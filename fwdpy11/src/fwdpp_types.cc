@@ -27,16 +27,25 @@ PYBIND11_PLUGIN(fwdpp_types) {
              // we can return dicts
              // with a mix of scalars + containers
              [](const KTfwd::gamete &g) noexcept {
-                 using obj = pybind11::object;
-                 pybind11::dict rv;
-                 rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
-                 rv[obj(pybind11::cast("mutations"))] =
-                     obj(pybind11::cast(g.mutations));
-                 rv[obj(pybind11::cast("smutations"))] =
-                     obj(pybind11::cast(g.smutations));
-                 return rv;
-             });
-
+        using obj = pybind11::object;
+        pybind11::dict rv;
+        rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
+        rv[obj(pybind11::cast("mutations"))] = obj(pybind11::cast(g.mutations));
+        rv[obj(pybind11::cast("smutations"))] =
+            obj(pybind11::cast(g.smutations));
+        return rv;
+             })
+        .def("__getstate__",[](const KTfwd::gamete &g)
+        {
+        return py::make_tuple(g.n, g.mutations, g.smutations);
+        })
+        .def("__setstate__",[](KTfwd::gamete & g, py::tuple t)
+        {
+        new (&g) KTfwd::gamete(t[0].cast<KTfwd::uint_t>(),
+                               t[1].cast<std::vector<KTfwd::uint_t>>(),
+                               t[2].cast<std::vector<KTfwd::uint_t>>());
+        });
+    
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
@@ -49,8 +58,9 @@ PYBIND11_PLUGIN(fwdpp_types) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
              })
         .def("__setstate__", [](KTfwd::popgenmut &m, py::tuple p) {
-            new (&m) KTfwd::popgenmut(p[0].cast<double>(), p[1].cast<double>(),
-                    p[2].cast<double>(), p[3].cast<unsigned>(), p[4].cast<std::uint16_t>());
+            new (&m) KTfwd::popgenmut(
+                p[0].cast<double>(), p[1].cast<double>(), p[2].cast<double>(),
+                p[3].cast<unsigned>(), p[4].cast<std::uint16_t>());
         });
 
     return m.ptr();

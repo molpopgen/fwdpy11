@@ -25,7 +25,18 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def_readonly("second", &fwdpy::diploid_t::second)
         .def_readonly("w", &fwdpy::diploid_t::w)
         .def_readonly("g", &fwdpy::diploid_t::g)
-        .def_readonly("e", &fwdpy::diploid_t::e);
+        .def_readonly("e", &fwdpy::diploid_t::e)
+        .def("__getstate__",
+             [](const fwdpy::diploid_t& d) {
+                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
+             })
+        .def("__setstate__", [](fwdpy::diploid_t& d, py::tuple t) {
+            new (&d) fwdpy::diploid_t(t[0].cast<std::size_t>(),
+                                      t[1].cast<std::size_t>());
+            d.w = t[2].cast<double>();
+            d.g = t[3].cast<double>();
+            d.e = t[4].cast<double>();
+        });
 
     pybind11::class_<singlepop_base>(m, "SinglepopBase");
 
