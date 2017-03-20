@@ -45,6 +45,17 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.fwdpy11_sampling',
+        ['fwdpy11/src/fwdpy11_sampling.cc'],
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True)
+        ],
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.wright_fisher.wfevolve',
         ['fwdpy11/wright_fisher/wfevolve.cc'],
         include_dirs=[
