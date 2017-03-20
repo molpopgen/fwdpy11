@@ -21,11 +21,11 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_readonly("first", &fwdpy::diploid_t::first)
-        .def_readonly("second", &fwdpy::diploid_t::second)
-        .def_readonly("w", &fwdpy::diploid_t::w)
-        .def_readonly("g", &fwdpy::diploid_t::g)
-        .def_readonly("e", &fwdpy::diploid_t::e)
+        .def_readonly("first", &fwdpy::diploid_t::first,"Key to first gamete.")
+        .def_readonly("second", &fwdpy::diploid_t::second,"Key to second gamete.")
+        .def_readonly("w", &fwdpy::diploid_t::w,"Fitness.")
+        .def_readonly("g", &fwdpy::diploid_t::g,"Genetic value.")
+        .def_readonly("e", &fwdpy::diploid_t::e,"Random/environmental effects.")
         .def("__getstate__",
              [](const fwdpy::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -41,10 +41,14 @@ PYBIND11_PLUGIN(fwdpy11_types) {
     pybind11::class_<singlepop_base>(m, "SinglepopBase");
 
     // Expose the type based on fwdpp's "sugar" layer
-    pybind11::class_<fwdpy::singlepop_t, singlepop_base>(m, "Spop")
-        .def(pybind11::init<unsigned>())
-        .def("clear", &fwdpy::singlepop_t::clear)
-        .def_readonly("mutations", &fwdpy::singlepop_t::mutations)
+    pybind11::class_<fwdpy::singlepop_t, singlepop_base>(
+        m, "Spop", "Population object representing a single deme.")
+        .def(pybind11::init<unsigned>(),
+             "Construct with an unsigned integer representing the initial "
+             "population size.")
+        .def("clear", &fwdpy::singlepop_t::clear, "Clears all population data.")
+        .def_readonly("mutations", &fwdpy::singlepop_t::mutations,
+                      "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
         .def_readonly("mcounts", &fwdpy::singlepop_t::mcounts)
         .def_readonly("fixations", &fwdpy::singlepop_t::fixations)
         .def_readonly("diploids", &fwdpy::singlepop_t::diploids)

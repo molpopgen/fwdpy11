@@ -18,12 +18,12 @@ Base class for mutations.
         .def_readwrite("pos", &KTfwd::mutation_base::pos, "Position (float).")
         .def_readwrite("neutral", &KTfwd::mutation_base::neutral, "Boolean")
         .def_readwrite("xtra", &KTfwd::mutation_base::xtra,
-                       "16-bits worth of extra data");
+                       "16-bits worth of extra data.");
 
     py::class_<KTfwd::gamete>(m, "Gamete")
-        .def_readonly("n", &KTfwd::gamete::n)
-        .def_readonly("mutations", &KTfwd::gamete::mutations)
-        .def_readonly("smutations", &KTfwd::gamete::smutations)
+        .def_readonly("n", &KTfwd::gamete::n,"Number of occurrences in the population.")
+        .def_readonly("mutations", &KTfwd::gamete::mutations,"Vector of keys to neutral mutations.")
+        .def_readonly("smutations", &KTfwd::gamete::smutations,"Vector of keys to selected mutations.")
         .def("as_dict",
              // This lambda shows that
              // we can return dicts
@@ -52,9 +52,9 @@ Base class for mutations.
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
         .def(py::init<double, double, double, unsigned, std::uint16_t>())
-        .def_readwrite("g", &KTfwd::popgenmut::g)
-        .def_readwrite("s", &KTfwd::popgenmut::s)
-        .def_readwrite("h", &KTfwd::popgenmut::h)
+        .def_readwrite("g", &KTfwd::popgenmut::g,"Generation when mutation arose (origination time).")
+        .def_readwrite("s", &KTfwd::popgenmut::s,"Selection coefficient/effect size.")
+        .def_readwrite("h", &KTfwd::popgenmut::h,"Dominance/effect in heterozygotes.")
         .def("__getstate__",
              [](const KTfwd::popgenmut &m) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
