@@ -35,6 +35,17 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.fwdpp_extensions',
+        ['fwdpy11/src/fwdpp_extensions.cc'],
+        include_dirs=[
+            # Path to pybind11 headers
+            get_pybind_include(),
+            get_pybind_include(user=True)
+        ],
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11.fwdpy11_types',
         ['fwdpy11/src/fwdpy11_types.cc'],
         include_dirs=[
