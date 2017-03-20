@@ -4,7 +4,7 @@
 #include <cmath>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/sugar/GSLrng_t.hpp>
-#include "types.hpp"
+#include "../src/types.hpp"
 
 // Evolve the population for some amount of time with mutation and recombination
 void evolve(
@@ -38,8 +38,8 @@ void evolve(
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(evolve) {
-    py::module m("evolve", "example extending");
+PYBIND11_PLUGIN(wfevolve) {
+    py::module m("wfevolve", "example extending");
 
     m.def("evolve", &evolve);
 

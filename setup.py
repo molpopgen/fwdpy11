@@ -20,7 +20,7 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
-PKGS=['fwdpy11']
+PKGS=['fwdpy11','fwdpy11.wright_fisher']
 
 ext_modules = [
     Extension(
@@ -45,8 +45,8 @@ ext_modules = [
         language='c++'
     ),
     Extension(
-        'fwdpy11.evolve',
-        ['fwdpy11/src/evolve.cc'],
+        'fwdpy11.wright_fisher.wfevolve',
+        ['fwdpy11/wright_fisher/wfevolve.cc'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),

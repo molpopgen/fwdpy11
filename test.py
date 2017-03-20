@@ -1,5 +1,5 @@
 import fwdpy11 as fp11
-import fwdpy11.evolve
+import fwdpy11.wright_fisher 
 from collections import Counter
 
 class RecordSFS:
@@ -18,6 +18,6 @@ rng=fp11.GSLrng(101)
 #This function is written in C++ and uses fwdpp,
 #and we are SENDING A PYTHON CLASS IN TO PROCESS
 #THE POP EACH GENERATION OMG.
-fwdpy11.evolve.evolve(pop,rng,1000,10000,0.001,0.001,rec)
+fwdpy11.wright_fisher.evolve(pop,rng,1000,10000,0.001,0.001,rec)
 
 print (rec.data)
