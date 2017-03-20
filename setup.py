@@ -20,6 +20,7 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
+PKGS=['fwdpy11']
 
 ext_modules = [
     Extension(
@@ -122,5 +123,6 @@ setup(
     ext_modules=ext_modules,
     install_requires=['pybind11>=1.7'],
     cmdclass={'build_ext': BuildExt},
+    packages=PKGS,
     zip_safe=False,
 )

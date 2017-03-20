@@ -11,7 +11,9 @@ PYBIND11_PLUGIN(fwdpp_types) {
     // low-level types
 
     py::class_<KTfwd::mutation_base>(m, "MutationBase",
-                                     "Base class for mutations.")
+R"delim(
+Base class for mutations.
+)delim")
         .def(py::init<double, bool, std::uint16_t>(), "Constructor")
         .def_readwrite("pos", &KTfwd::mutation_base::pos, "Position (float).")
         .def_readwrite("neutral", &KTfwd::mutation_base::neutral, "Boolean")
