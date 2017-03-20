@@ -1,5 +1,6 @@
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include "types.hpp"
 
@@ -9,10 +10,6 @@ using singlepop_base = fwdpy::singlepop_t::popbase;
 
 PYBIND11_PLUGIN(fwdpy11_types) {
     py::module m("fwdpy11_types", "example extending");
-    //    py::object popgenmut =
-    //        (py::object)py::module::import("fwdpp_types").attr("Mutation");
-    //    py::object gamete =
-    //        (py::object)py::module::import("fwdpp_types").attr("Gamete");
 
     py::class_<fwdpy::GSLrng_t>(
         m, "GSLrng", "Random number generator based on a mersenne twister.")
@@ -42,6 +39,14 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def_readonly("diploids", &fwdpy::singlepop_t::diploids)
         .def_readonly("gametes", &fwdpy::singlepop_t::gametes)
         .def_readonly("generation", &fwdpy::singlepop_t::generation)
-        .def_readonly("N", &fwdpy::singlepop_t::N);
+        .def_readonly("N", &fwdpy::singlepop_t::N)
+        .def("__getstate__",
+             [](const fwdpy::singlepop_t& pop) {
+                 return py::make_tuple(py::bytes(pop.serialize()));
+             })
+        .def("__setstate__", [](fwdpy::singlepop_t& p, py::tuple s) {
+            new (&p) fwdpy::singlepop_t(s[0].cast<std::string>());
+        });
+
     return m.ptr();
 }

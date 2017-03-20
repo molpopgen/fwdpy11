@@ -36,7 +36,6 @@ PYBIND11_PLUGIN(fwdpp_types) {
                      obj(pybind11::cast(g.smutations));
                  return rv;
              });
-    ;
 
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
@@ -44,7 +43,15 @@ PYBIND11_PLUGIN(fwdpp_types) {
         .def(py::init<double, double, double, unsigned, std::uint16_t>())
         .def_readwrite("g", &KTfwd::popgenmut::g)
         .def_readwrite("s", &KTfwd::popgenmut::s)
-        .def_readwrite("h", &KTfwd::popgenmut::h);
+        .def_readwrite("h", &KTfwd::popgenmut::h)
+        .def("__getstate__",
+             [](const KTfwd::popgenmut &m) {
+                 return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
+             })
+        .def("__setstate__", [](KTfwd::popgenmut &m, py::tuple p) {
+            new (&m) KTfwd::popgenmut(p[0].cast<double>(), p[1].cast<double>(),
+                    p[2].cast<double>(), p[3].cast<unsigned>(), p[4].cast<std::uint16_t>());
+        });
 
     return m.ptr();
 }

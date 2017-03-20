@@ -7,7 +7,6 @@
 #ifndef __FWDPY_TYPES__
 #define __FWDPY_TYPES__
 
-//#include "fwdpy/serialization.hpp"
 #include <fwdpp/sugar.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #ifdef CUSTOM_DIPLOID_BASE
@@ -17,6 +16,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include "serialization.hpp"
 namespace fwdpy
 {
     /*!
@@ -159,6 +159,11 @@ namespace fwdpy
         //! Constructor takes number of diploids as argument
 	    explicit singlepop_t(const unsigned &N) : base(N), generation(0) {}
 
+        explicit singlepop_t(const std::string & s) : base(0)
+        {
+            this->deserialize(s);
+        }
+
         unsigned
         gen() const
         /*!
@@ -191,20 +196,20 @@ namespace fwdpy
             return int(N == diploids.size());
         }
 
-        //std::string
-        //serialize() const
-        //{
-        //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
-        //}
+        std::string
+        serialize() const
+        {
+            return serialization::serialize_details(
+                this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
+        }
 
-        //void
-        //deserialize(const std::string &s)
-        //{
-        //    *this = serialize_objects::deserialize_details<singlepop_t>()(
-        //        s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), 0u);
-        //}
+        void
+        deserialize(const std::string &s)
+        {
+            *this = serialize_objects::deserialize_details<singlepop_t>()(
+                s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
+                fwdpy::diploid_reader(), 0u);
+        }
 
         //int
         //tofile(const char *filename, bool append = false) const
