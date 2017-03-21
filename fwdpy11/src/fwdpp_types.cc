@@ -6,7 +6,8 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(fwdpp_types) {
+PYBIND11_PLUGIN(fwdpp_types)
+{
     py::module m("fwdpp_types", "example extending");
 
     // low-level types
@@ -36,10 +37,10 @@ Base class for mutations.
                  using obj = pybind11::object;
                  pybind11::dict rv;
                  rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
-                 rv[obj(pybind11::cast("mutations"))] =
-                     obj(pybind11::cast(g.mutations));
-                 rv[obj(pybind11::cast("smutations"))] =
-                     obj(pybind11::cast(g.smutations));
+                 rv[obj(pybind11::cast("mutations"))]
+                     = obj(pybind11::cast(g.mutations));
+                 rv[obj(pybind11::cast("smutations"))]
+                     = obj(pybind11::cast(g.smutations));
                  return rv;
              })
         .def("__getstate__",
@@ -66,10 +67,17 @@ Base class for mutations.
              [](const KTfwd::popgenmut &m) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
              })
-        .def("__setstate__", [](KTfwd::popgenmut &m, py::tuple p) {
-            new (&m) KTfwd::popgenmut(
-                p[0].cast<double>(), p[1].cast<double>(), p[2].cast<double>(),
-                p[3].cast<unsigned>(), p[4].cast<std::uint16_t>());
+        .def("__setstate__",
+             [](KTfwd::popgenmut &m, py::tuple p) {
+                 new (&m) KTfwd::popgenmut(
+                     p[0].cast<double>(), p[1].cast<double>(),
+                     p[2].cast<double>(), p[3].cast<unsigned>(),
+                     p[4].cast<std::uint16_t>());
+             })
+        .def("__str__", [](const KTfwd::popgenmut &m) {
+            return "Mutation[" + std::to_string(m.pos) + ","
+                   + std::to_string(m.s) + "," + std::to_string(m.h) + ","
+                   + std::to_string(m.g) + "]";
         });
 
     return m.ptr();
