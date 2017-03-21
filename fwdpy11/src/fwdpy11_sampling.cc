@@ -67,6 +67,7 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
 
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::singlepop_t>);
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::multilocus_t>);
-
+	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy::singlepop_t>);
+	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy::multilocus_t>);
     return m.ptr();
 }
