@@ -139,7 +139,7 @@ setup(
     version=__version__,
     author='Kevin Thornton',
     author_email='krthornt@uci.edu',
-    url='',
+    url='http://molpopgen.github.io/fwdpy11',
     description='',
     long_description='',
     ext_modules=ext_modules,
