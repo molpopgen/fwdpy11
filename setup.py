@@ -2,6 +2,7 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
+import os,glob
 
 __version__ = '0.0.1'
 
@@ -123,6 +124,37 @@ class BuildExt(build_ext):
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
 
+#Figure out the headers we need to install:
+generated_package_data={}
+for root, dirnames, filenames in os.walk('fwdpy11/headers'):
+    if 'testsuite' not in root and 'examples' not in root and 'python_examples' not in root:
+        g=glob.glob(root+'/*.hh')
+        if len(g)>0:
+            replace=root.replace('/','.')
+            if replace not in PKGS:
+                PKGS.append(replace) #If there's a header file, we add the directory as a package
+            generated_package_data[replace]=['*.hh']
+        g=glob.glob(root+'/*.hpp')
+        if len(g)>0:
+            replace=root.replace('/','.')
+            if replace not in PKGS:
+                PKGS.append(replace) #If there's a header file, we add the directory as a package
+            try:
+                if '*.hpp' not in generated_package_data[replace]:
+                    generated_package_data[replace].append('*.hpp')
+            except:
+                generated_package_data[replace]=['*.hpp']
+        g=glob.glob(root+'/*.tcc')
+        if len(g)>0:
+            replace=root.replace('/','.')
+            if replace not in PKGS:
+                PKGS.append(replace) #If there's a template implementation file, we add the directory as a package
+            try:
+                if '*.tcc' not in generated_package_data[replace]:
+                    generated_package_data[replace].append('*.tcc')
+            except:
+                generated_package_data[replace]=['*.tcc']
+print(generated_package_data)
 setup(
     name='fwdpy11',
     version=__version__,
@@ -135,5 +167,6 @@ setup(
     install_requires=['pybind11>=1.7'],
     cmdclass={'build_ext': BuildExt},
     packages=PKGS,
+    package_data=generated_package_data,
     zip_safe=False,
 )
