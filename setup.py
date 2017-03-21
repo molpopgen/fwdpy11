@@ -22,58 +22,45 @@ class get_pybind_include(object):
 
 PKGS=['fwdpy11','fwdpy11.wright_fisher']
 
+INCLUDES=[
+    # Path to pybind11 headers
+    get_pybind_include(),
+    get_pybind_include(user=True)
+]
+
 ext_modules = [
     Extension(
         'fwdpy11.fwdpp_types',
         ['fwdpy11/src/fwdpp_types.cc'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-        ],
+        include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
     Extension(
         'fwdpy11.fwdpp_extensions',
         ['fwdpy11/src/fwdpp_extensions.cc'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-        ],
+        include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
     Extension(
         'fwdpy11.fwdpy11_types',
         ['fwdpy11/src/fwdpy11_types.cc'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-        ],
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
         language='c++'
     ),
     Extension(
         'fwdpy11.fwdpy11_sampling',
         ['fwdpy11/src/fwdpy11_sampling.cc'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-        ],
+        include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
         Extension(
         'fwdpy11.wright_fisher.wfevolve',
         ['fwdpy11/wright_fisher/wfevolve.cc'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True)
-        ],
+        include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
