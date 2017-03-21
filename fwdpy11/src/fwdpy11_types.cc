@@ -2,11 +2,12 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
+#include <type_traits>
 #include "types.hpp"
 
 namespace py = pybind11;
 
-using fwdpp_popgenmut_base = fwdpy::singlepop_t::popbase;
+using fwdpp_popgenmut_base = fwdpy::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy::singlepop_t::base;
 
 PYBIND11_PLUGIN(fwdpy11_types) {
@@ -48,9 +49,8 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def_readonly("fixations", &fwdpp_popgenmut_base::fixations)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes);
 
-    py::class_<singlepop_sugar_base,fwdpp_popgenmut_base>(m, "SinglepopBase")
+    py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase")
         .def_readonly("diploids", &singlepop_sugar_base::diploids);
-
 
     // Expose the type based on fwdpp's "sugar" layer
     py::class_<fwdpy::singlepop_t, singlepop_sugar_base>(
