@@ -33,7 +33,7 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
     py::module m("fwdpy11_sampling", "Taking samples from populations");
 
     m.def("sample_separate", &sample_separate_wrapper<fwdpy::singlepop_t>);
-    //m.def("sample_separate", &sample_separate_wrapper<fwdpy::multilocus_t>);
+    // m.def("sample_separate", &sample_separate_wrapper<fwdpy::multilocus_t>);
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix")
         .def(py::init<>())
@@ -46,7 +46,24 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
                       &KTfwd::data_matrix::selected_positions)
         .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq)
         .def_readonly("selected_popfreq", &KTfwd::data_matrix::selected_popfreq)
-        .def_readonly("nrow", &KTfwd::data_matrix::nrow);
+        .def_readonly("nrow", &KTfwd::data_matrix::nrow)
+        .def("__getstate__",
+             [](const KTfwd::data_matrix &d) {
+                 return py::make_tuple(d.nrow, d.neutral, d.selected,
+                                       d.neutral_positions,
+                                       d.selected_positions, d.neutral_popfreq,
+                                       d.selected_popfreq);
+             })
+        .def("__setstate__", [](KTfwd::data_matrix &d, py::tuple p) {
+            new (&d) KTfwd::data_matrix(p[0].cast<std::size_t>());
+            d.nrow = p[0].cast<std::size_t>();
+            d.neutral = p[1].cast<std::vector<char>>();
+            d.selected = p[1].cast<std::vector<char>>();
+            d.neutral_positions = p[1].cast<std::vector<double>>();
+            d.selected_positions = p[1].cast<std::vector<double>>();
+            d.neutral_popfreq = p[1].cast<std::vector<double>>();
+            d.selected_popfreq = p[1].cast<std::vector<double>>();
+        });
 
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::singlepop_t>);
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::multilocus_t>);
