@@ -6,7 +6,8 @@
 
 namespace py = pybind11;
 
-using singlepop_base = fwdpy::singlepop_t::popbase;
+using fwdpp_popgenmut_base = fwdpy::singlepop_t::popbase;
+using singlepop_sugar_base = fwdpy::singlepop_t::base;
 
 PYBIND11_PLUGIN(fwdpy11_types) {
     py::module m("fwdpy11_types", "example extending");
@@ -21,11 +22,13 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_readonly("first", &fwdpy::diploid_t::first,"Key to first gamete.")
-        .def_readonly("second", &fwdpy::diploid_t::second,"Key to second gamete.")
-        .def_readonly("w", &fwdpy::diploid_t::w,"Fitness.")
-        .def_readonly("g", &fwdpy::diploid_t::g,"Genetic value.")
-        .def_readonly("e", &fwdpy::diploid_t::e,"Random/environmental effects.")
+        .def_readonly("first", &fwdpy::diploid_t::first, "Key to first gamete.")
+        .def_readonly("second", &fwdpy::diploid_t::second,
+                      "Key to second gamete.")
+        .def_readonly("w", &fwdpy::diploid_t::w, "Fitness.")
+        .def_readonly("g", &fwdpy::diploid_t::g, "Genetic value.")
+        .def_readonly("e", &fwdpy::diploid_t::e,
+                      "Random/environmental effects.")
         .def("__getstate__",
              [](const fwdpy::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -38,21 +41,24 @@ PYBIND11_PLUGIN(fwdpy11_types) {
             d.e = t[4].cast<double>();
         });
 
-    pybind11::class_<singlepop_base>(m, "SinglepopBase");
-
-    // Expose the type based on fwdpp's "sugar" layer
-    pybind11::class_<fwdpy::singlepop_t, singlepop_base>(
-        m, "Spop", "Population object representing a single deme.")
-        .def(pybind11::init<unsigned>(),
-             "Construct with an unsigned integer representing the initial "
-             "population size.")
-        .def("clear", &fwdpy::singlepop_t::clear, "Clears all population data.")
+    py::class_<fwdpp_popgenmut_base>(m, "MutationPoptypeCommonBase")
         .def_readonly("mutations", &fwdpy::singlepop_t::mutations,
                       "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
         .def_readonly("mcounts", &fwdpy::singlepop_t::mcounts)
         .def_readonly("fixations", &fwdpy::singlepop_t::fixations)
-        .def_readonly("diploids", &fwdpy::singlepop_t::diploids)
-        .def_readonly("gametes", &fwdpy::singlepop_t::gametes)
+        .def_readonly("gametes", &fwdpy::singlepop_t::gametes);
+
+    py::class_<singlepop_sugar_base,fwdpp_popgenmut_base>(m, "SinglepopBase")
+        .def_readonly("diploids", &fwdpy::singlepop_t::diploids);
+
+
+    // Expose the type based on fwdpp's "sugar" layer
+    py::class_<fwdpy::singlepop_t, singlepop_sugar_base>(
+        m, "Spop", "Population object representing a single deme.")
+        .def(py::init<unsigned>(),
+             "Construct with an unsigned integer representing the initial "
+             "population size.")
+        .def("clear", &fwdpy::singlepop_t::clear, "Clears all population data.")
         .def_readonly("generation", &fwdpy::singlepop_t::generation)
         .def_readonly("N", &fwdpy::singlepop_t::N)
         .def("__getstate__",
