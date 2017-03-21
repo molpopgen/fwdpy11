@@ -161,7 +161,7 @@ for root, dirnames, filenames in os.walk('fwdpy11/headers'):
                     generated_package_data[replace].append('*.tcc')
             except:
                 generated_package_data[replace]=['*.tcc']
-print(generated_package_data)
+
 setup(
     name='fwdpy11',
     version=__version__,
