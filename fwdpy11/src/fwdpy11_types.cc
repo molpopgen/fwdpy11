@@ -42,14 +42,14 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         });
 
     py::class_<fwdpp_popgenmut_base>(m, "MutationPoptypeCommonBase")
-        .def_readonly("mutations", &fwdpy::singlepop_t::mutations,
+        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,
                       "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
-        .def_readonly("mcounts", &fwdpy::singlepop_t::mcounts)
-        .def_readonly("fixations", &fwdpy::singlepop_t::fixations)
-        .def_readonly("gametes", &fwdpy::singlepop_t::gametes);
+        .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts)
+        .def_readonly("fixations", &fwdpp_popgenmut_base::fixations)
+        .def_readonly("gametes", &fwdpp_popgenmut_base::gametes);
 
     py::class_<singlepop_sugar_base,fwdpp_popgenmut_base>(m, "SinglepopBase")
-        .def_readonly("diploids", &fwdpy::singlepop_t::diploids);
+        .def_readonly("diploids", &singlepop_sugar_base::diploids);
 
 
     // Expose the type based on fwdpp's "sugar" layer
