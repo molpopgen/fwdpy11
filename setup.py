@@ -24,6 +24,7 @@ PKGS=['fwdpy11','fwdpy11.wright_fisher']
 
 INCLUDES=[
     'fwdpy11/headers',
+    'fwdpy11/headers/fwdpp',
     # Path to pybind11 headers
     get_pybind_include(),
     get_pybind_include(user=True)
