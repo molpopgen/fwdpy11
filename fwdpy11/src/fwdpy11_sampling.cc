@@ -4,7 +4,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
-#include "types.hpp"
+#include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
 

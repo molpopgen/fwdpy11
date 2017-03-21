@@ -16,7 +16,7 @@
 #include <map>
 #include <memory>
 #include <vector>
-#include "serialization.hpp"
+#include <fwdpy11/serialization.hpp>
 namespace fwdpy
 {
     /*!

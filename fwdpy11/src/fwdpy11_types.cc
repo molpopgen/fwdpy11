@@ -3,7 +3,7 @@
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
 #include <type_traits>
-#include "types.hpp"
+#include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
 

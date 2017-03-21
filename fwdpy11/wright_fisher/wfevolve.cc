@@ -4,7 +4,7 @@
 #include <cmath>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/sugar/GSLrng_t.hpp>
-#include "../src/types.hpp"
+#include <fwdpy11/types.hpp>
 
 // Evolve the population for some amount of time with mutation and recombination
 void evolve(
