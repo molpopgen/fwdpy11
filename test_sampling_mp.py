@@ -22,7 +22,7 @@ class RecordSFSandSample:
         #The sample of size nsam is taken by calling
         #another pybind11-based function that calls
         #fwdpp in the back-end
-        sample=fp11.sample_singlepop(self.rng,pop,self.nsam,True);
+        sample=fp11.sample_separate(self.rng,pop,self.nsam,True);
         self.data.append((generation,c,sample))
 
 def evolve_and_return(args):
