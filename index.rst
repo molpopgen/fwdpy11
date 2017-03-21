@@ -6,6 +6,15 @@
 Welcome to fwdpy11's documentation!
 ===================================
 
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   README
+
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -18,7 +27,7 @@ Welcome to fwdpy11's documentation!
    :members:
    :show-inheritance:
 
-.. automodule:: fwdpy11.evolve
+.. automodule:: fwdpy11.wright_fisher
    :members:
    :show-inheritance:
 
