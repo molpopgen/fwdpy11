@@ -3,7 +3,8 @@
 #include <fwdpp/sugar/serialization.hpp>
 #include <sstream>
 #include <string>
-namespace fwdpy
+
+namespace fwdpy11
 {
     namespace serialization
     {

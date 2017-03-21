@@ -5,7 +5,8 @@
 #define FWDPY_SERIALIZATION_HPP
 #include "serialization_common.hpp"
 #include <fwdpp/sugar/serialization.hpp>
-namespace fwdpy
+
+namespace fwdpy11
 {
     namespace serialize_objects
     {

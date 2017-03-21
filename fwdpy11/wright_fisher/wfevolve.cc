@@ -8,9 +8,9 @@
 
 // Evolve the population for some amount of time with mutation and recombination
 void evolve(
-    fwdpy::singlepop_t& pop, const fwdpy::GSLrng_t & rng,  const unsigned& N,
+    fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t & rng,  const unsigned& N,
     const unsigned& generations, const double& mu, const double& recrate,
-    std::function<void(const fwdpy::singlepop_t&, const unsigned)> recorder) {
+    std::function<void(const fwdpy11::singlepop_t&, const unsigned)> recorder) {
     pop.mutations.reserve(std::ceil(std::log(2 * N) * (4. * double(N) * (mu)) +
                                     0.667 * (4. * double(N) * (mu))));
     std::function<double(void)> recmap =

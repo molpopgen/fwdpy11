@@ -17,7 +17,8 @@
 #include <memory>
 #include <vector>
 #include <fwdpy11/serialization.hpp>
-namespace fwdpy
+
+namespace fwdpy11
 {
     /*!
       Random number generator.
@@ -120,7 +121,7 @@ namespace fwdpy
 
       This is the C++ representation of a single-deme simulation where a
       KTfwd::popgenmut
-      is the mutation type, and a custom diploid (fwdpy::diploid_t) is the
+      is the mutation type, and a custom diploid (fwdpy11::diploid_t) is the
       diploid type.
 
       This type inherits from fwdpp's type KTfwd::singlepop, and the main
@@ -200,7 +201,7 @@ namespace fwdpy
         serialize() const
         {
             return serialization::serialize_details(
-                this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
+                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         }
 
         void
@@ -208,14 +209,14 @@ namespace fwdpy
         {
             *this = serialize_objects::deserialize_details<singlepop_t>()(
                 s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-                fwdpy::diploid_reader(), 0u);
+                fwdpy11::diploid_reader(), 0u);
         }
 
         //int
         //tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy::serialize_objects::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy::diploid_writer(),
+        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -224,7 +225,7 @@ namespace fwdpy
         //{
         //    *this = serialize_objects::gzdeserialize_details<singlepop_t>()(
         //        KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), filename, offset, 0u);
+        //        fwdpy11::diploid_reader(), filename, offset, 0u);
         //}
     };
 
@@ -235,7 +236,7 @@ namespace fwdpy
 
       This is the C++ representation of a single-deme simulation where a
       KTfwd::popgenmut
-      is the mutation type, and a custom diploid (fwdpy::diploid_t) is the
+      is the mutation type, and a custom diploid (fwdpy11::diploid_t) is the
       diploid type.
 
       This type inherits from fwdpp's type KTfwd::singlepop, and the main
@@ -283,7 +284,7 @@ namespace fwdpy
         {
         }
 
-        //! Construct from a fwdpy::singlepop_t
+        //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p) : base(p), generation(p.generation) {}
 
         unsigned
@@ -332,7 +333,7 @@ namespace fwdpy
         //serialize() const
         //{
         //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
+        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
         //void
@@ -340,14 +341,14 @@ namespace fwdpy
         //{
         //    *this = serialize_objects::deserialize_details<metapop_t>()(
         //        s, KTfwd::mutation_reader<metapop_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), std::vector<unsigned>(0u));
+        //        fwdpy11::diploid_reader(), std::vector<unsigned>(0u));
         //}
 
         //int
         //tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy::serialize_objects::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy::diploid_writer(),
+        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -356,7 +357,7 @@ namespace fwdpy
         //{
         //    *this = serialize_objects::gzdeserialize_details<metapop_t>()(
         //        KTfwd::mutation_reader<metapop_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), filename, offset, std::vector<unsigned>(0u));
+        //        fwdpy11::diploid_reader(), filename, offset, std::vector<unsigned>(0u));
         //}
     };
 
@@ -371,7 +372,7 @@ namespace fwdpy
       \brief Single-deme object where mutations contain vector<double> for
     internal data.
     ,
-      See fwdpy::singlepop_t documentation for details, which are the same as
+      See fwdpy11::singlepop_t documentation for details, which are the same as
     for this type.
     */
     {
@@ -397,7 +398,7 @@ namespace fwdpy
         //serialize() const
         //{
         //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
+        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
         //void
@@ -407,14 +408,14 @@ namespace fwdpy
         //        = serialize_objects::deserialize_details<singlepop_gm_vec_t>()(
         //            s,
         //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-        //            fwdpy::diploid_reader(), 0u);
+        //            fwdpy11::diploid_reader(), 0u);
         //}
 
         //int
         //tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy::serialize_objects::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy::diploid_writer(),
+        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -424,19 +425,19 @@ namespace fwdpy
         //    *this = serialize_objects::
         //        gzdeserialize_details<singlepop_gm_vec_t>()(
         //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-        //            fwdpy::diploid_reader(), filename, offset, 0u);
+        //            fwdpy11::diploid_reader(), filename, offset, 0u);
         //}
     };
 
     // Types for multi-"locus" (multi-region) simulations
     using multilocus_diploid_t = std::vector<diploid_t>;
 
-    // Have to use fwdpy::diploid_t below, as GCC seems to get confused
+    // Have to use fwdpy11::diploid_t below, as GCC seems to get confused
     // otherwise...
     struct multilocus_t
-        : public KTfwd::multiloc<KTfwd::popgenmut, fwdpy::diploid_t>
+        : public KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>
     {
-        using base = KTfwd::multiloc<KTfwd::popgenmut, fwdpy::diploid_t>;
+        using base = KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>;
         unsigned generation;
         explicit multilocus_t(const unsigned N, const unsigned nloci)
             : base(N, nloci), generation(0)
@@ -461,7 +462,7 @@ namespace fwdpy
         //serialize() const
         //{
         //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy::diploid_writer());
+        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
         //void
@@ -469,14 +470,14 @@ namespace fwdpy
         //{
         //    *this = serialize_objects::deserialize_details<multilocus_t>()(
         //        s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), 0u, 0u);
+        //        fwdpy11::diploid_reader(), 0u, 0u);
         //}
 
         //int
         //tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy::serialize_objects::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy::diploid_writer(),
+        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -485,7 +486,7 @@ namespace fwdpy
         //{
         //    *this = serialize_objects::gzdeserialize_details<multilocus_t>()(
         //        KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-        //        fwdpy::diploid_reader(), filename, offset, 0u, 0u);
+        //        fwdpy11::diploid_reader(), filename, offset, 0u, 0u);
         //}
     };
 }

@@ -12,7 +12,7 @@ template <typename poptype>
 typename std::enable_if<std::is_same<typename poptype::popmodel_t,
                                      KTfwd::sugar::SINGLEPOP_TAG>::value,
                         KTfwd::sep_sample_t>::type
-sample_separate_wrapper(const fwdpy::GSLrng_t &rng, const poptype &pop,
+sample_separate_wrapper(const fwdpy11::GSLrng_t &rng, const poptype &pop,
                         const unsigned nsam, const bool removeFixed) {
     return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed);
 }
@@ -22,7 +22,7 @@ typename std::enable_if<std::is_same<typename poptype::popmodel_t,
                                      KTfwd::sugar::MULTILOCPOP_TAG>::value,
                         std::vector<KTfwd::sep_sample_t>>::type
 sample_separate_wrapper(
-    const fwdpy::GSLrng_t &rng, const poptype &pop, const unsigned nsam,
+    const fwdpy11::GSLrng_t &rng, const poptype &pop, const unsigned nsam,
     const bool removeFixed,
     const std::vector<std::pair<double, double>> &locus_boundaries) {
     return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed,
@@ -32,8 +32,8 @@ sample_separate_wrapper(
 PYBIND11_PLUGIN(fwdpy11_sampling) {
     py::module m("fwdpy11_sampling", "Taking samples from populations");
 
-    m.def("sample_separate", &sample_separate_wrapper<fwdpy::singlepop_t>);
-    // m.def("sample_separate", &sample_separate_wrapper<fwdpy::multilocus_t>);
+    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>);
+    // m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix")
         .def(py::init<>())
@@ -65,9 +65,9 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
             d.selected_popfreq = p[1].cast<std::vector<double>>();
         });
 
-    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::singlepop_t>);
-    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy::multilocus_t>);
-	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy::singlepop_t>);
-	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy::multilocus_t>);
+    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::singlepop_t>);
+    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::multilocus_t>);
+	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy11::singlepop_t>);
+	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy11::multilocus_t>);
     return m.ptr();
 }
