@@ -169,6 +169,9 @@ class GammaS(Sregion):
         self.mean=float(mean)
         self.shape=float(shape)
         super(GammaS,self).__init__(beg,end,weight,h,coupled,label)
+    def callback(self):
+        from .fwdpp_extensions import DFEFixedDominance,ConstantSH,GammaSH
+        return DFEFixedDominance(GammaSH(self.mean,self.shape).callback,ConstantSH(self.h).callback)
     def __str__(self):
         return "Gamma DFE, mean = "+"{:.9f}".format(self.mean)+", shape = "+"{:.9f}".format(self.shape)+", "+super(GammaS,self).__str__()
         
