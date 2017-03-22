@@ -273,8 +273,8 @@ class UniformS(Sregion):
         self.hi=float(hi)
         super(UniformS,self).__init__(beg,end,weight,h,coupled)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,UniformSH
-        return DFEFixedDominance(UniformSH(self.s).callback,UniformSH(self.h).callback)
+        from .fwdpp_extensions import DFEFixedDominance,UniformSH,ConstantSH
+        return DFEFixedDominance(ConstantSH(self.lo,self.hi).callback,ConstantSH(self.h).callback)
     def __str__(self):
         return "Uniform s DFE, lo = "+"{:.9f}".format(self.lo)+", hi = "+"{:.9f}".format(self.hi)+", "+super(UniformS,self).__str__()
 
@@ -321,8 +321,8 @@ class ExpS(Sregion):
         self.mean=float(mean)
         super(ExpS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,ExpSH
-        return DFEFixedDominance(ExpSH(self.s).callback,ExpSH(self.h).callback)
+        from .fwdpp_extensions import DFEFixedDominance,ExpSH,ConstantSH
+        return DFEFixedDominance(ExpSH(self.mean).callback,ConstantSH(self.h).callback)
     def __str__(self):
         return "Exponential DFE, mean = "+"{:.9f}".format(self.mean)+", "+super(ExpS,self).__str__()
 
@@ -371,7 +371,25 @@ class GaussianS(Sregion):
         self.sd=float(sd)
         super(GaussianS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,GaussianSH
-        return DFEFixedDominance(GaussianSH(self.sd).callback,GaussianSH(self.h).callback)
+        from .fwdpp_extensions import DFEFixedDominance,GaussianSH,ConstantSH
+        return DFEFixedDominance(GaussianSH(self.sd).callback,ConstantSH(self.h).callback)
     def __str__(self):
         return "Gaussian DFE, s.d. = "+"{:.9f}".format(self.sd)+", "+super(GaussianS,self).__str__()
+
+def makeMutationRegions(neutral,selected):
+    nbeg = [i.b for i in neutral]
+    nend = [i.e for i in neutral]
+    nweights = [i.w for i in neutral]
+    sbeg = [i.b for i in selected]
+    send = [i.e for i in selected]
+    sweights = [i.w for i in selected]
+    sh = [i.callback() for i in selected]
+    from .fwdpp_extensions import MutationRegions
+    return MutationRegions(nbeg,nend,nweights,sbeg,send,sweights,sh)
+
+def makeRecombinationRegions(regions):
+    beg = [i.b for i in regions]
+    end = [i.e for i in regions]
+    weights = [i.w for i in regions]
+    from .fwdpp_extensions import RecombinationRegions
+    return RecombinationRegions(beg,end,weights)
