@@ -2,7 +2,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
-#include <type_traits>
 #include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
@@ -10,7 +9,8 @@ namespace py = pybind11;
 using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 
-PYBIND11_PLUGIN(fwdpy11_types) {
+PYBIND11_PLUGIN(fwdpy11_types)
+{
     py::module m("fwdpy11_types", "example extending");
 
     py::class_<fwdpy11::GSLrng_t>(
@@ -23,7 +23,8 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_readonly("first", &fwdpy11::diploid_t::first, "Key to first gamete.")
+        .def_readonly("first", &fwdpy11::diploid_t::first,
+                      "Key to first gamete.")
         .def_readonly("second", &fwdpy11::diploid_t::second,
                       "Key to second gamete.")
         .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness.")
@@ -36,7 +37,7 @@ PYBIND11_PLUGIN(fwdpy11_types) {
              })
         .def("__setstate__", [](fwdpy11::diploid_t& d, py::tuple t) {
             new (&d) fwdpy11::diploid_t(t[0].cast<std::size_t>(),
-                                      t[1].cast<std::size_t>());
+                                        t[1].cast<std::size_t>());
             d.w = t[2].cast<double>();
             d.g = t[3].cast<double>();
             d.e = t[4].cast<double>();
@@ -58,15 +59,16 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def(py::init<unsigned>(),
              "Construct with an unsigned integer representing the initial "
              "population size.")
-        .def("clear", &fwdpy11::singlepop_t::clear, "Clears all population data.")
+        .def("clear", &fwdpy11::singlepop_t::clear,
+             "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation)
         .def_readonly("N", &fwdpy11::singlepop_t::N)
         .def("__getstate__",
              [](const fwdpy11::singlepop_t& pop) {
-                 return py::make_tuple(py::bytes(pop.serialize()));
+                 return py::bytes(pop.serialize());
              })
-        .def("__setstate__", [](fwdpy11::singlepop_t& p, py::tuple s) {
-            new (&p) fwdpy11::singlepop_t(s[0].cast<std::string>());
+        .def("__setstate__", [](fwdpy11::singlepop_t& p, py::bytes s) {
+            new (&p) fwdpy11::singlepop_t(s);
         });
 
     return m.ptr();
