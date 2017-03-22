@@ -43,6 +43,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
             d.e = t[4].cast<double>();
         });
 
+	py::class_<std::vector<fwdpy11::gamete_t>>(m,"GameteContainer");
+	py::class_<std::vector<KTfwd::popgenmut>>(m,"MutationContainer");
+	
     py::class_<fwdpp_popgenmut_base>(m, "MutationPoptypeCommonBase")
         .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,
                       "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
