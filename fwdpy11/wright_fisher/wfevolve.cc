@@ -16,9 +16,9 @@ void evolve(
                                     0.667 * (4. * double(N) * (mu))));
     std::function<double(void)> recmap =
         std::bind(gsl_rng_uniform, rng.get());  // uniform crossover map
-    for (unsigned generation = 0; generation < generations; ++generation) {
+    for (unsigned generation = 0; generation < generations; ++generation,++pop.generation) {
         double wbar = KTfwd::sample_diploid(
-            rng.get(), pop.gametes, pop.diploids, pop.mutations, pop.mcounts, N,
+            rng.get(), pop.gametes, pop.diploids, pop.mutations, pop.mcounts, pop.N,N,
             mu, std::bind(KTfwd::infsites(), std::placeholders::_1,
                           std::placeholders::_2, rng.get(),
                           std::ref(pop.mut_lookup), generation,mu, 0.,
@@ -30,6 +30,7 @@ void evolve(
             std::bind(KTfwd::multiplicative_diploid(), std::placeholders::_1,
                       std::placeholders::_2, std::placeholders::_3, 2.),
             pop.neutral, pop.selected);
+		pop.N=N;
         KTfwd::update_mutations(pop.mutations, pop.fixations,
                                 pop.fixation_times, pop.mut_lookup, pop.mcounts,
                                 generation, 2 * pop.N);
