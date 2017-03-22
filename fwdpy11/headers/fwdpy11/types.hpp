@@ -209,7 +209,7 @@ namespace fwdpy11
         void
         deserialize(const std::string &s)
         {
-            *this = serialize_objects::deserialize_details<singlepop_t>()(
+            *this = serialization::deserialize_details<singlepop_t>()(
                 s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
                 fwdpy11::diploid_reader(), 0u);
         }
@@ -217,7 +217,7 @@ namespace fwdpy11
         // int
         // tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //    return fwdpy11::serialization::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
@@ -225,7 +225,7 @@ namespace fwdpy11
         // void
         // fromfile(const char *filename, std::size_t offset)
         //{
-        //    *this = serialize_objects::gzdeserialize_details<singlepop_t>()(
+        //    *this = serialization::gzdeserialize_details<singlepop_t>()(
         //        KTfwd::mutation_reader<singlepop_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), filename, offset, 0u);
         //}
@@ -344,7 +344,7 @@ namespace fwdpy11
         // void
         // deserialize(const std::string &s)
         //{
-        //    *this = serialize_objects::deserialize_details<metapop_t>()(
+        //    *this = serialization::deserialize_details<metapop_t>()(
         //        s, KTfwd::mutation_reader<metapop_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), std::vector<unsigned>(0u));
         //}
@@ -352,7 +352,7 @@ namespace fwdpy11
         // int
         // tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //    return fwdpy11::serialization::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
@@ -360,7 +360,7 @@ namespace fwdpy11
         // void
         // fromfile(const char *filename, std::size_t offset)
         //{
-        //    *this = serialize_objects::gzdeserialize_details<metapop_t>()(
+        //    *this = serialization::gzdeserialize_details<metapop_t>()(
         //        KTfwd::mutation_reader<metapop_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), filename, offset,
         //        std::vector<unsigned>(0u));
@@ -414,7 +414,7 @@ namespace fwdpy11
         //{
         //    *this
         //        =
-        //        serialize_objects::deserialize_details<singlepop_gm_vec_t>()(
+        //        serialization::deserialize_details<singlepop_gm_vec_t>()(
         //            s,
         //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
         //            fwdpy11::diploid_reader(), 0u);
@@ -423,7 +423,7 @@ namespace fwdpy11
         // int
         // tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //    return fwdpy11::serialization::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
@@ -431,7 +431,7 @@ namespace fwdpy11
         // void
         // fromfile(const char *filename, std::size_t offset)
         //{
-        //    *this = serialize_objects::
+        //    *this = serialization::
         //        gzdeserialize_details<singlepop_gm_vec_t>()(
         //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
         //            fwdpy11::diploid_reader(), filename, offset, 0u);
@@ -477,7 +477,7 @@ namespace fwdpy11
         // void
         // deserialize(const std::string &s)
         //{
-        //    *this = serialize_objects::deserialize_details<multilocus_t>()(
+        //    *this = serialization::deserialize_details<multilocus_t>()(
         //        s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), 0u, 0u);
         //}
@@ -485,7 +485,7 @@ namespace fwdpy11
         // int
         // tofile(const char *filename, bool append = false) const
         //{
-        //    return fwdpy11::serialize_objects::gzserialize_details(
+        //    return fwdpy11::serialization::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
@@ -493,7 +493,7 @@ namespace fwdpy11
         // void
         // fromfile(const char *filename, std::size_t offset)
         //{
-        //    *this = serialize_objects::gzdeserialize_details<multilocus_t>()(
+        //    *this = serialization::gzdeserialize_details<multilocus_t>()(
         //        KTfwd::mutation_reader<multilocus_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), filename, offset, 0u, 0u);
         //}
