@@ -30,7 +30,7 @@ def evolve_and_return(args):
     pop = fp11.Spop(N)
     rng=fp11.GSLrng(seed)
     rec=RecordSFSandSample(rng,10)
-    fwdpy11.wright_fisher.evolve(pop,rng,1000,10000,0.001,0.001,rec)
+    fwdpy11.wright_fisher.evolve(pop,rng,N,10*N,0.001,0.001,rec)
     #OMG pops are now pickle-able!!!
     return (pop,rec)
 
