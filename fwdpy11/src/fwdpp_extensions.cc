@@ -8,6 +8,23 @@ namespace py = pybind11;
 
 using dfe_callback_type = std::function<double(const gsl_rng *)>;
 
+template <typename S> struct make_sh_model_fixed_dom
+{
+    template <typename... args>
+    KTfwd::extensions::shmodel
+    operator()(const double h, args... A) const
+    {
+        return KTfwd::extensions::shmodel(
+            std::bind(S(A...), std::placeholders::_1),
+            std::bind(KTfwd::extensions::constant(h), std::placeholders::_1));
+    }
+};
+
+#define RETURN_DFE_FIXEDH(DIST, S, H)                                         \
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(S, H);
+#define RETURN_DFE2_FIXEDH(DIST, A, B, H)                                     \
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(A, B, H);
+
 PYBIND11_PLUGIN(fwdpp_extensions)
 {
     py::module m("fwdpp_extensions", "Expose fwdpp's extensions library.");
@@ -16,68 +33,28 @@ PYBIND11_PLUGIN(fwdpp_extensions)
         .def(py::init<>())
         .def(py::init<dfe_callback_type, dfe_callback_type>());
 
-#define DFE(A, B, C)                                                          \
-    py::class_<KTfwd::extensions::A>(m, B).def(C).def_property_readonly(      \
-        "callback", [](const KTfwd::extensions::A &c) -> dfe_callback_type {  \
-            return std::bind(c, std::placeholders::_1);                       \
-        });
+    m.def("makeConstantSH", ([](const double s, const double h) {
+              RETURN_DFE_FIXEDH(constant, s, h);
+          }));
 
-    DFE(constant, "ConstantSH", py::init<double>());
-    DFE(exponential, "ExpSH", py::init<double>());
-    DFE(gaussian, "GaussianSH", py::init<double>());
-    DFE(uniform, "UniformSH", (py::init<double, double>()));
-    DFE(gamma, "GammaSH", (py::init<double, double>()));
-    DFE(beta, "BetaSH", (py::init<double, double>()));
+    m.def("makeExpSH", ([](const double mean, const double h) {
+              RETURN_DFE_FIXEDH(exponential, mean, h);
+          }));
 
-    // py::class_<KTfwd::extensions::constant>(m, "ConstantSH")
-    //    .def(py::init<double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::constant &c) -> dfe_callback_type {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
+    m.def("makeGaussianSH", ([](const double sd, const double h) {
+              RETURN_DFE_FIXEDH(gaussian, sd, h);
+          }));
 
-    // py::class_<KTfwd::extensions::exponential>(m, "ExpSH")
-    //    .def(py::init<double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::exponential &c) -> dfe_callback_type
-    //        {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
+    m.def("makeUniformSH",
+          ([](const double lo, const double hi, const double h) {
+              RETURN_DFE2_FIXEDH(uniform, lo, hi, h);
+          }));
 
-    // py::class_<KTfwd::extensions::uniform>(m, "UniformSH")
-    //    .def(py::init<double,double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::uniform &c) -> dfe_callback_type {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
-
-    // py::class_<KTfwd::extensions::gaussian>(m, "GaussianSH")
-    //    .def(py::init<double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::gaussian &c) -> dfe_callback_type {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
-
-    // py::class_<KTfwd::extensions::gamma>(m, "GammaSH")
-    //    .def(py::init<double,double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::gamma &c) -> dfe_callback_type {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
-
-    // py::class_<KTfwd::extensions::beta>(m, "BetaSH")
-    //    .def(py::init<double,double>())
-    //    .def_property_readonly(
-    //        "callback",
-    //        [](const KTfwd::extensions::beta &c) -> dfe_callback_type {
-    //            return std::bind(c, std::placeholders::_1);
-    //        });
-
+    m.def("makeGammaSH",
+          ([](const double mean, const double shape, const double h) {
+              RETURN_DFE2_FIXEDH(gamma, mean, shape, h);
+          }));
+	
     py::class_<KTfwd::extensions::discrete_mut_model>(m, "MutationRegions")
         .def(py::init<std::vector<double>, std::vector<double>,
                       std::vector<double>, std::vector<double>,

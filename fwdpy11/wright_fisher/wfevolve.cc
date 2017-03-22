@@ -8,6 +8,7 @@
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
+#include <iostream>
 
 // Evolve the population for some amount of time with mutation and
 // recombination
@@ -21,6 +22,7 @@ evolve_singlepop_regions_cpp(
     const fwdpy11::singlepop_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
 {
+	std::cout << "here!\n";
     pop.mutations.reserve(std::ceil(
         std::log(2 * N)
         * (4. * double(N) * (mu_neutral + mu_selected)
@@ -30,6 +32,7 @@ evolve_singlepop_regions_cpp(
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
+			std::cout << generation << '\n';
             double wbar = KTfwd::sample_diploid(
                 rng.get(), 
 				pop.gametes, pop.diploids, pop.mutations,pop.mcounts, 

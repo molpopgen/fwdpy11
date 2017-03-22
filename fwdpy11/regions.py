@@ -170,8 +170,8 @@ class GammaS(Sregion):
         self.shape=float(shape)
         super(GammaS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,ConstantSH,GammaSH
-        return DFEFixedDominance(GammaSH(self.mean,self.shape).callback,ConstantSH(self.h).callback)
+        from .fwdpp_extensions import makeGammaSH
+        return makeGammaSH(self.mean,self.shape,self.h)
     def __str__(self):
         return "Gamma DFE, mean = "+"{:.9f}".format(self.mean)+", shape = "+"{:.9f}".format(self.shape)+", "+super(GammaS,self).__str__()
         
@@ -218,8 +218,8 @@ class ConstantS(Sregion):
         self.s=float(s)
         super(ConstantS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,ConstantSH
-        return DFEFixedDominance(ConstantSH(self.s).callback,ConstantSH(self.h).callback)
+        from .fwdpp_extensions import makeConstantSH 
+        return makeConstantSH(self.s,self.h)
     def __str__(self):
         return "Constant s DFE, s = "+"{:.9f}".format(self.s)+", "+super(ConstantS,self).__str__()
 
@@ -273,8 +273,8 @@ class UniformS(Sregion):
         self.hi=float(hi)
         super(UniformS,self).__init__(beg,end,weight,h,coupled)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,UniformSH,ConstantSH
-        return DFEFixedDominance(ConstantSH(self.lo,self.hi).callback,ConstantSH(self.h).callback)
+        from .fwdpp_extensions import makeUniformSH
+        return makeUniformSH(self.lo,self.hi,self.h)
     def __str__(self):
         return "Uniform s DFE, lo = "+"{:.9f}".format(self.lo)+", hi = "+"{:.9f}".format(self.hi)+", "+super(UniformS,self).__str__()
 
@@ -321,8 +321,8 @@ class ExpS(Sregion):
         self.mean=float(mean)
         super(ExpS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,ExpSH,ConstantSH
-        return DFEFixedDominance(ExpSH(self.mean).callback,ConstantSH(self.h).callback)
+        from .fwdpp_extensions import makeExpSH
+        return makeExpSH(self.mean,self.h)
     def __str__(self):
         return "Exponential DFE, mean = "+"{:.9f}".format(self.mean)+", "+super(ExpS,self).__str__()
 
@@ -371,8 +371,8 @@ class GaussianS(Sregion):
         self.sd=float(sd)
         super(GaussianS,self).__init__(beg,end,weight,h,coupled,label)
     def callback(self):
-        from .fwdpp_extensions import DFEFixedDominance,GaussianSH,ConstantSH
-        return DFEFixedDominance(GaussianSH(self.sd).callback,ConstantSH(self.h).callback)
+        from .fwdpp_extensions import makeGaussianSH
+        return makeGaussianSH(self.sd,self.h)
     def __str__(self):
         return "Gaussian DFE, s.d. = "+"{:.9f}".format(self.sd)+", "+super(GaussianS,self).__str__()
 
