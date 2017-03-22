@@ -36,7 +36,7 @@ namespace fwdpy11
     using gcont_t = std::vector<gamete_t>;
 
 #ifdef CUSTOM_DIPLOID_BASE
-	struct diploid_t : public KTfwd::tags::custom_diploid_t
+    struct diploid_t : public KTfwd::tags::custom_diploid_t
 #else
     struct diploid_t
 #endif
@@ -158,12 +158,14 @@ namespace fwdpy11
         //! The current generation.  Start counting from zero
         unsigned generation;
         //! Constructor takes number of diploids as argument
-	    explicit singlepop_t(const unsigned &N) : base(N), generation(0) {}
+        singlepop_t(const unsigned &N) : base(N), generation(0) {}
 
-        explicit singlepop_t(const std::string & s) : base(0)
-        {
-            this->deserialize(s);
-        }
+        singlepop_t(const std::string &s) : base(0) { this->deserialize(s); }
+
+        singlepop_t(singlepop_t &&) = default;
+        singlepop_t(const singlepop_t &) = default;
+        singlepop_t &operator=(const singlepop_t &) = default;
+        singlepop_t &operator=(singlepop_t &&) = default;
 
         unsigned
         gen() const
@@ -212,16 +214,16 @@ namespace fwdpy11
                 fwdpy11::diploid_reader(), 0u);
         }
 
-        //int
-        //tofile(const char *filename, bool append = false) const
+        // int
+        // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialize_objects::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
-        //void
-        //fromfile(const char *filename, std::size_t offset)
+        // void
+        // fromfile(const char *filename, std::size_t offset)
         //{
         //    *this = serialize_objects::gzdeserialize_details<singlepop_t>()(
         //        KTfwd::mutation_reader<singlepop_t::mutation_t>(),
@@ -285,7 +287,10 @@ namespace fwdpy11
         }
 
         //! Construct from a fwdpy11::singlepop_t
-        explicit metapop_t(const singlepop_t &p) : base(p), generation(p.generation) {}
+        explicit metapop_t(const singlepop_t &p)
+            : base(p), generation(p.generation)
+        {
+        }
 
         unsigned
         gen() const
@@ -329,35 +334,36 @@ namespace fwdpy11
         {
             return int(diploids.size());
         }
-        //std::string
-        //serialize() const
+        // std::string
+        // serialize() const
         //{
         //    return serialization::serialize_details(
         //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
-        //void
-        //deserialize(const std::string &s)
+        // void
+        // deserialize(const std::string &s)
         //{
         //    *this = serialize_objects::deserialize_details<metapop_t>()(
         //        s, KTfwd::mutation_reader<metapop_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), std::vector<unsigned>(0u));
         //}
 
-        //int
-        //tofile(const char *filename, bool append = false) const
+        // int
+        // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialize_objects::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
-        //void
-        //fromfile(const char *filename, std::size_t offset)
+        // void
+        // fromfile(const char *filename, std::size_t offset)
         //{
         //    *this = serialize_objects::gzdeserialize_details<metapop_t>()(
         //        KTfwd::mutation_reader<metapop_t::mutation_t>(),
-        //        fwdpy11::diploid_reader(), filename, offset, std::vector<unsigned>(0u));
+        //        fwdpy11::diploid_reader(), filename, offset,
+        //        std::vector<unsigned>(0u));
         //}
     };
 
@@ -378,7 +384,9 @@ namespace fwdpy11
     {
         using base = KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>;
         unsigned generation;
-        explicit singlepop_gm_vec_t(const unsigned &N) : base(N), generation(0) {}
+        explicit singlepop_gm_vec_t(const unsigned &N) : base(N), generation(0)
+        {
+        }
         unsigned
         gen() const
         {
@@ -394,33 +402,34 @@ namespace fwdpy11
         {
             return int(N == diploids.size());
         }
-        //std::string
-        //serialize() const
+        // std::string
+        // serialize() const
         //{
         //    return serialization::serialize_details(
         //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
-        //void
-        //deserialize(const std::string &s)
+        // void
+        // deserialize(const std::string &s)
         //{
         //    *this
-        //        = serialize_objects::deserialize_details<singlepop_gm_vec_t>()(
+        //        =
+        //        serialize_objects::deserialize_details<singlepop_gm_vec_t>()(
         //            s,
         //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
         //            fwdpy11::diploid_reader(), 0u);
         //}
 
-        //int
-        //tofile(const char *filename, bool append = false) const
+        // int
+        // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialize_objects::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
-        //void
-        //fromfile(const char *filename, std::size_t offset)
+        // void
+        // fromfile(const char *filename, std::size_t offset)
         //{
         //    *this = serialize_objects::
         //        gzdeserialize_details<singlepop_gm_vec_t>()(
@@ -458,31 +467,31 @@ namespace fwdpy11
         {
             return int(N == diploids.size());
         }
-        //std::string
-        //serialize() const
+        // std::string
+        // serialize() const
         //{
         //    return serialization::serialize_details(
         //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         //}
 
-        //void
-        //deserialize(const std::string &s)
+        // void
+        // deserialize(const std::string &s)
         //{
         //    *this = serialize_objects::deserialize_details<multilocus_t>()(
         //        s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), 0u, 0u);
         //}
 
-        //int
-        //tofile(const char *filename, bool append = false) const
+        // int
+        // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialize_objects::gzserialize_details(
         //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
-        //void
-        //fromfile(const char *filename, std::size_t offset)
+        // void
+        // fromfile(const char *filename, std::size_t offset)
         //{
         //    *this = serialize_objects::gzdeserialize_details<multilocus_t>()(
         //        KTfwd::mutation_reader<multilocus_t::mutation_t>(),
