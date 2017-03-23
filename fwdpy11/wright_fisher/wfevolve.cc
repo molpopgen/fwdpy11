@@ -58,20 +58,22 @@ evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
         {
             double wbar = KTfwd::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N, mu,
-                std::bind(KTfwd::infsites(), std::placeholders::_1,
-                          std::placeholders::_2, rng.get(),
-                          std::ref(pop.mut_lookup), &generation, mu, 0.,
-                          [&rng]() { return gsl_rng_uniform(rng.get()); },
-                          []() { return 0.; }, []() { return 0.; }),
+                pop.mcounts, pop.N, N, mu + 0.005,
+                std::bind(
+                    KTfwd::infsites(), std::placeholders::_1,
+                    std::placeholders::_2, rng.get(), std::ref(pop.mut_lookup),
+                    &generation, mu, 0.005,
+                    [&rng]() { return gsl_rng_uniform(rng.get()); },
+                    [&rng]() { return gsl_ran_exponential(rng.get(), -0.1); },
+                    []() { return 1.; }),
                 std::bind(KTfwd::poisson_xover(), rng.get(), recrate, 0., 1.,
                           std::placeholders::_1, std::placeholders::_2,
                           std::placeholders::_3),
-                std::bind(KTfwd::multiplicative_diploid(),
+                std::bind(KTfwd::additive_diploid(),
                           std::placeholders::_1, std::placeholders::_2,
                           std::placeholders::_3, 2.),
                 pop.neutral, pop.selected);
-            // pop.N = N;
+            pop.N = N;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
                                     pop.mcounts, generation, 2 * pop.N);

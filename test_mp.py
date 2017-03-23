@@ -21,6 +21,7 @@ def evolve_and_return(args):
     rng=fp11.GSLrng(seed)
     fwdpy11.wright_fisher.evolve(pop,rng,1000,10000,0.001,0.001)
     #OMG pops are now pickle-able!!!
+    print(len(pop.mutations),len(pop.mcounts))
     return (pop,rec)
 
 if __name__ == "__main__":
@@ -30,6 +31,3 @@ if __name__ == "__main__":
     res=P.imap(evolve_and_return,args)
     P.close()
     P.join()
-
-    for r in res:
-        print(r[0].mcounts,len(r[1].data))
