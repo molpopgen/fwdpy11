@@ -3,6 +3,7 @@ import fwdpy11.wright_fisher
 import multiprocessing as mp
 from collections import Counter
 import numpy as np
+import math
 
 class RecordSFSandSample:
     """
@@ -25,18 +26,39 @@ class RecordSFSandSample:
         sample=fp11.sample_separate(self.rng,pop,self.nsam,True);
         self.data.append((generation,c,sample))
 
+#two custom fitness functions:
+
+def neutral_fitness(a,b,c):
+    return 1
+
+def exp_decline_with_ttl(dip,gametes,mutations):
+    ttl=0.0
+    for mk in gametes[dip.first].smutations:
+        ttl += mutations[mk].s
+    for mk in gametes[dip.second].smutations:
+        ttl += mutations[mk].s
+    return math.exp(-(math.fabs(ttl)))
+
 def evolve_and_return(args):
-    N,seed=args
+    """
+    Caveat: C++-based fitness types
+    are not pickleable, and thus cannot
+    be sent in this way. Have to think of a workaround
+    """
+    N,seed,fitness=args
     pop = fp11.Spop(N)
     rng=fp11.GSLrng(seed)
     rec=RecordSFSandSample(rng,10)
-    fwdpy11.wright_fisher.evolve(pop,rng,N,10*N,0.001,0.001,rec)
+    nregions=[fp11.Region(0,1,1)]
+    sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
+    recregions=nregions
+    fwdpy11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,rec,fitness,N,1000,0.001,0.005,0.001,nregions,sregions,recregions)
     #OMG pops are now pickle-able!!!
     return (pop,rec)
 
 if __name__ == "__main__":
-    args=[(1000,seed) for seed in np.random.randint(0,42000000,10)]
-    print(args)
+    #run 10 sims in parallel with a fitness fxn written in Python
+    args=[(1000,seed,exp_decline_with_ttl) for seed in np.random.randint(0,42000000,10)]
     P=mp.Pool()
     res=P.imap(evolve_and_return,args)
     P.close()
