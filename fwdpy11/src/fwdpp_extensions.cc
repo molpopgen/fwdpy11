@@ -21,9 +21,9 @@ template <typename S> struct make_sh_model_fixed_dom
 };
 
 #define RETURN_DFE_FIXEDH(DIST, S, H)                                         \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(S, H);
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H,S);
 #define RETURN_DFE2_FIXEDH(DIST, A, B, H)                                     \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(A, B, H);
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H,A, B);
 
 PYBIND11_PLUGIN(fwdpp_extensions)
 {
