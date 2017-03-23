@@ -1,5 +1,5 @@
 import fwdpy11 as fp11
-import fwdpy11.evolve
+import fwdpy11.wright_fisher
 import multiprocessing as mp
 from collections import Counter
 import numpy as np
@@ -19,7 +19,7 @@ def evolve_and_return(args):
     pop = fp11.Spop(N)
     rec=RecordSFS()
     rng=fp11.GSLrng(seed)
-    fwdpy11.evolve.evolve(pop,rng,1000,10000,0.001,0.001,rec)
+    fwdpy11.wright_fisher.evolve(pop,rng,1000,10000,0.001,0.001)
     #OMG pops are now pickle-able!!!
     return (pop,rec)
 
