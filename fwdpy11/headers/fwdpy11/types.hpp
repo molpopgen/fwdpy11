@@ -6,7 +6,7 @@
 
 #ifndef __FWDPY_TYPES__
 #define __FWDPY_TYPES__
-
+#include <fwdpy11/opaque/opaque_types.hpp>
 #include <fwdpp/sugar.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #ifdef CUSTOM_DIPLOID_BASE
@@ -27,13 +27,6 @@ namespace fwdpy11
       as a Mersenne twister type (gsl_rng_mt19937).
     */
     using GSLrng_t = KTfwd::GSLrng_t<KTfwd::GSL_RNG_MT19937>;
-
-    //! Typedef for mutation container
-    using mcont_t = std::vector<KTfwd::popgenmut>;
-    //! Typedef for gamete type
-    using gamete_t = KTfwd::gamete;
-    //! Typedef for gamete container
-    using gcont_t = std::vector<gamete_t>;
 
 #ifdef CUSTOM_DIPLOID_BASE
     struct diploid_t : public KTfwd::tags::custom_diploid_t
