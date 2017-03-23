@@ -27,12 +27,14 @@ class RecordSFSandSample:
         sample=fp11.sample_separate(self.rng,pop,self.nsam,True);
         self.data.append((generation,c,sample))
 
+def hapsum(g,m):
+    s=0.
+    for i in range(len(g)):
+        s+=m[g[i]].s
+    return s
+
 def additive(d,g,m):
-    s=0.;
-    for mk in g[d.first].smutations:
-        s+=m[mk].s
-    for mk in g[d.second].smutations:
-        s+=m[mk].s
+    s=hapsum(g[d.first].smutations,m) + hapsum(g[d.second].smutations,m)
     return max(0,1.0+s)
 
 def evolve_and_return(args):
