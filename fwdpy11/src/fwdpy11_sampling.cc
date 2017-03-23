@@ -13,7 +13,8 @@ typename std::enable_if<std::is_same<typename poptype::popmodel_t,
                                      KTfwd::sugar::SINGLEPOP_TAG>::value,
                         KTfwd::sep_sample_t>::type
 sample_separate_wrapper(const fwdpy11::GSLrng_t &rng, const poptype &pop,
-                        const unsigned nsam, const bool removeFixed) {
+                        const unsigned nsam, const bool removeFixed)
+{
     return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed);
 }
 
@@ -24,16 +25,18 @@ typename std::enable_if<std::is_same<typename poptype::popmodel_t,
 sample_separate_wrapper(
     const fwdpy11::GSLrng_t &rng, const poptype &pop, const unsigned nsam,
     const bool removeFixed,
-    const std::vector<std::pair<double, double>> &locus_boundaries) {
+    const std::vector<std::pair<double, double>> &locus_boundaries)
+{
     return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed,
                                   locus_boundaries);
 }
 
-PYBIND11_PLUGIN(fwdpy11_sampling) {
+PYBIND11_PLUGIN(fwdpy11_sampling)
+{
     py::module m("fwdpy11_sampling", "Taking samples from populations");
 
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>);
-    // m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
+    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix")
         .def(py::init<>())
@@ -45,7 +48,8 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
         .def_readonly("selected_positions",
                       &KTfwd::data_matrix::selected_positions)
         .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq)
-        .def_readonly("selected_popfreq", &KTfwd::data_matrix::selected_popfreq)
+        .def_readonly("selected_popfreq",
+                      &KTfwd::data_matrix::selected_popfreq)
         .def_readonly("nrow", &KTfwd::data_matrix::nrow)
         .def("__getstate__",
              [](const KTfwd::data_matrix &d) {
@@ -67,7 +71,7 @@ PYBIND11_PLUGIN(fwdpy11_sampling) {
 
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::singlepop_t>);
     m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::multilocus_t>);
-	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy11::singlepop_t>);
-	m.def("genotype_matrix",&KTfwd::genotype_matrix<fwdpy11::multilocus_t>);
+    m.def("genotype_matrix", &KTfwd::genotype_matrix<fwdpy11::singlepop_t>);
+    m.def("genotype_matrix", &KTfwd::genotype_matrix<fwdpy11::multilocus_t>);
     return m.ptr();
 }
