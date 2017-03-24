@@ -61,6 +61,7 @@ def evolve_and_return(args):
 
 if __name__ == "__main__":
     #run 10 sims in parallel with a fitness fxn written in Python
+    np.random.seed(101)
     args=[(1000,seed,exp_decline_with_ttl) for seed in np.random.randint(0,42000000,10)]
     evolve_and_return(args[0])
     #P=mp.Pool()
