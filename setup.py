@@ -127,7 +127,6 @@ class BuildExt(build_ext):
                 opts.append('-fvisibility=hidden')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
-        opts.append('-UNDEBUG')
         for ext in self.extensions:
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
