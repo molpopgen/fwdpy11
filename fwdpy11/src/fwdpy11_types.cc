@@ -2,6 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/pytypes.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
@@ -43,25 +44,27 @@ PYBIND11_PLUGIN(fwdpy11_types)
             d.e = t[4].cast<double>();
         });
 
-    py::class_<fwdpy11::gcont_t>(m, "GameteContainer")
-        .def("__len__", [](const fwdpy11::gcont_t& v) { return v.size(); })
-        .def("__getitem__",
-             [](const fwdpy11::gcont_t& v, std::size_t i) { return v[i]; })
-        .def("__iter__",
-             [](const fwdpy11::gcont_t& v) {
-                 return py::make_iterator(v.begin(), v.end());
-             },
-             py::keep_alive<0, 1>());
+    py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer");
+    py::bind_vector<fwdpy11::mcont_t>(m, "MutationContainer");
+    // py::class_<fwdpy11::gcont_t>(m, "GameteContainer")
+    //    .def("__len__", [](const fwdpy11::gcont_t& v) { return v.size(); })
+    //    .def("__getitem__",
+    //         [](const fwdpy11::gcont_t& v, std::size_t i) { return v[i]; })
+    //    .def("__iter__",
+    //         [](const fwdpy11::gcont_t& v) {
+    //             return py::make_iterator(v.begin(), v.end());
+    //         },
+    //         py::keep_alive<0, 1>());
 
-    py::class_<fwdpy11::mcont_t>(m, "MutationContainer")
-        .def("__len__", [](const fwdpy11::mcont_t& v) { return v.size(); })
-        .def("__getitem__",
-             [](const fwdpy11::mcont_t& v, std::size_t i) { return v[i]; })
-        .def("__iter__",
-             [](const fwdpy11::mcont_t& v) {
-                 return py::make_iterator(v.begin(), v.end());
-             },
-             py::keep_alive<0, 1>());
+    // py::class_<fwdpy11::mcont_t>(m, "MutationContainer")
+    //    .def("__len__", [](const fwdpy11::mcont_t& v) { return v.size(); })
+    //    .def("__getitem__",
+    //         [](const fwdpy11::mcont_t& v, std::size_t i) { return v[i]; })
+    //    .def("__iter__",
+    //         [](const fwdpy11::mcont_t& v) {
+    //             return py::make_iterator(v.begin(), v.end());
+    //         },
+    //         py::keep_alive<0, 1>());
 
     py::class_<fwdpp_popgenmut_base>(m, "MutationPoptypeCommonBase")
         .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,
