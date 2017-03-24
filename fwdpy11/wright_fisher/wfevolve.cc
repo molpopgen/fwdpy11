@@ -69,9 +69,8 @@ evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
                 std::bind(KTfwd::poisson_xover(), rng.get(), recrate, 0., 1.,
                           std::placeholders::_1, std::placeholders::_2,
                           std::placeholders::_3),
-                std::bind(KTfwd::additive_diploid(),
-                          std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, 2.),
+                std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
+                          std::placeholders::_2, std::placeholders::_3, 2.),
                 pop.neutral, pop.selected);
             pop.N = N;
             KTfwd::update_mutations(pop.mutations, pop.fixations,

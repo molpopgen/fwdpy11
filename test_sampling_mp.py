@@ -52,9 +52,11 @@ def evolve_and_return(args):
     nregions=[fp11.Region(0,1,1)]
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
     recregions=nregions
-    fwdpy11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,rec,fitness,N,1000,0.001,0.005,0.001,nregions,sregions,recregions)
+    fitness=fp11.SpopAdditive(2.0).callback
+    fwdpy11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,
+            N,1000,0.001,0.005,0.001,nregions,sregions,recregions,fitness,rec)
     #OMG pops are now pickle-able!!!
-    return (pop,rec)
+    #return (pop,rec)
 
 if __name__ == "__main__":
     #run 10 sims in parallel with a fitness fxn written in Python
@@ -64,10 +66,10 @@ if __name__ == "__main__":
     P.close()
     P.join()
 
-    for r in res:
-        print(r[0].mcounts,len(r[1].data[0]))
-        print(r[1].data[-1])
-        print (r[0].gametes)
-        for dip in r[0].diploids:
-            for mk in r[0].gametes[dip.first].mutations:
-                print( r[0].mutations[mk])
+    #for r in res:
+    #    print(r[0].mcounts,len(r[1].data[0]))
+    #    print(r[1].data[-1])
+    #    print (r[0].gametes)
+    #    for dip in r[0].diploids:
+    #        for mk in r[0].gametes[dip.first].mutations:
+    #            print( r[0].mutations[mk])
