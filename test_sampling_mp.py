@@ -55,12 +55,14 @@ def evolve_and_return(args):
     fitness=fp11.SpopAdditive(2.0).callback
     fwdpy11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,
             N,1000,0.001,0.005,0.001,nregions,sregions,recregions,fitness,rec)
+    print(len(pop.mutations))
     #OMG pops are now pickle-able!!!
     #return (pop,rec)
 
 if __name__ == "__main__":
     #run 10 sims in parallel with a fitness fxn written in Python
     args=[(1000,seed,exp_decline_with_ttl) for seed in np.random.randint(0,42000000,10)]
+    evolve_and_return(args[0])
     P=mp.Pool()
     res=P.imap(evolve_and_return,args)
     P.close()
