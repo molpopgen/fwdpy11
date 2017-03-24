@@ -63,10 +63,10 @@ if __name__ == "__main__":
     #run 10 sims in parallel with a fitness fxn written in Python
     args=[(1000,seed,exp_decline_with_ttl) for seed in np.random.randint(0,42000000,10)]
     evolve_and_return(args[0])
-    P=mp.Pool()
-    res=P.imap(evolve_and_return,args)
-    P.close()
-    P.join()
+    #P=mp.Pool()
+    #res=P.imap(evolve_and_return,args)
+    #P.close()
+    #P.join()
 
     #for r in res:
     #    print(r[0].mcounts,len(r[1].data[0]))
