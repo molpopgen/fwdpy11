@@ -37,8 +37,9 @@ evolve_singlepop_regions_cpp(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
                 recmap,
-                std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
-                          std::placeholders::_2, std::placeholders::_3, 2.),
+				fitness,
+                //std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
+                //          std::placeholders::_2, std::placeholders::_3, 2.),
                 pop.neutral, pop.selected); //, selfing_rate);
             pop.N = N;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
