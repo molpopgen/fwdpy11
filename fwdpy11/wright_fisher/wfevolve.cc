@@ -1,6 +1,7 @@
 #include <fwdpy11/types.hpp>
-#include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/functional.h>
 #include <functional>
 #include <cmath>
 #include <fwdpp/diploid.hh>
@@ -9,12 +10,14 @@
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 
+namespace py = pybind11;
+
 // Evolve the population for some amount of time with mutation and
 // recombination
 void
 evolve_singlepop_regions_cpp(
-    const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop, const unsigned& N,
-    const unsigned generations, const double mu_neutral,
+    const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
@@ -23,24 +26,27 @@ evolve_singlepop_regions_cpp(
 {
     const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
-        std::log(2 * N)
-        * (4. * double(N) * (mu_neutral + mu_selected)
-           + 0.667 * (4. * double(N) * (mu_neutral + mu_selected)))));
+        std::log(2 * pop.N)
+        * (4. * double(pop.N) * (mu_neutral + mu_selected)
+           + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
     ++pop.generation;
+    const auto generations = popsizes.size();
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
+            const auto N_next = popsizes.at(generation);
+//            std::cout << generation << ' ' << generations << ' ' << N_next << '\n';
             double wbar = KTfwd::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N, mu_neutral + mu_selected,
+                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected,
                 KTfwd::extensions::bind_dmm(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
                 recmap, fitness_callback,
                 pop.neutral, pop.selected, selfing_rate);
-            pop.N = N;
+            pop.N = N_next;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
                                     pop.mcounts, generation, 2 * pop.N);
@@ -82,7 +88,6 @@ evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
         }
 }
 
-namespace py = pybind11;
 
 PYBIND11_PLUGIN(wfevolve)
 {

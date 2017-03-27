@@ -53,10 +53,9 @@ def evolve_and_return(args):
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
     recregions=nregions
     fitness=fp11.SpopAdditive(2.0)
-    #Fool pybind11 into seeing
-    #existing references
+    nlist=np.array([N]*N,dtype=np.uint32)
     fwdpy11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,
-            N,1000,0.001,0.005,0.001,nregions,sregions,recregions,fitness,rec)
+            nlist,0.001,0.005,0.001,nregions,sregions,recregions,fitness,rec)
     print(len(pop.mutations))
     #OMG pops are now pickle-able!!!
     #return (pop,rec)
