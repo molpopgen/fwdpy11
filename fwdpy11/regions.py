@@ -31,13 +31,13 @@ class Region(object):
         Example:
 
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> r = fwdpy11.Region(0,1,1)
-        >>> #A more "biological" case:
-        >>> #  The region covers positions 1 through 1,000,
-        >>> #  and the per-base pair "weight" is 1e-5:
-        >>> r = fwdpy11.Region(1,1000,1e-5,True)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> r = fwdpy11.Region(0,1,1)
+            >>> #A more "biological" case:
+            >>> #  The region covers positions 1 through 1,000,
+            >>> #  and the per-base pair "weight" is 1e-5:
+            >>> r = fwdpy11.Region(1,1000,1e-5,True)
         """
         if math.isinf(beg):
             raise ValueError("fwdpy11.Region: beg not finite")
@@ -105,13 +105,13 @@ class Sregion(Region):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> #Examples for models where the 3 genotype fitnesses are
-        >>> #1, 1+sh, and 1+2s, respectively
-        >>> recessive = fwdpy11.Sregion(0,1,1,0)
-        >>> additive = fwdpy11.Sregion(0,1,1,1.0)
-        >>> dominant = fwdpy11.Sregion(0,1,1,2.0)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> #Examples for models where the 3 genotype fitnesses are
+            >>> #1, 1+sh, and 1+2s, respectively
+            >>> recessive = fwdpy11.Sregion(0,1,1,0)
+            >>> additive = fwdpy11.Sregion(0,1,1,1.0)
+            >>> dominant = fwdpy11.Sregion(0,1,1,2.0)
         """
         if math.isinf(h):
             raise ValueError("fwdpy11.Sregion: h not finite")
@@ -155,9 +155,9 @@ class GammaS(Sregion):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
         """
         if math.isinf(mean):
             raise ValueError("fwdpy11.GammaS: mean not finite")
@@ -207,10 +207,10 @@ class ConstantS(Sregion):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> #s = -0.1 and h = 0
-        >>> constantS = fwdpy11.ConstantS(0,1,1,-0.1,0)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> #s = -0.1 and h = 0
+            >>> constantS = fwdpy11.ConstantS(0,1,1,-0.1,0)
         """
         if math.isinf(s):
             raise ValueError("fwdpy11.ConstantS: s not finite")
@@ -257,10 +257,10 @@ class UniformS(Sregion):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> #s is uniform on [0,-1]
-        >>> constantS = fwdpy11.UniformS(0,1,1,0,-1,0)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> #s is uniform on [0,-1]
+            >>> constantS = fwdpy11.UniformS(0,1,1,0,-1,0)
         """
         if math.isinf(lo):
             raise ValueError("fwdpy11.UniformS: lo not finite")
@@ -310,10 +310,10 @@ class ExpS(Sregion):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> #s is exp(-0.1) and recessive
-        >>> constantS = fwdpy11.ExpS(0,1,1,0,-0.1,0)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> #s is exp(-0.1) and recessive
+            >>> constantS = fwdpy11.ExpS(0,1,1,0,-0.1,0)
         """
         if math.isinf(mean):
             raise ValueError("fwdpy11.ExpS: mean not finite")
@@ -360,10 +360,10 @@ class GaussianS(Sregion):
 
         Example:
 
-        >>> #A simple case
-        >>> import fwdpy11
-        >>> #s N(0,0.1) and co-dominant
-        >>> constantS = fwdpy11.GaussianS(0,1,1,0,0.1,1)
+            >>> #A simple case
+            >>> import fwdpy11
+            >>> #s N(0,0.1) and co-dominant
+            >>> constantS = fwdpy11.GaussianS(0,1,1,0,0.1,1)
         """
         if math.isinf(sd):
             raise ValueError("fwdpy11.GaussianS: sd not finite")
@@ -388,6 +388,23 @@ def makeMutationRegions(neutral,selected):
 
     .. note:: Used by various "evolve" functions.  Users probably won't need to call this.
     
+        >>> import fwdpy11 as fp11
+        >>> nregions = [fp11.Region(0,0.5,1),fp11.Region(1,1.5,1)]
+        >>> sregions = [fp11.ExpS(0,0.5,1,1),fp11.GaussianS(1,1.5,1,0.25)]
+        >>> mr = fp11.makeMutationRegions(nregions,sregions)
+        >>> type(mr)
+        <class 'fwdpy11.fwdpp_extensions.MutationRegions'>
+
+    One or both lists may be empty:
+
+        >>> mr = fp11.makeMutationRegions([],[])
+
+    Neither list may be None:
+
+        >>> mr = fp11.makeMutationRegions([],None)
+        Traceback (most recent call last):
+            ...
+        TypeError: 'NoneType' object is not iterable
     """
     nbeg = [i.b for i in neutral]
     nend = [i.e for i in neutral]
@@ -410,6 +427,12 @@ def makeRecombinationRegions(regions):
 
     .. note:: Used by various "evolve" functions.  Users probably won't need to call this.
     
+        >>> import fwdpy11 as fp11
+        >>> rregions = [fp11.Region(0,0.5,1),fp11.Region(1,1.5,1)]
+        >>> rr = fp11.makeRecombinationRegions(rregions)
+        >>> type(rr)
+        <class 'fwdpy11.fwdpp_extensions.RecombinationRegions'>
+
     """
     beg = [i.b for i in regions]
     end = [i.e for i in regions]
