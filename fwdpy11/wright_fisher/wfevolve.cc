@@ -1,3 +1,4 @@
+#include <fwdpy11/types.hpp>
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <functional>
@@ -5,7 +6,6 @@
 #include <fwdpp/diploid.hh>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
-#include <fwdpy11/types.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 
@@ -18,10 +18,10 @@ evolve_singlepop_regions_cpp(
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
-    const fwdpy11::singlepop_fitness & fitness,
+    const fwdpy11::singlepop_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
 {
-	const auto fitness_callback = fitness.callback();
+    const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * N)
         * (4. * double(N) * (mu_neutral + mu_selected)
@@ -37,16 +37,15 @@ evolve_singlepop_regions_cpp(
                 KTfwd::extensions::bind_dmm(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
-                recmap,
-				fitness_callback,
-                //std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
+                recmap, fitness_callback,
+                // std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
                 //          std::placeholders::_2, std::placeholders::_3, 2.),
                 pop.neutral, pop.selected); //, selfing_rate);
             pop.N = N;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
                                     pop.mcounts, generation, 2 * pop.N);
-            // recorder(pop, generation);
+            recorder(pop, generation);
         }
 }
 

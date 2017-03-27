@@ -9,9 +9,6 @@
 #include <fwdpy11/opaque/opaque_types.hpp>
 #include <fwdpp/sugar.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
-#ifdef CUSTOM_DIPLOID_BASE
-#include <fwdpp/tags/diploid_tags.hpp>
-#endif
 #include <gsl/gsl_statistics_double.h>
 #include <map>
 #include <memory>
@@ -27,57 +24,6 @@ namespace fwdpy11
       as a Mersenne twister type (gsl_rng_mt19937).
     */
     using GSLrng_t = KTfwd::GSLrng_t<KTfwd::GSL_RNG_MT19937>;
-
-#ifdef CUSTOM_DIPLOID_BASE
-    struct diploid_t : public KTfwd::tags::custom_diploid_t
-#else
-    struct diploid_t
-#endif
-    /*!
-      \brief Custom diploid type.
-    */
-    {
-        using first_type = std::size_t;
-        using second_type = std::size_t;
-        //! First gamete.  A gamete is vector<size_t> where the elements are
-        //! indexes to a population's gamete container
-        first_type first;
-        //! Second gamete. A gamete is vector<size_t> where the elements are
-        //! indexes to a population's gamete container
-        second_type second;
-        //! 64 bits of data to do stuff with.  Initialized to zero upon
-        //! construction
-        std::size_t label;
-        //! Genetic component of trait value.  This is not necessarily written
-        //! to by a simulation.
-        double g;
-        //! Random component of trait value.  This is not necessarily written
-        //! to by a simulation.
-        double e;
-        //! Fitness.  This is not necessarily written to by a simulation.
-        double w;
-        //! Constructor
-        diploid_t() noexcept : first(first_type()),
-                               second(second_type()),
-                               label(0),
-                               g(0.),
-                               e(0.),
-                               w(1.)
-        {
-        }
-        //! Construct from two indexes to gametes
-        diploid_t(first_type g1, first_type g2) noexcept : first(g1),
-                                                           second(g2),
-                                                           label(0),
-                                                           g(0.),
-                                                           e(0.),
-                                                           w(1.)
-        {
-        }
-    };
-
-    //! Typedef for container of diploids
-    using dipvector_t = std::vector<diploid_t>;
 
     //! Allows serialization of diploids.
     struct diploid_writer

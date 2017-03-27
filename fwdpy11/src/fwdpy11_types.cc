@@ -44,6 +44,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
             d.e = t[4].cast<double>();
         });
 
+    py::bind_vector<fwdpy11::dipvector_t>(m, "DiploidContainer");
+    py::bind_vector<std::vector<KTfwd::uint_t>>(m, "VectorUint32");
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer");
     py::bind_vector<fwdpy11::mcont_t>(m, "MutationContainer");
     // py::class_<fwdpy11::gcont_t>(m, "GameteContainer")
