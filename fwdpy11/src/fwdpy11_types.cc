@@ -10,8 +10,7 @@ namespace py = pybind11;
 using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 
-PYBIND11_PLUGIN(fwdpy11_types)
-{
+PYBIND11_PLUGIN(fwdpy11_types) {
     py::module m("fwdpy11_types", "Wrap C++ types specific to fwdpy11.");
 
     py::class_<fwdpy11::GSLrng_t>(
@@ -25,13 +24,13 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
         .def_readonly("first", &fwdpy11::diploid_t::first,
-                      "Key to first gamete.")
+                      "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::diploid_t::second,
-                      "Key to second gamete.")
-        .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness.")
-        .def_readonly("g", &fwdpy11::diploid_t::g, "Genetic value.")
+                      "Key to second gamete. (read-onle)")
+        .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness. (read-only)")
+        .def_readonly("g", &fwdpy11::diploid_t::g, "Genetic value (read-only).")
         .def_readonly("e", &fwdpy11::diploid_t::e,
-                      "Random/environmental effects.")
+                      "Random/environmental effects (read-only).")
         .def("__getstate__",
              [](const fwdpy11::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -44,17 +43,43 @@ PYBIND11_PLUGIN(fwdpy11_types)
             d.e = t[4].cast<double>();
         });
 
-    py::bind_vector<fwdpy11::dipvector_t>(m, "DiploidContainer");
+    py::bind_vector<fwdpy11::dipvector_t>(
+        m, "DiploidContainer",
+        "C++ representation of a list of "
+        ":class:`fwdpy11.fwdpy11_types."
+        "SingleLocusDiploid`.  Typically, access will be read-only.");
     py::bind_vector<std::vector<KTfwd::uint_t>>(m, "VectorUint32");
-    py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer");
-    py::bind_vector<fwdpy11::mcont_t>(m, "MutationContainer");
+    py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
+                                      "C++ representations of a list of "
+                                      ":class:`fwdpy11.fwdpp_types.Gamete`.  "
+                                      "Typically, access will be read-only.");
+    py::bind_vector<fwdpy11::mcont_t>(m, "MutationContainer",
+                                      "C++ representation of a list of "
+                                      ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                                      "Typically, access will be read-only.");
 
-    py::class_<fwdpp_popgenmut_base>(m, "MutationPoptypeCommonBase")
-        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,
-                      "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
-        .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts)
+    py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase",
+                                     "Base class for a single deme/single "
+                                     "locus object containing "
+                                     ":class:`fwdpy11.fwdpp_types.Mutation`.")
+        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,R"delim(
+    List of :class:`fwdpy11.fwdpp_types.Mutation`.
+
+    .. note:: 
+        This list contains **both** extinct *and* extant mutations.  
+        To distinguish them, use :attr:`fwdpy11.fwdpy11_types.SpopMutationBase.mcounts`.
+)delim")
+        .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts, R"delim(
+    List of number of occurrences of elements in 
+    :attr:`fwdpy11.fwdpy11_types.SpopMutationBase.mutations`.
+
+    The values are unsigned 32-bit integers.  
+
+    .. note::
+        Some values may be 0.  These represent *extinct* variants.  You will typically want to avoid processing such mutations.
+)delim")
         .def_readonly("fixations", &fwdpp_popgenmut_base::fixations)
-		.def_readonly("fixation_times",&fwdpp_popgenmut_base::fixation_times)
+        .def_readonly("fixation_times", &fwdpp_popgenmut_base::fixation_times)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes);
 
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase")

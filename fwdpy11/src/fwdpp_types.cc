@@ -6,8 +6,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(fwdpp_types)
-{
+PYBIND11_PLUGIN(fwdpp_types) {
     py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");
 
     // low-level types
@@ -22,13 +21,23 @@ Base class for mutations.
         .def_readwrite("xtra", &KTfwd::mutation_base::xtra,
                        "16-bits worth of extra data.");
 
-    py::class_<KTfwd::gamete>(m, "Gamete")
-        .def_readonly("n", &KTfwd::gamete::n,
-                      "Number of occurrences in the population.")
+    py::class_<KTfwd::gamete>(m, "Gamete", R"delim(
+    A gamete.  This object represents a haplotype
+    in a contiguous genomic region.
+)delim")
+        .def_readonly(
+            "n", &KTfwd::gamete::n,
+            "Number of occurrences in the population.  . This has "
+            "little meaning beyond book-keeping used by the C++ "
+            "back-end. (read-only)")
         .def_readonly("mutations", &KTfwd::gamete::mutations,
-                      "Vector of keys to neutral mutations.")
+                      "List of keys to neutral mutations. Contains unsigned "
+                      "32-bit integers corresponding to mutations in the "
+                      "population. (read-only)")
         .def_readonly("smutations", &KTfwd::gamete::smutations,
-                      "Vector of keys to selected mutations.")
+                      "List of keys to selected mutations. Contains unsigned "
+                      "32-bit integers corresponding to mutations in the "
+                      "population. (read-only)")
         .def("as_dict",
              // This lambda shows that
              // we can return dicts
@@ -37,12 +46,13 @@ Base class for mutations.
                  using obj = pybind11::object;
                  pybind11::dict rv;
                  rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
-                 rv[obj(pybind11::cast("mutations"))]
-                     = obj(pybind11::cast(g.mutations));
-                 rv[obj(pybind11::cast("smutations"))]
-                     = obj(pybind11::cast(g.smutations));
+                 rv[obj(pybind11::cast("mutations"))] =
+                     obj(pybind11::cast(g.mutations));
+                 rv[obj(pybind11::cast("smutations"))] =
+                     obj(pybind11::cast(g.smutations));
                  return rv;
-             })
+             },
+             "Return dictionary representaton of the gamete.")
         .def("__getstate__",
              [](const KTfwd::gamete &g) {
                  return py::make_tuple(g.n, g.mutations, g.smutations);
@@ -57,12 +67,13 @@ Base class for mutations.
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
         .def(py::init<double, double, double, unsigned, std::uint16_t>())
-        .def_readwrite("g", &KTfwd::popgenmut::g,
-                       "Generation when mutation arose (origination time).")
+        .def_readwrite(
+            "g", &KTfwd::popgenmut::g,
+            "Generation when mutation arose (origination time). (read-only)")
         .def_readwrite("s", &KTfwd::popgenmut::s,
-                       "Selection coefficient/effect size.")
+                       "Selection coefficient/effect size. (read-only)")
         .def_readwrite("h", &KTfwd::popgenmut::h,
-                       "Dominance/effect in heterozygotes.")
+                       "Dominance/effect in heterozygotes. (read-only)")
         .def("__getstate__",
              [](const KTfwd::popgenmut &m) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
@@ -75,9 +86,9 @@ Base class for mutations.
                      p[4].cast<std::uint16_t>());
              })
         .def("__str__", [](const KTfwd::popgenmut &m) {
-            return "Mutation[" + std::to_string(m.pos) + ","
-                   + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                   + std::to_string(m.g) + "]";
+            return "Mutation[" + std::to_string(m.pos) + "," +
+                   std::to_string(m.s) + "," + std::to_string(m.h) + "," +
+                   std::to_string(m.g) + "]";
         });
 
     return m.ptr();
