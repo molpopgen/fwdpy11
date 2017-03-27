@@ -13,11 +13,17 @@ Contents:
 
    README
 
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+.. automodule:: fwdpy11.fwdpp_extensions
+   :members:
+   :show-inheritance:
+
+.. automodule:: fwdpy11.regions
+   :members:
+   :show-inheritance:
 
 .. automodule:: fwdpy11.fwdpp_types
    :members:
