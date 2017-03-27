@@ -73,6 +73,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "Container of :class:`fwdpy11.fwdpp_types.Mutation`")
         .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts)
         .def_readonly("fixations", &fwdpp_popgenmut_base::fixations)
+		.def_readonly("fixation_times",&fwdpp_popgenmut_base::fixation_times)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes);
 
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase")
