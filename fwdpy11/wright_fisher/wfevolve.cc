@@ -37,7 +37,6 @@ evolve_singlepop_regions_cpp(
          ++generation, ++pop.generation)
         {
             const auto N_next = popsizes.at(generation);
-//            std::cout << generation << ' ' << generations << ' ' << N_next << '\n';
             double wbar = KTfwd::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
                 pop.mcounts, pop.N, N_next, mu_neutral + mu_selected,
