@@ -58,11 +58,25 @@ PYBIND11_PLUGIN(fwdpy11_types) {
                                       ":class:`fwdpy11.fwdpp_types.Mutation`.  "
                                       "Typically, access will be read-only.");
 
-    py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase",
-                                     "Base class for a single deme/single "
-                                     "locus object containing "
-                                     ":class:`fwdpy11.fwdpp_types.Mutation`.")
-        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,R"delim(
+    py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase");
+
+    py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
+
+    // Expose the type based on fwdpp's "sugar" layer
+    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
+        m, "Spop", "Population object representing a single deme.")
+        .def(py::init<unsigned>(),
+             "Construct with an unsigned integer representing the initial "
+             "population size.")
+        .def("clear", &fwdpy11::singlepop_t::clear,
+             "Clears all population data.")
+        .def_readonly("generation", &fwdpy11::singlepop_t::generation,
+                      "The current generation.")
+        .def_readonly("N", &fwdpy11::singlepop_t::N,
+                      "The current population size.")
+        .def_readonly("diploids", &fwdpy11::singlepop_t::diploids,
+                      "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.")
+        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations, R"delim(
     List of :class:`fwdpy11.fwdpp_types.Mutation`.
 
     .. note:: 
@@ -78,23 +92,14 @@ PYBIND11_PLUGIN(fwdpy11_types) {
     .. note::
         Some values may be 0.  These represent *extinct* variants.  You will typically want to avoid processing such mutations.
 )delim")
-        .def_readonly("fixations", &fwdpp_popgenmut_base::fixations)
-        .def_readonly("fixation_times", &fwdpp_popgenmut_base::fixation_times)
-        .def_readonly("gametes", &fwdpp_popgenmut_base::gametes);
-
-    py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase")
-        .def_readonly("diploids", &singlepop_sugar_base::diploids);
-
-    // Expose the type based on fwdpp's "sugar" layer
-    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "Spop", "Population object representing a single deme.")
-        .def(py::init<unsigned>(),
-             "Construct with an unsigned integer representing the initial "
-             "population size.")
-        .def("clear", &fwdpy11::singlepop_t::clear,
-             "Clears all population data.")
-        .def_readonly("generation", &fwdpy11::singlepop_t::generation)
-        .def_readonly("N", &fwdpy11::singlepop_t::N)
+        .def_readonly("fixations", &fwdpp_popgenmut_base::fixations,
+                      "A :class:`fwdpy11.fwdpp_types.MutationContainer` of "
+                      "fixed variants.")
+        .def_readonly("fixation_times", &fwdpp_popgenmut_base::fixation_times,
+                      "A list of fixation times corresponding to "
+                      ":attr:`fwdpy11.fwdpy11_types.Spop.fixations`.")
+        .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
+                      "A :class:`fwdpy11.fwdpp_types.GameteContainer`.")
         .def("__getstate__",
              [](const fwdpy11::singlepop_t& pop) {
                  return py::bytes(pop.serialize());
