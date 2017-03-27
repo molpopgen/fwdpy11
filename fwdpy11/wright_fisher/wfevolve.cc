@@ -18,9 +18,10 @@ evolve_singlepop_regions_cpp(
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
-    fwdpy11::singlepop_fitness fitness,
+    const fwdpy11::singlepop_fitness & fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
 {
+	const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * N)
         * (4. * double(N) * (mu_neutral + mu_selected)
@@ -37,7 +38,7 @@ evolve_singlepop_regions_cpp(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
                 recmap,
-				fitness,
+				fitness_callback,
                 //std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
                 //          std::placeholders::_2, std::placeholders::_3, 2.),
                 pop.neutral, pop.selected); //, selfing_rate);

@@ -2,6 +2,7 @@
 #define FWDPY11_OPAQUE_TYPES_HPP__
 
 #include <pybind11/stl.h>
+#include <cstdint>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 

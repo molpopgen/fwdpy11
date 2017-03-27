@@ -5,12 +5,19 @@
 
 namespace fwdpy11
 {
-    using singlepop_fitness = std::function<double(const fwdpy11::diploid_t &,
-                                                   const fwdpy11::gcont_t &,
-                                                   const fwdpy11::mcont_t &)>;
+    using singlepop_fitness_signature = std::function<double(
+        const fwdpy11::diploid_t &, const fwdpy11::gcont_t &,
+        const fwdpy11::mcont_t &)>;
+
+	struct singlepop_fitness
+	{
+		~singlepop_fitness()=default;
+		singlepop_fitness()=default;
+		virtual singlepop_fitness_signature callback() const = 0;
+	};
 
     template <typename fitness_model_type>
-    struct fwdpp_singlepop_fitness_wrapper
+    struct fwdpp_singlepop_fitness_wrapper : public singlepop_fitness
     {
         using fitness_model = fitness_model_type;
         const double scaling;
@@ -18,8 +25,8 @@ namespace fwdpy11
             : scaling(scaling_)
         {
         }
-        inline singlepop_fitness
-        callback() const
+        inline singlepop_fitness_signature
+        callback() const final
         {
             return std::bind(fitness_model(), std::placeholders::_1,
                              std::placeholders::_2, std::placeholders::_3,

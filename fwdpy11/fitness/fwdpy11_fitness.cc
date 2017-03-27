@@ -10,21 +10,13 @@ PYBIND11_PLUGIN(fwdpy11_fitness)
 {
     py::module m("fwdpy11_fitness", "Standard fitness models.");
 
-    py::class_<fwdpy11::singlepop_mult_wrapper>(m, "SpopMult")
-        .def(py::init<double>())
-        .def_property_readonly(
-            "callback",
-            [](const fwdpy11::singlepop_mult_wrapper &m) -> fwdpy11::singlepop_fitness {
-                return m.callback();
-            });
+	py::class_<fwdpy11::singlepop_fitness>(m,"SpopFitness");
 
-    py::class_<fwdpy11::singlepop_additive_wrapper>(m, "SpopAdditive")
-        .def(py::init<double>())
-        .def_property_readonly(
-            "callback",
-            [](const fwdpy11::singlepop_additive_wrapper &m) -> fwdpy11::singlepop_fitness {
-                return m.callback();
-            });
+    py::class_<fwdpy11::singlepop_mult_wrapper,fwdpy11::singlepop_fitness>(m, "SpopMult")
+        .def(py::init<double>());
+
+    py::class_<fwdpy11::singlepop_additive_wrapper,fwdpy11::singlepop_fitness>(m, "SpopAdditive")
+        .def(py::init<double>());
 
     return m.ptr();
 }
