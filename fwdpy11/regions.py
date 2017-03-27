@@ -30,6 +30,7 @@ class Region(object):
 
         Example:
 
+
         >>> #A simple case
         >>> import fwdpy11
         >>> r = fwdpy11.Region(0,1,1)
@@ -377,6 +378,17 @@ class GaussianS(Sregion):
         return "Gaussian DFE, s.d. = "+"{:.9f}".format(self.sd)+", "+super(GaussianS,self).__str__()
 
 def makeMutationRegions(neutral,selected):
+    """
+    Convert user input into :class:`~fwdpy11.fwdpp_extensions.MutationRegions`
+
+    :param neutral: A list of :class:`fwdpy11.regions.Region` objects.
+    :param selected: A list of :class:`fwdpy11.regions.Sregion` objects.
+
+    :rtype: :class:`fwdpy11.fwdpp_extensions.MutationRegions`
+
+    .. note:: Used by various "evolve" functions.  Users probably won't need to call this.
+    
+    """
     nbeg = [i.b for i in neutral]
     nend = [i.e for i in neutral]
     nweights = [i.w for i in neutral]
@@ -388,6 +400,17 @@ def makeMutationRegions(neutral,selected):
     return MutationRegions(nbeg,nend,nweights,sbeg,send,sweights,sh)
 
 def makeRecombinationRegions(regions):
+    """
+    Convert user input into :class:`~fwdpy11.fwdpp_extensions.RecombinationRegions`
+
+    :param neutral: A list of :class:`fwdpy11.regions.Region` objects.
+    :param selected: A list of :class:`fwdpy11.regions.Sregion` objects.
+
+    :rtype: :class:`fwdpy11.fwdpp_extensions.MutationRegions`
+
+    .. note:: Used by various "evolve" functions.  Users probably won't need to call this.
+    
+    """
     beg = [i.b for i in regions]
     end = [i.e for i in regions]
     weights = [i.w for i in regions]
