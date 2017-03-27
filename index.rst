@@ -17,6 +17,10 @@ Contents:
    :maxdepth: 2
    :caption: Contents:
 
+.. automodule:: fwdpy11
+   :members:
+   :show-ineritance:
+
 .. automodule:: fwdpy11.fwdpp_extensions
    :members:
    :show-inheritance:
