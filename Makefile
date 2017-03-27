@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = fwdpy11
 SOURCEDIR     = .
-BUILDDIR      = fwdpy11_build
+BUILDDIR      = _build
 
 # Put it first so that "make" without argument is like "make help".
 help:
