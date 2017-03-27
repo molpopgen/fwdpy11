@@ -12,7 +12,7 @@ using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 
 PYBIND11_PLUGIN(fwdpy11_types)
 {
-    py::module m("fwdpy11_types", "example extending");
+    py::module m("fwdpy11_types", "Wrap C++ types specific to fwdpy11.");
 
     py::class_<fwdpy11::GSLrng_t>(
         m, "GSLrng", "Random number generator based on a mersenne twister.")

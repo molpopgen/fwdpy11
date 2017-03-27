@@ -8,7 +8,7 @@ namespace py = pybind11;
 
 PYBIND11_PLUGIN(fwdpp_types)
 {
-    py::module m("fwdpp_types", "example extending");
+    py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");
 
     // low-level types
 
