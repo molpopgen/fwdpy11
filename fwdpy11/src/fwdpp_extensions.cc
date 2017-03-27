@@ -21,9 +21,9 @@ template <typename S> struct make_sh_model_fixed_dom
 };
 
 #define RETURN_DFE_FIXEDH(DIST, S, H)                                         \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H,S);
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, S);
 #define RETURN_DFE2_FIXEDH(DIST, A, B, H)                                     \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H,A, B);
+    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, A, B);
 
 PYBIND11_PLUGIN(fwdpp_extensions)
 {
@@ -54,7 +54,7 @@ PYBIND11_PLUGIN(fwdpp_extensions)
           ([](const double mean, const double shape, const double h) {
               RETURN_DFE2_FIXEDH(gamma, mean, shape, h);
           }));
-	
+
     py::class_<KTfwd::extensions::discrete_mut_model>(m, "MutationRegions")
         .def(py::init<std::vector<double>, std::vector<double>,
                       std::vector<double>, std::vector<double>,
