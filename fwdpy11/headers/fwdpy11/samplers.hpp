@@ -6,10 +6,9 @@
 
 namespace fwdpy11
 {
-	//! Takes a const reference to a population
-	// and the generation as arguments.
+    //Applied each generation to record any data of interest.
     using singlepop_temporal_sampler
-        = std::function<void(const fwdpy11::singlepop_t&, const unsigned)>;
+        = std::function<void(const fwdpy11::singlepop_t&)>;
 }
 
 #endif

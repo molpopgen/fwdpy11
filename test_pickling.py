@@ -13,9 +13,9 @@ class PopulationPickleJar:
     """
     def __init__(self,fn):
         self.fn=fn
-    def __call__(self,pop,generation):
+    def __call__(self,pop):
         with open(self.fn,"ab") as f:
-            pickle.dump((generation,pop),f,-1)
+            pickle.dump((pop.generation,pop),f,-1)
             
 
 def evolve_and_return(args):

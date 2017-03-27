@@ -5,12 +5,12 @@ from collections import Counter
 class RecordSFS:
     def __init__(self):
         self.data=[]
-    def __call__(self,pop,generation):
+    def __call__(self,pop):
         c=Counter()
         for m in pop.mcounts:
             if m > 0:
                 c[m]+=1
-        self.data.append((generation,c))
+        self.data.append((pop.generation,c))
 
 pop = fp11.Spop(1000)
 rec=RecordSFS()

@@ -7,12 +7,12 @@ import numpy as np
 class RecordSFS:
     def __init__(self):
         self.data=[]
-    def __call__(self,pop,generation):
+    def __call__(self,pop):
         c=Counter()
         for m in pop.mcounts:
             if m > 0:
                 c[m]+=1
-        self.data.append((generation,c))
+        self.data.append((pop.generation,c))
 
 def evolve_and_return(args):
     N,seed=args

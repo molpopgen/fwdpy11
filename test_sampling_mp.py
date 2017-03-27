@@ -15,7 +15,7 @@ class RecordSFSandSample:
         self.data=[]
         self.rng=rng
         self.nsam=nsam
-    def __call__(self,pop,generation):
+    def __call__(self,pop):
         c=Counter()
         for m in pop.mcounts:
             if m > 0:
@@ -24,7 +24,7 @@ class RecordSFSandSample:
         #another pybind11-based function that calls
         #fwdpp in the back-end
         sample=fp11.sample_separate(self.rng,pop,self.nsam,True);
-        self.data.append((generation,c,sample))
+        self.data.append((pop.generation,c,sample))
 
 #two custom fitness functions:
 

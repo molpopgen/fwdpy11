@@ -28,6 +28,7 @@ evolve_singlepop_regions_cpp(
            + 0.667 * (4. * double(N) * (mu_neutral + mu_selected)))));
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
+    ++pop.generation;
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
@@ -43,7 +44,7 @@ evolve_singlepop_regions_cpp(
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
                                     pop.mcounts, generation, 2 * pop.N);
-            recorder(pop, generation);
+            recorder(pop);
         }
 }
 
