@@ -43,14 +43,23 @@ class RecordSFS:
 
 if __name__ == "__main__":
     np.random.seed(101)
+    #We'll pass in a replicate ID because
+    #we will get results back asychronously
+    #(in random order). 
     args=[(1000,repid,seed,RecordSFS) for
             repid,seed in
             zip(range(10),np.random.randint(0,42000000,10))]
-    print(args)
+    #Use a process pool to execute our function
+    #and get results in random order.
+    #The number of processes in the pool is 
+    #determined by your system by default.
+    #See the multiprocessing docs.
     P=mp.Pool()
     res=P.imap_unordered(evolve_and_return_with_sampler,args)
     P.close()
     P.join()
 
+    #You'll see the replicate ID
+    #in a different order in each run
     for i in res:
         print(i)
