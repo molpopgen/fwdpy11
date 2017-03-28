@@ -9,8 +9,8 @@ Dependencies
 
 The following must be present on your system:
 
-* GSL_
-* pybind11_
+* GSL_. This is a C library.  It is available via `conda`.
+* pybind11_. This should be installed via `pip` or `conda` as appropriate for your system.
 
 fwdpy11_ also uses fwdpp_, which is included as a submodule.
 
