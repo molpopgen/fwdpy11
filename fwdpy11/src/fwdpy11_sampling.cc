@@ -31,9 +31,9 @@ sample_separate_wrapper(
                                   locus_boundaries);
 }
 
-PYBIND11_PLUGIN(fwdpy11_sampling)
+PYBIND11_PLUGIN(sampling)
 {
-    py::module m("fwdpy11_sampling", "Taking samples from populations");
+    py::module m("sampling", "Taking samples from populations");
 
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>);
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);

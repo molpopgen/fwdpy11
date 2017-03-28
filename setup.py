@@ -54,7 +54,7 @@ ext_modules = [
         language='c++'
     ),
     Extension(
-        'fwdpy11.fwdpy11_sampling',
+        'fwdpy11.sampling',
         ['fwdpy11/src/fwdpy11_sampling.cc'],
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],

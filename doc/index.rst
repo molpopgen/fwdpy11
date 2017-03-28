@@ -28,6 +28,10 @@ Contents:
    :members:
    :show-inheritance:
 
+.. automodule:: fwdpy11.sampling
+   :members:
+   :show-inheritance:
+
 .. automodule:: fwdpy11.regions
    :members:
    :show-inheritance:
