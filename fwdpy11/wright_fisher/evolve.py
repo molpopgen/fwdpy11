@@ -21,7 +21,7 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     :param recorder: A callable to record data from the population.
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
     """
-    from ..regions import makeMutationRegions,makeRecombinationRegions
+    from ..internal import makeMutationRegions,makeRecombinationRegions
     mm=makeMutationRegions(nregions,sregions)
     rm=makeRecombinationRegions(recregions)
     evolve_singlepop_regions_cpp(rng,pop,popsizes,mu_neutral,
