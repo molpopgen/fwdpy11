@@ -16,6 +16,17 @@ Contents:
    :maxdepth: 2
    :caption: Contents:
 
+Examples
+##########################################
+
+.. toctree::
+   :maxdepth: 2
+
+   examples/parallel_simulation
+
+Functions and classes
+##########################################
+
 .. automodule:: fwdpy11.fwdpy11_types
    :members:
    :show-inheritance:
