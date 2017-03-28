@@ -21,7 +21,7 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
-PKGS=['fwdpy11','fwdpy11.wright_fisher']
+PKGS=['fwdpy11']
 
 INCLUDES=[
     'fwdpy11/headers',
@@ -162,14 +162,24 @@ for root, dirnames, filenames in os.walk('fwdpy11/headers'):
             except:
                 generated_package_data[replace]=['*.tcc']
 
+long_desc = open("README.rst").read()
+
 setup(
     name='fwdpy11',
     version=__version__,
     author='Kevin Thornton',
     author_email='krthornt@uci.edu',
     url='http://molpopgen.github.io/fwdpy11',
-    description='',
-    long_description='',
+    classifiers=['Intended Audience :: Science/Research',
+               'Topic :: Scientific/Engineering :: Bio-Informatics',
+               'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)'],
+    description='Forward-time population genetic simulation in Python',
+    license='GPL >= 3',
+    requires=['pybind11','numpy'],
+    provides=['fwdpy11'],
+    obsoletes=['none'],
+    data_files=[('fwdpy11',['COPYING', 'README.rst'])],
+    long_description=long_desc,
     ext_modules=ext_modules,
     install_requires=['pybind11>=1.7'],
     cmdclass={'build_ext': BuildExt},
