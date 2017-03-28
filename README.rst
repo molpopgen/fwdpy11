@@ -4,6 +4,13 @@ fwdpy11
 This is the README for fwdpy11_, which is a Python package for forward-time population genetic simulation.  It uses
 fwdpp_ as its C++ back-end.
 
+Features
+-----------------------
+
+* Picklable population objects
+* Parallel computation via multiprocessing_ or concurent.futures_.
+* Custom temporal samplers to analyzy populations _during_ a simulation may be written in pure Python.
+  
 Dependencies
 -----------------------
 
@@ -36,3 +43,5 @@ pickled populations from files using Python2.7.
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _GSL: http://gnu.org/software/gsl
 .. _pybind11: https://github.com/pybind/pybind11
+.. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
+.. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
