@@ -16,3 +16,12 @@ This first example shows the general recipe:
 
 
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
+
+Recording the site-frequency spectrum every generation
+-------------------------------------------------------------------------------
+
+This is our function to evolve with a sampler:
+
+.. literalinclude:: ../../examples/evolve_with_sampler.py
+
+.. literalinclude:: ../../examples/async_sampler1.py
