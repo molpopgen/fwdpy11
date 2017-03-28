@@ -27,6 +27,9 @@ Examples
 Functions and classes
 ##########################################
 
+.. toctree::
+    :maxdepth: 2
+
 .. automodule:: fwdpy11.fwdpy11_types
     :members:
     :show-inheritance:
