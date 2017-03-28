@@ -9,51 +9,51 @@ Welcome to fwdpy11's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
+    :caption: Contents:
 
 Examples
 ##########################################
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   examples/parallel_simulation
+    examples/parallel_simulation
 
 Functions and classes
 ##########################################
 
 .. automodule:: fwdpy11.fwdpy11_types
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.fwdpp_types
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.fitness
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.sampling
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.regions
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.wright_fisher
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 .. automodule:: fwdpy11.dev
-   :members:
-   :show-inheritance:
+    :members:
+    :show-inheritance:
 
 
 Indices and tables
