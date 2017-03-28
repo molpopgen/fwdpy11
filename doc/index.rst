@@ -11,7 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   README
 
 .. toctree::
    :maxdepth: 2
@@ -20,10 +19,6 @@ Contents:
 .. automodule:: fwdpy11
    :members:
    :show-ineritance:
-
-.. automodule:: fwdpy11.fwdpp_extensions
-   :members:
-   :show-inheritance:
 
 .. automodule:: fwdpy11.regions
    :members:
