@@ -6,9 +6,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(fwdpy11_fitness)
+PYBIND11_PLUGIN(fitness)
 {
-    py::module m("fwdpy11_fitness", "Standard fitness models.");
+    py::module m("fitness", "Standard fitness models.");
 
 	py::class_<fwdpy11::singlepop_fitness>(m,"SpopFitness");
 

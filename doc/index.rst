@@ -16,11 +16,7 @@ Contents:
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: fwdpy11
-   :members:
-   :show-ineritance:
-
-.. automodule:: fwdpy11.regions
+.. automodule:: fwdpy11.fwdpy11_types
    :members:
    :show-inheritance:
 
@@ -28,11 +24,19 @@ Contents:
    :members:
    :show-inheritance:
 
-.. automodule:: fwdpy11.fwdpy11_types
+.. automodule:: fwdpy11.fitness
+   :members:
+   :show-inheritance:
+
+.. automodule:: fwdpy11.regions
    :members:
    :show-inheritance:
 
 .. automodule:: fwdpy11.wright_fisher
+   :members:
+   :show-inheritance:
+
+.. automodule:: fwdpy11.dev
    :members:
    :show-inheritance:
 

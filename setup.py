@@ -61,15 +61,15 @@ ext_modules = [
         language='c++'
     ),
     Extension(
-        'fwdpy11.fitness.fwdpy11_fitness',
-        ['fwdpy11/fitness/fwdpy11_fitness.cc'],
+        'fwdpy11.fitness',
+        ['fwdpy11/src/fwdpy11_fitness.cc'],
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
     Extension(
-        'fwdpy11.wright_fisher.wfevolve',
-        ['fwdpy11/wright_fisher/wfevolve.cc'],
+        'fwdpy11.wfevolve',
+        ['fwdpy11/src/wfevolve.cc'],
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'

@@ -17,11 +17,11 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     :param nregions: A list of :class:`fwdpy11.regions.Region`.
     :param sregions: A list of :class:`fwdpy11.regions.Sregion`.
     :param recregions: A list of :class:`fwdpy11.regions.Region`.
-    :param fitness: A :class:`fwdpy11.fwdpy11.
+    :param fitness: A :class:`fwdpy11.fitness.SpopFitness`.
     :param recorder: A callable to record data from the population.
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
     """
-    from ..internal import makeMutationRegions,makeRecombinationRegions
+    from .internal import makeMutationRegions,makeRecombinationRegions
     mm=makeMutationRegions(nregions,sregions)
     rm=makeRecombinationRegions(recregions)
     evolve_singlepop_regions_cpp(rng,pop,popsizes,mu_neutral,
