@@ -7,9 +7,12 @@ fwdpp_ as its C++ back-end.
 Dependencies
 -----------------------
 
-* fwdpp_
+The following must be present on your system:
+
 * GSL_
 * pybind11_
+
+fwdpy11_ also uses fwdpp_, which is included as a submodule.
 
 License
 -----------------------
@@ -24,6 +27,8 @@ pickled populations from files using Python2.7.
 
 .. code-block:: bash
 
+    git submodule init
+    git submodule update
     python setup.py build_ext -i
     python test.py
 
