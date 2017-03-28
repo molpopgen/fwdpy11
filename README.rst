@@ -35,3 +35,4 @@ pickled populations from files using Python2.7.
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _GSL: http://gnu.org/software/gsl
+.. _pybind11: https://github.com/pybind/pybind11
