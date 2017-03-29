@@ -4,7 +4,6 @@ import fwdpy11.wright_fisher
 import numpy as np
 
 def evolve_and_return_with_sampler(args):
-    print("here")
     N,repid,seed,recorderType=args
     pop = fp11.Spop(N)
     rng=fp11.GSLrng(seed)
