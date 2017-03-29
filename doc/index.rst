@@ -50,6 +50,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+.. automodule:: fwdpy11.temporal_samplers
+    :members:
+    :show-inheritance:
+
 .. automodule:: fwdpy11.wright_fisher
     :members:
     :show-inheritance:
