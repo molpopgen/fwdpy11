@@ -77,15 +77,21 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       The current generation. A population starts at 
                       generation 0:
 
-                        >>> import fwdpy11
-                        >>> p = fwdpy11.Spop(1000)
-                        >>> p.generation
-                        0
+                        .. testcode:: 
 
-                        >>> import fwdpy11.wright_fisher as wf
-                        >>> p = wf.quick_sim(100)
-                        >>> p.generation
-                        101
+                            import fwdpy11
+                            p = fwdpy11.Spop(1000)
+                            print(p.generation)
+                            import fwdpy11.wright_fisher as wf
+                            p = wf.quick_sim(100)
+                            print(p.generation)
+
+                        The output is:
+
+                        .. testoutput::
+
+                          0
+                          101
                         )delim")
         .def_readonly("N", &fwdpy11::singlepop_t::N,
                       R"delim(
