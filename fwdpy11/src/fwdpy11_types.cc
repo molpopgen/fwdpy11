@@ -10,7 +10,8 @@ namespace py = pybind11;
 using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 
-PYBIND11_PLUGIN(fwdpy11_types) {
+PYBIND11_PLUGIN(fwdpy11_types)
+{
     py::module m("fwdpy11_types", "Wrap C++ types specific to fwdpy11.");
 
     py::class_<fwdpy11::GSLrng_t>(
@@ -28,7 +29,8 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def_readonly("second", &fwdpy11::diploid_t::second,
                       "Key to second gamete. (read-onle)")
         .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness. (read-only)")
-        .def_readonly("g", &fwdpy11::diploid_t::g, "Genetic value (read-only).")
+        .def_readonly("g", &fwdpy11::diploid_t::g,
+                      "Genetic value (read-only).")
         .def_readonly("e", &fwdpy11::diploid_t::e,
                       "Random/environmental effects (read-only).")
         .def("__getstate__",
@@ -53,10 +55,10 @@ PYBIND11_PLUGIN(fwdpy11_types) {
                                       "C++ representations of a list of "
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "
                                       "Typically, access will be read-only.");
-    py::bind_vector<fwdpy11::mcont_t>(m, "MutationContainer",
-                                      "C++ representation of a list of "
-                                      ":class:`fwdpy11.fwdpp_types.Mutation`.  "
-                                      "Typically, access will be read-only.");
+    py::bind_vector<fwdpy11::mcont_t>(
+        m, "MutationContainer", "C++ representation of a list of "
+                                ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                                "Typically, access will be read-only.");
 
     py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase");
 
@@ -71,9 +73,46 @@ PYBIND11_PLUGIN(fwdpy11_types) {
         .def("clear", &fwdpy11::singlepop_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
-                      "The current generation.")
+                      R"delim(
+                      The current generation. A population starts at 
+                      generation 0:
+
+                        >>> import fwdpy11
+                        >>> p = fwdpy11.Spop(1000)
+                        >>> p.generation
+                        0
+
+                        >>> import fwdpy11.wright_fisher as wf
+                        >>> p = wf.quick_sim(100)
+                        >>> p.generation
+                        101
+                        )delim")
         .def_readonly("N", &fwdpy11::singlepop_t::N,
-                      "The current population size.")
+                      R"delim(
+                      The current population size.
+
+                      .. testcode:: 
+
+                          import fwdpy11
+                          p = fwdpy11.Spop(1000)
+                          print(p.N)
+                          import numpy as np
+                          import fwdpy11.wright_fisher as wf
+                          #Evolve to a final N of 500
+                          nlist = np.array([p.N]*100 + [p.N/2]*100,dtype = np.uint32)
+                          rng=fwdpy11.GSLrng(101)
+                          wf.evolve(rng,p,nlist)
+                          print(p.N)
+                          print(p.generation)
+
+                      The output from the above is:
+
+                      .. testoutput::
+                      
+                        1000
+                        500
+                        201
+                      )delim")
         .def_readonly("diploids", &fwdpy11::singlepop_t::diploids,
                       "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.")
         .def_readonly("mutations", &fwdpp_popgenmut_base::mutations, R"delim(

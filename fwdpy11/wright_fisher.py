@@ -1,5 +1,32 @@
 from .wfevolve import evolve_singlepop_regions_cpp
 
+def quick_sim(ngens = None):
+    """
+    A convenience function for rapidly creating a
+    :class:`fwdpy11.fwdpy11_types.Spop`
+
+        >>> import fwdpy11.wright_fisher
+        >>> #This will simulate N=1e3 for 10N generations
+        >>> pop = fwdpy11.wright_fisher.quick_sim()
+        >>> pop.N
+        1000
+        >>> pop.generation
+        10001
+
+    .. note::
+        Implemented via a call to :func:`fwdpy11.wright_fisher.evolve`
+    """
+    from .fwdpy11_types import GSLrng,Spop
+    rng = GSLrng(42)
+    pop=Spop(1000)
+    if ngens is None:
+        evolve(rng,pop)
+    else:
+        import numpy as np
+        nlist = np.array([pop.N]*ngens,dtype=np.uint32)
+        evolve(rng,pop,nlist)
+    return pop
+
 def evolve(rng,pop,popsizes = None,mu_neutral=None,
         mu_selected = None,recrate=None,sregions=None):
     if popsizes is None:
