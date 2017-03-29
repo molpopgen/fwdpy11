@@ -4,6 +4,7 @@
 #include <pybind11/functional.h>
 #include <functional>
 #include <cmath>
+#include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
@@ -24,6 +25,9 @@ evolve_singlepop_regions_cpp(
     const fwdpy11::singlepop_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
 {
+    const auto generations = popsizes.size();
+    if (!generations)
+        throw std::runtime_error("empty list of population sizes");
     const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * pop.N)
@@ -32,7 +36,6 @@ evolve_singlepop_regions_cpp(
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
     ++pop.generation;
-    const auto generations = popsizes.size();
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
@@ -51,6 +54,7 @@ evolve_singlepop_regions_cpp(
                                     pop.mcounts, generation, 2 * pop.N);
             recorder(pop);
         }
+    --pop.generation;
 }
 
 // Evolve the population for some amount of time with mutation and

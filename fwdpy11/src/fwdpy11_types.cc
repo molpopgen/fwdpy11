@@ -91,7 +91,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                         .. testoutput::
 
                           0
-                          101
+                          100
                         )delim")
         .def_readonly("N", &fwdpy11::singlepop_t::N,
                       R"delim(
@@ -117,7 +117,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       
                         1000
                         500
-                        201
+                        200
                       )delim")
         .def_readonly("diploids", &fwdpy11::singlepop_t::diploids,
                       "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.")
