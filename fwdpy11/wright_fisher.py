@@ -58,22 +58,6 @@ def evolve(rng,pop,popsizes = None,mu_neutral=None,
       5000
       10323
 
-    Empty lists of population sizes result in exceptions:
-
-    .. testcode::
-
-        import fwdpy11 as fp11
-        import fwdpy11.wright_fisher as wf
-        rng = fp11.GSLrng(42)
-        p = fp11.Spop(1000)
-        wf.evolve(rng,p,[])
-
-    .. testoutput::
-
-      Traceback (most recent call last):
-      ...
-      RuntimeError: empty list of population sizes
-
     """
     if popsizes is None:
         import numpy as np
