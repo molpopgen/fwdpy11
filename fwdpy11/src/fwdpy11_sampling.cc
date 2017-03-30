@@ -26,35 +26,17 @@
 
 namespace py = pybind11;
 
-template <typename poptype>
-typename std::enable_if<std::is_same<typename poptype::popmodel_t,
-                                     KTfwd::sugar::SINGLEPOP_TAG>::value,
-                        KTfwd::sep_sample_t>::type
-sample_separate_wrapper(const fwdpy11::GSLrng_t &rng, const poptype &pop,
-                        const unsigned nsam, const bool removeFixed)
-{
-    return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed);
-}
-
-template <typename poptype>
-typename std::enable_if<std::is_same<typename poptype::popmodel_t,
-                                     KTfwd::sugar::MULTILOCPOP_TAG>::value,
-                        std::vector<KTfwd::sep_sample_t>>::type
-sample_separate_wrapper(
-    const fwdpy11::GSLrng_t &rng, const poptype &pop, const unsigned nsam,
-    const bool removeFixed,
-    const std::vector<std::pair<double, double>> &locus_boundaries)
-{
-    return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed,
-                                  locus_boundaries);
-}
-
 PYBIND11_PLUGIN(sampling)
 {
     py::module m("sampling", "Taking samples from populations");
 
-    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>,
-            R"delim(
+    m.def("sample_separate",
+          [](const fwdpy11::GSLrng_t &rng, const fwdpy11::singlepop_t &pop,
+             const KTfwd::uint_t samplesize, const bool removeFixed) {
+              return KTfwd::sample_separate(rng.get(), pop, samplesize,
+                                            removeFixed);
+          },
+          R"delim(
             Take a sample of :math:`n` chromosomes from a population (`n/2` 
             diploids.
 
@@ -69,8 +51,16 @@ PYBIND11_PLUGIN(sampling)
             contains selected variants.
 
             )delim",
-            py::arg("rng"),py::arg("pop"),py::arg("samplesize"),py::arg("removeFixed") = true);
-    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
+          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),
+          py::arg("removeFixed") = true);
+    m.def(
+        "sample_separate",
+        [](const fwdpy11::GSLrng_t &rng, const fwdpy11::multilocus_t &pop,
+           const unsigned nsam, const bool removeFixed,
+           const std::vector<std::pair<double, double>> &locus_boundaries) {
+            return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed,
+                                          locus_boundaries);
+        });
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix")
         .def(py::init<>())
