@@ -28,6 +28,21 @@ evolve_singlepop_regions_cpp(
     const auto generations = popsizes.size();
     if (!generations)
         throw std::runtime_error("empty list of population sizes");
+    if (mu_neutral < 0.)
+        {
+            throw std::runtime_error("negative neutral mutation rate: "
+                                     + std::to_string(mu_neutral));
+        }
+    if (mu_selected < 0.)
+        {
+            throw std::runtime_error("negative selected mutation rate: "
+                                     + std::to_string(mu_selected));
+        }
+    if (recrate < 0.)
+        {
+            throw std::runtime_error("negative recombination rate: "
+                                     + std::to_string(recrate));
+        }
     const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * pop.N)
@@ -46,8 +61,8 @@ evolve_singlepop_regions_cpp(
                 KTfwd::extensions::bind_dmm(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
-                recmap, fitness_callback,
-                pop.neutral, pop.selected, selfing_rate);
+                recmap, fitness_callback, pop.neutral, pop.selected,
+                selfing_rate);
             pop.N = N_next;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
@@ -59,8 +74,8 @@ evolve_singlepop_regions_cpp(
 
 // Evolve the population for some amount of time with mutation and
 // recombination
-//void
-//evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
+// void
+// evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
 //       const unsigned& N, const unsigned& generations, const double& mu,
 //       const double& recrate)
 //{
@@ -73,10 +88,12 @@ evolve_singlepop_regions_cpp(
 //                pop.mcounts, pop.N, N, mu + 0.005,
 //                std::bind(
 //                    KTfwd::infsites(), std::placeholders::_1,
-//                    std::placeholders::_2, rng.get(), std::ref(pop.mut_lookup),
+//                    std::placeholders::_2, rng.get(),
+//                    std::ref(pop.mut_lookup),
 //                    &generation, mu, 0.005,
 //                    [&rng]() { return gsl_rng_uniform(rng.get()); },
-//                    [&rng]() { return gsl_ran_exponential(rng.get(), -0.1); },
+//                    [&rng]() { return gsl_ran_exponential(rng.get(), -0.1);
+//                    },
 //                    []() { return 1.; }),
 //                std::bind(KTfwd::poisson_xover(), rng.get(), recrate, 0., 1.,
 //                          std::placeholders::_1, std::placeholders::_2,
@@ -91,12 +108,11 @@ evolve_singlepop_regions_cpp(
 //        }
 //}
 
-
 PYBIND11_PLUGIN(wfevolve)
 {
     py::module m("wfevolve", "example extending");
 
     m.def("evolve_singlepop_regions_cpp", &evolve_singlepop_regions_cpp);
-    //m.def("evolve", &evolve);
+    // m.def("evolve", &evolve);
     return m.ptr();
 }
