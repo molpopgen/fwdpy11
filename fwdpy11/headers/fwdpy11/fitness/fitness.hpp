@@ -2,6 +2,9 @@
 #define FWDPY11_FITNESS_HPP__
 
 #include <functional>
+#include <cmath>
+#include <stdexcept>
+#include <string>
 
 namespace fwdpy11
 {
@@ -28,9 +31,9 @@ namespace fwdpy11
     };
 
     struct singlepop_fitness_qtrait
-        /*! Pure virtual base class for single-deme fitness functions
-         *  for simulations of gaussian stabilizing selection.
-         */
+    /*! Pure virtual base class for single-deme fitness functions
+     *  for simulations of gaussian stabilizing selection.
+     */
     {
         virtual ~singlepop_fitness_qtrait() = default;
         singlepop_fitness_qtrait() = default;
@@ -45,6 +48,12 @@ namespace fwdpy11
         fwdpp_singlepop_fitness_wrapper(const double scaling_)
             : scaling(scaling_)
         {
+            if (!std::isfinite(scaling))
+                {
+                    throw std::runtime_error("non-finite value. "
+                                             + std::string(__FILE__) + " line "
+                                             + std::to_string(__LINE__));
+                }
         }
         inline singlepop_fitness_fxn
         callback() const final
