@@ -62,6 +62,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+C++ API
+==================
+
+.. doxygenindex:: project
 
 Indices and tables
 ==================
