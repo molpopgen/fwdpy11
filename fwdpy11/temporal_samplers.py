@@ -16,16 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-def get_includes():
+class RecordNothing:
     """
-    Returns absolute path to location of fwdpy11 headers
+    A temporal sampler that does nothing.
     """
-    import os,fwdpy11
-    return os.path.dirname(fwdpy11.__file__)+'/headers'
-
-def get_fwdpp_includes():
-    """
-    Returns absolute path to location of the fwdpp headers 
-    installed along with fwdpy11.
-    """
-    return get_includes()+'/fwdpp'
+    def __call__(self,pop):
+        return
