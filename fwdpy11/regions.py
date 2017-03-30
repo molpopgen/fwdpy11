@@ -30,14 +30,15 @@ class Region(object):
 
         Example:
 
+        .. testcode:: 
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> r = fwdpy11.Region(0,1,1)
-            >>> #A more "biological" case:
-            >>> #  The region covers positions 1 through 1,000,
-            >>> #  and the per-base pair "weight" is 1e-5:
-            >>> r = fwdpy11.Region(1,1000,1e-5,True)
+            #A simple case
+            import fwdpy11
+            r = fwdpy11.Region(0,1,1)
+            #A more "biological" case:
+            #  The region covers positions 1 through 1,000,
+            #  and the per-base pair "weight" is 1e-5:
+            r = fwdpy11.Region(1,1000,1e-5,True)
         """
         if math.isinf(beg):
             raise ValueError("fwdpy11.Region: beg not finite")
@@ -105,13 +106,15 @@ class Sregion(Region):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> #Examples for models where the 3 genotype fitnesses are
-            >>> #1, 1+sh, and 1+2s, respectively
-            >>> recessive = fwdpy11.Sregion(0,1,1,0)
-            >>> additive = fwdpy11.Sregion(0,1,1,1.0)
-            >>> dominant = fwdpy11.Sregion(0,1,1,2.0)
+        .. testcode:: 
+
+            #A simple case
+            import fwdpy11
+            #Examples for models where the 3 genotype fitnesses are
+            #1, 1+sh, and 1+2s, respectively
+            recessive = fwdpy11.Sregion(0,1,1,0)
+            additive = fwdpy11.Sregion(0,1,1,1.0)
+            dominant = fwdpy11.Sregion(0,1,1,2.0)
         """
         if math.isinf(h):
             raise ValueError("fwdpy11.Sregion: h not finite")
@@ -155,9 +158,11 @@ class GammaS(Sregion):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
+        .. testcode:: 
+
+            #A simple case
+            import fwdpy11
+            gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
         """
         if math.isinf(mean):
             raise ValueError("fwdpy11.GammaS: mean not finite")
@@ -207,10 +212,12 @@ class ConstantS(Sregion):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> #s = -0.1 and h = 0
-            >>> constantS = fwdpy11.ConstantS(0,1,1,-0.1,0)
+        .. testcode::
+
+            #A simple case
+            import fwdpy11
+            #s = -0.1 and h = 0
+            constantS = fwdpy11.ConstantS(0,1,1,-0.1,0)
         """
         if math.isinf(s):
             raise ValueError("fwdpy11.ConstantS: s not finite")
@@ -257,10 +264,12 @@ class UniformS(Sregion):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> #s is uniform on [0,-1]
-            >>> constantS = fwdpy11.UniformS(0,1,1,0,-1,0)
+        .. testcode:: 
+
+            #A simple case
+            import fwdpy11
+            #s is uniform on [0,-1]
+            constantS = fwdpy11.UniformS(0,1,1,0,-1,0)
         """
         if math.isinf(lo):
             raise ValueError("fwdpy11.UniformS: lo not finite")
@@ -310,10 +319,12 @@ class ExpS(Sregion):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> #s is exp(-0.1) and recessive
-            >>> constantS = fwdpy11.ExpS(0,1,1,0,-0.1,0)
+        .. testcode::
+
+            #A simple case
+            import fwdpy11
+            #s is exp(-0.1) and recessive
+            constantS = fwdpy11.ExpS(0,1,1,0,-0.1,0)
         """
         if math.isinf(mean):
             raise ValueError("fwdpy11.ExpS: mean not finite")
@@ -360,10 +371,12 @@ class GaussianS(Sregion):
 
         Example:
 
-            >>> #A simple case
-            >>> import fwdpy11
-            >>> #s N(0,0.1) and co-dominant
-            >>> constantS = fwdpy11.GaussianS(0,1,1,0,0.1,1)
+        .. testcode:: 
+
+            #A simple case
+            import fwdpy11
+            #s N(0,0.1) and co-dominant
+            constantS = fwdpy11.GaussianS(0,1,1,0,0.1,1)
         """
         if math.isinf(sd):
             raise ValueError("fwdpy11.GaussianS: sd not finite")
