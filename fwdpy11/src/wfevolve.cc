@@ -72,47 +72,11 @@ evolve_singlepop_regions_cpp(
     --pop.generation;
 }
 
-// Evolve the population for some amount of time with mutation and
-// recombination
-// void
-// evolve(fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
-//       const unsigned& N, const unsigned& generations, const double& mu,
-//       const double& recrate)
-//{
-//    pop.mutations.reserve(std::ceil(std::log(2 * N) * (4. * double(N) * (mu))
-//                                    + 0.667 * (4. * double(N) * (mu))));
-//    for (unsigned generation = 0; generation < generations; ++generation)
-//        {
-//            double wbar = KTfwd::sample_diploid(
-//                rng.get(), pop.gametes, pop.diploids, pop.mutations,
-//                pop.mcounts, pop.N, N, mu + 0.005,
-//                std::bind(
-//                    KTfwd::infsites(), std::placeholders::_1,
-//                    std::placeholders::_2, rng.get(),
-//                    std::ref(pop.mut_lookup),
-//                    &generation, mu, 0.005,
-//                    [&rng]() { return gsl_rng_uniform(rng.get()); },
-//                    [&rng]() { return gsl_ran_exponential(rng.get(), -0.1);
-//                    },
-//                    []() { return 1.; }),
-//                std::bind(KTfwd::poisson_xover(), rng.get(), recrate, 0., 1.,
-//                          std::placeholders::_1, std::placeholders::_2,
-//                          std::placeholders::_3),
-//                std::bind(KTfwd::additive_diploid(), std::placeholders::_1,
-//                          std::placeholders::_2, std::placeholders::_3, 2.),
-//                pop.neutral, pop.selected);
-//            pop.N = N;
-//            KTfwd::update_mutations(pop.mutations, pop.fixations,
-//                                    pop.fixation_times, pop.mut_lookup,
-//                                    pop.mcounts, generation, 2 * pop.N);
-//        }
-//}
 
 PYBIND11_PLUGIN(wfevolve)
 {
     py::module m("wfevolve", "example extending");
 
     m.def("evolve_singlepop_regions_cpp", &evolve_singlepop_regions_cpp);
-    // m.def("evolve", &evolve);
     return m.ptr();
 }
