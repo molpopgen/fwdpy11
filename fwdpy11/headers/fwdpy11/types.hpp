@@ -124,38 +124,6 @@ namespace fwdpy11
         singlepop_t &operator=(const singlepop_t &) = default;
         singlepop_t &operator=(singlepop_t &&) = default;
 
-        unsigned
-        gen() const
-        /*!
-          \return current generation.
-
-          This is mostly useful on the Cython side
-        */
-        {
-            return generation;
-        }
-        unsigned
-        popsize() const
-        /*!
-          \return current population size.
-
-          This is mostly useful on the Cython side
-        */
-        {
-            return N;
-        }
-        int
-        sane() const
-        /*!
-          \return int(N == diploids.size())
-
-          Useful on Cython side to check that N is
-          getting updated during simulations...
-        */
-        {
-            return int(N == diploids.size());
-        }
-
         std::string
         serialize() const
         {
@@ -247,49 +215,6 @@ namespace fwdpy11
         explicit metapop_t(const singlepop_t &p)
             : base(p), generation(p.generation)
         {
-        }
-
-        unsigned
-        gen() const
-        /*!
-          \return current generation.
-
-          This is mostly useful on the Cython side
-        */
-        {
-            return generation;
-        }
-        std::vector<unsigned>
-        popsizes() const
-        /*!
-          \return list of current deme sizese
-
-          This is mostly useful on the Cython side
-        */
-        {
-            return Ns;
-        }
-        int
-        sane() const
-        /*!
-          \return true of demes[i].size() == Ns[i] for all i. Returns false
-          otherwise.
-        */
-        {
-            for (unsigned i = 0; i < diploids.size(); ++i)
-                {
-                    if (diploids[i].size() != Ns[i])
-                        return 0;
-                }
-            return 1;
-        }
-        int
-        size() const
-        /*!
-          \return Number of demes
-        */
-        {
-            return int(diploids.size());
         }
         // std::string
         // serialize() const
@@ -408,21 +333,6 @@ namespace fwdpy11
         explicit multilocus_t(const unsigned N, const unsigned nloci)
             : base(N, nloci), generation(0)
         {
-        }
-        unsigned
-        gen() const
-        {
-            return generation;
-        }
-        unsigned
-        popsize() const
-        {
-            return N;
-        }
-        int
-        sane() const
-        {
-            return int(N == diploids.size());
         }
         // std::string
         // serialize() const
