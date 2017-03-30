@@ -5,16 +5,37 @@
 
 namespace fwdpy11
 {
-    using singlepop_fitness_signature = std::function<double(
-        const fwdpy11::diploid_t &, const fwdpy11::gcont_t &,
-        const fwdpy11::mcont_t &)>;
+    template <typename... T>
+    using singlepop_fitness_signature
+        = std::function<double(const fwdpy11::diploid_t &,
+                               const fwdpy11::gcont_t &,
+                               const fwdpy11::mcont_t &, T...)>;
 
-	struct singlepop_fitness
-	{
-		~singlepop_fitness()=default;
-		singlepop_fitness()=default;
-		virtual singlepop_fitness_signature callback() const = 0;
-	};
+    /*! Single-deme fitness function signature for standard "popgen"
+     *  simulations.
+     */
+    using singlepop_fitness_fxn = singlepop_fitness_signature<>;
+    //! For quantitative traits, optimum and VS are additional arguments
+    using singlepop_fitness_fxn_qtrait
+        = singlepop_fitness_signature<double, double>;
+
+    struct singlepop_fitness
+    //! Pure virtual base class for single-deme fitness functions
+    {
+        virtual ~singlepop_fitness() = default;
+        singlepop_fitness() = default;
+        virtual singlepop_fitness_fxn callback() const = 0;
+    };
+
+    struct singlepop_fitness_qtrait
+        /*! Pure virtual base class for single-deme fitness functions
+         *  for simulations of gaussian stabilizing selection.
+         */
+    {
+        virtual ~singlepop_fitness_qtrait() = default;
+        singlepop_fitness_qtrait() = default;
+        virtual singlepop_fitness_fxn_qtrait callback() const = 0;
+    };
 
     template <typename fitness_model_type>
     struct fwdpp_singlepop_fitness_wrapper : public singlepop_fitness
@@ -25,7 +46,7 @@ namespace fwdpy11
             : scaling(scaling_)
         {
         }
-        inline singlepop_fitness_signature
+        inline singlepop_fitness_fxn
         callback() const final
         {
             return std::bind(fitness_model(), std::placeholders::_1,
