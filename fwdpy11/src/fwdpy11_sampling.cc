@@ -55,6 +55,19 @@ PYBIND11_PLUGIN(sampling)
 
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>,
             R"delim(
+            Take a sample of :math:`n` chromosomes from a population (`n/2` 
+            diploids.
+
+            :param rng: A `fwdpy11.fwdpy11_types.GSLrng`
+            :param pop: A `fwdpy11.fwdpy11_types.Spop`
+            :param samplesize: (int) The sample size.
+            :param removeFixed (boolean, defaults to True) Whether or not to include fixations.
+
+            :rtype: tuple
+
+            :return: A tuple.  The first element contains neutral variants, and the second
+            contains selected variants.
+
             )delim",
             py::arg("rng"),py::arg("pop"),py::arg("samplesize"),py::arg("removeFixed") = true);
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
