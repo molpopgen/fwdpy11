@@ -39,7 +39,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.mathjax',
     'breathe']
 
-breathe_projects={'fwdpy11':'xml'}
+breathe_projects={'fwdpy11':'xml','fwdpp':'fwdpp_xml'}
 breathe_default_project="fwdpy11"
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['fwdpy11_templates']

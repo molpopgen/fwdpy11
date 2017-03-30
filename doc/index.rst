@@ -62,10 +62,17 @@ Functions and classes
     :members:
     :show-inheritance:
 
-C++ API
+fwdpy11 C++ API
 ==================
 
-.. doxygenindex:: project
+.. doxygenindex::
+    :project: fwdpy11
+
+fwdpp C++ API
+==================
+
+.. doxygenindex::
+    :project: fwdpp
 
 Indices and tables
 ==================
