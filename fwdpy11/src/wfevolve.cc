@@ -24,10 +24,12 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
+#include <fwdpp/experimental/sample_diploid.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
+#include <fwdpy11/rules/wf_rules.hpp>
 
 namespace py = pybind11;
 
@@ -69,18 +71,19 @@ evolve_singlepop_regions_cpp(
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
     ++pop.generation;
+    auto rules = fwdpy11::wf_rules();
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
             const auto N_next = popsizes.at(generation);
-            double wbar = KTfwd::sample_diploid(
+            double wbar = KTfwd::experimental::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
                 pop.mcounts, pop.N, N_next, mu_neutral + mu_selected,
                 KTfwd::extensions::bind_dmm(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
                 recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate);
+                selfing_rate,rules);
             pop.N = N_next;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
