@@ -65,11 +65,16 @@ Functions and classes
 fwdpy11 C++ API
 ==================
 
+This sections document's fwdpy11's C++ headers.
+
+
 .. doxygenindex::
     :project: fwdpy11
 
 fwdpp C++ API
 ==================
+
+This section docuement's fwdpp's API.
 
 .. doxygenindex::
     :project: fwdpp
