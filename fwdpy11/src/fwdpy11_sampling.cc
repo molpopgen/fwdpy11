@@ -53,7 +53,10 @@ PYBIND11_PLUGIN(sampling)
 {
     py::module m("sampling", "Taking samples from populations");
 
-    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>);
+    m.def("sample_separate", &sample_separate_wrapper<fwdpy11::singlepop_t>,
+            R"delim(
+            )delim",
+            py::arg("rng"),py::arg("pop"),py::arg("samplesize"),py::arg("removeFixed") = true);
     m.def("sample_separate", &sample_separate_wrapper<fwdpy11::multilocus_t>);
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix")
