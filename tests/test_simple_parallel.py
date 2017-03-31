@@ -25,7 +25,7 @@ def evolve_and_return(args):
     #Evolve the pop for 10 generations
     #and several default parameters will be
     #used.
-    nlist=np.array([N]*10,dtype=np.uint32_t)
+    nlist=np.array([N]*10,dtype=np.uint32)
     fp11.wright_fisher.evolve(rng,pop,nlist,sregions=sregions)
     #The population is picklable, and so
     #we can return it from another process
