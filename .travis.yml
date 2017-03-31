@@ -54,7 +54,6 @@ install:
     # Useful for debugging any issues with conda
     - conda info -a
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi;
-    # Need GSL 1.16, which is the "bioconda-approved" version
     - conda install -c r gsl
     - conda install numpy
     - conda install -c conda-forge pybind11
@@ -64,7 +63,6 @@ script:
     - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     - export CPPFLAGS="-I$HOME/miniconda/include $CPPFLAGS"
     - export LDFLAGS="-L$HOME/miniconda/lib $LDFLAGS"
-    #- pip install --upgrade Cython  cythongsl
     #fwdpp is included as a submodule,
     #so we need to initalize it here:
     - git submodule init
