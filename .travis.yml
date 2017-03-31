@@ -69,4 +69,5 @@ script:
     - git submodule update
     - cc -v
     - c++ -v
+    - gcc -v
     - python setup.py build_ext -i
