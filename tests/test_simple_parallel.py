@@ -22,13 +22,14 @@ def evolve_and_return(args):
     #Initialize a random number generator
     rng=fp11.GSLrng(seed)
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
-    #Evolve the pop for 10N generations
+    #Evolve the pop for 10 generations
     #and several default parameters will be
     #used.
-    fp11.wright_fisher.evolve(rng,pop,sregions=sregions)
+    nlist=np.array([N]*10,dtype=np.uint32_t)
+    fp11.wright_fisher.evolve(rng,pop,nlist,sregions=sregions)
     #The population is picklable, and so
     #we can return it from another process
-    return pop 
+    return pop
 
 class testSimpleParallel(unittest.TestCase):
     """
@@ -36,7 +37,6 @@ class testSimpleParallel(unittest.TestCase):
     in a script
     """
     def test_simple_parallel(self):
-        #init global rng seed
         np.random.seed(101)
         #Generate a list of arguments for our processes.
         #We generation 10 random number seeds
