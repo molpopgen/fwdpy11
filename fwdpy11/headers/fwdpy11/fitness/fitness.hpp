@@ -23,6 +23,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
+#include <fwdpp/fitness_models.hpp>
 
 namespace fwdpy11
 {
@@ -46,6 +47,9 @@ namespace fwdpy11
         virtual ~singlepop_fitness() = default;
         singlepop_fitness() = default;
         virtual singlepop_fitness_fxn callback() const = 0;
+        virtual void update(singlepop_t & pop)
+        {
+        }
     };
 
     struct singlepop_fitness_qtrait
@@ -86,5 +90,6 @@ namespace fwdpy11
         = fwdpp_singlepop_fitness_wrapper<KTfwd::multiplicative_diploid>;
     using singlepop_additive_wrapper
         = fwdpp_singlepop_fitness_wrapper<KTfwd::additive_diploid>;
+
 }
 #endif

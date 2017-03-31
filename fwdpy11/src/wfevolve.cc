@@ -42,8 +42,9 @@ evolve_singlepop_regions_cpp(
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
-    const fwdpy11::singlepop_fitness& fitness,
-    fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
+    fwdpy11::singlepop_fitness& fitness,
+    fwdpy11::singlepop_temporal_sampler recorder,
+    const double selfing_rate)
 {
     const auto generations = popsizes.size();
     if (!generations)
@@ -75,6 +76,7 @@ evolve_singlepop_regions_cpp(
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
+            fitness.update(pop);
             const auto N_next = popsizes.at(generation);
             double wbar = KTfwd::experimental::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
@@ -83,7 +85,7 @@ evolve_singlepop_regions_cpp(
                     mmodel, pop.mutations, pop.mut_lookup, rng.get(),
                     mu_neutral, mu_selected, pop.generation),
                 recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate,rules);
+                selfing_rate, rules);
             pop.N = N_next;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
@@ -92,7 +94,6 @@ evolve_singlepop_regions_cpp(
         }
     --pop.generation;
 }
-
 
 PYBIND11_PLUGIN(wfevolve)
 {
