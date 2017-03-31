@@ -1,8 +1,30 @@
+/* Implement a stateful fitness model.
+ * We define a new C++ type that will be
+ * wrapped as a fwdpy11.fitness.SpopFitness 
+ * object.
+ *
+ * Such a fitness model is ultimately responsible
+ * for generating a bound C++ callback whose signature
+ * is fwdpy11::singlepop_fitness_fxn.
+ *
+ * The module is built using cppimport:
+ * https://github.com/tbenthompson/cppimport
+ */
+
+
+/* The next block of code is used by cppimport
+ * The formatting is important, so I protect it
+ * from the auto-formatter that I use.
+ */
+// clang-format off
 <% 
 setup_pybind11(cfg) 
+#import fwdpy11 so we can find its C++ headers
 import fwdpy11 as fp11 
+#add fwdpy11 header locations to the include path
 cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ] 
 %>
+// clang-format on
 
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types.hpp>
@@ -11,6 +33,9 @@ cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ]
 namespace py = pybind11;
 
 struct snowdrift_diploid
+/* This is a function object implementing the snowdrift
+ * fitness calculation
+ */
 {
     using result_type = double;
     inline result_type
@@ -18,12 +43,20 @@ struct snowdrift_diploid
                const fwdpy11::mcont_t &, const std::vector<double> &phenotypes,
                const double b1, const double b2, const double c1,
                const double c2) const
+    /* The first 3 arguments will be passed in from fwdpp.
+     * The phenotypes are the stateful part, and will get
+     * passed in by reference.  The remaining params
+     * define the payoff function and are also supplied externally.
+     */
     {
-        unsigned N = phenotypes.size();
+        auto N = phenotypes.size();
+        //A diploid tracks its index via 
+        //fwdpy11::diploid_t::label, which 
+        //is std::size_t.
         auto i = dip.label;
         double zself = phenotypes[i];
         result_type fitness = 0;
-        for (unsigned j = 0; j < N; ++j)
+        for (std::size_t j = 0; j < N; ++j)
             {
                 if (i != j)
                     {
@@ -39,6 +72,19 @@ struct snowdrift_diploid
 };
 
 struct snowdrift : public fwdpy11::singlepop_fitness
+/* This is our stateful fitness object.
+ * It records the model parameters and holds a 
+ * vector to track individual phenotypes.
+ *
+ * The C++ side of an SpopFitness object must publicly
+ * inherit from fwdpy11::singlepop_fitness.
+ *
+ * The phenotypes get updated each generation during
+ * the simulation.
+ *
+ * The phenotypes will be the simple additive model,
+ * calculated using fwdpp's machinery.
+ */
 {
     double b1, b2, c1, c2;
     std::vector<double> phenotypes;
@@ -50,20 +96,31 @@ struct snowdrift : public fwdpy11::singlepop_fitness
 
     inline fwdpy11::singlepop_fitness_fxn
     callback() const final
+    // A stateful fitness model must return a bound callable.
     {
+        /* Please remember that std::bind will pass a copy unless you
+         * explicity wrap with a reference wrapper.  Here,
+         * we use std::cref to make sure that phenotypes are 
+         * passed as const reference.
+         */
         return std::bind(snowdrift_diploid(), std::placeholders::_1,
                          std::placeholders::_2, std::placeholders::_3,
                          std::cref(phenotypes), b1, b2, c1, c2);
     }
     void
-    update(fwdpy11::singlepop_t &pop) final
+    update(const fwdpy11::singlepop_t &pop) final
+    /* A stateful fitness model needs updating.
+     * The base class defines this virtual function
+     * to do nothing (for non-stateful models). 
+     * Here, we redefine it as needed.
+     */
     {
         phenotypes.resize(pop.N);
-        std::size_t d = 0;
         for (auto &&dip : pop.diploids)
             {
-                dip.label = d;
-                phenotypes[d++] = KTfwd::additive_diploid()(
+                //A diploid tracks its index via 
+                //fwdpy11::diploid_t::label
+                phenotypes[dip.label] = KTfwd::additive_diploid()(
                     dip, pop.gametes, pop.mutations, 2.0);
             }
     };
@@ -71,10 +128,16 @@ struct snowdrift : public fwdpy11::singlepop_fitness
 
 PYBIND11_PLUGIN(snowdrift)
 {
-    pybind11::module m("snowdrift", "Example of custom stateful fitness model.");
+    pybind11::module m("snowdrift",
+                       "Example of custom stateful fitness model.");
 
+    //fwdpy11 provides a macro
+    //to make sure that the Python wrapper
+    //to fwdpy11::singlepop_fitness is visible
+    //to this module.
     FWDPY11_SINGLEPOP_FITNESS()
 
+    //Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::singlepop_fitness>(m, "SpopSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"));
