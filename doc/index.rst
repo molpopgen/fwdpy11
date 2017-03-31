@@ -23,6 +23,7 @@ Examples
     :maxdepth: 2
 
     examples/parallel_simulation
+    examples/stateful_fitness
 
 Functions and classes
 ##########################################
