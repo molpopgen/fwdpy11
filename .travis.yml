@@ -69,4 +69,4 @@ script:
     #so we need to initalize it here:
     - git submodule init
     - git submodule update
-    - CC=gcc CXX=g++ python setup.py build_ext -i
+    - python setup.py build_ext -i
