@@ -56,7 +56,8 @@ install:
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi;
     # Need GSL 1.16, which is the "bioconda-approved" version
     - conda install -c r gsl
-    - conda install pybind11 numpy
+    - conda install numpy
+    - conda install -c conda-forge pybind11
     - pip install --upgrade cppimport
 script:
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
