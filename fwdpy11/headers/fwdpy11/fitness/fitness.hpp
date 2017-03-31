@@ -48,7 +48,7 @@ namespace fwdpy11
         singlepop_fitness() = default;
         virtual singlepop_fitness_fxn callback() const = 0;
         virtual void
-        update(singlepop_t &pop)
+        update(const singlepop_t &pop)
         {
         }
     };
@@ -61,6 +61,10 @@ namespace fwdpy11
         virtual ~singlepop_fitness_qtrait() = default;
         singlepop_fitness_qtrait() = default;
         virtual singlepop_fitness_fxn_qtrait callback() const = 0;
+        virtual void
+        update(const singlepop_t &pop)
+        {
+        }
     };
 
     template <typename fitness_model_type>
