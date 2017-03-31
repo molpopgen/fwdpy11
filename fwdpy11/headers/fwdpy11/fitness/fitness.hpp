@@ -47,7 +47,8 @@ namespace fwdpy11
         virtual ~singlepop_fitness() = default;
         singlepop_fitness() = default;
         virtual singlepop_fitness_fxn callback() const = 0;
-        virtual void update(singlepop_t & pop)
+        virtual void
+        update(singlepop_t &pop)
         {
         }
     };
@@ -91,5 +92,13 @@ namespace fwdpy11
     using singlepop_additive_wrapper
         = fwdpp_singlepop_fitness_wrapper<KTfwd::additive_diploid>;
 
+#define FWDPY11_SINGLEPOP_FITNESS()                                           \
+    pybind11::object FWDPY11_SINGLEPOP_FITNESS_BASE_IMPORT__                  \
+        = (pybind11::object)pybind11::module::import("fwdpy11.fitness")       \
+              .attr("SpopFitness");
+#define FWDPY11_SINGLEPOP_FITNESS_QTRAIT()                                    \
+    pybind11::object FWDPY11_SINGLEPOP_FITNESS_BASE_IMPORT__                  \
+        = (pybind11::object)pybind11::module::import("fwdpy11.fitness")       \
+              .attr("SpopFitnessQtrait");
 }
 #endif

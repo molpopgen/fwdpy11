@@ -73,8 +73,7 @@ PYBIND11_PLUGIN(snowdrift)
 {
     pybind11::module m("snowdrift", "Example of custom stateful fitness model.");
 
-    py::object base = (py::object) py::module::import("fwdpy11.fitness").attr("SpopFitness");
-
+    FWDPY11_SINGLEPOP_FITNESS()
 
     py::class_<snowdrift, fwdpy11::singlepop_fitness>(m, "SpopSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
