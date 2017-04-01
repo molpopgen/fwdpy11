@@ -54,6 +54,7 @@ namespace fwdpy11
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.g);
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.e);
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.w);
+            KTfwd::fwdpp_internal::scalar_writer()(o, &dip.label);
         }
     };
 
@@ -68,6 +69,7 @@ namespace fwdpy11
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.g);
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.e);
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.w);
+            KTfwd::fwdpp_internal::scalar_reader()(i, &dip.label);
         }
     };
 
