@@ -167,9 +167,13 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](const fwdpy11::singlepop_t& pop) {
                  return py::bytes(pop.serialize());
              })
-        .def("__setstate__", [](fwdpy11::singlepop_t& p, py::bytes s) {
-            new (&p) fwdpy11::singlepop_t(s);
-        });
+        .def("__setstate__",
+             [](fwdpy11::singlepop_t& p, py::bytes s) {
+                 new (&p) fwdpy11::singlepop_t(s);
+             })
+        .def("__eq__",
+             [](const fwdpy11::singlepop_t& lhs,
+                const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     return m.ptr();
 }

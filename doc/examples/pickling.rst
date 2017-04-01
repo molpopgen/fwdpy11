@@ -26,10 +26,12 @@ In order to picked a file, you must also use the latest pickling protocol.
     #Unpickle to create a new pop:
     pop2 = pickle.loads(ppop)
     print(type(pop2))
+    print(pop==pop2)
 
 .. testoutput::
 
     <class 'fwdpy11.fwdpy11_types.Spop'>
+    True
 
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
