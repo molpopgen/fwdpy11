@@ -15,6 +15,3 @@ dependencies:
         - numpy
         - breathe
 
-script:
-    - doxygen fwdpy.doxygen
-    - doxygen fwdpp.doxygen
