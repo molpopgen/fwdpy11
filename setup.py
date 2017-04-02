@@ -74,7 +74,15 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.wfevolve_qtrait',
+        ['fwdpy11/src/wfevolve_qtrait.cc'],
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
     ]
+    
 
 
 # As of Python 3.6, CCompiler has a `has_flag` method.

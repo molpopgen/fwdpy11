@@ -60,6 +60,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+.. automodule:: fwdpy11.wright_fisher_qtrait
+    :members:
+    :show-inheritance:
+
 .. automodule:: fwdpy11.dev
     :members:
     :show-inheritance:
