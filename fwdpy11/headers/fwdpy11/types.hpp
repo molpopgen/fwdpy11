@@ -336,20 +336,26 @@ namespace fwdpy11
             : base(N, nloci), generation(0)
         {
         }
-        // std::string
-        // serialize() const
-        //{
-        //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
-        //}
 
-        // void
-        // deserialize(const std::string &s)
-        //{
-        //    *this = serialization::deserialize_details<multilocus_t>()(
-        //        s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-        //        fwdpy11::diploid_reader(), 0u, 0u);
-        //}
+        explicit multilocus_t(const std::string &s) : base({0,0})
+        {
+            this->deserialize(s);
+        }
+
+        std::string
+        serialize() const
+        {
+            return serialization::serialize_details(
+                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
+        }
+
+        void
+        deserialize(const std::string &s)
+        {
+            *this = serialization::deserialize_details<multilocus_t>()(
+                s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
+                fwdpy11::diploid_reader(), 0u, 0u);
+        }
 
         // int
         // tofile(const char *filename, bool append = false) const

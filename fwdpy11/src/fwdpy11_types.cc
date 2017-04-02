@@ -27,6 +27,8 @@ namespace py = pybind11;
 
 using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
+using multilocus_sugar_base = fwdpy11::multilocus_t::base;
+using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
 
 PYBIND11_PLUGIN(fwdpy11_types)
 {
@@ -78,9 +80,12 @@ PYBIND11_PLUGIN(fwdpy11_types)
                                 ":class:`fwdpy11.fwdpp_types.Mutation`.  "
                                 "Typically, access will be read-only.");
 
+    // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase");
-
+    py::class_<multilocus_popgenmut_base>(m, "MlocusMutationBase");
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
+    py::class_<multilocus_sugar_base, multilocus_popgenmut_base>(m,
+                                                                 "MlocusBase");
 
     // Expose the type based on fwdpp's "sugar" layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
@@ -174,6 +179,32 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
+
+    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
+        .def(py::init<unsigned,unsigned>(),py::arg("N"),py::arg("nloci"))
+        .def("clear", &fwdpy11::multilocus_t::clear,
+             "Clears all population data.")
+        .def_readonly("generation", &fwdpy11::multilocus_t::generation,
+                      "The current generation.")
+        .def_readonly("N", &fwdpy11::multilocus_t::N,
+                      "Curent population size.")
+        .def_readonly("diploids", &fwdpy11::multilocus_t::diploids)
+        .def_readonly("mutations", &fwdpy11::multilocus_t::mutations)
+        .def_readonly("gametes", &fwdpy11::multilocus_t::gametes)
+        .def_readonly("mcounts", &fwdpy11::multilocus_t::mcounts)
+        .def_readonly("fixations", &fwdpy11::multilocus_t::fixations)
+        .def_readonly("fixation_times", &fwdpy11::multilocus_t::fixation_times)
+        .def("__getstate__",
+             [](const fwdpy11::multilocus_t& pop) {
+                 return py::bytes(pop.serialize());
+             })
+        .def("__setstate__",
+             [](fwdpy11::multilocus_t& p, py::bytes s) {
+                 new (&p) fwdpy11::multilocus_t(s);
+             })
+        .def("__eq__",
+             [](const fwdpy11::multilocus_t& lhs,
+                const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
 
     return m.ptr();
 }
