@@ -19,10 +19,12 @@
 #
 import os
 import sys
+import subprocess
 sys.path.insert(0, os.path.abspath('..'))
 #sys.path.insert(0, os.path.abspath('./fwdpy11'))
 
-
+subprocess.run(["doxygen", "fwdpy11.doxygen"])
+subprocess.run(["doxygen", "fwdpp.doxygen"])
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
