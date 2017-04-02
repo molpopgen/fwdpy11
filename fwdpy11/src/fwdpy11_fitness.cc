@@ -28,7 +28,17 @@ PYBIND11_PLUGIN(fitness)
 {
     py::module m("fitness", "Fitness models.");
 
-    py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness");
+    py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness",
+            R"delim(
+            A fitness function or trait value function
+            for a single-deme, single-region simulation (
+            :class:`fwdpy11.fwdpy11_types.Spop`).
+            
+            Current objects derived from this type are:
+            
+            * :class:`fwdpy11.fitness.SpopAdditive`
+            * :class:`fwdpy11.fitness.SpopMult`
+            )delim");
 
     py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(
         m, "SpopMult", R"delim(
