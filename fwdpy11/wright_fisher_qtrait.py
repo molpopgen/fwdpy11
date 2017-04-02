@@ -42,7 +42,7 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     * :math:`\sigma_e`, the standard deviation of random noise added to trait value.
 
     When the population's generation first becomes :math:`\geq` `Generation`, then 
-    the values for `optimum, `VS` and :math:`\sigma_e` are applied.
+    the values for `optimum`, `VS` and :math:`\sigma_e` are applied.
     """
     from .internal import makeMutationRegions,makeRecombinationRegions
     mm=makeMutationRegions(nregions,sregions)
