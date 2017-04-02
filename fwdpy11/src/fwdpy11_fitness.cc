@@ -29,7 +29,6 @@ PYBIND11_PLUGIN(fitness)
     py::module m("fitness", "Fitness models.");
 
     py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness");
-    py::class_<fwdpy11::singlepop_fitness_qtrait>(m, "SpopFitnessQtrait");
 
     py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(
         m, "SpopMult", R"delim(
