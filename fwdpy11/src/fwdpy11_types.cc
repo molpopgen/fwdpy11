@@ -30,7 +30,8 @@ using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 using multilocus_sugar_base = fwdpy11::multilocus_t::base;
 using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
 using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
-using singlepop_generalmut_vec_base = singlepop_generalmut_vec_sugar_base::popbase_t;
+using singlepop_generalmut_vec_base
+    = singlepop_generalmut_vec_sugar_base::popbase_t;
 
 PYBIND11_PLUGIN(fwdpy11_types)
 {
@@ -88,6 +89,10 @@ PYBIND11_PLUGIN(fwdpy11_types)
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
     py::class_<multilocus_sugar_base, multilocus_popgenmut_base>(m,
                                                                  "MlocusBase");
+
+    py::class_<singlepop_generalmut_vec_base>(m, "SpopGeneralMutVecBase");
+    py::class_<singlepop_generalmut_vec_sugar_base,
+               singlepop_generalmut_vec_base>(m, "SpopGeneralMutVecSugarBase");
 
     // Expose the type based on fwdpp's "sugar" layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
@@ -183,7 +188,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
-        .def(py::init<unsigned,unsigned>(),py::arg("N"),py::arg("nloci"))
+        .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"))
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -208,8 +213,12 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](const fwdpy11::multilocus_t& lhs,
                 const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
 
-    py::class_<fwdpy11::singlepop_gm_vec_t, singlepop_generalmut_vec_sugar_base>(m, "MlocusPop")
-        .def(py::init<unsigned>(),py::arg("N"))
+    py::class_<fwdpy11::singlepop_gm_vec_t,
+               singlepop_generalmut_vec_sugar_base>(
+        m, "SpopGeneralMutVec", "Single-deme object using "
+                                ":class:`fwpy11.fwdpp_types.GeneralMutVec` as "
+                                "the mutation type.")
+        .def(py::init<unsigned>(), py::arg("N"))
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
@@ -221,7 +230,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes)
         .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts)
         .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations)
-        .def_readonly("fixation_times", &fwdpy11::singlepop_gm_vec_t::fixation_times)
+        .def_readonly("fixation_times",
+                      &fwdpy11::singlepop_gm_vec_t::fixation_times)
         .def("__getstate__",
              [](const fwdpy11::singlepop_gm_vec_t& pop) {
                  return py::bytes(pop.serialize());
@@ -230,8 +240,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](fwdpy11::singlepop_gm_vec_t& p, py::bytes s) {
                  new (&p) fwdpy11::singlepop_gm_vec_t(s);
              })
-        .def("__eq__",
-             [](const fwdpy11::singlepop_gm_vec_t& lhs,
-                const fwdpy11::singlepop_gm_vec_t& rhs) { return lhs == rhs; });
+        .def("__eq__", [](const fwdpy11::singlepop_gm_vec_t& lhs,
+                          const fwdpy11::singlepop_gm_vec_t& rhs) {
+            return lhs == rhs;
+        });
     return m.ptr();
 }

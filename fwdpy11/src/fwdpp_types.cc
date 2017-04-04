@@ -112,14 +112,15 @@ Base class for mutations.
         });
 
     py::bind_vector<std::vector<double>>(m, "VectorDouble");
-	py::bind_vector<std::vector<KTfwd::generalmut_vec>>(m,"VectorGeneralMutVec");
+	py::bind_vector<std::vector<KTfwd::generalmut_vec>>(m,"VectorGeneralMutVec",
+            "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
         "Mutation type with vector of effect size and dominance terms.")
-        .def_readonly("s", &KTfwd::generalmut_vec::s)
-        .def_readonly("h", &KTfwd::generalmut_vec::h)
-        .def_readonly("g", &KTfwd::generalmut_vec::g);
+        .def_readonly("s", &KTfwd::generalmut_vec::s,"List of selection coefficients/effect sizes.")
+        .def_readonly("h", &KTfwd::generalmut_vec::h,"List of dominance terms.")
+        .def_readonly("g", &KTfwd::generalmut_vec::g,"Generation when mutation arose.");
 
     return m.ptr();
 }
