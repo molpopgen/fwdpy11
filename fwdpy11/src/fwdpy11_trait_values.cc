@@ -1,6 +1,8 @@
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <pybind11/pybind11.h>
+#include <numeric>
+#include <cmath>
 
 namespace py = pybind11;
 
@@ -46,10 +48,34 @@ struct multiplicative_diploid_trait_fxn
     }
 };
 
+struct gbr_diploid_trait_fxn
+{
+    inline double
+    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+               const fwdpy11::mcont_t &mutations, const double) const
+    {
+        auto sum1 = std::accumulate(
+            gametes[dip.first].smutations.cbegin(),
+            gametes[dip.first].smutations.cend(), 0.,
+            [&mutations](const double s, const KTfwd::uint_t key) {
+                return s + mutations[key].s;
+            });
+        auto sum2 = std::accumulate(
+            gametes[dip.second].smutations.cbegin(),
+            gametes[dip.second].smutations.cend(), 0.,
+            [&mutations](const double s, const KTfwd::uint_t key) {
+                return s + mutations[key].s;
+            });
+        return std::sqrt(sum1 * sum2);
+    }
+};
+
 using singlepop_multiplicative_trait_wrapper = fwdpy11::
     fwdpp_singlepop_fitness_wrapper<multiplicative_diploid_trait_fxn>;
 using singlepop_additive_trait_wrapper
     = fwdpy11::fwdpp_singlepop_fitness_wrapper<additive_diploid_trait_fxn>;
+using gbr_trait_wrapper
+    = fwdpy11::fwdpp_singlepop_fitness_wrapper<gbr_diploid_trait_fxn>;
 
 PYBIND11_PLUGIN(trait_values)
 {
@@ -74,5 +100,8 @@ PYBIND11_PLUGIN(trait_values)
                 Multiplicative trait value, centered on zero.
                 )delim")
         .def(py::init<double>(), py::arg("scaling"));
+
+    py::class_<gbr_trait_wrapper,fwdpy11::singlepop_fitness>(m,"SpopGBRTrait")
+        .def(py::init<>());
     return m.ptr();
 }

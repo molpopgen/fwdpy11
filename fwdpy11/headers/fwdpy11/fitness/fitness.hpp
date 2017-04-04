@@ -55,7 +55,7 @@ namespace fwdpy11
     {
         using fitness_model = fitness_model_type;
         const double scaling;
-        fwdpp_singlepop_fitness_wrapper(const double scaling_)
+        fwdpp_singlepop_fitness_wrapper(const double scaling_ = 2.0)
             : scaling(scaling_)
         {
             if (!std::isfinite(scaling))
