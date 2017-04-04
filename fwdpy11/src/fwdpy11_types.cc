@@ -217,7 +217,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def_readonly("N", &fwdpy11::multilocus_t::N,
                       "Curent population size.")
         .def_readonly("diploids", &fwdpy11::multilocus_t::diploids)
-        .def_readonly("mutations", &fwdpy11::multilocus_t::mutations,MUTATIONS_DOCSTRING)
+        .def_readonly("mutations", &fwdpy11::multilocus_t::mutations,
+                      MUTATIONS_DOCSTRING)
         .def_readonly("gametes", &fwdpy11::multilocus_t::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::multilocus_t::mcounts,
@@ -251,12 +252,19 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def_readonly("N", &fwdpy11::singlepop_gm_vec_t::N,
                       "Curent population size.")
         .def_readonly("diploids", &fwdpy11::singlepop_gm_vec_t::diploids)
-        .def_readonly("mutations", &fwdpy11::singlepop_gm_vec_t::mutations)
-        .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes)
-        .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts)
-        .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations)
+        .def_readonly(
+            "mutations", &fwdpy11::singlepop_gm_vec_t::mutations,
+            "A list of :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`.")
+        .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes,
+                      GAMETES_DOCSTRING)
+        .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts,
+                      MCOUNTS_DOCSTRING)
+        .def_readonly(
+            "fixations", &fwdpy11::singlepop_gm_vec_t::fixations,
+            "A list of :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`.")
         .def_readonly("fixation_times",
-                      &fwdpy11::singlepop_gm_vec_t::fixation_times)
+                      &fwdpy11::singlepop_gm_vec_t::fixation_times,
+                      FIXATION_TIMES_DOCSTRING)
         .def("__getstate__",
              [](const fwdpy11::singlepop_gm_vec_t& pop) {
                  return py::bytes(pop.serialize());
