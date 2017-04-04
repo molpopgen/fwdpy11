@@ -44,6 +44,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+.. automodule:: fwdpy11.trait_values
+    :members:
+    :show-inheritance:
+
 .. automodule:: fwdpy11.sampling
     :members:
     :show-inheritance:
