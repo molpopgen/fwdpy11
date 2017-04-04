@@ -33,6 +33,41 @@ using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
 using singlepop_generalmut_vec_base
     = singlepop_generalmut_vec_sugar_base::popbase_t;
 
+namespace
+{
+    static const auto MCOUNTS_DOCSTRING = R"delim(
+    List of number of occurrences of elements in 
+    a population objecst "mutations" container.
+
+    The values are unsigned 32-bit integers.  
+
+    .. note::
+        Some values may be 0.  These represent *extinct* variants.  You will typically want to avoid processing such mutations.
+)delim";
+
+    static const auto DIPLOIDS_DOCSTRING = R"delim(
+   A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.
+   )delim";
+
+    static const auto FIXATIONS_DOCSTRING
+        = R"delim(A :class:`fwdpy11.fwdpp_types.MutationContainer` of fixed variants.)delim";
+
+    static const auto FIXATION_TIMES_DOCSTRING =
+        R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
+
+    static const auto GAMETES_DOCSTRING
+        = R"delim(A :class:`fwdpy11.fwdpp_types.GameteContainer`.)delim";
+
+    static const auto MUTATIONS_DOCSTRING = R"delim(
+    List of :class:`fwdpy11.fwdpp_types.Mutation`.
+
+    .. note:: 
+        This list contains **both** extinct *and* extant mutations.  
+        To distinguish them, use the locations of nonzero values in "mcounts" 
+        for an instance of this type."
+    )delim";
+}
+
 PYBIND11_PLUGIN(fwdpy11_types)
 {
     py::module m("fwdpy11_types", "Wrap C++ types specific to fwdpy11.");
@@ -150,31 +185,17 @@ PYBIND11_PLUGIN(fwdpy11_types)
                         200
                       )delim")
         .def_readonly("diploids", &fwdpy11::singlepop_t::diploids,
-                      "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.")
-        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations, R"delim(
-    List of :class:`fwdpy11.fwdpp_types.Mutation`.
-
-    .. note:: 
-        This list contains **both** extinct *and* extant mutations.  
-        To distinguish them, use :attr:`fwdpy11.fwdpy11_types.SpopMutationBase.mcounts`.
-)delim")
-        .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts, R"delim(
-    List of number of occurrences of elements in 
-    :attr:`fwdpy11.fwdpy11_types.SpopMutationBase.mutations`.
-
-    The values are unsigned 32-bit integers.  
-
-    .. note::
-        Some values may be 0.  These represent *extinct* variants.  You will typically want to avoid processing such mutations.
-)delim")
+                      DIPLOIDS_DOCSTRING)
+        .def_readonly("mutations", &fwdpp_popgenmut_base::mutations,
+                      MUTATIONS_DOCSTRING)
+        .def_readonly("mcounts", &fwdpp_popgenmut_base::mcounts,
+                      MCOUNTS_DOCSTRING)
         .def_readonly("fixations", &fwdpp_popgenmut_base::fixations,
-                      "A :class:`fwdpy11.fwdpp_types.MutationContainer` of "
-                      "fixed variants.")
+                      FIXATIONS_DOCSTRING)
         .def_readonly("fixation_times", &fwdpp_popgenmut_base::fixation_times,
-                      "A list of fixation times corresponding to "
-                      ":attr:`fwdpy11.fwdpy11_types.Spop.fixations`.")
+                      FIXATION_TIMES_DOCSTRING)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
-                      "A :class:`fwdpy11.fwdpp_types.GameteContainer`.")
+                      GAMETES_DOCSTRING)
         .def("__getstate__",
              [](const fwdpy11::singlepop_t& pop) {
                  return py::bytes(pop.serialize());
@@ -196,11 +217,15 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def_readonly("N", &fwdpy11::multilocus_t::N,
                       "Curent population size.")
         .def_readonly("diploids", &fwdpy11::multilocus_t::diploids)
-        .def_readonly("mutations", &fwdpy11::multilocus_t::mutations)
-        .def_readonly("gametes", &fwdpy11::multilocus_t::gametes)
-        .def_readonly("mcounts", &fwdpy11::multilocus_t::mcounts)
-        .def_readonly("fixations", &fwdpy11::multilocus_t::fixations)
-        .def_readonly("fixation_times", &fwdpy11::multilocus_t::fixation_times)
+        .def_readonly("mutations", &fwdpy11::multilocus_t::mutations,MUTATIONS_DOCSTRING)
+        .def_readonly("gametes", &fwdpy11::multilocus_t::gametes,
+                      GAMETES_DOCSTRING)
+        .def_readonly("mcounts", &fwdpy11::multilocus_t::mcounts,
+                      MCOUNTS_DOCSTRING)
+        .def_readonly("fixations", &fwdpy11::multilocus_t::fixations,
+                      FIXATIONS_DOCSTRING)
+        .def_readonly("fixation_times", &fwdpy11::multilocus_t::fixation_times,
+                      FIXATIONS_DOCSTRING)
         .def("__getstate__",
              [](const fwdpy11::multilocus_t& pop) {
                  return py::bytes(pop.serialize());
