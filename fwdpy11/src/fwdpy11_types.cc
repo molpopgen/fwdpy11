@@ -29,6 +29,8 @@ using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 using multilocus_sugar_base = fwdpy11::multilocus_t::base;
 using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
+using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
+using singlepop_generalmut_vec_base = singlepop_generalmut_vec_sugar_base::popbase_t;
 
 PYBIND11_PLUGIN(fwdpy11_types)
 {
@@ -206,5 +208,30 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](const fwdpy11::multilocus_t& lhs,
                 const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
 
+    py::class_<fwdpy11::singlepop_gm_vec_t, singlepop_generalmut_vec_sugar_base>(m, "MlocusPop")
+        .def(py::init<unsigned>(),py::arg("N"))
+        .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
+             "Clears all population data.")
+        .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
+                      "The current generation.")
+        .def_readonly("N", &fwdpy11::singlepop_gm_vec_t::N,
+                      "Curent population size.")
+        .def_readonly("diploids", &fwdpy11::singlepop_gm_vec_t::diploids)
+        .def_readonly("mutations", &fwdpy11::singlepop_gm_vec_t::mutations)
+        .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes)
+        .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts)
+        .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations)
+        .def_readonly("fixation_times", &fwdpy11::singlepop_gm_vec_t::fixation_times)
+        .def("__getstate__",
+             [](const fwdpy11::singlepop_gm_vec_t& pop) {
+                 return py::bytes(pop.serialize());
+             })
+        .def("__setstate__",
+             [](fwdpy11::singlepop_gm_vec_t& p, py::bytes s) {
+                 new (&p) fwdpy11::singlepop_gm_vec_t(s);
+             })
+        .def("__eq__",
+             [](const fwdpy11::singlepop_gm_vec_t& lhs,
+                const fwdpy11::singlepop_gm_vec_t& rhs) { return lhs == rhs; });
     return m.ptr();
 }

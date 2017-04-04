@@ -271,38 +271,24 @@ namespace fwdpy11
         explicit singlepop_gm_vec_t(const unsigned &N) : base(N), generation(0)
         {
         }
-        unsigned
-        gen() const
+        explicit singlepop_gm_vec_t(const std::string &s) : base(0)
         {
-            return generation;
+            this->deserialize(s);
         }
-        unsigned
-        popsize() const
+        std::string
+        serialize() const
         {
-            return N;
+            return serialization::serialize_details(
+                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
         }
-        int
-        sane() const
-        {
-            return int(N == diploids.size());
-        }
-        // std::string
-        // serialize() const
-        //{
-        //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
-        //}
 
-        // void
-        // deserialize(const std::string &s)
-        //{
-        //    *this
-        //        =
-        //        serialization::deserialize_details<singlepop_gm_vec_t>()(
-        //            s,
-        //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-        //            fwdpy11::diploid_reader(), 0u);
-        //}
+        void
+        deserialize(const std::string &s)
+        {
+            *this = serialization::deserialize_details<singlepop_gm_vec_t>()(
+                s, KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
+                fwdpy11::diploid_reader(), 0u);
+        }
 
         // int
         // tofile(const char *filename, bool append = false) const
@@ -337,7 +323,7 @@ namespace fwdpy11
         {
         }
 
-        explicit multilocus_t(const std::string &s) : base({0,0})
+        explicit multilocus_t(const std::string &s) : base({ 0, 0 })
         {
             this->deserialize(s);
         }
