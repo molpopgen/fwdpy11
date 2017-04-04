@@ -667,7 +667,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -743,7 +742,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -996,15 +994,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1142,7 +1131,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1295,7 +1284,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2467,7 +2455,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 for ac_prog in python \
      python3 \
      python2 \
-                         python3.3                    python3.2                    python3.1                    python3.0                                                            python2.7
+                         python4.0                    python3.9                    python3.8                    python3.7                    python3.6                    python3.5                    python3.4                    python3.3                    python3.2                    python3.1                    python3.0                                                            python
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -2579,9 +2567,9 @@ See \`config.log' for more details" "$LINENO" 5; }
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if Python <= '3.3.1'" >&5
-$as_echo_n "checking if Python <= '3.3.1'... " >&6; }
-if ${pc_cv_python_req_version_3_3_1+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if Python <= '4.0'" >&5
+$as_echo_n "checking if Python <= '4.0'... " >&6; }
+if ${pc_cv_python_req_version_4_0+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_ext=py
@@ -2601,7 +2589,7 @@ if __name__ == '__main__':
     # split strings by '.' and convert to numeric.  Append some zeros
     # because we need at least 4 digits for the hex conversion.
     # map returns an iterator in Python 3.0 and a list in 2.x
-    reqver = list(map(int, '3.3.1'.split('.'))) + [0, 0, 0]
+    reqver = list(map(int, '4.0'.split('.'))) + [0, 0, 0]
     reqverhex = 0
     # xrange is not present in Python 3.0 and range returns an iterator
     for i in list(range(4)):
@@ -2617,9 +2605,9 @@ if __name__ == '__main__':
 
 _ACEOF
 if ac_fn_py_try_run "$LINENO"; then :
-  pc_cv_python_req_version_3_3_1=yes
+  pc_cv_python_req_version_4_0=yes
 else
-  pc_cv_python_req_version_3_3_1=no
+  pc_cv_python_req_version_4_0=no
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
@@ -2632,9 +2620,9 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $pc_cv_python_req_version_3_3_1" >&5
-$as_echo "$pc_cv_python_req_version_3_3_1" >&6; }
-if test "$pc_cv_python_req_version_3_3_1" = "no"; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $pc_cv_python_req_version_4_0" >&5
+$as_echo "$pc_cv_python_req_version_4_0" >&6; }
+if test "$pc_cv_python_req_version_4_0" = "no"; then :
   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
 $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
 as_fn_error $? "No compatible Python interpreter found. If you're sure that you have one, try setting the PYTHON environment variable to the location of the interpreter.
