@@ -68,6 +68,13 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.trait_values',
+        ['fwdpy11/src/fwdpy11_trait_values.cc'],
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.wfevolve',
         ['fwdpy11/src/wfevolve.cc'],
         include_dirs=INCLUDES,
