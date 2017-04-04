@@ -209,7 +209,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
-        .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"))
+        .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
+                "Construct with population size and number of loci.")
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -244,14 +245,16 @@ PYBIND11_PLUGIN(fwdpy11_types)
         m, "SpopGeneralMutVec", "Single-deme object using "
                                 ":class:`fwpy11.fwdpp_types.GeneralMutVec` as "
                                 "the mutation type.")
-        .def(py::init<unsigned>(), py::arg("N"))
+        .def(py::init<unsigned>(), py::arg("N"),
+                "Construct object with N diploids.")
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
                       "The current generation.")
         .def_readonly("N", &fwdpy11::singlepop_gm_vec_t::N,
                       "Curent population size.")
-        .def_readonly("diploids", &fwdpy11::singlepop_gm_vec_t::diploids)
+        .def_readonly("diploids", &fwdpy11::singlepop_gm_vec_t::diploids,
+                      DIPLOIDS_DOCSTRING)
         .def_readonly(
             "mutations", &fwdpy11::singlepop_gm_vec_t::mutations,
             "A list of :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`.")
