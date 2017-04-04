@@ -41,8 +41,9 @@ PYBIND11_PLUGIN(fitness)
             
             Current trait value objects derived from this type are:
 
-            * :class:`fwdpy11.fitness.SpopAdditiveTrait`
-            * :class:`fwdpy11.fitness.SpopMultTrait`
+            * :class:`fwdpy11.trait_values.SpopAdditiveTrait`
+            * :class:`fwdpy11.trait_values.SpopMultTrait`
+            * :class:`fwdpy11.trait_values.SpopGBRTrait`
             )delim");
 
     py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(

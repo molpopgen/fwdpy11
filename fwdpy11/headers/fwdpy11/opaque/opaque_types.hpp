@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
+#include <fwdpp/sugar/generalmut.hpp>
 
 namespace fwdpy11
 {
@@ -94,5 +95,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::dipvector_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
 
 #endif

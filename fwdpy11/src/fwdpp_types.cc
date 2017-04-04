@@ -19,12 +19,15 @@
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
-
+#include <fwdpp/sugar/generalmut.hpp>
+#include <fwdpy11/opaque/opaque_types.hpp>
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(fwdpp_types) {
+PYBIND11_PLUGIN(fwdpp_types)
+{
     py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");
 
     // low-level types
@@ -43,11 +46,10 @@ Base class for mutations.
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.
 )delim")
-        .def_readonly(
-            "n", &KTfwd::gamete::n,
-            "Number of occurrences in the population.  . This has "
-            "little meaning beyond book-keeping used by the C++ "
-            "back-end. (read-only)")
+        .def_readonly("n", &KTfwd::gamete::n,
+                      "Number of occurrences in the population.  . This has "
+                      "little meaning beyond book-keeping used by the C++ "
+                      "back-end. (read-only)")
         .def_readonly("mutations", &KTfwd::gamete::mutations,
                       "List of keys to neutral mutations. Contains unsigned "
                       "32-bit integers corresponding to mutations in the "
@@ -64,10 +66,10 @@ Base class for mutations.
                  using obj = pybind11::object;
                  pybind11::dict rv;
                  rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
-                 rv[obj(pybind11::cast("mutations"))] =
-                     obj(pybind11::cast(g.mutations));
-                 rv[obj(pybind11::cast("smutations"))] =
-                     obj(pybind11::cast(g.smutations));
+                 rv[obj(pybind11::cast("mutations"))]
+                     = obj(pybind11::cast(g.mutations));
+                 rv[obj(pybind11::cast("smutations"))]
+                     = obj(pybind11::cast(g.smutations));
                  return rv;
              },
              "Return dictionary representaton of the gamete.")
@@ -104,10 +106,21 @@ Base class for mutations.
                      p[4].cast<std::uint16_t>());
              })
         .def("__str__", [](const KTfwd::popgenmut &m) {
-            return "Mutation[" + std::to_string(m.pos) + "," +
-                   std::to_string(m.s) + "," + std::to_string(m.h) + "," +
-                   std::to_string(m.g) + "]";
+            return "Mutation[" + std::to_string(m.pos) + ","
+                   + std::to_string(m.s) + "," + std::to_string(m.h) + ","
+                   + std::to_string(m.g) + "]";
         });
+
+    py::bind_vector<std::vector<double>>(m, "VectorDouble");
+	py::bind_vector<std::vector<KTfwd::generalmut_vec>>(m,"VectorGeneralMutVec",
+            "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
+
+    py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
+        m, "GeneralMutVec",
+        "Mutation type with vector of effect size and dominance terms.")
+        .def_readonly("s", &KTfwd::generalmut_vec::s,"List of selection coefficients/effect sizes.")
+        .def_readonly("h", &KTfwd::generalmut_vec::h,"List of dominance terms.")
+        .def_readonly("g", &KTfwd::generalmut_vec::g,"Generation when mutation arose.");
 
     return m.ptr();
 }
