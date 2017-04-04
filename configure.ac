@@ -398,11 +398,11 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([Makefile setup.py doc/fwdpy11.doxygen fwdpy11/__init__.py docs/conf.py])
+AC_CONFIG_FILES([setup.py doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py])
 
 dnl stuff added by KRT
 
-AC_CONFIG_HEADERS([config.h])
+dnl AC_CONFIG_HEADERS([config.h])
 
 dnl MINFWDPPVERSION="0.5.4"
 dnl FWDPPVERSION=`fwdppConfig --version`
