@@ -43,6 +43,7 @@ PYBIND11_PLUGIN(fitness)
 
             * :class:`fwdpy11.trait_values.SpopAdditiveTrait`
             * :class:`fwdpy11.trait_values.SpopMultTrait`
+            * :class:`fwdpy11.trait_values.SpopGBRTrait`
             )delim");
 
     py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(
