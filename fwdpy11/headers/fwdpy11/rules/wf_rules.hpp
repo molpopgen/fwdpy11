@@ -1,6 +1,9 @@
 /*!
   \brief "Rules" class for the standard W-F model
 */
+#ifndef FWDPY11_WF_RULES_HPP__
+#define FWDPY11_WF_RULES_HPP__
+
 #include "rules_base.hpp"
 #include <fwdpp/fitness_models.hpp>
 
@@ -66,3 +69,5 @@ namespace fwdpy11
         }
     };
 }
+
+#endif

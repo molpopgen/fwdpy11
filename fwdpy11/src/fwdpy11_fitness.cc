@@ -28,8 +28,22 @@ PYBIND11_PLUGIN(fitness)
 {
     py::module m("fitness", "Fitness models.");
 
-    py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness");
-    py::class_<fwdpy11::singlepop_fitness_qtrait>(m, "SpopFitnessQtrait");
+    py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness",
+                                           R"delim(
+            A fitness function or trait value function
+            for a single-deme, single-region simulation (
+            :class:`fwdpy11.fwdpy11_types.Spop`).
+            
+            Current fitness ovjects derived from this type are:
+            
+            * :class:`fwdpy11.fitness.SpopAdditive`
+            * :class:`fwdpy11.fitness.SpopMult`
+            
+            Current trait value objects derived from this type are:
+
+            * :class:`fwdpy11.fitness.SpopAdditiveTrait`
+            * :class:`fwdpy11.fitness.SpopMultTrait`
+            )delim");
 
     py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(
         m, "SpopMult", R"delim(
@@ -46,8 +60,7 @@ PYBIND11_PLUGIN(fitness)
         .def(py::init<double>(), py::arg("scaling"));
 
     py::class_<fwdpy11::singlepop_additive_wrapper,
-               fwdpy11::singlepop_fitness>(
-        m, "SpopAdditive", R"delim(
+               fwdpy11::singlepop_fitness>(m, "SpopAdditive", R"delim(
         Additive fitness for single-deme simulations.
         Fitness is max(0,1 + :math:`\sum_{i} x_i`), 
         where :math:`x_i = 0, sh,\ \mathrm{or\ }scaling \times s`
@@ -59,6 +72,7 @@ PYBIND11_PLUGIN(fitness)
             w = fp11w.SpopAdditive(2.0)
         )delim")
         .def(py::init<double>(), py::arg("scaling"));
+
 
     return m.ptr();
 }

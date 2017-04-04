@@ -37,9 +37,6 @@ namespace fwdpy11
      *  simulations.
      */
     using singlepop_fitness_fxn = singlepop_fitness_signature<>;
-    //! For quantitative traits, optimum and VS are additional arguments
-    using singlepop_fitness_fxn_qtrait
-        = singlepop_fitness_signature<double, double>;
 
     struct singlepop_fitness
     //! Pure virtual base class for single-deme fitness functions
@@ -47,20 +44,6 @@ namespace fwdpy11
         virtual ~singlepop_fitness() = default;
         singlepop_fitness() = default;
         virtual singlepop_fitness_fxn callback() const = 0;
-        virtual void
-        update(const singlepop_t &pop)
-        {
-        }
-    };
-
-    struct singlepop_fitness_qtrait
-    /*! Pure virtual base class for single-deme fitness functions
-     *  for simulations of gaussian stabilizing selection.
-     */
-    {
-        virtual ~singlepop_fitness_qtrait() = default;
-        singlepop_fitness_qtrait() = default;
-        virtual singlepop_fitness_fxn_qtrait callback() const = 0;
         virtual void
         update(const singlepop_t &pop)
         {
@@ -100,9 +83,5 @@ namespace fwdpy11
     pybind11::object FWDPY11_SINGLEPOP_FITNESS_BASE_IMPORT__                  \
         = (pybind11::object)pybind11::module::import("fwdpy11.fitness")       \
               .attr("SpopFitness");
-#define FWDPY11_SINGLEPOP_FITNESS_QTRAIT()                                    \
-    pybind11::object FWDPY11_SINGLEPOP_FITNESS_BASE_IMPORT__                  \
-        = (pybind11::object)pybind11::module::import("fwdpy11.fitness")       \
-              .attr("SpopFitnessQtrait");
 }
 #endif
