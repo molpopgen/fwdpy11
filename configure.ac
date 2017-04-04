@@ -88,7 +88,7 @@ dnl          series and the max is in the 3.0 series, non-existent
 dnl          releases (2.8 & 2.9) will be correctly skipped.
 dnl----
 dnl
-PC_INIT([2.7], [3.3.1])
+PC_INIT([2.7], [])
 
 
 dnl--PC_PROG_PYTHON---------------------------------------------------

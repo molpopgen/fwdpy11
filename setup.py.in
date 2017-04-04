@@ -28,13 +28,18 @@ INCLUDES=[
     'fwdpy11/headers/fwdpp',
     # Path to pybind11 headers
     get_pybind_include(),
-    get_pybind_include(user=True)
+    get_pybind_include(user=True),
+    os.path.join(sys.prefix, 'include')
 ]
 
+LIBRARY_DIRS=[
+    os.path.join(sys.prefix, 'lib')
+    ]
 ext_modules = [
     Extension(
         'fwdpy11.fwdpp_types',
         ['fwdpy11/src/fwdpp_types.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -42,6 +47,7 @@ ext_modules = [
     Extension(
         'fwdpy11.fwdpp_extensions',
         ['fwdpy11/src/fwdpp_extensions.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -49,6 +55,7 @@ ext_modules = [
     Extension(
         'fwdpy11.fwdpy11_types',
         ['fwdpy11/src/fwdpy11_types.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -56,6 +63,7 @@ ext_modules = [
     Extension(
         'fwdpy11.sampling',
         ['fwdpy11/src/fwdpy11_sampling.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -63,6 +71,7 @@ ext_modules = [
     Extension(
         'fwdpy11.fitness',
         ['fwdpy11/src/fwdpy11_fitness.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -70,6 +79,7 @@ ext_modules = [
     Extension(
         'fwdpy11.trait_values',
         ['fwdpy11/src/fwdpy11_trait_values.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -77,6 +87,7 @@ ext_modules = [
         Extension(
         'fwdpy11.wfevolve',
         ['fwdpy11/src/wfevolve.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
@@ -84,6 +95,7 @@ ext_modules = [
     Extension(
         'fwdpy11.wfevolve_qtrait',
         ['fwdpy11/src/wfevolve_qtrait.cc'],
+        library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl','gslcblas'],
         language='c++'
