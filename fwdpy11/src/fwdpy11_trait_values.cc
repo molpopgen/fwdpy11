@@ -88,7 +88,7 @@ PYBIND11_PLUGIN(trait_values)
         R"delim(
                 Additive trait value, centered on zero.
 
-                Trait value is :math:`\sum_{i} x_i`), 
+                Trait value is :math:`\sum_{i} x_i`, 
                 where :math:`x_i = 0, sh,\ \mathrm{or\ }scaling \times s`
                 for AA, Aa, and aa, respectively.
                 )delim")
