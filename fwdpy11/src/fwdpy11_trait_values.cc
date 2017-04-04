@@ -101,8 +101,9 @@ PYBIND11_PLUGIN(trait_values)
                 )delim")
         .def(py::init<double>(), py::arg("scaling"));
 
-    py::class_<gbr_trait_wrapper,fwdpy11::singlepop_fitness>(m,"SpopGBRTrait",
-            R"delim(
+    py::class_<gbr_trait_wrapper, fwdpy11::singlepop_fitness>(m,
+                                                              "SpopGBRTrait",
+                                                              R"delim(
             The "gene-based recessive" model from Thornton et al.
             2013 http://dx.doi.org/10.1371/journal.pgen.1003258 
             and Sanjak et al. 2017 http://dx.doi.org/10.1371/journal.pgen.1006573.
