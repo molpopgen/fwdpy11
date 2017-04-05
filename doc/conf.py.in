@@ -20,6 +20,7 @@
 import os
 import sys
 import subprocess
+sys.path.insert(0, os.path.join(sys.prefix,'lib/python3.5'))
 sys.path.insert(0, os.path.abspath('..'))
 #sys.path.insert(0, os.path.abspath('./fwdpy11'))
 
