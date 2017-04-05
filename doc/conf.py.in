@@ -21,7 +21,7 @@ import os
 import sys
 import subprocess
 
-if (os.environ.get('READTHEDOCS')==True) is False:
+if (os.environ.get('READTHEDOCS')=="True") is False:
     sys.path.insert(0, os.path.abspath('..'))
 else:
     import site
