@@ -109,13 +109,13 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'default'
 
 html_theme_options = {
         'github_user':'molpopgen',
         'github_repo':'fwdpy11',
-        'github_button':True,
-        'github_banner':True,
+#        'github_button':True,
+#        'github_banner':True,
         }
 
 # Theme options are theme-specific and customize the look and feel of a theme
