@@ -23,7 +23,10 @@ import subprocess
 
 if (os.environ.get('READTHEDOCS')==True) is False:
     sys.path.insert(0, os.path.abspath('..'))
-
+else:
+    import site
+    p=site.getsitepackages()[0]
+    sys.path.insert(0,p)
 
 my_env=os.environ.copy()
 my_env["LD_LIBRARY_PATH"]=os.path.join(sys.prefix,'lib')
