@@ -4,8 +4,23 @@ fwdpy11
 This is the README for fwdpy11_, which is a Python package for forward-time population genetic simulation.  It uses
 fwdpp_ as its C++ back-end.
 
+Build status
+-----------------------
+
 .. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=master
     :target: https://travis-ci.org/molpopgen/fwdpy11
+	:alt: Master branch
+
+.. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=dev
+    :target: https://travis-ci.org/molpopgen/fwdpy11
+	:alt: Development branch
+
+Manual
+-----------------------
+
+.. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=latest
+	:target: http://fwdpy11.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status (master branch)
 
 Features
 -----------------------
