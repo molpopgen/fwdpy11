@@ -23,8 +23,12 @@ import subprocess
 sys.path.insert(0, os.path.abspath('..'))
 #sys.path.insert(0, os.path.abspath('./fwdpy11'))
 
-subprocess.run(["doxygen", "fwdpy11.doxygen"])
-subprocess.run(["doxygen", "fwdpp.doxygen"])
+my_env=os.environ.copy()
+my_env["LD_LIBRARY_PATH"]=os.path.join(sys.prefix,'lib')
+subprocess.Popen("doxygen fwdpy11.doxygen",env=my_env)
+subprocess.Popen("doxygen fwdpp.doxygen",env=my_env)
+#subprocess.run(["doxygen", "fwdpy11.doxygen"])
+#subprocess.run(["doxygen", "fwdpp.doxygen"])
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
