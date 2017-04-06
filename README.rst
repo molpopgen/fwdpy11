@@ -25,6 +25,11 @@ Latest/master:
 .. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=latest
 	:target: http://fwdpy11.readthedocs.io/en/latest/?badge=latest
 
+Development branch:
+
+.. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=dev
+	:target: http://fwdpy11.readthedocs.io/en/dev/?badge=dev
+
 Features
 -----------------------
 
