@@ -43,7 +43,7 @@ PYBIND11_PLUGIN(sampling)
             :param rng: A `fwdpy11.fwdpy11_types.GSLrng`
             :param pop: A `fwdpy11.fwdpy11_types.Spop`
             :param samplesize: (int) The sample size.
-            :param removeFixed (boolean, defaults to True) Whether or not to include fixations.
+            :param removeFixed: (boolean, defaults to True) Whether or not to include fixations.
 
             :rtype: tuple
 
@@ -72,7 +72,7 @@ PYBIND11_PLUGIN(sampling)
 
             :param pop: A `fwdpy11.fwdpy11_types.Spop`
             :param individuals: (list of integers) The individuals to include in the sample. 
-            :param removeFixed (boolean, defaults to True) Whether or not to include fixations.
+            :param removeFixed: (boolean, defaults to True) Whether or not to include fixations.
 
             :rtype: tuple
 
