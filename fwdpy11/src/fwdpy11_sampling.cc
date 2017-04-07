@@ -131,9 +131,28 @@ PYBIND11_PLUGIN(sampling)
             d.selected_popfreq = p[1].cast<std::vector<double>>();
         });
 
-    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::singlepop_t>);
-    m.def("mutation_keys", &KTfwd::mutation_keys<fwdpy11::multilocus_t>);
-    m.def("genotype_matrix", &KTfwd::genotype_matrix<fwdpy11::singlepop_t>);
-    m.def("genotype_matrix", &KTfwd::genotype_matrix<fwdpy11::multilocus_t>);
+#define MUTATION_KEYS(POPTYPE)                                                \
+    m.def("mutation_keys", &KTfwd::mutation_keys<POPTYPE>, py::arg("pop"),    \
+          py::arg("individuals"), py::arg("neutral") = true,                  \
+          py::arg("selected") = true, py::arg("deme") = 0);
+
+#define GENOTYPE_MATRIX(POPTYPE) \
+    m.def("genotype_matrix",&KTfwd::genotype_matrix<POPTYPE>);
+
+#define HAPLOTYPE_MATRIX(POPTYPE) \
+    m.def("haplotype_matrix",&KTfwd::genotype_matrix<POPTYPE>);
+
+    MUTATION_KEYS(fwdpy11::singlepop_t);
+    MUTATION_KEYS(fwdpy11::multilocus_t);
+    MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t);
+
+    GENOTYPE_MATRIX(fwdpy11::singlepop_t);
+    GENOTYPE_MATRIX(fwdpy11::multilocus_t);
+    GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t);
+
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t);
+    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t);
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t);
+
     return m.ptr();
 }
