@@ -131,33 +131,74 @@ PYBIND11_PLUGIN(sampling)
             d.selected_popfreq = p[1].cast<std::vector<double>>();
         });
 
-#define MUTATION_KEYS(POPTYPE)                                                \
+#define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
              const bool neutral, const bool selected) {                       \
               return KTfwd::mutation_keys(pop, individuals, neutral,          \
                                           selected);                          \
           },                                                                  \
+          "Generate a tuple of (mutation_key, sample count) for mutations\n"  \
+          "in a specific set of diploids in a :class:`" CLASSTYPE "` "        \
+          "object.\n\n"                                                       \
+          ":param pop: A population object.\n"                                \
+          ":param individuals: A list of indexes to diploids.\n"              \
+          ":param netural: (True) A boolean indicating whether to include "   \
+          "neutral variants.\n"                                               \
+          ":param selected: (True) A boolean indicating whether to include "  \
+          "selected variants.\n\n"                                            \
+          ".. note:: Mutation keys are unsorted.\n",                          \
           py::arg("pop"), py::arg("individuals"), py::arg("neutral") = true,  \
           py::arg("selected") = true);
 
-#define GENOTYPE_MATRIX(POPTYPE)                                              \
-    m.def("genotype_matrix", &KTfwd::genotype_matrix<POPTYPE>);
+    using keytype = std::vector<std::pair<std::size_t, KTfwd::uint_t>>;
+    using pkeytype = std::pair<keytype, keytype>;
 
-#define HAPLOTYPE_MATRIX(POPTYPE)                                             \
-    m.def("haplotype_matrix", &KTfwd::genotype_matrix<POPTYPE>);
+#define GENOTYPE_MATRIX(POPTYPE, CLASSTYPE)                                   \
+    m.def("genotype_matrix",                                                  \
+          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
+             const pkeytype &keys) {                                          \
+              return KTfwd::genotype_matrix<POPTYPE>(                         \
+                  pop, individuals, keys.first, keys.second);                 \
+          },                                                                  \
+          "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
+          ":class:`" CLASSTYPE "` object.\n"                                  \
+          "The DataMatrix will be encoded as diploid genotypes.\n\n"          \
+          ":param pop: A population object.\n"                                \
+          ":param keys: The return value from "                               \
+          ":func:`fwdpy11.sampling.mutation_keys`.\n\n"                       \
+          ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
+          "genotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::singlepop_t);
-    MUTATION_KEYS(fwdpy11::multilocus_t);
-    MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t);
+#define HAPLOTYPE_MATRIX(POPTYPE, CLASSTYPE)                                  \
+    m.def("haplotype_matrix",                                                 \
+          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
+             const pkeytype &keys) {                                          \
+              return KTfwd::haplotype_matrix<POPTYPE>(                        \
+                  pop, individuals, keys.first, keys.second);                 \
+          },                                                                  \
+          "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
+          ":class:`" CLASSTYPE "` object.\n"                                  \
+          "The DataMatrix will be encoded as haplotypes.\n\n"                 \
+          ":param pop: A population object.\n"                                \
+          ":param keys: The return value from "                               \
+          ":func:`fwdpy11.sampling.mutation_keys`.\n\n"                       \
+          ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
+          "haplotype matrix\n");
 
-    GENOTYPE_MATRIX(fwdpy11::singlepop_t);
-    GENOTYPE_MATRIX(fwdpy11::multilocus_t);
-    GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t);
+    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
+                  "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
 
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t);
-    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t);
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t);
+    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
+                    "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
 
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
+                     "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
     return m.ptr();
 }
