@@ -1,12 +1,38 @@
 Representing samples from a population in matrix form
 ====================================================================================
 
+fwdpy11 allows viewing samples from populations (including the entire sample) in a matrix format.
+
+The relevant functions are:
+
+* :function:`fwdpy11.sampling.genotype_matrix`
+* :function:`fwdpy11.sampling.haplotype_matrix`
+
+Both return :class:`fwdpy11.sampling.DataMatrix` objects.
+
+The API is extremely flexible, allowing for the inclusion or exclustion of selected markers.  Getting a 
+:class:`fwdpy11.sampling.DataMatrix` requires a few steps:
+
+1. Determine the individuals in your sample.  You may do this however you see fit.
+2. Get a list of mutation keys associated with that sample via a call to :function:`fwdpy11.sampling.mutation_keys`.
+3. Process/filter that list of keys as you need.  The list is unsorted.  You may choose to sort it according to mutation
+   position, effect size, etc.  You may also apply a frequency filter.  The data returned from :function:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
+4. Generate the fwdpy11.sampling.DataMatrix object by calling either :function:`fwdpy11.sampling.genotype_matrix` or
+   `fwdpy11.sampling.haplotype_matrix`.
+5. Get the matrices as numpy arrays via a call to :meth:`fwdpy11.sampling.DataMatrix.neutral` or :meth:`fwdpy11.sampling.DataMatrix.selected`.  These functions return 1d numpy arrays, which should be reshaped with the help of :attr:`fwdpy11.sampling.DataMatrix.nrow`, :meth:`fwdpy11.sampling.DataMatrix.ncol_neutral`, and :meth:`fwdpy11.sampling.DataMatrix.ncol_selected`.
+
+The positions and population frequencies are also stored in the :class:`fwdpy11.sampling.DataMatrix` instance.  The
+order of these mutations is the same order as the mutation keys used to generated the object.
+
+The following example is a tour of the API:
+
 .. testcode::
 
     import fwdpy11 as fp11
     import fwdpy11.wright_fisher as wf
     import fwdpy11.sampling
     import numpy as np
+    import pickle
 
     #First, we set up and run a 
     #simulation.
@@ -27,13 +53,6 @@ Representing samples from a population in matrix form
 
     #Now, we are going to represent the entire population
     #as a numpy matrix with dtype=np.int8.
-
-    #Getting matrices out requires a few steps:
-    #1. Determine the individuals in your sample.
-    #2. Get a list of mutation keys associated with that sample.
-    #3. Process/filter that list of keys as you need.
-    #4. Generate the fwdpy11.sampling.DataMatrix object
-    #5. Get the matrices ad numpy arrays
 
     #Step 1.
     individuals=[i for i in range(pop.N)] #sample EVERYONE
@@ -79,6 +98,15 @@ Representing samples from a population in matrix form
     n = np.reshape(n,(dm.nrow,dm.ncol_neutral()))
     #This must be pop.N = 1,000:
     print(dm.nrow)
+
+    #finally, the DataMatrix is picklable
+    #As always with fwdpy11 types,
+    #use -1 to select the latest
+    #pickling protocol
+    p = pickle.dumps(dm,-1)
+    up = pickle.loads(p)
+
+The output of the above code is:
 
 .. testoutput::
 
