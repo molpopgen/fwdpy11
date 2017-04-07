@@ -132,15 +132,20 @@ PYBIND11_PLUGIN(sampling)
         });
 
 #define MUTATION_KEYS(POPTYPE)                                                \
-    m.def("mutation_keys", &KTfwd::mutation_keys<POPTYPE>, py::arg("pop"),    \
-          py::arg("individuals"), py::arg("neutral") = true,                  \
-          py::arg("selected") = true, py::arg("deme") = 0);
+    m.def("mutation_keys",                                                    \
+          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
+             const bool neutral, const bool selected) {                       \
+              return KTfwd::mutation_keys(pop, individuals, neutral,          \
+                                          selected);                          \
+          },                                                                  \
+          py::arg("pop"), py::arg("individuals"), py::arg("neutral") = true,  \
+          py::arg("selected") = true);
 
-#define GENOTYPE_MATRIX(POPTYPE) \
-    m.def("genotype_matrix",&KTfwd::genotype_matrix<POPTYPE>);
+#define GENOTYPE_MATRIX(POPTYPE)                                              \
+    m.def("genotype_matrix", &KTfwd::genotype_matrix<POPTYPE>);
 
-#define HAPLOTYPE_MATRIX(POPTYPE) \
-    m.def("haplotype_matrix",&KTfwd::genotype_matrix<POPTYPE>);
+#define HAPLOTYPE_MATRIX(POPTYPE)                                             \
+    m.def("haplotype_matrix", &KTfwd::genotype_matrix<POPTYPE>);
 
     MUTATION_KEYS(fwdpy11::singlepop_t);
     MUTATION_KEYS(fwdpy11::multilocus_t);
