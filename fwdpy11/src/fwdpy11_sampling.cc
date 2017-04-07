@@ -204,14 +204,13 @@ PYBIND11_PLUGIN(sampling)
           py::arg("selected") = true);
 
     using keytype = std::vector<std::pair<std::size_t, KTfwd::uint_t>>;
-    using pkeytype = std::pair<keytype, keytype>;
 
 #define GENOTYPE_MATRIX(POPTYPE, CLASSTYPE)                                   \
     m.def("genotype_matrix",                                                  \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
-             const pkeytype &keys) {                                          \
+             const keytype &neutral_keys, const keytype &selected_keys) {     \
               return KTfwd::genotype_matrix<POPTYPE>(                         \
-                  pop, individuals, keys.first, keys.second);                 \
+                  pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
           "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
           ":class:`" CLASSTYPE "` object.\n"                                  \
@@ -225,15 +224,17 @@ PYBIND11_PLUGIN(sampling)
 #define HAPLOTYPE_MATRIX(POPTYPE, CLASSTYPE)                                  \
     m.def("haplotype_matrix",                                                 \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
-             const pkeytype &keys) {                                          \
+             const keytype &neutral_keys, const keytype &selected_keys) {     \
               return KTfwd::haplotype_matrix<POPTYPE>(                        \
-                  pop, individuals, keys.first, keys.second);                 \
+                  pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
           "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
           ":class:`" CLASSTYPE "` object.\n"                                  \
           "The DataMatrix will be encoded as haplotypes.\n\n"                 \
           ":param pop: A population object.\n"                                \
-          ":param keys: The return value from "                               \
+          ":param neutral_keys: The return value from "                       \
+          ":func:`fwdpy11.sampling.mutation_keys`.\n\n"                       \
+          ":param selected_keys: The return value from "                      \
           ":func:`fwdpy11.sampling.mutation_keys`.\n\n"                       \
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
