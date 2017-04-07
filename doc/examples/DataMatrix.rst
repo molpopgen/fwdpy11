@@ -5,8 +5,8 @@ fwdpy11 allows viewing samples from populations (including the entire sample) in
 
 The relevant functions are:
 
-* :function:`fwdpy11.sampling.genotype_matrix`
-* :function:`fwdpy11.sampling.haplotype_matrix`
+* :func:`fwdpy11.sampling.genotype_matrix`
+* :func:`fwdpy11.sampling.haplotype_matrix`
 
 Both return :class:`fwdpy11.sampling.DataMatrix` objects.
 
@@ -14,10 +14,10 @@ The API is extremely flexible, allowing for the inclusion or exclustion of selec
 :class:`fwdpy11.sampling.DataMatrix` requires a few steps:
 
 1. Determine the individuals in your sample.  You may do this however you see fit.
-2. Get a list of mutation keys associated with that sample via a call to :function:`fwdpy11.sampling.mutation_keys`.
+2. Get a list of mutation keys associated with that sample via a call to :func:`fwdpy11.sampling.mutation_keys`.
 3. Process/filter that list of keys as you need.  The list is unsorted.  You may choose to sort it according to mutation
-   position, effect size, etc.  You may also apply a frequency filter.  The data returned from :function:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
-4. Generate the fwdpy11.sampling.DataMatrix object by calling either :function:`fwdpy11.sampling.genotype_matrix` or
+   position, effect size, etc.  You may also apply a frequency filter.  The data returned from :func:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
+4. Generate the fwdpy11.sampling.DataMatrix object by calling either :func:`fwdpy11.sampling.genotype_matrix` or
    `fwdpy11.sampling.haplotype_matrix`.
 5. Get the matrices as numpy arrays via a call to :meth:`fwdpy11.sampling.DataMatrix.neutral` or :meth:`fwdpy11.sampling.DataMatrix.selected`.  These functions return 1d numpy arrays, which should be reshaped with the help of :attr:`fwdpy11.sampling.DataMatrix.nrow`, :meth:`fwdpy11.sampling.DataMatrix.ncol_neutral`, and :meth:`fwdpy11.sampling.DataMatrix.ncol_selected`.
 
