@@ -23,6 +23,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
+#include <fwdpp/internal/IOhelp.hpp>
 #include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
@@ -167,20 +168,59 @@ PYBIND11_PLUGIN(sampling)
              "Number of columns in the selected variant matrix.")
         .def("__getstate__",
              [](const KTfwd::data_matrix &d) {
-                 return py::make_tuple(d.nrow, d.neutral, d.selected,
-                                       d.neutral_positions,
-                                       d.selected_positions, d.neutral_popfreq,
-                                       d.selected_popfreq);
+                 std::ostringstream o;
+                 KTfwd::fwdpp_internal::scalar_writer w;
+                 w(o, &d.nrow, 1);
+                 auto nsites = d.neutral_positions.size();
+                 w(o, &nsites, 1);
+                 if (nsites)
+                     {
+                         auto l = d.neutral.size();
+                         w(o, &l);
+                         w(o, d.neutral.data(), d.neutral.size());
+                         w(o, d.neutral_positions.data(), nsites);
+                         w(o, d.neutral_popfreq.data(), nsites);
+                     }
+                 nsites = d.selected_positions.size();
+                 w(o, &nsites, 1);
+                 if (nsites)
+                     {
+                         auto l = d.neutral.size();
+                         w(o, &l);
+                         w(o, d.selected.data(), d.selected.size());
+                         w(o, d.selected_positions.data(), nsites);
+                         w(o, d.selected_popfreq.data(), nsites);
+                     }
+                 return py::bytes(o.str());
              })
-        .def("__setstate__", [](KTfwd::data_matrix &d, py::tuple p) {
-            new (&d) KTfwd::data_matrix(p[0].cast<std::size_t>());
-            d.nrow = p[0].cast<std::size_t>();
-            d.neutral = p[1].cast<std::vector<char>>();
-            d.selected = p[1].cast<std::vector<char>>();
-            d.neutral_positions = p[1].cast<std::vector<double>>();
-            d.selected_positions = p[1].cast<std::vector<double>>();
-            d.neutral_popfreq = p[1].cast<std::vector<double>>();
-            d.selected_popfreq = p[1].cast<std::vector<double>>();
+        .def("__setstate__", [](KTfwd::data_matrix &d, py::bytes b) {
+            std::istringstream data(b);
+            KTfwd::fwdpp_internal::scalar_reader r;
+            std::size_t n, n2;
+            r(data, &n);
+            new (&d) KTfwd::data_matrix(n);
+            r(data, &n);
+            if (n)
+                {
+                    r(data, &n2);
+                    d.neutral.resize(n2);
+                    r(data, d.neutral.data(), n2);
+                    d.neutral_positions.resize(n);
+                    r(data, d.neutral_positions.data(), n);
+                    d.neutral_popfreq.resize(n);
+                    r(data, d.neutral_popfreq.data(), n);
+                }
+            r(data, &n);
+            if (n)
+                {
+                    r(data, &n2);
+                    d.selected.resize(n2);
+                    r(data, d.selected.data(), n2);
+                    d.selected_positions.resize(n);
+                    r(data, d.selected_positions.data(), n);
+                    d.selected_popfreq.resize(n);
+                    r(data, d.selected_popfreq.data(), n);
+                }
         });
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
