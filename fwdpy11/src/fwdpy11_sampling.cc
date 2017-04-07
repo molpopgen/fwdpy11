@@ -19,12 +19,16 @@
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
 #include <fwdpy11/types.hpp>
 
 namespace py = pybind11;
+
+static_assert(sizeof(char) == sizeof(std::int8_t),
+              "sizeof(char) must equal sizeof(std::int8_t)");
 
 PYBIND11_PLUGIN(sampling)
 {
@@ -100,19 +104,67 @@ PYBIND11_PLUGIN(sampling)
                                             locus_boundaries);
           });
 
-    py::class_<KTfwd::data_matrix>(m, "DataMatrix")
+    py::class_<KTfwd::data_matrix>(m, "DataMatrix",
+                                   R"delim(
+		Represent a sample from a population in a matrix format.
+
+		There are two possible representations of the data:
+
+		1. As a genotype matrix, where individuals are encoded a 0,1, or 2
+		copies of the derived mutation. There is one row per diploid here.
+		2. As a haplotype matrix, with two rows per diploid, and each
+		column containing a 0 (ancestral) or 1 (derived) label.
+
+		You do not create objects of this type directly.  Instead, you use one of 
+		the following functions:
+
+		* :func:`fwdpy11.sampling.genotype_matrix`
+		* :func:`fwdpy11.sampling.haplotype_matrix`
+		
+		Please see the examples in the fwdpy11 manual for examples of generating
+		instances of this type.  The API requires multiple steps, in order to 
+		maximize flexibility.
+		)delim")
         .def(py::init<>())
         .def(py::init<std::size_t>())
-        .def_readonly("neutral", &KTfwd::data_matrix::neutral)
-        .def_readonly("selected", &KTfwd::data_matrix::selected)
+        .def("neutral",
+             [](const KTfwd::data_matrix &m) {
+                 return py::array_t<std::int8_t>(
+                     m.neutral.size(),
+                     reinterpret_cast<const std::int8_t *>(m.neutral.data()));
+             },
+             "Return the neutral variants as a 1d numpy array.")
+        .def("selected",
+             [](const KTfwd::data_matrix &m) {
+                 return py::array_t<std::int8_t>(
+                     m.selected.size(),
+                     reinterpret_cast<const std::int8_t *>(m.neutral.data()));
+             },
+             "Return the selected variants as a 1d numpy array.")
         .def_readonly("neutral_positions",
-                      &KTfwd::data_matrix::neutral_positions)
+                      &KTfwd::data_matrix::neutral_positions,
+                      "The list of neutral mutation positions.")
         .def_readonly("selected_positions",
-                      &KTfwd::data_matrix::selected_positions)
-        .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq)
-        .def_readonly("selected_popfreq",
-                      &KTfwd::data_matrix::selected_popfreq)
-        .def_readonly("nrow", &KTfwd::data_matrix::nrow)
+                      &KTfwd::data_matrix::selected_positions,
+                      "The list of selected mutation positions.")
+        .def_readonly(
+            "neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
+            "The list of population frequencies of neutral mutations.")
+        .def_readonly(
+            "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
+            "The list of population frequencies of selected mutations.")
+        .def_readonly("nrow", &KTfwd::data_matrix::nrow,
+                      "Number of rows in the matrix.")
+        .def("ncol_neutral",
+             [](const KTfwd::data_matrix &m) {
+                 return m.neutral.size() / m.nrow;
+             },
+             "Number of columns in the neutral variant matrix.")
+        .def("ncol_selected",
+             [](const KTfwd::data_matrix &m) {
+                 return m.selected.size() / m.nrow;
+             },
+             "Number of columns in the selected variant matrix.")
         .def("__getstate__",
              [](const KTfwd::data_matrix &d) {
                  return py::make_tuple(d.nrow, d.neutral, d.selected,
