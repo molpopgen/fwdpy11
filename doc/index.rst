@@ -25,6 +25,7 @@ Examples
     examples/parallel_simulation
     examples/stateful_fitness
     examples/pickling
+    examples/DataMatrix
 
 Functions and classes
 ##########################################
