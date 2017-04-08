@@ -9,18 +9,15 @@ Welcome to fwdpy11's documentation!
 Contents:
 
 .. toctree::
-    :maxdepth: 2
 
 
 .. toctree::
-    :maxdepth: 2
     :caption: Contents:
 
 Examples
 ##########################################
 
 .. toctree::
-    :maxdepth: 2
 
     examples/parallel_simulation
     examples/stateful_fitness
