@@ -90,20 +90,15 @@ PYBIND11_PLUGIN(sampling)
 
     m.def("sample_separate",
           [](const fwdpy11::GSLrng_t &rng, const fwdpy11::multilocus_t &pop,
-             const unsigned nsam, const bool removeFixed,
-             const std::vector<std::pair<double, double>> &locus_boundaries) {
-              return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed,
-                                            locus_boundaries);
+             const unsigned nsam, const bool removeFixed) {
+              return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed);
           });
 
-    m.def("sample_separate",
-          [](const fwdpy11::multilocus_t &pop,
-             const std::vector<std::size_t> &individuals,
-             const bool removeFixed,
-             const std::vector<std::pair<double, double>> &locus_boundaries) {
-              return KTfwd::sample_separate(pop, individuals, removeFixed,
-                                            locus_boundaries);
-          });
+    m.def("sample_separate", [](const fwdpy11::multilocus_t &pop,
+                                const std::vector<std::size_t> &individuals,
+                                const bool removeFixed) {
+        return KTfwd::sample_separate(pop, individuals, removeFixed);
+    });
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
