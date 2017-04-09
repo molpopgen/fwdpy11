@@ -16,6 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
+
+/* This file exposes the same fwdpp functions over and over again
+ * for different population types.  We use macros to reduce redundancy.
+ */
+
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -35,70 +40,53 @@ PYBIND11_PLUGIN(sampling)
 {
     py::module m("sampling", "Taking samples from populations");
 
-    m.def("sample_separate",
-          [](const fwdpy11::GSLrng_t &rng, const fwdpy11::singlepop_t &pop,
-             const KTfwd::uint_t samplesize, const bool removeFixed) {
-              return KTfwd::sample_separate(rng.get(), pop, samplesize,
-                                            removeFixed);
-          },
-          R"delim(
-            Take a sample of :math:`n` chromosomes from a population (`n/2` 
-            diploids.
-
-            :param rng: A `fwdpy11.fwdpy11_types.GSLrng`
-            :param pop: A `fwdpy11.fwdpy11_types.Spop`
-            :param samplesize: (int) The sample size.
-            :param removeFixed: (boolean, defaults to True) Whether or not to include fixations.
-
-            :rtype: tuple
-
-            :return: A tuple.  The first element contains neutral variants, and the second
-            contains selected variants.
-
-            )delim",
-          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),
+#define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
+    m.def("sample_separate",                                                  \
+          [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
+             const KTfwd::uint_t samplesize, const bool removeFixed) {        \
+              return KTfwd::sample_separate(rng.get(), pop, samplesize,       \
+                                            removeFixed);                     \
+          },                                                                  \
+          "Take a sample of :math:`n` chromosomes from a population "         \
+          "(`n/2` diploids.\n\n"                                              \
+          ":param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`\n"             \
+          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
+          ":param samplesize: (int) The sample size.\n"                       \
+          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
+          "include fixations.\n"                                              \
+          ":rtype: tuple\n\n"                                                 \
+          ":return: A tuple.  The first element contains neutral variants,"   \
+          "and the second contains selected variants.\n",                     \
+          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
           py::arg("removeFixed") = true);
 
-    m.def("sample_separate",
-          [](const fwdpy11::singlepop_t &pop,
-             const std::vector<std::size_t> &individuals,
-             const bool removeFixed) {
-              if (std::any_of(
-                      individuals.begin(), individuals.end(),
-                      [&pop](const std::size_t i) { return i >= pop.N; }))
-                  {
-                      throw std::runtime_error("individual index >= pop.N");
-                  }
-              return KTfwd::sample_separate(pop, individuals, removeFixed);
-          },
-          R"delim(
-			Get a sample from a populaton based on a specific set of
-            diploids.
-
-            :param pop: A `fwdpy11.fwdpy11_types.Spop`
-            :param individuals: (list of integers) The individuals to include in the sample. 
-            :param removeFixed: (boolean, defaults to True) Whether or not to include fixations.
-
-            :rtype: tuple
-
-            :return: A tuple.  The first element contains neutral variants, and the second
-            contains selected variants.
-
-            )delim",
-          py::arg("pop"), py::arg("individuals"),
+#define SAMPLE_SEPARATE_IND(POPTYPE, CLASSTYPE)                               \
+    m.def("sample_separate",                                                  \
+          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
+             const bool removeFixed) {                                        \
+              return KTfwd::sample_separate(pop, individuals, removeFixed);   \
+          },                                                                  \
+          "Take a sample of specific individuals from a population.\n\n "     \
+          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
+          ":param individuals : (list of int) Indexes of individuals.\n"      \
+          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
+          "include fixations.\n"                                              \
+          ":rtype: tuple\n\n"                                                 \
+          ":return: A tuple.  The first element contains neutral variants,"   \
+          "and the second contains selected variants.\n",                     \
+          py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
-    m.def("sample_separate",
-          [](const fwdpy11::GSLrng_t &rng, const fwdpy11::multilocus_t &pop,
-             const unsigned nsam, const bool removeFixed) {
-              return KTfwd::sample_separate(rng.get(), pop, nsam, removeFixed);
-          });
-
-    m.def("sample_separate", [](const fwdpy11::multilocus_t &pop,
-                                const std::vector<std::size_t> &individuals,
-                                const bool removeFixed) {
-        return KTfwd::sample_separate(pop, individuals, removeFixed);
-    });
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop")
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
+                           "fwdpy11.fwdpy11_types.MlocusPop")
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
+                           "fwdpy11.fwdpy11_types.SpopGeneralMutVec")
+    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop")
+    SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
+                        "fwdpy11.fwdpy11_types.MlocusPop")
+    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
+                        "fwdpy11.fwdpy11_types.SpopGeneralMutVec")
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
