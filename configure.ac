@@ -444,7 +444,7 @@ AC_LANG(C++)
 dnl check for things that are required to compile all examples and/or use library at all
 
 dnl AC_CHECK_HEADER(fwdpp/diploid.hh,,[AC_MSG_ERROR(fwdpp/diploid.hh not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning fwdppConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless fwdpp has been installed and then partially deleted from your system.)])
-AC_CHECK_HEADER(Sequence/SimData.hpp,,[AC_MSG_ERROR(Sequence/SimData.hpp not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning libsequenceConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless libsequence has been installed and then partially deleted from your system.)])
+#AC_CHECK_HEADER(Sequence/SimData.hpp,,[AC_MSG_ERROR(Sequence/SimData.hpp not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning libsequenceConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless libsequence has been installed and then partially deleted from your system.)])
 
 dnl AC_CHECK_HEADER(fwdpp/sugar/sampling.hpp,,[AC_MSG_ERROR([fwdpp/sugar/sampling.hpp not found.  This probably means that you need a dev branch of fwdpp.  You probably need to email KRT directly and ask which one.  Sorry!])])
 AC_CHECK_HEADER(gsl/gsl_rng.h,HAVE_GSL=1,[AC_MSG_ERROR([gsl/gsl_rng.h not found.  Please install the GNU Scientific Library])])
