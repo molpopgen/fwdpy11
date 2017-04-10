@@ -55,8 +55,7 @@ GPLv3 or later (See COPYING)
 Suppored Python version
 -----------------------
 
-Python 3.5 or newer is preferred.  Most features will work with 2.7 or later, but you will not be able to retrieve
-pickled populations from files using Python2.7.  
+fwdpy11 is written for Python 3.  Given time/energy, we _may_ look into supporting Python 2.7.  However, it is impossible to support all fwdpy11 features in Python 2.7.  Specifically, it is not possible to provide full pickling support.
 
 .. code-block:: bash
 
