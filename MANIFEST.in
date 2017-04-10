@@ -2,9 +2,11 @@ recursive-include fwdpy11 *.cpp *.hpp
 recursive-include m4 *.m4
 include configure
 include setup.py.in
-include docs/conf.py.in
-include docs/fwdpy11.doxygen
-include docs/fwdpp.doxygen
-include docs/Makefile
+include doc/conf.py
+include doc/conf.py.in
+include doc/fwdpy11.doxygen
+include doc/fwdpp.doxygen
+include doc/Makefile
+recursive-include doc *.rst
 include aclocal.m4
 recursive-include check_deps *
