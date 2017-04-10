@@ -1,5 +1,6 @@
 recursive-include fwdpy11 *.cpp *.hpp
 recursive-include m4 *.m4
+include COPYING
 include configure
 include setup.py.in
 include doc/conf.py
