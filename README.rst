@@ -52,7 +52,7 @@ Installation
 
 Using pip on Linux (or pip3 as appropriate for your system):
 
-.. code_block:: bash
+.. code-block:: bash
 
     pip install --upgrade fwdpy11
 
