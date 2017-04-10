@@ -47,6 +47,22 @@ The following must be present on your system:
 
 fwdpy11_ also uses fwdpp_, which is included as a submodule.
 
+Installation
+---------------------------------
+
+Using pip on Linux (or pip3 as appropriate for your system):
+
+```sh
+pip install --upgrade fwdpy11
+```
+
+On OS X, you must use GCC.  It is **highly** recommended that you use a GCC installed from Anaconda.  We do all of our
+OS X testing using the GCC 4.8.5 from Anaconda:
+
+```sh
+CC=gcc CXX=g++ pip install --upgrade fwdpy11
+```sh
+
 License
 -----------------------
 
@@ -55,7 +71,7 @@ GPLv3 or later (See COPYING)
 Suppored Python version
 -----------------------
 
-fwdpy11 is written for Python 3.  Given time/energy, we _may_ look into supporting Python 2.7.  However, it is impossible to support all fwdpy11 features in Python 2.7.  Specifically, it is not possible to provide full pickling support.
+fwdpy11 is written for Python 3.  Given time/energy, we *may* look into supporting Python 2.7.  However, it is impossible to support all fwdpy11 features in Python 2.7.  Specifically, it is not possible to provide full pickling support.
 
 .. code-block:: bash
 
