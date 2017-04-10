@@ -53,8 +53,8 @@ install:
     - conda update -q conda
     # Useful for debugging any issues with conda
     - conda info -a
-    #- if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi;
-    - conda install gcc
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi;
+    #- conda install gcc
     - conda install -c r gsl
     - conda install numpy
     - conda install -c conda-forge pybind11
@@ -68,4 +68,5 @@ script:
     #so we need to initalize it here:
     - git submodule init
     - git submodule update
-    - python setup.py build_ext -i
+    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then CC=clang CXX=clang++ python setup.py build_ext -i; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then CC=gcc CXX=g++ python setup.py build_ext -i; fi
