@@ -73,13 +73,6 @@ Using pip on Linux (or pip3 as appropriate for your system):
 
     pip install --upgrade fwdpy11
 
-On OS X, you must use GCC.  It is **highly** recommended that you use a GCC installed from Anaconda.  We do all of our
-OS X testing using the GCC 4.8.5 from Anaconda:
-
-.. code-block:: bash
-
-    CC=gcc CXX=g++ pip install --upgrade fwdpy11
-
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _GSL: http://gnu.org/software/gsl
