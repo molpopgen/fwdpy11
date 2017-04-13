@@ -4,6 +4,7 @@
 #wouldn't be needed for normal use.
 import cppimport
 cppimport.force_rebuild()
+cppimport.set_quiet(False)
 snowdrift = cppimport.imp("snowdrift")
 import unittest
 import numpy as np
