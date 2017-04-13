@@ -68,7 +68,8 @@ Installation
 ---------------------------------
 
 .. note::
-    GCC is required on OS X.  You are very likely to run into issues with Xcode/clang.
+    GCC is required on OS X.  You are very likely to run into issues with Xcode/clang.  
+    Clang on Linux works with no problem.
 
 Using pip on OS X and Linux (or pip3 as appropriate for your system):
 
