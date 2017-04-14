@@ -64,18 +64,36 @@ fwdpy11 is written for Python 3.  Given time/energy, we *may* look into supporti
     python setup.py build_ext -i
     python test.py
 
+.. note::
+    The clang compiler is the assumed default on OS X.  However, life is simpler
+    if you use gcc.  The setup.py takes a --gcc option that eliminates OS X-specific
+    (really Xcode clang-specific) features so that an OS X/gcc build is possible.
+
 Installation
 ---------------------------------
 
-.. note::
-    GCC is required on OS X.  You are very likely to run into issues with Xcode/clang.  
-    Clang on Linux works with no problem.
 
 Using pip on OS X and Linux (or pip3 as appropriate for your system):
 
 .. code-block:: bash
 
     pip install --upgrade fwdpy11
+
+If you prefer a pip install on OS X using GCC instead of clang:
+
+.. code-block:: bash
+
+    pip install --upgrade fwdpy11 --install-option=--gcc
+
+You may or may not need to prefix the above with
+
+.. code block:: bash
+
+    CC=gcc CXX=g++
+
+depending on wheter or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
+
+
 
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
