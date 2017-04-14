@@ -1,25 +1,24 @@
 language: generic
 
-# We don't actually use the Travis Python, but this keeps it organized.
-# The test matrix really uses the latest Miniconda for Py2 or Py3,
-# and we're "fooling" Travis into doing this for us.
 matrix:
     include:
     - os: linux
       dist: trusty
-      env: TOXENV=3
     - os: osx 
       osx_image: xcode8.3
-      env: TOXENV=3
+      env: OSXGCC=1 # Test build with conda's gcc on OS X
+    - os: osx 
+      osx_image: xcode8.3
+      env: OSXGCC=0 # 0 means clang/llvm build
     - os: osx
       osx_image: xcode8.2
-      env: TOXENV=3
+      env: OSXGCC=0
     - os: osx 
       osx_image: xcode8.1
-      env: TOXENV=3
+      env: OSXGCC=0
     - os: osx
       osx_image: xcode8
-      env: TOXENV=3
+      env: OSXGCC=0
 
 sudo: true
 
@@ -27,8 +26,8 @@ notifications:
     email: false
 
 install: 
-    - if [ "$TRAVIS_OS_NAME" == "linux" -a "$TOXENV" == "3" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$TOXENV" == "3" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
     - hash -r
@@ -36,9 +35,10 @@ install:
     - conda update -q conda
     # Useful for debugging any issues with conda
     - conda info -a
-    - conda install gcc
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then conda install gcc; fi
     - conda install -c r gsl
-    - conda install numpy
+    - conda install numpy python==3.5
     - conda install -c conda-forge pybind11
     - pip install --upgrade cppimport
 script:
@@ -50,5 +50,9 @@ script:
     #so we need to initalize it here:
     - git submodule init
     - git submodule update
-    - CC=gcc CXX=g++ python setup.py build_ext -i
-    - CC=gcc CXX=g++ python -m unittest discover -v tests
+    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python setup.py build_ext -i; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then python setup.py build_ext -i; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python setup.py build_ext -i --gcc; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ];then python -m unittest discover -v tests; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then LDFLAGS='-stdlib=libc++ -mmacosx-version-min=10.7' CPPFLAGS="-stdlib=libc++ -mmacosx-version-min=10.7" python -m unittest discover -v tests; fi
+    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi

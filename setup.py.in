@@ -6,6 +6,14 @@ import os,glob
 
 __version__ = '@PACKAGE_VERSION@'
 
+#clang/llvm is default for OS X builds.
+#can over-ride darwin-specific options
+#with setup.py --gcc install
+if '--gcc' in sys.argv:
+    USE_GCC = True
+    sys.argv.remove('--gcc')
+else:
+    USE_GCC = False
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -141,8 +149,8 @@ class BuildExt(build_ext):
         'unix': [],
     }
 
-#    if sys.platform == 'darwin':
-#        c_opts['unix'] += ['-stdlib=libc++', '-mmacosx-version-min=10.7']
+    if sys.platform == 'darwin' and USE_GCC is False:
+        c_opts['unix'] += ['-stdlib=libc++', '-mmacosx-version-min=10.7']
 
     def build_extensions(self):
         ct = self.compiler.compiler_type
@@ -150,7 +158,7 @@ class BuildExt(build_ext):
         if ct == 'unix':
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append(cpp_flag(self.compiler))
-            if has_flag(self.compiler, '-fvisibility=hidden'):# and sys.platform != 'darwin':
+            if has_flag(self.compiler, '-fvisibility=hidden') and (sys.platform != 'darwin' or USE_GCC is True):
                 opts.append('-fvisibility=hidden')
             if has_flag(self.compiler,'-g0'):
                 opts.append('-g0')
@@ -158,6 +166,8 @@ class BuildExt(build_ext):
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
         for ext in self.extensions:
             ext.extra_compile_args = opts
+            if sys.platform == 'darwin' and USE_GCC is False:
+                ext.extra_link_args=['-stdlib=libc++', '-mmacosx-version-min=10.7']
         build_ext.build_extensions(self)
 
 #Figure out the headers we need to install:
