@@ -72,7 +72,6 @@ fwdpy11 is written for Python 3.  Given time/energy, we *may* look into supporti
 Installation
 ---------------------------------
 
-
 Using pip on OS X and Linux (or pip3 as appropriate for your system):
 
 .. code-block:: bash
@@ -93,7 +92,16 @@ You may or may not need to prefix the above with
 
 depending on wheter or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
 
+Bioconda
+=================================
 
+fwdpy11 is available through bioconda_ for Linux and for OS X:
+
+.. code-block:: bash
+
+    conda install -c bioconda fwdpy11
+
+The OS X build is built using gcc.
 
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
@@ -101,3 +109,4 @@ depending on wheter or not your user's `$PATH` is set up to override Xcode's sym
 .. _pybind11: https://github.com/pybind/pybind11
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
+.. _bioconda: https://bioconda.github.io/
