@@ -36,13 +36,13 @@
 
 namespace py = pybind11;
 
-//Generation time, optimum, VS, sigE
+// Generation time, optimum, VS, sigE
 using env = std::tuple<KTfwd::uint_t, double, double, double>;
 
 static const std::size_t GEN = 0;
-static const std::size_t OPTIMUM=1;
+static const std::size_t OPTIMUM = 1;
 static const std::size_t VS = 2;
-static const std::size_t SIGE=3;
+static const std::size_t SIGE = 3;
 
 // Evolve the population for some amount of time with mutation and
 // recombination
@@ -98,6 +98,9 @@ evolve_singlepop_regions_qtrait_cpp(
            + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
+    const auto mmodels = KTfwd::extensions::bind_dmm(
+        mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
+        mu_selected, &pop.generation);
     ++pop.generation;
     auto rules = fwdpy11::qtrait::qtrait_model_rules(0., 0., 0.);
     // generate FIFO queue of env changes
@@ -121,10 +124,7 @@ evolve_singlepop_regions_qtrait_cpp(
             const auto N_next = popsizes.at(generation);
             double wbar = KTfwd::experimental::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected,
-                KTfwd::extensions::bind_dmm(
-                    mmodel, pop.mutations, pop.mut_lookup, rng.get(),
-                    mu_neutral, mu_selected, pop.generation),
+                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
                 recmap, fitness_callback, pop.neutral, pop.selected,
                 selfing_rate, rules);
             pop.N = N_next;

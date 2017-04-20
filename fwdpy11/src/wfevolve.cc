@@ -43,8 +43,7 @@ evolve_singlepop_regions_cpp(
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
     fwdpy11::singlepop_fitness& fitness,
-    fwdpy11::singlepop_temporal_sampler recorder,
-    const double selfing_rate)
+    fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate)
 {
     const auto generations = popsizes.size();
     if (!generations)
@@ -71,6 +70,9 @@ evolve_singlepop_regions_cpp(
            + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
     const auto recmap = KTfwd::extensions::bind_drm(
         rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
+    const auto mmodels = KTfwd::extensions::bind_dmm(
+        mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
+        mu_selected, &pop.generation);
     ++pop.generation;
     auto rules = fwdpy11::wf_rules();
     for (unsigned generation = 0; generation < generations;
@@ -80,10 +82,7 @@ evolve_singlepop_regions_cpp(
             const auto N_next = popsizes.at(generation);
             double wbar = KTfwd::experimental::sample_diploid(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected,
-                KTfwd::extensions::bind_dmm(
-                    mmodel, pop.mutations, pop.mut_lookup, rng.get(),
-                    mu_neutral, mu_selected, pop.generation),
+                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
                 recmap, fitness_callback, pop.neutral, pop.selected,
                 selfing_rate, rules);
             pop.N = N_next;
