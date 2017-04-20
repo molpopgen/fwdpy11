@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os,glob
 
-__version__ = '0.1-post4'
+__version__ = '0.1.1a0'
 
 #clang/llvm is default for OS X builds.
 #can over-ride darwin-specific options
