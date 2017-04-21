@@ -25,6 +25,7 @@
 #ifndef FWDPY11_TYPES__
 #define FWDPY11_TYPES__
 #include <fwdpy11/opaque/opaque_types.hpp>
+#include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <gsl/gsl_statistics_double.h>
@@ -35,14 +36,6 @@
 
 namespace fwdpy11
 {
-    /*!
-      Random number generator.
-
-      This is a std::unique_ptr wrapper to a gsl_rng * initialized
-      as a Mersenne twister type (gsl_rng_mt19937).
-    */
-    using GSLrng_t = KTfwd::GSLrng_t<KTfwd::GSL_RNG_MT19937>;
-
     //! Allows serialization of diploids.
     struct diploid_writer
     {

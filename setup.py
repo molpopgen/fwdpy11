@@ -108,6 +108,14 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.gsl_random',
+        ['fwdpy11/src/gsl_random.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
     ]
     
 

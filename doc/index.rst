@@ -14,7 +14,7 @@ Contents:
 .. toctree::
     :caption: Contents:
 
-Examples
+Examples and concepts
 ##########################################
 
 .. toctree::
@@ -23,7 +23,7 @@ Examples
     examples/stateful_fitness
     examples/pickling
     examples/DataMatrix
-
+    examples/qtrait
 Functions and classes
 ##########################################
 

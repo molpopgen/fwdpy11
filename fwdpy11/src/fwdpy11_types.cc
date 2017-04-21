@@ -131,7 +131,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
 
     // Expose the type based on fwdpp's "sugar" layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "Spop", "Population object representing a single deme.")
+        m, "Spop", "Population object representing a single deme and a single genomic region.")
         .def(py::init<unsigned>(),
              "Construct with an unsigned integer representing the initial "
              "population size.")

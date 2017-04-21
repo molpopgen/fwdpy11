@@ -2,6 +2,7 @@
 #define FWDPY11_RULES_QTRAIT_HPP__
 
 #include "fwdpy11/rules/rules_base.hpp"
+#include <functional>
 #include <cmath>
 #include <gsl/gsl_sf_pow_int.h>
 /*
@@ -24,10 +25,18 @@ namespace fwdpy11
         struct qtrait_model_rules : public fwdpy11::single_region_rules_base
         {
             using base_t = fwdpy11::single_region_rules_base;
-            double VS, optimum, sigE;
-            qtrait_model_rules(const double VS_, const double optimum_,
-                               const double sigE_) noexcept(false)
-                : base_t(), VS(VS_), optimum(optimum_), sigE(sigE_)
+            std::function<double(double)> trait_to_fitness;
+            std::function<double(const double g, const fwdpy11::diploid_t &,
+                                 const fwdpy11::diploid_t &)>
+                noise_function;
+            double sigE;
+            qtrait_model_rules(std::function<double(double)> t2f,
+                               std::function<double(
+                                   const double g, const fwdpy11::diploid_t &,
+                                   const fwdpy11::diploid_t &)>
+                                   noise) noexcept(false)
+                : base_t(), trait_to_fitness(std::move(t2f)),
+                  noise_function(std::move(noise))
             /*!
               Constructor throws std::runtime_error if params are not valid.
             */
@@ -37,7 +46,7 @@ namespace fwdpy11
             qtrait_model_rules(qtrait_model_rules &&) = default;
 
             qtrait_model_rules(const qtrait_model_rules &rhs)
-                : base_t(rhs), VS(rhs.VS), optimum(rhs.optimum), sigE(rhs.sigE)
+                : base_t(rhs), sigE(rhs.sigE)
             {
             }
 
@@ -64,15 +73,14 @@ namespace fwdpy11
             //! \brief Update some property of the offspring based on
             //! properties of the parents
             virtual void
-            update(const gsl_rng *r, diploid_t &offspring, const diploid_t &,
-                   const diploid_t &, const gcont_t &gametes,
-                   const mcont_t &mutations,
+            update(const gsl_rng *r, diploid_t &offspring,
+                   const diploid_t &parent1, const diploid_t &parent2,
+                   const gcont_t &gametes, const mcont_t &mutations,
                    const singlepop_fitness_fxn &ff) noexcept
             {
                 offspring.g = ff(offspring, gametes, mutations);
-                offspring.e = gsl_ran_gaussian_ziggurat(r, sigE);
-                double dev = (offspring.g + offspring.e - optimum);
-                offspring.w = std::exp(-(dev * dev) / (2. * VS));
+                offspring.e = noise_function(offspring.g, parent1, parent2);
+                offspring.w = trait_to_fitness(offspring.g + offspring.e);
                 assert(std::isfinite(offspring.w));
                 return;
             }

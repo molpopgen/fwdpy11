@@ -55,8 +55,28 @@ evolve_singlepop_regions_qtrait_cpp(
     const KTfwd::extensions::discrete_rec_model& rmodel,
     fwdpy11::singlepop_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
-    const std::vector<env>& environmental_changes)
+    std::function<double(double)> trait_to_fitness,
+    py::object trait_to_fitness_updater,
+    std::function<double(const double g, const fwdpy11::diploid_t&,
+                         const fwdpy11::diploid_t)>
+        noise,
+    py::object noise_updater)
 {
+
+    bool updater_exists = false;
+    py::function updater;
+    if (trait_to_fitness_updater != py::none())
+        {
+            updater = py::function(trait_to_fitness_updater);
+            updater_exists = true;
+        }
+    bool noise_updater_exists = false;
+    py::function noise_updater_fxn;
+    if (noise_updater != py::none())
+        {
+            noise_updater_fxn = noise_updater;
+            noise_updater_exists = true;
+        }
     const auto generations = popsizes.size();
     if (!generations)
         throw std::runtime_error("empty list of population sizes");
@@ -75,22 +95,22 @@ evolve_singlepop_regions_qtrait_cpp(
             throw std::runtime_error("negative recombination rate: "
                                      + std::to_string(recrate));
         }
-    if (environmental_changes.empty())
-        {
-            throw std::runtime_error("empty list of environmental changes.");
-        }
-    for (auto&& ei : environmental_changes)
-        {
-            if (std::get<VS>(ei) < 0.)
-                {
-                    throw std::runtime_error("VS must be >= 0.");
-                }
-            if (std::get<SIGE>(ei) < 0.)
-                {
-                    throw std::runtime_error(
-                        "environmental noise must be >= 0.");
-                }
-        }
+    // if (environmental_changes.empty())
+    //    {
+    //        throw std::runtime_error("empty list of environmental changes.");
+    //    }
+    // for (auto&& ei : environmental_changes)
+    //    {
+    //        if (std::get<VS>(ei) < 0.)
+    //            {
+    //                throw std::runtime_error("VS must be >= 0.");
+    //            }
+    //        if (std::get<SIGE>(ei) < 0.)
+    //            {
+    //                throw std::runtime_error(
+    //                    "environmental noise must be >= 0.");
+    //            }
+    //    }
     const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * pop.N)
@@ -102,24 +122,24 @@ evolve_singlepop_regions_qtrait_cpp(
         mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
         mu_selected, &pop.generation);
     ++pop.generation;
-    auto rules = fwdpy11::qtrait::qtrait_model_rules(0., 0., 0.);
+    auto rules = fwdpy11::qtrait::qtrait_model_rules(trait_to_fitness, noise);
     // generate FIFO queue of env changes
-    std::queue<env> env_q(std::deque<env>(environmental_changes.begin(),
-                                          environmental_changes.end()));
+    // std::queue<env> env_q(std::deque<env>(environmental_changes.begin(),
+    //                                      environmental_changes.end()));
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
-            if (!env_q.empty())
-                {
-                    auto next_env = env_q.front();
-                    if (pop.generation >= std::get<GEN>(next_env))
-                        {
-                            rules.optimum = std::get<OPTIMUM>(next_env);
-                            rules.VS = std::get<VS>(next_env);
-                            rules.sigE = std::get<SIGE>(next_env);
-                            env_q.pop();
-                        }
-                }
+            // if (!env_q.empty())
+            //    {
+            //        auto next_env = env_q.front();
+            //        if (pop.generation >= std::get<GEN>(next_env))
+            //            {
+            //                rules.optimum = std::get<OPTIMUM>(next_env);
+            //                rules.VS = std::get<VS>(next_env);
+            //                rules.sigE = std::get<SIGE>(next_env);
+            //                env_q.pop();
+            //            }
+            //    }
             fitness.update(pop);
             const auto N_next = popsizes.at(generation);
             double wbar = KTfwd::experimental::sample_diploid(
@@ -132,6 +152,14 @@ evolve_singlepop_regions_qtrait_cpp(
                                     pop.fixation_times, pop.mut_lookup,
                                     pop.mcounts, generation, 2 * pop.N);
             recorder(pop);
+            if (updater_exists)
+                {
+                    updater(pop.generation);
+                }
+            if (noise_updater_exists)
+                {
+                    noise_updater_fxn(pop.generation);
+                }
         }
     --pop.generation;
 }
