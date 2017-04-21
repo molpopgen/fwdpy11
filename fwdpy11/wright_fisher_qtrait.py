@@ -112,17 +112,9 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     with arbitrary changes in population size, a specified fitness model,
     and a temporal sampler.
 
-    The fitness model is Gaussian stabilizing selection with respect to an
-    optimum:
-
-    .. math::
-
-        w = e^{-\\frac{(P-O)^2}{2VS}}
-
-    The trait value is :math:`P=G+E`, where :math:`G` is the genetic component, calculated
-    using an object of type `fwdpy11.fitness.SpopFitness`.  The "environmental" term, 
-    :math:`E` is a Gassian deviate with mean 0 and standard deviation 
-    :math:`\sigma_e`.
+    This function evolves a class of models where traits are calculated 
+    and then mapped to fitness.  See the sections of the manual on 
+    simulating quantitative traits.
 
     :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
     :param pop: A :class:`fwdpy11.fwdpy11_types.Spop`
@@ -140,10 +132,10 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
 
 
     .. note::
-        If recorder is None, fwdpy11.temporal_samplers.RecordNothing will be used.
+        If recorder is None, :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     .. note::
-        If noise is None, fwdpy11.wright_fisher_qtrait.GaussianNoise will be used with mean and 
+        If noise is None, :class:`fwdpy11.wright_fisher_qtrait.GaussianNoise` will be used with mean and 
         standard deviation both set to zero.
     """
     from .internal import makeMutationRegions,makeRecombinationRegions
