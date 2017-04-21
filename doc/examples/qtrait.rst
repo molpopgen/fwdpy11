@@ -103,7 +103,7 @@ The following code block represents the following model:
 * There are no neutral mutations
 * Mutations affecting trait values are additive and Gaussian distributed.
 * Trait values are under Gaussian stabilizing selection with :math:`VS=1`.
-* The optimum changes to a new value every :math:`0.1N` generations.  The new optimum value is :math:`N(0,1)`.
+* The optimum changes to a new value every :math:`0.1N` generations according to a geometric distribution.  The new optimum value is :math:`N(0,1)`.
 * The :math:`E` value for offspring is the parental mean :math:`E` plus a Gaussian deviate.  Thus, there are shared
   environmental effects between parent and offspring that have a mean of zero.
 
