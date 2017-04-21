@@ -33,6 +33,7 @@
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/rules/qtrait.hpp>
+#include <fwdpy11/sim_functions.hpp>
 
 namespace py = pybind11;
 
@@ -146,11 +147,11 @@ evolve_singlepop_regions_qtrait_cpp(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
                 pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
                 recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate, rules);
+                selfing_rate, rules,KTfwd::remove_neutral());
             pop.N = N_next;
-            KTfwd::update_mutations(pop.mutations, pop.fixations,
-                                    pop.fixation_times, pop.mut_lookup,
-                                    pop.mcounts, generation, 2 * pop.N);
+            fwdpy11::update_mutations_n(pop.mutations, pop.fixations,
+                                      pop.fixation_times, pop.mut_lookup,
+                                      pop.mcounts, generation, 2 * pop.N);
             recorder(pop);
             if (updater_exists)
                 {
