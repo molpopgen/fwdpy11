@@ -8,43 +8,31 @@ namespace py = pybind11;
 
 struct additive_diploid_trait_fxn
 {
+    const KTfwd::additive_diploid w;
+    additive_diploid_trait_fxn()
+        : w{ KTfwd::additive_diploid(KTfwd::atrait()) }
+    {
+    }
     inline double
     operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations, const double scaling) const
     {
-        return KTfwd::site_dependent_fitness()(
-            dip, gametes, mutations,
-            [scaling](double &fitness,
-                      const fwdpy11::mcont_t::value_type &mut) noexcept {
-                fitness += (scaling * mut.s);
-            },
-            [](double &fitness,
-               const fwdpy11::mcont_t::value_type &mut) noexcept {
-                fitness += (mut.h * mut.s);
-            },
-            0.);
+        return w(dip, gametes, mutations, scaling);
     }
 };
 
 struct multiplicative_diploid_trait_fxn
 {
+    const KTfwd::multiplicative_diploid w;
+    multiplicative_diploid_trait_fxn()
+        : w{ KTfwd::multiplicative_diploid(KTfwd::mtrait()) }
+    {
+    }
     inline double
     operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations, const double scaling) const
     {
-        return KTfwd::site_dependent_fitness()(
-                   dip, gametes, mutations,
-                   [scaling](
-                       double &fitness,
-                       const fwdpy11::mcont_t::value_type &mut) noexcept {
-                       fitness *= (1. + scaling * mut.s);
-                   },
-                   [](double &fitness,
-                      const fwdpy11::mcont_t::value_type &mut) noexcept {
-                       fitness *= (1. + mut.h * mut.s);
-                   },
-                   1.)
-               - 1.0;
+        return w(dip, gametes, mutations, scaling);
     }
 };
 
