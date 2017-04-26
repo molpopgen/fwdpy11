@@ -1,6 +1,6 @@
 /* Implement a stateful fitness model.
  * We define a new C++ type that will be
- * wrapped as a fwdpy11.fitness.SpopFitness 
+ * wrapped as a fwdpy11.fitness.SpopFitness
  * object.
  *
  * Such a fitness model is ultimately responsible
@@ -10,7 +10,6 @@
  * The module is built using cppimport:
  * https://github.com/tbenthompson/cppimport
  */
-
 
 /* The next block of code is used by cppimport
  * The formatting is important, so I protect it
@@ -38,7 +37,7 @@ cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ]
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 
-namespace py = pybind11;
+    namespace py = pybind11;
 
 struct snowdrift_diploid
 /* This is a function object implementing the snowdrift
@@ -58,9 +57,9 @@ struct snowdrift_diploid
      */
     {
         auto N = phenotypes.size();
-        //A diploid tracks its index via 
-        //fwdpy11::diploid_t::label, which 
-        //is std::size_t.
+        // A diploid tracks its index via
+        // fwdpy11::diploid_t::label, which
+        // is std::size_t.
         auto i = dip.label;
         double zself = phenotypes[i];
         result_type fitness = 0;
@@ -81,7 +80,7 @@ struct snowdrift_diploid
 
 struct snowdrift : public fwdpy11::singlepop_fitness
 /* This is our stateful fitness object.
- * It records the model parameters and holds a 
+ * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
  * The C++ side of an SpopFitness object must publicly
@@ -108,7 +107,7 @@ struct snowdrift : public fwdpy11::singlepop_fitness
     {
         /* Please remember that std::bind will pass a copy unless you
          * explicity wrap with a reference wrapper.  Here,
-         * we use std::cref to make sure that phenotypes are 
+         * we use std::cref to make sure that phenotypes are
          * passed as const reference.
          */
         return std::bind(snowdrift_diploid(), std::placeholders::_1,
@@ -119,19 +118,29 @@ struct snowdrift : public fwdpy11::singlepop_fitness
     update(const fwdpy11::singlepop_t &pop) final
     /* A stateful fitness model needs updating.
      * The base class defines this virtual function
-     * to do nothing (for non-stateful models). 
+     * to do nothing (for non-stateful models).
      * Here, we redefine it as needed.
      */
     {
         phenotypes.resize(pop.N);
         for (auto &&dip : pop.diploids)
             {
-                //A diploid tracks its index via 
-                //fwdpy11::diploid_t::label
+                // A diploid tracks its index via
+                // fwdpy11::diploid_t::label
                 phenotypes[dip.label] = KTfwd::additive_diploid()(
                     dip, pop.gametes, pop.mutations, 2.0);
             }
     };
+
+    //A custom fitness function requires that 
+    //several pure virtual functions be defined.
+    //These macros do it for you:
+    SINGLEPOP_FITNESS_CLONE_SHARED(snowdrift);
+    SINGLEPOP_FITNESS_CLONE_UNIQUE(snowdrift);
+    //This one gets pass the C++ name of the 
+    //callback.  We use C++11's typid to
+    //do that for us:
+    SINGLEPOP_FITNESS_CALLBACK_NAME(typeid(snowdrift_diploid).name());
 };
 
 PYBIND11_PLUGIN(snowdrift)
@@ -139,14 +148,15 @@ PYBIND11_PLUGIN(snowdrift)
     pybind11::module m("snowdrift",
                        "Example of custom stateful fitness model.");
 
-    //fwdpy11 provides a macro
-    //to make sure that the Python wrapper
-    //to fwdpy11::singlepop_fitness is visible
-    //to this module.
+    // fwdpy11 provides a macro
+    // to make sure that the Python wrapper
+    // to fwdpy11::singlepop_fitness is visible
+    // to this module.
     FWDPY11_SINGLEPOP_FITNESS()
 
-    //Create a Python class based on our new type
-    py::class_<snowdrift, fwdpy11::singlepop_fitness>(m, "SpopSnowdrift")
+    // Create a Python class based on our new type
+    py::class_<snowdrift, std::shared_ptr<snowdrift>,
+               fwdpy11::singlepop_fitness>(m, "SpopSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"));
 

@@ -28,8 +28,9 @@ PYBIND11_PLUGIN(fitness)
 {
     py::module m("fitness", "Fitness models.");
 
-    py::class_<fwdpy11::singlepop_fitness>(m, "SpopFitness",
-                                           R"delim(
+    py::class_<fwdpy11::singlepop_fitness,
+               std::shared_ptr<fwdpy11::singlepop_fitness>>(m, "SpopFitness",
+                                                            R"delim(
             A fitness function or trait value function
             for a single-deme, single-region simulation (
             :class:`fwdpy11.fwdpy11_types.Spop`).
@@ -44,10 +45,17 @@ PYBIND11_PLUGIN(fitness)
             * :class:`fwdpy11.trait_values.SpopAdditiveTrait`
             * :class:`fwdpy11.trait_values.SpopMultTrait`
             * :class:`fwdpy11.trait_values.SpopGBRTrait`
-            )delim");
+            )delim")
+        .def("__call__",
+             [](const std::shared_ptr<fwdpy11::singlepop_fitness>& aw,
+                const fwdpy11::diploid_t& dip,
+                const fwdpy11::singlepop_t& pop) {
+                 return aw->callback()(dip, pop.gametes, pop.mutations);
+             });
 
-    py::class_<fwdpy11::singlepop_mult_wrapper, fwdpy11::singlepop_fitness>(
-        m, "SpopMult", R"delim(
+    py::class_<fwdpy11::singlepop_mult_wrapper,
+               std::shared_ptr<fwdpy11::singlepop_mult_wrapper>,
+               fwdpy11::singlepop_fitness>(m, "SpopMult", R"delim(
         Multiplicative fitness for single-deme simulations.
         At a single mutation, fitness is 0, 1+sh, 1+scaling*s
         for genotypes AA, Aa, and aa, respectively. The scaling
@@ -58,9 +66,10 @@ PYBIND11_PLUGIN(fitness)
             import fwdpy11.fitness as fp11w
             w = fp11w.SpopMult(1.0)
                        )delim")
-        .def(py::init<double>(), py::arg("scaling"));
+        .def(py::init<double>(), py::arg("scaling") = 2.0);
 
     py::class_<fwdpy11::singlepop_additive_wrapper,
+               std::shared_ptr<fwdpy11::singlepop_additive_wrapper>,
                fwdpy11::singlepop_fitness>(m, "SpopAdditive", R"delim(
         Additive fitness for single-deme simulations.
         Fitness is max(0,1 + :math:`\sum_{i} x_i`), 
@@ -72,8 +81,7 @@ PYBIND11_PLUGIN(fitness)
             import fwdpy11.fitness as fp11w
             w = fp11w.SpopAdditive(2.0)
         )delim")
-        .def(py::init<double>(), py::arg("scaling"));
-
+        .def(py::init<double>(), py::arg("scaling") = 2.0);
 
     return m.ptr();
 }
