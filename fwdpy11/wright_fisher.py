@@ -157,7 +157,7 @@ def evolve_regions_sampler(rng,pop,popsizes,mu_neutral,
 
 def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
         mu_selected,recrate,nregions,sregions,recregions,fitness,
-        recorder,selfing_rate = 0.):
+        recorder,selfing_rate = 0.,prune_all_fixations=True):
     """
     Evolve a single deme according to a Wright-Fisher life cycle 
     with arbitrary changes in population size, a specified fitness model,
@@ -175,9 +175,11 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     :param fitness: A :class:`fwdpy11.fitness.SpopFitness`.
     :param recorder: A callable to record data from the population.
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
+    :param prune_all_fixations: (True) Remove fixations affecting fitness from population.
     """
     from .internal import makeMutationRegions,makeRecombinationRegions
     mm=makeMutationRegions(nregions,sregions)
     rm=makeRecombinationRegions(recregions)
     evolve_singlepop_regions_cpp(rng,pop,popsizes,mu_neutral,
-            mu_selected,recrate,mm,rm,fitness,recorder,selfing_rate)
+            mu_selected,recrate,mm,rm,fitness,recorder,selfing_rate,
+            prune_all_fixations)

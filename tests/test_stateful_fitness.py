@@ -32,7 +32,7 @@ def evolve_snowdrift(args):
     nlist = np.array([N]*100,dtype=np.uint32)
     recorder = fp11ts.RecordNothing()
     fp11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,nlist,0.0,0.0025,0.001,
-            [],sregions,recregions,fitness,recorder)
+            [],sregions,recregions,fitness,recorder,prune_all_fixations=False)
     #return our pop
     return pop
 
