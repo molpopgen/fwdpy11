@@ -14,6 +14,13 @@ Contents:
 .. toctree::
     :caption: Contents:
 
+Release notes
+##########################################
+
+.. toctree::
+
+    pages/changelog
+
 Examples and concepts
 ##########################################
 
