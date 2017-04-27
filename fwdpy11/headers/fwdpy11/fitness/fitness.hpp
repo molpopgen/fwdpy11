@@ -25,6 +25,6 @@
 #include <string>
 #include <fwdpp/fitness_models.hpp>
 
-#include "singlepop_fitness.hpp"
+#include "single_locus_fitness.hpp"
 
 #endif

@@ -119,19 +119,21 @@ PYBIND11_PLUGIN(fwdpy11_types)
                                 "Typically, access will be read-only.");
 
     // expose the base classes for population types
-    py::class_<fwdpp_popgenmut_base>(m, "SpopMutationBase");
+    py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
     py::class_<multilocus_popgenmut_base>(m, "MlocusMutationBase");
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
     py::class_<multilocus_sugar_base, multilocus_popgenmut_base>(m,
                                                                  "MlocusBase");
 
-    py::class_<singlepop_generalmut_vec_base>(m, "SpopGeneralMutVecBase");
+    py::class_<singlepop_generalmut_vec_base>(m, "SlocusPopGeneralMutVecBase");
     py::class_<singlepop_generalmut_vec_sugar_base,
-               singlepop_generalmut_vec_base>(m, "SpopGeneralMutVecSugarBase");
+               singlepop_generalmut_vec_base>(
+        m, "SlocusPopGeneralMutVecSugarBase");
 
     // Expose the type based on fwdpp's "sugar" layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "Spop", "Population object representing a single deme and a single genomic region.")
+        m, "SlocusPop", "Population object representing a single deme and a "
+                        "single genomic region.")
         .def(py::init<unsigned>(),
              "Construct with an unsigned integer representing the initial "
              "population size.")
@@ -145,7 +147,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                         .. testcode:: 
 
                             import fwdpy11
-                            p = fwdpy11.Spop(1000)
+                            p = fwdpy11.SlocusPop(1000)
                             print(p.generation)
                             import fwdpy11.wright_fisher as wf
                             p = wf.quick_sim(100)
@@ -165,7 +167,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       .. testcode:: 
 
                           import fwdpy11
-                          p = fwdpy11.Spop(1000)
+                          p = fwdpy11.SlocusPop(1000)
                           print(p.N)
                           import numpy as np
                           import fwdpy11.wright_fisher as wf
@@ -210,7 +212,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
-                "Construct with population size and number of loci.")
+             "Construct with population size and number of loci.")
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -242,11 +244,12 @@ PYBIND11_PLUGIN(fwdpy11_types)
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
                singlepop_generalmut_vec_sugar_base>(
-        m, "SpopGeneralMutVec", "Single-deme object using "
-                                ":class:`fwpy11.fwdpp_types.GeneralMutVec` as "
-                                "the mutation type.")
+        m, "SlocusPopGeneralMutVec",
+        "Single-deme object using "
+        ":class:`fwpy11.fwdpp_types.GeneralMutVec` as "
+        "the mutation type.")
         .def(py::init<unsigned>(), py::arg("N"),
-                "Construct object with N diploids.")
+             "Construct object with N diploids.")
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,

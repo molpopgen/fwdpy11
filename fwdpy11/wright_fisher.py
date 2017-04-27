@@ -21,7 +21,7 @@ from .wfevolve import evolve_singlepop_regions_cpp
 def quick_sim(ngens = None):
     """
     A convenience function for rapidly creating a
-    :class:`fwdpy11.fwdpy11_types.Spop`
+    :class:`fwdpy11.fwdpy11_types.SlocusPop`
 
     .. testcode:: 
 
@@ -41,9 +41,9 @@ def quick_sim(ngens = None):
     .. note::
         Implemented via a call to :func:`fwdpy11.wright_fisher.evolve`
     """
-    from .fwdpy11_types import GSLrng,Spop
+    from .fwdpy11_types import GSLrng,SlocusPop
     rng = GSLrng(42)
-    pop=Spop(1000)
+    pop=SlocusPop(1000)
     if ngens is None:
         evolve(rng,pop)
     else:
@@ -62,7 +62,7 @@ def evolve(rng,pop,popsizes = None,mu_neutral=None,
         import fwdpy11.wright_fisher as wf
         import numpy as np
         rng = fp11.GSLrng(42)
-        p = fp11.Spop(1000)
+        p = fp11.SlocusPop(1000)
         wf.evolve(rng,p)
         print(p.generation)
         nlist=np.array([5000]*323,dtype=np.uint32)
@@ -103,7 +103,7 @@ def evolve_regions(rng,pop,popsizes,mu_neutral,
     with arbitrary changes in population size and a temporal sampler.
 
     :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
-    :param pop: A :class:`fwdpy11.fwdpy11_types.Spop`
+    :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
     :param popsizes: A 1d NumPy array representing population sizes over time.
     :param mu_neutral: The neutral mutation rate (per gamete, per generation)
     :param mu_selected: The selected mutation rate (per gamete, per generation)
@@ -115,7 +115,7 @@ def evolve_regions(rng,pop,popsizes,mu_neutral,
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
 
     .. note:: 
-        The fitness model will be :class:`fwdpy11.fitness.SpopAdditive` constructed
+        The fitness model will be :class:`fwdpy11.fitness.SlocusAdditive` constructed
         with a scaling of 2.0. This function calls 
         :func:`fwdpy11.wright_fisher.evolve_regions_sampler`, passing in a
         :class:`fwdpy11.temporal_samplers.RecordNothing` object.
@@ -134,7 +134,7 @@ def evolve_regions_sampler(rng,pop,popsizes,mu_neutral,
     with arbitrary changes in population size and a temporal sampler.
 
     :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
-    :param pop: A :class:`fwdpy11.fwdpy11_types.Spop`
+    :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
     :param popsizes: A 1d NumPy array representing population sizes over time.
     :param mu_neutral: The neutral mutation rate (per gamete, per generation)
     :param mu_selected: The selected mutation rate (per gamete, per generation)
@@ -146,11 +146,11 @@ def evolve_regions_sampler(rng,pop,popsizes,mu_neutral,
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
 
     .. note:: 
-        The fitness model will be :class:`fwdpy11.fitness.SpopAdditive` constructed
+        The fitness model will be :class:`fwdpy11.fitness.SlocusAdditive` constructed
         with a scaling of 2.0.
     """
-    from .fitness import SpopAdditive
-    fitness = SpopAdditive(2.0)
+    from .fitness import SlocusAdditive
+    fitness = SlocusAdditive(2.0)
     return evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
             mu_selected,recrate,nregions,sregions,recregions,fitness,
             recorder,selfing_rate)
@@ -164,7 +164,7 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     and a temporal sampler.
 
     :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
-    :param pop: A :class:`fwdpy11.fwdpy11_types.Spop`
+    :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
     :param popsizes: A 1d NumPy array representing population sizes over time.
     :param mu_neutral: The neutral mutation rate (per gamete, per generation)
     :param mu_selected: The selected mutation rate (per gamete, per generation)
@@ -172,7 +172,7 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     :param nregions: A list of :class:`fwdpy11.regions.Region`.
     :param sregions: A list of :class:`fwdpy11.regions.Sregion`.
     :param recregions: A list of :class:`fwdpy11.regions.Region`.
-    :param fitness: A :class:`fwdpy11.fitness.SpopFitness`.
+    :param fitness: A :class:`fwdpy11.fitness.SlocusFitness`.
     :param recorder: A callable to record data from the population.
     :param selfing_rate: (default 0.0) The probability than an individual selfs.
     :param prune_all_fixations: (True) Remove fixations affecting fitness from population.

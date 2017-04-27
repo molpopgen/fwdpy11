@@ -76,7 +76,7 @@ namespace fwdpy11
             update(const gsl_rng *r, diploid_t &offspring,
                    const diploid_t &parent1, const diploid_t &parent2,
                    const gcont_t &gametes, const mcont_t &mutations,
-                   const singlepop_fitness_fxn &ff) noexcept
+                   const single_locus_fitness_fxn &ff) noexcept
             {
                 offspring.g = ff(offspring, gametes, mutations);
                 offspring.e = noise_function(offspring.g, parent1, parent2);

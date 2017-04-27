@@ -30,7 +30,7 @@ In order to picked a file, you must also use the latest pickling protocol.
 
 .. testoutput::
 
-    <class 'fwdpy11.fwdpy11_types.Spop'>
+    <class 'fwdpy11.fwdpy11_types.SlocusPop'>
     True
 
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html

@@ -17,8 +17,8 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef FWDPY11_SINGLEPOP_FITNESS_HPP__
-#define FWDPY11_SINGLEPOP_FITNESS_HPP__
+#ifndef FWDPY11_SINGLE_LOCUS_FITNESS_HPP__
+#define FWDPY11_SINGLE_LOCUS_FITNESS_HPP__
 
 #include <typeinfo>
 #include <memory>
@@ -28,7 +28,7 @@
 namespace fwdpy11
 {
     template <typename... T>
-    using singlepop_fitness_signature
+    using single_locus_fitness_signature
         = std::function<double(const fwdpy11::diploid_t &,
                                const fwdpy11::gcont_t &,
                                const fwdpy11::mcont_t &, T...)>;
@@ -36,46 +36,46 @@ namespace fwdpy11
     /*! Single-deme fitness function signature for standard "popgen"
      *  simulations.
      */
-    using singlepop_fitness_fxn = singlepop_fitness_signature<>;
+    using single_locus_fitness_fxn = single_locus_fitness_signature<>;
 
-    struct singlepop_fitness
+    struct single_locus_fitness
     //! Pure virtual base class for single-deme fitness functions
     {
-        virtual ~singlepop_fitness() = default;
-        singlepop_fitness() = default;
+        virtual ~single_locus_fitness() = default;
+        single_locus_fitness() = default;
         virtual void
         update(const singlepop_t &pop)
         {
         }
-        virtual singlepop_fitness_fxn callback() const = 0;
-        virtual std::unique_ptr<singlepop_fitness> clone_unique() const = 0;
-        virtual std::shared_ptr<singlepop_fitness> clone_shared() const = 0;
+        virtual single_locus_fitness_fxn callback() const = 0;
+        virtual std::unique_ptr<single_locus_fitness> clone_unique() const = 0;
+        virtual std::shared_ptr<single_locus_fitness> clone_shared() const = 0;
         virtual std::string callback_name() const = 0;
     };
 
-#define SINGLEPOP_FITNESS_CLONE_UNIQUE(TYPENAME)                              \
-    std::unique_ptr<fwdpy11::singlepop_fitness> clone_unique() const          \
+#define SINGLE_LOCUS_FITNESS_CLONE_UNIQUE(TYPENAME)                           \
+    std::unique_ptr<fwdpy11::single_locus_fitness> clone_unique() const       \
     {                                                                         \
-        using ptr = std::unique_ptr<fwdpy11::singlepop_fitness>;              \
+        using ptr = std::unique_ptr<fwdpy11::single_locus_fitness>;           \
         return ptr(new TYPENAME(*this));                                      \
     }
 
-#define SINGLEPOP_FITNESS_CLONE_SHARED(TYPENAME)                              \
-    std::shared_ptr<fwdpy11::singlepop_fitness> clone_shared() const          \
+#define SINGLE_LOCUS_FITNESS_CLONE_SHARED(TYPENAME)                           \
+    std::shared_ptr<fwdpy11::single_locus_fitness> clone_shared() const       \
     {                                                                         \
-        return std::shared_ptr<fwdpy11::singlepop_fitness>(                   \
+        return std::shared_ptr<fwdpy11::single_locus_fitness>(                \
             new TYPENAME(*this));                                             \
     }
 
-#define SINGLEPOP_FITNESS_CALLBACK_NAME(T)                                    \
+#define SINGLE_LOCUS_FITNESS_CALLBACK_NAME(T)                                 \
     std::string callback_name() const { return T; }
 
     template <typename fitness_model_type>
-    struct fwdpp_singlepop_fitness_wrapper : public singlepop_fitness
+    struct fwdpp_single_locus_fitness_wrapper : public single_locus_fitness
     {
         using fitness_model = fitness_model_type;
         const double scaling;
-        fwdpp_singlepop_fitness_wrapper(const double scaling_ = 2.0)
+        fwdpp_single_locus_fitness_wrapper(const double scaling_ = 2.0)
             : scaling(scaling_)
         {
             if (!std::isfinite(scaling))
@@ -85,7 +85,7 @@ namespace fwdpy11
                                              + std::to_string(__LINE__));
                 }
         }
-        inline singlepop_fitness_fxn
+        inline single_locus_fitness_fxn
         callback() const final
         {
             return std::bind(fitness_model(), std::placeholders::_1,
@@ -93,24 +93,24 @@ namespace fwdpy11
                              scaling);
         }
 
-        SINGLEPOP_FITNESS_CLONE_SHARED(
-            fwdpp_singlepop_fitness_wrapper<fitness_model>);
-        SINGLEPOP_FITNESS_CLONE_UNIQUE(
-            fwdpp_singlepop_fitness_wrapper<fitness_model>);
-        SINGLEPOP_FITNESS_CALLBACK_NAME(typeid(fitness_model()).name()
-                                        + std::string(" with scaling = ")
-                                        + std::to_string(this->scaling));
+        SINGLE_LOCUS_FITNESS_CLONE_SHARED(
+            fwdpp_single_locus_fitness_wrapper<fitness_model>);
+        SINGLE_LOCUS_FITNESS_CLONE_UNIQUE(
+            fwdpp_single_locus_fitness_wrapper<fitness_model>);
+        SINGLE_LOCUS_FITNESS_CALLBACK_NAME(typeid(fitness_model()).name()
+                                           + std::string(" with scaling = ")
+                                           + std::to_string(this->scaling));
     };
 
-    using singlepop_mult_wrapper
-        = fwdpp_singlepop_fitness_wrapper<KTfwd::multiplicative_diploid>;
-    using singlepop_additive_wrapper
-        = fwdpp_singlepop_fitness_wrapper<KTfwd::additive_diploid>;
+    using single_locus_mult_wrapper
+        = fwdpp_single_locus_fitness_wrapper<KTfwd::multiplicative_diploid>;
+    using single_locus_additive_wrapper
+        = fwdpp_single_locus_fitness_wrapper<KTfwd::additive_diploid>;
 
-#define FWDPY11_SINGLEPOP_FITNESS()                                           \
-    pybind11::object FWDPY11_SINGLEPOP_FITNESS_BASE_IMPORT__                  \
+#define FWDPY11_SINGLE_LOCUS_FITNESS()                                        \
+    pybind11::object FWDPY11_SINGLE_LOCUS_FITNESS_BASE_IMPORT__               \
         = (pybind11::object)pybind11::module::import("fwdpy11.fitness")       \
-              .attr("SpopFitness");
+              .attr("SlocusFitness");
 }
 
 #endif

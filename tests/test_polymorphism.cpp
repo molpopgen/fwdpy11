@@ -27,7 +27,7 @@ PYBIND11_PLUGIN(test_polymorphism)
 
     m.def(
         "test_callback_names",
-        [](const std::vector<std::shared_ptr<fwdpy11::singlepop_fitness>>& f) {
+        [](const std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>& f) {
             std::vector<std::string> rv;
             for (auto&& i : f)
                 {

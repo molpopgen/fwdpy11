@@ -21,12 +21,12 @@ def evolve_snowdrift(args):
     N,seed=args
     #Construct as single-deme object
     #with N diploids
-    pop = fp11.Spop(N)
+    pop = fp11.SlocusPop(N)
     #Initialize a random number generator
     rng=fp11.GSLrng(seed)
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
     recregions=[fp11.Region(0,1,1)]
-    fitness = snowdrift.SpopSnowdrift(0.2,-0.2,1,-2)
+    fitness = snowdrift.SlocusSnowdrift(0.2,-0.2,1,-2)
     #evolve for 100 generations so that unit tests are
     #fast
     nlist = np.array([N]*100,dtype=np.uint32)
@@ -38,7 +38,7 @@ def evolve_snowdrift(args):
 
 class testSnowdrift(unittest.TestCase):
     def test_create(self):
-        f = snowdrift.SpopSnowdrift(1,-1,0.1,0.2);
+        f = snowdrift.SlocusSnowdrift(1,-1,0.1,0.2);
     def test_evolve(self):
         p = evolve_snowdrift((1000,42))
 

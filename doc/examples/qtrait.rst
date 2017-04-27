@@ -7,7 +7,7 @@ required. Optionally, one may want to add "noise" to trait values, perhaps repre
 phenotype.
 
 This page covers simulations of quantitative traits in a single genomic region (*e.g.* using
-:class:`fwdpy11.fwdpy11_types.Spop`).
+:class:`fwdpy11.fwdpy11_types.SlocusPop`).
 
 Let's call our trait value :math:`P`, which is composed of a genetic component, :math:`G` and a random component
 :math:`E`.
@@ -22,9 +22,9 @@ Trait values
 
 The following trait value functions are implemented:
 
-* :class:`fwdpy11.trait_values.SpopAdditiveTrait`
-* :class:`fwdpy11.trait_values.SpopMultTrait`
-* :class:`fwdpy11.trait_values.SpopGBRTrait`
+* :class:`fwdpy11.trait_values.SlocusAdditiveTrait`
+* :class:`fwdpy11.trait_values.SlocusMultTrait`
+* :class:`fwdpy11.trait_values.SlocusGBRTrait`
 
 The above functions calculate the :math:`G` component of :math:`P`.  Custom trait value functions can be written in C++
 in a similar manner as for custom fitness functions for standard "popgen" simulations.
@@ -126,7 +126,7 @@ The following code block represents the following model:
             return mp + gsl.gsl_ran_gaussian_ziggurat(rng,self.sd)
 
     N = 1000
-    pop = fp11.Spop(N)
+    pop = fp11.SlocusPop(N)
     #simulate for 2N generations
     nlist = np.array([N]*2*N,dtype=np.uint32)
     nregions=[]
@@ -137,7 +137,7 @@ The following code block represents the following model:
     mutrate_t=2e-3
     recrate=1e-2
 
-    traitModel = fp11tv.SpopAdditiveTrait(2.0)
+    traitModel = fp11tv.SlocusAdditiveTrait(2.0)
 
     rng = fp11.GSLrng(42)
 

@@ -61,7 +61,7 @@ namespace fwdpy11
         virtual void update(const gsl_rng *r, diploid_t &offspring,
                             const diploid_t &, const diploid_t &,
                             const gcont_t &gametes, const mcont_t &mutations,
-                            const singlepop_fitness_fxn &ff)
+                            const single_locus_fitness_fxn &ff)
             = 0;
     };
 }

@@ -11,12 +11,12 @@ def evolve_and_return_with_sampler(args):
     arguments.
     """
     N,repid,seed,recorderType=args
-    pop = fp11.Spop(N)
+    pop = fp11.SlocusPop(N)
     rng=fp11.GSLrng(seed)
     nregions=[fp11.Region(0,1,1)]
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
     recregions=nregions
-    fitness=fp11w.SpopAdditive(2.0)
+    fitness=fp11w.SlocusAdditive(2.0)
     nlist=np.array([N]*N,dtype=np.uint32)
     #use the type name passed in 
     #to create an instance:

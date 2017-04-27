@@ -54,7 +54,7 @@ evolve_singlepop_regions_qtrait_cpp(
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
-    fwdpy11::singlepop_fitness& fitness,
+    fwdpy11::single_locus_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
     std::function<double(double)> trait_to_fitness,
     py::object trait_to_fitness_updater,

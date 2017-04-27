@@ -42,7 +42,7 @@ evolve_and_prune_all(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
                      const double mu_neutral, const double mu_selected,
                      const bound_mmodels& mmodels,
                      const bound_recmodels& recmap,
-                     fwdpy11::singlepop_fitness& fitness,
+                     fwdpy11::single_locus_fitness& fitness,
                      fwdpy11::singlepop_temporal_sampler& recorder,
                      const double selfing_rate)
 {
@@ -73,7 +73,7 @@ evolve_and_prune_neutral_fixations(
     fwdpy11::wf_rules& rules, py::array_t<std::uint32_t> popsizes,
     const double mu_neutral, const double mu_selected,
     const bound_mmodels& mmodels, const bound_recmodels& recmap,
-    fwdpy11::singlepop_fitness& fitness,
+    fwdpy11::single_locus_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler& recorder, const double selfing_rate)
 {
     auto generations = popsizes.size();
@@ -105,7 +105,7 @@ evolve_singlepop_regions_cpp(
     const double mu_selected, const double recrate,
     const KTfwd::extensions::discrete_mut_model& mmodel,
     const KTfwd::extensions::discrete_rec_model& rmodel,
-    fwdpy11::singlepop_fitness& fitness,
+    fwdpy11::single_locus_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
     const bool remove_selected_fixations = false)
 {

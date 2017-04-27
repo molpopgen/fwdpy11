@@ -1,11 +1,11 @@
 /* Implement a stateful fitness model.
  * We define a new C++ type that will be
- * wrapped as a fwdpy11.fitness.SpopFitness
+ * wrapped as a fwdpy11.fitness.SlocusFitness
  * object.
  *
  * Such a fitness model is ultimately responsible
  * for generating a bound C++ callback whose signature
- * is fwdpy11::singlepop_fitness_fxn.
+ * is fwdpy11::single_locus_fitness_fxn.
  *
  * The module is built using cppimport:
  * https://github.com/tbenthompson/cppimport
@@ -78,13 +78,13 @@ struct snowdrift_diploid
     }
 };
 
-struct snowdrift : public fwdpy11::singlepop_fitness
+struct snowdrift : public fwdpy11::single_locus_fitness
 /* This is our stateful fitness object.
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
- * The C++ side of an SpopFitness object must publicly
- * inherit from fwdpy11::singlepop_fitness.
+ * The C++ side of an SlocusFitness object must publicly
+ * inherit from fwdpy11::single_locus_fitness.
  *
  * The phenotypes get updated each generation during
  * the simulation.
@@ -101,7 +101,7 @@ struct snowdrift : public fwdpy11::singlepop_fitness
     {
     }
 
-    inline fwdpy11::singlepop_fitness_fxn
+    inline fwdpy11::single_locus_fitness_fxn
     callback() const final
     // A stateful fitness model must return a bound callable.
     {
@@ -132,15 +132,15 @@ struct snowdrift : public fwdpy11::singlepop_fitness
             }
     };
 
-    //A custom fitness function requires that 
-    //several pure virtual functions be defined.
-    //These macros do it for you:
-    SINGLEPOP_FITNESS_CLONE_SHARED(snowdrift);
-    SINGLEPOP_FITNESS_CLONE_UNIQUE(snowdrift);
-    //This one gets pass the C++ name of the 
-    //callback.  We use C++11's typid to
-    //do that for us:
-    SINGLEPOP_FITNESS_CALLBACK_NAME(typeid(snowdrift_diploid).name());
+    // A custom fitness function requires that
+    // several pure virtual functions be defined.
+    // These macros do it for you:
+    SINGLE_LOCUS_FITNESS_CLONE_SHARED(snowdrift);
+    SINGLE_LOCUS_FITNESS_CLONE_UNIQUE(snowdrift);
+    // This one gets pass the C++ name of the
+    // callback.  We use C++11's typid to
+    // do that for us:
+    SINGLE_LOCUS_FITNESS_CALLBACK_NAME(typeid(snowdrift_diploid).name());
 };
 
 PYBIND11_PLUGIN(snowdrift)
@@ -152,11 +152,11 @@ PYBIND11_PLUGIN(snowdrift)
     // to make sure that the Python wrapper
     // to fwdpy11::singlepop_fitness is visible
     // to this module.
-    FWDPY11_SINGLEPOP_FITNESS()
+    FWDPY11_SINGLE_LOCUS_FITNESS()
 
     // Create a Python class based on our new type
     py::class_<snowdrift, std::shared_ptr<snowdrift>,
-               fwdpy11::singlepop_fitness>(m, "SpopSnowdrift")
+               fwdpy11::single_locus_fitness>(m, "SlocusSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"));
 

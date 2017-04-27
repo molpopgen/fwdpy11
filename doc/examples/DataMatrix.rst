@@ -44,7 +44,7 @@ The following example is a tour of the API:
     sregions=[fp11.ExpS(0,1,1,0.25,0.25)]
     rng=fp11.GSLrng(42)
 
-    pop=fp11.Spop(N)
+    pop=fp11.SlocusPop(N)
     #We simulate for N generations
     #because this code is run as part of the
     #testing suite, and so we want things

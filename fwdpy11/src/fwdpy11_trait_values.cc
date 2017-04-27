@@ -58,22 +58,22 @@ struct gbr_diploid_trait_fxn
     }
 };
 
-using singlepop_multiplicative_trait_wrapper = fwdpy11::
-    fwdpp_singlepop_fitness_wrapper<multiplicative_diploid_trait_fxn>;
-using singlepop_additive_trait_wrapper
-    = fwdpy11::fwdpp_singlepop_fitness_wrapper<additive_diploid_trait_fxn>;
+using single_locus_multiplicative_trait_wrapper = fwdpy11::
+    fwdpp_single_locus_fitness_wrapper<multiplicative_diploid_trait_fxn>;
+using single_locus_additive_trait_wrapper
+    = fwdpy11::fwdpp_single_locus_fitness_wrapper<additive_diploid_trait_fxn>;
 using gbr_trait_wrapper
-    = fwdpy11::fwdpp_singlepop_fitness_wrapper<gbr_diploid_trait_fxn>;
+    = fwdpy11::fwdpp_single_locus_fitness_wrapper<gbr_diploid_trait_fxn>;
 
 PYBIND11_PLUGIN(trait_values)
 {
     py::module m("trait_values", "Trait values.");
 
-    FWDPY11_SINGLEPOP_FITNESS()
+    FWDPY11_SINGLE_LOCUS_FITNESS()
 
-    py::class_<singlepop_additive_trait_wrapper,
-               std::shared_ptr<singlepop_additive_trait_wrapper>,
-               fwdpy11::singlepop_fitness>(m, "SpopAdditiveTrait",
+    py::class_<single_locus_additive_trait_wrapper,
+               std::shared_ptr<single_locus_additive_trait_wrapper>,
+               fwdpy11::single_locus_fitness>(m, "SlocusAdditiveTrait",
                                            R"delim(
                 Additive trait value, centered on zero.
 
@@ -83,16 +83,16 @@ PYBIND11_PLUGIN(trait_values)
                 )delim")
         .def(py::init<double>(), py::arg("scaling"));
 
-    py::class_<singlepop_multiplicative_trait_wrapper,
-               std::shared_ptr<singlepop_multiplicative_trait_wrapper>,
-               fwdpy11::singlepop_fitness>(m, "SpopMultTrait",
+    py::class_<single_locus_multiplicative_trait_wrapper,
+               std::shared_ptr<single_locus_multiplicative_trait_wrapper>,
+               fwdpy11::single_locus_fitness>(m, "SlocusMultTrait",
                                            R"delim(
                 Multiplicative trait value, centered on zero.
                 )delim")
         .def(py::init<double>(), py::arg("scaling"));
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,
-               fwdpy11::singlepop_fitness>(m, "SpopGBRTrait",
+               fwdpy11::single_locus_fitness>(m, "SlocusGBRTrait",
                                            R"delim(
             The "gene-based recessive" model from Thornton et al.
             2013 http://dx.doi.org/10.1371/journal.pgen.1003258 

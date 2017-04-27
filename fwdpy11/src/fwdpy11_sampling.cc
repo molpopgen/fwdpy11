@@ -77,16 +77,16 @@ PYBIND11_PLUGIN(sampling)
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop")
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
                            "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
-                           "fwdpy11.fwdpy11_types.SpopGeneralMutVec")
-    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop")
+                           "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
                         "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
-                        "fwdpy11.fwdpy11_types.SpopGeneralMutVec")
+                        "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
@@ -262,19 +262,19 @@ PYBIND11_PLUGIN(sampling)
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
     MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
     MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
-                  "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
+                  "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
 
-    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
     GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
     GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                    "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
+                    "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
 
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.Spop");
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
     HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
     HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                     "fwdpy11.fwdpy11_types.SpopGeneralMutVec");
+                     "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
     return m.ptr();
 }

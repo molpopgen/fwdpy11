@@ -18,7 +18,7 @@ def evolve_and_return(args):
     N,seed=args
     #Construct as single-deme object
     #with N diploids
-    pop = fp11.Spop(N)
+    pop = fp11.SlocusPop(N)
     #Initialize a random number generator
     rng=fp11.GSLrng(seed)
     sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
@@ -48,7 +48,7 @@ class testSimpleParallel(unittest.TestCase):
             #the population
             for res in pool.map(evolve_and_return,args):
                 self.assertEqual(str(type(res)),
-                        "<class 'fwdpy11.fwdpy11_types.Spop'>")
+                        "<class 'fwdpy11.fwdpy11_types.SlocusPop'>")
                 
 if __name__ == "__main__":
     unittest.main()
