@@ -61,7 +61,7 @@ evolve_and_prune_all(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
             pop.N = N_next;
             KTfwd::update_mutations(pop.mutations, pop.fixations,
                                     pop.fixation_times, pop.mut_lookup,
-                                    pop.mcounts, generation, 2 * pop.N);
+                                    pop.mcounts, pop.generation, 2 * pop.N);
             recorder(pop);
         }
 }
@@ -91,7 +91,7 @@ evolve_and_prune_neutral_fixations(
             pop.N = N_next;
             KTfwd::update_mutations_n(pop.mutations, pop.fixations,
                                       pop.fixation_times, pop.mut_lookup,
-                                      pop.mcounts, generation, 2 * pop.N);
+                                      pop.mcounts, pop.generation, 2 * pop.N);
             recorder(pop);
         }
 }

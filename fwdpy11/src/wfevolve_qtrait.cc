@@ -151,7 +151,7 @@ evolve_singlepop_regions_qtrait_cpp(
             pop.N = N_next;
             fwdpy11::update_mutations_n(pop.mutations, pop.fixations,
                                       pop.fixation_times, pop.mut_lookup,
-                                      pop.mcounts, generation, 2 * pop.N);
+                                      pop.mcounts, pop.generation, 2 * pop.N);
             recorder(pop);
             if (updater_exists)
                 {
