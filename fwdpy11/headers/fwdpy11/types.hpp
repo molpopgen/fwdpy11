@@ -110,7 +110,14 @@ namespace fwdpy11
         //! The current generation.  Start counting from zero
         unsigned generation;
         //! Constructor takes number of diploids as argument
-        singlepop_t(const unsigned &N) : base(N), generation(0) {}
+        singlepop_t(const unsigned &N) : base(N), generation(0)
+        {
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d.label = label++;
+                }
+        }
 
         singlepop_t(const std::string &s) : base(0) { this->deserialize(s); }
 
@@ -198,6 +205,7 @@ namespace fwdpy11
         explicit metapop_t(const std::vector<unsigned> &Ns)
             : base(&Ns[0], Ns.size()), generation(0)
         {
+            //need to determine policy for how to label diploids :)
         }
 
         //! Constructor takes list of deme sizes are aregument
@@ -314,6 +322,11 @@ namespace fwdpy11
         explicit multilocus_t(const unsigned N, const unsigned nloci)
             : base(N, nloci), generation(0)
         {
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d[0].label = label++;
+                }
         }
 
         explicit multilocus_t(const std::string &s) : base({ 0, 0 })
