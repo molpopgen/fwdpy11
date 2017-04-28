@@ -22,13 +22,13 @@ API and back-end changes:
 
 **Note:** the refactoring of type names will break scripts based on earlier versions.  Sorry, but things are rapidly changing here.  Please note that you can reassign class and function names in Python, allowing quick hacks to preserve compatibility:
 
-.. code_block:: python
+.. code-block:: python
 
     import fwdpy11
     Spop = fwdpy11.SlocusPop
 
 Alternately:
 
-.. code_block:: python
+.. code-block:: python
     
     from fwdpy11 import SlocusPop as Spop
