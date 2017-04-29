@@ -24,9 +24,13 @@
 
 namespace fwdpy11
 {
-    //Applied each generation to record any data of interest.
+    // Applied each generation to record any data of interest.
     using singlepop_temporal_sampler
         = std::function<void(const fwdpy11::singlepop_t&)>;
+
+    // Applied each generation to record any data of interest.
+    using multilocus_temporal_sampler
+        = std::function<void(const fwdpy11::multilocus_t&)>;
 }
 
 #endif

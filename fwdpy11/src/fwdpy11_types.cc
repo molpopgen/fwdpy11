@@ -33,6 +33,9 @@ using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
 using singlepop_generalmut_vec_base
     = singlepop_generalmut_vec_sugar_base::popbase_t;
 
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
+
 namespace
 {
     static const auto MCOUNTS_DOCSTRING = R"delim(

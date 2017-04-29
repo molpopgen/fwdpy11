@@ -47,6 +47,9 @@ namespace fwdpy11
         update(const singlepop_t &pop)
         {
         }
+		virtual void update(const multilocus_t & pop)
+		{
+		}
         virtual single_locus_fitness_fxn callback() const = 0;
         virtual std::unique_ptr<single_locus_fitness> clone_unique() const = 0;
         virtual std::shared_ptr<single_locus_fitness> clone_shared() const = 0;

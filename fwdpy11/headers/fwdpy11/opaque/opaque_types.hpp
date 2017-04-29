@@ -91,11 +91,9 @@ namespace fwdpy11
     using dipvector_t = std::vector<diploid_t>;
 }
 
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::dipvector_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
 
 #endif

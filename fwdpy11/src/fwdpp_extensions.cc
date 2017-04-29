@@ -77,13 +77,7 @@ PYBIND11_PLUGIN(fwdpp_extensions)
         .def(py::init<std::vector<double>, std::vector<double>,
                       std::vector<double>, std::vector<double>,
                       std::vector<double>, std::vector<double>,
-                      std::vector<KTfwd::extensions::shmodel>>())
-        .def_readonly("nbeg", &KTfwd::extensions::discrete_mut_model::nbeg)
-        .def_readonly("nend", &KTfwd::extensions::discrete_mut_model::nend)
-        .def_readonly("sbeg", &KTfwd::extensions::discrete_mut_model::sbeg)
-        .def_readonly("send", &KTfwd::extensions::discrete_mut_model::send)
-        .def_readonly("shmodels",
-                      &KTfwd::extensions::discrete_mut_model::shmodels);
+                      std::vector<KTfwd::extensions::shmodel>>());
 
     py::class_<KTfwd::extensions::discrete_rec_model>(m,
                                                       "RecombinationRegions")

@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/experimental/sample_diploid.hpp>
+#include <fwdpp/experimental/sample_diploid_mloc.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/samplers.hpp>
@@ -49,21 +50,20 @@ static const std::size_t SIGE = 3;
 // recombination
 void
 evolve_singlepop_regions_qtrait_cpp(
-    const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+    const fwdpy11::GSLrng_t &rng, fwdpy11::singlepop_t &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
-    const KTfwd::extensions::discrete_mut_model& mmodel,
-    const KTfwd::extensions::discrete_rec_model& rmodel,
-    fwdpy11::single_locus_fitness& fitness,
+    const KTfwd::extensions::discrete_mut_model &mmodel,
+    const KTfwd::extensions::discrete_rec_model &rmodel,
+    fwdpy11::single_locus_fitness &fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
     std::function<double(double)> trait_to_fitness,
     py::object trait_to_fitness_updater,
-    std::function<double(const double g, const fwdpy11::diploid_t&,
-                         const fwdpy11::diploid_t)>
+    std::function<double(const double g, const fwdpy11::diploid_t &,
+                         const fwdpy11::diploid_t &)>
         noise,
     py::object noise_updater)
 {
-
     bool updater_exists = false;
     py::function updater;
     if (trait_to_fitness_updater != py::none())
@@ -147,11 +147,11 @@ evolve_singlepop_regions_qtrait_cpp(
                 rng.get(), pop.gametes, pop.diploids, pop.mutations,
                 pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
                 recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate, rules,KTfwd::remove_neutral());
+                selfing_rate, rules, KTfwd::remove_neutral());
             pop.N = N_next;
-            fwdpy11::update_mutations_n(pop.mutations, pop.fixations,
-                                      pop.fixation_times, pop.mut_lookup,
-                                      pop.mcounts, pop.generation, 2 * pop.N);
+            fwdpy11::update_mutations_n(
+                pop.mutations, pop.fixations, pop.fixation_times,
+                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
             recorder(pop);
             if (updater_exists)
                 {
@@ -164,6 +164,98 @@ evolve_singlepop_regions_qtrait_cpp(
         }
     --pop.generation;
 }
+   
+//evolve_qtrait_mloc_regions_cpp(rng,pop,
+//        popsizes,
+//        mu_neutral,
+//        mu_selected,
+//        recrate,
+//        mm,
+//        rm,
+//        interlocus_rec,
+//        genetic_value_model,
+//        recorder,selfing_rate,
+//        multilocus_trait_model,
+//        trait_to_fitness,
+//        updater,noise,noise_updater)
+
+
+void
+evolve_qtrait_mloc_regions_cpp(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::multilocus_t &pop,
+    py::array_t<std::uint32_t> popsizes,
+    const std::vector<double> &neutral_mutation_rates,
+    const std::vector<double> &selected_mutation_rates,
+    const std::vector<double> &recrates,
+    const std::vector<KTfwd::extensions::discrete_mut_model> &mmodels,
+    const std::vector<KTfwd::extensions::discrete_rec_model> &rmodels,
+    const std::vector<std::function<unsigned(void)>> & interlocus_rec,
+    fwdpy11::multilocus_genetic_value &multilocus_gvalue,
+    fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
+    std::function<double(const py::array_t<double>)> aggregator,
+    std::function<double(double)> trait_to_fitness,
+    py::object trait_to_fitness_updater,
+    std::function<double(const double g, const fwdpy11::multilocus_diploid_t &,
+                         const fwdpy11::multilocus_diploid_t &)>
+        noise,
+    py::object noise_updater)
+{
+    bool updater_exists = false;
+    py::function updater;
+    if (trait_to_fitness_updater != py::none())
+        {
+            updater = py::function(trait_to_fitness_updater);
+            updater_exists = true;
+        }
+    bool noise_updater_exists = false;
+    py::function noise_updater_fxn;
+    if (noise_updater != py::none())
+        {
+            noise_updater_fxn = noise_updater;
+            noise_updater_exists = true;
+        }
+    const auto generations = popsizes.size();
+    if (!generations)
+        throw std::runtime_error("empty list of population sizes");
+    auto bound_mmodels = KTfwd::extensions::bind_vec_dmm(
+        mmodels, pop.mutations, pop.mut_lookup, rng.get(),
+        neutral_mutation_rates, selected_mutation_rates, &pop.generation);
+    auto bound_intralocus_rec = KTfwd::extensions::bind_vec_drm(
+        rmodels, pop.gametes, pop.mutations, rng.get(), recrates);
+    std::vector<double> total_mut_rates(neutral_mutation_rates);
+    std::transform(total_mut_rates.cbegin(), total_mut_rates.cend(),
+                   selected_mutation_rates.cbegin(), total_mut_rates.begin(),
+                   std::plus<double>());
+
+    fwdpy11::qtrait::qtrait_mloc_rules rules(aggregator, trait_to_fitness,
+                                             noise);
+
+    ++pop.generation;
+    for (unsigned i = 0; i < generations; ++i, ++pop.generation)
+        {
+            auto N_next = popsizes.at(i);
+            auto wbar = KTfwd::experimental::sample_diploid(
+                rng.get(), pop.gametes, pop.diploids, pop.mutations,
+                pop.mcounts, pop.N, N_next, total_mut_rates.data(),
+                bound_mmodels, bound_intralocus_rec, interlocus_rec,
+                multilocus_gvalue, pop.neutral, pop.selected, selfing_rate,
+                rules, KTfwd::remove_neutral());
+            pop.N = N_next;
+            fwdpy11::update_mutations_n(
+                pop.mutations, pop.fixations, pop.fixation_times,
+                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+            recorder(pop);
+            if (updater_exists)
+                {
+                    updater(pop.generation);
+                }
+            if (noise_updater_exists)
+                {
+                    noise_updater_fxn(pop.generation);
+                }
+            --pop.generation;
+        }
+}
 
 PYBIND11_PLUGIN(wfevolve_qtrait)
 {
@@ -171,5 +263,8 @@ PYBIND11_PLUGIN(wfevolve_qtrait)
 
     m.def("evolve_singlepop_regions_qtrait_cpp",
           &evolve_singlepop_regions_qtrait_cpp);
+
+    m.def("evolve_qtrait_mloc_regions_cpp",
+          &evolve_qtrait_mloc_regions_cpp);
     return m.ptr();
 }

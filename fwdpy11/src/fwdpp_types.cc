@@ -26,6 +26,9 @@
 #include <fwdpy11/opaque/opaque_types.hpp>
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
+
 PYBIND11_PLUGIN(fwdpp_types)
 {
     py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");

@@ -26,5 +26,6 @@
 #include <fwdpp/fitness_models.hpp>
 
 #include "single_locus_fitness.hpp"
+#include "multi_locus_fitness.hpp"
 
 #endif

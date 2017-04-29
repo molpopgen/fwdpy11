@@ -1,4 +1,4 @@
-from .wfevolve_qtrait import evolve_singlepop_regions_qtrait_cpp
+from .wfevolve_qtrait import evolve_singlepop_regions_qtrait_cpp,evolve_qtrait_mloc_regions_cpp
 import fwdpy11.gsl_random
 import math
 
@@ -156,3 +156,34 @@ def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
     evolve_singlepop_regions_qtrait_cpp(rng,pop,popsizes,mu_neutral,
             mu_selected,recrate,mm,rm,trait_model,recorder,selfing_rate,
             trait_to_fitness,updater,noise,noise_updater)
+
+def evolve_mlocus_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
+        mu_selected,recrate,nregions,sregions,recregions,interlocus_rec,genetic_value_model,
+        multilocus_trait_model,
+        trait_to_fitness=GSS(1,0.0),recorder=None,noise=None,selfing_rate = 0.):
+    from .internal import makeMutationRegions,makeRecombinationRegions
+    from functools import partial
+
+    if noise is None:
+        noise = GaussianNoise(rng,0.)
+    mm=[makeMutationRegions(i,j) for i,j in zip(nregions,sregions)]
+    rm=[makeRecombinationRegions(i) for i in recregions]
+    updater = None
+    noise_updater = None
+    if hasattr(trait_to_fitness,'update'):
+        updater = partial(type(trait_to_fitness).update,trait_to_fitness)
+    if hasattr(noise,'update'):
+        noise_updater = partial(type(noise).update,noise)
+    if recorder is None:
+        from fwdpy11.temporal_samplers import RecordNothing
+        recorder = RecordNothing()
+    evolve_qtrait_mloc_regions_cpp(rng,pop,popsizes,
+            mu_neutral,mu_selected,recrate,
+            mm,rm,interlocus_rec,
+            genetic_value_model,
+            recorder,
+            selfing_rate,
+            multilocus_trait_model,
+            trait_to_fitness,
+            updater,noise,noise_updater)
+    

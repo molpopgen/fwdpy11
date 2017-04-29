@@ -116,6 +116,14 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.multilocus',
+        ['fwdpy11/src/multilocus.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
     ]
     
 

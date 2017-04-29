@@ -78,6 +78,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+.. automodule:: fwdpy11.multilocus
+    :members:
+    :show-inheritance:
+
 fwdpy11 C++ API
 ==================
 
