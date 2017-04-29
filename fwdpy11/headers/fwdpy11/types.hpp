@@ -32,6 +32,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <stdexcept>
 #include <fwdpy11/serialization.hpp>
 
 namespace fwdpy11
@@ -112,6 +113,10 @@ namespace fwdpy11
         //! Constructor takes number of diploids as argument
         singlepop_t(const unsigned &N) : base(N), generation(0)
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
@@ -138,7 +143,7 @@ namespace fwdpy11
         {
             *this = serialization::deserialize_details<singlepop_t>()(
                 s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 0u);
+                fwdpy11::diploid_reader(), 1);
         }
 
         // int
@@ -205,7 +210,7 @@ namespace fwdpy11
         explicit metapop_t(const std::vector<unsigned> &Ns)
             : base(&Ns[0], Ns.size()), generation(0)
         {
-            //need to determine policy for how to label diploids :)
+            // need to determine policy for how to label diploids :)
         }
 
         //! Constructor takes list of deme sizes are aregument
@@ -271,11 +276,16 @@ namespace fwdpy11
         unsigned generation;
         explicit singlepop_gm_vec_t(const unsigned &N) : base(N), generation(0)
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
         }
         explicit singlepop_gm_vec_t(const std::string &s) : base(0)
         {
             this->deserialize(s);
         }
+
         std::string
         serialize() const
         {
@@ -288,7 +298,7 @@ namespace fwdpy11
         {
             *this = serialization::deserialize_details<singlepop_gm_vec_t>()(
                 s, KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 0u);
+                fwdpy11::diploid_reader(), 1u);
         }
 
         // int
@@ -318,10 +328,18 @@ namespace fwdpy11
         : public KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>
     {
         using base = KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>;
-        unsigned generation;
-        explicit multilocus_t(const unsigned N, const unsigned nloci)
-            : base(N, nloci), generation(0)
+        unsigned generation, nloci;
+        explicit multilocus_t(const unsigned N, const unsigned nloci_)
+            : base(N, nloci_), generation(0), nloci(nloci_)
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
+            if (!nloci)
+                {
+                    throw std::invalid_argument("number of loci must be > 0");
+                }
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
@@ -346,7 +364,7 @@ namespace fwdpy11
         {
             *this = serialization::deserialize_details<multilocus_t>()(
                 s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 0u, 0u);
+                fwdpy11::diploid_reader(), 1,1);
         }
 
         // int

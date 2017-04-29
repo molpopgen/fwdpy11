@@ -34,7 +34,8 @@ using singlepop_generalmut_vec_base
     = singlepop_generalmut_vec_sugar_base::popbase_t;
 
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
-PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
+PYBIND11_MAKE_OPAQUE(
+    std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
 namespace
 {
@@ -94,6 +95,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "Genetic value (read-only).")
         .def_readonly("e", &fwdpy11::diploid_t::e,
                       "Random/environmental effects (read-only).")
+        .def_readonly("label", &fwdpy11::diploid_t::label,
+                      "Index of the diploid in its deme")
         .def("__getstate__",
              [](const fwdpy11::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -222,6 +225,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "The current generation.")
         .def_readonly("N", &fwdpy11::multilocus_t::N,
                       "Curent population size.")
+        .def_readonly("nloci", &fwdpy11::multilocus_t::nloci,
+                      "Number of loci.")
         .def_readonly("diploids", &fwdpy11::multilocus_t::diploids)
         .def_readonly("mutations", &fwdpy11::multilocus_t::mutations,
                       MUTATIONS_DOCSTRING)
