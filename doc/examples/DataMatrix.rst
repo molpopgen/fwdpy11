@@ -38,18 +38,20 @@ The following example is a tour of the API:
     #simulation.
     N,theta,rho=1000,100,100
 
-    nlist=np.array([N]*N,dtype=np.uint32)
-    nregions=[fp11.Region(0,1,1)]
-    recregions=nregions
-    sregions=[fp11.ExpS(0,1,1,0.25,0.25)]
+    p={'demog':np.array([N]*N,dtype=np.uint32),
+       'nregions':[fp11.Region(0,1,1)],
+       'recregions':[fp11.Region(0,1,1)],
+       'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
+       'rates':(theta/float(4*N),0.0,rho/float(4*N))
+       }
     rng=fp11.GSLrng(42)
-
+    params = fp11.model_params.SlocusParams(**p)
     pop=fp11.SlocusPop(N)
     #We simulate for N generations
     #because this code is run as part of the
     #testing suite, and so we want things
     #to be over quickly.
-    pops = wf.evolve_regions(rng, pop,nlist, theta/float(4*N), 0, rho/float(4*N), nregions, [], recregions)
+    pops = wf.evolve(rng, pop,params)
 
     #Now, we are going to represent the entire population
     #as a numpy matrix with dtype=np.int8.

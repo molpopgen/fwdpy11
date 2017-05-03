@@ -11,6 +11,8 @@ import numpy as np
 import fwdpy11 as fp11
 import fwdpy11.temporal_samplers as fp11ts
 import fwdpy11.wright_fisher
+import fwdpy11.ezparams
+
 def evolve_snowdrift(args):
     """
     We write the function taking a tuple 
@@ -24,15 +26,18 @@ def evolve_snowdrift(args):
     pop = fp11.SlocusPop(N)
     #Initialize a random number generator
     rng=fp11.GSLrng(seed)
-    sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
-    recregions=[fp11.Region(0,1,1)]
-    fitness = snowdrift.SlocusSnowdrift(0.2,-0.2,1,-2)
-    #evolve for 100 generations so that unit tests are
-    #fast
-    nlist = np.array([N]*100,dtype=np.uint32)
-    recorder = fp11ts.RecordNothing()
-    fp11.wright_fisher.evolve_regions_sampler_fitness(rng,pop,nlist,0.0,0.0025,0.001,
-            [],sregions,recregions,fitness,recorder,prune_all_fixations=False)
+    p={'sregions':[fp11.ExpS(0,1,1,-0.1,1.0)],
+       'recregions':[fp11.Region(0,1,1)],
+       'nregions':[],
+       'gvalue':snowdrift.SlocusSnowdrift(0.2,-0.2,1,-2),
+        #evolve for 100 generations so that unit tests are
+        #fast
+       'demog':np.array([N]*100,dtype=np.uint32),
+       'rates':(0.0,0.0025,0.001),
+       'prune_selected':False
+       }
+    params = fwdpy11.model_params.SlocusParams(**p)
+    fp11.wright_fisher.evolve(rng,pop,params)
     #return our pop
     return pop
 

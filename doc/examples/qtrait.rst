@@ -127,17 +127,7 @@ The following code block represents the following model:
 
     N = 1000
     pop = fp11.SlocusPop(N)
-    #simulate for 2N generations
-    nlist = np.array([N]*2*N,dtype=np.uint32)
-    nregions=[]
-    sregions=[fp11.GaussianS(0,1,1,0.25)]
-    recregions=[fp11.Region(0,1,1)]
 
-    mutrate_n=0.0
-    mutrate_t=2e-3
-    recrate=1e-2
-
-    traitModel = fp11tv.SlocusAdditiveTrait(2.0)
 
     rng = fp11.GSLrng(42)
 
@@ -154,6 +144,17 @@ The following code block represents the following model:
 
     t2f = fp11qt.GSSmo(gss_params)
 
-    fp11qt.evolve_regions_sampler_fitness(rng,pop,nlist,mutrate_n,mutrate_t,recrate,
-            nregions,sregions,recregions,traitModel,t2f,noise=SharedE(rng,0.1))
+    p = {'nregions':[],
+    'sregions':[fp11.GaussianS(0,1,1,0.25)],
+    'recregions':[fp11.Region(0,1,1)],
+    'rates':(0.0,2e-3,1e-3),
+    'demog':np.array([N]*2*N,dtype=np.uint32),
+    'gvalue':fp11tv.SlocusAdditiveTrait(2.0),
+    'trait_to_fitness':t2f,
+    'noise':SharedE(rng,0.1)
+    }
+
+    params = fp11.model_params.SlocusParamsQ(**p)
+
+    fp11qt.evolve(rng,pop,params)
 

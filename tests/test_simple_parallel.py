@@ -1,5 +1,6 @@
 import fwdpy11 as fp11
 import fwdpy11.wright_fisher as wf
+import fwdpy11.ezparams as fp11ez
 #concurrent.futures is Python 3 only
 import concurrent.futures as cf
 import numpy as np
@@ -19,14 +20,12 @@ def evolve_and_return(args):
     #Construct as single-deme object
     #with N diploids
     pop = fp11.SlocusPop(N)
+    theta = 100.0
     #Initialize a random number generator
     rng=fp11.GSLrng(seed)
-    sregions=[fp11.ExpS(0,1,1,-0.1,1.0)]
-    #Evolve the pop for 10 generations
-    #and several default parameters will be
-    #used.
-    nlist=np.array([N]*10,dtype=np.uint32)
-    fp11.wright_fisher.evolve(rng,pop,nlist,sregions=sregions)
+    p = fp11ez.mslike(pop,simlen=100,rates=(theta/float(4*pop.N),1e-3,theta/float(4*pop.N)))
+    params = fp11.model_params.SlocusParams(**p)
+    fp11.wright_fisher.evolve(rng,pop,params)
     #The population is picklable, and so
     #we can return it from another process
     return pop

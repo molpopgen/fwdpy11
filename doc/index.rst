@@ -62,6 +62,10 @@ Functions and classes
     :members:
     :show-inheritance:
 
+.. automodule:: fwdpy11.model_params
+    :members:
+    :show-inheritance:
+
 .. automodule:: fwdpy11.temporal_samplers
     :members:
     :show-inheritance:

@@ -164,8 +164,8 @@ evolve_singlepop_regions_qtrait_cpp(
         }
     --pop.generation;
 }
-   
-//evolve_qtrait_mloc_regions_cpp(rng,pop,
+
+// evolve_qtrait_mloc_regions_cpp(rng,pop,
 //        popsizes,
 //        mu_neutral,
 //        mu_selected,
@@ -179,7 +179,6 @@ evolve_singlepop_regions_qtrait_cpp(
 //        trait_to_fitness,
 //        updater,noise,noise_updater)
 
-
 void
 evolve_qtrait_mloc_regions_cpp(
     const fwdpy11::GSLrng_t &rng, fwdpy11::multilocus_t &pop,
@@ -189,7 +188,7 @@ evolve_qtrait_mloc_regions_cpp(
     const std::vector<double> &recrates,
     const std::vector<KTfwd::extensions::discrete_mut_model> &mmodels,
     const std::vector<KTfwd::extensions::discrete_rec_model> &rmodels,
-    const std::vector<std::function<unsigned(void)>> & interlocus_rec,
+    const std::vector<std::function<unsigned(void)>> &interlocus_rec,
     fwdpy11::multilocus_genetic_value &multilocus_gvalue,
     fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
     std::function<double(const py::array_t<double>)> aggregator,
@@ -253,8 +252,8 @@ evolve_qtrait_mloc_regions_cpp(
                 {
                     noise_updater_fxn(pop.generation);
                 }
-            --pop.generation;
         }
+    --pop.generation;
 }
 
 PYBIND11_PLUGIN(wfevolve_qtrait)
@@ -264,7 +263,6 @@ PYBIND11_PLUGIN(wfevolve_qtrait)
     m.def("evolve_singlepop_regions_qtrait_cpp",
           &evolve_singlepop_regions_qtrait_cpp);
 
-    m.def("evolve_qtrait_mloc_regions_cpp",
-          &evolve_qtrait_mloc_regions_cpp);
+    m.def("evolve_qtrait_mloc_regions_cpp", &evolve_qtrait_mloc_regions_cpp);
     return m.ptr();
 }

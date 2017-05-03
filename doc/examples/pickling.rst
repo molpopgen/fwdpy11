@@ -17,9 +17,17 @@ In order to picked a file, you must also use the latest pickling protocol.
 
     import fwdpy11 as fp11
     import fwdpy11.wright_fisher as wf
+    import fwdpy11.ezparams
+    import numpy as np
     import pickle
 
-    pop = wf.quick_sim(1000)
+    pop = fp11.SlocusPop(1000)
+    p = fwdpy11.ezparams.mslike(pop,
+        simlen=100,
+        rates=(1e-3,0.,1e-3))
+    params = fp11.model_params.SlocusParams(**p)
+    rng = fp11.GSLrng(42)
+    wf.evolve(rng,pop,params)
     #Pickle the pop in memory.
     #The -1 means use latest protocol
     ppop = pickle.dumps(pop,-1)

@@ -64,14 +64,14 @@ class GSSmo:
                 raise ValueError("negative generation not allowed")
             if oi[2] <= 0.0:
                 raise ValueError("VS > 0 required")
-        self.optima = optima
+        self.optima = optima.copy()
         self.env = self.optima.pop(0)
     def __call__(self,P):
         devsq=pow(P-self.env[1],2)
         return math.exp(-devsq/(2.0*self.env[2]))
     def update(self,generation):
         """
-        Update the fitness model conditins.
+        Update the fitness model conditions.
 
         :param generation: the generation in the simulation
 
@@ -103,87 +103,142 @@ class GaussianNoise:
 
 ##END LINE NUMBER EMBARGO##
 
-def evolve_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
-        mu_selected,recrate,nregions,sregions,recregions,trait_model,
-        trait_to_fitness=GSS(1,0.0),recorder=None,noise=None,selfing_rate = 0.):
+def _evolve_slocus(rng,pop,params,recorder = None):
+    import warnings
+    #Test parameters while suppressing warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        params.validate()
+    from .internal import makeMutationRegions,makeRecombinationRegions
+    from functools import partial
+    mm=makeMutationRegions(params.nregions,params.sregions)
+    rm=makeRecombinationRegions(params.recregions)
 
+    noise = None
+    if params.noise is None:
+        noise = GaussianNoise(rng,0.)
+    else:
+        noise = params.noise
+    updater = None
+    noise_updater = None
+    if hasattr(params.trait2w,'update'):
+        updater = partial(type(params.trait2w).update,params.trait2w)
+    if hasattr(noise,'update'):
+        noise_updater = partial(type(noise).update,noise)
+    if recorder is None:
+        from fwdpy11.temporal_samplers import RecordNothing
+        recorder = RecordNothing()
+
+    evolve_singlepop_regions_qtrait_cpp(rng,pop,params.demography,
+            params.mutrate_n,params.mutrate_s,params.recrate,
+            mm,rm,
+            params.gvalue_fxn,recorder,params.pself,params.trait2w,updater,
+            params.noise,noise_updater)
+
+def _evolve_mlocus(rng,pop,params,recorder=None):
+    import warnings
+    #Test parameters while suppressing warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        params.validate()
+    
+    from .internal import makeMutationRegions,makeRecombinationRegions
+    from functools import partial
+
+    noise = None
+    if params.noise is None:
+        noise = GaussianNoise(rng,0.)
+    mm=[makeMutationRegions(i,j) for i,j in zip(params.nregions,params.sregions)]
+    rm=[makeRecombinationRegions(i) for i in params.recregions]
+    updater = None
+    noise_updater = None
+    if hasattr(params.trait2w,'update'):
+        updater = partial(type(params.trait2w).update,params.trait2w)
+    if hasattr(noise,'update'):
+        noise_updater = partial(type(noise).update,noise)
+    if recorder is None:
+        from fwdpy11.temporal_samplers import RecordNothing
+        recorder = RecordNothing()
+    evolve_qtrait_mloc_regions_cpp(rng,pop,params.demography,
+            params.mutrates_n,params.mutrates_s,params.recrates,
+            mm,rm,params.interlocus,
+            params.gvalue_fxn,
+            recorder,
+            params.pself,
+            params.aggregator,
+            params.trait2w,
+            updater,noise,noise_updater)
+
+def evolve(rng,pop,params,recorder=None):
     """
-    Evolve a single deme according to a Wright-Fisher life cycle 
-    with arbitrary changes in population size, a specified fitness model,
-    and a temporal sampler.
+    Evolve a quantitative trait.
 
     This function evolves a class of models where traits are calculated 
     and then mapped to fitness.  See the sections of the manual on 
     simulating quantitative traits.
 
-    :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
-    :param pop: A :class:`fwdpy11.fwdpy11_types.Spop`
-    :param popsizes: A 1d NumPy array representing population sizes over time.
-    :param mu_neutral: The neutral mutation rate (per gamete, per generation)
-    :param mu_selected: The selected mutation rate (per gamete, per generation)
-    :param recrate: The recombination reate (per diploid, per generation)
-    :param nregions: A list of :class:`fwdpy11.regions.Region`.
-    :param sregions: A list of :class:`fwdpy11.regions.Sregion`.
-    :param recregions: A list of :class:`fwdpy11.regions.Region`.
-    :param trait_model: A :class:`fwdpy11.fitness.SpopFitness`.
-    :param trait_to_fitness: (fwdpy11.wright_fisher_qtrait.GSS(0,0,0)) A callable relating trait value to fitness.
+    :param rng: An instance of :class:`fwdpy11.fwdpy11_types.GSLrng`.
+    :param pop: An instance of :class:`fwdpy11.fwdpy11_types.Spop` or :class:`fwdpy11.fwdpy11_types.MlocusPop`.
+    :param params: An instance of :class:`fwdpy11.model_params.SlocusParamsQ` or :class:`fwdpy11.model_params.MlocusParamsQ`.
     :param recorder: (None) A callable to record data from the population.
-    :param noise: (None) A callable for adding random effects to trait values.
-
 
     .. note::
         If recorder is None, :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     .. note::
-        If noise is None, :class:`fwdpy11.wright_fisher_qtrait.GaussianNoise` will be used with mean and 
+        If params.noise is None, :class:`fwdpy11.wright_fisher_qtrait.GaussianNoise` will be used with mean and 
         standard deviation both set to zero.
+
+    .. note::
+        Please be sure to match your population type to your model parameter type.  For example,
+        mixing a single-locus population with multi-locus model parameters will trigger an exception.
     """
-    from .internal import makeMutationRegions,makeRecombinationRegions
-    from functools import partial
-    if noise is None:
-        noise = GaussianNoise(rng,0.)
-    mm=makeMutationRegions(nregions,sregions)
-    rm=makeRecombinationRegions(recregions)
-    updater = None
-    noise_updater = None
-    if hasattr(trait_to_fitness,'update'):
-        updater = partial(type(trait_to_fitness).update,trait_to_fitness)
-    if hasattr(noise,'update'):
-        noise_updater = partial(type(noise).update,noise)
+    import warnings
+    #Test parameters while suppressing warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        params.validate()
+   
     if recorder is None:
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
-    evolve_singlepop_regions_qtrait_cpp(rng,pop,popsizes,mu_neutral,
-            mu_selected,recrate,mm,rm,trait_model,recorder,selfing_rate,
-            trait_to_fitness,updater,noise,noise_updater)
+    try:
+        _evolve_slocus(rng,pop,params,recorder)
+    except:
+        _evolve_mlocus(rng,pop,params,recorder)
 
-def evolve_mlocus_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
-        mu_selected,recrate,nregions,sregions,recregions,interlocus_rec,genetic_value_model,
-        multilocus_trait_model,
-        trait_to_fitness=GSS(1,0.0),recorder=None,noise=None,selfing_rate = 0.):
-    from .internal import makeMutationRegions,makeRecombinationRegions
-    from functools import partial
-
-    if noise is None:
-        noise = GaussianNoise(rng,0.)
-    mm=[makeMutationRegions(i,j) for i,j in zip(nregions,sregions)]
-    rm=[makeRecombinationRegions(i) for i in recregions]
-    updater = None
-    noise_updater = None
-    if hasattr(trait_to_fitness,'update'):
-        updater = partial(type(trait_to_fitness).update,trait_to_fitness)
-    if hasattr(noise,'update'):
-        noise_updater = partial(type(noise).update,noise)
-    if recorder is None:
-        from fwdpy11.temporal_samplers import RecordNothing
-        recorder = RecordNothing()
-    evolve_qtrait_mloc_regions_cpp(rng,pop,popsizes,
-            mu_neutral,mu_selected,recrate,
-            mm,rm,interlocus_rec,
-            genetic_value_model,
-            recorder,
-            selfing_rate,
-            multilocus_trait_model,
-            trait_to_fitness,
-            updater,noise,noise_updater)
-    
+#def evolve_mlocus_regions_sampler_fitness(rng,pop,popsizes,mu_neutral,
+#        mu_selected,recrate,nregions,sregions,recregions,interlocus_rec,genetic_value_model,
+#        multilocus_trait_model,
+#        trait_to_fitness=GSS(1,0.0),recorder=None,noise=None,selfing_rate = 0.):
+#    from .internal import makeMutationRegions,makeRecombinationRegions
+#    from functools import partial
+#
+#    if noise is None:
+#        noise = GaussianNoise(rng,0.)
+#    mm=[makeMutationRegions(i,j) for i,j in zip(nregions,sregions)]
+#    rm=[makeRecombinationRegions(i) for i in recregions]
+#    updater = None
+#    noise_updater = None
+#    if hasattr(trait_to_fitness,'update'):
+#        updater = partial(type(trait_to_fitness).update,trait_to_fitness)
+#    if hasattr(noise,'update'):
+#        noise_updater = partial(type(noise).update,noise)
+#    if recorder is None:
+#        from fwdpy11.temporal_samplers import RecordNothing
+#        recorder = RecordNothing()
+#    print("interlocus = ",interlocus_rec)
+#    print("gvalue = ",genetic_value_model)
+#    print("updater = ",updater)
+#    print("agg = ",multilocus_trait_model)
+#    print("ognoize = ",noise)
+#    evolve_qtrait_mloc_regions_cpp(rng,pop,popsizes,
+#            mu_neutral,mu_selected,recrate,
+#            mm,rm,interlocus_rec,
+#            genetic_value_model,
+#            recorder,
+#            selfing_rate,
+#            multilocus_trait_model,
+#            trait_to_fitness,
+#            updater,noise,noise_updater)
+#    

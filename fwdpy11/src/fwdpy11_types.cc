@@ -148,49 +148,11 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
                       R"delim(
                       The current generation. A population starts at 
-                      generation 0:
-
-                        .. testcode:: 
-
-                            import fwdpy11
-                            p = fwdpy11.SlocusPop(1000)
-                            print(p.generation)
-                            import fwdpy11.wright_fisher as wf
-                            p = wf.quick_sim(100)
-                            print(p.generation)
-
-                        The output is:
-
-                        .. testoutput::
-
-                          0
-                          100
-                        )delim")
+                      generation 0.
+                      )delim")
         .def_readonly("N", &fwdpy11::singlepop_t::N,
                       R"delim(
                       The current population size.
-
-                      .. testcode:: 
-
-                          import fwdpy11
-                          p = fwdpy11.SlocusPop(1000)
-                          print(p.N)
-                          import numpy as np
-                          import fwdpy11.wright_fisher as wf
-                          #Evolve to a final N of 500
-                          nlist = np.array([p.N]*100 + [p.N/2]*100,dtype = np.uint32)
-                          rng=fwdpy11.GSLrng(101)
-                          wf.evolve(rng,p,nlist)
-                          print(p.N)
-                          print(p.generation)
-
-                      The output from the above is:
-
-                      .. testoutput::
-                      
-                        1000
-                        500
-                        200
                       )delim")
         .def_readonly("diploids", &fwdpy11::singlepop_t::diploids,
                       DIPLOIDS_DOCSTRING)

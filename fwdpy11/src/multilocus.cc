@@ -52,7 +52,7 @@ struct aggregate_mult_trait
         auto s = g.size();
         return std::accumulate(
                    g.data(), g.data() + s, 1.0,
-                   [](double prod, double v) { return prod + (1. + v); })
+                   [](double prod, double v) { return prod * (1. + v); })
                - 1.0;
     }
 };
