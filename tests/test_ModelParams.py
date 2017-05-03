@@ -157,7 +157,8 @@ class testMlocusParams(unittest.TestCase):
                 'interlocus':interlocus,
                 'mutrate_n':region_rates,
                 'mutrate_s':region_rates,
-                'recrate':region_rates}
+                'recrate':region_rates,
+                'gvalue':genetic_value}
     def test_assign_gvalue(self):
         self.m.gvalue_fxn = ml.MultiLocusGeneticValue([SlocusAdditive()]*2)
     def test_assign_gvalue_from_list(self):
