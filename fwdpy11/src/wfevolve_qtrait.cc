@@ -38,14 +38,6 @@
 
 namespace py = pybind11;
 
-// Generation time, optimum, VS, sigE
-using env = std::tuple<KTfwd::uint_t, double, double, double>;
-
-static const std::size_t GEN = 0;
-static const std::size_t OPTIMUM = 1;
-static const std::size_t VS = 2;
-static const std::size_t SIGE = 3;
-
 // Evolve the population for some amount of time with mutation and
 // recombination
 void
@@ -164,20 +156,6 @@ evolve_singlepop_regions_qtrait_cpp(
         }
     --pop.generation;
 }
-
-// evolve_qtrait_mloc_regions_cpp(rng,pop,
-//        popsizes,
-//        mu_neutral,
-//        mu_selected,
-//        recrate,
-//        mm,
-//        rm,
-//        interlocus_rec,
-//        genetic_value_model,
-//        recorder,selfing_rate,
-//        multilocus_trait_model,
-//        trait_to_fitness,
-//        updater,noise,noise_updater)
 
 void
 evolve_qtrait_mloc_regions_cpp(
