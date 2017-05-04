@@ -26,6 +26,7 @@ Concepts
 ##########################################
 
 .. toctree::
+    :maxdepth: 1
 
     pages/regions
 
