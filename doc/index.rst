@@ -22,7 +22,14 @@ Release notes
 
     pages/changelog
 
-Examples and concepts
+Concepts
+##########################################
+
+.. toctree::
+
+    pages/regions
+
+Examples 
 ##########################################
 
 .. toctree::
