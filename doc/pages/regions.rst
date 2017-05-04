@@ -105,7 +105,7 @@ combine multiple regions in your list:
 
 Internally, the total "mutational weight" of the first region will be a
 function of its length, which is 1(1-0)=1. The second region's total
-weight will be 1\*(12-2)=10, and it will have 10xas many new mutations
+weight will be 1\*(12-2)=10, and it will have 10 times as many new mutations
 arising as the first region.
 
 .. testcode:: 
