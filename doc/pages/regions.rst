@@ -184,7 +184,7 @@ This gives us what we want: the hotspot is 100x hotter "per base", and is 10% of
 How to set up a model
 ---------------------------------
 
-When setting up a model, it is important that you think in terms of conditional probabilities.  In other words, if the total rate to neutral variants is :math:`\mu_n`, then the weights passed along to a function have the interpretations "Given that a neutral mutation occurs, the probability that it occurs in a certain interval is :math:`x`, where :math:`x` is determined by the relative weight assigned to an interval.
+When setting up a model, it is important that you think in terms of conditional probabilities.  In other words, if the total rate to neutral variants is :math:`\mu_n`, then the weights passed along to a function have the interpretations "Given that a neutral mutation occurs, the probability that it occurs in a certain interval is :math:`x`", where :math:`x` is determined by the relative weight assigned to an interval.
 
 The 'weights' that you assign are *relative* and need not sum to 1.  Each weight must be :math:`\geq 0`, though.
 
