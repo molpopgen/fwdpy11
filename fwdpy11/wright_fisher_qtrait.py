@@ -132,7 +132,7 @@ def _evolve_slocus(rng,pop,params,recorder = None):
     evolve_singlepop_regions_qtrait_cpp(rng,pop,params.demography,
             params.mutrate_n,params.mutrate_s,params.recrate,
             mm,rm,
-            params.gvalue_fxn,recorder,params.pself,params.trait2w,updater,
+            params.gvalue,recorder,params.pself,params.trait2w,updater,
             params.noise,noise_updater)
 
 def _evolve_mlocus(rng,pop,params,recorder=None):
@@ -162,7 +162,7 @@ def _evolve_mlocus(rng,pop,params,recorder=None):
     evolve_qtrait_mloc_regions_cpp(rng,pop,params.demography,
             params.mutrates_n,params.mutrates_s,params.recrates,
             mm,rm,params.interlocus,
-            params.gvalue_fxn,
+            params.gvalue,
             recorder,
             params.pself,
             params.aggregator,

@@ -130,11 +130,11 @@ class testSlocusParams(unittest.TestCase):
     def test_set_gvalue(self):
         m = fp11mp.SlocusParams()
         from fwdpy11.fitness import SlocusAdditive
-        m.gvalue_fxn=SlocusAdditive()
+        m.gvalue=SlocusAdditive()
     def test_set_bad_gvalue(self):
         m = fp11mp.SlocusParams()
         with self.assertRaises(ValueError):
-            m.gvalue_fxn=[]
+            m.gvalue=[]
     def test_invalid_kwargs(self):
         from fwdpy11.fitness import SlocusAdditive
         with self.assertRaises(ValueError):
@@ -155,17 +155,17 @@ class testMlocusParams(unittest.TestCase):
                 'sregions':sregions,
                 'recregions':recregions,
                 'interlocus':interlocus,
-                'mutrate_n':region_rates,
-                'mutrate_s':region_rates,
-                'recrate':region_rates,
+                'mutrates_n':region_rates,
+                'mutrates_s':region_rates,
+                'recrates':region_rates,
                 'gvalue':genetic_value}
     def test_assign_gvalue(self):
-        self.m.gvalue_fxn = ml.MultiLocusGeneticValue([SlocusAdditive()]*2)
+        self.m.gvalue = ml.MultiLocusGeneticValue([SlocusAdditive()]*2)
     def test_assign_gvalue_from_list(self):
-        self.m.gvalue_fxn = [SlocusAdditive()]*2
+        self.m.gvalue = [SlocusAdditive()]*2
     def test_assign_gvalue_from_bad_input(self):
         with self.assertRaises(ValueError):
-            self.m.gvalue_fxn = [2.0]*2
+            self.m.gvalue = [2.0]*2
     def test_assign_aggregator(self):
         self.m.aggregator = ml.AggAddTrait()
     def test_assign_aggregator_non_callable(self):

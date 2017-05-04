@@ -313,11 +313,11 @@ class SlocusParams(ModelParams):
         self.__set_rates(rates)    
 
     @property
-    def gvalue_fxn(self):
+    def gvalue(self):
         return self.__gvalue_data['gvalue']
 
-    @gvalue_fxn.setter
-    def gvalue_fxn(self,f):
+    @gvalue.setter
+    def gvalue(self,f):
         from fwdpy11.fitness import SlocusFitness
         if isinstance(f,SlocusFitness) is False:
             raise ValueError("invalid genetic value type: " + str(type(f)))
@@ -332,7 +332,7 @@ class SlocusParams(ModelParams):
 
         _validate_single_locus_rates(self.__mutrec_data)
 
-        if callable(self.gvalue_fxn) is False:
+        if callable(self.gvalue) is False:
             raise ValueError("genetic value function must be callable")
 
         #If individual rates are nonzero, then
@@ -440,9 +440,9 @@ class MlocusParams(ModelParams):
     """
     def __init__(self,**kwargs):
         self.__expected_demog_kwargs=['demog']
-        self.__mutrec_data = {'mutrate_n':[],
-                'mutrate_s':[],
-                'recrate':[]
+        self.__mutrec_data = {'mutrates_n':[],
+                'mutrates_s':[],
+                'recrates':[]
                 }
         self.__interlocus_rec = {'interlocus':[]}
         self.__gvalue_data = {'gvalue':None}
@@ -500,11 +500,11 @@ class MlocusParams(ModelParams):
             self.__gvalue_data['gvalue'] = MultiLocusGeneticValue([SlocusMult(2.0)]*len(self.sregions))
 
     @property
-    def gvalue_fxn(self):
+    def gvalue(self):
         return self.__gvalue_data['gvalue']
 
-    @gvalue_fxn.setter
-    def gvalue_fxn(self,f):
+    @gvalue.setter
+    def gvalue(self,f):
         from fwdpy11.multilocus import MultiLocusGeneticValue
         from fwdpy11.fitness import SlocusFitness
         if isinstance(f,list) is True: 
@@ -546,21 +546,21 @@ class MlocusParams(ModelParams):
         """
         Read-only access to neutral mutation rates.
         """
-        return self.__mutrec_data['mutrate_n']
+        return self.__mutrec_data['mutrates_n']
 
     @property
     def mutrates_s(self):
         """
         Read-only access to selected mutation rates.
         """
-        return self.__mutrec_data['mutrate_s']
+        return self.__mutrec_data['mutrates_s']
 
     @property
     def recrates(self):
         """
         Read-only access to recombination rates.
         """
-        return self.__mutrec_data['recrate']
+        return self.__mutrec_data['recrates']
 
     @property
     def pself(self):
@@ -585,7 +585,7 @@ class MlocusParams(ModelParams):
 
         List and tuples must contain lists of the three rates (neutral, selected, recombination).
 
-        Dicts must contain them with the keys 'mutrate_n', 'mutrate_s', and 'recrate'.
+        Dicts must contain them with the keys 'mutrates_n', 'mutrates_s', and 'recrates'.
 
         :raises ValueError: Raises exception when bad data are encountered.
         """
@@ -593,9 +593,9 @@ class MlocusParams(ModelParams):
 
     def __set_rates(self,rates):
         try:
-            self.__mutrec_data['mutrate_n'] = rates[0]
-            self.__mutrec_data['mutrate_s'] = rates[1]
-            self.__mutrec_data['recrate'] = rates[2]
+            self.__mutrec_data['mutrates_n'] = rates[0]
+            self.__mutrec_data['mutrates_s'] = rates[1]
+            self.__mutrec_data['recrates'] = rates[2]
             _validate_multilocus_rates(self.__mutrec_data)
         except:
             try:
@@ -691,7 +691,7 @@ class MlocusParams(ModelParams):
                     str(nloci) + " loci, but only " +
                     str(len(self.interlocus)) + " between-locus recombination functions.")
 
-        if len(self.gvalue_fxn) != nloci:
+        if len(self.gvalue) != nloci:
             raise ValueError("Number of loci does not equal number of functions in genetic value object: " +
                     str(nloci) + " != " + str(len(self.aggregator)))
 
