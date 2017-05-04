@@ -173,8 +173,6 @@ The above model can be represented as:
     beg = 0.450000000, end = 0.550000000, weight = 10.000000000, label = 0
 
 
-**Please note:** the apparent 'slop' that you see above (*e.g.*, the output looks oddly rounded vis-a-vis the input) does not appear to be passed on to the C++ internals, which is where it really matters.  This appears to simply be a display issue.
-
 Internally, this is what will happen to the above input:
 
 * The total weight on the first region will be :math:`w = w \times (e-b) = 1\times(0.45-0) = 0.45`
