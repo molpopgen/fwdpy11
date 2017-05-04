@@ -33,6 +33,7 @@ using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
 using singlepop_generalmut_vec_base
     = singlepop_generalmut_vec_sugar_base::popbase_t;
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(
     std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
@@ -114,6 +115,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
         "C++ representation of a list of "
         ":class:`fwdpy11.fwdpy11_types."
         "SingleLocusDiploid`.  Typically, access will be read-only.");
+    py::bind_vector<std::vector<fwdpy11::dipvector_t>>
+        (m, "VecDiploidContainer");
     py::bind_vector<std::vector<KTfwd::uint_t>>(m, "VectorUint32");
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
                                       "C++ representations of a list of "
