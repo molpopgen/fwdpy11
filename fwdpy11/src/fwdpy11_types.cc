@@ -181,7 +181,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](const fwdpy11::singlepop_t& lhs,
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
-    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
+    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop",
+            "Representation of a multi-locus, single deme system.")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and number of loci.")
         .def(py::init<unsigned,unsigned,
