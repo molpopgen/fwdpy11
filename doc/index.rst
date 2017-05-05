@@ -6,11 +6,6 @@
 Welcome to fwdpy11's documentation!
 ===================================
 
-Contents:
-
-.. toctree::
-
-
 .. toctree::
     :caption: Contents:
 
@@ -26,20 +21,32 @@ Concepts
 ##########################################
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
+    pages/definitions
+
+Data Types
+##########################################
+
+.. toctree::
+    :maxdepth: 2
+
+    pages/types
+    pages/rng
     pages/regions
 
 Examples 
 ##########################################
 
 .. toctree::
+    :maxdepth: 1
 
     examples/parallel_simulation
     examples/stateful_fitness
     examples/pickling
     examples/DataMatrix
     examples/qtrait
+    examples/processingpops
 
 Modules
 ##########################################
