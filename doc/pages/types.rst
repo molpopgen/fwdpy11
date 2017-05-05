@@ -14,8 +14,8 @@ These containers allow *direct* access the mutations allocated on the C++ side, 
 is no copy from a C++ vector to a Python list, for example.
 
 When an opaque container is "list-like", I will refer to it as an opaque list. Semantically, it is very similar to a
-Python list, and you interact with it in the same way.  The main differences from a list are that negative indexing and
-slice indexing are not supported. However, they can be cast to a Python list if such operations are desired.
+Python list, and you interact with it in the same way.  The main difference from a list is that negative indexing 
+is not supported. However, they can be cast to a Python list if such operations are desired.
 
 .. _popgenmuts:
 
