@@ -181,13 +181,13 @@ PYBIND11_PLUGIN(fwdpy11_types)
              [](const fwdpy11::singlepop_t& lhs,
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
-    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop",
-            "Representation of a multi-locus, single deme system.")
+    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
+        m, "MlocusPop", "Representation of a multi-locus, single deme system.")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and number of loci.")
-        .def(py::init<unsigned,unsigned,
-                const std::vector<std::pair<double,double>>&>(), py::arg("N"), 
-                py::arg("nloci"),py::arg("locus_boundaries"))
+        .def(py::init<unsigned, unsigned,
+                      const std::vector<std::pair<double, double>>&>(),
+             py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -207,18 +207,20 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       FIXATIONS_DOCSTRING)
         .def_readonly("fixation_times", &fwdpy11::multilocus_t::fixation_times,
                       FIXATIONS_DOCSTRING)
+        .def_readonly("locus_boundaries",
+                      &fwdpy11::multilocus_t::locus_boundaries,
+                      "[beg,end) positions for each locus")
         .def("__getstate__",
              [](const fwdpy11::multilocus_t& pop) {
-        return py::bytes(pop.serialize());
+                 return py::bytes(pop.serialize());
              })
         .def("__setstate__",
              [](fwdpy11::multilocus_t& p, py::bytes s) {
-        new (&p) fwdpy11::multilocus_t(s);
+                 new (&p) fwdpy11::multilocus_t(s);
              })
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
-                const fwdpy11::multilocus_t& rhs) {
-        return lhs == rhs; });
+                const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
                singlepop_generalmut_vec_sugar_base>(
@@ -251,15 +253,15 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       FIXATION_TIMES_DOCSTRING)
         .def("__getstate__",
              [](const fwdpy11::singlepop_gm_vec_t& pop) {
-        return py::bytes(pop.serialize());
+                 return py::bytes(pop.serialize());
              })
         .def("__setstate__",
              [](fwdpy11::singlepop_gm_vec_t& p, py::bytes s) {
-        new (&p) fwdpy11::singlepop_gm_vec_t(s);
+                 new (&p) fwdpy11::singlepop_gm_vec_t(s);
              })
         .def("__eq__", [](const fwdpy11::singlepop_gm_vec_t& lhs,
                           const fwdpy11::singlepop_gm_vec_t& rhs) {
-        return lhs == rhs;
+            return lhs == rhs;
         });
     return m.ptr();
 }
