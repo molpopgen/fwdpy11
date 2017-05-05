@@ -346,6 +346,25 @@ namespace fwdpy11
                     d[0].label = label++;
                 }
         }
+        explicit multilocus_t(
+            const unsigned N, const unsigned nloci_,
+            const std::vector<std::pair<double, double>> &locus_boundaries)
+            : base(N, nloci_, locus_boundaries), generation(0), nloci(nloci_)
+        {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
+            if (!nloci)
+                {
+                    throw std::invalid_argument("number of loci must be > 0");
+                }
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d[0].label = label++;
+                }
+        }
 
         explicit multilocus_t(const std::string &s) : base({ 0, 0 })
         {
@@ -364,7 +383,7 @@ namespace fwdpy11
         {
             *this = serialization::deserialize_details<multilocus_t>()(
                 s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 1,1);
+                fwdpy11::diploid_reader(), 1, 1);
         }
 
         // int
