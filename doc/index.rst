@@ -21,7 +21,7 @@ Concepts
 ##########################################
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     pages/definitions
     pages/regions
@@ -30,7 +30,7 @@ Data Types
 ##########################################
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     pages/types
 
