@@ -1,6 +1,6 @@
 .. _data_types:
 
-Data types related to simulated popuations
+Data types related to simulated populations
 ======================================================================
 
 This section describes the types that get updated when populations are evolved.  These are the same types that you 

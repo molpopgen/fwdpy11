@@ -32,6 +32,7 @@ Data Types
     :maxdepth: 2
 
     pages/types
+    pages/rng
     pages/regions
 
 Examples 
