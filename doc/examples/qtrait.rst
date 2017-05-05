@@ -1,3 +1,5 @@
+.. _qtraits1:
+
 Simulating quantitative traits, I.
 ==========================================
 
