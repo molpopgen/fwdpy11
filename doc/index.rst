@@ -6,11 +6,6 @@
 Welcome to fwdpy11's documentation!
 ===================================
 
-Contents:
-
-.. toctree::
-
-
 .. toctree::
     :caption: Contents:
 
@@ -28,12 +23,22 @@ Concepts
 .. toctree::
     :maxdepth: 1
 
+    pages/definitions
     pages/regions
+
+Data Types
+##########################################
+
+.. toctree::
+    :maxdepth: 1
+
+    pages/types
 
 Examples 
 ##########################################
 
 .. toctree::
+    :maxdepth: 1
 
     examples/parallel_simulation
     examples/stateful_fitness
