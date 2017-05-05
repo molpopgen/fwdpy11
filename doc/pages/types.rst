@@ -127,7 +127,7 @@ In a single-locus simulation, diploids are stored in an opaque list of type
 Single-locus, single-deme population objects
 -----------------------------------------------------------
 
-To simulation a single locus in a single deme, you use :class:`fwdpy11.fwdpy11_types.SlocusPop`.  Instances of this
+To simulate a single locus in a single deme, you use :class:`fwdpy11.fwdpy11_types.SlocusPop`.  Instances of this
 class are constructed with a population size:
 
 .. testcode::
