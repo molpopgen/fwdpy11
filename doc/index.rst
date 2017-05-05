@@ -9,13 +9,14 @@ Welcome to fwdpy11's documentation!
 .. toctree::
     :caption: Contents:
 
-Release notes
+Miscellaneous notes
 ##########################################
 
 .. toctree::
     :maxdepth: 1
 
     pages/changelog
+    pages/pubs
 
 Concepts
 ##########################################
