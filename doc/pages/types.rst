@@ -127,7 +127,7 @@ In a single-locus simulation, diploids are stored in an opaque list of type
 Single-locus, single-deme population objects
 -----------------------------------------------------------
 
-To simulation a single locus in a single deme, you use :class:`fwdpy11.fwdpy11_types.SlocusPop`.  Instances of this
+To simulate a single locus in a single deme, you use :class:`fwdpy11.fwdpy11_types.SlocusPop`.  Instances of this
 class are constructed with a population size:
 
 .. testcode::
@@ -158,3 +158,25 @@ This class contains the following read-only properties:
     "diploids", "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.  See :ref:`diploids`."
     "fixations", "A :class:`fwdpy11.fwdpy11_types.MutationContainer` storing fixations. See :ref:`popgenmuts`."
     "fixation_times", "A :class:`fwdpy11.fwdpp_types.VectorUint32` storing fixation times."
+
+.. _mlocuspop:
+
+Multi-locus, single-deme population objects
+-----------------------------------------------------------
+
+The type :class:`fwdpy11.fwdpy11_types.MlocusPop` is analagous to :class:`fwdpy11.fwdpy11_types.SlocusPop` in all but
+one respect.  The `diploids` property type is :class:`fwdpy11.fwdpy11_types.VecDiploidContainer`.  See :ref:`diploids`
+for details.  The class has all of the properties of :class:`fwdpy11.fwdpy11_types.SlocusPop` plus the following:
+
+.. csv-table:: :class:`fwdpy11.fwdpp_types.MlocusPop` properties
+    :header: "Property", "Definition"
+    :widths: auto
+
+    "nloci", "The number of loci"
+    "locus_boundaries", "The [begin,end) positions for each locus"
+
+The need for `locus_boundaries` will be discussed elsewhere.
+
+.. todo::
+
+    Discuss locus boundaries somewhere.
