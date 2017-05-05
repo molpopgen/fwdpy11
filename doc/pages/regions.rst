@@ -1,5 +1,9 @@
+.. _regions:
+
 Regions: modeling discrete variation in mutation and recombination
 ======================================================================
+
+Please see :ref:`definitions` before reading this section.
 
 The simulation routines allow the details of the mutation and recombination models to vary along a "sequence" or "region".  A user is able to specify the details of such variation by passing *lists* to package functions.  For example, you are able to:
 

@@ -1,4 +1,5 @@
-.. _definitions:
+.. _model_params:
 
-Definitions
+Parameterizing a simulation.
 ======================================================================
+

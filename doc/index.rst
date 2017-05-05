@@ -24,7 +24,6 @@ Concepts
     :maxdepth: 2
 
     pages/definitions
-    pages/regions
 
 Data Types
 ##########################################
@@ -33,6 +32,7 @@ Data Types
     :maxdepth: 2
 
     pages/types
+    pages/regions
 
 Examples 
 ##########################################
@@ -45,6 +45,7 @@ Examples
     examples/pickling
     examples/DataMatrix
     examples/qtrait
+    examples/processingpops
 
 Modules
 ##########################################

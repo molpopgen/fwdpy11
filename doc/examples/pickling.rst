@@ -1,3 +1,5 @@
+.. _pickling_pops:
+
 Pickling populations
 ==========================================
 

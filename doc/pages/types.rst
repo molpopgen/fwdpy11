@@ -1,7 +1,25 @@
-Data types
+.. _data_types:
+
+Data types related to simulated popuations
 ======================================================================
 
-Mutations
+This section describes the types that get updated when populations are evolved.  These are the same types that you 
+access to analyze a simulated population. We will see specific examples of processing populations in :ref:`processpops`.
+
+Opaque Containers
+-----------------------------------------------------------
+
+Many data objects are stored in "opqaue" containers, which are thin wrappers around C++ containers.
+These containers allow *direct* access the mutations allocated on the C++ side, meaning that there
+is no copy from a C++ vector to a Python list, for example.
+
+When an opaque container is "list-like", I will refer to it as an opaque list. Semantically, it is very similar to a
+Python list, and you interact with it in the same way.  The main differences from a list are that negative indexing and
+slice indexing are not supported. However, they can be cast to a Python list if such operations are desired.
+
+.. _popgenmuts:
+
+Mutations with a single effect size
 -----------------------------------------------------------
 
 A mutation is described by :class:`fwdpy11.fwdpp_types.Mutation`, which provides read-only access to the following
@@ -18,22 +36,6 @@ properties:
     "neutral", "Boolean -- neutral or not?"
     "xtra", "16 bit integer"
 
-Opaque Containers
------------------------------------------------------------
-
-Many data objects are stored in "opqaue" containers, which are thin wrappers around C++ containers.
-These containers allow *direct* access the mutations allocated on the C++ side, meaning that there
-is no copy from a C++ vector to a Python list, for example.
-
-The opaque containers discussed here differ from a list in that negative indexing and slice indexing are not supported.
-However, they can be cast to a Python list if such operations are desired.
-
-When an opaque container is "list-like", I will refer to it as an opaque list.
-
-
-Mutation Containers
------------------------------------------------------------
-
 Instances of :class:`fwdpy11.fwdpp_types.Mutation` are stored in an opaque list type called
 :class:`fwdpy11.fwdpy11_types.MutationContainer`.  
 
@@ -44,6 +46,8 @@ Instances of :class:`fwdpy11.fwdpp_types.Mutation` are stored in an opaque list 
 
     The reason why extinct mutations are present is because fwdpp (fwdpy11's C++ back-end) recycles the memory
     for extinct mutations in order to store new mutations.
+
+.. _mcounts:
 
 Mutation Counts
 -----------------------------------------------------------
@@ -60,6 +64,8 @@ Mutation objects to not track their own frequencies.  Rather, they are stored in
 
     Indices with values 0 zero correspond to the locations of extinct mutations in a mutation 
     container.
+
+.. _gametes:
 
 Gametes
 -----------------------------------------------------------
@@ -85,10 +91,9 @@ counts container).
     represented once and only once.  If you want to know the frequency distribution at the level of gametes, you'd have
     to calculate that yourself by via an all-by-all comparison.
 
-Gamete containers
------------------------------------------------------------
-
 Gametes are stored in opaque lists of type :class:`fwdpy11.fwdpy11_types.GameteContainer`.
+
+.. _diploids:
 
 Diploids
 -----------------------------------------------------------
@@ -112,3 +117,44 @@ For a multi-locus simulation, the diploid genotype at each locus is stored in a 
 .. note::
 
     Future changes to fwdpp will likely make the storage of data in a multi-locus diploid more efficient and sensible.
+
+In a single-locus simulation, diploids are stored in an opaque list of type
+:class:`fwdpy11.fwdpy11_types.DiploidContainer`.  For multi-locus simulations, diploids are stored in
+:class:`fwdpy11.fwdpy11_types.VecDiploidContainer`, which is also an opaque list.
+
+.. _slocuspop:
+
+Single-locus, single-deme population objects
+-----------------------------------------------------------
+
+To simulation a single locus in a single deme, you use :class:`fwdpy11.fwdpy11_types.SlocusPop`.  Instances of this
+class are constructed with a population size:
+
+.. testcode::
+
+    import fwdpy11 as fp11
+    pop = fp11.SlocusPop(10000)
+    print(pop.N)
+    print(pop.generation)
+
+.. testoutput::
+
+    10000
+    0
+
+These objects can be pickled. See :ref:`pickling_pops`.
+
+This class contains the following read-only properties:
+
+.. csv-table:: :class:`fwdpy11.fwdpp_types.SlocusPop` properties
+    :header: "Property", "Definition"
+    :widths: auto
+    
+    "N", "Current population size."
+    "generation", "Current generation."
+    "mutations", "A :class:`fwdpy11.fwdpy11_types.MutationContainer`. See :ref:`popgenmuts`."
+    "mcounts", "See :ref:`mcounts`."
+    "gametes", "A :class:`fwdpy11.fwdpy11_types.GameteContainer`.  See :ref:`gametes`."
+    "diploids", "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.  See :ref:`diploids`."
+    "fixations", "A :class:`fwdpy11.fwdpy11_types.MutationContainer` storing fixations. See :ref:`popgenmuts`."
+    "fixation_times", "A :class:`fwdpy11.fwdpp_types.VectorUint32` storing fixation times."
