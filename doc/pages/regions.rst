@@ -82,7 +82,7 @@ Specific examples
 Mutations not affecting fitness ("neutral" mutations)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You specify regions where neutral mutations arise via the class :class:`fwdpy11.fwdpy11.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
+You specify regions where neutral mutations arise via the class :class:`fwdpy11.regions.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
 
 .. testcode::
 
@@ -141,19 +141,19 @@ Type types of mutations affecting fitness that we consider will have two paramet
 * :math:`s`, the selection coefficient
 * :math:`h`, the effect of the mutation in a heterozygote (a.k.a. the "dominance" of the mutation).
 
-In a simulation, we may place a distribution on either :math:`s` itself or on the scaled selection parameter :math:`\alpha = 2Ns`.  These two methods are represented by the class :class:`fwdpy11.fwdpy11.Sregion`.  These classes contain/extend the :class:`Region` class described above, and thus inherit their members.  :class:`Sregion` adds :math:`h`, which is the dominance of a mutation, and then classes extending :class:`Sregion` add details about the distribution of fitness effects.  These classes are:
+In a simulation, we may place a distribution on either :math:`s` itself or on the scaled selection parameter :math:`\alpha = 2Ns`.  These two methods are represented by the class :class:`fwdpy11.regions.Sregion`.  These classes contain/extend the :class:`fwdpy11.regions.Region` class described above, and thus inherit their members.  :class:`fwdpy11.regions.Sregion` adds :math:`h`, which is the dominance of a mutation, and then classes extending :class:`fwdpy11.regions.Sregion` add details about the distribution of fitness effects.  These classes are:
 
-* :class:`fwdpy11.fwdpy11.ConstantS`
-* :class:`fwdpy11.fwdpy11.UniformS`
-* :class:`fwdpy11.fwdpy11.GammaS`
-* :class:`fwdpy11.fwdpy11.GaussianS`
+* :class:`fwdpy11.regions.ConstantS`
+* :class:`fwdpy11.regions.UniformS`
+* :class:`fwdpy11.regions.GammaS`
+* :class:`fwdpy11.regions.GaussianS`
   
 Crossover rate variation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Just like neutral mutations, intervals with different crossover rates are specified by different :class:`Region` objects.  Let's set up the following concrete example:
 
 * A region where crossovers occur between positions [0,1)
-* Positions [0,0.45) and [0.55,1) have uniform recombintion rates
+* Positions [0,0.45) and [0.55,1) have uniform recombintion rates at the "background" rate.
 * Positions [0.45,0.55) are a recombination hotspot with 100x the background intensity (per "base pair").
 
 The above model can be represented as:

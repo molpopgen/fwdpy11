@@ -55,7 +55,7 @@ GPLv3 or later (See COPYING)
 Suppored Python version
 -----------------------
 
-fwdpy11 is written for Python 3.  Given time/energy, we *may* look into supporting Python 2.7.  However, it is impossible to support all fwdpy11 features in Python 2.7.  Specifically, it is not possible to provide full pickling support.
+fwdpy11 is written for Python 3.  We will not modify the package to be compatibly with Python 2.7.
 
 .. code-block:: bash
 
