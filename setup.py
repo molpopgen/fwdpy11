@@ -43,6 +43,7 @@ INCLUDES=[
 LIBRARY_DIRS=[
     os.path.join(sys.prefix, 'lib')
     ]
+
 ext_modules = [
     Extension(
         'fwdpy11.fwdpp_types',
@@ -92,7 +93,7 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
-        Extension(
+    Extension(
         'fwdpy11.wfevolve',
         ['fwdpy11/src/wfevolve.cc'],
         library_dirs=LIBRARY_DIRS,
@@ -124,7 +125,15 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
-    ]
+    Extension(
+        'fwdpy11.util',
+        ['fwdpy11/src/fwdpy11_util.cc','fwdpy11/src/fwdpy11_util_add_mutation.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
+        ]
     
 
 

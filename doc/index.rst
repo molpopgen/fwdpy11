@@ -126,6 +126,12 @@ fwdpy11.multilocus
     :members:
     :show-inheritance:
 
+fwdpy11.util
+------------------------------
+.. automodule:: fwdpy11.util
+    :members:
+    :show-inheritance:
+
 fwdpy11 C++ API
 ==================
 
