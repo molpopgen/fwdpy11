@@ -4,7 +4,7 @@ Data types related to simulated populations
 ======================================================================
 
 This section describes the types that get updated when populations are evolved.  These are the same types that you 
-access to analyze a simulated population. We will see specific examples of processing populations in :ref:`processpops`.
+access to analyze a simulated population. We will see specific examples of processing populations in :ref:`processingpops`.
 
 Opaque Containers
 -----------------------------------------------------------
