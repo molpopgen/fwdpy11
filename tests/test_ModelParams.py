@@ -93,14 +93,14 @@ class testModelParamsBadInputData(unittest.TestCase):
 
 class testSlocusParams(unittest.TestCase):
     def test_init_demog(self):
-        m = fp11mp.SlocusParams(demog = np.array([100]*10,dtype=np.uint32))
+        m = fp11mp.SlocusParams(demography = np.array([100]*10,dtype=np.uint32))
         m.validate()
     def test_init_demog_list(self):
         with self.assertRaises(ValueError):
-            m = fp11mp.SlocusParams(demog = [100]*10)
+            m = fp11mp.SlocusParams(demography = [100]*10)
     def test_init_bad_popsizes(self):
         with self.assertRaises(ValueError):
-            m = fp11mp.SlocusParams(demog  = np.array([100]*10 + [-1]))
+            m = fp11mp.SlocusParams(demography  = np.array([100]*10 + [-1]))
     def test_bad_rates(self):
         with self.assertRaises(ValueError):
             m = fp11mp.SlocusParams(mutrate_n = None)

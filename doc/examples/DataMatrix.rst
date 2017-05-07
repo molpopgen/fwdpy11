@@ -38,7 +38,7 @@ The following example is a tour of the API:
     #simulation.
     N,theta,rho=1000,100,100
 
-    p={'demog':np.array([N]*N,dtype=np.uint32),
+    p={'demography':np.array([N]*N,dtype=np.uint32),
        'nregions':[fp11.Region(0,1,1)],
        'recregions':[fp11.Region(0,1,1)],
        'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],

@@ -43,7 +43,7 @@ def mslike(pop,**kwargs):
     for key,value in kwargs.items():
         if key in defaults:
             defaults[key]=value
-    params={'demog':np.array([pop.N]*defaults['simlen'],dtype=np.uint32),
+    params={'demography':np.array([pop.N]*defaults['simlen'],dtype=np.uint32),
             'nregions':[fwdpy11.Region(defaults['beg'],defaults['end'],1.0)],
             'recregions':[fwdpy11.Region(defaults['beg'],defaults['end'],1.0)],
             'rates':((defaults['pneutral']*defaults['theta'])/(4.0*pop.N),

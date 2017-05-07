@@ -32,7 +32,7 @@ def evolve_snowdrift(args):
        'gvalue':snowdrift.SlocusSnowdrift(0.2,-0.2,1,-2),
         #evolve for 100 generations so that unit tests are
         #fast
-       'demog':np.array([N]*100,dtype=np.uint32),
+       'demography':np.array([N]*100,dtype=np.uint32),
        'rates':(0.0,0.0025,0.001),
        'prune_selected':False
        }

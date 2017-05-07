@@ -44,9 +44,9 @@ class ModelParams(object):
     """
     def __init__(self,**kwargs):
         self.__expected_mutrec_kwargs=['nregions','sregions','recregions']
-        self.__expected_demog_kwargs=['demog']
+        self.__expected_demog_kwargs=['demography']
         self.__mutrec_data = {'nregions':[],'sregions':[],'recregions':[]}
-        self.__demog_data = {'demog':None}
+        self.__demog_data = {'demography':None}
         self.__fixations = {'prune_selected':None}
         unused_kwargs = []
 
@@ -84,7 +84,7 @@ class ModelParams(object):
 
     @property
     def demography(self):
-        return self.__demog_data['demog']
+        return self.__demog_data['demography']
 
     @property 
     def prune_selected(self):
@@ -136,7 +136,7 @@ class ModelParams(object):
 
         .. note:: See derived class documentation for type details.
         """
-        self.__demog_data['demog']=demog
+        self.__demog_data['demography']=demog
 
     def validate(self):
         """
@@ -198,7 +198,7 @@ class SlocusParams(ModelParams):
         self.__expected_mutrec_kwargs=['mutrate_n','mutrate_s','recrate']
         self.__expected_gvalue_kwargs=['gvalue']
         self.__expected_selfing_kwargs=['pself']
-        self.__expected_demog_kwargs=['demog']
+        self.__expected_demog_kwargs=['demography']
         self.__mutrec_data = {};
         self.__gvalue_data = {'gvalue':None}
         self.__selfing_data = {'pself':0.0}
@@ -458,7 +458,7 @@ class MlocusParams(ModelParams):
     Model parameters for multi-locus simulation
     """
     def __init__(self,**kwargs):
-        self.__expected_demog_kwargs=['demog']
+        self.__expected_demog_kwargs=['demography']
         self.__mutrec_data = {'mutrates_n':[],
                 'mutrates_s':[],
                 'recrates':[]
@@ -558,7 +558,7 @@ class MlocusParams(ModelParams):
 
     @property
     def demography(self):
-        return self.__demog_data['demog']
+        return self.__demog_data['demography']
 
     @property
     def mutrates_n(self):
