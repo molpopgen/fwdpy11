@@ -150,6 +150,8 @@ def _evolve_mlocus(rng,pop,params,recorder=None):
     noise = None
     if params.noise is None:
         noise = GaussianNoise(rng,0.)
+    else:
+        noise = params.noise
     mm=[makeMutationRegions(i,j) for i,j in zip(params.nregions,params.sregions)]
     rm=[makeRecombinationRegions(i) for i in params.recregions]
     updater = None
