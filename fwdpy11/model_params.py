@@ -484,6 +484,9 @@ class MlocusParams(ModelParams):
                 self.__mutrec_data[key]=value
             if key in self.__gvalue_data:
                 used = True
+                from fwdpy11.multilocus import MultiLocusGeneticValue
+                if(type(value) is MultiLocusGeneticValue) is False:
+                    raise ValueError("gvalue type must be fwdpy11.multilocus.MultiLocusGeneticValue")
                 self.__gvalue_data[key] = value
             if key in self.__selfing_data:
                 used = True
