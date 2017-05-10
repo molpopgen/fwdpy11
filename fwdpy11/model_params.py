@@ -731,14 +731,15 @@ class MlocusParamsQ(MlocusParams):
             if used is False:
                 new_kwargs[key]=value
 
+        super(MlocusParamsQ,self).__init__(**new_kwargs)
+
         #If no genetic value model is defined,
         #we set a default.
         if 'gvalue' not in kwargs and len(self.sregions)>0:
             from fwdpy11.multilocus import MultiLocusGeneticValue
-            from fwdpy11.fitness import SlocusMultTrait
+            from fwdpy11.trait_values import SlocusMultTrait
             new_kwargs['gvalue'] = MultiLocusGeneticValue([SlocusMultTrait(2.0)]*len(self.sregions))
 
-        super(MlocusParamsQ,self).__init__(**new_kwargs)
 
     @property
     def trait2w(self):
