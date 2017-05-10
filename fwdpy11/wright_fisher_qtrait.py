@@ -94,6 +94,8 @@ class GaussianNoise:
         :param sd: :math:`\\sigma`
         :param mean: (0.0) :math:`\\mu`
         """
+        if(type(rng) is fwdpy11.GSLrng) is False:
+            raise ValueError("rng must be a fwdpy11.GSLrng")
         self.sd=sd
         self.mean=mean
         self.rng=rng
