@@ -484,7 +484,7 @@ class MlocusParams(ModelParams):
                 self.__mutrec_data[key]=value
             if key in self.__gvalue_data:
                 used = True
-                self.__gvalue_data[key] = value
+                self.gvalue = value
             if key in self.__selfing_data:
                 used = True
                 if (type(value) is float) is False:
@@ -530,9 +530,11 @@ class MlocusParams(ModelParams):
             if any(isinstance(i,SlocusFitness) for i in f) is False:
                 raise ValueError("all elements in list must be single-locus genetic value objects.")
             self.__gvalue_data['gvalue'] = MultiLocusGeneticValue(f)
-        elif isinstance(f,MultiLocusGeneticValue) is False:
+        elif isinstance(f,MultiLocusGeneticValue) is True:
+            self.__gvalue_data['gvalue']=f
+        else:
             raise ValueError("invalid genetic value type: " + str(type(f)))
-        self.__gvalue_data['gvalue']=f
+
 
     @property 
     def aggregator(self):
