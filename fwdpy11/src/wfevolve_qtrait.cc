@@ -184,6 +184,7 @@ evolve_qtrait_mloc_regions_cpp(
                                              noise);
 
     ++pop.generation;
+    multilocus_gvalue.update(pop);
     auto wbar = rules.w(pop, multilocus_gvalue);
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
@@ -206,6 +207,7 @@ evolve_qtrait_mloc_regions_cpp(
             fwdpy11::update_mutations_n(
                 pop.mutations, pop.fixations, pop.fixation_times,
                 pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+            multilocus_gvalue.update(pop);
             wbar = rules.w(pop, multilocus_gvalue);
             recorder(pop);
             if (updater_exists)
