@@ -86,11 +86,26 @@ If you prefer a pip install on OS X using GCC instead of clang:
 
 You may or may not need to prefix the above with
 
-.. code block:: bash
+.. code-block:: bash
 
     CC=gcc CXX=g++
 
 depending on wheter or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
+
+Enabling assertions in the C++ code
+------------------------------------------------------------------
+
+The C++ code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
+enable them when hacking the code.  To do so:
+
+.. code-block:: bash
+
+    python setup.py build_ext -i --debug
+
+.. note::
+    Never install the package compiled in debug mode!  First, things will run much more slowly.  
+    Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
+    exist as a brute-force method to help developers quickly identify bugs.
 
 Bioconda
 =================================

@@ -36,32 +36,32 @@ namespace fwdpy11
 
         virtual ~single_region_rules_base() {}
 
-        virtual void w(const dipvector_t &, gcont_t &, const mcont_t &) = 0;
+        virtual double w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
+            = 0;
 
         //! \brief Pick parent one
         virtual size_t
-        pick1(const gsl_rng *r) const
+        pick1(const GSLrng_t &rng, const singlepop_t &) const
         {
-            return gsl_ran_discrete(r, lookup.get());
+            return gsl_ran_discrete(rng.get(), lookup.get());
         }
 
         //! \brief Pick parent 2.  Parent 1's data are passed along for models
         //! where that is relevant
         virtual size_t
-        pick2(const gsl_rng *r, const size_t &p1, const double &f,
-              const diploid_t &, const gcont_t &, const mcont_t &) const
+        pick2(const GSLrng_t &rng, const singlepop_t &, const std::size_t p1,
+              const double f) const
         {
-            return (f == 1. || (f > 0. && gsl_rng_uniform(r) < f))
+            return (f == 1. || (f > 0. && gsl_rng_uniform(rng.get()) < f))
                        ? p1
-                       : gsl_ran_discrete(r, lookup.get());
+                       : gsl_ran_discrete(rng.get(), lookup.get());
         }
 
         //! \brief Update some property of the offspring based on properties of
         //! the parents
-        virtual void update(const gsl_rng *r, diploid_t &offspring,
-                            const diploid_t &, const diploid_t &,
-                            const gcont_t &gametes, const mcont_t &mutations,
-                            const single_locus_fitness_fxn &ff)
+        virtual void update(const GSLrng_t &rng, diploid_t &dip,
+                            const singlepop_t &pop, const std::size_t p1,
+                            const std::size_t p2)
             = 0;
     };
 }

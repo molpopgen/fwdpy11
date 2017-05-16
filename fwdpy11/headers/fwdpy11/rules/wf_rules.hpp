@@ -4,6 +4,7 @@
 #ifndef FWDPY11_WF_RULES_HPP__
 #define FWDPY11_WF_RULES_HPP__
 
+#include <cassert>
 #include "rules_base.hpp"
 #include <fwdpp/fitness_models.hpp>
 
@@ -31,40 +32,38 @@ namespace fwdpy11
         {
         }
 
-        virtual void
-        w(const dipvector_t &diploids, gcont_t &gametes,
-          const mcont_t &mutations)
+        virtual double
+        w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
         {
             index = 0; // reset this variable
-            auto N_curr = diploids.size();
+            auto N_curr = pop.diploids.size();
             if (fitnesses.size() < N_curr)
                 fitnesses.resize(N_curr);
             wbar = 0.;
             for (size_t i = 0; i < N_curr; ++i)
                 {
-                    gametes[diploids[i].first].n
-                        = gametes[diploids[i].second].n = 0;
-                    fitnesses[i] = diploids[i].w;
-                    wbar += diploids[i].w;
+                    pop.diploids[i].w = pop.diploids[i].g
+                        = ff(pop.diploids[i], pop.gametes, pop.mutations);
+                    assert(std::isfinite(pop.diploids[i].w));
+                    fitnesses[i] = pop.diploids[i].w;
+                    wbar += pop.diploids[i].w;
                 }
             wbar /= double(N_curr);
             lookup = KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr(
                 gsl_ran_discrete_preproc(N_curr, &fitnesses[0]));
+            return wbar;
         }
 
         //! \brief Update some property of the offspring based on properties of
         //! the parents
         virtual void
-        update(const gsl_rng *r, diploid_t &offspring, const diploid_t &,
-               const diploid_t &, const gcont_t &gametes,
-               const mcont_t &mutations,
-               const single_locus_fitness_fxn &ff) noexcept
+        update(const GSLrng_t &rng, diploid_t &offspring,
+               const singlepop_t &pop, const std::size_t p1,
+               const std::size_t p2) noexcept
         {
-            offspring.w = ff(offspring, gametes, mutations);
             offspring.e = 0.0;
             offspring.g = 0.0;
             offspring.label = index++;
-            assert(std::isfinite(offspring.w));
             return;
         }
     };

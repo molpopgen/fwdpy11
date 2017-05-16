@@ -15,6 +15,11 @@ if '--gcc' in sys.argv:
 else:
     USE_GCC = False
 
+if '--debug' in sys.argv:
+    DEBUG_MODE=True
+else:
+    DEBUG_MODE=False
+
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
 
@@ -185,8 +190,10 @@ class BuildExt(build_ext):
             opts.append(cpp_flag(self.compiler))
             if has_flag(self.compiler, '-fvisibility=hidden') and (sys.platform != 'darwin' or USE_GCC is True):
                 opts.append('-fvisibility=hidden')
-            if has_flag(self.compiler,'-g0'):
+            if has_flag(self.compiler,'-g0') and DEBUG_MODE is False:
                 opts.append('-g0')
+            if DEBUG_MODE is True:
+                opts.append('-UNDEBUG')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
         for ext in self.extensions:

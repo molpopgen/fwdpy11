@@ -10,8 +10,24 @@ import unittest
 import numpy as np
 import fwdpy11 as fp11
 import fwdpy11.temporal_samplers as fp11ts
+import fwdpy11.fitness
 import fwdpy11.wright_fisher
 import fwdpy11.ezparams
+
+class SamplePhenotypes(object):
+    """
+    Temporal sampler checks that one can hook
+    a stateful fitness model to a sampler 
+    and access its data and that the data 
+    are as expected.
+    """
+    def __init__(self,f):
+        self.f = f
+        self.a = fwdpy11.fitness.SlocusAdditive(2.0)
+    def __call__(self,pop):
+        for i in range(pop.N):
+            w = self.a(pop.diploids[i],pop)
+            assert(w == self.f.phenotypes[i])
 
 def evolve_snowdrift(args):
     """
@@ -37,7 +53,8 @@ def evolve_snowdrift(args):
        'prune_selected':False
        }
     params = fwdpy11.model_params.SlocusParams(**p)
-    fp11.wright_fisher.evolve(rng,pop,params)
+    sampler = SamplePhenotypes(params.gvalue)
+    fp11.wright_fisher.evolve(rng,pop,params,sampler)
     #return our pop
     return pop
 

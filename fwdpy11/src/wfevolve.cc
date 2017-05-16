@@ -24,75 +24,54 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/experimental/sample_diploid.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/rules/wf_rules.hpp>
 #include <fwdpy11/sim_functions.hpp>
-
+#include <fwdpy11/evolve/slocuspop.hpp>
 namespace py = pybind11;
 
-template <typename bound_mmodels, typename bound_recmodels>
+template <typename bound_mmodels, typename bound_recmodels,
+          typename mut_removal_policy, typename update_mut>
 void
-evolve_and_prune_all(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
-                     fwdpy11::wf_rules& rules,
-                     py::array_t<std::uint32_t> popsizes,
-                     const double mu_neutral, const double mu_selected,
-                     const bound_mmodels& mmodels,
-                     const bound_recmodels& recmap,
-                     fwdpy11::single_locus_fitness& fitness,
-                     fwdpy11::singlepop_temporal_sampler& recorder,
-                     const double selfing_rate)
+evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+              fwdpy11::wf_rules& rules, py::array_t<std::uint32_t> popsizes,
+              const double mu_neutral, const double mu_selected,
+              const bound_mmodels& mmodels, const bound_recmodels& recmap,
+              fwdpy11::single_locus_fitness& fitness,
+              fwdpy11::singlepop_temporal_sampler& recorder,
+              const double selfing_rate, const mut_removal_policy& mp,
+              const update_mut& um)
 {
     auto generations = popsizes.size();
     auto fitness_callback = fitness.callback();
+    fitness.update(pop);
+    auto wbar = rules.w(pop, fitness_callback);
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
-            fitness.update(pop);
             const auto N_next = popsizes.at(generation);
-            double wbar = KTfwd::experimental::sample_diploid(
-                rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
-                recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate, rules);
+            fwdpy11::evolve_generation(
+                rng, pop, N_next, mu_neutral + mu_selected, mmodels,
+                recmap,
+                std::bind(&fwdpy11::wf_rules::pick1, &rules,
+                          std::placeholders::_1, std::placeholders::_2),
+                std::bind(&fwdpy11::wf_rules::pick2, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, selfing_rate),
+                std::bind(&fwdpy11::wf_rules::update, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, std::placeholders::_4,
+                          std::placeholders::_5),
+                mp);
             pop.N = N_next;
-            KTfwd::update_mutations(pop.mutations, pop.fixations,
-                                    pop.fixation_times, pop.mut_lookup,
-                                    pop.mcounts, pop.generation, 2 * pop.N);
-            recorder(pop);
-        }
-}
-
-template <typename bound_mmodels, typename bound_recmodels>
-void
-evolve_and_prune_neutral_fixations(
-    const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
-    fwdpy11::wf_rules& rules, py::array_t<std::uint32_t> popsizes,
-    const double mu_neutral, const double mu_selected,
-    const bound_mmodels& mmodels, const bound_recmodels& recmap,
-    fwdpy11::single_locus_fitness& fitness,
-    fwdpy11::singlepop_temporal_sampler& recorder, const double selfing_rate)
-{
-    auto generations = popsizes.size();
-    auto fitness_callback = fitness.callback();
-    for (unsigned generation = 0; generation < generations;
-         ++generation, ++pop.generation)
-        {
+            um(pop.mutations, pop.fixations, pop.fixation_times,
+               pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
             fitness.update(pop);
-            const auto N_next = popsizes.at(generation);
-            double wbar = KTfwd::experimental::sample_diploid(
-                rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
-                recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate, rules, KTfwd::remove_neutral());
-            pop.N = N_next;
-            KTfwd::update_mutations_n(pop.mutations, pop.fixations,
-                                      pop.fixation_times, pop.mut_lookup,
-                                      pop.mcounts, pop.generation, 2 * pop.N);
-            recorder(pop);
+            auto wbar = rules.w(pop, fitness_callback);
+			recorder(pop);
         }
 }
 
@@ -140,15 +119,17 @@ evolve_singlepop_regions_cpp(
     auto rules = fwdpy11::wf_rules();
     if (remove_selected_fixations)
         {
-            evolve_and_prune_all(rng, pop, rules, popsizes, mu_neutral,
-                                 mu_selected, mmodels, recmap, fitness,
-                                 recorder, selfing_rate);
+            evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
+                          mmodels, recmap, fitness, recorder, selfing_rate,
+                          std::true_type(),
+                          fwdpy11::update_mutations_wrapper());
         }
     else
         {
-            evolve_and_prune_neutral_fixations(
-                rng, pop, rules, popsizes, mu_neutral, mu_selected, mmodels,
-                recmap, fitness, recorder, selfing_rate);
+            evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
+                          mmodels, recmap, fitness, recorder, selfing_rate,
+                          KTfwd::remove_neutral(),
+                          fwdpy11::update_mutations_n_wrapper());
         }
     --pop.generation;
 }

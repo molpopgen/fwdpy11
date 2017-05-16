@@ -32,32 +32,37 @@
 namespace fwdpy11
 {
     /*!
-      Label all fixed neutral variant and all extinct variants for recycling.
-      Copy fixations and fixation times
-      for neutral mutations into containers.
+          Label all fixed neutral variant and all extinct variants for
+       recycling.
+          Copy fixations and fixation times
+          for neutral mutations into containers.
 
-      Fixed, non-neutral variants get copied into fixations and fixation times,
-      so that fixation times
-      can get records.
+          Fixed, non-neutral variants get copied into fixations and fixation
+       times,
+          so that fixation times
+          can get records.
 
-      This function is identical in name and interface to the current fwdpp
-      function in fwdpp/util.hpp.
+          This function is identical in name and interface to the current fwdpp
+          function in fwdpp/util.hpp.
 
-      It differs from the current fwdpp version in that:
-      1. It uses std::lower_bound to make sure that fixations/fixation times
-      are sorted by position
-      2. It uses binary searches (again, lower_bound) to guard against
-      re-inserting the same
-      non-neutral fixation over and over.
+          It differs from the current fwdpp version in that:
+          1. It uses std::lower_bound to make sure that fixations/fixation
+       times
+          are sorted by position
+          2. It uses binary searches (again, lower_bound) to guard against
+          re-inserting the same
+          non-neutral fixation over and over.
 
-      The reason for these changes is that the use case is sims of phenotypes.
-      We keep fixations
-      in the pop so that they contribute to trait values.  Thus, w/o the
-      searches, we'd keep re-inserting
-      a fixation each generation.
+          The reason for these changes is that the use case is sims of
+       phenotypes.
+          We keep fixations
+          in the pop so that they contribute to trait values.  Thus, w/o the
+          searches, we'd keep re-inserting
+          a fixation each generation.
 
-      \note: lookup must be compatible with lookup->erase(lookup->find(double))
-    */
+          \note: lookup must be compatible with
+       lookup->erase(lookup->find(double))
+        */
     template <typename mcont_t, typename fixation_container_t,
               typename fixation_time_container_t,
               typename mutation_lookup_table>
@@ -117,6 +122,26 @@ namespace fwdpy11
                     lookup.erase(mutations[i].pos);
             }
     }
+
+    struct update_mutations_wrapper
+    {
+        template <typename... args>
+        inline void
+        operator()(args &&... Args) const
+        {
+            KTfwd::update_mutations(std::forward<args>(Args)...);
+        }
+    };
+
+    struct update_mutations_n_wrapper
+    {
+        template <typename... args>
+        inline void
+        operator()(args &&... Args) const
+        {
+            fwdpy11::update_mutations_n(std::forward<args>(Args)...);
+        }
+    };
 }
 
 #endif

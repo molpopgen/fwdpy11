@@ -27,14 +27,14 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/experimental/sample_diploid.hpp>
-#include <fwdpp/experimental/sample_diploid_mloc.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/rules/qtrait.hpp>
 #include <fwdpy11/sim_functions.hpp>
+#include <fwdpy11/evolve/slocuspop.hpp>
+#include <fwdpy11/evolve/mlocuspop.hpp>
 
 namespace py = pybind11;
 
@@ -88,22 +88,6 @@ evolve_singlepop_regions_qtrait_cpp(
             throw std::runtime_error("negative recombination rate: "
                                      + std::to_string(recrate));
         }
-    // if (environmental_changes.empty())
-    //    {
-    //        throw std::runtime_error("empty list of environmental changes.");
-    //    }
-    // for (auto&& ei : environmental_changes)
-    //    {
-    //        if (std::get<VS>(ei) < 0.)
-    //            {
-    //                throw std::runtime_error("VS must be >= 0.");
-    //            }
-    //        if (std::get<SIGE>(ei) < 0.)
-    //            {
-    //                throw std::runtime_error(
-    //                    "environmental noise must be >= 0.");
-    //            }
-    //    }
     const auto fitness_callback = fitness.callback();
     pop.mutations.reserve(std::ceil(
         std::log(2 * pop.N)
@@ -116,34 +100,31 @@ evolve_singlepop_regions_qtrait_cpp(
         mu_selected, &pop.generation);
     ++pop.generation;
     auto rules = fwdpy11::qtrait::qtrait_model_rules(trait_to_fitness, noise);
-    // generate FIFO queue of env changes
-    // std::queue<env> env_q(std::deque<env>(environmental_changes.begin(),
-    //                                      environmental_changes.end()));
+    fitness.update(pop);
+    auto wbar = rules.w(pop, fitness_callback);
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
-            // if (!env_q.empty())
-            //    {
-            //        auto next_env = env_q.front();
-            //        if (pop.generation >= std::get<GEN>(next_env))
-            //            {
-            //                rules.optimum = std::get<OPTIMUM>(next_env);
-            //                rules.VS = std::get<VS>(next_env);
-            //                rules.sigE = std::get<SIGE>(next_env);
-            //                env_q.pop();
-            //            }
-            //    }
-            fitness.update(pop);
             const auto N_next = popsizes.at(generation);
-            double wbar = KTfwd::experimental::sample_diploid(
-                rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, mu_neutral + mu_selected, mmodels,
-                recmap, fitness_callback, pop.neutral, pop.selected,
-                selfing_rate, rules, KTfwd::remove_neutral());
+            fwdpy11::evolve_generation(
+                rng, pop, N_next, mu_neutral + mu_selected, mmodels, recmap,
+                std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1, &rules,
+                          std::placeholders::_1, std::placeholders::_2),
+                std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick2, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, selfing_rate),
+                std::bind(&fwdpy11::qtrait::qtrait_model_rules::update, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, std::placeholders::_4,
+                          std::placeholders::_5),
+                KTfwd::remove_neutral());
+
             pop.N = N_next;
             fwdpy11::update_mutations_n(
                 pop.mutations, pop.fixations, pop.fixation_times,
                 pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+            fitness.update(pop);
+            wbar = rules.w(pop, fitness_callback);
             recorder(pop);
             if (updater_exists)
                 {
@@ -208,19 +189,29 @@ evolve_qtrait_mloc_regions_cpp(
                                              noise);
 
     ++pop.generation;
+    auto wbar = rules.w(pop, multilocus_gvalue);
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
             auto N_next = popsizes.at(i);
-            auto wbar = KTfwd::experimental::sample_diploid(
-                rng.get(), pop.gametes, pop.diploids, pop.mutations,
-                pop.mcounts, pop.N, N_next, total_mut_rates.data(),
-                bound_mmodels, bound_intralocus_rec, interlocus_rec,
-                multilocus_gvalue, pop.neutral, pop.selected, selfing_rate,
-                rules, KTfwd::remove_neutral());
+            fwdpy11::evolve_generation(
+                rng, pop, N_next, total_mut_rates, bound_mmodels,
+                bound_intralocus_rec, interlocus_rec,
+                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1, &rules,
+                          std::placeholders::_1, std::placeholders::_2),
+                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick2, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, selfing_rate),
+                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::update, &rules,
+                          std::placeholders::_1, std::placeholders::_2,
+                          std::placeholders::_3, std::placeholders::_4,
+                          std::placeholders::_5),
+                KTfwd::remove_neutral());
+
             pop.N = N_next;
             fwdpy11::update_mutations_n(
                 pop.mutations, pop.fixations, pop.fixation_times,
                 pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+            wbar = rules.w(pop, multilocus_gvalue);
             recorder(pop);
             if (updater_exists)
                 {

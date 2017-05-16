@@ -46,10 +46,10 @@ struct snowdrift_diploid
 {
     using result_type = double;
     inline result_type
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &,
-               const fwdpy11::mcont_t &, const std::vector<double> &phenotypes,
-               const double b1, const double b2, const double c1,
-               const double c2) const
+    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+               const fwdpy11::mcont_t &mutations,
+               const std::vector<double> &phenotypes, const double b1,
+               const double b2, const double c1, const double c2) const
     /* The first 3 arguments will be passed in from fwdpp.
      * The phenotypes are the stateful part, and will get
      * passed in by reference.  The remaining params
@@ -62,6 +62,20 @@ struct snowdrift_diploid
         // is std::size_t.
         auto i = dip.label;
         double zself = phenotypes[i];
+        //The code here would not be found 
+        //in production code.  Here, we are testing 
+        //that all the data have been updated correctly
+        //in fwdpy11's machinery for evolving populations.
+        //This test is only here as this is part of unit
+        //testing suite.
+        auto g = KTfwd::additive_diploid()(dip, gametes, mutations,2.0);
+        if (zself != g)
+            {
+                throw std::runtime_error("snowdrift not working: "
+                                         + std::to_string(zself) + ' '
+                                         + std::to_string(g));
+            }
+        //End unit-testing only code
         result_type fitness = 0;
         for (std::size_t j = 0; j < N; ++j)
             {
@@ -138,7 +152,7 @@ struct snowdrift : public fwdpy11::single_locus_fitness
     SINGLE_LOCUS_FITNESS_CLONE_SHARED(snowdrift);
     SINGLE_LOCUS_FITNESS_CLONE_UNIQUE(snowdrift);
     // This one gets pass the C++ name of the
-    // callback.  We use C++11's typid to
+    // callback.  We use C++11's typeid to
     // do that for us:
     SINGLE_LOCUS_FITNESS_CALLBACK_NAME(typeid(snowdrift_diploid).name());
 };
@@ -158,7 +172,8 @@ PYBIND11_PLUGIN(snowdrift)
     py::class_<snowdrift, std::shared_ptr<snowdrift>,
                fwdpy11::single_locus_fitness>(m, "SlocusSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
-             py::arg("b2"), py::arg("c1"), py::arg("c2"));
+             py::arg("b2"), py::arg("c1"), py::arg("c2"))
+        .def_readwrite("phenotypes",&snowdrift::phenotypes);
 
     return m.ptr();
 }

@@ -82,7 +82,7 @@ namespace fwdpy11
         //! Required for py::bind_vector
         {
             return this->first == dip.first && this->second == dip.second
-                   && this->w == dip.w && this->g == dip.e
+                   && this->w == dip.w && this->g == dip.g && this->e == dip.e
                    && this->label == dip.label;
         }
     };
