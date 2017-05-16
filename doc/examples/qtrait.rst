@@ -123,7 +123,7 @@ The following code block represents the following model:
             self.sd=sd
             if(sd<0):
                 raise ValueError("sd > 0 required")
-        def __call__(self,g,p1,p2):
+        def __call__(self,p1,p2):
             mp = (p1.e+p2.e)/2.
             return mp + gsl.gsl_ran_gaussian_ziggurat(rng,self.sd)
 

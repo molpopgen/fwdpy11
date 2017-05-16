@@ -33,6 +33,7 @@
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/rules/qtrait.hpp>
 #include <fwdpy11/sim_functions.hpp>
+#include <fwdpy11/evolve/qtrait_api.hpp>
 #include <fwdpy11/evolve/slocuspop.hpp>
 #include <fwdpy11/evolve/mlocuspop.hpp>
 
@@ -49,12 +50,9 @@ evolve_singlepop_regions_qtrait_cpp(
     const KTfwd::extensions::discrete_rec_model &rmodel,
     fwdpy11::single_locus_fitness &fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
-    std::function<double(double)> trait_to_fitness,
+    fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,
-    std::function<double(const double g, const fwdpy11::diploid_t &,
-                         const fwdpy11::diploid_t &)>
-        noise,
-    py::object noise_updater)
+    fwdpy11::single_locus_noise_function noise, py::object noise_updater)
 {
     bool updater_exists = false;
     py::function updater;
@@ -150,13 +148,10 @@ evolve_qtrait_mloc_regions_cpp(
     const std::vector<std::function<unsigned(void)>> &interlocus_rec,
     fwdpy11::multilocus_genetic_value &multilocus_gvalue,
     fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
-    std::function<double(const py::array_t<double>)> aggregator,
-    std::function<double(double)> trait_to_fitness,
+    fwdpy11::multilocus_aggregator_function aggregator,
+    fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,
-    std::function<double(const double g, const fwdpy11::multilocus_diploid_t &,
-                         const fwdpy11::multilocus_diploid_t &)>
-        noise,
-    py::object noise_updater)
+    fwdpy11::multilocus_noise_function noise, py::object noise_updater)
 {
     bool updater_exists = false;
     py::function updater;

@@ -2,6 +2,7 @@
 #define FWDPY11_RULES_QTRAIT_HPP__
 
 #include "fwdpy11/rules/rules_base.hpp"
+#include <fwdpy11/evolve/qtrait_api.hpp>
 #include <pybind11/numpy.h>
 #include <functional>
 #include <cmath>
@@ -14,15 +15,10 @@ namespace fwdpy11
         struct qtrait_model_rules : public fwdpy11::single_region_rules_base
         {
             using base_t = fwdpy11::single_region_rules_base;
-            std::function<double(double)> trait_to_fitness;
-            std::function<double(const double g, const fwdpy11::diploid_t &,
-                                 const fwdpy11::diploid_t &)>
-                noise_function;
-            qtrait_model_rules(std::function<double(double)> t2f,
-                               std::function<double(
-                                   const double g, const fwdpy11::diploid_t &,
-                                   const fwdpy11::diploid_t &)>
-                                   noise) noexcept(false)
+            trait_to_fitness_function trait_to_fitness;
+            single_locus_noise_function noise_function;
+            qtrait_model_rules(trait_to_fitness_function t2f,
+                               single_locus_noise_function noise) noexcept
                 : base_t(), trait_to_fitness(std::move(t2f)),
                   noise_function(std::move(noise))
             {
@@ -44,9 +40,9 @@ namespace fwdpy11
                         pop.diploids[i].g
                             = ff(pop.diploids[i], pop.gametes, pop.mutations);
                         pop.diploids[i].w = trait_to_fitness(
-                            pop.diploids[i].g + pop.diploids[i].e);
+                            pop.diploids[i].g, pop.diploids[i].e);
                         assert(std::isfinite(pop.diploids[i].w));
-                        fitnesses[i]=pop.diploids[i].w;
+                        fitnesses[i] = pop.diploids[i].w;
                         wbar += pop.diploids[i].w;
                     }
                 wbar /= double(N_curr);
@@ -62,8 +58,8 @@ namespace fwdpy11
                    const singlepop_t &pop, const std::size_t p1,
                    const std::size_t p2) noexcept
             {
-                offspring.e = noise_function(offspring.g, pop.diploids[p1],
-                                             pop.diploids[p2]);
+                offspring.e
+                    = noise_function(pop.diploids[p1], pop.diploids[p2]);
                 return;
             }
         };
@@ -71,23 +67,17 @@ namespace fwdpy11
         struct qtrait_mloc_rules
         {
             mutable double wbar;
-            using aggregator_signature
-                = std::function<double(const pybind11::array_t<double>)>;
-            using trait_to_fitness_signature = std::function<double(double)>;
-            using noise_function_signature = std::function<double(
-                const double g, const fwdpy11::multilocus_diploid_t &,
-                const fwdpy11::multilocus_diploid_t &)>;
 
-            aggregator_signature aggregator;
-            trait_to_fitness_signature trait_to_fitness;
-            noise_function_signature noise_function;
+            multilocus_aggregator_function aggregator;
+            trait_to_fitness_function trait_to_fitness;
+            multilocus_noise_function noise_function;
             mutable std::vector<double> fitnesses;
 
             mutable KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr lookup;
             //! \brief Constructor
-            qtrait_mloc_rules(aggregator_signature ag,
-                              trait_to_fitness_signature t2f,
-                              noise_function_signature nf)
+            qtrait_mloc_rules(multilocus_aggregator_function ag,
+                              trait_to_fitness_function t2f,
+                              multilocus_noise_function nf)
                 : wbar(0.), aggregator{ std::move(ag) },
                   trait_to_fitness{ std::move(t2f) },
                   noise_function{ std::move(nf) }, fitnesses{}
@@ -118,7 +108,7 @@ namespace fwdpy11
                         pop.diploids[i][0].g = aggregator(gvalue(
                             pop.diploids[i], pop.gametes, pop.mutations));
                         pop.diploids[i][0].w = trait_to_fitness(
-                            pop.diploids[i][0].g + pop.diploids[i][0].e);
+                            pop.diploids[i][0].g, pop.diploids[i][0].e);
                         fitnesses[i] = pop.diploids[i][0].w;
                         wbar += fitnesses[i];
                     }
@@ -169,8 +159,8 @@ namespace fwdpy11
                    const multilocus_t &pop, const std::size_t p1,
                    const std::size_t p2) const
             {
-                offspring[0].e = noise_function(
-                    offspring[0].g, pop.diploids[p1], pop.diploids[p2]);
+                offspring[0].e
+                    = noise_function(pop.diploids[p1], pop.diploids[p2]);
             }
         };
     } // namespace qtrait

@@ -33,8 +33,8 @@ class GSS:
             raise ValueError("VS > 0 required")
         self.VS=VS
         self.O=O
-    def __call__(self,trait_value):
-        devsq=pow(trait_value-self.O,2)
+    def __call__(self,g,e):
+        devsq=pow((g+e)-self.O,2)
         return math.exp(-devsq/(2.0*self.VS))
 
 class GSSmo:
@@ -66,8 +66,8 @@ class GSSmo:
                 raise ValueError("VS > 0 required")
         self.optima = optima.copy()
         self.env = self.optima.pop(0)
-    def __call__(self,P):
-        devsq=pow(P-self.env[1],2)
+    def __call__(self,g,e):
+        devsq=pow((g+e)-self.env[1],2)
         return math.exp(-devsq/(2.0*self.env[2]))
     def update(self,generation):
         """
@@ -100,7 +100,7 @@ class GaussianNoise:
         self.mean=mean
         self.rng=rng
 
-    def __call__(self,g,parent1,parent2):
+    def __call__(self,parent1,parent2):
         return self.mean+fwdpy11.gsl_random.gsl_ran_gaussian_ziggurat(self.rng,self.sd) 
 
 ##END LINE NUMBER EMBARGO##
