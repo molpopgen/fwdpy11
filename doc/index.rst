@@ -36,6 +36,7 @@ Data Types
     pages/types
     pages/rng
     pages/regions
+    pages/model_params
 
 Examples 
 ##########################################
