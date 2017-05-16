@@ -41,6 +41,8 @@ import warnings
 class ModelParams(object):
     """
     Base class for simulation parameters
+
+    .. versionadded:: 0.1.1
     """
     def __init__(self,**kwargs):
         self.__expected_mutrec_kwargs=['nregions','sregions','recregions']
@@ -172,6 +174,8 @@ def _validate_single_locus_rates(data):
 class SlocusParams(ModelParams):
     """
     Simulation parameters for single-locus, single-deme simulations.
+
+    .. versionadded:: 0.1.1
     """
     def __set_rates(self,rates):
         try:
@@ -378,6 +382,8 @@ class SlocusParams(ModelParams):
 class SlocusParamsQ(SlocusParams):
     """
     Single locus parameter object for quantitative trait simulations
+
+    .. versionadded:: 0.1.1
     """
     def __init__(self,**kwargs):
         self.__qtrait_params = {'trait_to_fitness': None,'noise': None}
@@ -456,6 +462,8 @@ def _validate_multilocus_rates(data):
 class MlocusParams(ModelParams):
     """
     Model parameters for multi-locus simulation
+
+    .. versionadded:: 0.1.1
     """
     def __init__(self,**kwargs):
         self.__expected_demog_kwargs=['demography']
@@ -719,6 +727,8 @@ class MlocusParams(ModelParams):
 class MlocusParamsQ(MlocusParams):
     """
     Multi-locus model parameters for quantitative trait simulations
+
+    .. versionadded:: 0.1.1
     """
     def __init__(self,**kwargs):
         new_kwargs={}
