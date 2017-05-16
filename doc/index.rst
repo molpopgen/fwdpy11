@@ -16,6 +16,7 @@ Miscellaneous notes
     :maxdepth: 1
 
     pages/changelog
+    pages/todo
     pages/pubs
 
 Concepts
