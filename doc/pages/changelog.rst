@@ -17,6 +17,8 @@ Bug fixes:
 
 API and back-end changes:
 ------------------------------------------
+* Custom fitness/genetic value calculations now allowed in pure Python, but they are quite slow (for now). See 
+  :ref:`customgvalue`. [`commit <https://github.com/molpopgen/fwdpy11/commit/5549286046ead1181cba684464b3bcb19918321e>`]_
 * Stateful trait value models enabled for qtrait sims. [`commit <https://github.com/molpopgen/fwdpy11/commit/161dfcef63f3abf28ad56df33b84a92d87d7750f>`_]
 * Refactor evolution functions so that stateful fitness models behave as expected.  Enable compiling in a debug mode.
   Fix bug in operator== for diploid type. [`commit <https://github.com/molpopgen/fwdpy11/commit/a726c0535a5176aab1df5211fee7bf0aeba5054b>`_]
