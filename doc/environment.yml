@@ -14,4 +14,4 @@ dependencies:
     - pip:
         - numpy
         - breathe
-
+        - ipython
