@@ -45,6 +45,7 @@ Examples
     :maxdepth: 1
 
     examples/parallel_simulation
+    examples/customgvalue
     examples/stateful_fitness
     examples/pickling
     examples/DataMatrix
@@ -132,6 +133,12 @@ fwdpy11.multilocus
 fwdpy11.util
 ------------------------------
 .. automodule:: fwdpy11.util
+    :members:
+    :show-inheritance:
+
+fwdpy11.python_genetic_values
+------------------------------------------------------------
+.. automodule:: fwdpy11.python_genetic_values
     :members:
     :show-inheritance:
 

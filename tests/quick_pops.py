@@ -33,4 +33,17 @@ def quick_neutral_slocus(N=1000,simlen = 100):
     evolve(rng,pop,params)
     return pop
 
+def quick_nonneutral_slocus(N=1000,simlen = 100):
+    from fwdpy11.ezparams import mslike
+    from fwdpy11.model_params import SlocusParams
+    from fwdpy11 import SlocusPop,GSLrng
+    from fwdpy11.wright_fisher import evolve
+    from fwdpy11.regions import ExpS
+    pop = SlocusPop(N)
+    params_dict = mslike(pop,simlen=simlen,dfe=ExpS(0,1,1,-0.1),pneutral=0.95)
+    params = SlocusParams(**params_dict)
+    rng=GSLrng(42)
+    evolve(rng,pop,params)
+    return pop
+
 

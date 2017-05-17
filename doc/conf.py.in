@@ -46,6 +46,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
+    'IPython.sphinxext.ipython_console_highlighting',
+    'IPython.sphinxext.ipython_directive',
     'breathe']
 
 breathe_projects={'fwdpy11':'xml','fwdpp':'fwdpp_xml'}

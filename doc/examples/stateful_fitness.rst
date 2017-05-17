@@ -1,3 +1,5 @@
+.. _stateful_fitness:
+
 Custom stateful fitness models
 ==========================================
 

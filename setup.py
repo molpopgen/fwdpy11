@@ -138,7 +138,15 @@ ext_modules = [
         libraries=['gsl','gslcblas'],
         language='c++'
     ),
-        ]
+    Extension(
+        'fwdpy11.python_genetic_values',
+        ['fwdpy11/src/python_genetic_values.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl','gslcblas'],
+        language='c++'
+    ),
+    ]
     
 
 
