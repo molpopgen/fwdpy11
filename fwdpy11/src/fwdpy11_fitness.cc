@@ -21,6 +21,7 @@
 #include <fwdpp/fitness_models.hpp>
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
+#include <fwdpy11/fitness/single_locus_stateless_fitness.hpp>
 
 namespace py = pybind11;
 
@@ -29,8 +30,9 @@ PYBIND11_PLUGIN(fitness)
     py::module m("fitness", "Fitness models.");
 
     py::class_<fwdpy11::single_locus_fitness,
-               std::shared_ptr<fwdpy11::single_locus_fitness>>(m, "SlocusFitness",
-                                                            R"delim(
+               std::shared_ptr<fwdpy11::single_locus_fitness>>(m,
+                                                               "SlocusFitness",
+                                                               R"delim(
             A fitness function or trait value function
             for a single-deme, single-region simulation (
             :class:`fwdpy11.fwdpy11_types.Slocus`).
@@ -52,6 +54,14 @@ PYBIND11_PLUGIN(fitness)
                 const fwdpy11::singlepop_t& pop) {
                  return aw->callback()(dip, pop.gametes, pop.mutations);
              });
+
+    pybind11::class_<fwdpy11::single_locus_stateless_fitness,
+                     std::shared_ptr<fwdpy11::single_locus_stateless_fitness>,
+                     fwdpy11::single_locus_fitness>(
+        m, "SlocusCustomStatelessGeneticValue", "Custom stateless genetic "
+                                                "value/fitness function. See "
+                                                ":ref:`customgvaluescpp`.")
+        .def(py::init<fwdpy11::single_locus_fitness_fxn>());
 
     py::class_<fwdpy11::single_locus_mult_wrapper,
                std::shared_ptr<fwdpy11::single_locus_mult_wrapper>,

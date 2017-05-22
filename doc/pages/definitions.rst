@@ -76,5 +76,15 @@ More details on these topics can be found in:
 * :ref:`model_params`
 * :ref:`qtraits1`
 
+Stateful vs stateless genetic value calculations
+-----------------------------------------------------------
+
+A genetic value calculation that only requires a diploid, a gamete container, and a mutation container as argumetnts is
+considered "stateless".  In contrast, if a calculation requires knowledge of the rest of the state of the population, or
+somehow depends on an externally-defined object, then it is "stateful".  For example, if fitness depends on the mean
+genetic distance to all other individuals in the population, then that is something that would need to be updated and
+recorded each generation, making genetic value calculations "stateful".  Another example is the snowdrift model, which
+is shown in :ref:`stateful_fitness`.
+
 .. _sfs_code: http://sfscode.sourceforge.net/SFS_CODE/index/index.html
 .. _SLiM2: https://messerlab.org/slim/

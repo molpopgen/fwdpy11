@@ -29,3 +29,17 @@ def get_fwdpp_includes():
     installed along with fwdpy11.
     """
     return get_includes()+'/fwdpp'
+
+def minimal_mako():
+    """
+    Returns a minimal mako header for compiling
+    plugins using cppimport
+
+    .. versionadded:: 0.1.1
+    """
+    rv=r"""<% 
+setup_pybind11(cfg) 
+import fwdpy11 as fp11 
+cfg['include_dirs'] = [fp11.get_includes(), fp11.get_fwdpp_includes()]
+%>"""
+    return rv
