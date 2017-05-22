@@ -9,6 +9,8 @@ def exponential_size_change(Nstart,Nstop,time):
     :param time: Time (in generations) to get from Nstart to Nstop
 
     :return: A list of integers representing population size over time.
+
+    .. versionadded:: 0.1.1
     """
     if time < 1:
         raise RuntimeError("time must be >= 1")
