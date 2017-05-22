@@ -15,6 +15,7 @@ Miscellaneous notes
 .. toctree::
     :maxdepth: 1
 
+    pages/conventions
     pages/changelog
     pages/todo
     pages/pubs
