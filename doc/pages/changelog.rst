@@ -19,7 +19,7 @@ API and back-end changes:
 ------------------------------------------
 * Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code. See
   :ref:`customgvaluecpp`. [`commit
-  https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667>`_]
+  <https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667>`_]
 * Custom fitness/genetic value calculations now allowed in pure Python, but they are quite slow (for now). See 
   :ref:`customgvalues`. [`commit <https://github.com/molpopgen/fwdpy11/commit/5549286046ead1181cba684464b3bcb19918321e>`_]
 * Stateful trait value models enabled for qtrait sims. [`commit <https://github.com/molpopgen/fwdpy11/commit/161dfcef63f3abf28ad56df33b84a92d87d7750f>`_]
