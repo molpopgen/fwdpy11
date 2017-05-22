@@ -60,7 +60,7 @@ PYBIND11_PLUGIN(fitness)
                      fwdpy11::single_locus_fitness>(
         m, "SlocusCustomStatelessGeneticValue", "Custom stateless genetic "
                                                 "value/fitness function. See "
-                                                ":ref:`customgvaluescpp`.")
+                                                ":ref:`customgvaluecpp`.")
         .def(py::init<fwdpy11::single_locus_fitness_fxn>());
 
     py::class_<fwdpy11::single_locus_mult_wrapper,
