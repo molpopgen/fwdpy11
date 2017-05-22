@@ -115,9 +115,11 @@ PYBIND11_PLUGIN(fwdpy11_types)
         "C++ representation of a list of "
         ":class:`fwdpy11.fwdpy11_types."
         "SingleLocusDiploid`.  Typically, access will be read-only.");
-    py::bind_vector<std::vector<fwdpy11::dipvector_t>>(m,
-                                                       "VecDiploidContainer");
-    py::bind_vector<std::vector<KTfwd::uint_t>>(m, "VectorUint32");
+    py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
+        m, "VecDiploidContainer",
+        "Vector of :class:`fwdpy11.fwdpy11_types.SingleLocusDiploid`.");
+    py::bind_vector<std::vector<KTfwd::uint_t>>(m, "VectorUint32",
+            "Vector of unsigned 32-bit integers.");
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
                                       "C++ representations of a list of "
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "

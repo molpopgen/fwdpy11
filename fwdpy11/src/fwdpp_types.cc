@@ -114,7 +114,7 @@ Base class for mutations.
                    + std::to_string(m.g) + "]";
         });
 
-    py::bind_vector<std::vector<double>>(m, "VectorDouble");
+    py::bind_vector<std::vector<double>>(m, "VectorDouble","Vector of 64-bit floats.");
 	py::bind_vector<std::vector<KTfwd::generalmut_vec>>(m,"VectorGeneralMutVec",
             "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
 
