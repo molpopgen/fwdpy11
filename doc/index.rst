@@ -142,6 +142,12 @@ fwdpy11.python_genetic_values
     :members:
     :show-inheritance:
 
+fwdpy11.demography
+------------------------------------------------------------
+.. automodule:: fwdpy11.demography
+    :members:
+    :show-inheritance:
+
 fwdpy11 C++ API
 ==================
 
