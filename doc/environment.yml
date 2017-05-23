@@ -16,3 +16,4 @@ dependencies:
         - breathe
         - matplotlib
         - ipython
+        - cppimport
