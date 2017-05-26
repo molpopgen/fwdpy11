@@ -65,35 +65,7 @@ struct aggregate_mult_trait
                  return agg(a);                                               \
              });
 
-// struct bound_callback
-//{
-//    std::function<unsigned(void)> callback;
-//    bound_callback(const fwdpy11::GSLrng_t & rng,
-//}
-//
-// struct bound_interlocus_rec
-//{
-//    using signature = std::function<unsigned(void)>
-//    std::vector<signature> callbacks;
-//    bound_interlocus_rec() : callbacks{}
-//    {
-//    }
-//    bound_interlocus_rec(
-//}
-
 using ff_vec = std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>;
-
-//template <typename irec>
-//std::vector<std::shared_ptr<KTfwd::interlocus_rec>>
-//make_interloc_recs(const std::vector<double>& rates) noexcept
-//{
-//    std::vector<std::shared_ptr<KTfwd::interlocus_rec>> rv;
-//    for (auto&& i : rates)
-//        {
-//            rv.emplace_back(std::make_shared<irec>(i));
-//        }
-//    return rv;
-//}
 
 PYBIND11_PLUGIN(multilocus)
 {
