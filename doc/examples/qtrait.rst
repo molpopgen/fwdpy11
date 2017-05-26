@@ -125,7 +125,7 @@ The following code block represents the following model:
                 raise ValueError("sd > 0 required")
         def __call__(self,p1,p2):
             mp = (p1.e+p2.e)/2.
-            return mp + gsl.gsl_ran_gaussian_ziggurat(rng,self.sd)
+            return mp + gsl.gsl_ran_gaussian_ziggurat(self.rng,self.sd)
 
     N = 1000
     pop = fp11.SlocusPop(N)
