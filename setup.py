@@ -6,6 +6,9 @@ import os,glob
 
 __version__ = '0.1.1a0'
 
+if sys.version_info < (3,3):
+    raise RuntimeError("Python >= 3.3 required")
+
 #clang/llvm is default for OS X builds.
 #can over-ride darwin-specific options
 #with setup.py --gcc install
