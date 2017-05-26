@@ -41,6 +41,7 @@ namespace fwdpy11
         decltype(pop.diploids) offspring(N_next);
 
         // Generate the offspring
+		std::size_t label = 0;
         for (auto& dip : offspring)
             {
                 auto p1 = pick1(rng, pop);
@@ -54,6 +55,7 @@ namespace fwdpy11
                     ((gsl_rng_uniform(rng.get()) < 0.5) ? 1 : 0), pop.gametes,
                     pop.mutations, pop.neutral, pop.selected, mu.data(),
                     mmodel, KTfwd::emplace_back());
+				dip[0].label=label++;
                 update(rng, dip, pop, p1, p2);
             }
 

@@ -35,7 +35,6 @@ namespace fwdpy11
         virtual double
         w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
         {
-            index = 0; // reset this variable
             auto N_curr = pop.diploids.size();
             if (fitnesses.size() < N_curr)
                 fitnesses.resize(N_curr);
@@ -63,7 +62,6 @@ namespace fwdpy11
         {
             offspring.e = 0.0;
             offspring.g = 0.0;
-            offspring.label = index++;
             return;
         }
     };

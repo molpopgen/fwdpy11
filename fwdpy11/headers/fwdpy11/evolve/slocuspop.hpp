@@ -89,8 +89,8 @@ namespace fwdpy11
 
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);
-                update(rng, dip, pop, p1, p2);
                 dip.label = label++;
+                update(rng, dip, pop, p1, p2);
             }
 
         KTfwd::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
