@@ -23,7 +23,7 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         for i in self.keys[1]:
             self.assertFalse(self.pop.mutations[i[0]].neutral)
             self.assertTrue(self.pop.mcounts[i[0]]>0)
-    def testNeutralHapMat(self):
+    def testHapMat(self):
         nm = self.hm.neutral()
         self.assertTrue(nm.dtype == np.int8)
         #convert from 1d to 2d (future versions will simply return a 
@@ -54,3 +54,31 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
             self.assertEqual(nmuts,rowSumsSel[j+1])
 
             j+=2
+    def testGenoMat(self):
+        nm = self.hm.neutral()
+        self.assertTrue(nm.dtype == np.int8)
+        #convert from 1d to 2d (future versions will simply return a 
+        #2d matrix, but we need a new pybind11 release for that):
+        nm=nm.reshape((self.gm.nrow,int(len(nm)/self.gm.nrow)))
+        self.assertEqual(nm.ndim,2)
+        sm = self.gm.selected()
+        sm=sm.reshape((self.gm.nrow,int(len(sm)/self.gm.nrow)))
+        self.assertTrue(sm.dtype == np.int8)
+        #Get the row sums
+        rowSums = nm.sum(axis=1)
+        rowSumsSel = sm.sum(axis=1)
+        self.assertEqual(len(rowSums),self.gm.nrow)
+        self.assertEqual(len(rowSumsSel),self.gm.nrow)
+        j=0
+        for i in range(100,150):
+            #Num neutral variants in diploid i, gamete 0
+            nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
+            nmuts += len(self.pop.gametes[self.pop.diploids[i].second].mutations)
+            self.assertEqual(nmuts,rowSums[j])
+
+            #Now, test numbers of selected
+            nmuts = len(self.pop.gametes[self.pop.diploids[i].first].smutations)
+            nmuts += len(self.pop.gametes[self.pop.diploids[i].second].smutations)
+            self.assertEqual(nmuts,rowSumsSel[j])
+
+            j+=1
