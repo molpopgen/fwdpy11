@@ -30,11 +30,33 @@
 #include <fwdpp/sugar/sampling.hpp>
 #include <fwdpp/internal/IOhelp.hpp>
 #include <fwdpy11/types.hpp>
-
+#include <gsl/gsl_matrix_char.h>
 namespace py = pybind11;
 
 static_assert(sizeof(char) == sizeof(std::int8_t),
               "sizeof(char) must equal sizeof(std::int8_t)");
+
+std::vector<std::pair<double, std::string>>
+matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
+                 const std::size_t nrow)
+// returns a data structure compatible with libsequence/pylibseq
+{
+    std::size_t ncol = data.size() / nrow;
+    auto v = gsl_matrix_char_const_view_array(data.data(), nrow, ncol);
+    std::vector<std::pair<double, std::string>> rv;
+    rv.reserve(ncol);
+    for (std::size_t i = 0; i < ncol; ++i)
+        {
+            auto c = gsl_matrix_char_const_column(&v.matrix, i);
+            std::string column_data;
+            for (std::size_t j = 0; j < c.vector.size; ++j)
+                {
+                    column_data.push_back(gsl_vector_char_get(&c.vector, j));
+                }
+            rv.emplace_back(pos[i], std::move(column_data));
+        }
+    return rv;
+}
 
 PYBIND11_PLUGIN(sampling)
 {
@@ -77,12 +99,14 @@ PYBIND11_PLUGIN(sampling)
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
+                           "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
                            "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
                            "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
-    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
+    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
+                        "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
                         "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
@@ -122,7 +146,7 @@ PYBIND11_PLUGIN(sampling)
              [](const KTfwd::data_matrix &m) {
                  return py::array_t<std::int8_t>(
                      m.selected.size(),
-                     reinterpret_cast<const std::int8_t *>(m.neutral.data()));
+                     reinterpret_cast<const std::int8_t *>(m.selected.data()));
              },
              "Return the selected variants as a 1d numpy array.")
         .def_readonly("neutral_positions",
@@ -276,5 +300,42 @@ PYBIND11_PLUGIN(sampling)
     HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
     HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
                      "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+
+    m.def("matrix_to_sample",
+          [](const KTfwd::data_matrix &m, const bool neutral)
+
+          {
+              return (neutral) ? matrix_to_sample(m.neutral,
+                                                  m.neutral_positions, m.nrow)
+                               : matrix_to_sample(
+                                     m.selected, m.selected_positions, m.nrow);
+          },
+          R"delim(
+          Convert a :class:`fwdpy11.sampling.DataMatrix` into a
+          list of tuples (float,string).
+
+          .. versionadded:: 0.1.1
+
+          :param m: A :class:`fwdpy11.sampling.DataMatrix`
+          :param neutral: (True) Return data for neutral or selected sites.
+
+          :rtype: list of tuples
+
+          :return: The data in list format.  Positions are in same order 
+              as the original matrix.  The genotypes are represented as strings
+              with elements 0 through nrow-1 being in the same order as the original matrix.
+
+          .. note::
+            If the input data represent a haplotype matrix, then the return value
+            may be further processed using `pylibseq <http://molpopgen.github.io/pylibseq/>`_.
+            Any filtering on position, frequency, etc., should have aleady been done when the 
+            original matrix was generated.  However, you may filter the return value as you see fit.
+            If the matrix was created from a multi-locus simulation, you may wish to use
+            :py:attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` to split the return value up
+            on a by-locus basis.
+
+          )delim",
+          py::arg("m"), py::arg("neutral") = true);
+
     return m.ptr();
 }
