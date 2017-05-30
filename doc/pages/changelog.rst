@@ -9,6 +9,9 @@ Version 0.1.1
 
 Bug fixes:
 ---------------------
+* Fixed bug in :func:`fwdpy11.sampling.DataMatrix.selected` that returned wrong data in best case scenario and could
+  have caused crash in worst case. [`commit
+  <https://github.com/molpopgen/fwdpy11/commit/e715fb74472555aa64e1d894563ec218ebba1a97>`_].
 * Fix bug recording fixation times.  If a population was evolved multiple times, fixation times from the later rounds of
   evolution were incorrect. 
   [`commit <https://github.com/molpopgen/fwdpy11/commit/9db14d8b3db1c744045e20bfc00ce37e7fb28dfb>`_]
