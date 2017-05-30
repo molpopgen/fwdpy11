@@ -25,6 +25,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+#include <array>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
@@ -42,6 +43,7 @@ matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
 // returns a data structure compatible with libsequence/pylibseq
 {
     std::size_t ncol = data.size() / nrow;
+    const std::array<char, 3> states{ '0', '1', '2' };
     auto v = gsl_matrix_char_const_view_array(data.data(), nrow, ncol);
     std::vector<std::pair<double, std::string>> rv;
     rv.reserve(ncol);
@@ -51,7 +53,12 @@ matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
             std::string column_data;
             for (std::size_t j = 0; j < c.vector.size; ++j)
                 {
-                    column_data.push_back(gsl_vector_char_get(&c.vector, j));
+                    column_data.push_back(states[static_cast<std::int8_t>(
+                        gsl_vector_char_get(&c.vector, j))]);
+                }
+            if (column_data.size() != nrow)
+                {
+                    throw std::runtime_error("column_data.size() != nrow");
                 }
             rv.emplace_back(pos[i], std::move(column_data));
         }
