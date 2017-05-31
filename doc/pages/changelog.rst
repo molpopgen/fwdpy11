@@ -20,6 +20,7 @@ Bug fixes:
 
 API and back-end changes:
 ------------------------------------------
+* Added :func:`fwdpy11.sampling.matrix_to_sample` and :func:`fwdpy11.sampling.separate_samples_by_loci`. [`commit <https://github.com/molpopgen/fwdpy11/commit/i639c8de999679140fad6a976ff6c1996b25444aa>`_]
 * Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code. See
   :ref:`customgvaluecpp`. [`commit
   <https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667>`_]
