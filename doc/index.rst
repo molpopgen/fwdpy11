@@ -60,6 +60,7 @@ Advanced topics and examples
     :maxdepth: 1
 
     advanced/heritability
+    advanced/manip
 
 Modules
 ##########################################
