@@ -37,16 +37,16 @@ namespace py = pybind11;
 static_assert(sizeof(char) == sizeof(std::int8_t),
               "sizeof(char) must equal sizeof(std::int8_t)");
 
-std::vector<std::pair<double, std::string>>
+py::list
 matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
                  const std::size_t nrow)
-// returns a data structure compatible with libsequence/pylibseq
+// returns a data structure compatible with libsequence/pylibseq iff
+// the data correspond to a haplotype matrix
 {
     std::size_t ncol = data.size() / nrow;
     const std::array<char, 3> states{ '0', '1', '2' };
     auto v = gsl_matrix_char_const_view_array(data.data(), nrow, ncol);
-    std::vector<std::pair<double, std::string>> rv;
-    rv.reserve(ncol);
+    py::list rv;
     for (std::size_t i = 0; i < ncol; ++i)
         {
             auto c = gsl_matrix_char_const_column(&v.matrix, i);
@@ -60,7 +60,51 @@ matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
                 {
                     throw std::runtime_error("column_data.size() != nrow");
                 }
-            rv.emplace_back(pos[i], std::move(column_data));
+            rv.append(py::make_tuple(pos[i], std::move(column_data)));
+        }
+    return rv;
+}
+
+py::dict
+separate_samples_by_loci(const fwdpy11::multilocus_t &pop, py::list sample)
+// For a multi-locus pop, it is convenient to split samples by
+// loci.  This function does that using pop.locus_boundaries.
+// If pop.locus_boundaries is not properly set, an exception
+// is likely going to be triggered
+{
+    py::dict rv;
+    if (sample.size() == 0)
+        {
+            return rv;
+        }
+    for (std::size_t i = 0; i < pop.locus_boundaries.size(); ++i)
+        {
+            rv[py::int_(i)] = py::list();
+        }
+    for (auto &&item : sample)
+        {
+            py::tuple site = py::reinterpret_borrow<py::tuple>(item);
+            if (site.size() != 2)
+                {
+                    throw std::runtime_error("invalid tuple length: "
+                                             + std::to_string(site.size())
+                                             + " seen when 2 was expected");
+                }
+            auto itr = std::find_if(
+                pop.locus_boundaries.begin(), pop.locus_boundaries.end(),
+                [&site](const std::pair<double, double> &b) {
+                    return site[0].cast<double>() >= b.first
+                           && site[0].cast<double>() < b.second;
+                });
+            if (itr == pop.locus_boundaries.end())
+                {
+                    throw std::runtime_error(
+                        "could not find locus for mutation at position"
+                        + std::to_string(site[0].cast<double>()));
+                }
+            auto d = std::distance(pop.locus_boundaries.begin(), itr);
+            py::list li = py::reinterpret_borrow<py::list>(rv[py::int_(d)]);
+            li.append(site);
         }
     return rv;
 }
@@ -338,11 +382,29 @@ PYBIND11_PLUGIN(sampling)
             Any filtering on position, frequency, etc., should have aleady been done when the 
             original matrix was generated.  However, you may filter the return value as you see fit.
             If the matrix was created from a multi-locus simulation, you may wish to use
-            :py:attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` to split the return value up
-            on a by-locus basis.
+            :func:`fwdpy11.sampling.separate_samples_by_loci` to split the return value up
+			into separate lists for each locus.
 
           )delim",
           py::arg("m"), py::arg("neutral") = true);
+
+    m.def("separate_samples_by_loci", &separate_samples_by_loci,
+          R"delim(
+            Convert the output from :func:`fwdpy11.sampling.matrix_to_sample` into 
+            separate records per locus.
+
+			.. versionadded:: 0.1.1
+
+            :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`
+            :param sample: The return value of :func:`fwdpy11.sampling.matrix_to_sample`
+
+            :rtype: dict of lists of tuples
+
+            :return: The data returned follow the same structure 
+				as :func:`fwdpy11.sampling.matrix_to_sample`,
+                but there is one entry per locus.  
+				The key for each entry in the dict is the locus index.
+            )delim");
 
     return m.ptr();
 }

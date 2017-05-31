@@ -2,7 +2,7 @@ import unittest
 import fwdpy11 as fp11
 import fwdpy11.sampling
 import numpy as np
-from quick_pops import quick_nonneutral_slocus
+from quick_pops import quick_nonneutral_slocus,quick_mlocus_qtrait
 
 class test_DataMatrixFromSlocusPop(unittest.TestCase):
     """
@@ -92,3 +92,40 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
             num_ones = ni[1].count('1')
             self.assertEqual(num_ones,colSums[i])
             i+=1
+
+class test_DataMatrixFromMlocusPop(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.pop=quick_mlocus_qtrait()
+        self.indlist = [i for i in range(100,150)]
+        self.keys = fwdpy11.sampling.mutation_keys(self.pop,self.indlist)
+        self.hm = fwdpy11.sampling.haplotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
+        self.gm = fwdpy11.sampling.genotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
+        self.hm_neutral = self.hm.neutral()
+        self.hm_neutral = self.hm_neutral.reshape((self.hm.nrow,int(len(self.hm_neutral)/self.hm.nrow)))
+        self.hm_selected = self.hm.selected()
+        self.hm_selected = self.hm_selected.reshape((self.hm.nrow,int(len(self.hm_selected)/self.hm.nrow)))
+        self.gm_neutral = self.gm.neutral()
+        self.gm_neutral = self.gm_neutral.reshape((self.gm.nrow,int(len(self.gm_neutral)/self.gm.nrow)))
+        self.gm_selected = self.gm.selected()
+        self.gm_selected = self.gm_selected.reshape((self.gm.nrow,int(len(self.gm_selected)/self.gm.nrow)))
+    def testConvertHapMatrixToSample(self):
+        nsample = fwdpy11.sampling.matrix_to_sample(self.hm,True)
+        nsample_split = fwdpy11.sampling.separate_samples_by_loci(self.pop,nsample)
+        self.assertEqual(len(nsample_split),len(self.pop.locus_boundaries))
+        for key,value in nsample_split.items():
+            self.assertTrue(key<self.pop.nloci)
+            for site in value:
+                self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
+                self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
+                self.assertTrue(len(site[1]) == self.hm.nrow)
+    def testConvertGenoMatrixToSample(self):
+        nsample = fwdpy11.sampling.matrix_to_sample(self.gm,True)
+        nsample_split = fwdpy11.sampling.separate_samples_by_loci(self.pop,nsample)
+        self.assertEqual(len(nsample_split),len(self.pop.locus_boundaries))
+        for key,value in nsample_split.items():
+            self.assertTrue(key<self.pop.nloci)
+            for site in value:
+                self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
+                self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
+                self.assertTrue(len(site[1]) == self.gm.nrow)
