@@ -267,7 +267,7 @@ setup(
     data_files=[('fwdpy11',['COPYING', 'README.rst'])],
     long_description=long_desc,
     ext_modules=ext_modules,
-    install_requires=['pybind11>=1.7'],
+    install_requires=['pybind11>=2.1.0'],
     cmdclass={'build_ext': BuildExt},
     packages=PKGS,
     package_data=generated_package_data,
