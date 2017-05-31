@@ -1,4 +1,4 @@
-pybind11>=2.1.0
+pybind11>=@PYBIND11@
 cppimport
 numpy
 breathe

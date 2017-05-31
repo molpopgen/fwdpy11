@@ -398,55 +398,20 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([setup.py doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py])
+AC_CONFIG_FILES([setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py])
 
 dnl stuff added by KRT
 
-dnl AC_CONFIG_HEADERS([config.h])
+MINPYBIND11="2.1.0"
+AC_SUBST(PYBIND11,$MINPYBIND11)
 
-dnl MINFWDPPVERSION="0.5.4"
-dnl FWDPPVERSION=`fwdppConfig --version`
-dnl AC_SUBST(MINFWDPP,$MINFWDPPVERSION)
-dnl GSLVERSION=`gsl-config --version`
-
-dnl Check that fwdpp version is sufficient
-dnl if test "$FWDPPVERSION" \< $MINFWDPPVERSION
-
-dnl then
-dnl 	AC_MSG_ERROR([fwdpp > $MINFWDPPVERSION required, please install from http://github.com/molpopgen/fwdpp])
-dnl else
-dnl 	echo "fwdpp version $FWDPPVERSION detected"
-dnl fi
-
-dnl LIBSEQVERSION=`libsequenceConfig --version`
-dnl MINLIBSEQ=1.8.0
-dnl if test "$LIBSEQVERSION" \< $MINLIBSEQ
-dnl then
-dnl     AC_MSG_ERROR([libsequence > $MINLIBSEQ required.  Please install recent version from
-dnl                   http://github.com/molpopgen/libsequence])
-dnl else
-dnl     echo "libsequence version $LIBSEQVERSION detected"
-dnl fi
-dnl echo "GSL version $GSLVERSION detected"
-
-dnl AC_DEFINE_UNQUOTED([FWDPP_VERSION],["$FWDPPVERSION"],[The version of fwdpp used to compile this software])
 AC_DEFINE_UNQUOTED([GSL_VERSION],["$GSLVERSION"],[The version of GSL used to compile this software])
-
-dnl AC_ARG_ENABLE([cython],AS_HELP_STRING([--enable-cython],[Use Cython for compilation]),[AC_SUBST(EXTENSION,".pyx") AC_SUBST(CYTHONIMPORT,"from Cython.Build import cythonize") AC_SUBST(CYTHONIZE,"cythonize(extensions,gdb_debug=False)")],[AC_SUBST(EXTENSION,".cpp") AC_SUBST(CYTHONIMPORT,"") AC_SUBST(CYTHONIZE,"extensions")])
-dnl do we want tcmalloc?
-dnl AC_ARG_ENABLE([tcmalloc],AS_HELP_STRING([--enable-tcmalloc],[Enable linking to Google's tcmalloc library, if present.]))
-dnl Intel's TBB
-dnl AC_ARG_ENABLE([tbbprx],AS_HELP_STRING([--enable-tbbprx],[Enable linking to Intels's tbb proxy library, if present.]))
 
 AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 AC_LANG(C++)
 
 dnl check for things that are required to compile all examples and/or use library at all
 
-dnl AC_CHECK_HEADER(fwdpp/diploid.hh,,[AC_MSG_ERROR(fwdpp/diploid.hh not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning fwdppConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless fwdpp has been installed and then partially deleted from your system.)])
-#AC_CHECK_HEADER(Sequence/SimData.hpp,,[AC_MSG_ERROR(Sequence/SimData.hpp not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning libsequenceConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless libsequence has been installed and then partially deleted from your system.)])
-
-dnl AC_CHECK_HEADER(fwdpp/sugar/sampling.hpp,,[AC_MSG_ERROR([fwdpp/sugar/sampling.hpp not found.  This probably means that you need a dev branch of fwdpp.  You probably need to email KRT directly and ask which one.  Sorry!])])
 AC_CHECK_HEADER(gsl/gsl_rng.h,HAVE_GSL=1,[AC_MSG_ERROR([gsl/gsl_rng.h not found.  Please install the GNU Scientific Library])])
 AC_CHECK_HEADER(gsl/gsl_randist.h,HAVE_GSL=1,[AC_MSG_ERROR([gsl/gsl_rng.h not found.  Please install the GNU Scientific Library])])
 AC_CHECK_HEADER(zlib.h,,[AC_MSG_ERROR([zlib.h not found.  zlib >= 1.2.5 is requred])])
@@ -460,16 +425,6 @@ dnl check for C++ libraries that are required
 AC_LANG_SAVE
           AC_LANG_CPLUSPLUS
           AC_REQUIRE_CPP
-dnl check for tcmalloc if desired
-dnl if test "x$enable_tcmalloc" = xyes
-dnl then
-dnl AC_CHECK_LIB([tcmalloc],[tc_cfree],[AC_SUBST(TCMALLOC,"tcmalloc")],[AC_SUBST(TCMALLOC,"None")])
-dnl fi
-dnl Intel's tbb
-dnl if test "x$enable_tbbprx" = xyes
-dnl then
-dnl AC_CHECK_LIB([tbbmalloc_proxy],[main],[AC_SUBST(TBBPRX,"tbbmalloc_proxy")],[AC_SUBST(TBBPRX,"None")])
-dnl fi
 AC_LANG_RESTORE
 
 dnl Generate config.status

@@ -634,6 +634,7 @@ CPPFLAGS
 LDFLAGS
 CXXFLAGS
 CXX
+PYBIND11
 pkgpyexecdir
 pyexecdir
 PYTHON_EXEC_PREFIX
@@ -3201,20 +3202,18 @@ pkgpyexecdir=\${pyexecdir}/$PACKAGE_NAME
 
 
 
-ac_config_files="$ac_config_files setup.py doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py"
+ac_config_files="$ac_config_files setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py"
 
 
 
-
-
-
+MINPYBIND11="2.1.0"
+PYBIND11=$MINPYBIND11
 
 
 
 cat >>confdefs.h <<_ACEOF
 #define GSL_VERSION "$GSLVERSION"
 _ACEOF
-
 
 
 ac_ext=cpp
@@ -3873,8 +3872,6 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-
-#AC_CHECK_HEADER(Sequence/SimData.hpp,,[AC_MSG_ERROR(Sequence/SimData.hpp not found.  Please install the library.  Something is likely amiss with your system.  We got this far, meaning libsequenceConfig was found, but we failed here, meaning the headers were not found.  That should not be possible unless libsequence has been installed and then partially deleted from your system.)])
 
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
@@ -5159,6 +5156,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "setup.py") CONFIG_FILES="$CONFIG_FILES setup.py" ;;
+    "requirements.txt") CONFIG_FILES="$CONFIG_FILES requirements.txt" ;;
     "doc/fwdpy11.doxygen") CONFIG_FILES="$CONFIG_FILES doc/fwdpy11.doxygen" ;;
     "fwdpy11/__init__.py") CONFIG_FILES="$CONFIG_FILES fwdpy11/__init__.py" ;;
     "doc/conf.py") CONFIG_FILES="$CONFIG_FILES doc/conf.py" ;;

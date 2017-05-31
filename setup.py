@@ -1,6 +1,6 @@
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
-import sys
+import sys,pybind11
 import setuptools
 import os,glob
 
@@ -8,6 +8,10 @@ __version__ = '0.1.1a0'
 
 if sys.version_info < (3,3):
     raise RuntimeError("Python >= 3.3 required")
+
+if pybind11.__version__ < '2.1.0':
+    raise RuntimeError("fwdpy11 >= " + '2.1.0' + " required")
+
 
 #clang/llvm is default for OS X builds.
 #can over-ride darwin-specific options
