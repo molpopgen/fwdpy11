@@ -3,6 +3,14 @@
 Simulating quantitative traits, I.
 ==========================================
 
+Background reading:
+
+* :ref:`definitions`
+
+Further reading:
+
+* :ref:`heritability`
+
 fwdpy11 allows the simulation of quantitative traits in a fairly general way.  These simulations differ from standard
 population genetic simulations in that a "trait value" is calculated and that a mapping from trait value to fitness is
 required. Optionally, one may want to add "noise" to trait values, perhaps representing non-genetic contributions to

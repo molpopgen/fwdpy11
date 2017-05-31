@@ -53,6 +53,14 @@ Examples
     examples/qtrait
     examples/processingpops
 
+Advanced topics and examples
+##########################################
+
+.. toctree::
+    :maxdepth: 1
+
+    advanced/heritability
+
 Modules
 ##########################################
 
