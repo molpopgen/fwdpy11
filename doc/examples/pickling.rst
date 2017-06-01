@@ -22,8 +22,14 @@ In order to picked a file, you must also use the latest pickling protocol.
 .. warning::
     If you are simulating very large populations and/or a very large number of mutations, it is possible to 
     run out of memory during pickling.  When this occurs, exceptions will be thrown from fwdpp and translated
-    to a Python RuntimeError.  Future versions of fwdpy11 may allow direct serialization to a file, which 
-    avoids this problem at the cost of a less convenient API.
+    to a Python RuntimeError.  The cases where we have experienced such failures is when
+    simulating on the order of 10 megabases of variation under the Tennessen_ model of European demography. The 
+    last few time points of that model involve very large population sizes.
+    
+    Future versions of fwdpy11 may allow direct serialization to a file, which 
+    avoids this problem at the cost of a less convenient API. A workaround is to pickle a sample from the 
+    population, rather than the whole thing.  In this case, you may also wish to pickle the fixations, etc.,
+    or whatever additional data you may need.  
 
 .. testcode::
 
@@ -56,3 +62,4 @@ In order to picked a file, you must also use the latest pickling protocol.
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
 .. _lzma: https://docs.python.org/3/library/lzma.html
+.. _Tennessen: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3708544/
