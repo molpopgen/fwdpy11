@@ -13,7 +13,7 @@ natively pickling the Python representation of the underlying C++ types.
 Full support for pickling is only possible with Python 3.  Under Python 2, you may pickle/unpickle to/from memory just
 fine, but you cannot unpickle from a file.
 
-In order to picked a file, you must also use the latest pickling protocol.
+In order to pickle a file, you must also use the latest pickling protocol.
 
 .. note::
     If you are pickling populations to a file, you should be aware that you can (and probably should) compress the output.

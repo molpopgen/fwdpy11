@@ -8,8 +8,15 @@ We need to start out by defining some terms that will be used throughout the doc
 Region vs locus
 -----------------------------------------------------------
 
-fwdpy11 allows mutation and recombination parameters to vary along a genomic segment.  Let's call the genomic segment a
-**locus**.  Within a locus, positions with different mutation and recombination parameters are called **regions**.
+fwdpy11 allows mutation and recombination parameters to vary along a genomic segment.  We apply the following definitions:
+
+.. glossary:: 
+
+    locus
+        A genomic segment
+
+    region
+        A subset of a locus.  Recombination and mutation parameters may vary across regions. Regions may overlap.
 
 Regions have the following properties:
 
@@ -45,11 +52,18 @@ be precise about the terms we're using.
 
 We apply the following definitions here:
 
-* A *genetic value*, or :math:`G`, is the result of applying a function to the gamete data at a locus. 
-* A *trait value*, or *phenotype*, :math:`P`, reflects any adjustment made to :math:`G`.  For example, the addition of
-  random noise such that :math:`P=G+E`, where :math:`E` is the noise. 
-* A *fitness*, or :math:`w` results from applying a function mapping :math:`P` to fitness. :math:`w` is a non-negative
-  float.
+.. glossary::
+
+    genetic value
+        A *genetic value*, or :math:`G`, is the result of applying a function to the gamete data at a locus. 
+
+    trait value
+        A *trait value*, or *phenotype*, :math:`P`, reflects any adjustment made to :math:`G`.  For example, the addition of
+        random noise such that :math:`P=G+E`, where :math:`E` is the noise. 
+
+    fitness
+        A *fitness*, or :math:`w` results from applying a function mapping :math:`P` to fitness. :math:`w` is a non-negative
+        float.
 
 Consider the following two cases:
 
