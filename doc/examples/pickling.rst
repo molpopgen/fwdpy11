@@ -15,6 +15,16 @@ fine, but you cannot unpickle from a file.
 
 In order to picked a file, you must also use the latest pickling protocol.
 
+.. note::
+    If you are pickling populations to a file, you should be aware that you can (and probably should) compress the output.
+    We have found that lzma_ compression is ideal when pickling fwdpy11 population objects.
+
+.. warning::
+    If you are simulating very large populations and/or a very large number of mutations, it is possible to 
+    run out of memory during pickling.  When this occurs, exceptions will be thrown from fwdpp and translated
+    to a Python RuntimeError.  Future versions of fwdpy11 may allow direct serialization to a file, which 
+    avoids this problem at the cost of a less convenient API.
+
 .. testcode::
 
     import fwdpy11 as fp11
@@ -45,3 +55,4 @@ In order to picked a file, you must also use the latest pickling protocol.
 
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
+.. _lzma: https://docs.python.org/3/library/lzma.html
