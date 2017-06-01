@@ -79,7 +79,8 @@ fitness is calculated as
 
     w = e^{-\frac{(O-P)^2}{2VS}},
 
-where :math:`VS` reflects the intensity of selection against extreme values of :math:`P`.
+where :math:`VS` reflects the intensity of selection against extreme values of :math:`P`. (See :ref:`heritability` for more 
+on :math:`VS`)
 
 We can see from these two examples that some modeling scenarios allow us to go straight from a diploid's data to fitness
 while others require multiple functions to go from genotype to genetic value to trait value and then, finally, to
