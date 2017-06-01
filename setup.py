@@ -4,7 +4,7 @@ import sys,pybind11
 import setuptools
 import os,glob
 
-__version__ = '0.1.1'
+__version__ = '0.1.2a0'
 
 if sys.version_info < (3,3):
     raise RuntimeError("Python >= 3.3 required")
