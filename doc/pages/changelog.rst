@@ -4,6 +4,16 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.2
+++++++++++++++++++++++++++
+
+Bug fixes:
+---------------------
+
+API and back-end changes:
+------------------------------------------
+* :func:`fwdpy11.sampling.separate_samples_by_loci` changed to take a list of positions as first argument, and not a population object.
+
 Version 0.1.1
 ++++++++++++++++++++++++++
 

@@ -66,7 +66,7 @@ matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
 }
 
 py::dict
-separate_samples_by_loci(const fwdpy11::multilocus_t &pop, py::list sample)
+separate_samples_by_loci(const std::vector<std::pair<double, double>> & boundaries, py::list sample)
 // For a multi-locus pop, it is convenient to split samples by
 // loci.  This function does that using pop.locus_boundaries.
 // If pop.locus_boundaries is not properly set, an exception
@@ -77,7 +77,7 @@ separate_samples_by_loci(const fwdpy11::multilocus_t &pop, py::list sample)
         {
             return rv;
         }
-    for (std::size_t i = 0; i < pop.locus_boundaries.size(); ++i)
+    for (std::size_t i = 0; i < boundaries.size(); ++i)
         {
             rv[py::int_(i)] = py::list();
         }
@@ -91,18 +91,18 @@ separate_samples_by_loci(const fwdpy11::multilocus_t &pop, py::list sample)
                                              + " seen when 2 was expected");
                 }
             auto itr = std::find_if(
-                pop.locus_boundaries.begin(), pop.locus_boundaries.end(),
+                boundaries.begin(), boundaries.end(),
                 [&site](const std::pair<double, double> &b) {
                     return site[0].cast<double>() >= b.first
                            && site[0].cast<double>() < b.second;
                 });
-            if (itr == pop.locus_boundaries.end())
+            if (itr == boundaries.end())
                 {
                     throw std::runtime_error(
                         "could not find locus for mutation at position"
                         + std::to_string(site[0].cast<double>()));
                 }
-            auto d = std::distance(pop.locus_boundaries.begin(), itr);
+            auto d = std::distance(boundaries.begin(), itr);
             py::list li = py::reinterpret_borrow<py::list>(rv[py::int_(d)]);
             li.append(site);
         }
@@ -395,7 +395,10 @@ PYBIND11_PLUGIN(sampling)
 
 			.. versionadded:: 0.1.1
 
-            :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`
+			.. versionchanged:: 0.1.2
+				Take a list of positions as arguments and not a population object.
+		
+            :param boundaries: A list of [start,stop) tuples representing positions.
             :param sample: The return value of :func:`fwdpy11.sampling.matrix_to_sample`
 
             :rtype: dict of lists of tuples
