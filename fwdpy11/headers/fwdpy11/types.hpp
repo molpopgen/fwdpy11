@@ -384,6 +384,10 @@ namespace fwdpy11
             *this = serialization::deserialize_details<multilocus_t>()(
                 s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
                 fwdpy11::diploid_reader(), 1, 1);
+			if(!this->diploids.empty())
+			{
+				this->nloci=this->diploids[0].size();
+			}
         }
 
         // int
