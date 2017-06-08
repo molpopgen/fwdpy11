@@ -61,6 +61,7 @@ Advanced topics and examples
 
     advanced/heritability
     advanced/manip
+    advanced/mpi
 
 Modules
 ##########################################
