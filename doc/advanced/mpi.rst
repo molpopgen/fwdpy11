@@ -5,12 +5,14 @@ Parallel execution using MPI
 
 The example below does the following:
 
-1. 1,000 simulations are run
-2. Each simulation records :math:`\theta_\pi` in a sample of 50 dipliods each generation.
-3. The time series for each replicate is pickled to a file 
-4. Once all replicates are done, the MPI task with rank 0 collates all the pickled data into a single sqlite3 database.
+1. 1,000 simulations are run.
+2. Each simulation records :math:`\theta_\pi` in a sample of 50 diploids each generation.
+3. The time series for each replicate is returned to the master process.
+4. The master process converts all data into a Pandas DataFrame and dumps the results to an sqlite3 database. 
 
 .. code-block:: python
+
+    #implementation based on https://github.com/jbornschein/mpi4py-examples/blob/master/09-task-pull.py
 
     from mpi4py import MPI
     import fwdpy11 as fpl1
@@ -20,14 +22,30 @@ The example below does the following:
     import fwdpy11.wright_fisher
     import numpy as np
     import pandas as pd
-    import sqlite3
-    import gzip,pickle,os
+    import sqlite3,os
+    import time
 
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
-    #We'll simulate 1000 replicate
+    size = comm.Get_size()
+    status = MPI.Status()
+
+    #Set the global RNG seed
+    np.random.seed(42)
+
+    #We'll simulate 20 replicate
     #populations
     NREPS=1000
+
+    def enum(*sequential, **named):
+        """Handy way to fake an enumerated type in Python
+        http://stackoverflow.com/questions/36932/how-can-i-represent-an-enum-in-python
+        """
+        enums = dict(zip(sequential, range(len(sequential))), **named)
+        return type('Enum', (), enums)
+
+    # Define MPI message tags
+    tags = enum('READY', 'DONE', 'EXIT', 'START')
 
     def empty_array():
         return np.array([],
@@ -71,9 +89,6 @@ The example below does the following:
                     np.array([(self.repid,pop.generation,ssh)],
                         dtype=self.data.dtype)])
 
-    #Set the global RNG seed
-    np.random.seed(42)
-
 
     #Generate seeds for each replicate
     seeds = np.random.choice(int(4e6),
@@ -87,65 +102,52 @@ The example below does the following:
     #seeds so that each process gets 
     #an approximately even amount of work 
     #to do.
-    seeds_for_ranks = [seeds[i::comm.Get_size()] for i in range(comm.Get_size())] 
+    seeds_for_ranks = [seeds[i::comm.Get_size()-1] for i in range(comm.Get_size()-1)] 
     #Do the same trick to assign a 
     #"replicate ID number" to each task:
     reps = [i for i in range(NREPS)]
-    reps_for_ranks =[reps[i::comm.Get_size()] for i in range(comm.Get_size())] 
-
-    #These are the seeds and repids 
-    #for this specific rank
-    seeds = seeds_for_ranks[rank]
-    repids = reps_for_ranks[rank] 
-
-    #Create output file for this rank
-    ofn="rank" + str(rank) + ".gz"
-    if os.path.exists(ofn):
-        os.remove(ofn)
-    of = gzip.open(ofn,'ab')
-    #For each replicate, run a simulation:
-    for seed,repid in zip(seeds,repids):
-        N=1000
-        pop = fwdpy11.SlocusPop(N)
-        rng=fwdpy11.GSLrng(seed)
-        params=fwdpy11.model_params.SlocusParams(
-            nregions=[fwdpy11.Region(0,1,1)],
-            sregions=[fwdpy11.ExpS(0,1,1,-0.1,1.0)],
-            recregions=[fwdpy11.Region(0,1,1)],
-            gvalue=fwdpy11.fitness.SlocusAdditive(2.0),
-            demography=np.array([N]*10*N,dtype=np.uint32),
-            rates=(1e-3,5e-3,1e-3))
-        recorder = Pi(50,repid,rng)
-        fwdpy11.wright_fisher.evolve(rng,pop,params,recorder)
-        pickle.dump(recorder.data,of)   
-        pop.clear()
-        pop=None
-        del pop
-        recorder.data = None
-        recorder = None
-        del recorder
-    of.close()
-
-    #Return all file names to rank-0 process:
-    FILES = comm.gather(ofn,root=0)
+    reps_for_ranks =[reps[i::comm.Get_size()-1] for i in range(comm.Get_size()-1)] 
 
     if rank == 0:
-        dbname='output.db'
-        if os.path.exists(dbname):
-            os.remove(dbname)
-        conn = sqlite3.connect(dbname)
-        #Go through all .gz files, unpickle
-        #data, and collect it all in
-        #and sqlite3 database:
-        for fi in FILES:
-            with gzip.open(fi,"rb") as f:
-                while True:
-                    try:
-                        x=pickle.load(f)
-                        df=pd.DataFrame(x)
-                        df.to_sql('pi',conn,if_exists='append')
-                    except:
-                        break
-                #clean up our temp files:
-                os.remove(fi)
+        conn = sqlite3.connect("output.db")
+        nworkers = size - 1
+        nworkers_done = 0
+        ofn='output.db'
+        if os.path.exists(ofn):
+            os.remove(ofn)
+        conn = sqlite3.connect(ofn)
+        while nworkers_done < nworkers:
+            data = comm.recv(source=MPI.ANY_SOURCE, tag=MPI.ANY_TAG, status=status)
+            source = status.Get_source()
+            tag = status.Get_tag()
+            if tag == tags.DONE:
+                results = data
+                df = pd.DataFrame(data)
+                df.to_sql('pi',conn,if_exists='append')
+            elif tag == tags.EXIT:
+                nworkers_done += 1
         conn.close()
+    else:
+        #These are the seeds and 
+        #repids for this specific task
+        seeds = seeds_for_ranks[rank-1]
+        repids = reps_for_ranks[rank-1] 
+        #For each replicate, run a simulation:
+        for seed,repid in zip(seeds,repids):
+            N=1000
+            pop = fwdpy11.SlocusPop(N)
+            rng=fwdpy11.GSLrng(seed)
+            params=fwdpy11.model_params.SlocusParams(
+                nregions=[fwdpy11.Region(0,1,1)],
+                sregions=[fwdpy11.ExpS(0,1,1,-0.1,1.0)],
+                recregions=[fwdpy11.Region(0,1,1)],
+                gvalue=fwdpy11.fitness.SlocusAdditive(2.0),
+                demography=np.array([N]*10*N,dtype=np.uint32),
+                rates=(1e-3,5e-3,1e-3))
+
+            recorder = Pi(50,repid,rng)
+            fwdpy11.wright_fisher.evolve(rng,pop,params,recorder)
+            comm.send(recorder.data,dest=0,tag=tags.DONE)
+
+        #Tell the master that we're done
+        comm.send(None,dest=0,tag=tags.EXIT)
