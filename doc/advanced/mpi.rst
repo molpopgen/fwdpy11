@@ -26,7 +26,7 @@ like this is the ability to collect all results into a common output file.
 One common MPI idiom is to have one process be devoted to farming out work and receiving output from other processes.
 Here, we will use this "master" task to collect time series data from simulations.
 
-One critical issue controlling MPI performance is the extend of interprocess communication.  In the example below, we minimize the communication by having each task with rank > 0 figure out which replicates it will run and which seeds it will use.  We accomplish this calculation using Python "fancy indexing" within each task with rank > 0. 
+One critical issue controlling MPI performance is the extent of interprocess communication.  In the example below, we minimize the communication by having each task with rank > 0 figure out which replicates it will run and which seeds it will use.  We accomplish this calculation using Python "fancy indexing" within each task with rank > 0. 
 
 .. note::
     An alternative to having each task calculate its set of operations is to have the task with rank 0
