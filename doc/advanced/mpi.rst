@@ -3,6 +3,45 @@
 Parallel execution using MPI
 ======================================================================
 
+Background reading:
+
+* :ref:`parallel`
+
+An alternative way to run replicate simulations in parallel is to use the Message Passing Interface, or MPI.
+MPI allows different processes to communicate back and forth with one another.  This communication can happen
+within and between different computers, meaning that you can farm replicates out to multiple compute nodes on a
+cluster.
+
+In Python, MPI is available via the mpi4py_ module.  
+
+.. note:: 
+    In general, MPI is a complex beast, and it is beyone the scope
+    of this manual do teach it.  Further, its installation/configuration can be a bit, well, sensitive, for lack of a better
+    term. On your own machine, it will most likely "just work" when installed via Anaconda.  However, 
+    on a managed compute cluster, you may need the assistance of your support folks.
+
+Similar to our previous example (:ref:`parallel`) based on concurrent.future_, a big advantage of running replicates
+like this is the ability to collect all results into a common output file.
+
+One common MPI idiom is to have one process be devoted to farming out work and receiving output from other processes.
+Here, we will use this "master" task to collect time series data from simulations.
+
+One critical issue controlling MPI performance is the extend of interprocess communication.  In the example below, we minimize the communication by having each task with rank > 0 figure out which replicates it will run and which seeds it will use.  We accomplish this calculation using Python "fancy indexing" within each task with rank > 0. 
+
+.. note::
+    An alternative to having each task calculate its set of operations is to have the task with rank 0
+    act like a "job server", meaning that it asks all other tasks if they are ready to work, sends them data
+    if they are, gets the data back when they're done, and then tells them to exit.  Ony my 40 core 
+    machine, such an implementation takes twice as long to execute as the example below.  For the sake of 
+    completeness, though, you can see it in :ref:`mpi2`
+
+Our implementation is such that the task with rank 0 is the "master", and all other tasks (rank > 0) run the simulations.  Thus, your MPI world must have a size of at least 2:
+
+.. code-block:: bash
+
+    #Pass -n >= 2:
+    mpirun -n 2 python3 my_fwdpy11_mpi_script.py
+
 The example below does the following:
 
 1. 1,000 simulations are run.
@@ -12,7 +51,8 @@ The example below does the following:
 
 .. code-block:: python
 
-    #implementation based on https://github.com/jbornschein/mpi4py-examples/blob/master/09-task-pull.py
+    #implementation based on
+    #https://github.com/jbornschein/mpi4py-examples/blob/master/09-task-pull.py
 
     from mpi4py import MPI
     import fwdpy11 as fpl1
@@ -151,3 +191,6 @@ The example below does the following:
 
         #Tell the master that we're done
         comm.send(None,dest=0,tag=tags.EXIT)
+
+.. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
+.. _mpi4py: http://mpi4py.readthedocs.io

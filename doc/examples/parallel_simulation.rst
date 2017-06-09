@@ -1,6 +1,7 @@
+.. _parallel:
+
 Running simulations in parallel
 ==========================================
-
 
 Using Python's built-in methods for running multiple processes
 -------------------------------------------------------------------------------
@@ -191,3 +192,4 @@ As we can see, multiprocessing_ gives us the same results but in a random order.
 The latter is Python3 only, but so is this package.  It is also more "streamlined" in its interface than multiprocessing_, which also makes it less flexible.
 
 .. _multiprocessing: https://docs.python.org/3.5/library/multiprocessing.html
+.. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
