@@ -3,6 +3,12 @@
 Parallel execution using MPI
 ======================================================================
 
+The example below does the following:
+
+1. 1,000 simulations are run
+2. Each simulation records :math:`\theta_\pi` in a sample of 50 dipliods each generation.
+3. The time series for each replicate is pickled to a file 
+4. Once all replicates are done, the MPI task with rank 0 collates all the pickled data into a single sqlite3 database.
 
 .. code-block:: python
 
