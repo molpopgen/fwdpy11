@@ -20,7 +20,7 @@ In Python, MPI is available via the mpi4py_ module.
     term. On your own machine, it will most likely "just work" when installed via Anaconda.  However, 
     on a managed compute cluster, you may need the assistance of your support folks.
 
-Similar to our previous example (:ref:`parallel`) based on concurrent.future_, a big advantage of running replicates
+Similar to our previous example (:ref:`parallel`) based on concurrent.futures_, a big advantage of running replicates
 like this is the ability to collect all results into a common output file.
 
 One common MPI idiom is to have one process be devoted to farming out work and receiving output from other processes.
