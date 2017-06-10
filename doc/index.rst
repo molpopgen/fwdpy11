@@ -9,10 +9,8 @@ Welcome to fwdpy11's documentation!
 .. toctree::
     :caption: Contents:
 
-Miscellaneous notes
-##########################################
-
 .. toctree::
+    :caption: Miscellaneous notes
     :maxdepth: 1
 
     pages/conventions
@@ -20,18 +18,14 @@ Miscellaneous notes
     pages/todo
     pages/pubs
 
-Concepts
-##########################################
-
 .. toctree::
+    :caption: Concepts
     :maxdepth: 2
 
     pages/definitions
 
-Data Types
-##########################################
-
 .. toctree::
+    :caption: Data Types
     :maxdepth: 2
 
     pages/types
@@ -39,10 +33,8 @@ Data Types
     pages/regions
     pages/model_params
 
-Examples 
-##########################################
-
 .. toctree::
+    :caption: Examples
     :maxdepth: 1
 
     examples/parallel_simulation
@@ -53,20 +45,18 @@ Examples
     examples/qtrait
     examples/processingpops
 
-Advanced topics and examples
-##########################################
-
 .. toctree::
+    :caption: Advanced topics and examples
     :maxdepth: 1
 
     advanced/heritability
     advanced/manip
     advanced/mpi
+    advanced/mpi2
 
-Modules
-##########################################
 
 .. toctree::
+    :caption: Modules
     :maxdepth: 2
 
 fwdpy11.fwdpy11_types
@@ -158,23 +148,6 @@ fwdpy11.demography
 .. automodule:: fwdpy11.demography
     :members:
     :show-inheritance:
-
-fwdpy11 C++ API
-==================
-
-This sections document's fwdpy11's C++ headers.
-
-
-.. doxygenindex::
-    :project: fwdpy11
-
-fwdpp C++ API
-==================
-
-This section docuement's fwdpp's API.
-
-.. doxygenindex::
-    :project: fwdpp
 
 Indices and tables
 ==================

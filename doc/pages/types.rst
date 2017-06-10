@@ -148,7 +148,6 @@ This class contains the following read-only properties:
 
 .. csv-table:: :class:`fwdpy11.fwdpp_types.SlocusPop` properties
     :header: "Property", "Definition"
-    :widths: auto
     
     "N", "Current population size."
     "generation", "Current generation."
@@ -170,7 +169,6 @@ for details.  The class has all of the properties of :class:`fwdpy11.fwdpy11_typ
 
 .. csv-table:: :class:`fwdpy11.fwdpp_types.MlocusPop` properties
     :header: "Property", "Definition"
-    :widths: auto
 
     "nloci", "The number of loci"
     "locus_boundaries", "The [begin,end) positions for each locus"

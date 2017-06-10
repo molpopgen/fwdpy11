@@ -44,16 +44,16 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'IPython.sphinxext.ipython_console_highlighting',
-    'IPython.sphinxext.ipython_directive',
-    'breathe']
+    'IPython.sphinxext.ipython_directive']
+    #'breathe']
 
-if (os.environ.get('READTHEDOCS')=="True") is False:
-    my_env=os.environ.copy()
-    my_env["LD_LIBRARY_PATH"]=os.path.join(sys.prefix,'lib')
-    subprocess.Popen(['doxygen', 'fwdpy11.doxygen'],env=my_env)
-    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
-    breathe_projects={'fwdpy11':'xml','fwdpp':'fwdpp_xml'}
-    breathe_default_project="fwdpy11"
+#if (os.environ.get('READTHEDOCS')=="True") is False:
+#    my_env=os.environ.copy()
+#    my_env["LD_LIBRARY_PATH"]=os.path.join(sys.prefix,'lib')
+#    subprocess.Popen(['doxygen', 'fwdpy11.doxygen'],env=my_env)
+#    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
+#    breathe_projects={'fwdpy11':'xml','fwdpp':'fwdpp_xml'}
+#    breathe_default_project="fwdpy11"
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['fwdpy11_templates']
 
