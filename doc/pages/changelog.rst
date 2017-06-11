@@ -9,6 +9,8 @@ Version 0.1.2
 
 Bug fixes:
 ---------------------
+* Fixed bug in setting the number of loci after deserializing a multi-locus population object. [`commit
+  <https://github.com/molpopgen/fwdpy11/commit/4e4a547c5b4d30692b62bb4b4a5c22a4cd21d0fa>`_]
 
 API and back-end changes:
 ------------------------------------------
