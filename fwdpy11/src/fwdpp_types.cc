@@ -27,7 +27,8 @@
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
-PYBIND11_MAKE_OPAQUE(std::vector<double>); //for generalmut_vec::s and generalmut_vec::h
+PYBIND11_MAKE_OPAQUE(
+    std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
 PYBIND11_PLUGIN(fwdpp_types)
 {
@@ -114,16 +115,21 @@ Base class for mutations.
                    + std::to_string(m.g) + "]";
         });
 
-    py::bind_vector<std::vector<double>>(m, "VectorDouble","Vector of 64-bit floats.");
-	py::bind_vector<std::vector<KTfwd::generalmut_vec>>(m,"VectorGeneralMutVec",
-            "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
+    py::bind_vector<std::vector<double>>(
+        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol());
+    py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
+        m, "VectorGeneralMutVec",
+        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
         "Mutation type with vector of effect size and dominance terms.")
-        .def_readonly("s", &KTfwd::generalmut_vec::s,"List of selection coefficients/effect sizes.")
-        .def_readonly("h", &KTfwd::generalmut_vec::h,"List of dominance terms.")
-        .def_readonly("g", &KTfwd::generalmut_vec::g,"Generation when mutation arose.");
+        .def_readonly("s", &KTfwd::generalmut_vec::s,
+                      "List of selection coefficients/effect sizes.")
+        .def_readonly("h", &KTfwd::generalmut_vec::h,
+                      "List of dominance terms.")
+        .def_readonly("g", &KTfwd::generalmut_vec::g,
+                      "Generation when mutation arose.");
 
     return m.ptr();
 }

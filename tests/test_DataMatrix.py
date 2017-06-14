@@ -17,14 +17,10 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         self.keys = fwdpy11.sampling.mutation_keys(self.pop,self.indlist)
         self.hm = fwdpy11.sampling.haplotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
         self.gm = fwdpy11.sampling.genotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
-        self.hm_neutral = self.hm.neutral()
-        self.hm_neutral = self.hm_neutral.reshape((self.hm.nrow,int(len(self.hm_neutral)/self.hm.nrow)))
-        self.hm_selected = self.hm.selected()
-        self.hm_selected = self.hm_selected.reshape((self.hm.nrow,int(len(self.hm_selected)/self.hm.nrow)))
-        self.gm_neutral = self.gm.neutral()
-        self.gm_neutral = self.gm_neutral.reshape((self.gm.nrow,int(len(self.gm_neutral)/self.gm.nrow)))
-        self.gm_selected = self.gm.selected()
-        self.gm_selected = self.gm_selected.reshape((self.gm.nrow,int(len(self.gm_selected)/self.gm.nrow)))
+        self.hm_neutral = np.ndarray(self.hm.ndim_neutral(),buffer=self.hm.neutral,dtype=np.int8)
+        self.hm_selected = np.ndarray(self.hm.ndim_selected(),buffer=self.hm.selected,dtype=np.int8)
+        self.gm_neutral = np.ndarray(self.gm.ndim_neutral(),buffer=self.gm.neutral,dtype=np.int8)
+        self.gm_selected = np.ndarray(self.gm.ndim_selected(),buffer=self.gm.selected,dtype=np.int8)
     def testKeyNeutralityAndCount(self):
         for i in self.keys[0]:
             self.assertTrue(self.pop.mutations[i[0]].neutral)
@@ -40,8 +36,8 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         #Get the row sums
         rowSums = self.hm_neutral.sum(axis=1)
         rowSumsSel = self.hm_selected.sum(axis=1)
-        self.assertEqual(len(rowSums),self.hm.nrow)
-        self.assertEqual(len(rowSumsSel),self.hm.nrow)
+        self.assertEqual(len(rowSums),self.hm_neutral.shape[0])
+        self.assertEqual(len(rowSumsSel),self.hm_selected.shape[0])
         j=0
         for i in range(100,150):
             #Num neutral variants in diploid i, gamete 0
@@ -64,8 +60,8 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         #Get the row sums
         rowSums = self.gm_neutral.sum(axis=1)
         rowSumsSel = self.gm_selected.sum(axis=1)
-        self.assertEqual(len(rowSums),self.gm.nrow)
-        self.assertEqual(len(rowSumsSel),self.gm.nrow)
+        self.assertEqual(len(rowSums),self.gm_neutral.shape[0])
+        self.assertEqual(len(rowSumsSel),self.gm_selected.shape[0])
         j=0
         for i in range(100,150):
             nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
@@ -101,14 +97,10 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
         self.keys = fwdpy11.sampling.mutation_keys(self.pop,self.indlist)
         self.hm = fwdpy11.sampling.haplotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
         self.gm = fwdpy11.sampling.genotype_matrix(self.pop,self.indlist,self.keys[0],self.keys[1])
-        self.hm_neutral = self.hm.neutral()
-        self.hm_neutral = self.hm_neutral.reshape((self.hm.nrow,int(len(self.hm_neutral)/self.hm.nrow)))
-        self.hm_selected = self.hm.selected()
-        self.hm_selected = self.hm_selected.reshape((self.hm.nrow,int(len(self.hm_selected)/self.hm.nrow)))
-        self.gm_neutral = self.gm.neutral()
-        self.gm_neutral = self.gm_neutral.reshape((self.gm.nrow,int(len(self.gm_neutral)/self.gm.nrow)))
-        self.gm_selected = self.gm.selected()
-        self.gm_selected = self.gm_selected.reshape((self.gm.nrow,int(len(self.gm_selected)/self.gm.nrow)))
+        self.hm_neutral = np.ndarray(self.hm.ndim_neutral(),buffer=self.hm.neutral,dtype=np.int8)
+        self.hm_selected = np.ndarray(self.hm.ndim_selected(),buffer=self.hm.selected,dtype=np.int8)
+        self.gm_neutral = np.ndarray(self.gm.ndim_neutral(),buffer=self.gm.neutral,dtype=np.int8)
+        self.gm_selected = np.ndarray(self.gm.ndim_selected(),buffer=self.gm.selected,dtype=np.int8)
     def testConvertHapMatrixToSample(self):
         nsample = fwdpy11.sampling.matrix_to_sample(self.hm,True)
         nsample_split = fwdpy11.sampling.separate_samples_by_loci(self.pop.locus_boundaries,nsample)
@@ -118,7 +110,7 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             for site in value:
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
-                self.assertTrue(len(site[1]) == self.hm.nrow)
+                self.assertTrue(len(site[1]) == self.hm_neutral.shape[0])
     def testConvertGenoMatrixToSample(self):
         nsample = fwdpy11.sampling.matrix_to_sample(self.gm,True)
         nsample_split = fwdpy11.sampling.separate_samples_by_loci(self.pop.locus_boundaries,nsample)
@@ -128,4 +120,4 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             for site in value:
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
-                self.assertTrue(len(site[1]) == self.gm.nrow)
+                self.assertTrue(len(site[1]) == self.gm_neutral.shape[0])

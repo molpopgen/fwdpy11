@@ -19,6 +19,7 @@ First, we'll quickly simulate a single deme for `N` generations:
     import fwdpy11.fitness
     import fwdpy11.model_params
     import fwdpy11.ezparams
+    import fwdpy11.wright_fisher
     import numpy as np
 
     rng = fwdpy11.GSLrng(42)

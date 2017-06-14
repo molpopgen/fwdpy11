@@ -36,6 +36,7 @@ In order to pickle a file, you must also use the latest pickling protocol.
     import fwdpy11 as fp11
     import fwdpy11.wright_fisher as wf
     import fwdpy11.ezparams
+    import fwdpy11.model_params
     import numpy as np
     import pickle
 

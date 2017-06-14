@@ -1,3 +1,5 @@
+.. _datamatrix:
+
 Representing samples from a population in matrix form
 ====================================================================================
 
@@ -30,6 +32,7 @@ The following example is a tour of the API:
 
     import fwdpy11 as fp11
     import fwdpy11.wright_fisher as wf
+    import fwdpy11.model_params
     import fwdpy11.sampling
     import numpy as np
     import pickle
@@ -89,17 +92,13 @@ The following example is a tour of the API:
 
     print(type(dm))
 
-    #Get the neutral genotypes out as a numpy array
-    n = dm.neutral()
+    #Get the neutral genotypes out as a 2d 2d numpy array
+    n = np.ndarray(dm.ndim_neutral(),buffer=dm.neutral,dtype=np.int8) 
     print(type(n))
     print(n.dtype)
-
-    #n is a 1d array, and we want a 2d array
-    #with rows as individuals and columns
-    #as sites
-    n = np.reshape(n,(dm.nrow,dm.ncol_neutral()))
+    print(n.ndim)
     #This must be pop.N = 1,000:
-    print(dm.nrow)
+    print(n.shape[0])
 
     #finally, the DataMatrix is picklable
     #As always with fwdpy11 types,
@@ -117,4 +116,5 @@ The output of the above code is:
     <class 'fwdpy11.sampling.DataMatrix'>
     <class 'numpy.ndarray'>
     int8
+    2
     1000

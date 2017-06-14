@@ -46,6 +46,13 @@ Welcome to fwdpy11's documentation!
     examples/processingpops
 
 .. toctree::
+    :caption: Maximizing performance
+    :maxdepth: 1
+
+    performance/processingpops_np
+    performance/UsingCython.ipynb
+
+.. toctree::
     :caption: Advanced topics and examples
     :maxdepth: 1
 

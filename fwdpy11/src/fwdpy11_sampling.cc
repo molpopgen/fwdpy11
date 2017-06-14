@@ -24,6 +24,7 @@
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <pybind11/numpy.h>
 #include <array>
 #include <fwdpp/forward_types.hpp>
@@ -38,14 +39,15 @@ static_assert(sizeof(char) == sizeof(std::int8_t),
               "sizeof(char) must equal sizeof(std::int8_t)");
 
 py::list
-matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
-                 const std::size_t nrow)
+matrix_to_sample(const std::vector<std::int8_t> &data,
+                 const std::vector<double> &pos, const std::size_t nrow)
 // returns a data structure compatible with libsequence/pylibseq iff
 // the data correspond to a haplotype matrix
 {
     std::size_t ncol = data.size() / nrow;
-    const std::array<char, 3> states{ '0', '1', '2' };
-    auto v = gsl_matrix_char_const_view_array(data.data(), nrow, ncol);
+    const std::array<std::int8_t, 3> states{ '0', '1', '2' };
+    auto v = gsl_matrix_char_const_view_array(
+        reinterpret_cast<const char *>(data.data()), nrow, ncol);
     py::list rv;
     for (std::size_t i = 0; i < ncol; ++i)
         {
@@ -66,7 +68,8 @@ matrix_to_sample(const std::vector<char> &data, const std::vector<double> &pos,
 }
 
 py::dict
-separate_samples_by_loci(const std::vector<std::pair<double, double>> & boundaries, py::list sample)
+separate_samples_by_loci(
+    const std::vector<std::pair<double, double>> &boundaries, py::list sample)
 // For a multi-locus pop, it is convenient to split samples by
 // loci.  This function does that using pop.locus_boundaries.
 // If pop.locus_boundaries is not properly set, an exception
@@ -90,12 +93,12 @@ separate_samples_by_loci(const std::vector<std::pair<double, double>> & boundari
                                              + std::to_string(site.size())
                                              + " seen when 2 was expected");
                 }
-            auto itr = std::find_if(
-                boundaries.begin(), boundaries.end(),
-                [&site](const std::pair<double, double> &b) {
-                    return site[0].cast<double>() >= b.first
-                           && site[0].cast<double>() < b.second;
-                });
+            auto itr
+                = std::find_if(boundaries.begin(), boundaries.end(),
+                               [&site](const std::pair<double, double> &b) {
+                                   return site[0].cast<double>() >= b.first
+                                          && site[0].cast<double>() < b.second;
+                               });
             if (itr == boundaries.end())
                 {
                     throw std::runtime_error(
@@ -108,6 +111,8 @@ separate_samples_by_loci(const std::vector<std::pair<double, double>> & boundari
         }
     return rv;
 }
+
+PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
 PYBIND11_PLUGIN(sampling)
 {
@@ -163,6 +168,9 @@ PYBIND11_PLUGIN(sampling)
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
                         "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
+    py::bind_vector<std::vector<std::int8_t>>(m, "Vec8",
+                                              py::buffer_protocol());
+
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
 		Represent a sample from a population in a matrix format.
@@ -171,6 +179,7 @@ PYBIND11_PLUGIN(sampling)
 
 		1. As a genotype matrix, where individuals are encoded a 0,1, or 2
 		copies of the derived mutation. There is one row per diploid here.
+
 		2. As a haplotype matrix, with two rows per diploid, and each
 		column containing a 0 (ancestral) or 1 (derived) label.
 
@@ -180,26 +189,30 @@ PYBIND11_PLUGIN(sampling)
 		* :func:`fwdpy11.sampling.genotype_matrix`
 		* :func:`fwdpy11.sampling.haplotype_matrix`
 		
-		Please see the examples in the fwdpy11 manual for examples of generating
+		Please see :ref:`datamatrix` for examples of generating
 		instances of this type.  The API requires multiple steps, in order to 
 		maximize flexibility.
 		)delim")
         .def(py::init<>())
         .def(py::init<std::size_t>())
-        .def("neutral",
-             [](const KTfwd::data_matrix &m) {
-                 return py::array_t<std::int8_t>(
-                     m.neutral.size(),
-                     reinterpret_cast<const std::int8_t *>(m.neutral.data()));
-             },
-             "Return the neutral variants as a 1d numpy array.")
-        .def("selected",
-             [](const KTfwd::data_matrix &m) {
-                 return py::array_t<std::int8_t>(
-                     m.selected.size(),
-                     reinterpret_cast<const std::int8_t *>(m.selected.data()));
-             },
-             "Return the selected variants as a 1d numpy array.")
+        .def_readonly("neutral", &KTfwd::data_matrix::neutral,
+                      R"delim(
+                Return a buffer representing neutral variants.
+                This buffer may be used to create a NumPy
+                ndarray object.
+
+                .. versionchanged:: 0.1.2
+                    Return a buffer instead of 1d numpy.array
+                )delim")
+        .def_readonly("selected", &KTfwd::data_matrix::selected,
+                      R"delim(
+                Return a buffer representing neutral variants.
+                This buffer may be used to create a NumPy
+                ndarray object.
+
+                .. versionchanged:: 0.1.2
+                    Return a buffer instead of 1d numpy.array
+                )delim")
         .def_readonly("neutral_positions",
                       &KTfwd::data_matrix::neutral_positions,
                       "The list of neutral mutation positions.")
@@ -212,18 +225,30 @@ PYBIND11_PLUGIN(sampling)
         .def_readonly(
             "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
             "The list of population frequencies of selected mutations.")
-        .def_readonly("nrow", &KTfwd::data_matrix::nrow,
-                      "Number of rows in the matrix.")
-        .def("ncol_neutral",
-             [](const KTfwd::data_matrix &m) {
-                 return m.neutral.size() / m.nrow;
+        .def("ndim_neutral",
+             [](const KTfwd::data_matrix &dm) {
+                 return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
              },
-             "Number of columns in the neutral variant matrix.")
-        .def("ncol_selected",
-             [](const KTfwd::data_matrix &m) {
-                 return m.selected.size() / m.nrow;
+             R"delim(
+             Return the dimensions of the neutral matrix
+             
+             :rtype: tuple
+
+             .. versionadded:: 0.1.2
+                Replaces ncol and nrow_neutral functions
+             )delim")
+        .def("ndim_selected",
+             [](const KTfwd::data_matrix &dm) {
+                 return py::make_tuple(dm.nrow, dm.selected.size() / dm.nrow);
              },
-             "Number of columns in the selected variant matrix.")
+             R"delim(
+             Return the dimensions of the selected matrix
+
+             :rtype: tuple
+             
+             .. versionadded:: 0.1.2
+                Replaces ncol and nrow_selected functions
+             )delim")
         .def("__getstate__",
              [](const KTfwd::data_matrix &d) {
                  std::ostringstream o;

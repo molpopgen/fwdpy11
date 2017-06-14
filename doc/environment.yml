@@ -10,6 +10,7 @@ dependencies:
     - python==3.5
     - sphinx_rtd_theme==0.1.9
     - gsl
+    - nbsphinx
     - pip:
         - numpy
         - matplotlib
