@@ -14,6 +14,8 @@ Bug fixes:
 
 API and back-end changes:
 ------------------------------------------
+* The C++ data structures are connected to NumPy via Python buffer protocol.  See :ref:`processingpopsNP`.  [`commit
+  <https://github.com/molpopgen/fwdpy11/commit/48e3925a867c4ec55e1e5bb05457396fb456bc47>`_]
 * :func:`fwdpy11.sampling.separate_samples_by_loci` changed to take a list of positions as first argument, and not a population object.
 
 Version 0.1.1
