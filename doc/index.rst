@@ -32,6 +32,7 @@ Welcome to fwdpy11's documentation!
     pages/rng
     pages/regions
     pages/model_params
+    pages/recorders
 
 .. toctree::
     :caption: Examples
@@ -51,6 +52,7 @@ Welcome to fwdpy11's documentation!
 
     performance/processingpops_np
     performance/UsingCython.ipynb
+    performance/RecorderPerformance.ipynb
 
 .. toctree::
     :caption: Advanced topics and examples
