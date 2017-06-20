@@ -11,20 +11,23 @@ import fwdpy11.fwdpy11_types
 import copy
 import unittest
 
+
 class testCustomAdditive(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.pop = fwdpy11.SlocusPop(1000)
         self.pdict = fwdpy11.ezparams.mslike(self.pop,
-            dfe=fwdpy11.ExpS(0,1,1,-0.05),
-            pneutral=0.95,simlen=10)
+                                             dfe=fwdpy11.ExpS(0, 1, 1, -0.05),
+                                             pneutral=0.95, simlen=10)
         self.pdict['gvalue'] = ca.additive()
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.model_params.SlocusParams(**self.pdict)
+
     def testEvolve(self):
-        fwdpy11.wright_fisher.evolve(self.rng,self.pop,self.params)
+        fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
+
     def testCorrectNess(self):
-        fwdpy11.wright_fisher.evolve(self.rng,self.pop,self.params)
+        fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
         a = fwdpy11.fitness.SlocusAdditive(2.0)
         for i in self.pop.diploids:
-            self.assertEqual(i.w,a(i,self.pop))
+            self.assertEqual(i.w, a(i, self.pop))

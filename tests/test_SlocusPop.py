@@ -19,28 +19,38 @@
 import unittest
 import fwdpy11 as fp11
 
+
 class testSlocusPop(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.pop = fp11.SlocusPop(1000)
+
     def test_N(self):
-        self.assertEqual(self.pop.N,1000)
+        self.assertEqual(self.pop.N, 1000)
+
     def test_generation(self):
-        self.assertEqual(self.pop.generation,0)
+        self.assertEqual(self.pop.generation, 0)
+
     def test_fitnesses(self):
-        #All fitnesses should be 1
-        self.assertEqual(sum([i.w for i in self.pop.diploids]),float(self.pop.N))
+        # All fitnesses should be 1
+        self.assertEqual(
+            sum([i.w for i in self.pop.diploids]),
+            float(self.pop.N))
+
     def test_labels(self):
-        #All diploids should be labeled 0 to pop.N-1 
-        self.assertEqual([i.label for i in self.pop.diploids],[i for i in range(self.pop.N)])
+        # All diploids should be labeled 0 to pop.N-1
+        self.assertEqual(
+            [i.label for i in self.pop.diploids],
+            [i for i in range(self.pop.N)])
+
     def test_genetic_values(self):
-        self.assertEqual(sum([i.g for i in self.pop.diploids]),0.0)
+        self.assertEqual(sum([i.g for i in self.pop.diploids]), 0.0)
+
     def test_e_values(self):
-        self.assertEqual(sum([i.e for i in self.pop.diploids]),0.0)
+        self.assertEqual(sum([i.e for i in self.pop.diploids]), 0.0)
+
 
 class testSlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
             p = fp11.SlocusPop(0)
-
-

@@ -1,10 +1,11 @@
 import fwdpy11 as fp11
 import fwdpy11.wright_fisher as wf
 import fwdpy11.ezparams as fp11ez
-#concurrent.futures is Python 3 only
+# concurrent.futures is Python 3 only
 import concurrent.futures as cf
 import numpy as np
 import unittest
+
 
 def evolve_and_return(args):
     """
@@ -16,38 +17,42 @@ def evolve_and_return(args):
     For this function, the arguments are the population
     size and a random number seed.
     """
-    N,seed=args
-    #Construct as single-deme object
-    #with N diploids
+    N, seed = args
+    # Construct as single-deme object
+    # with N diploids
     pop = fp11.SlocusPop(N)
     theta = 100.0
-    #Initialize a random number generator
-    rng=fp11.GSLrng(seed)
-    p = fp11ez.mslike(pop,simlen=100,rates=(theta/float(4*pop.N),1e-3,theta/float(4*pop.N)))
+    # Initialize a random number generator
+    rng = fp11.GSLrng(seed)
+    p = fp11ez.mslike(pop, simlen=100, rates=(
+        theta / float(4 * pop.N), 1e-3, theta / float(4 * pop.N)))
     params = fp11.model_params.SlocusParams(**p)
-    fp11.wright_fisher.evolve(rng,pop,params)
-    #The population is picklable, and so
-    #we can return it from another process
+    fp11.wright_fisher.evolve(rng, pop, params)
+    # The population is picklable, and so
+    # we can return it from another process
     return pop
+
 
 class testSimpleParallel(unittest.TestCase):
     """
     This would be your __name__=="__main__"
     in a script
     """
+
     def test_simple_parallel(self):
         np.random.seed(101)
-        #Generate a list of arguments for our processes.
-        #We generation 10 random number seeds
-        args=[(1000,seed) for seed in np.random.randint(0,42000000,10)]
-        #Use a process pool with a max of 10 workers
+        # Generate a list of arguments for our processes.
+        # We generation 10 random number seeds
+        args = [(1000, seed) for seed in np.random.randint(0, 42000000, 10)]
+        # Use a process pool with a max of 10 workers
         with cf.ProcessPoolExecutor(10) as pool:
-            #Run our simulations and get the 
-            #result back, which will be
-            #the population
-            for res in pool.map(evolve_and_return,args):
+            # Run our simulations and get the
+            # result back, which will be
+            # the population
+            for res in pool.map(evolve_and_return, args):
                 self.assertEqual(str(type(res)),
-                        "<class 'fwdpy11.fwdpy11_types.SlocusPop'>")
-                
+                                 "<class 'fwdpy11.fwdpy11_types.SlocusPop'>")
+
+
 if __name__ == "__main__":
     unittest.main()
