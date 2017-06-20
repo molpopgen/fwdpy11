@@ -16,19 +16,24 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+
+
 def get_includes():
     """
     Returns absolute path to location of fwdpy11 headers
     """
-    import os,fwdpy11
+    import os
+    import fwdpy11
     return os.path.dirname(fwdpy11.__file__)+'/headers'
+
 
 def get_fwdpp_includes():
     """
-    Returns absolute path to location of the fwdpp headers 
+    Returns absolute path to location of the fwdpp headers
     installed along with fwdpy11.
     """
     return get_includes()+'/fwdpp'
+
 
 def minimal_mako():
     """
@@ -37,9 +42,9 @@ def minimal_mako():
 
     .. versionadded:: 0.1.1
     """
-    rv=r"""<% 
-setup_pybind11(cfg) 
-import fwdpy11 as fp11 
+    rv = r"""<%
+setup_pybind11(cfg)
+import fwdpy11 as fp11
 cfg['include_dirs'] = [fp11.get_includes(), fp11.get_fwdpp_includes()]
 %>"""
     return rv

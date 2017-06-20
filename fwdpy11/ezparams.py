@@ -19,39 +19,44 @@
 
 import numpy as np
 
-def mslike(pop,**kwargs):
+
+def mslike(pop, **kwargs):
     """
     Function to establish default parameters
-    for a single-locus simulation for standard pop-gen 
+    for a single-locus simulation for standard pop-gen
     modeling scenarios.
 
     :params pop: An instance of :class:`fwdpy11.fwdpy11_types.SlocusPop`
     :params kwargs: Keyword arguments.
     """
     import fwdpy11
-    if isinstance(pop,fwdpy11.SlocusPop) is False:
+    if isinstance(pop, fwdpy11.SlocusPop) is False:
         raise ValueError("incorrect pop type: " + str(type(pop)))
 
-    defaults={'simlen':10*pop.N,
-            'beg':0.0,
-            'end':1.0,
-            'theta':100.0,
-            'pneutral':1.0,
-            'rho':100.0,
-            'dfe':None
-            }
-    for key,value in kwargs.items():
+    defaults = {'simlen': 10*pop.N,
+                'beg': 0.0,
+                'end': 1.0,
+                'theta': 100.0,
+                'pneutral': 1.0,
+                'rho': 100.0,
+                'dfe': None
+                }
+    for key, value in kwargs.items():
         if key in defaults:
-            defaults[key]=value
-    params={'demography':np.array([pop.N]*defaults['simlen'],dtype=np.uint32),
-            'nregions':[fwdpy11.Region(defaults['beg'],defaults['end'],1.0)],
-            'recregions':[fwdpy11.Region(defaults['beg'],defaults['end'],1.0)],
-            'rates':((defaults['pneutral']*defaults['theta'])/(4.0*pop.N),
-                     ((1.0-defaults['pneutral'])*defaults['theta'])/(4.0*pop.N),
-                     defaults['rho']/(4.0*float(pop.N)))
-            }
+            defaults[key] = value
+    params = {'demography': np.array([pop.N]*defaults['simlen'],
+              dtype=np.uint32),
+              'nregions': [fwdpy11.Region(defaults['beg'],
+                           defaults['end'], 1.0)],
+              'recregions': [fwdpy11.Region(defaults['beg'],
+                             defaults['end'], 1.0)],
+              'rates': ((defaults['pneutral']*defaults['theta'])/(4.0*pop.N),
+                        ((1.0-defaults['pneutral'])*defaults['theta']) /
+                        (4.0*pop.N),
+                        defaults['rho']/(4.0*float(pop.N)))
+              }
     if defaults['dfe'] is None:
-        params['sregions']=[]
+        params['sregions'] = []
     else:
-        params['sregions']=[defaults['dfe']]
+        params['sregions'] = [defaults['dfe']]
     return params

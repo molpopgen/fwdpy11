@@ -123,6 +123,7 @@ The following code block represents the following model:
     import fwdpy11.trait_values as fp11tv
     import fwdpy11.wright_fisher_qtrait as fp11qt
     import fwdpy11.gsl_random as gsl
+    import fwdpy11.model_params
     import numpy as np
 
     class SharedE:
