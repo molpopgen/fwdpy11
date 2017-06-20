@@ -55,7 +55,7 @@ GPLv3 or later (See COPYING)
 Suppored Python version
 -----------------------
 
-fwdpy11 is written for Python 3.  We will not modify the package to be compatibly with Python 2.7.
+fwdpy11 is written for Python 3.  We will not modify the package to be compatible with Python 2.7.
 
 .. code-block:: bash
 
