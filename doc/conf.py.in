@@ -21,12 +21,12 @@ import os
 import sys
 import subprocess
 
-if (os.environ.get('READTHEDOCS')=="True") is False:
+if (os.environ.get('READTHEDOCS') == "True") is False:
     sys.path.insert(0, os.path.abspath('..'))
 else:
     import site
-    p=site.getsitepackages()[0]
-    sys.path.insert(0,p)
+    p = site.getsitepackages()[0]
+    sys.path.insert(0, p)
 
 #    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
 # -- General configuration ------------------------------------------------
@@ -39,16 +39,16 @@ else:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'IPython.sphinxext.ipython_console_highlighting',
-    'IPython.sphinxext.ipython_directive',
-    'nbsphinx']
-    #'breathe']
+              'sphinx.ext.doctest',
+              'sphinx.ext.todo',
+              'sphinx.ext.coverage',
+              'sphinx.ext.mathjax',
+              'IPython.sphinxext.ipython_console_highlighting',
+              'IPython.sphinxext.ipython_directive',
+              'nbsphinx']
+# 'breathe']
 
-#if (os.environ.get('READTHEDOCS')=="True") is False:
+# if (os.environ.get('READTHEDOCS')=="True") is False:
 #    my_env=os.environ.copy()
 #    my_env["LD_LIBRARY_PATH"]=os.path.join(sys.prefix,'lib')
 #    subprocess.Popen(['doxygen', 'fwdpy11.doxygen'],env=my_env)
@@ -72,14 +72,18 @@ project = 'fwdpy11'
 copyright = '2017, Kevin Thornton'
 author = 'Kevin Thornton'
 
-#http://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
+# http://stackoverflow.com/questions/5599254/how-to-use-sphinxs-autodoc-to-document-a-classs-init-self-method
+
+
 def skip(app, what, name, obj, skip, options):
     if name == "__init__":
         return False
     return skip
 
+
 def setup(app):
     app.connect("autodoc-skip-member", skip)
+
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -116,13 +120,13 @@ todo_include_todos = True
 #
 html_theme = 'default'
 
-if (os.environ.get('READTHEDOCS')=="True") is True:
+if (os.environ.get('READTHEDOCS') == "True") is True:
     html_theme_options = {
-            'github_user':'molpopgen',
-            'github_repo':'fwdpy11',
-    #        'github_button':True,
-    #        'github_banner':True,
-            }
+        'github_user': 'molpopgen',
+        'github_repo': 'fwdpy11',
+        #        'github_button':True,
+        #        'github_banner':True,
+    }
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -191,6 +195,3 @@ texinfo_documents = [
      author, 'fwdpy11', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
