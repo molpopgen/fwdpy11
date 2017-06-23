@@ -42,11 +42,11 @@ namespace fwdpy11
     {
         using first_type = std::size_t;
         using second_type = std::size_t;
-        //! First gamete.  A gamete is vector<size_t> where the elements are
-        //! indexes to a population's gamete container
+        //! First gamete.  A gamete contains vector<uint32_t> where the elements are
+        //! indexes to a population's mutation container
         first_type first;
-        //! Second gamete. A gamete is vector<size_t> where the elements are
-        //! indexes to a population's gamete container
+        //! Second gamete. A gamete contains vector<uint32_t> where the elements are
+        //! indexes to a population's mutation container
         second_type second;
         //! 64 bits of data to do stuff with.  Initialized to zero upon
         //! construction
