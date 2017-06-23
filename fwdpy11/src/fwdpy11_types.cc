@@ -513,7 +513,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .. versionadded: 0.1.3
         )delim");
 
-    py::bind_vector<std::vector<diploid_parents>>(m, "VecDipSpace",
+    py::bind_vector<std::vector<diploid_space>>(m, "VecDipSpace",
                                                   py::buffer_protocol(),
                                                   R"delim(
         Vector of the space field in a " 
