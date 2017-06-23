@@ -21,6 +21,7 @@
 
 #include <pybind11/stl.h>
 #include <cstdint>
+#include <tuple>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>
@@ -58,22 +59,23 @@ namespace fwdpy11
         double e;
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
+        //! Indexes of parents
+        std::tuple<std::uint32_t, std::uint32_t> parents;
+        //! Geography
+        std::tuple<double, double, double> xyz;
+        //! "Sex"
+        std::int8_t sex;
         //! Constructor
-        diploid_t() noexcept : first(first_type()),
-                               second(second_type()),
-                               label(0),
-                               g(0.),
-                               e(0.),
-                               w(1.)
+        diploid_t() noexcept
+            : first(first_type()), second(second_type()), label(0), g(0.),
+              e(0.), w(1.), parents{ 0, 0 }, xyz{ 0., 0., 0. }, sex(0)
         {
         }
         //! Construct from two indexes to gametes
-        diploid_t(first_type g1, first_type g2) noexcept : first(g1),
-                                                           second(g2),
-                                                           label(0),
-                                                           g(0.),
-                                                           e(0.),
-                                                           w(1.)
+        diploid_t(first_type g1, first_type g2) noexcept
+            : first(g1), second(g2), label(0), g(0.), e(0.), w(1.),
+
+              parents{ 0, 0 }, xyz{ 0., 0., 0. }, sex(0)
         {
         }
 
@@ -83,7 +85,10 @@ namespace fwdpy11
         {
             return this->first == dip.first && this->second == dip.second
                    && this->w == dip.w && this->g == dip.g && this->e == dip.e
-                   && this->label == dip.label;
+                   && this->label == dip.label &&
+                   this->parents == dip.parents &&
+                   this->xyz == dip.xyz &&
+                   this->sex == dip.sex;
         }
     };
 

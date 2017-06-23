@@ -90,9 +90,40 @@ make_diploid_gametes(const fwdpy11::diploid_t& dip, const std::size_t locus)
     return d;
 }
 
+struct diploid_parents
+{
+    std::uint32_t p1, p2;
+};
+
+inline diploid_parents
+make_diploid_parents(const fwdpy11::diploid_t& dip)
+{
+    diploid_parents rv;
+    rv.p1 = std::get<0>(dip.parents);
+    rv.p2 = std::get<1>(dip.parents);
+    return rv;
+}
+
+struct diploid_space
+{
+    double x, y, z;
+};
+
+inline diploid_space
+make_diploid_space(const fwdpy11::diploid_t& dip)
+{
+    diploid_space rv;
+    rv.x = std::get<0>(dip.xyz);
+    rv.y = std::get<1>(dip.xyz);
+    rv.z = std::get<2>(dip.xyz);
+    return rv;
+}
+
 PYBIND11_MAKE_OPAQUE(std::vector<flattened_popgenmut>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_traits>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_gametes>);
+PYBIND11_MAKE_OPAQUE(std::vector<diploid_space>);
+PYBIND11_MAKE_OPAQUE(std::vector<diploid_parents>);
 
 namespace
 {
@@ -154,6 +185,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
+        .def_readonly("parents", &fwdpy11::diploid_t::parents)
+        .def_readonly("space", &fwdpy11::diploid_t::xyz)
+        .def_readonly("sex", &fwdpy11::diploid_t::sex)
         .def("__getstate__",
              [](const fwdpy11::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -285,10 +319,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
 			 )delim");
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
-        m, "VecDiploidContainer",
-        "Vector of "
-        ":class:`fwdpy11.fwdpy11_types."
-        "SingleLocusDiploid`.")
+        m, "VecDiploidContainer", "Vector of "
+                                  ":class:`fwdpy11.fwdpy11_types."
+                                  "SingleLocusDiploid`.")
         .def("trait_array",
              [](const std::vector<fwdpy11::dipvector_t>& diploids) {
                  std::vector<diploid_traits> rv;
@@ -457,10 +490,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
         )delim");
 
     py::bind_vector<fwdpy11::mcont_t>(
-        m, "MutationContainer",
-        "C++ representation of a list of "
-        ":class:`fwdpy11.fwdpp_types.Mutation`.  "
-        "Typically, access will be read-only.")
+        m, "MutationContainer", "C++ representation of a list of "
+                                ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                                "Typically, access will be read-only.")
         .def("array",
              [](const fwdpy11::mcont_t& mc) {
                  std::vector<flattened_popgenmut> rv;
@@ -502,10 +534,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
     // Expose the type based on fwdpp's "sugar"
     // layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "SlocusPop",
-        "Population object representing a single "
-        "deme and a "
-        "single genomic region.")
+        m, "SlocusPop", "Population object representing a single "
+                        "deme and a "
+                        "single genomic region.")
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
@@ -545,9 +576,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
-        m, "MlocusPop",
-        "Representation of a multi-locus, single "
-        "deme system.")
+        m, "MlocusPop", "Representation of a multi-locus, single "
+                        "deme system.")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
@@ -632,5 +662,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                           const fwdpy11::singlepop_gm_vec_t& rhs) {
             return lhs == rhs;
         });
+
+    m.def("sizeof", []() { return sizeof(fwdpy11::diploid_t); });
     return m.ptr();
 }
