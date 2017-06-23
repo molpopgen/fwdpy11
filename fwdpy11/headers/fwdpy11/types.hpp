@@ -41,10 +41,10 @@ namespace fwdpy11
     template <int VERSION> struct diploid_writer
     {
         using result_type = void;
-        //This should really be constexpr. 
-        //Figure it out later:
+        // This should really be constexpr.
+        // Figure it out later:
         const int v;
-        diploid_writer() : v(VERSION){}
+        diploid_writer() : v(VERSION) {}
         template <typename diploid_t, typename streamtype>
         inline result_type
         operator()(const diploid_t &dip, streamtype &o) const
@@ -53,6 +53,20 @@ namespace fwdpy11
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.e);
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.w);
             KTfwd::fwdpp_internal::scalar_writer()(o, &dip.label);
+            if (v == 2)
+                {
+                    KTfwd::fwdpp_internal::scalar_writer()(
+                        o, &std::get<0>(dip.parents));
+                    KTfwd::fwdpp_internal::scalar_writer()(
+                        o, &std::get<1>(dip.parents));
+                    KTfwd::fwdpp_internal::scalar_writer()(
+                        o, &std::get<0>(dip.xyz));
+                    KTfwd::fwdpp_internal::scalar_writer()(
+                        o, &std::get<1>(dip.xyz));
+                    KTfwd::fwdpp_internal::scalar_writer()(
+                        o, &std::get<2>(dip.xyz));
+                    KTfwd::fwdpp_internal::scalar_writer()(o, &dip.sex);
+                }
         }
     };
 
@@ -68,6 +82,22 @@ namespace fwdpy11
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.e);
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.w);
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.label);
+            if (version == 2)
+                {
+                    std::uint32_t p;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &p);
+                    std::get<0>(dip.parents) = p;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &p);
+                    std::get<1>(dip.parents) = p;
+                    double space;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &space);
+                    std::get<0>(dip.xyz) = space;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &space);
+                    std::get<1>(dip.xyz) = space;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &space);
+                    std::get<2>(dip.xyz) = space;
+                    KTfwd::fwdpp_internal::scalar_reader()(i, &dip.sex);
+                }
         }
     };
 
