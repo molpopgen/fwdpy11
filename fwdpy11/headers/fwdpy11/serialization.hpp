@@ -27,6 +27,12 @@ namespace fwdpy11
 {
     namespace serialization
     {
+        inline constexpr int
+        magic()
+        {
+            return 1;
+        }
+
         template <typename poptype, typename mwriter_t, typename dipwriter_t>
         std::string
         serialize_details(const poptype *pop, const mwriter_t &mwriter,
@@ -34,12 +40,14 @@ namespace fwdpy11
         {
             KTfwd::serialize rv;
             std::ostringstream buffer;
+            buffer << "fp11";
+            buffer.write(reinterpret_cast<const char *>(&dipwriter.v), sizeof(int));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
             rv(buffer, *pop, mwriter, dipwriter);
             return buffer.str();
         }
-    
+
         template <typename poptype> struct deserialize_details
         {
             template <typename mreader_t, typename dipreader_t,
@@ -52,10 +60,26 @@ namespace fwdpy11
                 buffer.str(s);
                 buffer.seekg(0);
                 poptype pop(cdata...);
+                // We need to test for existance of serialization
+                // version numbers, introduced in 0.1.3.  Prior to that,
+                // it was wild west :).
+                bool have_magic = (s.substr(0,4)=="fp11") ? true : false;
+                //We default to version 1, which includes all
+                //previous releases that had no version numbers
+                int version = 1;
+                if (have_magic)
+                    {
+                        char c[4];
+                        buffer.read(&c[0],4*sizeof(char));
+                        buffer.read(reinterpret_cast<char *>(&version),
+                                    sizeof(int));
+                    }
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
                 KTfwd::deserialize d;
-                d(pop, buffer, mreader, dipreader);
+                d(pop, buffer, mreader,
+                  std::bind(dipreader, std::placeholders::_1,
+                            std::placeholders::_2, version));
                 return pop;
             }
         };

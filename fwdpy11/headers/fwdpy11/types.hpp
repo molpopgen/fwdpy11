@@ -38,9 +38,13 @@
 namespace fwdpy11
 {
     //! Allows serialization of diploids.
-    struct diploid_writer
+    template <int VERSION> struct diploid_writer
     {
         using result_type = void;
+        //This should really be constexpr. 
+        //Figure it out later:
+        const int v;
+        diploid_writer() : v(VERSION){}
         template <typename diploid_t, typename streamtype>
         inline result_type
         operator()(const diploid_t &dip, streamtype &o) const
@@ -58,7 +62,7 @@ namespace fwdpy11
         using result_type = void;
         template <typename diploid_t, typename streamtype>
         inline result_type
-        operator()(diploid_t &dip, streamtype &i) const
+        operator()(diploid_t &dip, streamtype &i, const int version) const
         {
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.g);
             KTfwd::fwdpp_internal::scalar_reader()(i, &dip.e);
@@ -135,7 +139,8 @@ namespace fwdpy11
         serialize() const
         {
             return serialization::serialize_details(
-                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
+                this, KTfwd::mutation_writer(),
+                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
         }
 
         void
@@ -290,7 +295,8 @@ namespace fwdpy11
         serialize() const
         {
             return serialization::serialize_details(
-                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
+                this, KTfwd::mutation_writer(),
+                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
         }
 
         void
@@ -375,7 +381,8 @@ namespace fwdpy11
         serialize() const
         {
             return serialization::serialize_details(
-                this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
+                this, KTfwd::mutation_writer(),
+                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
         }
 
         void
@@ -384,10 +391,10 @@ namespace fwdpy11
             *this = serialization::deserialize_details<multilocus_t>()(
                 s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
                 fwdpy11::diploid_reader(), 1, 1);
-			if(!this->diploids.empty())
-			{
-				this->nloci=this->diploids[0].size();
-			}
+            if (!this->diploids.empty())
+                {
+                    this->nloci = this->diploids[0].size();
+                }
         }
 
         // int
