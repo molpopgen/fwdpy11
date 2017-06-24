@@ -42,10 +42,12 @@ namespace fwdpy11
     {
         using first_type = std::size_t;
         using second_type = std::size_t;
-        //! First gamete.  A gamete contains vector<uint32_t> where the elements are
+        //! First gamete.  A gamete contains vector<uint32_t> where the
+        //! elements are
         //! indexes to a population's mutation container
         first_type first;
-        //! Second gamete. A gamete contains vector<uint32_t> where the elements are
+        //! Second gamete. A gamete contains vector<uint32_t> where the
+        //! elements are
         //! indexes to a population's mutation container
         second_type second;
         //! 64 bits of data to do stuff with.  Initialized to zero upon
@@ -63,19 +65,21 @@ namespace fwdpy11
         std::tuple<std::uint32_t, std::uint32_t> parents;
         //! Geography
         std::tuple<double, double, double> xyz;
+        //! Current deme
+        std::uint32_t deme;
         //! "Sex"
         std::int8_t sex;
         //! Constructor
         diploid_t() noexcept
             : first(first_type()), second(second_type()), label(0), g(0.),
-              e(0.), w(1.), parents{ 0, 0 }, xyz{ 0., 0., 0. }, sex(0)
+              e(0.), w(1.), parents{ 0, 0 }, xyz{ 0., 0., 0. }, deme(0), sex(0)
         {
         }
         //! Construct from two indexes to gametes
         diploid_t(first_type g1, first_type g2) noexcept
             : first(g1), second(g2), label(0), g(0.), e(0.), w(1.),
 
-              parents{ 0, 0 }, xyz{ 0., 0., 0. }, sex(0)
+              parents{ 0, 0 }, xyz{ 0., 0., 0. }, deme(0), sex(0)
         {
         }
 
@@ -85,10 +89,9 @@ namespace fwdpy11
         {
             return this->first == dip.first && this->second == dip.second
                    && this->w == dip.w && this->g == dip.g && this->e == dip.e
-                   && this->label == dip.label &&
-                   this->parents == dip.parents &&
-                   this->xyz == dip.xyz &&
-                   this->sex == dip.sex;
+                   && this->label == dip.label && this->parents == dip.parents
+                   && this->xyz == dip.xyz && this->sex == dip.sex
+                   && this->deme == dip.deme;
         }
     };
 

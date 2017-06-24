@@ -262,9 +262,13 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
-        .def_readonly("parents", &fwdpy11::diploid_t::parents)
-        .def_readonly("space", &fwdpy11::diploid_t::xyz)
-        .def_readonly("sex", &fwdpy11::diploid_t::sex)
+        .def_readonly("parents", &fwdpy11::diploid_t::parents,
+                      "Indexes of parents (read-only).")
+        .def_readonly("space", &fwdpy11::diploid_t::xyz,
+                      "x,y,z coordinates (read-only).")
+        .def_readonly("deme", &fwdpy11::diploid_t::deme,
+                      "Current deme (read-only).")
+        .def_readonly("sex", &fwdpy11::diploid_t::sex, "Sex (read-only).")
         .def("__getstate__",
              [](const fwdpy11::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -514,8 +518,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
         )delim");
 
     py::bind_vector<std::vector<diploid_space>>(m, "VecDipSpace",
-                                                  py::buffer_protocol(),
-                                                  R"delim(
+                                                py::buffer_protocol(),
+                                                R"delim(
         Vector of the space field in a " 
         ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
 
