@@ -78,7 +78,6 @@ namespace fwdpy11
         //! Construct from two indexes to gametes
         diploid_t(first_type g1, first_type g2) noexcept
             : first(g1), second(g2), label(0), g(0.), e(0.), w(1.),
-
               parents{ 0, 0 }, xyz{ 0., 0., 0. }, deme(0), sex(0)
         {
         }
