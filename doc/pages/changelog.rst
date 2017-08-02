@@ -4,6 +4,20 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.3
+++++++++++++++++++++++++++
+
+Bug fixes:
+------------------------
+
+API changes:
+------------------------
+
+Back-end changes
+------------------------
+
+* Added magic numbers to keep track of compatibility changes to serialization formats.
+
 Version 0.1.2
 ++++++++++++++++++++++++++
 
