@@ -7,6 +7,9 @@ import setuptools
 import os
 import glob
 
+if sys.version_info[0] < 3:
+    raise ValueError("Python 3 is required!")
+
 __version__ = '0.1.3a0'
 
 if sys.version_info < (3, 3):

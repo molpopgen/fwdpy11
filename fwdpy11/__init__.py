@@ -17,8 +17,14 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
+
+if sys.version_info[0] < 3:
+    raise ValueError("Python3 required!")
+
 __version__ = '0.1.3a0'
 from .fwdpp_types import *
 from .fwdpy11_types import *
 from .regions import *
 from .dev import *
+
