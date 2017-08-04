@@ -234,7 +234,7 @@ class GammaS(Sregion):
         x = 'regions.GammaS(beg=%s,end=%s,weight=%s,'
         x += 'mean=%s,shape=%s,coupled=%s,label=%s)'
         return x % (self.b, self.e, self.w, self.mean,
-                    self.shape, self.coupled, self.label)
+                    self.shape, self.c, self.l)
 
 
 class ConstantS(Sregion):
