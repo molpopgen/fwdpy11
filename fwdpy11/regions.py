@@ -37,6 +37,7 @@ class Region(object):
     This class is extended by:
         * :class:`fwdpy11.Sregion`
     """
+
     def __init__(self, beg, end, weight, coupled=True, label=0):
         """
         Constructor
@@ -85,15 +86,10 @@ class Region(object):
         self.c = coupled
         self.l = label
         if self.c is True:
-            self.w = (self.e-self.b)*self.w
+            self.w = (self.e - self.b) * self.w
 
-    def __str__(self):
-        bstr = "{:.9f}".format(self.b)
-        estr = "{:.9f}".format(self.e)
-        wstr = "{:.9f}".format(self.w)
-        retval = "beg = " + bstr + ", end = " + estr
-        retval += ", weight = " + wstr + ", label = " + format(self.l)
-        return retval
+    def __repr__(self):
+        return 'regions.Region(beg=%s,end=%s,weight=%s,coupled=%s,label=%s)' % (self.b, self.e, self.w, self.c, self.l)
 
 
 class Sregion(Region):
@@ -124,6 +120,7 @@ class Sregion(Region):
        :class:`fwdpy11.fwdpy11.GammaS`, and
        :class:`fwdpy11.fwdpy11.GaussianS`
     """
+
     def __init__(self, beg, end, weight, h=1.0, coupled=True, label=0):
         """
         Constructor
@@ -160,9 +157,9 @@ class Sregion(Region):
         self.h = float(h)
         super(Sregion, self).__init__(beg, end, weight, coupled, label)
 
-    def __str__(self):
-        retval = "h = "+"{:.9f}".format(self.h)
-        retval += ", "+super(Sregion, self).__str__()
+    # def __str__(self):
+    #    retval = "h = " + "{:.9f}".format(self.h)
+    #    retval += ", " + super(Sregion, self).__str__()
 
 
 class GammaS(Sregion):
@@ -183,6 +180,7 @@ class GammaS(Sregion):
     See :func:`evolve_regions` for how this
     class may be used to parameterize a simulation
     """
+
     def __init__(self, beg, end, weight, mean, shape, h=1.0,
                  coupled=True, label=0):
         """
@@ -230,11 +228,11 @@ class GammaS(Sregion):
         from .fwdpp_extensions import makeGammaSH
         return makeGammaSH(self.mean, self.shape, self.h)
 
-    def __str__(self):
-        retval = "Gamma DFE, mean = "+"{:.9f}".format(self.mean)
-        retval += ", shape = "+"{:.9f}".format(self.shape)
-        retval += ", "+super(GammaS, self).__str__()
-        return retval
+    def __repr__(self):
+        x = 'regions.GammaS(beg=%s,end=%s,weight=%s,'
+        x += 'mean=%s,shape=%s,coupled=%s,label=%s)'
+        return x % (self.b, self.e, self.w, self.mean,
+                    self.shape, self.coupled, self.label)
 
 
 class ConstantS(Sregion):
@@ -254,6 +252,7 @@ class ConstantS(Sregion):
     See :func:`evolve_regions` for how this class may be used to
     parameterize a simulation
     """
+
     def __init__(self, beg, end, weight, s, h=1.0, coupled=True, label=0):
         """
         Constructor
@@ -295,10 +294,10 @@ class ConstantS(Sregion):
         from .fwdpp_extensions import makeConstantSH
         return makeConstantSH(self.s, self.h)
 
-    def __str__(self):
-        retval = "Constant s DFE, s = "+"{:.9f}".format(self.s)
-        retval += ", "+super(ConstantS, self).__str__()
-        return retval
+    def __repr__(self):
+        x = 'regions.ConstantS(beg=%s,end=%s,weight=%s,'
+        x += 's=%s,h=%s,coupled=%s,label=%s)'
+        return x % (self.b, self.e, self.w, self.s, self.h, self.c, self.l)
 
 
 class UniformS(Sregion):
@@ -319,7 +318,8 @@ class UniformS(Sregion):
     See :func:`evolve_regions` for how this
     class may be used to parameterize a simulation
     """
-    def __init__(self, beg, end, weight, lo, hi, h=1.0, coupled=True):
+
+    def __init__(self, beg, end, weight, lo, hi, h=1.0, coupled=True, label=0):
         """
         Constructor
 
@@ -366,11 +366,10 @@ class UniformS(Sregion):
         from .fwdpp_extensions import makeUniformSH
         return makeUniformSH(self.lo, self.hi, self.h)
 
-    def __str__(self):
-        retval = "Uniform s DFE, lo = "+"{:.9f}".format(self.lo)
-        retval += ", hi = "+"{:.9f}".format(self.hi)
-        retval += ", "+super(UniformS, self).__str__()
-        return retval
+    def __repr__(self):
+        x = 'regions.UniformS(beg=%s,end=%s,weight=%s,'
+        x += 'lo=%s,hi=%s,h=%s,coupled=%s)'
+        return x % (self.b, self.e, self.w, self.lo, self.hi, self.h, self.c, self.l)
 
 
 class ExpS(Sregion):
@@ -390,6 +389,7 @@ class ExpS(Sregion):
     See :func:`evolve_regions` for how this class may be used to
     parameterize a simulation
     """
+
     def __init__(self, beg, end, weight, mean, h=1.0, coupled=True, label=0):
         """
         Constructor
@@ -431,10 +431,10 @@ class ExpS(Sregion):
         from .fwdpp_extensions import makeExpSH
         return makeExpSH(self.mean, self.h)
 
-    def __str__(self):
-        retval = "Exponential DFE, mean = "
-        retval += "{:.9f}".format(self.mean)+", "+super(ExpS, self).__str__()
-        return retval
+    def __repr__(self):
+        x = 'regions.ExpS(beg=%s,end=%s,weight=%s,'
+        x += 'mean=%s,h=%s,coupled=%s,label=%s)' 
+        return x % (self.b, self.e, self.w, self.mean, self.h, self.c, self.l)
 
 
 class GaussianS(Sregion):
@@ -457,6 +457,7 @@ class GaussianS(Sregion):
     See :func:`evolve_regions` for how this class may be used to
     parameterize a simulation
     """
+
     def __init__(self, beg, end, weight, sd, h=1.0, coupled=True, label=0):
         """
         Constructor
@@ -498,7 +499,7 @@ class GaussianS(Sregion):
         from .fwdpp_extensions import makeGaussianSH
         return makeGaussianSH(self.sd, self.h)
 
-    def __str__(self):
-        retval = "Gaussian DFE, s.d. = "+"{:.9f}".format(self.sd)
-        retval += ", "+super(GaussianS, self).__str__()
-        return retval
+    def __repr__(self):
+        x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
+        x += 'sd=%s,h=%s,coupled=%s,label=0)' 
+        return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l)

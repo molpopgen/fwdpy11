@@ -48,36 +48,21 @@ These two approaches allow for considerable modeling flexibility.  For example, 
 
 This model boils down to the relative number of crossing overs per region occuring in the ratio :math:`0 : 10^{-8} : 10^{-7}`.  This is easily represented using fwdpy's classes:
 
-.. testcode:: 
+.. ipython:: python
 
     import fwdpy11
     recRegions = [fwdpy11.Region(1,1e5,0),fwdpy11.Region(1e5,2e5,1e-8),fwdpy11.Region(2e5,3e5,1e-7)]
     for i in recRegions:
         print (i)
 
-
-.. testoutput:: 
-
-    beg = 1.000000000, end = 100000.000000000, weight = 0.000000000, label = 0
-    beg = 100000.000000000, end = 200000.000000000, weight = 0.001000000, label = 0
-    beg = 200000.000000000, end = 300000.000000000, weight = 0.010000000, label = 0
-
-
 For this hypothetical example, the region lengths are all identical, and
 thus an equivalent specification would be this:
 
-.. testcode:: 
+.. ipython:: python
 
     recRegions = [fwdpy11.Region(1,1e5,0,False),fwdpy11.Region(1e5,2e5,1e-8,False),fwdpy11.Region(2e5,3e5,1e-7,False)]
     for i in recRegions:
         print (i)
-
-
-.. testoutput::
-
-    beg = 1.000000000, end = 100000.000000000, weight = 0.000000000, label = 0
-    beg = 100000.000000000, end = 200000.000000000, weight = 0.000000010, label = 0
-    beg = 200000.000000000, end = 300000.000000000, weight = 0.000000100, label = 0
 
 
 Specific examples
@@ -88,13 +73,13 @@ Mutations not affecting fitness ("neutral" mutations)
 
 You specify regions where neutral mutations arise via the class :class:`fwdpy11.regions.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
 
-.. testcode::
+.. ipython:: python
 
     neutralRegions = [fwdpy11.Region(0,1,1)]
 
 The beginning and end positions can be whatever you like:
 
-.. testcode:: 
+.. ipython:: python 
 
     #With a weight of 1, we're just rescaling the position here.
     neutralRegions = [fwdpy11.Region(0,100,1)]
@@ -102,7 +87,7 @@ The beginning and end positions can be whatever you like:
 To specify variation in the netural mutation process along a sequence,
 combine multiple regions in your list:
 
-.. testcode::
+.. ipython:: python
 
     #If coupled=False for the second region, the effect would be that region2's mutation rate per base pair is 10x less than region 1!!
     neutralRegions = [fwdpy11.Region(beg=0,end=1,weight=1),fwdpy11.Region(beg=2,end=12,weight=1,coupled=True)]
@@ -112,7 +97,7 @@ function of its length, which is 1(1-0)=1. The second region's total
 weight will be 1\*(12-2)=10, and it will have 10 times as many new mutations
 arising as the first region.
 
-.. testcode:: 
+.. ipython:: python
 
     #Let's see what happens if we set coupled=False:
     neutralRegions2 = [fwdpy11.Region(beg=0,end=1,weight=1),fwdpy11.Region(beg=2,end=12,weight=1,coupled=False)]
@@ -122,17 +107,6 @@ arising as the first region.
     print("The set with coupled=False:")
     for i in neutralRegions2:
         print(i)
-
-
-.. testoutput::
-
-    The set with coupled=True:
-    beg = 0.000000000, end = 1.000000000, weight = 1.000000000, label = 0
-    beg = 2.000000000, end = 12.000000000, weight = 10.000000000, label = 0
-    The set with coupled=False:
-    beg = 0.000000000, end = 1.000000000, weight = 1.000000000, label = 0
-    beg = 2.000000000, end = 12.000000000, weight = 1.000000000, label = 0
-
 
 See the difference in the above? (Look at the "weight" term in the
 second line of each set.)
@@ -162,19 +136,12 @@ Just like neutral mutations, intervals with different crossover rates are specif
 
 The above model can be represented as:
 
-.. testcode::
+.. ipython:: python
 
     #recrate[2] is the hotspot:
     recrates = [fwdpy11.Region(0.,0.45,1.),fwdpy11.Region(0.55,1.,1.,),fwdpy11.Region(0.45,0.55,100.)]
     for i in recrates:
         print (i)
-
-
-.. testoutput::
-
-    beg = 0.000000000, end = 0.450000000, weight = 0.450000000, label = 0
-    beg = 0.550000000, end = 1.000000000, weight = 0.450000000, label = 0
-    beg = 0.450000000, end = 0.550000000, weight = 10.000000000, label = 0
 
 
 Internally, this is what will happen to the above input:
