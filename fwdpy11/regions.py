@@ -504,5 +504,5 @@ class GaussianS(Sregion):
 
     def __repr__(self):
         x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
-        x += 'sd=%s,h=%s,coupled=%s,label=0)'
+        x += 'sd=%s,h=%s,coupled=%s,label=%s)'
         return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l)
