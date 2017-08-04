@@ -17,6 +17,7 @@ Back-end changes
 ------------------------
 
 * Added magic numbers to keep track of compatibility changes to serialization formats.
+* __str__ changed to __repr__ for region types [`commit <https://github.com/molpopgen/fwdpy11/commit/2df859dd74d3de79d941a1cc21b8712a52bcf9ba>`_]
 
 Version 0.1.2
 ++++++++++++++++++++++++++
