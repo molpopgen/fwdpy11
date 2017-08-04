@@ -89,7 +89,9 @@ class Region(object):
             self.w = (self.e - self.b) * self.w
 
     def __repr__(self):
-        return 'regions.Region(beg=%s,end=%s,weight=%s,coupled=%s,label=%s)' % (self.b, self.e, self.w, self.c, self.l)
+        x = 'regions.Region(beg=%s,end=%s,'
+        x += 'weight=%s,coupled=%s,label=%s)'
+        return x % (self.b, self.e, self.w, self.c, self.l)
 
 
 class Sregion(Region):
@@ -368,8 +370,9 @@ class UniformS(Sregion):
 
     def __repr__(self):
         x = 'regions.UniformS(beg=%s,end=%s,weight=%s,'
-        x += 'lo=%s,hi=%s,h=%s,coupled=%s)'
-        return x % (self.b, self.e, self.w, self.lo, self.hi, self.h, self.c, self.l)
+        x += 'lo=%s,hi=%s,h=%s,coupled=%s,label=%s)'
+        return x % (self.b, self.e, self.w, self.lo,
+                    self.hi, self.h, self.c, self.l)
 
 
 class ExpS(Sregion):
@@ -433,7 +436,7 @@ class ExpS(Sregion):
 
     def __repr__(self):
         x = 'regions.ExpS(beg=%s,end=%s,weight=%s,'
-        x += 'mean=%s,h=%s,coupled=%s,label=%s)' 
+        x += 'mean=%s,h=%s,coupled=%s,label=%s)'
         return x % (self.b, self.e, self.w, self.mean, self.h, self.c, self.l)
 
 
@@ -501,5 +504,5 @@ class GaussianS(Sregion):
 
     def __repr__(self):
         x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
-        x += 'sd=%s,h=%s,coupled=%s,label=0)' 
+        x += 'sd=%s,h=%s,coupled=%s,label=0)'
         return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l)
