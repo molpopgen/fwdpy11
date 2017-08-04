@@ -58,3 +58,7 @@ class testCythonRecorder(unittest.TestCase):
     def testEvolve(self):
         from fwdpy11.wright_fisher import evolve
         evolve(self.rng, self.pop, self.p, self.cython_recorder)
+
+if __name__ == "__main__":
+    unittest.main()
+

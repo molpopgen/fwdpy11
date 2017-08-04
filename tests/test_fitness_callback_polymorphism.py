@@ -27,3 +27,7 @@ class testFitnessPolymorphism(unittest.TestCase):
         self.assertEqual(len(p1.findall(self.v[0])), 1)
         self.assertEqual(len(p2.findall(self.v[1])), 1)
         self.assertEqual(len(p3.findall(self.v[2])), 1)
+
+if __name__ == "__main__":
+    unittest.main()
+

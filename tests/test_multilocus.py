@@ -71,3 +71,7 @@ class testRecombination(unittest.TestCase):
     def testMakePoisson(self):
         v = [1e-3] * 5
         x = fp11m.poisson_rec(self.rng, v)
+
+if __name__ == "__main__":
+    unittest.main()
+

@@ -54,3 +54,7 @@ class testSlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
             p = fp11.SlocusPop(0)
+
+if __name__ == "__main__":
+    unittest.main()
+

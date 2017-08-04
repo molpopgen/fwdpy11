@@ -121,3 +121,7 @@ class testMlocusPop(unittest.TestCase):
         self.assertTrue(
             type(self.pop.gametes)
             is fwdpy11.fwdpy11_types.GameteContainer)
+
+if __name__ == "__main__":
+    unittest.main()
+

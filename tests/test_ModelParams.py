@@ -227,3 +227,7 @@ class testMlocusParams(unittest.TestCase):
         self.m = fp11mp.MlocusParams(**self.param_dict)
         with self.assertRaises(ValueError):
             self.m.validate()
+
+if __name__ == "__main__":
+    unittest.main()
+

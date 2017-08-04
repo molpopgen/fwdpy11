@@ -31,3 +31,6 @@ class testCustomAdditive(unittest.TestCase):
         a = fwdpy11.fitness.SlocusAdditive(2.0)
         for i in self.pop.diploids:
             self.assertEqual(i.w, a(i, self.pop))
+
+if __name__ == "__main__":
+    unittest.main()

@@ -97,3 +97,7 @@ class test_MlocusPop(unittest.TestCase):
             for k, l in zip(keys[i:i + self.pop.nloci], j):
                 self.assertEqual(k['first'], l.first)
                 self.assertEqual(k['second'], l.second)
+
+if __name__ == "__main__":
+    unittest.main()
+

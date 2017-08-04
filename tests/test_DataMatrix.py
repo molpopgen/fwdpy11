@@ -155,3 +155,6 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
                 self.assertTrue(len(site[1]) == self.gm_neutral.shape[0])
+
+if __name__ == "__main__":
+    unittest.main()

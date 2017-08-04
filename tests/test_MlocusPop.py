@@ -58,3 +58,6 @@ class testMlocusPopExceptions(unittest.TestCase):
     def testNoLoci(self):
         with self.assertRaises(ValueError):
             p = fp11.MlocusPop(1000, 0)
+
+if __name__ == "__main__":
+    unittest.main()
