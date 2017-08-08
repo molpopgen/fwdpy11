@@ -18,6 +18,7 @@ Back-end changes
 
 * Added magic numbers to keep track of compatibility changes to serialization formats.
 * __str__ changed to __repr__ for region types [`commit <https://github.com/molpopgen/fwdpy11/commit/2df859dd74d3de79d941a1cc21b8712a52bcf9ba>`_]
+* fwdpy11.model_params now uses try/except rather than isinstance to check that rates are float-like types.[`commit <https://github.com/molpopgen/fwdpy11/commit/37112a60cd8fc74133945e522a47183314bf4085>`_]
 
 Version 0.1.2
 ++++++++++++++++++++++++++
