@@ -45,6 +45,7 @@ class ModelParams(object):
 
     .. versionadded:: 0.1.1
     """
+
     def __init__(self, **kwargs):
         self.__expected_mutrec_kwargs = ['nregions', 'sregions', 'recregions']
         self.__expected_demog_kwargs = ['demography']
@@ -184,6 +185,7 @@ class SlocusParams(ModelParams):
 
     .. versionadded:: 0.1.1
     """
+
     def __set_rates(self, rates):
         try:
             self.__mutrec_data['mutrate_n'] = rates[0]
@@ -199,7 +201,7 @@ class SlocusParams(ModelParams):
                         else:
                             raise ValueError("invalid key/value " +
                                              "pair for setting rates: ",
-                                             key, ', '+str(value))
+                                             key, ', ' + str(value))
                 else:
                     raise
             except:
@@ -230,7 +232,9 @@ class SlocusParams(ModelParams):
                     raise
             if key in self.__expected_mutrec_kwargs:
                 used = True
-                if (type(value) is float) is False:
+                try:
+                    float(value)
+                except:
                     raise ValueError("mutation and recombination " +
                                      "rates must be floats")
                 self.__mutrec_data[key] = value
@@ -239,7 +243,9 @@ class SlocusParams(ModelParams):
                 self.__gvalue_data[key] = value
             if key in self.__expected_selfing_kwargs:
                 used = True
-                if (type(value) is float) is False:
+                try:
+                    float(value)
+                except:
                     raise ValueError("selfing probability must be a float")
                 self.__selfing_data[key] = value
             if key in self.__expected_demog_kwargs:
@@ -398,6 +404,7 @@ class SlocusParamsQ(SlocusParams):
 
     .. versionadded:: 0.1.1
     """
+
     def __init__(self, **kwargs):
         self.__qtrait_params = {'trait_to_fitness': None, 'noise': None}
         new_kwargs = {}
@@ -468,6 +475,12 @@ def _validate_multilocus_rates(data):
             raise ValueError(key + " cannot be None")
         if isinstance(value, list) is False:
             raise ValueError(key + " must be a list of float")
+        for i in value:
+            try:
+                float(i)
+            except:
+                raise ValueError(
+                    "rates must be floating point values")
         if any(i < 0. for i in value):
             raise ValueError("all mutation and recombination rates " +
                              "must be non-negative.")
@@ -484,6 +497,7 @@ class MlocusParams(ModelParams):
 
     .. versionadded:: 0.1.1
     """
+
     def __init__(self, **kwargs):
         self.__expected_demog_kwargs = ['demography']
         self.__mutrec_data = {'mutrates_n': [],
@@ -506,16 +520,21 @@ class MlocusParams(ModelParams):
                     raise
             if key in self.__mutrec_data:
                 used = True
-                if any([type(i) is float for i in value]) is False:
-                    raise ValueError("mutation and recombination " +
-                                     "rates must be floats")
+                for i in value:
+                    try:
+                        float(i)
+                    except:
+                        raise ValueError("mutation and recombination " +
+                                         "rates must be floats")
                 self.__mutrec_data[key] = value
             if key in self.__gvalue_data:
                 used = True
                 self.gvalue = value
             if key in self.__selfing_data:
                 used = True
-                if (type(value) is float) is False:
+                try:
+                    float(value)
+                except:
                     raise ValueError("selfing probability must be a float")
                 self.__selfing_data[key] = value
             if key in self.__expected_demog_kwargs:
@@ -546,7 +565,7 @@ class MlocusParams(ModelParams):
             from fwdpy11.multilocus import MultiLocusGeneticValue
             from fwdpy11.fitness import SlocusMult
             self.__gvalue_data['gvalue'] = \
-                MultiLocusGeneticValue([SlocusMult(2.0)]*len(self.sregions))
+                MultiLocusGeneticValue([SlocusMult(2.0)] * len(self.sregions))
 
     @property
     def gvalue(self):
@@ -659,7 +678,7 @@ class MlocusParams(ModelParams):
                         else:
                             raise ValueError("invalid key/value pair " +
                                              "for setting rates: ",
-                                             key, ', '+str(value))
+                                             key, ', ' + str(value))
                 else:
                     raise
             except:
@@ -726,7 +745,7 @@ class MlocusParams(ModelParams):
 
         # Lengths of all regions must be the same
         rlens = set((len(self.nregions),
-                    len(self.sregions), len(self.recregions)))
+                     len(self.sregions), len(self.recregions)))
         if len(rlens) > 1:
             raise ValueError("length of all region " +
                              "containers must be equal: " +
@@ -744,7 +763,7 @@ class MlocusParams(ModelParams):
 
         # For k loci, there must be k-1 interlocus-recombination rates
         nloci = rlens.pop()
-        if len(self.interlocus)+1 != nloci:
+        if len(self.interlocus) + 1 != nloci:
             raise ValueError("invalid parameters: " +
                              str(nloci) + " loci, but only " +
                              str(len(self.interlocus)) +
@@ -762,6 +781,7 @@ class MlocusParamsQ(MlocusParams):
 
     .. versionadded:: 0.1.1
     """
+
     def __init__(self, **kwargs):
         new_kwargs = {}
         self.__qtrait_params = {'trait2w': None,
