@@ -126,7 +126,7 @@ evolve_singlepop_regions_qtrait_cpp(
             recorder(pop);
             if (updater_exists)
                 {
-                    updater(pop.generation);
+                    updater(pop);
                 }
             if (noise_updater_exists)
                 {
@@ -212,11 +212,11 @@ evolve_qtrait_mloc_regions_cpp(
             recorder(pop);
             if (updater_exists)
                 {
-                    updater(pop.generation);
+                    updater(pop);
                 }
             if (noise_updater_exists)
                 {
-                    noise_updater_fxn(pop.generation);
+                    noise_updater_fxn(pop);
                 }
         }
     --pop.generation;

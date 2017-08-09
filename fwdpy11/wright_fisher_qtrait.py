@@ -75,8 +75,7 @@ class GSSmo:
     def __call__(self, g, e):
         devsq = pow((g+e)-self.env[1], 2)
         return math.exp(-devsq/(2.0*self.env[2]))
-
-    def update(self, generation):
+    def update(self,pop):
         """
         Update the fitness model conditions.
 
@@ -86,7 +85,7 @@ class GSSmo:
         """
         if len(self.optima) == 0:
             return
-        if generation >= self.optima[0][0]:
+        if pop.generation >= self.optima[0][0]:
             self.env = self.optima.pop(0)
 
 
