@@ -491,6 +491,21 @@ def _validate_multilocus_rates(data):
                          "rates must be equal length.")
 
 
+def _sanity_check_mutlilocus_rates_and_regions(rate_data, nregions, sregions, recregions):
+    for i, j in zip(rate_data['mutrates_n'], nregions):
+        if i > 0.0 and len(j) == 0:
+            raise ValueError(
+                "non-zero rate found associated with empty neutral locus")
+    for i, j in zip(rate_data['mutrates_s'], sregions):
+        if i > 0.0 and len(j) == 0:
+            raise ValueError(
+                "non-zero rate found associated with empty selected locus")
+    for i, j in zip(rate_data['recrates'], recregions):
+        if i > 0.0 and len(j) == 0:
+            raise ValueError(
+                "non-zero rate found associated with empty recombination locus")
+
+
 class MlocusParams(ModelParams):
     """
     Model parameters for multi-locus simulation
@@ -761,6 +776,13 @@ class MlocusParams(ModelParams):
         if rlens != ratelens:
             raise ValueError("region and rate containers of different lengths")
 
+        _sanity_check_mutlilocus_rates_and_regions(self.rates,
+                                                   ModelParams.nregions.fget(
+                                                       self),
+                                                   ModelParams.sregions.fget(
+                                                       self),
+                                                   ModelParams.recregions.fget(self))
+
         # For k loci, there must be k-1 interlocus-recombination rates
         nloci = rlens.pop()
         if len(self.interlocus) + 1 != nloci:
@@ -802,9 +824,8 @@ class MlocusParamsQ(MlocusParams):
         if 'gvalue' not in kwargs and len(self.sregions) > 0:
             from fwdpy11.multilocus import MultiLocusGeneticValue
             from fwdpy11.trait_values import SlocusMultTrait
-            new_kwargs['gvalue'] = \
-                MultiLocusGeneticValue([SlocusMultTrait(2.0)] *
-                                       len(self.sregions))
+            new_kwargs['gvalue'] = MultiLocusGeneticValue([SlocusMultTrait(2.0)] *
+                                                          len(self.sregions))
 
     @property
     def trait2w(self):

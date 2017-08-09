@@ -228,6 +228,27 @@ class testMlocusParams(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.m.validate()
 
+    def test_empty_sregion_exception(self):
+        self.setUpClass()
+        self.param_dict['sregions'] = [[fp11.ExpS(0, 1, 1, 0.25)], []]
+        self.m = fp11mp.MlocusParams(**self.param_dict)
+        with self.assertRaises(ValueError):
+            self.m.validate()
+
+    def test_empty_nregion_exception(self):
+        self.setUpClass()
+        self.param_dict['nregions'] = [[], []]
+        self.m = fp11mp.MlocusParams(**self.param_dict)
+        with self.assertRaises(ValueError):
+            self.m.validate()
+
+    def test_empty_recregion_exception(self):
+        self.setUpClass()
+        self.param_dict['recregions'] = [[fp11.Region(0, 1, 1)], []]
+        self.m = fp11mp.MlocusParams(**self.param_dict)
+        with self.assertRaises(ValueError):
+            self.m.validate()
+
+
 if __name__ == "__main__":
     unittest.main()
-
