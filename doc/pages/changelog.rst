@@ -10,6 +10,8 @@ Version 0.1.3
 Bug fixes:
 ------------------------
 
+* Issue #2 on GitHub fixed. [`commit <https://github.com/molpopgen/fwdpy11/commit/562a4d31947d9a7aae31f092ed8c014e94dc56db`_]
+
 API changes:
 ------------------------
 
