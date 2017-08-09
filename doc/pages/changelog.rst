@@ -15,6 +15,8 @@ Bug fixes:
 API changes:
 ------------------------
 
+* Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. [`commit <https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9`_]
+
 Back-end changes
 ------------------------
 
