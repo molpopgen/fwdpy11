@@ -97,8 +97,8 @@ Again, this class is relatively simple:
 
 * The constructor takes a list of tuples specifying the generations at which :math:`O` and/or :math:`VS` change. 
 * The call operator is the same as in the previous example
-* The new thing is the "update" function, which gets passed in the population's current generation.  We use the
-  generation to check if the conditions change. If they do change, we update the model parameters and pop an element off
+* The new thing is the "update" function, which gets passed in the population.  We may use the
+  date in the population object to check if the conditions change. If they do change, we update the model parameters and pop an element off
   the front of the list.
 
 .. note::

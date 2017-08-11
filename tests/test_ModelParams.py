@@ -23,7 +23,7 @@ import fwdpy11.model_params as fp11mp
 import fwdpy11.multilocus as ml
 from fwdpy11.fitness import SlocusAdditive
 import numpy as np
-
+import pickle
 
 class testModelParamsConstructor(unittest.TestCase):
     def test_init(self):
@@ -173,7 +173,7 @@ class testMlocusParams(unittest.TestCase):
             [fp11.ExpS(0, 1, 1, -0.1)],
             [fp11.GammaS(1, 2, 1, -0.1, 0.5)]]
         recregions = nregions
-        interlocus = ml.binomial_rec(self.rng, [0.5])
+        interlocus = ml.binomial_rec([0.5])
         region_rates = [1e-3, 1e-3]
         genetic_value = ml.MultiLocusGeneticValue([SlocusAdditive()] * 2)
         self.param_dict = {'nregions': nregions,
@@ -249,6 +249,16 @@ class testMlocusParams(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.m.validate()
 
+    def test_pickle_pdict(self):
+        self.setUpClass()
+        p = pickle.dumps(self.param_dict)
+        up = pickle.loads(p)
+
+    def test_pickle_params(self):
+        self.setUpClass()
+        self.m = fp11mp.MlocusParams(**self.param_dict)
+        p = pickle.dumps(self.m)
+        up = pickle.loads(p)
 
 if __name__ == "__main__":
     unittest.main()

@@ -62,20 +62,20 @@ struct snowdrift_diploid
         // is std::size_t.
         auto i = dip.label;
         double zself = phenotypes[i];
-        //The code here would not be found 
-        //in production code.  Here, we are testing 
-        //that all the data have been updated correctly
-        //in fwdpy11's machinery for evolving populations.
-        //This test is only here as this is part of unit
-        //testing suite.
-        auto g = KTfwd::additive_diploid()(dip, gametes, mutations,2.0);
+        // The code here would not be found
+        // in production code.  Here, we are testing
+        // that all the data have been updated correctly
+        // in fwdpy11's machinery for evolving populations.
+        // This test is only here as this is part of unit
+        // testing suite.
+        auto g = KTfwd::additive_diploid()(dip, gametes, mutations, 2.0);
         if (zself != g)
             {
                 throw std::runtime_error("snowdrift not working: "
                                          + std::to_string(zself) + ' '
                                          + std::to_string(g));
             }
-        //End unit-testing only code
+        // End unit-testing only code
         result_type fitness = 0;
         for (std::size_t j = 0; j < N; ++j)
             {
@@ -173,7 +173,18 @@ PYBIND11_PLUGIN(snowdrift)
                fwdpy11::single_locus_fitness>(m, "SlocusSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
-        .def_readwrite("phenotypes",&snowdrift::phenotypes);
+        .def_readwrite("phenotypes", &snowdrift::phenotypes)
+        // It is useful to make these type compatible with Python's
+        // pickling protocol:
+        .def("__getstate__",
+             [](const snowdrift &s) {
+                 return py::make_tuple(s.b1, s.b2, s.c1, s.c2, s.phenotypes);
+             })
+        .def("__setstate__", [](snowdrift &s, py::tuple t) {
+            new (&s) snowdrift(t[0].cast<double>(), t[1].cast<double>(),
+                               t[2].cast<double>(), t[3].cast<double>());
+            s.phenotypes = t[4].cast<std::vector<double>>();
+        });
 
     return m.ptr();
 }

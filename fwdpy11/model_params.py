@@ -555,9 +555,12 @@ class MlocusParams(ModelParams):
             if key in self.__expected_demog_kwargs:
                 _validate_single_deme_demography(value)
             if key in self.__interlocus_rec:
-                if any(callable(i) for i in value) is False:
-                    raise ValueError("interlocus recombination " +
-                                     "must contain callables")
+                import fwdpy11
+                for i in value:
+                    test = isinstance(i, fwdpy11.multilocus.InterlocusRecombination)
+                    if test is False:
+                        raise ValueError("invalid interlocus recombination object")
+                del fwdpy11
                 self.__interlocus_rec[key] = value
                 used = True
             if key in self.__aggregator:

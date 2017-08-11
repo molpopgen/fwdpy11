@@ -74,26 +74,44 @@ PYBIND11_PLUGIN(trait_values)
     py::class_<single_locus_additive_trait_wrapper,
                std::shared_ptr<single_locus_additive_trait_wrapper>,
                fwdpy11::single_locus_fitness>(m, "SlocusAdditiveTrait",
-                                           R"delim(
+                                              R"delim(
                 Additive trait value, centered on zero.
 
                 Trait value is :math:`\sum_{i} x_i`, 
                 where :math:`x_i = 0, sh,\ \mathrm{or\ }scaling \times s`
                 for AA, Aa, and aa, respectively.
                 )delim")
-        .def(py::init<double>(), py::arg("scaling"));
+        .def(py::init<double>(), py::arg("scaling"))
+        .def("__getstate__",
+             [](const single_locus_additive_trait_wrapper &w) {
+                 return py::make_tuple(w.scaling);
+             })
+        .def("__setstate__",
+             [](single_locus_additive_trait_wrapper &w, py::tuple t) {
+                 double scaling = t[0].cast<double>();
+                 new (&w) single_locus_additive_trait_wrapper(scaling);
+             });
 
     py::class_<single_locus_multiplicative_trait_wrapper,
                std::shared_ptr<single_locus_multiplicative_trait_wrapper>,
                fwdpy11::single_locus_fitness>(m, "SlocusMultTrait",
-                                           R"delim(
+                                              R"delim(
                 Multiplicative trait value, centered on zero.
                 )delim")
-        .def(py::init<double>(), py::arg("scaling"));
+        .def(py::init<double>(), py::arg("scaling"))
+        .def("__getstate__",
+             [](const single_locus_multiplicative_trait_wrapper &w) {
+                 return py::make_tuple(w.scaling);
+             })
+        .def("__setstate__",
+             [](single_locus_multiplicative_trait_wrapper &w, py::tuple t) {
+                 double scaling = t[0].cast<double>();
+                 new (&w) single_locus_multiplicative_trait_wrapper(scaling);
+             });
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,
                fwdpy11::single_locus_fitness>(m, "SlocusGBRTrait",
-                                           R"delim(
+                                              R"delim(
             The "gene-based recessive" model from Thornton et al.
             2013 http://dx.doi.org/10.1371/journal.pgen.1003258 
             and Sanjak et al. 2017 http://dx.doi.org/10.1371/journal.pgen.1006573.
@@ -101,7 +119,23 @@ PYBIND11_PLUGIN(trait_values)
             The trait value is the geometric mean of the sum of effect sizes on
             each haplotype.  It is undefined for the case where these sums are negative.
             )delim")
-        .def(py::init<>());
+        .def(py::init<>())
+        .def("__getstate__",
+             [](const gbr_trait_wrapper &g) {
+                 return py::make_tuple("gbr_trait_wrapper");
+             })
+        .def("__setstate__", [](gbr_trait_wrapper &g, py::tuple t) {
+            std::string n = t[0].cast<std::string>();
+            if (n == "gbr_trait_wrapper")
+                {
+                    new (&g) gbr_trait_wrapper();
+                }
+            else
+                {
+                    throw std::invalid_argument(
+                        "incorrect type name found when unpickling");
+                }
+        });
 
     return m.ptr();
 }

@@ -36,6 +36,7 @@
 #include <fwdpy11/evolve/qtrait_api.hpp>
 #include <fwdpy11/evolve/slocuspop.hpp>
 #include <fwdpy11/evolve/mlocuspop.hpp>
+#include <fwdpy11/multilocus.hpp>
 
 namespace py = pybind11;
 
@@ -145,7 +146,8 @@ evolve_qtrait_mloc_regions_cpp(
     const std::vector<double> &recrates,
     const std::vector<KTfwd::extensions::discrete_mut_model> &mmodels,
     const std::vector<KTfwd::extensions::discrete_rec_model> &rmodels,
-    const std::vector<std::function<unsigned(void)>> &interlocus_rec,
+    py::list interlocus_rec_wrappers,
+    //const std::vector<std::function<unsigned(void)>> &interlocus_rec,
     fwdpy11::multilocus_genetic_value &multilocus_gvalue,
     fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
     fwdpy11::multilocus_aggregator_function aggregator,
@@ -186,6 +188,12 @@ evolve_qtrait_mloc_regions_cpp(
     ++pop.generation;
     multilocus_gvalue.update(pop);
     auto wbar = rules.w(pop, multilocus_gvalue);
+    std::vector<std::function<unsigned(void)>> interlocus_rec;
+    for(auto && i : interlocus_rec_wrappers)
+    {
+        interlocus_rec.push_back(py::cast<fwdpy11::interlocus_rec>(i).callback(rng));
+    }
+
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
             auto N_next = popsizes.at(i);
