@@ -11,7 +11,7 @@ Bug fixes:
 ------------------------
 
 * Issue #2 on GitHub fixed. [`commit <https://github.com/molpopgen/fwdpy11/commit/562a4d31947d9a7aae31f092ed8c014e94dc56db>`_]
-* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #4 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
+* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
 
 API changes/new features:
 ------------------------------------------------
