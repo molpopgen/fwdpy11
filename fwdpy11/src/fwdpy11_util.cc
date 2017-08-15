@@ -141,6 +141,8 @@ PYBIND11_PLUGIN(util)
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.
+
+        :versionadded: 0.13.0
         )delim");
 
     m.def("change_effect_size",
@@ -184,6 +186,8 @@ PYBIND11_PLUGIN(util)
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.
+          
+        :versionadded: 0.13.0
           )delim");
 
     return m.ptr();
