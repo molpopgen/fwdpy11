@@ -25,125 +25,152 @@ from fwdpy11.fitness import SlocusAdditive
 import numpy as np
 import pickle
 
-class testModelParamsConstructor(unittest.TestCase):
-    def test_init(self):
-        m = fp11mp.ModelParams()
-        try:
-            m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-    def test_nregions(self):
-        m = fp11mp.ModelParams(nregions=[fp11.Region(0, 1, 1)])
-        self.assertIsInstance(m.nregions, list)
-        self.assertIsInstance(m.nregions[0], fp11.Region)
-        try:
-            m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-    def test_recregions(self):
-        m = fp11mp.ModelParams(recregions=[fp11.Region(0, 1, 1)])
-        self.assertIsInstance(m.recregions, list)
-        self.assertIsInstance(m.recregions[0], fp11.Region)
-        try:
-            m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-    def test_sregions(self):
-        m = fp11mp.ModelParams(sregions=[fp11.ExpS(0, 1, 1, 0.25)])
-        self.assertIsInstance(m.sregions, list)
-        self.assertIsInstance(m.sregions[0], fp11.ExpS)
-        try:
-            m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-
-class testModelParamsSetting(unittest.TestCase):
-    @classmethod
-    def setUpClass(self):
-        self.m = fp11mp.ModelParams()
-
-    def test_nregions(self):
-        self.m.nregions = [fp11.Region(0, 1, 1)]
-        self.assertIsInstance(self.m.nregions, list)
-        self.assertIsInstance(self.m.nregions[0], fp11.Region)
-        try:
-            self.m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-    def test_recregions(self):
-        self.m.recregions = [fp11.Region(0, 1, 1)]
-        self.assertIsInstance(self.m.recregions, list)
-        self.assertIsInstance(self.m.recregions[0], fp11.Region)
-        try:
-            self.m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-    def test_sregions(self):
-        self.m.sregions = [fp11.ExpS(0, 1, 1, 0.25)]
-        self.assertIsInstance(self.m.sregions, list)
-        self.assertIsInstance(self.m.sregions[0], fp11.ExpS)
-        try:
-            self.m.validate()
-        except ValueError:
-            self.fail("ValueError encountered")
-
-
-class testModelParamsBadInputData(unittest.TestCase):
-    def test_not_list(self):
-        m = fp11mp.ModelParams(nregions=fp11.Region(0, 1, 1))
-        with self.assertRaises(ValueError):
-            m.validate()
-
 
 class testSlocusParams(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        # We do not assign certain attributes,
+        # which allows us to test the defaults.
+        self.pdict = {'nregions': [],
+                      'sregions': [],
+                      'recregions': [],
+                      'rates': [0, 0, 0],
+                      'demography': np.array([100] * 100, dtype=np.uint32)
+                      }
+
+    def test_SlocusParamsDefaults(self):
+        from fwdpy11.fitness import SlocusMult
+        m = fp11mp.SlocusParams(**self.pdict)
+        self.assertEqual(type(m.gvalue), SlocusMult)
+
+    def test_SlocusParamsQDefaults(self):
+        self.pdict['prune_selected'] = False  # Suppresses a warning
+        from fwdpy11.trait_values import SlocusAdditiveTrait
+        from fwdpy11.wright_fisher_qtrait import GSS
+        m = fp11mp.SlocusParamsQ(**self.pdict)
+        self.assertEqual(type(m.gvalue), SlocusAdditiveTrait)
+        self.assertEqual(type(m.trait2w), GSS)
+        self.assertEqual(m.trait2w.VS, 1.0)
+        self.assertEqual(m.trait2w.O, 0.0)
+
+    def test_set_nregions(self):
+        self.setUpClass()
+        m = fp11mp.SlocusParams(**self.pdict)
+        try:
+            m.nregions = [fp11.Region(0, 1, 1)]
+        except:
+            self.fail("unexpected exception")
+        # An empty list is ok
+        try:
+            m.nregions = []
+        except:
+            self.fail("unexpected exception")
+        # TypeError b/c not iterable:
+        with self.assertRaises(TypeError):
+            m.nregions = fp11.Region(0, 1, 1)
+        with self.assertRaises(TypeError):
+            m.nregions = [fp11.ExpS(0, 1, 1, 0.25)]
+
+    def test_set_recregions(self):
+        self.setUpClass()
+        m = fp11mp.SlocusParams(**self.pdict)
+        try:
+            m.recregions = [fp11.Region(0, 1, 1)]
+        except:
+            self.fail("unexpected exception")
+        # An empty list is ok
+        try:
+            m.recregions = []
+        except:
+            self.fail("unexpected exception")
+        # TypeError b/c not iterable:
+        with self.assertRaises(TypeError):
+            m.recregions = fp11.Region(0, 1, 1)
+        with self.assertRaises(TypeError):
+            m.recregions = [fp11.ExpS(0, 1, 1, 0.25)]
+
+    def test_set_sregions(self):
+        self.setUpClass()
+        m = fp11mp.SlocusParams(**self.pdict)
+        try:
+            m.sregions = [fp11.GaussianS(0, 1, 1, 0.1)]
+        except:
+            self.fail("unexpected exception")
+        # An empty list is ok
+        try:
+            m.sregions = []
+        except:
+            self.fail("unexpected exception")
+        with self.assertRaises(TypeError):
+            m.sregions = fp11.GaussianS(0, 1, 1, 0.2)
+        with self.assertRaises(TypeError):
+            m.sregions = [fp11.Region(0, 1, 1)]
+
     def test_init_demog(self):
-        m = fp11mp.SlocusParams(
-            demography=np.array([100] * 10, dtype=np.uint32))
-        m.validate()
+        self.setUpClass()
+        try:
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
+        except:
+            self.fail("unexpected exception")
 
     def test_init_demog_list(self):
+        self.pdict['demography'] = [100]*10
         with self.assertRaises(ValueError):
-            m = fp11mp.SlocusParams(demography=[100] * 10)
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
 
     def test_init_bad_popsizes(self):
+        self.pdict['demography'] = np.array([100]*10 + [-1])
         with self.assertRaises(ValueError):
-            m = fp11mp.SlocusParams(demography=np.array([100] * 10 + [-1]))
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
 
     def test_bad_rates(self):
+        self.setUpClass()
+        self.pdict['mutrate_n'] = None
         with self.assertRaises(ValueError):
-            m = fp11mp.SlocusParams(mutrate_n=None)
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
+        self.pdict['mutrate_n'] = -0.01
+        with self.assertRaises(ValueError):
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
 
     def test_warning_for_zero_rate(self):
-        # We pass in some sregions but leave mutrate_s == 0
-        m = fp11mp.SlocusParams(
-            sregions=[fp11.GammaS(0, 1, 1, -0.1, 0.10, 1.0)])
-        m.demography = np.array([100] * 100, dtype=np.uint32)
+        # We pass in some sregions but leave mutrate_s == 0.
+        self.setUpClass()
+        self.pdict['sregions'] = [fp11.GammaS(0, 1, 1, -0.1, 0.10, 1.0)]
         with self.assertWarns(UserWarning):
+            m = fp11mp.SlocusParams(**self.pdict)
             m.validate()
 
     def test_set_rates_list(self):
-        m = fp11mp.SlocusParams()
-        m.rates = [0., 1e-3, 0.25]
-        with self.assertRaises(ValueError):
-            m.rates = [0., -1e-3, 0.25]
+        self.setUpClass()
+        self.pdict['rates'] = [0., 1e-3, 0.25]
+        try:
+            m = fp11mp.SlocusParams(**self.pdict)
+            m
+        except:
+            self.fail("unexpected exception")
 
     def test_set_rates_tuple(self):
         m = fp11mp.SlocusParams()
         m.rates = (0., 1e-3, 0.25)
+        self.assertEqual(m.mutrate_n, 0.0)
+        self.assertEqual(m.mutrate_s, 1e-3)
+        self.assertEqual(m.recrate, 0.25)
         with self.assertRaises(ValueError):
             m.rates = (0., -1e-3, 0.25)
 
     def test_set_rates_dict(self):
         m = fp11mp.SlocusParams()
-        m.rates = {'mutrate_n': 1e-3}
         with self.assertRaises(ValueError):
-            m.rates = {'mutrate_n': -1e-3}
+            m.rates = {'mutrate_n': 1e-3}
+        with self.assertRaises(ValueError):
+            m.rates = {'mutrate_n': -1e-3,
+                       'mutrate_s': 1e-3,
+                       'recrate': 1e-3}
         with self.assertRaises(ValueError):
             m.rates = {'monkeys_n': 1e-3}
 
@@ -161,12 +188,12 @@ class testSlocusParams(unittest.TestCase):
         from fwdpy11.fitness import SlocusAdditive
         with self.assertRaises(ValueError):
             m = fp11mp.SlocusParams(fitness=SlocusAdditive())
+            m
 
 
 class testMlocusParams(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.m = fp11mp.MlocusParams()
         self.rng = fp11.GSLrng(42)
         nregions = [[fp11.Region(0, 1, 1)], [fp11.Region(1, 2, 1)]]
         sregions = [
@@ -176,6 +203,7 @@ class testMlocusParams(unittest.TestCase):
         interlocus = ml.binomial_rec([0.5])
         region_rates = [1e-3, 1e-3]
         genetic_value = ml.MultiLocusGeneticValue([SlocusAdditive()] * 2)
+        nlist = np.array([100]*10, dtype=np.uint32)
         self.param_dict = {'nregions': nregions,
                            'sregions': sregions,
                            'recregions': recregions,
@@ -183,7 +211,9 @@ class testMlocusParams(unittest.TestCase):
                            'mutrates_n': region_rates,
                            'mutrates_s': region_rates,
                            'recrates': region_rates,
-                           'gvalue': genetic_value}
+                           'gvalue': genetic_value,
+                           'demography': nlist}
+        self.m = fp11mp.MlocusParams(**self.param_dict)
 
     def test_assign_gvalue(self):
         self.m.gvalue = ml.MultiLocusGeneticValue([SlocusAdditive()] * 2)
@@ -204,7 +234,7 @@ class testMlocusParams(unittest.TestCase):
     # Now, tests that check the validate(), too
 
     def test_construction(self):
-        self.m = fp11mp.MlocusParams(**self.param_dict)
+        self.setUpClass()
         try:
             self.m.validate()
         except:
@@ -212,21 +242,18 @@ class testMlocusParams(unittest.TestCase):
 
     def test_construction_unequal_region_lens_1(self):
         self.param_dict['nregions'] = [fp11.Region(0, 1, 1)]
-        self.m = fp11mp.MlocusParams(**self.param_dict)
-        with self.assertRaises(ValueError):
-            self.m.validate()
+        with self.assertRaises(TypeError):
+            self.m = fp11mp.MlocusParams(**self.param_dict)
 
     def test_construction_unequal_region_lens_2(self):
         self.param_dict['sregions'] = [fp11.ExpS(0, 1, 1, 0.25)]
-        self.m = fp11mp.MlocusParams(**self.param_dict)
-        with self.assertRaises(ValueError):
-            self.m.validate()
+        with self.assertRaises(TypeError):
+            self.m = fp11mp.MlocusParams(**self.param_dict)
 
     def test_construction_unequal_region_lens_3(self):
         self.param_dict['recregions'] = [fp11.Region(0, 1, 1)]
-        self.m = fp11mp.MlocusParams(**self.param_dict)
-        with self.assertRaises(ValueError):
-            self.m.validate()
+        with self.assertRaises(TypeError):
+            self.m = fp11mp.MlocusParams(**self.param_dict)
 
     def test_empty_sregion_exception(self):
         self.setUpClass()
@@ -253,12 +280,79 @@ class testMlocusParams(unittest.TestCase):
         self.setUpClass()
         p = pickle.dumps(self.param_dict)
         up = pickle.loads(p)
+        up
 
     def test_pickle_params(self):
         self.setUpClass()
         self.m = fp11mp.MlocusParams(**self.param_dict)
         p = pickle.dumps(self.m)
         up = pickle.loads(p)
+        up
+
+    def test_deprecated_keyword(self):
+        self.setUpClass()
+        self.m = fp11mp.MlocusParams(**self.param_dict)
+        with self.assertWarns(DeprecationWarning):
+            self.m.agg = ml.AggAddTrait()
+
+
+class testMlocusParamsDefaults(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        nregions = [[fp11.Region(0, 1, 1)], [fp11.Region(1, 2, 1)]]
+        sregions = [
+            [fp11.ExpS(0, 1, 1, -0.1)],
+            [fp11.GammaS(1, 2, 1, -0.1, 0.5)]]
+        recregions = nregions
+        interlocus = ml.binomial_rec([0.5])
+        region_rates = [1e-3, 1e-3]
+        nlist = np.array([100]*10, dtype=np.uint32)
+        self.pdict = {'nregions': nregions,
+                      'sregions': sregions,
+                      'recregions': recregions,
+                      'interlocus': interlocus,
+                      'mutrates_n': region_rates,
+                      'mutrates_s': region_rates,
+                      'recrates': region_rates,
+                      'demography': nlist
+                      }
+
+    def test_MlocusParamsDefaults(self):
+        m = fp11mp.MlocusParams(**self.pdict)
+        from fwdpy11.multilocus import AggMultFitness
+        from fwdpy11.multilocus import MultiLocusGeneticValue
+        from fwdpy11.fitness import SlocusMult
+        self.assertEqual(type(m.aggregator), AggMultFitness)
+        self.assertEqual(type(m.gvalue), MultiLocusGeneticValue)
+        # MultilocusGeneticValue is currently not iterable:
+        with self.assertRaises(TypeError):
+            for i in m.gvalue:
+                self.assertEqual(type(i), SlocusMult)
+
+    def test_MlocusParamsQDefaults(self):
+        self.pdict['prune_selected'] = True
+        m = fp11mp.MlocusParamsQ(**self.pdict)
+        from fwdpy11.multilocus import AggMultTrait
+        from fwdpy11.multilocus import MultiLocusGeneticValue
+        from fwdpy11.trait_values import SlocusAdditiveTrait
+        from fwdpy11.wright_fisher_qtrait import GSS
+        self.assertEqual(type(m.aggregator), AggMultTrait)
+        self.assertEqual(type(m.gvalue), MultiLocusGeneticValue)
+        self.assertEqual(type(m.trait2w), GSS)
+        self.assertEqual(m.trait2w.VS, 1.0)
+        self.assertEqual(m.trait2w.O, 0.0)
+        # MultilocusGeneticValue is currently not iterable:
+        with self.assertRaises(TypeError):
+            for i in m.gvalue:
+                self.assertEqual(type(i), SlocusAdditiveTrait)
+
+    def test_MlocusParams_cannot_set_gvalue(self):
+        self.pdict.pop('sregions')
+        m = fp11mp.MlocusParams(**self.pdict)
+        self.assertIs(m.gvalue, None)
+        m = fp11mp.MlocusParamsQ(**self.pdict)
+        self.assertIs(m.gvalue, None)
+
 
 if __name__ == "__main__":
     unittest.main()

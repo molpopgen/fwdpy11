@@ -85,7 +85,7 @@ def quick_mlocus_qtrait(N=1000, simlen=100):
                   'mutrates_n': [theta / (4. * float(N))] * nloci,
                   'mutrates_s': [mu] * nloci,
                   'recrates': [rho / (4. * float(N))] * nloci,
-                  'agg': agg,
+                  'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSS(1, 0),
                   'demography': nlist}
