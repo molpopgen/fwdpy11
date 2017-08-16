@@ -22,7 +22,7 @@ API changes/new features:
 Back-end changes
 ------------------------
 
-* :mod:`fwdpy11.model_params` has been refactored.  The new code base is more idiomatic w.r.to Python's OO methods.`[`commit <https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22>`_]
+* :mod:`fwdpy11.model_params` has been refactored, addressing issue #4 on GitHub.  The new code base is more idiomatic w.r.to Python's OO methods.`[`commit <https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22>`_]
 * Many of the C++-based types can now be pickled, making model parameter objects easier to serialize.  Most of the
   changes are in [`this commit <https://github.com/molpopgen/fwdpy11/commit/d0a3602e71a866f7ff9d355d62953ea00c663c5a>`_].  This mostly addresses Issue #3 on GitHub.
 * Added magic numbers to keep track of compatibility changes to serialization formats.
