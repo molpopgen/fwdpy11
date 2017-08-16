@@ -263,7 +263,7 @@ PYBIND11_PLUGIN(multilocus)
 
     m.def("poisson_rec",
           [](const fwdpy11::GSLrng_t& rng, const std::vector<double>& means) {
-              auto w = PyErr_WarnEx(NULL,
+              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
                                     "this overload of poisson_rec is "
                                     "deprecated.  Please use the version that "
                                     "only takes a list of means.",
@@ -291,7 +291,7 @@ PYBIND11_PLUGIN(multilocus)
 
     m.def("poisson_rec",
           [](const fwdpy11::GSLrng_t& rng, const double mean) {
-              auto w = PyErr_WarnEx(NULL,
+              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
                                     "this overload of poisson_rec is "
                                     "deprecated.  Please use the version that "
                                     "only takes a mean argument.",
@@ -314,7 +314,7 @@ PYBIND11_PLUGIN(multilocus)
 
     m.def("binomial_rec",
           [](const fwdpy11::GSLrng_t& rng, const std::vector<double>& probs) {
-              auto w = PyErr_WarnEx(NULL,
+              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
                                     "this overload of binomial_rec is "
                                     "deprecated.  Please use the version that "
                                     "only takes a list of probabilities.",
@@ -342,7 +342,7 @@ PYBIND11_PLUGIN(multilocus)
 
     m.def("binomial_rec",
           [](const fwdpy11::GSLrng_t& rng, const double prob) {
-              auto w = PyErr_WarnEx(NULL,
+              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
                                     "this overload of binomial_rec is "
                                     "deprecated.  Please use the version that "
                                     "only takes a probability argument.",
