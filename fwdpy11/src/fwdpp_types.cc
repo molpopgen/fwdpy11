@@ -41,9 +41,9 @@ PYBIND11_PLUGIN(fwdpp_types)
 Base class for mutations.
 )delim")
         .def(py::init<double, bool, std::uint16_t>(), "Constructor")
-        .def_readwrite("pos", &KTfwd::mutation_base::pos, "Position (float).")
-        .def_readwrite("neutral", &KTfwd::mutation_base::neutral, "Boolean")
-        .def_readwrite("xtra", &KTfwd::mutation_base::xtra,
+        .def_readonly("pos", &KTfwd::mutation_base::pos, "Position (float).")
+        .def_readonly("neutral", &KTfwd::mutation_base::neutral, "Boolean")
+        .def_readonly("xtra", &KTfwd::mutation_base::xtra,
                        "16-bits worth of extra data.");
 
     py::class_<KTfwd::gamete>(m, "Gamete", R"delim(
@@ -91,12 +91,12 @@ Base class for mutations.
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
         .def(py::init<double, double, double, unsigned, std::uint16_t>())
-        .def_readwrite(
+        .def_readonly(
             "g", &KTfwd::popgenmut::g,
             "Generation when mutation arose (origination time). (read-only)")
-        .def_readwrite("s", &KTfwd::popgenmut::s,
+        .def_readonly("s", &KTfwd::popgenmut::s,
                        "Selection coefficient/effect size. (read-only)")
-        .def_readwrite("h", &KTfwd::popgenmut::h,
+        .def_readonly("h", &KTfwd::popgenmut::h,
                        "Dominance/effect in heterozygotes. (read-only)")
         .def("__getstate__",
              [](const KTfwd::popgenmut &m) {

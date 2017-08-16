@@ -37,6 +37,7 @@ STATELESS_SLOCUS_FUNCTION(additive)
         s += mutations[i].s;
     return std::max(0.0, 1 + s);
 }
+END_STRUCT()
 
 //Standard pybind11 stuff goes here
 PYBIND11_PLUGIN(custom_additive)
@@ -46,7 +47,8 @@ PYBIND11_PLUGIN(custom_additive)
     //Call this macro so that your custom
     //class is recognizes are part of the 
     //expected Python class hierarchy
-    FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
+    FWDPY11_SINGLE_LOCUS_FITNESS()
+    //FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
     //This macro creates a Python function
 	//that will return an instance of 
 	//fwdpy11.fitness.SlocusCustomStatelessGeneticValue.

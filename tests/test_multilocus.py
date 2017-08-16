@@ -3,7 +3,7 @@ import fwdpy11 as fp11
 import fwdpy11.multilocus as fp11m
 import fwdpy11.fitness as fp11w
 import numpy as np
-
+import pickle
 
 class testMultiLocusFitness(unittest.TestCase):
     @classmethod
@@ -58,6 +58,36 @@ class testMultiLocusFitness(unittest.TestCase):
         with self.assertRaises(ValueError):
             x = tw(self.pop.diploids[0], self.pop)
 
+    def testPicklingAddFitness(self):
+        p = pickle.dumps(self.agg_add_w)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.agg_add_w),type(up))
+
+    def testPicklingAddTrait(self):
+        p = pickle.dumps(self.agg_add_t)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.agg_add_t),type(up))
+
+    def testPicklingMultFitness(self):
+        p = pickle.dumps(self.agg_mult_w)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.agg_mult_w),type(up))
+
+    def testPicklingMultTrait(self):
+        p = pickle.dumps(self.agg_mult_t)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.agg_mult_t),type(up))
+
+    def testPicklingMultiLocusGeneticValue(self):
+        p = pickle.dumps(self.additive_w)
+        up = pickle.loads(p)
+        self.assertEqual(type(up),type(self.additive_w))
+
+    def test_MultilocusGeneticValue_copy(self):
+        try:
+            f = fp11m.MultiLocusGeneticValue(self.additive_w.fitness_functions)
+        except:
+            self.fail("unexpected exception")
 
 class testRecombination(unittest.TestCase):
     @classmethod
@@ -66,11 +96,22 @@ class testRecombination(unittest.TestCase):
 
     def testMakeBinomial(self):
         v = [0.5] * 5
-        x = fp11m.binomial_rec(self.rng, v)
+        x = fp11m.binomial_rec(v)
 
     def testMakePoisson(self):
         v = [1e-3] * 5
-        x = fp11m.poisson_rec(self.rng, v)
+        x = fp11m.poisson_rec(v)
+
+
+    def testWarningsDeprecated(self):
+        with self.assertWarns(RuntimeWarning):
+            x = fp11m.binomial_rec(self.rng,1e-3)
+        with self.assertWarns(RuntimeWarning):
+            x = fp11m.binomial_rec(self.rng,[1e-3]*4)
+        with self.assertWarns(RuntimeWarning):
+            x = fp11m.poisson_rec(self.rng,1e-3)
+        with self.assertWarns(RuntimeWarning):
+            x = fp11m.poisson_rec(self.rng,[1e-3]*4)
 
 if __name__ == "__main__":
     unittest.main()

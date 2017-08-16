@@ -10,16 +10,21 @@ Version 0.1.3
 Bug fixes:
 ------------------------
 
-* Issue #2 on GitHub fixed. [`commit <https://github.com/molpopgen/fwdpy11/commit/562a4d31947d9a7aae31f092ed8c014e94dc56db`_]
+* Issue #2 on GitHub fixed. [`commit <https://github.com/molpopgen/fwdpy11/commit/562a4d31947d9a7aae31f092ed8c014e94dc56db>`_]
+* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
 
-API changes:
-------------------------
+API changes/new features:
+------------------------------------------------
 
-* Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. [`commit <https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9`_]
+* :func:`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of :class:`fwdpy11.fwdpp_types.Mutation` to be changed. [`commit <https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2>`_].
+* Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. [`commit <https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9>`_]
 
 Back-end changes
 ------------------------
 
+* :mod:`fwdpy11.model_params` has been refactored, addressing issue #4 on GitHub.  The new code base is more idiomatic w.r.to Python's OO methods.`[`commit <https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22>`_]
+* Many of the C++-based types can now be pickled, making model parameter objects easier to serialize.  Most of the
+  changes are in [`this commit <https://github.com/molpopgen/fwdpy11/commit/d0a3602e71a866f7ff9d355d62953ea00c663c5a>`_].  This mostly addresses Issue #3 on GitHub.
 * Added magic numbers to keep track of compatibility changes to serialization formats.
 * __str__ changed to __repr__ for region types [`commit <https://github.com/molpopgen/fwdpy11/commit/2df859dd74d3de79d941a1cc21b8712a52bcf9ba>`_]
 * fwdpy11.model_params now uses try/except rather than isinstance to check that rates are float-like types.[`commit <https://github.com/molpopgen/fwdpy11/commit/37112a60cd8fc74133945e522a47183314bf4085>`_]

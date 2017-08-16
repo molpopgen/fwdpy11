@@ -31,10 +31,12 @@ cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ]
 {
     w *= (1. + m.h);
 }
+END_STRUCT()
 
 // Likewise, this is the 1+s part for an "aa"
 //(homozygote) genotype.
 STATELESS_GENOTYPE_POLICY(aa) { w *= (1. + m.s); }
+END_STRUCT()
 
 // Standard pybind11 stuff goes here
 PYBIND11_PLUGIN(custom_stateless_genotype)
@@ -44,7 +46,9 @@ PYBIND11_PLUGIN(custom_stateless_genotype)
     // Call this macro so that your custom
     // class is recognizes are part of the
     // expected Python class hierarchy
-    FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
+    FWDPY11_SINGLE_LOCUS_FITNESS()
+
+    // FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
     // This macro creates a Python function
     // returning an instance of
     // fwdpy11.fitness.SlocusCustomStatelessGeneticValue
@@ -55,7 +59,7 @@ PYBIND11_PLUGIN(custom_stateless_genotype)
     // multiplicative model.
     // 4. The name of the Python function
     // 5. The name of the pybind11::module object
-    CREATE_STATELESS_SLOCUS_GENOTYPE_OBJECT(aa, Aa, 1.0, "GeneralW", m)
+    CREATE_STATELESS_SLOCUS_GENOTYPE_OBJECT(aa, Aa, 1, "GeneralW", m)
 
     return m.ptr();
 }

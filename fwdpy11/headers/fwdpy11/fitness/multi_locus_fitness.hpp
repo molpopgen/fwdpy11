@@ -32,7 +32,7 @@ namespace fwdpy11
     {
         /// We store a container of single-locus fitness function wrapper
         /// objects
-        std::vector<std::unique_ptr<fwdpy11::single_locus_fitness>>
+        std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>
             fitness_functions;
         /// These are the bound callbacks to the elements in fitness_functions
         std::vector<fwdpy11::single_locus_fitness_fxn> callbacks;
@@ -63,15 +63,16 @@ namespace fwdpy11
                     throw std::invalid_argument(
                         "empty list of fitness functions not allowed");
                 }
-            // Clone the input data into unique_ptr.
-            // This is for run-time safety.
+            // Clone the input data into shared_ptr.
+            // This is for run-time safety, to avoid
+			// possibility of circular references.
             for (auto&& ffi : fitness_functions_)
                 {
-                    // Single-locus ff are required to
+                    // Single-locus ff have API requirement to
                     // provide a function returning a copy
-                    // wrapped in std::unique_ptr, which is
+                    // wrapped in std::shared_ptr, which is
                     // what we call here:
-                    fitness_functions.emplace_back(ffi->clone_unique());
+                    fitness_functions.emplace_back(ffi->clone_shared());
                 }
             // Generate the required callbacks:
             for (auto&& ffi : fitness_functions)

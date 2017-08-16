@@ -34,9 +34,20 @@
         The classes should make deep copies of the input so that data
         from the calling environment are not changed, which can happen
         in some cases.
+        There is an issue for C++ types holding
+        things like Python objects.  Currently,
+        tests/test_python_genetic_values.py
+        will segfault if we copy.deepcopy the params objects.
 """
 
 import warnings
+
+
+def _validate_types(data, typename, strict):
+    for i in data:
+        if (strict is True and type(i) is not typename) or \
+           isinstance(i, typename) is False:
+                raise TypeError("invalid type: " + str(typename))
 
 
 class ModelParams(object):
@@ -45,102 +56,88 @@ class ModelParams(object):
 
     .. versionadded:: 0.1.1
     """
+    __nregions = None
+    __sregions = None
+    __recregions = None
+    __demography = None
+    __prune_selected = True
 
     def __init__(self, **kwargs):
-        self.__expected_mutrec_kwargs = ['nregions', 'sregions', 'recregions']
-        self.__expected_demog_kwargs = ['demography']
-        self.__mutrec_data = {'nregions': [], 'sregions': [], 'recregions': []}
-        self.__demog_data = {'demography': None}
-        self.__fixations = {'prune_selected': None}
-        unused_kwargs = []
-
         for key, value in kwargs.items():
-            used = False
-            if key in self.__expected_mutrec_kwargs:
-                used = True
-                self.__mutrec_data[key] = value
-            elif key in self.__expected_demog_kwargs:
-                used = True
-                self.__demog_data[key] = value
-            elif key in self.__fixations:
-                used = True
-                self.__fixations[key] = value
-            if used is False:
-                unused_kwargs.append(key)
-
-        if len(unused_kwargs) > 0:
-            raise ValueError("invalid kwargs: " + ','.join(unused_kwargs))
-
-        if self.__fixations['prune_selected'] is None:
-            self.__fixations['prune_selected'] = True
+            if key in dir(self) and key[:1] != "_":
+                setattr(self, key, value)
+            elif key not in dir(self):
+                raise ValueError(key, " not a valid parameter for this class.")
 
     @property
     def nregions(self):
-        return self.__mutrec_data['nregions']
+        """
+        Get or set the neutral regions.
+        The implementation of the setter
+        is handled by derived classes.
+        Look there for more details.
+        """
+        return self.__nregions
 
     @property
     def sregions(self):
-        return self.__mutrec_data['sregions']
+        """
+        Get or set the selected regions.
+        The implementation of the setter
+        is handled by derived classes.
+        Look there for more details.
+        """
+        return self.__sregions
 
     @property
     def recregions(self):
-        return self.__mutrec_data['recregions']
-
-    @property
-    def demography(self):
-        return self.__demog_data['demography']
+        """
+        Get or set the recombination regions.
+        The implementation of the setter
+        is handled by derived classes.
+        Look there for more details.
+        """
+        return self.__recregions
 
     @property
     def prune_selected(self):
-        return self.__fixations['prune_selected']
+        """
+        Get or set whether or not selected fixations
+        are to be removed during simulaton.
+
+        When setting, a bool is required.
+        """
+        return self.__prune_selected
 
     @prune_selected.setter
     def prune_selected(self, value):
-        self.__fixations['prune_selected'] = bool(value)
+        self.__prune_selected = bool(value)
 
     @nregions.setter
     def nregions(self, nregions):
-        """
-        Set the neutral regions
-
-        :param nregions: The neutral regions.  Type is model-dependant.
-
-        .. note:: See derived class documentation for type details.
-        """
-        self.__mutrec_data['nregions'] = nregions
+        self.__nregions = nregions
 
     @sregions.setter
     def sregions(self, sregions):
-        """
-        Set the selected regions
-
-        :param sregions: The selected regions.  Type is model-dependant.
-
-        .. note:: See derived class documentation for type details.
-        """
-        self.__mutrec_data['sregions'] = sregions
+        self.__sregions = sregions
 
     @recregions.setter
     def recregions(self, recregions):
-        """
-        Set the recombination regions.
+        self.__recregions = recregions
 
-        :param recregions: The recombination regions.  Type is model-dependant.
-
-        .. note:: See derived class documentation for type details.
+    @property
+    def demography(self):
         """
-        self.__mutrec_data['recregions'] = recregions
+        Get or set demographic history.
+        The setters are fully implemented in
+        derived classes.  Look there for
+        type info, as the details are model-dependent.
+        """
+        return self.__demography
 
     @demography.setter
-    def demography(self, demog):
-        """
-        Set the demography
-
-        :param demog: The demographic details, which are model-dependent.
-
-        .. note:: See derived class documentation for type details.
-        """
-        self.__demog_data['demography'] = demog
+    def demography(self, value):
+        self.__demography = value
 
     def validate(self):
         """
@@ -150,15 +147,16 @@ class ModelParams(object):
 
         .. note:: Demography objects must be validated in derived classes.
         """
-        for key, value in self.__mutrec_data.items():
-            # We do not check the types
-            # present in each list b/c
-            # different modeling scenarios
-            # require lists of regions or
-            # lists of lists of regions
-            if isinstance(value, list) is False:
-                raise ValueError("mutation and " +
-                                 "recombination data must be lists")
+        if self.nregions is None:
+            raise ValueError("neutral regions cannot be None")
+        if self.sregions is None:
+            raise ValueError("selected regions cannot be None")
+        if self.recregions is None:
+            raise ValueError("recombination regions cannot be None")
+        if self.demography is None:
+            raise ValueError("demography cannot be None")
+        if self.prune_selected is None:
+            raise ValueError("prune_selected cannot be None")
 
 
 def _validate_single_deme_demography(value):
@@ -183,21 +181,57 @@ class SlocusParams(ModelParams):
     """
     Simulation parameters for single-locus, single-deme simulations.
 
+    .. note::
+        The demography property for this class is a numpy
+        array with dtype = np.uint32.
+
+        When setting nregions or recregions, lists of
+        instances of :class:`fwdpy11.regions.Region` are
+        required.
+
+        When setting sregions, lists of instances of
+        :class:`fwdpy11.regions.Sregion` are required.
+
+    .. note::
+        If no gvalue is assigned, then
+        :class:`fwdpy11.fitness.SlocusMult` with
+        a scaling of 2.0 will be used.
+
     .. versionadded:: 0.1.1
     """
+    __mutrate_n = None
+    __mutrate_s = None
+    __recrate = None
+    __gvalue = None
+    __pself = 0.0
 
-    def __set_rates(self, rates):
+    def __init__(self, **kwargs):
+        gv_present = False
+        if 'gvalue' in kwargs:
+            gv_present = True
+        super(SlocusParams, self).__init__(**kwargs)
+        if gv_present is False:
+            from fwdpy11.fitness import SlocusMult
+            self.gvalue = SlocusMult(2.0)
+
+    def __set_rates(self, input_rates):
         try:
-            self.__mutrec_data['mutrate_n'] = rates[0]
-            self.__mutrec_data['mutrate_s'] = rates[1]
-            self.__mutrec_data['recrate'] = rates[2]
-            _validate_single_locus_rates(self.__mutrec_data)
+            if len(input_rates) != 3:
+                raise ValueError("len(input_rates) != 3")
+            self.mutrate_n = input_rates[0]
+            self.mutrate_s = input_rates[1]
+            self.recrate = input_rates[2]
+            _validate_single_locus_rates(self.rates)
         except:
             try:
-                if isinstance(rates, dict):
-                    for key, value in rates.items():
-                        if key in self.__expected_mutrec_kwargs:
-                            self.__mutrec_data[key] = value
+                if isinstance(input_rates, dict):
+                    for key, value in input_rates.items():
+                        if key == "mutrate_n":
+                            setattr(self, key, float(value))
+                        elif key == "mutrate_s":
+                            setattr(self, key, float(value))
+                        elif key == "recrate":
+                            setattr(self, key, float(value))
                         else:
                             raise ValueError("invalid key/value " +
                                              "pair for setting rates: ",
@@ -206,162 +240,138 @@ class SlocusParams(ModelParams):
                     raise
             except:
                 raise
-        _validate_single_locus_rates(self.__mutrec_data)
-
-    def __init__(self, **kwargs):
-        self.__expected_mutrec_kwargs = ['mutrate_n', 'mutrate_s', 'recrate']
-        self.__expected_gvalue_kwargs = ['gvalue']
-        self.__expected_selfing_kwargs = ['pself']
-        self.__expected_demog_kwargs = ['demography']
-        self.__mutrec_data = {}
-        self.__gvalue_data = {'gvalue': None}
-        self.__selfing_data = {'pself': 0.0}
-
-        for i in self.__expected_mutrec_kwargs:
-            # Set default mut and rec rates to 0.0
-            self.__mutrec_data[i] = 0.0
-
-        new_kwargs = {}
-        for key, value in kwargs.items():
-            used = False
-            if key == 'rates':
-                used = True
-                try:
-                    self.__set_rates(value)
-                except:
-                    raise
-            if key in self.__expected_mutrec_kwargs:
-                used = True
-                try:
-                    float(value)
-                except:
-                    raise ValueError("mutation and recombination " +
-                                     "rates must be floats")
-                self.__mutrec_data[key] = value
-            if key in self.__expected_gvalue_kwargs:
-                used = True
-                self.__gvalue_data[key] = value
-            if key in self.__expected_selfing_kwargs:
-                used = True
-                try:
-                    float(value)
-                except:
-                    raise ValueError("selfing probability must be a float")
-                self.__selfing_data[key] = value
-            if key in self.__expected_demog_kwargs:
-                _validate_single_deme_demography(value)
-            if used is False:
-                new_kwargs[key] = value
-
-        # Set a default genetic value model,
-        # which is for "pop-gen".
-        # We have to over-ride this potential default
-        # condition in SlocusParamsQ
-        if self.__gvalue_data['gvalue'] is None:
-            from fwdpy11.fitness import SlocusMult
-            self.__gvalue_data['gvalue'] = SlocusMult(2.0)
-
-        super(SlocusParams, self).__init__(**new_kwargs)
+        _validate_single_locus_rates(self.rates)
 
     @property
     def mutrate_n(self):
         """
-        Read-only access to neutral mutation rate.
+        Get or set the neutral mutation rate.
+        When setting, a float >= 0.0 is required.
         """
-        return self.__mutrec_data['mutrate_n']
+        return self.__mutrate_n
+
+    @mutrate_n.setter
+    def mutrate_n(self, neutral_mutation_rate):
+        try:
+            float(neutral_mutation_rate)
+        except:
+            raise ValueError("neutral mutation rate must be a float")
+        if neutral_mutation_rate < 0.0:
+            raise ValueError("neutral_mutation_rate must be >= 0.0")
+        self.__mutrate_n = neutral_mutation_rate
 
     @property
     def mutrate_s(self):
         """
-        Read-only access to selected mutation rate.
+        Get or set the selected mutation rate.
+        When setting, a float >= 0.0 is required.
         """
-        return self.__mutrec_data['mutrate_s']
+        return self.__mutrate_s
+
+    @mutrate_s.setter
+    def mutrate_s(self, selected_mutation_rate):
+        try:
+            float(selected_mutation_rate)
+        except:
+            raise ValueError("selected mutation rate must be a float")
+        if selected_mutation_rate < 0.0:
+            raise ValueError("selected mutation rate must be >= 0.0")
+        self.__mutrate_s = selected_mutation_rate
 
     @property
     def recrate(self):
         """
-        Read-only access to recombination rate.
+        Get or set the recombination rate.
+        When setting, a float >= 0.0 is required.
         """
-        return self.__mutrec_data['recrate']
+        return self.__recrate
+
+    @recrate.setter
+    def recrate(self, recombination_rate):
+        try:
+            float(recombination_rate)
+        except:
+            raise ValueError("recombination rate must be a float")
+        if recombination_rate < 0.0:
+            raise ValueError("recombination rate must be >= 0.0")
+        self.__recrate = recombination_rate
 
     @property
     def pself(self):
         """
-        Return selfing probability
+        Get or set selfing probability.
+        When setting, a float in the interval
+        [0,1] is required.
         """
-        return self.__selfing_data['pself']
+        return self.__pself
+
+    @pself.setter
+    def pself(self, prob_selfing):
+        try:
+            float(prob_selfing)
+        except:
+            raise ValueError("selfing probability must be a float")
+        if prob_selfing < 0.0 or prob_selfing > 1.0:
+            raise ValueError("invalid selfing probability: " + str(prob_selfing))
+        self.__pself = float(prob_selfing)
 
     @property
     def rates(self):
         """
-        Return all rates as a dict.
+        Get or set all rates at once.
+        When getting, a dict is returned.
+        When setting, a list or tuple of the
+        three rates (neutral, seleted, recombination)
+        may be used, or a dict with the keys mutrate_n,
+        mutrate_s, and recrate.
         """
-        return self.__mutrec_data
-
-    @ModelParams.nregions.setter
-    def nregions(self, nregions):
-        """
-        Set the neutral regions
-
-        :param nregions: A list of :class:`fwdpy11.regions.Region.
-        """
-        ModelParams.nregions.fset(self, nregions)
-
-    @ModelParams.sregions.setter
-    def sregions(self, sregions):
-        """
-        Set the selected regions
-
-        :param sregions:  A list of :class:`fwdpy11.regions.Sregion.
-        """
-        ModelParams.sregions.fset(self, sregions)
-
-    @ModelParams.recregions.setter
-    def recregions(self, recregions):
-        """
-        Set the recombination regions.
-
-        :param recregions: A list of :class:`fwdpy11.regions.Region.
-        """
-        ModelParams.recregions.fset(self, recregions)
-
-    @ModelParams.demography.setter
-    def demography(self, demog):
-        """
-        Set the demography
-
-        :param demog: A NumPy array reflecting population sizes over time.
-        """
-        _validate_single_deme_demography(demog)
-        ModelParams.demography.fset(self, demog)
+        return {'mutrate_n': self.__mutrate_n,
+                'mutrate_s': self.__mutrate_s,
+                'recrate': self.__recrate}
 
     @rates.setter
-    def rates(self, rates):
-        """
-        Set the neutral mutation, selected mutation, and recombination rates.
-
-        :param rates: A list, tuple, or dict.
-
-        List and tuples must contain the three rates
-        (neutral, selected, recombination).
-
-        Dicts must contain them with the keys
-        'mutrate_n', 'mutrate_s', and 'recrate'.
-
-        :raises ValueError: Raises exception when bad data are encountered.
-        """
-        self.__set_rates(rates)
+    def rates(self, input_rates):
+        self.__set_rates(input_rates)
 
     @property
     def gvalue(self):
-        return self.__gvalue_data['gvalue']
+        """
+        Get or set genetic value calculator.
+        When setting, an instance of
+        :class:`fwdpy11.fitness.SlocusFitness`
+        is required.
+        """
+        return self.__gvalue
 
     @gvalue.setter
     def gvalue(self, f):
         from fwdpy11.fitness import SlocusFitness
         if isinstance(f, SlocusFitness) is False:
             raise ValueError("invalid genetic value type: " + str(type(f)))
-        self.__gvalue_data['gvalue'] = f
+        self.__gvalue = f
+
+    @ModelParams.demography.setter
+    def demography(self, demog):
+        _validate_single_deme_demography(demog)
+        ModelParams.demography.fset(self, demog)
+
+    @ModelParams.nregions.setter
+    def nregions(self, neutral_regions):
+        from fwdpy11 import Region
+        _validate_types(neutral_regions, Region, True)
+        ModelParams.nregions.fset(self, neutral_regions)
+
+    @ModelParams.recregions.setter
+    def recregions(self, recombination_regions):
+        from fwdpy11 import Region
+        _validate_types(recombination_regions, Region, True)
+        ModelParams.recregions.fset(self, recombination_regions)
+
+    @ModelParams.sregions.setter
+    def sregions(self, selected_regions):
+        from fwdpy11 import Sregion
+        _validate_types(selected_regions, Sregion, False)
+        ModelParams.sregions.fset(self, selected_regions)
 
     def validate(self):
         """
@@ -370,17 +380,17 @@ class SlocusParams(ModelParams):
         super(SlocusParams, self).validate()
         from fwdpy11.fitness import SlocusFitness
 
-        _validate_single_locus_rates(self.__mutrec_data)
+        _validate_single_locus_rates(self.rates)
 
         if callable(self.gvalue) is False:
             raise ValueError("genetic value function must be callable")
 
         # If individual rates are nonzero, then
         # corresponding lists of regions cannot be empty:
-        checks = {'mutrate_n': ModelParams.nregions.fget(self),
-                  'mutrate_s': ModelParams.sregions.fget(self),
-                  'recrate': ModelParams.recregions.fget(self)}
-        for key, value in self.__mutrec_data.items():
+        checks = {'mutrate_n': self.nregions,
+                  'mutrate_s': self.sregions,
+                  'recrate': self.recregions}
+        for key, value in self.rates.items():
             if value > 0.0 and len(checks[key]) == 0:
                 raise ValueError(key + ' = ' + str(value) +
                                  ' is associated with empty list of regions.')
@@ -391,65 +401,104 @@ class SlocusParams(ModelParams):
                               + str(checks[key]) +
                               ').  Is this intentional?')
 
-        if isinstance(self.__gvalue_data['gvalue'], SlocusFitness) is False:
+        if isinstance(self.gvalue, SlocusFitness) is False:
             raise ValueError("invalid genetic value type: " +
                              type(self.__gvalue_data['gvalue']))
 
-        _validate_single_deme_demography(ModelParams.demography.fget(self))
+        _validate_single_deme_demography(self.demography)
 
 
 class SlocusParamsQ(SlocusParams):
     """
     Single locus parameter object for quantitative trait simulations
 
+    .. note::
+        The demography property for this class is a numpy
+        array with dtype = np.uint32.
+
+        When setting nregions or recregions, lists of
+        instances of :class:`fwdpy11.regions.Region` are
+        required.
+
+        When setting sregions, lists of instances of
+        :class:`fwdpy11.regions.Sregion` are required.
+
+    .. note::
+        If no gvalue is assigned, then
+        :class:`fwdpy11.trait_values.SlocusAdditiveTrait` with
+        a scaling of 2.0 will be used.
+
+        If no trait2w is assigned, then
+        :class:`fwdpy11.wright_fisher_qtrait.GSS` with VS = 1.0
+        and O = 0.0 will be used.
+
     .. versionadded:: 0.1.1
     """
 
+    __trait_to_fitness = None
+    __noise = None
+
     def __init__(self, **kwargs):
-        self.__qtrait_params = {'trait_to_fitness': None, 'noise': None}
-        new_kwargs = {}
-        for key, value in kwargs.items():
-            used = False
-            if key in self.__qtrait_params:
-                self.__qtrait_params[key] = value
-                used = True
-            if used is False:
-                new_kwargs[key] = value
+        gv_present = False
+        if 'gvalue' in kwargs:
+            gv_present = True
+        trait2w_present = False
+        if 'trait2w' in kwargs or 'trait_to_fitness' in kwargs:
+            trait2w_present = True
 
-        # If genetic value fxn not defined,
-        # the super will assign mult. fitness
-        # here, and so we over-ride that:
-        if 'gvalue' not in kwargs:
-            from fwdpy11.trait_values import SlocusMultTrait
-            new_kwargs['gvalue'] = SlocusMultTrait(2.0)
-
-        super(SlocusParamsQ, self).__init__(**new_kwargs)
-
-        if self.__qtrait_params['trait_to_fitness'] is None:
+        super(SlocusParams, self).__init__(**kwargs)
+        if gv_present is False:
+            from fwdpy11.trait_values import SlocusAdditiveTrait
+            self.gvalue = SlocusAdditiveTrait(2.0)
+        if trait2w_present is False:
             from fwdpy11.wright_fisher_qtrait import GSS
-            self.__qtrait_params['trait_to_fitness'] = GSS(0, 0, 1)
+            self.trait2w = GSS(VS=1.0, O=0.0)
 
-        ModelParams.prune_selected.fset(self, False)
+        if self.prune_selected is True:
+            warnings.warn("setting prune_selected to False", UserWarning)
+            self.prune_selected = False
 
     @property
     def trait2w(self):
-        return self.__qtrait_params['trait_to_fitness']
+        """
+        Get or set the trait value to fitness mapping function.
+        When setting, a callable is required.
+        """
+        return self.__trait_to_fitness
 
     @property
     def noise(self):
-        return self.__qtrait_params['noise']
+        """
+        Get or set the noise function.
+        When setting, a callable is required.
+        """
+        return self.__noise
 
     @trait2w.setter
     def trait2w(self, trait_to_fitness):
         if callable(trait_to_fitness) is False:
             raise ValueError("trait_to_fitness must be a callable.")
-        self.__qtrait_params['trait_to_fitness'] = trait_to_fitness
+        self.__trait_to_fitness = trait_to_fitness
+
+    @property
+    def trait_to_fitness(self):
+        warnings.warn("\'trait_to_fitness\' property is deprecated. "
+                      "Please use \'trait2w\'",
+                      DeprecationWarning)
+        return self.trait2w
+
+    @trait_to_fitness.setter
+    def trait_to_fitness(self, value):
+        warnings.warn("\'trait_to_fitness\' property is deprecated. "
+                      "Please use \'trait2w\'",
+                      DeprecationWarning)
+        self.trait2w = value
 
     @noise.setter
     def noise(self, noise):
         if callable(noise) is False:
             raise ValueError("noise must be a callable.")
-        self.__qtrait_params['noise'] = noise
+        self.__noise = noise
 
     def validate(self):
         super(SlocusParamsQ, self).validate()
@@ -464,7 +513,7 @@ class SlocusParamsQ(SlocusParams):
             raise ValueError("invalid value for prune_selected: " +
                              str(self.prune_selected))
 
-        if self.__qtrait_params['trait_to_fitness'] is None:
+        if self.__trait_to_fitness is None:
             raise ValueError("trait to fitness mapping " +
                              "function cannot be None")
 
@@ -491,7 +540,10 @@ def _validate_multilocus_rates(data):
                          "rates must be equal length.")
 
 
-def _sanity_check_mutlilocus_rates_and_regions(rate_data, nregions, sregions, recregions):
+def _sanity_check_mutlilocus_rates_and_regions(rate_data,
+                                               nregions,
+                                               sregions,
+                                               recregions):
     for i, j in zip(rate_data['mutrates_n'], nregions):
         if i > 0.0 and len(j) == 0:
             raise ValueError(
@@ -503,88 +555,74 @@ def _sanity_check_mutlilocus_rates_and_regions(rate_data, nregions, sregions, re
     for i, j in zip(rate_data['recrates'], recregions):
         if i > 0.0 and len(j) == 0:
             raise ValueError(
-                "non-zero rate found associated with empty recombination locus")
+                "non-zero rate found associated with empty "
+                "recombination locus")
 
 
 class MlocusParams(ModelParams):
     """
     Model parameters for multi-locus simulation
 
+    .. note::
+        The demography property for this class is a numpy
+        array with dtype = np.uint32.
+
+        When setting nregions or recregions, lists of
+        lists are required.  The inner lists may be empty
+        or they may contain instances of
+        :class:`fwdpy11.regions.Region`.
+
+        Similarly, sregions inner lists should contain
+        instances of :class:`fwdpy11.regions.Sregion`.
+        They may also be empty.
+
+    .. note::
+        If aggregator is not assigned, then
+        :class:`fwdpy11.multilocus.AggMultFitness` will be
+        used.
+
+        If gvalue is not assigned during construction, then
+        :class:`fwdpy11.multilocus.MultiLocusGeneticValue`
+        will be used and filled with instances of
+        :class:`fwdpy11.fitness.SlocusMult` with
+        scaling set to 2.0.  This assignment to gvalue is
+        only possible if sregions is assigned during construction,
+        so that we know how many loci there are.
+
     .. versionadded:: 0.1.1
     """
 
+    __mutrates_n = None
+    __mutrates_s = None
+    __recrates = None
+    __interlocus = None
+    __gvalue = None
+    __agg = None
+    __pself = 0.0
+
     def __init__(self, **kwargs):
-        self.__expected_demog_kwargs = ['demography']
-        self.__mutrec_data = {'mutrates_n': [],
-                              'mutrates_s': [],
-                              'recrates': []
-                              }
-        self.__interlocus_rec = {'interlocus': []}
-        self.__gvalue_data = {'gvalue': None}
-        self.__selfing_data = {'pself': 0.0}
-        self.__aggregator = {'agg': None}
-
-        new_kwargs = {}
-        for key, value in kwargs.items():
-            used = False
-            if key == 'rates':
-                used = True
-                try:
-                    self.__set_rates(value)
-                except:
-                    raise
-            if key in self.__mutrec_data:
-                used = True
-                for i in value:
-                    try:
-                        float(i)
-                    except:
-                        raise ValueError("mutation and recombination " +
-                                         "rates must be floats")
-                self.__mutrec_data[key] = value
-            if key in self.__gvalue_data:
-                used = True
-                self.gvalue = value
-            if key in self.__selfing_data:
-                used = True
-                try:
-                    float(value)
-                except:
-                    raise ValueError("selfing probability must be a float")
-                self.__selfing_data[key] = value
-            if key in self.__expected_demog_kwargs:
-                _validate_single_deme_demography(value)
-            if key in self.__interlocus_rec:
-                if any(callable(i) for i in value) is False:
-                    raise ValueError("interlocus recombination " +
-                                     "must contain callables")
-                self.__interlocus_rec[key] = value
-                used = True
-            if key in self.__aggregator:
-                self.__aggregator[key] = value
-                used = True
-            if used is False:
-                new_kwargs[key] = value
-
-        if self.__aggregator['agg'] is None:
+        super(MlocusParams, self).__init__(**kwargs)
+        if self.aggregator is None:
             from fwdpy11.multilocus import AggMultFitness
-            self.__aggregator['agg'] = AggMultFitness()
-
-        super(MlocusParams, self).__init__(**new_kwargs)
-
-        ModelParams.prune_selected.fset(self, False)
-
-        # If no genetic value model is defined,
-        # we set a default.
-        if self.__gvalue_data['gvalue'] is None and len(self.sregions) > 0:
-            from fwdpy11.multilocus import MultiLocusGeneticValue
-            from fwdpy11.fitness import SlocusMult
-            self.__gvalue_data['gvalue'] = \
-                MultiLocusGeneticValue([SlocusMult(2.0)] * len(self.sregions))
+            self.aggregator = AggMultFitness()
+        if self.gvalue is None:
+            if self.sregions is not None:
+                from fwdpy11.multilocus import MultiLocusGeneticValue
+                from fwdpy11.fitness import SlocusMult
+                self.gvalue = MultiLocusGeneticValue([SlocusMult(2.0)] *
+                                                     len(self.sregions))
 
     @property
     def gvalue(self):
-        return self.__gvalue_data['gvalue']
+        """
+        Get or set genetic value calculation object.
+        When setting, either a list of
+        :class:`fwdpy11.fitness.SlocusFitness` or
+        and instance of
+        :class:`fwdpy11.multilocus.MultiLocusGeneticValue`
+        is required.
+        """
+        return self.__gvalue
 
     @gvalue.setter
     def gvalue(self, f):
@@ -594,96 +632,179 @@ class MlocusParams(ModelParams):
             if any(isinstance(i, SlocusFitness) for i in f) is False:
                 raise ValueError("all elements in list must " +
                                  "be single-locus genetic value objects.")
-            self.__gvalue_data['gvalue'] = MultiLocusGeneticValue(f)
+            self.__gvalue = MultiLocusGeneticValue(f)
         elif isinstance(f, MultiLocusGeneticValue) is True:
-            self.__gvalue_data['gvalue'] = f
+            self.__gvalue = f
         else:
             raise ValueError("invalid genetic value type: " + str(type(f)))
 
     @property
+    def agg(self):
+        """
+        Get or set the aggregator function.
+        When setting, a callable is required.
+
+        .. note::
+            This is deprecated, use 'aggregator'
+            instead.
+
+        .. deprecated:: 0.13.0
+        """
+        warnings.warn("\'agg\' property is deprecated. "
+                      "Please use \'aggregator\'",
+                      DeprecationWarning)
+        return self.aggregator
+
+    @agg.setter
+    def agg(self, aggregator):
+        warnings.warn("\'agg\' property is deprecated. "
+                      "Please use \'aggregator\'",
+                      DeprecationWarning)
+        self.aggregator = aggregator
+
+    @property
     def aggregator(self):
-        return self.__aggregator['agg']
+        """
+        Get or set the aggregator function.
+        When setting, a callable is required.
+        """
+        return self.__agg
 
     @aggregator.setter
-    def aggregator(self, agg):
-        if callable(agg) is False:
+    def aggregator(self, aggregator):
+        if callable(aggregator) is False:
             raise ValueError("aggregator must be a callable")
-        self.__aggregator['agg'] = agg
-
-    @property
-    def nregions(self):
-        return self.__mutrec_data['nregions']
-
-    @property
-    def sregions(self):
-        return self.__mutrec_data['sregions']
-
-    @property
-    def recregions(self):
-        return self.__mutrec_data['recregions']
-
-    @property
-    def demography(self):
-        return self.__demog_data['demography']
+        self.__agg = aggregator
 
     @property
     def mutrates_n(self):
         """
-        Read-only access to neutral mutation rates.
+        Get or set the neutral mutation rates.
+        When setting a list of floats >= 0.0
+        is required.
         """
-        return self.__mutrec_data['mutrates_n']
+        return self.__mutrates_n
+
+    @mutrates_n.setter
+    def mutrates_n(self, neutral_mutation_rates):
+        try:
+            for i in neutral_mutation_rates:
+                float(i)
+        except:
+            raise ValueError("neutral mutation rates must all be float")
+
+        if any(i < 0.0 for i in neutral_mutation_rates):
+            raise ValueError("neutral mutation rates must be >= 0.0")
+
+        self.__mutrates_n = neutral_mutation_rates
 
     @property
     def mutrates_s(self):
         """
-        Read-only access to selected mutation rates.
+        Get or set the selected mutation rates.
+        When setting a list of floats >= 0.0
+        is required.
         """
-        return self.__mutrec_data['mutrates_s']
+        return self.__mutrates_s
+
+    @mutrates_s.setter
+    def mutrates_s(self, selected_mutation_rates):
+        try:
+            for i in selected_mutation_rates:
+                float(i)
+        except:
+            raise ValueError("selected mutation rates must all be float")
+
+        if any(i < 0.0 for i in selected_mutation_rates):
+            raise ValueError("selected mutation rates must be >= 0.0")
+
+        self.__mutrates_s = selected_mutation_rates
 
     @property
     def recrates(self):
         """
-        Read-only access to recombination rates.
+        Get or set the recombination rates.
+        When setting a list of floats >= 0.0
+        is required.
         """
-        return self.__mutrec_data['recrates']
+        return self.__recrates
+
+    @recrates.setter
+    def recrates(self, recombination_rates):
+        try:
+            for i in recombination_rates:
+                float(i)
+        except:
+            raise ValueError("recombination rates must all be float")
+
+        if any(i < 0.0 for i in recombination_rates):
+            raise ValueError("recombination rates must be >= 0.0")
+
+        self.__recrates = recombination_rates
+
+    @ModelParams.demography.setter
+    def demography(self, demog):
+        _validate_single_deme_demography(demog)
+        ModelParams.demography.fset(self, demog)
+
+    @ModelParams.nregions.setter
+    def nregions(self, neutral_regions):
+        from fwdpy11 import Region
+        for i in neutral_regions:
+            _validate_types(i, Region, True)
+        ModelParams.nregions.fset(self, neutral_regions)
+
+    @ModelParams.recregions.setter
+    def recregions(self, recombination_regions):
+        from fwdpy11 import Region
+        for i in recombination_regions:
+            _validate_types(i, Region, True)
+        ModelParams.recregions.fset(self, recombination_regions)
+
+    @ModelParams.sregions.setter
+    def sregions(self, selected_regions):
+        from fwdpy11 import Sregion
+        for i in selected_regions:
+            _validate_types(i, Sregion, False)
+        ModelParams.sregions.fset(self, selected_regions)
 
     @property
     def pself(self):
         """
-        Return selfing probability
+        Get or set selfing probability.
+        When setting, a float in the interval
+        [0,1] is required.
         """
-        return self.__selfing_data['pself']
+        return self.__pself
+
+    @pself.setter
+    def pself(self, prob_selfing):
+        self.__pself = float(prob_selfing)
 
     @property
     def rates(self):
         """
-        Return all rates as a dict.
+        Get or set all rates at once.
+        When getting, a dict is returned.
+        When setting, a list or tuple of the
+        three rates (neutral, seleted, recombination)
+        may be used, or a dict with the keys mutrates_n,
+        mutrates_s, and recrates.
         """
-        return self.__mutrec_data
+        return {'mutrates_n': self.__mutrates_n,
+                'mutrates_s': self.__mutrates_s,
+                'recrates': self.__recrates}
 
     @rates.setter
     def rates(self, rates):
-        """
-        Set the neutral mutation, selected mutation, and recombination rates.
-
-        :param rates: A list, tuple, or dict.
-
-        List and tuples must contain lists of the three rates
-        (neutral, selected, recombination).
-
-        Dicts must contain them with the keys
-        'mutrates_n', 'mutrates_s', and 'recrates'.
-
-        :raises ValueError: Raises exception when bad data are encountered.
-        """
         self.__set_rates(rates)
 
     def __set_rates(self, rates):
         try:
-            self.__mutrec_data['mutrates_n'] = rates[0]
-            self.__mutrec_data['mutrates_s'] = rates[1]
-            self.__mutrec_data['recrates'] = rates[2]
-            _validate_multilocus_rates(self.__mutrec_data)
+            self.__mutrates_n = rates[0]
+            self.__mutrates_s = rates[1]
+            self.__recrates = rates[2]
+            _validate_multilocus_rates(self.rates)
         except:
             try:
                 if isinstance(rates, dict):
@@ -700,52 +821,24 @@ class MlocusParams(ModelParams):
                 raise
         _validate_multilocus_rates(self.__mutrec_data)
 
-    @ModelParams.nregions.setter
-    def nregions(self, nregions):
-        """
-        Set the neutral regions
-
-        :param nregions: A list of lists of :class:`fwdpy11.regions.Region.
-        """
-        ModelParams.nregions.fset(self, nregions)
-
-    @ModelParams.sregions.setter
-    def sregions(self, sregions):
-        """
-        Set the selected regions
-
-        :param sregions:  A list of lists of :class:`fwdpy11.regions.Sregion.
-        """
-        ModelParams.sregions.fset(self, sregions)
-
-    @ModelParams.recregions.setter
-    def recregions(self, recregions):
-        """
-        Set the recombination regions.
-
-        :param recregions: A list of lists of :class:`fwdpy11.regions.Region.
-        """
-        ModelParams.recregions.fset(self, recregions)
-
-    @ModelParams.demography.setter
-    def demography(self, demog):
-        """
-        Set the demography
-
-        :param demog: A NumPy array reflecting population sizes over time.
-        """
-        _validate_single_deme_demography(demog)
-        ModelParams.demography.fset(self, demog)
-
     @property
     def interlocus(self):
-        return self.__interlocus_rec['interlocus']
+        """
+        Get or set interlocus recombination rates.
+        When setting, a list of instances of
+        :class:`fwdpy11.multilocus.InterlocusRecombination`
+        is required.
+        """
+        return self.__interlocus
 
     @interlocus.setter
     def interlocus(self, interlocus_rec):
-        if any(callable(i) for i in interlocus_rec) is False:
-            raise ValueError("interlocus_rec must contain callables.")
-        self.__interlocus_rec['interlocus'] = interlocus_rec
+        from fwdpy11.multilocus import InterlocusRecombination as IR
+        if any(isinstance(i, IR) for i in interlocus_rec) is False:
+            raise ValueError("interlocus recombination objects must be "
+                             "instances of "
+                             "fwdpy11.multilocus.InterlocusRecombination")
+        self.__interlocus = interlocus_rec
 
     def validate(self):
         """
@@ -777,11 +870,9 @@ class MlocusParams(ModelParams):
             raise ValueError("region and rate containers of different lengths")
 
         _sanity_check_mutlilocus_rates_and_regions(self.rates,
-                                                   ModelParams.nregions.fget(
-                                                       self),
-                                                   ModelParams.sregions.fget(
-                                                       self),
-                                                   ModelParams.recregions.fget(self))
+                                                   self.nregions,
+                                                   self.sregions,
+                                                   self.recregions)
 
         # For k loci, there must be k-1 interlocus-recombination rates
         nloci = rlens.pop()
@@ -801,51 +892,104 @@ class MlocusParamsQ(MlocusParams):
     """
     Multi-locus model parameters for quantitative trait simulations
 
+    .. note::
+        The demography property for this class is a numpy
+        array with dtype = np.uint32.
+
+    .. note::
+        If aggregator is not assigned, then
+        :class:`fwdpy11.multilocus.AggMultTrait` will be
+        used.
+
+        If gvalue is not assigned during construction, then
+        :class:`fwdpy11.multilocus.MultiLocusGeneticValue`
+        will be used and filled with instances of
+        :class:`fwdpy11.trait_values.SlocusAdditiveTrait` with
+        scaling set to 2.0.  This assignment to gvalue is
+        only possible if sregions is assigned during construction,
+        so that we know how many loci there are.
+
+        If trait2w is not set during construction, then
+        :class:`fwdpy11.wright_fisher_qtrait.GSS` will be
+        used with VS = 1.0 and O = 0.0.
+
     .. versionadded:: 0.1.1
     """
 
+    __trait2w = None
+    __noise = None
+
     def __init__(self, **kwargs):
-        new_kwargs = {}
-        self.__qtrait_params = {'trait2w': None,
-                                'noise': None}
-
-        for key, value in kwargs.items():
-            used = False
-            if key in self.__qtrait_params:
-                self.__qtrait_params[key] = value
-                used = True
-            if used is False:
-                new_kwargs[key] = value
-
-        super(MlocusParamsQ, self).__init__(**new_kwargs)
-
-        # If no genetic value model is defined,
-        # we set a default.
-        if 'gvalue' not in kwargs and len(self.sregions) > 0:
+        agg_present = False
+        if 'agg' in kwargs or 'aggregator' in kwargs:
+            agg_present = True
+        gvalue_present = False
+        if 'gvalue' in kwargs:
+            gvalue_present = True
+        trait2w_present = False
+        if 'trait2w' in kwargs or 'trait_to_fitness' in kwargs:
+            trait2w_present = True
+        super(MlocusParamsQ, self).__init__(**kwargs)
+        if agg_present is False:
+            from fwdpy11.multilocus import AggMultTrait
+            self.aggregator = AggMultTrait()
+        if gvalue_present is False and self.sregions is not None:
             from fwdpy11.multilocus import MultiLocusGeneticValue
-            from fwdpy11.trait_values import SlocusMultTrait
-            new_kwargs['gvalue'] = MultiLocusGeneticValue([SlocusMultTrait(2.0)] *
-                                                          len(self.sregions))
+            from fwdpy11.trait_values import SlocusAdditiveTrait
+            self.gvalue = MultiLocusGeneticValue([SlocusAdditiveTrait(2.0)] *
+                                                 len(self.sregions))
+        if trait2w_present is False:
+            from fwdpy11.wright_fisher_qtrait import GSS
+            self.trait2w = GSS(VS=1.0, O=0.0)
 
     @property
     def trait2w(self):
-        return self.__qtrait_params['trait2w']
+        """
+        Get or set the trait value to fitness mapping function.
+        When setting, a callable is required.
+        """
+        return self.__trait2w
 
     @trait2w.setter
     def trait2w(self, trait2w):
         if callable(trait2w) is False:
             raise ValueError("trait2w must be a callable.")
-        self.__qtrait_params['trait2w'] = trait2w
+        self.__trait2w = trait2w
+
+    @property
+    def trait_to_fitness(self):
+        """
+        Get or set the trait value to fitness mapping function.
+        When setting, a callable is required.
+
+        .. deprecated:: 0.13.0
+            Use trait2w instead.
+        """
+        warnings.warn("\'trait_to_fitness\' property is deprecated. "
+                      "Please use \'trait2w\'",
+                      DeprecationWarning)
+        return self.trait2w
+
+    @trait_to_fitness.setter
+    def trait_to_fitness(self, value):
+        warnings.warn("\'trait_to_fitness\' property is deprecated. "
+                      "Please use \'trait2w\'",
+                      DeprecationWarning)
+        self.trait2w = value
 
     @property
     def noise(self):
-        return self.__qtrait_params['noise']
+        """
+        Get or set the noise function.
+        When setting, a callable is required.
+        """
+        return self.__noise
 
     @noise.setter
     def noise(self, noise):
         if callable(noise) is False:
             raise ValueError("noise must be a callable.")
-        self.__qtrait_params['noise'] = noise
+        self.__noise = noise
 
     def validate(self):
         """
@@ -853,5 +997,9 @@ class MlocusParamsQ(MlocusParams):
         """
         if callable(self.trait2w) is False:
             raise ValueError("trait2w must be a callable.")
+
+        if self.noise is None:
+            warnings.warn("noise parameter is None.  Defaults will be used.",
+                          UserWarning)
 
         super(MlocusParamsQ, self).validate()

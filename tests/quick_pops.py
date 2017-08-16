@@ -75,7 +75,7 @@ def quick_mlocus_qtrait(N=1000, simlen=100):
     sregions = [[GaussianS(j[0] + 5., j[0] + 6., mu, sigmu, coupled=False)]
                 for i, j in zip(range(nloci), locus_boundaries)]
     agg = AggAddTrait()
-    interlocus_rec = binomial_rec(rng, [0.5] * (nloci - 1))
+    interlocus_rec = binomial_rec([0.5] * (nloci - 1))
     mlv = MultiLocusGeneticValue([SlocusAdditiveTrait(2.0)] * nloci)
     nlist = np.array([N] * simlen, dtype=np.uint32)
     param_dict = {'nregions': nregions,
@@ -85,7 +85,7 @@ def quick_mlocus_qtrait(N=1000, simlen=100):
                   'mutrates_n': [theta / (4. * float(N))] * nloci,
                   'mutrates_s': [mu] * nloci,
                   'recrates': [rho / (4. * float(N))] * nloci,
-                  'agg': agg,
+                  'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSS(1, 0),
                   'demography': nlist}
