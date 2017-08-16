@@ -58,8 +58,9 @@ struct gbr_diploid_trait_fxn
     }
 };
 
-using single_locus_multiplicative_trait_wrapper = fwdpy11::
-    fwdpp_single_locus_fitness_wrapper<multiplicative_diploid_trait_fxn>;
+using single_locus_multiplicative_trait_wrapper
+    = fwdpy11::fwdpp_single_locus_fitness_wrapper<
+        multiplicative_diploid_trait_fxn>;
 using single_locus_additive_trait_wrapper
     = fwdpy11::fwdpp_single_locus_fitness_wrapper<additive_diploid_trait_fxn>;
 using gbr_trait_wrapper
@@ -82,6 +83,14 @@ PYBIND11_PLUGIN(trait_values)
                 for AA, Aa, and aa, respectively.
                 )delim")
         .def(py::init<double>(), py::arg("scaling"))
+        .def_readonly("scaling", &single_locus_additive_trait_wrapper::scaling,
+                      "Get the scaling attribute.")
+        .def("__repr__",
+             [](const single_locus_additive_trait_wrapper &a) {
+                 std::string rv = "trait_values.SlocusAdditiveTrait(";
+                 rv += std::to_string(a.scaling) + ")";
+                 return rv;
+             })
         .def("__getstate__",
              [](const single_locus_additive_trait_wrapper &w) {
                  return py::make_tuple(w.scaling);
@@ -99,6 +108,15 @@ PYBIND11_PLUGIN(trait_values)
                 Multiplicative trait value, centered on zero.
                 )delim")
         .def(py::init<double>(), py::arg("scaling"))
+        .def_readonly("scaling",
+                      &single_locus_multiplicative_trait_wrapper::scaling,
+                      "Get the scaling attribute.")
+        .def("__repr__",
+             [](const single_locus_multiplicative_trait_wrapper &a) {
+                 std::string rv = "trait_values.SlocusMultTrait(";
+                 rv += std::to_string(a.scaling) + ")";
+                 return rv;
+             })
         .def("__getstate__",
              [](const single_locus_multiplicative_trait_wrapper &w) {
                  return py::make_tuple(w.scaling);
@@ -120,6 +138,11 @@ PYBIND11_PLUGIN(trait_values)
             each haplotype.  It is undefined for the case where these sums are negative.
             )delim")
         .def(py::init<>())
+        .def("__repr__",
+             [](const gbr_trait_wrapper &a) {
+                 std::string rv = "trait_values.SlocusGBRTrait()";
+                 return rv;
+             })
         .def("__getstate__",
              [](const gbr_trait_wrapper &g) {
                  return py::make_tuple("gbr_trait_wrapper");

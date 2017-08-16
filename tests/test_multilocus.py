@@ -83,6 +83,12 @@ class testMultiLocusFitness(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(type(up),type(self.additive_w))
 
+    def test_MultilocusGeneticValue_copy(self):
+        try:
+            f = fp11m.MultiLocusGeneticValue(self.additive_w.fitness_functions)
+        except:
+            self.fail("unexpected exception")
+
 class testRecombination(unittest.TestCase):
     @classmethod
     def setUpClass(self):

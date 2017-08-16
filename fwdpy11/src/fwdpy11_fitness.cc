@@ -55,11 +55,12 @@ PYBIND11_PLUGIN(fitness)
                  return aw->callback()(dip, pop.gametes, pop.mutations);
              });
 
-    //pybind11::class_<fwdpy11::single_locus_stateless_fitness,
+    // pybind11::class_<fwdpy11::single_locus_stateless_fitness,
     //                 std::shared_ptr<fwdpy11::single_locus_stateless_fitness>,
     //                 fwdpy11::single_locus_fitness>(
     //    m, "SlocusCustomStatelessGeneticValue", "Custom stateless genetic "
-    //                                            "value/fitness function. See "
+    //                                            "value/fitness function. See
+    //                                            "
     //                                            ":ref:`customgvaluecpp`.")
     //    .def(py::init<fwdpy11::single_locus_fitness_fxn>());
 
@@ -77,6 +78,15 @@ PYBIND11_PLUGIN(fitness)
             w = fp11w.SlocusMult(1.0)
                        )delim")
         .def(py::init<double>(), py::arg("scaling") = 2.0)
+        .def_readonly("scaling", &fwdpy11::single_locus_mult_wrapper::scaling,
+                      "Get the scaling parameter.")
+        .def("__repr__",
+             [](const fwdpy11::single_locus_mult_wrapper& m) {
+                 std::string rv = "fitness.SlocusMult(";
+                 rv += std::to_string(m.scaling);
+                 rv += ')';
+                 return rv;
+             })
         .def("__getstate__",
              [](const fwdpy11::single_locus_mult_wrapper& w) {
                  return py::make_tuple(w.scaling);
@@ -100,7 +110,17 @@ PYBIND11_PLUGIN(fitness)
             import fwdpy11.fitness as fp11w
             w = fp11w.SlocusAdditive(2.0)
         )delim")
+        .def_readonly("scaling",
+                      &fwdpy11::single_locus_additive_wrapper::scaling,
+                      "Get the scaling parameter.")
         .def(py::init<double>(), py::arg("scaling") = 2.0)
+        .def("__repr__",
+             [](const fwdpy11::single_locus_additive_wrapper& m) {
+                 std::string rv = "fitness.SlocusAdditive(";
+                 rv += std::to_string(m.scaling);
+                 rv += ')';
+                 return rv;
+             })
         .def("__getstate__",
              [](const fwdpy11::single_locus_additive_wrapper& w) {
                  return py::make_tuple(w.scaling);

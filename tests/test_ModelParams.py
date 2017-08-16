@@ -324,10 +324,8 @@ class testMlocusParamsDefaults(unittest.TestCase):
         from fwdpy11.fitness import SlocusMult
         self.assertEqual(type(m.aggregator), AggMultFitness)
         self.assertEqual(type(m.gvalue), MultiLocusGeneticValue)
-        # MultilocusGeneticValue is currently not iterable:
-        with self.assertRaises(TypeError):
-            for i in m.gvalue:
-                self.assertEqual(type(i), SlocusMult)
+        for i in m.gvalue.fitness_functions:
+            self.assertEqual(type(i), SlocusMult)
 
     def test_MlocusParamsQDefaults(self):
         self.pdict['prune_selected'] = True
@@ -341,10 +339,8 @@ class testMlocusParamsDefaults(unittest.TestCase):
         self.assertEqual(type(m.trait2w), GSS)
         self.assertEqual(m.trait2w.VS, 1.0)
         self.assertEqual(m.trait2w.O, 0.0)
-        # MultilocusGeneticValue is currently not iterable:
-        with self.assertRaises(TypeError):
-            for i in m.gvalue:
-                self.assertEqual(type(i), SlocusAdditiveTrait)
+        for i in m.gvalue.fitness_functions:
+            self.assertEqual(type(i), SlocusAdditiveTrait)
 
     def test_MlocusParams_cannot_set_gvalue(self):
         self.pdict.pop('sregions')

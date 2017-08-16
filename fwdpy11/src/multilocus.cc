@@ -81,7 +81,7 @@ struct aggregate_mult_trait
                 }                                                             \
         });
 
-using ff_vec = std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>;
+using ff_vec = decltype(fwdpy11::multilocus_genetic_value::fitness_functions);
 
 PYBIND11_PLUGIN(multilocus)
 {
@@ -103,6 +103,9 @@ PYBIND11_PLUGIN(multilocus)
                      }
                  return m(dip, pop.gametes, pop.mutations);
              })
+        .def_readonly("fitness_functions",
+                      &fwdpy11::multilocus_genetic_value::fitness_functions,
+                      "Read-only access to stored fitenss functions")
         .def("__len__",
              [](const fwdpy11::multilocus_genetic_value& m) {
                  return m.size();
@@ -110,14 +113,14 @@ PYBIND11_PLUGIN(multilocus)
         .def("__getstate__",
              [](const fwdpy11::multilocus_genetic_value& mw) {
                  /* This is some crazy magic:
-                          * This object contains a vector of unique_ptr
-                          * to single-locus functions.  We will clone each
-                          * element as a shared_ptr wrapping the underling
+                  * This object contains a vector of unique_ptr
+                  * to single-locus functions.  We will clone each
+                  * element as a shared_ptr wrapping the underling
                   * type.
-                          * This works b/c pybind11 knows about the C++
+                  * This works b/c pybind11 knows about the C++
                   * inheritance
-                          * hierarchy.
-                          */
+                  * hierarchy.
+                  */
                  py::list rv;
                  for (auto&& f : mw.fitness_functions)
                      {
@@ -127,11 +130,11 @@ PYBIND11_PLUGIN(multilocus)
              })
         .def("__setstate__",
              /* The back-conversion is just as interesting.
-                                 * We can simply type cast the list back to the
+              * We can simply type cast the list back to the
               * C++
-                                 * vector type ff_vec, which is a typedef
+              * vector type ff_vec, which is a typedef
               * defined above.
-                                 */
+              */
              [](fwdpy11::multilocus_genetic_value& mw, py::list l) {
                  new (&mw) fwdpy11::multilocus_genetic_value(l.cast<ff_vec>());
              });
@@ -150,8 +153,8 @@ PYBIND11_PLUGIN(multilocus)
                "under an multiplicative model.");
 
     py::class_<fwdpy11::interlocus_rec>(m, "InterlocusRecombination")
-        .def(py::init<double, std::underlying_type<fwdpy11::interlocus_rec::
-                                                       RECMODEL>::type>(),
+        .def(py::init<double, std::underlying_type<
+                                  fwdpy11::interlocus_rec::RECMODEL>::type>(),
              "This class parameterizes interlocus recombination in multilocus "
              "simulations.  You do not make instances of this class directly. "
              " Rather, you make calls to one of "
