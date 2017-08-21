@@ -104,13 +104,13 @@ class testRecombination(unittest.TestCase):
 
 
     def testWarningsDeprecated(self):
-        with self.assertWarns(RuntimeWarning):
+        with self.assertWarns(DeprecationWarning):
             x = fp11m.binomial_rec(self.rng,1e-3)
-        with self.assertWarns(RuntimeWarning):
+        with self.assertWarns(DeprecationWarning):
             x = fp11m.binomial_rec(self.rng,[1e-3]*4)
-        with self.assertWarns(RuntimeWarning):
+        with self.assertWarns(DeprecationWarning):
             x = fp11m.poisson_rec(self.rng,1e-3)
-        with self.assertWarns(RuntimeWarning):
+        with self.assertWarns(DeprecationWarning):
             x = fp11m.poisson_rec(self.rng,[1e-3]*4)
 
 if __name__ == "__main__":
