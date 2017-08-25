@@ -55,6 +55,6 @@ class testSlocusPopExceptions(unittest.TestCase):
         with self.assertRaises(ValueError):
             p = fp11.SlocusPop(0)
 
+
 if __name__ == "__main__":
     unittest.main()
-
