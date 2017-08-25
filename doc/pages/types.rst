@@ -34,7 +34,9 @@ properties:
     "h", "Dominance"
     "g", "Origination time"
     "neutral", "Boolean -- neutral or not?"
-    "xtra", "16 bit integer"
+    "label", "16 bit integer"
+
+Currently, all of the above fields are read-only except for "label".
 
 Instances of :class:`fwdpy11.fwdpp_types.Mutation` are stored in an opaque list type called
 :class:`fwdpy11.fwdpy11_types.MutationContainer`.  

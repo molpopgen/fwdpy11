@@ -43,8 +43,9 @@ Base class for mutations.
         .def(py::init<double, bool, std::uint16_t>(), "Constructor")
         .def_readonly("pos", &KTfwd::mutation_base::pos, "Position (float).")
         .def_readonly("neutral", &KTfwd::mutation_base::neutral, "Boolean")
-        .def_readonly("xtra", &KTfwd::mutation_base::xtra,
-                       "16-bits worth of extra data.");
+        .def_readwrite("label", &KTfwd::mutation_base::xtra,
+                       "A 16-bit unsigned integer that can be used for adding "
+                       "\"meta-data\" to mutations");
 
     py::class_<KTfwd::gamete>(m, "Gamete", R"delim(
     A gamete.  This object represents a haplotype
@@ -95,9 +96,9 @@ Base class for mutations.
             "g", &KTfwd::popgenmut::g,
             "Generation when mutation arose (origination time). (read-only)")
         .def_readonly("s", &KTfwd::popgenmut::s,
-                       "Selection coefficient/effect size. (read-only)")
+                      "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &KTfwd::popgenmut::h,
-                       "Dominance/effect in heterozygotes. (read-only)")
+                      "Dominance/effect in heterozygotes. (read-only)")
         .def("__getstate__",
              [](const KTfwd::popgenmut &m) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
