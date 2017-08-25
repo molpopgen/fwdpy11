@@ -4,7 +4,12 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
-Version 0.1.3
+Version 0.1.3a1
+++++++++++++++++++++++++++
+
+* Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
+
+Version 0.1.3a0
 ++++++++++++++++++++++++++
 
 Bug fixes:
