@@ -99,6 +99,17 @@ Base class for mutations.
                       "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &KTfwd::popgenmut::h,
                       "Dominance/effect in heterozygotes. (read-only)")
+        .def_property_readonly(
+            "key",
+            [](const KTfwd::popgenmut &m) {
+                return py::make_tuple(m.pos, m.s, m.g);
+            },
+            R"delim(It is often useful to have a unique key for
+                    tracking mutations.  This property returns 
+                    the tuple (pos, esize, origin).
+
+                    .. versionadded:: 0.1.3.a1
+                   )delim")
         .def("__getstate__",
              [](const KTfwd::popgenmut &m) {
                  return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
