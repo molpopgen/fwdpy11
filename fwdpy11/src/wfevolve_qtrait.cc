@@ -119,9 +119,9 @@ evolve_singlepop_regions_qtrait_cpp(
                 KTfwd::remove_neutral());
 
             pop.N = N_next;
-            fwdpy11::update_mutations_n(
+            fwdpy11::update_mutations(
                 pop.mutations, pop.fixations, pop.fixation_times,
-                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N, false);
             fitness.update(pop);
             wbar = rules.w(pop, fitness_callback);
             recorder(pop);
@@ -147,7 +147,7 @@ evolve_qtrait_mloc_regions_cpp(
     const std::vector<KTfwd::extensions::discrete_mut_model> &mmodels,
     const std::vector<KTfwd::extensions::discrete_rec_model> &rmodels,
     py::list interlocus_rec_wrappers,
-    //const std::vector<std::function<unsigned(void)>> &interlocus_rec,
+    // const std::vector<std::function<unsigned(void)>> &interlocus_rec,
     fwdpy11::multilocus_genetic_value &multilocus_gvalue,
     fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
     fwdpy11::multilocus_aggregator_function aggregator,
@@ -189,10 +189,11 @@ evolve_qtrait_mloc_regions_cpp(
     multilocus_gvalue.update(pop);
     auto wbar = rules.w(pop, multilocus_gvalue);
     std::vector<std::function<unsigned(void)>> interlocus_rec;
-    for(auto && i : interlocus_rec_wrappers)
-    {
-        interlocus_rec.push_back(py::cast<fwdpy11::interlocus_rec>(i).callback(rng));
-    }
+    for (auto &&i : interlocus_rec_wrappers)
+        {
+            interlocus_rec.push_back(
+                py::cast<fwdpy11::interlocus_rec>(i).callback(rng));
+        }
 
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
@@ -212,9 +213,9 @@ evolve_qtrait_mloc_regions_cpp(
                 KTfwd::remove_neutral());
 
             pop.N = N_next;
-            fwdpy11::update_mutations_n(
+            fwdpy11::update_mutations(
                 pop.mutations, pop.fixations, pop.fixation_times,
-                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+                pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N, false);
             multilocus_gvalue.update(pop);
             wbar = rules.w(pop, multilocus_gvalue);
             recorder(pop);

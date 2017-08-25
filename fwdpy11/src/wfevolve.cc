@@ -34,7 +34,7 @@
 namespace py = pybind11;
 
 template <typename bound_mmodels, typename bound_recmodels,
-          typename mut_removal_policy, typename update_mut>
+          typename mut_removal_policy>
 void
 evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
               fwdpy11::wf_rules& rules, py::array_t<std::uint32_t> popsizes,
@@ -43,7 +43,7 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
               fwdpy11::single_locus_fitness& fitness,
               fwdpy11::singlepop_temporal_sampler& recorder,
               const double selfing_rate, const mut_removal_policy& mp,
-              const update_mut& um)
+              const bool remove_selected_fixations)
 {
     auto generations = popsizes.size();
     auto fitness_callback = fitness.callback();
@@ -54,8 +54,7 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
         {
             const auto N_next = popsizes.at(generation);
             fwdpy11::evolve_generation(
-                rng, pop, N_next, mu_neutral + mu_selected, mmodels,
-                recmap,
+                rng, pop, N_next, mu_neutral + mu_selected, mmodels, recmap,
                 std::bind(&fwdpy11::wf_rules::pick1, &rules,
                           std::placeholders::_1, std::placeholders::_2),
                 std::bind(&fwdpy11::wf_rules::pick2, &rules,
@@ -67,11 +66,13 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
                           std::placeholders::_5),
                 mp);
             pop.N = N_next;
-            um(pop.mutations, pop.fixations, pop.fixation_times,
-               pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N);
+            fwdpy11::update_mutations(pop.mutations, pop.fixations,
+                                      pop.fixation_times, pop.mut_lookup,
+                                      pop.mcounts, pop.generation, 2 * pop.N,
+                                      remove_selected_fixations);
             fitness.update(pop);
             auto wbar = rules.w(pop, fitness_callback);
-			recorder(pop);
+            recorder(pop);
         }
 }
 
@@ -121,15 +122,13 @@ evolve_singlepop_regions_cpp(
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
                           mmodels, recmap, fitness, recorder, selfing_rate,
-                          std::true_type(),
-                          fwdpy11::update_mutations_wrapper());
+                          std::true_type(), true);
         }
     else
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
                           mmodels, recmap, fitness, recorder, selfing_rate,
-                          KTfwd::remove_neutral(),
-                          fwdpy11::update_mutations_n_wrapper());
+                          KTfwd::remove_neutral(), false);
         }
     --pop.generation;
 }
