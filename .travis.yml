@@ -39,8 +39,8 @@ install:
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then conda install gcc; fi
     - conda install -c r gsl
     - conda install cython numpy python==3.5
-    - conda install -c conda-forge pybind11
-    - pip install --upgrade cppimport
+    - conda install -c conda-forge pybind11==2.1.1
+    - pip install cppimport
 script:
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;

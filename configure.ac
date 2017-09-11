@@ -402,7 +402,7 @@ AC_CONFIG_FILES([setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/__init__.
 
 dnl stuff added by KRT
 
-MINPYBIND11="2.1.0"
+MINPYBIND11="2.1.1"
 AC_SUBST(PYBIND11,$MINPYBIND11)
 
 AC_DEFINE_UNQUOTED([GSL_VERSION],["$GSLVERSION"],[The version of GSL used to compile this software])
