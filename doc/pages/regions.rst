@@ -124,7 +124,12 @@ In a simulation, we may place a distribution on either :math:`s` itself or on th
 * :class:`fwdpy11.regions.ConstantS`
 * :class:`fwdpy11.regions.UniformS`
 * :class:`fwdpy11.regions.GammaS`
+* :class:`fwdpy11.regions.ExpS`
 * :class:`fwdpy11.regions.GaussianS`
+
+.. versionchanged:: 0.13.a2
+    Added ability to have these DFE objects represent distributions of scaled selection parameter via the "scaling"
+    attribute.
   
 Crossover rate variation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

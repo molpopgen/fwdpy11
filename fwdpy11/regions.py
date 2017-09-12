@@ -129,6 +129,10 @@ class Sregion(Region):
         scaling = 2N (where N is the population size), then the DFE is on 2Ns.  If N
         is not constant during a simulation, then the scaling is with respect to some
         "reference" population size.
+
+    .. versionchanged:: 0.13.a2
+        Added "scaling" attribute.
+
     """
 
     def __init__(self, beg, end, weight, h=1.0, coupled=True, label=0, scaling=1):
