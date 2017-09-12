@@ -17,6 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import math
+import numpy as np
 
 
 class Region(object):
@@ -109,6 +110,7 @@ class Sregion(Region):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.  See note below.
 
     See :func:`evolve_regions` for how this class
     may be used to parameterize a simulation.
@@ -121,9 +123,15 @@ class Sregion(Region):
        :class:`fwdpy11.fwdpy11.ExpS`,
        :class:`fwdpy11.fwdpy11.GammaS`, and
        :class:`fwdpy11.fwdpy11.GaussianS`
+
+    .. note:: The scaling of a distribution refers to the distribution of effect sizes.
+        For example, if scaling = 1.0, then the DFE is on the effect size itself.  If
+        scaling = 2N (where N is the population size), then the DFE is on 2Ns.  If N
+        is not constant during a simulation, then the scaling is with respect to some
+        "reference" population size.
     """
 
-    def __init__(self, beg, end, weight, h=1.0, coupled=True, label=0):
+    def __init__(self, beg, end, weight, h=1.0, coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -135,6 +143,7 @@ class Sregion(Region):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used to take mutations
             from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be
         interpreted as a "per base pair"
@@ -157,6 +166,7 @@ class Sregion(Region):
         if math.isnan(h):
             raise ValueError("fwdpy11.Segion: h not a number")
         self.h = float(h)
+        self.scaling = np.uint32(scaling)
         super(Sregion, self).__init__(beg, end, weight, coupled, label)
 
     # def __str__(self):
@@ -178,13 +188,14 @@ class GammaS(Sregion):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.
 
     See :func:`evolve_regions` for how this
     class may be used to parameterize a simulation
     """
 
     def __init__(self, beg, end, weight, mean, shape, h=1.0,
-                 coupled=True, label=0):
+                 coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -198,6 +209,7 @@ class GammaS(Sregion):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used
             to take mutations from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be
         interpreted as a "per base pair"
@@ -221,20 +233,21 @@ class GammaS(Sregion):
             raise ValueError("fwdpy11.GammaS: shape not a number")
         self.mean = float(mean)
         self.shape = float(shape)
-        super(GammaS, self).__init__(beg, end, weight, h, coupled, label)
+        super(GammaS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
 
     def callback(self):
         """
         Returns the C++ callback for this DFE
         """
         from .fwdpp_extensions import makeGammaSH
-        return makeGammaSH(self.mean, self.shape, self.h)
+        return makeGammaSH(self.mean, self.shape, self.h, self.scaling)
 
     def __repr__(self):
         x = 'regions.GammaS(beg=%s,end=%s,weight=%s,'
-        x += 'mean=%s,shape=%s,coupled=%s,label=%s)'
+        x += 'mean=%s,shape=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.mean,
-                    self.shape, self.c, self.l)
+                    self.shape, self.c, self.l, self.scaling)
 
 
 class ConstantS(Sregion):
@@ -250,12 +263,13 @@ class ConstantS(Sregion):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.
 
     See :func:`evolve_regions` for how this class may be used to
     parameterize a simulation
     """
 
-    def __init__(self, beg, end, weight, s, h=1.0, coupled=True, label=0):
+    def __init__(self, beg, end, weight, s, h=1.0, coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -268,6 +282,7 @@ class ConstantS(Sregion):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used to take mutations
             from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be interpreted
         as a "per base pair"
@@ -287,19 +302,20 @@ class ConstantS(Sregion):
         if math.isnan(s):
             raise ValueError("fwdpy11.ConstantS: s not a number")
         self.s = float(s)
-        super(ConstantS, self).__init__(beg, end, weight, h, coupled, label)
+        super(ConstantS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
 
     def callback(self):
         """
         Returns the C++ callback for this DFE
         """
         from .fwdpp_extensions import makeConstantSH
-        return makeConstantSH(self.s, self.h)
+        return makeConstantSH(self.s, self.h, self.scaling)
 
     def __repr__(self):
         x = 'regions.ConstantS(beg=%s,end=%s,weight=%s,'
-        x += 's=%s,h=%s,coupled=%s,label=%s)'
-        return x % (self.b, self.e, self.w, self.s, self.h, self.c, self.l)
+        x += 's=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
+        return x % (self.b, self.e, self.w, self.s, self.h, self.c, self.l, self.scaling)
 
 
 class UniformS(Sregion):
@@ -316,12 +332,13 @@ class UniformS(Sregion):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.
 
     See :func:`evolve_regions` for how this
     class may be used to parameterize a simulation
     """
 
-    def __init__(self, beg, end, weight, lo, hi, h=1.0, coupled=True, label=0):
+    def __init__(self, beg, end, weight, lo, hi, h=1.0, coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -335,6 +352,7 @@ class UniformS(Sregion):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used to take
             mutations from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be
         interpreted as a "per base pair"
@@ -359,20 +377,20 @@ class UniformS(Sregion):
             raise ValueError("fwdpy11.UniformS: hi not a number")
         self.lo = float(lo)
         self.hi = float(hi)
-        super(UniformS, self).__init__(beg, end, weight, h, coupled)
+        super(UniformS, self).__init__(beg, end, weight, h, coupled, scaling)
 
     def callback(self):
         """
         Returns the C++ callback for this DFE
         """
         from .fwdpp_extensions import makeUniformSH
-        return makeUniformSH(self.lo, self.hi, self.h)
+        return makeUniformSH(self.lo, self.hi, self.h, self.scaling)
 
     def __repr__(self):
         x = 'regions.UniformS(beg=%s,end=%s,weight=%s,'
-        x += 'lo=%s,hi=%s,h=%s,coupled=%s,label=%s)'
+        x += 'lo=%s,hi=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.lo,
-                    self.hi, self.h, self.c, self.l)
+                    self.hi, self.h, self.c, self.l, self.scaling)
 
 
 class ExpS(Sregion):
@@ -388,12 +406,13 @@ class ExpS(Sregion):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.
 
     See :func:`evolve_regions` for how this class may be used to
     parameterize a simulation
     """
 
-    def __init__(self, beg, end, weight, mean, h=1.0, coupled=True, label=0):
+    def __init__(self, beg, end, weight, mean, h=1.0, coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -406,6 +425,7 @@ class ExpS(Sregion):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used to take
             mutations from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be
         interpreted as a "per base pair"
@@ -425,19 +445,20 @@ class ExpS(Sregion):
         if math.isnan(mean):
             raise ValueError("fwdpy11.ExpS: mean not a number")
         self.mean = float(mean)
-        super(ExpS, self).__init__(beg, end, weight, h, coupled, label)
+        super(ExpS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
 
     def callback(self):
         """
         Returns the C++ callback for this DFE
         """
         from .fwdpp_extensions import makeExpSH
-        return makeExpSH(self.mean, self.h)
+        return makeExpSH(self.mean, self.h, self.scaling)
 
     def __repr__(self):
         x = 'regions.ExpS(beg=%s,end=%s,weight=%s,'
-        x += 'mean=%s,h=%s,coupled=%s,label=%s)'
-        return x % (self.b, self.e, self.w, self.mean, self.h, self.c, self.l)
+        x += 'mean=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
+        return x % (self.b, self.e, self.w, self.mean, self.h, self.c, self.l, self.scaling)
 
 
 class GaussianS(Sregion):
@@ -454,6 +475,7 @@ class GaussianS(Sregion):
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
+        * scaling: The scaling of the distrubution.
 
     The mean is zero.
 
@@ -461,7 +483,7 @@ class GaussianS(Sregion):
     parameterize a simulation
     """
 
-    def __init__(self, beg, end, weight, sd, h=1.0, coupled=True, label=0):
+    def __init__(self, beg, end, weight, sd, h=1.0, coupled=True, label=0, scaling=1):
         """
         Constructor
 
@@ -474,6 +496,7 @@ class GaussianS(Sregion):
         :param label: Not relevant to recombining regions.
             Otherwise, this value will be used to take mutations
             from this region.
+        :param scaling: The scaling of the DFE
 
         When coupled is True, the "weight" may be
         interpreted as a "per base pair"
@@ -493,16 +516,17 @@ class GaussianS(Sregion):
         if math.isnan(sd):
             raise ValueError("fwdpy11.GaussianS: sd not a number")
         self.sd = float(sd)
-        super(GaussianS, self).__init__(beg, end, weight, h, coupled, label)
+        super(GaussianS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
 
     def callback(self):
         """
         Returns the C++ callback for this DFE
         """
         from .fwdpp_extensions import makeGaussianSH
-        return makeGaussianSH(self.sd, self.h)
+        return makeGaussianSH(self.sd, self.h, self.scaling)
 
     def __repr__(self):
         x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
-        x += 'sd=%s,h=%s,coupled=%s,label=%s)'
-        return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l)
+        x += 'sd=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
+        return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l, self.scaling)
