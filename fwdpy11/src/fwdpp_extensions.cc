@@ -21,6 +21,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
+#include <fwdpy11/rng.hpp>
 #include <fwdpp/extensions/callbacks.hpp>
 #include <fwdpp/extensions/regions.hpp>
 
@@ -81,7 +82,11 @@ PYBIND11_PLUGIN(fwdpp_extensions)
 
     py::class_<KTfwd::extensions::shmodel>(m, "DFEFixedDominance")
         .def(py::init<>())
-        .def(py::init<dfe_callback_type, dfe_callback_type>());
+        .def(py::init<dfe_callback_type, dfe_callback_type>())
+        .def("__call__", [](const KTfwd::extensions::shmodel &sh,
+                            const fwdpy11::GSLrng_t &rng) {
+            return py::make_tuple(sh.s(rng.get()), sh.h(rng.get()));
+        });
 
     m.def("makeConstantSH",
           ([](const double s, const double h, const KTfwd::uint_t scaling) {
