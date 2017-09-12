@@ -4,6 +4,11 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.3a2
+++++++++++++++++++++++++++
+
+* :class:`fwdpy11.regions.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16<https://github.com/molpopgen/fwdpy11/pull/16>`_]
+
 Version 0.1.3a1
 ++++++++++++++++++++++++++
 
