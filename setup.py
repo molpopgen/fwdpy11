@@ -10,13 +10,13 @@ import glob
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
 
-__version__ = '0.1.3a1'
+__version__ = '0.1.3a2'
 
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
 if pybind11.__version__ < '2.1.0':
-    raise RuntimeError("fwdpy11 >= " + '2.1.0' + " required")
+    raise RuntimeError("pybind11 >= " + '2.1.0' + " required")
 
 
 # clang/llvm is default for OS X builds.

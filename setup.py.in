@@ -16,7 +16,7 @@ if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
 if pybind11.__version__ < '@PYBIND11@':
-    raise RuntimeError("fwdpy11 >= " + '@PYBIND11@' + " required")
+    raise RuntimeError("pybind11 >= " + '@PYBIND11@' + " required")
 
 
 # clang/llvm is default for OS X builds.
