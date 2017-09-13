@@ -30,9 +30,9 @@ PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(
     std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
-PYBIND11_PLUGIN(fwdpp_types)
+PYBIND11_MODULE(fwdpp_types, m)
 {
-    py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");
+    m.doc() = "Wrap C++ types from fwdpp.";
 
     // low-level types
 
@@ -143,6 +143,4 @@ Base class for mutations.
                       "List of dominance terms.")
         .def_readonly("g", &KTfwd::generalmut_vec::g,
                       "Generation when mutation arose.");
-
-    return m.ptr();
 }

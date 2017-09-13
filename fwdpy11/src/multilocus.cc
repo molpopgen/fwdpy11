@@ -83,11 +83,9 @@ struct aggregate_mult_trait
 
 using ff_vec = decltype(fwdpy11::multilocus_genetic_value::fitness_functions);
 
-PYBIND11_PLUGIN(multilocus)
+PYBIND11_MODULE(multilocus, m)
 {
-    py::module m(
-        "multilocus",
-        "Types and functions specific to multi-locus/region simulations");
+    m.doc() = "Types and functions specific to multi-locus/region simulations";
 
     py::class_<fwdpy11::multilocus_genetic_value>(m, "MultiLocusGeneticValue")
         .def(py::init<const ff_vec&>())
@@ -153,8 +151,8 @@ PYBIND11_PLUGIN(multilocus)
                "under an multiplicative model.");
 
     py::class_<fwdpy11::interlocus_rec>(m, "InterlocusRecombination")
-        .def(py::init<double, std::underlying_type<
-                                  fwdpy11::interlocus_rec::RECMODEL>::type>(),
+        .def(py::init<double, std::underlying_type<fwdpy11::interlocus_rec::
+                                                       RECMODEL>::type>(),
              "This class parameterizes interlocus recombination in multilocus "
              "simulations.  You do not make instances of this class directly. "
              " Rather, you make calls to one of "
@@ -362,6 +360,4 @@ PYBIND11_PLUGIN(multilocus)
 
     .. deprecated:: 0.1.3
     )delim");
-
-    return m.ptr();
 }

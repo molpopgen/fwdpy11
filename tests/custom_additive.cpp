@@ -40,10 +40,8 @@ STATELESS_SLOCUS_FUNCTION(additive)
 END_STRUCT()
 
 //Standard pybind11 stuff goes here
-PYBIND11_PLUGIN(custom_additive)
+PYBIND11_MODULE(custom_additive, m)
 {
-    pybind11::module m("custom_additive");
-
     //Call this macro so that your custom
     //class is recognizes are part of the 
     //expected Python class hierarchy
@@ -57,5 +55,4 @@ PYBIND11_PLUGIN(custom_additive)
     //2. The name of the Python function
     //3. The name of the pybind11::module object
 	CREATE_STATELESS_SLOCUS_OBJECT(additive,"additive",m);
-    return m.ptr();
 }

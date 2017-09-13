@@ -129,9 +129,9 @@ namespace
     )delim";
 }
 
-PYBIND11_PLUGIN(fwdpy11_types)
+PYBIND11_MODULE(fwdpy11_types, m)
 {
-    py::module m("fwdpy11_types", "Wrap C++ types specific to fwdpy11.");
+    m.doc() = "Wrap C++ types specific to fwdpy11.";
 
     py::class_<fwdpy11::GSLrng_t>(
         m, "GSLrng", "Random number generator based on a mersenne twister.")
@@ -631,5 +631,4 @@ PYBIND11_PLUGIN(fwdpy11_types)
                           const fwdpy11::singlepop_gm_vec_t& rhs) {
             return lhs == rhs;
         });
-    return m.ptr();
 }

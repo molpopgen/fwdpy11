@@ -76,9 +76,9 @@ template <typename S> struct make_sh_model_fixed_dom
     return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, SCALING, A,  \
                                                               B);
 
-PYBIND11_PLUGIN(fwdpp_extensions)
+PYBIND11_MODULE(fwdpp_extensions,m)
 {
-    py::module m("fwdpp_extensions", "Expose fwdpp's extensions library.");
+    m.doc() = "Expose fwdpp's extensions library.";
 
     py::class_<KTfwd::extensions::shmodel>(m, "DFEFixedDominance")
         .def(py::init<>())
@@ -123,6 +123,4 @@ PYBIND11_PLUGIN(fwdpp_extensions)
                                                       "RecombinationRegions")
         .def(py::init<std::vector<double>, std::vector<double>,
                       std::vector<double>>());
-
-    return m.ptr();
 }

@@ -157,10 +157,9 @@ struct snowdrift : public fwdpy11::single_locus_fitness
     SINGLE_LOCUS_FITNESS_CALLBACK_NAME(typeid(snowdrift_diploid).name());
 };
 
-PYBIND11_PLUGIN(snowdrift)
+PYBIND11_MODULE(snowdrift, m)
 {
-    pybind11::module m("snowdrift",
-                       "Example of custom stateful fitness model.");
+    m.doc() = "Example of custom stateful fitness model.";
 
     // fwdpy11 provides a macro
     // to make sure that the Python wrapper
@@ -185,6 +184,4 @@ PYBIND11_PLUGIN(snowdrift)
                                t[2].cast<double>(), t[3].cast<double>());
             s.phenotypes = t[4].cast<std::vector<double>>();
         });
-
-    return m.ptr();
 }

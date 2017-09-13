@@ -133,10 +133,9 @@ evolve_singlepop_regions_cpp(
     --pop.generation;
 }
 
-PYBIND11_PLUGIN(wfevolve)
+PYBIND11_MODULE(wfevolve,m)
 {
-    py::module m("wfevolve", "example extending");
+    m.doc() = "Evolution under a Wright-Fisher model.";
 
     m.def("evolve_singlepop_regions_cpp", &evolve_singlepop_regions_cpp);
-    return m.ptr();
 }

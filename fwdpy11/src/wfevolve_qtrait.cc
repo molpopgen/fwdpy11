@@ -231,13 +231,12 @@ evolve_qtrait_mloc_regions_cpp(
     --pop.generation;
 }
 
-PYBIND11_PLUGIN(wfevolve_qtrait)
+PYBIND11_MODULE(wfevolve_qtrait, m)
 {
-    py::module m("wfevolve_qtrait", "example extending");
+    m.doc() = "Evolution of quantitative traits under a Wright-Fisher model.";
 
     m.def("evolve_singlepop_regions_qtrait_cpp",
           &evolve_singlepop_regions_qtrait_cpp);
 
     m.def("evolve_qtrait_mloc_regions_cpp", &evolve_qtrait_mloc_regions_cpp);
-    return m.ptr();
 }

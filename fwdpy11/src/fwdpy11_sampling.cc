@@ -114,9 +114,9 @@ separate_samples_by_loci(
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
-PYBIND11_PLUGIN(sampling)
+PYBIND11_MODULE(sampling, m)
 {
-    py::module m("sampling", "Taking samples from populations");
+    m.doc() = "Taking samples from populations";
 
 #define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
     m.def("sample_separate",                                                  \
@@ -433,6 +433,4 @@ PYBIND11_PLUGIN(sampling)
                 but there is one entry per locus.  
 				The key for each entry in the dict is the locus index.
             )delim");
-
-    return m.ptr();
 }

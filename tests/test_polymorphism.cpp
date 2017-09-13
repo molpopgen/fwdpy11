@@ -19,23 +19,18 @@ cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ]
 #include <pybind11/pybind11.h>
 #include <fwdpy11/fitness/fitness.hpp>
 
-namespace py = pybind11;
+    namespace py = pybind11;
 
-PYBIND11_PLUGIN(test_polymorphism)
+PYBIND11_MODULE(test_polymorphism, m)
 {
-    py::module m("test_polymorphism");
-
-    m.def(
-        "test_callback_names",
-        [](const std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>& f) {
-            std::vector<std::string> rv;
-            for (auto&& i : f)
-                {
-                    rv.emplace_back(i->callback_name());
-                }
-            return rv;
-        });
-
-    return m.ptr();
+    m.def("test_callback_names",
+          [](const std::vector<std::shared_ptr<fwdpy11::single_locus_fitness>>&
+                 f) {
+              std::vector<std::string> rv;
+              for (auto&& i : f)
+                  {
+                      rv.emplace_back(i->callback_name());
+                  }
+              return rv;
+          });
 }
-
