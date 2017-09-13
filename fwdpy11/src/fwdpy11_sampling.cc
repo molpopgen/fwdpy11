@@ -168,8 +168,8 @@ PYBIND11_PLUGIN(sampling)
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
                         "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
-    py::bind_vector<std::vector<std::int8_t>>(m, "Vec8",
-                                              py::buffer_protocol());
+    py::bind_vector<std::vector<std::int8_t>>(m, "Vec8", py::buffer_protocol(),
+                                              py::module_local(false));
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(

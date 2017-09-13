@@ -128,9 +128,10 @@ Base class for mutations.
         });
 
     py::bind_vector<std::vector<double>>(
-        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol());
+        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
+        py::module_local(false));
     py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
-        m, "VectorGeneralMutVec",
+        m, "VectorGeneralMutVec", py::module_local(false),
         "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(

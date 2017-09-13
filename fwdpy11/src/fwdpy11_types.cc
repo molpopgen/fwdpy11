@@ -167,7 +167,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
         });
 
     py::bind_vector<fwdpy11::dipvector_t>(
-        m, "DiploidContainer",
+        m, "DiploidContainer", py::module_local(false),
         "C++ representation of a list of "
         ":class:`fwdpy11.fwdpy11_types."
         "SingleLocusDiploid`.  Typically, access will be read-only.")
@@ -285,7 +285,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
 			 )delim");
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
-        m, "VecDiploidContainer",
+        m, "VecDiploidContainer", py::module_local(false),
         "Vector of "
         ":class:`fwdpy11.fwdpy11_types."
         "SingleLocusDiploid`.")
@@ -420,8 +420,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
 
     py::bind_vector<std::vector<KTfwd::uint_t>>(
         m, "VectorUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol());
+        py::buffer_protocol(), py::module_local(false));
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
+                                      py::module_local(false),
                                       "C++ representations of a list of "
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "
                                       "Typically, access will be read-only.");
@@ -429,27 +430,27 @@ PYBIND11_PLUGIN(fwdpy11_types)
     PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
     PYBIND11_NUMPY_DTYPE(diploid_gametes, locus, first, second);
-    py::bind_vector<std::vector<flattened_popgenmut>>(m, "VecMutStruct",
-                                                      py::buffer_protocol(),
-                                                      R"delim(
+    py::bind_vector<std::vector<flattened_popgenmut>>(
+        m, "VecMutStruct", py::buffer_protocol(), py::module_local(false),
+        R"delim(
         Vector of the data fields in a "
         ":class:`fwdpy11.fwdpp_types.Mutation`.
 
         .. versionadded: 0.1.2
         )delim");
 
-    py::bind_vector<std::vector<diploid_traits>>(m, "VecDipTraits",
-                                                 py::buffer_protocol(),
-                                                 R"delim(
+    py::bind_vector<std::vector<diploid_traits>>(
+        m, "VecDipTraits", py::buffer_protocol(), py::module_local(false),
+        R"delim(
         Vector of the g,e,w data fields in a "
         ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
 
         .. versionadded: 0.1.2
         )delim");
 
-    py::bind_vector<std::vector<diploid_gametes>>(m, "VecDipGametes",
-                                                  py::buffer_protocol(),
-                                                  R"delim(
+    py::bind_vector<std::vector<diploid_gametes>>(
+        m, "VecDipGametes", py::buffer_protocol(), py::module_local(false),
+        R"delim(
         Vector of the locus and gamete index data fields in a "
         ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
 
@@ -457,10 +458,10 @@ PYBIND11_PLUGIN(fwdpy11_types)
         )delim");
 
     py::bind_vector<fwdpy11::mcont_t>(
-        m, "MutationContainer",
-        "C++ representation of a list of "
-        ":class:`fwdpy11.fwdpp_types.Mutation`.  "
-        "Typically, access will be read-only.")
+        m, "MutationContainer", "C++ representation of a list of "
+                                ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                                "Typically, access will be read-only.",
+        py::module_local(false))
         .def("array",
              [](const fwdpy11::mcont_t& mc) {
                  std::vector<flattened_popgenmut> rv;
@@ -502,10 +503,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
     // Expose the type based on fwdpp's "sugar"
     // layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "SlocusPop",
-        "Population object representing a single "
-        "deme and a "
-        "single genomic region.")
+        m, "SlocusPop", "Population object representing a single "
+                        "deme and a "
+                        "single genomic region.")
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
@@ -545,9 +545,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
-        m, "MlocusPop",
-        "Representation of a multi-locus, single "
-        "deme system.")
+        m, "MlocusPop", "Representation of a multi-locus, single "
+                        "deme system.")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
