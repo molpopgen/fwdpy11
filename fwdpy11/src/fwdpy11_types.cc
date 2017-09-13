@@ -90,9 +90,116 @@ make_diploid_gametes(const fwdpy11::diploid_t& dip, const std::size_t locus)
     return d;
 }
 
+struct diploid_parents
+{
+    std::uint32_t p1, p2;
+};
+
+inline diploid_parents
+make_diploid_parents(const fwdpy11::diploid_t& dip)
+{
+    diploid_parents rv;
+    rv.p1 = std::get<0>(dip.parents);
+    rv.p2 = std::get<1>(dip.parents);
+    return rv;
+}
+
+struct diploid_space
+{
+    double x, y, z;
+};
+
+inline diploid_space
+make_diploid_space(const fwdpy11::diploid_t& dip)
+{
+    diploid_space rv;
+    rv.x = std::get<0>(dip.xyz);
+    rv.y = std::get<1>(dip.xyz);
+    rv.z = std::get<2>(dip.xyz);
+    return rv;
+}
+
 PYBIND11_MAKE_OPAQUE(std::vector<flattened_popgenmut>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_traits>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_gametes>);
+PYBIND11_MAKE_OPAQUE(std::vector<diploid_space>);
+PYBIND11_MAKE_OPAQUE(std::vector<diploid_parents>);
+
+constexpr auto TRAIT_ARRAY_DOCSTRING =
+    R"delim(
+         :rtype: :class:`fwdpy11.fwdpy11_types.VecDipTraits` 
+			 
+         .. versionadded:: 0.1.2 
+         )delim";
+
+constexpr auto KEY_ARRAY_DOCSTRING =
+    R"delim(
+             :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
+			 
+			 .. versionadded:: 0.1.2
+			 )delim";
+
+constexpr auto PARENTS_ARRAY_DOCSTRING =
+    R"delim(
+             :rtype: :class:`fwdpy11.fwdpy11_types.VecDipParents`
+			 
+			 .. versionadded:: 0.1.3
+			 )delim";
+
+constexpr auto SPACE_ARRAY_DOCSTRING =
+    R"delim(
+             :rtype: :class:`fwdpy11.fwdpy11_types.VecDipSpace`
+			 
+			 .. versionadded:: 0.1.3
+			 )delim";
+
+#define MAKE_DIPLOID_ARRAY(NAME, TYPE, FN, DSTRING)                           \
+    .def(NAME,                                                                \
+         [](const fwdpy11::dipvector_t& diploids) {                           \
+             std::vector<TYPE> rv;                                            \
+             rv.reserve(diploids.size());                                     \
+             for (auto&& dip : diploids)                                      \
+                 {                                                            \
+                     rv.push_back(FN(dip));                                   \
+                 }                                                            \
+             return rv;                                                       \
+         },                                                                   \
+         DSTRING)
+
+#define MAKE_DIPLOID_ARRAY_IND(NAME, TYPE, FN, DSTRING)                       \
+    .def(NAME,                                                                \
+         [](const fwdpy11::dipvector_t& diploids,                             \
+            py::array_t<std::size_t> individuals) {                           \
+             auto r = individuals.unchecked<1>();                             \
+             std::vector<TYPE> rv;                                            \
+             rv.reserve(r.shape(0));                                          \
+             for (std::size_t i = 0; i < r.shape(0); ++i)                     \
+                 {                                                            \
+                     auto&& dip = diploids.at(r(i));                          \
+                     rv.push_back(FN(dip));                                   \
+                 }                                                            \
+             return rv;                                                       \
+         },                                                                   \
+         DSTRING)
+
+#define MAKE_DIPLOID_ARRAY_SLICE(NAME, TYPE, FN, DSTRING)                     \
+    .def(NAME,                                                                \
+         [](const fwdpy11::dipvector_t& diploids, py::slice slice) {          \
+             size_t start, stop, step, slicelength;                           \
+             if (!slice.compute(diploids.size(), &start, &stop, &step,        \
+                                &slicelength))                                \
+                 throw py::error_already_set();                               \
+             std::vector<TYPE> rv;                                            \
+             rv.reserve(slicelength);                                         \
+             for (size_t i = 0; i < slicelength; ++i)                         \
+                 {                                                            \
+                     auto&& dip = diploids.at(start);                         \
+                     rv.push_back(FN(dip));                                   \
+                     start += step;                                           \
+                 }                                                            \
+             return rv;                                                       \
+         },                                                                   \
+         DSTRING)
 
 namespace
 {
@@ -138,9 +245,10 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .def(py::init<unsigned>(),
              "Constructor takes unsigned integer as a seed");
 
-    py::class_<fwdpy11::diploid_t>(
-        m, "SingleLocusDiploid",
-        "Diploid data type for a single (usually contiguous) genomic region")
+    py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid",
+                                   "Diploid data type for a single "
+                                   "(usually contiguous) genomic "
+                                   "region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
         .def_readonly("first", &fwdpy11::diploid_t::first,
@@ -154,6 +262,13 @@ PYBIND11_PLUGIN(fwdpy11_types)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
+        .def_readonly("parents", &fwdpy11::diploid_t::parents,
+                      "Indexes of parents (read-only).")
+        .def_readonly("space", &fwdpy11::diploid_t::xyz,
+                      "x,y,z coordinates (read-only).")
+        .def_readonly("deme", &fwdpy11::diploid_t::deme,
+                      "Current deme (read-only).")
+        .def_readonly("sex", &fwdpy11::diploid_t::sex, "Sex (read-only).")
         .def("__getstate__",
              [](const fwdpy11::diploid_t& d) {
                  return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
@@ -171,124 +286,58 @@ PYBIND11_PLUGIN(fwdpy11_types)
         "C++ representation of a list of "
         ":class:`fwdpy11.fwdpy11_types."
         "SingleLocusDiploid`.  Typically, access will be read-only.")
-        .def("trait_array",
-             [](const fwdpy11::dipvector_t& diploids) {
-                 std::vector<diploid_traits> rv;
-                 rv.reserve(diploids.size());
-                 for (auto&& dip : diploids)
-                     {
-                         rv.push_back(make_diploid_traits(dip));
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipTraits`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim")
-        .def("trait_array",
-             [](const fwdpy11::dipvector_t& diploids,
-                py::array_t<std::size_t> individuals) {
-                 auto r = individuals.unchecked<1>();
-                 std::vector<diploid_traits> rv;
-                 rv.reserve(r.shape(0));
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
-                     {
-                         // range-check here
-                         auto&& dip = diploids.at(r(i));
-                         rv.push_back(make_diploid_traits(dip));
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipTraits`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim")
-        .def("trait_array",
-             [](const fwdpy11::dipvector_t& diploids, py::slice slice) {
-                 size_t start, stop, step, slicelength;
-
-                 if (!slice.compute(diploids.size(), &start, &stop, &step,
-                                    &slicelength))
-                     throw py::error_already_set();
-
-                 std::vector<diploid_traits> rv;
-                 rv.reserve(slicelength);
-                 for (size_t i = 0; i < slicelength; ++i)
-                     {
-                         auto&& dip = diploids.at(start);
-                         rv.push_back(make_diploid_traits(dip));
-                         start += step;
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipTraits`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim")
-        .def("key_array",
-             [](const fwdpy11::dipvector_t& diploids) {
-                 std::vector<diploid_gametes> rv;
-                 rv.reserve(diploids.size());
-                 for (auto&& dip : diploids)
-                     {
-                         rv.push_back(make_diploid_gametes(dip, 0));
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim")
-        .def("key_array",
-             [](const fwdpy11::dipvector_t& diploids,
-                py::array_t<std::size_t> individuals) {
-                 auto r = individuals.unchecked<1>();
-                 std::vector<diploid_gametes> rv;
-                 rv.reserve(r.shape(0));
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
-                     {
-                         rv.push_back(make_diploid_gametes(diploids.at(i), 0));
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim")
-        .def("key_array",
-             [](const fwdpy11::dipvector_t& diploids, py::slice slice) {
-                 size_t start, stop, step, slicelength;
-
-                 if (!slice.compute(diploids.size(), &start, &stop, &step,
-                                    &slicelength))
-                     throw py::error_already_set();
-
-                 std::vector<diploid_gametes> rv;
-                 rv.reserve(slicelength);
-                 for (size_t i = 0; i < slicelength; ++i)
-                     {
-                         rv.push_back(
-                             make_diploid_gametes(diploids.at(start), 0));
-                         start += step;
-                     }
-                 return rv;
-             },
-             R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
-			 
-			 .. versionadded:: 0.1.2
-			 )delim");
+        MAKE_DIPLOID_ARRAY("trait_array", diploid_traits, make_diploid_traits,
+                           TRAIT_ARRAY_DOCSTRING)
+            MAKE_DIPLOID_ARRAY_IND("trait_array", diploid_traits,
+                                   make_diploid_traits, TRAIT_ARRAY_DOCSTRING)
+                MAKE_DIPLOID_ARRAY_SLICE("trait_array", diploid_traits,
+                                         make_diploid_traits,
+                                         TRAIT_ARRAY_DOCSTRING)
+                    MAKE_DIPLOID_ARRAY("key_array", diploid_gametes,
+                                       std::bind(make_diploid_gametes,
+                                                 std::placeholders::_1, 0),
+                                       KEY_ARRAY_DOCSTRING)
+                        MAKE_DIPLOID_ARRAY_IND("key_array", diploid_gametes,
+                                               std::bind(make_diploid_gametes,
+                                                         std::placeholders::_1,
+                                                         0),
+                                               KEY_ARRAY_DOCSTRING)
+                            MAKE_DIPLOID_ARRAY_SLICE(
+                                "key_array", diploid_gametes,
+                                std::bind(make_diploid_gametes,
+                                          std::placeholders::_1, 0),
+                                KEY_ARRAY_DOCSTRING)
+                                MAKE_DIPLOID_ARRAY("parents_array",
+                                                   diploid_parents,
+                                                   make_diploid_parents,
+                                                   PARENTS_ARRAY_DOCSTRING)
+                                    MAKE_DIPLOID_ARRAY_IND(
+                                        "parents_array", diploid_parents,
+                                        make_diploid_parents,
+                                        PARENTS_ARRAY_DOCSTRING)
+                                        MAKE_DIPLOID_ARRAY_SLICE(
+                                            "parents_array", diploid_parents,
+                                            make_diploid_parents,
+                                            PARENTS_ARRAY_DOCSTRING)
+                                            MAKE_DIPLOID_ARRAY(
+                                                "space_array", diploid_space,
+                                                make_diploid_space,
+                                                SPACE_ARRAY_DOCSTRING)
+                                                MAKE_DIPLOID_ARRAY_IND(
+                                                    "space_array",
+                                                    diploid_space,
+                                                    make_diploid_space,
+                                                    SPACE_ARRAY_DOCSTRING)
+                                                    MAKE_DIPLOID_ARRAY_SLICE(
+                                                        "space_array",
+                                                        diploid_space,
+                                                        make_diploid_space,
+                                                        SPACE_ARRAY_DOCSTRING);
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
-        m, "VecDiploidContainer",
-        "Vector of "
-        ":class:`fwdpy11.fwdpy11_types."
-        "SingleLocusDiploid`.")
+        m, "VecDiploidContainer", "Vector of "
+                                  ":class:`fwdpy11.fwdpy11_types."
+                                  "SingleLocusDiploid`.")
         .def("trait_array",
              [](const std::vector<fwdpy11::dipvector_t>& diploids) {
                  std::vector<diploid_traits> rv;
@@ -429,6 +478,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
     PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
     PYBIND11_NUMPY_DTYPE(diploid_gametes, locus, first, second);
+    PYBIND11_NUMPY_DTYPE(diploid_parents, p1, p2);
+    PYBIND11_NUMPY_DTYPE(diploid_space, x, y, z);
+
     py::bind_vector<std::vector<flattened_popgenmut>>(m, "VecMutStruct",
                                                       py::buffer_protocol(),
                                                       R"delim(
@@ -456,11 +508,28 @@ PYBIND11_PLUGIN(fwdpy11_types)
         .. versionadded: 0.1.2
         )delim");
 
+    py::bind_vector<std::vector<diploid_parents>>(m, "VecDipParents",
+                                                  py::buffer_protocol(),
+                                                  R"delim(
+        Vector of the parents in a " 
+        ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
+
+        .. versionadded: 0.1.3
+        )delim");
+
+    py::bind_vector<std::vector<diploid_space>>(m, "VecDipSpace",
+                                                py::buffer_protocol(),
+                                                R"delim(
+        Vector of the space field in a " 
+        ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
+
+        .. versionadded: 0.1.3
+        )delim");
+
     py::bind_vector<fwdpy11::mcont_t>(
-        m, "MutationContainer",
-        "C++ representation of a list of "
-        ":class:`fwdpy11.fwdpp_types.Mutation`.  "
-        "Typically, access will be read-only.")
+        m, "MutationContainer", "C++ representation of a list of "
+                                ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                                "Typically, access will be read-only.")
         .def("array",
              [](const fwdpy11::mcont_t& mc) {
                  std::vector<flattened_popgenmut> rv;
@@ -502,10 +571,9 @@ PYBIND11_PLUGIN(fwdpy11_types)
     // Expose the type based on fwdpp's "sugar"
     // layer
     py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "SlocusPop",
-        "Population object representing a single "
-        "deme and a "
-        "single genomic region.")
+        m, "SlocusPop", "Population object representing a single "
+                        "deme and a "
+                        "single genomic region.")
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
@@ -545,9 +613,8 @@ PYBIND11_PLUGIN(fwdpy11_types)
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
-        m, "MlocusPop",
-        "Representation of a multi-locus, single "
-        "deme system.")
+        m, "MlocusPop", "Representation of a multi-locus, single "
+                        "deme system.")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
@@ -632,5 +699,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                           const fwdpy11::singlepop_gm_vec_t& rhs) {
             return lhs == rhs;
         });
+
+    m.def("sizeof", []() { return sizeof(fwdpy11::diploid_t); });
     return m.ptr();
 }

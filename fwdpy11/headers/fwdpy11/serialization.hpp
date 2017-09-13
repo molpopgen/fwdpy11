@@ -21,6 +21,7 @@
  */
 #ifndef FWDPY11_SERIALIZATION_HPP
 #define FWDPY11_SERIALIZATION_HPP
+
 #include <fwdpp/sugar/serialization.hpp>
 
 namespace fwdpy11
@@ -30,7 +31,7 @@ namespace fwdpy11
         inline constexpr int
         magic()
         {
-            return 1;
+            return 2; // changed to 2 in 0.1.3
         }
 
         template <typename poptype, typename mwriter_t, typename dipwriter_t>
@@ -41,7 +42,8 @@ namespace fwdpy11
             KTfwd::serialize rv;
             std::ostringstream buffer;
             buffer << "fp11";
-            buffer.write(reinterpret_cast<const char *>(&dipwriter.v), sizeof(int));
+            buffer.write(reinterpret_cast<const char *>(&dipwriter.v),
+                         sizeof(int));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
             rv(buffer, *pop, mwriter, dipwriter);
@@ -63,14 +65,14 @@ namespace fwdpy11
                 // We need to test for existance of serialization
                 // version numbers, introduced in 0.1.3.  Prior to that,
                 // it was wild west :).
-                bool have_magic = (s.substr(0,4)=="fp11") ? true : false;
-                //We default to version 1, which includes all
-                //previous releases that had no version numbers
+                bool have_magic = (s.substr(0, 4) == "fp11") ? true : false;
+                // We default to version 1, which includes all
+                // previous releases that had no version numbers
                 int version = 1;
                 if (have_magic)
                     {
                         char c[4];
-                        buffer.read(&c[0],4*sizeof(char));
+                        buffer.read(&c[0], 4 * sizeof(char));
                         buffer.read(reinterpret_cast<char *>(&version),
                                     sizeof(int));
                     }
