@@ -192,7 +192,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                  auto r = individuals.unchecked<1>();
                  std::vector<diploid_traits> rv;
                  rv.reserve(r.shape(0));
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
+                 for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i));
@@ -249,7 +249,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                  auto r = individuals.unchecked<1>();
                  std::vector<diploid_gametes> rv;
                  rv.reserve(r.shape(0));
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
+                 for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
                      {
                          rv.push_back(make_diploid_gametes(diploids.at(i), 0));
                      }
@@ -330,7 +330,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                  auto r = individuals.unchecked<1>();
                  std::vector<diploid_traits> rv;
                  rv.reserve(r.shape(0));
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
+                 for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i)).at(0);
@@ -350,7 +350,7 @@ PYBIND11_PLUGIN(fwdpy11_types)
                  std::vector<diploid_gametes> rv;
                  rv.reserve(r.shape(0));
                  std::size_t locus;
-                 for (std::size_t i = 0; i < r.shape(0); ++i)
+                 for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
                      {
                          auto&& dip = diploids.at(r(i));
                          locus = 0;
