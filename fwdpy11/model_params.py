@@ -47,7 +47,7 @@ def _validate_types(data, typename, strict):
     for i in data:
         if (strict is True and type(i) is not typename) or \
            isinstance(i, typename) is False:
-                raise TypeError("invalid type: " + str(typename))
+            raise TypeError("invalid type: " + str(typename))
 
 
 class ModelParams(object):
@@ -56,13 +56,13 @@ class ModelParams(object):
 
     .. versionadded:: 0.1.1
     """
-    __nregions = None
-    __sregions = None
-    __recregions = None
-    __demography = None
-    __prune_selected = True
 
     def __init__(self, **kwargs):
+        self.__nregions = None
+        self.__sregions = None
+        self.__recregions = None
+        self.__demography = None
+        self.__prune_selected = True
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
                 setattr(self, key, value)
@@ -199,13 +199,13 @@ class SlocusParams(ModelParams):
 
     .. versionadded:: 0.1.1
     """
-    __mutrate_n = None
-    __mutrate_s = None
-    __recrate = None
-    __gvalue = None
-    __pself = 0.0
 
     def __init__(self, **kwargs):
+        self.__mutrate_n = None
+        self.__mutrate_s = None
+        self.__recrate = None
+        self.__gvalue = None
+        self.__pself = 0.0
         gv_present = False
         if 'gvalue' in kwargs:
             gv_present = True
@@ -312,7 +312,8 @@ class SlocusParams(ModelParams):
         except:
             raise ValueError("selfing probability must be a float")
         if prob_selfing < 0.0 or prob_selfing > 1.0:
-            raise ValueError("invalid selfing probability: " + str(prob_selfing))
+            raise ValueError(
+                "invalid selfing probability: " + str(prob_selfing))
         self.__pself = float(prob_selfing)
 
     @property
@@ -435,10 +436,9 @@ class SlocusParamsQ(SlocusParams):
     .. versionadded:: 0.1.1
     """
 
-    __trait_to_fitness = None
-    __noise = None
-
     def __init__(self, **kwargs):
+        self.__trait_to_fitness = None
+        self.__noise = None
         gv_present = False
         if 'gvalue' in kwargs:
             gv_present = True
@@ -592,15 +592,14 @@ class MlocusParams(ModelParams):
     .. versionadded:: 0.1.1
     """
 
-    __mutrates_n = None
-    __mutrates_s = None
-    __recrates = None
-    __interlocus = None
-    __gvalue = None
-    __agg = None
-    __pself = 0.0
-
     def __init__(self, **kwargs):
+        self.__mutrates_n = None
+        self.__mutrates_s = None
+        self.__recrates = None
+        self.__interlocus = None
+        self.__gvalue = None
+        self.__agg = None
+        self.__pself = 0.0
         super(MlocusParams, self).__init__(**kwargs)
         if self.aggregator is None:
             from fwdpy11.multilocus import AggMultFitness
@@ -916,10 +915,9 @@ class MlocusParamsQ(MlocusParams):
     .. versionadded:: 0.1.1
     """
 
-    __trait2w = None
-    __noise = None
-
     def __init__(self, **kwargs):
+        self.__trait2w = None
+        self.__noise = None
         agg_present = False
         if 'agg' in kwargs or 'aggregator' in kwargs:
             agg_present = True
