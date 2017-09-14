@@ -4,7 +4,7 @@ setup_pybind11(cfg)
 #import fwdpy11 so we can find its C++ headers
 import fwdpy11 as fp11 
 #add fwdpy11 header locations to the include path
-cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ] 
+cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 #On OS X using clang, there is more work to do.  Using gcc on OS X
 #gets rid of these requirements. The specifics sadly depend on how
 #you initially built fwdpy11, and what is below assumes you used
@@ -40,10 +40,8 @@ STATELESS_SLOCUS_FUNCTION(additive)
 END_STRUCT()
 
 //Standard pybind11 stuff goes here
-PYBIND11_PLUGIN(custom_additive)
+PYBIND11_MODULE(custom_additive, m)
 {
-    pybind11::module m("custom_additive");
-
     //Call this macro so that your custom
     //class is recognizes are part of the 
     //expected Python class hierarchy
@@ -57,5 +55,4 @@ PYBIND11_PLUGIN(custom_additive)
     //2. The name of the Python function
     //3. The name of the pybind11::module object
 	CREATE_STATELESS_SLOCUS_OBJECT(additive,"additive",m);
-    return m.ptr();
 }

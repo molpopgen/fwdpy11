@@ -57,14 +57,14 @@ evolve_singlepop_regions_qtrait_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if (trait_to_fitness_updater != py::none())
+    if(!trait_to_fitness_updater.is(py::none()))
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if (noise_updater != py::none())
+    if(!noise_updater.is(py::none()))
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -157,14 +157,14 @@ evolve_qtrait_mloc_regions_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if (trait_to_fitness_updater != py::none())
+    if(!trait_to_fitness_updater.is(py::none()))
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if (noise_updater != py::none())
+    if(!noise_updater.is(py::none()))
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -231,13 +231,12 @@ evolve_qtrait_mloc_regions_cpp(
     --pop.generation;
 }
 
-PYBIND11_PLUGIN(wfevolve_qtrait)
+PYBIND11_MODULE(wfevolve_qtrait, m)
 {
-    py::module m("wfevolve_qtrait", "example extending");
+    m.doc() = "Evolution of quantitative traits under a Wright-Fisher model.";
 
     m.def("evolve_singlepop_regions_qtrait_cpp",
           &evolve_singlepop_regions_qtrait_cpp);
 
     m.def("evolve_qtrait_mloc_regions_cpp", &evolve_qtrait_mloc_regions_cpp);
-    return m.ptr();
 }

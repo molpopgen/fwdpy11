@@ -30,9 +30,9 @@ PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(
     std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
-PYBIND11_PLUGIN(fwdpp_types)
+PYBIND11_MODULE(fwdpp_types, m)
 {
-    py::module m("fwdpp_types", "Wrap C++ types from fwdpp.");
+    m.doc() = "Wrap C++ types from fwdpp.";
 
     // low-level types
 
@@ -128,9 +128,10 @@ Base class for mutations.
         });
 
     py::bind_vector<std::vector<double>>(
-        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol());
+        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
+        py::module_local(false));
     py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
-        m, "VectorGeneralMutVec",
+        m, "VectorGeneralMutVec", py::module_local(false),
         "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
@@ -142,6 +143,4 @@ Base class for mutations.
                       "List of dominance terms.")
         .def_readonly("g", &KTfwd::generalmut_vec::g,
                       "Generation when mutation arose.");
-
-    return m.ptr();
 }

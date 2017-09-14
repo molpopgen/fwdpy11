@@ -78,11 +78,10 @@ struct genetic_value : public fwdpy11::single_locus_fitness
     SINGLE_LOCUS_FITNESS_CALLBACK_NAME("Custom genetic value object");
 };
 
-PYBIND11_PLUGIN(python_genetic_values)
+PYBIND11_MODULE(python_genetic_values, m)
 {
-    py::module m("python_genetic_values",
-                 "Enable definition of custom single-locus genetic "
-                 "value/fitness functions using pure Python functions.");
+    m.doc() = "Enable definition of custom single-locus genetic "
+              "value/fitness functions using pure Python functions.";
 
     FWDPY11_SINGLE_LOCUS_FITNESS()
 
@@ -101,5 +100,4 @@ PYBIND11_PLUGIN(python_genetic_values)
                             const fwdpy11::singlepop_t &pop) {
             return aw->callback()(dip, pop.gametes, pop.mutations);
         });
-    return m.ptr();
 }

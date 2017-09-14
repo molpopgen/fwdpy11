@@ -25,9 +25,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(fitness)
+PYBIND11_MODULE(fitness, m)
 {
-    py::module m("fitness", "Fitness models.");
+    m.doc() = "Fitness models.";
 
     py::class_<fwdpy11::single_locus_fitness,
                std::shared_ptr<fwdpy11::single_locus_fitness>>(m,
@@ -130,6 +130,4 @@ PYBIND11_PLUGIN(fitness)
                  double scaling = t[0].cast<double>();
                  new (&w) fwdpy11::single_locus_additive_wrapper(scaling);
              });
-
-    return m.ptr();
 }

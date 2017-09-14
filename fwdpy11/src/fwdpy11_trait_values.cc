@@ -58,17 +58,16 @@ struct gbr_diploid_trait_fxn
     }
 };
 
-using single_locus_multiplicative_trait_wrapper
-    = fwdpy11::fwdpp_single_locus_fitness_wrapper<
-        multiplicative_diploid_trait_fxn>;
+using single_locus_multiplicative_trait_wrapper = fwdpy11::
+    fwdpp_single_locus_fitness_wrapper<multiplicative_diploid_trait_fxn>;
 using single_locus_additive_trait_wrapper
     = fwdpy11::fwdpp_single_locus_fitness_wrapper<additive_diploid_trait_fxn>;
 using gbr_trait_wrapper
     = fwdpy11::fwdpp_single_locus_fitness_wrapper<gbr_diploid_trait_fxn>;
 
-PYBIND11_PLUGIN(trait_values)
+PYBIND11_MODULE(trait_values, m)
 {
-    py::module m("trait_values", "Trait values.");
+    m.doc() = "Trait values.";
 
     FWDPY11_SINGLE_LOCUS_FITNESS()
 
@@ -159,6 +158,4 @@ PYBIND11_PLUGIN(trait_values)
                         "incorrect type name found when unpickling");
                 }
         });
-
-    return m.ptr();
 }

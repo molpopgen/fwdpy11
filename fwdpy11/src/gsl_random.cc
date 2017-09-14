@@ -23,10 +23,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(gsl_random)
+PYBIND11_MODULE(gsl_random, m)
 {
-    py::module m("gsl_random",
-                 "Wrappers around the GSL random number distributions");
+    m.doc() = "Wrappers around the GSL random number distributions";
 
     m.def("gsl_ran_gaussian_ziggurat",
           [](const fwdpy11::GSLrng_t& rng, const double sd) {
@@ -57,6 +56,4 @@ PYBIND11_PLUGIN(gsl_random)
               return gsl_ran_geometric(rng.get(), p);
           },
           "Geometric distribution parameterized by success probability.");
-
-    return m.ptr();
 }

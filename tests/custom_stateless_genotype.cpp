@@ -4,7 +4,7 @@ setup_pybind11(cfg)
 #import fwdpy11 so we can find its C++ headers
 import fwdpy11 as fp11 
 #add fwdpy11 header locations to the include path
-cfg['include_dirs'] = [ fp11.get_includes(), fp11.get_fwdpp_includes() ] 
+cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 #On OS X using clang, there is more work to do.  Using gcc on OS X
 #gets rid of these requirements. The specifics sadly depend on how
 #you initially built fwdpy11, and what is below assumes you used
@@ -39,10 +39,8 @@ STATELESS_GENOTYPE_POLICY(aa) { w *= (1. + m.s); }
 END_STRUCT()
 
 // Standard pybind11 stuff goes here
-PYBIND11_PLUGIN(custom_stateless_genotype)
+PYBIND11_MODULE(custom_stateless_genotype, m)
 {
-    pybind11::module m("custom_stateless_genotype");
-
     // Call this macro so that your custom
     // class is recognizes are part of the
     // expected Python class hierarchy
@@ -60,6 +58,4 @@ PYBIND11_PLUGIN(custom_stateless_genotype)
     // 4. The name of the Python function
     // 5. The name of the pybind11::module object
     CREATE_STATELESS_SLOCUS_GENOTYPE_OBJECT(aa, Aa, 1, "GeneralW", m)
-
-    return m.ptr();
 }

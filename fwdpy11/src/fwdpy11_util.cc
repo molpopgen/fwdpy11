@@ -33,9 +33,9 @@ check_finite(const double d, const std::string& error)
         }
 }
 
-PYBIND11_PLUGIN(util)
+PYBIND11_MODULE(util, m)
 {
-    py::module m("util", "Miscellaneous utilities for simulations.");
+    m.doc() = "Miscellaneous utilities for simulations.";
 
     m.def("add_mutation",
           [](const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
@@ -189,6 +189,4 @@ PYBIND11_PLUGIN(util)
           
         :versionadded: 0.13.0
           )delim");
-
-    return m.ptr();
 }
