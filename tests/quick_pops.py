@@ -53,16 +53,15 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     return pop
 
 
-def quick_mlocus_qtrait(N=1000, simlen=100):
+def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
     from fwdpy11.model_params import MlocusParamsQ
-    from fwdpy11 import MlocusPop, GSLrng
-    from fwdpy11.wright_fisher_qtrait import evolve, GSS
+    from fwdpy11 import MlocusPop
+    from fwdpy11.wright_fisher_qtrait import GSS
     from fwdpy11.regions import GaussianS, Region
     from fwdpy11.multilocus import AggAddTrait, binomial_rec, MultiLocusGeneticValue
     from fwdpy11.trait_values import SlocusAdditiveTrait
     import numpy as np
 
-    rng = GSLrng(42)
     theta, rho = 100., 100.
     mu = 1e-3
     sigmu = 0.25
@@ -93,6 +92,14 @@ def quick_mlocus_qtrait(N=1000, simlen=100):
                   'demography': nlist}
     params = MlocusParamsQ(**param_dict)
     pop = MlocusPop(N, nloci, locus_boundaries)
+    return (pop, params)
+
+
+def quick_mlocus_qtrait(N=1000, simlen=100):
+    from fwdpy11 import GSLrng
+    from fwdpy11.wright_fisher_qtrait import evolve
+    rng = GSLrng(42)
+    pop, params = quick_mlocus_qtrait_pop_params(N, simlen)
     evolve(rng, pop, params)
     return pop
 
