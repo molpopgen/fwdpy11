@@ -67,20 +67,6 @@ class Region(object):
             #  and the per-base pair "weight" is 1e-5:
             r = fwdpy11.Region(1,1000,1e-5,True)
         """
-        if math.isinf(beg):
-            raise ValueError("fwdpy11.Region: beg not finite")
-        if math.isinf(end):
-            raise ValueError("fwdpy11.Region: end not finite")
-        if math.isinf(weight):
-            raise ValueError("fwdpy11.Region: weight not finite")
-        if math.isnan(beg):
-            raise ValueError("fwdpy11.Region: beg not a number")
-        if math.isnan(end):
-            raise ValueError("fwdpy11.Region: end not a number")
-        if math.isnan(weight):
-            raise ValueError("fwdpy11.Region: weight not a number")
-        if weight < 0.0:
-            raise ValueError("fwdpy11.Region: weight < 0.0")
         self.b = float(beg)
         self.e = float(end)
         self.w = float(weight)
@@ -88,6 +74,75 @@ class Region(object):
         self.l = label
         if self.c is True:
             self.w = (self.e - self.b) * self.w
+
+    @property
+    def b(self):
+        """
+        Beginning of a region
+        """
+        return self.__b
+
+    @b.setter
+    def b(self, beg):
+        if math.isinf(beg):
+            raise ValueError("fwdpy11.Region: beg not finite")
+        if math.isnan(beg):
+            raise ValueError("fwdpy11.Region: beg not a number")
+        self.__b = beg
+
+    @property
+    def e(self):
+        """
+        End of a region
+        """
+        return self.__e
+
+    @e.setter
+    def e(self, end):
+        if math.isnan(end):
+            raise ValueError("fwdpy11.Region: end not a number")
+        if math.isinf(end):
+            raise ValueError("fwdpy11.Region: end not finite")
+        self.__e = end
+
+    @property
+    def w(self):
+        """
+        Weight on a region.
+        """
+        return self.__w
+
+    @w.setter
+    def w(self, weight):
+        if math.isinf(weight):
+            raise ValueError("fwdpy11.Region: weight not finite")
+        if math.isnan(weight):
+            raise ValueError("fwdpy11.Region: weight not a number")
+        if weight < 0.0:
+            raise ValueError("fwdpy11.Region: weight < 0.0")
+        self.__w = weight
+
+    @property
+    def c(self):
+        """
+        If weight is coupled to end-beg. (boolean)
+        """
+        return self.__c
+
+    @c.setter
+    def c(self, coupled):
+        self.__c = coupled
+
+    @property
+    def l(self):
+        """
+        Region label.
+        """
+        return self.__l
+
+    @l.setter
+    def l(self, label):
+        self.__l = np.uint16(label)
 
     def __repr__(self):
         x = 'regions.Region(beg=%s,end=%s,'
@@ -135,7 +190,8 @@ class Sregion(Region):
 
     """
 
-    def __init__(self, beg, end, weight, h=1.0, coupled=True, label=0, scaling=1):
+    def __init__(self, beg, end, weight, h=1.0,
+                 coupled=True, label=0, scaling=1):
         """
         Constructor
 
