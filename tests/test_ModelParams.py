@@ -21,7 +21,9 @@ import unittest
 import fwdpy11 as fp11
 import fwdpy11.model_params as fp11mp
 import fwdpy11.multilocus as ml
+import fwdpy11.wright_fisher_qtrait as wfq
 from fwdpy11.fitness import SlocusAdditive
+from quick_pops import quick_slocus_qtrait_pop_params
 import numpy as np
 import pickle
 
@@ -349,6 +351,13 @@ class testMlocusParamsDefaults(unittest.TestCase):
         m = fp11mp.MlocusParamsQ(**self.pdict)
         self.assertIs(m.gvalue, None)
 
+class test_SlocusParamsQEvolve(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.pop,self.params = quick_slocus_qtrait_pop_params()
+    def test_evolve(self):
+        rng = fp11.GSLrng(42)
+        wfq.evolve(rng,self.pop,self.params)
 
 if __name__ == "__main__":
     unittest.main()
