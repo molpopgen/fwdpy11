@@ -131,7 +131,7 @@ evolve_singlepop_regions_qtrait_cpp(
                 }
             if (noise_updater_exists)
                 {
-                    noise_updater_fxn(pop.generation);
+                    noise_updater_fxn(pop);
                 }
         }
     --pop.generation;
