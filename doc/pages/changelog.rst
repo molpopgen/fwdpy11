@@ -4,34 +4,27 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
-Version 0.1.3a2
-++++++++++++++++++++++++++
-
-* :class:`fwdpy11.regions.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16 <https://github.com/molpopgen/fwdpy11/pull/16>`_]
-
-Version 0.1.3a1
-++++++++++++++++++++++++++
-
-* Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
-
-Version 0.1.3a0
+Version 0.1.3
 ++++++++++++++++++++++++++
 
 Bug fixes:
 ------------------------
 
 * Issue #2 on GitHub fixed. [`commit <https://github.com/molpopgen/fwdpy11/commit/562a4d31947d9a7aae31f092ed8c014e94dc56db>`_]
-* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
 
 API changes/new features:
 ------------------------------------------------
 
+* :class:`fwdpy11.regions.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16 <https://github.com/molpopgen/fwdpy11/pull/16>`_]
+  * Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
 * :func:`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of :class:`fwdpy11.fwdpp_types.Mutation` to be changed. [`commit <https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2>`_].
+* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
 * Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. [`commit <https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9>`_]
 
 Back-end changes
 ------------------------
 
+* Code base updadted to work with pybind11_ 2.2.0. [`PR #19 <https://github.com/molpopgen/fwdpy11/pull/19>`_] 
 * :mod:`fwdpy11.model_params` has been refactored, addressing issue #4 on GitHub.  The new code base is more idiomatic w.r.to Python's OO methods.`[`commit <https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22>`_]
 * Many of the C++-based types can now be pickled, making model parameter objects easier to serialize.  Most of the
   changes are in [`this commit <https://github.com/molpopgen/fwdpy11/commit/d0a3602e71a866f7ff9d355d62953ea00c663c5a>`_].  This mostly addresses Issue #3 on GitHub.
@@ -97,3 +90,5 @@ Alternately:
 .. code-block:: python
     
     from fwdpy11 import SlocusPop as Spop
+
+.. _pybind11: https://github.com/pybind/pybind11
