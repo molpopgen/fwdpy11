@@ -221,13 +221,57 @@ class Sregion(Region):
             additive = fwdpy11.Sregion(0,1,1,1.0)
             dominant = fwdpy11.Sregion(0,1,1,2.0)
         """
+        super(Sregion, self).__init__(beg, end, weight, coupled, label)
+        self.h = h
+        self.scaling = scaling
+        self.__des = None
+
+    def callback(self):
+        """
+        Return the C++ callback associated with this Sregion.
+        """
+        return self.des
+
+    @property
+    def h(self):
+        """
+        Dominance (h)
+        """
+        return self.__h
+
+    @h.setter
+    def h(self, h):
         if math.isinf(h):
             raise ValueError("fwdpy11.Sregion: h not finite")
         if math.isnan(h):
             raise ValueError("fwdpy11.Segion: h not a number")
-        self.h = float(h)
-        self.scaling = np.uint32(scaling)
-        super(Sregion, self).__init__(beg, end, weight, coupled, label)
+        self.__h = float(h)
+
+    @property
+    def scaling(self):
+        """
+        Scaling term for the DFE
+        """
+        return self.__scaling
+
+    @scaling.setter
+    def scaling(self, scaling):
+        self.__scaling = np.uint32(scaling)
+
+    @property
+    def des(self):
+        """
+        Distribution of effect sizes.
+        """
+        if self.__des is None:
+            raise ValueError("distribution of effect sizes must not be None")
+        return self.__des
+
+    @des.setter
+    def des(self, des):
+        if callable(des) is False:
+            raise ValueError("distribution of effect sizes must be a callable")
+        self.__des = des
 
     # def __str__(self):
     #    retval = "h = " + "{:.9f}".format(self.h)
@@ -283,25 +327,42 @@ class GammaS(Sregion):
             import fwdpy11
             gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
         """
-        if math.isinf(mean):
-            raise ValueError("fwdpy11.GammaS: mean not finite")
-        if math.isinf(shape):
-            raise ValueError("fwdpy11.GammaS: shape not finite")
-        if math.isnan(mean):
-            raise ValueError("fwdpy11.GammaS: mean not a number")
-        if math.isnan(shape):
-            raise ValueError("fwdpy11.GammaS: shape not a number")
-        self.mean = float(mean)
-        self.shape = float(shape)
         super(GammaS, self).__init__(
             beg, end, weight, h, coupled, label, scaling)
-
-    def callback(self):
-        """
-        Returns the C++ callback for this DFE
-        """
+        self.mean = float(mean)
+        self.shape = float(shape)
         from .fwdpp_extensions import makeGammaSH
-        return makeGammaSH(self.mean, self.shape, self.h, self.scaling)
+        self.des = makeGammaSH(self.mean, self.shape, self.h, self.scaling)
+
+    @property
+    def mean(self):
+        """
+        Mean of the distribution.
+        """
+        return self.__mean
+
+    @mean.setter
+    def mean(self, mean):
+        if math.isinf(mean):
+            raise ValueError("fwdpy11.GammaS: mean not finite")
+        if math.isnan(mean):
+            raise ValueError("fwdpy11.GammaS: mean not a number")
+        self.__mean = float(mean)
+
+    @property
+    def shape(self):
+        """
+        Shape parameter.
+        """
+        return self.__shape
+
+    @shape.setter
+    def shape(self, shape):
+        if math.isinf(shape):
+            raise ValueError("fwdpy11.GammaS: shape not finite")
+        if math.isnan(shape):
+            raise ValueError("fwdpy11.GammaS: shape not a number")
+        self.__shape = float(shape)
 
     def __repr__(self):
         x = 'regions.GammaS(beg=%s,end=%s,weight=%s,'
@@ -357,20 +418,26 @@ class ConstantS(Sregion):
             #s = -0.1 and h = 0
             constantS = fwdpy11.ConstantS(0,1,1,-0.1,0)
         """
+        super(ConstantS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
+        self.s = s
+        from .fwdpp_extensions import makeConstantSH
+        self.des = makeConstantSH(self.s, self.h, self.scaling)
+
+    @property
+    def s(self):
+        """
+        Effect size.
+        """
+        return self.__s
+
+    @s.setter
+    def s(self, s):
         if math.isinf(s):
             raise ValueError("fwdpy11.ConstantS: s not finite")
         if math.isnan(s):
             raise ValueError("fwdpy11.ConstantS: s not a number")
-        self.s = float(s)
-        super(ConstantS, self).__init__(
-            beg, end, weight, h, coupled, label, scaling)
-
-    def callback(self):
-        """
-        Returns the C++ callback for this DFE
-        """
-        from .fwdpp_extensions import makeConstantSH
-        return makeConstantSH(self.s, self.h, self.scaling)
+        self.__s = float(s)
 
     def __repr__(self):
         x = 'regions.ConstantS(beg=%s,end=%s,weight=%s,'
@@ -424,27 +491,44 @@ class UniformS(Sregion):
 
             #A simple case
             import fwdpy11
-            #s is uniform on [0,-1]
-            constantS = fwdpy11.UniformS(0,1,1,0,-1,0)
+            #s is uniform on [-1, 0]
+            uniformS = fwdpy11.UniformS(0,1,1,-1,0,0)
         """
+        super(UniformS, self).__init__(beg, end, weight, h, coupled, scaling)
+        self.lo = lo
+        self.hi = hi
+        from .fwdpp_extensions import makeUniformSH
+        self.des = makeUniformSH(self.lo, self.hi, self.h, self.scaling)
+
+    @property
+    def lo(self):
+        """
+        Lo value for effect size.
+        """
+        return self.__lo
+
+    @lo.setter
+    def lo(self, lo):
         if math.isinf(lo):
             raise ValueError("fwdpy11.UniformS: lo not finite")
-        if math.isinf(hi):
-            raise ValueError("fwdpy11.UniformS: hi not finite")
         if math.isnan(lo):
             raise ValueError("fwdpy11.UniformS: lo not a number")
+        self.__lo = float(lo)
+
+    @property
+    def hi(self):
+        """
+        Hi value for effect size.
+        """
+        return self.__hi
+
+    @hi.setter
+    def hi(self, hi):
+        if math.isinf(hi):
+            raise ValueError("fwdpy11.UniformS: hi not finite")
         if math.isnan(hi):
             raise ValueError("fwdpy11.UniformS: hi not a number")
-        self.lo = float(lo)
-        self.hi = float(hi)
-        super(UniformS, self).__init__(beg, end, weight, h, coupled, scaling)
-
-    def callback(self):
-        """
-        Returns the C++ callback for this DFE
-        """
-        from .fwdpp_extensions import makeUniformSH
-        return makeUniformSH(self.lo, self.hi, self.h, self.scaling)
+        self.__hi = float(hi)
 
     def __repr__(self):
         x = 'regions.UniformS(beg=%s,end=%s,weight=%s,'
@@ -498,22 +582,28 @@ class ExpS(Sregion):
             #A simple case
             import fwdpy11
             #s is exp(-0.1) and recessive
-            constantS = fwdpy11.ExpS(0,1,1,0,-0.1,0)
+            expS = fwdpy11.ExpS(0,1,1,-0.1,0)
         """
+        super(ExpS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
+        self.mean = mean
+        from .fwdpp_extensions import makeExpSH
+        self.des = makeExpSH(self.mean, self.h, self.scaling)
+
+    @property
+    def mean(self):
+        """
+        Mean of the distribution
+        """
+        return self.__mean
+
+    @mean.setter
+    def mean(self, mean):
         if math.isinf(mean):
             raise ValueError("fwdpy11.ExpS: mean not finite")
         if math.isnan(mean):
             raise ValueError("fwdpy11.ExpS: mean not a number")
-        self.mean = float(mean)
-        super(ExpS, self).__init__(
-            beg, end, weight, h, coupled, label, scaling)
-
-    def callback(self):
-        """
-        Returns the C++ callback for this DFE
-        """
-        from .fwdpp_extensions import makeExpSH
-        return makeExpSH(self.mean, self.h, self.scaling)
+        self.__mean = float(mean)
 
     def __repr__(self):
         x = 'regions.ExpS(beg=%s,end=%s,weight=%s,'
@@ -550,7 +640,7 @@ class GaussianS(Sregion):
         :param beg: the beginning of the region
         :param end: the end of the region
         :param weight: the weight to assign
-        :param mean: the mean selection coefficient
+        :param sd: standard deviation of effect sizes 
         :param h: the dominance
         :param coupled: if True, the weight is converted to (end-beg)*weight
         :param label: Not relevant to recombining regions.
@@ -569,22 +659,28 @@ class GaussianS(Sregion):
             #A simple case
             import fwdpy11
             #s N(0,0.1) and co-dominant
-            constantS = fwdpy11.GaussianS(0,1,1,0,0.1,1)
+            gaussianS = fwdpy11.GaussianS(0,1,1,0.1,1)
         """
+        super(GaussianS, self).__init__(
+            beg, end, weight, h, coupled, label, scaling)
+        self.sd = sd
+        from .fwdpp_extensions import makeGaussianSH
+        self.des = makeGaussianSH(self.sd, self.h, self.scaling)
+
+    @property
+    def sd(self):
+        """
+        Standard deviation of the distribution
+        """
+        return self.__sd
+
+    @sd.setter
+    def sd(self, sd):
         if math.isinf(sd):
             raise ValueError("fwdpy11.GaussianS: sd not finite")
         if math.isnan(sd):
             raise ValueError("fwdpy11.GaussianS: sd not a number")
-        self.sd = float(sd)
-        super(GaussianS, self).__init__(
-            beg, end, weight, h, coupled, label, scaling)
-
-    def callback(self):
-        """
-        Returns the C++ callback for this DFE
-        """
-        from .fwdpp_extensions import makeGaussianSH
-        return makeGaussianSH(self.sd, self.h, self.scaling)
+        self.__sd = float(sd)
 
     def __repr__(self):
         x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
