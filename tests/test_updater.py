@@ -5,6 +5,12 @@ from quick_pops import quick_mlocus_qtrait_pop_params
 
 
 class GaussianNoiseUpdater(GaussianNoise):
+    """
+    This noise updater inherits from the 
+    standard fwdpy11 object.  It defines an
+    updater function to record how many 
+    times it has been called.
+    """
     def __init__(self, rng, sd, mean=0.0):
         self.ncalls = 0
         super(GaussianNoiseUpdater, self).__init__(rng, sd, mean)
