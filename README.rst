@@ -90,7 +90,34 @@ You may or may not need to prefix the above with
 
     CC=gcc CXX=g++
 
-depending on wheter or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
+depending on whether or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
+
+Caution
+==================================
+
+We use the GitHub "release_" mechanism to make stable versions available.  However, GitHub releases to not include the
+sub-modules, meaning that the releases themselves cannot be used for installation.  (A related irony is that the Zenodo
+DOI for the releases are somewhat meaningless.)
+
+To install a specific release:
+
+1. Use pip (see above).  This is the recommended approach if you do not use conda.
+2. Install from bioconda.  This is the recommended approach.
+3. Clone the repo, checkout the release, and update submodules:
+
+.. code-block:: bash
+
+    git clone http://github.com/molpopgen/fwdpy11
+    cd fwdpy11
+    git submodule init
+    git submodule update
+
+The latter method is probably the least appealing.
+
+We have a strict policy of putting releases on PyPi and bioconda_.  If there is a release on PyPi but not on bioconda_,
+then that is because we identified a bug and pushed a new release before the bioconda_ build happend.  It happens.
+That's life.
+
 
 Enabling assertions in the C++ code
 ------------------------------------------------------------------
@@ -125,3 +152,4 @@ The OS X build is built using gcc.
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
 .. _bioconda: https://bioconda.github.io/
+.. _release: https://github.com/molpopgen/fwdpy11/releases
