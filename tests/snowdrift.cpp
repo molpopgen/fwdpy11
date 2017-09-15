@@ -175,13 +175,15 @@ PYBIND11_MODULE(snowdrift, m)
         .def_readwrite("phenotypes", &snowdrift::phenotypes)
         // It is useful to make these type compatible with Python's
         // pickling protocol:
-        .def("__getstate__",
-             [](const snowdrift &s) {
-                 return py::make_tuple(s.b1, s.b2, s.c1, s.c2, s.phenotypes);
-             })
-        .def("__setstate__", [](snowdrift &s, py::tuple t) {
-            new (&s) snowdrift(t[0].cast<double>(), t[1].cast<double>(),
-                               t[2].cast<double>(), t[3].cast<double>());
-            s.phenotypes = t[4].cast<std::vector<double>>();
-        });
+        .def(py::pickle(
+            [](const snowdrift &s) {
+                return py::make_tuple(s.b1, s.b2, s.c1, s.c2, s.phenotypes);
+            },
+            [](py::tuple t) {
+                auto rv = std::make_shared<snowdrift>(
+                    t[0].cast<double>(), t[1].cast<double>(),
+                    t[2].cast<double>(), t[3].cast<double>());
+                rv->phenotypes = t[4].cast<std::vector<double>>();
+                return rv;
+            }));
 }
