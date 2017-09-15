@@ -28,7 +28,11 @@
 
 namespace fwdpy11
 {
-    struct multilocus_genetic_value
+    // pybind11 2.2.0 enforces hidden visibility for its entire namespace.
+    // Thus struct contains a py::array, leading to warnings about
+    // the struct having greater visibility than a member.  In 0.1.4,
+    // the hidden attribute was added to silence this warning.
+    __attribute__ ((visibility ("hidden"))) struct multilocus_genetic_value
     {
         /// We store a container of single-locus fitness function wrapper
         /// objects
