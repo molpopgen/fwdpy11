@@ -145,7 +145,7 @@ def _evolve_slocus(rng, pop, params, recorder=None):
                                         params.recrate, mm, rm,
                                         params.gvalue, recorder,
                                         params.pself, params.trait2w, updater,
-                                        params.noise, noise_updater)
+                                        noise, noise_updater)
 
 
 def _evolve_mlocus(rng, pop, params, recorder=None):

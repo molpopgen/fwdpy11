@@ -446,7 +446,7 @@ class SlocusParamsQ(SlocusParams):
         if 'trait2w' in kwargs or 'trait_to_fitness' in kwargs:
             trait2w_present = True
 
-        super(SlocusParams, self).__init__(**kwargs)
+        super(SlocusParamsQ, self).__init__(**kwargs)
         if gv_present is False:
             from fwdpy11.trait_values import SlocusAdditiveTrait
             self.gvalue = SlocusAdditiveTrait(2.0)
