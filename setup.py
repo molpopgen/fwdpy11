@@ -10,7 +10,7 @@ import glob
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
 
-__version__ = '0.1.3.post1'
+__version__ = '0.1.4a0'
 
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
