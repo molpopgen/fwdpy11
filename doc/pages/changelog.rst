@@ -4,6 +4,22 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.4
+++++++++++++++++++++++++++
+
+Bug fixes:
+--------------------------
+
+API changes/new features:
+----------------------------------------------------
+
+Back-end changes
+------------------------
+
+* fwdpy11.regions are now based on the @property/@foo.setter idiom for safety and code reuse.  `PR #21 <https://github.com/molpopgen/fwdpy11/pull/21>`
+* Doctests are now run on Travis `PR #30 <https://github.com/molpopgen/fwdpy11/pull/30>`
+* Removed all uses of placement new in favor of pybind11::pickle. `PR #26 <https://github.com/molpopgen/fwdpy11/pull/26>`_.
+
 Version 0.1.3.post1
 ++++++++++++++++++++++++++
 
