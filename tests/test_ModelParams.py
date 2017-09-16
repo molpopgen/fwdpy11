@@ -21,7 +21,9 @@ import unittest
 import fwdpy11 as fp11
 import fwdpy11.model_params as fp11mp
 import fwdpy11.multilocus as ml
+import fwdpy11.wright_fisher_qtrait as wfq
 from fwdpy11.fitness import SlocusAdditive
+from quick_pops import quick_slocus_qtrait_pop_params
 import numpy as np
 import pickle
 
@@ -115,13 +117,13 @@ class testSlocusParams(unittest.TestCase):
             self.fail("unexpected exception")
 
     def test_init_demog_list(self):
-        self.pdict['demography'] = [100]*10
+        self.pdict['demography'] = [100] * 10
         with self.assertRaises(ValueError):
             m = fp11mp.SlocusParams(**self.pdict)
             m
 
     def test_init_bad_popsizes(self):
-        self.pdict['demography'] = np.array([100]*10 + [-1])
+        self.pdict['demography'] = np.array([100] * 10 + [-1])
         with self.assertRaises(ValueError):
             m = fp11mp.SlocusParams(**self.pdict)
             m
@@ -203,7 +205,7 @@ class testMlocusParams(unittest.TestCase):
         interlocus = ml.binomial_rec([0.5])
         region_rates = [1e-3, 1e-3]
         genetic_value = ml.MultiLocusGeneticValue([SlocusAdditive()] * 2)
-        nlist = np.array([100]*10, dtype=np.uint32)
+        nlist = np.array([100] * 10, dtype=np.uint32)
         self.param_dict = {'nregions': nregions,
                            'sregions': sregions,
                            'recregions': recregions,
@@ -306,7 +308,7 @@ class testMlocusParamsDefaults(unittest.TestCase):
         recregions = nregions
         interlocus = ml.binomial_rec([0.5])
         region_rates = [1e-3, 1e-3]
-        nlist = np.array([100]*10, dtype=np.uint32)
+        nlist = np.array([100] * 10, dtype=np.uint32)
         self.pdict = {'nregions': nregions,
                       'sregions': sregions,
                       'recregions': recregions,
@@ -348,6 +350,16 @@ class testMlocusParamsDefaults(unittest.TestCase):
         self.assertIs(m.gvalue, None)
         m = fp11mp.MlocusParamsQ(**self.pdict)
         self.assertIs(m.gvalue, None)
+
+
+class test_SlocusParamsQEvolve(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.pop, self.params = quick_slocus_qtrait_pop_params()
+
+    def test_evolve(self):
+        rng = fp11.GSLrng(42)
+        wfq.evolve(rng, self.pop, self.params)
 
 
 if __name__ == "__main__":
