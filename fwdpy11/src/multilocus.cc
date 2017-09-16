@@ -64,22 +64,22 @@ struct aggregate_mult_trait
         .def(py::init<>())                                                    \
         .def("__call__", [](const CPPNAME& agg,                               \
                             const py::array_t<double>& a) { return agg(a); }) \
-        .def(py::pickle(                                                      \
-            [](const CPPNAME& aggregator) {                                   \
-                return py::make_tuple(std::string("CPPNAME"));                \
-            },                                                                \
-            [](py::tuple t) {                                                 \
-                std::string n = t[0].cast<std::string>();                     \
-                if (n == "CPPNAME")                                           \
-                    {                                                         \
-                        return std::unique_ptr<CPPNAME>(new CPPNAME());       \
-                    }                                                         \
-                else                                                          \
-                    {                                                         \
-                        throw std::invalid_argument(                          \
-                            "incorrect cppname encountered for aggregator");  \
-                    }                                                         \
-            }));
+        .def("__getstate__",                                                  \
+             [](const CPPNAME& aggregator) {                                  \
+                 return py::make_tuple(std::string("CPPNAME"));               \
+             })                                                               \
+        .def("__setstate__", [](CPPNAME& aggregator, py::tuple t) {           \
+            std::string n = t[0].cast<std::string>();                         \
+            if (n == "CPPNAME")                                               \
+                {                                                             \
+                    new (&aggregator) CPPNAME();                              \
+                }                                                             \
+            else                                                              \
+                {                                                             \
+                    throw std::invalid_argument(                              \
+                        "incorrect cppname encountered for aggregator");      \
+                }                                                             \
+        });
 
 using ff_vec = decltype(fwdpy11::multilocus_genetic_value::fitness_functions);
 
@@ -108,36 +108,34 @@ PYBIND11_MODULE(multilocus, m)
              [](const fwdpy11::multilocus_genetic_value& m) {
                  return m.size();
              })
-        .def(py::pickle(
-            [](const fwdpy11::multilocus_genetic_value& mw) {
-                /* This is some crazy magic:
-                 * This object contains a vector of unique_ptr
-                 * to single-locus functions.  We will clone each
-                 * element as a shared_ptr wrapping the underling
-                 * type.
-                 * This works b/c pybind11 knows about the C++
-                 * inheritance
-                 * hierarchy.
-                 */
-                py::list rv;
-                for (auto&& f : mw.fitness_functions)
-                    {
-                        rv.append(f->clone_shared());
-                    }
-                return rv;
-            },
-            /* The back-conversion is just as interesting.
-             * We can simply type cast the list back to the
-             * C++
-             * vector type ff_vec, which is a typedef
-             * defined above.
-             */
-            [](py::list l) {
-                return std::unique_ptr<fwdpy11::multilocus_genetic_value>(
-                    new fwdpy11::multilocus_genetic_value(l.cast<ff_vec>()));
-                // new (&mw)
-                // fwdpy11::multilocus_genetic_value(l.cast<ff_vec>());
-            }));
+        .def("__getstate__",
+             [](const fwdpy11::multilocus_genetic_value& mw) {
+                 /* This is some crazy magic:
+                  * This object contains a vector of unique_ptr
+                  * to single-locus functions.  We will clone each
+                  * element as a shared_ptr wrapping the underling
+                  * type.
+                  * This works b/c pybind11 knows about the C++
+                  * inheritance
+                  * hierarchy.
+                  */
+                 py::list rv;
+                 for (auto&& f : mw.fitness_functions)
+                     {
+                         rv.append(f->clone_shared());
+                     }
+                 return rv;
+             })
+        .def("__setstate__",
+             /* The back-conversion is just as interesting.
+              * We can simply type cast the list back to the
+              * C++
+              * vector type ff_vec, which is a typedef
+              * defined above.
+              */
+             [](fwdpy11::multilocus_genetic_value& mw, py::list l) {
+                 new (&mw) fwdpy11::multilocus_genetic_value(l.cast<ff_vec>());
+             });
 
     AGGREGATOR(aggregate_additive_fitness, "AggAddFitness",
                "Map genetic values from a multi-locus diploid to fitness "
@@ -160,17 +158,16 @@ PYBIND11_MODULE(multilocus, m)
              " Rather, you make calls to one of "
              ":func:`fwdpy11.multilocus.poisson_rec` or "
              ":func:`fwdpy11.multilocus.binomial_rec`.")
-        .def(py::pickle(
-            [](const fwdpy11::interlocus_rec& ir) {
-                return py::make_tuple(ir.param, ir.get_model());
-            },
-            [](py::tuple t) {
-                double d = t[0].cast<double>();
-                auto m = t[1].cast<fwdpy11::interlocus_rec::mtype>();
-                return std::unique_ptr<fwdpy11::interlocus_rec>(
-                    new fwdpy11::interlocus_rec(d, m));
-                // new (&ir) fwdpy11::interlocus_rec(d, m);
-            }))
+        .def("__getstate__",
+             [](const fwdpy11::interlocus_rec& ir) {
+                 return py::make_tuple(ir.param, ir.get_model());
+             })
+        .def("__setstate__",
+             [](fwdpy11::interlocus_rec& ir, py::tuple t) {
+                 double d = t[0].cast<double>();
+                 auto m = t[1].cast<fwdpy11::interlocus_rec::mtype>();
+                 new (&ir) fwdpy11::interlocus_rec(d, m);
+             })
         .def("__repr__", [](const fwdpy11::interlocus_rec& ir) {
             std::string rv = "multilocus.InterlocusRecombination(";
             rv += std::to_string(ir.param);

@@ -90,14 +90,15 @@ PYBIND11_MODULE(trait_values, m)
                  rv += std::to_string(a.scaling) + ")";
                  return rv;
              })
-        .def(py::pickle(
-            [](const single_locus_additive_trait_wrapper &w) {
-                return py::make_tuple(w.scaling);
-            },
-            [](py::tuple t) {
-                return std::make_shared<single_locus_additive_trait_wrapper>(
-                    t[0].cast<double>());
-            }));
+        .def("__getstate__",
+             [](const single_locus_additive_trait_wrapper &w) {
+                 return py::make_tuple(w.scaling);
+             })
+        .def("__setstate__",
+             [](single_locus_additive_trait_wrapper &w, py::tuple t) {
+                 double scaling = t[0].cast<double>();
+                 new (&w) single_locus_additive_trait_wrapper(scaling);
+             });
 
     py::class_<single_locus_multiplicative_trait_wrapper,
                std::shared_ptr<single_locus_multiplicative_trait_wrapper>,
@@ -115,15 +116,15 @@ PYBIND11_MODULE(trait_values, m)
                  rv += std::to_string(a.scaling) + ")";
                  return rv;
              })
-        .def(py::pickle(
-            [](const single_locus_multiplicative_trait_wrapper &w) {
-                return py::make_tuple(w.scaling);
-            },
-            [](py::tuple t) {
-                return std::
-                    make_shared<single_locus_multiplicative_trait_wrapper>(
-                        t[0].cast<double>());
-            }));
+        .def("__getstate__",
+             [](const single_locus_multiplicative_trait_wrapper &w) {
+                 return py::make_tuple(w.scaling);
+             })
+        .def("__setstate__",
+             [](single_locus_multiplicative_trait_wrapper &w, py::tuple t) {
+                 double scaling = t[0].cast<double>();
+                 new (&w) single_locus_multiplicative_trait_wrapper(scaling);
+             });
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,
                fwdpy11::single_locus_fitness>(m, "SlocusGBRTrait",
@@ -141,20 +142,20 @@ PYBIND11_MODULE(trait_values, m)
                  std::string rv = "trait_values.SlocusGBRTrait()";
                  return rv;
              })
-        .def(py::pickle(
-            [](const gbr_trait_wrapper &g) {
-                return py::make_tuple("gbr_trait_wrapper");
-            },
-            [](py::tuple t) {
-                std::string n = t[0].cast<std::string>();
-                if (n == "gbr_trait_wrapper")
-                    {
-                        return std::make_shared<gbr_trait_wrapper>();
-                    }
-                else
-                    {
-                        throw std::invalid_argument(
-                            "incorrect type name found when unpickling");
-                    }
-            }));
+        .def("__getstate__",
+             [](const gbr_trait_wrapper &g) {
+                 return py::make_tuple("gbr_trait_wrapper");
+             })
+        .def("__setstate__", [](gbr_trait_wrapper &g, py::tuple t) {
+            std::string n = t[0].cast<std::string>();
+            if (n == "gbr_trait_wrapper")
+                {
+                    new (&g) gbr_trait_wrapper();
+                }
+            else
+                {
+                    throw std::invalid_argument(
+                        "incorrect type name found when unpickling");
+                }
+        });
 }

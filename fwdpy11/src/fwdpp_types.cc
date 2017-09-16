@@ -78,16 +78,15 @@ Base class for mutations.
                  return rv;
              },
              "Return dictionary representaton of the gamete.")
-        .def(py::pickle(
-            [](const KTfwd::gamete &g) {
-                return py::make_tuple(g.n, g.mutations, g.smutations);
-            },
-            [](py::tuple t) {
-                return std::unique_ptr<KTfwd::gamete>(new KTfwd::gamete(
-                    t[0].cast<KTfwd::uint_t>(),
-                    t[1].cast<std::vector<KTfwd::uint_t>>(),
-                    t[2].cast<std::vector<KTfwd::uint_t>>()));
-            }));
+        .def("__getstate__",
+             [](const KTfwd::gamete &g) {
+                 return py::make_tuple(g.n, g.mutations, g.smutations);
+             })
+        .def("__setstate__", [](KTfwd::gamete &g, py::tuple t) {
+            new (&g) KTfwd::gamete(t[0].cast<KTfwd::uint_t>(),
+                                   t[1].cast<std::vector<KTfwd::uint_t>>(),
+                                   t[2].cast<std::vector<KTfwd::uint_t>>());
+        });
 
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
@@ -111,16 +110,17 @@ Base class for mutations.
 
                     .. versionadded:: 0.1.3.a1
                    )delim")
-        .def(py::pickle(
-            [](const KTfwd::popgenmut &m) {
-                return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
-            },
-            [](py::tuple p) {
-                return std::unique_ptr<KTfwd::popgenmut>(new KTfwd::popgenmut(
-                    p[0].cast<double>(), p[1].cast<double>(),
-                    p[2].cast<double>(), p[3].cast<unsigned>(),
-                    p[4].cast<std::uint16_t>()));
-            }))
+        .def("__getstate__",
+             [](const KTfwd::popgenmut &m) {
+                 return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
+             })
+        .def("__setstate__",
+             [](KTfwd::popgenmut &m, py::tuple p) {
+                 new (&m) KTfwd::popgenmut(
+                     p[0].cast<double>(), p[1].cast<double>(),
+                     p[2].cast<double>(), p[3].cast<unsigned>(),
+                     p[4].cast<std::uint16_t>());
+             })
         .def("__str__", [](const KTfwd::popgenmut &m) {
             return "Mutation[" + std::to_string(m.pos) + ","
                    + std::to_string(m.s) + "," + std::to_string(m.h) + ","

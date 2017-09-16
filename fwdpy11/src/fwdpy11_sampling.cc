@@ -249,64 +249,62 @@ PYBIND11_MODULE(sampling, m)
              .. versionadded:: 0.1.2
                 Replaces ncol and nrow_selected functions
              )delim")
-        .def(py::pickle(
-            [](const KTfwd::data_matrix &d) {
-                std::ostringstream o;
-                KTfwd::fwdpp_internal::scalar_writer w;
-                w(o, &d.nrow, 1);
-                auto nsites = d.neutral_positions.size();
-                w(o, &nsites, 1);
-                if (nsites)
-                    {
-                        auto l = d.neutral.size();
-                        w(o, &l);
-                        w(o, d.neutral.data(), d.neutral.size());
-                        w(o, d.neutral_positions.data(), nsites);
-                        w(o, d.neutral_popfreq.data(), nsites);
-                    }
-                nsites = d.selected_positions.size();
-                w(o, &nsites, 1);
-                if (nsites)
-                    {
-                        auto l = d.neutral.size();
-                        w(o, &l);
-                        w(o, d.selected.data(), d.selected.size());
-                        w(o, d.selected_positions.data(), nsites);
-                        w(o, d.selected_popfreq.data(), nsites);
-                    }
-                return py::bytes(o.str());
-            },
-            [](py::bytes b) {
-                std::istringstream data(b);
-                KTfwd::fwdpp_internal::scalar_reader r;
-                std::size_t n, n2;
-                r(data, &n);
-                KTfwd::data_matrix d(n);
-                r(data, &n);
-                if (n)
-                    {
-                        r(data, &n2);
-                        d.neutral.resize(n2);
-                        r(data, d.neutral.data(), n2);
-                        d.neutral_positions.resize(n);
-                        r(data, d.neutral_positions.data(), n);
-                        d.neutral_popfreq.resize(n);
-                        r(data, d.neutral_popfreq.data(), n);
-                    }
-                r(data, &n);
-                if (n)
-                    {
-                        r(data, &n2);
-                        d.selected.resize(n2);
-                        r(data, d.selected.data(), n2);
-                        d.selected_positions.resize(n);
-                        r(data, d.selected_positions.data(), n);
-                        d.selected_popfreq.resize(n);
-                        r(data, d.selected_popfreq.data(), n);
-                    }
-                return std::unique_ptr<KTfwd::data_matrix>(
-                    new KTfwd::data_matrix(std::move(d)));
-            }));
+        .def("__getstate__",
+             [](const KTfwd::data_matrix &d) {
+                 std::ostringstream o;
+                 KTfwd::fwdpp_internal::scalar_writer w;
+                 w(o, &d.nrow, 1);
+                 auto nsites = d.neutral_positions.size();
+                 w(o, &nsites, 1);
+                 if (nsites)
+                     {
+                         auto l = d.neutral.size();
+                         w(o, &l);
+                         w(o, d.neutral.data(), d.neutral.size());
+                         w(o, d.neutral_positions.data(), nsites);
+                         w(o, d.neutral_popfreq.data(), nsites);
+                     }
+                 nsites = d.selected_positions.size();
+                 w(o, &nsites, 1);
+                 if (nsites)
+                     {
+                         auto l = d.neutral.size();
+                         w(o, &l);
+                         w(o, d.selected.data(), d.selected.size());
+                         w(o, d.selected_positions.data(), nsites);
+                         w(o, d.selected_popfreq.data(), nsites);
+                     }
+                 return py::bytes(o.str());
+             })
+        .def("__setstate__", [](KTfwd::data_matrix &d, py::bytes b) {
+            std::istringstream data(b);
+            KTfwd::fwdpp_internal::scalar_reader r;
+            std::size_t n, n2;
+            r(data, &n);
+            new (&d) KTfwd::data_matrix(n);
+            r(data, &n);
+            if (n)
+                {
+                    r(data, &n2);
+                    d.neutral.resize(n2);
+                    r(data, d.neutral.data(), n2);
+                    d.neutral_positions.resize(n);
+                    r(data, d.neutral_positions.data(), n);
+                    d.neutral_popfreq.resize(n);
+                    r(data, d.neutral_popfreq.data(), n);
+                }
+            r(data, &n);
+            if (n)
+                {
+                    r(data, &n2);
+                    d.selected.resize(n2);
+                    r(data, d.selected.data(), n2);
+                    d.selected_positions.resize(n);
+                    r(data, d.selected_positions.data(), n);
+                    d.selected_popfreq.resize(n);
+                    r(data, d.selected_popfreq.data(), n);
+                }
+        });
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
