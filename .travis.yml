@@ -4,12 +4,12 @@ matrix:
     include:
     - os: linux
       dist: trusty
-#    - os: osx 
-#      osx_image: xcode8.3
-#      env: OSXGCC=1 # Test build with conda's gcc on OS X
-#    - os: osx 
-#      osx_image: xcode8.3
-#      env: OSXGCC=0 # 0 means clang/llvm build
+    - os: osx 
+      osx_image: xcode8.3
+      env: OSXGCC=1 # Test build with conda's gcc on OS X
+    - os: osx 
+      osx_image: xcode8.3
+      env: OSXGCC=0 # 0 means clang/llvm build
 #    - os: osx
 #      osx_image: xcode8.2
 #      env: OSXGCC=0
