@@ -53,6 +53,25 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     return pop
 
 
+def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
+    from fwdpy11.model_params import SlocusParamsQ
+    from fwdpy11 import SlocusPop
+    from fwdpy11.wright_fisher_qtrait import GSS
+    from fwdpy11.regions import GaussianS, Region
+    from fwdpy11.trait_values import SlocusAdditiveTrait
+    import numpy as np
+    p = {'nregions': [],
+         'sregions': [GaussianS(0, 1, 1, 0.25)],
+         'recregions': [Region(0, 1, 1)],
+         'rates': (0.0, 2e-3, 1e-3),
+         'demography': np.array([N] * simlen, dtype=np.uint32),
+         'gvalue': SlocusAdditiveTrait(2.0),
+         'trait2w': GSS(1, 0)
+         }
+    pop = SlocusPop(N)
+    params = SlocusParamsQ(**p)
+    return (pop,params)
+
 def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
     from fwdpy11.model_params import MlocusParamsQ
     from fwdpy11 import MlocusPop
