@@ -4,21 +4,21 @@ matrix:
     include:
     - os: linux
       dist: trusty
-    - os: osx 
-      osx_image: xcode8.3
-      env: OSXGCC=1 # Test build with conda's gcc on OS X
-    - os: osx 
-      osx_image: xcode8.3
-      env: OSXGCC=0 # 0 means clang/llvm build
-    - os: osx
-      osx_image: xcode8.2
-      env: OSXGCC=0
-    - os: osx 
-      osx_image: xcode8.1
-      env: OSXGCC=0
-    - os: osx
-      osx_image: xcode8
-      env: OSXGCC=0
+#    - os: osx 
+#      osx_image: xcode8.3
+#      env: OSXGCC=1 # Test build with conda's gcc on OS X
+#    - os: osx 
+#      osx_image: xcode8.3
+#      env: OSXGCC=0 # 0 means clang/llvm build
+#    - os: osx
+#      osx_image: xcode8.2
+#      env: OSXGCC=0
+#    - os: osx 
+#      osx_image: xcode8.1
+#      env: OSXGCC=0
+#    - os: osx
+#      osx_image: xcode8
+#      env: OSXGCC=0
 
 sudo: true
 
@@ -37,9 +37,9 @@ install:
     - conda info -a
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then conda install gcc; fi
-    - conda install -c r gsl
-    - conda install cython numpy python==3.5
+    - conda install cython numpy python==3.5 gsl
     - conda install -c conda-forge pybind11==2.2.0
+    - conda install -c conda-forge sphinx nbsphinx ipython matplotlib
     - pip install cppimport
 script:
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
@@ -51,8 +51,9 @@ script:
     - git submodule init
     - git submodule update
     - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python setup.py build_ext -i; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ];then python -m unittest discover -v tests; fi
+    - if [ "$TRAVIS_OS_NAME" == "linux" ];then cd doc && make doctest; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then python setup.py build_ext -i; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python setup.py build_ext -i --gcc; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ];then python -m unittest discover -v tests; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then LDFLAGS='-stdlib=libc++ -mmacosx-version-min=10.7' CPPFLAGS="-stdlib=libc++ -mmacosx-version-min=10.7" python -m unittest discover -v tests; fi
     - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
