@@ -154,18 +154,17 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
-        .def(py::pickle(
-            [](const fwdpy11::diploid_t& d) {
-                return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
-            },
-            [](py::tuple t) {
-                std::unique_ptr<fwdpy11::diploid_t> d(new fwdpy11::diploid_t(
-                    t[0].cast<std::size_t>(), t[1].cast<std::size_t>()));
-                d->w = t[2].cast<double>();
-                d->g = t[3].cast<double>();
-                d->e = t[4].cast<double>();
-                return d;
-            }));
+        .def("__getstate__",
+             [](const fwdpy11::diploid_t& d) {
+                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
+             })
+        .def("__setstate__", [](fwdpy11::diploid_t& d, py::tuple t) {
+            new (&d) fwdpy11::diploid_t(t[0].cast<std::size_t>(),
+                                        t[1].cast<std::size_t>());
+            d.w = t[2].cast<double>();
+            d.g = t[3].cast<double>();
+            d.e = t[4].cast<double>();
+        });
 
     py::bind_vector<fwdpy11::dipvector_t>(
         m, "DiploidContainer", py::module_local(false),
@@ -533,14 +532,14 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
-        .def(py::pickle(
-            [](const fwdpy11::singlepop_t& pop) {
-                return py::bytes(pop.serialize());
-            },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::singlepop_t>(
-                    new fwdpy11::singlepop_t(s));
-            }))
+        .def("__getstate__",
+             [](const fwdpy11::singlepop_t& pop) {
+                 return py::bytes(pop.serialize());
+             })
+        .def("__setstate__",
+             [](fwdpy11::singlepop_t& p, py::bytes s) {
+                 new (&p) fwdpy11::singlepop_t(s);
+             })
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
                 const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
@@ -576,14 +575,14 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("locus_boundaries",
                       &fwdpy11::multilocus_t::locus_boundaries,
                       "[beg,end) positions for each locus")
-        .def(py::pickle(
-            [](const fwdpy11::multilocus_t& pop) {
-                return py::bytes(pop.serialize());
-            },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::multilocus_t>(
-                    new fwdpy11::multilocus_t(s));
-            }))
+        .def("__getstate__",
+             [](const fwdpy11::multilocus_t& pop) {
+                 return py::bytes(pop.serialize());
+             })
+        .def("__setstate__",
+             [](fwdpy11::multilocus_t& p, py::bytes s) {
+                 new (&p) fwdpy11::multilocus_t(s);
+             })
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
                 const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
@@ -620,14 +619,14 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("fixation_times",
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
-        .def(py::pickle(
-            [](const fwdpy11::singlepop_gm_vec_t& pop) {
-                return py::bytes(pop.serialize());
-            },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
-                    new fwdpy11::singlepop_gm_vec_t(s));
-            }))
+        .def("__getstate__",
+             [](const fwdpy11::singlepop_gm_vec_t& pop) {
+                 return py::bytes(pop.serialize());
+             })
+        .def("__setstate__",
+             [](fwdpy11::singlepop_gm_vec_t& p, py::bytes s) {
+                 new (&p) fwdpy11::singlepop_gm_vec_t(s);
+             })
         .def("__eq__", [](const fwdpy11::singlepop_gm_vec_t& lhs,
                           const fwdpy11::singlepop_gm_vec_t& rhs) {
             return lhs == rhs;
