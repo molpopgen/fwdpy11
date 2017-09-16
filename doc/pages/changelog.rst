@@ -4,6 +4,11 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.3.post1
+++++++++++++++++++++++++++
+
+* Fixed GitHub issues #23 and #25 via `PR #24 <https://github.com/molpopgen/fwdpy11/pull/24>`_.
+
 Version 0.1.3
 ++++++++++++++++++++++++++
 

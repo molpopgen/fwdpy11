@@ -47,7 +47,6 @@ dnl----
 dnl
 AC_INIT([fwdpy11], [0.1.4a0], [krthornt@uci.edu])
 
-
 dnl----
 dnl If you plan to use Automake, initialize it hre
 dnl Set some Automake flags
