@@ -6,7 +6,10 @@ import unittest
 import os
 import fwdpy11
 import fwdpy11.util
+import fwdpy11.wright_fisher_qtrait
+import numpy as np
 from quick_pops import quick_nonneutral_slocus
+from quick_pops import quick_slocus_qtrait_pop_params
 from quick_pops import quick_mlocus_qtrait_change_optimum
 
 
@@ -60,12 +63,25 @@ class testFixationsAreSortedQtraitSim(unittest.TestCase):
 class tests_MultipleFixationsAtPosition(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fwdpy11.SlocusPop(1000)
+        self.pop, self.params = quick_slocus_qtrait_pop_params()
+        self.params.demography = np.array([self.pop.N], dtype=np.uint32)
+        self.params.mutrate_n = 0.0  # disallow neutral mutations
         self.rng = fwdpy11.GSLrng(42)
-        fwdpy11.util.add_mutation(self.rng, self.pop, 2 * self.pop.N, (0.1, 0.0, 0.0), 0)
+        fwdpy11.util.add_mutation(
+            self.rng, self.pop, 2 * self.pop.N, (0.1, 0.0, 0.0), 0)
 
     def test_two_neutral_fixations(self):
-        self.assertEqual(len(self.pop.mutations), 1)
+        # Evolve pop for 1 gen.
+        # This will push mutation into fixations:
+        fwdpy11.wright_fisher_qtrait.evolve(self.rng, self.pop, self.params)
+        self.assertEqual(len(self.pop.fixations), 1)
+        # Add back the exact same mutation:
+        fwdpy11.util.add_mutation(
+            self.rng, self.pop, 2 * self.pop.N, (0.1, 0.0, 0.0), 0)
+        # Evolve again for 1 gen:
+        fwdpy11.wright_fisher_qtrait.evolve(self.rng, self.pop, self.params)
+        self.assertEqual(len(self.pop.fixations), 2)
+        self.assertEqual(list(self.pop.fixation_times), [1, 2])
 
 
 if __name__ == "__main__":
