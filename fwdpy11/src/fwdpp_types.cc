@@ -124,7 +124,7 @@ Base class for mutations.
         .def("__str__", [](const KTfwd::popgenmut &m) {
             return "Mutation[" + std::to_string(m.pos) + ","
                    + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                   + std::to_string(m.g) + "]";
+                   + std::to_string(m.g) + "," + std::to_string(m.xtra) + "]";
         });
 
     py::bind_vector<std::vector<double>>(

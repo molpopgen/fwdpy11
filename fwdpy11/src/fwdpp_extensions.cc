@@ -76,7 +76,7 @@ template <typename S> struct make_sh_model_fixed_dom
     return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, SCALING, A,  \
                                                               B);
 
-PYBIND11_MODULE(fwdpp_extensions,m)
+PYBIND11_MODULE(fwdpp_extensions, m)
 {
     m.doc() = "Expose fwdpp's extensions library.";
 
@@ -114,10 +114,11 @@ PYBIND11_MODULE(fwdpp_extensions,m)
           }));
 
     py::class_<KTfwd::extensions::discrete_mut_model>(m, "MutationRegions")
-        .def(py::init<std::vector<double>, std::vector<double>,
-                      std::vector<double>, std::vector<double>,
-                      std::vector<double>, std::vector<double>,
-                      std::vector<KTfwd::extensions::shmodel>>());
+        .def(py::init < std::vector<double>, std::vector<double>,
+             std::vector<double>, std::vector<double>, std::vector<double>,
+             std::vector<double>, std::vector<KTfwd::extensions::shmodel>,
+             std::vector<decltype(KTfwd::mutation::xtra)>,
+             std::vector<decltype(KTfwd::mutation::xtra)>>());
 
     py::class_<KTfwd::extensions::discrete_rec_model>(m,
                                                       "RecombinationRegions")
