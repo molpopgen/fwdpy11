@@ -40,9 +40,9 @@ namespace fwdpy11
     /// for recycling or not.
     ///
     /// It differs from the current fwdpp version in that:
-    /// 1. It uses std::lower_bound to make sure that fixations/fixation times
+    /// 1. It uses std::upper_bound to make sure that fixations/fixation times
     /// are sorted by position
-    /// 2. It uses binary searches (again, lower_bound) to guard against
+    /// 2. It uses binary searches (again, upper_bound) to guard against
     /// re-inserting the same non-neutral fixation over and over.
     ///
     /// The reason for these changes is that the use case is sims of
@@ -75,13 +75,13 @@ namespace fwdpy11
                 assert(mcounts[i] <= twoN);
                 if (mcounts[i] == twoN)
                     {
-                        auto loc = std::lower_bound(
+                        auto loc = std::upper_bound(
                             fixations.begin(), fixations.end(),
                             mutations[i].pos,
-                            [](const typename fixation_container_t::value_type
-                                   &__mut,
-                               const double &__value) noexcept {
-                                return __mut.pos < __value;
+                            [](const double &__value,
+                               const typename fixation_container_t::value_type
+                                   &__mut) noexcept {
+                                return __value < __mut.pos;
                             });
                         auto d = std::distance(fixations.begin(), loc);
                         if (mutations[i].neutral
