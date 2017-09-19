@@ -156,7 +156,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Index of the diploid in its deme")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
-                return py::make_tuple(d.first, d.second, d.w, d.g, d.e);
+                return py::make_tuple(d.first, d.second, d.w, d.g, d.e, d.label);
             },
             [](py::tuple t) {
                 std::unique_ptr<fwdpy11::diploid_t> d(new fwdpy11::diploid_t(
@@ -164,6 +164,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->w = t[2].cast<double>();
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
+                d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
+                return d;
                 return d;
             }));
 
