@@ -17,7 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import math
-import numpy as np
 
 
 class Region(object):
@@ -142,6 +141,7 @@ class Region(object):
 
     @l.setter
     def l(self, label):
+        import numpy as np
         self.__l = np.uint16(label)
 
     def __repr__(self):
@@ -256,6 +256,7 @@ class Sregion(Region):
 
     @scaling.setter
     def scaling(self, scaling):
+        import numpy as np
         self.__scaling = np.uint32(scaling)
 
     @property

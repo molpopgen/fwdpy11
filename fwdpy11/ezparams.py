@@ -17,8 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import numpy as np
-
 
 def mslike(pop, **kwargs):
     """
@@ -44,6 +42,8 @@ def mslike(pop, **kwargs):
     for key, value in kwargs.items():
         if key in defaults:
             defaults[key] = value
+    import numpy as np
+
     params = {'demography': np.array([pop.N]*defaults['simlen'],
               dtype=np.uint32),
               'nregions': [fwdpy11.Region(defaults['beg'],
