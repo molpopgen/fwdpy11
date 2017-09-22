@@ -24,6 +24,7 @@
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>
 #include <fwdpy11/opaque/opaque_types.hpp>
+
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
@@ -38,8 +39,8 @@ PYBIND11_MODULE(fwdpp_types, m)
 
     py::class_<KTfwd::mutation_base>(m, "MutationBase",
                                      R"delim(
-Base class for mutations.
-)delim")
+                                        Base class for mutations.
+                                     )delim")
         .def(py::init<double, bool, std::uint16_t>(), "Constructor")
         .def_readonly("pos", &KTfwd::mutation_base::pos, "Position (float).")
         .def_readonly("neutral", &KTfwd::mutation_base::neutral, "Boolean")
@@ -51,8 +52,31 @@ Base class for mutations.
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.
 )delim")
+        .def(py::init<KTfwd::gamete::constructor_tuple>(),
+             R"delim(
+                Construct gamete from tuple.
+                
+                The tuple must be (n, mutations, smutations)
+
+                .. testcode::
+
+                    import fwdpy11
+                    # Note the cast that is needed: 
+                    g = fwdpy11.Gamete((1,
+                                        fwdpy11.VectorUint32([2]),
+                                        fwdpy11.VectorUint32([0])))
+                    print(g.n)
+                    print(list(g.mutations))
+                    print(list(g.smutations))
+
+                .. testoutput::
+
+                    1
+                    [2]
+                    [0]
+                )delim")
         .def_readonly("n", &KTfwd::gamete::n,
-                      "Number of occurrences in the population.  . This has "
+                      "Number of occurrences in the population. This has "
                       "little meaning beyond book-keeping used by the C++ "
                       "back-end. (read-only)")
         .def_readonly("mutations", &KTfwd::gamete::mutations,
@@ -92,7 +116,60 @@ Base class for mutations.
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
-        .def(py::init<double, double, double, unsigned, std::uint16_t>())
+        .def(py::init<double, double, double, unsigned, std::uint16_t>(),
+             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
+             py::arg("label"),
+             R"delim(
+                Construct a mutations.
+
+                :param pos: Mutation position (float)
+                :param s: Effect size (float)
+                :param h: Dominance term (float)
+                :param g: Origin time (unsigned integer)
+                :param label: Label (16 bit integer)
+
+                .. testcode::
+
+                    import fwdpy11
+                    m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, 0)
+                    print(m.pos)
+                    print(m.s)
+                    print(m.h)
+                    print(m.g)
+                    print(m.label)
+
+                .. testoutput::
+                    
+                    1.0
+                    -1.0
+                    0.25
+                    0
+                    0
+                )delim")
+        .def(py::init<KTfwd::popgenmut::constructor_tuple>(),
+             R"delim(
+                Construct mutation from a tuple.
+
+                The tuple should contain (pos, s, h, g, label)
+
+                .. testcode::
+
+                    import fwdpy11
+                    m = fwdpy11.Mutation((1.0, -1.0, 0.25, 0, 0))
+                    print(m.pos)
+                    print(m.s)
+                    print(m.h)
+                    print(m.g)
+                    print(m.label)
+
+                .. testoutput::
+                    
+                    1.0
+                    -1.0
+                    0.25
+                    0
+                    0
+                )delim")
         .def_readonly(
             "g", &KTfwd::popgenmut::g,
             "Generation when mutation arose (origination time). (read-only)")
@@ -137,6 +214,30 @@ Base class for mutations.
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
         "Mutation type with vector of effect size and dominance terms.")
+        .def(py::init<KTfwd::generalmut_vec::constructor_tuple>(),
+                R"delim(
+                Construct from a tuple.
+                
+                .. testcode::
+                    
+                    import fwdpy11
+                    s = fwdpy11.VectorDouble([-0.1, 0.1])
+                    h = fwdpy11.VectorDouble([0.0, 1.0])
+                    m = fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))
+                    print(m.pos)
+                    print(m.g)
+                    print(m.label)
+                    print(list(m.s))
+                    print(list(m.h))
+
+                .. testoutput::
+
+                    0.1
+                    3
+                    0
+                    [-0.1, 0.1]
+                    [0.0, 1.0]
+                )delim")
         .def_readonly("s", &KTfwd::generalmut_vec::s,
                       "List of selection coefficients/effect sizes.")
         .def_readonly("h", &KTfwd::generalmut_vec::h,
