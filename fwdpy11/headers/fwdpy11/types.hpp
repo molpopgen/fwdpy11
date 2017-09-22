@@ -41,10 +41,10 @@ namespace fwdpy11
     template <int VERSION> struct diploid_writer
     {
         using result_type = void;
-        //This should really be constexpr. 
-        //Figure it out later:
+        // This should really be constexpr.
+        // Figure it out later:
         const int v;
-        diploid_writer() : v(VERSION){}
+        diploid_writer() : v(VERSION) {}
         template <typename diploid_t, typename streamtype>
         inline result_type
         operator()(const diploid_t &dip, streamtype &o) const
@@ -100,7 +100,7 @@ namespace fwdpy11
       fixation_times: vector<unsigned>, is filled by simulations that "prune"
       fixations when they occur
 
-      \note Internally, fwdppy uses extinct elements in containers for "object
+      \note Internally, fwdpp uses extinct elements in containers for "object
       recycling."
 
       Further:
@@ -126,6 +126,12 @@ namespace fwdpy11
                 {
                     d.label = label++;
                 }
+        }
+
+        singlepop_t(const dipvector_t &diploids, const gcont_t &gametes,
+                    const mcont_t &mutations)
+            : base(diploids, gametes, mutations)
+        {
         }
 
         singlepop_t(const std::string &s) : base(0) { this->deserialize(s); }
@@ -197,7 +203,7 @@ namespace fwdpy11
       fixation_times: vector<unsigned>, is filled by simulations that "prune"
       fixations when they occur
 
-      \note Internally, fwdppy uses extinct elements in containers for "object
+      \note Internally, fwdpp uses extinct elements in containers for "object
       recycling."
 
       Further:
@@ -224,6 +230,11 @@ namespace fwdpy11
         {
         }
 
+        explicit metapop_t(const vdipvector_t &diploids,
+                           const gcont_t &gametes, const mcont_t &mutations)
+            : base(diploids, gametes, mutations)
+        {
+        }
         //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p)
             : base(p), generation(p.generation)
@@ -286,6 +297,13 @@ namespace fwdpy11
                     throw std::invalid_argument("population size must be > 0");
                 }
         }
+
+        explicit singlepop_gm_vec_t(const dipvector_t & diploids,
+                const gcont_t & gametes, const mcont_t & mutations)
+            : base(diploids,gametes,mutations)
+        {
+        }
+
         explicit singlepop_gm_vec_t(const std::string &s) : base(0)
         {
             this->deserialize(s);
@@ -370,6 +388,12 @@ namespace fwdpy11
                 {
                     d[0].label = label++;
                 }
+        }
+
+        explicit multilocus_t(const dipvector_t &diploids,
+                              const gcont_t &gametes, const mcont_t &mutations)
+            : base(diploids, gametes, mutations)
+        {
         }
 
         explicit multilocus_t(const std::string &s) : base({ 0, 0 })
