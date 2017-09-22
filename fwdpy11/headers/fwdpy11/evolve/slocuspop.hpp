@@ -5,7 +5,7 @@
 #include <type_traits>
 #include <fwdpp/internal/gamete_cleaner.hpp>
 #include <fwdpp/insertion_policies.hpp>
-#include <fwdpp/recombination.hpp>
+#include <fwdpp/mutate_recombine.hpp>
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
@@ -63,29 +63,13 @@ namespace fwdpy11
                 if (gsl_rng_uniform(rng.get()) < 0.5)
                     std::swap(p2g1, p2g2);
 
-                dip.first
-                    = KTfwd::recombination(pop.gametes, gamete_recycling_bin,
-                                           pop.neutral, pop.selected, recmodel,
-                                           p1g1, p1g2, pop.mutations)
-                          .first;
-                dip.second
-                    = KTfwd::recombination(pop.gametes, gamete_recycling_bin,
-                                           pop.neutral, pop.selected, recmodel,
-                                           p2g1, p2g2, pop.mutations)
-                          .first;
-
-                pop.gametes[dip.first].n++;
-                pop.gametes[dip.second].n++;
-
-                // now, add new mutations
-                dip.first = KTfwd::mutate_gamete_recycle(
-                    mutation_recycling_bin, gamete_recycling_bin, rng.get(),
-                    mu, pop.gametes, pop.mutations, dip.first, mmodel,
-                    KTfwd::emplace_back());
-                dip.second = KTfwd::mutate_gamete_recycle(
-                    mutation_recycling_bin, gamete_recycling_bin, rng.get(),
-                    mu, pop.gametes, pop.mutations, dip.second, mmodel,
-                    KTfwd::emplace_back());
+                //Update to fwdpp 0.5.7 API
+                //in fwdpy11 0.1.4
+                KTfwd::mutate_recombine_update(
+                    rng.get(), pop.gametes, pop.mutations,
+                    std::make_tuple(p1g1, p1g2, p2g1, p2g2), recmodel, mmodel,
+                    mu, gamete_recycling_bin, mutation_recycling_bin, dip, pop.neutral,
+                    pop.selected);
 
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);

@@ -57,14 +57,14 @@ evolve_singlepop_regions_qtrait_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if(!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is(py::none()))
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if(!noise_updater.is(py::none()))
+    if (!noise_updater.is(py::none()))
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -101,6 +101,10 @@ evolve_singlepop_regions_qtrait_cpp(
     auto rules = fwdpy11::qtrait::qtrait_model_rules(trait_to_fitness, noise);
     fitness.update(pop);
     auto wbar = rules.w(pop, fitness_callback);
+    if (!std::isfinite(wbar))
+        {
+            throw std::runtime_error("population mean fitness not finite");
+        }
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
@@ -124,6 +128,11 @@ evolve_singlepop_regions_qtrait_cpp(
                 pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N, false);
             fitness.update(pop);
             wbar = rules.w(pop, fitness_callback);
+            if (!std::isfinite(wbar))
+                {
+                    throw std::runtime_error(
+                        "population mean fitness not finite");
+                }
             recorder(pop);
             if (updater_exists)
                 {
@@ -157,14 +166,14 @@ evolve_qtrait_mloc_regions_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if(!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is(py::none()))
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if(!noise_updater.is(py::none()))
+    if (!noise_updater.is(py::none()))
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -188,6 +197,10 @@ evolve_qtrait_mloc_regions_cpp(
     ++pop.generation;
     multilocus_gvalue.update(pop);
     auto wbar = rules.w(pop, multilocus_gvalue);
+    if(!std::isfinite(wbar))
+    {
+        throw std::runtime_error("population mean fitness not finite");
+    }
     std::vector<std::function<unsigned(void)>> interlocus_rec;
     for (auto &&i : interlocus_rec_wrappers)
         {
