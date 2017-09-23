@@ -36,6 +36,12 @@ Welcome to fwdpy11's documentation!
     pages/recorders
 
 .. toctree::
+    :caption: Advanced manipulation of populations
+    :maxdepth: 2
+
+    pages/popobjects
+
+.. toctree::
     :caption: Examples
     :maxdepth: 1
 
