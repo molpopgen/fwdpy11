@@ -515,7 +515,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                    "population size.")
         .def(py::init<const fwdpy11::singlepop_t::dipvector_t&,
                       const fwdpy11::singlepop_t::gcont_t&,
-                      const fwdpy11::singlepop_t::mcont_t&>())
+                      const fwdpy11::singlepop_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
         .def("clear", &fwdpy11::singlepop_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
@@ -559,7 +564,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
              "number of loci.")
         .def(py::init<const fwdpy11::multilocus_t::dipvector_t&,
                       const fwdpy11::multilocus_t::gcont_t&,
-                      const fwdpy11::multilocus_t::mcont_t&>())
+                      const fwdpy11::multilocus_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
         .def(py::init<unsigned, unsigned,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
@@ -608,7 +618,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
              "Construct object with N diploids.")
         .def(py::init<const fwdpy11::singlepop_gm_vec_t::dipvector_t&,
                       const fwdpy11::singlepop_gm_vec_t::gcont_t&,
-                      const fwdpy11::singlepop_gm_vec_t::mcont_t&>())
+                      const fwdpy11::singlepop_gm_vec_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
