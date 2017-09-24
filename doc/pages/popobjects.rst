@@ -22,25 +22,36 @@ in:
 
     import fwdpy11
 
+    # Create empty containers for mutations,
+    # gametes, and diploids:
     mutations = fwdpy11.MutationContainer()
     gametes = fwdpy11.GameteContainer()
     diploids = fwdpy11.DiploidContainer()
+
+    # Add a mutation with pos = 0.1,
+    # s = -0.01, h = 1.0, g = 0,
+    # and label = 0
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+
+    # Add a gamete that exists in two copies
+    # and contains our mutation
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+
+    # There is only one gamete, and so our diploid
+    # will contain two copies of it:
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     
-
+    # Create a population from our containers
     pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
-    print(pop.N)
-    print(len(pop.mutations))
-    print(pop.mutations[0].neutral)
-    print(len(pop.gametes))
 
-The output from the above is:
-
-.. testoutput:: constructing_pops
-
-    1
-    1
-    False
-    1
+    # Check that our pop is as expected:
+    assert(pop.N == 1)
+    assert(len(pop.diploids) == 1)
+    assert(len(pop.gametes) == 1)
+    assert(len(pop.mutations) == 1)
+    assert(pop.gametes[0].n == 2)
+    assert(mutations[0].pos == 0.1)
+    assert(mutations[0].s == -0.01)
+    assert(mutations[0].h == 1)
+    assert(mutations[0].g == 0)
+    assert(mutations[0].label == 0)
