@@ -73,4 +73,13 @@ Some comments are needed:
 
 1. The C++ back-end (fwdpp_) is very strict about the input.  Any error will result in exceptions being thrown.
 
+Examples of input errors
+-----------------------------------------------
+
+Seeding a single-locus simulation from msprime
+---------------------------------------------------------------------------------------------------------
+
+Seeding a multi-locus simulation from msprime
+---------------------------------------------------------------------------------------------------------
+
 .. _fwdpp: http://molpopgen.github.io/fwdpp
