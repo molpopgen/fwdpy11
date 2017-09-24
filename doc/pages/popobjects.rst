@@ -18,11 +18,29 @@ Quick start example
 Building populations this way will take advantage of object constructors taking tuples as parameters.  Let's just dive
 in:
 
-.. testcode::
+.. testcode:: constructing_pops
 
     import fwdpy11
 
-    mutations = [fwdpy11.Mutation(0.1,-0.01,1.0,0,0)]
-    gametes = [fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0])))]
-    diploids = [fwdpy11.SingleLocusDiploid(0,0)]
+    mutations = fwdpy11.MutationContainer()
+    gametes = fwdpy11.GameteContainer()
+    diploids = fwdpy11.DiploidContainer()
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+    
+
     pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    print(pop.N)
+    print(len(pop.mutations))
+    print(pop.mutations[0].neutral)
+    print(len(pop.gametes))
+
+The output from the above is:
+
+.. testoutput:: constructing_pops
+
+    1
+    1
+    False
+    1
