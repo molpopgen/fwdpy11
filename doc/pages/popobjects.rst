@@ -34,11 +34,16 @@ in:
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
     # Add a gamete that exists in two copies
-    # and contains our mutation
+    # and contains our mutation.  The mutation
+    # is not neutral, and therefore belongs in
+    # 'smutations', with is the second vector
+    # in our tuple.  The first is the list of 
+    # indexes of neutral variants.
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
 
     # There is only one gamete, and so our diploid
-    # will contain two copies of it:
+    # will contain two copies of it, and its index is 
+    # 0:
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     
     # Create a population from our containers
@@ -55,3 +60,17 @@ in:
     assert(mutations[0].h == 1)
     assert(mutations[0].g == 0)
     assert(mutations[0].label == 0)
+
+
+The above example brings up some new concepts:
+
+1. There are several new container types introduced. These are thin wrappers around C++ containers. 
+2. We _can_ construct these containers from Python iterable types such as lists.  The above example does just that to
+   create a :class:`fwdpy11.fwdpp_types.Gamete` instance.  However, doing so with large lists may use a lot of RAM, and
+   the append approach may be preferable.
+
+Some comments are needed:
+
+1. The C++ back-end (fwdpp_) is very strict about the input.  Any error will result in exceptions being thrown.
+
+.. _fwdpp: http://molpopgen.github.io/fwdpp
