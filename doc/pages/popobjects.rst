@@ -194,9 +194,13 @@ Being able to seed from msprime_ is very useful.  For example, imagine we wanted
 expermiments.  We could use :func:`fwdpy11.util.change_effect_size` to make one of the mutations in the data have an
 effect on fitness/trait value, use :func:`copy.deepcopy` to "replicate" the base population, evolve them, and analyze.
 When I did this sort of work_ with Jim Baldwin-Brown, it was much trickier at the time, involving a lot more files!
+Now, we could redo much of that paper with a single script.
 
 Seeding a multi-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
+
+WIP
+
 
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _msprime: https://github.com/jeromekelleher/msprime
