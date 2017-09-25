@@ -99,10 +99,105 @@ The result is a `RuntimeError`:
     ...
     RuntimeError: gamete count does not match number of diploids referring to it
 
+Neutral or non-neutral mutations in the incorrect gamete container:
+
+.. testcode::
+
+    import fwdpy11
+    mutations = fwdpy11.MutationContainer()
+    gametes = fwdpy11.GameteContainer()
+    diploids = fwdpy11.DiploidContainer()
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+    # The mutation is non-neutral, and we are mistakenly
+    # putting it in the Gametes.mutations container:
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([0]),fwdpy11.VectorUint32([]))))
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+
+The result is a `RuntimeError`:
+
+.. testoutput::
+    :options: +ELLIPSIS
+
+    Traceback (most recent call last):
+    ...
+    RuntimeError: gamete contains key to mutation in wrong container.
+
+Other conditions that will lead to errors include:
+
+1. Gametes and diploids containing indexes that are out of range.
+
 Seeding a single-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
+
+In this section, we will use msprime_ to simulate data for 2,000 chromosomes with scaled mutation and recombintion rates
+of :math:`\theta=1,000` and :math:`\rho=1,000`, respectively.  Mutation and crossover positions will be on the unit
+interval :math:`[0,1)`.
+
+The output of msprime_ will be used to fill containers that we then use to construct an instantce of
+:class:`fwdpy11.fwdpy11_types.SlocusPop`.
+
+.. ipython:: python
+
+    import fwdpy11
+    import msprime
+
+
+    def find_all_derived(s):
+        """
+        Returns indexes of all
+        derived mutation states
+        """
+        return fwdpy11.VectorUint32([i for i, ltr in enumerate(s) if ltr == '1'])
+
+
+    def convert_mutations(m, mutation_dominance, mutation_label):
+        mutations = fwdpy11.MutationContainer(
+            [fwdpy11.Mutation(i.position, 0, mutation_dominance, 0, mutation_label) for i in m.mutations()])
+        return mutations
+
+
+    def convert_single_locus_haplotypes(m):
+        s = fwdpy11.VectorUint32()
+        gametes = fwdpy11.GameteContainer(
+            [fwdpy11.Gamete((1, find_all_derived(i), s)) for i in m.haplotypes()])
+        return gametes
+
+
+    def generate_diploids(N):
+        # Testing showd that a listcomp
+        # here really ate RAM, so we
+        # do a for loop instead:
+        diploids = fwdpy11.DiploidContainer()
+        for i in range(int(N)):
+            diploids.append(fwdpy11.SingleLocusDiploid(2 * i, 2 * i + 1))
+        return diploids
+
+
+    def msprime2fwdpy11(m, mutation_dominance=1.0, mutation_label=0):
+        if m.get_sample_size() % 2 != 0.0:
+            raise ValueError("require a TreeSequence with an even sample size")
+        mutations = convert_mutations(m, mutation_dominance, mutation_label)
+        gametes = convert_single_locus_haplotypes(m)
+        diploids = generate_diploids(int(m.get_sample_size())/2)
+        return fwdpy11.SlocusPop(diploids, gametes, mutations)
+
+
+    m = msprime.simulate(2000, mutation_rate=1000, recombination_rate=1000)
+    pop = msprime2fwdpy11(m)
+    assert(pop.N == 1000)
+    pop_pos = [i.pos for i in pop.mutations]
+    msp_pos = [i.position for i in m.mutations()]
+    assert(pop_pos == msp_pos)
+
+Being able to seed from msprime_ is very useful.  For example, imagine we wanted to simulate "evolve and resequence"
+expermiments.  We could use :func:`fwdpy11.util.change_effect_size` to make one of the mutations in the data have an
+effect on fitness/trait value, use :func:`copy.deepcopy` to "replicate" the base population, evolve them, and analyze.
+When I did this sort of work_ with Jim Baldwin-Brown, it was much trickier at the time, involving a lot more files!
 
 Seeding a multi-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
 
 .. _fwdpp: http://molpopgen.github.io/fwdpp
+.. _msprime: https://github.com/jeromekelleher/msprime
+.. _work: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3969567/
