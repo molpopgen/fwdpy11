@@ -3,7 +3,6 @@ name: fwdpy_docs
 channels:
     - conda-forge
     - defaults
-    - r
     - bioconda
 
 dependencies:
@@ -11,6 +10,7 @@ dependencies:
     - sphinx_rtd_theme==0.1.9
     - gsl
     - nbsphinx
+    - msprime
     - pip:
         - numpy
         - matplotlib
