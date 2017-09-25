@@ -165,7 +165,7 @@ The output of msprime_ will be used to fill containers that we then use to const
 
 
     def generate_diploids(N):
-        # Testing showd that a listcomp
+        # Testing showed that a listcomp
         # here really ate RAM, so we
         # do a for loop instead:
         diploids = fwdpy11.DiploidContainer()
