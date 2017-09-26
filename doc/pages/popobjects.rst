@@ -128,28 +128,6 @@ Other conditions that will lead to errors include:
 1. Gametes and diploids containing indexes that are out of range.
 2. Mutation keys in gametes must be sorted according to mutation position.
 
-.. note::
-
-    The above examples are simplified because msprime_ output is already sorted appropriately.
-
-Dealing with unsorted mutation input 
----------------------------------------------------------------------------------------------------------
-Consider the following example with two mutations:
-
-.. testcode::
-
-    import fwdpy11
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
-    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
-    # Add in a second, non-neutral mutation:
-    mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
-    # Put mutations into containers out of order
-    # as far as mutation position is concerned:
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
-    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
 
 Seeding a single-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
@@ -219,6 +197,79 @@ expermiments.  We could use :func:`fwdpy11.util.change_effect_size` to make one 
 effect on fitness/trait value, use :func:`copy.deepcopy` to "replicate" the base population, evolve them, and analyze.
 When I did this sort of work_ with Jim Baldwin-Brown, it was much trickier at the time, involving a lot more files!
 Now, we could redo much of that paper with a single script.
+
+.. note::
+
+    The above example is simplified because msprime_ output is already sorted appropriately.
+
+Dealing with unsorted mutation input 
+---------------------------------------------------------------------------------------------------------
+Consider the following example with two mutations:
+
+.. ipython:: python
+
+    import fwdpy11
+
+    mutations = fwdpy11.MutationContainer()
+
+    gametes = fwdpy11.GameteContainer()
+
+    diploids = fwdpy11.DiploidContainer()
+
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+
+Add in a second, non-neutral mutation:
+
+.. ipython:: python
+
+    mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
+
+Put mutations into containers out of order as far as mutation position is concerned:
+
+.. ipython:: python
+
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
+
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+
+We will get an exception when we try to create a population:
+
+.. ipython:: python
+
+    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+
+We can sort the input data with a call to :func:`fwdpy11.util.sort_gamete_keys`:
+
+.. ipython:: python
+
+    from fwdpy11.util import sort_gamete_keys
+    sort_gamete_keys(gametes,mutations)
+    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+
+The sorting takes place on the C++ side because of how the relevant container types are exposed to Python.
+
+.. testcode::
+    :hide:
+
+    import fwdpy11
+    mutations = fwdpy11.MutationContainer()
+    gametes = fwdpy11.GameteContainer()
+    diploids = fwdpy11.DiploidContainer()
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+    # Add in a second, non-neutral mutation:
+    mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
+    # Put mutations into containers out of order
+    # as far as mutation position is concerned:
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+
+.. testoutput::
+    :hide:
+
+    Traceback (most recent call last):
+    ...
+    ValueError: gamete contains unsorted keys 
 
 Seeding a multi-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
