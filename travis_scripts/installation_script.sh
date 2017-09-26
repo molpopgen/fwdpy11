@@ -29,7 +29,7 @@ then
     conda install -c conda-forge sphinx nbsphinx ipython matplotlib
     pip install cppimport
 else
-    sudo apt-get -f update -qq
+    sudo apt-get update -qq
     sudo apt-get -f install python-dev libffi-dev libssl-dev
     sudo pip install -r requirements.txt
 fi
