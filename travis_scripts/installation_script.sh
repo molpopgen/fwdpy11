@@ -30,6 +30,6 @@ then
     pip install cppimport
 else
     sudo apt-get update -qq
-    sudo apt-get -f install python-dev libffi-dev libssl-dev
+    sudo apt-get -f install python-dev libffi-dev libssl-dev libgsl*-dev
     pip install -r requirements.txt
 fi
