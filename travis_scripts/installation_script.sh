@@ -29,6 +29,8 @@ then
     conda install -c conda-forge pybind11==2.2.0
     conda install -c conda-forge sphinx nbsphinx ipython matplotlib
     pip install cppimport
+    echo `which python`
+    echo `which python3`
 else
     sudo apt-get update -qq
     sudo apt-get -f install python-dev libffi-dev libssl-dev libgsl*-dev
