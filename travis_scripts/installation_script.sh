@@ -16,7 +16,7 @@ then
     hash -r
     conda config --set always_yes yes --set changeps1 no
     conda update -q conda
-    Useful for debugging any issues with conda
+    # Useful for debugging any issues with conda
     conda info -a
     if [ "$TRAVIS_OS_NAME" == "linux" ];
     then conda install gcc;
