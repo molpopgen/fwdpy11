@@ -8,6 +8,8 @@ git submodule update
 if [ "$USECONDA" == "1" ];
 then
     echo "CONDA BUILD $TRAVIS_OS_NAME"
+    python --version
+    python3 --version
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     export CPPFLAGS="-I$HOME/miniconda/include $CPPFLAGS"
