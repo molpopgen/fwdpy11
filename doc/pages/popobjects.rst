@@ -126,6 +126,30 @@ The result is a `RuntimeError`:
 Other conditions that will lead to errors include:
 
 1. Gametes and diploids containing indexes that are out of range.
+2. Mutation keys in gametes must be sorted according to mutation position.
+
+.. note::
+
+    The above examples are simplified because msprime_ output is already sorted appropriately.
+
+Dealing with unsorted mutation input 
+---------------------------------------------------------------------------------------------------------
+Consider the following example with two mutations:
+
+.. testcode::
+
+    import fwdpy11
+    mutations = fwdpy11.MutationContainer()
+    gametes = fwdpy11.GameteContainer()
+    diploids = fwdpy11.DiploidContainer()
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+    # Add in a second, non-neutral mutation:
+    mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
+    # Put mutations into containers out of order
+    # as far as mutation position is concerned:
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
 
 Seeding a single-locus simulation from msprime
 ---------------------------------------------------------------------------------------------------------
