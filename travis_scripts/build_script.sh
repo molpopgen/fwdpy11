@@ -20,5 +20,5 @@ then
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
 else
     python setup.py build_ext -i
-    python -m unnittest discover tests
+    python -m unittest discover tests
 fi
