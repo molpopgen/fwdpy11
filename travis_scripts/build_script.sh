@@ -7,7 +7,7 @@ git submodule update
 
 if [ "$USECONDA" == "1" ];
 then
-    echo "CONDA BUILD"
+    echo "CONDA BUILD $TRAVIS_OS_NAME"
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     export CPPFLAGS="-I$HOME/miniconda/include $CPPFLAGS"
@@ -20,6 +20,7 @@ then
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then LDFLAGS='-stdlib=libc++ -mmacosx-version-min=10.7' CPPFLAGS="-stdlib=libc++ -mmacosx-version-min=10.7" python -m unittest discover -v tests; fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
 else
+    echo "OOPS"
     python setup.py build_ext -i
     python -m unittest discover tests
 fi
