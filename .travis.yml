@@ -7,9 +7,6 @@ matrix:
       env: USECONDA=1
     - os: linux
       dist: trusty
-      python: 3.3 
-    - os: linux
-      dist: trusty
       python: 3.4
     - os: linux
       dist: trusty
