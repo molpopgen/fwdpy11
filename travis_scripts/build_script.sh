@@ -28,4 +28,5 @@ else
     echo "OOPS"
     python setup.py build_ext -i
     python -m unittest discover tests
+    cd doc && make doctest
 fi
