@@ -19,8 +19,24 @@ then
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python setup.py build_ext -i --gcc; fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then LDFLAGS='-stdlib=libc++ -mmacosx-version-min=10.7' CPPFLAGS="-stdlib=libc++ -mmacosx-version-min=10.7" python -m unittest discover -v tests; fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
+    if [ "$?" != "0" ];
+    then
+        exit $?
+    fi
 else
     python setup.py build_ext -i
+    if [ "$?" != "0" ];
+    then
+        exit $?
+    fi
     python -m unittest discover tests
+    if [ "$?" != "0" ];
+    then
+        exit $?
+    fi
     cd doc && make doctest
+    if [ "$?" != "0" ];
+    then
+        exit $?
+    fi
 fi
