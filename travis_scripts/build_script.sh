@@ -21,22 +21,22 @@ then
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
     if [ "$?" != "0" ];
     then
-        exit $?
+        exit 1
     fi
 else
     python setup.py build_ext -i
     if [ "$?" != "0" ];
     then
-        exit $?
+        exit 1
     fi
     python -m unittest discover tests
     if [ "$?" != "0" ];
     then
-        exit $?
+        exit 1
     fi
     cd doc && make doctest
     if [ "$?" != "0" ];
     then
-        exit $?
+        exit 1
     fi
 fi
