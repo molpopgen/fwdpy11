@@ -264,14 +264,19 @@ class Sregion(Region):
         """
         Distribution of effect sizes.
         """
-        if self.__des is None:
-            raise ValueError("distribution of effect sizes must not be None")
-        return self.__des
+        import fwdpy11.fwdpp_extensions
+        return getattr(fwdpy11.fwdpp_extensions, self.__des[0])(*self.__des[1])
 
     @des.setter
     def des(self, des):
-        if callable(des) is False:
-            raise ValueError("distribution of effect sizes must be a callable")
+        try:
+            import fwdpy11.fwdpp_extensions
+            if callable(getattr(fwdpy11.fwdpp_extensions, des[0])) is False:
+                raise ValueError(
+                    "callable required for distribution of effect sizes")
+            getattr(fwdpy11.fwdpp_extensions, des[0])(*des[1])
+        except:
+            raise
         self.__des = des
 
     # def __str__(self):
@@ -332,8 +337,8 @@ class GammaS(Sregion):
             beg, end, weight, h, coupled, label, scaling)
         self.mean = float(mean)
         self.shape = float(shape)
-        from .fwdpp_extensions import makeGammaSH
-        self.des = makeGammaSH(self.mean, self.shape, self.h, self.scaling)
+        self.des = ("makeGammaSH", (self.mean,
+                                    self.shape, self.h, self.scaling))
 
     @property
     def mean(self):
@@ -422,8 +427,7 @@ class ConstantS(Sregion):
         super(ConstantS, self).__init__(
             beg, end, weight, h, coupled, label, scaling)
         self.s = s
-        from .fwdpp_extensions import makeConstantSH
-        self.des = makeConstantSH(self.s, self.h, self.scaling)
+        self.des = ("makeConstantSH", (self.s, self.h, self.scaling))
 
     @property
     def s(self):
@@ -498,8 +502,7 @@ class UniformS(Sregion):
         super(UniformS, self).__init__(beg, end, weight, h, coupled, scaling)
         self.lo = lo
         self.hi = hi
-        from .fwdpp_extensions import makeUniformSH
-        self.des = makeUniformSH(self.lo, self.hi, self.h, self.scaling)
+        self.des = ("makeUniformSH", (self.lo, self.hi, self.h, self.scaling))
 
     @property
     def lo(self):
@@ -588,8 +591,7 @@ class ExpS(Sregion):
         super(ExpS, self).__init__(
             beg, end, weight, h, coupled, label, scaling)
         self.mean = mean
-        from .fwdpp_extensions import makeExpSH
-        self.des = makeExpSH(self.mean, self.h, self.scaling)
+        self.des = ("makeExpSH", (self.mean, self.h, self.scaling))
 
     @property
     def mean(self):
@@ -665,8 +667,7 @@ class GaussianS(Sregion):
         super(GaussianS, self).__init__(
             beg, end, weight, h, coupled, label, scaling)
         self.sd = sd
-        from .fwdpp_extensions import makeGaussianSH
-        self.des = makeGaussianSH(self.sd, self.h, self.scaling)
+        self.des = ("makeGaussianSH", (self.sd, self.h, self.scaling))
 
     @property
     def sd(self):
