@@ -1,4 +1,11 @@
 pybind11==@PYBIND11@
-cppimport
 numpy
-breathe
+
+#below are for building package,
+#dox, and running tests
+cppimport
+cython
+sphinx
+nbsphinx
+ipython
+matplotlib
