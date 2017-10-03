@@ -12,6 +12,10 @@ gamete, and mutation objects.  Constructing population objects this way allows f
 methods.  However, some care is required, and you should be familiar with the material in :ref:`data_types`, which
 covers how populations are represented in memory.
 
+.. note::
+    This page uses :class:`fwdpy11.fwdpy11_types.SlocusPop` in its examples.
+    However, analagous functionality is available for all supported population types.
+    
 Quick start example
 -----------------------------------
 
@@ -107,6 +111,11 @@ The first three assertions show that the containers that we contstructed are now
 into the population object, avoiding an extra temporary copy.  *The create function should be the preferred method of
 constructing populations unless you have a reason to keep the input data around.*
 
+.. note::
+    There is also a :func:`fwdpy11.fwdpy11_types.SlocusPop.create_with_fixations` allowing a population to be
+    created with fixations, fixation times, and a current generation > 0.  That function is mostly used
+    internally when rebuilding populations from files.
+
 Examples of input errors
 -----------------------------------------------
 
@@ -122,7 +131,7 @@ Incorrect gamete count:
     # The gamete is incorrectly labelled as occurring once:
     gametes.append(fwdpy11.Gamete((1,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
 The result is a `RuntimeError`:
 
@@ -146,7 +155,7 @@ Neutral or non-neutral mutations in the incorrect gamete container:
     # putting it in the Gametes.mutations container:
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([0]),fwdpy11.VectorUint32([]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
 The result is a `RuntimeError`:
 
@@ -216,7 +225,7 @@ The output of msprime_ will be used to fill containers that we then use to const
         mutations = convert_mutations(m, mutation_dominance, mutation_label)
         gametes = convert_single_locus_haplotypes(m)
         diploids = generate_diploids(int(m.get_sample_size())/2)
-        return fwdpy11.SlocusPop(diploids, gametes, mutations)
+        return fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
 
     m = msprime.simulate(2000, mutation_rate=1000, recombination_rate=1000)
@@ -278,7 +287,7 @@ We can sort the input data with a call to :func:`fwdpy11.util.sort_gamete_keys`:
 
     from fwdpy11.util import sort_gamete_keys
     sort_gamete_keys(gametes,mutations)
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
 The sorting takes place on the C++ side because of how the relevant container types are exposed to Python.
 
@@ -296,7 +305,7 @@ The sorting takes place on the C++ side because of how the relevant container ty
     # as far as mutation position is concerned:
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
 .. testoutput::
     :hide:
