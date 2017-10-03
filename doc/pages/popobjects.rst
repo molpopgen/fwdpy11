@@ -73,6 +73,39 @@ Some comments are needed:
 
 1. The C++ back-end (fwdpp_) is very strict about the input.  Any error will result in exceptions being thrown.
 
+Efficient construction of large populations
+-----------------------------------------------
+
+When building a large population programmatically, a naive approach would leave with with a data copy on both the Python
+and on the C++ side, which is not ideal.  We can avoid that via class methods that use C++11's move semantics to "steal"
+the data from our input containers. The following example is the same as above, except that we create the function via
+:func:`fwdpy11.fwdpy11_types.SlocusPop.create`:
+
+.. testcode:: move_constructing_pops
+
+    import fwdpy11
+
+    mutations = fwdpy11.MutationContainer()
+    gametes = fwdpy11.GameteContainer()
+    diploids = fwdpy11.DiploidContainer()
+
+    mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
+
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+
+    diploids.append(fwdpy11.SingleLocusDiploid(0,0))
+    
+    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    assert(len(diploids) == 0)
+    assert(len(gametes) == 0)
+    assert(len(mutations) == 0)
+    assert(len(pop.diploids) == 1)
+    assert(len(pop.mutations) == 1)
+    assert(len(pop.gametes) == 1)
+
+The first three assertions show that the containers that we contstructed are now empty.  Their contents have been moved
+into the population object, avoiding an extra temporary copy.
+
 Examples of input errors
 -----------------------------------------------
 
