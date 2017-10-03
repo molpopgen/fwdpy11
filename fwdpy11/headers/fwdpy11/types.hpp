@@ -37,6 +37,35 @@
 
 namespace fwdpy11
 {
+    template <typename poptype, typename diploids_input,
+              typename gametes_input, typename mutations_input>
+    inline poptype
+    create_wrapper(diploids_input &&diploids, gametes_input &&gametes,
+                   mutations_input &&mutations)
+    {
+        return poptype(std::forward<diploids_input>(diploids),
+                       std::forward<gametes_input>(gametes),
+                       std::forward<mutations_input>(mutations));
+    }
+
+    template <typename poptype, typename diploids_input,
+              typename gametes_input, typename mutations_input>
+    inline poptype
+    create_wrapper(diploids_input &&diploids, gametes_input &&gametes,
+                   mutations_input &&mutations, mutations_input &fixations,
+                   std::vector<KTfwd::uint_t> &fixation_times,
+                   KTfwd::uint_t generation)
+    {
+        auto rv = create_wrapper<poptype>(
+            std::forward<diploids_input>(diploids),
+            std::forward<gametes_input>(gametes),
+            std::forward<mutations_input>(mutations));
+        rv.fixations.swap(fixations);
+        rv.fixation_times.swap(fixation_times);
+        rv.generation = generation;
+        return rv;
+    }
+
     //! Allows serialization of diploids.
     template <int VERSION> struct diploid_writer
     {
@@ -146,6 +175,26 @@ namespace fwdpy11
         singlepop_t &operator=(const singlepop_t &) = default;
         singlepop_t &operator=(singlepop_t &&) = default;
 
+        static singlepop_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<singlepop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static singlepop_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<singlepop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
+
         std::string
         serialize() const
         {
@@ -251,6 +300,25 @@ namespace fwdpy11
             : base(p), generation(p.generation)
         {
         }
+        static metapop_t
+        create(base::vdipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<metapop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static metapop_t
+        create_with_fixations(base::vdipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<metapop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
         // std::string
         // serialize() const
         //{
@@ -326,6 +394,25 @@ namespace fwdpy11
             this->deserialize(s);
         }
 
+        static singlepop_gm_vec_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<singlepop_gm_vec_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static singlepop_gm_vec_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<singlepop_gm_vec_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
         std::string
         serialize() const
         {
@@ -423,6 +510,25 @@ namespace fwdpy11
             this->deserialize(s);
         }
 
+        static multilocus_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<multilocus_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static multilocus_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<multilocus_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
         std::string
         serialize() const
         {
