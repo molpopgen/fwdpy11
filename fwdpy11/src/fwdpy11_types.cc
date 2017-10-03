@@ -535,6 +535,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
                     :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPop`
 
+                    .. versionadded:: 0.1.4
+
                     .. note::
                         See :ref:`popobjects` for example use.
                     )delim")
@@ -606,6 +608,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
                     :rtype: :class:`fwdpy11.fwdpy11_types.MlocusPop`
 
+                    .. versionadded:: 0.1.4
+
                     .. note::
                         See :ref:`popobjects` for example use.
                     )delim")
@@ -675,6 +679,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
 
                     :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
+
+                    .. versionadded:: 0.1.4
 
                     .. note::
                         See :ref:`popobjects` for example use.
