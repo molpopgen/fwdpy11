@@ -128,9 +128,14 @@ namespace fwdpy11
                 }
         }
 
-        singlepop_t(const dipvector_t &diploids, const gcont_t &gametes,
-                    const mcont_t &mutations)
-            : base(diploids, gametes, mutations)
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        singlepop_t(diploids_input &&diploids, gametes_input &&gametes,
+                    mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
         {
         }
 
@@ -298,9 +303,15 @@ namespace fwdpy11
                 }
         }
 
-        explicit singlepop_gm_vec_t(const dipvector_t & diploids,
-                const gcont_t & gametes, const mcont_t & mutations)
-            : base(diploids,gametes,mutations)
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        explicit singlepop_gm_vec_t(diploids_input &&diploids,
+                                      gametes_input &&gametes,
+                                      mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
         {
         }
 
@@ -390,9 +401,14 @@ namespace fwdpy11
                 }
         }
 
-        explicit multilocus_t(const dipvector_t &diploids,
-                              const gcont_t &gametes, const mcont_t &mutations)
-            : base(diploids, gametes, mutations)
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        multilocus_t(diploids_input &&diploids, gametes_input &&gametes,
+                     mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
         {
         }
 
