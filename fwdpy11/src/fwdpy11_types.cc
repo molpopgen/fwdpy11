@@ -676,7 +676,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     
                     :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
                     :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
-                    :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
+                    :param mutations: A :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`
 
                     :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
 
