@@ -76,7 +76,7 @@ Some comments are needed:
 Efficient construction of large populations
 -----------------------------------------------
 
-When building a large population programmatically, a naive approach would leave with with a data copy on both the Python
+When building a large population programmatically, a naive approach would leave us with a data copy on both the Python
 and on the C++ side, which is not ideal.  We can avoid that via class methods that use C++11's move semantics to "steal"
 the data from our input containers. The following example is the same as above, except that we create the function via
 :func:`fwdpy11.fwdpy11_types.SlocusPop.create`:
@@ -104,7 +104,8 @@ the data from our input containers. The following example is the same as above, 
     assert(len(pop.gametes) == 1)
 
 The first three assertions show that the containers that we contstructed are now empty.  Their contents have been moved
-into the population object, avoiding an extra temporary copy.
+into the population object, avoiding an extra temporary copy.  *The create function should be the preferred method of
+constructing populations unless you have a reason to keep the input data around.*
 
 Examples of input errors
 -----------------------------------------------
