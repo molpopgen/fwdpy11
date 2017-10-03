@@ -235,11 +235,17 @@ namespace fwdpy11
         {
         }
 
-        explicit metapop_t(const vdipvector_t &diploids,
-                           const gcont_t &gametes, const mcont_t &mutations)
-            : base(diploids, gametes, mutations)
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        metapop_t(diploids_input &&diploids, gametes_input &&gametes,
+                  mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
         {
         }
+
         //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p)
             : base(p), generation(p.generation)
@@ -307,8 +313,8 @@ namespace fwdpy11
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
         explicit singlepop_gm_vec_t(diploids_input &&diploids,
-                                      gametes_input &&gametes,
-                                      mutations_input &&mutations)
+                                    gametes_input &&gametes,
+                                    mutations_input &&mutations)
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations))
