@@ -33,6 +33,7 @@
 #include <algorithm>
 #include <fwdpp/util.hpp>
 
+
 namespace fwdpy11
 {
     /// This function is similar in name and interface to the current fwdpp
@@ -105,6 +106,7 @@ namespace fwdpy11
                                     || (loc->pos != mutations[i].pos
                                         && loc->g != mutations[i].g))
                                     {
+                                        fixations.insert(loc, mutations[i]);
                                         fixation_times.insert(
                                             fixation_times.begin() + d,
                                             generation);
