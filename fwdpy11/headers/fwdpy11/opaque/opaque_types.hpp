@@ -59,22 +59,28 @@ namespace fwdpy11
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
         //! Constructor
-        diploid_t() noexcept : first(first_type()),
-                               second(second_type()),
-                               label(0),
-                               g(0.),
-                               e(0.),
-                               w(1.)
+        diploid_t() noexcept
+            : first(first_type()), second(second_type()), label(0), g(0.),
+              e(0.), w(1.)
         {
         }
         //! Construct from two indexes to gametes
-        diploid_t(first_type g1, first_type g2) noexcept : first(g1),
-                                                           second(g2),
-                                                           label(0),
-                                                           g(0.),
-                                                           e(0.),
-                                                           w(1.)
+        diploid_t(first_type g1, first_type g2) noexcept
+            : first(g1), second(g2), label(0), g(0.), e(0.), w(1.)
         {
+        }
+
+        diploid_t(first_type g1, first_type g2, std::size_t label_, double g_,
+                  double e_, double w_)
+            : first(g1), second(g2), label(label_), g(g_), e(e_), w(w_)
+        {
+        }
+
+        static inline diploid_t
+        create(first_type g1, first_type g2, std::size_t label_, double g_,
+               double e_, double w_)
+        {
+            return diploid_t(g1, g2, label_, g_, e_, w_);
         }
 
         inline bool

@@ -54,7 +54,7 @@ namespace fwdpy11
                     ((gsl_rng_uniform(rng.get()) < 0.5) ? 1 : 0),
                     ((gsl_rng_uniform(rng.get()) < 0.5) ? 1 : 0), pop.gametes,
                     pop.mutations, pop.neutral, pop.selected, mu.data(),
-                    mmodel, KTfwd::emplace_back());
+                    mmodel);
 				dip[0].label=label++;
                 update(rng, dip, pop, p1, p2);
             }

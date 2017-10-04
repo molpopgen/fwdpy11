@@ -37,14 +37,43 @@
 
 namespace fwdpy11
 {
+    template <typename poptype, typename diploids_input,
+              typename gametes_input, typename mutations_input>
+    inline poptype
+    create_wrapper(diploids_input &&diploids, gametes_input &&gametes,
+                   mutations_input &&mutations)
+    {
+        return poptype(std::forward<diploids_input>(diploids),
+                       std::forward<gametes_input>(gametes),
+                       std::forward<mutations_input>(mutations));
+    }
+
+    template <typename poptype, typename diploids_input,
+              typename gametes_input, typename mutations_input>
+    inline poptype
+    create_wrapper(diploids_input &&diploids, gametes_input &&gametes,
+                   mutations_input &&mutations, mutations_input &fixations,
+                   std::vector<KTfwd::uint_t> &fixation_times,
+                   KTfwd::uint_t generation)
+    {
+        auto rv = create_wrapper<poptype>(
+            std::forward<diploids_input>(diploids),
+            std::forward<gametes_input>(gametes),
+            std::forward<mutations_input>(mutations));
+        rv.fixations.swap(fixations);
+        rv.fixation_times.swap(fixation_times);
+        rv.generation = generation;
+        return rv;
+    }
+
     //! Allows serialization of diploids.
     template <int VERSION> struct diploid_writer
     {
         using result_type = void;
-        //This should really be constexpr. 
-        //Figure it out later:
+        // This should really be constexpr.
+        // Figure it out later:
         const int v;
-        diploid_writer() : v(VERSION){}
+        diploid_writer() : v(VERSION) {}
         template <typename diploid_t, typename streamtype>
         inline result_type
         operator()(const diploid_t &dip, streamtype &o) const
@@ -100,7 +129,7 @@ namespace fwdpy11
       fixation_times: vector<unsigned>, is filled by simulations that "prune"
       fixations when they occur
 
-      \note Internally, fwdppy uses extinct elements in containers for "object
+      \note Internally, fwdpp uses extinct elements in containers for "object
       recycling."
 
       Further:
@@ -128,12 +157,43 @@ namespace fwdpy11
                 }
         }
 
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        singlepop_t(diploids_input &&diploids, gametes_input &&gametes,
+                    mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
+        {
+        }
+
         singlepop_t(const std::string &s) : base(0) { this->deserialize(s); }
 
         singlepop_t(singlepop_t &&) = default;
         singlepop_t(const singlepop_t &) = default;
         singlepop_t &operator=(const singlepop_t &) = default;
         singlepop_t &operator=(singlepop_t &&) = default;
+
+        static singlepop_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<singlepop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static singlepop_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<singlepop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
 
         std::string
         serialize() const
@@ -197,7 +257,7 @@ namespace fwdpy11
       fixation_times: vector<unsigned>, is filled by simulations that "prune"
       fixations when they occur
 
-      \note Internally, fwdppy uses extinct elements in containers for "object
+      \note Internally, fwdpp uses extinct elements in containers for "object
       recycling."
 
       Further:
@@ -224,10 +284,40 @@ namespace fwdpy11
         {
         }
 
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        metapop_t(diploids_input &&diploids, gametes_input &&gametes,
+                  mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
+        {
+        }
+
         //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p)
             : base(p), generation(p.generation)
         {
+        }
+        static metapop_t
+        create(base::vdipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<metapop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static metapop_t
+        create_with_fixations(base::vdipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<metapop_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
         }
         // std::string
         // serialize() const
@@ -286,11 +376,43 @@ namespace fwdpy11
                     throw std::invalid_argument("population size must be > 0");
                 }
         }
+
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        explicit singlepop_gm_vec_t(diploids_input &&diploids,
+                                    gametes_input &&gametes,
+                                    mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
+        {
+        }
+
         explicit singlepop_gm_vec_t(const std::string &s) : base(0)
         {
             this->deserialize(s);
         }
 
+        static singlepop_gm_vec_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<singlepop_gm_vec_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static singlepop_gm_vec_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<singlepop_gm_vec_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
         std::string
         serialize() const
         {
@@ -372,11 +494,41 @@ namespace fwdpy11
                 }
         }
 
+        // Perfect-forwarding constructor:
+        template <typename diploids_input, typename gametes_input,
+                  typename mutations_input>
+        multilocus_t(diploids_input &&diploids, gametes_input &&gametes,
+                     mutations_input &&mutations)
+            : base(std::forward<diploids_input>(diploids),
+                   std::forward<gametes_input>(gametes),
+                   std::forward<mutations_input>(mutations))
+        {
+        }
+
         explicit multilocus_t(const std::string &s) : base({ 0, 0 })
         {
             this->deserialize(s);
         }
 
+        static multilocus_t
+        create(base::dipvector_t &diploids, base::gcont_t &gametes,
+               base::mcont_t &mutations)
+        {
+            return create_wrapper<multilocus_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations));
+        }
+
+        static multilocus_t
+        create_with_fixations(base::dipvector_t &diploids,
+                              base::gcont_t &gametes, base::mcont_t &mutations,
+                              base::mcont_t &fixations,
+                              std::vector<KTfwd::uint_t> &fixation_times,
+                              const KTfwd::uint_t generation)
+        {
+            return create_wrapper<multilocus_t>(
+                std::move(diploids), std::move(gametes), std::move(mutations),
+                fixations, fixation_times, generation);
+        }
         std::string
         serialize() const
         {

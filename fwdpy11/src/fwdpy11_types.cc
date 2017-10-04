@@ -143,6 +143,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
+        .def_static("create",&fwdpy11::diploid_t::create)
         .def_readonly("first", &fwdpy11::diploid_t::first,
                       "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::diploid_t::second,
@@ -156,7 +157,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Index of the diploid in its deme")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
-                return py::make_tuple(d.first, d.second, d.w, d.g, d.e, d.label);
+                return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
+                                      d.label);
             },
             [](py::tuple t) {
                 std::unique_ptr<fwdpy11::diploid_t> d(new fwdpy11::diploid_t(
@@ -512,6 +514,35 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
+        .def(py::init<const fwdpy11::singlepop_t::dipvector_t&,
+                      const fwdpy11::singlepop_t::gcont_t&,
+                      const fwdpy11::singlepop_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
+        .def_static("create", &fwdpy11::singlepop_t::create,
+                    py::arg("diploids"), py::arg("gametes"),
+                    py::arg("mutations"),
+                    R"delim(
+                    Create a new object from input data.
+                    Unlike the constructor method, this method results
+                    in no temporary copies of input data.
+                    
+                    :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
+                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
+                    :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
+
+                    :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPop`
+
+                    .. versionadded:: 0.1.4
+
+                    .. note::
+                        See :ref:`popobjects` for example use.
+                    )delim")
+        .def_static("create_with_fixations",
+                    &fwdpy11::singlepop_t::create_with_fixations)
         .def("clear", &fwdpy11::singlepop_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
@@ -553,9 +584,38 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
+        .def(py::init<const fwdpy11::multilocus_t::dipvector_t&,
+                      const fwdpy11::multilocus_t::gcont_t&,
+                      const fwdpy11::multilocus_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
         .def(py::init<unsigned, unsigned,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
+        .def_static("create", &fwdpy11::multilocus_t::create,
+                    py::arg("diploids"), py::arg("gametes"),
+                    py::arg("mutations"),
+                    R"delim(
+                    Create a new object from input data.
+                    Unlike the constructor method, this method results
+                    in no temporary copies of input data.
+                    
+                    :param diplods: A :class:`fwdpy11.fwdpy11_types.VecDiploidContainer`
+                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
+                    :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
+
+                    :rtype: :class:`fwdpy11.fwdpy11_types.MlocusPop`
+
+                    .. versionadded:: 0.1.4
+
+                    .. note::
+                        See :ref:`popobjects` for example use.
+                    )delim")
+        .def_static("create_with_fixations",
+                    &fwdpy11::multilocus_t::create_with_fixations)
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -599,6 +659,35 @@ PYBIND11_MODULE(fwdpy11_types, m)
         "the mutation type.")
         .def(py::init<unsigned>(), py::arg("N"),
              "Construct object with N diploids.")
+        .def(py::init<const fwdpy11::singlepop_gm_vec_t::dipvector_t&,
+                      const fwdpy11::singlepop_gm_vec_t::gcont_t&,
+                      const fwdpy11::singlepop_gm_vec_t::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             ..versionadded:: 0.1.4
+             )delim")
+        .def_static("create", &fwdpy11::singlepop_gm_vec_t::create,
+                    py::arg("diploids"), py::arg("gametes"),
+                    py::arg("mutations"),
+                    R"delim(
+                    Create a new object from input data.
+                    Unlike the constructor method, this method results
+                    in no temporary copies of input data.
+                    
+                    :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
+                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
+                    :param mutations: A :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`
+
+                    :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
+
+                    .. versionadded:: 0.1.4
+
+                    .. note::
+                        See :ref:`popobjects` for example use.
+                    )delim")
+        .def_static("create_with_fixations",
+                    &fwdpy11::singlepop_gm_vec_t::create_with_fixations)
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
