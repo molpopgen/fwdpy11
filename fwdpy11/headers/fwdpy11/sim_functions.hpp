@@ -27,6 +27,7 @@
   moved over to fwdpp.
 */
 
+#include <tuple>
 #include <type_traits>
 #include <vector>
 #include <algorithm>
@@ -40,9 +41,9 @@ namespace fwdpy11
     /// for recycling or not.
     ///
     /// It differs from the current fwdpp version in that:
-    /// 1. It uses std::upper_bound to make sure that fixations/fixation times
+    /// 1. It uses std::lower_bound to make sure that fixations/fixation times
     /// are sorted by position
-    /// 2. It uses binary searches (again, upper_bound) to guard against
+    /// 2. It uses binary searches (again, lower_bound) to guard against
     /// re-inserting the same non-neutral fixation over and over.
     ///
     /// The reason for these changes is that the use case is sims of
@@ -75,13 +76,14 @@ namespace fwdpy11
                 assert(mcounts[i] <= twoN);
                 if (mcounts[i] == twoN)
                     {
-                        auto loc = std::upper_bound(
+                        auto loc = std::lower_bound(
                             fixations.begin(), fixations.end(),
-                            mutations[i].pos,
-                            [](const double &__value,
-                               const typename fixation_container_t::value_type
-                                   &__mut) noexcept {
-                                return __value < __mut.pos;
+                            std::make_tuple(mutations[i].pos, mutations[i].g),
+                            [](const typename fixation_container_t::value_type
+                                   &mut,
+                               const std::tuple<double, std::uint32_t>
+                                   &value) noexcept {
+                                return std::tie(mut.pos,mut.g) < value;
                             });
                         auto d = std::distance(fixations.begin(), loc);
                         if (mutations[i].neutral
@@ -103,7 +105,6 @@ namespace fwdpy11
                                     || (loc->pos != mutations[i].pos
                                         && loc->g != mutations[i].g))
                                     {
-                                        fixations.insert(loc, mutations[i]);
                                         fixation_times.insert(
                                             fixation_times.begin() + d,
                                             generation);
