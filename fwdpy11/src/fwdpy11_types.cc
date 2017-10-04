@@ -143,6 +143,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
+        .def_static("create",&fwdpy11::diploid_t::create)
         .def_readonly("first", &fwdpy11::diploid_t::first,
                       "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::diploid_t::second,
