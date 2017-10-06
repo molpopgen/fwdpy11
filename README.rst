@@ -119,6 +119,13 @@ then that is because we identified a bug and pushed a new release before the bio
 That's life.
 
 
+Enabling debugging symbols in the C++ code
+------------------------------------------------------------------
+
+.. code_block:: bash
+
+    python setup.py build_ext -i --debug
+
 Enabling assertions in the C++ code
 ------------------------------------------------------------------
 
@@ -127,10 +134,10 @@ enable them when hacking the code.  To do so:
 
 .. code-block:: bash
 
-    python setup.py build_ext -i --debug
+    python setup.py build_ext -i --assert
 
 .. note::
-    Never install the package compiled in debug mode!  First, things will run much more slowly.  
+    Never install the package compiled in assert mode!  First, things will run much more slowly.  
     Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
     exist as a brute-force method to help developers quickly identify bugs.
 

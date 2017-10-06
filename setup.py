@@ -33,6 +33,12 @@ if '--debug' in sys.argv:
 else:
     DEBUG_MODE = False
 
+if '--assert' in sys.argv:
+    ASSERT_MODE = True
+    sys.argv.remove('--assert')
+else:
+    ASSERT_MODE = False
+
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -217,7 +223,7 @@ class BuildExt(build_ext):
                 opts.append('-fvisibility=hidden')
             if has_flag(self.compiler, '-g0') and DEBUG_MODE is False:
                 opts.append('-g0')
-            if DEBUG_MODE is True:
+            if ASSERT_MODE is True:
                 opts.append('-UNDEBUG')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' %
