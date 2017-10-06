@@ -57,14 +57,14 @@ evolve_singlepop_regions_qtrait_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if (!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is_none())
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if (!noise_updater.is(py::none()))
+    if (!noise_updater.is_none())
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -166,14 +166,14 @@ evolve_qtrait_mloc_regions_cpp(
 {
     bool updater_exists = false;
     py::function updater;
-    if (!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is_none())
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if (!noise_updater.is(py::none()))
+    if (!noise_updater.is_none())
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
