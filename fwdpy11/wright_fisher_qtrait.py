@@ -140,12 +140,15 @@ def _evolve_slocus(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
+    prune_selected = None
+    if params.prune_selected is not None:
+        prune_selected = params.prune_selected
     evolve_singlepop_regions_qtrait_cpp(rng, pop, params.demography,
                                         params.mutrate_n, params.mutrate_s,
                                         params.recrate, mm, rm,
                                         params.gvalue, recorder,
                                         params.pself, params.trait2w, updater,
-                                        noise, noise_updater)
+                                        noise, noise_updater, prune_selected)
 
 
 def _evolve_mlocus(rng, pop, params, recorder=None):
@@ -175,6 +178,9 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
     if recorder is None:
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
+    prune_selected = None
+    if params.prune_selected is not None:
+        prune_selected = params.prune_selected
     evolve_qtrait_mloc_regions_cpp(rng, pop, params.demography,
                                    params.mutrates_n, params.mutrates_s,
                                    params.recrates, mm, rm, params.interlocus,
@@ -183,7 +189,8 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
                                    params.pself,
                                    params.aggregator,
                                    params.trait2w,
-                                   updater, noise, noise_updater)
+                                   updater, noise, noise_updater,
+                                   prune_selected)
 
 
 def evolve(rng, pop, params, recorder=None):
