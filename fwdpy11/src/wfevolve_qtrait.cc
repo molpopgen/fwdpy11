@@ -238,7 +238,7 @@ evolve_qtrait_mloc_regions_cpp(
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
             auto N_next = popsizes.at(i);
-            if (remove_selected_fixations)
+            if (!remove_selected_fixations)
                 {
                     fwdpy11::evolve_generation(
                         rng, pop, N_next, total_mut_rates, bound_mmodels,
