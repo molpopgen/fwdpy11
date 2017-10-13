@@ -69,11 +69,10 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
          'trait2w': GSS(1, 0)
          }
     pop = SlocusPop(N)
-    params = SlocusParamsQ(**p)
-    return (pop,params)
+    return (pop, p)
+
 
 def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
-    from fwdpy11.model_params import MlocusParamsQ
     from fwdpy11 import MlocusPop
     from fwdpy11.wright_fisher_qtrait import GSS
     from fwdpy11.regions import GaussianS, Region
@@ -108,22 +107,25 @@ def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
                   'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSS(1, 0),
-                  'demography': nlist}
-    params = MlocusParamsQ(**param_dict)
+                  'demography': nlist,
+                  'prune_selected': False
+                  }
     pop = MlocusPop(N, nloci, locus_boundaries)
-    return (pop, params)
+    return (pop, param_dict)
 
 
 def quick_mlocus_qtrait(N=1000, simlen=100):
     from fwdpy11 import GSLrng
     from fwdpy11.wright_fisher_qtrait import evolve
+    from fwdpy11.model_params import MlocusParamsQ
     rng = GSLrng(42)
-    pop, params = quick_mlocus_qtrait_pop_params(N, simlen)
+    pop, param_dict = quick_mlocus_qtrait_pop_params(N, simlen)
+    params = MlocusParamsQ(**param_dict)
     evolve(rng, pop, params)
     return pop
 
 
-def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100):
+def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100, prune_selected=False):
     """
     .. warning:: May result in long-running tests
     """
@@ -163,7 +165,8 @@ def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100):
                   'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSSmo([(0, 0, 1), (simlen / 2, 1, 1)]),
-                  'demography': nlist}
+                  'demography': nlist,
+                  'prune_selected': prune_selected}
     params = MlocusParamsQ(**param_dict)
     pop = MlocusPop(N, nloci, locus_boundaries)
     evolve(rng, pop, params)

@@ -43,7 +43,7 @@ class testFixationsAreSortedQtraitSim(unittest.TestCase):
 
     @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
                      "Skipping this test on Travis CI.")
-    def test_sorted_fixations_MlocusPopQtrait(self):
+    def test_sorted_fixations_MlocusPopQtrait_with_pruning(self):
         pop = quick_mlocus_qtrait_change_optimum(N=1000, simlen=10000)
         self.assertTrue(len(pop.fixations) > 0)
         self.assertEqual(len(pop.fixations), len(pop.fixation_times))
@@ -58,12 +58,39 @@ class testFixationsAreSortedQtraitSim(unittest.TestCase):
             # These non-neutral fixations
             # must still be found in the pop.
             self.assertTrue(any(i.key == ni for i in pop.mutations))
+        neutral_fixations = [i.key for i in pop.fixations if i.neutral is True]
+        self.assertTrue(len(neutral_fixations) > 0)
+        for ni in neutral_fixations:
+            self.assertTrue(any(i.key == ni for i in pop.mutations) is False)
 
+    @unittest.skipIf("TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+                     "Skipping this test on Travis CI.")
+    def test_sorted_fixations_MlocusPopQtrait_without_pruning(self):
+        pop = quick_mlocus_qtrait_change_optimum(N=1000, simlen=10000, prune_selected = True)
+        self.assertTrue(len(pop.fixations) > 0)
+        self.assertEqual(len(pop.fixations), len(pop.fixation_times))
+        fpos = [i.pos for i in pop.fixations]
+        self.assertTrue(sorted(fpos))
+        non_neutral_fixations = [
+            i.key for i in pop.fixations if i.neutral is False]
+        # If this test fails, we have sim parameters
+        # that are not useful for testing:
+        self.assertTrue(len(non_neutral_fixations) > 0)
+        for ni in non_neutral_fixations:
+            # These non-neutral fixations
+            # must not be found in the pop.
+            self.assertTrue(any(i.key == ni for i in pop.mutations) is False)
+        neutral_fixations = [i.key for i in pop.fixations if i.neutral is True]
+        self.assertTrue(len(neutral_fixations) > 0)
+        for ni in neutral_fixations:
+            self.assertTrue(any(i.key == ni for i in pop.mutations) is False)
 
 class tests_MultipleFixationsAtPosition(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop, self.params = quick_slocus_qtrait_pop_params()
+        from fwdpy11.model_params import SlocusParamsQ
+        self.pop, self.pdict = quick_slocus_qtrait_pop_params()
+        self.params = SlocusParamsQ(**self.pdict)
         self.params.demography = np.array([self.pop.N], dtype=np.uint32)
         self.params.mutrate_n = 0.0  # disallow neutral mutations
         self.rng = fwdpy11.GSLrng(42)
