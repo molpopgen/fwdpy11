@@ -21,9 +21,10 @@ class GaussianNoiseUpdater(GaussianNoise):
     def update(self, generation):
         self.ncalls += 1
 
+
 class GSSupdater(GSS):
     def __init__(self, VS, O):
-        super(GSSupdater, self).__init__(VS,O)
+        super(GSSupdater, self).__init__(VS, O)
         self.ncalls = 0
 
     def update(self, pop):
@@ -37,7 +38,7 @@ class testNoiseUpdater(unittest.TestCase):
         pop, pdict = quick_mlocus_qtrait_pop_params()
         self.params = MlocusParamsQ(**pdict)
         n = GaussianNoiseUpdater(rng, 0.1)
-        trait2w = GSSupdater(1.0,0)
+        trait2w = GSSupdater(1.0, 0)
         self.params.noise = n
         self.params.trait2w = trait2w
         evolve(rng, pop, self.params)
