@@ -68,7 +68,6 @@ class ModelParams(object):
                 setattr(self, key, value)
             elif key not in dir(self):
                 raise ValueError(key, " not a valid parameter for this class.")
-
     @property
     def nregions(self):
         """
