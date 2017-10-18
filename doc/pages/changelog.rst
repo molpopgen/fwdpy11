@@ -15,10 +15,18 @@ API changes/new features:
 
 * The 'label' field of :class:`fwdpy11.regions.Region` (and :class:`fwdpy11.regions.Sregions`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
+* Population objects may now be constructed programatically.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`
 
 Back-end changes
 ------------------------
 
+* :func:`fwdpy11.wright_fisher_qtrait.evolve` has been updated to allow "standard popgen" models of multi-locus
+  evolution. This change is a stepping stone to a future global simplification of the API.`PR #42 <https://github.com/molpopgen/fwdpy11/pull/42>` 
+* The :class:`fwdpy11.regions.Sregion` now store their callback data differently.  The result is a type that can be
+  pickled in Python 3.6. `PR #39 <https://github.com/molpopgen/fwdpy11/pull/39>` 
+* Travis builds are now Linux only and test many Python/GCC combos. `PR #38 <https://github.com/molpopgen/fwdpy11/pull/38>`
+* The doctests are now run on Travis. `PR #30 <https://github.com/molpopgen/fwdpy11/pull/30>` 
+* Update to fwdpp_ 0.5.7  `PR #33 <https://github.com/molpopgen/fwdpy11/pull/33>`
 * The method to keep fixations sorted has been updated so that the sorting is by position and fixation time. `PR #33 <https://github.com/molpopgen/fwdpy11/pull/33>`_
 * fwdpy11.regions are now based on the @property/@foo.setter idiom for safety and code reuse.  `PR #21 <https://github.com/molpopgen/fwdpy11/pull/21>`_
 * Doctests are now run on Travis `PR #30 <https://github.com/molpopgen/fwdpy11/pull/30>`_
