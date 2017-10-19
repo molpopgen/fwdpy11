@@ -130,25 +130,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
-          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
-          py::arg("removeFixed") = true);
-
-#define SAMPLE_RANDOM(POPTYPE, CLASSTYPE)                                     \
-    m.def("sample",                                                           \
-          [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
-             const KTfwd::uint_t samplesize, const bool removeFixed) {        \
-              return KTfwd::sample(rng.get(), pop, samplesize, removeFixed);  \
-          },                                                                  \
-          "Take a sample of :math:`n` chromosomes from a population "         \
-          "(`n/2` diploids.\n\n"                                              \
-          ":param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`\n"             \
-          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
-          ":param samplesize: (int) The sample size.\n"                       \
-          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
-          "include fixations.\n"                                              \
-          ":rtype: list\n\n"                                                  \
-          ":return: A list with neutral and selected variants combined.\n",   \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
           py::arg("removeFixed") = true);
 
@@ -165,50 +148,158 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
-#define SAMPLE_IND(POPTYPE, CLASSTYPE)                                        \
-    m.def("sample",                                                           \
-          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
-             const bool removeFixed) {                                        \
-              return KTfwd::sample(pop, individuals, removeFixed);            \
-          },                                                                  \
-          "Take a sample of specific individuals from a population.\n\n "     \
-          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
-          ":param individuals : (list of int) Indexes of individuals.\n"      \
-          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
-          "include fixations.\n"                                              \
-          ":rtype: list\n\n"                                                  \
-          ":return: A list with neutral and selected mutations combined.\n",  \
-          py::arg("pop"), py::arg("individuals"),                             \
-          py::arg("removeFixed") = true);
+template <typename poptype>
+auto
+sample_separate_wrapper(const poptype &pop, py::object &rng_,
+                        py::object &nsam_, py::object &individuals_,
+                        const bool &removeFixed)
+    -> decltype(KTfwd::sample_separate(rng_.cast<fwdpy11::GSLrng_t>().get(),
+                                       pop, nsam_.cast<unsigned>(),
+                                       removeFixed))
+{
+    if (nsam_.is_none())
+        {
+            auto ind = individuals_.cast<std::vector<std::size_t>>();
+            return KTfwd::sample_separate(pop, ind, removeFixed);
+        }
+    auto nsam = nsam_.cast<KTfwd::uint_t>();
+    auto rng = rng_.cast<fwdpy11::GSLrng_t *>();
+    return KTfwd::sample_separate(rng->get(), pop, nsam, removeFixed);
+}
+
+template <typename poptype>
+auto
+sample_wrapper(const poptype &pop, py::object &rng_, py::object &nsam_,
+               py::object &individuals_, const bool &removeFixed)
+    -> decltype(KTfwd::sample(rng_.cast<fwdpy11::GSLrng_t>().get(), pop,
+                              nsam_.cast<unsigned>(), removeFixed))
+{
+    if (nsam_.is_none())
+        {
+            auto ind = individuals_.cast<std::vector<std::size_t>>();
+            return KTfwd::sample(pop, ind, removeFixed);
+        }
+    auto nsam = nsam_.cast<KTfwd::uint_t>();
+    auto rng = rng_.cast<fwdpy11::GSLrng_t *>();
+    return KTfwd::sample(rng->get(), pop, nsam, removeFixed);
+}
 
 PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
 
+    m.def("sample",
+          [](const fwdpy11::singlepop_t &pop, py::object rng_,
+             py::object nsam_, py::object individuals_, const bool separate,
+             const bool removeFixed) -> py::object {
+              if (separate)
+                  {
+                      auto s = sample_separate_wrapper<fwdpy11::singlepop_t>(
+                          pop, rng_, nsam_, individuals_, removeFixed);
+                      return py::make_tuple(std::move(s.first),
+                                            std::move(s.second));
+                  }
+              auto s = sample_wrapper(pop, rng_, nsam_, individuals_,
+                                      removeFixed);
+              py::list rv;
+              for (auto &&i : s)
+                  {
+                      rv.append(py::make_tuple(i.first, i.first));
+                  }
+              return rv;
+          },
+          py::arg("pop"), py::arg("rng") = nullptr, py::arg("nsam") = nullptr,
+          py::arg("individuals") = nullptr, py::arg("separate") = true,
+          py::arg("remove_fixed") = true,
+          R"delim(
+          Take a sample from a population.
+
+          :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
+          :param rng: (None) A :class:`fwdpy11.fwdpy11_types.GSLrng_t`
+          :param nsam: (None) An integer representing the sample size.
+          :param individuals: (None) List of individuals to sample.
+          :param separate: (True) Whether or not to separate neutral and non-neutral variants.
+          :param remove_fixed: (True) Whether or not to include variants fixed in the sample.
+
+          This function will return either a random sample of size ``nsam``,
+          or a sample based on a predetermined set of individuals.  In the 
+          former case, the ``rng`` and ``nsam`` parameters are required. In
+          the latter, only ``individuals`` is required.
+
+          :rtype: A list (when ``separate`` is ``False``).  Otherwise a tuple of lists.
+          )delim");
+
+    m.def("sample",
+          [](const fwdpy11::multilocus_t &pop, py::object rng_,
+             py::object nsam_, py::object individuals_, const bool separate,
+             const bool removeFixed) -> py::object {
+              if (separate)
+                  {
+                      auto s = sample_separate_wrapper<fwdpy11::multilocus_t>(
+                          pop, rng_, nsam_, individuals_, removeFixed);
+                      py::list rv;
+                      for (auto &si : s)
+                          {
+                              rv.append(std::move(si));
+                          }
+                      return rv;
+                  }
+              auto s = sample_wrapper(pop, rng_, nsam_, individuals_,
+                                      removeFixed);
+              py::list rv;
+              for (auto &&i : s)
+                  {
+                      rv.append(std::move(i));
+                  }
+              return rv;
+          },
+          py::arg("pop"), py::arg("rng") = nullptr, py::arg("nsam") = nullptr,
+          py::arg("individuals") = nullptr, py::arg("separate") = true,
+          py::arg("remove_fixed") = true);
+
+    m.def(
+        "sample",
+        [](const fwdpy11::singlepop_gm_vec_t &pop, py::object rng_,
+           py::object nsam_, py::object individuals_, const bool separate,
+           const bool removeFixed) -> py::object {
+            if (separate)
+                {
+                    auto s
+                        = sample_separate_wrapper<fwdpy11::singlepop_gm_vec_t>(
+                            pop, rng_, nsam_, individuals_, removeFixed);
+                    return py::make_tuple(std::move(s.first),
+                                          std::move(s.second));
+                }
+            auto s
+                = sample_wrapper(pop, rng_, nsam_, individuals_, removeFixed);
+            py::list rv;
+            for (auto &&i : s)
+                {
+                    rv.append(py::make_tuple(i.first, i.first));
+                }
+            return rv;
+        },
+        py::arg("pop"), py::arg("rng") = nullptr, py::arg("nsam") = nullptr,
+        py::arg("individuals") = nullptr, py::arg("separate") = true,
+        py::arg("remove_fixed") = true);
+
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
                            "fwdpy11.fwdpy11_types.SlocusPop")
-    SAMPLE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
                            "fwdpy11.fwdpy11_types.MlocusPop")
-    SAMPLE_RANDOM(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
                            "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
-    SAMPLE_RANDOM(fwdpy11::singlepop_gm_vec_t,
-                  "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
                         "fwdpy11.fwdpy11_types.SlocusPop")
-    SAMPLE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
                         "fwdpy11.fwdpy11_types.MlocusPop")
-    SAMPLE_IND(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
                         "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
-    SAMPLE_IND(fwdpy11::singlepop_gm_vec_t,
-               "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
     py::bind_vector<std::vector<std::int8_t>>(m, "Vec8", py::buffer_protocol(),
                                               py::module_local(false));
@@ -261,12 +352,13 @@ PYBIND11_MODULE(sampling, m)
         .def_readonly("selected_positions",
                       &KTfwd::data_matrix::selected_positions,
                       "The list of selected mutation positions.")
-        .def_readonly(
-            "neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
-            "The list of population frequencies of neutral mutations.")
-        .def_readonly(
-            "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
-            "The list of population frequencies of selected mutations.")
+        .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
+                      "The list of population frequencies of "
+                      "neutral mutations.")
+        .def_readonly("selected_popfreq",
+                      &KTfwd::data_matrix::selected_popfreq,
+                      "The list of population frequencies of "
+                      "selected mutations.")
         .def("ndim_neutral",
              [](const KTfwd::data_matrix &dm) {
                  return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
