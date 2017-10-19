@@ -220,7 +220,7 @@ PYBIND11_MODULE(sampling, m)
           Take a sample from a population.
 
           :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
-          :param rng: (None) A :class:`fwdpy11.fwdpy11_types.GSLrng_t`
+          :param rng: (None) A :class:`fwdpy11.fwdpy11_types.GSLrng`
           :param nsam: (None) An integer representing the sample size.
           :param individuals: (None) List of individuals to sample.
           :param separate: (True) Whether or not to separate neutral and non-neutral variants.
@@ -232,6 +232,17 @@ PYBIND11_MODULE(sampling, m)
           the latter, only ``individuals`` is required.
 
           :rtype: A list (when ``separate`` is ``False``).  Otherwise a tuple of lists.
+
+          :return: See Note
+
+          .. note::
+            The lists returned contain tuples of (position, data).  There is one
+            tuple per site, and the data are a string encoded as 0 = ancestral, 
+            1 = derived.  The data are ordered by diploid.  When ``individuals``
+            is used, the order of the diploids in the output is the same as 
+            the input order. When ``separate`` is ``True``, the tuple returned has 
+            two elements.  The first element is genotypes at neutral sites. 
+            The second is genotypes at selected sites.
           )delim");
 
     m.def("sample",
@@ -260,7 +271,38 @@ PYBIND11_MODULE(sampling, m)
           },
           py::arg("pop"), py::arg("rng") = nullptr, py::arg("nsam") = nullptr,
           py::arg("individuals") = nullptr, py::arg("separate") = true,
-          py::arg("remove_fixed") = true);
+          py::arg("remove_fixed") = true,
+          R"delim(
+          Take a sample from a population.
+
+          :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
+          :param rng: (None) A :class:`fwdpy11.fwdpy11_types.GSLrng`
+          :param nsam: (None) An integer representing the sample size.
+          :param individuals: (None) List of individuals to sample.
+          :param separate: (True) Whether or not to separate neutral and non-neutral variants.
+          :param remove_fixed: (True) Whether or not to include variants fixed in the sample.
+
+          This function will return either a random sample of size ``nsam``,
+          or a sample based on a predetermined set of individuals.  In the 
+          former case, the ``rng`` and ``nsam`` parameters are required. In
+          the latter, only ``individuals`` is required.
+
+          :rtype: list
+
+          :return: See Note
+
+          .. note::
+            The list returned has one element per locus.  When ``separate`` is 
+            false, the data for each locus is a set of tuples (position, data).
+            There is one tuple per site, and the data are a string encoded 
+            as 0 = ancestral, 1 = derived. When ``separate`` is true, there
+            is a tuple containing two such lists per locus.  The first list
+            is for neutral sites and the second for selected mutations.
+
+            For each site, the data are ordered by diploid.  When ``individuals`` 
+            is used, the order of the diploids in the output is the same as 
+            the input order.
+          )delim");
 
     m.def(
         "sample",
@@ -286,7 +328,35 @@ PYBIND11_MODULE(sampling, m)
         },
         py::arg("pop"), py::arg("rng") = nullptr, py::arg("nsam") = nullptr,
         py::arg("individuals") = nullptr, py::arg("separate") = true,
-        py::arg("remove_fixed") = true);
+        py::arg("remove_fixed") = true,
+        R"delim(
+          Take a sample from a population.
+
+          :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
+          :param rng: (None) A :class:`fwdpy11.fwdpy11_types.GSLrng`
+          :param nsam: (None) An integer representing the sample size.
+          :param individuals: (None) List of individuals to sample.
+          :param separate: (True) Whether or not to separate neutral and non-neutral variants.
+          :param remove_fixed: (True) Whether or not to include variants fixed in the sample.
+
+          This function will return either a random sample of size ``nsam``,
+          or a sample based on a predetermined set of individuals.  In the 
+          former case, the ``rng`` and ``nsam`` parameters are required. In
+          the latter, only ``individuals`` is required.
+
+          :rtype: A list (when ``separate`` is ``False``).  Otherwise a tuple of lists.
+
+          :return: See Note
+
+          .. note::
+            The lists returned contain tuples of (position, data).  There is one
+            tuple per site, and the data are a string encoded as 0 = ancestral, 
+            1 = derived.  The data are ordered by diploid.  When ``individuals``
+            is used, the order of the diploids in the output is the same as 
+            the input order. When ``separate`` is ``True``, the tuple returned has 
+            two elements.  The first element is genotypes at neutral sites. 
+            The second is genotypes at selected sites.
+        )delim");
 
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
                            "fwdpy11.fwdpy11_types.SlocusPop")
