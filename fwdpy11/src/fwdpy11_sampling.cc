@@ -114,10 +114,6 @@ separate_samples_by_loci(
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
-PYBIND11_MODULE(sampling, m)
-{
-    m.doc() = "Taking samples from populations";
-
 #define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
     m.def("sample_separate",                                                  \
           [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
@@ -138,6 +134,24 @@ PYBIND11_MODULE(sampling, m)
           py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
           py::arg("removeFixed") = true);
 
+#define SAMPLE_RANDOM(POPTYPE, CLASSTYPE)                                     \
+    m.def("sample",                                                           \
+          [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
+             const KTfwd::uint_t samplesize, const bool removeFixed) {        \
+              return KTfwd::sample(rng.get(), pop, samplesize, removeFixed);  \
+          },                                                                  \
+          "Take a sample of :math:`n` chromosomes from a population "         \
+          "(`n/2` diploids.\n\n"                                              \
+          ":param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`\n"             \
+          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
+          ":param samplesize: (int) The sample size.\n"                       \
+          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
+          "include fixations.\n"                                              \
+          ":rtype: list\n\n"                                                  \
+          ":return: A list with neutral and selected variants combined.\n",   \
+          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
+          py::arg("removeFixed") = true);
+
 #define SAMPLE_SEPARATE_IND(POPTYPE, CLASSTYPE)                               \
     m.def("sample_separate",                                                  \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
@@ -155,18 +169,46 @@ PYBIND11_MODULE(sampling, m)
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
+#define SAMPLE_IND(POPTYPE, CLASSTYPE)                                        \
+    m.def("sample",                                                           \
+          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
+             const bool removeFixed) {                                        \
+              return KTfwd::sample(pop, individuals, removeFixed);            \
+          },                                                                  \
+          "Take a sample of specific individuals from a population.\n\n "     \
+          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
+          ":param individuals : (list of int) Indexes of individuals.\n"      \
+          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
+          "include fixations.\n"                                              \
+          ":rtype: list\n\n"                                                  \
+          ":return: A list with neutral and selected mutations combined.\n",  \
+          py::arg("pop"), py::arg("individuals"),                             \
+          py::arg("removeFixed") = true);
+
+PYBIND11_MODULE(sampling, m)
+{
+    m.doc() = "Taking samples from populations";
+
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
                            "fwdpy11.fwdpy11_types.SlocusPop")
+    SAMPLE_RANDOM(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
                            "fwdpy11.fwdpy11_types.MlocusPop")
+    SAMPLE_RANDOM(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
                            "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+    SAMPLE_RANDOM(fwdpy11::singlepop_gm_vec_t,
+                  "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
                         "fwdpy11.fwdpy11_types.SlocusPop")
+    SAMPLE_IND(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
                         "fwdpy11.fwdpy11_types.MlocusPop")
+    SAMPLE_IND(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
                         "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+    SAMPLE_IND(fwdpy11::singlepop_gm_vec_t,
+               "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
     py::bind_vector<std::vector<std::int8_t>>(m, "Vec8", py::buffer_protocol(),
                                               py::module_local(false));
