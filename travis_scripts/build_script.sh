@@ -12,8 +12,8 @@ then
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;
     export CPPFLAGS="-I$HOME/miniconda/include $CPPFLAGS"
     export LDFLAGS="-L$HOME/miniconda/lib $LDFLAGS"
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then python setup.py build_ext -i; fi
-    if [ "$TRAVIS_OS_NAME" == "linux" ];then python -m unittest discover -v tests; fi
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; then CC=$CC CXX=$CXX python setup.py build_ext -i; fi
+    if [ "$TRAVIS_OS_NAME" == "linux" ];then CC=$CC CXX=$CXX python -m unittest discover -v tests; fi
     if [ "$TRAVIS_OS_NAME" == "linux" ];then cd doc && make doctest; fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then python setup.py build_ext -i; fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python setup.py build_ext -i --gcc; fi
