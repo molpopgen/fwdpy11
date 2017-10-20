@@ -24,7 +24,7 @@ then
         exit 1
     fi
 else
-    python setup.py build_ext -i
+    CC=$CC CXX=$CXX python setup.py build_ext -i
     if [ "$?" != "0" ];
     then
         exit 1
