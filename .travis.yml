@@ -23,6 +23,20 @@ matrix:
       addons:
           apt_packages:
             - pandoc
+
+    - os: linux
+      dist: trusty
+      python: 3.6
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - pandoc
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
 #    - os: osx 
 #      osx_image: xcode8.3
 #      env: OSXGCC=1 # Test build with conda's gcc on OS X
