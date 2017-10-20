@@ -23,6 +23,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types.hpp>
+#include <fwdpp/fwdpp/sugar/sampling.hpp>
 
 namespace py = pybind11;
 
@@ -143,7 +144,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_static("create",&fwdpy11::diploid_t::create)
+        .def_static("create", &fwdpy11::diploid_t::create)
         .def_readonly("first", &fwdpy11::diploid_t::first,
                       "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::diploid_t::second,
@@ -576,7 +577,94 @@ PYBIND11_MODULE(fwdpy11_types, m)
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
-                const fwdpy11::singlepop_t& rhs) { return lhs == rhs; });
+                const fwdpy11::singlepop_t& rhs) { return lhs == rhs; })
+        .def("sample",
+             [](const fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
+                const std::int64_t nsam, const bool separate,
+                const bool remove_fixed) -> py::object {
+                 if (nsam <= 0)
+                     {
+                         throw std::invalid_argument(
+                             "sample size must be > 0");
+                     }
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
+                                                         remove_fixed);
+                         auto t = py::make_tuple(std::move(s.first),
+                                                 std::move(s.second));
+                         return t;
+                     }
+                 py::list rv;
+                 auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
+                 for (auto& i : s)
+                     {
+                         rv.append(i);
+                     }
+                 return rv;
+             },
+             py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
+             Sample random diploids *with replacement*.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+
+             .. note::
+                If you want sampling *without* replacement, see
+                :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample_ind`.
+             )delim")
+        .def("sample_ind",
+             [](const fwdpy11::singlepop_t& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool separate, const bool remove_fixed) -> py::object {
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(pop, individuals,
+                                                         remove_fixed);
+                         auto t = py::make_tuple(std::move(s.first),
+                                                 std::move(s.second));
+                         return t;
+                     }
+                 py::list rv;
+                 auto s = KTfwd::sample(pop, individuals, remove_fixed);
+                 for (auto& i : s)
+                     {
+                         rv.append(i);
+                     }
+                 return rv;
+             },
+             py::arg("individuals"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
+             Sample specific diploids.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param individuals: The individuals to sample.
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The final sample size is ``2*len(individuals)``.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+             )delim");
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
         m, "MlocusPop", "Representation of a multi-locus, single "
@@ -648,7 +736,102 @@ PYBIND11_MODULE(fwdpy11_types, m)
             }))
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
-                const fwdpy11::multilocus_t& rhs) { return lhs == rhs; });
+                const fwdpy11::multilocus_t& rhs) { return lhs == rhs; })
+        .def(
+            "sample",
+            [](const fwdpy11::multilocus_t& pop, const fwdpy11::GSLrng_t& rng,
+               const std::int64_t nsam, const bool separate,
+               const bool remove_fixed) -> py::object {
+                if (nsam <= 0)
+                    {
+                        throw std::invalid_argument("sample size must be > 0");
+                    }
+                if (separate)
+                    {
+                        auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
+                                                        remove_fixed);
+                        py::list rv;
+                        for (auto& i : s)
+                            {
+                                rv.append(py::make_tuple(std::move(i.first),
+                                                         std::move(i.second)));
+                            }
+                        return rv;
+                    }
+                py::list rv;
+                auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
+                for (auto& i : s)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
+            py::arg("remove_fixed") = true,
+            R"delim(
+             Sample random diploids *with replacement*.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+
+             .. note::
+                If you want sampling *without* replacement, see
+                :func:`~fwdpy11.fwdpy11_types.MlocusPop.sample_ind`.
+             )delim")
+        .def("sample_ind",
+             [](const fwdpy11::multilocus_t& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool separate, const bool remove_fixed) -> py::object {
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(pop, individuals,
+                                                         remove_fixed);
+                         py::list rv;
+                         for (auto& i : s)
+                             {
+                                 rv.append(py::make_tuple(
+                                     std::move(i.first), std::move(i.second)));
+                                 return rv;
+                             }
+                     }
+                 py::list rv;
+                 auto s = KTfwd::sample(pop, individuals, remove_fixed);
+                 for (auto& i : s)
+                     {
+                         rv.append(i);
+                     }
+                 return rv;
+             },
+             py::arg("individuals"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
+             Sample specific diploids.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param individuals: The individuals to sample.
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The final sample size is ``2*len(individuals)``.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+             )delim");
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
                singlepop_generalmut_vec_sugar_base>(
@@ -719,8 +902,94 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
                     new fwdpy11::singlepop_gm_vec_t(s));
             }))
-        .def("__eq__", [](const fwdpy11::singlepop_gm_vec_t& lhs,
-                          const fwdpy11::singlepop_gm_vec_t& rhs) {
-            return lhs == rhs;
-        });
+        .def("__eq__",
+             [](const fwdpy11::singlepop_gm_vec_t& lhs,
+                const fwdpy11::singlepop_gm_vec_t& rhs) { return lhs == rhs; })
+        .def("sample",
+             [](const fwdpy11::singlepop_gm_vec_t& pop,
+                const fwdpy11::GSLrng_t& rng, const std::int64_t nsam,
+                const bool separate, const bool remove_fixed) -> py::object {
+                 if (nsam <= 0)
+                     {
+                         throw std::invalid_argument(
+                             "sample size must be > 0");
+                     }
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
+                                                         remove_fixed);
+                         auto t = py::make_tuple(std::move(s.first),
+                                                 std::move(s.second));
+                         return t;
+                     }
+                 py::list rv;
+                 auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
+                 for (auto& i : s)
+                     {
+                         rv.append(i);
+                     }
+                 return rv;
+             },
+             py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
+             Sample random diploids *with replacement*.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+
+             .. note::
+                If you want sampling *without* replacement, see
+                :func:`~fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec.sample_ind`.
+             )delim")
+        .def("sample_ind",
+             [](const fwdpy11::singlepop_gm_vec_t& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool separate, const bool remove_fixed) -> py::object {
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(pop, individuals,
+                                                         remove_fixed);
+                         auto t = py::make_tuple(std::move(s.first),
+                                                 std::move(s.second));
+                         return t;
+                     }
+                 py::list rv;
+                 auto s = KTfwd::sample(pop, individuals, remove_fixed);
+                 for (auto& i : s)
+                     {
+                         rv.append(i);
+                     }
+                 return rv;
+             },
+             py::arg("individuals"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
+             Sample specific diploids.
+             
+             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param individuals: The individuals to sample.
+             :param separate: (True) Separate neutral from non-neutral variants in output.
+             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+
+             The final sample size is ``2*len(individuals)``.
+
+             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
+             in each string are diploid genotypes.  The order of diploids is constant
+             across variable sites.
+
+             When ``separate`` is ``True``, the function returns a tuple of two lists.
+             The first list is for neutral variants, and the second for non-neutral.
+             )delim");
 }
