@@ -58,6 +58,9 @@ sudo: true
 notifications:
     email: false
 
+before_install:
+    - eval "${MATRIX_EVAL}"
+
 install: 
     ./travis_scripts/installation_script.sh
 
