@@ -196,7 +196,7 @@ PYBIND11_MODULE(sampling, m)
         .def(py::init<>())
         .def(py::init<std::size_t>())
         .def_readwrite("neutral", &KTfwd::data_matrix::neutral,
-                      R"delim(
+                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
@@ -212,7 +212,7 @@ PYBIND11_MODULE(sampling, m)
                     Allow read/write access instead of readonly
                 )delim")
         .def_readwrite("selected", &KTfwd::data_matrix::selected,
-                      R"delim(
+                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
@@ -239,29 +239,37 @@ PYBIND11_MODULE(sampling, m)
         .def_readonly(
             "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
             "The list of population frequencies of selected mutations.")
-        .def("ndim_neutral",
-             [](const KTfwd::data_matrix &dm) {
-                 return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
-             },
-             R"delim(
+        .def_property_readonly("ndim_neutral",
+                               [](const KTfwd::data_matrix &dm) {
+                                   return py::make_tuple(
+                                       dm.nrow, dm.neutral.size() / dm.nrow);
+                               },
+                               R"delim(
              Return the dimensions of the neutral matrix
              
              :rtype: tuple
 
              .. versionadded:: 0.1.2
                 Replaces ncol and nrow_neutral functions
+
+             .. versionchanged:: 0.1.4
+                Changed from a function to a readonly property
              )delim")
-        .def("ndim_selected",
-             [](const KTfwd::data_matrix &dm) {
-                 return py::make_tuple(dm.nrow, dm.selected.size() / dm.nrow);
-             },
-             R"delim(
+        .def_property_readonly("ndim_selected",
+                               [](const KTfwd::data_matrix &dm) {
+                                   return py::make_tuple(
+                                       dm.nrow, dm.selected.size() / dm.nrow);
+                               },
+                               R"delim(
              Return the dimensions of the selected matrix
 
              :rtype: tuple
              
              .. versionadded:: 0.1.2
                 Replaces ncol and nrow_selected functions
+
+             .. versionchanged:: 0.1.4
+                Changed from a function to a readonly property
              )delim")
         .def(py::pickle(
             [](const KTfwd::data_matrix &d) {
