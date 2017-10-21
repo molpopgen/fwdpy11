@@ -15,6 +15,7 @@ Welcome to fwdpy11's documentation!
 
     pages/conventions
     pages/changelog
+    pages/upgrade_path
     pages/deprecated
     pages/todo
     pages/pubs
