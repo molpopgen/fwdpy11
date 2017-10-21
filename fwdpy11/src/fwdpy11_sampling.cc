@@ -203,10 +203,6 @@ PYBIND11_MODULE(sampling, m)
                 This buffer may be used to create a NumPy
                 ndarray object.
 
-                .. warning::
-                    Changing the size of this property is
-                    undefined behavior.
-
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
 
@@ -218,10 +214,6 @@ PYBIND11_MODULE(sampling, m)
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
-
-                .. warning::
-                    Changing the size of this property is
-                    undefined behavior.
 
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
