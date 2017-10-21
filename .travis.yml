@@ -5,24 +5,36 @@ matrix:
     - os: linux
       dist: trusty
       env: USECONDA=1
+      env:
+        - CC=gcc
+        - CXX=g++
     - os: linux
       dist: trusty
       python: 3.4
       addons:
           apt_packages:
             - pandoc
+      env:
+        - CC=gcc
+        - CXX=g++
     - os: linux
       dist: trusty
       python: 3.5
       addons:
           apt_packages:
             - pandoc
+      env:
+        - CC=gcc
+        - CXX=g++
     - os: linux
       dist: trusty
       python: 3.6
       addons:
           apt_packages:
             - pandoc
+      env:
+        - CC=gcc
+        - CXX=g++
 
     - os: linux
       dist: trusty
@@ -35,7 +47,8 @@ matrix:
             - g++-6
             - pandoc
       env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+        - CC=gcc-6
+        - CXX=g++-6
 
 #    - os: osx 
 #      osx_image: xcode8.3
@@ -57,9 +70,6 @@ sudo: true
 
 notifications:
     email: false
-
-before_install:
-    - eval "${MATRIX_EVAL}"
 
 install: 
     ./travis_scripts/installation_script.sh
