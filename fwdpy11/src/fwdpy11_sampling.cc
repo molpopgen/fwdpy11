@@ -114,10 +114,6 @@ separate_samples_by_loci(
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
-PYBIND11_MODULE(sampling, m)
-{
-    m.doc() = "Taking samples from populations";
-
 #define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
     m.def("sample_separate",                                                  \
           [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
@@ -134,7 +130,8 @@ PYBIND11_MODULE(sampling, m)
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
           py::arg("removeFixed") = true);
 
@@ -151,9 +148,14 @@ PYBIND11_MODULE(sampling, m)
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
+
+PYBIND11_MODULE(sampling, m)
+{
+    m.doc() = "Taking samples from populations";
 
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
                            "fwdpy11.fwdpy11_types.SlocusPop")
@@ -219,12 +221,13 @@ PYBIND11_MODULE(sampling, m)
         .def_readonly("selected_positions",
                       &KTfwd::data_matrix::selected_positions,
                       "The list of selected mutation positions.")
-        .def_readonly(
-            "neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
-            "The list of population frequencies of neutral mutations.")
-        .def_readonly(
-            "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
-            "The list of population frequencies of selected mutations.")
+        .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
+                      "The list of population frequencies of "
+                      "neutral mutations.")
+        .def_readonly("selected_popfreq",
+                      &KTfwd::data_matrix::selected_popfreq,
+                      "The list of population frequencies of "
+                      "selected mutations.")
         .def("ndim_neutral",
              [](const KTfwd::data_matrix &dm) {
                  return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
