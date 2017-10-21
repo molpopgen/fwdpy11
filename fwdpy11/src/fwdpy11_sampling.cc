@@ -195,23 +195,37 @@ PYBIND11_MODULE(sampling, m)
 		)delim")
         .def(py::init<>())
         .def(py::init<std::size_t>())
-        .def_readonly("neutral", &KTfwd::data_matrix::neutral,
+        .def_readwrite("neutral", &KTfwd::data_matrix::neutral,
                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
 
+                .. warning::
+                    Changing the size of this property is
+                    undefined behavior.
+
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
+
+                .. versionchanged: 0.1.4
+                    Allow read/write access instead of readonly
                 )delim")
-        .def_readonly("selected", &KTfwd::data_matrix::selected,
+        .def_readwrite("selected", &KTfwd::data_matrix::selected,
                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
 
+                .. warning::
+                    Changing the size of this property is
+                    undefined behavior.
+
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
+
+                .. versionchanged: 0.1.4
+                    Allow read/write access instead of readonly
                 )delim")
         .def_readonly("neutral_positions",
                       &KTfwd::data_matrix::neutral_positions,
