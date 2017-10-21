@@ -242,7 +242,7 @@ PYBIND11_MODULE(sampling, m)
                       &KTfwd::data_matrix::selected_popfreq,
                       "The list of population frequencies of "
                       "selected mutations.")
-        .def("ndim_neutral",
+        .def_property_readonly("ndim_neutral",
              [](const KTfwd::data_matrix &dm) {
                  return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
              },
