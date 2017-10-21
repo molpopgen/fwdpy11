@@ -21,7 +21,7 @@ The API is extremely flexible, allowing for the inclusion or exclustion of selec
    position, effect size, etc.  You may also apply a frequency filter.  The data returned from :func:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
 4. Generate the fwdpy11.sampling.DataMatrix object by calling either :func:`fwdpy11.sampling.genotype_matrix` or
    `fwdpy11.sampling.haplotype_matrix`.
-5. Get the matrices as numpy arrays via a call to :meth:`fwdpy11.sampling.DataMatrix.neutral` or :meth:`fwdpy11.sampling.DataMatrix.selected`.  These functions return 1d numpy arrays, which should be reshaped with the help of :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral`, :meth:`fwdpy11.sampling.DataMatrix.ndim_selected`.
+5. Get the matrices as numpy arrays via a call to :meth:`fwdpy11.sampling.DataMatrix.neutral` or :meth:`fwdpy11.sampling.DataMatrix.selected`.  These functions return 1d numpy arrays, which should be reshaped with the help of :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral`, :attr:`fwdpy11.sampling.DataMatrix.ndim_selected`.
 
 The positions and population frequencies are also stored in the :class:`fwdpy11.sampling.DataMatrix` instance.  The
 order of these mutations is the same order as the mutation keys used to generated the object.
@@ -93,7 +93,7 @@ The following example is a tour of the API:
     print(type(dm))
 
     #Get the neutral genotypes out as a 2d 2d numpy array
-    n = np.ndarray(dm.ndim_neutral(),buffer=dm.neutral,dtype=np.int8) 
+    n = np.ndarray(dm.ndim_neutral,buffer=dm.neutral,dtype=np.int8) 
     print(type(n))
     print(n.dtype)
     print(n.ndim)
