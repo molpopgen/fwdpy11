@@ -24,12 +24,13 @@ then
         exit 1
     fi
 else
+    echo "compilers are $CC $CXX"
     CC=$CC CXX=$CXX python setup.py build_ext -i
     if [ "$?" != "0" ];
     then
         exit 1
     fi
-    python -m unittest discover tests
+    CC=$CC CXX=$CXX python -m unittest discover tests
     if [ "$?" != "0" ];
     then
         exit 1
