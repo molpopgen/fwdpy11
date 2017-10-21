@@ -4,8 +4,8 @@ matrix:
     include:
     - os: linux
       dist: trusty
-      env: USECONDA=1
       env:
+        - USECONDA=1
         - CC=gcc
         - CXX=g++
     - os: linux
