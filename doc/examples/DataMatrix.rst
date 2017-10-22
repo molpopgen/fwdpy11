@@ -208,3 +208,8 @@ Now, we'll get an exception trying to modify the array:
     for i in np.hsplit(n, n.shape[1]):
         i -= 2
         i *= -1
+
+
+An array with ``flags.writeable=False`` can still be reshaped.  The flag simply prevents the raw-data from being
+over-written.  The main use case for making an array read-only is to add a sense of safety to your code.  For example,
+such arrays cannot be modified by functions.
