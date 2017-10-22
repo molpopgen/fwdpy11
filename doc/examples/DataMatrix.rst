@@ -37,8 +37,8 @@ The following example is a tour of the API:
     import numpy as np
     import pickle
 
-    #First, we set up and run a 
-    #simulation.
+    # First, we set up and run a 
+    # simulation.
     N,theta,rho=1000,100,100
 
     p={'demography':np.array([N]*N,dtype=np.uint32),
@@ -50,62 +50,93 @@ The following example is a tour of the API:
     rng=fp11.GSLrng(42)
     params = fp11.model_params.SlocusParams(**p)
     pop=fp11.SlocusPop(N)
-    #We simulate for N generations
-    #because this code is run as part of the
-    #testing suite, and so we want things
-    #to be over quickly.
+    # We simulate for N generations
+    # because this code is run as part of the
+    # testing suite, and so we want things
+    # to be over quickly.
     pops = wf.evolve(rng, pop,params)
 
-    #Now, we are going to represent the entire population
-    #as a numpy matrix with dtype=np.int8.
+    # Now, we are going to represent the entire population
+    # as a numpy matrix with dtype=np.int8.
 
-    #Step 1.
+    # Step 1.
     individuals=[i for i in range(pop.N)] #sample EVERYONE
 
-    #Step 2.
-    #By default, we get mutation keys back 
-    #for neutral and selected mutations.
-    #keys is a tuple.  keys[0] is neutral variants,
-    #and keys[1] is selected variants
+    # Step 2.
+    # By default, we get mutation keys back 
+    # for neutral and selected mutations.
+    # keys is a tuple.  keys[0] is neutral variants,
+    # and keys[1] is selected variants
     keys = fp11.sampling.mutation_keys(pop,individuals)
 
-    #Step3.
-    #The keys come out totally unsorted.  Each element in
-    #keys is itself a tuple.  The first element is the 
-    #index of the mutation in pop.mutations and the 
-    #second is the number of times it occurs in the sample
-    #(which in this case is the entire population).
-    #Let's sort the keys based on position and also remove singletons.
+    # Step3.
+    # The keys come out totally unsorted.  Each element in
+    # keys is itself a tuple.  The first element is the 
+    # index of the mutation in pop.mutations and the 
+    # second is the number of times it occurs in the sample
+    # (which in this case is the entire population).
+    # Let's sort the keys based on position and also remove singletons.
     neutral_sorted_keys=[i for i in sorted(keys[0],key=lambda x,m=pop.mutations: m[x[0]].pos) if i[1] > 1]
     selected_sorted_keys=[i for i in sorted(keys[1],key=lambda x,m=pop.mutations: m[x[0]].pos) if i[1] > 1]
 
-    #Let's make sure we got that right:
+    # Let's make sure we got that right:
     print(all(pop.mutations[neutral_sorted_keys[i][0]].pos <= 
         pop.mutations[neutral_sorted_keys[i+1][0]].pos for i in range(len(neutral_sorted_keys)-1)))
     print(all(pop.mutations[selected_sorted_keys[i][0]].pos <= 
         pop.mutations[selected_sorted_keys[i+1][0]].pos for i in range(len(selected_sorted_keys)-1)))
 
-    #Step 4. -- get the DataMatrix encoded as a genotype matrix,
-    #meaning 1 row per diploid and column values are 0,1,2
-    #copies of derived allele
+    # Step 4. -- get the DataMatrix encoded as a genotype matrix,
+    # meaning 1 row per diploid and column values are 0,1,2
+    # copies of derived allele
     dm = fwdpy11.sampling.genotype_matrix(pop,individuals,neutral_sorted_keys,selected_sorted_keys)
 
     print(type(dm))
 
-    #Get the neutral genotypes out as a 2d 2d numpy array
+    # Get the neutral genotypes out as a 2d 2d numpy array
     n = np.ndarray(dm.ndim_neutral,buffer=dm.neutral,dtype=np.int8) 
     print(type(n))
     print(n.dtype)
     print(n.ndim)
-    #This must be pop.N = 1,000:
+    # This must be pop.N = 1,000:
     print(n.shape[0])
 
-    #finally, the DataMatrix is picklable
-    #As always with fwdpy11 types,
-    #use -1 to select the latest
-    #pickling protocol
+    # The DataMatrix is picklable
+    # As always with fwdpy11 types,
+    # use -1 to select the latest
+    # pickling protocol
     p = pickle.dumps(dm,-1)
     up = pickle.loads(p)
+
+    # We can also modify the data
+    # in the array via Python's 
+    # buffer protocol. Using
+    # copy=False will give
+    # us a buffer where modifications
+    # will be passed on to the C++
+    # side.
+    
+    # First, we'll copy
+    # the existing view. 
+    orig = n.copy()
+
+    assert(n.shape == orig.shape)
+    assert(np.array_equal(n, orig) == True)
+
+    # We will swap all 0 and 2 encodings
+    # in the data:
+    for i in np.hsplit(n, n.shape[1]):
+        i -= 2
+        i *= -1
+
+    # OK, let's prove that we've modified the C++
+    # side.  We'll do that by making a new view,
+    # and compare it to our copy:
+    n2 = np.ndarray(dm.ndim_neutral,buffer=dm.neutral,dtype=np.int8) 
+    assert(np.array_equal(n2, orig) == False)
+
+    # Our new view is equivalent to our modified
+    # view:
+    assert(np.array_equal(n, n2) == True)
 
 The output of the above code is:
 
@@ -118,3 +149,62 @@ The output of the above code is:
     int8
     2
     1000
+
+Let's talk about what we did in this example.  We used the Python buffer protocol to view the genotypes at neutral
+variants.  The ``buffer=`` argument to ``np.ndarray`` means that our NumPy array is a thin wrapper on top of memory
+allocated in C++, giving us read-write access to the data.  The fact that we have write access allows our recoding of
+the columns to be propagated to the C++ side.  Further, these thin wrappers give us very fast access to the underlying
+data.
+
+There are several use cases for recoding the data.  A DataMatrix is encoded by number of copies of the derived allele.
+However, it may be useful to encode by number of copies of the minor allele, or the ``+`` allele when modeling a
+quantitative trait.  For such cases, you can selectively recode the columns on a case-by-case basis.
+
+It is possible to get a thin wrapper that is not writeable.  Doing so let's you have both fast access and safety. Let's revisit the above example:
+
+.. ipython:: python
+    :suppress:
+
+    import fwdpy11 as fp11
+    import fwdpy11.wright_fisher as wf
+    import fwdpy11.model_params
+    import fwdpy11.sampling
+    import numpy as np
+    import pickle
+
+    N,theta,rho=1000,100,100
+
+    p={'demography':np.array([N]*N,dtype=np.uint32),
+       'nregions':[fp11.Region(0,1,1)],
+       'recregions':[fp11.Region(0,1,1)],
+       'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
+       'rates':(theta/float(4*N),0.0,rho/float(4*N))
+       }
+    rng=fp11.GSLrng(42)
+    params = fp11.model_params.SlocusParams(**p)
+    pop=fp11.SlocusPop(N)
+    wf.evolve(rng, pop, params)
+
+    keys = fwdpy11.sampling.mutation_keys(pop, range(10))
+    dm = fwdpy11.sampling.genotype_matrix(pop,range(10),keys[0],keys[1])
+
+.. ipython:: python
+
+    # Use a different syntax, to show that 
+    # there are > 1 way to do things with
+    # NumPy
+    n = np.array(dm.neutral,copy=False,dtype=np.int8).reshape(dm.ndim_neutral)
+
+Mark our new array as read-only:
+
+.. ipython:: python
+
+    n.flags.writeable = False
+
+Now, we'll get an exception trying to modify the array:
+
+.. ipython:: python
+
+    for i in np.hsplit(n, n.shape[1]):
+        i -= 2
+        i *= -1
