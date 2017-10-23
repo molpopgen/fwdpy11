@@ -723,9 +723,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       FIXATIONS_DOCSTRING)
         .def_readonly("fixation_times", &fwdpy11::multilocus_t::fixation_times,
                       FIXATIONS_DOCSTRING)
-        .def_readonly("locus_boundaries",
-                      &fwdpy11::multilocus_t::locus_boundaries,
-                      "[beg,end) positions for each locus")
+        .def_readwrite("locus_boundaries",
+                       &fwdpy11::multilocus_t::locus_boundaries,
+                       "[beg,end) positions for each locus")
         .def(py::pickle(
             [](const fwdpy11::multilocus_t& pop) {
                 return py::bytes(pop.serialize());
