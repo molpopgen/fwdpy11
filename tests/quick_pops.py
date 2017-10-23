@@ -66,7 +66,7 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
          'rates': (0.0, 2e-3, 1e-3),
          'demography': np.array([N] * simlen, dtype=np.uint32),
          'gvalue': SlocusAdditiveTrait(2.0),
-         'trait2w': GSS(1, 0)
+         'trait2w': GSS(1, 0),
          'prune_selected': False
          }
     pop = SlocusPop(N)
