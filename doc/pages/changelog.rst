@@ -15,6 +15,7 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
+* :attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` is now writeable.
 * :attr:`fwdpy11.sampling.DataMatrix.neutral` and :attr:`fwdpy11.sampling.DataMatrix.selected` are now writeable
   buffers. :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral` and :attr:`fwdpy11.sampling.DataMatrix.ndim_selected` have
   been changed from functions to read-only properties. `PR #45 <https://github.com/molpopgen/fwdpy11/pull/45>`_
