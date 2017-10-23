@@ -53,7 +53,39 @@ class testSlocusPop(unittest.TestCase):
 class testSlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            p = fp11.SlocusPop(0)
+            fp11.SlocusPop(0)
+
+
+class testSampling(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        from quick_pops import quick_nonneutral_slocus
+        self.pop = quick_nonneutral_slocus()
+        self.rng = fp11.GSLrng(42)
+
+    def testRandomSample(self):
+        self.pop.sample(self.rng, 10)
+        self.pop.sample(self.rng, 10, separate=False)
+        self.pop.sample(self.rng, 10, remove_fixed=False)
+        self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
+        self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
+        self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+
+    def testDefinedSample(self):
+        self.pop.sample_ind(range(10))
+
+        with self.assertRaises(IndexError):
+            """
+            fwdpp catches case where i >= N
+            """
+            self.pop.sample_ind(range(self.pop.N, self.pop.N + 10))
+
+        with self.assertRaises(TypeError):
+            """
+            pybind11 disallows conversion of negative
+            numbers to a list of unsigned types.
+            """
+            self.pop.sample_ind(range(-10, 10))
 
 
 if __name__ == "__main__":
