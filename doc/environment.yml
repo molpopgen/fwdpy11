@@ -12,6 +12,7 @@ dependencies:
     - gsl
     - nbsphinx
     - msprime
+    - gcc
     - pip:
         - numpy
         - matplotlib
