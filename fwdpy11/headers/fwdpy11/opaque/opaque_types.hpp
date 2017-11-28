@@ -100,8 +100,7 @@ namespace fwdpy11
         {
             return this->first == dip.first && this->second == dip.second
                    && this->w == dip.w && this->g == dip.g && this->e == dip.e
-                   && this->label == dip.label &&
-                   this->parental_data == dip.parental_data;
+                   && this->label == dip.label;
         }
     };
 
