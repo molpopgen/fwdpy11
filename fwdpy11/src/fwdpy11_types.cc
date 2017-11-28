@@ -156,6 +156,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
+        .def_readonly("parental_data", &fwdpy11::diploid_t::parental_data,
+                      "label values of this diploid's parents")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e,

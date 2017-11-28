@@ -62,6 +62,7 @@ namespace fwdpy11
         {
             offspring.e = 0.0;
             offspring.g = 0.0;
+            offspring.parental_data = std::make_tuple(p1, p2);
             return;
         }
     };

@@ -21,6 +21,7 @@
 
 #include <pybind11/stl.h>
 #include <cstdint>
+#include <tuple>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>
@@ -58,21 +59,31 @@ namespace fwdpy11
         double e;
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
+        //! IDs of parents.  NB: this will be changed in future releases
+        std::tuple<std::size_t, std::size_t> parental_data;
         //! Constructor
         diploid_t() noexcept
             : first(first_type()), second(second_type()), label(0), g(0.),
-              e(0.), w(1.)
+              e(0.), w(1.), parental_data(std::make_tuple(
+                                std::numeric_limits<std::size_t>::max(),
+                                std::numeric_limits<std::size_t>::max()))
         {
         }
         //! Construct from two indexes to gametes
         diploid_t(first_type g1, first_type g2) noexcept
-            : first(g1), second(g2), label(0), g(0.), e(0.), w(1.)
+            : first(g1), second(g2), label(0), g(0.), e(0.), w(1.),
+              parental_data(
+                  std::make_tuple(std::numeric_limits<std::size_t>::max(),
+                                  std::numeric_limits<std::size_t>::max()))
         {
         }
 
         diploid_t(first_type g1, first_type g2, std::size_t label_, double g_,
                   double e_, double w_)
-            : first(g1), second(g2), label(label_), g(g_), e(e_), w(w_)
+            : first(g1), second(g2), label(label_), g(g_), e(e_), w(w_),
+              parental_data(
+                  std::make_tuple(std::numeric_limits<std::size_t>::max(),
+                                  std::numeric_limits<std::size_t>::max()))
         {
         }
 
@@ -89,7 +100,8 @@ namespace fwdpy11
         {
             return this->first == dip.first && this->second == dip.second
                    && this->w == dip.w && this->g == dip.g && this->e == dip.e
-                   && this->label == dip.label;
+                   && this->label == dip.label &&
+                   this->parental_data == dip.parental_data;
         }
     };
 
