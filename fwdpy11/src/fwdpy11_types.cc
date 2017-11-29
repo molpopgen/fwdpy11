@@ -148,7 +148,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("first", &fwdpy11::diploid_t::first,
                       "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::diploid_t::second,
-                      "Key to second gamete. (read-onle)")
+                      "Key to second gamete. (read-only)")
         .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness. (read-only)")
         .def_readonly("g", &fwdpy11::diploid_t::g,
                       "Genetic value (read-only).")
@@ -157,7 +157,15 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
         .def_readonly("parental_data", &fwdpy11::diploid_t::parental_data,
-                      "label values of this diploid's parents")
+                      R"delim(
+				A tuple of the parental labels.
+
+				.. versionadded:: 0.1.4
+
+				.. note::
+					This field is not pickled. The representation
+					will change in future releases.
+				)delim")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
