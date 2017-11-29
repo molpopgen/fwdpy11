@@ -19,6 +19,7 @@
 #ifndef FWDPY11_OPAQUE_TYPES_HPP__
 #define FWDPY11_OPAQUE_TYPES_HPP__
 
+#include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <cstdint>
 #include <tuple>
@@ -60,30 +61,24 @@ namespace fwdpy11
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
         //! IDs of parents.  NB: this will be changed in future releases
-        std::tuple<std::size_t, std::size_t> parental_data;
+		pybind11::object parental_data;
         //! Constructor
         diploid_t() noexcept
             : first(first_type()), second(second_type()), label(0), g(0.),
-              e(0.), w(1.), parental_data(std::make_tuple(
-                                std::numeric_limits<std::size_t>::max(),
-                                std::numeric_limits<std::size_t>::max()))
+              e(0.), w(1.), parental_data(pybind11::none())
         {
         }
         //! Construct from two indexes to gametes
         diploid_t(first_type g1, first_type g2) noexcept
             : first(g1), second(g2), label(0), g(0.), e(0.), w(1.),
-              parental_data(
-                  std::make_tuple(std::numeric_limits<std::size_t>::max(),
-                                  std::numeric_limits<std::size_t>::max()))
+              parental_data(pybind11::none())
         {
         }
 
         diploid_t(first_type g1, first_type g2, std::size_t label_, double g_,
                   double e_, double w_)
             : first(g1), second(g2), label(label_), g(g_), e(e_), w(w_),
-              parental_data(
-                  std::make_tuple(std::numeric_limits<std::size_t>::max(),
-                                  std::numeric_limits<std::size_t>::max()))
+              parental_data(pybind11::none())
         {
         }
 

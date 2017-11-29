@@ -736,12 +736,61 @@ PYBIND11_MODULE(fwdpy11_types, m)
                        &fwdpy11::multilocus_t::locus_boundaries,
                        "[beg,end) positions for each locus")
         .def(py::pickle(
-            [](const fwdpy11::multilocus_t& pop) {
-                return py::bytes(pop.serialize());
+            [](const fwdpy11::multilocus_t& pop) -> py::object {
+                auto pb = py::bytes(pop.serialize());
+                py::list pdata;
+                for (auto& d : pop.diploids)
+                    {
+                        pdata.append(d[0].parental_data);
+                    }
+                return py::make_tuple(std::move(pb), std::move(pdata));
             },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::multilocus_t>(
-                    new fwdpy11::multilocus_t(s));
+            [](py::object pickled) {
+                
+			
+			try
+                    {
+                        auto s = pickled.cast<py::bytes>();
+                        return std::unique_ptr<fwdpy11::multilocus_t>(
+                            new fwdpy11::multilocus_t(s));
+                    }
+                catch (std::runtime_error& eas)
+                    {
+                        try
+                            {
+                                auto t = pickled.cast<py::tuple>();
+                                auto s = t[0].cast<py::bytes>();
+                                auto l = t[1].cast<py::list>();
+                                auto rv
+                                    = std::unique_ptr<fwdpy11::multilocus_t>(
+                                        new fwdpy11::multilocus_t(s));
+                                for (std::size_t i = 0;
+                                     i < rv->diploids.size(); ++i)
+                                    {
+                                        rv->diploids[i][0].parental_data
+                                            = l[i];
+                                    }
+                                return rv;
+                            }
+                        catch (py::error_already_set& eas)
+                            {
+								eas.restore();
+                                auto t = pickled.cast<py::tuple>();
+                                auto s = t[0].cast<py::bytes>();
+                                auto l = t[1].cast<py::list>();
+                                auto rv
+                                    = std::unique_ptr<fwdpy11::multilocus_t>(
+                                        new fwdpy11::multilocus_t(s));
+                                for (std::size_t i = 0;
+                                     i < rv->diploids.size(); ++i)
+                                    {
+                                        rv->diploids[i][0].parental_data
+                                            = l[i];
+                                    }
+                                return rv;
+                            }
+                    }
+                                throw std::runtime_error("bad juju!");
             }))
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
