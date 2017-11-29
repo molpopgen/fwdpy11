@@ -179,7 +179,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
                 return d;
-                return d;
             }));
 
     py::bind_vector<fwdpy11::dipvector_t>(
