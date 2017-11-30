@@ -623,7 +623,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
-                const fwdpy11::singlepop_t& rhs) { return lhs == rhs })
+                const fwdpy11::singlepop_t& rhs) { return lhs == rhs; })
         .def("sample",
              [](const fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
                 const std::int64_t nsam, const bool separate,
