@@ -175,8 +175,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
-                //Unpickle the Python object.
-                //The if statement is for backwards compatibility.
+                // Unpickle the Python object.
+                // The if statement is for backwards compatibility.
                 if (t.size() == 7)
                     {
                         d->parental_data = t[6];
@@ -579,6 +579,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
+        .def_readonly("popdata", &fwdpy11::singlepop_t::popdata)
+        .def_readwrite("popdata_user", &fwdpy11::singlepop_t::popdata_user)
         .def(py::pickle(
             [](const fwdpy11::singlepop_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -587,7 +589,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         pdata.append(d.parental_data);
                     }
-                return py::make_tuple(std::move(pb), std::move(pdata));
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
             [](py::object pickled) {
                 try
@@ -601,6 +604,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
                 auto s = t[0].cast<py::bytes>();
                 auto l = t[1].cast<py::list>();
                 auto rv = std::unique_ptr<fwdpy11::singlepop_t>(
@@ -609,11 +617,13 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         rv->diploids[i].parental_data = l[i];
                     }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
                 return rv;
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
-                const fwdpy11::singlepop_t& rhs) { return lhs == rhs; })
+                const fwdpy11::singlepop_t& rhs) { return lhs == rhs })
         .def("sample",
              [](const fwdpy11::singlepop_t& pop, const fwdpy11::GSLrng_t& rng,
                 const std::int64_t nsam, const bool separate,
