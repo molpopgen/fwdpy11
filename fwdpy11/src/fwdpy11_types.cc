@@ -166,7 +166,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
-                                      d.label);
+                                      d.label, d.parental_data);
             },
             [](py::tuple t) {
                 std::unique_ptr<fwdpy11::diploid_t> d(new fwdpy11::diploid_t(
@@ -175,6 +175,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
+                //Unpickle the Python object.
+                //The if statement is for backwards compatibility.
+                if (t.size() == 7)
+                    {
+                        d->parental_data = t[6];
+                    }
                 return d;
             }));
 
