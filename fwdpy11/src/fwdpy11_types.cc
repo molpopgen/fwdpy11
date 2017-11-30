@@ -162,10 +162,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
 				The details are simulation-dependent.
 
 				.. versionadded:: 0.1.4
-
-				.. note::
-					This field is not used in equality comparison
-					between diploids.
 				)delim")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {

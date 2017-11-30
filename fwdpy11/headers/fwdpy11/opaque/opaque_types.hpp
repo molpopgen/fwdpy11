@@ -61,7 +61,7 @@ namespace fwdpy11
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
         //! IDs of parents.  NB: this will be changed in future releases
-		pybind11::object parental_data;
+        pybind11::object parental_data;
         //! Constructor
         diploid_t() noexcept
             : first(first_type()), second(second_type()), label(0), g(0.),
@@ -93,9 +93,27 @@ namespace fwdpy11
         operator==(const diploid_t& dip) const noexcept
         //! Required for py::bind_vector
         {
-            return this->first == dip.first && this->second == dip.second
-                   && this->w == dip.w && this->g == dip.g && this->e == dip.e
-                   && this->label == dip.label;
+            auto cpp_data_comparison
+                = this->first == dip.first && this->second == dip.second
+                  && this->w == dip.w && this->g == dip.g && this->e == dip.e
+                  && this->label == dip.label;
+            //We now attempt to compare the parental data.
+            //pybind11 doesn't have a rich comparison support,
+            //so we rely on the __eq__ attribute.  If no 
+            //such attribute exists, we simply clear the
+            //error and move on.
+            try
+                {
+                    bool parental_data_comp
+                        = this->parental_data.attr("__eq__")(dip.parental_data)
+                              .cast<bool>();
+                    return cpp_data_comparison && parental_data_comp;
+                }
+            catch (...)
+                {
+                    PyErr_Clear();
+                }
+            return cpp_data_comparison;
         }
     };
 
