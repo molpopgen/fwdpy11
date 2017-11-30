@@ -158,13 +158,14 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Index of the diploid in its deme")
         .def_readonly("parental_data", &fwdpy11::diploid_t::parental_data,
                       R"delim(
-				A tuple of the parental labels.
+				Python object representing information about parents.
+				The details are simulation-dependent.
 
 				.. versionadded:: 0.1.4
 
 				.. note::
-					This field is not pickled. The representation
-					will change in future releases.
+					This field is not used in equality comparison
+					between diploids.
 				)delim")
         .def(py::pickle(
             [](const fwdpy11::diploid_t& d) {
@@ -577,12 +578,36 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
         .def(py::pickle(
-            [](const fwdpy11::singlepop_t& pop) {
-                return py::bytes(pop.serialize());
+            [](const fwdpy11::singlepop_t& pop) -> py::object {
+                auto pb = py::bytes(pop.serialize());
+                py::list pdata;
+                for (auto& d : pop.diploids)
+                    {
+                        pdata.append(d.parental_data);
+                    }
+                return py::make_tuple(std::move(pb), std::move(pdata));
             },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::singlepop_t>(
+            [](py::object pickled) {
+                try
+                    {
+                        auto s = pickled.cast<py::bytes>();
+                        return std::unique_ptr<fwdpy11::singlepop_t>(
+                            new fwdpy11::singlepop_t(s));
+                    }
+                catch (std::runtime_error& eas)
+                    {
+                        PyErr_Clear();
+                    }
+                auto t = pickled.cast<py::tuple>();
+                auto s = t[0].cast<py::bytes>();
+                auto l = t[1].cast<py::list>();
+                auto rv = std::unique_ptr<fwdpy11::singlepop_t>(
                     new fwdpy11::singlepop_t(s));
+                for (std::size_t i = 0; i < rv->diploids.size(); ++i)
+                    {
+                        rv->diploids[i].parental_data = l[i];
+                    }
+                return rv;
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_t& lhs,
@@ -746,9 +771,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return py::make_tuple(std::move(pb), std::move(pdata));
             },
             [](py::object pickled) {
-                
-			
-			try
+                try
                     {
                         auto s = pickled.cast<py::bytes>();
                         return std::unique_ptr<fwdpy11::multilocus_t>(
@@ -756,41 +779,18 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     }
                 catch (std::runtime_error& eas)
                     {
-                        try
-                            {
-                                auto t = pickled.cast<py::tuple>();
-                                auto s = t[0].cast<py::bytes>();
-                                auto l = t[1].cast<py::list>();
-                                auto rv
-                                    = std::unique_ptr<fwdpy11::multilocus_t>(
-                                        new fwdpy11::multilocus_t(s));
-                                for (std::size_t i = 0;
-                                     i < rv->diploids.size(); ++i)
-                                    {
-                                        rv->diploids[i][0].parental_data
-                                            = l[i];
-                                    }
-                                return rv;
-                            }
-                        catch (py::error_already_set& eas)
-                            {
-								eas.restore();
-                                auto t = pickled.cast<py::tuple>();
-                                auto s = t[0].cast<py::bytes>();
-                                auto l = t[1].cast<py::list>();
-                                auto rv
-                                    = std::unique_ptr<fwdpy11::multilocus_t>(
-                                        new fwdpy11::multilocus_t(s));
-                                for (std::size_t i = 0;
-                                     i < rv->diploids.size(); ++i)
-                                    {
-                                        rv->diploids[i][0].parental_data
-                                            = l[i];
-                                    }
-                                return rv;
-                            }
+                        PyErr_Clear();
                     }
-                                throw std::runtime_error("bad juju!");
+                auto t = pickled.cast<py::tuple>();
+                auto s = t[0].cast<py::bytes>();
+                auto l = t[1].cast<py::list>();
+                auto rv = std::unique_ptr<fwdpy11::multilocus_t>(
+                    new fwdpy11::multilocus_t(s));
+                for (std::size_t i = 0; i < rv->diploids.size(); ++i)
+                    {
+                        rv->diploids[i][0].parental_data = l[i];
+                    }
+                return rv;
             }))
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
