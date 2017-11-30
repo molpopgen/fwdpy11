@@ -579,8 +579,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
-        .def_readonly("popdata", &fwdpy11::singlepop_t::popdata)
-        .def_readwrite("popdata_user", &fwdpy11::singlepop_t::popdata_user)
+        .def_readonly("popdata", &fwdpy11::singlepop_t::popdata,
+                      "A Python object that may be written to by a "
+                      "simulation. Any data written should be documented by "
+                      "the simulation function.")
+        .def_readwrite("popdata_user", &fwdpy11::singlepop_t::popdata_user,
+                       "A Python object with read-write access.")
         .def(py::pickle(
             [](const fwdpy11::singlepop_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -772,6 +776,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readwrite("locus_boundaries",
                        &fwdpy11::multilocus_t::locus_boundaries,
                        "[beg,end) positions for each locus")
+        .def_readonly("popdata", &fwdpy11::multilocus_t::popdata,
+                      "A Python object that may be written to by a "
+                      "simulation. Any data written should be documented by "
+                      "the simulation function.")
+        .def_readwrite("popdata_user", &fwdpy11::multilocus_t::popdata_user,
+                       "A Python object with read-write access.")
         .def(py::pickle(
             [](const fwdpy11::multilocus_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -794,6 +804,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
                 auto s = t[0].cast<py::bytes>();
                 auto l = t[1].cast<py::list>();
                 auto rv = std::unique_ptr<fwdpy11::multilocus_t>(
@@ -802,6 +817,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         rv->diploids[i][0].parental_data = l[i];
                     }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
                 return rv;
             }))
         .def("__eq__",
@@ -964,6 +981,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("fixation_times",
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
+        .def_readonly("popdata", &fwdpy11::singlepop_gm_vec_t::popdata,
+                      "A Python object that may be written to by a "
+                      "simulation. Any data written should be documented by "
+                      "the simulation function.")
+        .def_readwrite("popdata_user", &fwdpy11::singlepop_gm_vec_t::popdata_user,
+                       "A Python object with read-write access.")
         .def(py::pickle(
             [](const fwdpy11::singlepop_gm_vec_t& pop) {
                 return py::bytes(pop.serialize());
