@@ -985,15 +985,50 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "A Python object that may be written to by a "
                       "simulation. Any data written should be documented by "
                       "the simulation function.")
-        .def_readwrite("popdata_user", &fwdpy11::singlepop_gm_vec_t::popdata_user,
+        .def_readwrite("popdata_user",
+                       &fwdpy11::singlepop_gm_vec_t::popdata_user,
                        "A Python object with read-write access.")
+
         .def(py::pickle(
-            [](const fwdpy11::singlepop_gm_vec_t& pop) {
-                return py::bytes(pop.serialize());
+
+            [](const fwdpy11::singlepop_gm_vec_t& pop) -> py::object {
+                auto pb = py::bytes(pop.serialize());
+                py::list pdata;
+                for (auto& d : pop.diploids)
+                    {
+                        pdata.append(d.parental_data);
+                    }
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
+            [](py::object pickled) {
+                try
+                    {
+                        auto s = pickled.cast<py::bytes>();
+                        return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
+                            new fwdpy11::singlepop_gm_vec_t(s));
+                    }
+                catch (std::runtime_error& eas)
+                    {
+                        PyErr_Clear();
+                    }
+                auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
+                auto s = t[0].cast<py::bytes>();
+                auto l = t[1].cast<py::list>();
+                auto rv = std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
                     new fwdpy11::singlepop_gm_vec_t(s));
+                for (std::size_t i = 0; i < rv->diploids.size(); ++i)
+                    {
+                        rv->diploids[i].parental_data = l[i];
+                    }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
+                return rv;
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_gm_vec_t& lhs,
