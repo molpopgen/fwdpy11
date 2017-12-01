@@ -5,6 +5,10 @@ Tracking parentage
 
 .. versionadded:: 0.1.4
 
+Background reading:
+
+* :ref:`recorders`
+
 This example shows one way to track parentage during a simulation.  We'll run a single-deme simulation and use
 :attr:`fwdpy11.fwdpy11_types.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
 
