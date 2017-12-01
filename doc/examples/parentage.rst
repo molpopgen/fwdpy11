@@ -13,11 +13,16 @@ This example shows one way to track parentage during a simulation.  We'll run a 
 :attr:`fwdpy11.fwdpy11_types.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
 
 The mechanics are quite simple.  We define a custom recorder that gathers the parent data
-(:attr:`fwdpy11.fwdpp_types.SingleLocusDiploid.parental_data`) into a list each generation.  
+(:attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data`) into a list each generation.  We will couple the parent
+data along with the individual's label field.  This coupling facilitates later post-processing.
+
+For convenience, we coerce the data into a `collections.namedtuple`, which allows final storage into a
+`pandas.DataFrame`.
 
 A real-world example would have to do more work than this.  You would probably need to assign unique individual IDs each
 generation, etc., and get the data into some standard format (PLINK's ped/fam, for example), in order to do interesting
-work with the pedigree.
+work with the pedigree.  Additionally, you probably want to thin the data down to remove individuals that left no
+offspring, etc. 
 
 .. ipython:: python
 
@@ -26,12 +31,15 @@ work with the pedigree.
     import fwdpy11.model_params
     import fwdpy11.ezparams
     import fwdpy11.wright_fisher
-    import numpy as np
+    from collections import namedtuple
+    import pandas as pd
+
+    PedigreeData = namedtuple('PedigreeData',['gen','id','p1','p2'])
 
     class RecordParents(object):
         def __call__(self,pop):
-            parents = [i.parental_data for i in pop.diploids]
-            pop.popdata_user.append(parents)
+            parents = [PedigreeData(pop.generation,i.label,*i.parental_data) for i in pop.diploids]
+            pop.popdata_user.extend(parents)
 
     rng = fwdpy11.GSLrng(42)
 
@@ -43,5 +51,6 @@ work with the pedigree.
 
     r = RecordParents()
     fwdpy11.wright_fisher.evolve(rng,pop,params,r)
-    for i in pop.popdata_user:
-        print(i)
+
+    df = pd.DataFrame.from_records(pop.popdata_user,columns=PedigreeData._fields)
+    print(df.head())
