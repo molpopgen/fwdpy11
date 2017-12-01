@@ -15,8 +15,9 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
-* :attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data` added as read-only field.  This field is **not**
-  pickled and its representation *will* change in future releases. `PR #47 <https://github.com/molpopgen/fwdpy11/pull/47>`_
+* Attributes `popdata` and `popdata_user` added to all population objects. `PR #52
+  <https://github.com/molpopgen/fwdpy11/pull/52>`_
+* :attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data` added as read-only field. `PR #51 <https://github.com/molpopgen/fwdpy11/pull/51>`_
 * :attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` is now writeable.
 * :attr:`fwdpy11.sampling.DataMatrix.neutral` and :attr:`fwdpy11.sampling.DataMatrix.selected` are now writeable
   buffers. :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral` and :attr:`fwdpy11.sampling.DataMatrix.ndim_selected` have
