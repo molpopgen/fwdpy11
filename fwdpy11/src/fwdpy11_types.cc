@@ -1011,16 +1011,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                       pop.popdata, pop.popdata_user);
             },
             [](py::object pickled) {
-                try
-                    {
-                        auto s = pickled.cast<py::bytes>();
-                        return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
-                            new fwdpy11::singlepop_gm_vec_t(s));
-                    }
-                catch (std::runtime_error& eas)
-                    {
-                        PyErr_Clear();
-                    }
                 auto t = pickled.cast<py::tuple>();
                 if (t.size() != 4)
                     {
