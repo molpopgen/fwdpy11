@@ -36,6 +36,7 @@ offspring, etc.
 
     PedigreeData = namedtuple('PedigreeData',['gen','id','p1','p2'])
 
+    # Our recorder is very simple:
     class RecordParents(object):
         def __call__(self,pop):
             parents = [PedigreeData(pop.generation,i.label,*i.parental_data) for i in pop.diploids]
@@ -43,8 +44,11 @@ offspring, etc.
 
     rng = fwdpy11.GSLrng(42)
 
-    theta,rho = 100.0,100.0
     pop = fwdpy11.SlocusPop(10)
+
+    # It is important to initialize
+    # popdata_user, whose default
+    # value is None:
     pop.popdata_user = []
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N)
     params = fwdpy11.model_params.SlocusParams(**pdict)
@@ -52,5 +56,6 @@ offspring, etc.
     r = RecordParents()
     fwdpy11.wright_fisher.evolve(rng,pop,params,r)
 
+    # Store the data as a DataFrame
     df = pd.DataFrame.from_records(pop.popdata_user,columns=PedigreeData._fields)
     print(df.head())
