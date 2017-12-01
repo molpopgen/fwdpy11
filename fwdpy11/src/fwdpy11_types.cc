@@ -680,6 +680,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::singlepop_t& pop,
@@ -720,6 +722,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
@@ -878,6 +882,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.MlocusPop.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::multilocus_t& pop,
@@ -922,6 +928,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
@@ -1080,6 +1088,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::singlepop_gm_vec_t& pop,
@@ -1120,5 +1130,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 }
