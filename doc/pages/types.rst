@@ -113,6 +113,10 @@ contains the following read-only properties:
     "g", "Genetic value."
     "e", "Random component of trait value."
     "label", "The index of this diploid in the population."
+    "parental_data", "A Python object with information about parents."
+
+The information stored in `parental_data` is simulation-dependent.  For models with no population structure, it will
+typically be a Python tuple containing the `label` value for each parent.  See :ref:`parentage` for an example.
 
 For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.fwdpy11_types.DiploidContainer`, which is an opaque list of :class:`fwdpy11.fwdpy11_types.SingleLocusDiploid` objects.  **The w/g/e/label fields are only populated for the first locus.**
 
@@ -180,3 +184,12 @@ The need for `locus_boundaries` will be discussed elsewhere.
 .. todo::
 
     Discuss locus boundaries somewhere.
+
+Python data types stored in population objects
+---------------------------------------------------------------------------------
+
+.. versionadded:: 0.1.4
+
+All population objects contain two generic Python objects.  These are called `popdata` and `popdata_user`.  The former
+is read-only and exists to provide flexibility to the internal details of simulation functions.  The latter is a
+read-write property that the user can modify.
