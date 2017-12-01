@@ -128,6 +128,14 @@ namespace
         To distinguish them, use the locations of nonzero values in "mcounts" 
         for an instance of this type."
     )delim";
+
+    static const auto POPDATA_DOCSTRING
+        = "Python object that may be written to by a simulation. Any data "
+          "written should be documented by the simulation function.\n\n.. "
+          "versionadded:: 0.1.4";
+
+    static const auto POPDATA_USER_DOCSTRING
+        = "A Python object with read-write access.\n\n.. versionadded:: 0.1.4";
 }
 
 PYBIND11_MODULE(fwdpy11_types, m)
@@ -175,8 +183,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
-                //Unpickle the Python object.
-                //The if statement is for backwards compatibility.
+                // Unpickle the Python object.
+                // The if statement is for backwards compatibility.
                 if (t.size() == 7)
                     {
                         d->parental_data = t[6];
@@ -579,6 +587,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
+        .def_readonly("popdata", &fwdpy11::singlepop_t::popdata,
+                      POPDATA_DOCSTRING)
+        .def_readwrite("popdata_user", &fwdpy11::singlepop_t::popdata_user,
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
             [](const fwdpy11::singlepop_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -587,7 +599,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         pdata.append(d.parental_data);
                     }
-                return py::make_tuple(std::move(pb), std::move(pdata));
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
             [](py::object pickled) {
                 try
@@ -601,6 +614,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
                 auto s = t[0].cast<py::bytes>();
                 auto l = t[1].cast<py::list>();
                 auto rv = std::unique_ptr<fwdpy11::singlepop_t>(
@@ -609,6 +627,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         rv->diploids[i].parental_data = l[i];
                     }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
                 return rv;
             }))
         .def("__eq__",
@@ -660,6 +680,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::singlepop_t& pop,
@@ -700,6 +722,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 
     py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
@@ -762,6 +786,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readwrite("locus_boundaries",
                        &fwdpy11::multilocus_t::locus_boundaries,
                        "[beg,end) positions for each locus")
+        .def_readonly("popdata", &fwdpy11::multilocus_t::popdata,
+                      POPDATA_DOCSTRING)
+        .def_readwrite("popdata_user", &fwdpy11::multilocus_t::popdata_user,
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
             [](const fwdpy11::multilocus_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -784,6 +812,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
                 auto s = t[0].cast<py::bytes>();
                 auto l = t[1].cast<py::list>();
                 auto rv = std::unique_ptr<fwdpy11::multilocus_t>(
@@ -792,6 +825,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         rv->diploids[i][0].parental_data = l[i];
                     }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
                 return rv;
             }))
         .def("__eq__",
@@ -847,6 +882,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.MlocusPop.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::multilocus_t& pop,
@@ -891,6 +928,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
@@ -954,13 +993,41 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("fixation_times",
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
+        .def_readonly("popdata", &fwdpy11::singlepop_gm_vec_t::popdata,
+                      POPDATA_DOCSTRING)
+        .def_readwrite("popdata_user",
+                       &fwdpy11::singlepop_gm_vec_t::popdata_user,
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
-            [](const fwdpy11::singlepop_gm_vec_t& pop) {
-                return py::bytes(pop.serialize());
+
+            [](const fwdpy11::singlepop_gm_vec_t& pop) -> py::object {
+                auto pb = py::bytes(pop.serialize());
+                py::list pdata;
+                for (auto& d : pop.diploids)
+                    {
+                        pdata.append(d.parental_data);
+                    }
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
-            [](py::bytes s) {
-                return std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
+            [](py::object pickled) {
+                auto t = pickled.cast<py::tuple>();
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error(
+                            "expected tuple with 4 elements");
+                    }
+                auto s = t[0].cast<py::bytes>();
+                auto l = t[1].cast<py::list>();
+                auto rv = std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
                     new fwdpy11::singlepop_gm_vec_t(s));
+                for (std::size_t i = 0; i < rv->diploids.size(); ++i)
+                    {
+                        rv->diploids[i].parental_data = l[i];
+                    }
+                rv->popdata = t[2];
+                rv->popdata_user = t[3];
+                return rv;
             }))
         .def("__eq__",
              [](const fwdpy11::singlepop_gm_vec_t& lhs,
@@ -1011,6 +1078,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              .. note::
                 If you want sampling *without* replacement, see
                 :func:`~fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec.sample_ind`.
+
+			 .. versionadded:: 0.1.4
              )delim")
         .def("sample_ind",
              [](const fwdpy11::singlepop_gm_vec_t& pop,
@@ -1051,5 +1120,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              When ``separate`` is ``True``, the function returns a tuple of two lists.
              The first list is for neutral variants, and the second for non-neutral.
+
+			 .. versionadded:: 0.1.4
              )delim");
 }

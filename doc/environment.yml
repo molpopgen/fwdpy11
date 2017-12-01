@@ -15,6 +15,7 @@ dependencies:
     - gcc
     - pip:
         - numpy
+        - pandas
         - matplotlib
         - ipython
         - cppimport

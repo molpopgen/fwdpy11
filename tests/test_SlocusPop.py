@@ -88,5 +88,58 @@ class testSampling(unittest.TestCase):
             self.pop.sample_ind(range(-10, 10))
 
 
+class testPythonObjects(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        from quick_pops import quick_slocus_qtrait_pop_params
+        self.pop, self.pdict = quick_slocus_qtrait_pop_params()
+        self.rng = fp11.GSLrng(101)
+
+    def testInitialState(self):
+        self.assertTrue(self.pop.popdata is None)
+        self.assertTrue(self.pop.popdata_user is None)
+
+    def testParentalData(self):
+        from fwdpy11.model_params import SlocusParamsQ
+        from fwdpy11.wright_fisher_qtrait import evolve
+        params = SlocusParamsQ(**self.pdict)
+        evolve(self.rng, self.pop, params)
+        parents = [i.parental_data for i in self.pop.diploids]
+        for i in parents:
+            self.assertTrue(i is not None)
+            self.assertTrue(len(i) == 2)
+            self.assertTrue(i[0] < self.pop.N)
+            self.assertTrue(i[1] < self.pop.N)
+
+    def testPopdataReadOnly(self):
+        from fwdpy11.model_params import SlocusParamsQ
+        from fwdpy11.wright_fisher_qtrait import evolve
+        params = SlocusParamsQ(**self.pdict)
+        with self.assertRaises(Exception):
+            class Recorder(object):
+                def __call__(self, pop):
+                    pop.popdata = []
+            r = Recorder()
+            evolve(self.rng, self.pop, params, r)
+
+    def testPopdataUserAndPickling(self):
+        from fwdpy11.model_params import SlocusParamsQ
+        from fwdpy11.wright_fisher_qtrait import evolve
+        params = SlocusParamsQ(**self.pdict)
+
+        class Recorder(object):
+            def __call__(self, pop):
+                pop.popdata_user = pop.generation
+        r = Recorder()
+        evolve(self.rng, self.pop, params, r)
+        self.assertEqual(self.pop.generation, self.pop.popdata_user)
+
+        import pickle
+        d = pickle.dumps(self.pop)
+        up = pickle.loads(d)
+        self.assertEqual(up.popdata_user, self.pop.generation)
+        self.assertEqual(self.pop, up)
+
+
 if __name__ == "__main__":
     unittest.main()

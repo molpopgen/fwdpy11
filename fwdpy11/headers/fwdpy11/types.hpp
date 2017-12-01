@@ -24,12 +24,13 @@
 
 #ifndef FWDPY11_TYPES__
 #define FWDPY11_TYPES__
+
+#include <pybind11/pybind11.h>
 #include <fwdpy11/opaque/opaque_types.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar.hpp>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <gsl/gsl_statistics_double.h>
-#include <map>
 #include <memory>
 #include <vector>
 #include <stdexcept>
@@ -143,8 +144,16 @@ namespace fwdpy11
         using base = KTfwd::singlepop<KTfwd::popgenmut, diploid_t>;
         //! The current generation.  Start counting from zero
         unsigned generation;
+        //! A Python object that sims may (optionally) use
+        pybind11::object popdata;
+        //! A Python objeft that users may access during a simulation
+        pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
-        singlepop_t(const unsigned &N) : base(N), generation(0)
+        singlepop_t(const unsigned &N)
+            : base(N),
+              generation(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -164,7 +173,10 @@ namespace fwdpy11
                     mutations_input &&mutations)
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
-                   std::forward<mutations_input>(mutations))
+                   std::forward<mutations_input>(mutations)),
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
@@ -215,7 +227,8 @@ namespace fwdpy11
         // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
+        //        *this, KTfwd::mutation_writer(),
+        //        fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -235,29 +248,35 @@ namespace fwdpy11
 
       This is the C++ representation of a single-deme simulation where a
       KTfwd::popgenmut
-      is the mutation type, and a custom diploid (fwdpy11::diploid_t) is the
+      is the mutation type, and a custom diploid (fwdpy11::diploid_t) is
+      the
       diploid type.
 
       This type inherits from fwdpp's type KTfwd::singlepop, and the main
       documentation
       is found in the fwdpp reference manual.
 
-      Here is a brief overview of the most important members of the base class.
+      Here is a brief overview of the most important members of the base
+      class.
 
       The format is name: type, comment
 
-      mutations: vector<popgenmut>, contains a mix of extinct, segregating, and
+      mutations: vector<popgenmut>, contains a mix of extinct, segregating,
+      and
       possibly fixed variants, depending on the simulation type.
-      mcounts: vector<unsigned>, is the same length as mutations, and records
+      mcounts: vector<unsigned>, is the same length as mutations, and
+      records
       the count (frequency, as an integer) of each mutation.
       gametes: vector<gamete>, contains a mix of extinct and extant gametes
       diploids: vector<vector<diploid>>, each vector is a deme
       fixations: vector<popgenmut>, is filled by simulations that "prune"
       fixations when they occur
-      fixation_times: vector<unsigned>, is filled by simulations that "prune"
+      fixation_times: vector<unsigned>, is filled by simulations that
+      "prune"
       fixations when they occur
 
-      \note Internally, fwdpp uses extinct elements in containers for "object
+      \note Internally, fwdpp uses extinct elements in containers for
+      "object
       recycling."
 
       Further:
@@ -271,16 +290,25 @@ namespace fwdpy11
         using base = KTfwd::metapop<KTfwd::popgenmut, diploid_t>;
         //! Current generation.  Start counting from 0
         unsigned generation;
-        //! Constructor takes list of deme sizes are aregument
+        pybind11::object popdata;
+        //! A Python objeft that users may access during a simulation
+        pybind11::object popdata_user;
+        //! Constructor takes number of diploids as argument
         explicit metapop_t(const std::vector<unsigned> &Ns)
-            : base(&Ns[0], Ns.size()), generation(0)
+            : base(&Ns[0], Ns.size()),
+              generation(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             // need to determine policy for how to label diploids :)
         }
 
         //! Constructor takes list of deme sizes are aregument
         explicit metapop_t(const std::initializer_list<unsigned> &Ns)
-            : base(Ns), generation(0)
+            : base(Ns),
+              generation(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
@@ -291,13 +319,19 @@ namespace fwdpy11
                   mutations_input &&mutations)
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
-                   std::forward<mutations_input>(mutations))
+                   std::forward<mutations_input>(mutations)),
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
         //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p)
-            : base(p), generation(p.generation)
+            : base(p),
+              generation(p.generation), popdata{ p.popdata }, popdata_user{
+                  p.popdata_user
+              }
         {
         }
         static metapop_t
@@ -323,7 +357,8 @@ namespace fwdpy11
         // serialize() const
         //{
         //    return serialization::serialize_details(
-        //        this, KTfwd::mutation_writer(), fwdpy11::diploid_writer());
+        //        this, KTfwd::mutation_writer(),
+        //        fwdpy11::diploid_writer());
         //}
 
         // void
@@ -338,7 +373,8 @@ namespace fwdpy11
         // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
+        //        *this, KTfwd::mutation_writer(),
+        //        fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -363,13 +399,22 @@ namespace fwdpy11
       \brief Single-deme object where mutations contain vector<double> for
     internal data.
     ,
-      See fwdpy11::singlepop_t documentation for details, which are the same as
+      See fwdpy11::singlepop_t documentation for details, which are the
+    same as
     for this type.
     */
     {
         using base = KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>;
         unsigned generation;
-        explicit singlepop_gm_vec_t(const unsigned &N) : base(N), generation(0)
+        pybind11::object popdata;
+        //! A Python objeft that users may access during a simulation
+        pybind11::object popdata_user;
+        //! Constructor takes number of diploids as argument
+        explicit singlepop_gm_vec_t(const unsigned &N)
+            : base(N),
+              generation(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -385,11 +430,17 @@ namespace fwdpy11
                                     mutations_input &&mutations)
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
-                   std::forward<mutations_input>(mutations))
+                   std::forward<mutations_input>(mutations)),
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
-        explicit singlepop_gm_vec_t(const std::string &s) : base(0)
+        explicit singlepop_gm_vec_t(const std::string &s)
+            : base(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             this->deserialize(s);
         }
@@ -433,7 +484,8 @@ namespace fwdpy11
         // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
+        //        *this, KTfwd::mutation_writer(),
+        //        fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 
@@ -457,8 +509,15 @@ namespace fwdpy11
     {
         using base = KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>;
         unsigned generation, nloci;
+        pybind11::object popdata;
+        //! A Python objeft that users may access during a simulation
+        pybind11::object popdata_user;
+        //! Constructor takes number of diploids as argument
         explicit multilocus_t(const unsigned N, const unsigned nloci_)
-            : base(N, nloci_), generation(0), nloci(nloci_)
+            : base(N, nloci_), generation(0),
+              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -477,7 +536,10 @@ namespace fwdpy11
         explicit multilocus_t(
             const unsigned N, const unsigned nloci_,
             const std::vector<std::pair<double, double>> &locus_boundaries)
-            : base(N, nloci_, locus_boundaries), generation(0), nloci(nloci_)
+            : base(N, nloci_, locus_boundaries), generation(0),
+              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -501,7 +563,10 @@ namespace fwdpy11
                      mutations_input &&mutations)
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
-                   std::forward<mutations_input>(mutations))
+                   std::forward<mutations_input>(mutations)),
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
@@ -553,7 +618,8 @@ namespace fwdpy11
         // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(), fwdpy11::diploid_writer(),
+        //        *this, KTfwd::mutation_writer(),
+        //        fwdpy11::diploid_writer(),
         //        filename, append);
         //}
 

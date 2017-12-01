@@ -53,6 +53,7 @@ Welcome to fwdpy11's documentation!
     examples/DataMatrix
     examples/qtrait
     examples/processingpops
+    examples/parentage
 
 .. toctree::
     :caption: Maximizing performance
