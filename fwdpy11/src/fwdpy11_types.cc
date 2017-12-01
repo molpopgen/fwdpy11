@@ -128,6 +128,14 @@ namespace
         To distinguish them, use the locations of nonzero values in "mcounts" 
         for an instance of this type."
     )delim";
+
+    static const auto POPDATA_DOCSTRING
+        = "Python object that may be written to by a simulation. Any data "
+          "written should be documented by the simulation function.\n\n.. "
+          "versionadded:: 0.1.4";
+
+    static const auto POPDATA_USER_DOCSTRING
+        = "A Python object with read-write access.\n\n.. versionadded:: 0.1.4";
 }
 
 PYBIND11_MODULE(fwdpy11_types, m)
@@ -580,11 +588,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("gametes", &fwdpp_popgenmut_base::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("popdata", &fwdpy11::singlepop_t::popdata,
-                      "A Python object that may be written to by a "
-                      "simulation. Any data written should be documented by "
-                      "the simulation function.")
+                      POPDATA_DOCSTRING)
         .def_readwrite("popdata_user", &fwdpy11::singlepop_t::popdata_user,
-                       "A Python object with read-write access.")
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
             [](const fwdpy11::singlepop_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -777,11 +783,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
                        &fwdpy11::multilocus_t::locus_boundaries,
                        "[beg,end) positions for each locus")
         .def_readonly("popdata", &fwdpy11::multilocus_t::popdata,
-                      "A Python object that may be written to by a "
-                      "simulation. Any data written should be documented by "
-                      "the simulation function.")
+                      POPDATA_DOCSTRING)
         .def_readwrite("popdata_user", &fwdpy11::multilocus_t::popdata_user,
-                       "A Python object with read-write access.")
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
             [](const fwdpy11::multilocus_t& pop) -> py::object {
                 auto pb = py::bytes(pop.serialize());
@@ -982,13 +986,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("popdata", &fwdpy11::singlepop_gm_vec_t::popdata,
-                      "A Python object that may be written to by a "
-                      "simulation. Any data written should be documented by "
-                      "the simulation function.")
+                      POPDATA_DOCSTRING)
         .def_readwrite("popdata_user",
                        &fwdpy11::singlepop_gm_vec_t::popdata_user,
-                       "A Python object with read-write access.")
-
+                       POPDATA_USER_DOCSTRING)
         .def(py::pickle(
 
             [](const fwdpy11::singlepop_gm_vec_t& pop) -> py::object {
