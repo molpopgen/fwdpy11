@@ -20,6 +20,7 @@
 import argparse
 import sys
 
+
 def print_includes():
     from .dev import get_fwdpp_includes
     from .dev import get_includes
@@ -29,15 +30,27 @@ def print_includes():
     print(' '.join('-I' + idir for idir in idirs))
 
 
+def print_mako():
+    from .dev import minimal_mako
+    print (minimal_mako())
+
+
 def main():
     parser = argparse.ArgumentParser(prog='python -m fwdpy11')
     parser.add_argument('--includes', action='store_true',
                         help='Print include paths for fwdpy11 and fwdpp.')
+    parser.add_argument('--mako', action='store_true',
+                        help="Print minimal mako header for use with cppimport.")
     args = parser.parse_args()
     if not sys.argv[1:]:
         parser.print_help()
     if args.includes:
         print_includes()
+        return
+    if args.mako:
+        print_mako()
+        return
+
 
 if __name__ == "__main__":
     main()
