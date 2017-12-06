@@ -104,13 +104,25 @@ PYBIND11_MODULE(fwdpp_types, m)
              "Return dictionary representaton of the gamete.")
         .def(py::pickle(
             [](const KTfwd::gamete &g) {
-                return py::make_tuple(g.n, g.mutations, g.smutations);
+                py::list n = py::cast(g.mutations);
+                py::list s = py::cast(g.smutations);
+                return py::make_tuple(g.n, n, s);
             },
             [](py::tuple t) {
+                py::list nl = t[1].cast<py::list>();
+                py::list sl = t[2].cast<py::list>();
+                KTfwd::gamete::mutation_container n, s;
+                for (auto &&nli : nl)
+                    {
+                        n.push_back(nli.cast<KTfwd::uint_t>());
+                    }
+                for (auto &&sli : sl)
+                    {
+                        s.push_back(sli.cast<KTfwd::uint_t>());
+                    }
                 return std::unique_ptr<KTfwd::gamete>(new KTfwd::gamete(
-                    t[0].cast<KTfwd::uint_t>(),
-                    t[1].cast<std::vector<KTfwd::uint_t>>(),
-                    t[2].cast<std::vector<KTfwd::uint_t>>()));
+                    t[0].cast<KTfwd::uint_t>(), std::move(n), std::move(s)));
+
             }));
 
     // Sugar types
