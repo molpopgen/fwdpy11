@@ -123,7 +123,10 @@ PYBIND11_MODULE(fwdpp_types, m)
                 return std::unique_ptr<KTfwd::gamete>(new KTfwd::gamete(
                     t[0].cast<KTfwd::uint_t>(), std::move(n), std::move(s)));
 
-            }));
+            }))
+        .def("__eq__", [](const KTfwd::gamete &a, const KTfwd::gamete &b) {
+            return a == b;
+        });
 
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
