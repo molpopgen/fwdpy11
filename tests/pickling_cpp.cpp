@@ -21,6 +21,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
 
 namespace py = pybind11;
 
+//Example of pickling a specific C++ type
 py::bytes
 pickle_mutation(const KTfwd::popgenmut& p)
 {
@@ -28,7 +29,18 @@ pickle_mutation(const KTfwd::popgenmut& p)
     return py::module::import("pickle").attr("dumps")(m);
 }
 
+//General pickler for any Python type.
+//Also shows how to save pickle.dumps
+//as a callable on the C++ side
+py::bytes
+general_pickler(py::object p)
+{
+    auto f = py::module::import("pickle").attr("dumps");
+    return f(p);
+}
+
 PYBIND11_MODULE(pickling_cpp, m)
 {
     m.def("pickle_mutation", &pickle_mutation);
+    m.def("general_pickler", &general_pickler);
 }

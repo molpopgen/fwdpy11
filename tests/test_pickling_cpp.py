@@ -5,7 +5,7 @@ pickling_cpp = cppimport.imp("pickling_cpp")
 import unittest
 
 
-class testPickeMutation(unittest.TestCase):
+class testPickleMutation(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
@@ -16,6 +16,42 @@ class testPickeMutation(unittest.TestCase):
         o = pickling_cpp.pickle_mutation(self.m)
         m = pickle.loads(o)
         self.assertEqual(m, self.m)
+
+    def testUnpickleFromGeneralPickler(self):
+        import pickle
+        o = pickling_cpp.general_pickler(self.m)
+        m = pickle.loads(o)
+        self.assertEqual(m, self.m)
+
+
+class testPickleSlocusPop(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        from quick_pops import quick_neutral_slocus
+        self.pop = quick_neutral_slocus()
+
+    def testPickleMutations(self):
+        import pickle
+        p = [pickling_cpp.general_pickler(i) for i in self.pop.mutations]
+        for i, j in zip(p, self.pop.mutations):
+            m = pickle.loads(i)
+            self.assertEqual(m, j)
+
+    def testPickleGametes(self):
+        import pickle
+        p = [pickling_cpp.general_pickler(i) for i in self.pop.gametes]
+        for i, j in zip(p, self.pop.gametes):
+            m = pickle.loads(i)
+#            self.assertEqual(m, j)
+
+    def testPickleDiploids(self):
+        import pickle
+        p = [pickling_cpp.general_pickler(i) for i in self.pop.diploids]
+        for i, j in zip(p, self.pop.diploids):
+            m = pickle.loads(i)
+            print(m.first,m.second,m.g,m.e,m.w,m.parental_data)
+            print(j.first,j.second,j.g,j.e,j.w,j.parental_data)
+            self.assertEqual(m, j)
 
 
 if __name__ == "__main__":
