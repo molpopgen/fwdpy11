@@ -198,11 +198,15 @@ PYBIND11_MODULE(fwdpp_types, m)
                     p[2].cast<double>(), p[3].cast<unsigned>(),
                     p[4].cast<std::uint16_t>()));
             }))
-        .def("__str__", [](const KTfwd::popgenmut &m) {
-            return "Mutation[" + std::to_string(m.pos) + ","
-                   + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                   + std::to_string(m.g) + "," + std::to_string(m.xtra) + "]";
-        });
+        .def("__str__",
+             [](const KTfwd::popgenmut &m) {
+                 return "Mutation[" + std::to_string(m.pos) + ","
+                        + std::to_string(m.s) + "," + std::to_string(m.h) + ","
+                        + std::to_string(m.g) + "," + std::to_string(m.xtra)
+                        + "]";
+             })
+        .def("__eq__", [](const KTfwd::popgenmut &a,
+                          const KTfwd::popgenmut &b) { return a == b; });
 
     py::bind_vector<std::vector<double>>(
         m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
@@ -215,7 +219,7 @@ PYBIND11_MODULE(fwdpp_types, m)
         m, "GeneralMutVec",
         "Mutation type with vector of effect size and dominance terms.")
         .def(py::init<KTfwd::generalmut_vec::constructor_tuple>(),
-                R"delim(
+             R"delim(
                 Construct from a tuple.
                 
                 .. testcode::
