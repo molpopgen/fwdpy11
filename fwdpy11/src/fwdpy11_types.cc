@@ -190,7 +190,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         d->parental_data = t[6];
                     }
                 return d;
-            }));
+            }))
+        .def("__eq__", [](const fwdpy11::diploid_t& a,
+                          const fwdpy11::diploid_t& b) { return a == b; });
 
     py::bind_vector<fwdpy11::dipvector_t>(
         m, "DiploidContainer", py::module_local(false),
