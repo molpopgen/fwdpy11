@@ -19,6 +19,7 @@ Welcome to fwdpy11's documentation!
     pages/deprecated
     pages/todo
     pages/pubs
+    pages/developers
 
 .. toctree::
     :caption: Concepts
