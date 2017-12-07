@@ -310,7 +310,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
 			 
 			 .. versionadded:: 0.1.2
-			 )delim");
+			 )delim")
+        .def(py::pickle(
+            [](const std::vector<fwdpy11::diploid_t>& v) -> py::list {
+                py::list rv;
+                for (auto&& vi : v)
+                    {
+                        rv.append(vi);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<fwdpy11::diploid_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::diploid_t>());
+                    }
+                return rv;
+            }));
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
         m, "VecDiploidContainer", py::module_local(false),
