@@ -121,5 +121,24 @@ class testPickleMlocusPop(unittest.TestCase):
         self.assertEqual(pp, self.pop)
 
 
+class testSlocusPopGeneralMut(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        import fwdpy11
+        self.pop = fwdpy11.SlocusPopGeneralMutVec(100)
+
+    def testPicklePopPy(self):
+        import pickle
+        p = pickle.dumps(self.pop, -1)
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
+
+    def testPicklePopCpp(self):
+        import pickle
+        p = pickling_cpp.general_pickler(self.pop)
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
+
+
 if __name__ == "__main__":
     unittest.main()
