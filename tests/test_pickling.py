@@ -108,6 +108,18 @@ class testPickleMlocusPop(unittest.TestCase):
         for i, j in zip(p, self.pop.diploids):
             self.assertEqual(i, j)
 
+    def testPicklePopPy(self):
+        import pickle
+        p = pickle.dumps(self.pop, -1)
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
+
+    def testPicklePopCpp(self):
+        import pickle
+        p = pickling_cpp.general_pickler(self.pop)
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
+
 
 if __name__ == "__main__":
     unittest.main()

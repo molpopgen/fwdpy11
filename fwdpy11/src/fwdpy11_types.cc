@@ -886,7 +886,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         pdata.append(d[0].parental_data);
                     }
-                return py::make_tuple(std::move(pb), std::move(pdata));
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
             [](py::object pickled) {
                 try
