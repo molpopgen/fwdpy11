@@ -95,5 +95,19 @@ class testPickleSlocusPop(unittest.TestCase):
         self.assertEqual(pp, self.pop)
 
 
+class testPickleMlocusPop(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        from quick_pops import quick_mlocus_qtrait
+        self.pop = quick_mlocus_qtrait()
+
+    def testPickleDiploids(self):
+        import pickle
+        x = pickle.dumps(self.pop.diploids)
+        p = pickle.loads(x)
+        for i, j in zip(p, self.pop.diploids):
+            self.assertEqual(i, j)
+
+
 if __name__ == "__main__":
     unittest.main()
