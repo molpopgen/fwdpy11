@@ -13,9 +13,9 @@ dependencies:
     - nbsphinx
     - msprime
     - gcc
+    - numpy
+    - pandas
+    - matplotlib
+    - ipython
     - pip:
-        - numpy
-        - pandas
-        - matplotlib
-        - ipython
         - cppimport
