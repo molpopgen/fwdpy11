@@ -107,11 +107,13 @@ PYBIND11_MODULE(fwdpp_types, m)
                 return py::make_tuple(g.n, g.mutations, g.smutations);
             },
             [](py::tuple t) {
-                return std::unique_ptr<KTfwd::gamete>(new KTfwd::gamete(
-                    t[0].cast<KTfwd::uint_t>(),
-                    t[1].cast<std::vector<KTfwd::uint_t>>(),
-                    t[2].cast<std::vector<KTfwd::uint_t>>()));
-            }));
+                return KTfwd::gamete(t[0].cast<KTfwd::uint_t>(),
+                                     t[1].cast<std::vector<KTfwd::uint_t>>(),
+                                     t[2].cast<std::vector<KTfwd::uint_t>>());
+            }))
+        .def("__eq__", [](const KTfwd::gamete &a, const KTfwd::gamete &b) {
+            return a == b;
+        });
 
     // Sugar types
     py::class_<KTfwd::popgenmut, KTfwd::mutation_base>(
@@ -198,24 +200,45 @@ PYBIND11_MODULE(fwdpp_types, m)
                     p[2].cast<double>(), p[3].cast<unsigned>(),
                     p[4].cast<std::uint16_t>()));
             }))
-        .def("__str__", [](const KTfwd::popgenmut &m) {
-            return "Mutation[" + std::to_string(m.pos) + ","
-                   + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                   + std::to_string(m.g) + "," + std::to_string(m.xtra) + "]";
-        });
+        .def("__str__",
+             [](const KTfwd::popgenmut &m) {
+                 return "Mutation[" + std::to_string(m.pos) + ","
+                        + std::to_string(m.s) + "," + std::to_string(m.h) + ","
+                        + std::to_string(m.g) + "," + std::to_string(m.xtra)
+                        + "]";
+             })
+        .def("__eq__", [](const KTfwd::popgenmut &a,
+                          const KTfwd::popgenmut &b) { return a == b; });
 
     py::bind_vector<std::vector<double>>(
         m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
         py::module_local(false));
     py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
         m, "VectorGeneralMutVec", py::module_local(false),
-        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.");
+        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.")
+        .def(py::pickle(
+            [](const std::vector<KTfwd::generalmut_vec> &mutations) {
+                py::list rv;
+                for (auto &&i : mutations)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::generalmut_vec> rv;
+                for (auto &&i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::generalmut_vec>());
+                    }
+                return rv;
+            }));
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
         "Mutation type with vector of effect size and dominance terms.")
         .def(py::init<KTfwd::generalmut_vec::constructor_tuple>(),
-                R"delim(
+             R"delim(
                 Construct from a tuple.
                 
                 .. testcode::
@@ -243,5 +266,38 @@ PYBIND11_MODULE(fwdpp_types, m)
         .def_readonly("h", &KTfwd::generalmut_vec::h,
                       "List of dominance terms.")
         .def_readonly("g", &KTfwd::generalmut_vec::g,
-                      "Generation when mutation arose.");
+                      "Generation when mutation arose.")
+        .def(py::pickle(
+            [](const KTfwd::generalmut_vec &m) {
+                py::list h, s;
+                for (auto &&i : m.h)
+                    {
+                        h.append(i);
+                    }
+                for (auto &&i : m.s)
+                    {
+                        s.append(i);
+                    }
+                return py::make_tuple(m.pos, s, h, m.g, m.xtra);
+            },
+            [](py::tuple t) {
+                py::list s = t[1].cast<py::list>();
+                py::list h = t[2].cast<py::list>();
+                std::vector<double> vs, vh;
+                for (auto &&i : s)
+                    {
+                        vs.push_back(i.cast<double>());
+                    }
+                for (auto &&i : h)
+                    {
+                        vh.push_back(i.cast<double>());
+                    }
+                double pos = t[0].cast<double>();
+                KTfwd::uint_t g = t[3].cast<KTfwd::uint_t>();
+                auto xtra = t[4].cast<decltype(KTfwd::generalmut_vec::xtra)>();
+                return KTfwd::generalmut_vec(std::make_tuple(
+                    std::move(vs), std::move(vh), pos, g, xtra));
+            }))
+        .def("__eq__", [](const KTfwd::generalmut_vec &a,
+                          const KTfwd::generalmut_vec &b) { return a == b; });
 }

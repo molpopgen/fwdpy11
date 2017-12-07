@@ -190,7 +190,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         d->parental_data = t[6];
                     }
                 return d;
-            }));
+            }))
+        .def("__eq__", [](const fwdpy11::diploid_t& a,
+                          const fwdpy11::diploid_t& b) { return a == b; });
 
     py::bind_vector<fwdpy11::dipvector_t>(
         m, "DiploidContainer", py::module_local(false),
@@ -308,7 +310,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
 			 
 			 .. versionadded:: 0.1.2
-			 )delim");
+			 )delim")
+        .def(py::pickle(
+            [](const std::vector<fwdpy11::diploid_t>& v) -> py::list {
+                py::list rv;
+                for (auto&& vi : v)
+                    {
+                        rv.append(vi);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<fwdpy11::diploid_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::diploid_t>());
+                    }
+                return rv;
+            }));
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
         m, "VecDiploidContainer", py::module_local(false),
@@ -442,16 +461,68 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDipGametes`
 			 
 			 .. versionadded:: 0.1.2
-			 )delim");
+			 )delim")
+        .def(py::pickle(
+            [](const std::vector<fwdpy11::dipvector_t>& diploids) {
+                py::list rv;
+                for (auto&& i : diploids)
+                    {
+                        rv.append(i);
+                    };
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<fwdpy11::dipvector_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::dipvector_t>());
+                    }
+                return rv;
+            }));
 
     py::bind_vector<std::vector<KTfwd::uint_t>>(
         m, "VectorUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol(), py::module_local(false));
+        py::buffer_protocol(), py::module_local(false))
+        .def(py::pickle(
+            [](const std::vector<KTfwd::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::uint_t>());
+                    }
+                return rv;
+            }));
+
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
                                       py::module_local(false),
                                       "C++ representations of a list of "
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "
-                                      "Typically, access will be read-only.");
+                                      "Typically, access will be read-only.")
+        .def(py::pickle(
+            [](const fwdpy11::gcont_t& gametes) {
+                py::list rv;
+                for (auto&& g : gametes)
+                    {
+                        rv.append(g);
+                    }
+                return rv;
+            },
+            [](const py::list l) {
+                fwdpy11::gcont_t rv;
+                for (auto&& li : l)
+                    {
+                        rv.push_back(li.cast<fwdpy11::gcont_t::value_type>());
+                    }
+                return rv;
+            }));
 
     PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
@@ -512,7 +583,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
         array for processing.
 
         .. versionadded: 0.1.2
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpy11::mcont_t& mutations) {
+                py::list rv;
+                for (auto&& i : mutations)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                fwdpy11::mcont_t rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::mcont_t::value_type>());
+                    }
+                return rv;
+            }));
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
@@ -798,7 +886,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     {
                         pdata.append(d[0].parental_data);
                     }
-                return py::make_tuple(std::move(pb), std::move(pdata));
+                return py::make_tuple(std::move(pb), std::move(pdata),
+                                      pop.popdata, pop.popdata_user);
             },
             [](py::object pickled) {
                 try
