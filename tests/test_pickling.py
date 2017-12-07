@@ -38,8 +38,8 @@ class testPickleSlocusPop(unittest.TestCase):
             self.assertEqual(m, j)
         x = pickle.dumps(self.pop.mutations)
         p = pickle.loads(x)
-        for i,j in zip(p, self.pop.mutations):
-            self.assertEqual(i,j)
+        for i, j in zip(p, self.pop.mutations):
+            self.assertEqual(i, j)
 
     def testPickleGametes(self):
         import pickle
@@ -69,6 +69,12 @@ class testPickleSlocusPop(unittest.TestCase):
         p = pickle.loads(x)
         for i, j in zip(p, self.pop.diploids):
             self.assertEqual(i, j)
+
+    def testPicklePopCpp(self):
+        import pickle
+        p = pickling_cpp.general_pickler(self.pop)
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
 
 
 if __name__ == "__main__":
