@@ -466,11 +466,29 @@ PYBIND11_MODULE(fwdpy11_types, m)
     py::bind_vector<std::vector<KTfwd::uint_t>>(
         m, "VectorUint32", "Vector of unsigned 32-bit integers.",
         py::buffer_protocol(), py::module_local(false));
+
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
                                       py::module_local(false),
                                       "C++ representations of a list of "
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "
-                                      "Typically, access will be read-only.");
+                                      "Typically, access will be read-only.")
+        .def(py::pickle(
+            [](const fwdpy11::gcont_t& gametes) {
+                py::list rv;
+                for (auto&& g : gametes)
+                    {
+                        rv.append(g);
+                    }
+                return rv;
+            },
+            [](const py::list l) {
+                fwdpy11::gcont_t rv;
+                for (auto&& li : l)
+                    {
+                        rv.push_back(li.cast<fwdpy11::gcont_t::value_type>());
+                    }
+                return rv;
+            }));
 
     PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
