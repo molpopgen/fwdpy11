@@ -15,8 +15,9 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
-* Attributes `popdata` and `popdata_user` added to all population objects. `PR #52
-  <https://github.com/molpopgen/fwdpy11/pull/52>`_
+* Improved support for pickling lower-level types. See the unit test file `tests/test_pickling.py` for examples of directly pickling things like mutations and containers of mutations.  `PR #55 <https://github.com/molpopgen/fwdpy11/pull/55>`_
+* `__main__.py` added.  The main use is to help writing python modules based on fwdpy11. See :ref:`developers` for details. `PR #54 <https://github.com/molpopgen/fwdpy11/pull/54>`_
+* Attributes `popdata` and `popdata_user` added to all population objects. `PR #52 <https://github.com/molpopgen/fwdpy11/pull/52>`_
 * :attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data` added as read-only field. `PR #51 <https://github.com/molpopgen/fwdpy11/pull/51>`_
 * :attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` is now writeable.
 * :attr:`fwdpy11.sampling.DataMatrix.neutral` and :attr:`fwdpy11.sampling.DataMatrix.selected` are now writeable
