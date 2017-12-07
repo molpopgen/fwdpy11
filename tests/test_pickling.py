@@ -36,6 +36,10 @@ class testPickleSlocusPop(unittest.TestCase):
         for i, j in zip(p, self.pop.mutations):
             m = pickle.loads(i)
             self.assertEqual(m, j)
+        x = pickle.dumps(self.pop.mutations)
+        p = pickle.loads(x)
+        for i,j in zip(p, self.pop.mutations):
+            self.assertEqual(i,j)
 
     def testPickleGametes(self):
         import pickle

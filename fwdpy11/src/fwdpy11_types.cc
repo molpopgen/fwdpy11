@@ -566,7 +566,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
         array for processing.
 
         .. versionadded: 0.1.2
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpy11::mcont_t& mutations) {
+                py::list rv;
+                for (auto&& i : mutations)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                fwdpy11::mcont_t rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::mcont_t::value_type>());
+                    }
+                return rv;
+            }));
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
