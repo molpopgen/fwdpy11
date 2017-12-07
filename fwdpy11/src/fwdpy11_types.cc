@@ -465,7 +465,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     py::bind_vector<std::vector<KTfwd::uint_t>>(
         m, "VectorUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol(), py::module_local(false));
+        py::buffer_protocol(), py::module_local(false))
+        .def(py::pickle(
+            [](const std::vector<KTfwd::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::uint_t>());
+                    }
+                return rv;
+            }));
 
     py::bind_vector<fwdpy11::gcont_t>(m, "GameteContainer",
                                       py::module_local(false),
