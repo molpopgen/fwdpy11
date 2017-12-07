@@ -99,7 +99,7 @@ class testPickleMlocusPop(unittest.TestCase):
     @classmethod
     def setUp(self):
         from quick_pops import quick_mlocus_qtrait
-        self.pop = quick_mlocus_qtrait()
+        self.pop = quick_mlocus_qtrait(N=500, simlen=10)
 
     def testPickleDiploids(self):
         import pickle
