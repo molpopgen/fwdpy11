@@ -28,10 +28,11 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/opaque/opaque_types.hpp>
 #include <fwdpy11/rng.hpp>
-#include <fwdpp/sugar.hpp>
-#include <fwdpp/sugar/GSLrng_t.hpp>
-#include <gsl/gsl_statistics_double.h>
-#include <memory>
+#include <fwdpp/sugar/popgenmut.hpp>
+#include <fwdpp/sugar/generalmut.hpp>
+#include <fwdpp/sugar/singlepop.hpp>
+#include <fwdpp/sugar/multiloc.hpp>
+#include <fwdpp/sugar/metapop.hpp>
 #include <vector>
 #include <stdexcept>
 #include <fwdpy11/serialization.hpp>
