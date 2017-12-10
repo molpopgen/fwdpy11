@@ -47,6 +47,27 @@ PYBIND11_MODULE(fwdpp_types, m)
                        "A 16-bit unsigned integer that can be used for adding "
                        "\"meta-data\" to mutations");
 
+    py::bind_vector<std::vector<KTfwd::uint_t>>(
+        m, "VecUint32", "Vector of unsigned 32-bit integers.",
+        py::buffer_protocol())
+        .def(py::pickle(
+            [](const std::vector<KTfwd::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::uint_t>());
+                    }
+                return rv;
+            }));
+
     py::class_<KTfwd::gamete>(m, "Gamete", R"delim(
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.

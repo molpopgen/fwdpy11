@@ -87,6 +87,27 @@ PYBIND11_MODULE(fwdpy11_types, m)
 {
     m.doc() = "Wrap C++ types specific to fwdpy11.";
 
+    py::bind_vector<std::vector<KTfwd::uint_t>>(
+        m, "VecUint32", "Vector of unsigned 32-bit integers.",
+        py::buffer_protocol())
+        .def(py::pickle(
+            [](const std::vector<KTfwd::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::uint_t>());
+                    }
+                return rv;
+            }));
+
     py::class_<fwdpy11::GSLrng_t>(
         m, "GSLrng", "Random number generator based on a mersenne twister.")
         .def(py::init<unsigned>(),
@@ -138,28 +159,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
             }))
         .def("__eq__", [](const fwdpy11::diploid_t& a,
                           const fwdpy11::diploid_t& b) { return a == b; });
-
-    py::bind_vector<std::vector<KTfwd::uint_t>>(
-        m, "VecUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol(), py::module_local(false))
-        .def(py::pickle(
-            [](const std::vector<KTfwd::uint_t>& v) {
-                py::list rv;
-                for (auto&& i : v)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<KTfwd::uint_t> rv;
-                for (auto&& i : l)
-                    {
-                        rv.push_back(i.cast<KTfwd::uint_t>());
-                    }
-                return rv;
-            }));
-
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
