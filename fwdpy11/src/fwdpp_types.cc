@@ -23,7 +23,6 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>
-#include <fwdpy11/opaque/opaque_types.hpp>
 
 namespace py = pybind11;
 

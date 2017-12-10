@@ -34,6 +34,9 @@ using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
 using singlepop_generalmut_vec_base
     = singlepop_generalmut_vec_sugar_base::popbase_t;
 
+PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 

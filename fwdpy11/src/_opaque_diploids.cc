@@ -20,7 +20,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
-#include <fwdpy11/opaque/opaque_types.hpp>
+#include <fwdpy11/types/diploid.hpp>
 
 namespace py = pybind11;
 
@@ -54,7 +54,8 @@ make_diploid_gametes(const fwdpy11::diploid_t& dip, const std::size_t locus)
     return d;
 }
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::diploid_t>>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_traits>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_gametes>);
 
