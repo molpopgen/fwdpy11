@@ -79,7 +79,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -98,7 +98,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -121,7 +121,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -136,7 +136,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -153,7 +153,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -176,7 +176,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -214,7 +214,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -234,7 +234,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -253,7 +253,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -277,7 +277,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -301,7 +301,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -327,7 +327,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11.fwdpy11_types.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")

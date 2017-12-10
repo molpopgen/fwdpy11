@@ -168,6 +168,24 @@ fwdpy11.demography
     :members:
     :show-inheritance:
 
+Low level modules
+---------------------------------------------------------
+.. automodule:: fwdpy11._opaque_mutations
+    :members:
+    :show-inheritance:
+
+.. automodule:: fwdpy11._opaque_generalmutvecs
+    :members:
+    :show-inheritance:
+
+.. automodule:: fwdpy11._opaque_gametes
+    :members:
+    :show-inheritance:
+
+.. automodule:: fwdpy11._opaque_diploids
+    :members:
+    :show-inheritance:
+
 Indices and tables
 ==================
 

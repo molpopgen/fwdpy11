@@ -71,7 +71,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
                  return rv;
              },
              R"delim(
-        :rtype: :class:`fwdpy11.fwdpy11_types.VecMutationDtype`.
+        :rtype: :class:`fwdpy11._opaque_mutations.VecMutationDtype`.
         
         The return value should be coerced into a Numpy 
         array for processing.
