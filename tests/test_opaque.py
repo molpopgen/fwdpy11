@@ -33,7 +33,7 @@ class testSlocusPop(unittest.TestCase):
     def test_mutations(self):
         self.assertTrue(
             type(self.pop.mutations)
-            is fwdpy11.fwdpy11_types.MutationContainer)
+            is fwdpy11._opaque_mutations.VecMutation)
         self.assertFalse(type(self.pop.mutations) is list)
         self.assertTrue(type(list(self.pop.mutations)) is list)
 
@@ -60,7 +60,7 @@ class testSlocusPop(unittest.TestCase):
 
 class SlocusTypeSampler(object):
     def __call__(self, pop):
-        assert(type(pop.mutations) is fwdpy11.fwdpy11_types.MutationContainer)
+        assert(type(pop.mutations) is fwdpy11._opaque_mutations.VecMutation)
         assert(type(pop.mutations) is not list)
         assert(type(list(pop.mutations)) is list)
         assert(type(pop.mcounts) is fwdpy11.fwdpy11_types.VectorUint32)
@@ -97,7 +97,7 @@ class testMlocusPop(unittest.TestCase):
     def test_mutations(self):
         self.assertTrue(
             type(self.pop.mutations)
-            is fwdpy11.fwdpy11_types.MutationContainer)
+            is fwdpy11._opaque_mutations.VecMutation)
         self.assertFalse(type(self.pop.mutations) is list)
         self.assertTrue(type(list(self.pop.mutations)) is list)
 
