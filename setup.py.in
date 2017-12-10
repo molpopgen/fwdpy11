@@ -96,6 +96,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11._opaque_generalmutvecs',
+        ['fwdpy11/src/_opaque_generalmutvecs.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11._opaque_diploids',
         ['fwdpy11/src/_opaque_diploids.cc'],
         library_dirs=LIBRARY_DIRS,

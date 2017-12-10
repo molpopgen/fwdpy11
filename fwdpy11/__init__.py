@@ -28,6 +28,7 @@ from .fwdpp_types import *
 from ._opaque_gametes import *
 from ._opaque_mutations import *
 from ._opaque_diploids import *
+from ._opaque_generalmutvecs import *
 from .fwdpy11_types import *
 from .regions import *
 from .dev import *

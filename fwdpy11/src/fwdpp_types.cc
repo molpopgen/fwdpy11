@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#include <pybind11/functional.h>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
@@ -213,26 +213,6 @@ PYBIND11_MODULE(fwdpp_types, m)
     py::bind_vector<std::vector<double>>(
         m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
         py::module_local(false));
-    py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
-        m, "VectorGeneralMutVec", py::module_local(false),
-        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.")
-        .def(py::pickle(
-            [](const std::vector<KTfwd::generalmut_vec> &mutations) {
-                py::list rv;
-                for (auto &&i : mutations)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<KTfwd::generalmut_vec> rv;
-                for (auto &&i : l)
-                    {
-                        rv.push_back(i.cast<KTfwd::generalmut_vec>());
-                    }
-                return rv;
-            }));
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
