@@ -40,26 +40,6 @@ PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 PYBIND11_MAKE_OPAQUE(
     std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
-struct flattened_popgenmut
-{
-    KTfwd::uint_t g;
-    decltype(KTfwd::popgenmut::xtra) label;
-    std::int8_t neutral;
-    double pos, s, h;
-};
-
-inline flattened_popgenmut
-make_flattened_popgenmut(const KTfwd::popgenmut& m)
-{
-    flattened_popgenmut rv;
-    rv.g = m.g;
-    rv.label = m.xtra;
-    rv.neutral = m.neutral;
-    rv.pos = m.pos;
-    rv.s = m.s;
-    rv.h = m.h;
-    return rv;
-}
 
 struct diploid_traits
 {
@@ -91,7 +71,6 @@ make_diploid_gametes(const fwdpy11::diploid_t& dip, const std::size_t locus)
     return d;
 }
 
-PYBIND11_MAKE_OPAQUE(std::vector<flattened_popgenmut>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_traits>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_gametes>);
 
@@ -502,17 +481,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
             }));
 
 
-    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
     PYBIND11_NUMPY_DTYPE(diploid_gametes, locus, first, second);
-    py::bind_vector<std::vector<flattened_popgenmut>>(
-        m, "VecMutStruct", py::buffer_protocol(), py::module_local(false),
-        R"delim(
-        Vector of the data fields in a "
-        ":class:`fwdpy11.fwdpp_types.Mutation`.
-
-        .. versionadded: 0.1.2
-        )delim");
 
     py::bind_vector<std::vector<diploid_traits>>(
         m, "VecDipTraits", py::buffer_protocol(), py::module_local(false),
@@ -531,54 +501,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
         .. versionadded: 0.1.2
         )delim");
-
-    py::bind_vector<fwdpy11::mcont_t>(
-        m, "MutationContainer", "C++ representation of a list of "
-                                ":class:`fwdpy11.fwdpp_types.Mutation`.  "
-                                "Typically, access will be read-only.",
-        py::module_local(false))
-        .def("array",
-             [](const fwdpy11::mcont_t& mc) {
-                 std::vector<flattened_popgenmut> rv;
-                 rv.reserve(mc.size());
-                 for (auto&& m : mc)
-                     {
-                         flattened_popgenmut t;
-                         t.pos = m.pos;
-                         t.s = m.s;
-                         t.h = m.h;
-                         t.g = m.g;
-                         t.label = m.xtra;
-                         t.neutral = m.neutral;
-                         rv.push_back(std::move(t));
-                     }
-                 return rv;
-             },
-             R"delim(
-        :rtype: :class:`fwdpy11.fwdpy11_types.VecMutStruct`.
-        
-        The return value should be coerced into a Numpy 
-        array for processing.
-
-        .. versionadded: 0.1.2
-        )delim")
-        .def(py::pickle(
-            [](const fwdpy11::mcont_t& mutations) {
-                py::list rv;
-                for (auto&& i : mutations)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                fwdpy11::mcont_t rv;
-                for (auto&& i : l)
-                    {
-                        rv.push_back(i.cast<fwdpy11::mcont_t::value_type>());
-                    }
-                return rv;
-            }));
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
