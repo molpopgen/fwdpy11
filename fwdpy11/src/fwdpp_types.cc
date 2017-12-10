@@ -210,8 +210,7 @@ PYBIND11_MODULE(fwdpp_types, m)
                           const KTfwd::popgenmut &b) { return a == b; });
 
     py::bind_vector<std::vector<double>>(
-        m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
-        py::module_local(false));
+        m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol());
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
