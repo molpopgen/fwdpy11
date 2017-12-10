@@ -55,11 +55,11 @@ Mutation Counts
 -----------------------------------------------------------
 
 Mutation objects to not track their own frequencies.  Rather, they are stored in a
-:class:`fwdpy11.fwdpy11_types.VectorUint32`, which is an opaque list of unsigned integers.
+:class:`fwdpy11.fwdpy11_types.VecUint32`, which is an opaque list of unsigned integers.
 
 .. note::
     
-    The length of a :class:`fwdpy11.fwdpy11_types.VectorUint32` in a simulation is the same
+    The length of a :class:`fwdpy11.fwdpy11_types.VecUint32` in a simulation is the same
     length as the corresponding :class:`fwdpy11.fwdpy11_types.MutationContainer`.
 
 .. note::
@@ -82,7 +82,7 @@ Class :class:`fwdpy11.fwdpy11_types.Gamete` describes a gamete.  It has the foll
     "mutations","Container of keys to neutral mutations"
     "smutations","Container of keys to selected mutations"
 
-The type of `mutations` and `smutations` is :class:`fwdpy11.fwdpy11_types.VectorUint32`, an opaque list of unsigned
+The type of `mutations` and `smutations` is :class:`fwdpy11.fwdpy11_types.VecUint32`, an opaque list of unsigned
 integers.  These integers are the indexes of the mutations in the mutations container (and their counts in the mutation
 counts container).
 
@@ -162,7 +162,7 @@ This class contains the following read-only properties:
     "gametes", "A :class:`fwdpy11.fwdpy11_types.GameteContainer`.  See :ref:`gametes`."
     "diploids", "A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.  See :ref:`diploids`."
     "fixations", "A :class:`fwdpy11.fwdpy11_types.MutationContainer` storing fixations. See :ref:`popgenmuts`."
-    "fixation_times", "A :class:`fwdpy11.fwdpp_types.VectorUint32` storing fixation times."
+    "fixation_times", "A :class:`fwdpy11.fwdpp_types.VecUint32` storing fixation times."
 
 .. _mlocuspop:
 

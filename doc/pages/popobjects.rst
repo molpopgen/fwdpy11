@@ -43,7 +43,7 @@ in:
     # 'smutations', with is the second vector
     # in our tuple.  The first is the list of 
     # indexes of neutral variants.
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
 
     # There is only one gamete, and so our diploid
     # will contain two copies of it, and its index is 
@@ -95,7 +95,7 @@ the data from our input containers. The following example is the same as above, 
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
 
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     
@@ -129,7 +129,7 @@ Incorrect gamete count:
     diploids = fwdpy11.VecSingleLocusDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The gamete is incorrectly labelled as occurring once:
-    gametes.append(fwdpy11.Gamete((1,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
+    gametes.append(fwdpy11.Gamete((1,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
@@ -153,7 +153,7 @@ Neutral or non-neutral mutations in the incorrect gamete container:
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The mutation is non-neutral, and we are mistakenly
     # putting it in the Gametes.mutations container:
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([0]),fwdpy11.VectorUint32([]))))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([0]),fwdpy11.VecUint32([]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 
@@ -193,7 +193,7 @@ The output of msprime_ will be used to fill containers that we then use to const
         Returns indexes of all
         derived mutation states
         """
-        return fwdpy11.VectorUint32([i for i, ltr in enumerate(s) if ltr == '1'])
+        return fwdpy11.VecUint32([i for i, ltr in enumerate(s) if ltr == '1'])
 
 
     def convert_mutations(m, mutation_dominance, mutation_label):
@@ -203,7 +203,7 @@ The output of msprime_ will be used to fill containers that we then use to const
 
 
     def convert_single_locus_haplotypes(m):
-        s = fwdpy11.VectorUint32()
+        s = fwdpy11.VecUint32()
         gametes = fwdpy11.VecGamete(
             [fwdpy11.Gamete((1, find_all_derived(i), s)) for i in m.haplotypes()])
         return gametes
@@ -271,7 +271,7 @@ Put mutations into containers out of order as far as mutation position is concer
 
 .. ipython:: python
 
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([]),fwdpy11.VecUint32([1,0]))))
 
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
 
@@ -303,7 +303,7 @@ The sorting takes place on the C++ side because of how the relevant container ty
     mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
     # Put mutations into containers out of order
     # as far as mutation position is concerned:
-    gametes.append(fwdpy11.Gamete((2,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([1,0]))))
+    gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([]),fwdpy11.VecUint32([1,0]))))
     diploids.append(fwdpy11.SingleLocusDiploid(0,0))
     pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
 

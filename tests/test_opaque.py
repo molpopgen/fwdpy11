@@ -40,7 +40,7 @@ class testSlocusPop(unittest.TestCase):
     def test_mcount(self):
         self.assertTrue(
             type(self.pop.mcounts)
-            is fwdpy11.fwdpy11_types.VectorUint32)
+            is fwdpy11.fwdpy11_types.VecUint32)
 
     def test_diploids(self):
         self.assertTrue(
@@ -63,7 +63,7 @@ class SlocusTypeSampler(object):
         assert(type(pop.mutations) is fwdpy11._opaque_mutations.VecMutation)
         assert(type(pop.mutations) is not list)
         assert(type(list(pop.mutations)) is list)
-        assert(type(pop.mcounts) is fwdpy11.fwdpy11_types.VectorUint32)
+        assert(type(pop.mcounts) is fwdpy11.fwdpy11_types.VecUint32)
         assert(type(pop.diploids) is fwdpy11._opaque_diploids.VecSingleLocusDiploid)
         assert(type(pop.diploids[0])
                is fwdpy11.fwdpy11_types.SingleLocusDiploid)
@@ -104,7 +104,7 @@ class testMlocusPop(unittest.TestCase):
     def test_mcount(self):
         self.assertTrue(
             type(self.pop.mcounts)
-            is fwdpy11.fwdpy11_types.VectorUint32)
+            is fwdpy11.fwdpy11_types.VecUint32)
 
     def test_diploids(self):
         self.assertFalse(type(self.pop.diploids) is list)
@@ -132,15 +132,15 @@ class testVectorGeneralMutVec(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
-        s = fwdpy11.VectorDouble([0.1, -0.1])
-        h = fwdpy11.VectorDouble([0., 1.])
+        s = fwdpy11.VecDouble([0.1, -0.1])
+        h = fwdpy11.VecDouble([0., 1.])
         self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
 
     def test_opaque(self):
         self.assertTrue(type(self.mutations[0].s
-                             is fwdpy11.fwdpp_types.VectorDouble))
+                             is fwdpy11.fwdpp_types.VecDouble))
         self.assertTrue(type(self.mutations[0].h
-                             is fwdpy11.fwdpp_types.VectorDouble))
+                             is fwdpy11.fwdpp_types.VecDouble))
 
     def test_opaque_conversion(self):
         """

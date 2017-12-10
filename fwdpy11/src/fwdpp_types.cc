@@ -63,8 +63,8 @@ PYBIND11_MODULE(fwdpp_types, m)
                     import fwdpy11
                     # Note the cast that is needed: 
                     g = fwdpy11.Gamete((1,
-                                        fwdpy11.VectorUint32([2]),
-                                        fwdpy11.VectorUint32([0])))
+                                        fwdpy11.VecUint32([2]),
+                                        fwdpy11.VecUint32([0])))
                     print(g.n)
                     print(list(g.mutations))
                     print(list(g.smutations))
@@ -211,7 +211,7 @@ PYBIND11_MODULE(fwdpp_types, m)
                           const KTfwd::popgenmut &b) { return a == b; });
 
     py::bind_vector<std::vector<double>>(
-        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
+        m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
         py::module_local(false));
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
@@ -224,8 +224,8 @@ PYBIND11_MODULE(fwdpp_types, m)
                 .. testcode::
                     
                     import fwdpy11
-                    s = fwdpy11.VectorDouble([-0.1, 0.1])
-                    h = fwdpy11.VectorDouble([0.0, 1.0])
+                    s = fwdpy11.VecDouble([-0.1, 0.1])
+                    h = fwdpy11.VecDouble([0.0, 1.0])
                     m = fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))
                     print(m.pos)
                     print(m.g)

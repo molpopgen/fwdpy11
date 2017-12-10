@@ -151,8 +151,8 @@ class testVectorGeneralMutVec(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
-        s = fwdpy11.VectorDouble([0.1, -0.1])
-        h = fwdpy11.VectorDouble([0., 1.])
+        s = fwdpy11.VecDouble([0.1, -0.1])
+        h = fwdpy11.VecDouble([0., 1.])
         self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
 
     def testPickleVector(self):

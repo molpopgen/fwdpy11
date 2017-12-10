@@ -137,7 +137,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                           const fwdpy11::diploid_t& b) { return a == b; });
 
     py::bind_vector<std::vector<KTfwd::uint_t>>(
-        m, "VectorUint32", "Vector of unsigned 32-bit integers.",
+        m, "VecUint32", "Vector of unsigned 32-bit integers.",
         py::buffer_protocol(), py::module_local(false))
         .def(py::pickle(
             [](const std::vector<KTfwd::uint_t>& v) {
@@ -604,7 +604,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     
                     :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
                     :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
-                    :param mutations: A :class:`fwdpy11.fwdpp_types.VectorGeneralMutVec`
+                    :param mutations: A :class:`fwdpy11.fwdpp_types.VecGeneralMutVec`
 
                     :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
 
@@ -626,7 +626,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("mutations", &fwdpy11::singlepop_gm_vec_t::mutations,
                       "A list of "
                       ":class:`fwdpy11.fwdpp_types."
-                      "VectorGeneralMutVec`.")
+                      "VecGeneralMutVec`.")
         .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts,
@@ -634,7 +634,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations,
                       "A list of "
                       ":class:`fwdpy11.fwdpp_types."
-                      "VectorGeneralMutVec`.")
+                      "VecGeneralMutVec`.")
         .def_readonly("fixation_times",
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
