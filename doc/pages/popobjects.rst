@@ -28,9 +28,9 @@ in:
 
     # Create empty containers for mutations,
     # gametes, and diploids:
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
+    mutations = fwdpy11.VecMutation()
+    gametes = fwdpy11.VecGamete()
+    diploids = fwdpy11.VecSingleLocusDiploid()
 
     # Add a mutation with pos = 0.1,
     # s = -0.01, h = 1.0, g = 0,
@@ -89,9 +89,9 @@ the data from our input containers. The following example is the same as above, 
 
     import fwdpy11
 
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
+    mutations = fwdpy11.VecMutation()
+    gametes = fwdpy11.VecGamete()
+    diploids = fwdpy11.VecSingleLocusDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -124,9 +124,9 @@ Incorrect gamete count:
 .. testcode::
 
     import fwdpy11
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
+    mutations = fwdpy11.VecMutation()
+    gametes = fwdpy11.VecGamete()
+    diploids = fwdpy11.VecSingleLocusDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The gamete is incorrectly labelled as occurring once:
     gametes.append(fwdpy11.Gamete((1,fwdpy11.VectorUint32([]),fwdpy11.VectorUint32([0]))))
@@ -147,9 +147,9 @@ Neutral or non-neutral mutations in the incorrect gamete container:
 .. testcode::
 
     import fwdpy11
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
+    mutations = fwdpy11.VecMutation()
+    gametes = fwdpy11.VecGamete()
+    diploids = fwdpy11.VecSingleLocusDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The mutation is non-neutral, and we are mistakenly
     # putting it in the Gametes.mutations container:
@@ -197,14 +197,14 @@ The output of msprime_ will be used to fill containers that we then use to const
 
 
     def convert_mutations(m, mutation_dominance, mutation_label):
-        mutations = fwdpy11.MutationContainer(
+        mutations = fwdpy11.VecMutation(
             [fwdpy11.Mutation(i.position, 0, mutation_dominance, 0, mutation_label) for i in m.mutations()])
         return mutations
 
 
     def convert_single_locus_haplotypes(m):
         s = fwdpy11.VectorUint32()
-        gametes = fwdpy11.GameteContainer(
+        gametes = fwdpy11.VecGamete(
             [fwdpy11.Gamete((1, find_all_derived(i), s)) for i in m.haplotypes()])
         return gametes
 
@@ -213,7 +213,7 @@ The output of msprime_ will be used to fill containers that we then use to const
         # Testing showed that a listcomp
         # here really ate RAM, so we
         # do a for loop instead:
-        diploids = fwdpy11.DiploidContainer()
+        diploids = fwdpy11.VecSingleLocusDiploid()
         for i in range(int(N)):
             diploids.append(fwdpy11.SingleLocusDiploid(2 * i, 2 * i + 1))
         return diploids
@@ -253,11 +253,11 @@ Consider the following example with two mutations:
 
     import fwdpy11
 
-    mutations = fwdpy11.MutationContainer()
+    mutations = fwdpy11.VecMutation()
 
-    gametes = fwdpy11.GameteContainer()
+    gametes = fwdpy11.VecGamete()
 
-    diploids = fwdpy11.DiploidContainer()
+    diploids = fwdpy11.VecSingleLocusDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -295,9 +295,9 @@ The sorting takes place on the C++ side because of how the relevant container ty
     :hide:
 
     import fwdpy11
-    mutations = fwdpy11.MutationContainer()
-    gametes = fwdpy11.GameteContainer()
-    diploids = fwdpy11.DiploidContainer()
+    mutations = fwdpy11.VecMutation()
+    gametes = fwdpy11.VecGamete()
+    diploids = fwdpy11.VecSingleLocusDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # Add in a second, non-neutral mutation:
     mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))
