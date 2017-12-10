@@ -36,9 +36,6 @@ using singlepop_generalmut_vec_base
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
-PYBIND11_MAKE_OPAQUE(
-    std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
-
 
 namespace
 {
