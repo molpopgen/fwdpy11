@@ -170,8 +170,12 @@ PYBIND11_MODULE(sampling, m)
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
                         "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
 
-    py::bind_vector<std::vector<std::int8_t>>(m, "Vec8", py::buffer_protocol(),
-                                              py::module_local(false));
+    py::bind_vector<std::vector<std::int8_t>>(
+        m, "VecInt8", py::buffer_protocol(),
+        "C++ vector of 8-bit integers.  Used by "
+        ":attr:`fwdpy11.fwdpy11_sampling.DataMatrix.neutral` and "
+        ":attr:`fwdpy11.fwdpy11_sampling.DataMatrix.selected` to store marker "
+        "data.");
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
@@ -235,10 +239,11 @@ PYBIND11_MODULE(sampling, m)
                       "The list of population frequencies of "
                       "selected mutations.")
         .def_property_readonly("ndim_neutral",
-             [](const KTfwd::data_matrix &dm) {
-                 return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
-             },
-             R"delim(
+                               [](const KTfwd::data_matrix &dm) {
+                                   return py::make_tuple(
+                                       dm.nrow, dm.neutral.size() / dm.nrow);
+                               },
+                               R"delim(
              Return the dimensions of the neutral matrix
              
              :rtype: tuple

@@ -17,6 +17,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 // clang-format on
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/fitness/fitness.hpp>
 
     namespace py = pybind11;

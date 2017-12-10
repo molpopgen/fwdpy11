@@ -1,41 +1,12 @@
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-#ifndef FWDPY11_OPAQUE_TYPES_HPP__
-#define FWDPY11_OPAQUE_TYPES_HPP__
+#ifndef FWDPY11_TYPES_DIPLOID_HPP__
+#define FWDPY11_TYPES_DIPLOID_HPP__
 
+#include <cstddef>
+#include <vector>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <cstdint>
-#include <tuple>
-#include <fwdpp/forward_types.hpp>
-#include <fwdpp/sugar/popgenmut.hpp>
-#include <fwdpp/sugar/generalmut.hpp>
 
 namespace fwdpy11
 {
-    //! Typedef for mutation container
-    using mcont_t = std::vector<KTfwd::popgenmut>;
-    //! Typedef for gamete type
-    using gamete_t = KTfwd::gamete;
-    //! Typedef for gamete container
-    using gcont_t = std::vector<gamete_t>;
-
     struct diploid_t
     /*!
       \brief Custom diploid type.
@@ -97,11 +68,11 @@ namespace fwdpy11
                 = this->first == dip.first && this->second == dip.second
                   && this->w == dip.w && this->g == dip.g && this->e == dip.e
                   && this->label == dip.label;
-            //We now attempt to compare the parental data.
-            //pybind11 doesn't have a rich comparison support,
-            //so we rely on the __eq__ attribute.  If no 
-            //such attribute exists, we simply clear the
-            //error and move on.
+            // We now attempt to compare the parental data.
+            // pybind11 doesn't have a rich comparison support,
+            // so we rely on the __eq__ attribute.  If no
+            // such attribute exists, we simply clear the
+            // error and move on.
             try
                 {
                     bool parental_data_comp
@@ -116,14 +87,9 @@ namespace fwdpy11
             return cpp_data_comparison;
         }
     };
-
+    
     //! Typedef for container of diploids
     using dipvector_t = std::vector<diploid_t>;
 }
-
-PYBIND11_MAKE_OPAQUE(fwdpy11::dipvector_t);
-PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
-PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
 
 #endif

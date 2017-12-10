@@ -26,7 +26,9 @@
 #define FWDPY11_TYPES__
 
 #include <pybind11/pybind11.h>
-#include <fwdpy11/opaque/opaque_types.hpp>
+//#include <fwdpy11/opaque/opaque_types.hpp>
+#include "types/typedefs.hpp"
+#include "types/diploid.hpp"
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>

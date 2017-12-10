@@ -16,14 +16,13 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#include <pybind11/functional.h>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/sugar/generalmut.hpp>
-#include <fwdpy11/opaque/opaque_types.hpp>
 
 namespace py = pybind11;
 
@@ -48,6 +47,27 @@ PYBIND11_MODULE(fwdpp_types, m)
                        "A 16-bit unsigned integer that can be used for adding "
                        "\"meta-data\" to mutations");
 
+    py::bind_vector<std::vector<KTfwd::uint_t>>(
+        m, "VecUint32", "Vector of unsigned 32-bit integers.",
+        py::buffer_protocol())
+        .def(py::pickle(
+            [](const std::vector<KTfwd::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<KTfwd::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<KTfwd::uint_t>());
+                    }
+                return rv;
+            }));
+
     py::class_<KTfwd::gamete>(m, "Gamete", R"delim(
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.
@@ -63,8 +83,8 @@ PYBIND11_MODULE(fwdpp_types, m)
                     import fwdpy11
                     # Note the cast that is needed: 
                     g = fwdpy11.Gamete((1,
-                                        fwdpy11.VectorUint32([2]),
-                                        fwdpy11.VectorUint32([0])))
+                                        fwdpy11.VecUint32([2]),
+                                        fwdpy11.VecUint32([0])))
                     print(g.n)
                     print(list(g.mutations))
                     print(list(g.smutations))
@@ -211,28 +231,7 @@ PYBIND11_MODULE(fwdpp_types, m)
                           const KTfwd::popgenmut &b) { return a == b; });
 
     py::bind_vector<std::vector<double>>(
-        m, "VectorDouble", "Vector of 64-bit floats.", py::buffer_protocol(),
-        py::module_local(false));
-    py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
-        m, "VectorGeneralMutVec", py::module_local(false),
-        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.")
-        .def(py::pickle(
-            [](const std::vector<KTfwd::generalmut_vec> &mutations) {
-                py::list rv;
-                for (auto &&i : mutations)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<KTfwd::generalmut_vec> rv;
-                for (auto &&i : l)
-                    {
-                        rv.push_back(i.cast<KTfwd::generalmut_vec>());
-                    }
-                return rv;
-            }));
+        m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol());
 
     py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
         m, "GeneralMutVec",
@@ -244,8 +243,8 @@ PYBIND11_MODULE(fwdpp_types, m)
                 .. testcode::
                     
                     import fwdpy11
-                    s = fwdpy11.VectorDouble([-0.1, 0.1])
-                    h = fwdpy11.VectorDouble([0.0, 1.0])
+                    s = fwdpy11.VecDouble([-0.1, 0.1])
+                    h = fwdpy11.VecDouble([0.0, 1.0])
                     m = fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))
                     print(m.pos)
                     print(m.g)
