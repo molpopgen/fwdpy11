@@ -55,7 +55,7 @@ class testSlocusPop(unittest.TestCase):
     def test_gametes(self):
         self.assertTrue(
             type(self.pop.gametes)
-            is fwdpy11.fwdpy11_types.GameteContainer)
+            is fwdpy11._opaque_gametes.VecGamete)
 
 
 class SlocusTypeSampler(object):
@@ -67,7 +67,7 @@ class SlocusTypeSampler(object):
         assert(type(pop.diploids) is fwdpy11.fwdpy11_types.DiploidContainer)
         assert(type(pop.diploids[0])
                is fwdpy11.fwdpy11_types.SingleLocusDiploid)
-        assert(type(pop.gametes) is fwdpy11.fwdpy11_types.GameteContainer)
+        assert(type(pop.gametes) is fwdpy11._opaque_gametes.VecGamete)
 
 
 class testSlocusPopSampler(unittest.TestCase):
@@ -120,7 +120,7 @@ class testMlocusPop(unittest.TestCase):
     def test_gametes(self):
         self.assertTrue(
             type(self.pop.gametes)
-            is fwdpy11.fwdpy11_types.GameteContainer)
+            is fwdpy11._opaque_gametes.VecGamete)
 
 
 class testVectorGeneralMutVec(unittest.TestCase):

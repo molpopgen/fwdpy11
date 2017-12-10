@@ -80,6 +80,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11._opaque_gametes',
+        ['fwdpy11/src/_opaque_gametes.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),    
+    Extension(
         'fwdpy11.fwdpp_extensions',
         ['fwdpy11/src/fwdpp_extensions.cc'],
         library_dirs=LIBRARY_DIRS,

@@ -24,6 +24,7 @@ if sys.version_info[0] < 3:
 
 __version__ = '@PACKAGE_VERSION@'
 from .fwdpp_types import *
+from ._opaque_gametes import *
 from .fwdpy11_types import *
 from .regions import *
 from .dev import *
