@@ -23,9 +23,11 @@ if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
 __version__ = '0.1.4a0'
+
 from .fwdpp_types import *
 from ._opaque_gametes import *
 from ._opaque_mutations import *
+from ._opaque_diploids import *
 from .fwdpy11_types import *
 from .regions import *
 from .dev import *

@@ -68,7 +68,7 @@ INCLUDES = [
 
 LIBRARY_DIRS = [
     os.path.join(sys.prefix, 'lib')
-    ]
+]
 
 ext_modules = [
     Extension(
@@ -86,7 +86,7 @@ ext_modules = [
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
         language='c++'
-    ),    
+    ),
     Extension(
         'fwdpy11._opaque_mutations',
         ['fwdpy11/src/_opaque_mutations.cc'],
@@ -94,8 +94,16 @@ ext_modules = [
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
         language='c++'
-    ),    
-        Extension(
+    ),
+    Extension(
+        'fwdpy11._opaque_diploids',
+        ['fwdpy11/src/_opaque_diploids.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11.fwdpp_extensions',
         ['fwdpy11/src/fwdpp_extensions.cc'],
         library_dirs=LIBRARY_DIRS,
@@ -184,7 +192,7 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
-    ]
+]
 
 
 # As of Python 3.6, CCompiler has a `has_flag` method.
@@ -257,7 +265,7 @@ generated_package_data = {}
 for root, dirnames, filenames in os.walk('fwdpy11/headers'):
     if 'testsuite' not in root and 'examples' not in root and \
        'python_examples' not in root:
-        g = glob.glob(root+'/*.hh')
+        g = glob.glob(root + '/*.hh')
         if len(g) > 0:
             replace = root.replace('/', '.')
             # If there's a header file, we add the directory as a package
@@ -275,7 +283,7 @@ for root, dirnames, filenames in os.walk('fwdpy11/headers'):
                     generated_package_data[replace].append('*.hpp')
             except:
                 generated_package_data[replace] = ['*.hpp']
-        g = glob.glob(root+'/*.tcc')
+        g = glob.glob(root + '/*.tcc')
         if len(g) > 0:
             replace = root.replace('/', '.')
             # If there's a template implementation file,
