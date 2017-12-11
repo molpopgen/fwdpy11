@@ -336,7 +336,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      }
                  py::list rv;
                  auto s = KTfwd::sample(pop, individuals, remove_fixed);
-                 s = py::cast(s);
+                 rv = py::cast(s);
                  return rv;
              },
              py::arg("individuals"), py::arg("separate") = true,
@@ -674,10 +674,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      }
                  py::list rv;
                  auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
-                 for (auto& i : s)
-                     {
-                         rv.append(i);
-                     }
+                 rv = py::cast(s);
                  return rv;
              },
              py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
@@ -717,10 +714,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      }
                  py::list rv;
                  auto s = KTfwd::sample(pop, individuals, remove_fixed);
-                 for (auto& i : s)
-                     {
-                         rv.append(i);
-                     }
+                 rv = py::cast(s);
                  return rv;
              },
              py::arg("individuals"), py::arg("separate") = true,
