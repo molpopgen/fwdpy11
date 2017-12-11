@@ -291,8 +291,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      {
                          auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
                                                          remove_fixed);
-                         auto t = py::make_tuple(std::move(s.first),
-                                                 std::move(s.second));
+                         auto t = py::make_tuple(s.first,
+                                                 s.second);
                          return t;
                      }
                  py::list rv;
@@ -547,13 +547,16 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              The final sample size is ``2*len(individuals)``.
 
-             The output is a list of tuples.  Each tuple is (pair, state), where state is 
+             The output is a list of tuples.  When separate is False,
+             Each tuple is (pair, state), where state is 
              a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
              in each string are diploid genotypes.  The order of diploids is constant
              across variable sites.
 
-             When ``separate`` is ``True``, the function returns a tuple of two lists.
-             The first list is for neutral variants, and the second for non-neutral.
+             When ``separate`` is ``True``, the function returns a list of tuples.
+             Each tuple is of length two, with the first element being a list of tuples
+             for neutral variants following the layout described above.  The second
+             element is for selected variants.
 
 			 .. versionadded:: 0.1.4
              )delim");

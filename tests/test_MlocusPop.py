@@ -76,6 +76,9 @@ class testSampling(unittest.TestCase):
         self.assertEqual(len(x), self.pop.nloci)
         x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
         self.assertEqual(len(x), self.pop.nloci)
+        for i in x:
+            self.assertTrue(isinstance(i, tuple))
+            self.assertEqual(len(i), 2)
         x = self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
         self.assertEqual(len(x), self.pop.nloci)
         x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
