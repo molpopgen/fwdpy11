@@ -62,18 +62,24 @@ class testMlocusPopExceptions(unittest.TestCase):
 
 class testSampling(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
+    def setUp(self):
         from quick_pops import quick_mlocus_qtrait
         self.pop = quick_mlocus_qtrait()
         self.rng = fp11.GSLrng(42)
 
     def testRandomSample(self):
-        self.pop.sample(self.rng, 10)
-        self.pop.sample(self.rng, 10, separate=False)
-        self.pop.sample(self.rng, 10, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+        x = self.pop.sample(self.rng, 10)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(self.rng, 10, separate=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(self.rng, 10, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+        self.assertEqual(len(x), self.pop.nloci)
 
         self.pop.locus_boundaries = []
 
@@ -81,8 +87,8 @@ class testSampling(unittest.TestCase):
             self.pop.sample(self.rng, 10, remove_fixed=False)
 
     def testDefinedSample(self):
-        self.pop.sample_ind(range(10))
-
+        x = self.pop.sample_ind(range(10))
+        self.assertEqual(len(x), self.pop.nloci)
         with self.assertRaises(IndexError):
             """
             fwdpp catches case where i >= N
