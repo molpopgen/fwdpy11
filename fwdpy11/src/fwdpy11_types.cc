@@ -291,8 +291,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      {
                          auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
                                                          remove_fixed);
-                         auto t = py::make_tuple(s.first,
-                                                 s.second);
+                         auto t = py::make_tuple(s.first, s.second);
                          return t;
                      }
                  py::list rv;
@@ -332,16 +331,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      {
                          auto s = KTfwd::sample_separate(pop, individuals,
                                                          remove_fixed);
-                         auto t = py::make_tuple(std::move(s.first),
-                                                 std::move(s.second));
+                         auto t = py::make_tuple(s.first, s.second);
                          return t;
                      }
                  py::list rv;
                  auto s = KTfwd::sample(pop, individuals, remove_fixed);
-                 for (auto& i : s)
-                     {
-                         rv.append(i);
-                     }
+                 s = py::cast(s);
                  return rv;
              },
              py::arg("individuals"), py::arg("separate") = true,
@@ -474,30 +469,30 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def("__eq__",
              [](const fwdpy11::multilocus_t& lhs,
                 const fwdpy11::multilocus_t& rhs) { return lhs == rhs; })
-        .def(
-            "sample",
-            [](const fwdpy11::multilocus_t& pop, const fwdpy11::GSLrng_t& rng,
-               const std::int64_t nsam, const bool separate,
-               const bool remove_fixed) -> py::list {
-                if (nsam <= 0)
-                    {
-                        throw std::invalid_argument("sample size must be > 0");
-                    }
-                py::list rv;
-                if (separate)
-                    {
-                        auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
-                                                        remove_fixed);
-                        rv = py::cast(s);
-                        return rv;
-                    }
-                auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
-                rv = py::cast(s);
-                return rv;
-            },
-            py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
-            py::arg("remove_fixed") = true,
-            R"delim(
+        .def("sample",
+             [](const fwdpy11::multilocus_t& pop, const fwdpy11::GSLrng_t& rng,
+                const std::int64_t nsam, const bool separate,
+                const bool remove_fixed) -> py::list {
+                 if (nsam <= 0)
+                     {
+                         throw std::invalid_argument(
+                             "sample size must be > 0");
+                     }
+                 py::list rv;
+                 if (separate)
+                     {
+                         auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
+                                                         remove_fixed);
+                         rv = py::cast(s);
+                         return rv;
+                     }
+                 auto s = KTfwd::sample(rng.get(), pop, nsam, remove_fixed);
+                 rv = py::cast(s);
+                 return rv;
+             },
+             py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
+             py::arg("remove_fixed") = true,
+             R"delim(
              Sample random diploids *with replacement*.
              
              :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
@@ -674,8 +669,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      {
                          auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
                                                          remove_fixed);
-                         auto t = py::make_tuple(std::move(s.first),
-                                                 std::move(s.second));
+                         auto t = py::make_tuple(s.first, s.second);
                          return t;
                      }
                  py::list rv;
@@ -718,8 +712,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      {
                          auto s = KTfwd::sample_separate(pop, individuals,
                                                          remove_fixed);
-                         auto t = py::make_tuple(std::move(s.first),
-                                                 std::move(s.second));
+                         auto t = py::make_tuple(s.first, s.second);
                          return t;
                      }
                  py::list rv;
