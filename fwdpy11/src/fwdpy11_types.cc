@@ -703,6 +703,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                      }
                  py::list rv
                      = py::cast(KTfwd::sample(pop, individuals, remove_fixed));
+                 return rv;
              },
              py::arg("individuals"), py::arg("separate") = true,
              py::arg("remove_fixed") = true,
