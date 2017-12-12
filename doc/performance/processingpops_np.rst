@@ -60,15 +60,15 @@ What's the fastest way to get mean fitness?
 
 .. ipython:: python
 
-    %timeit np.array(pop.diploids.trait_array())['w'].mean()
+    %timeit -n 10 -r 1 np.array(pop.diploids.trait_array())['w'].mean()
 
 .. ipython:: python
 
-    %timeit np.array([i.w for i in pop.diploids]).mean()
+    %timeit -n 10 -r 1 np.array([i.w for i in pop.diploids]).mean()
 
 .. ipython:: python
 
-    %timeit sum([i.w for i in pop.diploids])/float(len(pop.diploids))
+    %timeit -n 10 -r 1 sum([i.w for i in pop.diploids])/float(len(pop.diploids))
 
 Using our stuctured array is vastly more efficient.  For the record, a simple Python loop is the slowest way to go:
 
@@ -80,7 +80,7 @@ Using our stuctured array is vastly more efficient.  For the record, a simple Py
             s += pop.diploids[i].w
         return s/float(len(pop.diploids))
 
-    %timeit wbar(pop)
+    %timeit -n 10 -r 1 wbar(pop)
 
 
 Slicing, etc.
@@ -214,7 +214,7 @@ The run times for the Python implementation:
 
 .. ipython:: python
 
-    %timeit esize_sum_py(pop)
+    %timeit -n 10 -r 1 esize_sum_py(pop)
 
 Now, let's rewrite the above taking advantage of numpy arrays:
 
@@ -240,7 +240,7 @@ It is about twice as fast:
 
 .. ipython:: python
 
-    %timeit esize_sum_np(pop)
+    %timeit -n 10 -r 1 esize_sum_np(pop)
 
 Check that both routines give the same answer:
 
@@ -269,7 +269,7 @@ This is the Python implementation from :ref:`processingpops`:
                     sfsn[pop.mcounts[i]] += 1
         return (sfsn,sfss)
 
-    %timeit sfs_py(pop)
+    %timeit -n 10 -r 1 sfs_py(pop)
 
 Re-writing it to use numpy structured arrays is 10x faster.  The main 
 difference is that we are using numpy to act as buffers to the underlying
@@ -291,7 +291,7 @@ C++ memory. Here it is:
                 sfss[mc[i]] += 1
         return (sfsn,sfss)
 
-    %timeit sfs_np(pop)
+    %timeit -n 10 -r 1 sfs_np(pop)
 
 They give the same results, too!
 
