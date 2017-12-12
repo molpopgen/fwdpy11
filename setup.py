@@ -257,6 +257,11 @@ class BuildExt(build_ext):
                 opts.append('-g0')
             if ASSERT_MODE is True:
                 opts.append('-UNDEBUG')
+            # Do not optimize on RTD.  
+            # This reduces compile time
+            # by a lot
+            if "READTHEDOCS" in os.environ and os.environ["READTHEDOCS"] == "true":
+                opts.append('-O0')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' %
                         self.distribution.get_version())
