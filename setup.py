@@ -260,7 +260,7 @@ class BuildExt(build_ext):
             # Do not optimize on RTD.  
             # This reduces compile time
             # by a lot
-            if "READTHEDOCS" in os.environ and os.environ["READTHEDOCS"] == "true":
+            if "READTHEDOCS" in os.environ and os.environ["READTHEDOCS"] == "True":
                 opts.append('-O0')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' %
