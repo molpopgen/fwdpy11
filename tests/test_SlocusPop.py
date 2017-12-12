@@ -64,12 +64,18 @@ class testSampling(unittest.TestCase):
         self.rng = fp11.GSLrng(42)
 
     def testRandomSample(self):
-        self.pop.sample(self.rng, 10)
-        self.pop.sample(self.rng, 10, separate=False)
-        self.pop.sample(self.rng, 10, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
-        self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+        x = self.pop.sample(self.rng, 10)
+        self.assertTrue(type(x) is tuple)
+        x = self.pop.sample(self.rng, 10, separate=False)
+        self.assertTrue(type(x) is list)
+        x = self.pop.sample(self.rng, 10, remove_fixed=False)
+        self.assertTrue(type(x) is tuple)
+        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
+        self.assertTrue(type(x) is tuple)
+        x = self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
+        self.assertTrue(type(x) is list)
+        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+        self.assertTrue(type(x) is tuple)
 
     def testDefinedSample(self):
         self.pop.sample_ind(range(10))
