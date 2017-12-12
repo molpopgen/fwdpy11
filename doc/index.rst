@@ -78,11 +78,18 @@ Welcome to fwdpy11's documentation!
     :caption: Modules
     :maxdepth: 2
 
-fwdpy11.fwdpy11_types
+fwdpy11
 ------------------------------
-.. automodule:: fwdpy11.fwdpy11_types
+.. automodule:: fwdpy11
     :members:
+    :inherited-members:
     :show-inheritance:
+
+# fwdpy11.fwdpy11_types
+# ------------------------------
+# .. automodule:: fwdpy11.fwdpy11_types
+#     :members:
+#     :show-inheritance:
 
 fwdpy11.fwdpp_types
 ------------------------------

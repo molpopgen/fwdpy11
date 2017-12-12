@@ -397,7 +397,7 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/__init__.py doc/conf.py])
+AC_CONFIG_FILES([setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py])
 
 dnl stuff added by KRT
 

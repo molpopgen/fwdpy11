@@ -106,14 +106,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::GSLrng_t>(
-        m, "GSLrng", "Random number generator based on a mersenne twister.")
+    py::class_<fwdpy11::GSLrng_t>(m, "GSLrng")
         .def(py::init<unsigned>(),
              "Constructor takes unsigned integer as a seed");
 
-    py::class_<fwdpy11::diploid_t>(
-        m, "SingleLocusDiploid",
-        "Diploid data type for a single (usually contiguous) genomic region")
+    py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
         .def_static("create", &fwdpy11::diploid_t::create)
@@ -172,10 +169,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     // Expose the type based on fwdpp's "sugar"
     // layer
-    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "SlocusPop", "Population object representing a single "
-                        "deme and a "
-                        "single genomic region.")
+    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(m, "SlocusPop")
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
@@ -358,9 +352,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 .. versionadded:: 0.1.4
              )delim");
 
-    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
-        m, "MlocusPop", "Representation of a multi-locus, single "
-                        "deme system.")
+    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
@@ -550,11 +542,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
                singlepop_generalmut_vec_sugar_base>(
-        m, "SlocusPopGeneralMutVec",
-        "Single-deme object using "
-        ":class:`fwpy11.fwdpp_types.GeneralMutVec`"
-        " as "
-        "the mutation type.")
+        m, "SlocusPopGeneralMutVec")
         .def(py::init<unsigned>(), py::arg("N"),
              "Construct object with N diploids.")
         .def(py::init<const fwdpy11::singlepop_gm_vec_t::dipvector_t&,

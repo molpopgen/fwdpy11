@@ -22,7 +22,7 @@ import sys
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-__version__ = '0.1.4a0'
+from fwdpy11._version import __version__ # NOQA
 
 from .fwdpp_types import *
 from ._opaque_gametes import *
@@ -33,3 +33,42 @@ from .fwdpy11_types import *
 from .regions import *
 from .dev import *
 
+
+class GSLrng(fwdpy11_types.GSLrng):
+    """
+    Random number generator based on
+    GNU Scientific Library 
+    mersenne twister.
+    """
+    pass
+
+
+class SingleLocusDiploid(fwdpy11_types.SingleLocusDiploid):
+    """
+    Diploid data type for a single (usually contiguous) genomic region
+    """
+
+
+class SlocusPop(fwdpy11_types.SlocusPop):
+    """
+    Population object representing a single 
+    deme and a single genomic region.
+    """
+    pass
+
+
+class MlocusPop(fwdpy11_types.MlocusPop):
+    """
+    Representation of a multi-locus, single 
+    deme system.
+    """
+    pass
+
+
+class SlocusPopGeneralMutVec(fwdpy11_types.SlocusPopGeneralMutVec):
+    """
+    Single-deme object using 
+    :class:`fwpy11.GeneralMutVec`
+    as the mutation type.
+    """
+    pass
