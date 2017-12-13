@@ -47,7 +47,7 @@ class SingleLocusDiploid(fwdpy11_types.SingleLocusDiploid):
     """
     Diploid data type for a single (usually contiguous) genomic region
     """
-
+    pass
 
 class SlocusPop(fwdpy11_types.SlocusPop):
     """
