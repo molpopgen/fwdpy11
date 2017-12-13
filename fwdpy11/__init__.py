@@ -32,16 +32,7 @@ from ._opaque_generalmutvecs import *
 from .fwdpy11_types import *
 from .regions import *
 from .dev import *
-
-
-class GSLrng(fwdpy11_types.GSLrng):
-    """
-    Random number generator based on
-    GNU Scientific Library 
-    mersenne twister.
-    """
-    pass
-
+from ._gslrng import GSLrng
 
 class SingleLocusDiploid(fwdpy11_types.SingleLocusDiploid):
     """
