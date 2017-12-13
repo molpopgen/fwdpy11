@@ -106,10 +106,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::GSLrng_t>(m, "GSLrng")
-        .def(py::init<unsigned>(),
-             "Constructor takes unsigned integer as a seed");
-
     py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
