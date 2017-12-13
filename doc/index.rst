@@ -83,13 +83,14 @@ fwdpy11
 .. automodule:: fwdpy11
     :members:
     :inherited-members:
+    :imported-members:
     :show-inheritance:
 
-# fwdpy11.fwdpy11_types
-# ------------------------------
-# .. automodule:: fwdpy11.fwdpy11_types
-#     :members:
-#     :show-inheritance:
+fwdpy11.fwdpy11_types
+------------------------------
+.. automodule:: fwdpy11.fwdpy11_types
+    :members:
+    :show-inheritance:
 
 fwdpy11.fwdpp_types
 ------------------------------
