@@ -16,25 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+from fwdpy11.fwdpy11_types import MlocusPop
 
-import sys
 
-if sys.version_info[0] < 3:
-    raise ValueError("Python3 required!")
-
-from fwdpy11._version import __version__ # NOQA
-
-from .fwdpp_types import *
-from ._opaque_gametes import *
-from ._opaque_mutations import *
-from ._opaque_diploids import *
-from ._opaque_generalmutvecs import *
-from .fwdpy11_types import SingleLocusDiploid
-from .fwdpy11_types import VecUint32
-from ._regions import *
-from ._dev import *
-from ._gslrng import GSLrng
-from .SlocusPop import SlocusPop
-from .MlocusPop import MlocusPop
-from .SlocusPopGeneralMutVec import SlocusPopGeneralMutVec
-
+class MlocusPop(MlocusPop):
+    """
+    Representation of a multi-locus, single
+    deme system.
+    """
+    pass
