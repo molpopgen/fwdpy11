@@ -146,8 +146,9 @@ indexing, etc.!).  A perhaps less error-prone method involves just asking `numpy
     #Our new container is a Python list.
     #If we had used slices, it would be
     #an opaque list
+    import pickle
     assert(type(sample) is list)
-    assert(type(sample[0]) is fwdpy11.SingleLocusDiploid)
+    assert(type(sample[0]) is fwdpy11.fwdpy11_types.SingleLocusDiploid)
 
 
 
