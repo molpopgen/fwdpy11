@@ -35,7 +35,7 @@ PYBIND11_MODULE(fitness, m)
                                                                R"delim(
             A fitness function or trait value function
             for a single-deme, single-region simulation (
-            :class:`fwdpy11.fwdpy11_types.Slocus`).
+            :class:`fwdpy11.Slocus`).
             
             Current fitness ovjects derived from this type are:
             

@@ -57,7 +57,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
 
     py::bind_vector<std::vector<KTfwd::popgenmut>>(
         m, "VecMutation", "C++ representation of a list of "
-                          ":class:`fwdpy11.fwdpp_types.Mutation`.  "
+                          ":class:`fwdpy11.Mutation`.  "
                           "Typically, access will be read-only.",
         py::module_local(false))
         .def("array",
@@ -71,7 +71,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
                  return rv;
              },
              R"delim(
-        :rtype: :class:`fwdpy11._opaque_mutations.VecMutationDtype`.
+        :rtype: :class:`fwdpy11.VecMutationDtype`.
         
         The return value should be coerced into a Numpy 
         array for processing.
@@ -100,7 +100,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
         m, "VecMutationDtype", py::buffer_protocol(), py::module_local(false),
         R"delim(
         Vector of the data fields in a "
-        ":class:`fwdpy11.fwdpp_types.Mutation`.
+        ":class:`fwdpy11.Mutation`.
 
         .. versionadded: 0.1.2
         )delim");

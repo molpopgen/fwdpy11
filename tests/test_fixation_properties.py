@@ -15,7 +15,7 @@ from quick_pops import quick_mlocus_qtrait_change_optimum
 
 class testFixationsAreSorted(unittest.TestCase):
     def test_fixations_SlocusPop(self):
-        from fwdpy11.regions import ExpS
+        from fwdpy11 import ExpS
         pop = quick_nonneutral_slocus(N=1000,
                                       simlen=10000,
                                       dfe=ExpS(0, 1, 1, 0.05))

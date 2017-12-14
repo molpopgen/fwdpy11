@@ -200,7 +200,7 @@ PYBIND11_MODULE(multilocus, m)
     :return: A list of :class:`fwdpy11.multilocus.InterlocusRecombination`.
 
     .. versionchanged:: 0.1.3
-        No longer takes a :class:`fwdpy11.fwdpy11_types.GSLrng` as argument.
+        No longer takes a :class:`fwdpy11.GSLrng` as argument.
     )delim");
 
     m.def("poisson_rec",
@@ -218,7 +218,7 @@ PYBIND11_MODULE(multilocus, m)
     :return: An instance of :class:`fwdpy11.multilocus.InterlocusRecombination`.
 
     .. versionchanged:: 0.1.3
-        No longer takes a :class:`fwdpy11.fwdpy11_types.GSLrng` as argument.
+        No longer takes a :class:`fwdpy11.GSLrng` as argument.
     )delim");
 
     m.def("binomial_rec",
@@ -241,7 +241,7 @@ PYBIND11_MODULE(multilocus, m)
     :return: A list of of :class:`fwdpy11.multilocus.InterlocusRecombination`.
 
     .. versionchanged:: 0.1.3
-        No longer takes a :class:`fwdpy11.fwdpy11_types.GSLrng` as argument.
+        No longer takes a :class:`fwdpy11.GSLrng` as argument.
     )delim");
 
     m.def("binomial_rec",
@@ -259,7 +259,7 @@ PYBIND11_MODULE(multilocus, m)
     :return: An instance of :class:`fwdpy11.multilocus.InterlocusRecombination`.
 
     .. versionchanged:: 0.1.3
-        No longer takes a :class:`fwdpy11.fwdpy11_types.GSLrng` as argument.
+        No longer takes a :class:`fwdpy11.GSLrng` as argument.
     )delim");
 
     m.def("poisson_rec",
@@ -280,7 +280,7 @@ PYBIND11_MODULE(multilocus, m)
           R"delim(
     Parameterize interlocus recomination as a Poisson process.
 
-    :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+    :param rng: A :class:`fwdpy11.GSLrng`
     :param means: A list of mean values.
 
     :rtype: list
@@ -303,7 +303,7 @@ PYBIND11_MODULE(multilocus, m)
           R"delim(
     Parameterize interlocus recomination as a Poisson process.
 
-    :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+    :param rng: A :class:`fwdpy11.GSLrng`
     :param mean: The mean of a Poisson process.
 
     :rtype: :class:`fwdpy11.multilocus.InterlocusRecombination`
@@ -331,7 +331,7 @@ PYBIND11_MODULE(multilocus, m)
           R"delim(
     Parameterize interlocus recomination as a Binomial process.
 
-    :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+    :param rng: A :class:`fwdpy11.GSLrng`
     :param probs: A list of genetic distance in cM/100.
 
     :rtype: list
@@ -354,7 +354,7 @@ PYBIND11_MODULE(multilocus, m)
           R"delim(
     Parameterize interlocus recomination as a Binomial process.
 
-    :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+    :param rng: A :class:`fwdpy11.GSLrng`
     :param prob: The genetic distance in cM/100.
 
     :rtype: :class:`fwdpy11.multilocus.InterlocusRecombination`

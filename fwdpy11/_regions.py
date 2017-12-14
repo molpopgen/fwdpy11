@@ -145,7 +145,7 @@ class Region(object):
         self.__l = np.uint16(label)
 
     def __repr__(self):
-        x = 'regions.Region(beg=%s,end=%s,'
+        x = 'Region(beg=%s,end=%s,'
         x += 'weight=%s,coupled=%s,label=%s)'
         return x % (self.b, self.e, self.w, self.c, self.l)
 
@@ -173,11 +173,11 @@ class Sregion(Region):
     .. note:: This class cannot be used directly to parameterize a simulation.
         Rather, you must use a derived type that specifies a
         distribution of fitness effects.  These types include:
-       :class:`fwdpy11.fwdpy11.ConstantS`,
-       :class:`fwdpy11.fwdpy11.UniformS`,
-       :class:`fwdpy11.fwdpy11.ExpS`,
-       :class:`fwdpy11.fwdpy11.GammaS`, and
-       :class:`fwdpy11.fwdpy11.GaussianS`
+       :class:`fwdpy11.ConstantS`,
+       :class:`fwdpy11.UniformS`,
+       :class:`fwdpy11.ExpS`,
+       :class:`fwdpy11.GammaS`, and
+       :class:`fwdpy11.GaussianS`
 
     .. note:: The scaling of a distribution refers to the distribution of effect sizes.
         For example, if scaling = 1.0, then the DFE is on the effect size itself.  If
@@ -371,7 +371,7 @@ class GammaS(Sregion):
         self.__shape = float(shape)
 
     def __repr__(self):
-        x = 'regions.GammaS(beg=%s,end=%s,weight=%s,'
+        x = 'GammaS(beg=%s,end=%s,weight=%s,'
         x += 'mean=%s,shape=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.mean,
                     self.shape, self.c, self.l, self.scaling)
@@ -445,7 +445,7 @@ class ConstantS(Sregion):
         self.__s = float(s)
 
     def __repr__(self):
-        x = 'regions.ConstantS(beg=%s,end=%s,weight=%s,'
+        x = 'ConstantS(beg=%s,end=%s,weight=%s,'
         x += 's=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.s, self.h, self.c, self.l, self.scaling)
 
@@ -535,7 +535,7 @@ class UniformS(Sregion):
         self.__hi = float(hi)
 
     def __repr__(self):
-        x = 'regions.UniformS(beg=%s,end=%s,weight=%s,'
+        x = 'UniformS(beg=%s,end=%s,weight=%s,'
         x += 'lo=%s,hi=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.lo,
                     self.hi, self.h, self.c, self.l, self.scaling)
@@ -609,7 +609,7 @@ class ExpS(Sregion):
         self.__mean = float(mean)
 
     def __repr__(self):
-        x = 'regions.ExpS(beg=%s,end=%s,weight=%s,'
+        x = 'ExpS(beg=%s,end=%s,weight=%s,'
         x += 'mean=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.mean, self.h, self.c, self.l, self.scaling)
 
@@ -685,6 +685,6 @@ class GaussianS(Sregion):
         self.__sd = float(sd)
 
     def __repr__(self):
-        x = 'regions.GaussianS(beg=%s,end=%s,weight=%s,'
+        x = 'GaussianS(beg=%s,end=%s,weight=%s,'
         x += 'sd=%s,h=%s,coupled=%s,label=%s,scaling=%s)'
         return x % (self.b, self.e, self.w, self.sd, self.h, self.c, self.l, self.scaling)

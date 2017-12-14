@@ -64,8 +64,8 @@ PYBIND11_MODULE(util, m)
           R"delim(
           Add a new mutation to a population.
 
-          :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`.
-          :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`.
+          :param rng: A :class:`fwdpy11.GSLrng`.
+          :param pop: A :class:`fwdpy11.SlocusPop`.
           :param ncopies: The number of copies of the mutation.
           :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
           :param label: (0) An integer label for the mutation.
@@ -93,8 +93,8 @@ PYBIND11_MODULE(util, m)
           R"delim(
           Add a new mutation to a population.
 
-          :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`.
-          :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`.
+          :param rng: A :class:`fwdpy11.GSLrng`.
+          :param pop: A :class:`fwdpy11.MlocusPop`.
           :param locus: The locus in which the mutation will be located.
           :param ncopies: The number of copies of the mutation.
           :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
@@ -152,7 +152,7 @@ PYBIND11_MODULE(util, m)
         This function allows you to change the effect of a mutation
         on genetic value.
         
-        :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
+        :param pop: A :class:`fwdpy11.SlocusPop`
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.
@@ -197,7 +197,7 @@ PYBIND11_MODULE(util, m)
         This function allows you to change the effect of a mutation
         on genetic value.
         
-        :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`
+        :param pop: A :class:`fwdpy11.MlocusPop`
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.

@@ -86,18 +86,6 @@ fwdpy11
     :imported-members:
     :show-inheritance:
 
-fwdpy11.fwdpy11_types
-------------------------------
-.. automodule:: fwdpy11.fwdpy11_types
-    :members:
-    :show-inheritance:
-
-fwdpy11.fwdpp_types
-------------------------------
-.. automodule:: fwdpy11.fwdpp_types
-    :members:
-    :show-inheritance:
-
 fwdpy11.fitness
 ------------------------------
 .. automodule:: fwdpy11.fitness
@@ -113,12 +101,6 @@ fwdpy11.trait_values
 fwdpy11.sampling
 ------------------------------
 .. automodule:: fwdpy11.sampling
-    :members:
-    :show-inheritance:
-
-fwdpy11.regions
-------------------------------
-.. automodule:: fwdpy11.regions
     :members:
     :show-inheritance:
 
@@ -173,24 +155,6 @@ fwdpy11.python_genetic_values
 fwdpy11.demography
 ------------------------------------------------------------
 .. automodule:: fwdpy11.demography
-    :members:
-    :show-inheritance:
-
-Low level modules
----------------------------------------------------------
-.. automodule:: fwdpy11._opaque_mutations
-    :members:
-    :show-inheritance:
-
-.. automodule:: fwdpy11._opaque_generalmutvecs
-    :members:
-    :show-inheritance:
-
-.. automodule:: fwdpy11._opaque_gametes
-    :members:
-    :show-inheritance:
-
-.. automodule:: fwdpy11._opaque_diploids
     :members:
     :show-inheritance:
 

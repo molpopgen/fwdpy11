@@ -30,8 +30,8 @@ from ._opaque_mutations import *
 from ._opaque_diploids import *
 from ._opaque_generalmutvecs import *
 from .fwdpy11_types import *
-from .regions import *
-from .dev import *
+from ._regions import *
+from ._dev import *
 from ._gslrng import GSLrng
 
 class SingleLocusDiploid(fwdpy11_types.SingleLocusDiploid):

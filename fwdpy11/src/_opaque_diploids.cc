@@ -64,9 +64,9 @@ PYBIND11_MODULE(_opaque_diploids, m)
     m.doc() = "Expose C++ containers of diploids to Python without copies.";
 
     py::bind_vector<fwdpy11::dipvector_t>(
-        m, "VecSingleLocusDiploid", py::module_local(false),
+        m, "VecDiploid", py::module_local(false),
         "C++ representation of a list of "
-        ":class:`fwdpy11.fwdpy11_types."
+        ":class:`fwdpy11."
         "SingleLocusDiploid`.  Typically, access will be read-only.")
         .def("trait_array",
              [](const fwdpy11::dipvector_t& diploids) {
@@ -79,7 +79,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -98,7 +98,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -121,7 +121,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -136,7 +136,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -153,7 +153,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -176,7 +176,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -199,10 +199,9 @@ PYBIND11_MODULE(_opaque_diploids, m)
             }));
 
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
-        m, "VecVecSingleLocusDiploid", py::module_local(false),
+        m, "VecVecDiploid", py::module_local(false),
         "Vector of "
-        ":class:`fwdpy11.fwdpy11_types."
-        "SingleLocusDiploid`.")
+        ":class:`fwdpy11.SingleLocusDiploid`.")
         .def("trait_array",
              [](const std::vector<fwdpy11::dipvector_t>& diploids) {
                  std::vector<diploid_traits> rv;
@@ -214,7 +213,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -234,7 +233,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -253,7 +252,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -277,7 +276,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -301,7 +300,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidTraits`
+			 :rtype: :class:`fwdpy11.VecDiploidTraits`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -327,7 +326,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  return rv;
              },
              R"delim(
-			 :rtype: :class:`fwdpy11._opaque_diploids.VecDiploidGametes`
+			 :rtype: :class:`fwdpy11.VecDiploidGametes`
 			 
 			 .. versionadded:: 0.1.2
 			 )delim")
@@ -356,7 +355,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
         m, "VecDiploidTraits", py::buffer_protocol(), py::module_local(false),
         R"delim(
         Vector of the g,e,w data fields in a "
-        ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
+        ":class:`fwdpy11.SingleLocusDiploid`.
 
         .. versionadded: 0.1.2
         )delim");
@@ -365,7 +364,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
         m, "VecDiploidGametes", py::buffer_protocol(), py::module_local(false),
         R"delim(
         Vector of the locus and gamete index data fields in a "
-        ":class:`fwdpy11.fwdpp_types.SingleLocusDiploid`.
+        ":class:`fwdpy11.SingleLocusDiploid`.
 
         .. versionadded: 0.1.2
         )delim");

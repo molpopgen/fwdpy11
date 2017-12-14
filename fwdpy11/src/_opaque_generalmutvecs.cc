@@ -11,7 +11,7 @@ PYBIND11_MODULE(_opaque_generalmutvecs,m)
 {
     py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
         m, "VecGeneralMutVec", py::module_local(false),
-        "A list of :class:`fwdpy11.fwdpp_types.GeneralMutVec`.")
+        "A list of :class:`fwdpy11.GeneralMutVec`.")
         .def(py::pickle(
             [](const std::vector<KTfwd::generalmut_vec> &mutations) {
                 py::list rv;

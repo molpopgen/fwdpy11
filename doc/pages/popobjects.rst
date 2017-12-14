@@ -13,7 +13,7 @@ methods.  However, some care is required, and you should be familiar with the ma
 covers how populations are represented in memory.
 
 .. note::
-    This page uses :class:`fwdpy11.fwdpy11_types.SlocusPop` in its examples.
+    This page uses :class:`fwdpy11.SlocusPop` in its examples.
     However, analagous functionality is available for all supported population types.
     
 Quick start example
@@ -30,7 +30,7 @@ in:
     # gametes, and diploids:
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     # Add a mutation with pos = 0.1,
     # s = -0.01, h = 1.0, g = 0,
@@ -91,7 +91,7 @@ the data from our input containers. The following example is the same as above, 
 
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -126,7 +126,7 @@ Incorrect gamete count:
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The gamete is incorrectly labelled as occurring once:
     gametes.append(fwdpy11.Gamete((1,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
@@ -149,7 +149,7 @@ Neutral or non-neutral mutations in the incorrect gamete container:
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The mutation is non-neutral, and we are mistakenly
     # putting it in the Gametes.mutations container:
@@ -213,7 +213,7 @@ The output of msprime_ will be used to fill containers that we then use to const
         # Testing showed that a listcomp
         # here really ate RAM, so we
         # do a for loop instead:
-        diploids = fwdpy11.VecSingleLocusDiploid()
+        diploids = fwdpy11.VecDiploid()
         for i in range(int(N)):
             diploids.append(fwdpy11.SingleLocusDiploid(2 * i, 2 * i + 1))
         return diploids
@@ -257,7 +257,7 @@ Consider the following example with two mutations:
 
     gametes = fwdpy11.VecGamete()
 
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -297,7 +297,7 @@ The sorting takes place on the C++ side because of how the relevant container ty
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # Add in a second, non-neutral mutation:
     mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))

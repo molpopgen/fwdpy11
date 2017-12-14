@@ -45,7 +45,7 @@ class testSlocusPop(unittest.TestCase):
     def test_diploids(self):
         self.assertTrue(
             type(self.pop.diploids)
-            is fwdpy11.VecSingleLocusDiploid)
+            is fwdpy11.VecDiploid)
 
     def test_a_diploid(self):
         self.assertTrue(
@@ -64,7 +64,7 @@ class SlocusTypeSampler(object):
         assert(type(pop.mutations) is not list)
         assert(type(list(pop.mutations)) is list)
         assert(type(pop.mcounts) is fwdpy11.VecUint32)
-        assert(type(pop.diploids) is fwdpy11.VecSingleLocusDiploid)
+        assert(type(pop.diploids) is fwdpy11.VecDiploid)
         assert(type(pop.diploids[0])
                is fwdpy11.fwdpy11_types.SingleLocusDiploid)
         assert(type(pop.gametes) is fwdpy11.VecGamete)
@@ -110,12 +110,12 @@ class testMlocusPop(unittest.TestCase):
         self.assertFalse(type(self.pop.diploids) is list)
         self.assertTrue(
             type(self.pop.diploids)
-            is fwdpy11.VecVecSingleLocusDiploid)
+            is fwdpy11.VecVecDiploid)
 
     def test_a_diploid(self):
         self.assertTrue(
             type(self.pop.diploids[0])
-            is fwdpy11.VecSingleLocusDiploid)
+            is fwdpy11.VecDiploid)
 
     def test_gametes(self):
         self.assertTrue(

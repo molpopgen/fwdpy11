@@ -57,7 +57,7 @@ In order to pickle a file, you must also use the latest pickling protocol.
 
 .. testoutput::
 
-    <class 'fwdpy11.fwdpy11_types.SlocusPop'>
+    <class 'fwdpy11.SlocusPop'>
     True
 
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html

@@ -51,7 +51,7 @@ class testSimpleParallel(unittest.TestCase):
             # the population
             for res in pool.map(evolve_and_return, args):
                 self.assertEqual(str(type(res)),
-                                 "<class 'fwdpy11.fwdpy11_types.SlocusPop'>")
+                                 "<class 'fwdpy11.SlocusPop'>")
 
 
 if __name__ == "__main__":
