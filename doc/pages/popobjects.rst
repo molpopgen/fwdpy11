@@ -70,7 +70,7 @@ The above example brings up some new concepts:
 
 1. There are several new container types introduced. These are thin wrappers around C++ containers. 
 2. We _can_ construct these containers from Python iterable types such as lists.  The above example does just that to
-   create a :class:`fwdpy11.fwdpp_types.Gamete` instance.  However, doing so with large lists may use a lot of RAM, and
+   create a :class:`fwdpy11.Gamete` instance.  However, doing so with large lists may use a lot of RAM, and
    the append approach may be preferable.
 
 Some comments are needed:
@@ -83,7 +83,7 @@ Efficient construction of large populations
 When building a large population programmatically, a naive approach would leave us with a data copy on both the Python
 and on the C++ side, which is not ideal.  We can avoid that via class methods that use C++11's move semantics to "steal"
 the data from our input containers. The following example is the same as above, except that we create the function via
-:func:`fwdpy11.fwdpy11_types.SlocusPop.create`:
+:func:`fwdpy11.SlocusPop.create`:
 
 .. testcode:: move_constructing_pops
 
@@ -112,7 +112,7 @@ into the population object, avoiding an extra temporary copy.  *The create funct
 constructing populations unless you have a reason to keep the input data around.*
 
 .. note::
-    There is also a :func:`fwdpy11.fwdpy11_types.SlocusPop.create_with_fixations` allowing a population to be
+    There is also a :func:`fwdpy11.SlocusPop.create_with_fixations` allowing a population to be
     created with fixations, fixation times, and a current generation > 0.  That function is mostly used
     internally when rebuilding populations from files.
 
@@ -180,7 +180,7 @@ of :math:`\theta=1,000` and :math:`\rho=1,000`, respectively.  Mutation and cros
 interval :math:`[0,1)`.
 
 The output of msprime_ will be used to fill containers that we then use to construct an instantce of
-:class:`fwdpy11.fwdpy11_types.SlocusPop`.
+:class:`fwdpy11.SlocusPop`.
 
 .. ipython:: python
 

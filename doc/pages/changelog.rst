@@ -10,7 +10,7 @@ Version 0.1.4
 Bug fixes:
 --------------------------
 
-* :attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.label` is now pickled. `PR #34 <https://github.com/molpopgen/fwdpy11/pull/34>`_
+* :attr:`fwdpy11.SingleLocusDiploid.label` is now pickled. `PR #34 <https://github.com/molpopgen/fwdpy11/pull/34>`_
 
 API changes/new features:
 ----------------------------------------------------
@@ -18,14 +18,14 @@ API changes/new features:
 * Improved support for pickling lower-level types. See the unit test file `tests/test_pickling.py` for examples of directly pickling things like mutations and containers of mutations.  `PR #55 <https://github.com/molpopgen/fwdpy11/pull/55>`_
 * `__main__.py` added.  The main use is to help writing python modules based on fwdpy11. See :ref:`developers` for details. `PR #54 <https://github.com/molpopgen/fwdpy11/pull/54>`_
 * Attributes `popdata` and `popdata_user` added to all population objects. `PR #52 <https://github.com/molpopgen/fwdpy11/pull/52>`_
-* :attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data` added as read-only field. `PR #51 <https://github.com/molpopgen/fwdpy11/pull/51>`_
-* :attr:`fwdpy11.fwdpy11_types.MlocusPop.locus_boundaries` is now writeable.
+* :attr:`fwdpy11.SingleLocusDiploid.parental_data` added as read-only field. `PR #51 <https://github.com/molpopgen/fwdpy11/pull/51>`_
+* :attr:`fwdpy11.MlocusPop.locus_boundaries` is now writeable.
 * :attr:`fwdpy11.sampling.DataMatrix.neutral` and :attr:`fwdpy11.sampling.DataMatrix.selected` are now writeable
   buffers. :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral` and :attr:`fwdpy11.sampling.DataMatrix.ndim_selected` have
   been changed from functions to read-only properties. `PR #45 <https://github.com/molpopgen/fwdpy11/pull/45>`_
 * Population objects have new member functions ``sample`` and ``sample_ind``.  These replace
   :func:`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
-  :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample` and :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample_ind` for more info. (The
+  :func:`~fwdpy11.SlocusPop.sample` and :func:`~fwdpy11.SlocusPop.sample_ind` for more info. (The
   same member functions exist for *all* population objects.) `PR #43 <https://github.com/molpopgen/fwdpy11/pull/43>`_
 * The 'label' field of :class:`fwdpy11.regions.Region` (and :class:`fwdpy11.regions.Sregions`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
@@ -65,8 +65,8 @@ API changes/new features:
 
 * :class:`fwdpy11.regions.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16 <https://github.com/molpopgen/fwdpy11/pull/16>`_]
   * Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
-* :func:`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of :class:`fwdpy11.fwdpp_types.Mutation` to be changed. [`commit <https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2>`_].
-* The attributes of :class:`fwdpy11.fwdpp_types.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
+* :func:`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of :class:`fwdpy11.Mutation` to be changed. [`commit <https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2>`_].
+* The attributes of :class:`fwdpy11.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
 * Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. [`commit <https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9>`_]
 
 Back-end changes

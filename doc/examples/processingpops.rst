@@ -147,7 +147,7 @@ indexing, etc.!).  A perhaps less error-prone method involves just asking `numpy
     #If we had used slices, it would be
     #an opaque list
     assert(type(sample) is list)
-    assert(type(sample[0]) is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+    assert(type(sample[0]) is fwdpy11.SingleLocusDiploid)
 
 
 

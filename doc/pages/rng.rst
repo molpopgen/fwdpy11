@@ -3,7 +3,7 @@
 Random number generator
 ======================================================================
 
-The random number generator type is :class:`fwdpy11.fwdpy11_types.GSLrng`.  It is initialized with a non-negative
+The random number generator type is :class:`fwdpy11.GSLrng`.  It is initialized with a non-negative
 integer as a seed:
 
 .. testcode::

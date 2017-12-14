@@ -10,10 +10,10 @@ Background reading:
 * :ref:`recorders`
 
 This example shows one way to track parentage during a simulation.  We'll run a single-deme simulation and use
-:attr:`fwdpy11.fwdpy11_types.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
+:attr:`fwdpy11.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
 
 The mechanics are quite simple.  We define a custom recorder that gathers the parent data
-(:attr:`fwdpy11.fwdpy11_types.SingleLocusDiploid.parental_data`) into a list each generation.  We will couple the parent
+(:attr:`fwdpy11.SingleLocusDiploid.parental_data`) into a list each generation.  We will couple the parent
 data along with the individual's label field.  This coupling facilitates later post-processing.
 
 For convenience, we coerce the data into a `collections.namedtuple`, which allows final storage into a
