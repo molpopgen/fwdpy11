@@ -39,7 +39,7 @@ properties:
 Currently, all of the above fields are read-only except for "label".
 
 Instances of :class:`fwdpy11.Mutation` are stored in an opaque list type called
-:class:`fwdpy11.MutationContainer`.  
+:class:`fwdpy11.VecMutation`.  
 
 .. note::
 
@@ -60,7 +60,7 @@ Mutation objects to not track their own frequencies.  Rather, they are stored in
 .. note::
     
     The length of a :class:`fwdpy11.VecUint32` in a simulation is the same
-    length as the corresponding :class:`fwdpy11.MutationContainer`.
+    length as the corresponding :class:`fwdpy11.VecMutation`.
 
 .. note::
 
@@ -93,7 +93,7 @@ counts container).
     represented once and only once.  If you want to know the frequency distribution at the level of gametes, you'd have
     to calculate that yourself by via an all-by-all comparison.
 
-Gametes are stored in opaque lists of type :class:`fwdpy11.GameteContainer`.
+Gametes are stored in opaque lists of type :class:`fwdpy11.VecGamete`.
 
 .. _diploids:
 
@@ -118,15 +118,15 @@ contains the following read-only properties:
 The information stored in `parental_data` is simulation-dependent.  For models with no population structure, it will
 typically be a Python tuple containing the `label` value for each parent.  See :ref:`parentage` for an example.
 
-For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.DiploidContainer`, which is an opaque list of :class:`fwdpy11.SingleLocusDiploid` objects.  **The w/g/e/label fields are only populated for the first locus.**
+For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.VecDiploid`, which is an opaque list of :class:`fwdpy11.SingleLocusDiploid` objects.  **The w/g/e/label fields are only populated for the first locus.**
 
 .. note::
 
     Future changes to fwdpp will likely make the storage of data in a multi-locus diploid more efficient and sensible.
 
 In a single-locus simulation, diploids are stored in an opaque list of type
-:class:`fwdpy11.DiploidContainer`.  For multi-locus simulations, diploids are stored in
-:class:`fwdpy11.VecDiploidContainer`, which is also an opaque list.
+:class:`fwdpy11.VecDiploid`.  For multi-locus simulations, diploids are stored in
+:class:`fwdpy11.VecVecDiploid`, which is also an opaque list.
 
 .. _slocuspop:
 
@@ -157,11 +157,11 @@ This class contains the following read-only properties:
     
     "N", "Current population size."
     "generation", "Current generation."
-    "mutations", "A :class:`fwdpy11.MutationContainer`. See :ref:`popgenmuts`."
+    "mutations", "A :class:`fwdpy11.VecMutation`. See :ref:`popgenmuts`."
     "mcounts", "See :ref:`mcounts`."
-    "gametes", "A :class:`fwdpy11.GameteContainer`.  See :ref:`gametes`."
-    "diploids", "A :class:`fwdpy11.DiploidContainer`.  See :ref:`diploids`."
-    "fixations", "A :class:`fwdpy11.MutationContainer` storing fixations. See :ref:`popgenmuts`."
+    "gametes", "A :class:`fwdpy11.VecGamete`.  See :ref:`gametes`."
+    "diploids", "A :class:`fwdpy11.VecDiploid`.  See :ref:`diploids`."
+    "fixations", "A :class:`fwdpy11.VecMutation` storing fixations. See :ref:`popgenmuts`."
     "fixation_times", "A :class:`fwdpy11.VecUint32` storing fixation times."
 
 .. _mlocuspop:
@@ -170,7 +170,7 @@ Multi-locus, single-deme population objects
 -----------------------------------------------------------
 
 The type :class:`fwdpy11.MlocusPop` is analagous to :class:`fwdpy11.SlocusPop` in all but
-one respect.  The `diploids` property type is :class:`fwdpy11.VecDiploidContainer`.  See :ref:`diploids`
+one respect.  The `diploids` property type is :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`
 for details.  The class has all of the properties of :class:`fwdpy11.SlocusPop` plus the following:
 
 .. csv-table:: :class:`fwdpy11.MlocusPop` properties
