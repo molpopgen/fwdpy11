@@ -128,12 +128,6 @@ fwdpy11.wright_fisher_qtrait
     :members:
     :show-inheritance:
 
-fwdpy11.dev
-------------------------------
-.. automodule:: fwdpy11.dev
-    :members:
-    :show-inheritance:
-
 fwdpy11.multilocus
 ------------------------------
 .. automodule:: fwdpy11.multilocus
