@@ -25,3 +25,39 @@ class SlocusPop(SlocusPop):
     deme and a single genomic region.
     """
     pass
+
+    @staticmethod
+    def create(diploids, gametes, mutations, *args):
+        """
+        Create a new object from input data.
+        Unlike the constructor method, this method results
+        in no temporary copies of input data.
+
+        :param diplods: A :class:`fwdpy11.VecDiploid`
+        :param gametes: A :class:`fwdpy11.VecGamete`
+        :param mutations: A :class:`fwdpy11.VecMutation`
+        :param args: Fixations, fixation times, and generation
+
+        :rtype: :class:`fwdpy11.SlocusPop`
+
+        See :ref:`popobjects` for example use.
+
+        When passing in extra args, they must be the following:
+
+        fixations: A :class:`fwdpy11.VecMutation`
+        fixation times: A :class:`fwdpy11.VecUint32`
+        generation: A non-negative integer
+
+        It is required that len(fixations) == len(fixation times).
+
+        The result of passing in these extra args will be an object
+        with its fixation data populated and its generation set
+        to the input value.
+
+        .. versionadded:: 0.1.4
+
+        """
+        return SlocusPop(super(SlocusPop,
+                               SlocusPop).create(diploids,
+                                                 gametes, mutations,
+                                                 args))

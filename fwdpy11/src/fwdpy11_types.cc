@@ -177,27 +177,29 @@ PYBIND11_MODULE(fwdpy11_types, m)
              
              .. versionadded:: 0.1.4
              )delim")
-        .def_static("create", &fwdpy11::singlepop_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.VecDiploid`
-                    :param gametes: A :class:`fwdpy11.VecGamete`
-                    :param mutations: A :class:`fwdpy11.VecMutation`
+        .def(py::init<const fwdpy11::singlepop_t&>(),
+             R"delim(
+                Copy constructor
 
-                    :rtype: :class:`fwdpy11.SlocusPop`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::singlepop_t::create_with_fixations)
+                .. versionadded:: 0.1.4
+                )delim")
+        .def_static(
+            "create",
+            [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
+               fwdpy11::mcont_t& mutations, py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        auto x = diploids.size();
+                        auto rv = fwdpy11::singlepop_t::create(
+                            diploids, gametes, mutations);
+                        return rv;
+                    }
+                auto fixations = args[0].cast<fwdpy11::mcont_t>();
+                auto ftimes = args[1].cast<std::vector<KTfwd::uint_t>>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::singlepop_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, ftimes, g);
+            })
         .def("clear", &fwdpy11::singlepop_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
