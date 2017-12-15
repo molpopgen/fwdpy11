@@ -62,8 +62,6 @@ class testSlocusPopCreate(unittest.TestCase):
         self.assertEqual(len(self.diploids), 0)
         self.assertEqual(len(self.gametes), 0)
         self.assertEqual(len(self.mutations), 0)
-        self.assertEqual(len(self.fixations), 0)
-        self.assertEqual(len(ftimes), 0)
 
 
 class testMlocusPopCreate(unittest.TestCase):
