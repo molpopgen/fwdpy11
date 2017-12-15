@@ -361,6 +361,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
              
              .. versionadded:: 0.1.4
              )delim")
+        .def(py::init<const fwdpy11::multilocus_t&>(),
+             R"delim(
+                Copy constructor.
+
+                .. versionadded:: 0.1.4
+                )delim")
         .def(py::init<unsigned, unsigned,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
@@ -550,6 +556,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
              
              .. versionadded:: 0.1.4
              )delim")
+        .def(py::init<const fwdpy11::singlepop_gm_vec_t&>(),
+             R"delim(
+                Copy constructor.
+
+                .. versionadded:: 0.1.4
+                )delim")
         .def_static("create", &fwdpy11::singlepop_gm_vec_t::create,
                     py::arg("diploids"), py::arg("gametes"),
                     py::arg("mutations"),
