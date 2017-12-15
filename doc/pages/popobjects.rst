@@ -111,10 +111,6 @@ The first three assertions show that the containers that we contstructed are now
 into the population object, avoiding an extra temporary copy.  *The create function should be the preferred method of
 constructing populations unless you have a reason to keep the input data around.*
 
-.. note::
-    There is also a :func:`fwdpy11.SlocusPop.create_with_fixations` allowing a population to be
-    created with fixations, fixation times, and a current generation > 0.  That function is mostly used
-    internally when rebuilding populations from files.
 
 Examples of input errors
 -----------------------------------------------
