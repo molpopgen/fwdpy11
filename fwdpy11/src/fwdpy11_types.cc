@@ -189,7 +189,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
                fwdpy11::mcont_t& mutations, py::tuple args) {
                 if (args.size() == 0)
                     {
-                        auto x = diploids.size();
                         auto rv = fwdpy11::singlepop_t::create(
                             diploids, gametes, mutations);
                         return rv;
