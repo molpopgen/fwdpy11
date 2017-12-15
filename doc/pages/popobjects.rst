@@ -111,11 +111,6 @@ The first three assertions show that the containers that we contstructed are now
 into the population object, avoiding an extra temporary copy.  *The create function should be the preferred method of
 constructing populations unless you have a reason to keep the input data around.*
 
-.. note::
-    When constructing a population with fixations and fixation times, the input data for the fixations
-    (and fixation times) will not be moved, and will remain allocated on the Python side.  This is a 
-    compromise for a simpler API.
-
 
 Examples of input errors
 -----------------------------------------------
