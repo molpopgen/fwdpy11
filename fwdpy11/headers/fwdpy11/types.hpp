@@ -153,10 +153,8 @@ namespace fwdpy11
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         singlepop_t(const unsigned &N)
-            : base(N),
-              generation(0), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(N), generation(0), popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
             if (!N)
                 {
@@ -177,9 +175,8 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+              generation{ 0 }, popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
         }
 
@@ -298,20 +295,16 @@ namespace fwdpy11
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         explicit metapop_t(const std::vector<unsigned> &Ns)
-            : base(&Ns[0], Ns.size()),
-              generation(0), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(&Ns[0], Ns.size()), generation(0),
+              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
         {
             // need to determine policy for how to label diploids :)
         }
 
         //! Constructor takes list of deme sizes are aregument
         explicit metapop_t(const std::initializer_list<unsigned> &Ns)
-            : base(Ns),
-              generation(0), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(Ns), generation(0), popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
         }
 
@@ -323,18 +316,15 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+              generation{ 0 }, popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
         }
 
         //! Construct from a fwdpy11::singlepop_t
         explicit metapop_t(const singlepop_t &p)
-            : base(p),
-              generation(p.generation), popdata{ p.popdata }, popdata_user{
-                  p.popdata_user
-              }
+            : base(p), generation(p.generation), popdata{ p.popdata },
+              popdata_user{ p.popdata_user }
         {
         }
         static metapop_t
@@ -414,10 +404,8 @@ namespace fwdpy11
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         explicit singlepop_gm_vec_t(const unsigned &N)
-            : base(N),
-              generation(0), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(N), generation(0), popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
             if (!N)
                 {
@@ -434,16 +422,14 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+              generation{ 0 }, popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
         }
 
         explicit singlepop_gm_vec_t(const std::string &s)
-            : base(0), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(0), popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
             this->deserialize(s);
         }
@@ -517,10 +503,8 @@ namespace fwdpy11
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         explicit multilocus_t(const unsigned N, const unsigned nloci_)
-            : base(N, nloci_), generation(0),
-              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(N, nloci_), generation(0), nloci(nloci_),
+              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
         {
             if (!N)
                 {
@@ -539,10 +523,8 @@ namespace fwdpy11
         explicit multilocus_t(
             const unsigned N, const unsigned nloci_,
             const std::vector<std::pair<double, double>> &locus_boundaries)
-            : base(N, nloci_, locus_boundaries), generation(0),
-              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+            : base(N, nloci_, locus_boundaries), generation(0), nloci(nloci_),
+              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
         {
             if (!N)
                 {
@@ -567,9 +549,8 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
-                  pybind11::none()
-              }
+              generation{ 0 }, popdata{ pybind11::none() },
+              popdata_user{ pybind11::none() }
         {
         }
 
