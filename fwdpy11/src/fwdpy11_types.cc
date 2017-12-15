@@ -34,6 +34,7 @@ using singlepop_generalmut_vec_base
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
@@ -557,27 +558,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
                 .. versionadded:: 0.1.4
                 )delim")
-        .def_static("create", &fwdpy11::singlepop_gm_vec_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.VecDiploid`
-                    :param gametes: A :class:`fwdpy11.VecGamete`
-                    :param mutations: A :class:`fwdpy11.VecGeneralMutVec`
-
-                    :rtype: :class:`fwdpy11.SlocusPopGeneralMutVec`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::singlepop_gm_vec_t::create_with_fixations)
+        .def_static(
+            "create",
+            [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
+               std::vector<KTfwd::generalmut_vec>& mutations, py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        return fwdpy11::singlepop_gm_vec_t::create(
+                            diploids, gametes, mutations);
+                    }
+                auto& fixations
+                    = args[0].cast<std::vector<KTfwd::generalmut_vec>&>();
+                auto& fixation_times
+                    = args[1].cast<std::vector<KTfwd::uint_t>&>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::singlepop_gm_vec_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, fixation_times,
+                    g);
+            })
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
