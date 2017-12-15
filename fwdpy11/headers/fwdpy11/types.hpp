@@ -60,6 +60,10 @@ namespace fwdpy11
                    std::vector<KTfwd::uint_t> &fixation_times,
                    KTfwd::uint_t generation)
     {
+        if (fixation_times.size() != fixations.size())
+        {
+            throw pybind11::value_error("length of fixation_times != length of fixations");
+        }
         auto rv = create_wrapper<poptype>(
             std::forward<diploids_input>(diploids),
             std::forward<gametes_input>(gametes),
