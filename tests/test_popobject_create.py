@@ -62,15 +62,18 @@ class testSlocusPopCreate(unittest.TestCase):
         self.assertEqual(len(self.diploids), 0)
         self.assertEqual(len(self.gametes), 0)
         self.assertEqual(len(self.mutations), 0)
-
+        self.assertEqual(len(self.fixations), 0)
+        self.assertEqual(len(ftimes), 0)
 
 class testMlocusPopCreate(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.mutations = fwdpy11.VecMutation()
+        self.fixations = fwdpy11.VecMutation()
         self.gametes = fwdpy11.VecGamete()
         self.diploids = fwdpy11.VecVecDiploid()
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
+        self.fixations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
             (4, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
         self.diploids.append(fwdpy11.VecDiploid(
@@ -94,7 +97,7 @@ class testMlocusPopCreate(unittest.TestCase):
         pop = fwdpy11.MlocusPop.create(self.diploids,
                                        self.gametes,
                                        self.mutations,
-                                       self.mutations,
+                                       self.fixations,
                                        ftimes, 2)
         self.assertTrue(type(pop) is fwdpy11.MlocusPop)
         self.assertEqual(len(pop.fixations), len(pop.fixation_times))
@@ -102,6 +105,8 @@ class testMlocusPopCreate(unittest.TestCase):
         self.assertEqual(len(self.diploids), 0)
         self.assertEqual(len(self.gametes), 0)
         self.assertEqual(len(self.mutations), 0)
+        self.assertEqual(len(self.fixations), 0)
+        self.assertEqual(len(ftimes), 0)
 
 
 if __name__ == "__main__":
