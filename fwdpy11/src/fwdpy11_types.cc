@@ -193,8 +193,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                             diploids, gametes, mutations);
                         return rv;
                     }
-                auto fixations = args[0].cast<fwdpy11::mcont_t>();
-                auto ftimes = args[1].cast<std::vector<KTfwd::uint_t>>();
+                auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
+                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
                 auto g = args[2].cast<KTfwd::uint_t>();
                 return fwdpy11::singlepop_t::create_with_fixations(
                     diploids, gametes, mutations, fixations, ftimes, g);
@@ -380,8 +380,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         return fwdpy11::multilocus_t::create(diploids, gametes,
                                                              mutations);
                     }
-                auto fixations = args[0].cast<fwdpy11::mcont_t>();
-                auto ftimes = args[1].cast<std::vector<KTfwd::uint_t>>();
+                auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
+                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
                 auto g = args[2].cast<KTfwd::uint_t>();
                 return fwdpy11::multilocus_t::create_with_fixations(
                     diploids, gametes, mutations, fixations, ftimes, g);
