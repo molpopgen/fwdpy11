@@ -370,27 +370,22 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def(py::init<unsigned, unsigned,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
-        .def_static("create", &fwdpy11::multilocus_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.VecVecDiploid`
-                    :param gametes: A :class:`fwdpy11.VecGamete`
-                    :param mutations: A :class:`fwdpy11.VecMutation`
-
-                    :rtype: :class:`fwdpy11.MlocusPop`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::multilocus_t::create_with_fixations)
+        .def_static(
+            "create",
+            [](std::vector<fwdpy11::multilocus_diploid_t>& diploids,
+               fwdpy11::gcont_t& gametes, fwdpy11::mcont_t& mutations,
+               py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        return fwdpy11::multilocus_t::create(diploids, gametes,
+                                                             mutations);
+                    }
+                auto fixations = args[0].cast<fwdpy11::mcont_t>();
+                auto ftimes = args[1].cast<std::vector<KTfwd::uint_t>>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::multilocus_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, ftimes, g);
+            })
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
