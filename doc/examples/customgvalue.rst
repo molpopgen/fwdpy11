@@ -68,7 +68,7 @@ Get mean run time using our custom additive model:
 
 .. ipython:: python
 
-    %timeit fwdpy11.wright_fisher.evolve(rng,pop,params)
+    %timeit -n 10 -r 1 fwdpy11.wright_fisher.evolve(rng,pop,params)
 
 OK, let's compare to the built-in additive fitness class.  We need
 to reset our parameters, rng, etc., first:
@@ -85,7 +85,7 @@ The C++ version is **much** faster:
 
 .. ipython:: python
 
-    %timeit fwdpy11.wright_fisher.evolve(rng,pop,params)
+    %timeit -n 10 -r 1 fwdpy11.wright_fisher.evolve(rng,pop,params)
 
 The reason for the massive speed difference has little to do with how we implemented our additive function. Rather, it
 is due to a constant back and forth between C++ and Python. See `here
@@ -121,7 +121,7 @@ Let's use it:
         dfe=fwdpy11.ExpS(0,1,1,-0.05),
         pneutral=0.95,simlen=10)
     pdict['gvalue'] = ca.examples.custom_additive.additive()
-    %timeit fwdpy11.wright_fisher.evolve(rng,pop,params)
+    %timeit -n 10 -r 1 fwdpy11.wright_fisher.evolve(rng,pop,params)
 
 That's much better--we are back to very fast fitness calculations!
 
