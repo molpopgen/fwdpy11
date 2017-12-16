@@ -13,7 +13,7 @@ methods.  However, some care is required, and you should be familiar with the ma
 covers how populations are represented in memory.
 
 .. note::
-    This page uses :class:`fwdpy11.fwdpy11_types.SlocusPop` in its examples.
+    This page uses :class:`fwdpy11.SlocusPop` in its examples.
     However, analagous functionality is available for all supported population types.
     
 Quick start example
@@ -30,7 +30,7 @@ in:
     # gametes, and diploids:
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     # Add a mutation with pos = 0.1,
     # s = -0.01, h = 1.0, g = 0,
@@ -70,7 +70,7 @@ The above example brings up some new concepts:
 
 1. There are several new container types introduced. These are thin wrappers around C++ containers. 
 2. We _can_ construct these containers from Python iterable types such as lists.  The above example does just that to
-   create a :class:`fwdpy11.fwdpp_types.Gamete` instance.  However, doing so with large lists may use a lot of RAM, and
+   create a :class:`fwdpy11.Gamete` instance.  However, doing so with large lists may use a lot of RAM, and
    the append approach may be preferable.
 
 Some comments are needed:
@@ -83,7 +83,7 @@ Efficient construction of large populations
 When building a large population programmatically, a naive approach would leave us with a data copy on both the Python
 and on the C++ side, which is not ideal.  We can avoid that via class methods that use C++11's move semantics to "steal"
 the data from our input containers. The following example is the same as above, except that we create the function via
-:func:`fwdpy11.fwdpy11_types.SlocusPop.create`:
+:func:`fwdpy11.SlocusPop.create`:
 
 .. testcode:: move_constructing_pops
 
@@ -91,7 +91,7 @@ the data from our input containers. The following example is the same as above, 
 
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -111,10 +111,6 @@ The first three assertions show that the containers that we contstructed are now
 into the population object, avoiding an extra temporary copy.  *The create function should be the preferred method of
 constructing populations unless you have a reason to keep the input data around.*
 
-.. note::
-    There is also a :func:`fwdpy11.fwdpy11_types.SlocusPop.create_with_fixations` allowing a population to be
-    created with fixations, fixation times, and a current generation > 0.  That function is mostly used
-    internally when rebuilding populations from files.
 
 Examples of input errors
 -----------------------------------------------
@@ -126,7 +122,7 @@ Incorrect gamete count:
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The gamete is incorrectly labelled as occurring once:
     gametes.append(fwdpy11.Gamete((1,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
@@ -149,7 +145,7 @@ Neutral or non-neutral mutations in the incorrect gamete container:
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # The mutation is non-neutral, and we are mistakenly
     # putting it in the Gametes.mutations container:
@@ -180,7 +176,7 @@ of :math:`\theta=1,000` and :math:`\rho=1,000`, respectively.  Mutation and cros
 interval :math:`[0,1)`.
 
 The output of msprime_ will be used to fill containers that we then use to construct an instantce of
-:class:`fwdpy11.fwdpy11_types.SlocusPop`.
+:class:`fwdpy11.SlocusPop`.
 
 .. ipython:: python
 
@@ -213,7 +209,7 @@ The output of msprime_ will be used to fill containers that we then use to const
         # Testing showed that a listcomp
         # here really ate RAM, so we
         # do a for loop instead:
-        diploids = fwdpy11.VecSingleLocusDiploid()
+        diploids = fwdpy11.VecDiploid()
         for i in range(int(N)):
             diploids.append(fwdpy11.SingleLocusDiploid(2 * i, 2 * i + 1))
         return diploids
@@ -257,7 +253,7 @@ Consider the following example with two mutations:
 
     gametes = fwdpy11.VecGamete()
 
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
 
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
 
@@ -297,7 +293,7 @@ The sorting takes place on the C++ side because of how the relevant container ty
     import fwdpy11
     mutations = fwdpy11.VecMutation()
     gametes = fwdpy11.VecGamete()
-    diploids = fwdpy11.VecSingleLocusDiploid()
+    diploids = fwdpy11.VecDiploid()
     mutations.append(fwdpy11.Mutation(0.1,-0.01,1.0,0,0))
     # Add in a second, non-neutral mutation:
     mutations.append(fwdpy11.Mutation(0.22,0.1,1.0,0,1))

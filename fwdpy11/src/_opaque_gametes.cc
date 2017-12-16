@@ -30,7 +30,7 @@ PYBIND11_MODULE(_opaque_gametes, m)
     py::bind_vector<std::vector<KTfwd::gamete>>(
         m, "VecGamete", py::module_local(false),
         "C++ representations of a list of "
-        ":class:`fwdpy11.fwdpp_types.Gamete`.  "
+        ":class:`fwdpy11.Gamete`.  "
         "Typically, access will be read-only.")
         .def(py::pickle(
             [](const std::vector<KTfwd::gamete>& gametes) {

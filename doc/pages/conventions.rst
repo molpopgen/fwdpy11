@@ -16,5 +16,5 @@ This allows you to write code like this:
     p = fwdpy11.SlocusPop(1000)
 
 However, in order to refer to that class in the documentation, we must use its fully-specified name, which is
-:class:`fwdpy11.fwdpy11_types.SlocusPop`.
+:class:`fwdpy11.SlocusPop`.
 

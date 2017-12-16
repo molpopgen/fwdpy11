@@ -123,7 +123,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
           },                                                                  \
           "Take a sample of :math:`n` chromosomes from a population "         \
           "(`n/2` diploids.\n\n"                                              \
-          ":param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`\n"             \
+          ":param rng: A :class:`fwdpy11.GSLrng`\n"             \
           ":param pop: A :class:`" CLASSTYPE "`\n"                            \
           ":param samplesize: (int) The sample size.\n"                       \
           ":param removeFixed: (boolean, defaults to True) Whether or not to" \
@@ -158,17 +158,17 @@ PYBIND11_MODULE(sampling, m)
     m.doc() = "Taking samples from populations";
 
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
-                           "fwdpy11.fwdpy11_types.SlocusPop")
+                           "fwdpy11.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
-                           "fwdpy11.fwdpy11_types.MlocusPop")
+                           "fwdpy11.MlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
-                           "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+                           "fwdpy11.SlocusPopGeneralMutVec")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
-                        "fwdpy11.fwdpy11_types.SlocusPop")
+                        "fwdpy11.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
-                        "fwdpy11.fwdpy11_types.MlocusPop")
+                        "fwdpy11.MlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
-                        "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+                        "fwdpy11.SlocusPopGeneralMutVec")
 
     py::bind_vector<std::vector<std::int8_t>>(
         m, "VecInt8", py::buffer_protocol(),
@@ -385,20 +385,20 @@ PYBIND11_MODULE(sampling, m)
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
     MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
-                  "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+                  "fwdpy11.SlocusPopGeneralMutVec");
 
-    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
     GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                    "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+                    "fwdpy11.SlocusPopGeneralMutVec");
 
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
     HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                     "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+                     "fwdpy11.SlocusPopGeneralMutVec");
 
     m.def("matrix_to_sample",
           [](const KTfwd::data_matrix &m, const bool neutral)

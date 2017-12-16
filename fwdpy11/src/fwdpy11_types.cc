@@ -34,6 +34,7 @@ using singlepop_generalmut_vec_base
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
@@ -51,20 +52,20 @@ namespace
 )delim";
 
     static const auto DIPLOIDS_DOCSTRING = R"delim(
-   A :class:`fwdpy11.fwdpy11_types.DiploidContainer`.
+   A :class:`fwdpy11.VecDiploid`.
    )delim";
 
     static const auto FIXATIONS_DOCSTRING
-        = R"delim(A :class:`fwdpy11.fwdpp_types.MutationContainer` of fixed variants.)delim";
+        = R"delim(A :class:`fwdpy11.VecMutation` of fixed variants.)delim";
 
     static const auto FIXATION_TIMES_DOCSTRING =
         R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
 
     static const auto GAMETES_DOCSTRING
-        = R"delim(A :class:`fwdpy11.fwdpp_types.GameteContainer`.)delim";
+        = R"delim(A :class:`fwdpy11.VecGamete`.)delim";
 
     static const auto MUTATIONS_DOCSTRING = R"delim(
-    List of :class:`fwdpy11.fwdpp_types.Mutation`.
+    List of :class:`fwdpy11.Mutation`.
 
     .. note:: 
         This list contains **both** extinct *and* extant mutations.  
@@ -106,14 +107,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::GSLrng_t>(
-        m, "GSLrng", "Random number generator based on a mersenne twister.")
-        .def(py::init<unsigned>(),
-             "Constructor takes unsigned integer as a seed");
-
-    py::class_<fwdpy11::diploid_t>(
-        m, "SingleLocusDiploid",
-        "Diploid data type for a single (usually contiguous) genomic region")
+    py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
         .def_static("create", &fwdpy11::diploid_t::create)
@@ -172,10 +166,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     // Expose the type based on fwdpp's "sugar"
     // layer
-    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(
-        m, "SlocusPop", "Population object representing a single "
-                        "deme and a "
-                        "single genomic region.")
+    py::class_<fwdpy11::singlepop_t, singlepop_sugar_base>(m, "SlocusPop")
         .def(py::init<unsigned>(), "Construct with an unsigned integer "
                                    "representing the initial "
                                    "population size.")
@@ -185,29 +176,30 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Construct with tuple of (diploids, gametes, mutations).
              
-             ..versionadded:: 0.1.4
+             .. versionadded:: 0.1.4
              )delim")
-        .def_static("create", &fwdpy11::singlepop_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
-                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
-                    :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
+        .def(py::init<const fwdpy11::singlepop_t&>(),
+             R"delim(
+                Copy constructor
 
-                    :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPop`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::singlepop_t::create_with_fixations)
+                .. versionadded:: 0.1.4
+                )delim")
+        .def_static(
+            "create",
+            [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
+               fwdpy11::mcont_t& mutations, py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        auto rv = fwdpy11::singlepop_t::create(
+                            diploids, gametes, mutations);
+                        return rv;
+                    }
+                auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
+                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::singlepop_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, ftimes, g);
+            })
         .def("clear", &fwdpy11::singlepop_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_t::generation,
@@ -302,7 +294,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample random diploids *with replacement*.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -317,7 +309,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              .. note::
                 If you want sampling *without* replacement, see
-                :func:`~fwdpy11.fwdpy11_types.SlocusPop.sample_ind`.
+                :func:`~fwdpy11.SlocusPop.sample_ind`.
 
 			 .. versionadded:: 0.1.4
              )delim")
@@ -340,7 +332,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -358,9 +350,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 .. versionadded:: 0.1.4
              )delim");
 
-    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(
-        m, "MlocusPop", "Representation of a multi-locus, single "
-                        "deme system.")
+    py::class_<fwdpy11::multilocus_t, multilocus_sugar_base>(m, "MlocusPop")
         .def(py::init<unsigned, unsigned>(), py::arg("N"), py::arg("nloci"),
              "Construct with population size and "
              "number of loci.")
@@ -370,32 +360,33 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Construct with tuple of (diploids, gametes, mutations).
              
-             ..versionadded:: 0.1.4
+             .. versionadded:: 0.1.4
              )delim")
+        .def(py::init<const fwdpy11::multilocus_t&>(),
+             R"delim(
+                Copy constructor.
+
+                .. versionadded:: 0.1.4
+                )delim")
         .def(py::init<unsigned, unsigned,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
-        .def_static("create", &fwdpy11::multilocus_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.fwdpy11_types.VecDiploidContainer`
-                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
-                    :param mutations: A :class:`fwdpy11.fwdpy11_types.MutationContainer`
-
-                    :rtype: :class:`fwdpy11.fwdpy11_types.MlocusPop`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::multilocus_t::create_with_fixations)
+        .def_static(
+            "create",
+            [](std::vector<fwdpy11::multilocus_diploid_t>& diploids,
+               fwdpy11::gcont_t& gametes, fwdpy11::mcont_t& mutations,
+               py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        return fwdpy11::multilocus_t::create(diploids, gametes,
+                                                             mutations);
+                    }
+                auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
+                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::multilocus_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, ftimes, g);
+            })
         .def("clear", &fwdpy11::multilocus_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::multilocus_t::generation,
@@ -490,7 +481,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample random diploids *with replacement*.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -505,7 +496,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              .. note::
                 If you want sampling *without* replacement, see
-                :func:`~fwdpy11.fwdpy11_types.MlocusPop.sample_ind`.
+                :func:`~fwdpy11.MlocusPop.sample_ind`.
 
 			 .. versionadded:: 0.1.4
              )delim")
@@ -527,7 +518,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -549,12 +540,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
              )delim");
 
     py::class_<fwdpy11::singlepop_gm_vec_t,
-               singlepop_generalmut_vec_sugar_base>(
-        m, "SlocusPopGeneralMutVec",
-        "Single-deme object using "
-        ":class:`fwpy11.fwdpp_types.GeneralMutVec`"
-        " as "
-        "the mutation type.")
+               singlepop_generalmut_vec_sugar_base>(m,
+                                                    "SlocusPopGeneralMutVec")
         .def(py::init<unsigned>(), py::arg("N"),
              "Construct object with N diploids.")
         .def(py::init<const fwdpy11::singlepop_gm_vec_t::dipvector_t&,
@@ -563,29 +550,32 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Construct with tuple of (diploids, gametes, mutations).
              
-             ..versionadded:: 0.1.4
+             .. versionadded:: 0.1.4
              )delim")
-        .def_static("create", &fwdpy11::singlepop_gm_vec_t::create,
-                    py::arg("diploids"), py::arg("gametes"),
-                    py::arg("mutations"),
-                    R"delim(
-                    Create a new object from input data.
-                    Unlike the constructor method, this method results
-                    in no temporary copies of input data.
-                    
-                    :param diplods: A :class:`fwdpy11.fwdpy11_types.DiploidContainer`
-                    :param gametes: A :class:`fwdpy11.fwdpy11_types.GameteContainer`
-                    :param mutations: A :class:`fwdpy11.fwdpp_types.VecGeneralMutVec`
+        .def(py::init<const fwdpy11::singlepop_gm_vec_t&>(),
+             R"delim(
+                Copy constructor.
 
-                    :rtype: :class:`fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec`
-
-                    .. versionadded:: 0.1.4
-
-                    .. note::
-                        See :ref:`popobjects` for example use.
-                    )delim")
-        .def_static("create_with_fixations",
-                    &fwdpy11::singlepop_gm_vec_t::create_with_fixations)
+                .. versionadded:: 0.1.4
+                )delim")
+        .def_static(
+            "create",
+            [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
+               std::vector<KTfwd::generalmut_vec>& mutations, py::tuple args) {
+                if (args.size() == 0)
+                    {
+                        return fwdpy11::singlepop_gm_vec_t::create(
+                            diploids, gametes, mutations);
+                    }
+                auto& fixations
+                    = args[0].cast<std::vector<KTfwd::generalmut_vec>&>();
+                auto& fixation_times
+                    = args[1].cast<std::vector<KTfwd::uint_t>&>();
+                auto g = args[2].cast<KTfwd::uint_t>();
+                return fwdpy11::singlepop_gm_vec_t::create_with_fixations(
+                    diploids, gametes, mutations, fixations, fixation_times,
+                    g);
+            })
         .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
              "Clears all population data.")
         .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
@@ -596,16 +586,13 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       DIPLOIDS_DOCSTRING)
         .def_readonly("mutations", &fwdpy11::singlepop_gm_vec_t::mutations,
                       "A list of "
-                      ":class:`fwdpy11.fwdpp_types."
-                      "VecGeneralMutVec`.")
+                      ":class:`fwdpy11.VecGeneralMutVec`.")
         .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts,
                       MCOUNTS_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations,
-                      "A list of "
-                      ":class:`fwdpy11.fwdpp_types."
-                      "VecGeneralMutVec`.")
+                      "A list of :class:`fwdpy11.VecGeneralMutVec`.")
         .def_readonly("fixation_times",
                       &fwdpy11::singlepop_gm_vec_t::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
@@ -672,7 +659,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample random diploids *with replacement*.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -687,7 +674,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
              .. note::
                 If you want sampling *without* replacement, see
-                :func:`~fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec.sample_ind`.
+                :func:`~fwdpy11.SlocusPopGeneralMutVec.sample_ind`.
 
 			 .. versionadded:: 0.1.4
              )delim")
@@ -710,7 +697,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`
+             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.

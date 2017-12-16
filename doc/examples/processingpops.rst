@@ -28,7 +28,7 @@ First, we'll quickly simulate a single deme for `N` generations:
     pop = fwdpy11.SlocusPop(1000)
 
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,
-        dfe=fwdpy11.regions.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
+        dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
     params = fwdpy11.model_params.SlocusParams(**pdict)
 
     fwdpy11.wright_fisher.evolve(rng,pop,params)
@@ -146,6 +146,7 @@ indexing, etc.!).  A perhaps less error-prone method involves just asking `numpy
     #Our new container is a Python list.
     #If we had used slices, it would be
     #an opaque list
+    import pickle
     assert(type(sample) is list)
     assert(type(sample[0]) is fwdpy11.fwdpy11_types.SingleLocusDiploid)
 

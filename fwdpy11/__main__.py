@@ -22,8 +22,8 @@ import sys
 
 
 def print_includes():
-    from .dev import get_fwdpp_includes
-    from .dev import get_includes
+    from ._dev import get_fwdpp_includes
+    from ._dev import get_includes
 
     idirs = [get_includes(), get_fwdpp_includes()]
 
@@ -31,7 +31,7 @@ def print_includes():
 
 
 def print_mako():
-    from .dev import minimal_mako
+    from ._dev import minimal_mako
     print (minimal_mako())
 
 

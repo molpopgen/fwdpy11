@@ -55,7 +55,7 @@ class testAdditiveEvolution(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         from fwdpy11.ezparams import mslike
-        from fwdpy11.regions import ExpS
+        from fwdpy11 import ExpS
         from fwdpy11.model_params import SlocusParams
         self.pop = fp11.SlocusPop(1000)
         self.pdict = mslike(
