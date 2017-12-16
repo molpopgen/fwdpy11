@@ -20,7 +20,7 @@ fwdpy11 allows mutation and recombination parameters to vary along a genomic seg
 
 Regions have the following properties:
 
-* They are parameterized by objects in the :class:`fwdpy11.regions.Region` class hierarchy.
+* They are parameterized by objects in the :class:`fwdpy11.Region` class hierarchy.
 * They may overlap.  For example, a "coding region" may be modeled as two overlapping regions, one in which neutral
   mutations occur, and another in which selected mutations occur.  There could even be more than one "selected
   region"--one for deleterious mutations and another for beneficial mutations.

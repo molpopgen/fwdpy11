@@ -27,7 +27,7 @@ API changes/new features:
   :func:`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
   :func:`~fwdpy11.SlocusPop.sample` and :func:`~fwdpy11.SlocusPop.sample_ind` for more info. (The
   same member functions exist for *all* population objects.) `PR #43 <https://github.com/molpopgen/fwdpy11/pull/43>`_
-* The 'label' field of :class:`fwdpy11.regions.Region` (and :class:`fwdpy11.regions.Sregions`) now populate the label
+* The 'label' field of :class:`fwdpy11.Region` (and :class:`fwdpy11.Sregions`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
 * Population objects may now be constructed programatically.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`_
 
@@ -38,14 +38,14 @@ Back-end changes
 * Travis CI now tests several Python versions using GCC 6 on Linux. `PR #44 <https://github.com/molpopgen/fwdpy11/pull/44>`_
 * :func:`fwdpy11.wright_fisher_qtrait.evolve` has been updated to allow "standard popgen" models of multi-locus
   evolution. This change is a stepping stone to a future global simplification of the API. `PR #42 <https://github.com/molpopgen/fwdpy11/pull/42>`_
-* The :class:`fwdpy11.regions.Sregion` now store their callback data differently.  The result is a type that can be
+* The :class:`fwdpy11.Sregion` now store their callback data differently.  The result is a type that can be
   pickled in Python 3.6. `PR #39 <https://github.com/molpopgen/fwdpy11/pull/39>`_ 
 * Travis builds are now Linux only and test many Python/GCC combos. `PR #38 <https://github.com/molpopgen/fwdpy11/pull/38>`_
 * Update to fwdpp_ 0.5.7  `PR #35 <https://github.com/molpopgen/fwdpy11/pull/35>`_
 * The method to keep fixations sorted has been updated so that the sorting is by position and fixation time. `PR #33 <https://github.com/molpopgen/fwdpy11/pull/33>`_
 * The doctests are now run on Travis. `PR #30 <https://github.com/molpopgen/fwdpy11/pull/30>`_
 * Removed all uses of placement new in favor of pybind11::pickle. `PR #26 <https://github.com/molpopgen/fwdpy11/pull/26>`_.
-* fwdpy11.regions are now based on the @property/@foo.setter idiom for safety and code reuse.  `PR #21 <https://github.com/molpopgen/fwdpy11/pull/21>`_
+* fwdpy11 are now based on the @property/@foo.setter idiom for safety and code reuse.  `PR #21 <https://github.com/molpopgen/fwdpy11/pull/21>`_
 
 Version 0.1.3.post1
 ++++++++++++++++++++++++++
@@ -63,7 +63,7 @@ Bug fixes:
 API changes/new features:
 ------------------------------------------------
 
-* :class:`fwdpy11.regions.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16 <https://github.com/molpopgen/fwdpy11/pull/16>`_]
+* :class:`fwdpy11.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [`PR #16 <https://github.com/molpopgen/fwdpy11/pull/16>`_]
   * Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
 * :func:`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of :class:`fwdpy11.Mutation` to be changed. [`commit <https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2>`_].
 * The attributes of :class:`fwdpy11.Mutation` are now read-only, addressing Issue #5 on GitHub. [`commit <https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011>`_]
