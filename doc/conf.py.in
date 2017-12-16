@@ -45,7 +45,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'IPython.sphinxext.ipython_console_highlighting',
               'IPython.sphinxext.ipython_directive',
-              'nbsphinx']
+              ]
 # 'breathe']
 
 # if (os.environ.get('READTHEDOCS')=="True") is False:

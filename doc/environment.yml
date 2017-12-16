@@ -10,7 +10,6 @@ dependencies:
     - sphinx_rtd_theme==0.1.9
     - pybind11==2.2.1
     - gsl
-    - nbsphinx
     - msprime
     - gcc
     - numpy

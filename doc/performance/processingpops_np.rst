@@ -23,7 +23,7 @@ First, we'll quickly simulate a single deme for `N` generations:
     theta,rho = 100.0,100.0
     pop = fwdpy11.SlocusPop(1000)
 
-    pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,dfe=fwdpy11.regions.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
+    pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
 
     params = fwdpy11.model_params.SlocusParams(**pdict)
     fwdpy11.wright_fisher.evolve(rng,pop,params)
