@@ -107,7 +107,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid")
+    py::class_<fwdpy11::diploid_t>(m, "SingleLocusDiploid",
+            "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
         .def_static("create", &fwdpy11::diploid_t::create)
