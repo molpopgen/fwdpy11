@@ -28,6 +28,8 @@ else:
     p = site.getsitepackages()[0]
     sys.path.insert(0, p)
 
+nitpicky = True
+
 #    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
 # -- General configuration ------------------------------------------------
 
