@@ -24,12 +24,11 @@ class Region(object):
     Representation of a "region" in a simulation.
 
     Attributes:
-        b: the beginning of the region
-        e: the end of the region
-        w: the "weight" assigned to the region
-        l: A label assigned to the region.
-            Labels must be integers, and can be used to
-            'tag' mutations arising in different regions.
+        * b: the beginning of the region
+        * e: the end of the region
+        * w: the "weight" assigned to the region
+        * l: A label assigned to the region.  Labels must be integers,
+            and can be used to 'tag' mutations arising in different regions.
 
     See :func:`fwdpy11.wright_fisher.evolve` for how this class may be used to
         parameterize a simulation.
@@ -163,8 +162,8 @@ class Sregion(Region):
         * w: the "weight" assigned to the region
         * h: the dominance term
         * l: A label assigned to the region.
-            Labels must be integers, and can be used to
-            'tag' mutations arising in different regions.
+            Labels must be integers, and can be
+            used to 'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.  See note below.
 
     See :func:`fwdpy11.wright_fisher.evolve` for how this class

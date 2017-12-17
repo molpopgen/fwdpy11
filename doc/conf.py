@@ -29,7 +29,11 @@ else:
     sys.path.insert(0, p)
 
 nitpicky = True
-
+nitpick_ignore = [('py:class', 'pybind11_builtins.pybind11_object'),
+                  ('py:class', 'fwdpy11._regions.Region'),
+                  ('py:class', 'fwdpy11._regions.Sregion'),
+                  ('py:class', 'object'),
+                  ('py:obj', 'tuple')]
 #    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
 # -- General configuration ------------------------------------------------
 
