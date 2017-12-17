@@ -24,7 +24,8 @@ written in Cython_:
 An important limitation is that you cannot define a Cython_ function to take the C++ representation of a fwdpy11 type as
 an argument.  The reason is that Cython_ and pybind11_ (which fwdpy11 is based on) are different ways of reflecting C++
 types in Python, and it does not seem straightforward to have the to systems interoperate.  See this issue_ for more
-details.
+details. Note, however, that this is probably not a big deal.  The pybind11_-defined types in fwdpy11 are very efficient
+Python classes with efficient access to member data.
 
 One can of course use Cython_ to write interesting functions.  For example, here's one to calculate the mean effect size
 of a mutation:
