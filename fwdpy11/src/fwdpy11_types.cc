@@ -333,7 +333,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -519,7 +518,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
@@ -698,7 +696,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
              R"delim(
              Sample specific diploids.
              
-             :param rng: A :class:`fwdpy11.GSLrng`
              :param individuals: The individuals to sample.
              :param separate: (True) Separate neutral from non-neutral variants in output.
              :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
