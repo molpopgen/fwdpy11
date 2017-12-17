@@ -19,7 +19,7 @@
 #
 import os
 import sys
-import subprocess
+# import subprocess
 
 if (os.environ.get('READTHEDOCS') == "True") is False:
     sys.path.insert(0, os.path.abspath('..'))
@@ -28,6 +28,12 @@ else:
     p = site.getsitepackages()[0]
     sys.path.insert(0, p)
 
+nitpicky = True
+nitpick_ignore = [('py:class', 'pybind11_builtins.pybind11_object'),
+                  ('py:class', 'fwdpy11._regions.Region'),
+                  ('py:class', 'fwdpy11._regions.Sregion'),
+                  ('py:class', 'object'),
+                  ('py:obj', 'tuple')]
 #    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
 # -- General configuration ------------------------------------------------
 
@@ -45,7 +51,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'IPython.sphinxext.ipython_console_highlighting',
               'IPython.sphinxext.ipython_directive',
-              'nbsphinx']
+              ]
 # 'breathe']
 
 # if (os.environ.get('READTHEDOCS')=="True") is False:

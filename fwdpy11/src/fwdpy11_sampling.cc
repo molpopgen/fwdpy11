@@ -173,8 +173,8 @@ PYBIND11_MODULE(sampling, m)
     py::bind_vector<std::vector<std::int8_t>>(
         m, "VecInt8", py::buffer_protocol(),
         "C++ vector of 8-bit integers.  Used by "
-        ":attr:`fwdpy11.fwdpy11_sampling.DataMatrix.neutral` and "
-        ":attr:`fwdpy11.fwdpy11_sampling.DataMatrix.selected` to store marker "
+        ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
+        ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
         "data.");
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",

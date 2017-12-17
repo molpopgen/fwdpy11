@@ -31,7 +31,7 @@ class test_SlocusPop(unittest.TestCase):
 
     def testCythonFunc(self):
         ms = mean_s(self.muts['s'])
-        self.assertAlmostEqual(ms, self.muts['s'].sum())
+        self.assertAlmostEqual(ms, self.muts['s'].mean())
 
     def testDiploidTraits(self):
         dips = np.array(self.pop.diploids.trait_array())

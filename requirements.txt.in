@@ -6,6 +6,6 @@ numpy
 cppimport
 cython
 sphinx
-nbsphinx
+pandas
 ipython
 matplotlib
