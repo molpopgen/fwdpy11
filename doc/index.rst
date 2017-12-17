@@ -60,6 +60,7 @@ Welcome to fwdpy11's documentation!
     :caption: Maximizing performance
     :maxdepth: 1
 
+    performance/optimization
     performance/processingpops_np
 
 .. toctree::
