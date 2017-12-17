@@ -31,7 +31,7 @@ class Region(object):
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
 
-    See :func:`evolve_regions` for how this class may be used to
+    See :func:`fwdpy11.wright_fisher.evolve` for how this class may be used to
         parameterize a simulation.
 
     This class is extended by:
@@ -167,7 +167,7 @@ class Sregion(Region):
             'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.  See note below.
 
-    See :func:`evolve_regions` for how this class
+    See :func:`fwdpy11.wright_fisher.evolve` for how this class
     may be used to parameterize a simulation.
 
     .. note:: This class cannot be used directly to parameterize a simulation.
@@ -300,7 +300,7 @@ class GammaS(Sregion):
             'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.
 
-    See :func:`evolve_regions` for how this
+    See :func:`fwdpy11.wright_fisher.evolve` for how this
     class may be used to parameterize a simulation
     """
 
@@ -392,7 +392,7 @@ class ConstantS(Sregion):
             'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.
 
-    See :func:`evolve_regions` for how this class may be used to
+    See :func:`fwdpy11.wright_fisher.evolve` for how this class may be used to
     parameterize a simulation
     """
 
@@ -466,7 +466,7 @@ class UniformS(Sregion):
             'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.
 
-    See :func:`evolve_regions` for how this
+    See :func:`fwdpy11.wright_fisher.evolve` for how this
     class may be used to parameterize a simulation
     """
 
@@ -556,7 +556,7 @@ class ExpS(Sregion):
             'tag' mutations arising in different regions.
         * scaling: The scaling of the distrubution.
 
-    See :func:`evolve_regions` for how this class may be used to
+    See :func:`fwdpy11.wright_fisher.evolve` for how this class may be used to
     parameterize a simulation
     """
 
@@ -632,7 +632,7 @@ class GaussianS(Sregion):
 
     The mean is zero.
 
-    See :func:`evolve_regions` for how this class may be used to
+    See :func:`fwdpy11.wright_fisher.evolve` for how this class may be used to
     parameterize a simulation
     """
 

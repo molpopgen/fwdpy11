@@ -27,7 +27,7 @@ API changes/new features:
   :func:`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
   :func:`~fwdpy11.SlocusPop.sample` and :func:`~fwdpy11.SlocusPop.sample_ind` for more info. (The
   same member functions exist for *all* population objects.) `PR #43 <https://github.com/molpopgen/fwdpy11/pull/43>`_
-* The 'label' field of :class:`fwdpy11.Region` (and :class:`fwdpy11.Sregions`) now populate the label
+* The 'label' field of :class:`fwdpy11.Region` (and :class:`fwdpy11.Sregion`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
 * Population objects may now be constructed programatically.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`_
 
@@ -112,7 +112,7 @@ API and back-end changes:
 ------------------------------------------
 * Added :func:`fwdpy11.sampling.matrix_to_sample` and :func:`fwdpy11.sampling.separate_samples_by_loci`. [`commit <https://github.com/molpopgen/fwdpy11/commit/i639c8de999679140fad6a976ff6c1996b25444aa>`_]
 * Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code. See
-  :ref:`customgvaluecpp`. [`commit
+  :ref:`customgvalues`. [`commit
   <https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667>`_]
 * Custom fitness/genetic value calculations now allowed in pure Python, but they are quite slow (for now). See 
   :ref:`customgvalues`. [`commit <https://github.com/molpopgen/fwdpy11/commit/5549286046ead1181cba684464b3bcb19918321e>`_]

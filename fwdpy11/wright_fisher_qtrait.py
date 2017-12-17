@@ -188,7 +188,8 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
     else:
         prune_selected = False
     if prune_selected is True:
-        warnings.warn("selected fixations will be removed from population during the simulation")
+        warnings.warn(
+            "selected fixations will be removed from population during the simulation")
     evolve_qtrait_mloc_regions_cpp(rng, pop, params.demography,
                                    params.mutrates_n, params.mutrates_s,
                                    params.recrates, mm, rm, params.interlocus,
@@ -209,9 +210,8 @@ def evolve(rng, pop, params, recorder=None):
     and then mapped to fitness.  See the sections of the manual on
     simulating quantitative traits.
 
-    :param rng: An instance of :class:`fwdpy11.fwdpy11_types.GSLrng`.
-    :param pop: An instance of :class:`fwdpy11.fwdpy11_types.Spop`
-        or :class:`fwdpy11.fwdpy11_types.MlocusPop`.
+    :param rng: An instance of :class:`fwdpy11.GSLrng`.
+    :param pop: An instance of :class:`fwdpy11.Spop` or :class:`fwdpy11.MlocusPop`.
     :param params: An instance of :class:`fwdpy11.model_params.SlocusParamsQ`
         or :class:`fwdpy11.model_params.MlocusParamsQ`.
     :param recorder: (None) A callable to record data from the population.

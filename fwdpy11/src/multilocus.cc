@@ -87,7 +87,10 @@ PYBIND11_MODULE(multilocus, m)
 {
     m.doc() = "Types and functions specific to multi-locus/region simulations";
 
-    py::class_<fwdpy11::multilocus_genetic_value>(m, "MultiLocusGeneticValue")
+    py::class_<fwdpy11::multilocus_genetic_value>(
+        m, "MultiLocusGeneticValue", "Genetic value calculations for "
+                                     "simulations using multilocus types such "
+                                     "as :class:`fwdpy11.MlocusPop`.")
         .def(py::init<const ff_vec&>())
         .def("__call__",
              [](const fwdpy11::multilocus_genetic_value& m,
@@ -152,14 +155,15 @@ PYBIND11_MODULE(multilocus, m)
                "Map genetic values from a multi-locus diploid to trait value "
                "under an multiplicative model.");
 
-    py::class_<fwdpy11::interlocus_rec>(m, "InterlocusRecombination")
+    py::class_<fwdpy11::interlocus_rec>(
+        m, "InterlocusRecombination",
+        "This class parameterizes interlocus recombination in multilocus "
+        "simulations.  You do not make instances of this class directly. "
+        " Rather, you make calls to one of "
+        ":func:`fwdpy11.multilocus.poisson_rec` or "
+        ":func:`fwdpy11.multilocus.binomial_rec`.")
         .def(py::init<double, std::underlying_type<fwdpy11::interlocus_rec::
-                                                       RECMODEL>::type>(),
-             "This class parameterizes interlocus recombination in multilocus "
-             "simulations.  You do not make instances of this class directly. "
-             " Rather, you make calls to one of "
-             ":func:`fwdpy11.multilocus.poisson_rec` or "
-             ":func:`fwdpy11.multilocus.binomial_rec`.")
+                                                       RECMODEL>::type>())
         .def(py::pickle(
             [](const fwdpy11::interlocus_rec& ir) {
                 return py::make_tuple(ir.param, ir.get_model());

@@ -24,7 +24,7 @@ def mslike(pop, **kwargs):
     for a single-locus simulation for standard pop-gen
     modeling scenarios.
 
-    :params pop: An instance of :class:`fwdpy11.fwdpy11_types.SlocusPop`
+    :params pop: An instance of :class:`fwdpy11.SlocusPop`
     :params kwargs: Keyword arguments.
     """
     import fwdpy11

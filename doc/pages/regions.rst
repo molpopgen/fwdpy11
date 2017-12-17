@@ -133,7 +133,7 @@ In a simulation, we may place a distribution on either :math:`s` itself or on th
   
 Crossover rate variation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Just like neutral mutations, intervals with different crossover rates are specified by different :class:`Region` objects.  Let's set up the following concrete example:
+Just like neutral mutations, intervals with different crossover rates are specified by different :class:`fwdpy11.Region` objects.  Let's set up the following concrete example:
 
 * A region where crossovers occur between positions [0,1)
 * Positions [0,0.45) and [0.55,1) have uniform recombintion rates at the "background" rate.

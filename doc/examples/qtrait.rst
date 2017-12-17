@@ -25,7 +25,7 @@ Let's call our trait value :math:`P`, which is composed of a genetic component, 
 The evolve function
 -----------------------------
 
-The function used to evolve quantitative traits in :func:`fwdpy11.wright_fisher_qtrait.evolve_regions_sampler_fitness`.
+The function used to evolve quantitative traits in :func:`fwdpy11.wright_fisher_qtrait.evolve`.
 
 Trait values
 -----------------------------

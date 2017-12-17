@@ -22,7 +22,7 @@ from fwdpy11.fwdpy11_types import SlocusPopGeneralMutVec
 class SlocusPopGeneralMutVec(SlocusPopGeneralMutVec):
     """
     Single-deme object using
-    :class:`fwpy11.GeneralMutVec`
+    :class:`fwdpy11.GeneralMutVec`
     as the mutation type.
     """
     @staticmethod
