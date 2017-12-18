@@ -315,9 +315,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                              = KTfwd::sample_separate(pop, ind, remove_fixed);
                          rv = py::make_tuple(temp.first, temp.second);
                      }
-                 auto temp = KTfwd::sample(pop, ind, remove_fixed);
-                 py::list tlist = py::cast(temp);
-                 rv = tlist;
+                 else
+                     {
+                         auto temp = KTfwd::sample(pop, ind, remove_fixed);
+                         py::list tlist = py::cast(temp);
+                         rv = tlist;
+                     }
                  return rv;
              },
              py::arg("separate") = true, py::arg("remove_fixed") = true,
