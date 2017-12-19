@@ -43,6 +43,36 @@ Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.
 
 .. _genetic_values:
 
+Simulation types
+-----------------------------------------------------------
+
+When it comes to the effect of mutations on fitness, we have two types:
+
+.. glossary::
+
+    direct
+
+        The mutation's effect size(s) affects fitness directly.  This is the :math:`s` of standard population
+        genetic models.
+
+    indirect
+
+        The mutation's effect size(s) affect one or more traits.  The trait vector/matrix of a diploid then
+        determines fitness.
+
+Thus, we have two types of simulation:
+
+.. glossary::
+
+    "Standard population genetic simulation"
+
+        A simulation where mutations directly affect fitness
+
+    "Quantitative genetic simulation"
+
+        A simulation where mutations affect trait (phenotype) values first, which in turn affects fitness.
+
+
 Genetic values, fitness, etc.
 -----------------------------------------------------------
 
