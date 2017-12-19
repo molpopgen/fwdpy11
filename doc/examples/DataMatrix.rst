@@ -21,7 +21,14 @@ The API is extremely flexible, allowing for the inclusion or exclustion of selec
    position, effect size, etc.  You may also apply a frequency filter.  The data returned from :func:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
 4. Generate the fwdpy11.sampling.DataMatrix object by calling either :func:`fwdpy11.sampling.genotype_matrix` or
    `fwdpy11.sampling.haplotype_matrix`.
-5. Get the matrices as numpy arrays via a call to :meth:`fwdpy11.sampling.DataMatrix.neutral` or :meth:`fwdpy11.sampling.DataMatrix.selected`.  These functions return 1d numpy arrays, which should be reshaped with the help of :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral`, :attr:`fwdpy11.sampling.DataMatrix.ndim_selected`.
+5. Get the data as buffers via :attr:`fwdpy11.sampling.DataMatrix.neutral` or :attr:`fwdpy11.sampling.DataMatrix.selected`.  These buffers may be converted to numpy arrays with the help of :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral`, :attr:`fwdpy11.sampling.DataMatrix.ndim_selected`.
+
+The following is optional:
+
+6. You may convert your resulting matrix into a sample format compatible with pylibseq_ via a call to
+   :func:`fwdpy11.sampling.matrix_to_sample`.  Doing so only makes sense for a haplotype matrix, given how pylibseq_
+   functions work.  For multilocus simulations, the output from :func:`fwdpy11.sampling.matrix_to_sample` may be
+   separated out on a per-locus basis via a call to :func:`fwdpy11.sampling.separate_samples_by_loci`.
 
 The positions and population frequencies are also stored in the :class:`fwdpy11.sampling.DataMatrix` instance.  The
 order of these mutations is the same order as the mutation keys used to generated the object.
@@ -213,3 +220,5 @@ Now, we'll get an exception trying to modify the array:
 An array with ``flags.writeable=False`` can still be reshaped.  The flag simply prevents the raw-data from being
 over-written.  The main use case for making an array read-only is to add a sense of safety to your code.  For example,
 such arrays cannot be modified by functions.
+
+.. _pylibseq: http://molpopgen.github.io/pylibseq/
