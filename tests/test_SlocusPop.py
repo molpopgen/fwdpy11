@@ -64,34 +64,31 @@ class testSampling(unittest.TestCase):
         self.rng = fp11.GSLrng(42)
 
     def testRandomSample(self):
-        x = self.pop.sample(self.rng, 10)
+        x = self.pop.sample(rng=self.rng, nsam=10)
         self.assertTrue(type(x) is tuple)
-        x = self.pop.sample(self.rng, 10, separate=False)
+        x = self.pop.sample(rng=self.rng, nsam=10, separate=False)
         self.assertTrue(type(x) is list)
-        x = self.pop.sample(self.rng, 10, remove_fixed=False)
+        x = self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
         self.assertTrue(type(x) is tuple)
-        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=False)
-        self.assertTrue(type(x) is tuple)
-        x = self.pop.sample(self.rng, 10, separate=False, remove_fixed=False)
-        self.assertTrue(type(x) is list)
-        x = self.pop.sample(self.rng, 10, separate=True, remove_fixed=True)
+        x = self.pop.sample(rng=self.rng, nsam=10,
+                            separate=True, remove_fixed=False)
         self.assertTrue(type(x) is tuple)
 
     def testDefinedSample(self):
-        self.pop.sample_ind(range(10))
+        self.pop.sample(individuals=range(10))
 
         with self.assertRaises(IndexError):
             """
             fwdpp catches case where i >= N
             """
-            self.pop.sample_ind(range(self.pop.N, self.pop.N + 10))
+            self.pop.sample(individuals=range(self.pop.N, self.pop.N + 10))
 
-        with self.assertRaises(TypeError):
+        with self.assertRaises(Exception):
             """
             pybind11 disallows conversion of negative
             numbers to a list of unsigned types.
             """
-            self.pop.sample_ind(range(-10, 10))
+            self.pop.sample(individuals=range(-10, 10))
 
 
 class testPythonObjects(unittest.TestCase):
