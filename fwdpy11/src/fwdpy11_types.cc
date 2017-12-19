@@ -615,80 +615,56 @@ PYBIND11_MODULE(fwdpy11_types, m)
              [](const fwdpy11::singlepop_gm_vec_t& lhs,
                 const fwdpy11::singlepop_gm_vec_t& rhs) { return lhs == rhs; })
         .def("sample",
-             [](const fwdpy11::singlepop_gm_vec_t& pop,
-                const fwdpy11::GSLrng_t& rng, const std::int64_t nsam,
-                const bool separate, const bool remove_fixed) -> py::object {
-                 if (nsam <= 0)
-                     {
-                         throw std::invalid_argument(
-                             "sample size must be > 0");
-                     }
+             [](const fwdpy11::singlepop_gm_vec_t& pop, const bool separate,
+                const bool remove_fixed, py::kwargs kwargs) -> py::object {
+                 py::object rv;
+
+                 std::vector<std::size_t> ind = get_individuals(pop.N, kwargs);
+
                  if (separate)
                      {
-                         auto s = KTfwd::sample_separate(rng.get(), pop, nsam,
-                                                         remove_fixed);
-                         return py::make_tuple(s.first, s.second);
+                         auto temp
+                             = KTfwd::sample_separate(pop, ind, remove_fixed);
+                         rv = py::make_tuple(temp.first, temp.second);
                      }
-                 py::list rv = py::cast(
-                     KTfwd::sample(rng.get(), pop, nsam, remove_fixed));
-                 return rv;
-             },
-             py::arg("rng"), py::arg("nsam"), py::arg("separate") = true,
-             py::arg("remove_fixed") = true,
-             R"delim(
-             Sample random diploids *with replacement*.
-             
-             :param rng: A :class:`fwdpy11.GSLrng`
-             :param nsam: An integer representing the sample size in chromosomes (2 times number of diploids).
-             :param separate: (True) Separate neutral from non-neutral variants in output.
-             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
-
-             The output is a list of tuples.  Each tuple is (pair, state), where state is 
-             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
-             in each string are diploid genotypes.  The order of diploids is constant
-             across variable sites.
-
-             When ``separate`` is ``True``, the function returns a tuple of two lists.
-             The first list is for neutral variants, and the second for non-neutral.
-
-             .. note::
-                If you want sampling *without* replacement, see
-                :func:`~fwdpy11.SlocusPopGeneralMutVec.sample_ind`.
-
-			 .. versionadded:: 0.1.4
-             )delim")
-        .def("sample_ind",
-             [](const fwdpy11::singlepop_gm_vec_t& pop,
-                const std::vector<std::size_t>& individuals,
-                const bool separate, const bool remove_fixed) -> py::object {
-                 if (separate)
+                 else
                      {
-                         auto s = KTfwd::sample_separate(pop, individuals,
-                                                         remove_fixed);
-                         return py::make_tuple(s.first, s.second);
+                         auto temp = KTfwd::sample(pop, ind, remove_fixed);
+                         py::list tlist = py::cast(temp);
+                         rv = tlist;
                      }
-                 py::list rv
-                     = py::cast(KTfwd::sample(pop, individuals, remove_fixed));
                  return rv;
              },
-             py::arg("individuals"), py::arg("separate") = true,
-             py::arg("remove_fixed") = true,
+             py::arg("separate") = true, py::arg("remove_fixed") = true,
              R"delim(
-             Sample specific diploids.
+             Sample diploids from the population.
+
+             :param separate: (True) Return neutral and selected variants separately.
+             :param remove_fixed: (True) Remove variants fixed in the sample.
+             :param kwargs: See below.
+
+             :rtype: object
+
+             :returns: Haplotype information for a sample.
+
+             The valid kwargs are:
+
+             * individuals, which should be a list of non-negative integers
+             * rng, which should be a :class:`fwdpy11.GSLrng`
+             * nsam, which should be a positive integer
              
-             :param individuals: The individuals to sample.
-             :param separate: (True) Separate neutral from non-neutral variants in output.
-             :param remove_fixed: (True) Remove sites fixed in the sample from the return value.
+             The latter two kwargs must be used together, and will generate a sample of
+             ``nsam`` individuals taken *with replacement* from the population. 
 
-             The final sample size is ``2*len(individuals)``.
+             The return value is structured around a list of tuples.  Each tuple
+             is (position, genotype), where genotype are encoded as 0/1 = ancestral/derived.
+             From index 0 to 2*nsam - 1 (or 2*len(individuals) -1), adjacent pairs of 
+             values represent diploid genotype data.  Across sites, the data represent
+             individual haplotypes.
 
-             The output is a list of tuples.  Each tuple is (pair, state), where state is 
-             a string encoded as 0 = ancestral and 1 = derived.   Adjacent characters
-             in each string are diploid genotypes.  The order of diploids is constant
-             across variable sites.
-
-             When ``separate`` is ``True``, the function returns a tuple of two lists.
-             The first list is for neutral variants, and the second for non-neutral.
+             When `separate` is `True`, a tuple of two such lists is returned.  The first
+             list is for genotypes at neutral variants.  The second list is for non-neutral
+             variants.
 
 			 .. versionadded:: 0.1.4
              )delim");
