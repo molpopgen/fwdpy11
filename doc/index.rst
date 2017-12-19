@@ -42,6 +42,7 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 1
 
     examples/processingpops
+    examples/sampling
     examples/parallel_simulation
     examples/customgvalue
     examples/stateful_fitness
