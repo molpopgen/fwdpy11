@@ -38,23 +38,23 @@ Welcome to fwdpy11's documentation!
     pages/recorders
 
 .. toctree::
-    :caption: Advanced manipulation of populations
-    :maxdepth: 2
-
-    pages/popobjects
-
-.. toctree::
     :caption: Examples
     :maxdepth: 1
 
+    examples/processingpops
     examples/parallel_simulation
     examples/customgvalue
     examples/stateful_fitness
     examples/pickling
     examples/DataMatrix
     examples/qtrait
-    examples/processingpops
     examples/parentage
+
+.. toctree::
+    :caption: Advanced manipulation of populations
+    :maxdepth: 2
+
+    pages/popobjects
 
 .. toctree::
     :caption: Maximizing performance
