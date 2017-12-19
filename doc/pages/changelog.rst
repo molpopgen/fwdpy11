@@ -15,6 +15,10 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
+* Population objects have new member functions ``sample`` and ``sample_ind``.  These replace
+  :func:`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
+  :func:`~fwdpy11.SlocusPop.sample` for more info. (The
+  same member functions exist for *all* population objects.) `PR #62 <https://github.com/molpopgen/fwdpy11/pull/62>`_
 * Improved support for pickling lower-level types. See the unit test file `tests/test_pickling.py` for examples of directly pickling things like mutations and containers of mutations.  `PR #55 <https://github.com/molpopgen/fwdpy11/pull/55>`_
 * `__main__.py` added.  The main use is to help writing python modules based on fwdpy11. See :ref:`developers` for details. `PR #54 <https://github.com/molpopgen/fwdpy11/pull/54>`_
 * Attributes `popdata` and `popdata_user` added to all population objects. `PR #52 <https://github.com/molpopgen/fwdpy11/pull/52>`_
@@ -23,10 +27,6 @@ API changes/new features:
 * :attr:`fwdpy11.sampling.DataMatrix.neutral` and :attr:`fwdpy11.sampling.DataMatrix.selected` are now writeable
   buffers. :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral` and :attr:`fwdpy11.sampling.DataMatrix.ndim_selected` have
   been changed from functions to read-only properties. `PR #45 <https://github.com/molpopgen/fwdpy11/pull/45>`_
-* Population objects have new member functions ``sample`` and ``sample_ind``.  These replace
-  :func:`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
-  :func:`~fwdpy11.SlocusPop.sample` and :func:`~fwdpy11.SlocusPop.sample_ind` for more info. (The
-  same member functions exist for *all* population objects.) `PR #43 <https://github.com/molpopgen/fwdpy11/pull/43>`_
 * The 'label' field of :class:`fwdpy11.Region` (and :class:`fwdpy11.Sregion`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
 * Population objects may now be constructed programatically.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`_
@@ -34,7 +34,8 @@ API changes/new features:
 Back-end changes
 ------------------------
 
-
+* The documentation building process is greatly streamlined.  `PR #60 <https://github.com/molpopgen/fwdpy11/pull/60>`_
+* Object namespaces have been refactored.  The big effect is to streamline the manual. `PR #59 <https://github.com/molpopgen/fwdpy11/pull/59>`_
 * Travis CI now tests several Python versions using GCC 6 on Linux. `PR #44 <https://github.com/molpopgen/fwdpy11/pull/44>`_
 * :func:`fwdpy11.wright_fisher_qtrait.evolve` has been updated to allow "standard popgen" models of multi-locus
   evolution. This change is a stepping stone to a future global simplification of the API. `PR #42 <https://github.com/molpopgen/fwdpy11/pull/42>`_
