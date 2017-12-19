@@ -10,15 +10,6 @@ matrix:
         - CXX=g++
     - os: linux
       dist: trusty
-      python: 3.4
-      addons:
-          apt_packages:
-            - pandoc
-      env:
-        - CC=gcc
-        - CXX=g++
-    - os: linux
-      dist: trusty
       python: 3.5
       addons:
           apt_packages:
@@ -35,20 +26,6 @@ matrix:
       env:
         - CC=gcc
         - CXX=g++
-
-    - os: linux
-      dist: trusty
-      python: 3.4
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - pandoc
-      env:
-        - CC=gcc-6
-        - CXX=g++-6
 
     - os: linux
       dist: trusty
