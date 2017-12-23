@@ -97,7 +97,7 @@ We apply the following definitions here:
 
 Consider the following two cases:
 
-First,  standard population genetic model of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
+First,  standard population genetic models of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
 affecting fitness interact multiplicatively.  Here, mutations directly affect fitness.  In our terms, :math:`G = w`.
 
 Next, we thing about a quantitative trait under Gaussian stabilizing selection with respect to an optimum.  Mutations
