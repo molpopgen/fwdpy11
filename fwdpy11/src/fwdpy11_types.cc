@@ -427,7 +427,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                       ":class:`fwdpy11.fwdpp_types.Gamete`.  "
                                       "Typically, access will be read-only.");
 
-    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
+    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, g, label, neutral, pos, s, h);
     PYBIND11_NUMPY_DTYPE(diploid_traits, g, e, w);
     PYBIND11_NUMPY_DTYPE(diploid_gametes, locus, first, second);
     py::bind_vector<std::vector<flattened_popgenmut>>(
