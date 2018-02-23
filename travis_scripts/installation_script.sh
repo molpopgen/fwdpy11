@@ -25,7 +25,7 @@ then
     then
         conda install gcc;
     fi
-    conda install cython numpy python==3.5 gsl
+    conda install cython numpy python==3.6 gsl
     conda install -c conda-forge pybind11==2.2.0
     conda install -c conda-forge sphinx nbsphinx ipython matplotlib
     pip install cppimport
