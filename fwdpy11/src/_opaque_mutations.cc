@@ -53,7 +53,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
     m.doc()
         = "Expose C++ vectors of Mutation objects to Python without copies.";
 
-    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
+    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, g, label, neutral, pos, s, h);
 
     py::bind_vector<std::vector<KTfwd::popgenmut>>(
         m, "VecMutation", "C++ representation of a list of "
