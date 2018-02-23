@@ -22,7 +22,7 @@ import sys
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-__version__ = '0.1.3.post1'
+__version__ = '0.1.3.post2'
 from .fwdpp_types import *
 from .fwdpy11_types import *
 from .regions import *
