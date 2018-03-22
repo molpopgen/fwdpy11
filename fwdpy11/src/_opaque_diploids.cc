@@ -29,16 +29,6 @@ struct diploid_traits
     double g, e, w;
 };
 
-inline diploid_traits
-make_diploid_traits(const fwdpy11::diploid_t& dip)
-{
-    diploid_traits d;
-    d.g = dip.g;
-    d.e = dip.e;
-    d.w = dip.w;
-    return d;
-}
-
 struct diploid_gametes
 {
     std::size_t locus, first, second;
@@ -64,7 +54,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(diploids.size());
                  for (auto&& dip : diploids)
                      {
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -83,7 +73,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i));
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -105,7 +95,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  for (size_t i = 0; i < slicelength; ++i)
                      {
                          auto&& dip = diploids.at(start);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                          start += step;
                      }
                  return rv;
@@ -201,7 +191,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(diploids.size());
                  for (auto&& dip : diploids)
                      {
-                         rv.emplace_back(make_diploid_traits(dip.at(0)));
+                         rv.push_back(diploid_traits{ dip.at(0).g, dip.at(0).e,
+                                                      dip.at(0).w });
                      }
                  return rv;
              },
@@ -240,7 +231,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i)).at(0);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -287,7 +278,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  for (size_t i = 0; i < slicelength; ++i)
                      {
                          auto&& dip = diploids.at(start).at(0);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                          start += step;
                      }
                  return rv;
@@ -311,7 +302,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  std::size_t locus;
                  for (size_t i = 0; i < slicelength; ++i)
                      {
-                         auto&& dip = diploids.at(start); 
+                         auto&& dip = diploids.at(start);
                          locus = 0;
                          for (auto&& di : dip)
                              {
