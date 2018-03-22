@@ -42,6 +42,8 @@ Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.
 :ref:`mlocuspop` for details.
 
 
+.. _simtypes:
+
 Simulation types
 -----------------------------------------------------------
 
