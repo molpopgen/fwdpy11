@@ -41,7 +41,6 @@ details on this type.
 Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.MlocusPop` object.  See
 :ref:`mlocuspop` for details.
 
-.. _genetic_values:
 
 Simulation types
 -----------------------------------------------------------
@@ -72,6 +71,8 @@ Thus, we have two types of simulation:
 
         A simulation where mutations affect trait (phenotype) values first, which in turn affects fitness.
 
+
+.. _genetic_values:
 
 Genetic values, fitness, etc.
 -----------------------------------------------------------
