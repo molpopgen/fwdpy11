@@ -107,6 +107,15 @@ class test_MlocusPop(unittest.TestCase):
                 self.assertEqual(k['first'], l.first)
                 self.assertEqual(k['second'], l.second)
 
+    def testDiploidKeysSlice(self):
+        keys = np.array(self.pop.diploids.key_array(slice(15,103,11)))
+        i=0
+        for j in self.pop.diploids[slice(15,103,11)]:
+            for k in j:
+                self.assertEqual(k.first, keys['first'][i])
+                self.assertEqual(k.second,keys['second'][i])
+                i+=1
+
 
 if __name__ == "__main__":
     unittest.main()
