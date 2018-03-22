@@ -26,22 +26,22 @@ namespace py = pybind11;
 
 struct flattened_popgenmut
 {
+    double pos, s, h;
     KTfwd::uint_t g;
     decltype(KTfwd::popgenmut::xtra) label;
     std::int8_t neutral;
-    double pos, s, h;
 };
 
 inline flattened_popgenmut
 make_flattened_popgenmut(const KTfwd::popgenmut& m)
 {
     flattened_popgenmut rv;
-    rv.g = m.g;
-    rv.label = m.xtra;
-    rv.neutral = m.neutral;
     rv.pos = m.pos;
     rv.s = m.s;
     rv.h = m.h;
+    rv.g = m.g;
+    rv.label = m.xtra;
+    rv.neutral = m.neutral;
     return rv;
 }
 
@@ -53,7 +53,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
     m.doc()
         = "Expose C++ vectors of Mutation objects to Python without copies.";
 
-    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, g, label, neutral, pos, s, h);
+    PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
 
     py::bind_vector<std::vector<KTfwd::popgenmut>>(
         m, "VecMutation", "C++ representation of a list of "

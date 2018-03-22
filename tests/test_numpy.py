@@ -29,6 +29,15 @@ class test_SlocusPop(unittest.TestCase):
             self.assertEqual(i['g'], j.g)
             self.assertEqual(i['s'], j.s)
 
+            # Can we create a mutation from each element?
+            m = fwdpy11.Mutation(tuple(i)[:-1])
+            self.assertEqual(m.pos, j.pos)
+            self.assertEqual(m.s, j.s)
+            self.assertEqual(m.h, j.h)
+            self.assertEqual(m.g, j.g)
+            self.assertEqual(m.label, j.label)
+            self.assertEqual(m.neutral, j.neutral)
+
     def testCythonFunc(self):
         ms = mean_s(self.muts['s'])
         self.assertAlmostEqual(ms, self.muts['s'].mean())
@@ -98,6 +107,6 @@ class test_MlocusPop(unittest.TestCase):
                 self.assertEqual(k['first'], l.first)
                 self.assertEqual(k['second'], l.second)
 
+
 if __name__ == "__main__":
     unittest.main()
-
