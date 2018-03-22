@@ -142,6 +142,7 @@ You may get the mutations from the population into an array via:
 .. note::
     You may create a numpy array of the fixations list similarly.
 
+
 The mutation keys in gametes
 -------------------------------------------
 
@@ -248,6 +249,22 @@ Check that both routines give the same answer:
 
     check = esize_sum_py(pop)==esize_sum_np(pop)
     np.where(check == False)
+
+As of fwdpy11 0.1.4, you can use elements from a numpy array based on mutations to create new :class:`fwdpy11.Mutation`
+instances:
+
+.. ipython:: python
+
+    ma = np.array(pop.mutations.array())
+    # Conversion to tuple and exclusion of last field
+    # gives us a valid tuple for construction:
+    m = fwdpy11.Mutation(tuple(ma[0])[:-1])
+    print(m,pop.mutations[0])
+    print(m is pop.mutations[0])
+
+One possible use case for the above is to create a new population using data from an existing population. For more
+details on that topic, see :ref:`popobjects`
+
 
 The site-frequency spectrum
 -------------------------------------------
