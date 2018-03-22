@@ -29,30 +29,10 @@ struct diploid_traits
     double g, e, w;
 };
 
-inline diploid_traits
-make_diploid_traits(const fwdpy11::diploid_t& dip)
-{
-    diploid_traits d;
-    d.g = dip.g;
-    d.e = dip.e;
-    d.w = dip.w;
-    return d;
-}
-
 struct diploid_gametes
 {
     std::size_t locus, first, second;
 };
-
-inline diploid_gametes
-make_diploid_gametes(const fwdpy11::diploid_t& dip, const std::size_t locus)
-{
-    diploid_gametes d;
-    d.locus = locus;
-    d.first = dip.first;
-    d.second = dip.second;
-    return d;
-}
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::diploid_t>>);
@@ -74,7 +54,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(diploids.size());
                  for (auto&& dip : diploids)
                      {
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -93,7 +73,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i));
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -115,7 +95,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  for (size_t i = 0; i < slicelength; ++i)
                      {
                          auto&& dip = diploids.at(start);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                          start += step;
                      }
                  return rv;
@@ -131,7 +111,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(diploids.size());
                  for (auto&& dip : diploids)
                      {
-                         rv.push_back(make_diploid_gametes(dip, 0));
+                         rv.push_back(
+                             diploid_gametes{ 0, dip.first, dip.second });
                      }
                  return rv;
              },
@@ -148,7 +129,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(r.shape(0));
                  for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
                      {
-                         rv.push_back(make_diploid_gametes(diploids.at(i), 0));
+                         rv.push_back(diploid_gametes{
+                             0, diploids.at(i).first, diploids.at(i).second });
                      }
                  return rv;
              },
@@ -170,7 +152,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  for (size_t i = 0; i < slicelength; ++i)
                      {
                          rv.push_back(
-                             make_diploid_gametes(diploids.at(start), 0));
+                             diploid_gametes{ 0, diploids.at(start).first,
+                                              diploids.at(start).second });
                          start += step;
                      }
                  return rv;
@@ -208,7 +191,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  rv.reserve(diploids.size());
                  for (auto&& dip : diploids)
                      {
-                         rv.emplace_back(make_diploid_traits(dip.at(0)));
+                         rv.push_back(diploid_traits{ dip.at(0).g, dip.at(0).e,
+                                                      dip.at(0).w });
                      }
                  return rv;
              },
@@ -226,8 +210,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                          locus = 0;
                          for (auto&& di : dip)
                              {
-                                 rv.emplace_back(
-                                     make_diploid_gametes(di, locus++));
+                                 rv.push_back(diploid_gametes{ locus, di.first,
+                                                               di.second });
                              }
                      }
                  return rv;
@@ -247,7 +231,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                      {
                          // range-check here
                          auto&& dip = diploids.at(r(i)).at(0);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                      }
                  return rv;
              },
@@ -269,8 +253,8 @@ PYBIND11_MODULE(_opaque_diploids, m)
                          locus = 0;
                          for (auto&& di : dip)
                              {
-                                 rv.emplace_back(
-                                     make_diploid_gametes(di, locus++));
+                                 rv.emplace_back(diploid_gametes{
+                                     locus++, di.first, di.second });
                              }
                      }
                  return rv;
@@ -294,7 +278,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  for (size_t i = 0; i < slicelength; ++i)
                      {
                          auto&& dip = diploids.at(start).at(0);
-                         rv.push_back(make_diploid_traits(dip));
+                         rv.push_back(diploid_traits{ dip.g, dip.e, dip.w });
                          start += step;
                      }
                  return rv;
@@ -318,9 +302,13 @@ PYBIND11_MODULE(_opaque_diploids, m)
                  std::size_t locus;
                  for (size_t i = 0; i < slicelength; ++i)
                      {
-                         auto&& dip = diploids.at(start).at(0);
+                         auto&& dip = diploids.at(start);
                          locus = 0;
-                         rv.push_back(make_diploid_gametes(dip, locus++));
+                         for (auto&& di : dip)
+                             {
+                                 rv.push_back(diploid_gametes{
+                                     locus++, di.first, di.second });
+                             }
                          start += step;
                      }
                  return rv;

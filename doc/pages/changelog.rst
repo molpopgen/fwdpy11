@@ -10,6 +10,7 @@ Version 0.1.4
 Bug fixes:
 --------------------------
 
+* A bug affecting retrieval of multi-locus diploid key data as a buffer for numpy arrays is now fixed. `PR #72 <https://github.com/molpopgen/fwdpy11/pull/72>`_
 * :attr:`fwdpy11.SingleLocusDiploid.label` is now pickled. `PR #34 <https://github.com/molpopgen/fwdpy11/pull/34>`_
 
 API changes/new features:
@@ -34,6 +35,7 @@ API changes/new features:
 Back-end changes
 ------------------------
 
+* The numpy dtype for :class:`fwdpy11.Mutation` has been refactored so that it generates tuples useable to construct object instances. This PR also removes some helper functions in favor of C++11 uniform initialization for these dtypes. `PR #72 <https://github.com/molpopgen/fwdpy11/pull/72>`_
 * The documentation building process is greatly streamlined.  `PR #60 <https://github.com/molpopgen/fwdpy11/pull/60>`_
 * Object namespaces have been refactored.  The big effect is to streamline the manual. `PR #59 <https://github.com/molpopgen/fwdpy11/pull/59>`_
 * Travis CI now tests several Python versions using GCC 6 on Linux. `PR #44 <https://github.com/molpopgen/fwdpy11/pull/44>`_
