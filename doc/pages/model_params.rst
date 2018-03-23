@@ -1,6 +1,6 @@
 .. _model_params:
 
-Parameterizing a simulation.
+Parameterizing a simulation
 ======================================================================
 
 .. versionadded:: 0.1.1

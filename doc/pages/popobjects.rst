@@ -1,6 +1,6 @@
 .. _popobjects:
 
-Construction of population objects from a predetermined state.
+Construction of population objects from a predetermined state
 ============================================================================================================================================
 
 Background reading:
