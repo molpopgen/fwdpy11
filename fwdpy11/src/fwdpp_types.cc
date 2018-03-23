@@ -22,13 +22,13 @@
 #include <pybind11/stl_bind.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
-#include <fwdpp/sugar/generalmut.hpp>
+//#include <fwdpp/sugar/generalmut.hpp>
 
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
-PYBIND11_MAKE_OPAQUE(
-    std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
+//PYBIND11_MAKE_OPAQUE(
+//    std::vector<double>); // for generalmut_vec::s and generalmut_vec::h
 
 PYBIND11_MODULE(fwdpp_types, m)
 {
@@ -230,73 +230,73 @@ PYBIND11_MODULE(fwdpp_types, m)
         .def("__eq__", [](const KTfwd::popgenmut &a,
                           const KTfwd::popgenmut &b) { return a == b; });
 
-    py::bind_vector<std::vector<double>>(
-        m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol());
+    //py::bind_vector<std::vector<double>>(
+    //    m, "VecDouble", "Vector of 64-bit floats.", py::buffer_protocol());
 
-    py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
-        m, "GeneralMutVec",
-        "Mutation type with vector of effect size and dominance terms.")
-        .def(py::init<KTfwd::generalmut_vec::constructor_tuple>(),
-             R"delim(
-                Construct from a tuple.
-                
-                .. testcode::
-                    
-                    import fwdpy11
-                    s = fwdpy11.VecDouble([-0.1, 0.1])
-                    h = fwdpy11.VecDouble([0.0, 1.0])
-                    m = fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))
-                    print(m.pos)
-                    print(m.g)
-                    print(m.label)
-                    print(list(m.s))
-                    print(list(m.h))
+    //py::class_<KTfwd::generalmut_vec, KTfwd::mutation_base>(
+    //    m, "GeneralMutVec",
+    //    "Mutation type with vector of effect size and dominance terms.")
+    //    .def(py::init<KTfwd::generalmut_vec::constructor_tuple>(),
+    //         R"delim(
+    //            Construct from a tuple.
+    //            
+    //            .. testcode::
+    //                
+    //                import fwdpy11
+    //                s = fwdpy11.VecDouble([-0.1, 0.1])
+    //                h = fwdpy11.VecDouble([0.0, 1.0])
+    //                m = fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))
+    //                print(m.pos)
+    //                print(m.g)
+    //                print(m.label)
+    //                print(list(m.s))
+    //                print(list(m.h))
 
-                .. testoutput::
+    //            .. testoutput::
 
-                    0.1
-                    3
-                    0
-                    [-0.1, 0.1]
-                    [0.0, 1.0]
-                )delim")
-        .def_readonly("s", &KTfwd::generalmut_vec::s,
-                      "List of selection coefficients/effect sizes.")
-        .def_readonly("h", &KTfwd::generalmut_vec::h,
-                      "List of dominance terms.")
-        .def_readonly("g", &KTfwd::generalmut_vec::g,
-                      "Generation when mutation arose.")
-        .def(py::pickle(
-            [](const KTfwd::generalmut_vec &m) {
-                py::list h, s;
-                for (auto &&i : m.h)
-                    {
-                        h.append(i);
-                    }
-                for (auto &&i : m.s)
-                    {
-                        s.append(i);
-                    }
-                return py::make_tuple(m.pos, s, h, m.g, m.xtra);
-            },
-            [](py::tuple t) {
-                py::list s = t[1].cast<py::list>();
-                py::list h = t[2].cast<py::list>();
-                std::vector<double> vs, vh;
-                for (auto &&i : s)
-                    {
-                        vs.push_back(i.cast<double>());
-                    }
-                for (auto &&i : h)
-                    {
-                        vh.push_back(i.cast<double>());
-                    }
-                double pos = t[0].cast<double>();
-                KTfwd::uint_t g = t[3].cast<KTfwd::uint_t>();
-                auto xtra = t[4].cast<decltype(KTfwd::generalmut_vec::xtra)>();
-                return KTfwd::generalmut_vec(std::make_tuple(
-                    std::move(vs), std::move(vh), pos, g, xtra));
-            }))
-        .def("__eq__", [](const KTfwd::generalmut_vec &a,
-                          const KTfwd::generalmut_vec &b) { return a == b; });
+    //                0.1
+    //                3
+    //                0
+    //                [-0.1, 0.1]
+    //                [0.0, 1.0]
+    //            )delim")
+    //    .def_readonly("s", &KTfwd::generalmut_vec::s,
+    //                  "List of selection coefficients/effect sizes.")
+    //    .def_readonly("h", &KTfwd::generalmut_vec::h,
+    //                  "List of dominance terms.")
+    //    .def_readonly("g", &KTfwd::generalmut_vec::g,
+    //                  "Generation when mutation arose.")
+    //    .def(py::pickle(
+    //        [](const KTfwd::generalmut_vec &m) {
+    //            py::list h, s;
+    //            for (auto &&i : m.h)
+    //                {
+    //                    h.append(i);
+    //                }
+    //            for (auto &&i : m.s)
+    //                {
+    //                    s.append(i);
+    //                }
+    //            return py::make_tuple(m.pos, s, h, m.g, m.xtra);
+    //        },
+    //        [](py::tuple t) {
+    //            py::list s = t[1].cast<py::list>();
+    //            py::list h = t[2].cast<py::list>();
+    //            std::vector<double> vs, vh;
+    //            for (auto &&i : s)
+    //                {
+    //                    vs.push_back(i.cast<double>());
+    //                }
+    //            for (auto &&i : h)
+    //                {
+    //                    vh.push_back(i.cast<double>());
+    //                }
+    //            double pos = t[0].cast<double>();
+    //            KTfwd::uint_t g = t[3].cast<KTfwd::uint_t>();
+    //            auto xtra = t[4].cast<decltype(KTfwd::generalmut_vec::xtra)>();
+    //            return KTfwd::generalmut_vec(std::make_tuple(
+    //                std::move(vs), std::move(vh), pos, g, xtra));
+    //        }))
+    //    .def("__eq__", [](const KTfwd::generalmut_vec &a,
+    //                      const KTfwd::generalmut_vec &b) { return a == b; });
 }

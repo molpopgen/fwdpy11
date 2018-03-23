@@ -31,7 +31,7 @@
 #include "types/diploid.hpp"
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
-#include <fwdpp/sugar/generalmut.hpp>
+//#include <fwdpp/sugar/generalmut.hpp>
 #include <fwdpp/sugar/singlepop.hpp>
 #include <fwdpp/sugar/multiloc.hpp>
 #include <fwdpp/sugar/metapop.hpp>
@@ -388,109 +388,109 @@ namespace fwdpy11
     // Types based on KTfwd::generalmut_vec  //! Typedef for gamete type
 
     //! Typedef for gamete container
-    using gcont_gm_vec_t = std::vector<gamete_t>;
+    // using gcont_gm_vec_t = std::vector<gamete_t>;
 
-    struct singlepop_gm_vec_t
-        : public KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>
-    /*!
-      \brief Single-deme object where mutations contain vector<double> for
-    internal data.
-    ,
-      See fwdpy11::singlepop_t documentation for details, which are the
-    same as
-    for this type.
-    */
-    {
-        using base = KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>;
-        unsigned generation;
-        pybind11::object popdata;
-        //! A Python objeft that users may access during a simulation
-        pybind11::object popdata_user;
-        //! Constructor takes number of diploids as argument
-        explicit singlepop_gm_vec_t(const unsigned &N)
-            : base(N), generation(0), popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
-        {
-            if (!N)
-                {
-                    throw std::invalid_argument("population size must be > 0");
-                }
-        }
+    // struct singlepop_gm_vec_t
+    //     : public KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>
+    // /*!
+    //   \brief Single-deme object where mutations contain vector<double> for
+    // internal data.
+    // ,
+    //   See fwdpy11::singlepop_t documentation for details, which are the
+    // same as
+    // for this type.
+    // */
+    // {
+    //     using base = KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>;
+    //     unsigned generation;
+    //     pybind11::object popdata;
+    //     //! A Python objeft that users may access during a simulation
+    //     pybind11::object popdata_user;
+    //     //! Constructor takes number of diploids as argument
+    //     explicit singlepop_gm_vec_t(const unsigned &N)
+    //         : base(N), generation(0), popdata{ pybind11::none() },
+    //           popdata_user{ pybind11::none() }
+    //     {
+    //         if (!N)
+    //             {
+    //                 throw std::invalid_argument("population size must be > 0");
+    //             }
+    //     }
 
-        // Perfect-forwarding constructor:
-        template <typename diploids_input, typename gametes_input,
-                  typename mutations_input>
-        explicit singlepop_gm_vec_t(diploids_input &&diploids,
-                                    gametes_input &&gametes,
-                                    mutations_input &&mutations)
-            : base(std::forward<diploids_input>(diploids),
-                   std::forward<gametes_input>(gametes),
-                   std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
-        {
-        }
+    //     // Perfect-forwarding constructor:
+    //     template <typename diploids_input, typename gametes_input,
+    //               typename mutations_input>
+    //     explicit singlepop_gm_vec_t(diploids_input &&diploids,
+    //                                 gametes_input &&gametes,
+    //                                 mutations_input &&mutations)
+    //         : base(std::forward<diploids_input>(diploids),
+    //                std::forward<gametes_input>(gametes),
+    //                std::forward<mutations_input>(mutations)),
+    //           generation{ 0 }, popdata{ pybind11::none() },
+    //           popdata_user{ pybind11::none() }
+    //     {
+    //     }
 
-        explicit singlepop_gm_vec_t(const std::string &s)
-            : base(0), popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
-        {
-            this->deserialize(s);
-        }
+    //     explicit singlepop_gm_vec_t(const std::string &s)
+    //         : base(0), popdata{ pybind11::none() },
+    //           popdata_user{ pybind11::none() }
+    //     {
+    //         this->deserialize(s);
+    //     }
 
-        static singlepop_gm_vec_t
-        create(base::dipvector_t &diploids, base::gcont_t &gametes,
-               base::mcont_t &mutations)
-        {
-            return create_wrapper<singlepop_gm_vec_t>(
-                std::move(diploids), std::move(gametes), std::move(mutations));
-        }
+    //     static singlepop_gm_vec_t
+    //     create(base::dipvector_t &diploids, base::gcont_t &gametes,
+    //            base::mcont_t &mutations)
+    //     {
+    //         return create_wrapper<singlepop_gm_vec_t>(
+    //             std::move(diploids), std::move(gametes), std::move(mutations));
+    //     }
 
-        static singlepop_gm_vec_t
-        create_with_fixations(base::dipvector_t &diploids,
-                              base::gcont_t &gametes, base::mcont_t &mutations,
-                              base::mcont_t &fixations,
-                              std::vector<KTfwd::uint_t> &fixation_times,
-                              const KTfwd::uint_t generation)
-        {
-            return create_wrapper<singlepop_gm_vec_t>(
-                std::move(diploids), std::move(gametes), std::move(mutations),
-                fixations, fixation_times, generation);
-        }
-        std::string
-        serialize() const
-        {
-            return serialization::serialize_details(
-                this, KTfwd::mutation_writer(),
-                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
-        }
+    //     static singlepop_gm_vec_t
+    //     create_with_fixations(base::dipvector_t &diploids,
+    //                           base::gcont_t &gametes, base::mcont_t &mutations,
+    //                           base::mcont_t &fixations,
+    //                           std::vector<KTfwd::uint_t> &fixation_times,
+    //                           const KTfwd::uint_t generation)
+    //     {
+    //         return create_wrapper<singlepop_gm_vec_t>(
+    //             std::move(diploids), std::move(gametes), std::move(mutations),
+    //             fixations, fixation_times, generation);
+    //     }
+    //     std::string
+    //     serialize() const
+    //     {
+    //         return serialization::serialize_details(
+    //             this, KTfwd::mutation_writer(),
+    //             fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
+    //     }
 
-        void
-        deserialize(const std::string &s)
-        {
-            *this = serialization::deserialize_details<singlepop_gm_vec_t>()(
-                s, KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 1u);
-        }
+    //     void
+    //     deserialize(const std::string &s)
+    //     {
+    //         *this = serialization::deserialize_details<singlepop_gm_vec_t>()(
+    //             s, KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
+    //             fwdpy11::diploid_reader(), 1u);
+    //     }
 
-        // int
-        // tofile(const char *filename, bool append = false) const
-        //{
-        //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(),
-        //        fwdpy11::diploid_writer(),
-        //        filename, append);
-        //}
+    //     // int
+    //     // tofile(const char *filename, bool append = false) const
+    //     //{
+    //     //    return fwdpy11::serialization::gzserialize_details(
+    //     //        *this, KTfwd::mutation_writer(),
+    //     //        fwdpy11::diploid_writer(),
+    //     //        filename, append);
+    //     //}
 
-        // void
-        // fromfile(const char *filename, std::size_t offset)
-        //{
-        //    *this = serialization::
-        //        gzdeserialize_details<singlepop_gm_vec_t>()(
-        //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
-        //            fwdpy11::diploid_reader(), filename, offset, 0u);
-        //}
-    };
+    //     // void
+    //     // fromfile(const char *filename, std::size_t offset)
+    //     //{
+    //     //    *this = serialization::
+    //     //        gzdeserialize_details<singlepop_gm_vec_t>()(
+    //     //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
+    //     //            fwdpy11::diploid_reader(), filename, offset, 0u);
+    //     //}
+    // };
 
     // Types for multi-"locus" (multi-region) simulations
     using multilocus_diploid_t = std::vector<diploid_t>;

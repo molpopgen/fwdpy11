@@ -123,35 +123,35 @@ class testMlocusPop(unittest.TestCase):
             is fwdpy11.VecGamete)
 
 
-class testVectorGeneralMutVec(unittest.TestCase):
-    """
-    Test that the s,h fields
-    are opaque containers and
-    not converted to lists.
-    """
-    @classmethod
-    def setUp(self):
-        import fwdpy11
-        s = fwdpy11.VecDouble([0.1, -0.1])
-        h = fwdpy11.VecDouble([0., 1.])
-        self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
-
-    def test_opaque(self):
-        self.assertTrue(type(self.mutations[0].s
-                             is fwdpy11.VecDouble))
-        self.assertTrue(type(self.mutations[0].h
-                             is fwdpy11.VecDouble))
-
-    def test_opaque_conversion(self):
-        """
-        This tests something that is quite
-        unsafe to do unless you really
-        know what you are doing.
-        """
-        import numpy as np
-        x = np.array(self.mutations[0].s, copy=False)
-        x[0] = 303.0
-        self.assertEqual(self.mutations[0].s[0], 303.0)
+# class testVectorGeneralMutVec(unittest.TestCase):
+#     """
+#     Test that the s,h fields
+#     are opaque containers and
+#     not converted to lists.
+#     """
+#     @classmethod
+#     def setUp(self):
+#         import fwdpy11
+#         s = fwdpy11.VecDouble([0.1, -0.1])
+#         h = fwdpy11.VecDouble([0., 1.])
+#         self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
+# 
+#     def test_opaque(self):
+#         self.assertTrue(type(self.mutations[0].s
+#                              is fwdpy11.VecDouble))
+#         self.assertTrue(type(self.mutations[0].h
+#                              is fwdpy11.VecDouble))
+# 
+#     def test_opaque_conversion(self):
+#         """
+#         This tests something that is quite
+#         unsafe to do unless you really
+#         know what you are doing.
+#         """
+#         import numpy as np
+#         x = np.array(self.mutations[0].s, copy=False)
+#         x[0] = 303.0
+#         self.assertEqual(self.mutations[0].s[0], 303.0)
 
 
 if __name__ == "__main__":
