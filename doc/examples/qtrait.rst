@@ -1,6 +1,6 @@
 .. _qtraits1:
 
-Simulating quantitative traits, I.
+Simulating quantitative traits, I
 ==========================================
 
 Background reading:

@@ -41,6 +41,39 @@ details on this type.
 Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.MlocusPop` object.  See
 :ref:`mlocuspop` for details.
 
+
+.. _simtypes:
+
+Simulation types
+-----------------------------------------------------------
+
+When it comes to the effect of mutations on fitness, we have two types:
+
+.. glossary::
+
+    direct
+
+        The mutation's effect size(s) affects fitness directly.  This is the :math:`s` of standard population
+        genetic models.
+
+    indirect
+
+        The mutation's effect size(s) affect one or more traits.  The trait vector/matrix of a diploid then
+        determines fitness.
+
+Thus, we have two types of simulation:
+
+.. glossary::
+
+    "Standard population genetic simulation"
+
+        A simulation where mutations directly affect fitness
+
+    "Quantitative genetic simulation"
+
+        A simulation where mutations affect trait (phenotype) values first, which in turn affects fitness.
+
+
 .. _genetic_values:
 
 Genetic values, fitness, etc.
@@ -67,7 +100,7 @@ We apply the following definitions here:
 
 Consider the following two cases:
 
-First,  standard population genetic model of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
+First,  standard population genetic models of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
 affecting fitness interact multiplicatively.  Here, mutations directly affect fitness.  In our terms, :math:`G = w`.
 
 Next, we thing about a quantitative trait under Gaussian stabilizing selection with respect to an optimum.  Mutations
