@@ -19,10 +19,14 @@
 
 #include <cmath>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <fwdpp/sugar/change_neutral.hpp>
 #include "fwdpy11_util_add_mutation.hpp"
 
 namespace py = pybind11;
+
+PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
 
 void
 check_finite(const double d, const std::string& error)
@@ -31,6 +35,17 @@ check_finite(const double d, const std::string& error)
         {
             throw std::invalid_argument(error);
         }
+}
+
+template <typename mkeys, typename mutation_container>
+void
+sort_keys(mkeys& k, const mutation_container& mutations)
+{
+    std::sort(std::begin(k), std::end(k),
+              [&mutations](const typename mkeys::value_type a,
+                           const typename mkeys::value_type b) {
+                  return mutations[a].pos < mutations[b].pos;
+              });
 }
 
 PYBIND11_MODULE(util, m)
@@ -49,8 +64,8 @@ PYBIND11_MODULE(util, m)
           R"delim(
           Add a new mutation to a population.
 
-          :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`.
-          :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`.
+          :param rng: A :class:`fwdpy11.GSLrng`.
+          :param pop: A :class:`fwdpy11.SlocusPop`.
           :param ncopies: The number of copies of the mutation.
           :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
           :param label: (0) An integer label for the mutation.
@@ -78,8 +93,8 @@ PYBIND11_MODULE(util, m)
           R"delim(
           Add a new mutation to a population.
 
-          :param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`.
-          :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`.
+          :param rng: A :class:`fwdpy11.GSLrng`.
+          :param pop: A :class:`fwdpy11.MlocusPop`.
           :param locus: The locus in which the mutation will be located.
           :param ncopies: The number of copies of the mutation.
           :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
@@ -137,7 +152,7 @@ PYBIND11_MODULE(util, m)
         This function allows you to change the effect of a mutation
         on genetic value.
         
-        :param pop: A :class:`fwdpy11.fwdpy11_types.SlocusPop`
+        :param pop: A :class:`fwdpy11.SlocusPop`
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.
@@ -182,11 +197,27 @@ PYBIND11_MODULE(util, m)
         This function allows you to change the effect of a mutation
         on genetic value.
         
-        :param pop: A :class:`fwdpy11.fwdpy11_types.MlocusPop`
+        :param pop: A :class:`fwdpy11.MlocusPop`
         :param index: The index of the mutation to change
         :param new_esize: The new value for the `s` field.
         :param new_dominance: (1.0) The new value for the `h` field.
           
         :versionadded: 0.13.0
+          )delim");
+
+    m.def("sort_gamete_keys",
+          [](fwdpy11::gcont_t& gametes, const fwdpy11::mcont_t& mutations) {
+              for (auto& g : gametes)
+                  {
+                      sort_keys(g.mutations, mutations);
+                      sort_keys(g.smutations, mutations);
+                  }
+          },
+          R"delim(
+          Sorts mutation keys in gametes.  Useful when constructing
+          population objects directly.  See :ref:`popobjects` for example
+          use.
+          
+          .. versionadded:: 0.1.4
           )delim");
 }

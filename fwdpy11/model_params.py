@@ -68,7 +68,6 @@ class ModelParams(object):
                 setattr(self, key, value)
             elif key not in dir(self):
                 raise ValueError(key, " not a valid parameter for this class.")
-
     @property
     def nregions(self):
         """
@@ -186,11 +185,11 @@ class SlocusParams(ModelParams):
         array with dtype = np.uint32.
 
         When setting nregions or recregions, lists of
-        instances of :class:`fwdpy11.regions.Region` are
+        instances of :class:`fwdpy11.Region` are
         required.
 
         When setting sregions, lists of instances of
-        :class:`fwdpy11.regions.Sregion` are required.
+        :class:`fwdpy11.Sregion` are required.
 
     .. note::
         If no gvalue is assigned, then
@@ -418,11 +417,11 @@ class SlocusParamsQ(SlocusParams):
         array with dtype = np.uint32.
 
         When setting nregions or recregions, lists of
-        instances of :class:`fwdpy11.regions.Region` are
+        instances of :class:`fwdpy11.Region` are
         required.
 
         When setting sregions, lists of instances of
-        :class:`fwdpy11.regions.Sregion` are required.
+        :class:`fwdpy11.Sregion` are required.
 
     .. note::
         If no gvalue is assigned, then
@@ -570,10 +569,10 @@ class MlocusParams(ModelParams):
         When setting nregions or recregions, lists of
         lists are required.  The inner lists may be empty
         or they may contain instances of
-        :class:`fwdpy11.regions.Region`.
+        :class:`fwdpy11.Region`.
 
         Similarly, sregions inner lists should contain
-        instances of :class:`fwdpy11.regions.Sregion`.
+        instances of :class:`fwdpy11.Sregion`.
         They may also be empty.
 
     .. note::

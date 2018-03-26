@@ -22,9 +22,9 @@ Mutation rates, recombination rates, and a weighting system
 
 A simulation will typically have a mutation rate, :math:`\\mu`, which represents the mean of a Poisson number of mutations per gamete per generation), and a recombination rate, :math:`r`, which again is the mean of Poisson number of crossover events (per diploid, per generation).  These parameters are the _total_ rates across an entire simulated region.  Variation in these parameters along the region are affected by a set of positions coupled with "weights", which the user specifies.
 
-The base class: :class:`fwdpy11.regions.Region`
+The base class: :class:`fwdpy11.Region`
 
-A :class:`fwdpy11.regions.Region` is a Python class with the following members:
+A :class:`fwdpy11.Region` is a Python class with the following members:
 
 * :math:`b`, which is the beginning/start of the region. The type is "float". 
 * :math:`e`, which is the end/stop of the region. The type is "float".
@@ -71,7 +71,7 @@ Specific examples
 Mutations not affecting fitness ("neutral" mutations)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You specify regions where neutral mutations arise via the class :class:`fwdpy11.regions.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
+You specify regions where neutral mutations arise via the class :class:`fwdpy11.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
 
 .. ipython:: python
 
@@ -119,13 +119,13 @@ Type types of mutations affecting fitness that we consider will have two paramet
 * :math:`s`, the selection coefficient
 * :math:`h`, the effect of the mutation in a heterozygote (a.k.a. the "dominance" of the mutation).
 
-In a simulation, we may place a distribution on either :math:`s` itself or on the scaled selection parameter :math:`\alpha = 2Ns`.  These two methods are represented by the class :class:`fwdpy11.regions.Sregion`.  These classes contain/extend the :class:`fwdpy11.regions.Region` class described above, and thus inherit their members.  :class:`fwdpy11.regions.Sregion` adds :math:`h`, which is the dominance of a mutation, and then classes extending :class:`fwdpy11.regions.Sregion` add details about the distribution of fitness effects.  These classes are:
+In a simulation, we may place a distribution on either :math:`s` itself or on the scaled selection parameter :math:`\alpha = 2Ns`.  These two methods are represented by the class :class:`fwdpy11.Sregion`.  These classes contain/extend the :class:`fwdpy11.Region` class described above, and thus inherit their members.  :class:`fwdpy11.Sregion` adds :math:`h`, which is the dominance of a mutation, and then classes extending :class:`fwdpy11.Sregion` add details about the distribution of fitness effects.  These classes are:
 
-* :class:`fwdpy11.regions.ConstantS`
-* :class:`fwdpy11.regions.UniformS`
-* :class:`fwdpy11.regions.GammaS`
-* :class:`fwdpy11.regions.ExpS`
-* :class:`fwdpy11.regions.GaussianS`
+* :class:`fwdpy11.ConstantS`
+* :class:`fwdpy11.UniformS`
+* :class:`fwdpy11.GammaS`
+* :class:`fwdpy11.ExpS`
+* :class:`fwdpy11.GaussianS`
 
 .. versionchanged:: 0.13.a2
     Added ability to have these DFE objects represent distributions of scaled selection parameter via the "scaling"
@@ -133,7 +133,7 @@ In a simulation, we may place a distribution on either :math:`s` itself or on th
   
 Crossover rate variation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Just like neutral mutations, intervals with different crossover rates are specified by different :class:`Region` objects.  Let's set up the following concrete example:
+Just like neutral mutations, intervals with different crossover rates are specified by different :class:`fwdpy11.Region` objects.  Let's set up the following concrete example:
 
 * A region where crossovers occur between positions [0,1)
 * Positions [0,0.45) and [0.55,1) have uniform recombintion rates at the "background" rate.

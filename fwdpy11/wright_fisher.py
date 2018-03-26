@@ -23,8 +23,8 @@ def evolve(rng, pop, params, recorder=None):
     """
     Evolve a population
 
-    :param rng: An instance of :class:`fwdpy11.fwdpy11_types.GSLrng`
-    :param pop: An instance of :class:`fwdpy11.fwdpy11_types.SlocusPop`
+    :param rng: An instance of :class:`fwdpy11.GSLrng`
+    :param pop: An instance of :class:`fwdpy11.SlocusPop`
     :param params: An instance of :class:`fwdpy11.model_params.SlocusParams`
     :param recorder: (None) A temporal sampler/data recorder.
 

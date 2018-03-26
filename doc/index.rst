@@ -15,9 +15,11 @@ Welcome to fwdpy11's documentation!
 
     pages/conventions
     pages/changelog
+    pages/upgrade_path
     pages/deprecated
     pages/todo
     pages/pubs
+    pages/developers
 
 .. toctree::
     :caption: Concepts
@@ -32,6 +34,8 @@ Welcome to fwdpy11's documentation!
     pages/types
     pages/rng
     pages/regions
+    pages/geneticvalues
+    pages/fixations
     pages/model_params
     pages/recorders
 
@@ -39,21 +43,28 @@ Welcome to fwdpy11's documentation!
     :caption: Examples
     :maxdepth: 1
 
+    examples/processingpops
+    examples/sampling
     examples/parallel_simulation
     examples/customgvalue
     examples/stateful_fitness
     examples/pickling
     examples/DataMatrix
     examples/qtrait
-    examples/processingpops
+    examples/parentage
+
+.. toctree::
+    :caption: Advanced manipulation of populations
+    :maxdepth: 2
+
+    pages/popobjects
 
 .. toctree::
     :caption: Maximizing performance
     :maxdepth: 1
 
+    performance/optimization
     performance/processingpops_np
-    performance/UsingCython.ipynb
-    performance/RecorderPerformance.ipynb
 
 .. toctree::
     :caption: Advanced topics and examples
@@ -69,16 +80,12 @@ Welcome to fwdpy11's documentation!
     :caption: Modules
     :maxdepth: 2
 
-fwdpy11.fwdpy11_types
+fwdpy11
 ------------------------------
-.. automodule:: fwdpy11.fwdpy11_types
+.. automodule:: fwdpy11
     :members:
-    :show-inheritance:
-
-fwdpy11.fwdpp_types
-------------------------------
-.. automodule:: fwdpy11.fwdpp_types
-    :members:
+    :inherited-members:
+    :imported-members:
     :show-inheritance:
 
 fwdpy11.fitness
@@ -96,12 +103,6 @@ fwdpy11.trait_values
 fwdpy11.sampling
 ------------------------------
 .. automodule:: fwdpy11.sampling
-    :members:
-    :show-inheritance:
-
-fwdpy11.regions
-------------------------------
-.. automodule:: fwdpy11.regions
     :members:
     :show-inheritance:
 
@@ -126,12 +127,6 @@ fwdpy11.wright_fisher
 fwdpy11.wright_fisher_qtrait
 ------------------------------
 .. automodule:: fwdpy11.wright_fisher_qtrait
-    :members:
-    :show-inheritance:
-
-fwdpy11.dev
-------------------------------
-.. automodule:: fwdpy11.dev
     :members:
     :show-inheritance:
 

@@ -355,8 +355,8 @@ class testMlocusParamsDefaults(unittest.TestCase):
 class test_SlocusParamsQEvolve(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop, self.params = quick_slocus_qtrait_pop_params()
-
+        self.pop, self.pdict = quick_slocus_qtrait_pop_params()
+        self.params = fp11mp.SlocusParamsQ(**self.pdict)
     def test_evolve(self):
         rng = fp11.GSLrng(42)
         wfq.evolve(rng, self.pop, self.params)

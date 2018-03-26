@@ -13,5 +13,7 @@ of its design:
 
 Other publications that we are aware of. (Please send us yours!)
 
+* `Zhou et al. (PNAS) Evolutionary genomics of grape (Vitis vinifera ssp. vinifera) domestication.
+  <http://www.pnas.org/content/114/44/11715.full>`_
 * `Schrider and Kern (bioRxiv) Soft sweeps are the dominant mode of adaptation in the human genome.
   <http://biorxiv.org/content/biorxiv/early/2017/04/27/090084.full.pdf>`_

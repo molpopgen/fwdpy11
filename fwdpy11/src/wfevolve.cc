@@ -49,6 +49,10 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
     auto fitness_callback = fitness.callback();
     fitness.update(pop);
     auto wbar = rules.w(pop, fitness_callback);
+    if (!std::isfinite(wbar))
+        {
+            throw std::runtime_error("population mean fitness not finite");
+        }
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
@@ -72,6 +76,11 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
                                       remove_selected_fixations);
             fitness.update(pop);
             auto wbar = rules.w(pop, fitness_callback);
+            if (!std::isfinite(wbar))
+                {
+                    throw std::runtime_error(
+                        "population mean fitness not finite");
+                }
             recorder(pop);
         }
 }
@@ -133,7 +142,7 @@ evolve_singlepop_regions_cpp(
     --pop.generation;
 }
 
-PYBIND11_MODULE(wfevolve,m)
+PYBIND11_MODULE(wfevolve, m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 

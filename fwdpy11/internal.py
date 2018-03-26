@@ -51,12 +51,14 @@ def makeMutationRegions(neutral, selected):
     nbeg = [i.b for i in neutral]
     nend = [i.e for i in neutral]
     nweights = [i.w for i in neutral]
+    nlabels = [i.l for i in neutral]
     sbeg = [i.b for i in selected]
     send = [i.e for i in selected]
     sweights = [i.w for i in selected]
     sh = [i.callback() for i in selected]
+    slabels = [i.l for i in selected]
     from .fwdpp_extensions import MutationRegions
-    return MutationRegions(nbeg, nend, nweights, sbeg, send, sweights, sh)
+    return MutationRegions(nbeg, nend, nweights, sbeg, send, sweights, sh, nlabels, slabels)
 
 
 def makeRecombinationRegions(regions):

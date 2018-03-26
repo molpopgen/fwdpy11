@@ -27,10 +27,12 @@
   moved over to fwdpp.
 */
 
+#include <tuple>
 #include <type_traits>
 #include <vector>
 #include <algorithm>
 #include <fwdpp/util.hpp>
+
 
 namespace fwdpy11
 {
@@ -77,11 +79,12 @@ namespace fwdpy11
                     {
                         auto loc = std::lower_bound(
                             fixations.begin(), fixations.end(),
-                            mutations[i].pos,
+                            std::make_tuple(mutations[i].pos, mutations[i].g),
                             [](const typename fixation_container_t::value_type
-                                   &__mut,
-                               const double &__value) noexcept {
-                                return __mut.pos < __value;
+                                   &mut,
+                               const std::tuple<double, std::uint32_t>
+                                   &value) noexcept {
+                                return std::tie(mut.pos,mut.g) < value;
                             });
                         auto d = std::distance(fixations.begin(), loc);
                         if (mutations[i].neutral

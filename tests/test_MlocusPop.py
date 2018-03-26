@@ -53,11 +53,61 @@ class testMlocusPop(unittest.TestCase):
 class testMlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            p = fp11.MlocusPop(0, 5)
+            fp11.MlocusPop(0, 5)
 
     def testNoLoci(self):
         with self.assertRaises(ValueError):
-            p = fp11.MlocusPop(1000, 0)
+            fp11.MlocusPop(1000, 0)
+
+
+class testSampling(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        from quick_pops import quick_mlocus_qtrait
+        self.pop = quick_mlocus_qtrait()
+        self.rng = fp11.GSLrng(42)
+
+    def testRandomSample(self):
+        x = self.pop.sample(rng=self.rng, nsam=10)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(rng=self.rng, nsam=10, separate=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(rng=self.rng, nsam=10,
+                            separate=True, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        for i in x:
+            self.assertTrue(isinstance(i, tuple))
+            self.assertEqual(len(i), 2)
+        x = self.pop.sample(rng=self.rng, nsam=10,
+                            separate=False, remove_fixed=False)
+        self.assertEqual(len(x), self.pop.nloci)
+        x = self.pop.sample(rng=self.rng, nsam=10,
+                            separate=True, remove_fixed=True)
+        self.assertEqual(len(x), self.pop.nloci)
+
+        self.pop.locus_boundaries = []
+
+        with self.assertRaises(RuntimeError):
+            self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
+
+    def testDefinedSample(self):
+        x = self.pop.sample(individuals = range(10))
+        self.assertEqual(len(x), self.pop.nloci)
+        with self.assertRaises(IndexError):
+            """
+            fwdpp catches case where i >= N
+            """
+            self.pop.sample(individuals = range(self.pop.N, self.pop.N + 10))
+
+        with self.assertRaises(Exception):
+            """
+            pybind11 disallows conversion of negative
+            numbers to a list of unsigned types.
+            """
+            self.pop.sample(individuals = range(-10, 10))
+
 
 if __name__ == "__main__":
     unittest.main()

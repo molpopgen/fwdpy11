@@ -20,7 +20,7 @@ fwdpy11 allows mutation and recombination parameters to vary along a genomic seg
 
 Regions have the following properties:
 
-* They are parameterized by objects in the :class:`fwdpy11.regions.Region` class hierarchy.
+* They are parameterized by objects in the :class:`fwdpy11.Region` class hierarchy.
 * They may overlap.  For example, a "coding region" may be modeled as two overlapping regions, one in which neutral
   mutations occur, and another in which selected mutations occur.  There could even be more than one "selected
   region"--one for deleterious mutations and another for beneficial mutations.
@@ -33,13 +33,46 @@ A locus contains the following properties:
 * Regions specify how recombination and mutation occur in a gamete.  See :ref:`gametes`.
 * Loci cannot overlap, but recombination can occur between them.
 
-A "single locus" simulation of a single deme means that an object of type :class:`fwdpy11.fwdpy11_types.SlocusPop` is
+A "single locus" simulation of a single deme means that an object of type :class:`fwdpy11.SlocusPop` is
 being evolved.  Within that locus, you may have as many regions as you want.  You may even think of them as different
 "genes" (aka loci), but that is a different locus concept from what we are using here. See :ref:`slocuspop` for more
 details on this type.
 
-Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.fwdpy11_types.MlocusPop` object.  See
+Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.MlocusPop` object.  See
 :ref:`mlocuspop` for details.
+
+
+.. _simtypes:
+
+Simulation types
+-----------------------------------------------------------
+
+When it comes to the effect of mutations on fitness, we have two types:
+
+.. glossary::
+
+    direct
+
+        The mutation's effect size(s) affects fitness directly.  This is the :math:`s` of standard population
+        genetic models.
+
+    indirect
+
+        The mutation's effect size(s) affect one or more traits.  The trait vector/matrix of a diploid then
+        determines fitness.
+
+Thus, we have two types of simulation:
+
+.. glossary::
+
+    "Standard population genetic simulation"
+
+        A simulation where mutations directly affect fitness
+
+    "Quantitative genetic simulation"
+
+        A simulation where mutations affect trait (phenotype) values first, which in turn affects fitness.
+
 
 .. _genetic_values:
 
@@ -67,7 +100,7 @@ We apply the following definitions here:
 
 Consider the following two cases:
 
-First,  standard population genetic model of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
+First,  standard population genetic models of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
 affecting fitness interact multiplicatively.  Here, mutations directly affect fitness.  In our terms, :math:`G = w`.
 
 Next, we thing about a quantitative trait under Gaussian stabilizing selection with respect to an optimum.  Mutations

@@ -22,9 +22,19 @@ import sys
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-__version__ = '0.1.3.post3'
+from fwdpy11._version import __version__ # NOQA
+
 from .fwdpp_types import *
-from .fwdpy11_types import *
-from .regions import *
-from .dev import *
+from ._opaque_gametes import *
+from ._opaque_mutations import *
+from ._opaque_diploids import *
+# from ._opaque_generalmutvecs import *
+from .fwdpy11_types import SingleLocusDiploid
+from .fwdpy11_types import VecUint32
+from ._regions import *
+from ._dev import *
+from ._gslrng import GSLrng
+from .SlocusPop import SlocusPop
+from .MlocusPop import MlocusPop
+# from .SlocusPopGeneralMutVec import SlocusPopGeneralMutVec
 

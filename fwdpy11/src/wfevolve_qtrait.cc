@@ -53,18 +53,19 @@ evolve_singlepop_regions_qtrait_cpp(
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
     fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,
-    fwdpy11::single_locus_noise_function noise, py::object noise_updater)
+    fwdpy11::single_locus_noise_function noise, py::object noise_updater,
+    const bool remove_selected_fixations)
 {
     bool updater_exists = false;
     py::function updater;
-    if(!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is_none())
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if(!noise_updater.is(py::none()))
+    if (!noise_updater.is_none())
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -101,29 +102,63 @@ evolve_singlepop_regions_qtrait_cpp(
     auto rules = fwdpy11::qtrait::qtrait_model_rules(trait_to_fitness, noise);
     fitness.update(pop);
     auto wbar = rules.w(pop, fitness_callback);
+    if (!std::isfinite(wbar))
+        {
+            throw std::runtime_error("population mean fitness not finite");
+        }
     for (unsigned generation = 0; generation < generations;
          ++generation, ++pop.generation)
         {
             const auto N_next = popsizes.at(generation);
-            fwdpy11::evolve_generation(
-                rng, pop, N_next, mu_neutral + mu_selected, mmodels, recmap,
-                std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1, &rules,
-                          std::placeholders::_1, std::placeholders::_2),
-                std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick2, &rules,
-                          std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, selfing_rate),
-                std::bind(&fwdpy11::qtrait::qtrait_model_rules::update, &rules,
-                          std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, std::placeholders::_4,
-                          std::placeholders::_5),
-                KTfwd::remove_neutral());
-
+            if (!remove_selected_fixations)
+                {
+                    fwdpy11::evolve_generation(
+                        rng, pop, N_next, mu_neutral + mu_selected, mmodels,
+                        recmap,
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2),
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick2,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  selfing_rate),
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::update,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  std::placeholders::_4,
+                                  std::placeholders::_5),
+                        KTfwd::remove_neutral());
+                }
+            else
+                {
+                    fwdpy11::evolve_generation(
+                        rng, pop, N_next, mu_neutral + mu_selected, mmodels,
+                        recmap,
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2),
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick2,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  selfing_rate),
+                        std::bind(&fwdpy11::qtrait::qtrait_model_rules::update,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  std::placeholders::_4,
+                                  std::placeholders::_5),
+                        std::true_type());
+                }
             pop.N = N_next;
             fwdpy11::update_mutations(
                 pop.mutations, pop.fixations, pop.fixation_times,
                 pop.mut_lookup, pop.mcounts, pop.generation, 2 * pop.N, false);
             fitness.update(pop);
             wbar = rules.w(pop, fitness_callback);
+            if (!std::isfinite(wbar))
+                {
+                    throw std::runtime_error(
+                        "population mean fitness not finite");
+                }
             recorder(pop);
             if (updater_exists)
                 {
@@ -153,18 +188,19 @@ evolve_qtrait_mloc_regions_cpp(
     fwdpy11::multilocus_aggregator_function aggregator,
     fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,
-    fwdpy11::multilocus_noise_function noise, py::object noise_updater)
+    fwdpy11::multilocus_noise_function noise, py::object noise_updater,
+    const bool remove_selected_fixations)
 {
     bool updater_exists = false;
     py::function updater;
-    if(!trait_to_fitness_updater.is(py::none()))
+    if (!trait_to_fitness_updater.is_none())
         {
             updater = py::function(trait_to_fitness_updater);
             updater_exists = true;
         }
     bool noise_updater_exists = false;
     py::function noise_updater_fxn;
-    if(!noise_updater.is(py::none()))
+    if (!noise_updater.is_none())
         {
             noise_updater_fxn = noise_updater;
             noise_updater_exists = true;
@@ -188,6 +224,10 @@ evolve_qtrait_mloc_regions_cpp(
     ++pop.generation;
     multilocus_gvalue.update(pop);
     auto wbar = rules.w(pop, multilocus_gvalue);
+    if (!std::isfinite(wbar))
+        {
+            throw std::runtime_error("population mean fitness not finite");
+        }
     std::vector<std::function<unsigned(void)>> interlocus_rec;
     for (auto &&i : interlocus_rec_wrappers)
         {
@@ -198,20 +238,44 @@ evolve_qtrait_mloc_regions_cpp(
     for (unsigned i = 0; i < generations; ++i, ++pop.generation)
         {
             auto N_next = popsizes.at(i);
-            fwdpy11::evolve_generation(
-                rng, pop, N_next, total_mut_rates, bound_mmodels,
-                bound_intralocus_rec, interlocus_rec,
-                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1, &rules,
-                          std::placeholders::_1, std::placeholders::_2),
-                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick2, &rules,
-                          std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, selfing_rate),
-                std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::update, &rules,
-                          std::placeholders::_1, std::placeholders::_2,
-                          std::placeholders::_3, std::placeholders::_4,
-                          std::placeholders::_5),
-                KTfwd::remove_neutral());
-
+            if (!remove_selected_fixations)
+                {
+                    fwdpy11::evolve_generation(
+                        rng, pop, N_next, total_mut_rates, bound_mmodels,
+                        bound_intralocus_rec, interlocus_rec,
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2),
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick2,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  selfing_rate),
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::update,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  std::placeholders::_4,
+                                  std::placeholders::_5),
+                        KTfwd::remove_neutral());
+                }
+            else
+                {
+                    fwdpy11::evolve_generation(
+                        rng, pop, N_next, total_mut_rates, bound_mmodels,
+                        bound_intralocus_rec, interlocus_rec,
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2),
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick2,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  selfing_rate),
+                        std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::update,
+                                  &rules, std::placeholders::_1,
+                                  std::placeholders::_2, std::placeholders::_3,
+                                  std::placeholders::_4,
+                                  std::placeholders::_5),
+                        std::true_type());
+                }
             pop.N = N_next;
             fwdpy11::update_mutations(
                 pop.mutations, pop.fixations, pop.fixation_times,

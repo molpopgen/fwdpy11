@@ -52,12 +52,10 @@ In order to pickle a file, you must also use the latest pickling protocol.
     ppop = pickle.dumps(pop,-1)
     #Unpickle to create a new pop:
     pop2 = pickle.loads(ppop)
-    print(type(pop2))
     print(pop==pop2)
 
 .. testoutput::
 
-    <class 'fwdpy11.fwdpy11_types.SlocusPop'>
     True
 
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html

@@ -35,7 +35,7 @@ PYBIND11_MODULE(fitness, m)
                                                                R"delim(
             A fitness function or trait value function
             for a single-deme, single-region simulation (
-            :class:`fwdpy11.fwdpy11_types.Slocus`).
+            :class:`fwdpy11.Slocus`).
             
             Current fitness ovjects derived from this type are:
             
@@ -87,15 +87,14 @@ PYBIND11_MODULE(fitness, m)
                  rv += ')';
                  return rv;
              })
-        .def("__getstate__",
-             [](const fwdpy11::single_locus_mult_wrapper& w) {
-                 return py::make_tuple(w.scaling);
-             })
-        .def("__setstate__",
-             [](fwdpy11::single_locus_mult_wrapper& w, py::tuple t) {
-                 double scaling = t[0].cast<double>();
-                 new (&w) fwdpy11::single_locus_mult_wrapper(scaling);
-             });
+        .def(py::pickle(
+            [](const fwdpy11::single_locus_mult_wrapper& w) {
+                return py::make_tuple(w.scaling);
+            },
+            [](py::tuple t) {
+                return std::make_shared<fwdpy11::single_locus_mult_wrapper>(
+                    t[0].cast<double>());
+            }));
 
     py::class_<fwdpy11::single_locus_additive_wrapper,
                std::shared_ptr<fwdpy11::single_locus_additive_wrapper>,
@@ -121,13 +120,13 @@ PYBIND11_MODULE(fitness, m)
                  rv += ')';
                  return rv;
              })
-        .def("__getstate__",
-             [](const fwdpy11::single_locus_additive_wrapper& w) {
-                 return py::make_tuple(w.scaling);
-             })
-        .def("__setstate__",
-             [](fwdpy11::single_locus_additive_wrapper& w, py::tuple t) {
-                 double scaling = t[0].cast<double>();
-                 new (&w) fwdpy11::single_locus_additive_wrapper(scaling);
-             });
+        .def(py::pickle(
+            [](const fwdpy11::single_locus_additive_wrapper& w) {
+                return py::make_tuple(w.scaling);
+            },
+            [](py::tuple t) {
+                return std::
+                    make_shared<fwdpy11::single_locus_additive_wrapper>(
+                        t[0].cast<double>());
+            }));
 }

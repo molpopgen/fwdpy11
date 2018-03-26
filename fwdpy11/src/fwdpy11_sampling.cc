@@ -114,10 +114,6 @@ separate_samples_by_loci(
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
-PYBIND11_MODULE(sampling, m)
-{
-    m.doc() = "Taking samples from populations";
-
 #define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
     m.def("sample_separate",                                                  \
           [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
@@ -127,14 +123,15 @@ PYBIND11_MODULE(sampling, m)
           },                                                                  \
           "Take a sample of :math:`n` chromosomes from a population "         \
           "(`n/2` diploids.\n\n"                                              \
-          ":param rng: A :class:`fwdpy11.fwdpy11_types.GSLrng`\n"             \
+          ":param rng: A :class:`fwdpy11.GSLrng`\n"             \
           ":param pop: A :class:`" CLASSTYPE "`\n"                            \
           ":param samplesize: (int) The sample size.\n"                       \
           ":param removeFixed: (boolean, defaults to True) Whether or not to" \
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
           py::arg("removeFixed") = true);
 
@@ -151,25 +148,34 @@ PYBIND11_MODULE(sampling, m)
           "include fixations.\n"                                              \
           ":rtype: tuple\n\n"                                                 \
           ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n",                     \
+          "and the second contains selected variants.\n\n"                    \
+          ".. deprecated:: 0.1.4\n",                                          \
           py::arg("pop"), py::arg("individuals"),                             \
           py::arg("removeFixed") = true);
 
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
-                           "fwdpy11.fwdpy11_types.SlocusPop")
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
-                           "fwdpy11.fwdpy11_types.MlocusPop")
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
-                           "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
-    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
-                        "fwdpy11.fwdpy11_types.SlocusPop")
-    SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
-                        "fwdpy11.fwdpy11_types.MlocusPop")
-    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
-                        "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec")
+PYBIND11_MODULE(sampling, m)
+{
+    m.doc() = "Taking samples from populations";
 
-    py::bind_vector<std::vector<std::int8_t>>(m, "Vec8", py::buffer_protocol(),
-                                              py::module_local(false));
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
+                           "fwdpy11.SlocusPop")
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
+                           "fwdpy11.MlocusPop")
+    // SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
+    //                        "fwdpy11.SlocusPopGeneralMutVec")
+    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
+                        "fwdpy11.SlocusPop")
+    SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
+                        "fwdpy11.MlocusPop")
+    // SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
+    //                     "fwdpy11.SlocusPopGeneralMutVec")
+
+    py::bind_vector<std::vector<std::int8_t>>(
+        m, "VecInt8", py::buffer_protocol(),
+        "C++ vector of 8-bit integers.  Used by "
+        ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
+        ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
+        "data.");
 
     py::class_<KTfwd::data_matrix>(m, "DataMatrix",
                                    R"delim(
@@ -195,23 +201,29 @@ PYBIND11_MODULE(sampling, m)
 		)delim")
         .def(py::init<>())
         .def(py::init<std::size_t>())
-        .def_readonly("neutral", &KTfwd::data_matrix::neutral,
-                      R"delim(
+        .def_readwrite("neutral", &KTfwd::data_matrix::neutral,
+                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
 
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
+
+                .. versionchanged: 0.1.4
+                    Allow read/write access instead of readonly
                 )delim")
-        .def_readonly("selected", &KTfwd::data_matrix::selected,
-                      R"delim(
+        .def_readwrite("selected", &KTfwd::data_matrix::selected,
+                       R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
                 ndarray object.
 
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
+
+                .. versionchanged: 0.1.4
+                    Allow read/write access instead of readonly
                 )delim")
         .def_readonly("neutral_positions",
                       &KTfwd::data_matrix::neutral_positions,
@@ -219,92 +231,103 @@ PYBIND11_MODULE(sampling, m)
         .def_readonly("selected_positions",
                       &KTfwd::data_matrix::selected_positions,
                       "The list of selected mutation positions.")
-        .def_readonly(
-            "neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
-            "The list of population frequencies of neutral mutations.")
-        .def_readonly(
-            "selected_popfreq", &KTfwd::data_matrix::selected_popfreq,
-            "The list of population frequencies of selected mutations.")
-        .def("ndim_neutral",
-             [](const KTfwd::data_matrix &dm) {
-                 return py::make_tuple(dm.nrow, dm.neutral.size() / dm.nrow);
-             },
-             R"delim(
+        .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
+                      "The list of population frequencies of "
+                      "neutral mutations.")
+        .def_readonly("selected_popfreq",
+                      &KTfwd::data_matrix::selected_popfreq,
+                      "The list of population frequencies of "
+                      "selected mutations.")
+        .def_property_readonly("ndim_neutral",
+                               [](const KTfwd::data_matrix &dm) {
+                                   return py::make_tuple(
+                                       dm.nrow, dm.neutral.size() / dm.nrow);
+                               },
+                               R"delim(
              Return the dimensions of the neutral matrix
              
              :rtype: tuple
 
              .. versionadded:: 0.1.2
                 Replaces ncol and nrow_neutral functions
+
+             .. versionchanged:: 0.1.4
+                Changed from a function to a readonly property
              )delim")
-        .def("ndim_selected",
-             [](const KTfwd::data_matrix &dm) {
-                 return py::make_tuple(dm.nrow, dm.selected.size() / dm.nrow);
-             },
-             R"delim(
+        .def_property_readonly("ndim_selected",
+                               [](const KTfwd::data_matrix &dm) {
+                                   return py::make_tuple(
+                                       dm.nrow, dm.selected.size() / dm.nrow);
+                               },
+                               R"delim(
              Return the dimensions of the selected matrix
 
              :rtype: tuple
              
              .. versionadded:: 0.1.2
                 Replaces ncol and nrow_selected functions
+
+             .. versionchanged:: 0.1.4
+                Changed from a function to a readonly property
              )delim")
-        .def("__getstate__",
-             [](const KTfwd::data_matrix &d) {
-                 std::ostringstream o;
-                 KTfwd::fwdpp_internal::scalar_writer w;
-                 w(o, &d.nrow, 1);
-                 auto nsites = d.neutral_positions.size();
-                 w(o, &nsites, 1);
-                 if (nsites)
-                     {
-                         auto l = d.neutral.size();
-                         w(o, &l);
-                         w(o, d.neutral.data(), d.neutral.size());
-                         w(o, d.neutral_positions.data(), nsites);
-                         w(o, d.neutral_popfreq.data(), nsites);
-                     }
-                 nsites = d.selected_positions.size();
-                 w(o, &nsites, 1);
-                 if (nsites)
-                     {
-                         auto l = d.neutral.size();
-                         w(o, &l);
-                         w(o, d.selected.data(), d.selected.size());
-                         w(o, d.selected_positions.data(), nsites);
-                         w(o, d.selected_popfreq.data(), nsites);
-                     }
-                 return py::bytes(o.str());
-             })
-        .def("__setstate__", [](KTfwd::data_matrix &d, py::bytes b) {
-            std::istringstream data(b);
-            KTfwd::fwdpp_internal::scalar_reader r;
-            std::size_t n, n2;
-            r(data, &n);
-            new (&d) KTfwd::data_matrix(n);
-            r(data, &n);
-            if (n)
-                {
-                    r(data, &n2);
-                    d.neutral.resize(n2);
-                    r(data, d.neutral.data(), n2);
-                    d.neutral_positions.resize(n);
-                    r(data, d.neutral_positions.data(), n);
-                    d.neutral_popfreq.resize(n);
-                    r(data, d.neutral_popfreq.data(), n);
-                }
-            r(data, &n);
-            if (n)
-                {
-                    r(data, &n2);
-                    d.selected.resize(n2);
-                    r(data, d.selected.data(), n2);
-                    d.selected_positions.resize(n);
-                    r(data, d.selected_positions.data(), n);
-                    d.selected_popfreq.resize(n);
-                    r(data, d.selected_popfreq.data(), n);
-                }
-        });
+        .def(py::pickle(
+            [](const KTfwd::data_matrix &d) {
+                std::ostringstream o;
+                KTfwd::fwdpp_internal::scalar_writer w;
+                w(o, &d.nrow, 1);
+                auto nsites = d.neutral_positions.size();
+                w(o, &nsites, 1);
+                if (nsites)
+                    {
+                        auto l = d.neutral.size();
+                        w(o, &l);
+                        w(o, d.neutral.data(), d.neutral.size());
+                        w(o, d.neutral_positions.data(), nsites);
+                        w(o, d.neutral_popfreq.data(), nsites);
+                    }
+                nsites = d.selected_positions.size();
+                w(o, &nsites, 1);
+                if (nsites)
+                    {
+                        auto l = d.neutral.size();
+                        w(o, &l);
+                        w(o, d.selected.data(), d.selected.size());
+                        w(o, d.selected_positions.data(), nsites);
+                        w(o, d.selected_popfreq.data(), nsites);
+                    }
+                return py::bytes(o.str());
+            },
+            [](py::bytes b) {
+                std::istringstream data(b);
+                KTfwd::fwdpp_internal::scalar_reader r;
+                std::size_t n, n2;
+                r(data, &n);
+                KTfwd::data_matrix d(n);
+                r(data, &n);
+                if (n)
+                    {
+                        r(data, &n2);
+                        d.neutral.resize(n2);
+                        r(data, d.neutral.data(), n2);
+                        d.neutral_positions.resize(n);
+                        r(data, d.neutral_positions.data(), n);
+                        d.neutral_popfreq.resize(n);
+                        r(data, d.neutral_popfreq.data(), n);
+                    }
+                r(data, &n);
+                if (n)
+                    {
+                        r(data, &n2);
+                        d.selected.resize(n2);
+                        r(data, d.selected.data(), n2);
+                        d.selected_positions.resize(n);
+                        r(data, d.selected_positions.data(), n);
+                        d.selected_popfreq.resize(n);
+                        r(data, d.selected_popfreq.data(), n);
+                    }
+                return std::unique_ptr<KTfwd::data_matrix>(
+                    new KTfwd::data_matrix(std::move(d)));
+            }));
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
@@ -362,20 +385,20 @@ PYBIND11_MODULE(sampling, m)
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
-    MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
-                  "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    // MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
+    //               "fwdpy11.SlocusPopGeneralMutVec");
 
-    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
-    GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                    "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    // GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
+    //                 "fwdpy11.SlocusPopGeneralMutVec");
 
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.fwdpy11_types.SlocusPop");
-    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.fwdpy11_types.MlocusPop");
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-                     "fwdpy11.fwdpy11_types.SlocusPopGeneralMutVec");
+    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    // HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
+    //                  "fwdpy11.SlocusPopGeneralMutVec");
 
     m.def("matrix_to_sample",
           [](const KTfwd::data_matrix &m, const bool neutral)

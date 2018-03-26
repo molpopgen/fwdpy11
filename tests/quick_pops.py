@@ -40,7 +40,7 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11.model_params import SlocusParams
     from fwdpy11 import SlocusPop, GSLrng
     from fwdpy11.wright_fisher import evolve
-    from fwdpy11.regions import ExpS
+    from fwdpy11 import ExpS
     pop = SlocusPop(N)
     if dfe is None:
         dfe = ExpS(0, 1, 1, -0.1)
@@ -57,7 +57,7 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
     from fwdpy11.model_params import SlocusParamsQ
     from fwdpy11 import SlocusPop
     from fwdpy11.wright_fisher_qtrait import GSS
-    from fwdpy11.regions import GaussianS, Region
+    from fwdpy11 import GaussianS, Region
     from fwdpy11.trait_values import SlocusAdditiveTrait
     import numpy as np
     p = {'nregions': [],
@@ -66,17 +66,17 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
          'rates': (0.0, 2e-3, 1e-3),
          'demography': np.array([N] * simlen, dtype=np.uint32),
          'gvalue': SlocusAdditiveTrait(2.0),
-         'trait2w': GSS(1, 0)
+         'trait2w': GSS(1, 0),
+         'prune_selected': False
          }
     pop = SlocusPop(N)
-    params = SlocusParamsQ(**p)
-    return (pop,params)
+    return (pop, p)
+
 
 def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
-    from fwdpy11.model_params import MlocusParamsQ
     from fwdpy11 import MlocusPop
     from fwdpy11.wright_fisher_qtrait import GSS
-    from fwdpy11.regions import GaussianS, Region
+    from fwdpy11 import GaussianS, Region
     from fwdpy11.multilocus import AggAddTrait, binomial_rec, MultiLocusGeneticValue
     from fwdpy11.trait_values import SlocusAdditiveTrait
     import numpy as np
@@ -108,29 +108,32 @@ def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
                   'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSS(1, 0),
-                  'demography': nlist}
-    params = MlocusParamsQ(**param_dict)
+                  'demography': nlist,
+                  'prune_selected': False
+                  }
     pop = MlocusPop(N, nloci, locus_boundaries)
-    return (pop, params)
+    return (pop, param_dict)
 
 
 def quick_mlocus_qtrait(N=1000, simlen=100):
     from fwdpy11 import GSLrng
     from fwdpy11.wright_fisher_qtrait import evolve
+    from fwdpy11.model_params import MlocusParamsQ
     rng = GSLrng(42)
-    pop, params = quick_mlocus_qtrait_pop_params(N, simlen)
+    pop, param_dict = quick_mlocus_qtrait_pop_params(N, simlen)
+    params = MlocusParamsQ(**param_dict)
     evolve(rng, pop, params)
     return pop
 
 
-def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100):
+def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100, prune_selected=False):
     """
     .. warning:: May result in long-running tests
     """
     from fwdpy11.model_params import MlocusParamsQ
     from fwdpy11 import MlocusPop, GSLrng
     from fwdpy11.wright_fisher_qtrait import evolve, GSSmo
-    from fwdpy11.regions import GaussianS, Region
+    from fwdpy11 import GaussianS, Region
     from fwdpy11.multilocus import AggAddTrait, binomial_rec, MultiLocusGeneticValue
     from fwdpy11.trait_values import SlocusAdditiveTrait
     import numpy as np
@@ -163,7 +166,8 @@ def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100):
                   'aggregator': agg,
                   'gvalue': mlv,
                   'trait2w': GSSmo([(0, 0, 1), (simlen / 2, 1, 1)]),
-                  'demography': nlist}
+                  'demography': nlist,
+                  'prune_selected': prune_selected}
     params = MlocusParamsQ(**param_dict)
     pop = MlocusPop(N, nloci, locus_boundaries)
     evolve(rng, pop, params)

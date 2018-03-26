@@ -29,9 +29,18 @@ class test_SlocusPop(unittest.TestCase):
             self.assertEqual(i['g'], j.g)
             self.assertEqual(i['s'], j.s)
 
+            # Can we create a mutation from each element?
+            m = fwdpy11.Mutation(tuple(i)[:-1])
+            self.assertEqual(m.pos, j.pos)
+            self.assertEqual(m.s, j.s)
+            self.assertEqual(m.h, j.h)
+            self.assertEqual(m.g, j.g)
+            self.assertEqual(m.label, j.label)
+            self.assertEqual(m.neutral, j.neutral)
+
     def testCythonFunc(self):
         ms = mean_s(self.muts['s'])
-        self.assertAlmostEqual(ms, self.muts['s'].sum())
+        self.assertAlmostEqual(ms, self.muts['s'].mean())
 
     def testDiploidTraits(self):
         dips = np.array(self.pop.diploids.trait_array())
@@ -98,6 +107,15 @@ class test_MlocusPop(unittest.TestCase):
                 self.assertEqual(k['first'], l.first)
                 self.assertEqual(k['second'], l.second)
 
+    def testDiploidKeysSlice(self):
+        keys = np.array(self.pop.diploids.key_array(slice(15,103,11)))
+        i=0
+        for j in self.pop.diploids[slice(15,103,11)]:
+            for k in j:
+                self.assertEqual(k.first, keys['first'][i])
+                self.assertEqual(k.second,keys['second'][i])
+                i+=1
+
+
 if __name__ == "__main__":
     unittest.main()
-

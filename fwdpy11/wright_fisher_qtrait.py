@@ -26,6 +26,7 @@ class GSS:
 
     :rtype: float
     """
+
     def __init__(self, VS, O):
         """
         :param VS: 1/VS is intensity of selection against
@@ -38,8 +39,8 @@ class GSS:
         self.O = O
 
     def __call__(self, g, e):
-        devsq = pow((g+e)-self.O, 2)
-        return math.exp(-devsq/(2.0*self.VS))
+        devsq = pow((g + e) - self.O, 2)
+        return math.exp(-devsq / (2.0 * self.VS))
 
 
 class GSSmo:
@@ -54,6 +55,7 @@ class GSSmo:
         the first tuple for the constructor refers to the population's
         current generation.
     """
+
     def __init__(self, optima):
         """
         :param optima: A list of tuples.  Each tuple is (generation,optimum,VS)
@@ -73,9 +75,10 @@ class GSSmo:
         self.env = self.optima.pop(0)
 
     def __call__(self, g, e):
-        devsq = pow((g+e)-self.env[1], 2)
-        return math.exp(-devsq/(2.0*self.env[2]))
-    def update(self,pop):
+        devsq = pow((g + e) - self.env[1], 2)
+        return math.exp(-devsq / (2.0 * self.env[2]))
+
+    def update(self, pop):
         """
         Update the fitness model conditions.
 
@@ -95,6 +98,7 @@ class GaussianNoise:
 
     Adds :math:`N(\\mu,\\sigma)` to trait values.
     """
+
     def __init__(self, rng, sd, mean=0.0):
         """
         :param rng: A :class:`fwdpy11.GSLrng`
@@ -140,12 +144,15 @@ def _evolve_slocus(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
+    prune_selected = None
+    if params.prune_selected is not None:
+        prune_selected = params.prune_selected
     evolve_singlepop_regions_qtrait_cpp(rng, pop, params.demography,
                                         params.mutrate_n, params.mutrate_s,
                                         params.recrate, mm, rm,
                                         params.gvalue, recorder,
                                         params.pself, params.trait2w, updater,
-                                        noise, noise_updater)
+                                        noise, noise_updater, prune_selected)
 
 
 def _evolve_mlocus(rng, pop, params, recorder=None):
@@ -164,7 +171,7 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
     else:
         noise = params.noise
     mm = [makeMutationRegions(i, j) for i, j in zip(params.nregions,
-          params.sregions)]
+                                                    params.sregions)]
     rm = [makeRecombinationRegions(i) for i in params.recregions]
     updater = None
     noise_updater = None
@@ -175,6 +182,14 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
     if recorder is None:
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
+    prune_selected = None
+    if params.prune_selected is not None:
+        prune_selected = params.prune_selected
+    else:
+        prune_selected = False
+    if prune_selected is True:
+        warnings.warn(
+            "selected fixations will be removed from population during the simulation")
     evolve_qtrait_mloc_regions_cpp(rng, pop, params.demography,
                                    params.mutrates_n, params.mutrates_s,
                                    params.recrates, mm, rm, params.interlocus,
@@ -183,7 +198,8 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
                                    params.pself,
                                    params.aggregator,
                                    params.trait2w,
-                                   updater, noise, noise_updater)
+                                   updater, noise, noise_updater,
+                                   prune_selected)
 
 
 def evolve(rng, pop, params, recorder=None):
@@ -194,9 +210,8 @@ def evolve(rng, pop, params, recorder=None):
     and then mapped to fitness.  See the sections of the manual on
     simulating quantitative traits.
 
-    :param rng: An instance of :class:`fwdpy11.fwdpy11_types.GSLrng`.
-    :param pop: An instance of :class:`fwdpy11.fwdpy11_types.Spop`
-        or :class:`fwdpy11.fwdpy11_types.MlocusPop`.
+    :param rng: An instance of :class:`fwdpy11.GSLrng`.
+    :param pop: An instance of :class:`fwdpy11.Spop` or :class:`fwdpy11.MlocusPop`.
     :param params: An instance of :class:`fwdpy11.model_params.SlocusParamsQ`
         or :class:`fwdpy11.model_params.MlocusParamsQ`.
     :param recorder: (None) A callable to record data from the population.

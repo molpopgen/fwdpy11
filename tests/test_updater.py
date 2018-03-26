@@ -21,9 +21,10 @@ class GaussianNoiseUpdater(GaussianNoise):
     def update(self, generation):
         self.ncalls += 1
 
+
 class GSSupdater(GSS):
     def __init__(self, VS, O):
-        super(GSSupdater, self).__init__(VS,O)
+        super(GSSupdater, self).__init__(VS, O)
         self.ncalls = 0
 
     def update(self, pop):
@@ -32,13 +33,15 @@ class GSSupdater(GSS):
 
 class testNoiseUpdater(unittest.TestCase):
     def test_noise_updater(self):
+        from fwdpy11.model_params import MlocusParamsQ
         rng = GSLrng(42)
-        pop, params = quick_mlocus_qtrait_pop_params()
+        pop, pdict = quick_mlocus_qtrait_pop_params()
+        self.params = MlocusParamsQ(**pdict)
         n = GaussianNoiseUpdater(rng, 0.1)
-        trait2w = GSSupdater(1.0,0)
-        params.noise = n
-        params.trait2w = trait2w
-        evolve(rng, pop, params)
+        trait2w = GSSupdater(1.0, 0)
+        self.params.noise = n
+        self.params.trait2w = trait2w
+        evolve(rng, pop, self.params)
         self.assertEqual(n.ncalls, pop.generation)
         self.assertEqual(trait2w.ncalls, pop.generation)
 

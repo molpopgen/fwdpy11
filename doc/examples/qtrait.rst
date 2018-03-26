@@ -1,6 +1,6 @@
 .. _qtraits1:
 
-Simulating quantitative traits, I.
+Simulating quantitative traits, I
 ==========================================
 
 Background reading:
@@ -17,7 +17,7 @@ required. Optionally, one may want to add "noise" to trait values, perhaps repre
 phenotype.
 
 This page covers simulations of quantitative traits in a single genomic region (*e.g.* using
-:class:`fwdpy11.fwdpy11_types.SlocusPop`).
+:class:`fwdpy11.SlocusPop`).
 
 Let's call our trait value :math:`P`, which is composed of a genetic component, :math:`G` and a random component
 :math:`E`.
@@ -25,7 +25,7 @@ Let's call our trait value :math:`P`, which is composed of a genetic component, 
 The evolve function
 -----------------------------
 
-The function used to evolve quantitative traits in :func:`fwdpy11.wright_fisher_qtrait.evolve_regions_sampler_fitness`.
+The function used to evolve quantitative traits in :func:`fwdpy11.wright_fisher_qtrait.evolve`.
 
 Trait values
 -----------------------------
@@ -53,7 +53,7 @@ The implementation is straightforward:
 
 * The class is constructed with a random number generator, the mean, and the standard deviation.
 * The call operator gets passed three things: the offspring's :math:`G` value, and two objects of type
-  :class:`fwdpy11.fwdpy11_types.SingleLocusDiploid` representing the two parents.  The function returns a Gaussian
+  :class:`fwdpy11.SingleLocusDiploid` representing the two parents.  The function returns a Gaussian
   deviate with the appropriate mean and standard deviation.
 
 For this example, the offspring genetic value and the parents are not needed. Below, we'll implement a simple model

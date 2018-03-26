@@ -60,6 +60,7 @@ namespace fwdpy11
             {
                 offspring.e
                     = noise_function(pop.diploids[p1], pop.diploids[p2]);
+                offspring.parental_data = pybind11::make_tuple(p1,p2);
                 return;
             }
         };
@@ -161,6 +162,7 @@ namespace fwdpy11
             {
                 offspring[0].e
                     = noise_function(pop.diploids[p1], pop.diploids[p2]);
+                offspring[0].parental_data = pybind11::make_tuple(p1,p2);
             }
         };
     } // namespace qtrait

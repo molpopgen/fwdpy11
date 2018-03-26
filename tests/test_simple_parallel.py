@@ -1,5 +1,4 @@
 import fwdpy11 as fp11
-import fwdpy11.wright_fisher as wf
 import fwdpy11.ezparams as fp11ez
 # concurrent.futures is Python 3 only
 import concurrent.futures as cf
@@ -50,8 +49,8 @@ class testSimpleParallel(unittest.TestCase):
             # result back, which will be
             # the population
             for res in pool.map(evolve_and_return, args):
-                self.assertEqual(str(type(res)),
-                                 "<class 'fwdpy11.fwdpy11_types.SlocusPop'>")
+                self.assertEqual(res.N, 1000)
+                self.assertEqual(res.generation, 100)
 
 
 if __name__ == "__main__":

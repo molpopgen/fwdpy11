@@ -79,4 +79,3 @@ Given that recorders will be called quite often, you want to make sure they are 
 of the manual:
 
 * :ref:`processingpopsNP`
-* :ref:`cython`

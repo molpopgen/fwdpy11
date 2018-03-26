@@ -17,8 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import numpy as np
-
 
 def mslike(pop, **kwargs):
     """
@@ -26,7 +24,7 @@ def mslike(pop, **kwargs):
     for a single-locus simulation for standard pop-gen
     modeling scenarios.
 
-    :params pop: An instance of :class:`fwdpy11.fwdpy11_types.SlocusPop`
+    :params pop: An instance of :class:`fwdpy11.SlocusPop`
     :params kwargs: Keyword arguments.
     """
     import fwdpy11
@@ -44,6 +42,8 @@ def mslike(pop, **kwargs):
     for key, value in kwargs.items():
         if key in defaults:
             defaults[key] = value
+    import numpy as np
+
     params = {'demography': np.array([pop.N]*defaults['simlen'],
               dtype=np.uint32),
               'nregions': [fwdpy11.Region(defaults['beg'],

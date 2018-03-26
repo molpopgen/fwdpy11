@@ -1,24 +1,75 @@
-language: generic
+language: python
 
 matrix:
     include:
     - os: linux
       dist: trusty
-    - os: osx 
-      osx_image: xcode8.3
-      env: OSXGCC=1 # Test build with conda's gcc on OS X
-    - os: osx 
-      osx_image: xcode8.3
-      env: OSXGCC=0 # 0 means clang/llvm build
-    - os: osx
-      osx_image: xcode8.2
-      env: OSXGCC=0
-    - os: osx 
-      osx_image: xcode8.1
-      env: OSXGCC=0
-    - os: osx
-      osx_image: xcode8
-      env: OSXGCC=0
+      env:
+        - USECONDA=1
+        - CC=gcc
+        - CXX=g++
+    - os: linux
+      dist: trusty
+      python: 3.5
+      addons:
+          apt_packages:
+            - pandoc
+      env:
+        - CC=gcc
+        - CXX=g++
+    - os: linux
+      dist: trusty
+      python: 3.6
+      addons:
+          apt_packages:
+            - pandoc
+      env:
+        - CC=gcc
+        - CXX=g++
+
+    - os: linux
+      dist: trusty
+      python: 3.5
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - pandoc
+      env:
+        - CC=gcc-6
+        - CXX=g++-6
+
+    - os: linux
+      dist: trusty
+      python: 3.6
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - pandoc
+      env:
+        - CC=gcc-6
+        - CXX=g++-6
+
+#    - os: osx 
+#      osx_image: xcode8.3
+#      env: OSXGCC=1 # Test build with conda's gcc on OS X
+#    - os: osx 
+#      osx_image: xcode8.3
+#      env: OSXGCC=0 # 0 means clang/llvm build
+#    - os: osx
+#      osx_image: xcode8.2
+#      env: OSXGCC=0
+#    - os: osx 
+#      osx_image: xcode8.1
+#      env: OSXGCC=0
+#    - os: osx
+#      osx_image: xcode8
+#      env: OSXGCC=0
 
 sudo: true
 
@@ -26,33 +77,7 @@ notifications:
     email: false
 
 install: 
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh; fi
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - hash -r
-    - conda config --set always_yes yes --set changeps1 no
-    - conda update -q conda
-    # Useful for debugging any issues with conda
-    - conda info -a
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then conda install gcc; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then conda install gcc; fi
-    - conda install -c r gsl
-    - conda install cython numpy python==3.6
-    - conda install -c conda-forge pybind11==2.2.0
-    - pip install cppimport
+    ./travis_scripts/installation_script.sh
+
 script:
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then export LD_LIBRARY_PATH=$HOME/miniconda/lib; fi;
-    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export DYLD_FALLBACK_LIBRARY_PATH=$HOME/miniconda/lib; fi;
-    - export CPPFLAGS="-I$HOME/miniconda/include $CPPFLAGS"
-    - export LDFLAGS="-L$HOME/miniconda/lib $LDFLAGS"
-    #fwdpp is included as a submodule,
-    #so we need to initalize it here:
-    - git submodule init
-    - git submodule update
-    - if [ "$TRAVIS_OS_NAME" == "linux" ]; then python setup.py build_ext -i; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then python setup.py build_ext -i; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python setup.py build_ext -i --gcc; fi
-    - if [ "$TRAVIS_OS_NAME" == "linux" ];then python -m unittest discover -v tests; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "0" ]; then LDFLAGS='-stdlib=libc++ -mmacosx-version-min=10.7' CPPFLAGS="-stdlib=libc++ -mmacosx-version-min=10.7" python -m unittest discover -v tests; fi
-    - if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ]; then CC=gcc CXX=g++ python -m unittest discover -v tests; fi
+    ./travis_scripts/build_script.sh

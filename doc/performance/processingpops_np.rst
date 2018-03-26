@@ -23,7 +23,7 @@ First, we'll quickly simulate a single deme for `N` generations:
     theta,rho = 100.0,100.0
     pop = fwdpy11.SlocusPop(1000)
 
-    pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,dfe=fwdpy11.regions.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
+    pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
 
     params = fwdpy11.model_params.SlocusParams(**pdict)
     fwdpy11.wright_fisher.evolve(rng,pop,params)
@@ -60,15 +60,15 @@ What's the fastest way to get mean fitness?
 
 .. ipython:: python
 
-    %timeit np.array(pop.diploids.trait_array())['w'].mean()
+    %timeit -n 10 -r 1 np.array(pop.diploids.trait_array())['w'].mean()
 
 .. ipython:: python
 
-    %timeit np.array([i.w for i in pop.diploids]).mean()
+    %timeit -n 10 -r 1 np.array([i.w for i in pop.diploids]).mean()
 
 .. ipython:: python
 
-    %timeit sum([i.w for i in pop.diploids])/float(len(pop.diploids))
+    %timeit -n 10 -r 1 sum([i.w for i in pop.diploids])/float(len(pop.diploids))
 
 Using our stuctured array is vastly more efficient.  For the record, a simple Python loop is the slowest way to go:
 
@@ -80,7 +80,7 @@ Using our stuctured array is vastly more efficient.  For the record, a simple Py
             s += pop.diploids[i].w
         return s/float(len(pop.diploids))
 
-    %timeit wbar(pop)
+    %timeit -n 10 -r 1 wbar(pop)
 
 
 Slicing, etc.
@@ -141,6 +141,7 @@ You may get the mutations from the population into an array via:
 
 .. note::
     You may create a numpy array of the fixations list similarly.
+
 
 The mutation keys in gametes
 -------------------------------------------
@@ -214,7 +215,7 @@ The run times for the Python implementation:
 
 .. ipython:: python
 
-    %timeit esize_sum_py(pop)
+    %timeit -n 10 -r 1 esize_sum_py(pop)
 
 Now, let's rewrite the above taking advantage of numpy arrays:
 
@@ -240,7 +241,7 @@ It is about twice as fast:
 
 .. ipython:: python
 
-    %timeit esize_sum_np(pop)
+    %timeit -n 10 -r 1 esize_sum_np(pop)
 
 Check that both routines give the same answer:
 
@@ -248,6 +249,22 @@ Check that both routines give the same answer:
 
     check = esize_sum_py(pop)==esize_sum_np(pop)
     np.where(check == False)
+
+As of fwdpy11 0.1.4, you can use elements from a numpy array based on mutations to create new :class:`fwdpy11.Mutation`
+instances:
+
+.. ipython:: python
+
+    ma = np.array(pop.mutations.array())
+    # Conversion to tuple and exclusion of last field
+    # gives us a valid tuple for construction:
+    m = fwdpy11.Mutation(tuple(ma[0])[:-1])
+    print(m,pop.mutations[0])
+    print(m is pop.mutations[0])
+
+One possible use case for the above is to create a new population using data from an existing population. For more
+details on that topic, see :ref:`popobjects`
+
 
 The site-frequency spectrum
 -------------------------------------------
@@ -269,7 +286,7 @@ This is the Python implementation from :ref:`processingpops`:
                     sfsn[pop.mcounts[i]] += 1
         return (sfsn,sfss)
 
-    %timeit sfs_py(pop)
+    %timeit -n 10 -r 1 sfs_py(pop)
 
 Re-writing it to use numpy structured arrays is 10x faster.  The main 
 difference is that we are using numpy to act as buffers to the underlying
@@ -291,7 +308,7 @@ C++ memory. Here it is:
                 sfss[mc[i]] += 1
         return (sfsn,sfss)
 
-    %timeit sfs_np(pop)
+    %timeit -n 10 -r 1 sfs_np(pop)
 
 They give the same results, too!
 
