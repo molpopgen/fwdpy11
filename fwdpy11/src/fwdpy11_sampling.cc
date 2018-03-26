@@ -30,7 +30,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
-#include <fwdpp/internal/IOhelp.hpp>
+#include <fwdpp/io/scalar_serialization.hpp>
 #include <fwdpy11/types.hpp>
 #include <gsl/gsl_matrix_char.h>
 namespace py = pybind11;
@@ -273,7 +273,7 @@ PYBIND11_MODULE(sampling, m)
         .def(py::pickle(
             [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
-                fwdpp::fwdpp_internal::scalar_writer w;
+                fwdpp::io::scalar_writer w;
                 w(o, &d.nrow, 1);
                 auto nsites = d.neutral_positions.size();
                 w(o, &nsites, 1);
@@ -299,7 +299,7 @@ PYBIND11_MODULE(sampling, m)
             },
             [](py::bytes b) {
                 std::istringstream data(b);
-                fwdpp::fwdpp_internal::scalar_reader r;
+                fwdpp::io::scalar_reader r;
                 std::size_t n, n2;
                 r(data, &n);
                 fwdpp::data_matrix d(n);
