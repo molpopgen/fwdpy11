@@ -1,5 +1,6 @@
 recursive-include fwdpy11 *.cpp *.hpp
 recursive-include m4 *.m4
+recursive-include tests *.cpp *.pyx *.py
 include COPYING
 include configure
 include setup.py.in
