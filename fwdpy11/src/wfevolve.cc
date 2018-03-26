@@ -120,8 +120,6 @@ evolve_singlepop_regions_cpp(
         std::log(2 * pop.N)
         * (4. * double(pop.N) * (mu_neutral + mu_selected)
            + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
-    const auto recmap = fwdpp::extensions::bind_drm(
-        rmodel, pop.gametes, pop.mutations, rng.get(), recrate);
     const auto mmodels = fwdpp::extensions::bind_dmm(
         mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
         mu_selected, &pop.generation);
@@ -130,13 +128,13 @@ evolve_singlepop_regions_cpp(
     if (remove_selected_fixations)
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
-                          mmodels, recmap, fitness, recorder, selfing_rate,
+                          mmodels, rmodel, fitness, recorder, selfing_rate,
                           std::true_type(), true);
         }
     else
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
-                          mmodels, recmap, fitness, recorder, selfing_rate,
+                          mmodels, rmodel, fitness, recorder, selfing_rate,
                           fwdpp::remove_neutral(), false);
         }
     --pop.generation;

@@ -27,7 +27,7 @@ namespace fwdpy11
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
-                         fwdpp::sugar::SINGLEPOP_TAG>::value,
+                         fwdpp::sugar::SINGLELOC_TAG>::value,
             "Population type must be a single-locus, single-deme type.");
 
         auto gamete_recycling_bin
@@ -63,13 +63,13 @@ namespace fwdpy11
                 if (gsl_rng_uniform(rng.get()) < 0.5)
                     std::swap(p2g1, p2g2);
 
-                //Update to fwdpp 0.5.7 API
-                //in fwdpy11 0.1.4
+                // Update to fwdpp 0.5.7 API
+                // in fwdpy11 0.1.4
                 fwdpp::mutate_recombine_update(
                     rng.get(), pop.gametes, pop.mutations,
                     std::make_tuple(p1g1, p1g2, p2g1, p2g2), recmodel, mmodel,
-                    mu, gamete_recycling_bin, mutation_recycling_bin, dip, pop.neutral,
-                    pop.selected);
+                    mu, gamete_recycling_bin, mutation_recycling_bin, dip,
+                    pop.neutral, pop.selected);
 
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);

@@ -4,8 +4,8 @@
 #include <tuple>
 #include <type_traits>
 #include <fwdpp/internal/gamete_cleaner.hpp>
+#include <fwdpp/internal/multilocus_rec.hpp>
 #include <fwdpp/insertion_policies.hpp>
-#include <fwdpp/recombination.hpp>
 #include <fwdpy11/types.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
@@ -27,7 +27,7 @@ namespace fwdpy11
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
-                         fwdpp::sugar::MULTILOCPOP_TAG>::value,
+                         fwdpp::sugar::MULTILOC_TAG>::value,
             "Population type must be a multi-locus, single-deme type.");
 
         auto gamete_recycling_bin
