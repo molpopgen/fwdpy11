@@ -46,7 +46,7 @@ namespace fwdpy11
                         wbar += pop.diploids[i].w;
                     }
                 wbar /= double(N_curr);
-                lookup = KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr(
+                lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
                     gsl_ran_discrete_preproc(N_curr, &fitnesses[0]));
                 return wbar;
             }
@@ -74,7 +74,7 @@ namespace fwdpy11
             multilocus_noise_function noise_function;
             mutable std::vector<double> fitnesses;
 
-            mutable KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr lookup;
+            mutable fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr lookup;
             //! \brief Constructor
             qtrait_mloc_rules(multilocus_aggregator_function ag,
                               trait_to_fitness_function t2f,
@@ -90,7 +90,7 @@ namespace fwdpy11
             qtrait_mloc_rules(const qtrait_mloc_rules &rhs)
             {
                 if (!fitnesses.empty())
-                    lookup = KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr(
+                    lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
                         gsl_ran_discrete_preproc(fitnesses.size(),
                                                  &fitnesses[0]));
             }
@@ -129,7 +129,7 @@ namespace fwdpy11
                   This only works b/c the rhs of the expression below may be
                   treated as an rvalue reference.
                 */
-                lookup = KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr(
+                lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
                     gsl_ran_discrete_preproc(N_curr, &fitnesses[0]));
                 return wbar;
             }

@@ -8,9 +8,9 @@ namespace py = pybind11;
 
 struct additive_diploid_trait_fxn
 {
-    const KTfwd::additive_diploid w;
+    const fwdpp::additive_diploid w;
     additive_diploid_trait_fxn()
-        : w{ KTfwd::additive_diploid(KTfwd::atrait()) }
+        : w{ fwdpp::additive_diploid(fwdpp::atrait()) }
     {
     }
     inline double
@@ -23,9 +23,9 @@ struct additive_diploid_trait_fxn
 
 struct multiplicative_diploid_trait_fxn
 {
-    const KTfwd::multiplicative_diploid w;
+    const fwdpp::multiplicative_diploid w;
     multiplicative_diploid_trait_fxn()
-        : w{ KTfwd::multiplicative_diploid(KTfwd::mtrait()) }
+        : w{ fwdpp::multiplicative_diploid(fwdpp::mtrait()) }
     {
     }
     inline double
@@ -45,13 +45,13 @@ struct gbr_diploid_trait_fxn
         auto sum1 = std::accumulate(
             gametes[dip.first].smutations.cbegin(),
             gametes[dip.first].smutations.cend(), 0.,
-            [&mutations](const double s, const KTfwd::uint_t key) {
+            [&mutations](const double s, const fwdpp::uint_t key) {
                 return s + mutations[key].s;
             });
         auto sum2 = std::accumulate(
             gametes[dip.second].smutations.cbegin(),
             gametes[dip.second].smutations.cend(), 0.,
-            [&mutations](const double s, const KTfwd::uint_t key) {
+            [&mutations](const double s, const fwdpp::uint_t key) {
                 return s + mutations[key].s;
             });
         return std::sqrt(sum1 * sum2);

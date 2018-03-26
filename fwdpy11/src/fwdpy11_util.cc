@@ -26,7 +26,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 void
 check_finite(const double d, const std::string& error)
@@ -54,7 +54,7 @@ PYBIND11_MODULE(util, m)
 
     m.def("add_mutation",
           [](const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
-             const KTfwd::uint_t ncopies,
+             const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label) {
               return add_mutation(rng, pop, ncopies, pos_s_h, label);
@@ -83,7 +83,7 @@ PYBIND11_MODULE(util, m)
 
     m.def("add_mutation",
           [](const fwdpy11::GSLrng_t& rng, fwdpy11::multilocus_t& pop,
-             const std::size_t locus, const KTfwd::uint_t ncopies,
+             const std::size_t locus, const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label) {
               return add_mutation(rng, pop, locus, ncopies, pos_s_h, label);
@@ -140,7 +140,7 @@ PYBIND11_MODULE(util, m)
               // which requires a call into fwdpp
               if (need_to_update_storage)
                   {
-                      KTfwd::change_neutral(pop, index);
+                      fwdpp::change_neutral(pop, index);
                   }
           },
           py::arg("pop"), py::arg("index"), py::arg("new_esize"),
@@ -185,7 +185,7 @@ PYBIND11_MODULE(util, m)
               // which requires a call into fwdpp
               if (need_to_update_storage)
                   {
-                      KTfwd::change_neutral(pop, index);
+                      fwdpp::change_neutral(pop, index);
                   }
           },
           py::arg("pop"), py::arg("index"), py::arg("new_esize"),

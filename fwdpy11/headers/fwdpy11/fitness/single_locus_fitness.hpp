@@ -106,9 +106,9 @@ namespace fwdpy11
     };
 
     using single_locus_mult_wrapper
-        = fwdpp_single_locus_fitness_wrapper<KTfwd::multiplicative_diploid>;
+        = fwdpp_single_locus_fitness_wrapper<fwdpp::multiplicative_diploid>;
     using single_locus_additive_wrapper
-        = fwdpp_single_locus_fitness_wrapper<KTfwd::additive_diploid>;
+        = fwdpp_single_locus_fitness_wrapper<fwdpp::additive_diploid>;
 
 #define FWDPY11_SINGLE_LOCUS_FITNESS()                                        \
     pybind11::object FWDPY11_SINGLE_LOCUS_FITNESS_BASE_IMPORT__               \

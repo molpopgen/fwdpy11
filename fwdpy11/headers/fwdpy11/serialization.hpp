@@ -38,7 +38,7 @@ namespace fwdpy11
         serialize_details(const poptype *pop, const mwriter_t &mwriter,
                           const dipwriter_t &dipwriter)
         {
-            KTfwd::serialize rv;
+            fwdpp::serialize rv;
             std::ostringstream buffer;
             buffer << "fp11";
             buffer.write(reinterpret_cast<const char *>(&dipwriter.v), sizeof(int));
@@ -76,7 +76,7 @@ namespace fwdpy11
                     }
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
-                KTfwd::deserialize d;
+                fwdpp::deserialize d;
                 d(pop, buffer, mreader,
                   std::bind(dipreader, std::placeholders::_1,
                             std::placeholders::_2, version));
@@ -102,7 +102,7 @@ namespace fwdpy11
             auto rv
                 = gzwrite(f, reinterpret_cast<const char *>(&pop.generation),
                           sizeof(decltype(pop.generation)));
-            KTfwd::gzserialize s;
+            fwdpp::gzserialize s;
             rv += s(f, pop, mwriter, dipwriter);
             gzclose(f);
             return rv;
@@ -125,7 +125,7 @@ namespace fwdpy11
                 poptype temp(cdata...);
                 gzread(f, reinterpret_cast<char *>(&temp.generation),
                        sizeof(decltype(temp.generation)));
-                KTfwd::gzdeserialize s;
+                fwdpp::gzdeserialize s;
                 s(temp, f, mreader, dipreader);
                 gzclose(f);
                 return temp;

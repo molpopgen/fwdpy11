@@ -21,19 +21,19 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::gamete>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::gamete>);
 
 PYBIND11_MODULE(_opaque_gametes, m)
 {
     m.doc() = "Expose C++ vectors of gametes to Python without copies.";
 
-    py::bind_vector<std::vector<KTfwd::gamete>>(
+    py::bind_vector<std::vector<fwdpp::gamete>>(
         m, "VecGamete", py::module_local(false),
         "C++ representations of a list of "
         ":class:`fwdpy11.Gamete`.  "
         "Typically, access will be read-only.")
         .def(py::pickle(
-            [](const std::vector<KTfwd::gamete>& gametes) {
+            [](const std::vector<fwdpp::gamete>& gametes) {
                 py::list rv;
                 for (auto&& g : gametes)
                     {
@@ -42,10 +42,10 @@ PYBIND11_MODULE(_opaque_gametes, m)
                 return rv;
             },
             [](const py::list l) {
-                std::vector<KTfwd::gamete> rv;
+                std::vector<fwdpp::gamete> rv;
                 for (auto&& li : l)
                     {
-                        rv.push_back(li.cast<KTfwd::gamete>());
+                        rv.push_back(li.cast<fwdpp::gamete>());
                     }
                 return rv;
             }));

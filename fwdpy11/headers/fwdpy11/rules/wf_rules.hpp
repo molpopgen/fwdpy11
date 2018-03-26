@@ -48,7 +48,7 @@ namespace fwdpy11
                     wbar += pop.diploids[i].w;
                 }
             wbar /= double(N_curr);
-            lookup = KTfwd::fwdpp_internal::gsl_ran_discrete_t_ptr(
+            lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
                 gsl_ran_discrete_preproc(N_curr, &fitnesses[0]));
             return wbar;
         }
