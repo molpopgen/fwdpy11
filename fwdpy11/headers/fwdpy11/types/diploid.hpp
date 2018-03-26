@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <vector>
 #include <pybind11/pybind11.h>
+#include <fwdpp/io/scalar_serialization.hpp>
+#include <fwdpp/io/diploid.hpp>
 
 namespace fwdpy11
 {
@@ -87,9 +89,43 @@ namespace fwdpy11
             return cpp_data_comparison;
         }
     };
-    
+
     //! Typedef for container of diploids
     using dipvector_t = std::vector<diploid_t>;
+}
+
+namespace fwdpp
+{
+    namespace io
+    {
+        template <> struct serialize_diploid<fwdpy11::diploid_t>
+        {
+            template <typename streamtype>
+            inline void
+            operator()(streamtype& buffer, const fwdpy11::diploid_t& dip) const
+            {
+                fwdpp::io::scalar_writer w;
+                w(buffer, &dip.g);
+                w(buffer, &dip.e);
+                w(buffer, &dip.w);
+                w(buffer, &dip.label);
+            }
+        };
+
+        template <> struct deserialize_diploid<fwdpy11::diploid_t>
+        {
+            template <typename streamtype>
+            inline void
+            operator()(streamtype& buffer, fwdpy11::diploid_t& dip) const
+            {
+                fwdpp::io::scalar_reader r;
+                r(buffer, &dip.g);
+                r(buffer, &dip.e);
+                r(buffer, &dip.w);
+                r(buffer, &dip.label);
+            }
+        };
+    }
 }
 
 #endif
