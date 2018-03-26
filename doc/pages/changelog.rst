@@ -30,7 +30,7 @@ API changes/new features:
   been changed from functions to read-only properties. `PR #45 <https://github.com/molpopgen/fwdpy11/pull/45>`_
 * The 'label' field of :class:`fwdpy11.Region` (and :class:`fwdpy11.Sregion`) now populate the label
   field of a mutation. `PR #32 <https://github.com/molpopgen/fwdpy11/pull/32>`_ See tests/test_mutation_labels.py for an example.
-* Population objects may now be constructed programatically.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`_
+* Population objects may now be constructed programatically. See :ref:`popobjects`.   `PR #36 <https://github.com/molpopgen/fwdpy11/pull/36>`_ 
 
 Back-end changes
 ------------------------

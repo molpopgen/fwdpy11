@@ -34,6 +34,8 @@ Welcome to fwdpy11's documentation!
     pages/types
     pages/rng
     pages/regions
+    pages/geneticvalues
+    pages/fixations
     pages/model_params
     pages/recorders
 
