@@ -114,14 +114,21 @@ PYBIND11_MODULE(fwdpp_extensions, m)
           }));
 
     py::class_<fwdpp::extensions::discrete_mut_model>(m, "MutationRegions")
-        .def(py::init < std::vector<double>, std::vector<double>,
-             std::vector<double>, std::vector<double>, std::vector<double>,
-             std::vector<double>, std::vector<fwdpp::extensions::shmodel>,
-             std::vector<decltype(fwdpp::mutation::xtra)>,
-             std::vector<decltype(fwdpp::mutation::xtra)>>());
+        .def(py::init<std::vector<double>, std::vector<double>,
+                      std::vector<double>, std::vector<double>,
+                      std::vector<double>, std::vector<double>,
+                      std::vector<fwdpp::extensions::shmodel>,
+                      std::vector<decltype(fwdpp::mutation::xtra)>,
+                      std::vector<decltype(fwdpp::mutation::xtra)>>());
 
     py::class_<fwdpp::extensions::discrete_rec_model>(m,
                                                       "RecombinationRegions")
-        .def(py::init<std::vector<double>, std::vector<double>,
-                      std::vector<double>>());
+        .def(py::init([](const fwdpy11::GSLrng_t &r, const double recrate,
+                         std::vector<double> beg, std::vector<double> end,
+                         std::vector<double> weights) {
+            return std::unique_ptr<fwdpp::extensions::discrete_rec_model>(
+                new fwdpp::extensions::discrete_rec_model(
+                    r.get(), recrate, std::move(beg), std::move(end),
+                    std::move(weights)));
+        }));
 }
