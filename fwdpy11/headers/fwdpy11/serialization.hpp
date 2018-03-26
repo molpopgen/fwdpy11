@@ -21,6 +21,7 @@
  */
 #ifndef FWDPY11_SERIALIZATION_HPP
 #define FWDPY11_SERIALIZATION_HPP
+#include <sstream>
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
 
