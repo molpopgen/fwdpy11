@@ -91,9 +91,8 @@ namespace fwdpy11
         inline single_locus_fitness_fxn
         callback() const final
         {
-            return std::bind(fitness_model(), std::placeholders::_1,
-                             std::placeholders::_2, std::placeholders::_3,
-                             scaling);
+            return std::bind(fitness_model(scaling), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3);
         }
 
         SINGLE_LOCUS_FITNESS_CLONE_SHARED(
