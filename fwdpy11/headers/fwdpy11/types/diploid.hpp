@@ -105,6 +105,8 @@ namespace fwdpp
             operator()(streamtype& buffer, const fwdpy11::diploid_t& dip) const
             {
                 fwdpp::io::scalar_writer w;
+                w(buffer, &dip.first);
+                w(buffer, &dip.second);
                 w(buffer, &dip.g);
                 w(buffer, &dip.e);
                 w(buffer, &dip.w);
@@ -119,6 +121,8 @@ namespace fwdpp
             operator()(streamtype& buffer, fwdpy11::diploid_t& dip) const
             {
                 fwdpp::io::scalar_reader r;
+                r(buffer, &dip.first);
+                r(buffer, &dip.second);
                 r(buffer, &dip.g);
                 r(buffer, &dip.e);
                 r(buffer, &dip.w);
