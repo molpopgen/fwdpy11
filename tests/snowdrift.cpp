@@ -69,7 +69,7 @@ struct snowdrift_diploid
         // in fwdpy11's machinery for evolving populations.
         // This test is only here as this is part of unit
         // testing suite.
-        auto g = fwdpp::additive_diploid()(dip, gametes, mutations, 2.0);
+        auto g = fwdpp::additive_diploid(0.0)(dip, gametes, mutations);
         if (zself != g)
             {
                 throw std::runtime_error("snowdrift not working: "
@@ -142,8 +142,8 @@ struct snowdrift : public fwdpy11::single_locus_fitness
             {
                 // A diploid tracks its index via
                 // fwdpy11::diploid_t::label
-                phenotypes[dip.label] = fwdpp::additive_diploid()(
-                    dip, pop.gametes, pop.mutations, 2.0);
+                phenotypes[dip.label] = fwdpp::additive_diploid(2.0)(
+                    dip, pop.gametes, pop.mutations);
             }
     };
 
