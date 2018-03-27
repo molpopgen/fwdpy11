@@ -61,23 +61,27 @@ def makeMutationRegions(neutral, selected):
     return MutationRegions(nbeg, nend, nweights, sbeg, send, sweights, sh, nlabels, slabels)
 
 
-def makeRecombinationRegions(regions):
+def makeRecombinationRegions(rng, recrate, regions):
     """
     Convert user input into
     :class:`~fwdpy11.fwdpp_extensions.RecombinationRegions`
 
-    :param neutral: A list of :class:`fwdpy11.regions.Region` objects.
-    :param selected: A list of :class:`fwdpy11.regions.Sregion` objects.
+    :param rng: :class:`fwdpy11.GSLrng`
+    :param recrate: (float) Recombination reate.
+    :param regions: A list of :class:`fwdpy11.Region`
 
-    :rtype: :class:`fwdpy11.fwdpp_extensions.MutationRegions`
+    :rtype: :class:`fwdpy11.fwdpp_extensions.RecombinationRegions`
+
+
 
     .. note::
         Used by various "evolve" functions.
         Users probably won't need to call this.
 
         >>> import fwdpy11 as fp11
+        >>> rng = fwdpy11.GSLrng(42)
         >>> rregions = [fp11.Region(0,0.5,1),fp11.Region(1,1.5,1)]
-        >>> rr = fp11.makeRecombinationRegions(rregions)
+        >>> rr = fp11.makeRecombinationRegions(rng, 1e-3, rregions)
         >>> type(rr)
         <class 'fwdpy11.fwdpp_extensions.RecombinationRegions'>
 
@@ -86,4 +90,4 @@ def makeRecombinationRegions(regions):
     end = [i.e for i in regions]
     weights = [i.w for i in regions]
     from .fwdpp_extensions import RecombinationRegions
-    return RecombinationRegions(beg, end, weights)
+    return RecombinationRegions(rng, recrate, beg, end, weights)

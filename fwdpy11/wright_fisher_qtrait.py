@@ -127,7 +127,7 @@ def _evolve_slocus(rng, pop, params, recorder=None):
     from .internal import makeMutationRegions, makeRecombinationRegions
     from functools import partial
     mm = makeMutationRegions(params.nregions, params.sregions)
-    rm = makeRecombinationRegions(params.recregions)
+    rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     noise = None
     if params.noise is None:
@@ -172,7 +172,8 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
         noise = params.noise
     mm = [makeMutationRegions(i, j) for i, j in zip(params.nregions,
                                                     params.sregions)]
-    rm = [makeRecombinationRegions(i) for i in params.recregions]
+    rm = [makeRecombinationRegions(rng, i, j) for i, j in zip(
+        params.recrates, params.recregions)]
     updater = None
     noise_updater = None
     if hasattr(params.trait2w, 'update'):
