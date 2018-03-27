@@ -9,7 +9,7 @@
 
 void
 add_next_dip(const fwdpy11::GSLrng_t& rng, std::vector<std::size_t>& dips,
-             const KTfwd::uint_t N)
+             const fwdpp::uint_t N)
 {
     unsigned next_dip = gsl_rng_uniform_int(rng.get(), N);
     while (std::find(dips.begin(), dips.end(), next_dip) != dips.end())
@@ -20,8 +20,8 @@ add_next_dip(const fwdpy11::GSLrng_t& rng, std::vector<std::size_t>& dips,
 }
 
 std::tuple<std::vector<std::size_t>, std::vector<short>>
-get_diploids_and_genos(const fwdpy11::GSLrng_t& rng, KTfwd::uint_t ncopies,
-                       const KTfwd::uint_t N)
+get_diploids_and_genos(const fwdpy11::GSLrng_t& rng, fwdpp::uint_t ncopies,
+                       const fwdpp::uint_t N)
 // Figure out who the diploids are that get the new mutation,
 // and their corresponding genotype
 {
@@ -54,7 +54,7 @@ get_diploids_and_genos(const fwdpy11::GSLrng_t& rng, KTfwd::uint_t ncopies,
 
 std::size_t
 add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
-             const KTfwd::uint_t ncopies,
+             const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label)
 /// Add a new mutation at HW proportions
@@ -65,7 +65,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
                 "new mutation position already exists in population");
         }
     auto dips_and_genos = get_diploids_and_genos(rng, ncopies, pop.N);
-    auto rv = KTfwd::add_mutation(pop, std::get<0>(dips_and_genos),
+    auto rv = fwdpp::add_mutation(pop, std::get<0>(dips_and_genos),
                                   std::get<1>(dips_and_genos),
                                   std::get<0>(pos_s_h), std::get<1>(pos_s_h),
                                   std::get<2>(pos_s_h), pop.generation, label);
@@ -75,7 +75,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
 
 std::size_t
 add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::multilocus_t& pop,
-             const std::size_t locus, const KTfwd::uint_t ncopies,
+             const std::size_t locus, const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label)
 /// Add a new mutation at HW proportions
@@ -86,7 +86,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::multilocus_t& pop,
                 "new mutation position already exists in population");
         }
     auto dips_and_genos = get_diploids_and_genos(rng, ncopies, pop.N);
-    auto rv = KTfwd::add_mutation(pop, locus, std::get<0>(dips_and_genos),
+    auto rv = fwdpp::add_mutation(pop, locus, std::get<0>(dips_and_genos),
                                   std::get<1>(dips_and_genos),
                                   std::get<0>(pos_s_h), std::get<1>(pos_s_h),
                                   std::get<2>(pos_s_h), pop.generation, label);

@@ -34,10 +34,10 @@ using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
-//PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
+//PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::generalmut_vec>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::uint_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 namespace
 {
@@ -83,7 +83,7 @@ namespace
 }
 
 std::vector<std::size_t>
-get_individuals(const KTfwd::uint_t popsize, py::kwargs kwargs)
+get_individuals(const fwdpp::uint_t popsize, py::kwargs kwargs)
 {
     std::vector<std::size_t> ind;
     bool has_ind = kwargs.contains("individuals");
@@ -97,8 +97,8 @@ get_individuals(const KTfwd::uint_t popsize, py::kwargs kwargs)
     else if (has_rng && has_nsam && !has_ind)
         {
             const auto& rng = kwargs["rng"].cast<const fwdpy11::GSLrng_t&>();
-            const auto nsam = kwargs["nsam"].cast<KTfwd::uint_t>();
-            for (KTfwd::uint_t i = 0; i < nsam; ++i)
+            const auto nsam = kwargs["nsam"].cast<fwdpp::uint_t>();
+            for (fwdpp::uint_t i = 0; i < nsam; ++i)
                 {
                     ind.push_back(static_cast<std::size_t>(
                         gsl_rng_uniform_int(rng.get(), popsize)));
@@ -116,11 +116,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
 {
     m.doc() = "Wrap C++ types specific to fwdpy11.";
 
-    py::bind_vector<std::vector<KTfwd::uint_t>>(
+    py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
         py::buffer_protocol())
         .def(py::pickle(
-            [](const std::vector<KTfwd::uint_t>& v) {
+            [](const std::vector<fwdpp::uint_t>& v) {
                 py::list rv;
                 for (auto&& i : v)
                     {
@@ -129,10 +129,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             },
             [](py::list l) {
-                std::vector<KTfwd::uint_t> rv;
+                std::vector<fwdpp::uint_t> rv;
                 for (auto&& i : l)
                     {
-                        rv.push_back(i.cast<KTfwd::uint_t>());
+                        rv.push_back(i.cast<fwdpp::uint_t>());
                     }
                 return rv;
             }));
@@ -227,8 +227,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                         return rv;
                     }
                 auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
-                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
-                auto g = args[2].cast<KTfwd::uint_t>();
+                auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
+                auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::singlepop_t::create_with_fixations(
                     diploids, gametes, mutations, fixations, ftimes, g);
             })
@@ -312,12 +312,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                  if (separate)
                      {
                          auto temp
-                             = KTfwd::sample_separate(pop, ind, remove_fixed);
+                             = fwdpp::sample_separate(pop, ind, remove_fixed);
                          rv = py::make_tuple(temp.first, temp.second);
                      }
                  else
                      {
-                         auto temp = KTfwd::sample(pop, ind, remove_fixed);
+                         auto temp = fwdpp::sample(pop, ind, remove_fixed);
                          py::list tlist = py::cast(temp);
                          rv = tlist;
                      }
@@ -389,8 +389,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                                              mutations);
                     }
                 auto& fixations = args[0].cast<fwdpy11::mcont_t&>();
-                auto& ftimes = args[1].cast<std::vector<KTfwd::uint_t>&>();
-                auto g = args[2].cast<KTfwd::uint_t>();
+                auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
+                auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::multilocus_t::create_with_fixations(
                     diploids, gametes, mutations, fixations, ftimes, g);
             })
@@ -473,12 +473,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
                  if (separate)
                      {
                          auto temp
-                             = KTfwd::sample_separate(pop, ind, remove_fixed);
+                             = fwdpp::sample_separate(pop, ind, remove_fixed);
                          rv = py::cast(temp);
                      }
                  else
                      {
-                         auto temp = KTfwd::sample(pop, ind, remove_fixed);
+                         auto temp = fwdpp::sample(pop, ind, remove_fixed);
                          rv = py::cast(temp);
                      }
                  return rv;
@@ -540,17 +540,17 @@ PYBIND11_MODULE(fwdpy11_types, m)
     //    .def_static(
     //        "create",
     //        [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
-    //           std::vector<KTfwd::generalmut_vec>& mutations, py::tuple args) {
+    //           std::vector<fwdpp::generalmut_vec>& mutations, py::tuple args) {
     //            if (args.size() == 0)
     //                {
     //                    return fwdpy11::singlepop_gm_vec_t::create(
     //                        diploids, gametes, mutations);
     //                }
     //            auto& fixations
-    //                = args[0].cast<std::vector<KTfwd::generalmut_vec>&>();
+    //                = args[0].cast<std::vector<fwdpp::generalmut_vec>&>();
     //            auto& fixation_times
-    //                = args[1].cast<std::vector<KTfwd::uint_t>&>();
-    //            auto g = args[2].cast<KTfwd::uint_t>();
+    //                = args[1].cast<std::vector<fwdpp::uint_t>&>();
+    //            auto g = args[2].cast<fwdpp::uint_t>();
     //            return fwdpy11::singlepop_gm_vec_t::create_with_fixations(
     //                diploids, gametes, mutations, fixations, fixation_times,
     //                g);
@@ -624,12 +624,12 @@ PYBIND11_MODULE(fwdpy11_types, m)
     //             if (separate)
     //                 {
     //                     auto temp
-    //                         = KTfwd::sample_separate(pop, ind, remove_fixed);
+    //                         = fwdpp::sample_separate(pop, ind, remove_fixed);
     //                     rv = py::make_tuple(temp.first, temp.second);
     //                 }
     //             else
     //                 {
-    //                     auto temp = KTfwd::sample(pop, ind, remove_fixed);
+    //                     auto temp = fwdpp::sample(pop, ind, remove_fixed);
     //                     py::list tlist = py::cast(temp);
     //                     rv = tlist;
     //                 }

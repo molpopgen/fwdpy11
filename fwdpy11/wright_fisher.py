@@ -42,7 +42,7 @@ def evolve(rng, pop, params, recorder=None):
 
     from .internal import makeMutationRegions, makeRecombinationRegions
     mm = makeMutationRegions(params.nregions, params.sregions)
-    rm = makeRecombinationRegions(params.recregions)
+    rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     if recorder is None:
         from fwdpy11.temporal_samplers import RecordNothing

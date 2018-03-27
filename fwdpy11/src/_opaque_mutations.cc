@@ -27,12 +27,12 @@ namespace py = pybind11;
 struct flattened_popgenmut
 {
     double pos, s, h;
-    KTfwd::uint_t g;
-    decltype(KTfwd::popgenmut::xtra) label;
+    fwdpp::uint_t g;
+    decltype(fwdpp::popgenmut::xtra) label;
     std::int8_t neutral;
 };
 
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::popgenmut>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::popgenmut>);
 PYBIND11_MAKE_OPAQUE(std::vector<flattened_popgenmut>);
 
 PYBIND11_MODULE(_opaque_mutations, m)
@@ -42,14 +42,14 @@ PYBIND11_MODULE(_opaque_mutations, m)
 
     PYBIND11_NUMPY_DTYPE(flattened_popgenmut, pos, s, h, g, label, neutral);
 
-    py::bind_vector<std::vector<KTfwd::popgenmut>>(
+    py::bind_vector<std::vector<fwdpp::popgenmut>>(
         m, "VecMutation",
         "C++ representation of a list of "
         ":class:`fwdpy11.Mutation`.  "
         "Typically, access will be read-only.",
         py::module_local(false))
         .def("array",
-             [](const std::vector<KTfwd::popgenmut>& mc) {
+             [](const std::vector<fwdpp::popgenmut>& mc) {
                  std::vector<flattened_popgenmut> rv;
                  rv.reserve(mc.size());
                  for (auto&& m : mc)
@@ -68,7 +68,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
         .. versionadded: 0.1.2
         )delim")
         .def(py::pickle(
-            [](const std::vector<KTfwd::popgenmut>& mutations) {
+            [](const std::vector<fwdpp::popgenmut>& mutations) {
                 py::list rv;
                 for (auto&& i : mutations)
                     {
@@ -77,10 +77,10 @@ PYBIND11_MODULE(_opaque_mutations, m)
                 return rv;
             },
             [](py::list l) {
-                std::vector<KTfwd::popgenmut> rv;
+                std::vector<fwdpp::popgenmut> rv;
                 for (auto&& i : l)
                     {
-                        rv.push_back(i.cast<KTfwd::popgenmut>());
+                        rv.push_back(i.cast<fwdpp::popgenmut>());
                     }
                 return rv;
             }));

@@ -31,97 +31,104 @@ using dfe_callback_type = std::function<double(const gsl_rng *)>;
 
 template <typename S> struct make_sh_model_fixed_dom
 {
-    KTfwd::extensions::shmodel
-    operator()(const double h, const KTfwd::uint_t scaling,
+    fwdpp::extensions::shmodel
+    operator()(const double h, const fwdpp::uint_t scaling,
                const double param) const
     {
         if (scaling == 1)
             {
-                return KTfwd::extensions::shmodel(
+                return fwdpp::extensions::shmodel(
                     std::bind(S(param), std::placeholders::_1),
-                    std::bind(KTfwd::extensions::constant(h),
+                    std::bind(fwdpp::extensions::constant(h),
                               std::placeholders::_1));
             }
         auto scaling_fxn = [scaling, param](const gsl_rng *r) {
             return S(param)(r) / static_cast<double>(scaling);
         };
-        return KTfwd::extensions::shmodel(
+        return fwdpp::extensions::shmodel(
             std::move(scaling_fxn),
-            std::bind(KTfwd::extensions::constant(h), std::placeholders::_1));
+            std::bind(fwdpp::extensions::constant(h), std::placeholders::_1));
     }
 
-    KTfwd::extensions::shmodel
-    operator()(const double h, const KTfwd::uint_t scaling,
+    fwdpp::extensions::shmodel
+    operator()(const double h, const fwdpp::uint_t scaling,
                const double param1, const double param2) const
     {
         if (scaling == 1)
             {
-                return KTfwd::extensions::shmodel(
+                return fwdpp::extensions::shmodel(
                     std::bind(S(param1, param2), std::placeholders::_1),
-                    std::bind(KTfwd::extensions::constant(h),
+                    std::bind(fwdpp::extensions::constant(h),
                               std::placeholders::_1));
             }
         auto scaling_fxn = [scaling, param1, param2](const gsl_rng *r) {
             return S(param1, param2)(r) / static_cast<double>(scaling);
         };
-        return KTfwd::extensions::shmodel(
+        return fwdpp::extensions::shmodel(
             std::move(scaling_fxn),
-            std::bind(KTfwd::extensions::constant(h), std::placeholders::_1));
+            std::bind(fwdpp::extensions::constant(h), std::placeholders::_1));
     }
 };
 
 #define RETURN_DFE_FIXEDH(DIST, SCALING, S, H)                                \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, SCALING, S);
+    return make_sh_model_fixed_dom<fwdpp::extensions::DIST>()(H, SCALING, S);
 #define RETURN_DFE2_FIXEDH(DIST, SCALING, A, B, H)                            \
-    return make_sh_model_fixed_dom<KTfwd::extensions::DIST>()(H, SCALING, A,  \
+    return make_sh_model_fixed_dom<fwdpp::extensions::DIST>()(H, SCALING, A,  \
                                                               B);
 
 PYBIND11_MODULE(fwdpp_extensions, m)
 {
     m.doc() = "Expose fwdpp's extensions library.";
 
-    py::class_<KTfwd::extensions::shmodel>(m, "DFEFixedDominance")
+    py::class_<fwdpp::extensions::shmodel>(m, "DFEFixedDominance")
         .def(py::init<>())
         .def(py::init<dfe_callback_type, dfe_callback_type>())
-        .def("__call__", [](const KTfwd::extensions::shmodel &sh,
+        .def("__call__", [](const fwdpp::extensions::shmodel &sh,
                             const fwdpy11::GSLrng_t &rng) {
             return py::make_tuple(sh.s(rng.get()), sh.h(rng.get()));
         });
 
     m.def("makeConstantSH",
-          ([](const double s, const double h, const KTfwd::uint_t scaling) {
+          ([](const double s, const double h, const fwdpp::uint_t scaling) {
               RETURN_DFE_FIXEDH(constant, scaling, s, h);
           }));
 
     m.def("makeExpSH",
-          ([](const double mean, const double h, const KTfwd::uint_t scaling) {
+          ([](const double mean, const double h, const fwdpp::uint_t scaling) {
               RETURN_DFE_FIXEDH(exponential, scaling, mean, h);
           }));
 
     m.def("makeGaussianSH",
-          ([](const double sd, const double h, const KTfwd::uint_t scaling) {
+          ([](const double sd, const double h, const fwdpp::uint_t scaling) {
               RETURN_DFE_FIXEDH(gaussian, scaling, sd, h);
           }));
 
     m.def("makeUniformSH", ([](const double lo, const double hi,
-                               const double h, const KTfwd::uint_t scaling) {
+                               const double h, const fwdpp::uint_t scaling) {
               RETURN_DFE2_FIXEDH(uniform, scaling, lo, hi, h);
           }));
 
     m.def("makeGammaSH", ([](const double mean, const double shape,
-                             const double h, const KTfwd::uint_t scaling) {
+                             const double h, const fwdpp::uint_t scaling) {
               RETURN_DFE2_FIXEDH(gamma, scaling, mean, shape, h);
           }));
 
-    py::class_<KTfwd::extensions::discrete_mut_model>(m, "MutationRegions")
-        .def(py::init < std::vector<double>, std::vector<double>,
-             std::vector<double>, std::vector<double>, std::vector<double>,
-             std::vector<double>, std::vector<KTfwd::extensions::shmodel>,
-             std::vector<decltype(KTfwd::mutation::xtra)>,
-             std::vector<decltype(KTfwd::mutation::xtra)>>());
-
-    py::class_<KTfwd::extensions::discrete_rec_model>(m,
-                                                      "RecombinationRegions")
+    py::class_<fwdpp::extensions::discrete_mut_model>(m, "MutationRegions")
         .def(py::init<std::vector<double>, std::vector<double>,
-                      std::vector<double>>());
+                      std::vector<double>, std::vector<double>,
+                      std::vector<double>, std::vector<double>,
+                      std::vector<fwdpp::extensions::shmodel>,
+                      std::vector<decltype(fwdpp::mutation::xtra)>,
+                      std::vector<decltype(fwdpp::mutation::xtra)>>());
+
+    py::class_<fwdpp::extensions::discrete_rec_model>(m,
+                                                      "RecombinationRegions")
+        .def(py::init([](const fwdpy11::GSLrng_t &r, const double recrate,
+                         std::vector<double> beg, std::vector<double> end,
+                         std::vector<double> weights) {
+            return std::unique_ptr<fwdpp::extensions::discrete_rec_model>(
+                new fwdpp::extensions::discrete_rec_model(
+                    r.get(), recrate, std::move(beg), std::move(end),
+                    std::move(weights)));
+        }));
 }

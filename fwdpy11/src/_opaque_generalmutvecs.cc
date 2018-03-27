@@ -5,15 +5,15 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<KTfwd::generalmut_vec>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::generalmut_vec>);
 
 PYBIND11_MODULE(_opaque_generalmutvecs,m)
 {
-    py::bind_vector<std::vector<KTfwd::generalmut_vec>>(
+    py::bind_vector<std::vector<fwdpp::generalmut_vec>>(
         m, "VecGeneralMutVec", py::module_local(false),
         "A list of :class:`fwdpy11.GeneralMutVec`.")
         .def(py::pickle(
-            [](const std::vector<KTfwd::generalmut_vec> &mutations) {
+            [](const std::vector<fwdpp::generalmut_vec> &mutations) {
                 py::list rv;
                 for (auto &&i : mutations)
                     {
@@ -22,10 +22,10 @@ PYBIND11_MODULE(_opaque_generalmutvecs,m)
                 return rv;
             },
             [](py::list l) {
-                std::vector<KTfwd::generalmut_vec> rv;
+                std::vector<fwdpp::generalmut_vec> rv;
                 for (auto &&i : l)
                     {
-                        rv.push_back(i.cast<KTfwd::generalmut_vec>());
+                        rv.push_back(i.cast<fwdpp::generalmut_vec>());
                     }
                 return rv;
             }));

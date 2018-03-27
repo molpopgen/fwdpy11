@@ -18,7 +18,7 @@ namespace fwdpy11
               typename mutation_removal_policy>
     void
     evolve_generation(const GSLrng_t& rng, poptype& pop,
-                      const KTfwd::uint_t N_next, const double mu,
+                      const fwdpp::uint_t N_next, const double mu,
                       const mutation_model& mmodel,
                       const recombination_model& recmodel,
                       const pick1_function& pick1, const pick2_function& pick2,
@@ -27,13 +27,13 @@ namespace fwdpy11
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
-                         KTfwd::sugar::SINGLEPOP_TAG>::value,
+                         fwdpp::sugar::SINGLELOC_TAG>::value,
             "Population type must be a single-locus, single-deme type.");
 
         auto gamete_recycling_bin
-            = KTfwd::fwdpp_internal::make_gamete_queue(pop.gametes);
+            = fwdpp::fwdpp_internal::make_gamete_queue(pop.gametes);
         auto mutation_recycling_bin
-            = KTfwd::fwdpp_internal::make_mut_queue(pop.mcounts);
+            = fwdpp::fwdpp_internal::make_mut_queue(pop.mcounts);
 
         // Efficiency hit.  Unavoidable
         // in use case of a sampler looking
@@ -63,13 +63,13 @@ namespace fwdpy11
                 if (gsl_rng_uniform(rng.get()) < 0.5)
                     std::swap(p2g1, p2g2);
 
-                //Update to fwdpp 0.5.7 API
-                //in fwdpy11 0.1.4
-                KTfwd::mutate_recombine_update(
+                // Update to fwdpp 0.5.7 API
+                // in fwdpy11 0.1.4
+                fwdpp::mutate_recombine_update(
                     rng.get(), pop.gametes, pop.mutations,
                     std::make_tuple(p1g1, p1g2, p2g1, p2g2), recmodel, mmodel,
-                    mu, gamete_recycling_bin, mutation_recycling_bin, dip, pop.neutral,
-                    pop.selected);
+                    mu, gamete_recycling_bin, mutation_recycling_bin, dip,
+                    pop.neutral, pop.selected);
 
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);
@@ -77,9 +77,9 @@ namespace fwdpy11
                 update(rng, dip, pop, p1, p2);
             }
 
-        KTfwd::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
+        fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
                                                pop.mcounts);
-        KTfwd::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
+        fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
                                               pop.mcounts, 2 * N_next, mrp);
         // This is constant-time
         pop.diploids.swap(offspring);

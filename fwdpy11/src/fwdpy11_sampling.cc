@@ -30,7 +30,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
-#include <fwdpp/internal/IOhelp.hpp>
+#include <fwdpp/io/scalar_serialization.hpp>
 #include <fwdpy11/types.hpp>
 #include <gsl/gsl_matrix_char.h>
 namespace py = pybind11;
@@ -117,8 +117,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 #define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
     m.def("sample_separate",                                                  \
           [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
-             const KTfwd::uint_t samplesize, const bool removeFixed) {        \
-              return KTfwd::sample_separate(rng.get(), pop, samplesize,       \
+             const fwdpp::uint_t samplesize, const bool removeFixed) {        \
+              return fwdpp::sample_separate(rng.get(), pop, samplesize,       \
                                             removeFixed);                     \
           },                                                                  \
           "Take a sample of :math:`n` chromosomes from a population "         \
@@ -139,7 +139,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
     m.def("sample_separate",                                                  \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
              const bool removeFixed) {                                        \
-              return KTfwd::sample_separate(pop, individuals, removeFixed);   \
+              return fwdpp::sample_separate(pop, individuals, removeFixed);   \
           },                                                                  \
           "Take a sample of specific individuals from a population.\n\n "     \
           ":param pop: A :class:`" CLASSTYPE "`\n"                            \
@@ -177,7 +177,7 @@ PYBIND11_MODULE(sampling, m)
         ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
         "data.");
 
-    py::class_<KTfwd::data_matrix>(m, "DataMatrix",
+    py::class_<fwdpp::data_matrix>(m, "DataMatrix",
                                    R"delim(
 		Represent a sample from a population in a matrix format.
 
@@ -201,7 +201,7 @@ PYBIND11_MODULE(sampling, m)
 		)delim")
         .def(py::init<>())
         .def(py::init<std::size_t>())
-        .def_readwrite("neutral", &KTfwd::data_matrix::neutral,
+        .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
@@ -213,7 +213,7 @@ PYBIND11_MODULE(sampling, m)
                 .. versionchanged: 0.1.4
                     Allow read/write access instead of readonly
                 )delim")
-        .def_readwrite("selected", &KTfwd::data_matrix::selected,
+        .def_readwrite("selected", &fwdpp::data_matrix::selected,
                        R"delim(
                 Return a buffer representing neutral variants.
                 This buffer may be used to create a NumPy
@@ -226,20 +226,20 @@ PYBIND11_MODULE(sampling, m)
                     Allow read/write access instead of readonly
                 )delim")
         .def_readonly("neutral_positions",
-                      &KTfwd::data_matrix::neutral_positions,
+                      &fwdpp::data_matrix::neutral_positions,
                       "The list of neutral mutation positions.")
         .def_readonly("selected_positions",
-                      &KTfwd::data_matrix::selected_positions,
+                      &fwdpp::data_matrix::selected_positions,
                       "The list of selected mutation positions.")
-        .def_readonly("neutral_popfreq", &KTfwd::data_matrix::neutral_popfreq,
+        .def_readonly("neutral_popfreq", &fwdpp::data_matrix::neutral_popfreq,
                       "The list of population frequencies of "
                       "neutral mutations.")
         .def_readonly("selected_popfreq",
-                      &KTfwd::data_matrix::selected_popfreq,
+                      &fwdpp::data_matrix::selected_popfreq,
                       "The list of population frequencies of "
                       "selected mutations.")
         .def_property_readonly("ndim_neutral",
-                               [](const KTfwd::data_matrix &dm) {
+                               [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
                                        dm.nrow, dm.neutral.size() / dm.nrow);
                                },
@@ -255,7 +255,7 @@ PYBIND11_MODULE(sampling, m)
                 Changed from a function to a readonly property
              )delim")
         .def_property_readonly("ndim_selected",
-                               [](const KTfwd::data_matrix &dm) {
+                               [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
                                        dm.nrow, dm.selected.size() / dm.nrow);
                                },
@@ -271,9 +271,9 @@ PYBIND11_MODULE(sampling, m)
                 Changed from a function to a readonly property
              )delim")
         .def(py::pickle(
-            [](const KTfwd::data_matrix &d) {
+            [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
-                KTfwd::fwdpp_internal::scalar_writer w;
+                fwdpp::io::scalar_writer w;
                 w(o, &d.nrow, 1);
                 auto nsites = d.neutral_positions.size();
                 w(o, &nsites, 1);
@@ -299,10 +299,10 @@ PYBIND11_MODULE(sampling, m)
             },
             [](py::bytes b) {
                 std::istringstream data(b);
-                KTfwd::fwdpp_internal::scalar_reader r;
+                fwdpp::io::scalar_reader r;
                 std::size_t n, n2;
                 r(data, &n);
-                KTfwd::data_matrix d(n);
+                fwdpp::data_matrix d(n);
                 r(data, &n);
                 if (n)
                     {
@@ -325,15 +325,15 @@ PYBIND11_MODULE(sampling, m)
                         d.selected_popfreq.resize(n);
                         r(data, d.selected_popfreq.data(), n);
                     }
-                return std::unique_ptr<KTfwd::data_matrix>(
-                    new KTfwd::data_matrix(std::move(d)));
+                return std::unique_ptr<fwdpp::data_matrix>(
+                    new fwdpp::data_matrix(std::move(d)));
             }));
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
              const bool neutral, const bool selected) {                       \
-              return KTfwd::mutation_keys(pop, individuals, neutral,          \
+              return fwdpp::mutation_keys(pop, individuals, neutral,          \
                                           selected);                          \
           },                                                                  \
           "Generate a tuple of (mutation_key, sample count) for mutations\n"  \
@@ -349,13 +349,13 @@ PYBIND11_MODULE(sampling, m)
           py::arg("pop"), py::arg("individuals"), py::arg("neutral") = true,  \
           py::arg("selected") = true);
 
-    using keytype = std::vector<std::pair<std::size_t, KTfwd::uint_t>>;
+    using keytype = std::vector<std::pair<std::size_t, fwdpp::uint_t>>;
 
 #define GENOTYPE_MATRIX(POPTYPE, CLASSTYPE)                                   \
     m.def("genotype_matrix",                                                  \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
              const keytype &neutral_keys, const keytype &selected_keys) {     \
-              return KTfwd::genotype_matrix<POPTYPE>(                         \
+              return fwdpp::genotype_matrix<POPTYPE>(                         \
                   pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
           "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
@@ -371,7 +371,7 @@ PYBIND11_MODULE(sampling, m)
     m.def("haplotype_matrix",                                                 \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
              const keytype &neutral_keys, const keytype &selected_keys) {     \
-              return KTfwd::haplotype_matrix<POPTYPE>(                        \
+              return fwdpp::haplotype_matrix<POPTYPE>(                        \
                   pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
           "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
@@ -401,7 +401,7 @@ PYBIND11_MODULE(sampling, m)
     //                  "fwdpy11.SlocusPopGeneralMutVec");
 
     m.def("matrix_to_sample",
-          [](const KTfwd::data_matrix &m, const bool neutral)
+          [](const fwdpp::data_matrix &m, const bool neutral)
 
           {
               return (neutral) ? matrix_to_sample(m.neutral,

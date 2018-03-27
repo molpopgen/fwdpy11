@@ -32,7 +32,7 @@ namespace fwdpy11
         inline single_locus_fitness_fxn
         callback() const final
         {
-            return std::bind(KTfwd::site_dependent_genetic_value(),
+            return std::bind(fwdpp::site_dependent_genetic_value(),
                              std::placeholders::_1, std::placeholders::_2,
                              std::placeholders::_3, AA(), Aa(),
                              static_cast<double>(starting_value));
@@ -70,7 +70,7 @@ namespace fwdpy11
 #define STATELESS_GENOTYPE_POLICY(FUNCTION)                                   \
     struct FUNCTION                                                           \
     {                                                                         \
-        inline void operator()(double& w, const KTfwd::popgenmut& m) const
+        inline void operator()(double& w, const fwdpp::popgenmut& m) const
 
 #define CREATE_STATELESS_SLOCUS_OBJECT(FUNCTION, FUNCNAME, MODOBJ)            \
     pybind11::                                                                \

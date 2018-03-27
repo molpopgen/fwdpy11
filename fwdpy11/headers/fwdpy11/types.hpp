@@ -32,8 +32,8 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 //#include <fwdpp/sugar/generalmut.hpp>
-#include <fwdpp/sugar/singlepop.hpp>
-#include <fwdpp/sugar/multiloc.hpp>
+#include <fwdpp/sugar/slocuspop.hpp>
+#include <fwdpp/sugar/mlocuspop.hpp>
 #include <vector>
 #include <stdexcept>
 #include <fwdpy11/serialization.hpp>
@@ -56,13 +56,14 @@ namespace fwdpy11
     inline poptype
     create_wrapper(diploids_input &&diploids, gametes_input &&gametes,
                    mutations_input &&mutations, mutations_input &fixations,
-                   std::vector<KTfwd::uint_t> &fixation_times,
-                   KTfwd::uint_t generation)
+                   std::vector<fwdpp::uint_t> &fixation_times,
+                   fwdpp::uint_t generation)
     {
         if (fixation_times.size() != fixations.size())
-        {
-            throw pybind11::value_error("length of fixation_times != length of fixations");
-        }
+            {
+                throw pybind11::value_error(
+                    "length of fixation_times != length of fixations");
+            }
         auto rv = create_wrapper<poptype>(
             std::forward<diploids_input>(diploids),
             std::forward<gametes_input>(gametes),
@@ -74,50 +75,50 @@ namespace fwdpy11
     }
 
     //! Allows serialization of diploids.
-    template <int VERSION> struct diploid_writer
-    {
-        using result_type = void;
-        // This should really be constexpr.
-        // Figure it out later:
-        const int v;
-        diploid_writer() : v(VERSION) {}
-        template <typename diploid_t, typename streamtype>
-        inline result_type
-        operator()(const diploid_t &dip, streamtype &o) const
-        {
-            KTfwd::fwdpp_internal::scalar_writer()(o, &dip.g);
-            KTfwd::fwdpp_internal::scalar_writer()(o, &dip.e);
-            KTfwd::fwdpp_internal::scalar_writer()(o, &dip.w);
-            KTfwd::fwdpp_internal::scalar_writer()(o, &dip.label);
-        }
-    };
+    //template <int VERSION> struct diploid_writer
+    //{
+    //    using result_type = void;
+    //    // This should really be constexpr.
+    //    // Figure it out later:
+    //    const int v;
+    //    diploid_writer() : v(VERSION) {}
+    //    template <typename diploid_t, typename streamtype>
+    //    inline result_type
+    //    operator()(const diploid_t &dip, streamtype &o) const
+    //    {
+    //        fwdpp::fwdpp_internal::scalar_writer()(o, &dip.g);
+    //        fwdpp::fwdpp_internal::scalar_writer()(o, &dip.e);
+    //        fwdpp::fwdpp_internal::scalar_writer()(o, &dip.w);
+    //        fwdpp::fwdpp_internal::scalar_writer()(o, &dip.label);
+    //    }
+    //};
 
     //! Allows de-serialization of diploids.
-    struct diploid_reader
-    {
-        using result_type = void;
-        template <typename diploid_t, typename streamtype>
-        inline result_type
-        operator()(diploid_t &dip, streamtype &i, const int version) const
-        {
-            KTfwd::fwdpp_internal::scalar_reader()(i, &dip.g);
-            KTfwd::fwdpp_internal::scalar_reader()(i, &dip.e);
-            KTfwd::fwdpp_internal::scalar_reader()(i, &dip.w);
-            KTfwd::fwdpp_internal::scalar_reader()(i, &dip.label);
-        }
-    };
+    // struct diploid_reader
+    // {
+    //     using result_type = void;
+    //     template <typename diploid_t, typename streamtype>
+    //     inline result_type
+    //     operator()(diploid_t &dip, streamtype &i, const int version) const
+    //     {
+    //         fwdpp::fwdpp_internal::scalar_reader()(i, &dip.g);
+    //         fwdpp::fwdpp_internal::scalar_reader()(i, &dip.e);
+    //         fwdpp::fwdpp_internal::scalar_reader()(i, &dip.w);
+    //         fwdpp::fwdpp_internal::scalar_reader()(i, &dip.label);
+    //     }
+    // };
 
-    struct singlepop_t : public KTfwd::singlepop<KTfwd::popgenmut, diploid_t>
+    struct singlepop_t : public fwdpp::slocuspop<fwdpp::popgenmut, diploid_t>
     /*!
       \brief Single-deme object where mutations have single effect size and
       dominance.
 
       This is the C++ representation of a single-deme simulation where a
-      KTfwd::popgenmut
+      fwdpp::popgenmut
       is the mutation type, and a custom diploid (fwdpy11::diploid_t) is the
       diploid type.
 
-      This type inherits from fwdpp's type KTfwd::singlepop, and the main
+      This type inherits from fwdpp's type fwdpp::singlepop, and the main
       documentation
       is found in the fwdpp reference manual.
 
@@ -147,7 +148,7 @@ namespace fwdpy11
     */
     {
         //! Typedef for base type
-        using base = KTfwd::singlepop<KTfwd::popgenmut, diploid_t>;
+        using base = fwdpp::slocuspop<fwdpp::popgenmut, diploid_t>;
         //! The current generation.  Start counting from zero
         unsigned generation;
         //! A Python object that sims may (optionally) use
@@ -156,8 +157,10 @@ namespace fwdpy11
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         singlepop_t(const unsigned &N)
-            : base(N), generation(0), popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
+            : base(N),
+              generation(0), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -178,8 +181,9 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
@@ -202,8 +206,8 @@ namespace fwdpy11
         create_with_fixations(base::dipvector_t &diploids,
                               base::gcont_t &gametes, base::mcont_t &mutations,
                               base::mcont_t &fixations,
-                              std::vector<KTfwd::uint_t> &fixation_times,
-                              const KTfwd::uint_t generation)
+                              std::vector<fwdpp::uint_t> &fixation_times,
+                              const fwdpp::uint_t generation)
         {
             return create_wrapper<singlepop_t>(
                 std::move(diploids), std::move(gametes), std::move(mutations),
@@ -213,44 +217,23 @@ namespace fwdpy11
         std::string
         serialize() const
         {
-            return serialization::serialize_details(
-                this, KTfwd::mutation_writer(),
-                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
+            return serialization::serialize_details(this);
         }
 
         void
         deserialize(const std::string &s)
         {
-            *this = serialization::deserialize_details<singlepop_t>()(
-                s, KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 1);
+            *this = serialization::deserialize_details<singlepop_t>()(s,1);
         }
-
-        // int
-        // tofile(const char *filename, bool append = false) const
-        //{
-        //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(),
-        //        fwdpy11::diploid_writer(),
-        //        filename, append);
-        //}
-
-        // void
-        // fromfile(const char *filename, std::size_t offset)
-        //{
-        //    *this = serialization::gzdeserialize_details<singlepop_t>()(
-        //        KTfwd::mutation_reader<singlepop_t::mutation_t>(),
-        //        fwdpy11::diploid_reader(), filename, offset, 0u);
-        //}
     };
 
-    // Types based on KTfwd::generalmut_vec  //! Typedef for gamete type
+    // Types based on fwdpp::generalmut_vec  //! Typedef for gamete type
 
     //! Typedef for gamete container
     // using gcont_gm_vec_t = std::vector<gamete_t>;
 
     // struct singlepop_gm_vec_t
-    //     : public KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>
+    //     : public fwdpp::singlepop<fwdpp::generalmut_vec, diploid_t>
     // /*!
     //   \brief Single-deme object where mutations contain vector<double> for
     // internal data.
@@ -260,7 +243,7 @@ namespace fwdpy11
     // for this type.
     // */
     // {
-    //     using base = KTfwd::singlepop<KTfwd::generalmut_vec, diploid_t>;
+    //     using base = fwdpp::singlepop<fwdpp::generalmut_vec, diploid_t>;
     //     unsigned generation;
     //     pybind11::object popdata;
     //     //! A Python objeft that users may access during a simulation
@@ -272,7 +255,8 @@ namespace fwdpy11
     //     {
     //         if (!N)
     //             {
-    //                 throw std::invalid_argument("population size must be > 0");
+    //                 throw std::invalid_argument("population size must be >
+    //                 0");
     //             }
     //     }
 
@@ -302,33 +286,37 @@ namespace fwdpy11
     //            base::mcont_t &mutations)
     //     {
     //         return create_wrapper<singlepop_gm_vec_t>(
-    //             std::move(diploids), std::move(gametes), std::move(mutations));
+    //             std::move(diploids), std::move(gametes),
+    //             std::move(mutations));
     //     }
 
     //     static singlepop_gm_vec_t
     //     create_with_fixations(base::dipvector_t &diploids,
-    //                           base::gcont_t &gametes, base::mcont_t &mutations,
+    //                           base::gcont_t &gametes, base::mcont_t
+    //                           &mutations,
     //                           base::mcont_t &fixations,
-    //                           std::vector<KTfwd::uint_t> &fixation_times,
-    //                           const KTfwd::uint_t generation)
+    //                           std::vector<fwdpp::uint_t> &fixation_times,
+    //                           const fwdpp::uint_t generation)
     //     {
     //         return create_wrapper<singlepop_gm_vec_t>(
-    //             std::move(diploids), std::move(gametes), std::move(mutations),
+    //             std::move(diploids), std::move(gametes),
+    //             std::move(mutations),
     //             fixations, fixation_times, generation);
     //     }
     //     std::string
     //     serialize() const
     //     {
     //         return serialization::serialize_details(
-    //             this, KTfwd::mutation_writer(),
+    //             this, fwdpp::mutation_writer(),
     //             fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
     //     }
 
     //     void
     //     deserialize(const std::string &s)
     //     {
-    //         *this = serialization::deserialize_details<singlepop_gm_vec_t>()(
-    //             s, KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
+    //         *this =
+    //         serialization::deserialize_details<singlepop_gm_vec_t>()(
+    //             s, fwdpp::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
     //             fwdpy11::diploid_reader(), 1u);
     //     }
 
@@ -336,7 +324,7 @@ namespace fwdpy11
     //     // tofile(const char *filename, bool append = false) const
     //     //{
     //     //    return fwdpy11::serialization::gzserialize_details(
-    //     //        *this, KTfwd::mutation_writer(),
+    //     //        *this, fwdpp::mutation_writer(),
     //     //        fwdpy11::diploid_writer(),
     //     //        filename, append);
     //     //}
@@ -346,7 +334,7 @@ namespace fwdpy11
     //     //{
     //     //    *this = serialization::
     //     //        gzdeserialize_details<singlepop_gm_vec_t>()(
-    //     //            KTfwd::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
+    //     // fwdpp::mutation_reader<singlepop_gm_vec_t::mutation_t>(),
     //     //            fwdpy11::diploid_reader(), filename, offset, 0u);
     //     //}
     // };
@@ -357,17 +345,19 @@ namespace fwdpy11
     // Have to use fwdpy11::diploid_t below, as GCC seems to get confused
     // otherwise...
     struct multilocus_t
-        : public KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>
+        : public fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::diploid_t>
     {
-        using base = KTfwd::multiloc<KTfwd::popgenmut, fwdpy11::diploid_t>;
+        using base = fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::diploid_t>;
         unsigned generation, nloci;
         pybind11::object popdata;
         //! A Python objeft that users may access during a simulation
         pybind11::object popdata_user;
         //! Constructor takes number of diploids as argument
         explicit multilocus_t(const unsigned N, const unsigned nloci_)
-            : base(N, nloci_), generation(0), nloci(nloci_),
-              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
+            : base(N, nloci_), generation(0),
+              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -386,8 +376,10 @@ namespace fwdpy11
         explicit multilocus_t(
             const unsigned N, const unsigned nloci_,
             const std::vector<std::pair<double, double>> &locus_boundaries)
-            : base(N, nloci_, locus_boundaries), generation(0), nloci(nloci_),
-              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
+            : base(N, nloci_, locus_boundaries), generation(0),
+              nloci(nloci_), popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
             if (!N)
                 {
@@ -412,8 +404,9 @@ namespace fwdpy11
             : base(std::forward<diploids_input>(diploids),
                    std::forward<gametes_input>(gametes),
                    std::forward<mutations_input>(mutations)),
-              generation{ 0 }, popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
+              generation{ 0 }, popdata{ pybind11::none() }, popdata_user{
+                  pybind11::none()
+              }
         {
         }
 
@@ -434,8 +427,8 @@ namespace fwdpy11
         create_with_fixations(base::dipvector_t &diploids,
                               base::gcont_t &gametes, base::mcont_t &mutations,
                               base::mcont_t &fixations,
-                              std::vector<KTfwd::uint_t> &fixation_times,
-                              const KTfwd::uint_t generation)
+                              std::vector<fwdpp::uint_t> &fixation_times,
+                              const fwdpp::uint_t generation)
         {
             return create_wrapper<multilocus_t>(
                 std::move(diploids), std::move(gametes), std::move(mutations),
@@ -444,17 +437,14 @@ namespace fwdpy11
         std::string
         serialize() const
         {
-            return serialization::serialize_details(
-                this, KTfwd::mutation_writer(),
-                fwdpy11::diploid_writer<fwdpy11::serialization::magic()>());
+            return serialization::serialize_details(this);
         }
 
         void
         deserialize(const std::string &s)
         {
-            *this = serialization::deserialize_details<multilocus_t>()(
-                s, KTfwd::mutation_reader<multilocus_t::mutation_t>(),
-                fwdpy11::diploid_reader(), 1, 1);
+            *this
+                = serialization::deserialize_details<multilocus_t>()(s, 1, 1);
             if (!this->diploids.empty())
                 {
                     this->nloci = this->diploids[0].size();
@@ -465,7 +455,7 @@ namespace fwdpy11
         // tofile(const char *filename, bool append = false) const
         //{
         //    return fwdpy11::serialization::gzserialize_details(
-        //        *this, KTfwd::mutation_writer(),
+        //        *this, fwdpp::mutation_writer(),
         //        fwdpy11::diploid_writer(),
         //        filename, append);
         //}
@@ -474,7 +464,7 @@ namespace fwdpy11
         // fromfile(const char *filename, std::size_t offset)
         //{
         //    *this = serialization::gzdeserialize_details<multilocus_t>()(
-        //        KTfwd::mutation_reader<multilocus_t::mutation_t>(),
+        //        fwdpp::mutation_reader<multilocus_t::mutation_t>(),
         //        fwdpy11::diploid_reader(), filename, offset, 0u, 0u);
         //}
     };

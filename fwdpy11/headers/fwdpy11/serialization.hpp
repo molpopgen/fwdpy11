@@ -21,7 +21,9 @@
  */
 #ifndef FWDPY11_SERIALIZATION_HPP
 #define FWDPY11_SERIALIZATION_HPP
-#include <fwdpp/sugar/serialization.hpp>
+#include <sstream>
+#include <fwdpp/forward_types_serialization.hpp>
+#include <fwdpp/io/serialize_population.hpp>
 
 namespace fwdpy11
 {
@@ -33,28 +35,25 @@ namespace fwdpy11
             return 1;
         }
 
-        template <typename poptype, typename mwriter_t, typename dipwriter_t>
+        template <typename poptype>
         std::string
-        serialize_details(const poptype *pop, const mwriter_t &mwriter,
-                          const dipwriter_t &dipwriter)
+        serialize_details(const poptype *pop)
         {
-            KTfwd::serialize rv;
             std::ostringstream buffer;
             buffer << "fp11";
-            buffer.write(reinterpret_cast<const char *>(&dipwriter.v), sizeof(int));
+			auto m = magic();
+			buffer.write(reinterpret_cast<char*>(&m),sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
-            rv(buffer, *pop, mwriter, dipwriter);
+			fwdpp::io::serialize_population(buffer, *pop);
             return buffer.str();
         }
 
         template <typename poptype> struct deserialize_details
         {
-            template <typename mreader_t, typename dipreader_t,
-                      typename... constructor_data>
+            template <typename... constructor_data>
             inline poptype
-            operator()(const std::string &s, const mreader_t &mreader,
-                       const dipreader_t &dipreader, constructor_data... cdata)
+            operator()(const std::string &s, constructor_data... cdata)
             {
                 std::istringstream buffer;
                 buffer.str(s);
@@ -63,74 +62,71 @@ namespace fwdpy11
                 // We need to test for existance of serialization
                 // version numbers, introduced in 0.1.3.  Prior to that,
                 // it was wild west :).
-                bool have_magic = (s.substr(0,4)=="fp11") ? true : false;
-                //We default to version 1, which includes all
-                //previous releases that had no version numbers
+                bool have_magic = (s.substr(0, 4) == "fp11") ? true : false;
+                // We default to version 1, which includes all
+                // previous releases that had no version numbers
                 int version = 1;
                 if (have_magic)
                     {
                         char c[4];
-                        buffer.read(&c[0],4*sizeof(char));
+                        buffer.read(&c[0], 4 * sizeof(char));
                         buffer.read(reinterpret_cast<char *>(&version),
                                     sizeof(int));
                     }
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
-                KTfwd::deserialize d;
-                d(pop, buffer, mreader,
-                  std::bind(dipreader, std::placeholders::_1,
-                            std::placeholders::_2, version));
+                fwdpp::io::deserialize_population(buffer, pop);
                 return pop;
             }
         };
 
-        template <typename poptype, typename mwriter_t, typename dipwriter_t>
-        inline int
-        gzserialize_details(const poptype &pop, const mwriter_t &mwriter,
-                            const dipwriter_t &dipwriter, const char *filename,
-                            bool append)
-        {
-            gzFile f;
-            if (append)
-                {
-                    f = gzopen(filename, "ab");
-                }
-            else
-                {
-                    f = gzopen(filename, "wb");
-                }
-            auto rv
-                = gzwrite(f, reinterpret_cast<const char *>(&pop.generation),
-                          sizeof(decltype(pop.generation)));
-            KTfwd::gzserialize s;
-            rv += s(f, pop, mwriter, dipwriter);
-            gzclose(f);
-            return rv;
-        }
+        // template <typename poptype, typename mwriter_t, typename dipwriter_t>
+        // inline int
+        // gzserialize_details(const poptype &pop, const mwriter_t &mwriter,
+        //                     const dipwriter_t &dipwriter, const char *filename,
+        //                     bool append)
+        // {
+        //     gzFile f;
+        //     if (append)
+        //         {
+        //             f = gzopen(filename, "ab");
+        //         }
+        //     else
+        //         {
+        //             f = gzopen(filename, "wb");
+        //         }
+        //     auto rv
+        //         = gzwrite(f, reinterpret_cast<const char *>(&pop.generation),
+        //                   sizeof(decltype(pop.generation)));
+        //     fwdpp::gzserialize s;
+        //     rv += s(f, pop, mwriter, dipwriter);
+        //     gzclose(f);
+        //     return rv;
+        // }
 
-        template <typename poptype> struct gzdeserialize_details
-        {
-            template <typename mreader_t, typename dipreader_t,
-                      typename... constructor_data>
-            inline poptype
-            operator()(const mreader_t &mreader, const dipreader_t &dipreader,
-                       const char *filename, std::size_t offset,
-                       constructor_data... cdata) const
-            {
-                gzFile f = gzopen(filename, "rb");
-                if (offset)
-                    {
-                        gzseek(f, offset, SEEK_SET);
-                    }
-                poptype temp(cdata...);
-                gzread(f, reinterpret_cast<char *>(&temp.generation),
-                       sizeof(decltype(temp.generation)));
-                KTfwd::gzdeserialize s;
-                s(temp, f, mreader, dipreader);
-                gzclose(f);
-                return temp;
-            };
-        };
+        // template <typename poptype> struct gzdeserialize_details
+        // {
+        //     template <typename mreader_t, typename dipreader_t,
+        //               typename... constructor_data>
+        //     inline poptype
+        //     operator()(const mreader_t &mreader, const dipreader_t &dipreader,
+        //                const char *filename, std::size_t offset,
+        //                constructor_data... cdata) const
+        //     {
+        //         gzFile f = gzopen(filename, "rb");
+        //         if (offset)
+        //             {
+        //                 gzseek(f, offset, SEEK_SET);
+        //             }
+        //         poptype temp(cdata...);
+        //         gzread(f, reinterpret_cast<char *>(&temp.generation),
+        //                sizeof(decltype(temp.generation)));
+        //         fwdpp::gzdeserialize s;
+        //         s(temp, f, mreader, dipreader);
+        //         gzclose(f);
+        //         return temp;
+        //     };
+        // };
     }
 }
 #endif

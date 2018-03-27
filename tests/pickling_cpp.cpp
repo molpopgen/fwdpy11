@@ -23,7 +23,7 @@ namespace py = pybind11;
 
 //Example of pickling a specific C++ type
 py::bytes
-pickle_mutation(const KTfwd::popgenmut& p)
+pickle_mutation(const fwdpp::popgenmut& p)
 {
     py::object m = py::cast<decltype(p)>(p);
     return py::module::import("pickle").attr("dumps")(m);

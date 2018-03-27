@@ -91,9 +91,8 @@ namespace fwdpy11
         inline single_locus_fitness_fxn
         callback() const final
         {
-            return std::bind(fitness_model(), std::placeholders::_1,
-                             std::placeholders::_2, std::placeholders::_3,
-                             scaling);
+            return std::bind(fitness_model(scaling), std::placeholders::_1,
+                             std::placeholders::_2, std::placeholders::_3);
         }
 
         SINGLE_LOCUS_FITNESS_CLONE_SHARED(
@@ -106,9 +105,9 @@ namespace fwdpy11
     };
 
     using single_locus_mult_wrapper
-        = fwdpp_single_locus_fitness_wrapper<KTfwd::multiplicative_diploid>;
+        = fwdpp_single_locus_fitness_wrapper<fwdpp::multiplicative_diploid>;
     using single_locus_additive_wrapper
-        = fwdpp_single_locus_fitness_wrapper<KTfwd::additive_diploid>;
+        = fwdpp_single_locus_fitness_wrapper<fwdpp::additive_diploid>;
 
 #define FWDPY11_SINGLE_LOCUS_FITNESS()                                        \
     pybind11::object FWDPY11_SINGLE_LOCUS_FITNESS_BASE_IMPORT__               \
