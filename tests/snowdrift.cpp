@@ -69,7 +69,7 @@ struct snowdrift_diploid
         // in fwdpy11's machinery for evolving populations.
         // This test is only here as this is part of unit
         // testing suite.
-        auto g = fwdpp::additive_diploid(0.0)(dip, gametes, mutations);
+        auto g = fwdpp::additive_diploid(2.0)(dip, gametes, mutations);
         if (zself != g)
             {
                 throw std::runtime_error("snowdrift not working: "
