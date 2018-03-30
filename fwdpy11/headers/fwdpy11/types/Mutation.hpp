@@ -65,7 +65,7 @@ namespace fwdpy11
         */
         Mutation(const double &pos_, const double &s_, const double &h_,
                  const unsigned &g_, const std::uint16_t x_ = 0) noexcept
-            : mutation_base(pos_, (s_ == 0.) ? true : false, x), g(g_), s(s_),
+            : mutation_base(pos_, (s_ == 0.) ? true : false, x_), g(g_), s(s_),
               h(h_), esizes{}, heffects{}
         {
         }
@@ -97,18 +97,18 @@ namespace fwdpy11
         Mutation(constructor_tuple t) noexcept
             : mutation_base(std::get<0>(t),
                             (std::get<1>(t) == 0.) ? true : false,
-                            std::get<6>(t)),
-              g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t)),
-              esizes(std::get<4>(t)), heffects(std::get<5>(t))
+                            std::get<4>(t)),
+              g(std::get<3>(t)), s(std::get<1>(t)),
+              h(std::get<2>(t)), esizes{}, heffects{}
         {
         }
 
         Mutation(constructor_tuple_variable_effects t) noexcept
             : mutation_base(std::get<0>(t),
                             (std::get<1>(t) == 0.) ? true : false,
-                            std::get<4>(t)),
-              g(std::get<3>(t)), s(std::get<1>(t)),
-              h(std::get<2>(t)), esizes{}, heffects{}
+                            std::get<6>(t)),
+              g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t)),
+              esizes(std::get<4>(t)), heffects(std::get<5>(t))
         {
         }
 
@@ -130,13 +130,13 @@ namespace fwdpp
 {
     namespace io
     {
-        template <> struct serialize_mutation<Mutation>
+        template <> struct serialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_writer writer;
-            serialize_mutation<Mutation>() : writer{} {}
+            serialize_mutation<fwdpy11::Mutation>() : writer{} {}
             template <typename streamtype>
             inline void
-            operator()(streamtype &buffer, const Mutation &m) const
+            operator()(streamtype &buffer, const fwdpy11::Mutation &m) const
             {
                 writer(buffer, &m.g);
                 writer(buffer, &m.pos);
@@ -157,17 +157,17 @@ namespace fwdpp
             }
         };
 
-        template <> struct deserialize_mutation<Mutation>
+        template <> struct deserialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_reader reader;
-            deserialize_mutation<Mutation>() : reader{} {}
+            deserialize_mutation<fwdpy11::Mutation>() : reader{} {}
             template <typename streamtype>
-            inline Mutation
+            inline fwdpy11::Mutation
             operator()(streamtype &buffer) const
             {
                 uint_t g;
                 double pos, s, h;
-                decltype(Mutation::xtra) xtra;
+                decltype(fwdpy11::Mutation::xtra) xtra;
                 io::scalar_reader reader;
                 reader(buffer, &g);
                 reader(buffer, &pos);
@@ -188,8 +188,8 @@ namespace fwdpp
                         hs.resize(ns);
                         reader(buffer, hs.data(), nh);
                     }
-                return Mutation(pos, s, h, g, std::move(ss), std::move(hs),
-                                xtra);
+                return fwdpy11::Mutation(pos, s, h, g, std::move(ss),
+                                         std::move(hs), xtra);
             }
         };
     }
