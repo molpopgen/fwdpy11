@@ -154,6 +154,18 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::diploid_t::label,
                       "Index of the diploid in its deme")
+        .def_readonly("deme", &fwdpy11::diploid_t::deme,
+                R"delim(
+                Deme label for individual.
+
+                .. versionadded:: 0.1.5
+                )delim")
+        .def_readonly("sex", &fwdpy11::diploid_t::sex,
+                R"delim(
+                Sex label for individual.
+
+                .. versionadded:: 0.1.5
+                )delim")
         .def_readonly("parental_data", &fwdpy11::diploid_t::parental_data,
                       R"delim(
 				Python object representing information about parents.

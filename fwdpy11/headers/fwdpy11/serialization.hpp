@@ -32,7 +32,7 @@ namespace fwdpy11
         inline constexpr int
         magic()
         {
-            return 1;
+            return 2;
         }
 
         template <typename poptype>
@@ -41,11 +41,11 @@ namespace fwdpy11
         {
             std::ostringstream buffer;
             buffer << "fp11";
-			auto m = magic();
-			buffer.write(reinterpret_cast<char*>(&m),sizeof(decltype(m)));
+            auto m = magic();
+            buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
-			fwdpp::io::serialize_population(buffer, *pop);
+            fwdpp::io::serialize_population(buffer, *pop);
             return buffer.str();
         }
 
@@ -73,6 +73,14 @@ namespace fwdpy11
                         buffer.read(reinterpret_cast<char *>(&version),
                                     sizeof(int));
                     }
+                if (version == 1)
+                    {
+                        throw std::runtime_error("File format "
+                                                 "incompatibility: this file "
+                                                 "format version "
+                                                 "was last supported in "
+                                                 "fwdpy11 0.1.4");
+                    }
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
                 fwdpp::io::deserialize_population(buffer, pop);
@@ -80,11 +88,11 @@ namespace fwdpy11
             }
         };
 
-        // template <typename poptype, typename mwriter_t, typename dipwriter_t>
-        // inline int
-        // gzserialize_details(const poptype &pop, const mwriter_t &mwriter,
-        //                     const dipwriter_t &dipwriter, const char *filename,
-        //                     bool append)
+        // template <typename poptype, typename mwriter_t, typename
+        // dipwriter_t> inline int gzserialize_details(const poptype &pop,
+        // const mwriter_t &mwriter,
+        //                     const dipwriter_t &dipwriter, const char
+        //                     *filename, bool append)
         // {
         //     gzFile f;
         //     if (append)
@@ -96,7 +104,8 @@ namespace fwdpy11
         //             f = gzopen(filename, "wb");
         //         }
         //     auto rv
-        //         = gzwrite(f, reinterpret_cast<const char *>(&pop.generation),
+        //         = gzwrite(f, reinterpret_cast<const char
+        //         *>(&pop.generation),
         //                   sizeof(decltype(pop.generation)));
         //     fwdpp::gzserialize s;
         //     rv += s(f, pop, mwriter, dipwriter);
@@ -109,7 +118,8 @@ namespace fwdpy11
         //     template <typename mreader_t, typename dipreader_t,
         //               typename... constructor_data>
         //     inline poptype
-        //     operator()(const mreader_t &mreader, const dipreader_t &dipreader,
+        //     operator()(const mreader_t &mreader, const dipreader_t
+        //     &dipreader,
         //                const char *filename, std::size_t offset,
         //                constructor_data... cdata) const
         //     {

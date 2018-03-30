@@ -113,7 +113,9 @@ contains the following read-only properties:
     "g", "Genetic value."
     "e", "Random component of trait value."
     "label", "The index of this diploid in the population."
-    "parental_data", "A Python object with information about parents."
+    "deme", "The deme index of this diploid. New in 0.1.5."
+    "sex", "The sex index of this diploid. New in 0.1.5."
+    "parental_data", "A Python object with information about parents. New in 0.1.4."
 
 The information stored in `parental_data` is simulation-dependent.  For models with no population structure, it will
 typically be a Python tuple containing the `label` value for each parent.  See :ref:`parentage` for an example.
