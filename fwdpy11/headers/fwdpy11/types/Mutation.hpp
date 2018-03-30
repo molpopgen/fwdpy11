@@ -23,6 +23,14 @@
  * This file started off via a copy
  * of fwdpp's popgenmut.hpp
  * by Kevin Thornton.
+ *
+ * This file defines the minimal C++ API
+ * for the type.
+ *
+ * To serialize instaces of this type 
+ * using fwdpp's machinery:
+ *
+ * #include <fwdpy11/serialization/Mutation.hpp>
  */
 
 #include <tuple>
@@ -30,8 +38,6 @@
 #include <vector>
 #include <algorithm>
 #include <fwdpp/forward_types.hpp>
-#include <fwdpp/io/mutation.hpp>
-#include <fwdpp/io/scalar_serialization.hpp>
 
 namespace fwdpy11
 {
@@ -124,74 +130,5 @@ namespace fwdpy11
     };
 }
 
-// Make Mutation compatible with fwdpp's
-// serialization API:
-namespace fwdpp
-{
-    namespace io
-    {
-        template <> struct serialize_mutation<fwdpy11::Mutation>
-        {
-            io::scalar_writer writer;
-            serialize_mutation<fwdpy11::Mutation>() : writer{} {}
-            template <typename streamtype>
-            inline void
-            operator()(streamtype &buffer, const fwdpy11::Mutation &m) const
-            {
-                writer(buffer, &m.g);
-                writer(buffer, &m.pos);
-                writer(buffer, &m.s);
-                writer(buffer, &m.h);
-                writer(buffer, &m.xtra);
-                std::size_t ns = m.esizes.size(), nh = m.heffects.size();
-                writer(buffer, &ns);
-                writer(buffer, &nh);
-                if (ns)
-                    {
-                        writer(buffer, m.esizes.data(), ns);
-                    }
-                if (nh)
-                    {
-                        writer(buffer, m.heffects.data(), nh);
-                    }
-            }
-        };
-
-        template <> struct deserialize_mutation<fwdpy11::Mutation>
-        {
-            io::scalar_reader reader;
-            deserialize_mutation<fwdpy11::Mutation>() : reader{} {}
-            template <typename streamtype>
-            inline fwdpy11::Mutation
-            operator()(streamtype &buffer) const
-            {
-                uint_t g;
-                double pos, s, h;
-                decltype(fwdpy11::Mutation::xtra) xtra;
-                io::scalar_reader reader;
-                reader(buffer, &g);
-                reader(buffer, &pos);
-                reader(buffer, &s);
-                reader(buffer, &h);
-                reader(buffer, &xtra);
-                std::size_t ns, nh;
-                reader(buffer, &ns);
-                reader(buffer, &nh);
-                std::vector<double> ss, hs;
-                if (ns)
-                    {
-                        ss.resize(ns);
-                        reader(buffer, ss.data(), ns);
-                    }
-                if (nh)
-                    {
-                        hs.resize(ns);
-                        reader(buffer, hs.data(), nh);
-                    }
-                return fwdpy11::Mutation(pos, s, h, g, std::move(ss),
-                                         std::move(hs), xtra);
-            }
-        };
-    }
-}
 #endif
+
