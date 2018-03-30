@@ -35,38 +35,36 @@ template <typename S> struct make_sh_model_fixed_dom
     operator()(const double h, const fwdpp::uint_t scaling,
                const double param) const
     {
+        S S_(param);
+        auto h_ = fwdpp::extensions::constant(h);
         if (scaling == 1)
             {
-                return fwdpp::extensions::shmodel(
-                    std::bind(S(param), std::placeholders::_1),
-                    std::bind(fwdpp::extensions::constant(h),
-                              std::placeholders::_1));
+                return fwdpp::extensions::shmodel{ std::move(S_),
+                                                   std::move(h_) };
             }
-        auto scaling_fxn = [scaling, param](const gsl_rng *r) {
-            return S(param)(r) / static_cast<double>(scaling);
+        auto bound_S = [scaling, S_](const gsl_rng *r) {
+            return S_(r) / static_cast<double>(scaling);
         };
-        return fwdpp::extensions::shmodel(
-            std::move(scaling_fxn),
-            std::bind(fwdpp::extensions::constant(h), std::placeholders::_1));
+        return fwdpp::extensions::shmodel{ std::move(bound_S),
+                                           std::move(h_) };
     }
 
     fwdpp::extensions::shmodel
     operator()(const double h, const fwdpp::uint_t scaling,
                const double param1, const double param2) const
     {
+        S S_(param1, param2);
+        auto h_ = fwdpp::extensions::constant(h);
         if (scaling == 1)
             {
-                return fwdpp::extensions::shmodel(
-                    std::bind(S(param1, param2), std::placeholders::_1),
-                    std::bind(fwdpp::extensions::constant(h),
-                              std::placeholders::_1));
+                return fwdpp::extensions::shmodel{ std::move(S_),
+                                                   std::move(h_) };
             }
-        auto scaling_fxn = [scaling, param1, param2](const gsl_rng *r) {
-            return S(param1, param2)(r) / static_cast<double>(scaling);
+        auto bound_S = [scaling, S_](const gsl_rng *r) {
+            return S_(r) / static_cast<double>(scaling);
         };
-        return fwdpp::extensions::shmodel(
-            std::move(scaling_fxn),
-            std::bind(fwdpp::extensions::constant(h), std::placeholders::_1));
+        return fwdpp::extensions::shmodel{ std::move(bound_S),
+                                           std::move(h_) };
     }
 };
 
