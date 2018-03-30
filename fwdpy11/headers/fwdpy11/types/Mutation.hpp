@@ -10,6 +10,7 @@
 #include <tuple>
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/io/mutation.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
@@ -21,7 +22,8 @@ namespace fwdpy11
     {
         //! The generation when the mutation arose
         fwdpp::uint_t g;
-        //! Selection coefficient
+        //! Effect size.  We call it 's' so
+        // that we can use fwdpp's genetic value toolkit
         double s;
         //! Dominance of the mutation
         double h;
@@ -31,35 +33,51 @@ namespace fwdpy11
             = std::tuple<double, double, double, unsigned, std::uint16_t>;
 
         /*!
-          \brief Constructor
-          \param __pos Mutation position
-          \param __s Selection coefficient
-          \param __h Dominance coefficient
-          \param __g Generation when mutation arose
-          \param __x Value to assign to mutation_base::xtra
+          Constructor for constant effect size sims.
+
+          \param pos_ Mutation position
+          \param s_ Selection coefficient
+          \param h_ Dominance coefficient
+          \param g_ Generation when mutation arose
+          \param x_ Value to assign to mutation_base::xtra
         */
-        Mutation(const double &__pos, const double &__s, const double &__h,
-                 const unsigned &__g, const std::uint16_t x = 0) noexcept
-            : mutation_base(__pos, (__s == 0.) ? true : false, x), g(__g),
-              s(__s), h(__h)
+        Mutation(const double &pos_, const double &s_, const double &h_,
+                 const unsigned &g_, const std::uint16_t x_ = 0) noexcept
+            : mutation_base(pos_, (s_ == 0.) ? true : false, x), g(g_), s(s_),
+              h(h_), esizes{}, heffects{}
         {
         }
 
+        /*!
+          Constructor for constant effect size + variable effect size sims.
+
+          \param pos_ Mutation position
+          \param s_ Selection coefficient
+          \param h_ Dominance coefficient
+          \param g_ Generation when mutation arose
+          \param x_ Value to assign to mutation_base::xtra
+          \param esizes_ Vector of effect sizes
+          \param heffects_ Vector of heterozygous effects
+        */
         template <typename vectype>
-        Mutation(const double &__pos, const double &__s, const double &__h,
-                 const unsigned &__g, vectype &&esizes_, vectype &&heffects_,
-                 const std::uint16_t x = 0) noexcept
-            : fwdpp::mutation_base(__pos, (__s == 0.) ? true : false, x),
-              g(__g), s(__s), h(__h), esizes(std::forward<vectype>(esizes_)),
+        Mutation(const double &pos_, const double &s_, const double &h_,
+                 const unsigned &g_, vectype &&esizes_, vectype &&heffects_,
+                 const std::uint16_t x_ = 0) noexcept
+            : fwdpp::mutation_base(pos_, true, x_), g(g_), s(s_), h(h_),
+              esizes(std::forward<vectype>(esizes_)),
               heffects(std::forward<vectype>(heffects_))
         {
+            this->neutral = ((s == 0.0)
+                             || std::all_of(std::begin(this->esizes),
+                                            std::end(this->esizes), 0.0));
         }
 
         Mutation(constructor_tuple t) noexcept
             : mutation_base(std::get<0>(t),
                             (std::get<1>(t) == 0.) ? true : false,
                             std::get<4>(t)),
-              g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t))
+              g(std::get<3>(t)), s(std::get<1>(t)),
+              h(std::get<2>(t)), esizes{}, heffects{}
         {
         }
 
