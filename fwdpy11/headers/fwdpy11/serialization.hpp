@@ -32,7 +32,7 @@ namespace fwdpy11
         inline constexpr int
         magic()
         {
-            return 1;
+            return 2;
         }
 
         template <typename poptype>
