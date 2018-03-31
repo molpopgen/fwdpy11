@@ -47,7 +47,7 @@ struct snowdrift_diploid
 {
     using result_type = double;
     inline result_type
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations,
                const std::vector<double> &phenotypes, const double b1,
                const double b2, const double c1, const double c2) const
@@ -59,7 +59,7 @@ struct snowdrift_diploid
     {
         auto N = phenotypes.size();
         // A diploid tracks its index via
-        // fwdpy11::diploid_t::label, which
+        // fwdpy11::Diploid::label, which
         // is std::size_t.
         auto i = dip.label;
         double zself = phenotypes[i];
@@ -141,7 +141,7 @@ struct snowdrift : public fwdpy11::single_locus_fitness
         for (auto &&dip : pop.diploids)
             {
                 // A diploid tracks its index via
-                // fwdpy11::diploid_t::label
+                // fwdpy11::Diploid::label
                 phenotypes[dip.label] = fwdpp::additive_diploid(2.0)(
                     dip, pop.gametes, pop.mutations);
             }

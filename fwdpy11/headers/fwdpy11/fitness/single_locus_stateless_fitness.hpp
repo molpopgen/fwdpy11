@@ -52,7 +52,7 @@ namespace fwdpy11
 #define STATELESS_SLOCUS_FUNCTION(FUNCTION)                                   \
     struct FUNCTION                                                           \
     {                                                                         \
-        inline double operator()(const fwdpy11::diploid_t& dip,               \
+        inline double operator()(const fwdpy11::Diploid& dip,               \
                                  const fwdpy11::gcont_t& gametes,             \
                                  const fwdpy11::mcont_t& mutations) const
 

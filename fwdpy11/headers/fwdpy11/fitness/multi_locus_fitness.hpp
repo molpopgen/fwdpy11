@@ -86,7 +86,7 @@ namespace fwdpy11
         }
 
         inline pybind11::array_t<double>
-        operator()(const fwdpy11::multilocus_diploid_t& dip,
+        operator()(const fwdpy11::multilocus_Diploid& dip,
                    const fwdpy11::gcont_t& gametes,
                    const fwdpy11::mcont_t& mutations) const
         {
@@ -96,7 +96,7 @@ namespace fwdpy11
             std::transform(dip.cbegin(), dip.cend(), callbacks.cbegin(),
                            genetic_values_np.mutable_data(),
                            [&gametes, &mutations](
-                               const fwdpy11::diploid_t& dip_locus_i,
+                               const fwdpy11::Diploid& dip_locus_i,
                                const fwdpy11::single_locus_fitness_fxn& wf) {
                                return wf(dip_locus_i, gametes, mutations);
                            });

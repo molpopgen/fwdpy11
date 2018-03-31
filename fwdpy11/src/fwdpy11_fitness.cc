@@ -50,7 +50,7 @@ PYBIND11_MODULE(fitness, m)
             )delim")
         .def("__call__",
              [](const std::shared_ptr<fwdpy11::single_locus_fitness>& aw,
-                const fwdpy11::diploid_t& dip,
+                const fwdpy11::Diploid& dip,
                 const fwdpy11::singlepop_t& pop) {
                  return aw->callback()(dip, pop.gametes, pop.mutations);
              });

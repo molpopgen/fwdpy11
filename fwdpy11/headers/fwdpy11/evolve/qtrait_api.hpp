@@ -27,9 +27,9 @@ namespace fwdpy11
     using trait_to_fitness_function
         = std::function<double(const double, const double)>;
     using single_locus_noise_function = std::function<double(
-        const fwdpy11::diploid_t &, const fwdpy11::diploid_t &)>;
+        const fwdpy11::Diploid &, const fwdpy11::Diploid &)>;
     using multilocus_noise_function = std::function<double(
-        const fwdpy11::multilocus_diploid_t &, const fwdpy11::multilocus_diploid_t &)>;
+        const fwdpy11::multilocus_Diploid &, const fwdpy11::multilocus_Diploid &)>;
     using multilocus_aggregator_function
         = std::function<double(const pybind11::array_t<double>)>;
 }

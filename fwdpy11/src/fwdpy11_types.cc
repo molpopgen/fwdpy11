@@ -35,7 +35,7 @@ using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
 //PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::generalmut_vec>);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
@@ -137,36 +137,36 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::diploid_t>(
+    py::class_<fwdpy11::Diploid>(
         m, "SingleLocusDiploid",
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_static("create", &fwdpy11::diploid_t::create)
-        .def_readonly("first", &fwdpy11::diploid_t::first,
+        .def_static("create", &fwdpy11::Diploid::create)
+        .def_readonly("first", &fwdpy11::Diploid::first,
                       "Key to first gamete. (read-only)")
-        .def_readonly("second", &fwdpy11::diploid_t::second,
+        .def_readonly("second", &fwdpy11::Diploid::second,
                       "Key to second gamete. (read-only)")
-        .def_readonly("w", &fwdpy11::diploid_t::w, "Fitness. (read-only)")
-        .def_readonly("g", &fwdpy11::diploid_t::g,
+        .def_readonly("w", &fwdpy11::Diploid::w, "Fitness. (read-only)")
+        .def_readonly("g", &fwdpy11::Diploid::g,
                       "Genetic value (read-only).")
-        .def_readonly("e", &fwdpy11::diploid_t::e,
+        .def_readonly("e", &fwdpy11::Diploid::e,
                       "Random/environmental effects (read-only).")
-        .def_readonly("label", &fwdpy11::diploid_t::label,
+        .def_readonly("label", &fwdpy11::Diploid::label,
                       "Index of the diploid in its deme")
-        .def_readonly("deme", &fwdpy11::diploid_t::deme,
+        .def_readonly("deme", &fwdpy11::Diploid::deme,
                 R"delim(
                 Deme label for individual.
 
                 .. versionadded:: 0.1.5
                 )delim")
-        .def_readonly("sex", &fwdpy11::diploid_t::sex,
+        .def_readonly("sex", &fwdpy11::Diploid::sex,
                 R"delim(
                 Sex label for individual.
 
                 .. versionadded:: 0.1.5
                 )delim")
-        .def_readonly("parental_data", &fwdpy11::diploid_t::parental_data,
+        .def_readonly("parental_data", &fwdpy11::Diploid::parental_data,
                       R"delim(
 				Python object representing information about parents.
 				The details are simulation-dependent.
@@ -174,17 +174,17 @@ PYBIND11_MODULE(fwdpy11_types, m)
 				.. versionadded:: 0.1.4
 				)delim")
         .def(py::pickle(
-            [](const fwdpy11::diploid_t& d) {
+            [](const fwdpy11::Diploid& d) {
                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
                                       d.label, d.parental_data);
             },
             [](py::tuple t) {
-                std::unique_ptr<fwdpy11::diploid_t> d(new fwdpy11::diploid_t(
+                std::unique_ptr<fwdpy11::Diploid> d(new fwdpy11::Diploid(
                     t[0].cast<std::size_t>(), t[1].cast<std::size_t>()));
                 d->w = t[2].cast<double>();
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
-                d->label = t[5].cast<decltype(fwdpy11::diploid_t::label)>();
+                d->label = t[5].cast<decltype(fwdpy11::Diploid::label)>();
                 // Unpickle the Python object.
                 // The if statement is for backwards compatibility.
                 if (t.size() == 7)
@@ -193,8 +193,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     }
                 return d;
             }))
-        .def("__eq__", [](const fwdpy11::diploid_t& a,
-                          const fwdpy11::diploid_t& b) { return a == b; });
+        .def("__eq__", [](const fwdpy11::Diploid& a,
+                          const fwdpy11::Diploid& b) { return a == b; });
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
@@ -392,7 +392,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
         .def_static(
             "create",
-            [](std::vector<fwdpy11::multilocus_diploid_t>& diploids,
+            [](std::vector<fwdpy11::multilocus_Diploid>& diploids,
                fwdpy11::gcont_t& gametes, fwdpy11::mcont_t& mutations,
                py::tuple args) {
                 if (args.size() == 0)

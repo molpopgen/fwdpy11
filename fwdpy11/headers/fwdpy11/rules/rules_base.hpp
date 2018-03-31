@@ -58,7 +58,7 @@ namespace fwdpy11
 
         //! \brief Update some property of the offspring based on properties of
         //! the parents
-        virtual void update(const GSLrng_t &rng, diploid_t &dip,
+        virtual void update(const GSLrng_t &rng, Diploid &dip,
                             const singlepop_t &pop, const std::size_t p1,
                             const std::size_t p2)
             = 0;

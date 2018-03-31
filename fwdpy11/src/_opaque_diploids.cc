@@ -34,8 +34,8 @@ struct diploid_gametes
     std::size_t locus, first, second;
 };
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::diploid_t>);
-PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::diploid_t>>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::Diploid>>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_traits>);
 PYBIND11_MAKE_OPAQUE(std::vector<diploid_gametes>);
 
@@ -164,7 +164,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
 			 .. versionadded:: 0.1.2
 			 )delim")
         .def(py::pickle(
-            [](const std::vector<fwdpy11::diploid_t>& v) -> py::list {
+            [](const std::vector<fwdpy11::Diploid>& v) -> py::list {
                 py::list rv;
                 for (auto&& vi : v)
                     {
@@ -173,10 +173,10 @@ PYBIND11_MODULE(_opaque_diploids, m)
                 return rv;
             },
             [](py::list l) {
-                std::vector<fwdpy11::diploid_t> rv;
+                std::vector<fwdpy11::Diploid> rv;
                 for (auto&& i : l)
                     {
-                        rv.push_back(i.cast<fwdpy11::diploid_t>());
+                        rv.push_back(i.cast<fwdpy11::Diploid>());
                     }
                 return rv;
             }));
