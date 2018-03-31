@@ -4,7 +4,7 @@
 #include <vector>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
-#include "diploid.hpp"
+#include "Diploid.hpp"
 
 namespace fwdpy11
 {

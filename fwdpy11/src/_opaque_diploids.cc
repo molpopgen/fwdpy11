@@ -20,7 +20,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
-#include <fwdpy11/types/diploid.hpp>
+#include <fwdpy11/types/Diploid.hpp>
 
 namespace py = pybind11;
 
