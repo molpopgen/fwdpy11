@@ -37,6 +37,7 @@
 #include <vector>
 #include <stdexcept>
 #include <fwdpy11/serialization.hpp>
+#include <fwdpy11/serialization/Diploid.hpp>
 
 namespace fwdpy11
 {
