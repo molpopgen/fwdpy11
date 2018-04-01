@@ -28,7 +28,7 @@
 #include <pybind11/pybind11.h>
 //#include <fwdpy11/opaque/opaque_types.hpp>
 #include "types/typedefs.hpp"
-#include "types/diploid.hpp"
+#include "types/Diploid.hpp"
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 //#include <fwdpp/sugar/generalmut.hpp>
@@ -37,6 +37,7 @@
 #include <vector>
 #include <stdexcept>
 #include <fwdpy11/serialization.hpp>
+#include <fwdpy11/serialization/Diploid.hpp>
 
 namespace fwdpy11
 {
@@ -108,14 +109,14 @@ namespace fwdpy11
     //     }
     // };
 
-    struct singlepop_t : public fwdpp::slocuspop<fwdpp::popgenmut, diploid_t>
+    struct singlepop_t : public fwdpp::slocuspop<fwdpp::popgenmut, Diploid>
     /*!
       \brief Single-deme object where mutations have single effect size and
       dominance.
 
       This is the C++ representation of a single-deme simulation where a
       fwdpp::popgenmut
-      is the mutation type, and a custom diploid (fwdpy11::diploid_t) is the
+      is the mutation type, and a custom diploid (fwdpy11::Diploid) is the
       diploid type.
 
       This type inherits from fwdpp's type fwdpp::singlepop, and the main
@@ -148,7 +149,7 @@ namespace fwdpy11
     */
     {
         //! Typedef for base type
-        using base = fwdpp::slocuspop<fwdpp::popgenmut, diploid_t>;
+        using base = fwdpp::slocuspop<fwdpp::popgenmut, Diploid>;
         //! The current generation.  Start counting from zero
         unsigned generation;
         //! A Python object that sims may (optionally) use
@@ -340,14 +341,14 @@ namespace fwdpy11
     // };
 
     // Types for multi-"locus" (multi-region) simulations
-    using multilocus_diploid_t = std::vector<diploid_t>;
+    using multilocus_Diploid = std::vector<Diploid>;
 
     // Have to use fwdpy11::diploid_t below, as GCC seems to get confused
     // otherwise...
     struct multilocus_t
-        : public fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::diploid_t>
+        : public fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::Diploid>
     {
-        using base = fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::diploid_t>;
+        using base = fwdpp::mlocuspop<fwdpp::popgenmut, fwdpy11::Diploid>;
         unsigned generation, nloci;
         pybind11::object popdata;
         //! A Python objeft that users may access during a simulation

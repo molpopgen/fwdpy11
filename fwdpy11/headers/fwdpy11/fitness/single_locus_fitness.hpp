@@ -29,7 +29,7 @@ namespace fwdpy11
 {
     template <typename... T>
     using single_locus_fitness_signature
-        = std::function<double(const fwdpy11::diploid_t &,
+        = std::function<double(const fwdpy11::Diploid &,
                                const fwdpy11::gcont_t &,
                                const fwdpy11::mcont_t &, T...)>;
 

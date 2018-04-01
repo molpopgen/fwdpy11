@@ -5,12 +5,10 @@
 #include <cstddef>
 #include <vector>
 #include <pybind11/pybind11.h>
-#include <fwdpp/io/scalar_serialization.hpp>
-#include <fwdpp/io/diploid.hpp>
 
 namespace fwdpy11
 {
-    struct diploid_t
+    struct Diploid
     /*!
       \brief Custom diploid type.
     */
@@ -39,34 +37,34 @@ namespace fwdpy11
         //! IDs of parents.  NB: this will be changed in future releases
         pybind11::object parental_data;
         //! Constructor
-        diploid_t() noexcept
+        Diploid() noexcept
             : first(first_type()), second(second_type()), label(0), deme(0),
               sex(-1), g(0.), e(0.), w(1.), parental_data(pybind11::none())
         {
         }
         //! Construct from two indexes to gametes
-        diploid_t(first_type g1, first_type g2) noexcept
+        Diploid(first_type g1, first_type g2) noexcept
             : first(g1), second(g2), label(0), deme(0), sex(-1), g(0.), e(0.),
               w(1.), parental_data(pybind11::none())
         {
         }
 
-        diploid_t(first_type g1, first_type g2, std::size_t label_,
+        Diploid(first_type g1, first_type g2, std::size_t label_,
                   double deme_, double sex_, double g_, double e_, double w_)
             : first(g1), second(g2), label(label_), deme(deme_), sex(sex_),
               g(g_), e(e_), w(w_), parental_data(pybind11::none())
         {
         }
 
-        static inline diploid_t
+        static inline Diploid
         create(first_type g1, first_type g2, std::size_t label_, double deme_,
                double sex_, double g_, double e_, double w_)
         {
-            return diploid_t(g1, g2, label_, deme_, sex_, g_, e_, w_);
+            return Diploid(g1, g2, label_, deme_, sex_, g_, e_, w_);
         }
 
         inline bool
-        operator==(const diploid_t& dip) const noexcept
+        operator==(const Diploid& dip) const noexcept
         //! Required for py::bind_vector
         {
             auto cpp_data_comparison
@@ -95,49 +93,9 @@ namespace fwdpy11
     };
 
     //! Typedef for container of diploids
-    using dipvector_t = std::vector<diploid_t>;
-}
-
-namespace fwdpp
-{
-    namespace io
-    {
-        template <> struct serialize_diploid<fwdpy11::diploid_t>
-        {
-            template <typename streamtype>
-            inline void
-            operator()(streamtype& buffer, const fwdpy11::diploid_t& dip) const
-            {
-                fwdpp::io::scalar_writer w;
-                w(buffer, &dip.first);
-                w(buffer, &dip.second);
-                w(buffer, &dip.g);
-                w(buffer, &dip.e);
-                w(buffer, &dip.w);
-                w(buffer, &dip.label);
-                w(buffer, &dip.deme);
-                w(buffer, &dip.sex);
-            }
-        };
-
-        template <> struct deserialize_diploid<fwdpy11::diploid_t>
-        {
-            template <typename streamtype>
-            inline void
-            operator()(streamtype& buffer, fwdpy11::diploid_t& dip) const
-            {
-                fwdpp::io::scalar_reader r;
-                r(buffer, &dip.first);
-                r(buffer, &dip.second);
-                r(buffer, &dip.g);
-                r(buffer, &dip.e);
-                r(buffer, &dip.w);
-                r(buffer, &dip.label);
-                r(buffer, &dip.deme);
-                r(buffer, &dip.sex);
-            }
-        };
-    }
+    using dipvector_t = std::vector<Diploid>;
 }
 
 #endif
+
+

@@ -14,7 +14,7 @@ struct additive_diploid_trait_fxn
     {
     }
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
@@ -29,7 +29,7 @@ struct multiplicative_diploid_trait_fxn
     {
     }
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
@@ -41,7 +41,7 @@ struct gbr_diploid_trait_fxn
 	gbr_diploid_trait_fxn(){}
 	gbr_diploid_trait_fxn(double){} //hack to make API happy
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
                const fwdpy11::mcont_t &mutations) const
     {
         auto sum1 = std::accumulate(
