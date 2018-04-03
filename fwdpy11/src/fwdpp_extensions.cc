@@ -166,7 +166,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                     {
                         auto start = std::get<0>(selected_mut_regions.at(i));
                         auto stop = std::get<1>(selected_mut_regions.at(i));
-                        auto label = std::get<2>(selected_mut_regions.at(i));
+                        auto label = std::get<3>(selected_mut_regions.at(i));
                         auto sh = dist_effect_sizes.at(i);
                         weights.push_back(
                             std::get<2>(selected_mut_regions.at(i)));
