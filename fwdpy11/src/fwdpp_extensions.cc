@@ -134,7 +134,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
         fwdpp::extensions::discrete_mut_model<std::vector<fwdpp::popgenmut>>>(
         m, "MutationRegions")
         .def(py::init(
-            [](const fwdpy11::GSLrng_t &r, const fwdpy11::singlepop_t &pop,
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::singlepop_t &pop,
                const std::vector<mutregion_tuple> &neutral_mut_regions,
                const std::vector<mutregion_tuple> &selected_mut_regions,
                std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
@@ -192,7 +192,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                                                    std::move(weights));
             }))
         .def(py::init(
-            [](const fwdpy11::GSLrng_t &r, const fwdpy11::multilocus_t &pop,
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::multilocus_t &pop,
                const std::vector<mutregion_tuple> &neutral_mut_regions,
                const std::vector<mutregion_tuple> &selected_mut_regions,
                std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
