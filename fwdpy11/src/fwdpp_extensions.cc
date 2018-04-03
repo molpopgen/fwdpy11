@@ -185,6 +185,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                                       [&r, sh]() { return sh.h(r.get()); },
                                       label);
                               };
+                        functions.push_back(std::move(mf));
                     }
                 return fwdpp::extensions::discrete_mut_model<
                     fwdpy11::singlepop_t::mcont_t>(std::move(functions),
@@ -242,6 +243,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                                       [&r, sh]() { return sh.h(r.get()); },
                                       label);
                               };
+                        functions.push_back(std::move(mf));
                     }
                 return fwdpp::extensions::discrete_mut_model<
                     fwdpy11::multilocus_t::mcont_t>(std::move(functions),
