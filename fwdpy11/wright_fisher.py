@@ -41,7 +41,7 @@ def evolve(rng, pop, params, recorder=None):
         params.validate()
 
     from .internal import makeMutationRegions, makeRecombinationRegions
-    mm = makeMutationRegions(params.nregions, params.sregions)
+    mm = makeMutationRegions(rng, pop, params.nregions, params.sregions)
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     if recorder is None:

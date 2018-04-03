@@ -126,7 +126,7 @@ def _evolve_slocus(rng, pop, params, recorder=None):
         params.validate()
     from .internal import makeMutationRegions, makeRecombinationRegions
     from functools import partial
-    mm = makeMutationRegions(params.nregions, params.sregions)
+    mm = makeMutationRegions(rng, pop, params.nregions, params.sregions)
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     noise = None
@@ -170,8 +170,8 @@ def _evolve_mlocus(rng, pop, params, recorder=None):
         noise = GaussianNoise(rng, 0.)
     else:
         noise = params.noise
-    mm = [makeMutationRegions(i, j) for i, j in zip(params.nregions,
-                                                    params.sregions)]
+    mm = [makeMutationRegions(rng, pop, i, j) for i, j in zip(params.nregions,
+                                                              params.sregions)]
     rm = [makeRecombinationRegions(rng, i, j) for i, j in zip(
         params.recrates, params.recregions)]
     updater = None
@@ -212,7 +212,7 @@ def evolve(rng, pop, params, recorder=None):
     simulating quantitative traits.
 
     :param rng: An instance of :class:`fwdpy11.GSLrng`.
-    :param pop: An instance of :class:`fwdpy11.Spop` or :class:`fwdpy11.MlocusPop`.
+    :param pop: An instance of :class:`fwdpy11.SlocusPop` or :class:`fwdpy11.MlocusPop`.
     :param params: An instance of :class:`fwdpy11.model_params.SlocusParamsQ`
         or :class:`fwdpy11.model_params.MlocusParamsQ`.
     :param recorder: (None) A callable to record data from the population.
