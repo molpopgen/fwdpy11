@@ -92,7 +92,8 @@ evolve_singlepop_regions_cpp(
     const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model& mmodel,
+    const fwdpp::extensions::discrete_mut_model<fwdpy11::singlepop_t::mcont_t>&
+        mmodel,
     const fwdpp::extensions::discrete_rec_model& rmodel,
     fwdpy11::single_locus_fitness& fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
@@ -120,22 +121,21 @@ evolve_singlepop_regions_cpp(
         std::log(2 * pop.N)
         * (4. * double(pop.N) * (mu_neutral + mu_selected)
            + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
-    const auto mmodels = fwdpp::extensions::bind_dmm(
-        mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
-        mu_selected, &pop.generation);
+    const auto mmodels = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
+    const auto bound_rmodels = [&rng, &rmodel]() { return rmodel(rng.get()); };
     ++pop.generation;
     auto rules = fwdpy11::wf_rules();
     if (remove_selected_fixations)
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
-                          mmodels, rmodel, fitness, recorder, selfing_rate,
-                          std::true_type(), true);
+                          mmodels, bound_rmodels, fitness, recorder,
+                          selfing_rate, std::true_type(), true);
         }
     else
         {
             evolve_common(rng, pop, rules, popsizes, mu_neutral, mu_selected,
-                          mmodels, rmodel, fitness, recorder, selfing_rate,
-                          fwdpp::remove_neutral(), false);
+                          mmodels, bound_rmodels, fitness, recorder,
+                          selfing_rate, fwdpp::remove_neutral(), false);
         }
     --pop.generation;
 }

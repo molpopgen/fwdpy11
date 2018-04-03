@@ -47,7 +47,8 @@ evolve_singlepop_regions_qtrait_cpp(
     const fwdpy11::GSLrng_t &rng, fwdpy11::singlepop_t &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model &mmodel,
+    const fwdpp::extensions::discrete_mut_model<fwdpy11::singlepop_t::mcont_t>
+        &mmodel,
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::single_locus_fitness &fitness,
     fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
@@ -94,9 +95,8 @@ evolve_singlepop_regions_qtrait_cpp(
         * (4. * double(pop.N) * (mu_neutral + mu_selected)
            + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
 
-    const auto mmodels = fwdpp::extensions::bind_dmm(
-        mmodel, pop.mutations, pop.mut_lookup, rng.get(), mu_neutral,
-        mu_selected, &pop.generation);
+    const auto mmodels = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
+    const auto bound_rmodels = [&rng, &rmodel]() { return rmodel(rng.get()); };
     ++pop.generation;
     auto rules = fwdpy11::qtrait::qtrait_model_rules(trait_to_fitness, noise);
     fitness.update(pop);
@@ -113,7 +113,7 @@ evolve_singlepop_regions_qtrait_cpp(
                 {
                     fwdpy11::evolve_generation(
                         rng, pop, N_next, mu_neutral + mu_selected, mmodels,
-                        rmodel,
+                        bound_rmodels,
                         std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1,
                                   &rules, std::placeholders::_1,
                                   std::placeholders::_2),
@@ -132,7 +132,7 @@ evolve_singlepop_regions_qtrait_cpp(
                 {
                     fwdpy11::evolve_generation(
                         rng, pop, N_next, mu_neutral + mu_selected, mmodels,
-                        rmodel,
+                        bound_rmodels,
                         std::bind(&fwdpy11::qtrait::qtrait_model_rules::pick1,
                                   &rules, std::placeholders::_1,
                                   std::placeholders::_2),
@@ -178,7 +178,9 @@ evolve_qtrait_mloc_regions_cpp(
     const std::vector<double> &neutral_mutation_rates,
     const std::vector<double> &selected_mutation_rates,
     const std::vector<double> &recrates,
-    const std::vector<fwdpp::extensions::discrete_mut_model> &mmodels,
+    const std::vector<
+        fwdpp::extensions::discrete_mut_model<fwdpy11::multilocus_t::mcont_t>>
+        &mmodels,
     const std::vector<fwdpp::extensions::discrete_rec_model> &rmodels,
     py::list interlocus_rec_wrappers,
     // const std::vector<std::function<unsigned(void)>> &interlocus_rec,
@@ -207,9 +209,13 @@ evolve_qtrait_mloc_regions_cpp(
     const auto generations = popsizes.size();
     if (!generations)
         throw std::runtime_error("empty list of population sizes");
-    auto bound_mmodels = fwdpp::extensions::bind_vec_dmm(
-        mmodels, pop.mutations, pop.mut_lookup, rng.get(),
-        neutral_mutation_rates, selected_mutation_rates, &pop.generation);
+    auto bound_mmodels = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
+    std::vector<std::function<std::vector<double>(void)>> bound_recmodels;
+    for (const auto &i : rmodels)
+        {
+            bound_recmodels.emplace_back(
+                [&i, &rng]() { return i(rng.get()); });
+        }
     std::vector<double> total_mut_rates(neutral_mutation_rates);
     std::transform(total_mut_rates.cbegin(), total_mut_rates.cend(),
                    selected_mutation_rates.cbegin(), total_mut_rates.begin(),
@@ -239,7 +245,7 @@ evolve_qtrait_mloc_regions_cpp(
                 {
                     fwdpy11::evolve_generation(
                         rng, pop, N_next, total_mut_rates, bound_mmodels,
-                        rmodels, interlocus_rec,
+                        bound_recmodels, interlocus_rec,
                         std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1,
                                   &rules, std::placeholders::_1,
                                   std::placeholders::_2),
@@ -258,7 +264,7 @@ evolve_qtrait_mloc_regions_cpp(
                 {
                     fwdpy11::evolve_generation(
                         rng, pop, N_next, total_mut_rates, bound_mmodels,
-                        rmodels, interlocus_rec,
+                        bound_recmodels, interlocus_rec,
                         std::bind(&fwdpy11::qtrait::qtrait_mloc_rules::pick1,
                                   &rules, std::placeholders::_1,
                                   std::placeholders::_2),
