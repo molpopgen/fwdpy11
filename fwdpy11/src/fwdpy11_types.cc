@@ -198,7 +198,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     // expose the base classes for population types
     py::class_<fwdpp_popgenmut_base>(m, "SlocusPopMutationBase");
-    py::class_<multilocus_popgenmut_base>(m, "MlocusMutationBase");
+    //py::class_<multilocus_popgenmut_base>(m, "MlocusMutationBase");
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
     py::class_<multilocus_sugar_base, multilocus_popgenmut_base>(m,
                                                                  "MlocusBase");
