@@ -28,13 +28,9 @@ using fwdpp_popgenmut_base = fwdpy11::singlepop_t::popbase_t;
 using singlepop_sugar_base = fwdpy11::singlepop_t::base;
 using multilocus_sugar_base = fwdpy11::multilocus_t::base;
 using multilocus_popgenmut_base = multilocus_sugar_base::popbase_t;
-//using singlepop_generalmut_vec_sugar_base = fwdpy11::singlepop_gm_vec_t::base;
-//using singlepop_generalmut_vec_base
-//    = singlepop_generalmut_vec_sugar_base::popbase_t;
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::mcont_t);
-//PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::generalmut_vec>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dipvector_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
@@ -202,11 +198,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
     py::class_<singlepop_sugar_base, fwdpp_popgenmut_base>(m, "SinglepopBase");
     py::class_<multilocus_sugar_base, multilocus_popgenmut_base>(m,
                                                                  "MlocusBase");
-
-    //py::class_<singlepop_generalmut_vec_base>(m, "SlocusPopGeneralMutVecBase");
-    //py::class_<singlepop_generalmut_vec_sugar_base,
-    //           singlepop_generalmut_vec_base>(
-    //    m, "SlocusPopGeneralMutVecSugarBase");
 
     // Expose the type based on fwdpp's "sugar"
     // layer
@@ -529,155 +520,4 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 .. versionadded:: 0.1.4
              )delim",
         py::arg("separate")=true,py::arg("remove_fixed")=true);
-
-    //py::class_<fwdpy11::singlepop_gm_vec_t,
-    //           singlepop_generalmut_vec_sugar_base>(m,
-    //                                                "SlocusPopGeneralMutVec")
-    //    .def(py::init<unsigned>(), py::arg("N"),
-    //         "Construct object with N diploids.")
-    //    .def(py::init<const fwdpy11::singlepop_gm_vec_t::dipvector_t&,
-    //                  const fwdpy11::singlepop_gm_vec_t::gcont_t&,
-    //                  const fwdpy11::singlepop_gm_vec_t::mcont_t&>(),
-    //         R"delim(
-    //         Construct with tuple of (diploids, gametes, mutations).
-    //         
-    //         .. versionadded:: 0.1.4
-    //         )delim")
-    //    .def(py::init<const fwdpy11::singlepop_gm_vec_t&>(),
-    //         R"delim(
-    //            Copy constructor.
-
-    //            .. versionadded:: 0.1.4
-    //            )delim")
-    //    .def_static(
-    //        "create",
-    //        [](fwdpy11::dipvector_t& diploids, fwdpy11::gcont_t& gametes,
-    //           std::vector<fwdpp::generalmut_vec>& mutations, py::tuple args) {
-    //            if (args.size() == 0)
-    //                {
-    //                    return fwdpy11::singlepop_gm_vec_t::create(
-    //                        diploids, gametes, mutations);
-    //                }
-    //            auto& fixations
-    //                = args[0].cast<std::vector<fwdpp::generalmut_vec>&>();
-    //            auto& fixation_times
-    //                = args[1].cast<std::vector<fwdpp::uint_t>&>();
-    //            auto g = args[2].cast<fwdpp::uint_t>();
-    //            return fwdpy11::singlepop_gm_vec_t::create_with_fixations(
-    //                diploids, gametes, mutations, fixations, fixation_times,
-    //                g);
-    //        })
-    //    .def("clear", &fwdpy11::singlepop_gm_vec_t::clear,
-    //         "Clears all population data.")
-    //    .def_readonly("generation", &fwdpy11::singlepop_gm_vec_t::generation,
-    //                  "The current generation.")
-    //    .def_readonly("N", &fwdpy11::singlepop_gm_vec_t::N,
-    //                  "Curent population size.")
-    //    .def_readonly("diploids", &fwdpy11::singlepop_gm_vec_t::diploids,
-    //                  DIPLOIDS_DOCSTRING)
-    //    .def_readonly("mutations", &fwdpy11::singlepop_gm_vec_t::mutations,
-    //                  "A list of "
-    //                  ":class:`fwdpy11.VecGeneralMutVec`.")
-    //    .def_readonly("gametes", &fwdpy11::singlepop_gm_vec_t::gametes,
-    //                  GAMETES_DOCSTRING)
-    //    .def_readonly("mcounts", &fwdpy11::singlepop_gm_vec_t::mcounts,
-    //                  MCOUNTS_DOCSTRING)
-    //    .def_readonly("fixations", &fwdpy11::singlepop_gm_vec_t::fixations,
-    //                  "A list of :class:`fwdpy11.VecGeneralMutVec`.")
-    //    .def_readonly("fixation_times",
-    //                  &fwdpy11::singlepop_gm_vec_t::fixation_times,
-    //                  FIXATION_TIMES_DOCSTRING)
-    //    .def_readonly("popdata", &fwdpy11::singlepop_gm_vec_t::popdata,
-    //                  POPDATA_DOCSTRING)
-    //    .def_readwrite("popdata_user",
-    //                   &fwdpy11::singlepop_gm_vec_t::popdata_user,
-    //                   POPDATA_USER_DOCSTRING)
-    //    .def(py::pickle(
-
-    //        [](const fwdpy11::singlepop_gm_vec_t& pop) -> py::object {
-    //            auto pb = py::bytes(pop.serialize());
-    //            py::list pdata;
-    //            for (auto& d : pop.diploids)
-    //                {
-    //                    pdata.append(d.parental_data);
-    //                }
-    //            return py::make_tuple(std::move(pb), std::move(pdata),
-    //                                  pop.popdata, pop.popdata_user);
-    //        },
-    //        [](py::object pickled) {
-    //            auto t = pickled.cast<py::tuple>();
-    //            if (t.size() != 4)
-    //                {
-    //                    throw std::runtime_error(
-    //                        "expected tuple with 4 elements");
-    //                }
-    //            auto s = t[0].cast<py::bytes>();
-    //            auto l = t[1].cast<py::list>();
-    //            auto rv = std::unique_ptr<fwdpy11::singlepop_gm_vec_t>(
-    //                new fwdpy11::singlepop_gm_vec_t(s));
-    //            for (std::size_t i = 0; i < rv->diploids.size(); ++i)
-    //                {
-    //                    rv->diploids[i].parental_data = l[i];
-    //                }
-    //            rv->popdata = t[2];
-    //            rv->popdata_user = t[3];
-    //            return rv;
-    //        }))
-    //    .def("__eq__",
-    //         [](const fwdpy11::singlepop_gm_vec_t& lhs,
-    //            const fwdpy11::singlepop_gm_vec_t& rhs) { return lhs == rhs; })
-    //    .def("sample",
-    //         [](const fwdpy11::singlepop_gm_vec_t& pop, const bool separate,
-    //            const bool remove_fixed, py::kwargs kwargs) -> py::object {
-    //             py::object rv;
-
-    //             std::vector<std::size_t> ind = get_individuals(pop.N, kwargs);
-
-    //             if (separate)
-    //                 {
-    //                     auto temp
-    //                         = fwdpp::sample_separate(pop, ind, remove_fixed);
-    //                     rv = py::make_tuple(temp.first, temp.second);
-    //                 }
-    //             else
-    //                 {
-    //                     auto temp = fwdpp::sample(pop, ind, remove_fixed);
-    //                     py::list tlist = py::cast(temp);
-    //                     rv = tlist;
-    //                 }
-    //             return rv;
-    //         },
-    //         py::arg("separate") = true, py::arg("remove_fixed") = true,
-    //         R"delim(
-    //         Sample diploids from the population.
-
-    //         :param separate: (True) Return neutral and selected variants separately.
-    //         :param remove_fixed: (True) Remove variants fixed in the sample.
-    //         :param kwargs: See below.
-
-    //         :rtype: object
-
-    //         :returns: Haplotype information for a sample.
-
-    //         The valid kwargs are:
-
-    //         * individuals, which should be a list of non-negative integers
-    //         * rng, which should be a :class:`fwdpy11.GSLrng`
-    //         * nsam, which should be a positive integer
-    //         
-    //         The latter two kwargs must be used together, and will generate a sample of
-    //         ``nsam`` individuals taken *with replacement* from the population. 
-
-    //         The return value is structured around a list of tuples.  Each tuple
-    //         is (position, genotype), where genotype are encoded as 0/1 = ancestral/derived.
-    //         From index 0 to 2*nsam - 1 (or 2*len(individuals) -1), adjacent pairs of 
-    //         values represent diploid genotype data.  Across sites, the data represent
-    //         individual haplotypes.
-
-    //         When `separate` is `True`, a tuple of two such lists is returned.  The first
-    //         list is for genotypes at neutral variants.  The second list is for non-neutral
-    //         variants.
-
-	//		 .. versionadded:: 0.1.4
-    //         )delim");
 }
