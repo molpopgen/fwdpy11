@@ -62,6 +62,11 @@ namespace
     static const auto POPDATA_USER_DOCSTRING
         = "A Python object with read-write access.\n\n.. versionadded:: 0.1.4";
 }
+
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
+
 PYBIND11_MODULE(_Population, m)
 {
     py::class_<fwdpy11::Population>(m, "_Population")
