@@ -31,6 +31,8 @@ namespace
    )delim";
 }
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
+
 PYBIND11_MODULE(_SlocusPop, m)
 {
     py::object base_class_module
