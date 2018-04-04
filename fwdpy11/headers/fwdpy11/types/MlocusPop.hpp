@@ -81,26 +81,6 @@ namespace fwdpy11
             diploids.clear();
             popbase_t::clear_containers();
         }
-
-        // static MlocusPop
-        // create(dipvector_t &diploids, gcont_t &gametes, mcont_t &mutations)
-        //{
-        //    return create_wrapper<MlocusPop>(
-        //        std::move(diploids), std::move(gametes),
-        //        std::move(mutations));
-        //}
-
-        // static MlocusPop
-        // create_with_fixations(dipvector_t &diploids, gcont_t &gametes,
-        //                      mcont_t &mutations, mcont_t &fixations,
-        //                      std::vector<fwdpp::uint_t> &fixation_times,
-        //                      const fwdpp::uint_t generation)
-        //{
-        //    return create_wrapper<MlocusPop>(
-        //        std::move(diploids), std::move(gametes),
-        //        std::move(mutations),
-        //        fixations, fixation_times, generation);
-        //}
     };
 }
 #endif

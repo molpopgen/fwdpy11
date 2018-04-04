@@ -21,6 +21,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types/MlocusPop.hpp>
+#include <fwdpy11/types/create_pops.hpp>
 
 namespace py = pybind11;
 
@@ -46,5 +47,20 @@ PYBIND11_MODULE(_MlocusPop, m)
         .def_readonly("locus_boundaries",
                       &fwdpy11::MlocusPop::locus_boundaries)
         .def_readonly("diploids", &fwdpy11::MlocusPop::diploids,
-                      DIPLOIDS_DOCSTRING);
+                      DIPLOIDS_DOCSTRING)
+        .def_static("create", [](fwdpy11::MlocusPop::dipvector_t& diploids,
+                                 fwdpy11::MlocusPop::gcont_t& gametes,
+                                 fwdpy11::MlocusPop::mcont_t& mutations,
+                                 py::tuple args) -> fwdpy11::MlocusPop {
+            if (args.size() == 0)
+                {
+                    return fwdpy11::create_wrapper<fwdpy11::MlocusPop>()(
+                        diploids, gametes, mutations);
+                }
+            auto fixations = args[0].cast<fwdpy11::MlocusPop::mcont_t>();
+            auto ftimes = args[1].cast<std::vector<fwdpp::uint_t>>();
+            auto g = args[2].cast<fwdpp::uint_t>();
+            return fwdpy11::create_wrapper<fwdpy11::MlocusPop>()(
+                diploids, gametes, mutations, fixations, ftimes, g);
+        });
 }
