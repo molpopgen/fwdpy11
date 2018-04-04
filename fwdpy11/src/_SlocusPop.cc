@@ -40,7 +40,29 @@ PYBIND11_MODULE(_SlocusPop, m)
         = (pybind11::object)pybind11::module::import("fwdpy11._Population");
 
     py::class_<fwdpy11::SlocusPop, fwdpy11::Population>(m, "_SlocusPop")
-        .def(py::init<fwdpp::uint_t>())
+        .def(py::init<fwdpp::uint_t>(), "Construct with an unsigned integer "
+                                        "representing the initial "
+                                        "population size.")
+        .def(py::init<const fwdpy11::SlocusPop::dipvector_t&,
+                      const fwdpy11::SlocusPop::gcont_t&,
+                      const fwdpy11::SlocusPop::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             .. versionadded:: 0.1.4
+             )delim")
+        .def(py::init<const fwdpy11::SlocusPop&>(),
+             R"delim(
+                Copy constructor
+
+                .. versionadded:: 0.1.4
+                )delim")
+        .def("clear", &fwdpy11::SlocusPop::clear,
+             "Clears all population data.")
+        .def("__eq__",
+             [](const fwdpy11::SlocusPop& lhs, const fwdpy11::SlocusPop& rhs) {
+                 return lhs == rhs;
+             })
         .def_readonly("diploids", &fwdpy11::SlocusPop::diploids,
                       DIPLOIDS_DOCSTRING)
         .def_static("create", [](fwdpy11::SlocusPop::dipvector_t& diploids,

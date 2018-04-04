@@ -42,7 +42,28 @@ PYBIND11_MODULE(_MlocusPop, m)
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(m, "_MlocusPop")
         .def(py::init<fwdpp::uint_t, fwdpp::uint_t,
-                      const std::vector<std::pair<double, double>>&>())
+                      const std::vector<std::pair<double, double>>&>(),
+             py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
+        .def(py::init<const fwdpy11::MlocusPop::dipvector_t&,
+                      const fwdpy11::MlocusPop::gcont_t&,
+                      const fwdpy11::MlocusPop::mcont_t&>(),
+             R"delim(
+             Construct with tuple of (diploids, gametes, mutations).
+             
+             .. versionadded:: 0.1.4
+             )delim")
+        .def(py::init<const fwdpy11::MlocusPop&>(),
+             R"delim(
+                Copy constructor.
+
+                .. versionadded:: 0.1.4
+                )delim")
+        .def("clear", &fwdpy11::MlocusPop::clear,
+             "Clears all population data.")
+        .def("__eq__",
+             [](const fwdpy11::MlocusPop& lhs, const fwdpy11::MlocusPop& rhs) {
+                 return lhs == rhs;
+             })
         .def_readonly("nloci", &fwdpy11::MlocusPop::nloci)
         .def_readonly("locus_boundaries",
                       &fwdpy11::MlocusPop::locus_boundaries)
