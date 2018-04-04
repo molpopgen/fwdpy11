@@ -69,6 +69,27 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
 {
+    py::bind_vector<std::vector<fwdpp::uint_t>>(
+        m, "VecUint32", "Vector of unsigned 32-bit integers.",
+        py::buffer_protocol())
+        .def(py::pickle(
+            [](const std::vector<fwdpp::uint_t>& v) {
+                py::list rv;
+                for (auto&& i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<fwdpp::uint_t> rv;
+                for (auto&& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpp::uint_t>());
+                    }
+                return rv;
+            }));
+
     py::class_<fwdpy11::Population>(m, "_Population")
         .def_readonly("N", &fwdpy11::Population::N)
         .def_readonly("mutations", &fwdpy11::Population::mutations,
