@@ -92,6 +92,7 @@ PYBIND11_MODULE(_Population, m)
 
     py::class_<fwdpy11::Population>(m, "_Population")
         .def_readonly("N", &fwdpy11::Population::N)
+        .def_readonly("generation", &fwdpy11::Population::generation)
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
