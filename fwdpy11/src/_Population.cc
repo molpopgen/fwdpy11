@@ -90,9 +90,12 @@ PYBIND11_MODULE(_Population, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::Population>(m, "_Population")
-        .def_readonly("N", &fwdpy11::Population::N)
-        .def_readonly("generation", &fwdpy11::Population::generation)
+    py::class_<fwdpy11::Population>(m, "_Population",
+                                    "Abstract base class for populations "
+                                    "based on :class:`fwdpy11.Mutation`")
+        .def_readonly("N", &fwdpy11::Population::N, "Current population size.")
+        .def_readonly("generation", &fwdpy11::Population::generation,
+                      "Curent generation.")
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,

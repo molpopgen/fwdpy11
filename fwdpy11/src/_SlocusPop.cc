@@ -39,7 +39,8 @@ PYBIND11_MODULE(_SlocusPop, m)
     py::object base_class_module
         = (pybind11::object)pybind11::module::import("fwdpy11._Population");
 
-    py::class_<fwdpy11::SlocusPop, fwdpy11::Population>(m, "_SlocusPop")
+    py::class_<fwdpy11::SlocusPop, fwdpy11::Population>(
+        m, "_SlocusPop", "Representation of a single-locus population")
         .def(py::init<fwdpp::uint_t>(), "Construct with an unsigned integer "
                                         "representing the initial "
                                         "population size.")

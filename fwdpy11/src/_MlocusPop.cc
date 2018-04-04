@@ -40,7 +40,8 @@ PYBIND11_MODULE(_MlocusPop, m)
     py::object base_class_module
         = (pybind11::object)pybind11::module::import("fwdpy11._Population");
 
-    py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(m, "_MlocusPop")
+    py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
+        m, "_MlocusPop", "Representation of a multi-locus population")
         .def(py::init<fwdpp::uint_t, fwdpp::uint_t,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
