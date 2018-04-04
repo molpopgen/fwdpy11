@@ -112,6 +112,22 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11._Population',
+        ['fwdpy11/src/_Population.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=[],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11._SlocusPop',
+        ['fwdpy11/src/_SlocusPop.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11.fwdpy11_types',
         ['fwdpy11/src/fwdpy11_types.cc'],
         library_dirs=LIBRARY_DIRS,

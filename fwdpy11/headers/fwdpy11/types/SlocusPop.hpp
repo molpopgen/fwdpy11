@@ -42,7 +42,10 @@ namespace fwdpy11
         SlocusPop &operator=(const SlocusPop &) = default;
 
         // Constructors for Python
-        SlocusPop(const fwdpp::uint_t N) : Population{ N } {}
+        SlocusPop(const fwdpp::uint_t N)
+            : Population{ N }, diploids(N, { 0, 0 })
+        {
+        }
 
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
@@ -70,23 +73,25 @@ namespace fwdpy11
             popbase_t::clear_containers();
         }
 
-        static SlocusPop
-        create(dipvector_t &diploids, gcont_t &gametes, mcont_t &mutations)
-        {
-            return create_wrapper<SlocusPop>(
-                std::move(diploids), std::move(gametes), std::move(mutations));
-        }
+        // static SlocusPop
+        // create(dipvector_t &diploids, gcont_t &gametes, mcont_t &mutations)
+        //{
+        //    return create_wrapper<SlocusPop>(
+        //        std::move(diploids), std::move(gametes),
+        //        std::move(mutations));
+        //}
 
-        static SlocusPop
-        create_with_fixations(dipvector_t &diploids, gcont_t &gametes,
-                              mcont_t &mutations, mcont_t &fixations,
-                              std::vector<fwdpp::uint_t> &fixation_times,
-                              const fwdpp::uint_t generation)
-        {
-            return create_wrapper<SlocusPop>(
-                std::move(diploids), std::move(gametes), std::move(mutations),
-                fixations, fixation_times, generation);
-        }
+        // static SlocusPop
+        // create_with_fixations(dipvector_t &diploids, gcont_t &gametes,
+        //                      mcont_t &mutations, mcont_t &fixations,
+        //                      std::vector<fwdpp::uint_t> &fixation_times,
+        //                      const fwdpp::uint_t generation)
+        //{
+        //    return create_wrapper<SlocusPop>(
+        //        std::move(diploids), std::move(gametes),
+        //        std::move(mutations),
+        //        fixations, fixation_times, generation);
+        //}
     };
 }
 #endif
