@@ -128,6 +128,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11._MlocusPop',
+        ['fwdpy11/src/_MlocusPop.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.fwdpy11_types',
         ['fwdpy11/src/fwdpy11_types.cc'],
         library_dirs=LIBRARY_DIRS,
