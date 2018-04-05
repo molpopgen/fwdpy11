@@ -47,6 +47,13 @@ namespace fwdpy11
         MlocusPop &operator=(const MlocusPop &) = default;
 
         // Constructors for Python
+        MlocusPop(const fwdpp::uint_t N, fwdpp::uint_t nloci_)
+            : Population{ N },
+              diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
+              locus_boundaries{}
+        {
+        }
+
         MlocusPop(
             const fwdpp::uint_t N, fwdpp::uint_t nloci_,
             const std::vector<std::pair<double, double>> &locus_boundaries_)

@@ -42,6 +42,8 @@ PYBIND11_MODULE(_MlocusPop, m)
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
         m, "_MlocusPop", "Representation of a multi-locus population")
+        .def(py::init<fwdpp::uint_t, fwdpp::uint_t>(),
+             py::arg("N"), py::arg("nloci"))
         .def(py::init<fwdpp::uint_t, fwdpp::uint_t,
                       const std::vector<std::pair<double, double>>&>(),
              py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
