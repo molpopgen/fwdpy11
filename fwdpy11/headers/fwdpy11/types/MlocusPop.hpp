@@ -106,7 +106,9 @@ namespace fwdpy11
         bool
         operator==(const MlocusPop &rhs) const
         {
-            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs);
+            return this->diploids == rhs.diploids
+                   && this->locus_boundaries == rhs.locus_boundaries
+                   && popbase_t::is_equal(rhs);
         };
 
         void
