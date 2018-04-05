@@ -118,8 +118,6 @@ PYBIND11_MODULE(_SlocusPop, m)
                 auto l = t[1].cast<py::list>();
                 auto rv = fwdpy11::serialization::deserialize_details<
                     fwdpy11::SlocusPop>()(s, 1);
-                // auto rv = std::unique_ptr<fwdpy11::singlepop_t>(
-                //    new fwdpy11::singlepop_t(s));
                 for (std::size_t i = 0; i < rv.diploids.size(); ++i)
                     {
                         rv.diploids[i].parental_data = l[i];
