@@ -33,9 +33,10 @@ static_assert(std::is_same<fwdpy11::SlocusPop::gcont_t,
                            fwdpy11::MlocusPop::gcont_t>::value,
               "SlocusPop and MlocusPop must have same gamete container type");
 
-static_assert(std::is_same<fwdpy11::SlocusPop::mcont_t,
-                           fwdpy11::MlocusPop::mcont_t>::value,
-              "SlocusPop and MlocusPop must have same mutation container type");
+static_assert(
+    std::is_same<fwdpy11::SlocusPop::mcont_t,
+                 fwdpy11::MlocusPop::mcont_t>::value,
+    "SlocusPop and MlocusPop must have same mutation container type");
 
 namespace py = pybind11;
 
@@ -43,6 +44,10 @@ namespace
 {
     static const auto DIPLOIDS_DOCSTRING = R"delim(
    A :class:`fwdpy11.VecDiploid`.
+   )delim";
+
+    static const auto MLDIPLOIDS_DOCSTRING = R"delim(
+   A :class:`fwdpy11.VecVecDiploid`.
    )delim";
 }
 
@@ -231,7 +236,7 @@ PYBIND11_MODULE(_Populations, m)
         .def_readwrite("locus_boundaries",
                        &fwdpy11::MlocusPop::locus_boundaries)
         .def_readonly("diploids", &fwdpy11::MlocusPop::diploids,
-                      DIPLOIDS_DOCSTRING)
+                      MLDIPLOIDS_DOCSTRING)
         .def_static(
             "create",
             [](fwdpy11::MlocusPop::dipvector_t& diploids,
