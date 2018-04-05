@@ -24,7 +24,7 @@ namespace fwdpy11
         inline poptype
         operator()(diploids_input &&diploids, gametes_input &&gametes,
                    mutations_input &&mutations, mutations_input &&fixations,
-                   std::vector<fwdpp::uint_t> &fixation_times,
+                   std::vector<fwdpp::uint_t> &&fixation_times,
                    fwdpp::uint_t generation) const
         {
             auto rv

@@ -37,6 +37,9 @@ namespace
 }
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
+PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::gcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::mcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::mcount_t);
 
 PYBIND11_MODULE(_SlocusPop, m)
 {
@@ -79,13 +82,16 @@ PYBIND11_MODULE(_SlocusPop, m)
                 if (args.size() == 0)
                     {
                         return fwdpy11::create_wrapper<fwdpy11::SlocusPop>()(
-                            diploids, gametes, mutations);
+                            std::move(diploids), std::move(gametes),
+                            std::move(mutations));
                     }
-                auto fixations = args[0].cast<fwdpy11::SlocusPop::mcont_t>();
-                auto ftimes = args[1].cast<std::vector<fwdpp::uint_t>>();
+                auto& fixations = args[0].cast<fwdpy11::SlocusPop::mcont_t&>();
+                auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
                 auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::create_wrapper<fwdpy11::SlocusPop>()(
-                    diploids, gametes, mutations, fixations, ftimes, g);
+                    std::move(diploids), std::move(gametes),
+                    std::move(mutations), std::move(fixations),
+                    std::move(ftimes), g);
             })
         .def(py::pickle(
             [](const fwdpy11::SlocusPop& pop) -> py::object {
