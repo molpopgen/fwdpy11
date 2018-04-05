@@ -15,8 +15,8 @@ __version__ = '0.1.4'
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
-if pybind11.__version__ < '2.2.0':
-    raise RuntimeError("pybind11 >= " + '2.2.0' + " required")
+if pybind11.__version__ < '2.2.2':
+    raise RuntimeError("pybind11 >= " + '2.2.2' + " required")
 
 
 # clang/llvm is default for OS X builds.
@@ -339,7 +339,7 @@ setup(
     data_files=[('fwdpy11', ['COPYING', 'README.rst'])],
     long_description=long_desc,
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2.0', 'numpy'],
+    install_requires=['pybind11>=2.2.2', 'numpy'],
     cmdclass={'build_ext': BuildExt},
     packages=PKGS,
     package_data=generated_package_data,

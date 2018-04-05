@@ -3205,7 +3205,7 @@ ac_config_files="$ac_config_files setup.py requirements.txt doc/fwdpy11.doxygen 
 
 
 
-MINPYBIND11="2.2.0"
+MINPYBIND11="2.2.2"
 PYBIND11=$MINPYBIND11
 
 
