@@ -24,6 +24,8 @@
 #include <fwdpy11/types/create_pops.hpp>
 #include <fwdpy11/serialization.hpp>
 #include <fwdpy11/serialization/Diploid.hpp>
+#include <fwdpp/sugar/sampling.hpp>
+#include "get_individuals.hpp"
 
 namespace py = pybind11;
 
@@ -125,5 +127,59 @@ PYBIND11_MODULE(_SlocusPop, m)
                 rv.popdata = t[2];
                 rv.popdata_user = t[3];
                 return rv;
-            }));
+            }))
+        .def("sample",
+             [](const fwdpy11::SlocusPop& pop, const bool separate,
+                const bool remove_fixed, py::kwargs kwargs) -> py::object {
+                 py::object rv;
+
+                 std::vector<std::size_t> ind = get_individuals(pop.N, kwargs);
+
+                 if (separate)
+                     {
+                         auto temp
+                             = fwdpp::sample_separate(pop, ind, remove_fixed);
+                         rv = py::make_tuple(temp.first, temp.second);
+                     }
+                 else
+                     {
+                         auto temp = fwdpp::sample(pop, ind, remove_fixed);
+                         py::list tlist = py::cast(temp);
+                         rv = tlist;
+                     }
+                 return rv;
+             },
+             py::arg("separate") = true, py::arg("remove_fixed") = true,
+             R"delim(
+             Sample diploids from the population.
+
+             :param separate: (True) Return neutral and selected variants separately.
+             :param remove_fixed: (True) Remove variants fixed in the sample.
+             :param kwargs: See below.
+
+             :rtype: object
+
+             :returns: Haplotype information for a sample.
+
+             The valid kwargs are:
+
+             * individuals, which should be a list of non-negative integers
+             * rng, which should be a :class:`fwdpy11.GSLrng`
+             * nsam, which should be a positive integer
+             
+             The latter two kwargs must be used together, and will generate a sample of
+             ``nsam`` individuals taken *with replacement* from the population. 
+
+             The return value is structured around a list of tuples.  Each tuple
+             is (position, genotype), where genotype are encoded as 0/1 = ancestral/derived.
+             From index 0 to 2*nsam - 1 (or 2*len(individuals) -1), adjacent pairs of 
+             values represent diploid genotype data.  Across sites, the data represent
+             individual haplotypes.
+
+             When `separate` is `True`, a tuple of two such lists is returned.  The first
+             list is for genotypes at neutral variants.  The second list is for non-neutral
+             variants.
+
+			 .. versionadded:: 0.1.4
+             )delim");
 }
