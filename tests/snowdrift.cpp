@@ -35,7 +35,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 
     namespace py = pybind11;
@@ -47,8 +47,8 @@ struct snowdrift_diploid
 {
     using result_type = double;
     inline result_type
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations,
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations,
                const std::vector<double> &phenotypes, const double b1,
                const double b2, const double c1, const double c2) const
     /* The first 3 arguments will be passed in from fwdpp.
@@ -130,7 +130,7 @@ struct snowdrift : public fwdpy11::single_locus_fitness
                          std::cref(phenotypes), b1, b2, c1, c2);
     }
     void
-    update(const fwdpy11::singlepop_t &pop) final
+    update(const fwdpy11::SlocusPop &pop) final
     /* A stateful fitness model needs updating.
      * The base class defines this virtual function
      * to do nothing (for non-stateful models).
