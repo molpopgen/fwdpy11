@@ -16,13 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from fwdpy11._MlocusPop import _MlocusPop
+from fwdpy11._Populations import _MlocusPop
 
 
 class MlocusPop(_MlocusPop):
     """
-    Representation of a multi-locus, single
-    deme system.
+    Representation of a multi-locus system.
     """
     @staticmethod
     def create(diploids, gametes, mutations, *args):
