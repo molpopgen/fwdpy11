@@ -147,14 +147,14 @@ class testMlocusPopCreate(unittest.TestCase):
                                        self.mutations,
                                        self.fixations,
                                        ftimes, 2)
-        # self.assertTrue(type(pop) is fwdpy11.MlocusPop)
-        # self.assertEqual(len(pop.fixations), len(pop.fixation_times))
-        # # Test that data were moved and not copied:
-        # self.assertEqual(len(self.diploids), 0)
-        # self.assertEqual(len(self.gametes), 0)
-        # self.assertEqual(len(self.mutations), 0)
-        # self.assertEqual(len(self.fixations), 0)
-        # self.assertEqual(len(ftimes), 0)
+        self.assertTrue(type(pop) is fwdpy11.MlocusPop)
+        self.assertEqual(len(pop.fixations), len(pop.fixation_times))
+        # Test that data were moved and not copied:
+        self.assertEqual(len(self.diploids), 0)
+        self.assertEqual(len(self.gametes), 0)
+        self.assertEqual(len(self.mutations), 0)
+        self.assertEqual(len(self.fixations), 0)
+        self.assertEqual(len(ftimes), 0)
 
 
 if __name__ == "__main__":
