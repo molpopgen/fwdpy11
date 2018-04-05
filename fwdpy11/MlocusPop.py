@@ -16,10 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from fwdpy11.fwdpy11_types import MlocusPop
+from fwdpy11._MlocusPop import _MlocusPop
 
 
-class MlocusPop(MlocusPop):
+class MlocusPop(_MlocusPop):
     """
     Representation of a multi-locus, single
     deme system.
