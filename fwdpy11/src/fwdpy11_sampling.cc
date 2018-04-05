@@ -31,7 +31,10 @@
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
-#include <fwdpy11/types.hpp>
+//#include <fwdpy11/types.hpp>
+#include <fwdpy11/rng.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <gsl/gsl_matrix_char.h>
 namespace py = pybind11;
 
@@ -157,15 +160,15 @@ PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
 
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_t,
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::SlocusPop,
                            "fwdpy11.SlocusPop")
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::multilocus_t,
+    SAMPLE_SEPARATE_RANDOM(fwdpy11::MlocusPop,
                            "fwdpy11.MlocusPop")
     // SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
     //                        "fwdpy11.SlocusPopGeneralMutVec")
-    SAMPLE_SEPARATE_IND(fwdpy11::singlepop_t,
+    SAMPLE_SEPARATE_IND(fwdpy11::SlocusPop,
                         "fwdpy11.SlocusPop")
-    SAMPLE_SEPARATE_IND(fwdpy11::multilocus_t,
+    SAMPLE_SEPARATE_IND(fwdpy11::MlocusPop,
                         "fwdpy11.MlocusPop")
     // SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
     //                     "fwdpy11.SlocusPopGeneralMutVec")
@@ -385,18 +388,18 @@ PYBIND11_MODULE(sampling, m)
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
-    MUTATION_KEYS(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    MUTATION_KEYS(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    MUTATION_KEYS(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
     // MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
     //               "fwdpy11.SlocusPopGeneralMutVec");
 
-    GENOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
-    GENOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
     // GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
     //                 "fwdpy11.SlocusPopGeneralMutVec");
 
-    HAPLOTYPE_MATRIX(fwdpy11::singlepop_t, "fwdpy11.SlocusPop");
-    HAPLOTYPE_MATRIX(fwdpy11::multilocus_t, "fwdpy11.MlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
     // HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
     //                  "fwdpy11.SlocusPopGeneralMutVec");
 

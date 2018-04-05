@@ -29,7 +29,7 @@ namespace fwdpy11
             qtrait_model_rules(const qtrait_model_rules &rhs) : base_t(rhs) {}
 
             virtual double
-            w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
+            w(SlocusPop &pop, const single_locus_fitness_fxn &ff)
             {
                 auto N_curr = pop.diploids.size();
                 if (fitnesses.size() < N_curr)
@@ -55,7 +55,7 @@ namespace fwdpy11
             //! properties of the parents
             virtual void
             update(const GSLrng_t &rng, Diploid &offspring,
-                   const singlepop_t &pop, const std::size_t p1,
+                   const SlocusPop &pop, const std::size_t p1,
                    const std::size_t p2) noexcept
             {
                 offspring.e
@@ -97,7 +97,7 @@ namespace fwdpy11
 
             //! \brief The "fitness manager"
             double
-            w(multilocus_t &pop, const multilocus_genetic_value &gvalue) const
+            w(MlocusPop &pop, const multilocus_genetic_value &gvalue) const
             {
                 unsigned N_curr = pop.diploids.size();
                 if (fitnesses.size() < N_curr)
@@ -136,7 +136,7 @@ namespace fwdpy11
 
             //! \brief Pick parent one
             inline size_t
-            pick1(const GSLrng_t &rng, const multilocus_t &pop) const
+            pick1(const GSLrng_t &rng, const MlocusPop &pop) const
             {
                 return gsl_ran_discrete(rng.get(), lookup.get());
             }
@@ -144,7 +144,7 @@ namespace fwdpy11
             //! \brief Pick parent 2.  Parent 1's data are passed along for
             //! models where that is relevant
             inline size_t
-            pick2(const GSLrng_t &rng, const multilocus_t &,
+            pick2(const GSLrng_t &rng, const MlocusPop &,
                   const std::size_t p1, const double f) const
             {
                 return ((f == 1.)
@@ -156,8 +156,8 @@ namespace fwdpy11
             //! \brief Update some property of the offspring based on
             //! properties of the parents
             void
-            update(const GSLrng_t &rng, multilocus_Diploid &offspring,
-                   const multilocus_t &pop, const std::size_t p1,
+            update(const GSLrng_t &rng, MlocusPop::diploid_t &offspring,
+                   const MlocusPop &pop, const std::size_t p1,
                    const std::size_t p2) const
             {
                 offspring[0].e

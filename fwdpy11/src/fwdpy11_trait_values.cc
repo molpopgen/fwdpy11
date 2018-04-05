@@ -1,4 +1,4 @@
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <pybind11/pybind11.h>
 #include <numeric>
@@ -14,8 +14,8 @@ struct additive_diploid_trait_fxn
     {
     }
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations) const
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
     }
@@ -29,8 +29,8 @@ struct multiplicative_diploid_trait_fxn
     {
     }
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations) const
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
     }
@@ -41,8 +41,8 @@ struct gbr_diploid_trait_fxn
 	gbr_diploid_trait_fxn(){}
 	gbr_diploid_trait_fxn(double){} //hack to make API happy
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations) const
+    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
         auto sum1 = std::accumulate(
             gametes[dip.first].smutations.cbegin(),

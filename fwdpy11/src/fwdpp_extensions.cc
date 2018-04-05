@@ -22,7 +22,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
 #include <fwdpp/extensions/callbacks.hpp>
@@ -134,7 +135,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
         fwdpp::extensions::discrete_mut_model<std::vector<fwdpp::popgenmut>>>(
         m, "MutationRegions")
         .def(py::init(
-            [](const fwdpy11::GSLrng_t &r, fwdpy11::singlepop_t &pop,
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::SlocusPop &pop,
                const std::vector<mutregion_tuple> &neutral_mut_regions,
                const std::vector<mutregion_tuple> &selected_mut_regions,
                std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
@@ -149,7 +150,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto mf
                             = [&r, &pop, start, stop, label](
                                   std::queue<std::size_t> &recbin,
-                                  fwdpy11::singlepop_t::mcont_t &mutations) {
+                                  fwdpy11::SlocusPop::mcont_t &mutations) {
                                   return fwdpp::infsites_popgenmut(
                                       recbin, mutations, r.get(),
                                       pop.mut_lookup, pop.generation, 0,
@@ -173,7 +174,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto mf
                             = [&r, &pop, start, stop, label,
                                sh](std::queue<std::size_t> &recbin,
-                                   fwdpy11::singlepop_t::mcont_t &mutations) {
+                                   fwdpy11::SlocusPop::mcont_t &mutations) {
                                   return fwdpp::infsites_popgenmut(
                                       recbin, mutations, r.get(),
                                       pop.mut_lookup, pop.generation, 1.,
@@ -188,11 +189,11 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         functions.push_back(std::move(mf));
                     }
                 return fwdpp::extensions::discrete_mut_model<
-                    fwdpy11::singlepop_t::mcont_t>(std::move(functions),
+                    fwdpy11::SlocusPop::mcont_t>(std::move(functions),
                                                    std::move(weights));
             }))
         .def(py::init(
-            [](const fwdpy11::GSLrng_t &r, fwdpy11::multilocus_t &pop,
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::MlocusPop &pop,
                const std::vector<mutregion_tuple> &neutral_mut_regions,
                const std::vector<mutregion_tuple> &selected_mut_regions,
                std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
@@ -207,7 +208,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto mf
                             = [&r, &pop, start, stop, label](
                                   std::queue<std::size_t> &recbin,
-                                  fwdpy11::multilocus_t::mcont_t &mutations) {
+                                  fwdpy11::MlocusPop::mcont_t &mutations) {
                                   return fwdpp::infsites_popgenmut(
                                       recbin, mutations, r.get(),
                                       pop.mut_lookup, pop.generation, 0,
@@ -231,7 +232,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto mf
                             = [&r, &pop, start, stop, label,
                                sh](std::queue<std::size_t> &recbin,
-                                   fwdpy11::multilocus_t::mcont_t &mutations) {
+                                   fwdpy11::MlocusPop::mcont_t &mutations) {
                                   return fwdpp::infsites_popgenmut(
                                       recbin, mutations, r.get(),
                                       pop.mut_lookup, pop.generation, 1.,
@@ -246,7 +247,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         functions.push_back(std::move(mf));
                     }
                 return fwdpp::extensions::discrete_mut_model<
-                    fwdpy11::multilocus_t::mcont_t>(std::move(functions),
+                    fwdpy11::MlocusPop::mcont_t>(std::move(functions),
                                                     std::move(weights));
             }));
 

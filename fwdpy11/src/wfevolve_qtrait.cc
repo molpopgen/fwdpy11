@@ -16,7 +16,6 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#include <fwdpy11/types.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/functional.h>
@@ -29,6 +28,9 @@
 #include <fwdpp/diploid.hh>
 #include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
+#include <fwdpy11/rng.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/rules/qtrait.hpp>
@@ -44,14 +46,14 @@ namespace py = pybind11;
 // recombination
 void
 evolve_singlepop_regions_qtrait_cpp(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::singlepop_t &pop,
+    const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model<fwdpy11::singlepop_t::mcont_t>
+    const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
         &mmodel,
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::single_locus_fitness &fitness,
-    fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
+    fwdpy11::SlocusPopemporal_sampler recorder, const double selfing_rate,
     fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,
     fwdpy11::single_locus_noise_function noise, py::object noise_updater,
@@ -173,19 +175,19 @@ evolve_singlepop_regions_qtrait_cpp(
 
 void
 evolve_qtrait_mloc_regions_cpp(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::multilocus_t &pop,
+    const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
     py::array_t<std::uint32_t> popsizes,
     const std::vector<double> &neutral_mutation_rates,
     const std::vector<double> &selected_mutation_rates,
     const std::vector<double> &recrates,
     const std::vector<
-        fwdpp::extensions::discrete_mut_model<fwdpy11::multilocus_t::mcont_t>>
+        fwdpp::extensions::discrete_mut_model<fwdpy11::MlocusPop::mcont_t>>
         &mmodels,
     const std::vector<fwdpp::extensions::discrete_rec_model> &rmodels,
     py::list interlocus_rec_wrappers,
     // const std::vector<std::function<unsigned(void)>> &interlocus_rec,
     fwdpy11::multilocus_genetic_value &multilocus_gvalue,
-    fwdpy11::multilocus_temporal_sampler recorder, const double selfing_rate,
+    fwdpy11::MlocusPopemporal_sampler recorder, const double selfing_rate,
     fwdpy11::multilocus_aggregator_function aggregator,
     fwdpy11::trait_to_fitness_function trait_to_fitness,
     py::object trait_to_fitness_updater,

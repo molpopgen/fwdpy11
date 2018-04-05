@@ -20,7 +20,8 @@
 #define FWDPY11_EVOLVE_QTRAIT_API__
 
 #include <functional>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/Diploid.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 
 namespace fwdpy11
 {
@@ -28,8 +29,9 @@ namespace fwdpy11
         = std::function<double(const double, const double)>;
     using single_locus_noise_function = std::function<double(
         const fwdpy11::Diploid &, const fwdpy11::Diploid &)>;
-    using multilocus_noise_function = std::function<double(
-        const fwdpy11::multilocus_Diploid &, const fwdpy11::multilocus_Diploid &)>;
+    using multilocus_noise_function
+        = std::function<double(const fwdpy11::MlocusPop::diploid_t &,
+                               const fwdpy11::MlocusPop::diploid_t &)>;
     using multilocus_aggregator_function
         = std::function<double(const pybind11::array_t<double>)>;
 }

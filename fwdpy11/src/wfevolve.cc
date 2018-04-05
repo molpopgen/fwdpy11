@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#include <fwdpy11/types.hpp>
+//#include <fwdpy11/types.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/functional.h>
@@ -36,12 +36,12 @@ namespace py = pybind11;
 template <typename bound_mmodels, typename bound_recmodels,
           typename mut_removal_policy>
 void
-evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
               fwdpy11::wf_rules& rules, py::array_t<std::uint32_t> popsizes,
               const double mu_neutral, const double mu_selected,
               const bound_mmodels& mmodels, const bound_recmodels& recmap,
               fwdpy11::single_locus_fitness& fitness,
-              fwdpy11::singlepop_temporal_sampler& recorder,
+              fwdpy11::SlocusPopemporal_sampler& recorder,
               const double selfing_rate, const mut_removal_policy& mp,
               const bool remove_selected_fixations)
 {
@@ -89,14 +89,14 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
 // recombination
 void
 evolve_singlepop_regions_cpp(
-    const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+    const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model<fwdpy11::singlepop_t::mcont_t>&
+    const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>&
         mmodel,
     const fwdpp::extensions::discrete_rec_model& rmodel,
     fwdpy11::single_locus_fitness& fitness,
-    fwdpy11::singlepop_temporal_sampler recorder, const double selfing_rate,
+    fwdpy11::SlocusPopemporal_sampler recorder, const double selfing_rate,
     const bool remove_selected_fixations = false)
 {
     const auto generations = popsizes.size();

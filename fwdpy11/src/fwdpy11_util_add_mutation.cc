@@ -53,7 +53,7 @@ get_diploids_and_genos(const fwdpy11::GSLrng_t& rng, fwdpp::uint_t ncopies,
 }
 
 std::size_t
-add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
              const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label)
@@ -74,7 +74,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
 }
 
 std::size_t
-add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::multilocus_t& pop,
+add_mutation(const fwdpy11::GSLrng_t& rng, fwdpy11::MlocusPop& pop,
              const std::size_t locus, const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label)

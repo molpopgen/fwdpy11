@@ -6,7 +6,7 @@
 #include <fwdpp/internal/gamete_cleaner.hpp>
 #include <fwdpp/internal/multilocus_rec.hpp>
 #include <fwdpp/insertion_policies.hpp>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
 
