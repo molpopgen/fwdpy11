@@ -163,14 +163,10 @@ PYBIND11_MODULE(sampling, m)
                            "fwdpy11.SlocusPop")
     SAMPLE_SEPARATE_RANDOM(fwdpy11::MlocusPop,
                            "fwdpy11.MlocusPop")
-    // SAMPLE_SEPARATE_RANDOM(fwdpy11::singlepop_gm_vec_t,
-    //                        "fwdpy11.SlocusPopGeneralMutVec")
     SAMPLE_SEPARATE_IND(fwdpy11::SlocusPop,
                         "fwdpy11.SlocusPop")
     SAMPLE_SEPARATE_IND(fwdpy11::MlocusPop,
                         "fwdpy11.MlocusPop")
-    // SAMPLE_SEPARATE_IND(fwdpy11::singlepop_gm_vec_t,
-    //                     "fwdpy11.SlocusPopGeneralMutVec")
 
     py::bind_vector<std::vector<std::int8_t>>(
         m, "VecInt8", py::buffer_protocol(),
@@ -389,18 +385,12 @@ PYBIND11_MODULE(sampling, m)
 
     MUTATION_KEYS(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
     MUTATION_KEYS(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
-    // MUTATION_KEYS(fwdpy11::singlepop_gm_vec_t,
-    //               "fwdpy11.SlocusPopGeneralMutVec");
 
     GENOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
     GENOTYPE_MATRIX(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
-    // GENOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-    //                 "fwdpy11.SlocusPopGeneralMutVec");
 
     HAPLOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
     HAPLOTYPE_MATRIX(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
-    // HAPLOTYPE_MATRIX(fwdpy11::singlepop_gm_vec_t,
-    //                  "fwdpy11.SlocusPopGeneralMutVec");
 
     m.def("matrix_to_sample",
           [](const fwdpp::data_matrix &m, const bool neutral)

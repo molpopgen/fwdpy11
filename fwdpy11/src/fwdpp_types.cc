@@ -22,7 +22,6 @@
 #include <pybind11/stl_bind.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/popgenmut.hpp>
-//#include <fwdpp/sugar/generalmut.hpp>
 
 namespace py = pybind11;
 
