@@ -53,8 +53,8 @@ namespace fwdpy11
     struct FUNCTION                                                           \
     {                                                                         \
         inline double operator()(const fwdpy11::Diploid& dip,               \
-                                 const fwdpy11::gcont_t& gametes,             \
-                                 const fwdpy11::mcont_t& mutations) const
+                                 const fwdpy11::Population::gcont_t& gametes,             \
+                                 const fwdpy11::Population::mcont_t& mutations) const
 
 #define END_STRUCT()                                                          \
     }                                                                         \

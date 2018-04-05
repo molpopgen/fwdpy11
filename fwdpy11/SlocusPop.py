@@ -16,13 +16,13 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from fwdpy11.fwdpy11_types import SlocusPop
+from fwdpy11._Populations import _SlocusPop
 
 
-class SlocusPop(SlocusPop):
+class SlocusPop(_SlocusPop):
     """
     Population object representing a single
-    deme and a single genomic region.
+    locus.
     """
     pass
 
@@ -57,7 +57,6 @@ class SlocusPop(SlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return SlocusPop(super(SlocusPop,
-                               SlocusPop).create(diploids,
-                                                 gametes, mutations,
-                                                 args))
+        return SlocusPop(_SlocusPop.create(diploids,
+                                           gametes, mutations,
+                                           args))

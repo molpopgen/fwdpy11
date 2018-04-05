@@ -19,7 +19,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/types.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/fitness/single_locus_stateless_fitness.hpp>
 
@@ -51,7 +50,7 @@ PYBIND11_MODULE(fitness, m)
         .def("__call__",
              [](const std::shared_ptr<fwdpy11::single_locus_fitness>& aw,
                 const fwdpy11::Diploid& dip,
-                const fwdpy11::singlepop_t& pop) {
+                const fwdpy11::SlocusPop& pop) {
                  return aw->callback()(dip, pop.gametes, pop.mutations);
              });
 

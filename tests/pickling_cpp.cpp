@@ -17,7 +17,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
 // clang-format on
 
 #include <pybind11/pybind11.h>
-#include <fwdpy11/types.hpp>
+#include <fwdpp/sugar/popgenmut.hpp>
 
 namespace py = pybind11;
 

@@ -15,8 +15,8 @@ __version__ = '0.1.4'
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
-if pybind11.__version__ < '2.2.0':
-    raise RuntimeError("pybind11 >= " + '2.2.0' + " required")
+if pybind11.__version__ < '2.2.2':
+    raise RuntimeError("pybind11 >= " + '2.2.2' + " required")
 
 
 # clang/llvm is default for OS X builds.
@@ -95,14 +95,6 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
-    # Extension(
-    #     'fwdpy11._opaque_generalmutvecs',
-    #     ['fwdpy11/src/_opaque_generalmutvecs.cc'],
-    #     library_dirs=LIBRARY_DIRS,
-    #     include_dirs=INCLUDES,
-    #     libraries=['gsl', 'gslcblas'],
-    #     language='c++'
-    # ),
     Extension(
         'fwdpy11._opaque_diploids',
         ['fwdpy11/src/_opaque_diploids.cc'],
@@ -114,6 +106,22 @@ ext_modules = [
     Extension(
         'fwdpy11.fwdpp_extensions',
         ['fwdpy11/src/fwdpp_extensions.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11._Population',
+        ['fwdpy11/src/_Population.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=[],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11._Populations',
+        ['fwdpy11/src/_Populations.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
@@ -331,7 +339,7 @@ setup(
     data_files=[('fwdpy11', ['COPYING', 'README.rst'])],
     long_description=long_desc,
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2.0', 'numpy'],
+    install_requires=['pybind11>=2.2.2', 'numpy'],
     cmdclass={'build_ext': BuildExt},
     packages=PKGS,
     package_data=generated_package_data,

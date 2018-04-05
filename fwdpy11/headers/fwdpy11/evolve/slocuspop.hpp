@@ -6,7 +6,7 @@
 #include <fwdpp/internal/gamete_cleaner.hpp>
 #include <fwdpp/insertion_policies.hpp>
 #include <fwdpp/mutate_recombine.hpp>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
 

@@ -33,7 +33,7 @@ namespace fwdpy11
         }
 
         virtual double
-        w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
+        w(SlocusPop &pop, const single_locus_fitness_fxn &ff)
         {
             auto N_curr = pop.diploids.size();
             if (fitnesses.size() < N_curr)
@@ -57,7 +57,7 @@ namespace fwdpy11
         //! the parents
         virtual void
         update(const GSLrng_t &rng, Diploid &offspring,
-               const singlepop_t &pop, const std::size_t p1,
+               const SlocusPop &pop, const std::size_t p1,
                const std::size_t p2) noexcept
         {
             offspring.e = 0.0;

@@ -53,7 +53,7 @@ PYBIND11_MODULE(util, m)
     m.doc() = "Miscellaneous utilities for simulations.";
 
     m.def("add_mutation",
-          [](const fwdpy11::GSLrng_t& rng, fwdpy11::singlepop_t& pop,
+          [](const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
              const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label) {
@@ -82,7 +82,7 @@ PYBIND11_MODULE(util, m)
           )delim");
 
     m.def("add_mutation",
-          [](const fwdpy11::GSLrng_t& rng, fwdpy11::multilocus_t& pop,
+          [](const fwdpy11::GSLrng_t& rng, fwdpy11::MlocusPop& pop,
              const std::size_t locus, const fwdpp::uint_t ncopies,
              const std::tuple<double, double, double>& pos_s_h,
              const std::uint16_t label) {
@@ -116,7 +116,7 @@ PYBIND11_MODULE(util, m)
           )delim");
 
     m.def("change_effect_size",
-          [](fwdpy11::singlepop_t& pop, const std::size_t index,
+          [](fwdpy11::SlocusPop& pop, const std::size_t index,
              const double new_esize, const double new_dominance) {
               if (index >= pop.mutations.size())
                   {
@@ -161,7 +161,7 @@ PYBIND11_MODULE(util, m)
         )delim");
 
     m.def("change_effect_size",
-          [](fwdpy11::multilocus_t& pop, const std::size_t index,
+          [](fwdpy11::MlocusPop& pop, const std::size_t index,
              const double new_esize, const double new_dominance) {
               if (index >= pop.mutations.size())
                   {
@@ -206,7 +206,8 @@ PYBIND11_MODULE(util, m)
           )delim");
 
     m.def("sort_gamete_keys",
-          [](fwdpy11::gcont_t& gametes, const fwdpy11::mcont_t& mutations) {
+          [](fwdpy11::Population::gcont_t& gametes,
+             const fwdpy11::Population::mcont_t& mutations) {
               for (auto& g : gametes)
                   {
                       sort_keys(g.mutations, mutations);

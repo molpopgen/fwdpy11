@@ -94,8 +94,8 @@ PYBIND11_MODULE(multilocus, m)
         .def(py::init<const ff_vec&>())
         .def("__call__",
              [](const fwdpy11::multilocus_genetic_value& m,
-                const fwdpy11::multilocus_Diploid& dip,
-                const fwdpy11::multilocus_t& pop) {
+                const fwdpy11::MlocusPop::diploid_t& dip,
+                const fwdpy11::MlocusPop& pop) {
                  if (m.size() != pop.diploids[0].size())
                      {
                          throw std::invalid_argument("number of fitness "

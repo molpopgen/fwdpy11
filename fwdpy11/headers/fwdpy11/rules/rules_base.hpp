@@ -2,7 +2,9 @@
 #define FWDPY_RULES_BASE_HPP
 
 #include "fwdpy11/fitness/fitness.hpp"
-#include "fwdpy11/types.hpp"
+#include <fwdpy11/rng.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpp/internal/gsl_discrete.hpp>
 #include <stdexcept>
 #include <vector>
@@ -35,12 +37,12 @@ namespace fwdpy11
 
         virtual ~single_region_rules_base() {}
 
-        virtual double w(singlepop_t &pop, const single_locus_fitness_fxn &ff)
+        virtual double w(SlocusPop &pop, const single_locus_fitness_fxn &ff)
             = 0;
 
         //! \brief Pick parent one
         virtual size_t
-        pick1(const GSLrng_t &rng, const singlepop_t &) const
+        pick1(const GSLrng_t &rng, const SlocusPop &) const
         {
             return gsl_ran_discrete(rng.get(), lookup.get());
         }
@@ -48,7 +50,7 @@ namespace fwdpy11
         //! \brief Pick parent 2.  Parent 1's data are passed along for models
         //! where that is relevant
         virtual size_t
-        pick2(const GSLrng_t &rng, const singlepop_t &, const std::size_t p1,
+        pick2(const GSLrng_t &rng, const SlocusPop &, const std::size_t p1,
               const double f) const
         {
             return (f == 1. || (f > 0. && gsl_rng_uniform(rng.get()) < f))
@@ -59,7 +61,7 @@ namespace fwdpy11
         //! \brief Update some property of the offspring based on properties of
         //! the parents
         virtual void update(const GSLrng_t &rng, Diploid &dip,
-                            const singlepop_t &pop, const std::size_t p1,
+                            const SlocusPop &pop, const std::size_t p1,
                             const std::size_t p2)
             = 0;
     };

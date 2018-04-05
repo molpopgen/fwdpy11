@@ -32,7 +32,7 @@ namespace fwdpy11
     // Thus struct contains a py::array, leading to warnings about
     // the struct having greater visibility than a member.  In 0.1.4,
     // the hidden attribute was added to silence this warning.
-    struct __attribute__ ((visibility ("hidden"))) multilocus_genetic_value
+    struct __attribute__((visibility("hidden"))) multilocus_genetic_value
     {
         /// We store a container of single-locus fitness function wrapper
         /// objects
@@ -69,7 +69,7 @@ namespace fwdpy11
                 }
             // Clone the input data into shared_ptr.
             // This is for run-time safety, to avoid
-			// possibility of circular references.
+            // possibility of circular references.
             for (auto&& ffi : fitness_functions_)
                 {
                     // Single-locus ff have API requirement to
@@ -86,9 +86,9 @@ namespace fwdpy11
         }
 
         inline pybind11::array_t<double>
-        operator()(const fwdpy11::multilocus_Diploid& dip,
-                   const fwdpy11::gcont_t& gametes,
-                   const fwdpy11::mcont_t& mutations) const
+        operator()(const fwdpy11::MlocusPop::diploid_t& dip,
+                   const fwdpy11::Population::gcont_t& gametes,
+                   const fwdpy11::Population::mcont_t& mutations) const
         {
             // use std::transform instead of loop b/c
             // genetic_values_np.mutable_at does
@@ -108,7 +108,7 @@ namespace fwdpy11
             return callbacks.size();
         }
         inline void
-        update(const multilocus_t& pop)
+        update(const MlocusPop& pop)
         {
             for (auto&& fi : fitness_functions)
                 {

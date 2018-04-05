@@ -22,7 +22,9 @@
 
 #include <typeinfo>
 #include <memory>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/Diploid.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpp/fitness_models.hpp>
 
 namespace fwdpy11
@@ -30,8 +32,8 @@ namespace fwdpy11
     template <typename... T>
     using single_locus_fitness_signature
         = std::function<double(const fwdpy11::Diploid &,
-                               const fwdpy11::gcont_t &,
-                               const fwdpy11::mcont_t &, T...)>;
+                               const fwdpy11::Population::gcont_t &,
+                               const fwdpy11::Population::mcont_t &, T...)>;
 
     /*! Single-deme fitness function signature for standard "popgen"
      *  simulations.
@@ -44,10 +46,10 @@ namespace fwdpy11
         virtual ~single_locus_fitness() = default;
         single_locus_fitness() = default;
         virtual void
-        update(const singlepop_t &pop)
+        update(const SlocusPop &pop)
         {
         }
-		virtual void update(const multilocus_t & pop)
+		virtual void update(const MlocusPop & pop)
 		{
 		}
         virtual single_locus_fitness_fxn callback() const = 0;

@@ -130,9 +130,36 @@ In a single-locus simulation, diploids are stored in an opaque list of type
 :class:`fwdpy11.VecDiploid`.  For multi-locus simulations, diploids are stored in
 :class:`fwdpy11.VecVecDiploid`, which is also an opaque list.
 
+.. _population:
+
+The population base class
+-----------------------------------------------------------
+
+.. versionadded:: 0.1.5
+
+All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
+:class:`fwdpy11._Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
+Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:`fwdpy11.MlocusPop`.
+
+.. csv-table:: :class:`fwdpy11._Population` properties
+    :header: "Property", "Definition"
+    
+    "N", "Current population size."
+    "generation", "Current generation."
+    "mutations", "A :class:`fwdpy11.VecMutation`. See :ref:`popgenmuts`."
+    "mcounts", "See :ref:`mcounts`."
+    "gametes", "A :class:`fwdpy11.VecGamete`.  See :ref:`gametes`."
+    "fixations", "A :class:`fwdpy11.VecMutation` storing fixations. See :ref:`popgenmuts`."
+    "fixation_times", "A :class:`fwdpy11.VecUint32` storing fixation times."
+
+.. note::
+
+    When simulating structured populations, `N` refers to the total number of individuals in the "meta-population",
+    and specific deme data for individuals is obtained through :attr:`fwdpy11.SingleLocusDiploid.deme`.
+    
 .. _slocuspop:
 
-Single-locus, single-deme population objects
+Single-locus population objects
 -----------------------------------------------------------
 
 To simulate a single locus in a single deme, you use :class:`fwdpy11.SlocusPop`.  Instances of this
@@ -152,19 +179,13 @@ class are constructed with a population size:
 
 These objects can be pickled. See :ref:`pickling_pops`.
 
-This class contains the following read-only properties:
+This class contains the following read-only properties, in addition to those found in the base class
+:class:`fwdpy11._Population`:
 
 .. csv-table:: :class:`fwdpy11.SlocusPop` properties
     :header: "Property", "Definition"
     
-    "N", "Current population size."
-    "generation", "Current generation."
-    "mutations", "A :class:`fwdpy11.VecMutation`. See :ref:`popgenmuts`."
-    "mcounts", "See :ref:`mcounts`."
-    "gametes", "A :class:`fwdpy11.VecGamete`.  See :ref:`gametes`."
     "diploids", "A :class:`fwdpy11.VecDiploid`.  See :ref:`diploids`."
-    "fixations", "A :class:`fwdpy11.VecMutation` storing fixations. See :ref:`popgenmuts`."
-    "fixation_times", "A :class:`fwdpy11.VecUint32` storing fixation times."
 
 .. _mlocuspop:
 
@@ -173,11 +194,12 @@ Multi-locus, single-deme population objects
 
 The type :class:`fwdpy11.MlocusPop` is analagous to :class:`fwdpy11.SlocusPop` in all but
 one respect.  The `diploids` property type is :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`
-for details.  The class has all of the properties of :class:`fwdpy11.SlocusPop` plus the following:
+for details.  The class has all of the properties of :class:`fwdpy11._Population` plus the following:
 
 .. csv-table:: :class:`fwdpy11.MlocusPop` properties
     :header: "Property", "Definition"
 
+    "diploids", "A :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`."
     "nloci", "The number of loci"
     "locus_boundaries", "The [begin,end) positions for each locus"
 
