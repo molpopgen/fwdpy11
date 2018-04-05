@@ -46,6 +46,11 @@ namespace fwdpy11
         SlocusPop(const fwdpp::uint_t N)
             : Population{ N }, diploids(N, { 0, 0 })
         {
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d.label = label++;
+                }
         }
 
         template <typename diploids_input, typename gametes_input,

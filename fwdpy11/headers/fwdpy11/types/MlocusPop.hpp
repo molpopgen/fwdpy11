@@ -52,6 +52,11 @@ namespace fwdpy11
               diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
               locus_boundaries{}
         {
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d[0].label = label++;
+                }
         }
 
         MlocusPop(
@@ -61,6 +66,11 @@ namespace fwdpy11
               diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
               locus_boundaries{ locus_boundaries_ }
         {
+            std::size_t label = 0;
+            for (auto &&d : this->diploids)
+                {
+                    d[0].label = label++;
+                }
         }
 
         template <typename diploids_input, typename gametes_input,
