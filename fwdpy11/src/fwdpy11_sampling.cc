@@ -31,7 +31,6 @@
 #include <fwdpp/sugar/matrix.hpp>
 #include <fwdpp/sugar/sampling.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
-//#include <fwdpy11/types.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>

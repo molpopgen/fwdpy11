@@ -19,7 +19,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
-//#include <fwdpy11/types.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/fitness/single_locus_stateless_fitness.hpp>
 

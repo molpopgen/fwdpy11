@@ -2,7 +2,6 @@
 #define FWDPY_RULES_BASE_HPP
 
 #include "fwdpy11/fitness/fitness.hpp"
-//#include "fwdpy11/types.hpp"
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
