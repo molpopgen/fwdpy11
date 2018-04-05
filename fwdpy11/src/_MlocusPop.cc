@@ -72,8 +72,8 @@ PYBIND11_MODULE(_MlocusPop, m)
                  return lhs == rhs;
              })
         .def_readonly("nloci", &fwdpy11::MlocusPop::nloci)
-        .def_readonly("locus_boundaries",
-                      &fwdpy11::MlocusPop::locus_boundaries)
+        .def_readwrite("locus_boundaries",
+                       &fwdpy11::MlocusPop::locus_boundaries)
         .def_readonly("diploids", &fwdpy11::MlocusPop::diploids,
                       DIPLOIDS_DOCSTRING)
         .def_static(
