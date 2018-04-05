@@ -1,5 +1,5 @@
-#ifndef FWDPY11_SLOCUSPOP_HPP__
-#define FWDPY11_SLOCUSPOP_HPP__
+#ifndef FWDPY11_MLOCUSPOP_HPP__
+#define FWDPY11_MLOCUSPOP_HPP__
 
 #include "Population.hpp"
 #include "Diploid.hpp"
