@@ -3,6 +3,7 @@
 
 #include "Population.hpp"
 #include "Diploid.hpp"
+#include <stdexcept>
 #include <fwdpp/sugar/poptypes/tags.hpp>
 
 namespace fwdpy11
@@ -52,6 +53,14 @@ namespace fwdpy11
               diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
               locus_boundaries{}
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
+            if (!nloci)
+                {
+                    throw std::invalid_argument("number of loci must be > 0");
+                }
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
@@ -66,6 +75,14 @@ namespace fwdpy11
               diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
               locus_boundaries{ locus_boundaries_ }
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
+            if (!nloci)
+                {
+                    throw std::invalid_argument("number of loci must be > 0");
+                }
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {

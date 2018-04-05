@@ -4,6 +4,7 @@
 #include "Population.hpp"
 #include "Diploid.hpp"
 #include "create_pops.hpp"
+#include <stdexcept>
 #include <fwdpp/sugar/poptypes/tags.hpp>
 
 namespace fwdpy11
@@ -46,6 +47,10 @@ namespace fwdpy11
         SlocusPop(const fwdpp::uint_t N)
             : Population{ N }, diploids(N, { 0, 0 })
         {
+            if (!N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
