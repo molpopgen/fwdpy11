@@ -69,6 +69,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
 {
+    m.doc() = "Defined the ABC :class:`fwdpy11._Population`";
+
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
         py::buffer_protocol())

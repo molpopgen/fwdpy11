@@ -94,6 +94,24 @@ fwdpy11.fitness
     :members:
     :show-inheritance:
 
+fwdpy11._Population
+------------------------------
+.. automodule:: fwdpy11._Population
+    :members:
+    :show-inheritance:
+
+fwdpy11._SlocusPop
+------------------------------
+.. automodule:: fwdpy11._SlocusPop
+    :members:
+    :show-inheritance:
+
+fwdpy11._MlocusPop
+------------------------------
+.. automodule:: fwdpy11._MlocusPop
+    :members:
+    :show-inheritance:
+
 fwdpy11.trait_values
 ------------------------------
 .. automodule:: fwdpy11.trait_values
