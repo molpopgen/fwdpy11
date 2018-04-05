@@ -55,7 +55,4 @@ class MlocusPop(_MlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return MlocusPop(super(MlocusPop,
-                               MlocusPop).create(diploids,
-                                                 gametes, mutations,
-                                                 args))
+        return MlocusPop(_MlocusPop.create(diploids, gametes, mutations, args))

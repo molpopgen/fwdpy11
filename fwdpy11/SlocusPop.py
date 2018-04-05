@@ -18,6 +18,7 @@
 #
 from fwdpy11._SlocusPop import _SlocusPop
 
+
 class SlocusPop(_SlocusPop):
     """
     Population object representing a single
@@ -56,7 +57,6 @@ class SlocusPop(_SlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return SlocusPop(super(SlocusPop,
-                               SlocusPop).create(diploids,
-                                                 gametes, mutations,
-                                                 args))
+        return SlocusPop(_SlocusPop.create(diploids,
+                                           gametes, mutations,
+                                           args))
