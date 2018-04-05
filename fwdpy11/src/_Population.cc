@@ -108,6 +108,6 @@ PYBIND11_MODULE(_Population, m)
                       FIXATION_TIMES_DOCSTRING)
         .def_readonly("popdata", &fwdpy11::Population::popdata,
                       POPDATA_DOCSTRING)
-        .def_readonly("popdata_user", &fwdpy11::Population::popdata_user,
+        .def_readwrite("popdata_user", &fwdpy11::Population::popdata_user,
                       POPDATA_USER_DOCSTRING);
 }
