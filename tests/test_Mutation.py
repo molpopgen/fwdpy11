@@ -45,7 +45,8 @@ class testSingleEffectMutation(unittest.TestCase):
 class testMultiEffectMutation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, [1., 2.], [-1.0, 1./3.], 13)
+        self.m = fwdpy11.Mutation(
+            1.0, -1.0, 0.25, 0, [1., 2.], [-1.0, 1. / 3.], 13)
 
     def testConstruct(self):
         self.assertEqual(self.m.pos, 1.0)
@@ -60,6 +61,61 @@ class testMultiEffectMutation(unittest.TestCase):
         p = pickle.dumps(self.m)
         up = pickle.loads(p)
         self.assertEqual(up, self.m)
+
+
+class testMultiEffectMutationSlocusPopPickling(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        mutations = fwdpy11.VecMutation()
+        fixations = fwdpy11.VecMutation()
+        gametes = fwdpy11.VecGamete()
+        diploids = fwdpy11.VecDiploid()
+        mutations.append(fwdpy11.Mutation(
+            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
+        fixations.append(fwdpy11.Mutation(
+            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
+        gametes.append(fwdpy11.Gamete(
+            (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+        diploids.append(fwdpy11.SingleLocusDiploid(0, 0))
+        ftimes = fwdpy11.VecUint32([1])
+        self.pop = fwdpy11.SlocusPop.create(diploids,
+                                            gametes,
+                                            mutations,
+                                            fixations,
+                                            ftimes, 2)
+
+    def testPickle(self):
+        p = pickle.dumps(self.pop)
+        up = pickle.loads(p)
+        self.assertEqual(self.pop, up)
+
+
+class testMultiEffectMutationMlocusPopPickling(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        mutations = fwdpy11.VecMutation()
+        fixations = fwdpy11.VecMutation()
+        gametes = fwdpy11.VecGamete()
+        diploids = fwdpy11.VecVecDiploid()
+        mutations.append(fwdpy11.Mutation(
+            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
+        fixations.append(fwdpy11.Mutation(
+            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
+        gametes.append(fwdpy11.Gamete(
+            (4, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+        diploids.append(fwdpy11.VecDiploid(
+            [fwdpy11.SingleLocusDiploid(0, 0)] * 2))
+        ftimes = fwdpy11.VecUint32([1])
+        self.pop = fwdpy11.MlocusPop.create(diploids,
+                                            gametes,
+                                            mutations,
+                                            fixations,
+                                            ftimes, 2)
+
+    def testPickle(self):
+        p = pickle.dumps(self.pop)
+        up = pickle.loads(p)
+        self.assertEqual(self.pop, up)
 
 
 if __name__ == "__main__":
