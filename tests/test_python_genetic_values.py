@@ -48,7 +48,7 @@ class testCustomAdditive(unittest.TestCase):
         our C++ implementation.
         """
         for i in self.pop.diploids:
-            self.assertEqual(self.acpp(i, self.pop), self.a(i, self.pop))
+            self.assertAlmostEqual(self.acpp(i, self.pop), self.a(i, self.pop))
 
 
 class testAdditiveEvolution(unittest.TestCase):

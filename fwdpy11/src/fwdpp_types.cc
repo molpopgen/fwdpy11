@@ -21,7 +21,6 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpp/forward_types.hpp>
-#include <fwdpp/sugar/popgenmut.hpp>
 
 namespace py = pybind11;
 
@@ -131,99 +130,4 @@ PYBIND11_MODULE(fwdpp_types, m)
         .def("__eq__", [](const fwdpp::gamete &a, const fwdpp::gamete &b) {
             return a == b;
         });
-
-    // Sugar types
-    py::class_<fwdpp::popgenmut, fwdpp::mutation_base>(
-        m, "Mutation", "Mutation with effect size and dominance")
-        .def(py::init<double, double, double, unsigned, std::uint16_t>(),
-             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
-             py::arg("label"),
-             R"delim(
-                Construct a mutations.
-
-                :param pos: Mutation position (float)
-                :param s: Effect size (float)
-                :param h: Dominance term (float)
-                :param g: Origin time (unsigned integer)
-                :param label: Label (16 bit integer)
-
-                .. testcode::
-
-                    import fwdpy11
-                    m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, 0)
-                    print(m.pos)
-                    print(m.s)
-                    print(m.h)
-                    print(m.g)
-                    print(m.label)
-
-                .. testoutput::
-                    
-                    1.0
-                    -1.0
-                    0.25
-                    0
-                    0
-                )delim")
-        .def(py::init<fwdpp::popgenmut::constructor_tuple>(),
-             R"delim(
-                Construct mutation from a tuple.
-
-                The tuple should contain (pos, s, h, g, label)
-
-                .. testcode::
-
-                    import fwdpy11
-                    m = fwdpy11.Mutation((1.0, -1.0, 0.25, 0, 0))
-                    print(m.pos)
-                    print(m.s)
-                    print(m.h)
-                    print(m.g)
-                    print(m.label)
-
-                .. testoutput::
-                    
-                    1.0
-                    -1.0
-                    0.25
-                    0
-                    0
-                )delim")
-        .def_readonly(
-            "g", &fwdpp::popgenmut::g,
-            "Generation when mutation arose (origination time). (read-only)")
-        .def_readonly("s", &fwdpp::popgenmut::s,
-                      "Selection coefficient/effect size. (read-only)")
-        .def_readonly("h", &fwdpp::popgenmut::h,
-                      "Dominance/effect in heterozygotes. (read-only)")
-        .def_property_readonly(
-            "key",
-            [](const fwdpp::popgenmut &m) {
-                return py::make_tuple(m.pos, m.s, m.g);
-            },
-            R"delim(It is often useful to have a unique key for
-                    tracking mutations.  This property returns 
-                    the tuple (pos, esize, origin).
-
-                    .. versionadded:: 0.1.3.a1
-                   )delim")
-        .def(py::pickle(
-            [](const fwdpp::popgenmut &m) {
-                return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
-            },
-            [](py::tuple p) {
-                return std::unique_ptr<fwdpp::popgenmut>(new fwdpp::popgenmut(
-                    p[0].cast<double>(), p[1].cast<double>(),
-                    p[2].cast<double>(), p[3].cast<unsigned>(),
-                    p[4].cast<std::uint16_t>()));
-            }))
-        .def("__str__",
-             [](const fwdpp::popgenmut &m) {
-                 return "Mutation[" + std::to_string(m.pos) + ","
-                        + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                        + std::to_string(m.g) + "," + std::to_string(m.xtra)
-                        + "]";
-             })
-        .def("__eq__", [](const fwdpp::popgenmut &a,
-                          const fwdpp::popgenmut &b) { return a == b; });
 }

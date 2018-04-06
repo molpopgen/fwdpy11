@@ -52,9 +52,10 @@ namespace fwdpy11
 #define STATELESS_SLOCUS_FUNCTION(FUNCTION)                                   \
     struct FUNCTION                                                           \
     {                                                                         \
-        inline double operator()(const fwdpy11::Diploid& dip,               \
-                                 const fwdpy11::Population::gcont_t& gametes,             \
-                                 const fwdpy11::Population::mcont_t& mutations) const
+        inline double operator()(                                             \
+            const fwdpy11::Diploid& dip,                                      \
+            const fwdpy11::Population::gcont_t& gametes,                      \
+            const fwdpy11::Population::mcont_t& mutations) const
 
 #define END_STRUCT()                                                          \
     }                                                                         \
@@ -70,7 +71,7 @@ namespace fwdpy11
 #define STATELESS_GENOTYPE_POLICY(FUNCTION)                                   \
     struct FUNCTION                                                           \
     {                                                                         \
-        inline void operator()(double& w, const fwdpp::popgenmut& m) const
+        inline void operator()(double& w, const fwdpy11::Mutation& m) const
 
 #define CREATE_STATELESS_SLOCUS_OBJECT(FUNCTION, FUNCNAME, MODOBJ)            \
     pybind11::                                                                \

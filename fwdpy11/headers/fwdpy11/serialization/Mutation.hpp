@@ -67,7 +67,6 @@ namespace fwdpp
                 uint_t g;
                 double pos, s, h;
                 decltype(fwdpy11::Mutation::xtra) xtra;
-                io::scalar_reader reader;
                 reader(buffer, &g);
                 reader(buffer, &pos);
                 reader(buffer, &s);

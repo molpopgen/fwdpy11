@@ -31,19 +31,19 @@ namespace fwdpy11
     std::size_t
     infsites_Mutation(std::queue<std::size_t> &recycling_bin,
                       Population::mcont_t &mutations,
-                      Population::lookup_table_type &lookup,
-                      const fwdpp::uint_t &generation, const double pselected,
+                      Population::lookup_table_t &lookup,
+                      const fwdpp::uint_t &generation,
                       const position_function &posmaker,
                       const effect_size_function &esize_maker,
                       const dominance_function &hmaker,
                       const decltype(Mutation::xtra) x = 0)
     /*!
      * Mutation function to add a fwdpp::Mutation to a population.
-	 *
-	 * Generate mutations with single effect size.
-	 *
-	 * This implementation is a modification of fwdpp::infsites_popgenmut,
-	 * from the fwdpp library
+         *
+         * Generate mutations with single effect size.
+         *
+         * This implementation is a modification of fwdpp::infsites_popgenmut,
+         * from the fwdpp library
      *
      * In order to use this function, it must be bound to a callable
      * that is a valid mutation function.  See examples for details.
@@ -75,9 +75,9 @@ namespace fwdpy11
                 pos = posmaker();
             }
         lookup.insert(pos);
-        return fwdpp_internal::recycle_mutation_helper(
-            recycling_bin, mutations, pos, (selected) ? esize_maker() : 0.,
-            (selected) ? hmaker() : 0., generation, x);
+        return fwdpp::fwdpp_internal::recycle_mutation_helper(
+            recycling_bin, mutations, pos, esize_maker(), hmaker(), generation,
+            x);
     }
 }
 
