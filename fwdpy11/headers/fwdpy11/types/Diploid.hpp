@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstddef>
 #include <vector>
-#include <pybind11/pybind11.h>
+#include <tuple>
 
 namespace fwdpy11
 {
@@ -35,24 +35,24 @@ namespace fwdpy11
         //! Fitness.  This is not necessarily written to by a simulation.
         double w;
         //! IDs of parents.  NB: this will be changed in future releases
-        pybind11::object parental_data;
+        std::tuple<std::size_t, std::size_t> parental_data;
         //! Constructor
         Diploid() noexcept
             : first(first_type()), second(second_type()), label(0), deme(0),
-              sex(-1), g(0.), e(0.), w(1.), parental_data(pybind11::none())
+              sex(-1), g(0.), e(0.), w(1.), parental_data{}
         {
         }
         //! Construct from two indexes to gametes
         Diploid(first_type g1, first_type g2) noexcept
             : first(g1), second(g2), label(0), deme(0), sex(-1), g(0.), e(0.),
-              w(1.), parental_data(pybind11::none())
+              w(1.), parental_data{}
         {
         }
 
-        Diploid(first_type g1, first_type g2, std::size_t label_,
-                  double deme_, double sex_, double g_, double e_, double w_)
+        Diploid(first_type g1, first_type g2, std::size_t label_, double deme_,
+                double sex_, double g_, double e_, double w_)
             : first(g1), second(g2), label(label_), deme(deme_), sex(sex_),
-              g(g_), e(e_), w(w_), parental_data(pybind11::none())
+              g(g_), e(e_), w(w_), parental_data{}
         {
         }
 
@@ -71,23 +71,8 @@ namespace fwdpy11
                 = this->first == dip.first && this->second == dip.second
                   && this->w == dip.w && this->g == dip.g && this->e == dip.e
                   && this->label == dip.label && this->deme == dip.deme
-                  && this->sex == dip.sex;
-            // We now attempt to compare the parental data.
-            // pybind11 doesn't have a rich comparison support,
-            // so we rely on the __eq__ attribute.  If no
-            // such attribute exists, we simply clear the
-            // error and move on.
-            try
-                {
-                    bool parental_data_comp
-                        = this->parental_data.attr("__eq__")(dip.parental_data)
-                              .cast<bool>();
-                    return cpp_data_comparison && parental_data_comp;
-                }
-            catch (...)
-                {
-                    PyErr_Clear();
-                }
+                  && this->sex == dip.sex
+                  && this->parental_data == dip.parental_data;
             return cpp_data_comparison;
         }
     };
@@ -97,5 +82,3 @@ namespace fwdpy11
 }
 
 #endif
-
-

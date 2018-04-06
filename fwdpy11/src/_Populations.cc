@@ -113,13 +113,8 @@ PYBIND11_MODULE(_Populations, m)
             [](const fwdpy11::SlocusPop& pop) -> py::object {
                 auto pb = py::bytes(
                     fwdpy11::serialization::serialize_details(&pop));
-                py::list pdata;
-                for (auto& d : pop.diploids)
-                    {
-                        pdata.append(d.parental_data);
-                    }
-                return py::make_tuple(std::move(pb), std::move(pdata),
-                                      pop.popdata, pop.popdata_user);
+                return py::make_tuple(std::move(pb), pop.popdata,
+                                      pop.popdata_user);
             },
             [](py::object pickled) -> fwdpy11::SlocusPop {
                 try
@@ -133,21 +128,16 @@ PYBIND11_MODULE(_Populations, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
-                if (t.size() != 4)
+                if (t.size() != 3)
                     {
                         throw std::runtime_error(
-                            "expected tuple with 4 elements");
+                            "expected tuple with 3 elements");
                     }
                 auto s = t[0].cast<py::bytes>();
-                auto l = t[1].cast<py::list>();
                 auto rv = fwdpy11::serialization::deserialize_details<
                     fwdpy11::SlocusPop>()(s, 1);
-                for (std::size_t i = 0; i < rv.diploids.size(); ++i)
-                    {
-                        rv.diploids[i].parental_data = l[i];
-                    }
-                rv.popdata = t[2];
-                rv.popdata_user = t[3];
+                rv.popdata = t[1];
+                rv.popdata_user = t[2];
                 return rv;
             }))
         .def("sample",
@@ -261,13 +251,8 @@ PYBIND11_MODULE(_Populations, m)
             [](const fwdpy11::MlocusPop& pop) -> py::object {
                 auto pb = py::bytes(
                     fwdpy11::serialization::serialize_details(&pop));
-                py::list pdata;
-                for (auto& d : pop.diploids)
-                    {
-                        pdata.append(d[0].parental_data);
-                    }
-                return py::make_tuple(std::move(pb), std::move(pdata),
-                                      pop.popdata, pop.popdata_user);
+                return py::make_tuple(std::move(pb), pop.popdata,
+                                      pop.popdata_user);
             },
             [](py::object pickled) -> fwdpy11::MlocusPop {
                 try
@@ -281,21 +266,16 @@ PYBIND11_MODULE(_Populations, m)
                         PyErr_Clear();
                     }
                 auto t = pickled.cast<py::tuple>();
-                if (t.size() != 4)
+                if (t.size() != 3)
                     {
                         throw std::runtime_error(
-                            "expected tuple with 4 elements");
+                            "expected tuple with 3 elements");
                     }
                 auto s = t[0].cast<py::bytes>();
-                auto l = t[1].cast<py::list>();
                 auto rv = fwdpy11::serialization::deserialize_details<
                     fwdpy11::MlocusPop>()(s, 1, 1);
-                for (std::size_t i = 0; i < rv.diploids.size(); ++i)
-                    {
-                        rv.diploids[i][0].parental_data = l[i];
-                    }
-                rv.popdata = t[2];
-                rv.popdata_user = t[3];
+                rv.popdata = t[1];
+                rv.popdata_user = t[2];
                 return rv;
             }))
         .def("sample",
