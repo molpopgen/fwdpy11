@@ -17,15 +17,39 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/Mutation.hpp>
 #include <fwdpp/fwdpp/sugar/sampling.hpp>
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<double>);
+
 PYBIND11_MODULE(fwdpy11_types, m)
 {
     m.doc() = "Wrap C++ types specific to fwdpy11.";
+
+    py::bind_vector<std::vector<double>>(
+        m, "VecDouble", "C++ vector of 64 bit floats.", py::buffer_protocol())
+        .def(py::pickle(
+            [](const std::vector<double> &v) {
+                py::list rv;
+                for (auto &&i : v)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<double> rv;
+                for (auto &&i : l)
+                    {
+                        rv.push_back(i.cast<double>());
+                    }
+                return rv;
+            }));
 
     // Sugar types
     py::class_<fwdpy11::Mutation, fwdpp::mutation_base>(
@@ -60,6 +84,24 @@ PYBIND11_MODULE(fwdpy11_types, m)
                     0
                     0
                 )delim")
+        .def(py::init([](double pos, double s, double h, fwdpp::uint_t g,
+                         py::list esizes, py::list heffects,
+                         std::uint16_t label) {
+                 std::vector<double> esizes_;
+                 std::vector<double> heffects_;
+                 for (auto i : esizes)
+                     {
+                         esizes_.push_back(i.cast<double>());
+                     }
+                 for (auto i : heffects)
+                     {
+                         heffects_.push_back(i.cast<double>());
+                     }
+                 return fwdpy11::Mutation(pos, s, h, g, std::move(esizes_),
+                                          std::move(heffects_), label);
+             }),
+             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
+             py::arg("esizes"), py::arg("heffects"), py::arg("label"))
         .def(py::init<fwdpy11::Mutation::constructor_tuple>(),
              R"delim(
                 Construct mutation from a tuple.
@@ -91,6 +133,18 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &fwdpy11::Mutation::h,
                       "Dominance/effect in heterozygotes. (read-only)")
+        .def_readonly("heffects", &fwdpy11::Mutation::heffects,
+                      R"delim(
+				Vector of heterozygous effects.
+
+				.. versionadded:: 0.1.5
+				)delim")
+        .def_readonly("esizes", &fwdpy11::Mutation::esizes,
+                      R"delim(
+				Vector of effect sizes.
+
+				.. versionadded:: 0.1.5
+				)delim")
         .def_property_readonly(
             "key",
             [](const fwdpy11::Mutation &m) {
@@ -104,14 +158,17 @@ PYBIND11_MODULE(fwdpy11_types, m)
                    )delim")
         .def(py::pickle(
             [](const fwdpy11::Mutation &m) {
-                return py::make_tuple(m.pos, m.s, m.h, m.g, m.xtra);
+                return py::make_tuple(m.pos, m.s, m.h, m.g, m.esizes,
+                                      m.heffects, m.xtra);
             },
             [](py::tuple p) {
                 return std::unique_ptr<fwdpy11::Mutation>(
                     new fwdpy11::Mutation(
                         p[0].cast<double>(), p[1].cast<double>(),
                         p[2].cast<double>(), p[3].cast<unsigned>(),
-                        p[4].cast<std::uint16_t>()));
+                        p[4].cast<std::vector<double>>(),
+                        p[5].cast<std::vector<double>>(),
+                        p[6].cast<std::uint16_t>()));
             }))
         .def("__str__",
              [](const fwdpy11::Mutation &m) {
