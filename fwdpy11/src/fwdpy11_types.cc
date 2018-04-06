@@ -73,7 +73,8 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::Diploid::label)>();
-                d->parental_data = t[6];
+                d->parental_data
+                    = t[6].cast<std::tuple<std::size_t, std::size_t>>();
                 d->deme = t[7].cast<std::uint32_t>();
                 d->sex = t[8].cast<std::int32_t>();
                 return d;

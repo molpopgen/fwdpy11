@@ -45,6 +45,8 @@ namespace fwdpp
                 w(buffer, &dip.label);
                 w(buffer, &dip.deme);
                 w(buffer, &dip.sex);
+                w(buffer, &std::get<0>(dip.parental_data));
+                w(buffer, &std::get<1>(dip.parental_data));
             }
         };
 
@@ -63,6 +65,8 @@ namespace fwdpp
                 r(buffer, &dip.label);
                 r(buffer, &dip.deme);
                 r(buffer, &dip.sex);
+                r(buffer, &std::get<0>(dip.parental_data));
+                r(buffer, &std::get<1>(dip.parental_data));
             }
         };
     }
