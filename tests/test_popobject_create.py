@@ -21,6 +21,21 @@
 
 import fwdpy11
 import unittest
+import pickle
+
+
+class testDiploidCreate(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.d = fwdpy11.SingleLocusDiploid.create(
+            0, 0, 10, 3, -1, 0.5, 1.0, 2.0)
+
+    def testPickle(self):
+        x = pickle.dumps(self.d)
+        dd = pickle.loads(x)
+        self.assertEqual(dd.deme, 3)
+        self.assertEqual(dd.sex, -1)
+        self.assertEqual(dd, self.d)
 
 
 class testSlocusPopCreate(unittest.TestCase):

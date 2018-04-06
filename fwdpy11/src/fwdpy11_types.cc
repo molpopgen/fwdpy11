@@ -37,20 +37,19 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("second", &fwdpy11::Diploid::second,
                       "Key to second gamete. (read-only)")
         .def_readonly("w", &fwdpy11::Diploid::w, "Fitness. (read-only)")
-        .def_readonly("g", &fwdpy11::Diploid::g,
-                      "Genetic value (read-only).")
+        .def_readonly("g", &fwdpy11::Diploid::g, "Genetic value (read-only).")
         .def_readonly("e", &fwdpy11::Diploid::e,
                       "Random/environmental effects (read-only).")
         .def_readonly("label", &fwdpy11::Diploid::label,
                       "Index of the diploid in its deme")
         .def_readonly("deme", &fwdpy11::Diploid::deme,
-                R"delim(
+                      R"delim(
                 Deme label for individual.
 
                 .. versionadded:: 0.1.5
                 )delim")
         .def_readonly("sex", &fwdpy11::Diploid::sex,
-                R"delim(
+                      R"delim(
                 Sex label for individual.
 
                 .. versionadded:: 0.1.5
@@ -65,7 +64,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def(py::pickle(
             [](const fwdpy11::Diploid& d) {
                 return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
-                                      d.label, d.parental_data);
+                                      d.label, d.parental_data, d.deme, d.sex);
             },
             [](py::tuple t) {
                 std::unique_ptr<fwdpy11::Diploid> d(new fwdpy11::Diploid(
@@ -74,12 +73,9 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 d->g = t[3].cast<double>();
                 d->e = t[4].cast<double>();
                 d->label = t[5].cast<decltype(fwdpy11::Diploid::label)>();
-                // Unpickle the Python object.
-                // The if statement is for backwards compatibility.
-                if (t.size() == 7)
-                    {
-                        d->parental_data = t[6];
-                    }
+                d->parental_data = t[6];
+                d->deme = t[7].cast<std::uint32_t>();
+                d->sex = t[8].cast<std::int32_t>();
                 return d;
             }))
         .def("__eq__", [](const fwdpy11::Diploid& a,
