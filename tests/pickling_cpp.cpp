@@ -17,13 +17,13 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
 // clang-format on
 
 #include <pybind11/pybind11.h>
-#include <fwdpp/sugar/popgenmut.hpp>
+#include <fwdpy11/types/Mutation.hpp>
 
 namespace py = pybind11;
 
 //Example of pickling a specific C++ type
 py::bytes
-pickle_mutation(const fwdpp::popgenmut& p)
+pickle_mutation(const fwdpy11::Mutation& p)
 {
     py::object m = py::cast<decltype(p)>(p);
     return py::module::import("pickle").attr("dumps")(m);

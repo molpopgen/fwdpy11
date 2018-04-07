@@ -25,6 +25,7 @@
 #include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/types/create_pops.hpp>
 #include <fwdpy11/serialization.hpp>
+#include <fwdpy11/serialization/Mutation.hpp>
 #include <fwdpy11/serialization/Diploid.hpp>
 #include <fwdpp/sugar/sampling.hpp>
 #include "get_individuals.hpp"

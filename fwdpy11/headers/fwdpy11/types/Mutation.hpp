@@ -27,7 +27,7 @@
  * This file defines the minimal C++ API
  * for the type.
  *
- * To serialize instaces of this type 
+ * To serialize instaces of this type
  * using fwdpp's machinery:
  *
  * #include <fwdpy11/serialization/Mutation.hpp>
@@ -95,9 +95,11 @@ namespace fwdpy11
               esizes(std::forward<vectype>(esizes_)),
               heffects(std::forward<vectype>(heffects_))
         {
-            this->neutral = ((s == 0.0)
-                             || std::all_of(std::begin(this->esizes),
-                                            std::end(this->esizes), 0.0));
+            this->neutral
+                = ((s == 0.0)
+                   && std::all_of(std::begin(this->esizes),
+                                  std::end(this->esizes),
+                                  [](const double d) { return d == 0.; }));
         }
 
         Mutation(constructor_tuple t) noexcept
@@ -107,6 +109,11 @@ namespace fwdpy11
               g(std::get<3>(t)), s(std::get<1>(t)),
               h(std::get<2>(t)), esizes{}, heffects{}
         {
+            this->neutral
+                = ((s == 0.0)
+                   && std::all_of(std::begin(this->esizes),
+                                  std::end(this->esizes),
+                                  [](const double d) { return d == 0.; }));
         }
 
         Mutation(constructor_tuple_variable_effects t) noexcept
@@ -116,6 +123,11 @@ namespace fwdpy11
               g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t)),
               esizes(std::get<4>(t)), heffects(std::get<5>(t))
         {
+            this->neutral
+                = ((s == 0.0)
+                   && std::all_of(std::begin(this->esizes),
+                                  std::end(this->esizes),
+                                  [](const double d) { return d == 0.; }));
         }
 
         bool
@@ -131,4 +143,3 @@ namespace fwdpy11
 }
 
 #endif
-
