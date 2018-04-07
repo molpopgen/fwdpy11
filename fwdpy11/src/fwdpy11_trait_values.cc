@@ -10,11 +10,13 @@ struct additive_diploid_trait_fxn
 {
     const fwdpp::additive_diploid w;
     additive_diploid_trait_fxn(const double scaling)
-        : w{ fwdpp::additive_diploid(scaling,fwdpp::atrait()) }
+        : w{ fwdpp::additive_diploid(scaling,
+                                     fwdpp::additive_diploid::policy::atrait) }
     {
     }
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
                const fwdpy11::Population::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
@@ -25,11 +27,13 @@ struct multiplicative_diploid_trait_fxn
 {
     const fwdpp::multiplicative_diploid w;
     multiplicative_diploid_trait_fxn(const double scaling)
-        : w{ fwdpp::multiplicative_diploid(scaling,fwdpp::mtrait()) }
+        : w{ fwdpp::multiplicative_diploid(
+              scaling, fwdpp::multiplicative_diploid::policy::mtrait) }
     {
     }
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
                const fwdpy11::Population::mcont_t &mutations) const
     {
         return w(dip, gametes, mutations);
@@ -38,10 +42,11 @@ struct multiplicative_diploid_trait_fxn
 
 struct gbr_diploid_trait_fxn
 {
-	gbr_diploid_trait_fxn(){}
-	gbr_diploid_trait_fxn(double){} //hack to make API happy
+    gbr_diploid_trait_fxn() {}
+    gbr_diploid_trait_fxn(double) {} // hack to make API happy
     inline double
-    operator()(const fwdpy11::Diploid &dip, const fwdpy11::Population::gcont_t &gametes,
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
                const fwdpy11::Population::mcont_t &mutations) const
     {
         auto sum1 = std::accumulate(
@@ -60,8 +65,9 @@ struct gbr_diploid_trait_fxn
     }
 };
 
-using single_locus_multiplicative_trait_wrapper = fwdpy11::
-    fwdpp_single_locus_fitness_wrapper<multiplicative_diploid_trait_fxn>;
+using single_locus_multiplicative_trait_wrapper
+    = fwdpy11::fwdpp_single_locus_fitness_wrapper<
+        multiplicative_diploid_trait_fxn>;
 using single_locus_additive_trait_wrapper
     = fwdpy11::fwdpp_single_locus_fitness_wrapper<additive_diploid_trait_fxn>;
 using gbr_trait_wrapper
@@ -122,9 +128,9 @@ PYBIND11_MODULE(trait_values, m)
                 return py::make_tuple(w.scaling);
             },
             [](py::tuple t) {
-                return std::
-                    make_shared<single_locus_multiplicative_trait_wrapper>(
-                        t[0].cast<double>());
+                return std::make_shared<
+                    single_locus_multiplicative_trait_wrapper>(
+                    t[0].cast<double>());
             }));
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,
