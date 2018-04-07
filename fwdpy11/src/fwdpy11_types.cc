@@ -101,7 +101,22 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                           std::move(heffects_), label);
              }),
              py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
-             py::arg("esizes"), py::arg("heffects"), py::arg("label"))
+             py::arg("esizes"), py::arg("heffects"), py::arg("label"),
+             R"delim(
+			 Construct a mutation with both a constant effect and/or
+			 a vector of effects.
+
+			 :param pos: Mutation position (float)
+			 :param s: Effect size (float)
+			 :param h: Dominance term (float)
+			 :param g: Origin time (unsigned integer)
+			 :param esizes: List of effect sizes (list of float)
+			 :param heffects: List of heterozygouse effects (list of float)
+			 :param label: Label (16 bit integer)
+				
+			 .. versionadded:: 0.1.5
+
+			 )delim")
         .def(py::init<fwdpy11::Mutation::constructor_tuple>(),
              R"delim(
                 Construct mutation from a tuple.
