@@ -97,10 +97,12 @@ namespace fwdpy11
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d))
+              diploids(std::forward<diploids_input>(d)),
+			  nloci{}
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();
+			nloci = diploids.at(0).size();
         }
 
         bool
