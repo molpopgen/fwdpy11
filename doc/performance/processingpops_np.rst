@@ -105,6 +105,7 @@ You may also access with a slice:
 The accesses are all range-checked and will raise exceptions when necessary:
 
 .. ipython:: python
+    :okexcept:
 
     #This tries to access past the end of the population:
     pop.diploids.trait_array(np.array([len(pop.diploids)+10]))
@@ -164,6 +165,7 @@ You may access the mutation indexes in a gamete as follows:
     to prevent bad things from happening
 
 .. ipython:: python
+    :okexcept:
 
     nkeys.flags.writeable = False
     #Now, attempting to write raises an error
