@@ -27,6 +27,8 @@
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 
 void
 check_finite(const double d, const std::string& error)
