@@ -97,7 +97,8 @@ class testMlocusPopCreate(unittest.TestCase):
 
     def testConstruction(self):
         pop = fwdpy11.MlocusPop(self.diploids, self.gametes, self.mutations)
-        self.assertTrue(pop.N, 1)
+        self.assertEqual(pop.N, 1)
+        self.assertEqual(pop.nloci, 2)
 
     def testStaticMethod(self):
         pop = fwdpy11.MlocusPop.create(
