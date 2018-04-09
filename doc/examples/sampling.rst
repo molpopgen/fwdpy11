@@ -69,6 +69,7 @@ By default, mutations that are fixed in the sample are not included.  To change 
 You cannot mix and match the random sampling with a :class:`fwdpy11.GSLrng` and sampling a list of individuals:
 
 .. ipython:: python
+    :okexcept:
 
     s6 = pop.sample(rng = rng, individuals = [5,7,9,11])
 

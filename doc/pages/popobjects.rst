@@ -274,6 +274,7 @@ Put mutations into containers out of order as far as mutation position is concer
 We will get an exception when we try to create a population:
 
 .. ipython:: python
+    :okexcept:
 
     pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
 

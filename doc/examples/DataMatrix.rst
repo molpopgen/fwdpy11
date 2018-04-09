@@ -211,6 +211,7 @@ Mark our new array as read-only:
 Now, we'll get an exception trying to modify the array:
 
 .. ipython:: python
+    :okexcept:
 
     for i in np.hsplit(n, n.shape[1]):
         i -= 2
