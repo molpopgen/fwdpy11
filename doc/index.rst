@@ -100,15 +100,9 @@ fwdpy11._Population
     :members:
     :show-inheritance:
 
-fwdpy11._SlocusPop
+fwdpy11._Populations
 ------------------------------
-.. automodule:: fwdpy11._SlocusPop
-    :members:
-    :show-inheritance:
-
-fwdpy11._MlocusPop
-------------------------------
-.. automodule:: fwdpy11._MlocusPop
+.. automodule:: fwdpy11._Populations
     :members:
     :show-inheritance:
 
