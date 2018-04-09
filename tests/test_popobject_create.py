@@ -81,6 +81,33 @@ class testSlocusPopCreate(unittest.TestCase):
         self.assertEqual(len(ftimes), 0)
 
 
+class testGameteKeySorting(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.mutations = fwdpy11.VecMutation()
+        self.fixations = fwdpy11.VecMutation()
+        self.gametes = fwdpy11.VecGamete()
+        self.diploids = fwdpy11.VecDiploid()
+        self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
+        self.mutations.append(fwdpy11.Mutation(0.01, -2, 1, 0, 0))
+        self.gametes.append(fwdpy11.Gamete(
+            (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+        self.gametes.append(fwdpy11.Gamete(
+            (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0, 1]))))
+        self.diploids.append(fwdpy11.SingleLocusDiploid(0, 1))
+
+    def testUnsortedGametes(self):
+        with self.assertRaises(ValueError):
+            pop = fwdpy11.SlocusPop.create(
+                self.diploids, self.gametes, self.mutations)
+
+    def testSortingGametes(self):
+        import fwdpy11.util
+        fwdpy11.util.sort_gamete_keys(self.gametes, self.mutations)
+        pop = fwdpy11.SlocusPop.create(
+            self.diploids, self.gametes, self.mutations)
+
+
 class testMlocusPopCreate(unittest.TestCase):
     @classmethod
     def setUp(self):
