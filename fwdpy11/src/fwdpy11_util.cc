@@ -21,8 +21,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpp/sugar/change_neutral.hpp>
-#include "fwdpy11_util_add_mutation.hpp"
 
 namespace py = pybind11;
 
@@ -53,69 +54,6 @@ sort_keys(mkeys& k, const mutation_container& mutations)
 PYBIND11_MODULE(util, m)
 {
     m.doc() = "Miscellaneous utilities for simulations.";
-
-    m.def("add_mutation",
-          [](const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
-             const fwdpp::uint_t ncopies,
-             const std::tuple<double, double, double>& pos_s_h,
-             const std::uint16_t label) {
-              return add_mutation(rng, pop, ncopies, pos_s_h, label);
-          },
-          py::arg("rng"), py::arg("pop"), py::arg("ncopies"),
-          py::arg("pos_esize_h"), py::arg("label") = 0,
-          R"delim(
-          Add a new mutation to a population.
-
-          :param rng: A :class:`fwdpy11.GSLrng`.
-          :param pop: A :class:`fwdpy11.SlocusPop`.
-          :param ncopies: The number of copies of the mutation.
-          :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
-          :param label: (0) An integer label for the mutation.
-
-          .. note::
-            The genotype frequencies for the new variant will
-            be multinomially distributed around expected 
-            Hardy-Weinberg proportions.
-
-          .. note:: 
-            An exception will occur if the new mutation 
-            position is at a pre-existing position in 
-            the population.
-          )delim");
-
-    m.def("add_mutation",
-          [](const fwdpy11::GSLrng_t& rng, fwdpy11::MlocusPop& pop,
-             const std::size_t locus, const fwdpp::uint_t ncopies,
-             const std::tuple<double, double, double>& pos_s_h,
-             const std::uint16_t label) {
-              return add_mutation(rng, pop, locus, ncopies, pos_s_h, label);
-          },
-          py::arg("rng"), py::arg("pop"), py::arg("locus"), py::arg("ncopies"),
-          py::arg("pos_esize_h"), py::arg("label") = 0,
-          R"delim(
-          Add a new mutation to a population.
-
-          :param rng: A :class:`fwdpy11.GSLrng`.
-          :param pop: A :class:`fwdpy11.MlocusPop`.
-          :param locus: The locus in which the mutation will be located.
-          :param ncopies: The number of copies of the mutation.
-          :param pos_esize_h: A tuple containing (pos,s,h) for the mutation.
-          :param label: (0) An integer label for the mutation.
-
-          .. note::
-            The genotype frequencies for the new variant will
-            be multinomially distributed around expected 
-            Hardy-Weinberg proportions.
-
-          .. note:: 
-            An exception will occur if the new mutation 
-            position is at a pre-existing position in 
-            the population.
-
-          .. todo::
-            Enforce that the new mutation position is 
-            correct given pop.locus_boundaries
-          )delim");
 
     m.def("change_effect_size",
           [](fwdpy11::SlocusPop& pop, const std::size_t index,

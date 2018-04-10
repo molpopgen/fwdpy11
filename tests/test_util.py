@@ -31,24 +31,6 @@ class testAddMutations(unittest.TestCase):
         self.pop = quick_neutral_slocus()
         self.rng = fwdpy11.GSLrng(42)
 
-    def test_add_selected(self):
-        ncopies = 103
-        x = fwdpy11.util.add_mutation(
-            self.rng, self.pop, ncopies, (0.77, -0.1, 0.11))
-        self.assertTrue(x < len(self.pop.mutations))
-        self.assertTrue(self.pop.mcounts[x] == ncopies)
-
-    def test_mutate_at_existing_position(self):
-        ncopies = 213
-        extant_pos = [self.pop.mutations[i].pos
-                      for i in range(len(self.pop.mcounts))
-                      if self.pop.mcounts[i] > 0]
-        with self.assertRaises(ValueError):
-            x = fwdpy11.util.add_mutation(
-                self.rng, self.pop, ncopies, (extant_pos[0], -0.1, 0.11))
-            x
-
-
 class test_ChangeEsizeSlocus(unittest.TestCase):
     @classmethod
     def setUpClass(self):
