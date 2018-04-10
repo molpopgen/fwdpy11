@@ -58,6 +58,7 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/popobjects
+    pages/manip_mutations
 
 .. toctree::
     :caption: Maximizing performance
