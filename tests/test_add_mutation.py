@@ -63,7 +63,6 @@ class testSlocusPopAddMutations(unittest.TestCase):
         self.assertEqual(
             len(self.pop.gametes[self.pop.diploids[0].second].smutations), 1)
 
-
     def testAddOneSelectedMutationWithVecEffects(self):
         self.mvec.append(self.smut_vec)
         m = self.pop.add_mutations(self.mvec, [0], [2])
@@ -71,8 +70,8 @@ class testSlocusPopAddMutations(unittest.TestCase):
         # The addition of mutations to populations works
         # via move construction, meaning the vector contents
         # of the input must be empty:
-        self.assertEqual(len(self.mvec[0].esizes),0)
-        self.assertEqual(len(self.mvec[0].heffects),0)
+        self.assertEqual(len(self.mvec[0].esizes), 0)
+        self.assertEqual(len(self.mvec[0].heffects), 0)
 
         self.assertEqual(len(m), 1)
         for i in m:
