@@ -142,8 +142,8 @@ PYBIND11_MODULE(_Populations, m)
                 try
                     {
                         auto s = pickled.cast<py::bytes>();
-                        return fwdpy11::serialization::deserialize_details<
-                            fwdpy11::SlocusPop>()(s, 1);
+                        return fwdpy11::serialization::
+                            deserialize_details<fwdpy11::SlocusPop>()(s, 1);
                     }
                 catch (std::runtime_error& eas)
                     {
@@ -156,8 +156,8 @@ PYBIND11_MODULE(_Populations, m)
                             "expected tuple with 3 elements");
                     }
                 auto s = t[0].cast<py::bytes>();
-                auto rv = fwdpy11::serialization::deserialize_details<
-                    fwdpy11::SlocusPop>()(s, 1);
+                auto rv = fwdpy11::serialization::
+                    deserialize_details<fwdpy11::SlocusPop>()(s, 1);
                 rv.popdata = t[1];
                 rv.popdata_user = t[2];
                 return rv;
@@ -215,7 +215,8 @@ PYBIND11_MODULE(_Populations, m)
              variants.
 
 			 .. versionadded:: 0.1.4
-             )delim");
+             )delim")
+        .def("add_mutations", &fwdpy11::SlocusPop::add_mutations);
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
         m, "_MlocusPop", "Representation of a multi-locus population")
@@ -280,8 +281,8 @@ PYBIND11_MODULE(_Populations, m)
                 try
                     {
                         auto s = pickled.cast<py::bytes>();
-                        return fwdpy11::serialization::deserialize_details<
-                            fwdpy11::MlocusPop>()(s, 1, 1);
+                        return fwdpy11::serialization::
+                            deserialize_details<fwdpy11::MlocusPop>()(s, 1, 1);
                     }
                 catch (std::runtime_error& eas)
                     {
@@ -294,8 +295,8 @@ PYBIND11_MODULE(_Populations, m)
                             "expected tuple with 3 elements");
                     }
                 auto s = t[0].cast<py::bytes>();
-                auto rv = fwdpy11::serialization::deserialize_details<
-                    fwdpy11::MlocusPop>()(s, 1, 1);
+                auto rv = fwdpy11::serialization::
+                    deserialize_details<fwdpy11::MlocusPop>()(s, 1, 1);
                 rv.popdata = t[1];
                 rv.popdata_user = t[2];
                 return rv;
@@ -353,5 +354,6 @@ PYBIND11_MODULE(_Populations, m)
 
 			 .. versionadded:: 0.1.4
              )delim",
-             py::arg("separate") = true, py::arg("remove_fixed") = true);
+             py::arg("separate") = true, py::arg("remove_fixed") = true)
+        .def("add_mutations", &fwdpy11::MlocusPop::add_mutations);
 }

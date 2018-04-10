@@ -5,7 +5,9 @@
 #include "Diploid.hpp"
 #include "create_pops.hpp"
 #include <stdexcept>
+#include <unordered_set>
 #include <fwdpp/sugar/poptypes/tags.hpp>
+#include <fwdpp/sugar/add_mutation.hpp>
 
 namespace fwdpy11
 {
@@ -82,6 +84,43 @@ namespace fwdpy11
         {
             diploids.clear();
             popbase_t::clear_containers();
+        }
+
+        virtual std::vector<std::size_t>
+        add_mutations(typename fwdpp_base::mcont_t &new_mutations,
+                      const std::vector<std::size_t> &individuals,
+                      const std::vector<short> &gametes)
+        {
+            std::unordered_set<double> poschecker;
+            for (const auto &m : new_mutations)
+                {
+                    if (this->mut_lookup.find(m.pos) != this->mut_lookup.end())
+                        {
+                            throw std::invalid_argument(
+                                "attempting to add new mutation at "
+                                "already-mutated position");
+                        }
+                    if (poschecker.find(m.pos) != poschecker.end())
+                        {
+                            throw std::invalid_argument(
+                                "attempting to add multiple mutations at the "
+                                "same position");
+                        }
+                    poschecker.insert(m.pos);
+                }
+            std::vector<std::size_t> rv;
+
+            for (auto &i : new_mutations)
+                {
+                    auto pos = i.pos;
+                    // remaining preconditions get checked by fwdpp:
+                    rv.push_back(fwdpp::add_mutation(*this, individuals,
+                                                     gametes, std::move(i)));
+
+                    // fwdpp's function doesn't update the lookup:
+                    this->mut_lookup.insert(pos);
+                }
+            return rv;
         }
     };
 }

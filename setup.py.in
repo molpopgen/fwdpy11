@@ -201,8 +201,7 @@ ext_modules = [
     ),
     Extension(
         'fwdpy11.util',
-        ['fwdpy11/src/fwdpy11_util.cc',
-         'fwdpy11/src/fwdpy11_util_add_mutation.cc'],
+        ['fwdpy11/src/fwdpy11_util.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],

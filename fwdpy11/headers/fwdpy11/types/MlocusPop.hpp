@@ -4,6 +4,9 @@
 #include "Population.hpp"
 #include "Diploid.hpp"
 #include <stdexcept>
+#include <unordered_set>
+#include <algorithm>
+#include <fwdpp/sugar/add_mutation.hpp>
 #include <fwdpp/sugar/poptypes/tags.hpp>
 
 namespace fwdpy11
@@ -97,12 +100,11 @@ namespace fwdpy11
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d)),
-			  nloci{}
+              diploids(std::forward<diploids_input>(d)), nloci{}
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();
-			nloci = diploids.at(0).size();
+            nloci = diploids.at(0).size();
         }
 
         bool
@@ -118,6 +120,62 @@ namespace fwdpy11
         {
             diploids.clear();
             popbase_t::clear_containers();
+        }
+
+        virtual std::vector<std::size_t>
+        add_mutations(typename fwdpp_base::mcont_t &new_mutations,
+                      const std::vector<std::size_t> &individuals,
+                      const std::vector<short> &gametes)
+        {
+            std::unordered_set<double> poschecker;
+            std::vector<std::size_t> loci;
+            for (const auto &m : new_mutations)
+                {
+                    auto x = std::lower_bound(
+                        std::begin(locus_boundaries),
+                        std::end(locus_boundaries), m.pos,
+                        [](const std::pair<double, double> &p,
+                           const double value) { return p.second < value; });
+                    if (x == std::end(locus_boundaries))
+                        {
+                            throw std::invalid_argument("mutation position "
+                                                        "not within locus "
+                                                        "boundaries");
+                        }
+                    if (m.pos >= x->second)
+                        {
+                            throw std::invalid_argument(
+                                "mutation position greater than right-hand "
+                                "locus boundary");
+                        }
+                    loci.push_back(x - std::begin(locus_boundaries));
+                    if (this->mut_lookup.find(m.pos) != this->mut_lookup.end())
+                        {
+                            throw std::invalid_argument(
+                                "attempting to add new mutation at "
+                                "already-mutated position");
+                        }
+                    if (poschecker.find(m.pos) != poschecker.end())
+                        {
+                            throw std::invalid_argument(
+                                "attempting to add multiple mutations at the "
+                                "same position");
+                        }
+                    poschecker.insert(m.pos);
+                }
+            std::vector<std::size_t> rv;
+
+            std::size_t locus = 0;
+            for (auto &i : new_mutations)
+                {
+                    auto pos = i.pos;
+                    // remaining preconditions get checked by fwdpp:
+                    rv.push_back(fwdpp::add_mutation(*this, loci[locus++],
+                                                     individuals, gametes,
+                                                     std::move(i)));
+                    this->mut_lookup.insert(pos);
+                }
+            return rv;
         }
     };
 }
