@@ -83,6 +83,14 @@ namespace fwdpy11
             diploids.clear();
             popbase_t::clear_containers();
         }
+
+        virtual std::vector<std::size_t>
+        add_mutations(typename fwdpp_base::mcont_t &mutations,
+                      const std::vector<std::size_t> &individuals,
+                      const std::vector<short> &gametes)
+        {
+            return {};
+        }
     };
 }
 #endif
