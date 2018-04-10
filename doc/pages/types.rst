@@ -19,7 +19,7 @@ is not supported. However, they can be cast to a Python list if such operations 
 
 .. _popgenmuts:
 
-Mutations with a single effect size
+Mutations 
 -----------------------------------------------------------
 
 A mutation is described by :class:`fwdpy11.Mutation`, which provides read-only access to the following
@@ -32,6 +32,8 @@ properties:
     "pos", "Position"
     "s", "Selection coefficient/effect size"
     "h", "Dominance"
+    "esizes", "A vector of effect sizes"
+    "heffects", "A vector of heterozygous effects"
     "g", "Origination time"
     "neutral", "Boolean -- neutral or not?"
     "label", "16 bit integer"
