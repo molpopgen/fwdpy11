@@ -199,26 +199,6 @@ namespace fwdpy11
                                 "adjacent intervals cannot overlap");
                         }
                 }
-            // if (!std::is_sorted(std::begin(lb), std::end(lb),
-            //                    [](const std::pair<double, double> &a,
-            //                       const std::pair<double, double> &b) {
-            //                        return a.second < b.second;
-            //                    }))
-            //    {
-            //        throw std::invalid_argument(
-            //            "locus boundaries not sorted by second element");
-            //    }
-            // for (std::size_t i = 0; i < lb.size(); ++i)
-            //    {
-            //        if (lb[i].second <= lb[i].first)
-            //            {
-            //                throw std::invalid_argument(
-            //                    "locus boundaries must be [a,b) and a < b");
-            //            }
-            //		if(i<lb.size()-1)
-            //		{
-            //		}
-            //    }
         }
     };
 }
