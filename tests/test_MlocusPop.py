@@ -87,11 +87,6 @@ class testSampling(unittest.TestCase):
                             separate=True, remove_fixed=True)
         self.assertEqual(len(x), self.pop.nloci)
 
-        self.pop.locus_boundaries = []
-
-        with self.assertRaises(ValueError):
-            self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
-
     def testDefinedSample(self):
         x = self.pop.sample(individuals=range(10))
         self.assertEqual(len(x), self.pop.nloci)
@@ -126,6 +121,19 @@ class testBadLocusBoundaries(unittest.TestCase):
         with self.assertRaises(ValueError):
             pop = fp11.MlocusPop(100, [(0, 3), (1, 2)])
 
+class testSettingLocusBoundaries(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fp11.MlocusPop(100,[(0,1),(1,2)])
+
+    def testReassign(self):
+        self.pop.locus_boundaries = [(2,3),(11,45)]
+
+    def testBadReassign(self):
+        with self.assertRaises(ValueError):
+            self.pop.locus_boundaries = []
+        with self.assertRaises(ValueError):
+            self.pop.locus_boundaries = [(1,2.),(1,3)]
 
 if __name__ == "__main__":
     unittest.main()
