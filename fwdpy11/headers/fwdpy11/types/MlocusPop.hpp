@@ -175,10 +175,7 @@ namespace fwdpy11
         {
             if (lb.empty())
                 return;
-            if (!std::is_sorted(
-                    std::begin(lb), std::end(lb),
-                    [](const std::pair<double, double> &a,
-                       const std::pair<double, double> &b) { return a < b; }))
+            if (!std::is_sorted(std::begin(lb), std::end(lb)))
                 {
                     throw std::invalid_argument("locus boundaries not sorted");
                 }
