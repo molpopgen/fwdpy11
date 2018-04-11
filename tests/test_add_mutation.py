@@ -162,7 +162,7 @@ class testSlocusPopAddMutations(unittest.TestCase):
 
     def testUnEqualListLengths(self):
         self.mvec.append(self.nmut)
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(ValueError):
             m = self.pop.add_mutations(self.mvec, [0], [0, 1])
 
     def testInvalidIndividual(self):
@@ -172,7 +172,7 @@ class testSlocusPopAddMutations(unittest.TestCase):
 
     def testInvalidGamete(self):
         self.mvec.append(self.nmut)
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(IndexError):
             m = self.pop.add_mutations(self.mvec, [53], [3])
 
 

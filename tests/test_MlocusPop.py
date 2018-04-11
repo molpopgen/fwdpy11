@@ -89,7 +89,7 @@ class testSampling(unittest.TestCase):
 
         self.pop.locus_boundaries = []
 
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(ValueError):
             self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
 
     def testDefinedSample(self):
