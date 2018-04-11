@@ -23,7 +23,7 @@ import fwdpy11 as fp11
 class testMlocusPop(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fp11.MlocusPop(1000, 5)
+        self.pop = fp11.MlocusPop(1000, [(i,i+1) for i in range(5)])
 
     def test_N(self):
         self.assertEqual(self.pop.N, 1000)
@@ -53,11 +53,11 @@ class testMlocusPop(unittest.TestCase):
 class testMlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            fp11.MlocusPop(0, 5)
+            fp11.MlocusPop(0, [(i,i+1) for i in range(5)])
 
     def testNoLoci(self):
         with self.assertRaises(ValueError):
-            fp11.MlocusPop(1000, 0)
+            fp11.MlocusPop(1000, [])
 
 
 class testSampling(unittest.TestCase):

@@ -123,13 +123,14 @@ class testMlocusPopCreate(unittest.TestCase):
             [fwdpy11.SingleLocusDiploid(0, 0)] * 2))
 
     def testConstruction(self):
-        pop = fwdpy11.MlocusPop(self.diploids, self.gametes, self.mutations)
+        pop = fwdpy11.MlocusPop(
+            self.diploids, self.gametes, self.mutations, [(0, 1), (1, 2)])
         self.assertEqual(pop.N, 1)
         self.assertEqual(pop.nloci, 2)
 
     def testStaticMethod(self):
         pop = fwdpy11.MlocusPop.create(
-            self.diploids, self.gametes, self.mutations)
+            self.diploids, self.gametes, self.mutations, [(0, 1), (1, 2)])
         self.assertTrue(type(pop) is fwdpy11.MlocusPop)
         # Test that data were moved and not copied:
         self.assertEqual(len(self.diploids), 0)
@@ -141,6 +142,7 @@ class testMlocusPopCreate(unittest.TestCase):
         pop = fwdpy11.MlocusPop.create(self.diploids,
                                        self.gametes,
                                        self.mutations,
+                                       [(0., 1.), (1., 2.)],
                                        self.fixations,
                                        ftimes, 2)
         self.assertTrue(type(pop) is fwdpy11.MlocusPop)

@@ -282,8 +282,8 @@ PYBIND11_MODULE(_Populations, m)
                         auto s = pickled.cast<py::bytes>();
                         return fwdpy11::serialization::
                             deserialize_details<fwdpy11::MlocusPop>()(
-                                s, 1,
-                                std::vector<std::pair<double, double>>{});
+                                s, 1, std::vector<std::pair<double, double>>{
+                                          { 0., 1 } });
                     }
                 catch (std::runtime_error& eas)
                     {
@@ -298,7 +298,8 @@ PYBIND11_MODULE(_Populations, m)
                 auto s = t[0].cast<py::bytes>();
                 auto rv = fwdpy11::serialization::
                     deserialize_details<fwdpy11::MlocusPop>()(
-                        s, 1, std::vector<std::pair<double, double>>{});
+                        s, 1,
+                        std::vector<std::pair<double, double>>{ { 0., 1 } });
                 rv.popdata = t[1];
                 rv.popdata_user = t[2];
                 return rv;

@@ -24,7 +24,7 @@ class MlocusPop(_MlocusPop):
     Representation of a multi-locus system.
     """
     @staticmethod
-    def create(diploids, gametes, mutations, *args):
+    def create(diploids, gametes, mutations, locus_boundaries, *args):
         """
         Create a new object from input data.
         Unlike the constructor method, this method results
@@ -33,6 +33,7 @@ class MlocusPop(_MlocusPop):
         :param diplods: A :class:`fwdpy11.VecVecDiploid`
         :param gametes: A :class:`fwdpy11.VecGamete`
         :param mutations: A :class:`fwdpy11.VecMutation`
+        :param locus_boundaries: Positional boundaries of each locus
         :param args: Fixations, fixation times, and generation
 
         :rtype: :class:`fwdpy11.MlocusPop`
@@ -54,4 +55,4 @@ class MlocusPop(_MlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return MlocusPop(_MlocusPop.create(diploids, gametes, mutations, args))
+        return MlocusPop(_MlocusPop.create(diploids, gametes, mutations, locus_boundaries, args))

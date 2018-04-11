@@ -111,7 +111,7 @@ def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
                   'demography': nlist,
                   'prune_selected': False
                   }
-    pop = MlocusPop(N, nloci, locus_boundaries)
+    pop = MlocusPop(N, locus_boundaries)
     return (pop, param_dict)
 
 
@@ -169,6 +169,6 @@ def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100, prune_selected=False)
                   'demography': nlist,
                   'prune_selected': prune_selected}
     params = MlocusParamsQ(**param_dict)
-    pop = MlocusPop(N, nloci, locus_boundaries)
+    pop = MlocusPop(N, locus_boundaries)
     evolve(rng, pop, params)
     return pop

@@ -109,6 +109,7 @@ class testMultiEffectMutationMlocusPopPickling(unittest.TestCase):
         self.pop = fwdpy11.MlocusPop.create(diploids,
                                             gametes,
                                             mutations,
+                                            [(0, 1), (1, 2)],
                                             fixations,
                                             ftimes, 2)
 
