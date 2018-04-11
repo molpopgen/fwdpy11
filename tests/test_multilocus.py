@@ -8,7 +8,7 @@ import pickle
 class testMultiLocusFitness(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fp11.MlocusPop(1000, 5)
+        self.pop = fp11.MlocusPop(1000, [(i,i+1) for i in range(5)])
         self.all_additive = [fp11w.SlocusAdditive()] * 5
         self.all_mult = [fp11w.SlocusMult()] * 5
         self.agg_add_w = fp11m.AggAddFitness()

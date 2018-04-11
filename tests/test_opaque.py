@@ -92,7 +92,7 @@ class testSlocusPopSampler(unittest.TestCase):
 class testMlocusPop(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fwdpy11.MlocusPop(1000, 5)
+        self.pop = fwdpy11.MlocusPop(1000, [(i, i + 1) for i in range(5)])
 
     def test_mutations(self):
         self.assertTrue(

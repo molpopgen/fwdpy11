@@ -98,8 +98,8 @@ class testFixationsAreSortedMlocusPop(unittest.TestCase):
             [fwdpy11.SingleLocusDiploid(0, 0), fwdpy11.SingleLocusDiploid(1, 1)])
         diploids.append(dip)
         diploids.append(dip)
-        self.pop = fwdpy11.MlocusPop(diploids, gametes, mutations)
-        self.pop.locus_boundaries = [(0, 1), (1, 2)]
+        self.pop = fwdpy11.MlocusPop(
+            diploids, gametes, mutations, [(0, 1), (1, 2)])
 
     def testSetup(self):
         self.assertEqual(len(self.pop.mutations), 4)

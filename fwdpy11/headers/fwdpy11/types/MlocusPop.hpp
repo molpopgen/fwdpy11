@@ -51,10 +51,12 @@ namespace fwdpy11
         MlocusPop &operator=(const MlocusPop &) = default;
 
         // Constructors for Python
-        MlocusPop(const fwdpp::uint_t N, fwdpp::uint_t nloci_)
-            : Population{ N },
-              diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
-              locus_boundaries{}
+        MlocusPop(const fwdpp::uint_t N,
+                  std::vector<std::pair<double, double>> locus_boundaries_)
+            : Population{ N }, diploids(N, diploid_t(locus_boundaries_.size(),
+                                                     Diploid{ 0, 0 })),
+              nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
+              locus_boundaries{ std::move(locus_boundaries_) }
         {
             if (!N)
                 {
@@ -64,28 +66,7 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("number of loci must be > 0");
                 }
-            std::size_t label = 0;
-            for (auto &&d : this->diploids)
-                {
-                    d[0].label = label++;
-                }
-        }
-
-        MlocusPop(
-            const fwdpp::uint_t N, fwdpp::uint_t nloci_,
-            const std::vector<std::pair<double, double>> &locus_boundaries_)
-            : Population{ N },
-              diploids(N, diploid_t(nloci_, Diploid{ 0, 0 })), nloci{ nloci_ },
-              locus_boundaries{ locus_boundaries_ }
-        {
-            if (!N)
-                {
-                    throw std::invalid_argument("population size must be > 0");
-                }
-            if (!nloci)
-                {
-                    throw std::invalid_argument("number of loci must be > 0");
-                }
+            validate_locus_boundaries(locus_boundaries);
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
@@ -95,16 +76,25 @@ namespace fwdpy11
 
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
-        explicit MlocusPop(diploids_input &&d, gametes_input &&g,
-                           mutations_input &&m)
+        explicit MlocusPop(
+            diploids_input &&d, gametes_input &&g, mutations_input &&m,
+            std::vector<std::pair<double, double>> locus_boundaries_)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d)), nloci{}
+              diploids(std::forward<diploids_input>(d)),
+              nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
+              locus_boundaries{ std::move(locus_boundaries_) }
         //! Constructor for pre-determined population status
         {
+            validate_locus_boundaries(locus_boundaries);
+            if (diploids.at(0).size() != nloci)
+                {
+                    throw std::invalid_argument("diploid genotypes "
+                                                "inconsistent wit number of "
+                                                "locus boundaries");
+                }
             this->process_individual_input();
-            nloci = diploids.at(0).size();
         }
 
         bool
@@ -119,6 +109,7 @@ namespace fwdpy11
         clear()
         {
             diploids.clear();
+            locus_boundaries.clear();
             popbase_t::clear_containers();
         }
 
@@ -176,6 +167,35 @@ namespace fwdpy11
                     this->mut_lookup.insert(pos);
                 }
             return rv;
+        }
+
+        void
+        validate_locus_boundaries(
+            const std::vector<std::pair<double, double>> &lb) const
+        {
+            if (lb.empty())
+                return;
+            if (!std::is_sorted(std::begin(lb), std::end(lb)))
+                {
+                    throw std::invalid_argument("locus boundaries not sorted");
+                }
+            for (auto &i : lb)
+                {
+                    if (i.second <= i.first)
+                        {
+                            throw std::invalid_argument("a locus boundary "
+                                                        "must be an interval "
+                                                        "[a,b) with a<b");
+                        }
+                }
+            for (std::size_t i = 0; i < lb.size() - 1; ++i)
+                {
+                    if (lb[i].second > lb[i + 1].first)
+                        {
+                            throw std::invalid_argument(
+                                "adjacent intervals cannot overlap");
+                        }
+                }
         }
     };
 }

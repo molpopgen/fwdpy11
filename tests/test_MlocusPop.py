@@ -23,7 +23,7 @@ import fwdpy11 as fp11
 class testMlocusPop(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fp11.MlocusPop(1000, 5)
+        self.pop = fp11.MlocusPop(1000, [(i, i + 1) for i in range(5)])
 
     def test_N(self):
         self.assertEqual(self.pop.N, 1000)
@@ -53,11 +53,11 @@ class testMlocusPop(unittest.TestCase):
 class testMlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            fp11.MlocusPop(0, 5)
+            fp11.MlocusPop(0, [(i, i + 1) for i in range(5)])
 
     def testNoLoci(self):
         with self.assertRaises(ValueError):
-            fp11.MlocusPop(1000, 0)
+            fp11.MlocusPop(1000, [])
 
 
 class testSampling(unittest.TestCase):
@@ -87,26 +87,54 @@ class testSampling(unittest.TestCase):
                             separate=True, remove_fixed=True)
         self.assertEqual(len(x), self.pop.nloci)
 
-        self.pop.locus_boundaries = []
-
-        with self.assertRaises(ValueError):
-            self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
-
     def testDefinedSample(self):
-        x = self.pop.sample(individuals = range(10))
+        x = self.pop.sample(individuals=range(10))
         self.assertEqual(len(x), self.pop.nloci)
         with self.assertRaises(IndexError):
             """
             fwdpp catches case where i >= N
             """
-            self.pop.sample(individuals = range(self.pop.N, self.pop.N + 10))
+            self.pop.sample(individuals=range(self.pop.N, self.pop.N + 10))
 
         with self.assertRaises(Exception):
             """
             pybind11 disallows conversion of negative
             numbers to a list of unsigned types.
             """
-            self.pop.sample(individuals = range(-10, 10))
+            self.pop.sample(individuals=range(-10, 10))
+
+
+class testBadLocusBoundaries(unittest.TestCase):
+    def testUnsorted(self):
+        with self.assertRaises(ValueError):
+            pop = fp11.MlocusPop(100, [(1, 2), (0, 1)])
+
+    def testBadInterval(self):
+        with self.assertRaises(ValueError):
+            pop = fp11.MlocusPop(100, [(0, 1), (1, 1)])
+        with self.assertRaises(ValueError):
+            pop = fp11.MlocusPop(100, [(0, 1), (2, 1)])
+
+    def testOverlap(self):
+        with self.assertRaises(ValueError):
+            pop = fp11.MlocusPop(100, [(0, 1.1), (1, 2)])
+        with self.assertRaises(ValueError):
+            pop = fp11.MlocusPop(100, [(0, 3), (1, 2)])
+
+
+class testSettingLocusBoundaries(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fp11.MlocusPop(100, [(0, 1), (1, 2)])
+
+    def testReassign(self):
+        self.pop.locus_boundaries = [(2, 3), (11, 45)]
+
+    def testBadReassign(self):
+        with self.assertRaises(ValueError):
+            self.pop.locus_boundaries = []
+        with self.assertRaises(ValueError):
+            self.pop.locus_boundaries = [(1, 2.), (1, 3)]
 
 
 if __name__ == "__main__":
