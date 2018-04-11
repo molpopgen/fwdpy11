@@ -15,6 +15,12 @@ fine, but you cannot unpickle from a file.
 
 In order to pickle a file, you must also use the latest pickling protocol.
 
+Some general notes:
+
+* We are trying hard to keep the binary formats constant, and to use "magic" numbers to read in older format versions
+  whenever possible.  However, in 0.1.5, we had to make a clean break, and attempting to unpickle populations from
+  previous versions will result in an exception.
+
 .. note::
     If you are pickling populations to a file, you should be aware that you can (and probably should) compress the output.
     We have found that lzma_ compression is ideal when pickling fwdpy11 population objects.

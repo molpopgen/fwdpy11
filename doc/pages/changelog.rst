@@ -4,6 +4,14 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.1.5
+++++++++++++++++++++++++++
+
+Warning:
+--------------------------
+
+This version breaks pickle format compatibility with files generated with version 0.1.4 and earlier.  Sorry, but we had to do it.
+
 Version 0.1.4
 ++++++++++++++++++++++++++
 
