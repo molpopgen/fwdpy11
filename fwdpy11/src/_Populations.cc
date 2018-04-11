@@ -220,14 +220,12 @@ PYBIND11_MODULE(_Populations, m)
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
         m, "_MlocusPop", "Representation of a multi-locus population")
-        .def(py::init<fwdpp::uint_t, fwdpp::uint_t>(), py::arg("N"),
-             py::arg("nloci"))
-        .def(py::init<fwdpp::uint_t, fwdpp::uint_t,
-                      const std::vector<std::pair<double, double>>&>(),
-             py::arg("N"), py::arg("nloci"), py::arg("locus_boundaries"))
+        .def(py::init<fwdpp::uint_t, std::vector<std::pair<double, double>>>(),
+             py::arg("N"), py::arg("locus_boundaries"))
         .def(py::init<const fwdpy11::MlocusPop::dipvector_t&,
                       const fwdpy11::MlocusPop::gcont_t&,
-                      const fwdpy11::MlocusPop::mcont_t&>(),
+                      const fwdpy11::MlocusPop::mcont_t&,
+                      std::vector<std::pair<double, double>>>(),
              R"delim(
              Construct with tuple of (diploids, gametes, mutations).
              
@@ -255,20 +253,21 @@ PYBIND11_MODULE(_Populations, m)
             [](fwdpy11::MlocusPop::dipvector_t& diploids,
                fwdpy11::MlocusPop::gcont_t& gametes,
                fwdpy11::MlocusPop::mcont_t& mutations,
+               std::vector<std::pair<double, double>> locus_boundaries,
                py::tuple args) -> fwdpy11::MlocusPop {
                 if (args.size() == 0)
                     {
                         return fwdpy11::create_wrapper<fwdpy11::MlocusPop>()(
                             std::move(diploids), std::move(gametes),
-                            std::move(mutations));
+                            std::move(mutations), std::move(locus_boundaries));
                     }
                 auto& fixations = args[0].cast<fwdpy11::MlocusPop::mcont_t&>();
                 auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
                 auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::create_wrapper<fwdpy11::MlocusPop>()(
                     std::move(diploids), std::move(gametes),
-                    std::move(mutations), std::move(fixations),
-                    std::move(ftimes), g);
+                    std::move(mutations), std::move(locus_boundaries),
+                    std::move(fixations), std::move(ftimes), g);
             })
         .def(py::pickle(
             [](const fwdpy11::MlocusPop& pop) -> py::object {
@@ -282,7 +281,9 @@ PYBIND11_MODULE(_Populations, m)
                     {
                         auto s = pickled.cast<py::bytes>();
                         return fwdpy11::serialization::
-                            deserialize_details<fwdpy11::MlocusPop>()(s, 1, 1);
+                            deserialize_details<fwdpy11::MlocusPop>()(
+                                s, 1,
+                                std::vector<std::pair<double, double>>{});
                     }
                 catch (std::runtime_error& eas)
                     {
@@ -296,7 +297,8 @@ PYBIND11_MODULE(_Populations, m)
                     }
                 auto s = t[0].cast<py::bytes>();
                 auto rv = fwdpy11::serialization::
-                    deserialize_details<fwdpy11::MlocusPop>()(s, 1, 1);
+                    deserialize_details<fwdpy11::MlocusPop>()(
+                        s, 1, std::vector<std::pair<double, double>>{});
                 rv.popdata = t[1];
                 rv.popdata_user = t[2];
                 return rv;
