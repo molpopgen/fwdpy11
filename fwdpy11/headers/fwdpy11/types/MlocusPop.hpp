@@ -66,6 +66,7 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("number of loci must be > 0");
                 }
+            validate_locus_boundaries(locus_boundaries);
             std::size_t label = 0;
             for (auto &&d : this->diploids)
                 {
@@ -82,10 +83,11 @@ namespace fwdpy11
                          std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d)),
-              nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) }, locus_boundaries{ std::move(
-                                                     locus_boundaries_) }
+              nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
+              locus_boundaries{ std::move(locus_boundaries_) }
         //! Constructor for pre-determined population status
         {
+            validate_locus_boundaries(locus_boundaries);
             if (diploids.at(0).size() != nloci)
                 {
                     throw std::invalid_argument("diploid genotypes "
@@ -165,6 +167,58 @@ namespace fwdpy11
                     this->mut_lookup.insert(pos);
                 }
             return rv;
+        }
+
+        void
+        validate_locus_boundaries(
+            const std::vector<std::pair<double, double>> &lb) const
+        {
+            if (lb.empty())
+                return;
+            if (!std::is_sorted(
+                    std::begin(lb), std::end(lb),
+                    [](const std::pair<double, double> &a,
+                       const std::pair<double, double> &b) { return a < b; }))
+                {
+                    throw std::invalid_argument("locus boundaries not sorted");
+                }
+            for (auto &i : lb)
+                {
+                    if (i.second <= i.first)
+                        {
+                            throw std::invalid_argument("a locus boundary "
+                                                        "must be an interval "
+                                                        "[a,b) with a<b");
+                        }
+                }
+            for (std::size_t i = 0; i < lb.size() - 1; ++i)
+                {
+                    if (lb[i].second > lb[i + 1].first)
+                        {
+                            throw std::invalid_argument(
+                                "adjacent intervals cannot overlap");
+                        }
+                }
+            // if (!std::is_sorted(std::begin(lb), std::end(lb),
+            //                    [](const std::pair<double, double> &a,
+            //                       const std::pair<double, double> &b) {
+            //                        return a.second < b.second;
+            //                    }))
+            //    {
+            //        throw std::invalid_argument(
+            //            "locus boundaries not sorted by second element");
+            //    }
+            // for (std::size_t i = 0; i < lb.size(); ++i)
+            //    {
+            //        if (lb[i].second <= lb[i].first)
+            //            {
+            //                throw std::invalid_argument(
+            //                    "locus boundaries must be [a,b) and a < b");
+            //            }
+            //		if(i<lb.size()-1)
+            //		{
+            //		}
+            //    }
         }
     };
 }
