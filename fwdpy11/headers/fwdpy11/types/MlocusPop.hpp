@@ -161,10 +161,11 @@ namespace fwdpy11
                 {
                     auto pos = i.pos;
                     // remaining preconditions get checked by fwdpp:
-                    rv.push_back(fwdpp::add_mutation(*this, loci[locus++],
-                                                     individuals, gametes,
-                                                     std::move(i)));
-                    this->mut_lookup.insert(pos);
+                    auto idx = fwdpp::add_mutation(*this, loci[locus++],
+                                                   individuals, gametes,
+                                                   std::move(i));
+                    this->mut_lookup.emplace(pos, idx);
+                    rv.push_back(idx);
                 }
             return rv;
         }

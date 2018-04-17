@@ -33,7 +33,6 @@
 #include <algorithm>
 #include <fwdpp/util.hpp>
 
-
 namespace fwdpy11
 {
     /// This function is similar in name and interface to the current fwdpp
@@ -84,7 +83,7 @@ namespace fwdpy11
                                    &mut,
                                const std::tuple<double, std::uint32_t>
                                    &value) noexcept {
-                                return std::tie(mut.pos,mut.g) < value;
+                                return std::tie(mut.pos, mut.g) < value;
                             });
                         auto d = std::distance(fixations.begin(), loc);
                         if (mutations[i].neutral
@@ -95,10 +94,17 @@ namespace fwdpy11
                                     fixation_times.begin() + d, generation);
                                 mcounts[i] = 0; // set count to zero to mark
                                                 // mutation as "recyclable"
-                                lookup.erase(mutations[i].pos); // remove
-                                                                // mutation
-                                                                // position
-                                                                // from lookup
+                                auto itr
+                                    = lookup.equal_range(mutations[i].pos);
+                                while (itr.first != itr.second)
+                                    {
+                                        if (itr.first->second == i)
+                                            {
+                                                lookup.erase(itr.first);
+                                                break;
+                                            }
+                                        ++itr.first;
+                                    }
                             }
                         else
                             {
@@ -113,30 +119,41 @@ namespace fwdpy11
                                     }
                             }
                     }
-                if (!mcounts[i])
-                    lookup.erase(mutations[i].pos);
+                else if (!mcounts[i])
+                    {
+                        auto itr = lookup.equal_range(mutations[i].pos);
+                        while (itr.first != itr.second)
+                            {
+                                if (itr.first->second == i)
+                                    {
+                                        lookup.erase(itr.first);
+                                        break;
+                                    }
+                                ++itr.first;
+                            }
+                    }
             }
-    }
 
-    //    struct update_mutations_wrapper
-    //    {
-    //        template <typename... args>
-    //        inline void
-    //        operator()(args &&... Args) const
-    //        {
-    //            fwdpp::update_mutations(std::forward<args>(Args)...);
-    //        }
-    //    };
-    //
-    //    struct update_mutations_n_wrapper
-    //    {
-    //        template <typename... args>
-    //        inline void
-    //        operator()(args &&... Args) const
-    //        {
-    //            fwdpy11::update_mutations_n(std::forward<args>(Args)...);
-    //        }
-    //    };
+        //    struct update_mutations_wrapper
+        //    {
+        //        template <typename... args>
+        //        inline void
+        //        operator()(args &&... Args) const
+        //        {
+        //            fwdpp::update_mutations(std::forward<args>(Args)...);
+        //        }
+        //    };
+        //
+        //    struct update_mutations_n_wrapper
+        //    {
+        //        template <typename... args>
+        //        inline void
+        //        operator()(args &&... Args) const
+        //        {
+        //            fwdpy11::update_mutations_n(std::forward<args>(Args)...);
+        //        }
+        //    };
+    }
 }
 
 #endif

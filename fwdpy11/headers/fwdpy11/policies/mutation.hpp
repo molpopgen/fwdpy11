@@ -39,11 +39,11 @@ namespace fwdpy11
                       const decltype(Mutation::xtra) x = 0)
     /*!
      * Mutation function to add a fwdpp::Mutation to a population.
-         *
-         * Generate mutations with single effect size.
-         *
-         * This implementation is a modification of fwdpp::infsites_popgenmut,
-         * from the fwdpp library
+     *
+     * Generate mutations with single effect size.
+     *
+     * This implementation is a modification of fwdpp::infsites_popgenmut,
+     * from the fwdpp library
      *
      * In order to use this function, it must be bound to a callable
      * that is a valid mutation function.  See examples for details.
@@ -74,10 +74,11 @@ namespace fwdpy11
             {
                 pos = posmaker();
             }
-        lookup.insert(pos);
-        return fwdpp::fwdpp_internal::recycle_mutation_helper(
+        auto idx = fwdpp::fwdpp_internal::recycle_mutation_helper(
             recycling_bin, mutations, pos, esize_maker(), hmaker(), generation,
             x);
+        lookup.emplace(pos, idx);
+        return idx;
     }
 }
 
