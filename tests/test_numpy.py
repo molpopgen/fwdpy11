@@ -30,7 +30,9 @@ class test_SlocusPop(unittest.TestCase):
             self.assertEqual(i['s'], j.s)
 
             # Can we create a mutation from each element?
-            m = fwdpy11.Mutation(tuple(i)[:-1])
+            # TODO: figure out why I cannot use
+            # [:-1] here on my Pop OS install.
+            m = fwdpy11.Mutation(tuple(i)[:5])
             self.assertEqual(m.pos, j.pos)
             self.assertEqual(m.s, j.s)
             self.assertEqual(m.h, j.h)
