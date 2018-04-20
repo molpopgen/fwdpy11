@@ -29,7 +29,7 @@ struct flattened_Mutation
     double pos, s, h;
     fwdpp::uint_t g;
     decltype(fwdpy11::Mutation::xtra) label;
-    std::int8_t neutral;
+    std::int16_t neutral;
 };
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
