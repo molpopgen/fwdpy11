@@ -3,7 +3,7 @@
 
 #include "PyPopulation.hpp"
 #include "Mutation.hpp"
-#include <unordered_set>
+#include <unordered_map>
 #include <fwdpp/fwd_functional.hpp>
 
 namespace fwdpy11
@@ -14,8 +14,7 @@ namespace fwdpy11
         = PyPopulation<Mutation, std::vector<Mutation>,
                        std::vector<fwdpp::gamete>, std::vector<Mutation>,
                        std::vector<fwdpp::uint_t>,
-                       std::unordered_set<double, std::hash<double>,
-                                          fwdpp::equal_eps>>;
+                       std::unordered_map<double,fwdpp::uint_t>>;
 }
 
 #endif

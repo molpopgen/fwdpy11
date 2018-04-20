@@ -114,11 +114,12 @@ namespace fwdpy11
                 {
                     auto pos = i.pos;
                     // remaining preconditions get checked by fwdpp:
-                    rv.push_back(fwdpp::add_mutation(*this, individuals,
-                                                     gametes, std::move(i)));
+                    auto idx = fwdpp::add_mutation(*this, individuals, gametes,
+                                                   std::move(i));
 
                     // fwdpp's function doesn't update the lookup:
-                    this->mut_lookup.insert(pos);
+                    this->mut_lookup.emplace(pos, idx);
+                    rv.push_back(idx);
                 }
             return rv;
         }
