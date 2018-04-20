@@ -16,11 +16,11 @@ namespace fwdpy11
     {
       private:
         virtual void process_individual_input() = 0;
+
+      public:
         using fwdpp_base
             = fwdpp::sugar::popbase<mutation_type, mcont, gcont, mvector,
                                     ftvector, lookup_table_type>;
-
-      public:
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
         pybind11::object popdata;
