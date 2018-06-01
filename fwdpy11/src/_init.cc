@@ -17,7 +17,12 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include <pybind11/pybind11.h>
+#include <gsl/gsl_version.h>
 #include <gsl/gsl_errno.h>
+#include <type_traits>
+
+static_assert(GSL_MAJOR_VERSION >= 2, "GSL major version >= 2 required");
+static_assert(GSL_MINOR_VERSION >= 2, "GSL minor version >= 2 required");
 
 PYBIND11_MODULE(_init, m)
 {
