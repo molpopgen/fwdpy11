@@ -72,6 +72,14 @@ LIBRARY_DIRS = [
 
 ext_modules = [
     Extension(
+        'fwdpy11._init',
+        ['fwdpy11/src/_init.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.fwdpp_types',
         ['fwdpy11/src/fwdpp_types.cc'],
         library_dirs=LIBRARY_DIRS,
