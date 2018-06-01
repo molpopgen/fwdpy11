@@ -33,6 +33,7 @@ then
     echo `which python3`
 else
     sudo apt-get update -qq
-    sudo apt-get -f install python-dev libffi-dev libssl-dev libgsl*-dev libhdf5-dev
+    sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev
+    ./travis_scripts/gsl2.sh
     pip install -r requirements.txt
 fi

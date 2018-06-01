@@ -25,6 +25,7 @@ then
     fi
 else
     echo "compilers are $CC $CXX"
+    export LD_LIBRARY_PATH=/usr/local/lib
     CC=$CC CXX=$CXX python setup.py build_ext -i
     if [ "$?" != "0" ];
     then
