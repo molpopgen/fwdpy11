@@ -5,5 +5,5 @@ tar xzf gsl-2.2.tar.gz
 cd gsl-2.2
 ./configure
 make
-sudo make install
+sudo make install > /dev/null 2> /dev/null
 cd ..
