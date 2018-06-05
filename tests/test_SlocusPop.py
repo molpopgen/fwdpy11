@@ -143,6 +143,14 @@ class testPythonObjects(unittest.TestCase):
         self.assertEqual(up.popdata_user, self.pop.generation)
         self.assertEqual(self.pop, up)
 
+    def testMutationLookupTable(self):
+        from fwdpy11.model_params import SlocusParamsQ
+        from fwdpy11.wright_fisher_qtrait import evolve
+        params = SlocusParamsQ(**self.pdict)
+        evolve(self.rng, self.pop, params)
+        for i in self.pop.mut_lookup:
+            self.assertEqual(i[0], self.pop.mutations[i[1]].pos)
+
 
 if __name__ == "__main__":
     unittest.main()
