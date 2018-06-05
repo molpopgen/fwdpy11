@@ -61,7 +61,7 @@ namespace
 
     static const auto POPDATA_USER_DOCSTRING
         = "A Python object with read-write access.\n\n.. versionadded:: 0.1.4";
-}
+} // namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
@@ -102,6 +102,16 @@ PYBIND11_MODULE(_Population, m)
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
+        .def_property_readonly("mut_lookup",
+                      [](const fwdpy11::Population& pop) {
+                          py::list rv;
+                          for (auto&& i : pop.mut_lookup)
+                              {
+                                  rv.append(py::make_tuple(i.first, i.second));
+                              }
+                          return rv;
+                      },
+                      "Mutation position lookup table.")
         .def_readonly("gametes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::Population::fixations,
@@ -111,5 +121,5 @@ PYBIND11_MODULE(_Population, m)
         .def_readonly("popdata", &fwdpy11::Population::popdata,
                       POPDATA_DOCSTRING)
         .def_readwrite("popdata_user", &fwdpy11::Population::popdata_user,
-                      POPDATA_USER_DOCSTRING);
+                       POPDATA_USER_DOCSTRING);
 }
