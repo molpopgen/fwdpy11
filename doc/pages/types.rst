@@ -69,6 +69,16 @@ Mutation objects to not track their own frequencies.  Rather, they are stored in
     Indices with values 0 zero correspond to the locations of extinct mutations in a mutation 
     container.
 
+.. _mpos:
+
+Mutation positions
+-----------------------------------------------------------
+
+.. versionadded:: 0.1.5
+
+The positions of all extant variants, and their locations in the mutation container, are tracked via a list of tuples.
+The first element in each tuple is the mutation position (a float) and the second it its location (an unsigned integer).
+
 .. _gametes:
 
 Gametes
@@ -150,6 +160,7 @@ Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:
     "generation", "Current generation."
     "mutations", "A :class:`fwdpy11.VecMutation`. See :ref:`popgenmuts`."
     "mcounts", "See :ref:`mcounts`."
+    "mut_lookup", "See :ref:`mpos`. The locations refer to the mutations container."
     "gametes", "A :class:`fwdpy11.VecGamete`.  See :ref:`gametes`."
     "fixations", "A :class:`fwdpy11.VecMutation` storing fixations. See :ref:`popgenmuts`."
     "fixation_times", "A :class:`fwdpy11.VecUint32` storing fixation times."
