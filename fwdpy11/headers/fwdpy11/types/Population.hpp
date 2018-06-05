@@ -14,7 +14,7 @@ namespace fwdpy11
         = PyPopulation<Mutation, std::vector<Mutation>,
                        std::vector<fwdpp::gamete>, std::vector<Mutation>,
                        std::vector<fwdpp::uint_t>,
-                       std::unordered_map<double,fwdpp::uint_t>>;
+                       std::unordered_multimap<double,fwdpp::uint_t>>;
 }
 
 #endif
