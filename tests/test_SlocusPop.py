@@ -143,6 +143,10 @@ class testPythonObjects(unittest.TestCase):
         self.assertEqual(up.popdata_user, self.pop.generation)
         self.assertEqual(self.pop, up)
 
+    def testMutationLookupTable(self):
+        for i in self.pop.mut_lookup:
+            self.assertEqual(i[0], pop.mutations[i[1]].pos)
+
 
 if __name__ == "__main__":
     unittest.main()
