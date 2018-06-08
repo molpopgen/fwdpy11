@@ -94,13 +94,13 @@ namespace fwdpy11
                                     fixation_times.begin() + d, generation);
                                 mcounts[i] = 0; // set count to zero to mark
                                                 // mutation as "recyclable"
+                                auto itr
+                                    = lookup.equal_range(mutations[i].pos);
                                 // Make position max double so that a user
                                 // cannot accidentally track this as a zero-frequency
                                 // variant
                                 mutations[i].pos
                                     = std::numeric_limits<double>::max();
-                                auto itr
-                                    = lookup.equal_range(mutations[i].pos);
                                 while (itr.first != itr.second)
                                     {
                                         if (itr.first->second == i)
