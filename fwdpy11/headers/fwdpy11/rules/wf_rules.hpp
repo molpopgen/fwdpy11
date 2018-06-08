@@ -41,11 +41,11 @@ namespace fwdpy11
             wbar = 0.;
             for (size_t i = 0; i < N_curr; ++i)
                 {
-                    pop.diploids[i].w = pop.diploids[i].g
+                    pop.diploid_metadata[i].w = pop.diploid_metadata[i].g
                         = ff(pop.diploids[i], pop.gametes, pop.mutations);
-                    assert(std::isfinite(pop.diploids[i].w));
-                    fitnesses[i] = pop.diploids[i].w;
-                    wbar += pop.diploids[i].w;
+                    assert(std::isfinite(pop.diploid_metadata[i].w));
+                    fitnesses[i] = pop.diploid_metadata[i].w;
+                    wbar += pop.diploid_metadata[i].w;
                 }
             wbar /= double(N_curr);
             lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
@@ -56,13 +56,14 @@ namespace fwdpy11
         //! \brief Update some property of the offspring based on properties of
         //! the parents
         virtual void
-        update(const GSLrng_t &rng, Diploid &offspring,
+        update(const GSLrng_t &rng, dip_metadata &offspring_metadata,
                const SlocusPop &pop, const std::size_t p1,
                const std::size_t p2) noexcept
         {
-            offspring.e = 0.0;
-            offspring.g = 0.0;
-            offspring.parental_data = std::make_tuple(p1, p2);
+            offspring_metadata.e = 0.0;
+            offspring_metadata.g = 0.0;
+            offspring_metadata.parents[0]=p1;
+            offspring_metadata.parents[1]=p2;
             return;
         }
     };
