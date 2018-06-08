@@ -10,7 +10,7 @@ namespace fwdpy11
 {
     using Diploid = std::pair<std::size_t, std::size_t>;
 
-    struct diploid_metadata
+    struct dip_metadata
     /*!
       \brief Bare struct for metadata.  Used as Numpy dtype.
     */
