@@ -12,6 +12,43 @@ Warning:
 
 This version breaks pickle format compatibility with files generated with version 0.1.4 and earlier.  Sorry, but we had to do it.
 
+Dependency changes:
+--------------------------
+
+* GSL >= 2.2 is now required.
+
+Bug fixes:
+--------------------------
+
+* Fixed bug in :func:`fwdpy11.util.sort_gamete_keys`.  The function was working on a copy, meaning data were not being
+  modified. `PR #93 <https://github.com/molpopgen/fwdpy11/pull/93>`_
+* Fix a bug in updating a population's mutation lookup table. This bug was upstream in fwdpp (`fwdpp issue 130 <https://github.com/molpopgen/fwdpp/issues/130>`_).  While definitely a bug, I could never find a case where simulation outputs were adversely affected.  In other words, simulation output remained the same after the fix, due to the rarity of the bug. `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_
+
+
+API changes/new features:
+----------------------------------------------------
+
+* Deme and sex fields added to diploid. `PR #82 <https://github.com/molpopgen/fwdpy11/pull/82>`_
+* Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  `PR #94 <https://github.com/molpopgen/fwdpy11/pull/94>`_
+* :class:`fwdpy11.MlocusPop` now requires that :attr:`fwdpy11.MlocusPop.locus_boundaries` be initialized upon
+  construction. `PR #96 <https://github.com/molpopgen/fwdpy11/pull/96>`_
+* The mutation position lookup table of a population is now a read-only property. See :ref:`mpos`.
+
+Back-end changes
+------------------------
+
+* Refactored class hierarchy for populations.
+* Updated to the fwdpp 0.6.x API. `PR #76 <https://github.com/molpopgen/fwdpy11/pull/76>`_ `PR #84 <https://github.com/molpopgen/fwdpy11/pull/84>`_ `PR #90 <https://github.com/molpopgen/fwdpy11/pull/90>`_
+* An entirely new mutation type was introduced on the C++ side.  It is API compatible with the previous type (fwdpp's
+  "popgenmut"), but has extra fields for extra flexibility. `PR #77 <https://github.com/molpopgen/fwdpy11/pull/77>`_ `PR #88 <https://github.com/molpopgen/fwdpy11/pull/88>`_
+* Replaced `std::bind` with lambda closures for callbacks. `PR #80 <https://github.com/molpopgen/fwdpy11/pull/80>`_
+* C++ implementation of diploid renamed to match Python class name. `PR #83 <https://github.com/molpopgen/fwdpy11/pull/83>`_
+* Diploids "parents" field changes from Python to C++ tuple. `PR #87 <https://github.com/molpopgen/fwdpy11/pull/87>`_
+* Fast exposure to raw C++ buffers improved for population objects. `PR #89 <https://github.com/molpopgen/fwdpy11/pull/89>`_
+* Refactored long unit tests. `PR #91 <https://github.com/molpopgen/fwdpy11/pull/91>`_
+* The GSL error handler is now turned off when fwdpy11 is imported. `PR #101 <https://github.com/molpopgen/fwdpy11/pull/101>`_
+* Population mutation position lookup table changed to an unordered multimap. `PR #102 <https://github.com/molpopgen/fwdpy11/pull/102>`_
+
 Version 0.1.4
 ++++++++++++++++++++++++++
 
@@ -20,7 +57,7 @@ Bug fixes:
 
 * A bug affecting retrieval of multi-locus diploid key data as a buffer for numpy arrays is now fixed. `PR #72 <https://github.com/molpopgen/fwdpy11/pull/72>`_
 * :attr:`fwdpy11.SingleLocusDiploid.label` is now pickled. `PR #34 <https://github.com/molpopgen/fwdpy11/pull/34>`_
-
+    
 API changes/new features:
 ----------------------------------------------------
 
