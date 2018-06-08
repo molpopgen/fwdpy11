@@ -42,7 +42,7 @@ Dependencies
 
 The following must be present on your system:
 
-* GSL_. This is a C library.  It is available via `conda`.
+* GSL_. This is a C library.  It is available via `conda`.  fwdpy11 requires version 2.2 or greater.
 * pybind11_. This should be installed via `pip` or `conda` as appropriate for your system.
 
 fwdpy11_ also uses fwdpp_, which is included as a submodule.
