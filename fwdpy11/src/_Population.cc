@@ -143,5 +143,26 @@ PYBIND11_MODULE(_Population, m)
              :returns: Index of mutation if found, or -1 otherwise.
 
              .. versionadded:: 0.1.5
+             )delim")
+        .def("find_fixation_by_key",
+             [](const fwdpy11::Population& pop,
+                const std::tuple<double, double, fwdpp::uint_t>& key,
+                const std::int64_t offset) {
+                 return pop.find_fixation_by_key(key, offset);
+             },
+             py::arg("pop"), py::arg("offset") = 0,
+             R"delim(
+             Find a fixation by key.
+             
+             :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
+             :type key: tuple
+             :param offset: Offset to start search in fixation container.
+             :type offset: int
+
+             :rtype: int
+
+             :returns: Index of fixation if found, or -1 otherwise.
+
+             .. versionadded:: 0.1.5
              )delim");
 }

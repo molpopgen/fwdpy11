@@ -73,6 +73,23 @@ namespace fwdpy11
             return static_cast<std::int64_t>(
                 std::distance(this->mutations.begin(), itr));
         }
+
+        std::int64_t
+        find_fixation_by_key(
+            const std::tuple<double, double, fwdpp::uint_t> &key,
+            const std::int64_t offset) const
+        {
+            auto itr = std::find_if(
+                this->fixations.begin() + offset, this->fixations.end(),
+                [&key](const typename mvector::value_type &mutation) {
+                    return key
+                           == std::tie(mutation.pos, mutation.s, mutation.g);
+                });
+            if (itr == this->fixations.end())
+                return -1;
+            return static_cast<std::int64_t>(
+                std::distance(this->fixations.begin(), itr));
+        }
     };
 } // namespace fwdpy11
 
