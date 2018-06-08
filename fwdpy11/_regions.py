@@ -623,7 +623,7 @@ class GaussianS(Sregion):
         * e: the end of the region
         * w: the "weight" assigned to the region
         * sd: the standard deviation
-        * h: the dominance ter
+        * h: the dominance term
         * l: A label assigned to the region.
             Labels must be integers, and can be used to
             'tag' mutations arising in different regions.
