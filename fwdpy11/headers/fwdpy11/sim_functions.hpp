@@ -94,6 +94,11 @@ namespace fwdpy11
                                     fixation_times.begin() + d, generation);
                                 mcounts[i] = 0; // set count to zero to mark
                                                 // mutation as "recyclable"
+                                // Make position NaN so that a user
+                                // cannot accidentally track this as a zero-frequency
+                                // variant
+                                mutations[i].pos
+                                    = std::numeric_limits<double>::quiet_NaN();
                                 auto itr
                                     = lookup.equal_range(mutations[i].pos);
                                 while (itr.first != itr.second)
@@ -126,6 +131,12 @@ namespace fwdpy11
                             {
                                 if (itr.first->second == i)
                                     {
+                                        // Make position NaN so that a user
+                                        // cannot accidentally track this as a zero-frequency
+                                        // variant
+                                        mutations[itr.first->second].pos
+                                            = std::numeric_limits<
+                                                double>::quiet_NaN();
                                         lookup.erase(itr.first);
                                         break;
                                     }
@@ -154,6 +165,6 @@ namespace fwdpy11
         //        }
         //    };
     }
-}
+} // namespace fwdpy11
 
 #endif
