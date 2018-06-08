@@ -103,7 +103,7 @@ PYBIND11_MODULE(_Population, m)
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
-        .def_readonly("diploid_metadata",
+        .def_readwrite("diploid_metadata",
                       &fwdpy11::Population::diploid_metadata,
                       "Container of diploid metadata.")
         .def_property_readonly(
