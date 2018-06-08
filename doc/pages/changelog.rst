@@ -50,6 +50,9 @@ Back-end changes
 * Refactored long unit tests. `PR #91 <https://github.com/molpopgen/fwdpy11/pull/91>`_
 * The GSL error handler is now turned off when fwdpy11 is imported. `PR #101 <https://github.com/molpopgen/fwdpy11/pull/101>`_
 * Population mutation position lookup table changed to an unordered multimap. `PR #102 <https://github.com/molpopgen/fwdpy11/pull/102>`_
+* When a mutation is fixed or lost, its position is now set to the max value of a C++ double.  This change gets rid of
+  some UI oddities when tracking mutations over time. `PR #106 <https://github.com/molpopgen/fwdpy11/pull/106>`_ and
+  this `commit <https://github.com/molpopgen/fwdpy11/commit/96e8b6e7ca4b257cb8ae5e704f6a36a4b5bfa7bc>`_.
 
 Version 0.1.4
 ++++++++++++++++++++++++++
