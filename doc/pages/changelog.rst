@@ -32,7 +32,9 @@ API changes/new features:
 * Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  `PR #94 <https://github.com/molpopgen/fwdpy11/pull/94>`_
 * :class:`fwdpy11.MlocusPop` now requires that :attr:`fwdpy11.MlocusPop.locus_boundaries` be initialized upon
   construction. `PR #96 <https://github.com/molpopgen/fwdpy11/pull/96>`_
-* The mutation position lookup table of a population is now a read-only property. See :ref:`mpos`.
+* The mutation position lookup table of a population is now a read-only property. See :ref:`mpos`. `PR #103 <https://github.com/molpopgen/fwdpy11/pull/103>`_
+* A mutation or fixation can now be rapidy found by its "key".  See :func:`fwdpy11.Population.find_mutation_by_key`
+  and :func:`fwdpy11.Population.find_fixation_by_key`.  `PR #106 <https://github.com/molpopgen/fwdpy11/pull/106>`_
 
 Back-end changes
 ------------------------
