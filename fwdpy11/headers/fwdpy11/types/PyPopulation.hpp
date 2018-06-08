@@ -6,6 +6,7 @@
 #include <pybind11/pybind11.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/poptypes/popbase.hpp>
+#include "Diploid.hpp"
 
 namespace fwdpy11
 {
@@ -28,6 +29,8 @@ namespace fwdpy11
         pybind11::object popdata;
         pybind11::object popdata_user;
 
+        std::vector<dip_metadata> diploid_metadata;
+
         virtual ~PyPopulation() = default;
 
         PyPopulation(PyPopulation &&) = default;
@@ -35,7 +38,8 @@ namespace fwdpy11
 
         PyPopulation(fwdpp::uint_t N_)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
-              popdata{ pybind11::none() }, popdata_user{ pybind11::none() }
+              popdata{ pybind11::none() }, popdata_user{ pybind11::none() },
+              diploid_metadata(N)
         {
         }
 
@@ -47,7 +51,8 @@ namespace fwdpy11
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
               N{ N_ }, generation{ 0 }, popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() }
+              popdata_user{ pybind11::none() },
+              diploid_metadata(N)
         {
         }
 

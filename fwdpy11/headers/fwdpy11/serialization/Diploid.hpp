@@ -30,45 +30,49 @@ namespace fwdpp
 {
     namespace io
     {
-        template <> struct serialize_diploid<fwdpy11::Diploid>
-        {
-            template <typename streamtype>
-            inline void
-            operator()(streamtype& buffer, const fwdpy11::Diploid& dip) const
-            {
-                fwdpp::io::scalar_writer w;
-                w(buffer, &dip.first);
-                w(buffer, &dip.second);
-                w(buffer, &dip.g);
-                w(buffer, &dip.e);
-                w(buffer, &dip.w);
-                w(buffer, &dip.label);
-                w(buffer, &dip.deme);
-                w(buffer, &dip.sex);
-                w(buffer, &std::get<0>(dip.parental_data));
-                w(buffer, &std::get<1>(dip.parental_data));
-            }
-        };
+        // In 0.1.5, we made the diploid type a typedef for a simple C++ 
+        // pair.  Thus, we can use fwdpp's existing serialization code.
+        // This file remains here as a placeholder for the future.
+        
+        // template <> struct serialize_diploid<fwdpy11::Diploid>
+        // {
+        //     template <typename streamtype>
+        //     inline void
+        //     operator()(streamtype& buffer, const fwdpy11::Diploid& dip) const
+        //     {
+        //         fwdpp::io::scalar_writer w;
+        //         w(buffer, &dip.first);
+        //         w(buffer, &dip.second);
+        //         w(buffer, &dip.g);
+        //         w(buffer, &dip.e);
+        //         w(buffer, &dip.w);
+        //         w(buffer, &dip.label);
+        //         w(buffer, &dip.deme);
+        //         w(buffer, &dip.sex);
+        //         w(buffer, &std::get<0>(dip.parental_data));
+        //         w(buffer, &std::get<1>(dip.parental_data));
+        //     }
+        // };
 
-        template <> struct deserialize_diploid<fwdpy11::Diploid>
-        {
-            template <typename streamtype>
-            inline void
-            operator()(streamtype& buffer, fwdpy11::Diploid& dip) const
-            {
-                fwdpp::io::scalar_reader r;
-                r(buffer, &dip.first);
-                r(buffer, &dip.second);
-                r(buffer, &dip.g);
-                r(buffer, &dip.e);
-                r(buffer, &dip.w);
-                r(buffer, &dip.label);
-                r(buffer, &dip.deme);
-                r(buffer, &dip.sex);
-                r(buffer, &std::get<0>(dip.parental_data));
-                r(buffer, &std::get<1>(dip.parental_data));
-            }
-        };
+        // template <> struct deserialize_diploid<fwdpy11::Diploid>
+        // {
+        //     template <typename streamtype>
+        //     inline void
+        //     operator()(streamtype& buffer, fwdpy11::Diploid& dip) const
+        //     {
+        //         fwdpp::io::scalar_reader r;
+        //         r(buffer, &dip.first);
+        //         r(buffer, &dip.second);
+        //         r(buffer, &dip.g);
+        //         r(buffer, &dip.e);
+        //         r(buffer, &dip.w);
+        //         r(buffer, &dip.label);
+        //         r(buffer, &dip.deme);
+        //         r(buffer, &dip.sex);
+        //         r(buffer, &std::get<0>(dip.parental_data));
+        //         r(buffer, &std::get<1>(dip.parental_data));
+        //     }
+        // };
     }
 }
 

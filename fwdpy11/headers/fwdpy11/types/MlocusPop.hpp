@@ -68,9 +68,10 @@ namespace fwdpy11
                 }
             validate_locus_boundaries(locus_boundaries);
             std::size_t label = 0;
-            for (auto &&d : this->diploids)
+            for (auto &&d : this->diploid_metadata)
                 {
-                    d[0].label = label++;
+                    d.label = label++;
+                    d.w = 1.0;
                 }
         }
 
@@ -199,5 +200,5 @@ namespace fwdpy11
                 }
         }
     };
-}
+} // namespace fwdpy11
 #endif

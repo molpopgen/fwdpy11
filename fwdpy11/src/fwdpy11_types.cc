@@ -203,6 +203,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readonly("first", &fwdpy11::Diploid::first,
                       "Key to first gamete. (read-only)")
         .def_readonly("second", &fwdpy11::Diploid::second,
+                      "Key to second gamete. (read-only)")
         .def(py::pickle(
             [](const fwdpy11::Diploid &d) {
         return py::make_tuple(d.first, d.second);
