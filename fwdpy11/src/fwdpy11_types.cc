@@ -206,14 +206,31 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       "Key to second gamete. (read-only)")
         .def(py::pickle(
             [](const fwdpy11::Diploid &d) {
-        return py::make_tuple(d.first, d.second);
+                return py::make_tuple(d.first, d.second);
             },
             [](py::tuple t) {
-        std::unique_ptr<fwdpy11::Diploid> d(new fwdpy11::Diploid(
-            t[0].cast<std::size_t>(), t[1].cast<std::size_t>()));
-        return d;
+                std::unique_ptr<fwdpy11::Diploid> d(new fwdpy11::Diploid(
+                    t[0].cast<std::size_t>(), t[1].cast<std::size_t>()));
+                return d;
             }))
         .def("__eq__", [](const fwdpy11::Diploid &a,
-                          const fwdpy11::Diploid &b) {
-        return a == b; });
+                          const fwdpy11::Diploid &b) { return a == b; });
+
+    py::class_<fwdpy11::dip_metadata>(m, "DiploidMetadata",
+                                      "Diploid meta data.")
+        .def_readwrite("g", &fwdpy11::dip_metadata::g)
+        .def_readwrite("e", &fwdpy11::dip_metadata::e)
+        .def_readwrite("w", &fwdpy11::dip_metadata::w)
+        .def_property("parents",
+                      [](const fwdpy11::dip_metadata &d) {
+                          return py::make_tuple(d.parents[0], d.parents[1]);
+                      },
+                      [](fwdpy11::dip_metadata &d,
+                         const std::pair<std::size_t, std::size_t> &input) {
+                          d.parents[0] = input.first;
+                          d.parents[1] = input.second;
+                      })
+        .def_readwrite("sex", &fwdpy11::dip_metadata::sex)
+        .def_readwrite("deme", &fwdpy11::dip_metadata::deme)
+        .def_readwrite("label", &fwdpy11::dip_metadata::label);
 }
