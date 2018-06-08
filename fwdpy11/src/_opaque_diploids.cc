@@ -79,4 +79,11 @@ PYBIND11_MODULE(_opaque_diploids, m)
 
     PYBIND11_NUMPY_DTYPE(fwdpy11::dip_metadata, g, e, w, label, parents, deme,
                          sex);
+
+    py::bind_vector<std::vector<fwdpy11::dip_metadata>>(
+        m, "VecDiploidMetaData", py::module_local(false),
+        py::buffer_protocol(),
+        R"delim(
+        Container of diploid metadata.
+        )delim");
 }
