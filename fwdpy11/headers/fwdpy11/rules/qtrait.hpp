@@ -37,13 +37,14 @@ namespace fwdpy11
                 wbar = 0.;
                 for (size_t i = 0; i < N_curr; ++i)
                     {
-                        pop.diploids[i].g
+                        pop.diploid_metadata[i].g
                             = ff(pop.diploids[i], pop.gametes, pop.mutations);
-                        pop.diploids[i].w = trait_to_fitness(
-                            pop.diploids[i].g, pop.diploids[i].e);
-                        assert(std::isfinite(pop.diploids[i].w));
-                        fitnesses[i] = pop.diploids[i].w;
-                        wbar += pop.diploids[i].w;
+                        pop.diploid_metadata[i].w
+                            = trait_to_fitness(pop.diploid_metadata[i].g,
+                                               pop.diploid_metadata[i].e);
+                        assert(std::isfinite(pop.diploid_metadata[i].w));
+                        fitnesses[i] = pop.diploid_metadata[i].w;
+                        wbar += pop.diploid_metadata[i].w;
                     }
                 wbar /= double(N_curr);
                 lookup = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
@@ -54,13 +55,14 @@ namespace fwdpy11
             //! \brief Update some property of the offspring based on
             //! properties of the parents
             virtual void
-            update(const GSLrng_t &rng, Diploid &offspring,
+            update(const GSLrng_t &rng, dip_metadata &offspring_metadata,
                    const SlocusPop &pop, const std::size_t p1,
                    const std::size_t p2) noexcept
             {
-                offspring.e
+                offspring_metadata.e
                     = noise_function(pop.diploids[p1], pop.diploids[p2]);
-                offspring.parental_data = std::make_tuple(p1,p2);
+                offspring_metadata.parents[0] = p1;
+                offspring_metadata.parents[1] = p2;
                 return;
             }
         };
@@ -106,11 +108,12 @@ namespace fwdpy11
 
                 for (unsigned i = 0; i < N_curr; ++i)
                     {
-                        pop.diploids[i][0].g = aggregator(gvalue(
+                        pop.diploid_metadata[i].g = aggregator(gvalue(
                             pop.diploids[i], pop.gametes, pop.mutations));
-                        pop.diploids[i][0].w = trait_to_fitness(
-                            pop.diploids[i][0].g, pop.diploids[i][0].e);
-                        fitnesses[i] = pop.diploids[i][0].w;
+                        pop.diploid_metadata[i].w
+                            = trait_to_fitness(pop.diploid_metadata[i].g,
+                                               pop.diploid_metadata[i].e);
+                        fitnesses[i] = pop.diploid_metadata[i].w;
                         wbar += fitnesses[i];
                     }
 
@@ -144,8 +147,8 @@ namespace fwdpy11
             //! \brief Pick parent 2.  Parent 1's data are passed along for
             //! models where that is relevant
             inline size_t
-            pick2(const GSLrng_t &rng, const MlocusPop &,
-                  const std::size_t p1, const double f) const
+            pick2(const GSLrng_t &rng, const MlocusPop &, const std::size_t p1,
+                  const double f) const
             {
                 return ((f == 1.)
                         || (f > 0. && gsl_rng_uniform(rng.get()) < f))
@@ -156,15 +159,16 @@ namespace fwdpy11
             //! \brief Update some property of the offspring based on
             //! properties of the parents
             void
-            update(const GSLrng_t &rng, MlocusPop::diploid_t &offspring,
+            update(const GSLrng_t &rng, dip_metadata &offspring_metadata,
                    const MlocusPop &pop, const std::size_t p1,
                    const std::size_t p2) const
             {
-                offspring[0].e
+                offspring_metadata.e
                     = noise_function(pop.diploids[p1], pop.diploids[p2]);
-                offspring[0].parental_data = std::make_tuple(p1,p2);
+                offspring_metadata.parents[0] = p1;
+                offspring_metadata.parents[1] = p2;
             }
         };
     } // namespace qtrait
-} // namespace fwdpy
+} // namespace fwdpy11
 #endif

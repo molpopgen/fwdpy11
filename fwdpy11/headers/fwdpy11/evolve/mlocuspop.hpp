@@ -39,9 +39,9 @@ namespace fwdpy11
             g.n = 0;
 
         decltype(pop.diploids) offspring(N_next);
-
+        decltype(pop.diploid_metadata) offspring_metadata(N_next);
         // Generate the offspring
-		std::size_t label = 0;
+        std::size_t label = 0;
         for (auto& dip : offspring)
             {
                 auto p1 = pick1(rng, pop);
@@ -55,8 +55,8 @@ namespace fwdpy11
                     ((gsl_rng_uniform(rng.get()) < 0.5) ? 1 : 0), pop.gametes,
                     pop.mutations, pop.neutral, pop.selected, mu.data(),
                     mmodel);
-				dip[0].label=label++;
-                update(rng, dip, pop, p1, p2);
+                offspring_metadata[label].label = label;
+                update(rng, offspring_metadata[label++], pop, p1, p2);
             }
 
         fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
@@ -66,7 +66,8 @@ namespace fwdpy11
                                               std::true_type());
         // This is constant-time
         pop.diploids.swap(offspring);
+        pop.diploid_metadata.swap(offspring_metadata);
     }
-}
+} // namespace fwdpy11
 
 #endif
