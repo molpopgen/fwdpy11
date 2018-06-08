@@ -102,16 +102,17 @@ PYBIND11_MODULE(_Population, m)
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
-        .def_property_readonly("mut_lookup",
-                      [](const fwdpy11::Population& pop) {
-                          py::list rv;
-                          for (auto&& i : pop.mut_lookup)
-                              {
-                                  rv.append(py::make_tuple(i.first, i.second));
-                              }
-                          return rv;
-                      },
-                      "Mutation position lookup table.")
+        .def_property_readonly(
+            "mut_lookup",
+            [](const fwdpy11::Population& pop) {
+                py::list rv;
+                for (auto&& i : pop.mut_lookup)
+                    {
+                        rv.append(py::make_tuple(i.first, i.second));
+                    }
+                return rv;
+            },
+            "Mutation position lookup table.")
         .def_readonly("gametes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::Population::fixations,
@@ -121,5 +122,47 @@ PYBIND11_MODULE(_Population, m)
         .def_readonly("popdata", &fwdpy11::Population::popdata,
                       POPDATA_DOCSTRING)
         .def_readwrite("popdata_user", &fwdpy11::Population::popdata_user,
-                       POPDATA_USER_DOCSTRING);
+                       POPDATA_USER_DOCSTRING)
+        .def("find_mutation_by_key",
+             [](const fwdpy11::Population& pop,
+                const std::tuple<double, double, fwdpp::uint_t>& key,
+                const std::int64_t offset) {
+                 return pop.find_mutation_by_key(key, offset);
+             },
+             py::arg("pop"), py::arg("offset") = 0,
+             R"delim(
+             Find a mutation by key.
+             
+             :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
+             :type key: tuple
+             :param offset: Offset to start search in mutation container.
+             :type offset: int
+
+             :rtype: int
+
+             :returns: Index of mutation if found, or -1 otherwise.
+
+             .. versionadded:: 0.1.5
+             )delim")
+        .def("find_fixation_by_key",
+             [](const fwdpy11::Population& pop,
+                const std::tuple<double, double, fwdpp::uint_t>& key,
+                const std::int64_t offset) {
+                 return pop.find_fixation_by_key(key, offset);
+             },
+             py::arg("pop"), py::arg("offset") = 0,
+             R"delim(
+             Find a fixation by key.
+             
+             :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
+             :type key: tuple
+             :param offset: Offset to start search in fixation container.
+             :type offset: int
+
+             :rtype: int
+
+             :returns: Index of fixation if found, or -1 otherwise.
+
+             .. versionadded:: 0.1.5
+             )delim");
 }
