@@ -69,7 +69,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
 {
-    m.doc() = "Defined the ABC :class:`fwdpy11._Population`";
+    m.doc() = "Defines the ABC :class:`fwdpy11._Population`";
 
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
@@ -92,7 +92,7 @@ PYBIND11_MODULE(_Population, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::Population>(m, "_Population",
+    py::class_<fwdpy11::Population>(m, "Population",
                                     "Abstract base class for populations "
                                     "based on :class:`fwdpy11.Mutation`")
         .def_readonly("N", &fwdpy11::Population::N, "Current population size.")

@@ -150,10 +150,10 @@ The population base class
 .. versionadded:: 0.1.5
 
 All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
-:class:`fwdpy11._Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
+:class:`fwdpy11.Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
 Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:`fwdpy11.MlocusPop`.
 
-.. csv-table:: :class:`fwdpy11._Population` properties
+.. csv-table:: :class:`fwdpy11.Population` properties
     :header: "Property", "Definition"
     
     "N", "Current population size."
@@ -193,7 +193,7 @@ class are constructed with a population size:
 These objects can be pickled. See :ref:`pickling_pops`.
 
 This class contains the following read-only properties, in addition to those found in the base class
-:class:`fwdpy11._Population`:
+:class:`fwdpy11.Population`:
 
 .. csv-table:: :class:`fwdpy11.SlocusPop` properties
     :header: "Property", "Definition"
@@ -207,7 +207,7 @@ Multi-locus, single-deme population objects
 
 The type :class:`fwdpy11.MlocusPop` is analagous to :class:`fwdpy11.SlocusPop` in all but
 one respect.  The `diploids` property type is :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`
-for details.  The class has all of the properties of :class:`fwdpy11._Population` plus the following:
+for details.  The class has all of the properties of :class:`fwdpy11.Population` plus the following:
 
 .. csv-table:: :class:`fwdpy11.MlocusPop` properties
     :header: "Property", "Definition"

@@ -31,7 +31,7 @@ See the unit test file tests/test_add_mutations.py for more examples.
     Attempting to add a mutation at an already-mutation position will raise an exception,
     because you are violating the infinitely-many sites assumption of the simulation engine.
     To guard against this, you may check the current set of mutation positions via
-    :attr:`fwdpy11._Population.mut_lookup`.  See :ref:`mpos` for details.
+    :attr:`fwdpy11.Population.mut_lookup`.  See :ref:`mpos` for details.
 
 Changing the effect size of a mutation
 ======================================================================

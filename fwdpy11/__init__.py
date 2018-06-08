@@ -35,7 +35,7 @@ from .fwdpy11_types import Mutation
 from ._regions import *
 from ._dev import *
 from ._gslrng import GSLrng
-from ._Population import _Population
+from ._Population import Population
 from .SlocusPop import SlocusPop
 from .MlocusPop import MlocusPop
 
