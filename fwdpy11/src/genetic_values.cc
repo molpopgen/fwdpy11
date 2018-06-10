@@ -59,6 +59,10 @@ wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>::
 {
 }
 
+using wrapped_additive = wrap_fwdpp_genetic_value<fwdpp::additive_diploid>;
+using wrapped_multiplicative
+    = wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>;
+
 PYBIND11_MODULE(genetic_values, m)
 {
     py::enum_<fwdpp::additive_diploid::policy>(m, "AdditivePolicy")
@@ -71,15 +75,26 @@ PYBIND11_MODULE(genetic_values, m)
         .value("mtrait", fwdpp::multiplicative_diploid::policy::mtrait)
         .export_values();
 
-    py::class_<wrap_fwdpp_genetic_value<fwdpp::additive_diploid>>(
-        m, "SlocusAdditive")
+    py::class_<wrapped_additive>(m, "SlocusAdditive")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::additive_diploid::policy,
-                      fwdpy11::genetic_value_to_fitness_t>());
+                      fwdpy11::genetic_value_to_fitness_t>())
+        .def_property_readonly(
+            "scaling",
+            [](const wrapped_additive& wa) { return wa.gv.scaling; })
+        .def_property_readonly("is_fitness", [](const wrapped_additive& wa) {
+            return wa.gv.p == fwdpp::additive_diploid::policy::aw;
+        });
 
-    py::class_<wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>>(
-        m, "SlocusMult")
+    py::class_<wrapped_multiplicative>(m, "SlocusMult")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::multiplicative_diploid::policy,
-                      fwdpy11::genetic_value_to_fitness_t>());
+                      fwdpy11::genetic_value_to_fitness_t>())
+        .def_property_readonly(
+            "scaling",
+            [](const wrapped_multiplicative& wa) { return wa.gv.scaling; })
+        .def_property_readonly(
+            "is_fitness", [](const wrapped_multiplicative& wa) {
+                return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
+            });
 }
