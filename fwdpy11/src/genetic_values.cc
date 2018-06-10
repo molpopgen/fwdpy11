@@ -1,3 +1,4 @@
+#include <memory>
 #include <functional>
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
@@ -11,14 +12,14 @@ template <typename fwdppT>
 struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
 {
     const fwdppT gv;
-    const fwdpy11::genetic_value_to_fitness_t gv2w;
+    const std::unique_ptr<fwdpy11::GeneticValueToFitness> gv2w;
 
     wrap_fwdpp_genetic_value(const double);
 
     wrap_fwdpp_genetic_value(const double scaling,
                              const typename fwdppT::policy p,
-                             const fwdpy11::genetic_value_to_fitness_t& g2w)
-        : gv{ scaling, p }, gv2w{ g2w }
+                             const fwdpy11::GeneticValueToFitness& g2w)
+        : gv{ scaling, p }, gv2w{ g2w.clone() }
     {
     }
 
@@ -37,7 +38,7 @@ struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
     inline double
     genetic_value_to_fitness(const double g, const double e) const
     {
-        return gv2w(g, e);
+        return gv2w->operator()(g, e);
     }
 };
 
@@ -45,7 +46,8 @@ template <>
 wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
     const double scaling)
     : gv{ scaling, fwdpp::additive_diploid::policy::aw }, gv2w{
-          fwdpy11::GeneticValueIsFitness()
+          std::unique_ptr<fwdpy11::GeneticValueIsFitness>(
+              new fwdpy11::GeneticValueIsFitness())
       }
 {
 }
@@ -54,7 +56,8 @@ template <>
 wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>::
     wrap_fwdpp_genetic_value(const double scaling)
     : gv{ scaling, fwdpp::multiplicative_diploid::policy::mw }, gv2w{
-          fwdpy11::GeneticValueIsFitness()
+          std::unique_ptr<fwdpy11::GeneticValueIsFitness>(
+              new fwdpy11::GeneticValueIsFitness())
       }
 {
 }
@@ -75,10 +78,16 @@ PYBIND11_MODULE(genetic_values, m)
         .value("mtrait", fwdpp::multiplicative_diploid::policy::mtrait)
         .export_values();
 
-    py::class_<wrapped_additive>(m, "SlocusAdditive")
+    py::class_<fwdpy11::SlocusPopGeneticValue>(
+        m, "SlocusPopGeneticValue",
+        "ABC for genetic value calculations for diploid members of "
+        ":class:`fwdpy11.SlocusPop`");
+
+    py::class_<wrapped_additive, fwdpy11::SlocusPopGeneticValue>(
+        m, "SlocusAdditive")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::additive_diploid::policy,
-                      fwdpy11::genetic_value_to_fitness_t>())
+                      const fwdpy11::GeneticValueToFitness&>())
         .def_property_readonly(
             "scaling",
             [](const wrapped_additive& wa) { return wa.gv.scaling; })
@@ -86,10 +95,11 @@ PYBIND11_MODULE(genetic_values, m)
             return wa.gv.p == fwdpp::additive_diploid::policy::aw;
         });
 
-    py::class_<wrapped_multiplicative>(m, "SlocusMult")
+    py::class_<wrapped_multiplicative, fwdpy11::SlocusPopGeneticValue>(
+        m, "SlocusMult")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::multiplicative_diploid::policy,
-                      fwdpy11::genetic_value_to_fitness_t>())
+                      const fwdpy11::GeneticValueToFitness&>())
         .def_property_readonly(
             "scaling",
             [](const wrapped_multiplicative& wa) { return wa.gv.scaling; })
@@ -97,4 +107,16 @@ PYBIND11_MODULE(genetic_values, m)
             "is_fitness", [](const wrapped_multiplicative& wa) {
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             });
+
+    py::class_<fwdpy11::GeneticValueToFitness>(
+        m, "GeneticValueToFitness",
+        "ABC for functions translating genetic values into fitness.");
+
+    py::class_<fwdpy11::GeneticValueIsFitness, fwdpy11::GeneticValueToFitness>(
+        m, "GeneticValueIsFitness")
+        .def(py::init<>());
+
+    py::class_<fwdpy11::GSS, fwdpy11::GeneticValueToFitness>(
+        m, "GSS", "Gaussian stabilizing selection.")
+        .def(py::init<double, double>(), py::arg("VS"), py::arg("opt"));
 }

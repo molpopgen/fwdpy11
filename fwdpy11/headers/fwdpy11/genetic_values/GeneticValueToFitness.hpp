@@ -2,6 +2,7 @@
 #define FWDPY11_GENETIC_VALUE_TO_FITNESS_HPP__
 
 #include <cmath>
+#include <memory>
 #include <functional>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
@@ -16,6 +17,8 @@ namespace fwdpy11
         inline virtual double operator()(const double, const double) const = 0;
         inline virtual void update(const SlocusPop &) = 0;
         inline virtual void update(const MlocusPop &) = 0;
+        inline virtual std::unique_ptr<GeneticValueToFitness>
+        clone() const = 0;
     };
 
     struct GeneticValueIsFitness : public GeneticValueToFitness
@@ -32,6 +35,12 @@ namespace fwdpy11
         inline void
         update(const MlocusPop &)
         {
+        }
+        inline std::unique_ptr<GeneticValueToFitness>
+        clone() const
+        {
+            return std::unique_ptr<GeneticValueIsFitness>(
+                new GeneticValueIsFitness());
         }
     };
 
@@ -65,6 +74,12 @@ namespace fwdpy11
         inline void
         update(const MlocusPop &)
         {
+        }
+
+        inline std::unique_ptr<GeneticValueToFitness>
+        clone() const
+        {
+            return std::unique_ptr<GSS>(new GSS(VS, opt));
         }
     };
 } //namespace fwdpy11
