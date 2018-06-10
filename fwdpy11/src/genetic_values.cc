@@ -7,21 +7,17 @@
 
 namespace py = pybind11;
 
-struct single_locus_additive : public fwdpy11::SlocusPopGeneticValue
+template <typename fwdppT>
+struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
 {
-    const fwdpp::additive_diploid gv;
+    const fwdppT gv;
     const fwdpy11::genetic_value_to_fitness_t gv2w;
 
-    single_locus_additive(const double scaling)
-        : gv{ scaling, fwdpp::additive_diploid::policy::aw }, gv2w{
-            fwdpy11::GeneticValueIsFitness()
-          }
-    {
-    }
+    wrap_fwdpp_genetic_value(const double);
 
-    single_locus_additive(const double scaling,
-                          fwdpp::additive_diploid::policy p,
-                          const fwdpy11::genetic_value_to_fitness_t& g2w)
+    wrap_fwdpp_genetic_value(const double scaling,
+                             const typename fwdppT::policy p,
+                             const fwdpy11::genetic_value_to_fitness_t& g2w)
         : gv{ scaling, p }, gv2w{ g2w }
     {
     }
@@ -45,6 +41,24 @@ struct single_locus_additive : public fwdpy11::SlocusPopGeneticValue
     }
 };
 
+template <>
+wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
+    const double scaling)
+    : gv{ scaling, fwdpp::additive_diploid::policy::aw }, gv2w{
+          fwdpy11::GeneticValueIsFitness()
+      }
+{
+}
+
+template <>
+wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>::
+    wrap_fwdpp_genetic_value(const double scaling)
+    : gv{ scaling, fwdpp::multiplicative_diploid::policy::mw }, gv2w{
+          fwdpy11::GeneticValueIsFitness()
+      }
+{
+}
+
 PYBIND11_MODULE(genetic_values, m)
 {
     py::enum_<fwdpp::additive_diploid::policy>(m, "AdditivePolicy")
@@ -52,8 +66,20 @@ PYBIND11_MODULE(genetic_values, m)
         .value("atrait", fwdpp::additive_diploid::policy::atrait)
         .export_values();
 
-    py::class_<single_locus_additive>(m, "SlocusAdditive")
+    py::enum_<fwdpp::multiplicative_diploid::policy>(m, "MultiplicativePolicy")
+        .value("mw", fwdpp::multiplicative_diploid::policy::mw)
+        .value("mtrait", fwdpp::multiplicative_diploid::policy::mtrait)
+        .export_values();
+
+    py::class_<wrap_fwdpp_genetic_value<fwdpp::additive_diploid>>(
+        m, "SlocusAdditive")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::additive_diploid::policy,
+                      fwdpy11::genetic_value_to_fitness_t>());
+
+    py::class_<wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>>(
+        m, "SlocusMult")
+        .def(py::init<double>(), py::arg("scaling"))
+        .def(py::init<double, fwdpp::multiplicative_diploid::policy,
                       fwdpy11::genetic_value_to_fitness_t>());
 }
