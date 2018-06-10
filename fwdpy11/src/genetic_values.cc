@@ -2,37 +2,26 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
+#include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 
 namespace py = pybind11;
 
-using genetic_value_to_fitness_t
-    = std::function<double(const double, const double)>;
-
-struct genetic_value_is_fitness
-{
-    inline double
-    operator()(const double g, const double) const
-    {
-        return g;
-    }
-};
-
 struct single_locus_additive : public fwdpy11::SlocusPopGeneticValue
 {
     const fwdpp::additive_diploid gv;
-    const genetic_value_to_fitness_t gv2w;
+    const fwdpy11::genetic_value_to_fitness_t gv2w;
 
     single_locus_additive(const double scaling)
         : gv{ scaling, fwdpp::additive_diploid::policy::aw }, gv2w{
-              genetic_value_is_fitness()
+            fwdpy11::GeneticValueIsFitness()
           }
     {
     }
 
     single_locus_additive(const double scaling,
                           fwdpp::additive_diploid::policy p,
-                          const genetic_value_to_fitness_t& g2w)
+                          const fwdpy11::genetic_value_to_fitness_t& g2w)
         : gv{ scaling, p }, gv2w{ g2w }
     {
     }
@@ -66,5 +55,5 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<single_locus_additive>(m, "SlocusAdditive")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, fwdpp::additive_diploid::policy,
-                      genetic_value_to_fitness_t>());
+                      fwdpy11::genetic_value_to_fitness_t>());
 }
