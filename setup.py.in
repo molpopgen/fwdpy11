@@ -168,6 +168,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.genetic_values',
+        ['fwdpy11/src/genetic_values.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.trait_values',
         ['fwdpy11/src/fwdpy11_trait_values.cc'],
         library_dirs=LIBRARY_DIRS,
