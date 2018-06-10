@@ -14,11 +14,10 @@ namespace fwdpy11
 
     struct GeneticValueToFitness
     {
-        inline virtual double operator()(const double, const double) const = 0;
-        inline virtual void update(const SlocusPop &) = 0;
-        inline virtual void update(const MlocusPop &) = 0;
-        inline virtual std::unique_ptr<GeneticValueToFitness>
-        clone() const = 0;
+        virtual double operator()(const double, const double) const = 0;
+        virtual void update(const SlocusPop &) = 0;
+        virtual void update(const MlocusPop &) = 0;
+        virtual std::unique_ptr<GeneticValueToFitness> clone() const = 0;
     };
 
     struct GeneticValueIsFitness : public GeneticValueToFitness
