@@ -46,7 +46,12 @@ namespace fwdpy11
         }
     };
 
-    struct GSS : public GeneticValueToFitness
+    struct GeneticValueIsTrait : public GeneticValueToFitness
+    /// Another ABC.  Effectively a type trait
+    {
+    };
+
+    struct GSS : public GeneticValueIsTrait
     {
         const double VS, opt;
         GSS(const double VS_, const double opt_) : VS{ VS_ }, opt{ opt_ }
@@ -78,7 +83,7 @@ namespace fwdpy11
         }
     };
 
-    struct GSSmo : public GeneticValueToFitness
+    struct GSSmo : public GeneticValueIsTrait
     {
         double VS, opt;
         std::size_t current_optimum;
