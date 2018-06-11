@@ -4,6 +4,11 @@
 #include <cmath>
 #include <memory>
 #include <functional>
+#include <algorithm>
+#include <limits>
+#include <vector>
+#include <queue>
+#include <tuple>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
@@ -69,6 +74,95 @@ namespace fwdpy11
         clone() const
         {
             return std::unique_ptr<GSS>(new GSS(VS, opt));
+        }
+    };
+
+    struct GSSmo : public GeneticValueToFitness
+    {
+        double VS, opt;
+        // Tuple is time, optimum, VS
+        std::queue<std::tuple<std::uint32_t, double, double>> optima;
+
+        GSSmo(const std::vector<std::tuple<std::uint32_t, double, double>>
+                  &optima_)
+            : VS{ std::numeric_limits<double>::quiet_NaN() },
+              opt{ std::numeric_limits<double>::quiet_NaN() }, optima()
+        {
+            using tuple_t = std::tuple<std::uint32_t, double, double>;
+            if (optima_.empty())
+                {
+                    throw std::invalid_argument("empty container of optima");
+                }
+            if (!std::is_sorted(optima_.begin(), optima_.end(),
+                                [](const tuple_t &a, const tuple_t &b) {
+                                    return std::get<0>(a) < std::get<0>(b);
+                                }))
+                {
+                    throw std::invalid_argument("optima not sorted by time");
+                }
+            if (std::any_of(optima_.begin(), optima_.end(),
+                            [](const tuple_t &t) {
+                                auto VS_ = std::get<2>(t);
+                                auto opt_ = std::get<1>(t);
+                                bool rv = false;
+                                if (VS_ < 0.0)
+                                    rv = true;
+                                if (!std::isfinite(VS_))
+                                    rv = true;
+                                if (!std::isfinite(opt_))
+                                    rv = true;
+                                return rv;
+                            }))
+                {
+                    throw std::invalid_argument(
+                        "all VS and opt values must be finite");
+                }
+            for (auto &i : optima_)
+                {
+                    optima.push(i);
+                }
+            opt = std::get<1>(optima.front());
+            VS = std::get<2>(optima.front());
+            optima.pop();
+        }
+
+        inline double
+        operator()(const double g, const double e) const
+        {
+            return std::exp(-(std::pow(g + e - opt, 2.0) / (2.0 * VS)));
+        }
+
+        template <typename poptype>
+        inline void
+        update_details(const poptype &pop)
+        {
+            if (!optima.empty())
+                {
+                    if (pop.generation >= std::get<0>(optima.front()))
+                        {
+                            opt = std::get<1>(optima.front());
+                            VS = std::get<2>(optima.front());
+                            optima.pop();
+                        }
+                }
+        }
+
+        inline void
+        update(const SlocusPop &pop)
+        {
+            update_details(pop);
+        }
+
+        inline void
+        update(const MlocusPop &pop)
+        {
+            update_details(pop);
+        }
+
+        inline std::unique_ptr<GeneticValueToFitness>
+        clone() const
+        {
+            return std::unique_ptr<GSSmo>(new GSSmo(*this));
         }
     };
 } //namespace fwdpy11

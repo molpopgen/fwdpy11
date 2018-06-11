@@ -1,6 +1,7 @@
 #include <memory>
 #include <functional>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
@@ -157,4 +158,10 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::GSS, fwdpy11::GeneticValueToFitness>(
         m, "GSS", "Gaussian stabilizing selection.")
         .def(py::init<double, double>(), py::arg("VS"), py::arg("opt"));
+
+    py::class_<fwdpy11::GSSmo, fwdpy11::GeneticValueToFitness>(
+        m, "GSSmo", "Gaussian stabilizing selection with a moving optimum.")
+        .def(py::init<const std::vector<
+                 std::tuple<std::uint32_t, double, double>>&>(),
+             py::arg("optima"));
 }
