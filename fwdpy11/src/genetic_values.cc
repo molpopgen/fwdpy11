@@ -1,3 +1,4 @@
+#include <cmath>
 #include <memory>
 #include <functional>
 #include <pybind11/pybind11.h>
@@ -23,6 +24,10 @@ struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
                              const fwdpy11::GeneticValueToFitness& g2w)
         : gv{ scaling, p }, gv2w{ g2w.clone() }
     {
+        if (!std::isfinite(scaling))
+            {
+                throw std::invalid_argument("scaling must be finite");
+            }
     }
 
     inline double
@@ -49,6 +54,10 @@ wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
               new fwdpy11::GeneticValueIsFitness())
       }
 {
+    if (!std::isfinite(scaling))
+        {
+            throw std::invalid_argument("scaling must be finite");
+        }
 }
 
 template <>
