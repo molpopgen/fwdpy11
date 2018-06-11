@@ -12,10 +12,10 @@
 namespace py = pybind11;
 
 template <typename fwdppT>
-struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
+struct wrap_fwdpp_genetic_value
+    : public fwdpy11::SlocusPopGeneticValueWithMapping
 {
     const fwdppT gv;
-    const std::unique_ptr<fwdpy11::GeneticValueToFitness> gv2w;
 
     wrap_fwdpp_genetic_value(const double);
 
@@ -29,7 +29,11 @@ struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
         return gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
     }
 
-    DEFAULT_SLOCUSPOP_UPDATE()
+    inline void
+    update(const fwdpy11::SlocusPop& pop)
+    {
+        gv2w->update(pop);
+    }
 
     inline double
     genetic_value_to_fitness(const double g, const double e) const
@@ -41,10 +45,10 @@ struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
 template <>
 wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
     const double scaling)
-    : gv{ scaling, fwdpp::additive_diploid::policy::aw }, gv2w{
+    : fwdpy11::SlocusPopGeneticValueWithMapping(
           std::unique_ptr<fwdpy11::GeneticValueIsFitness>(
-              new fwdpy11::GeneticValueIsFitness())
-      }
+              new fwdpy11::GeneticValueIsFitness())),
+      gv{ scaling, fwdpp::additive_diploid::policy::aw }
 {
     if (!std::isfinite(scaling))
         {
@@ -55,18 +59,22 @@ wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
 template <>
 wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>::
     wrap_fwdpp_genetic_value(const double scaling)
-    : gv{ scaling, fwdpp::multiplicative_diploid::policy::mw }, gv2w{
-          std::unique_ptr<fwdpy11::GeneticValueIsFitness>(
-              new fwdpy11::GeneticValueIsFitness())
-      }
+    : fwdpy11::SlocusPopGeneticValueWithMapping{ std::unique_ptr<
+          fwdpy11::GeneticValueIsFitness>(
+          new fwdpy11::GeneticValueIsFitness()) },
+      gv{ scaling, fwdpp::multiplicative_diploid::policy::mw }
 {
+    if (!std::isfinite(scaling))
+        {
+            throw std::invalid_argument("scaling must be finite");
+        }
 }
 
 template <>
 wrap_fwdpp_genetic_value<fwdpp::additive_diploid>::wrap_fwdpp_genetic_value(
     const double scaling, const fwdpy11::GeneticValueIsTrait& g2w)
-    : gv{ scaling, fwdpp::additive_diploid::policy::atrait }, gv2w{
-          g2w.clone()
+    : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone() }, gv{
+          scaling, fwdpp::additive_diploid::policy::atrait
       }
 {
 }
@@ -75,8 +83,8 @@ template <>
 wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>::
     wrap_fwdpp_genetic_value(const double scaling,
                              const fwdpy11::GeneticValueIsTrait& g2w)
-    : gv{ scaling, fwdpp::multiplicative_diploid::policy::mtrait }, gv2w{
-          g2w.clone()
+    : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone() }, gv{
+          scaling, fwdpp::multiplicative_diploid::policy::mtrait
       }
 {
 }
@@ -85,10 +93,12 @@ using wrapped_additive = wrap_fwdpp_genetic_value<fwdpp::additive_diploid>;
 using wrapped_multiplicative
     = wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>;
 
-struct GBR : public fwdpy11::SlocusPopGeneticValue
+struct GBR : public fwdpy11::SlocusPopGeneticValueWithMapping
 {
-    const std::unique_ptr<fwdpy11::GeneticValueToFitness> gv2w;
-    GBR(const fwdpy11::GeneticValueIsTrait& g2w) : gv2w{ g2w.clone() } {}
+    GBR(const fwdpy11::GeneticValueIsTrait& g2w)
+        : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone() }
+    {
+    }
 
     inline double
     sum_haplotype_effect_sizes(const std::size_t gamete_index,
@@ -137,12 +147,18 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::SlocusPopGeneticValue>(
         m, "SlocusPopGeneticValue",
         "ABC for genetic value calculations for diploid members of "
-        ":class:`fwdpy11.SlocusPop`")
+        ":class:`fwdpy11.SlocusPop`");
+
+    py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
+               fwdpy11::SlocusPopGeneticValue>(
+        m, "SlocusPopGeneticValueWithMapping")
         .def_property_readonly(
             "gvalue_to_fitness",
-            [](const wrapped_additive& wa) { return wa.gv2w->clone(); });
+            [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
+                return o.gv2w->clone();
+            });
 
-    py::class_<wrapped_additive, fwdpy11::SlocusPopGeneticValue>(
+    py::class_<wrapped_additive, fwdpy11::SlocusPopGeneticValueWithMapping>(
         m, "SlocusAdditive")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, const fwdpy11::GeneticValueIsTrait&>())
@@ -153,8 +169,8 @@ PYBIND11_MODULE(genetic_values, m)
             return wa.gv.p == fwdpp::additive_diploid::policy::aw;
         });
 
-    py::class_<wrapped_multiplicative, fwdpy11::SlocusPopGeneticValue>(
-        m, "SlocusMult")
+    py::class_<wrapped_multiplicative,
+               fwdpy11::SlocusPopGeneticValueWithMapping>(m, "SlocusMult")
         .def(py::init<double>(), py::arg("scaling"))
         .def(py::init<double, const fwdpy11::GeneticValueIsTrait&>())
         .def_property_readonly(
@@ -165,8 +181,11 @@ PYBIND11_MODULE(genetic_values, m)
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             });
 
-    py::class_<GBR, fwdpy11::SlocusPopGeneticValue>(m, "GBR").def(
-        py::init<const fwdpy11::GeneticValueIsTrait&>(), py::arg("gv2w"));
+    py::class_<GBR, fwdpy11::SlocusPopGeneticValueWithMapping>(m, "GBR")
+        .def(py::init<const fwdpy11::GeneticValueIsTrait&>(), py::arg("gv2w"))
+        .def_property_readonly("gvalue_to_fitness", [](const GBR& gbr) {
+            return gbr.gv2w->clone();
+        });
 
     py::class_<fwdpy11::GeneticValueToFitness>(
         m, "GeneticValueToFitness",
