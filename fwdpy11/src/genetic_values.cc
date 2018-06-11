@@ -126,7 +126,10 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::SlocusPopGeneticValue>(
         m, "SlocusPopGeneticValue",
         "ABC for genetic value calculations for diploid members of "
-        ":class:`fwdpy11.SlocusPop`");
+        ":class:`fwdpy11.SlocusPop`")
+        .def_property_readonly("gvalue_to_fitness", [](const wrapped_additive& wa) {
+            return wa.gv2w->clone();
+        });
 
     py::class_<wrapped_additive, fwdpy11::SlocusPopGeneticValue>(
         m, "SlocusAdditive")
