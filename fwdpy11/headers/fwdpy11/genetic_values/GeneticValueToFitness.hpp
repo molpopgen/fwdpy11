@@ -18,16 +18,16 @@ namespace fwdpy11
     using genetic_value_to_fitness_t
         = std::function<double(const double, const double)>;
 
-    struct GeneticValueToFitness
+    struct GeneticValueToFitnessMap
     {
         virtual double operator()(const double /*g*/,
                                   const double /*e*/) const = 0;
         virtual void update(const SlocusPop & /*pop*/) = 0;
         virtual void update(const MlocusPop & /*pop*/) = 0;
-        virtual std::unique_ptr<GeneticValueToFitness> clone() const = 0;
+        virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
     };
 
-    struct GeneticValueIsFitness : public GeneticValueToFitness
+    struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
         inline double
         operator()(const double g, const double) const
@@ -38,7 +38,7 @@ namespace fwdpy11
         DEFAULT_SLOCUSPOP_UPDATE()
         DEFAULT_MLOCUSPOP_UPDATE()
 
-        inline std::unique_ptr<GeneticValueToFitness>
+        inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
             return std::unique_ptr<GeneticValueIsFitness>(
@@ -46,7 +46,7 @@ namespace fwdpy11
         }
     };
 
-    struct GeneticValueIsTrait : public GeneticValueToFitness
+    struct GeneticValueIsTrait : public GeneticValueToFitnessMap
     /// Another ABC.  Effectively a type trait
     {
     };
@@ -76,7 +76,7 @@ namespace fwdpy11
         DEFAULT_SLOCUSPOP_UPDATE()
         DEFAULT_MLOCUSPOP_UPDATE()
 
-        inline std::unique_ptr<GeneticValueToFitness>
+        inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
             return std::unique_ptr<GSS>(new GSS(VS, opt));
@@ -160,7 +160,7 @@ namespace fwdpy11
             update_details(pop);
         }
 
-        inline std::unique_ptr<GeneticValueToFitness>
+        inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
             return std::unique_ptr<GSSmo>(new GSSmo(*this));

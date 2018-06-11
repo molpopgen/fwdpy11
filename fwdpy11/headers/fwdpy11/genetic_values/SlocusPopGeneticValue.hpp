@@ -24,9 +24,9 @@ namespace fwdpy11
     {
         /// Classes deriving from this must call gv2w->update
         /// from their own update functions.
-        std::unique_ptr<GeneticValueToFitness> gv2w;
+        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
         SlocusPopGeneticValueWithMapping(
-            std::unique_ptr<GeneticValueToFitness> gv2w_)
+            std::unique_ptr<GeneticValueToFitnessMap> gv2w_)
             : gv2w{ std::move(gv2w_) }
         {
         }

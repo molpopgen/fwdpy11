@@ -187,14 +187,14 @@ PYBIND11_MODULE(genetic_values, m)
             return gbr.gv2w->clone();
         });
 
-    py::class_<fwdpy11::GeneticValueToFitness>(
-        m, "GeneticValueToFitness",
+    py::class_<fwdpy11::GeneticValueToFitnessMap>(
+        m, "GeneticValueToFitnessMap",
         "ABC for functions translating genetic values into fitness.");
 
-    py::class_<fwdpy11::GeneticValueIsTrait, fwdpy11::GeneticValueToFitness>(
+    py::class_<fwdpy11::GeneticValueIsTrait, fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueIsTrait", "ABC");
 
-    py::class_<fwdpy11::GeneticValueIsFitness, fwdpy11::GeneticValueToFitness>(
+    py::class_<fwdpy11::GeneticValueIsFitness, fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueIsFitness")
         .def(py::init<>());
 
