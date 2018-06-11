@@ -64,6 +64,43 @@ using wrapped_additive = wrap_fwdpp_genetic_value<fwdpp::additive_diploid>;
 using wrapped_multiplicative
     = wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>;
 
+struct GBR : public fwdpy11::SlocusPopGeneticValue
+{
+    const std::unique_ptr<fwdpy11::GeneticValueToFitness> gv2w;
+    GBR(const fwdpy11::GeneticValueToFitness& g2w) : gv2w{ g2w.clone() } {}
+
+    inline double
+    sum_haplotype_effect_sizes(const std::size_t gamete_index,
+                               const fwdpy11::SlocusPop& pop) const
+    {
+        double h = 0.0;
+        for (auto&& key : pop.gametes[gamete_index].smutations)
+            {
+                h += pop.mutations[key].s;
+            }
+        return h;
+    }
+
+    inline double
+    operator()(const std::size_t diploid_index,
+               const fwdpy11::SlocusPop& pop) const
+    {
+        double h1 = sum_haplotype_effect_sizes(
+            pop.diploids[diploid_index].first, pop);
+        double h2 = sum_haplotype_effect_sizes(
+            pop.diploids[diploid_index].second, pop);
+        return std::sqrt(h1 * h2);
+    }
+
+    DEFAULT_SLOCUSPOP_UPDATE()
+
+    inline double
+    genetic_value_to_fitness(const double g, const double e) const
+    {
+        return gv2w->operator()(g, e);
+    }
+};
+
 PYBIND11_MODULE(genetic_values, m)
 {
     py::enum_<fwdpp::additive_diploid::policy>(m, "AdditivePolicy")
@@ -105,6 +142,9 @@ PYBIND11_MODULE(genetic_values, m)
             "is_fitness", [](const wrapped_multiplicative& wa) {
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             });
+
+    py::class_<GBR, fwdpy11::SlocusPopGeneticValue>(m, "GBR").def(
+        py::init<const fwdpy11::GeneticValueToFitness&>(), py::arg("gv2w"));
 
     py::class_<fwdpy11::GeneticValueToFitness>(
         m, "GeneticValueToFitness",
