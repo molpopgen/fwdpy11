@@ -164,6 +164,8 @@ PYBIND11_MODULE(genetic_values, m)
         m, "GeneticValueIsFitness")
         .def(py::init<>());
 
+    // TODO: need to decide on (VS, opt) vs (opt, VS) and have
+    // GSS and GSSmo do the same thing
     py::class_<fwdpy11::GSS, fwdpy11::GeneticValueToFitness>(
         m, "GSS", "Gaussian stabilizing selection.")
         .def(py::init<double, double>(), py::arg("VS"), py::arg("opt"))
