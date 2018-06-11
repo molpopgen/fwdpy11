@@ -161,7 +161,7 @@ PYBIND11_MODULE(genetic_values, m)
 
     py::class_<fwdpy11::GSSmo, fwdpy11::GeneticValueToFitness>(
         m, "GSSmo", "Gaussian stabilizing selection with a moving optimum.")
-        .def(py::init<const std::vector<
-                 std::tuple<std::uint32_t, double, double>>&>(),
-             py::arg("optima"));
+        .def(
+            py::init<std::vector<std::tuple<std::uint32_t, double, double>>>(),
+            py::arg("optima"));
 }

@@ -80,27 +80,28 @@ namespace fwdpy11
     struct GSSmo : public GeneticValueToFitness
     {
         double VS, opt;
+        std::size_t current_optimum;
         // Tuple is time, optimum, VS
-        std::queue<std::tuple<std::uint32_t, double, double>> optima;
+        std::vector<std::tuple<std::uint32_t, double, double>> optima;
 
-        GSSmo(const std::vector<std::tuple<std::uint32_t, double, double>>
-                  &optima_)
+        GSSmo(std::vector<std::tuple<std::uint32_t, double, double>>
+                  optima_)
             : VS{ std::numeric_limits<double>::quiet_NaN() },
-              opt{ std::numeric_limits<double>::quiet_NaN() }, optima()
+              opt{ std::numeric_limits<double>::quiet_NaN() }, current_optimum(1),optima(std::move(optima_))
         {
             using tuple_t = std::tuple<std::uint32_t, double, double>;
-            if (optima_.empty())
+            if (optima.empty())
                 {
                     throw std::invalid_argument("empty container of optima");
                 }
-            if (!std::is_sorted(optima_.begin(), optima_.end(),
+            if (!std::is_sorted(optima.begin(), optima.end(),
                                 [](const tuple_t &a, const tuple_t &b) {
                                     return std::get<0>(a) < std::get<0>(b);
                                 }))
                 {
                     throw std::invalid_argument("optima not sorted by time");
                 }
-            if (std::any_of(optima_.begin(), optima_.end(),
+            if (std::any_of(optima.begin(), optima.end(),
                             [](const tuple_t &t) {
                                 auto VS_ = std::get<2>(t);
                                 auto opt_ = std::get<1>(t);
@@ -117,13 +118,8 @@ namespace fwdpy11
                     throw std::invalid_argument(
                         "all VS and opt values must be finite");
                 }
-            for (auto &i : optima_)
-                {
-                    optima.push(i);
-                }
-            opt = std::get<1>(optima.front());
-            VS = std::get<2>(optima.front());
-            optima.pop();
+            opt = std::get<1>(optima[0]);
+            VS = std::get<2>(optima[0]);
         }
 
         inline double
@@ -136,13 +132,12 @@ namespace fwdpy11
         inline void
         update_details(const poptype &pop)
         {
-            if (!optima.empty())
+            if (current_optimum < optima.size())
                 {
                     if (pop.generation >= std::get<0>(optima.front()))
                         {
-                            opt = std::get<1>(optima.front());
-                            VS = std::get<2>(optima.front());
-                            optima.pop();
+                            opt = std::get<1>(optima[current_optimum]);
+                            VS = std::get<2>(optima[current_optimum++]);
                         }
                 }
         }
