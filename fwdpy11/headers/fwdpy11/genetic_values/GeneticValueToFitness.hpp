@@ -20,9 +20,10 @@ namespace fwdpy11
 
     struct GeneticValueToFitness
     {
-        virtual double operator()(const double, const double) const = 0;
-        virtual void update(const SlocusPop &) = 0;
-        virtual void update(const MlocusPop &) = 0;
+        virtual double operator()(const double /*g*/,
+                                  const double /*e*/) const = 0;
+        virtual void update(const SlocusPop & /*pop*/) = 0;
+        virtual void update(const MlocusPop & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitness> clone() const = 0;
     };
 
@@ -84,10 +85,10 @@ namespace fwdpy11
         // Tuple is time, optimum, VS
         std::vector<std::tuple<std::uint32_t, double, double>> optima;
 
-        GSSmo(std::vector<std::tuple<std::uint32_t, double, double>>
-                  optima_)
+        GSSmo(std::vector<std::tuple<std::uint32_t, double, double>> optima_)
             : VS{ std::numeric_limits<double>::quiet_NaN() },
-              opt{ std::numeric_limits<double>::quiet_NaN() }, current_optimum(1),optima(std::move(optima_))
+              opt{ std::numeric_limits<double>::quiet_NaN() },
+              current_optimum(1), optima(std::move(optima_))
         {
             using tuple_t = std::tuple<std::uint32_t, double, double>;
             if (optima.empty())
