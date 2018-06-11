@@ -166,7 +166,9 @@ PYBIND11_MODULE(genetic_values, m)
 
     py::class_<fwdpy11::GSS, fwdpy11::GeneticValueToFitness>(
         m, "GSS", "Gaussian stabilizing selection.")
-        .def(py::init<double, double>(), py::arg("VS"), py::arg("opt"));
+        .def(py::init<double, double>(), py::arg("VS"), py::arg("opt"))
+        .def_readonly("VS", &fwdpy11::GSS::VS)
+        .def_readonly("opt", &fwdpy11::GSS::opt);
 
     py::class_<fwdpy11::GSSmo, fwdpy11::GeneticValueToFitness>(
         m, "GSSmo", "Gaussian stabilizing selection with a moving optimum.")
