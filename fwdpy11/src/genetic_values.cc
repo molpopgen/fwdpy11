@@ -5,6 +5,7 @@
 #include <fwdpp/fitness_models.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/default_update.hpp>
 
 namespace py = pybind11;
 
@@ -30,10 +31,7 @@ struct wrap_fwdpp_genetic_value : public fwdpy11::SlocusPopGeneticValue
         return gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
     }
 
-    inline void
-    update(const fwdpy11::SlocusPop&)
-    {
-    }
+    DEFAULT_SLOCUSPOP_UPDATE()
 
     inline double
     genetic_value_to_fitness(const double g, const double e) const

@@ -6,6 +6,7 @@
 #include <functional>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
+#include <fwdpy11/genetic_values/default_update.hpp>
 
 namespace fwdpy11
 {
@@ -27,14 +28,10 @@ namespace fwdpy11
         {
             return g;
         }
-        inline void
-        update(const SlocusPop &)
-        {
-        }
-        inline void
-        update(const MlocusPop &)
-        {
-        }
+
+        DEFAULT_SLOCUSPOP_UPDATE()
+        DEFAULT_MLOCUSPOP_UPDATE()
+
         inline std::unique_ptr<GeneticValueToFitness>
         clone() const
         {
@@ -65,15 +62,8 @@ namespace fwdpy11
             return std::exp(-(std::pow(g + e - opt, 2.0) / (2.0 * VS)));
         }
 
-        inline void
-        update(const SlocusPop &)
-        {
-        }
-
-        inline void
-        update(const MlocusPop &)
-        {
-        }
+        DEFAULT_SLOCUSPOP_UPDATE()
+        DEFAULT_MLOCUSPOP_UPDATE()
 
         inline std::unique_ptr<GeneticValueToFitness>
         clone() const
