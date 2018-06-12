@@ -192,6 +192,7 @@ wfSlocusPop(
                 generate_offspring_metadata);
             handle_fixations(remove_selected_fixations, N_next, pop);
 
+            pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
             lookup = calculate_fitness(pop, genetic_value_fxn);
