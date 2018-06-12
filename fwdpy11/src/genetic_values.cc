@@ -117,7 +117,11 @@ struct GBR : public fwdpy11::SlocusPopGeneticValueWithMapping
         return std::sqrt(h1 * h2);
     }
 
-    DEFAULT_SLOCUSPOP_UPDATE()
+    inline void
+    update(const fwdpy11::SlocusPop& pop)
+    {
+        gv2w->update(pop);
+    }
 };
 
 
