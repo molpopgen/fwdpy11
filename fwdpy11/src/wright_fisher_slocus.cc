@@ -198,3 +198,10 @@ wfSlocusPop(
             recorder(pop); // The user may now analyze the pop'n
         }
 }
+
+PYBIND11_MODULE(wright_fisher_slocus, m)
+{
+    m.doc() = "Evolution under a Wright-Fisher model.";
+
+    m.def("evolve", &wfSlocusPop);
+}
