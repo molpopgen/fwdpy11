@@ -191,5 +191,10 @@ wfSlocusPop(
                 bound_rmodel, pick_first_parent, pick_second_parent,
                 generate_offspring_metadata);
             handle_fixations(remove_selected_fixations, N_next, pop);
+
+            // TODO: deal with random effects
+            genetic_value_fxn.update(pop);
+            lookup = calculate_fitness(pop, genetic_value_fxn);
+            recorder(pop); // The user may now analyze the pop'n
         }
 }
