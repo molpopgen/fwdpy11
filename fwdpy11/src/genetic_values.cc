@@ -34,12 +34,6 @@ struct wrap_fwdpp_genetic_value
     {
         gv2w->update(pop);
     }
-
-    inline double
-    genetic_value_to_fitness(const double g, const double e) const
-    {
-        return gv2w->operator()(g, e);
-    }
 };
 
 template <>
@@ -124,13 +118,8 @@ struct GBR : public fwdpy11::SlocusPopGeneticValueWithMapping
     }
 
     DEFAULT_SLOCUSPOP_UPDATE()
-
-    inline double
-    genetic_value_to_fitness(const double g, const double e) const
-    {
-        return gv2w->operator()(g, e);
-    }
 };
+
 
 PYBIND11_MODULE(genetic_values, m)
 {
@@ -191,11 +180,12 @@ PYBIND11_MODULE(genetic_values, m)
         m, "GeneticValueToFitnessMap",
         "ABC for functions translating genetic values into fitness.");
 
-    py::class_<fwdpy11::GeneticValueIsTrait, fwdpy11::GeneticValueToFitnessMap>(
-        m, "GeneticValueIsTrait", "ABC");
+    py::class_<fwdpy11::GeneticValueIsTrait,
+               fwdpy11::GeneticValueToFitnessMap>(m, "GeneticValueIsTrait",
+                                                  "ABC");
 
-    py::class_<fwdpy11::GeneticValueIsFitness, fwdpy11::GeneticValueToFitnessMap>(
-        m, "GeneticValueIsFitness")
+    py::class_<fwdpy11::GeneticValueIsFitness,
+               fwdpy11::GeneticValueToFitnessMap>(m, "GeneticValueIsFitness")
         .def(py::init<>());
 
     // TODO: need to decide on (VS, opt) vs (opt, VS) and have
