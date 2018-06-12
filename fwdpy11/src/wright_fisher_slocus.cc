@@ -204,5 +204,5 @@ PYBIND11_MODULE(wright_fisher_slocus, m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("evolve", &wfSlocusPop);
+    m.def("WFSlocusPop", &wfSlocusPop);
 }
