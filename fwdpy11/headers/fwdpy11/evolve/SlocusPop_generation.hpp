@@ -51,8 +51,8 @@ namespace fwdpy11
         std::size_t label = 0;
         for (auto& dip : offspring)
             {
-                auto p1 = pick1(rng, pop);
-                auto p2 = pick2(rng, pop, p1);
+                auto p1 = pick1();
+                auto p2 = pick2(p1);
 
                 auto p1g1 = pop.diploids[p1].first;
                 auto p1g2 = pop.diploids[p1].second;
@@ -76,7 +76,8 @@ namespace fwdpy11
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);
                 offspring_metadata[label].label = label;
-                update(rng, offspring_metadata[label++], pop, p1, p2);
+                update(offspring_metadata[label++], p1, p2,
+                       pop.diploid_metadata);
             }
 
         fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
