@@ -184,6 +184,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.wright_fisher_slocus',
+        ['fwdpy11/src/wright_fisher_slocus.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+        Extension(
         'fwdpy11.wfevolve',
         ['fwdpy11/src/wfevolve.cc'],
         library_dirs=LIBRARY_DIRS,
