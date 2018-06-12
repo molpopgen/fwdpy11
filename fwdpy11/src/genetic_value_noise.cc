@@ -17,11 +17,32 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <gsl/gsl_randist.h>
 #include <pybind11/pybind11.h>
 #include <fwdpy11/genetic_values/noise.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
 namespace py = pybind11;
+
+struct GaussianNoise : public fwdpy11::SlocusPopGeneticValueNoise
+{
+    const double mean, sd;
+    GaussianNoise(const double m, const double s) : mean{ m }, sd{ s } {}
+    virtual double
+    operator()(const fwdpy11::GSLrng_t& rng,
+               const fwdpy11::dip_metadata& /*offspring_metadata*/,
+               const std::size_t /*parent1*/, const std::size_t /*parent2*/,
+               const fwdpy11::SlocusPop& /*pop*/) const
+    {
+        return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
+    }
+    DEFAULT_SLOCUSPOP_UPDATE();
+    std::unique_ptr<fwdpy11::SlocusPopGeneticValueNoise>
+    clone() const
+    {
+        return std::unique_ptr<GaussianNoise>(new GaussianNoise(mean, sd));
+    }
+};
 
 PYBIND11_MODULE(genetic_value_noise, m)
 {
@@ -34,4 +55,8 @@ PYBIND11_MODULE(genetic_value_noise, m)
     py::class_<fwdpy11::SlocusPopNoNoise, fwdpy11::SlocusPopGeneticValueNoise>(
         m, "SlocusPopNoNoise")
         .def(py::init<>());
+
+    py::class_<GaussianNoise, fwdpy11::SlocusPopGeneticValueNoise>(
+        m, "GaussianNoise")
+        .def(py::init<double, double>(), py::arg("mean"), py::arg("sd"));
 }
