@@ -19,6 +19,7 @@
 
 #include <pybind11/pybind11.h>
 #include <fwdpy11/genetic_values/noise.hpp>
+#include <fwdpy11/genetic_values/default_update.hpp>
 
 namespace py = pybind11;
 

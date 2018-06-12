@@ -19,17 +19,41 @@
 #ifndef FWDPY11_GENETIC_VALUES_NOISE_HPP__
 #define FWDPY11_GENETIC_VALUES_NOISE_HPP__
 
+#include <memory>
+#include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
+#include "default_update.hpp"
 
 namespace fwdpy11
 {
     struct SlocusPopGeneticValueNoise
     ///ABC for random effects on trait values
     {
-        virtual double operator()(const std::size_t /*parent1*/,
-                                  const std::size_t /*parent2*/,
-                                  const SlocusPop& /*pop*/)
-            = 0;
+        virtual double
+        operator()(const fwdpy11::dip_metadata& /*offspring_metadata*/,
+                   const std::size_t /*parent1*/,
+                   const std::size_t /*parent2*/,
+                   const SlocusPop& /*pop*/) const = 0;
+        virtual void update(const SlocusPop& /*pop*/) = 0;
+        virtual std::unique_ptr<SlocusPopGeneticValueNoise> clone() const = 0;
+    };
+
+    struct SlocusPopNoNoise : public SlocusPopGeneticValueNoise
+    {
+        virtual double
+        operator()(const dip_metadata& /*offspring_metadata*/,
+                   const std::size_t /*parent1*/,
+                   const std::size_t /*parent2*/,
+                   const SlocusPop& /*pop*/) const
+        {
+            return 0.;
+        }
+        DEFAULT_SLOCUSPOP_UPDATE();
+        std::unique_ptr<SlocusPopGeneticValueNoise>
+        clone() const
+        {
+            return std::unique_ptr<SlocusPopNoNoise>(new SlocusPopNoNoise());
+        }
     };
 } // namespace fwdpy11
 
