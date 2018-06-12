@@ -26,11 +26,11 @@
 namespace fwdpy11
 {
     // Applied each generation to record any data of interest.
-    using SlocusPopemporal_sampler
+    using SlocusPop_temporal_sampler
         = std::function<void(const fwdpy11::SlocusPop&)>;
 
     // Applied each generation to record any data of interest.
-    using MlocusPopemporal_sampler
+    using MlocusPop_temporal_sampler
         = std::function<void(const fwdpy11::MlocusPop&)>;
 }
 

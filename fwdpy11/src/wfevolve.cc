@@ -40,7 +40,7 @@ evolve_common(const fwdpy11::GSLrng_t& rng, fwdpy11::SlocusPop& pop,
               const double mu_neutral, const double mu_selected,
               const bound_mmodels& mmodels, const bound_recmodels& recmap,
               fwdpy11::single_locus_fitness& fitness,
-              fwdpy11::SlocusPopemporal_sampler& recorder,
+              fwdpy11::SlocusPop_temporal_sampler& recorder,
               const double selfing_rate, const mut_removal_policy& mp,
               const bool remove_selected_fixations)
 {
@@ -95,7 +95,7 @@ evolve_singlepop_regions_cpp(
         mmodel,
     const fwdpp::extensions::discrete_rec_model& rmodel,
     fwdpy11::single_locus_fitness& fitness,
-    fwdpy11::SlocusPopemporal_sampler recorder, const double selfing_rate,
+    fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
     const bool remove_selected_fixations = false)
 {
     const auto generations = popsizes.size();

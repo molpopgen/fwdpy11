@@ -110,7 +110,7 @@ wfSlocusPop(
         &mmodel,
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPopemporal_sampler recorder, const double selfing_rate,
+    fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
     //TODO: make noise API less of a kludge
     fwdpy11::single_locus_noise_function noise, py::object noise_updater,
     const bool remove_selected_fixations)
