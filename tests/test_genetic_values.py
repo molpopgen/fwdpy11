@@ -12,6 +12,10 @@ class testSlocusAdditive(unittest.TestCase):
         x = fwdpy11.genetic_values.SlocusAdditive(np.float(1.0))
         self.assertEqual(x.scaling, 1.0)
         self.assertEqual(x.is_fitness, True)
+        self.assertTrue(isinstance(x.gvalue_to_fitness,
+                                   fwdpy11.genetic_values.GeneticValueIsFitness))
+        self.assertTrue(isinstance(x.noise,
+            fwdpy11.genetic_value_noise.SlocusPopNoNoise))
 
     def testConstructWithNaN(self):
         with self.assertRaises(ValueError):

@@ -30,4 +30,8 @@ PYBIND11_MODULE(genetic_value_noise, m)
     py::class_<fwdpy11::SlocusPopGeneticValueNoise>(
         m, "SlocusPopGeneticValueNoise",
         "ABC for noise classes affecting :class:`fwdpy11.SlocusPop`.");
+
+    py::class_<fwdpy11::SlocusPopNoNoise, fwdpy11::SlocusPopGeneticValueNoise>(
+        m, "SlocusPopNoNoise")
+        .def(py::init<>());
 }

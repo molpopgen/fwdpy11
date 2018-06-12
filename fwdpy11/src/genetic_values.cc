@@ -163,6 +163,9 @@ struct GBR : public fwdpy11::SlocusPopGeneticValueWithMapping
 
 PYBIND11_MODULE(genetic_values, m)
 {
+    auto imported_noise = static_cast<pybind11::object>(
+        pybind11::module::import("fwdpy11.genetic_value_noise"));
+
     py::enum_<fwdpp::additive_diploid::policy>(m, "AdditivePolicy")
         .value("aw", fwdpp::additive_diploid::policy::aw)
         .value("atrait", fwdpp::additive_diploid::policy::atrait)
@@ -185,6 +188,10 @@ PYBIND11_MODULE(genetic_values, m)
             "gvalue_to_fitness",
             [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
                 return o.gv2w->clone();
+            })
+        .def_property_readonly(
+            "noise", [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
+                return o.noise_fxn->clone();
             });
 
     py::class_<wrapped_additive, fwdpy11::SlocusPopGeneticValueWithMapping>(
@@ -216,10 +223,8 @@ PYBIND11_MODULE(genetic_values, m)
 
     py::class_<GBR, fwdpy11::SlocusPopGeneticValueWithMapping>(m, "GBR")
         .def(py::init<const fwdpy11::GeneticValueIsTrait&>(), py::arg("gv2w"))
-        .def(py::init<const fwdpy11::GeneticValueIsTrait&,const fwdpy11::SlocusPopGeneticValueNoise&>())
-        .def_property_readonly("gvalue_to_fitness", [](const GBR& gbr) {
-            return gbr.gv2w->clone();
-        });
+        .def(py::init<const fwdpy11::GeneticValueIsTrait&,
+                      const fwdpy11::SlocusPopGeneticValueNoise&>());
 
     py::class_<fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueToFitnessMap",
