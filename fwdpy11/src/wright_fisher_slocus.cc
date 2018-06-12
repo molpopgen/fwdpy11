@@ -38,8 +38,6 @@
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolve/SlocusPop_generation.hpp>
-// TODO: move concept of random noise to new set of headers.
-#include <fwdpy11/evolve/qtrait_api.hpp>
 
 namespace py = pybind11;
 
@@ -54,8 +52,9 @@ calculate_fitness(fwdpy11::SlocusPop &pop,
         {
             auto g = genetic_value_fxn(i, pop);
             pop.diploid_metadata[i].g = g;
-            // TODO: deal with random effects
-            pop.diploid_metadata[i].e = 0.0;
+            pop.diploid_metadata[i].e = genetic_value_fxn.noise(
+                pop.diploid_metadata[i], pop.diploid_metadata[i].parents[0],
+                pop.diploid_metadata[i].parents[1], pop);
             pop.diploid_metadata[i].w
                 = genetic_value_fxn.genetic_value_to_fitness(
                     pop.diploid_metadata[i].g, pop.diploid_metadata[i].e);
@@ -111,8 +110,6 @@ wfSlocusPop(
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
-    //TODO: make noise API less of a kludge
-    fwdpy11::single_locus_noise_function noise, py::object noise_updater,
     const bool remove_selected_fixations)
 {
     //validate the input params

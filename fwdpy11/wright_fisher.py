@@ -49,10 +49,5 @@ def evolve(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
-    # TODO: deal properly with noise concept
-    from fwdpy11.wright_fisher_qtrait import GaussianNoise
-    noise = GaussianNoise(rng, 0.0)
-    noise_updater = None
-
     WFSlocusPop(rng, pop, params.demography, params.mutrate_n, params.mutrate_s,
-                params.recrate, mm, rm, params.gvalue, recorder, params.pself, noise, noise_updater, params.prune_selected)
+                params.recrate, mm, rm, params.gvalue, recorder, params.pself, params.prune_selected)
