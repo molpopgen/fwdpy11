@@ -22,6 +22,7 @@
 #include <memory>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/rng.hpp>
 #include "default_update.hpp"
 
 namespace fwdpy11
@@ -29,11 +30,11 @@ namespace fwdpy11
     struct SlocusPopGeneticValueNoise
     ///ABC for random effects on trait values
     {
-        virtual double
-        operator()(const fwdpy11::dip_metadata& /*offspring_metadata*/,
-                   const std::size_t /*parent1*/,
-                   const std::size_t /*parent2*/,
-                   const SlocusPop& /*pop*/) const = 0;
+        virtual double operator()(const GSLrng_t& /* rng */,
+                                  const dip_metadata& /*offspring_metadata*/,
+                                  const std::size_t /*parent1*/,
+                                  const std::size_t /*parent2*/,
+                                  const SlocusPop& /*pop*/) const = 0;
         virtual void update(const SlocusPop& /*pop*/) = 0;
         virtual std::unique_ptr<SlocusPopGeneticValueNoise> clone() const = 0;
     };
@@ -41,7 +42,8 @@ namespace fwdpy11
     struct SlocusPopNoNoise : public SlocusPopGeneticValueNoise
     {
         virtual double
-        operator()(const dip_metadata& /*offspring_metadata*/,
+        operator()(const GSLrng_t& /*rng*/,
+                   const dip_metadata& /*offspring_metadata*/,
                    const std::size_t /*parent1*/,
                    const std::size_t /*parent2*/,
                    const SlocusPop& /*pop*/) const

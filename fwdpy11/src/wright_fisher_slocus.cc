@@ -42,7 +42,7 @@
 namespace py = pybind11;
 
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
-calculate_fitness(fwdpy11::SlocusPop &pop,
+calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
                   const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn)
 {
     // Calculate parental fitnesses
@@ -53,7 +53,8 @@ calculate_fitness(fwdpy11::SlocusPop &pop,
             auto g = genetic_value_fxn(i, pop);
             pop.diploid_metadata[i].g = g;
             pop.diploid_metadata[i].e = genetic_value_fxn.noise(
-                pop.diploid_metadata[i], pop.diploid_metadata[i].parents[0],
+                rng, pop.diploid_metadata[i],
+                pop.diploid_metadata[i].parents[0],
                 pop.diploid_metadata[i].parents[1], pop);
             pop.diploid_metadata[i].w
                 = genetic_value_fxn.genetic_value_to_fitness(
@@ -148,7 +149,7 @@ wfSlocusPop(
     const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
 
-    auto lookup = calculate_fitness(pop, genetic_value_fxn);
+    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
     // Generate our fxns for picking parents
 
@@ -192,7 +193,7 @@ wfSlocusPop(
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup = calculate_fitness(pop, genetic_value_fxn);
+            lookup = calculate_fitness(rng, pop, genetic_value_fxn);
             recorder(pop); // The user may now analyze the pop'n
         }
 }

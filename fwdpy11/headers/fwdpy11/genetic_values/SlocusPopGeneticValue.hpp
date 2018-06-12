@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include "GeneticValueToFitness.hpp"
 #include "noise.hpp"
@@ -16,7 +17,8 @@ namespace fwdpy11
                                   const SlocusPop& /*pop*/) const = 0;
         virtual double genetic_value_to_fitness(const double /*g*/,
                                                 const double /*e*/) const = 0;
-        virtual double noise(const dip_metadata& /*offspring_metadata*/,
+        virtual double noise(const GSLrng_t& /*rng*/,
+                             const dip_metadata& /*offspring_metadata*/,
                              const std::size_t /*parent1*/,
                              const std::size_t /*parent2*/,
                              const SlocusPop& /*pop*/) const = 0;
@@ -33,7 +35,7 @@ namespace fwdpy11
         std::unique_ptr<SlocusPopGeneticValueNoise> noise_fxn;
 
         SlocusPopGeneticValueWithMapping(
-            std::unique_ptr<GeneticValueToFitnessMap> gv2w_ )
+            std::unique_ptr<GeneticValueToFitnessMap> gv2w_)
             : gv2w{ std::move(gv2w_) }, noise_fxn{ new SlocusPopNoNoise() }
         {
         }
@@ -52,12 +54,12 @@ namespace fwdpy11
         }
 
         inline virtual double
-        noise(const dip_metadata& offspring_metadata,
+        noise(const GSLrng_t& rng, const dip_metadata& offspring_metadata,
               const std::size_t parent1, const std::size_t parent2,
               const SlocusPop& pop) const
         {
-            return noise_fxn->operator()(offspring_metadata, parent1, parent2,
-                                     pop);
+            return noise_fxn->operator()(rng, offspring_metadata, parent1,
+                                         parent2, pop);
         }
     };
 } //namespace fwdpy11
