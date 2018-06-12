@@ -175,7 +175,15 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
-        Extension(
+    Extension(
+        'fwdpy11.genetic_value_noise',
+        ['fwdpy11/src/genetic_value_noise.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11.trait_values',
         ['fwdpy11/src/fwdpy11_trait_values.cc'],
         library_dirs=LIBRARY_DIRS,
