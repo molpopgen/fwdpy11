@@ -68,6 +68,7 @@ class ModelParams(object):
                 setattr(self, key, value)
             elif key not in dir(self):
                 raise ValueError(key, " not a valid parameter for this class.")
+
     @property
     def nregions(self):
         """
@@ -345,8 +346,9 @@ class SlocusParams(ModelParams):
 
     @gvalue.setter
     def gvalue(self, f):
-        from fwdpy11.fitness import SlocusFitness
-        if isinstance(f, SlocusFitness) is False:
+        # from fwdpy11.fitness import SlocusFitness
+        from fwdpy11.genetic_values import SlocusPopGeneticValueWithMapping
+        if isinstance(f, SlocusPopGeneticValueWithMapping) is False:
             raise ValueError("invalid genetic value type: " + str(type(f)))
         self.__gvalue = f
 
@@ -378,12 +380,13 @@ class SlocusParams(ModelParams):
         Sanity-check parameters.
         """
         super(SlocusParams, self).validate()
-        from fwdpy11.fitness import SlocusFitness
+        from fwdpy11.genetic_values import SlocusPopGeneticValue
+        # from fwdpy11.fitness import SlocusFitness
 
         _validate_single_locus_rates(self.rates)
 
-        if callable(self.gvalue) is False:
-            raise ValueError("genetic value function must be callable")
+        # if callable(self.gvalue) is False:
+        #     raise ValueError("genetic value function must be callable")
 
         # If individual rates are nonzero, then
         # corresponding lists of regions cannot be empty:
@@ -401,7 +404,7 @@ class SlocusParams(ModelParams):
                               + str(checks[key]) +
                               ').  Is this intentional?')
 
-        if isinstance(self.gvalue, SlocusFitness) is False:
+        if isinstance(self.gvalue, SlocusPopGeneticValue) is False:
             raise ValueError("invalid genetic value type: " +
                              type(self.__gvalue_data['gvalue']))
 
@@ -447,11 +450,12 @@ class SlocusParamsQ(SlocusParams):
 
         super(SlocusParamsQ, self).__init__(**kwargs)
         if gv_present is False:
-            from fwdpy11.trait_values import SlocusAdditiveTrait
-            self.gvalue = SlocusAdditiveTrait(2.0)
-        if trait2w_present is False:
-            from fwdpy11.wright_fisher_qtrait import GSS
-            self.trait2w = GSS(VS=1.0, O=0.0)
+            #from fwdpy11.trait_values import SlocusAdditiveTrait
+            from fwdpy11.genetic_values import SlocusAdditive, GSS
+            self.gvalue = SlocusAdditive(2.0, GSS(VS=1.0, opt=0.01))
+        # if trait2w_present is False:
+        #     from fwdpy11.wright_fisher_qtrait import GSS
+        #     self.trait2w = GSS(VS=1.0, O=0.0)
 
         if self.prune_selected is True:
             warnings.warn("setting prune_selected to False", UserWarning)
@@ -502,8 +506,8 @@ class SlocusParamsQ(SlocusParams):
     def validate(self):
         super(SlocusParamsQ, self).validate()
 
-        if callable(self.trait2w) is False:
-            raise ValueError("trait to fitness mapper must be a callable")
+        # if callable(self.trait2w) is False:
+        #     raise ValueError("trait to fitness mapper must be a callable")
 
         if self.noise is not None and callable(self.noise) is False:
             raise ValueError("noise function must be callable")
@@ -512,9 +516,9 @@ class SlocusParamsQ(SlocusParams):
             raise ValueError("invalid value for prune_selected: " +
                              str(self.prune_selected))
 
-        if self.__trait_to_fitness is None:
-            raise ValueError("trait to fitness mapping " +
-                             "function cannot be None")
+        # if self.__trait_to_fitness is None:
+        #     raise ValueError("trait to fitness mapping " +
+        #                      "function cannot be None")
 
 
 def _validate_multilocus_rates(data):
