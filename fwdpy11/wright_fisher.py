@@ -16,7 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from .wfevolve import evolve_singlepop_regions_cpp
+#from .wfevolve import evolve_singlepop_regions_cpp
+from .wright_fisher_slocus import WFSlocusPop
 
 
 def evolve(rng, pop, params, recorder=None):
@@ -48,8 +49,10 @@ def evolve(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
-    evolve_singlepop_regions_cpp(rng, pop, params.demography,
-                                 params.mutrate_n, params.mutrate_s,
-                                 params.recrate, mm, rm,
-                                 params.gvalue, recorder, params.pself,
-                                 params.prune_selected)
+    # TODO: deal properly with noise concept
+    from fwdpy11.wright_fisher_qtrait import GaussianNoise
+    noise = GaussianNoise(rng, 0.0)
+    noise_updater = None
+
+    WFSlocusPop(rng, pop, params.demography, params.mutrate_n, params.mutrate_s,
+                params.recrate, mm, rm, params.gvalue, recorder, params.pself, noise, noise_updater, params.prune_selected)
