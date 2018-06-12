@@ -16,8 +16,7 @@ namespace fwdpy11
 {
     template <typename poptype, typename pick1_function,
               typename pick2_function, typename update_function,
-              typename mutation_model, typename recombination_model,
-              typename mutation_removal_policy>
+              typename mutation_model, typename recombination_model>
     void
     evolve_generation(
         const GSLrng_t& rng, poptype& pop, const fwdpp::uint_t N_next,
@@ -25,7 +24,7 @@ namespace fwdpy11
         const fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr& lookup,
         const mutation_model& mmodel, const recombination_model& recmodel,
         const pick1_function& pick1, const pick2_function& pick2,
-        const update_function& update, const mutation_removal_policy& mrp)
+        const update_function& update)
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
@@ -82,8 +81,6 @@ namespace fwdpy11
 
         fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
                                                pop.mcounts);
-        fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                              pop.mcounts, 2 * N_next, mrp);
         // This is constant-time
         pop.diploids.swap(offspring);
         pop.diploid_metadata.swap(offspring_metadata);

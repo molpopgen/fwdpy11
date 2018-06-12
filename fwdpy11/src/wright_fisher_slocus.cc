@@ -169,9 +169,20 @@ wfSlocusPop(
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
             fwdpy11::evolve_generation(
-                rng, pop, N_next, mu_neutral + mu_selected, lookup, bound_mmodel,
-                bound_rmodel, pick_first_parent, pick_second_parent,
-                generate_offspring_metadata,
-                std::true_type()); //TODO: deal with fixations properly
+                rng, pop, N_next, mu_neutral + mu_selected, lookup,
+                bound_mmodel, bound_rmodel, pick_first_parent,
+                pick_second_parent, generate_offspring_metadata);
+            if (remove_selected_fixations)
+                {
+                    fwdpp::fwdpp_internal::gamete_cleaner(
+                        pop.gametes, pop.mutations, pop.mcounts, 2 * N_next,
+                        std::true_type());
+                }
+            else
+                {
+                    fwdpp::fwdpp_internal::gamete_cleaner(
+                        pop.gametes, pop.mutations, pop.mcounts, 2 * N_next,
+                        fwdpp::remove_neutral());
+                }
         }
 }
