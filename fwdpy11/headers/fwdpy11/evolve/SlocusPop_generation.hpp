@@ -21,7 +21,6 @@ namespace fwdpy11
     evolve_generation(
         const GSLrng_t& rng, poptype& pop, const fwdpp::uint_t N_next,
         const double mu,
-        const fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr& lookup,
         const mutation_model& mmodel, const recombination_model& recmodel,
         const pick1_function& pick1, const pick2_function& pick2,
         const update_function& update)

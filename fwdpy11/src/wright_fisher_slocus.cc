@@ -169,7 +169,7 @@ wfSlocusPop(
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
             fwdpy11::evolve_generation(
-                rng, pop, N_next, mu_neutral + mu_selected, lookup,
+                rng, pop, N_next, mu_neutral + mu_selected,
                 bound_mmodel, bound_rmodel, pick_first_parent,
                 pick_second_parent, generate_offspring_metadata);
             if (remove_selected_fixations)
