@@ -26,8 +26,8 @@ namespace py = pybind11;
 
 struct GaussianNoise : public fwdpy11::SlocusPopGeneticValueNoise
 {
-    const double mean, sd;
-    GaussianNoise(const double m, const double s) : mean{ m }, sd{ s } {}
+    const double sd, mean;
+    GaussianNoise(const double s, const double m) : sd{ s }, mean{ m } {}
     virtual double
     operator()(const fwdpy11::GSLrng_t& rng,
                const fwdpy11::dip_metadata& /*offspring_metadata*/,
@@ -40,7 +40,7 @@ struct GaussianNoise : public fwdpy11::SlocusPopGeneticValueNoise
     std::unique_ptr<fwdpy11::SlocusPopGeneticValueNoise>
     clone() const
     {
-        return std::unique_ptr<GaussianNoise>(new GaussianNoise(mean, sd));
+        return std::unique_ptr<GaussianNoise>(new GaussianNoise(*this));
     }
 };
 
@@ -58,5 +58,5 @@ PYBIND11_MODULE(genetic_value_noise, m)
 
     py::class_<GaussianNoise, fwdpy11::SlocusPopGeneticValueNoise>(
         m, "GaussianNoise")
-        .def(py::init<double, double>(), py::arg("mean"), py::arg("sd"));
+        .def(py::init<double, double>(), py::arg("sd"), py::arg("mean")=0.0);
 }
