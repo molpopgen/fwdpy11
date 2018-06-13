@@ -99,6 +99,9 @@ handle_fixations(const bool remove_selected_fixations,
                                                   pop.mcounts, 2 * N_next,
                                                   fwdpp::remove_neutral());
         }
+    fwdpy11::update_mutations(pop.mutations, pop.fixations, pop.fixation_times,
+                              pop.mut_lookup, pop.mcounts, pop.generation,
+                              2 * pop.N, remove_selected_fixations);
 }
 
 void
