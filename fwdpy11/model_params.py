@@ -144,6 +144,9 @@ class ModelParams(object):
 
     @property
     def gvalue(self):
+        """
+        Get/set the genetic value calculator.
+        """
         return self.__gvalue
 
     @gvalue.setter
@@ -152,6 +155,9 @@ class ModelParams(object):
 
     @property
     def rates(self):
+        """
+        Get/set mutation and recombination rates.
+        """
         return self.__rates
 
     @rates.setter
@@ -162,30 +168,51 @@ class ModelParams(object):
 
     @property
     def mutrate_n(self):
+        """
+        Return neutral mutation rate(s).
+        """
         return self.__rates[0]
 
     @property
     def mutrate_s(self):
+        """
+        Return selected mutation rate(s).
+        """
         return self.__rates[1]
 
     @property
     def recrate(self):
+        """
+        Return recombination rate(s).
+        """
         return self.__rates[2]
 
     @property
     def mutrates_n(self):
+        """
+        Return neutral mutation rate(s).
+        """
         return self.mutrate_n
 
     @property
     def mutrates_s(self):
+        """
+        Return selected mutation rate(s).
+        """
         return self.mutrate_s
 
     @property
     def recrates(self):
+        """
+        Return recombination rate(s).
+        """
         return self.recrate
 
     @property
     def pself(self):
+        """
+        Get/set selfing probability/probabilities.
+        """
         return self.__pself
 
     @pself.setter
