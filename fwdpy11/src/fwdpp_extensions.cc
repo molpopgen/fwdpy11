@@ -125,114 +125,130 @@ PYBIND11_MODULE(fwdpp_extensions, m)
     // start, stop, weight, label
     using mutregion_tuple = std::tuple<double, double, double,
                                        decltype(fwdpp::mutation_base::xtra)>;
-    using mutfunction = fwdpp::extensions::
-        discrete_mut_model<std::vector<fwdpy11::Mutation>>::function_type;
+    using mutfunction = fwdpp::extensions::discrete_mut_model<
+        std::vector<fwdpy11::Mutation>>::function_type;
 
     // This is a hack-ish means of doing things.
     // Once we have a proper base class in place,
     // we can reduce what is below to a single function
     // taking const ref to base.
-    py::class_<fwdpp::extensions::
-                   discrete_mut_model<std::vector<fwdpy11::Mutation>>>(
+    py::class_<
+        fwdpp::extensions::discrete_mut_model<std::vector<fwdpy11::Mutation>>>(
         m, "MutationRegions")
-        .def(py::init([](
-            const fwdpy11::GSLrng_t &r, fwdpy11::SlocusPop &pop,
-            const std::vector<mutregion_tuple> &neutral_mut_regions,
-            const std::vector<mutregion_tuple> &selected_mut_regions,
-            std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
-            std::vector<mutfunction> functions;
-            std::vector<double> weights;
-            for (auto &&i : neutral_mut_regions)
-                {
-                    auto start = std::get<0>(i);
-                    auto stop = std::get<1>(i);
-                    auto label = std::get<3>(i);
-                    weights.push_back(std::get<2>(i));
-                    auto mf = [&r, &pop, start, stop,
-                               label](std::queue<std::size_t> &recbin,
+        .def(py::init(
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::SlocusPop &pop,
+               const std::vector<mutregion_tuple> &neutral_mut_regions,
+               const std::vector<mutregion_tuple> &selected_mut_regions,
+               std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
+                std::vector<mutfunction> functions;
+                std::vector<double> weights;
+                for (auto &&i : neutral_mut_regions)
+                    {
+                        auto start = std::get<0>(i);
+                        auto stop = std::get<1>(i);
+                        auto label = std::get<3>(i);
+                        weights.push_back(std::get<2>(i));
+                        auto mf = [&r, &pop, start, stop, label](
+                                      std::queue<std::size_t> &recbin,
                                       fwdpy11::SlocusPop::mcont_t &mutations) {
-                        return fwdpy11::infsites_Mutation(
-                            recbin, mutations, pop.mut_lookup, pop.generation,
-                            [&r, start, stop]() {
-                                return gsl_ran_flat(r.get(), start, stop);
-                            },
-                            []() { return 0.; }, []() { return 1.; }, label);
-                    };
-                    functions.push_back(std::move(mf));
-                }
-            for (std::size_t i = 0; i < selected_mut_regions.size(); ++i)
-                {
-                    auto start = std::get<0>(selected_mut_regions.at(i));
-                    auto stop = std::get<1>(selected_mut_regions.at(i));
-                    auto label = std::get<3>(selected_mut_regions.at(i));
-                    auto sh = dist_effect_sizes.at(i);
-                    weights.push_back(std::get<2>(selected_mut_regions.at(i)));
-                    auto mf = [&r, &pop, start, stop, label,
-                               sh](std::queue<std::size_t> &recbin,
-                                   fwdpy11::SlocusPop::mcont_t &mutations) {
-                        return fwdpy11::infsites_Mutation(
-                            recbin, mutations, pop.mut_lookup, pop.generation,
-                            [&r, start, stop]() {
-                                return gsl_ran_flat(r.get(), start, stop);
-                            },
-                            [&r, sh]() { return sh.s(r.get()); },
-                            [&r, sh]() { return sh.h(r.get()); }, label);
-                    };
-                    functions.push_back(std::move(mf));
-                }
-            return fwdpp::extensions::
-                discrete_mut_model<fwdpy11::SlocusPop::mcont_t>(
-                    std::move(functions), std::move(weights));
-        }))
-        .def(py::init([](
-            const fwdpy11::GSLrng_t &r, fwdpy11::MlocusPop &pop,
-            const std::vector<mutregion_tuple> &neutral_mut_regions,
-            const std::vector<mutregion_tuple> &selected_mut_regions,
-            std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
-            std::vector<mutfunction> functions;
-            std::vector<double> weights;
-            for (auto &&i : neutral_mut_regions)
-                {
-                    auto start = std::get<0>(i);
-                    auto stop = std::get<1>(i);
-                    auto label = std::get<3>(i);
-                    weights.push_back(std::get<2>(i));
-                    auto mf = [&r, &pop, start, stop,
-                               label](std::queue<std::size_t> &recbin,
+                            return fwdpy11::infsites_Mutation(
+                                recbin, mutations, pop.mut_lookup,
+                                pop.generation,
+                                [&r, start, stop]() {
+                                    return gsl_ran_flat(r.get(), start, stop);
+                                },
+                                []() { return 0.; }, []() { return 1.; },
+                                label);
+                        };
+                        functions.push_back(std::move(mf));
+                    }
+                for (std::size_t i = 0; i < selected_mut_regions.size(); ++i)
+                    {
+                        auto start = std::get<0>(selected_mut_regions.at(i));
+                        auto stop = std::get<1>(selected_mut_regions.at(i));
+                        auto label = std::get<3>(selected_mut_regions.at(i));
+                        auto sh = dist_effect_sizes.at(i);
+                        weights.push_back(
+                            std::get<2>(selected_mut_regions.at(i)));
+                        auto mf = [&r, &pop, start, stop, label, sh](
+                                      std::queue<std::size_t> &recbin,
+                                      fwdpy11::SlocusPop::mcont_t &mutations) {
+                            return fwdpy11::infsites_Mutation(
+                                recbin, mutations, pop.mut_lookup,
+                                pop.generation,
+                                [&r, start, stop]() {
+                                    return gsl_ran_flat(r.get(), start, stop);
+                                },
+                                [&r, sh]() { return sh.s(r.get()); },
+                                [&r, sh]() { return sh.h(r.get()); }, label);
+                        };
+                        functions.push_back(std::move(mf));
+                    }
+                return fwdpp::extensions::discrete_mut_model<
+                    fwdpy11::SlocusPop::mcont_t>(std::move(functions),
+                                                 std::move(weights));
+            }))
+        .def(py::init(
+            [](const fwdpy11::GSLrng_t &r, fwdpy11::MlocusPop &pop,
+               const std::vector<mutregion_tuple> &neutral_mut_regions,
+               const std::vector<mutregion_tuple> &selected_mut_regions,
+               std::vector<fwdpp::extensions::shmodel> &dist_effect_sizes) {
+                std::vector<mutfunction> functions;
+                std::vector<double> weights;
+                for (auto &&i : neutral_mut_regions)
+                    {
+                        auto start = std::get<0>(i);
+                        auto stop = std::get<1>(i);
+                        auto label = std::get<3>(i);
+                        weights.push_back(std::get<2>(i));
+                        auto mf = [&r, &pop, start, stop, label](
+                                      std::queue<std::size_t> &recbin,
                                       fwdpy11::MlocusPop::mcont_t &mutations) {
-                        return fwdpy11::infsites_Mutation(
-                            recbin, mutations, pop.mut_lookup, pop.generation,
-                            [&r, start, stop]() {
-                                return gsl_ran_flat(r.get(), start, stop);
-                            },
-                            []() { return 0.; }, []() { return 1.; }, label);
-                    };
-                    functions.push_back(std::move(mf));
-                }
-            for (std::size_t i = 0; i < selected_mut_regions.size(); ++i)
-                {
-                    auto start = std::get<0>(selected_mut_regions.at(i));
-                    auto stop = std::get<1>(selected_mut_regions.at(i));
-                    auto label = std::get<2>(selected_mut_regions.at(i));
-                    auto sh = dist_effect_sizes.at(i);
-                    weights.push_back(std::get<2>(selected_mut_regions.at(i)));
-                    auto mf = [&r, &pop, start, stop, label,
-                               sh](std::queue<std::size_t> &recbin,
-                                   fwdpy11::MlocusPop::mcont_t &mutations) {
-                        return fwdpy11::infsites_Mutation(
-                            recbin, mutations, pop.mut_lookup, pop.generation,
-                            [&r, start, stop]() {
-                                return gsl_ran_flat(r.get(), start, stop);
-                            },
-                            [&r, sh]() { return sh.s(r.get()); },
-                            [&r, sh]() { return sh.h(r.get()); }, label);
-                    };
-                    functions.push_back(std::move(mf));
-                }
-            return fwdpp::extensions::
-                discrete_mut_model<fwdpy11::MlocusPop::mcont_t>(
-                    std::move(functions), std::move(weights));
-        }));
+                            return fwdpy11::infsites_Mutation(
+                                recbin, mutations, pop.mut_lookup,
+                                pop.generation,
+                                [&r, start, stop]() {
+                                    return gsl_ran_flat(r.get(), start, stop);
+                                },
+                                []() { return 0.; }, []() { return 1.; },
+                                label);
+                        };
+                        functions.push_back(std::move(mf));
+                    }
+                for (std::size_t i = 0; i < selected_mut_regions.size(); ++i)
+                    {
+                        auto start = std::get<0>(selected_mut_regions.at(i));
+                        auto stop = std::get<1>(selected_mut_regions.at(i));
+                        auto label = std::get<2>(selected_mut_regions.at(i));
+                        auto sh = dist_effect_sizes.at(i);
+                        weights.push_back(
+                            std::get<2>(selected_mut_regions.at(i)));
+                        auto mf = [&r, &pop, start, stop, label, sh](
+                                      std::queue<std::size_t> &recbin,
+                                      fwdpy11::MlocusPop::mcont_t &mutations) {
+                            return fwdpy11::infsites_Mutation(
+                                recbin, mutations, pop.mut_lookup,
+                                pop.generation,
+                                [&r, start, stop]() {
+                                    return gsl_ran_flat(r.get(), start, stop);
+                                },
+                                [&r, sh]() { return sh.s(r.get()); },
+                                [&r, sh]() { return sh.h(r.get()); }, label);
+                        };
+                        functions.push_back(std::move(mf));
+                    }
+                return fwdpp::extensions::discrete_mut_model<
+                    fwdpy11::MlocusPop::mcont_t>(std::move(functions),
+                                                 std::move(weights));
+            }))
+        .def_property_readonly(
+            "weights",
+            [](const fwdpp::extensions::discrete_mut_model<
+                fwdpy11::SlocusPop::mcont_t> &dmm) {
+                return std::vector<double>(dmm.get_weights());
+            },
+            "Returns the internal weights data.  There are in order of "
+            "neutral regions followed by selected regions.");
 
     py::class_<fwdpp::extensions::discrete_rec_model>(m,
                                                       "RecombinationRegions")
@@ -252,5 +268,18 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                 }
             return fwdpp::extensions::discrete_rec_model(
                 recrate, std::move(functions), std::move(weights));
-        }));
+        }))
+        .def_property_readonly(
+            "weights",
+            [](const fwdpp::extensions::discrete_rec_model &dmm) {
+                return std::vector<double>(dmm.get_weights());
+            },
+            "Returns the internal weights data.  There are in order of "
+            "neutral regions followed by selected regions.")
+        .def_property_readonly(
+            "recrate",
+            [](const fwdpp::extensions::discrete_rec_model &dmm) {
+                return dmm.get_recrate();
+            },
+            "Returns the stored recombination rate.");
 }
