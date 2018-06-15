@@ -60,15 +60,25 @@ def makeMutationRegions(rng, pop, neutral, selected, pneutral):
         raise ValueError("pneutral not finite")
     elif pneutral < 0.0 or pneutral > 1.0:
         raise ValueError("pneutral must be in the range [0.0, 1.0]")
-
-    pneutral_per_region = 0.0
-    pselected_per_region = 0.0
-    if len(neutral) > 0:
-        pneutral_per_region = pneutral/float(len(neutral))
-    if len(selected) > 0:
-        pselected_per_region = (1.0-pneutral)/float(len(selected))
-    ntuples = [(i.b, i.e, i.w*pneutral_per_region, i.l) for i in neutral]
-    stuples = [(i.b, i.e, i.w*pselected_per_region, i.l) for i in selected]
+    import numpy as np
+    
+    # We need to reweight the user input so that new
+    # mutations come out at the expected rates.
+    # This is necessary b/c the user inputs weights
+    # *separately* for neutral and selected variants.
+    # These weights have to get combined into a single
+    # weight vector on the C++ side, meaning that we
+    # have some normalization to do:
+    nw = np.array([i.w for i in neutral],dtype=np.float)
+    nw /= nw.sum()
+    nw *= pneutral
+    sw = np.array([i.w for i in selected],dtype=np.float)
+    sw /= sw.sum()
+    sw *= (1.0-pneutral)
+    nw /= (nw.sum()+sw.sum())
+    sw /= (nw.sum()+sw.sum())
+    ntuples = [(i.b, i.e, j, i.l) for i,j in zip(neutral,nw)]
+    stuples = [(i.b, i.e, j, i.l) for i,j in zip(selected,sw)]
     callbacks = [i.callback() for i in selected]
     from .fwdpp_extensions import MutationRegions
     return MutationRegions(rng, pop, ntuples, stuples, callbacks)
