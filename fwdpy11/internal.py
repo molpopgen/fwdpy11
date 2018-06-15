@@ -61,7 +61,7 @@ def makeMutationRegions(rng, pop, neutral, selected, pneutral):
     elif pneutral < 0.0 or pneutral > 1.0:
         raise ValueError("pneutral must be in the range [0.0, 1.0]")
     import numpy as np
-    
+
     # We need to reweight the user input so that new
     # mutations come out at the expected rates.
     # This is necessary b/c the user inputs weights
@@ -69,16 +69,19 @@ def makeMutationRegions(rng, pop, neutral, selected, pneutral):
     # These weights have to get combined into a single
     # weight vector on the C++ side, meaning that we
     # have some normalization to do:
-    nw = np.array([i.w for i in neutral],dtype=np.float)
-    nw /= nw.sum()
-    nw *= pneutral
-    sw = np.array([i.w for i in selected],dtype=np.float)
-    sw /= sw.sum()
-    sw *= (1.0-pneutral)
-    nw /= (nw.sum()+sw.sum())
-    sw /= (nw.sum()+sw.sum())
-    ntuples = [(i.b, i.e, j, i.l) for i,j in zip(neutral,nw)]
-    stuples = [(i.b, i.e, j, i.l) for i,j in zip(selected,sw)]
+    neutral_region_weights = np.array([i.w for i in neutral], dtype=np.float64)
+    neutral_region_weights /= neutral_region_weights.sum()
+    neutral_region_weights *= pneutral
+    selected_region_weights = np.array([i.w for i in selected], dtype=np.float64)
+    selected_region_weights /= selected_region_weights.sum()
+    selected_region_weights *= (1.0-pneutral)
+    summed_weights = neutral_region_weights.sum() + selected_region_weights.sum()
+    neutral_region_weights /= summed_weights
+    selected_region_weights /= summed_weights
+    ntuples = [(i.b, i.e, j, i.l)
+               for i, j in zip(neutral, neutral_region_weights)]
+    stuples = [(i.b, i.e, j, i.l)
+               for i, j in zip(selected, selected_region_weights)]
     callbacks = [i.callback() for i in selected]
     from .fwdpp_extensions import MutationRegions
     return MutationRegions(rng, pop, ntuples, stuples, callbacks)
