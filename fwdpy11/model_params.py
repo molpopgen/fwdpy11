@@ -196,20 +196,24 @@ class ModelParams(object):
         """
         Error check model params.
 
-        :raises ValueError: Throws ValueError if validation fails.
+        :raises TypeError: Throws TypeError if validation fails.
 
         .. note:: Demography objects must be validated in derived classes.
         """
         if self.nregions is None:
-            raise ValueError("neutral regions cannot be None")
+            raise TypeError("neutral regions cannot be None")
         if self.sregions is None:
-            raise ValueError("selected regions cannot be None")
+            raise TypeError("selected regions cannot be None")
         if self.recregions is None:
-            raise ValueError("recombination regions cannot be None")
+            raise TypeError("recombination regions cannot be None")
         if self.demography is None:
-            raise ValueError("demography cannot be None")
+            raise TypeError("demography cannot be None")
         if self.prune_selected is None:
-            raise ValueError("prune_selected cannot be None")
+            raise TypeError("prune_selected cannot be None")
+        if self.gvalue is None:
+            raise TypeError("gvalue cannot be None")
+        if self.rates is None:
+            raise TypeError("rates cannot be None")
 
 
 def _validate_single_deme_demography(value):
