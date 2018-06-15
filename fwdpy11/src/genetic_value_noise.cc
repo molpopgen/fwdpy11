@@ -24,7 +24,7 @@
 
 namespace py = pybind11;
 
-struct GaussianNoise : public fwdpy11::SlocusPopGeneticValueNoise
+struct GaussianNoise : public fwdpy11::GeneticValueNoise
 {
     const double sd, mean;
     GaussianNoise(const double s, const double m) : sd{ s }, mean{ m } {}
@@ -36,8 +36,17 @@ struct GaussianNoise : public fwdpy11::SlocusPopGeneticValueNoise
     {
         return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
     }
+    virtual double
+    operator()(const fwdpy11::GSLrng_t& rng,
+               const fwdpy11::dip_metadata& /*offspring_metadata*/,
+               const std::size_t /*parent1*/, const std::size_t /*parent2*/,
+               const fwdpy11::MlocusPop& /*pop*/) const
+    {
+        return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
+    }
     DEFAULT_SLOCUSPOP_UPDATE();
-    std::unique_ptr<fwdpy11::SlocusPopGeneticValueNoise>
+    DEFAULT_MLOCUSPOP_UPDATE();
+    std::unique_ptr<fwdpy11::GeneticValueNoise>
     clone() const
     {
         return std::unique_ptr<GaussianNoise>(new GaussianNoise(*this));
@@ -48,15 +57,14 @@ PYBIND11_MODULE(genetic_value_noise, m)
 {
     m.doc() = "\"Noise\" added to genetic values.";
 
-    py::class_<fwdpy11::SlocusPopGeneticValueNoise>(
-        m, "SlocusPopGeneticValueNoise",
+    py::class_<fwdpy11::GeneticValueNoise>(
+        m, "GeneticValueNoise",
         "ABC for noise classes affecting :class:`fwdpy11.SlocusPop`.");
 
-    py::class_<fwdpy11::SlocusPopNoNoise, fwdpy11::SlocusPopGeneticValueNoise>(
-        m, "SlocusPopNoNoise")
+    py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
+        m, "NoNoise")
         .def(py::init<>());
 
-    py::class_<GaussianNoise, fwdpy11::SlocusPopGeneticValueNoise>(
-        m, "GaussianNoise")
-        .def(py::init<double, double>(), py::arg("sd"), py::arg("mean")=0.0);
+    py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(m, "GaussianNoise")
+        .def(py::init<double, double>(), py::arg("sd"), py::arg("mean") = 0.0);
 }

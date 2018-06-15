@@ -31,17 +31,17 @@ namespace fwdpy11
         /// from their own update functions.
         std::unique_ptr<GeneticValueToFitnessMap> gv2w;
         /// This must be updated, too:
-        std::unique_ptr<SlocusPopGeneticValueNoise> noise_fxn;
+        std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         SlocusPopGeneticValueWithMapping(
             std::unique_ptr<GeneticValueToFitnessMap> gv2w_)
-            : gv2w{ std::move(gv2w_) }, noise_fxn{ new SlocusPopNoNoise() }
+            : gv2w{ std::move(gv2w_) }, noise_fxn{ new NoNoise() }
         {
         }
 
         SlocusPopGeneticValueWithMapping(
             std::unique_ptr<GeneticValueToFitnessMap> gv2w_,
-            std::unique_ptr<SlocusPopGeneticValueNoise> noise_)
+            std::unique_ptr<GeneticValueNoise> noise_)
             : gv2w{ std::move(gv2w_) }, noise_fxn{ std::move(noise_) }
         {
         }

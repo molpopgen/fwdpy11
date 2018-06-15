@@ -22,12 +22,13 @@
 #include <memory>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/rng.hpp>
 #include "default_update.hpp"
 
 namespace fwdpy11
 {
-    struct SlocusPopGeneticValueNoise
+    struct GeneticValueNoise
     ///ABC for random effects on trait values
     {
         virtual double operator()(const GSLrng_t& /* rng */,
@@ -35,11 +36,17 @@ namespace fwdpy11
                                   const std::size_t /*parent1*/,
                                   const std::size_t /*parent2*/,
                                   const SlocusPop& /*pop*/) const = 0;
-        virtual void update(const SlocusPop& /*pop*/) = 0;
-        virtual std::unique_ptr<SlocusPopGeneticValueNoise> clone() const = 0;
+        virtual double operator()(const GSLrng_t& /* rng */,
+                                  const dip_metadata& /*offspring_metadata*/,
+                                  const std::size_t /*parent1*/,
+                                  const std::size_t /*parent2*/,
+                                  const MlocusPop& /*pop*/) const = 0;
+                virtual void update(const SlocusPop& /*pop*/) = 0;
+        virtual void update(const MlocusPop& /*pop*/) = 0;
+        virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
     };
 
-    struct SlocusPopNoNoise : public SlocusPopGeneticValueNoise
+    struct NoNoise : public GeneticValueNoise
     {
         virtual double
         operator()(const GSLrng_t& /*rng*/,
@@ -50,11 +57,22 @@ namespace fwdpy11
         {
             return 0.;
         }
+        virtual double
+        operator()(const GSLrng_t& /*rng*/,
+                   const dip_metadata& /*offspring_metadata*/,
+                   const std::size_t /*parent1*/,
+                   const std::size_t /*parent2*/,
+                   const MlocusPop& /*pop*/) const
+        {
+            return 0.;
+        }
+
         DEFAULT_SLOCUSPOP_UPDATE();
-        std::unique_ptr<SlocusPopGeneticValueNoise>
+        DEFAULT_MLOCUSPOP_UPDATE();
+        std::unique_ptr<GeneticValueNoise>
         clone() const
         {
-            return std::unique_ptr<SlocusPopNoNoise>(new SlocusPopNoNoise());
+            return std::unique_ptr<NoNoise>(new NoNoise());
         }
     };
 } // namespace fwdpy11
