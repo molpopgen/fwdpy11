@@ -14,6 +14,7 @@
 #include <fwdpy11/genetic_values/default_update.hpp>
 
 #include "wrap_fwdpp_genetic_value.hpp"
+#include "wrap_fwdpp_genetic_value_mlocus.hpp"
 
 namespace py = pybind11;
 
@@ -65,6 +66,8 @@ struct SlocusGBR : public fwdpy11::SlocusPopGeneticValueWithMapping
         noise_fxn->update(pop);
     }
 };
+
+// Classes for MlocusPop
 
 PYBIND11_MODULE(genetic_values, m)
 {
