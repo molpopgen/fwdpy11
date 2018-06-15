@@ -52,9 +52,13 @@ def _validate_types(data, typename, strict):
 
 class ModelParams(object):
     """
-    Base class for simulation parameters
+    Class to hold simulation parameters
 
     .. versionadded:: 0.1.1
+
+    .. versionchanged:: 0.1.5
+        Changed this from a horrible class hierarchy
+        into a much simpler, single class.
     """
 
     def __init__(self, **kwargs):
@@ -63,6 +67,9 @@ class ModelParams(object):
         self.__recregions = None
         self.__demography = None
         self.__prune_selected = True
+        self.__rates = None
+        self.__gvalue = None
+        self.__pself = 0.0
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
                 setattr(self, key, value)
@@ -73,31 +80,34 @@ class ModelParams(object):
     def nregions(self):
         """
         Get or set the neutral regions.
-        The implementation of the setter
-        is handled by derived classes.
-        Look there for more details.
         """
         return self.__nregions
+
+    @nregions.setter
+    def nregions(self, nregions_):
+        self.__nregions = nregions_
 
     @property
     def sregions(self):
         """
         Get or set the selected regions.
-        The implementation of the setter
-        is handled by derived classes.
-        Look there for more details.
         """
         return self.__sregions
+
+    @sregions.setter
+    def sregions(self, sregions_):
+        self.__sregions = sregions_
 
     @property
     def recregions(self):
         """
         Get or set the recombination regions.
-        The implementation of the setter
-        is handled by derived classes.
-        Look there for more details.
         """
         return self.__recregions
+
+    @recregions.setter
+    def recregions(self, recregions_):
+        self.__recregions = recregions_
 
     @property
     def prune_selected(self):
@@ -121,23 +131,66 @@ class ModelParams(object):
     def sregions(self, sregions):
         self.__sregions = sregions
 
-    @recregions.setter
-    def recregions(self, recregions):
-        self.__recregions = recregions
-
     @property
     def demography(self):
         """
         Get or set demographic history.
-        The setters are fully implemented in
-        derived classes.  Look there for
-        type info, as the details are model-dependent.
         """
         return self.__demography
 
     @demography.setter
     def demography(self, value):
         self.__demography = value
+
+    @property
+    def gvalue(self):
+        return self.__gvalue
+
+    @gvalue.setter
+    def gvalue(self, gvalue_):
+        self.__gvalue = gvalue_
+
+    @property
+    def rates(self):
+        return self.__rates
+
+    @rates.setter
+    def rates(self, rates_):
+        if len(rates_) != 3:
+            raise ValueError("length of rates must be 3")
+        self.__rates = rates_
+
+    @property
+    def mutrate_n(self):
+        return self.__rates[0]
+
+    @property
+    def mutrate_s(self):
+        return self.__rates[1]
+
+    @property
+    def recrate(self):
+        return self.__rates[2]
+
+    @property
+    def mutrates_n(self):
+        return self.mutrate_n
+
+    @property
+    def mutrates_s(self):
+        return self.mutrate_s
+
+    @property
+    def recrates(self):
+        return self.recrate
+
+    @property
+    def pself(self):
+        return self.__pself
+
+    @pself.setter
+    def pself(self, pself_):
+        self.__pself = pself_
 
     def validate(self):
         """
