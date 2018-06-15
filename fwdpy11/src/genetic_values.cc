@@ -8,6 +8,7 @@
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValueWithMapping.hpp>
+#include <fwdpy11/genetic_values/MlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/noise.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
