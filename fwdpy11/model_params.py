@@ -198,7 +198,6 @@ class ModelParams(object):
 
         :raises TypeError: Throws TypeError if validation fails.
 
-        .. note:: Demography objects must be validated in derived classes.
         """
         if self.nregions is None:
             raise TypeError("neutral regions cannot be None")
