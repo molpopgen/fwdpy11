@@ -21,14 +21,14 @@ using wrapped_additive = wrap_fwdpp_genetic_value<fwdpp::additive_diploid>;
 using wrapped_multiplicative
     = wrap_fwdpp_genetic_value<fwdpp::multiplicative_diploid>;
 
-struct GBR : public fwdpy11::SlocusPopGeneticValueWithMapping
+struct SlocusGBR : public fwdpy11::SlocusPopGeneticValueWithMapping
 {
-    GBR(const fwdpy11::GeneticValueIsTrait& g2w)
+    SlocusGBR(const fwdpy11::GeneticValueIsTrait& g2w)
         : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone() }
     {
     }
 
-    GBR(const fwdpy11::GeneticValueIsTrait& g2w,
+    SlocusGBR(const fwdpy11::GeneticValueIsTrait& g2w,
         const fwdpy11::GeneticValueNoise& noise_)
         : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone(),
                                                      noise_.clone() }
@@ -126,7 +126,7 @@ PYBIND11_MODULE(genetic_values, m)
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             });
 
-    py::class_<GBR, fwdpy11::SlocusPopGeneticValueWithMapping>(m, "GBR")
+    py::class_<SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(m, "SlocusGBR")
         .def(py::init<const fwdpy11::GeneticValueIsTrait&>(), py::arg("gv2w"))
         .def(py::init<const fwdpy11::GeneticValueIsTrait&,
                       const fwdpy11::GeneticValueNoise&>());
