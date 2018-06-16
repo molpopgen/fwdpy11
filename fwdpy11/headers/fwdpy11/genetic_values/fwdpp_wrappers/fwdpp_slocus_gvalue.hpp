@@ -17,11 +17,16 @@ namespace fwdpy11
         fwdpp_slocus_gvalue(const double);
 
         fwdpp_slocus_gvalue(const double scaling,
-                                 const fwdpy11::GeneticValueIsTrait& g2w);
+                            const fwdpy11::GeneticValueIsTrait& g2w);
 
         fwdpp_slocus_gvalue(const double scaling,
-                                 const fwdpy11::GeneticValueIsTrait& g2w,
-                                 const fwdpy11::GeneticValueNoise& noise_fxn);
+                            const fwdpy11::GeneticValueIsTrait& g2w,
+                            const fwdpy11::GeneticValueNoise& noise_fxn);
+
+        fwdpp_slocus_gvalue(const fwdpy11::GeneticValueIsTrait& g2w);
+
+        fwdpp_slocus_gvalue(const fwdpy11::GeneticValueIsTrait& g2w,
+                            const fwdpy11::GeneticValueNoise& noise_fxn);
 
         inline double
         operator()(const std::size_t diploid_index,
@@ -36,6 +41,6 @@ namespace fwdpy11
             gv2w->update(pop);
             noise_fxn->update(pop);
         }
-    };  
+    };
 } // namespace fwdpy11
 #endif

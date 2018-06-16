@@ -12,57 +12,11 @@
 #include <fwdpy11/genetic_values/MlocusPopGeneticValueWithMapping.hpp>
 #include <fwdpy11/genetic_values/SlocusAdditive.hpp>
 #include <fwdpy11/genetic_values/SlocusMult.hpp>
+#include <fwdpy11/genetic_values/SlocusGBR.hpp>
 #include <fwdpy11/genetic_values/noise.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
-#include "wrap_fwdpp_genetic_value.hpp"
-
 namespace py = pybind11;
-
-struct SlocusGBR : public fwdpy11::SlocusPopGeneticValueWithMapping
-{
-    SlocusGBR(const fwdpy11::GeneticValueIsTrait& g2w)
-        : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone() }
-    {
-    }
-
-    SlocusGBR(const fwdpy11::GeneticValueIsTrait& g2w,
-              const fwdpy11::GeneticValueNoise& noise_)
-        : fwdpy11::SlocusPopGeneticValueWithMapping{ g2w.clone(),
-                                                     noise_.clone() }
-    {
-    }
-
-    inline double
-    sum_haplotype_effect_sizes(const std::size_t gamete_index,
-                               const fwdpy11::SlocusPop& pop) const
-    {
-        double h = 0.0;
-        for (auto&& key : pop.gametes[gamete_index].smutations)
-            {
-                h += pop.mutations[key].s;
-            }
-        return h;
-    }
-
-    inline double
-    operator()(const std::size_t diploid_index,
-               const fwdpy11::SlocusPop& pop) const
-    {
-        double h1 = sum_haplotype_effect_sizes(
-            pop.diploids[diploid_index].first, pop);
-        double h2 = sum_haplotype_effect_sizes(
-            pop.diploids[diploid_index].second, pop);
-        return std::sqrt(h1 * h2);
-    }
-
-    inline void
-    update(const fwdpy11::SlocusPop& pop)
-    {
-        gv2w->update(pop);
-        noise_fxn->update(pop);
-    }
-};
 
 // Classes for MlocusPop
 
@@ -127,7 +81,7 @@ PYBIND11_MODULE(genetic_values, m)
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             });
 
-    py::class_<SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
+    py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
         m, "SlocusGBR")
         .def(py::init<const fwdpy11::GeneticValueIsTrait&>(), py::arg("gv2w"))
         .def(py::init<const fwdpy11::GeneticValueIsTrait&,
