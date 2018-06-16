@@ -14,19 +14,33 @@ namespace fwdpy11
             = std::unique_ptr<fwdpy11::GeneticValueToFitnessMap>;
         const fwdppT gv;
 
-        fwdpp_slocus_gvalue(const double);
+        template <typename forwarded_fwdppT>
+        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_)
+            : SlocusPopGeneticValueWithMapping{ std::unique_ptr<
+                  GeneticValueToFitnessMap>(new GeneticValueIsFitness()) },
+              gv{ std::forward<forwarded_fwdppT>(gv_) }
+        {
+        }
 
-        fwdpp_slocus_gvalue(const double scaling,
-                            const fwdpy11::GeneticValueIsTrait& g2w);
+        template <typename forwarded_fwdppT>
+        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
+                            const GeneticValueToFitnessMap& gv2w_)
+            : SlocusPopGeneticValueWithMapping{ gv2w_.clone() }, gv{
+                  std::forward<forwarded_fwdppT>(gv_)
+              }
+        {
+        }
 
-        fwdpp_slocus_gvalue(const double scaling,
-                            const fwdpy11::GeneticValueIsTrait& g2w,
-                            const fwdpy11::GeneticValueNoise& noise_fxn);
+        template <typename forwarded_fwdppT>
+        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
+                            const GeneticValueToFitnessMap& gv2w_,
+                            const GeneticValueNoise& noise_)
+            : SlocusPopGeneticValueWithMapping{ gv2w_.clone(),
+                                                noise_.clone() },
+              gv{ std::forward<forwarded_fwdppT>(gv_) }
 
-        fwdpp_slocus_gvalue(const fwdpy11::GeneticValueIsTrait& g2w);
-
-        fwdpp_slocus_gvalue(const fwdpy11::GeneticValueIsTrait& g2w,
-                            const fwdpy11::GeneticValueNoise& noise_fxn);
+        {
+        }
 
         inline double
         operator()(const std::size_t diploid_index,
