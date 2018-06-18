@@ -16,16 +16,16 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_)
-            : SlocusPopGeneticValueWithMapping{ std::unique_ptr<
-                  GeneticValueToFitnessMap>(new GeneticValueIsFitness()) },
-              gv{ std::forward<forwarded_fwdppT>(gv_) }
+            : SlocusPopGeneticValueWithMapping{ GeneticValueIsFitness() }, gv{
+                  std::forward<forwarded_fwdppT>(gv_)
+              }
         {
         }
 
         template <typename forwarded_fwdppT>
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_)
-            : SlocusPopGeneticValueWithMapping{ gv2w_.clone() }, gv{
+            : SlocusPopGeneticValueWithMapping{ gv2w_ }, gv{
                   std::forward<forwarded_fwdppT>(gv_)
               }
         {
@@ -35,9 +35,9 @@ namespace fwdpy11
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_,
                             const GeneticValueNoise& noise_)
-            : SlocusPopGeneticValueWithMapping{ gv2w_.clone(),
-                                                noise_.clone() },
-              gv{ std::forward<forwarded_fwdppT>(gv_) }
+            : SlocusPopGeneticValueWithMapping{ gv2w_, noise_ }, gv{
+                  std::forward<forwarded_fwdppT>(gv_)
+              }
 
         {
         }
