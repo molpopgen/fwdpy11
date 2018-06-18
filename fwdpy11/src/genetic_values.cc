@@ -18,8 +18,6 @@
 
 namespace py = pybind11;
 
-// Classes for MlocusPop
-
 PYBIND11_MODULE(genetic_values, m)
 {
     auto imported_noise = static_cast<pybind11::object>(
