@@ -25,9 +25,10 @@ namespace fwdpy11
     // TODO: remove this
     using Diploid = DiploidGenotype;
 
-    inline bool operator==(const DiploidGenotype & a, const DiploidGenotype & b)
+    inline bool
+    operator==(const DiploidGenotype& a, const DiploidGenotype& b)
     {
-        return a.first==b.first && a.second==b.second;
+        return a.first == b.first && a.second == b.second;
     }
 
     struct dip_metadata
