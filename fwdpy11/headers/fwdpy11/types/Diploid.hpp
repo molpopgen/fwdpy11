@@ -43,6 +43,7 @@ namespace fwdpy11
         std::size_t parents[2]; // Indexes of parents
         std::uint32_t deme;
         std::int32_t sex;
+        std::int32_t nodes[2];  // Nodes in TreeSequence
     };
 
     //! Typedef for container of diploids
