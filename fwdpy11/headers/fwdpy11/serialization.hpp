@@ -24,6 +24,7 @@
 #include <sstream>
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
+#include <fwdpy11/serialization/diploid_metadata.hpp>
 
 namespace fwdpy11
 {
@@ -46,6 +47,7 @@ namespace fwdpy11
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
             fwdpp::io::serialize_population(buffer, *pop);
+            fwdpy11::serialize_diploid_metadata()(buffer, pop->diploid_metadata);
             return buffer.str();
         }
 
@@ -83,6 +85,7 @@ namespace fwdpy11
                     }
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
+                deserialize_diploid_metadata()(buffer, pop.diploid_metadata);
                 fwdpp::io::deserialize_population(buffer, pop);
                 return pop;
             }
@@ -137,6 +140,6 @@ namespace fwdpy11
         //         return temp;
         //     };
         // };
-    }
-}
+    } // namespace serialization
+} // namespace fwdpy11
 #endif
