@@ -29,7 +29,7 @@ namespace fwdpy11
         }
 
       public:
-        using dipvector_t = std::vector<Diploid>;
+        using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
         using popbase_t = Population;
         using popmodel_t = fwdpp::sugar::SINGLELOC_TAG;

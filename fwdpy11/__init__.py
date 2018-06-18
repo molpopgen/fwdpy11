@@ -30,7 +30,7 @@ from ._opaque_gametes import *
 from ._opaque_mutations import *
 from ._opaque_diploids import *
 from ._Population import VecUint32
-from .fwdpy11_types import SingleLocusDiploid
+from .fwdpy11_types import DiploidGenotype
 from .fwdpy11_types import Mutation
 from ._regions import *
 from ._dev import *

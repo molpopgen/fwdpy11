@@ -24,21 +24,22 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Diploid>);
-PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::Diploid>>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
+PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::DiploidGenotype>>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dip_metadata>);
 
 PYBIND11_MODULE(_opaque_diploids, m)
 {
     m.doc() = "Expose C++ containers of diploids to Python without copies.";
+    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidGenotype, first, second);
 
     py::bind_vector<fwdpy11::dipvector_t>(
-        m, "VecDiploid", py::module_local(false),
+        m, "VecDiploid", py::buffer_protocol(), py::module_local(false),
         "C++ representation of a list of "
         ":class:`fwdpy11."
-        "SingleLocusDiploid`.  Typically, access will be read-only.")
+        "DiploidGenotype`.  Typically, access will be read-only.")
         .def(py::pickle(
-            [](const std::vector<fwdpy11::Diploid>& v) -> py::list {
+            [](const std::vector<fwdpy11::DiploidGenotype>& v) -> py::list {
                 py::list rv;
                 for (auto&& vi : v)
                     {
@@ -47,10 +48,10 @@ PYBIND11_MODULE(_opaque_diploids, m)
                 return rv;
             },
             [](py::list l) {
-                std::vector<fwdpy11::Diploid> rv;
+                std::vector<fwdpy11::DiploidGenotype> rv;
                 for (auto&& i : l)
                     {
-                        rv.push_back(i.cast<fwdpy11::Diploid>());
+                        rv.push_back(i.cast<fwdpy11::DiploidGenotype>());
                     }
                 return rv;
             }));
@@ -58,7 +59,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
     py::bind_vector<std::vector<fwdpy11::dipvector_t>>(
         m, "VecVecDiploid", py::module_local(false),
         "Vector of "
-        ":class:`fwdpy11.SingleLocusDiploid`.")
+        ":class:`fwdpy11.DiploidGenotype`.")
         .def(py::pickle(
             [](const std::vector<fwdpy11::dipvector_t>& diploids) {
                 py::list rv;

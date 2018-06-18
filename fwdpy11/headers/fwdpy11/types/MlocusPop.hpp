@@ -32,7 +32,7 @@ namespace fwdpy11
         }
 
       public:
-        using dipvector_t = std::vector<std::vector<Diploid>>;
+        using dipvector_t = std::vector<std::vector<DiploidGenotype>>;
         using diploid_t = dipvector_t::value_type;
         using popbase_t = Population;
         using popmodel_t = fwdpp::sugar::MULTILOC_TAG;
@@ -54,7 +54,7 @@ namespace fwdpy11
         MlocusPop(const fwdpp::uint_t N,
                   std::vector<std::pair<double, double>> locus_boundaries_)
             : Population{ N }, diploids(N, diploid_t(locus_boundaries_.size(),
-                                                     Diploid{ 0, 0 })),
+                                                     DiploidGenotype{ 0, 0 })),
               nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
               locus_boundaries{ std::move(locus_boundaries_) }
         {
