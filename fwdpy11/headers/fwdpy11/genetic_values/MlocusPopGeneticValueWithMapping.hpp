@@ -34,13 +34,13 @@ namespace fwdpy11
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         MlocusPopGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_)
-            : gv2w{ gv2w_ }, noise_fxn{ NoNoise() }
+            : gv2w{ gv2w_.clone() }, noise_fxn{ new NoNoise() }
         {
         }
 
         MlocusPopGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_,
                                          const GeneticValueNoise& noise_)
-            : gv2w{ gv2w_ }, noise_fxn{ noise_ }
+            : gv2w{ gv2w_.clone() }, noise_fxn{ noise_.clone() }
         {
         }
 
