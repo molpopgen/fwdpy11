@@ -10,7 +10,10 @@ namespace fwdpy11
 {
     struct DiploidGenotype
     /// Kept as "bare"/simple struct so that
-    /// we can use this as a Numpy dtype
+    /// we can use this as a Numpy dtype.
+    /// Direct initialization of data members must
+    /// use construction via brace/"uniform"
+    /// initialization.
     {
         using first_type = std::size_t;
         using second_type = std::size_t;
