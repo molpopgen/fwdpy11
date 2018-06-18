@@ -209,13 +209,16 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 return py::make_tuple(d.first, d.second);
             },
             [](py::tuple t) {
-                std::unique_ptr<fwdpy11::DiploidGenotype> d(new fwdpy11::DiploidGenotype{
-                    t[0].cast<std::size_t>(), t[1].cast<std::size_t>()});
+                std::unique_ptr<fwdpy11::DiploidGenotype> d(
+                    new fwdpy11::DiploidGenotype{ t[0].cast<std::size_t>(),
+                                                  t[1].cast<std::size_t>() });
                 return d;
             }))
-        .def("__eq__", [](const fwdpy11::DiploidGenotype &a,
-                          const fwdpy11::DiploidGenotype &b) { return a == b; });
+        .def("__eq__",
+             [](const fwdpy11::DiploidGenotype &a,
+                const fwdpy11::DiploidGenotype &b) { return a == b; });
 
+    // TODO: pickling support
     py::class_<fwdpy11::dip_metadata>(m, "DiploidMetadata",
                                       "Diploid meta data.")
         .def_readwrite("g", &fwdpy11::dip_metadata::g)
