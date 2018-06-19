@@ -119,49 +119,60 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
 {
     // TODO: update
     //validate the input params
-    //if (!std::isfinite(mu_neutral))
-    //    {
-    //        throw std::invalid_argument("neutral mutation rate is not finite");
-    //    }
-    //if (!std::isfinite(mu_selected))
-    //    {
-    //        throw std::invalid_argument(
-    //            "selected mutation rate is not finite");
-    //    }
-    //if (mu_neutral < 0.0)
-    //    {
-    //        throw std::invalid_argument(
-    //            "neutral mutation rate must be non-negative");
-    //    }
-    //if (mu_selected < 0.0)
-    //    {
-    //        throw std::invalid_argument(
-    //            "selected mutation rate must be non-negative");
-    //    }
+    if (!std::any_of(neutral_mutation_rates.begin(),
+                     neutral_mutation_rates.end(),
+                     [](const double d) { return std::isnan(d); }))
+        {
+            throw std::invalid_argument(
+                "neutral mutation rates must all be finite");
+        }
+    if (!std::any_of(selected_mutation_rates.begin(),
+                     selected_mutation_rates.end(),
+                     [](const double d) { return std::isnan(d); }))
+        {
+            throw std::invalid_argument(
+                "selected mutation rates must all be finite");
+        }
+    if (!std::any_of(neutral_mutation_rates.begin(),
+                     neutral_mutation_rates.end(),
+                     [](const double d) { return d < 0; }))
+        {
+            throw std::invalid_argument("neutral mutation rates must all be "
+                                        "greater than or equal to zero");
+        }
+    if (!std::any_of(selected_mutation_rates.begin(),
+                     selected_mutation_rates.end(),
+                     [](const double d) { return d < 0.0; }))
+        {
+            throw std::invalid_argument("selected mutation rates must all be "
+                                        "greather than or equal to zero");
+        }
     const std::uint32_t num_generations
         = static_cast<std::uint32_t>(popsizes.size());
     if (!num_generations)
         {
             throw std::invalid_argument("empty list of population sizes");
         }
-
-    // TODO update
-    // E[S_{2N}] I got the expression from Ewens.
-    //pop.mutations.reserve(std::ceil(
-    //    std::log(2 * pop.N)
-    //    * (4. * double(pop.N) * (mu_neutral + mu_selected)
-    //       + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
-
-    const auto bound_mmodel
-        = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
-    //const auto bound_rmodel = [&rng, &rmodels]() { return rmodels(rng.get()); };
-    // TODO: complete binding
-    std::vector<std::function<std::vector<double>()>> bound_recmodels;
-
     std::vector<double> total_mut_rates(neutral_mutation_rates);
     std::transform(total_mut_rates.cbegin(), total_mut_rates.cend(),
                    selected_mutation_rates.cbegin(), total_mut_rates.begin(),
                    std::plus<double>());
+    auto tot_mutrate
+        = std::accumulate(total_mut_rates.begin(), total_mut_rates.end(), 0.);
+    //E[S_{ 2N }] I got the expression from Ewens.
+    pop.mutations.reserve(
+        std::ceil(std::log(2 * pop.N)
+                  * (4. * double(pop.N) * tot_mutrate
+                     + 0.667 * (4. * double(pop.N) * tot_mutrate))));
+
+    const auto bound_mmodel
+        = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
+    std::vector<std::function<std::vector<double>()>> bound_recmodels;
+    for (auto &rm : rmodels)
+        {
+            bound_recmodels.push_back([&rng, rm]() { return rm(rng.get()); });
+        }
+
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
     // Generate our fxns for picking parents
