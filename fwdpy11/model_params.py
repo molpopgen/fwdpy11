@@ -66,12 +66,13 @@ class ModelParams(object):
         self.__nregions = None
         self.__sregions = None
         self.__recregions = None
+        self.__interlocus_rec = None
         self.__demography = None
         self.__prune_selected = True
         self.__rates = None
         self.__gvalue = None
         self.__gv2w = None
-        self.__noise = (NoNoise(),)
+        self.__noise = (NoNoise,)
         self.__pself = 0.0
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
@@ -235,6 +236,17 @@ class ModelParams(object):
         Return recombination rate(s).
         """
         return self.recrate
+
+    @property
+    def interlocus_rec(self):
+        """
+        Get/set interlocus recombination functions.
+        """
+        return self.__interlocus_rec
+
+    @interlocus_rec.setter
+    def interlocus_rec(self, ir):
+        self.__interlocus_rec = ir
 
     @property
     def pself(self):
