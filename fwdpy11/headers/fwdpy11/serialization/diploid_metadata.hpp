@@ -24,12 +24,10 @@ namespace fwdpy11
                     w(buffer, &md.e);
                     w(buffer, &md.w);
                     w(buffer, &md.label);
-                    w(buffer, &md.parents[0]);
-                    w(buffer, &md.parents[1]);
+                    w(buffer, md.parents, 2);
                     w(buffer, &md.deme);
                     w(buffer, &md.sex);
-                    w(buffer, &md.nodes[0]);
-                    w(buffer, &md.nodes[1]);
+                    w(buffer, md.nodes, 2);
                 }
             pybind11::print("done");
         }
@@ -54,12 +52,10 @@ namespace fwdpy11
                     r(buffer, &md.e);
                     r(buffer, &md.w);
                     r(buffer, &md.label);
-                    r(buffer, &md.parents[0]);
-                    r(buffer, &md.parents[1]);
+                    r(buffer, md.parents, 2);
                     r(buffer, &md.deme);
                     r(buffer, &md.sex);
-                    r(buffer, &md.nodes[0]);
-                    r(buffer, &md.nodes[1]);
+                    r(buffer, md.nodes, 2);
                     vmd.emplace_back(md);
                 }
         }
