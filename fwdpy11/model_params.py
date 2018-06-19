@@ -62,6 +62,7 @@ class ModelParams(object):
     """
 
     def __init__(self, **kwargs):
+        from fwdpy11.genetic_value_noise import NoNoise
         self.__nregions = None
         self.__sregions = None
         self.__recregions = None
@@ -69,6 +70,8 @@ class ModelParams(object):
         self.__prune_selected = True
         self.__rates = None
         self.__gvalue = None
+        self.__gv2w = None
+        self.__noise = (NoNoise(),)
         self.__pself = 0.0
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
@@ -145,13 +148,38 @@ class ModelParams(object):
     @property
     def gvalue(self):
         """
-        Get/set the genetic value calculator.
+        Get/set the type name of the genetic value
+        calculator.
         """
         return self.__gvalue
 
     @gvalue.setter
     def gvalue(self, gvalue_):
         self.__gvalue = gvalue_
+
+    @property
+    def gv2w(self):
+        """
+        Get/set the type name and constructor arguments
+        for the genetic value to fitness (w) map.
+        """
+        return self.__gv2w
+
+    @gv2w.setter
+    def gv2w(self, x):
+        self.__gv2w = x
+
+    @property
+    def noise(self):
+        """
+        Get/set the type name and constructor arguments
+        for the noise object.
+        """
+        return self.__noise
+
+    @noise.setter
+    def noise(self, x):
+        self.__noise = x
 
     @property
     def rates(self):
@@ -238,8 +266,29 @@ class ModelParams(object):
             raise TypeError("prune_selected cannot be None")
         if self.gvalue is None:
             raise TypeError("gvalue cannot be None")
+        if self.noise is None:
+            raise TypeError("noise cannot be None")
         if self.rates is None:
             raise TypeError("rates cannot be None")
+
+    def make_gvalue(self):
+        if len(self.gv2w) == 1:
+            gv2wmap = self.gv2w[0]()
+        elif self.gv2w[1].__class__ is tuple:
+            gv2wmap = self.gv2w[0](*self.gv2w[1])
+        else:
+            gv2wmap = self.gv2w[0](**self.gv2w[1])
+        if len(self.noise) == 1:
+            noisefxn = self.noise[0]()
+        elif self.noise[1].__class__ is tuple:
+            noisefxn = self.noise[0](*self.noise[1])
+        else:
+            noisefxn = self.noise[0](**self.noise[1])
+        if len(self.gvalue) == 1:
+            return self.gvalue[0](gv2wmap, noisefxn)
+        elif self.gvalue[1].__class__ is tuple:
+            return self.gvalue[0](*self.gvalue[1], gv2wmap, noisefxn)
+        return self.gvalue[0](**self.gvalue[1], gv2w=gv2wmap, noise=noisefxn)
 
 
 def _validate_single_deme_demography(value):

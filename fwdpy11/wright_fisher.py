@@ -52,4 +52,4 @@ def evolve(rng, pop, params, recorder=None):
         recorder = RecordNothing()
 
     WFSlocusPop(rng, pop, params.demography, params.mutrate_n, params.mutrate_s,
-                params.recrate, mm, rm, params.gvalue, recorder, params.pself, params.prune_selected)
+                params.recrate, mm, rm, params.make_gvalue(), recorder, params.pself, params.prune_selected)
