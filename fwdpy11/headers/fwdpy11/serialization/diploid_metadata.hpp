@@ -2,7 +2,6 @@
 #define FWDPY11_SERIALIZATION_DIPLOID_METADATA_HPP__
 
 #include <fwdpy11/types/Diploid.hpp>
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
@@ -46,7 +45,6 @@ namespace fwdpy11
             fwdpp::io::scalar_reader r;
             std::size_t s;
             r(buffer, &s);
-            pybind11::print(s);
             vmd.clear();
 
             dip_metadata md;
