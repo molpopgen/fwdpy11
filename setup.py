@@ -199,6 +199,14 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.wright_fisher_mlocus',
+        ['fwdpy11/src/wright_fisher_mlocus.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
         Extension(
         'fwdpy11.wfevolve',
         ['fwdpy11/src/wfevolve.cc'],
