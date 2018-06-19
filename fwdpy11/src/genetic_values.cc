@@ -144,7 +144,8 @@ PYBIND11_MODULE(genetic_values, m)
                 return o.noise_fxn->clone();
             });
 
-    py::class_<fwdpy11::MlocusAdditive>(m, "MlocusAdditive")
+    py::class_<fwdpy11::MlocusAdditive,
+               fwdpy11::MlocusPopGeneticValueWithMapping>(m, "MlocusAdditive")
         .def(py::init([](const double scaling) {
                  return fwdpy11::MlocusAdditive(
                      fwdpp::additive_diploid(
@@ -168,7 +169,8 @@ PYBIND11_MODULE(genetic_values, m)
                 fwdpy11::aggregate_additive_fitness(), gv2w, noise);
         }));
 
-    py::class_<fwdpy11::MlocusMult>(m, "MlocusMult")
+    py::class_<fwdpy11::MlocusMult, fwdpy11::MlocusPopGeneticValueWithMapping>(
+        m, "MlocusMult")
         .def(py::init([](const double scaling) {
                  return fwdpy11::MlocusMult(
                      fwdpp::multiplicative_diploid(
@@ -192,7 +194,8 @@ PYBIND11_MODULE(genetic_values, m)
                 fwdpy11::aggregate_mult_fitness(), gv2w, noise);
         }));
 
-    py::class_<fwdpy11::MlocusGBR>(m, "MlocusGBR")
+    py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
+        m, "MlocusGBR")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
             return fwdpy11::MlocusGBR(
                 fwdpy11::GBR(), fwdpy11::aggregate_additive_trait(), gv2w);
