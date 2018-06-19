@@ -46,8 +46,8 @@ namespace fwdpy11
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
-            fwdpp::io::serialize_population(buffer, *pop);
             fwdpy11::serialize_diploid_metadata()(buffer, pop->diploid_metadata);
+            fwdpp::io::serialize_population(buffer, *pop);
             return buffer.str();
         }
 
