@@ -16,9 +16,6 @@ namespace fwdpy11
             std::size_t s = vmd.size();
             w(buffer, &s);
             for (const auto& md : vmd)
-                // For some reaason, serializing the
-                // sub-arrays was causing segfaults.
-                // TODO: revisit this issue later.
                 {
                     w(buffer, &md.g);
                     w(buffer, &md.e);
