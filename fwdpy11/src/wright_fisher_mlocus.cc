@@ -32,6 +32,7 @@
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
+#include <fwdpy11/multilocus.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/sim_functions.hpp>
@@ -112,35 +113,35 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
             const std::vector<fwdpp::extensions::discrete_mut_model<
                 fwdpy11::MlocusPop::mcont_t>> &mmodels,
             const std::vector<fwdpp::extensions::discrete_rec_model> &rmodels,
-            const std::vector<std::function<unsigned(void)>> &interlocus_rec,
+            py::list interlocus_rec_list,
             fwdpy11::MlocusPopGeneticValue &genetic_value_fxn,
             fwdpy11::MlocusPop_temporal_sampler recorder,
             const double selfing_rate, const bool remove_selected_fixations)
 {
     // TODO: update
     //validate the input params
-    if (!std::any_of(neutral_mutation_rates.begin(),
+    if (std::any_of(neutral_mutation_rates.begin(),
                      neutral_mutation_rates.end(),
-                     [](const double d) { return std::isnan(d); }))
+                     [](const double d) { return !std::isfinite(d); }))
         {
             throw std::invalid_argument(
                 "neutral mutation rates must all be finite");
         }
-    if (!std::any_of(selected_mutation_rates.begin(),
+    if (std::any_of(selected_mutation_rates.begin(),
                      selected_mutation_rates.end(),
-                     [](const double d) { return std::isnan(d); }))
+                     [](const double d) { return !std::isfinite(d); }))
         {
             throw std::invalid_argument(
                 "selected mutation rates must all be finite");
         }
-    if (!std::any_of(neutral_mutation_rates.begin(),
+    if (std::any_of(neutral_mutation_rates.begin(),
                      neutral_mutation_rates.end(),
                      [](const double d) { return d < 0; }))
         {
             throw std::invalid_argument("neutral mutation rates must all be "
                                         "greater than or equal to zero");
         }
-    if (!std::any_of(selected_mutation_rates.begin(),
+    if (std::any_of(selected_mutation_rates.begin(),
                      selected_mutation_rates.end(),
                      [](const double d) { return d < 0.0; }))
         {
@@ -173,6 +174,12 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
             bound_recmodels.push_back([&rng, rm]() { return rm(rng.get()); });
         }
 
+    std::vector<std::function<unsigned(void)>> interlocus_rec;
+    for (auto &i : interlocus_rec_list)
+        {
+            interlocus_rec.push_back(
+                py::cast<fwdpy11::interlocus_rec>(i).callback(rng));
+        }
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
     // Generate our fxns for picking parents
