@@ -53,8 +53,8 @@ namespace fwdpy11
 
     struct GSS : public GeneticValueIsTrait
     {
-        const double VS, opt;
-        GSS(const double VS_, const double opt_) : VS{ VS_ }, opt{ opt_ }
+        const double opt, VS;
+        GSS(const double opt_, const double VS_) : opt{ opt_ }, VS{ VS_ }
         {
             if (VS <= 0.0)
                 {
@@ -79,7 +79,7 @@ namespace fwdpy11
         inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
-            return std::unique_ptr<GSS>(new GSS(VS, opt));
+            return std::unique_ptr<GSS>(new GSS(opt, VS));
         }
     };
 
