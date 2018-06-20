@@ -11,7 +11,6 @@
 #include <fwdpp/interlocus_recombination.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/multilocus.hpp>
-#include <fwdpy11/fitness/fitness.hpp>
 
 namespace py = pybind11;
 

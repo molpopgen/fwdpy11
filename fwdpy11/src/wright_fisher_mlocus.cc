@@ -34,7 +34,6 @@
 #include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/multilocus.hpp>
 #include <fwdpy11/samplers.hpp>
-#include <fwdpy11/fitness/fitness.hpp>
 #include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/genetic_values/MlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
