@@ -51,7 +51,7 @@ struct snowdrift_diploid
     operator()(const fwdpy11::DiploidGenotype &dip,
                const fwdpy11::Population::gcont_t &gametes,
                const fwdpy11::Population::mcont_t &mutations,
-               const fwdpy11::dip_metadata &metadata,
+               const fwdpy11::DiploidMetadata&metadata,
                const std::vector<double> &phenotypes, const double b1,
                const double b2, const double c1, const double c2) const
     /* The first 3 arguments will be passed in from fwdpp.
@@ -124,7 +124,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     operator()(const std::size_t diploid_index,
                const fwdpy11::SlocusPop &pop) const
     {
-        return fdwpp::additive_diploid(2.0)(pop.diploids[diploid_index],
+        return fwdpp::additive_diploid(2.0)(pop.diploids[diploid_index],
                                             pop.gametes, pop.mutations);
     }
 
@@ -134,7 +134,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
         double fitness = 0.0;
         double zself = metadata.g;
         auto N = phenotypes.size();
-        for (std::size_t j = 0; j < N++ j)
+        for (std::size_t j = 0; j < N; ++j)
             {
                 if (metadata.label != j)
                     {
@@ -150,7 +150,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
 
     inline double
     noise(const fwdpy11::GSLrng_t & /*rng*/,
-          const fwdpy11::dip_metadata & /*offspring_metadata*/,
+          const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
           const std::size_t /*parent1*/, const std::size_t /*parent2*/,
           const fwdpy11::SlocusPop & /*pop*/) const
     {
