@@ -27,15 +27,13 @@ import pickle
 class testDiploidCreate(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.d = fwdpy11.SingleLocusDiploid.create(
-            0, 0, 10, 3, -1, 0.5, 1.0, 2.0)
+        self.d = fwdpy11.DiploidGenotype(0, 0)
 
     def testPickle(self):
         x = pickle.dumps(self.d)
         dd = pickle.loads(x)
-        self.assertEqual(dd.deme, 3)
-        self.assertEqual(dd.sex, -1)
-        self.assertEqual(dd, self.d)
+        self.assertEqual(dd.first, 0)
+        self.assertEqual(dd.second, 0)
 
 
 class testSlocusPopCreate(unittest.TestCase):
@@ -49,7 +47,7 @@ class testSlocusPopCreate(unittest.TestCase):
         self.fixations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
             (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
-        self.diploids.append(fwdpy11.SingleLocusDiploid(0, 0))
+        self.diploids.append(fwdpy11.DiploidGenotype(0, 0))
 
     def testConstruction(self):
         pop = fwdpy11.SlocusPop(self.diploids, self.gametes, self.mutations)
@@ -94,7 +92,7 @@ class testGameteKeySorting(unittest.TestCase):
             (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
         self.gametes.append(fwdpy11.Gamete(
             (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0, 1]))))
-        self.diploids.append(fwdpy11.SingleLocusDiploid(0, 1))
+        self.diploids.append(fwdpy11.DiploidGenotype(0, 1))
 
     def testUnsortedGametes(self):
         with self.assertRaises(ValueError):
@@ -120,7 +118,7 @@ class testMlocusPopCreate(unittest.TestCase):
         self.gametes.append(fwdpy11.Gamete(
             (4, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
         self.diploids.append(fwdpy11.VecDiploid(
-            [fwdpy11.SingleLocusDiploid(0, 0)] * 2))
+            [fwdpy11.DiploidGenotype(0, 0)] * 2))
 
     def testConstruction(self):
         pop = fwdpy11.MlocusPop(
