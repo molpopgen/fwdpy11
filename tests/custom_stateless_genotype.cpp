@@ -16,46 +16,54 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 %>
 // clang-format on
 
-// This is the only required header
-#include <fwdpy11/fitness/single_locus_stateless_fitness.hpp>
+#include <algorithm> //for std::max
+#include <pybind11/pybind11.h>
+#include <fwdpp/fitness_models.hpp>
+#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/default_update.hpp>
 
-    // This is the "1+t" part.
-    // The macro defines a function
-    // taking fitness (w) as an argument
-    // and a mutation, m, as a constant
-    // argument.  Here, we update w
-    // according to a multiplicative scheme.
-    // The macro argument is the name of the function
-    // to generate.
-    STATELESS_GENOTYPE_POLICY(Aa)
+    struct GeneralW : public fwdpy11::SlocusPopGeneticValue
 {
-    w *= (1. + m.h);
-}
-END_STRUCT()
+    fwdpp::site_dependent_genetic_value w;
 
-// Likewise, this is the 1+s part for an "aa"
-//(homozygote) genotype.
-STATELESS_GENOTYPE_POLICY(aa) { w *= (1. + m.s); }
-END_STRUCT()
+    GeneralW() : fwdpy11::SlocusPopGeneticValue{}, w{} {}
 
-// Standard pybind11 stuff goes here
+    inline double
+    operator()(const std::size_t diploid_index,
+               const fwdpy11::SlocusPop& pop) const
+    {
+        return std::max(
+            0.0,
+            w(pop.diploids[diploid_index], pop.gametes, pop.mutations,
+              [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
+              [](double& g, const fwdpy11::Mutation& m) {
+                  g *= (1.0 + m.h);
+              }));
+    }
+
+    double
+    genetic_value_to_fitness(const fwdpy11::DiploidMetadata& metadata) const
+    {
+        return metadata.g;
+    }
+
+    double
+    noise(const fwdpy11::GSLrng_t& /*rng*/,
+          const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
+          const std::size_t /*parent1*/, const std::size_t /*parent2*/,
+          const fwdpy11::SlocusPop& /*pop*/) const
+    {
+        return 0.0;
+    }
+
+    DEFAULT_SLOCUSPOP_UPDATE();
+};
+
+//Standard pybind11 stuff goes here
 PYBIND11_MODULE(custom_stateless_genotype, m)
 {
-    // Call this macro so that your custom
-    // class is recognizes are part of the
-    // expected Python class hierarchy
-    FWDPY11_SINGLE_LOCUS_FITNESS()
-
-    // FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
-    // This macro creates a Python function
-    // returning an instance of
-    // fwdpy11.fitness.SlocusCustomStatelessGeneticValue
-    // The macro arguments are:
-    // 1. The name of your function for treating aa genotypes
-    // 2. The name of your function for treating Aa genotypes
-    // 3. A starting value for fitness/genetic value, which will be one for a
-    // multiplicative model.
-    // 4. The name of the Python function
-    // 5. The name of the pybind11::module object
-    CREATE_STATELESS_SLOCUS_GENOTYPE_OBJECT(aa, Aa, 1, "GeneralW", m)
+    pybind11::object imported_custom_stateless_genotype_base_class_type
+        = pybind11::module::import("fwdpy11.genetic_values")
+              .attr("SlocusPopGeneticValue");
+    pybind11::class_<GeneralW>(m, "GeneralW").def(pybind11::init<>());
 }
