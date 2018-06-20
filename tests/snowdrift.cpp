@@ -46,8 +46,11 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
- * The C++ side of an SlocusFitness object must publicly
- * inherit from fwdpy11::single_locus_fitness.
+ * Here, we publicly inherit from fwdpy11::SlocusPopGeneticValue,
+ * which is defined in the header included above.  It is
+ * an abstract class in C++ terms, and is reflected
+ * as a Python Abstract Base Class (ABC) called
+ * fwdpy11.genetic_values.SlocusPopGeneticValue.
  *
  * The phenotypes get updated each generation during
  * the simulation.
@@ -56,7 +59,11 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
  * calculated using fwdpp's machinery.
  */
 {
-    double b1, b2, c1, c2;
+    const double b1, b2, c1, c2;
+    // This is our stateful data,
+    // which is a record of the
+    // additive genetic values of all
+    // diploids
     std::vector<double> phenotypes;
 
     snowdrift(double b1_, double b2_, double c1_, double c2_)
@@ -68,19 +75,22 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     inline double
     operator()(const std::size_t diploid_index,
                const fwdpy11::SlocusPop & /*pop*/) const
+    // The call operator must return the genetic value of an individual
     {
         return phenotypes[diploid_index];
     }
 
     inline double
     genetic_value_to_fitness(const fwdpy11::DiploidMetadata &metadata) const
+    // This function converts genetic value to fitness.
     {
         double fitness = 0.0;
         double zself = metadata.g;
         auto N = phenotypes.size();
         for (std::size_t j = 0; j < N; ++j)
             {
-                if (metadata.label != j)
+                if (metadata.label
+                    != j) // A record of which diploid we are processesing is the label field of the meta data.
                     {
                         double zpair = zself + phenotypes[j];
                         // Payoff function from Fig 1
@@ -97,17 +107,15 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
           const fwdpy11::DiploidMetadata & /*offspring_metadata*/,
           const std::size_t /*parent1*/, const std::size_t /*parent2*/,
           const fwdpy11::SlocusPop & /*pop*/) const
+    // This function may be used to model random effects...
     {
+        //...but there are no random effects here.
         return 0.0;
     }
 
     inline void
     update(const fwdpy11::SlocusPop &pop)
-    /* A stateful fitness model needs updating.
-     * The base class defines this virtual function
-     * to do nothing (for non-stateful models).
-     * Here, we redefine it as needed.
-     */
+    // A stateful fitness model needs updating.
     {
         phenotypes.resize(pop.N);
         for (std::size_t i = 0; i < pop.N; ++i)
@@ -125,10 +133,11 @@ PYBIND11_MODULE(snowdrift, m)
 {
     m.doc() = "Example of custom stateful fitness model.";
 
-    //          .attr("SlocusFitness");
+    // We need to import the Python version of our base class:
     pybind11::object imported_snowdrift_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
               .attr("SlocusPopGeneticValue");
+
     // Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::SlocusPopGeneticValue>(m, "SlocusSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
