@@ -89,8 +89,9 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
         auto N = phenotypes.size();
         for (std::size_t j = 0; j < N; ++j)
             {
-                if (metadata.label
-                    != j) // A record of which diploid we are processesing is the label field of the meta data.
+                // A record of which diploid we are
+                // processesing is the label field of the meta data.
+                if (metadata.label != j)
                     {
                         double zpair = zself + phenotypes[j];
                         // Payoff function from Fig 1
