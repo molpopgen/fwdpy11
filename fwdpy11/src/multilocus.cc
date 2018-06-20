@@ -26,8 +26,8 @@ PYBIND11_MODULE(multilocus, m)
         " Rather, you make calls to one of "
         ":func:`fwdpy11.multilocus.poisson_rec` or "
         ":func:`fwdpy11.multilocus.binomial_rec`.")
-        .def(py::init<double, std::underlying_type<fwdpy11::interlocus_rec::
-                                                       RECMODEL>::type>())
+        .def(py::init<double, std::underlying_type<
+                                  fwdpy11::interlocus_rec::RECMODEL>::type>())
         .def(py::pickle(
             [](const fwdpy11::interlocus_rec& ir) {
                 return py::make_tuple(ir.param, ir.get_model());
@@ -128,107 +128,5 @@ PYBIND11_MODULE(multilocus, m)
 
     .. versionchanged:: 0.1.3
         No longer takes a :class:`fwdpy11.GSLrng` as argument.
-    )delim");
-
-    m.def("poisson_rec",
-          [](const fwdpy11::GSLrng_t& rng, const std::vector<double>& means) {
-              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
-                                    "this overload of poisson_rec is "
-                                    "deprecated.  Please use the version that "
-                                    "only takes a list of means.",
-                                    0);
-              py::list rv;
-              for (auto&& r : means)
-                  {
-                      rv.append(fwdpy11::interlocus_rec(
-                          r, fwdpy11::interlocus_rec::RECMODEL::POISSON));
-                  }
-              return rv;
-          },
-          R"delim(
-    Parameterize interlocus recomination as a Poisson process.
-
-    :param rng: A :class:`fwdpy11.GSLrng`
-    :param means: A list of mean values.
-
-    :rtype: list
-
-    :return: A list of :class:`fwdpy11.multilocus.InterlocusRecombination`.
-
-    .. deprecated:: 0.1.3
-    )delim");
-
-    m.def("poisson_rec",
-          [](const fwdpy11::GSLrng_t& rng, const double mean) {
-              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
-                                    "this overload of poisson_rec is "
-                                    "deprecated.  Please use the version that "
-                                    "only takes a mean argument.",
-                                    0);
-              return fwdpy11::interlocus_rec(
-                  mean, fwdpy11::interlocus_rec::RECMODEL::POISSON);
-          },
-          R"delim(
-    Parameterize interlocus recomination as a Poisson process.
-
-    :param rng: A :class:`fwdpy11.GSLrng`
-    :param mean: The mean of a Poisson process.
-
-    :rtype: :class:`fwdpy11.multilocus.InterlocusRecombination`
-
-    :return: An instance of :class:`fwdpy11.multilocus.InterlocusRecombination`.
-
-    .. deprecated:: 0.1.3
-    )delim");
-
-    m.def("binomial_rec",
-          [](const fwdpy11::GSLrng_t& rng, const std::vector<double>& probs) {
-              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
-                                    "this overload of binomial_rec is "
-                                    "deprecated.  Please use the version that "
-                                    "only takes a list of probabilities.",
-                                    0);
-              py::list rv;
-              for (auto&& r : probs)
-                  {
-                      rv.append(fwdpy11::interlocus_rec(
-                          r, fwdpy11::interlocus_rec::RECMODEL::BINOMIAL));
-                  }
-              return rv;
-          },
-          R"delim(
-    Parameterize interlocus recomination as a Binomial process.
-
-    :param rng: A :class:`fwdpy11.GSLrng`
-    :param probs: A list of genetic distance in cM/100.
-
-    :rtype: list
-
-    :return: A list of of :class:`fwdpy11.multilocus.InterlocusRecombination`.
-
-    .. deprecated:: 0.1.3
-    )delim");
-
-    m.def("binomial_rec",
-          [](const fwdpy11::GSLrng_t& rng, const double prob) {
-              auto w = PyErr_WarnEx(PyExc_DeprecationWarning,
-                                    "this overload of binomial_rec is "
-                                    "deprecated.  Please use the version that "
-                                    "only takes a probability argument.",
-                                    0);
-              return fwdpy11::interlocus_rec(
-                  prob, fwdpy11::interlocus_rec::RECMODEL::BINOMIAL);
-          },
-          R"delim(
-    Parameterize interlocus recomination as a Binomial process.
-
-    :param rng: A :class:`fwdpy11.GSLrng`
-    :param prob: The genetic distance in cM/100.
-
-    :rtype: :class:`fwdpy11.multilocus.InterlocusRecombination`
-
-    :return: An instance of :class:`fwdpy11.multilocus.InterlocusRecombination`.
-
-    .. deprecated:: 0.1.3
     )delim");
 }
