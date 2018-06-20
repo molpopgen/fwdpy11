@@ -26,9 +26,11 @@ def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11.ezparams import mslike
     from fwdpy11.model_params import ModelParams
     from fwdpy11 import SlocusPop, GSLrng
+    from fwdpy11.genetic_values import SlocusMult
     from fwdpy11.wright_fisher import evolve
     pop = SlocusPop(N)
     params_dict = mslike(pop, simlen=simlen)
+    params_dict['gvalue'] = (SlocusMult, (2.,))
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolve(rng, pop, params)
