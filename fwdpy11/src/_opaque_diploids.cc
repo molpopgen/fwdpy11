@@ -26,7 +26,7 @@ namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::DiploidGenotype>>);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dip_metadata>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
 PYBIND11_MODULE(_opaque_diploids, m)
 {
@@ -78,10 +78,10 @@ PYBIND11_MODULE(_opaque_diploids, m)
                 return rv;
             }));
 
-    PYBIND11_NUMPY_DTYPE(fwdpy11::dip_metadata, g, e, w, label, parents, deme,
-                         sex);
+    PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidMetadata, g, e, w, label, parents,
+                         deme, sex);
 
-    py::bind_vector<std::vector<fwdpy11::dip_metadata>>(
+    py::bind_vector<std::vector<fwdpy11::DiploidMetadata>>(
         m, "VecDiploidMetaData", py::module_local(false),
         py::buffer_protocol(),
         R"delim(

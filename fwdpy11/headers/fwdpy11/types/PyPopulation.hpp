@@ -29,7 +29,7 @@ namespace fwdpy11
         pybind11::object popdata;
         pybind11::object popdata_user;
 
-        std::vector<dip_metadata> diploid_metadata;
+        std::vector<DiploidMetadata> diploid_metadata;
 
         virtual ~PyPopulation() = default;
 

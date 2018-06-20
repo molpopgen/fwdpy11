@@ -65,7 +65,7 @@ namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::dip_metadata>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)

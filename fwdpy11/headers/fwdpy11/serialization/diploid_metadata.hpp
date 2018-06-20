@@ -10,7 +10,7 @@ namespace fwdpy11
         template <typename streamtype>
         inline void
         operator()(streamtype& buffer,
-                   const std::vector<fwdpy11::dip_metadata>& vmd) const
+                   const std::vector<fwdpy11::DiploidMetadata>& vmd) const
         {
             fwdpp::io::scalar_writer w;
             std::size_t s = vmd.size();
@@ -35,14 +35,14 @@ namespace fwdpy11
         template <typename streamtype>
         inline void
         operator()(streamtype& buffer,
-                   std::vector<fwdpy11::dip_metadata>& vmd) const
+                   std::vector<fwdpy11::DiploidMetadata>& vmd) const
         {
             fwdpp::io::scalar_reader r;
             std::size_t s;
             r(buffer, &s);
             vmd.clear();
 
-            dip_metadata md;
+            DiploidMetadata md;
             for (std::size_t i = 0; i < s; ++i)
                 {
                     r(buffer, &md.g);

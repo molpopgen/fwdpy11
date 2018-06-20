@@ -32,12 +32,12 @@ namespace fwdpy11
     ///ABC for random effects on trait values
     {
         virtual double operator()(const GSLrng_t& /* rng */,
-                                  const dip_metadata& /*offspring_metadata*/,
+                                  const DiploidMetadata& /*offspring_metadata*/,
                                   const std::size_t /*parent1*/,
                                   const std::size_t /*parent2*/,
                                   const SlocusPop& /*pop*/) const = 0;
         virtual double operator()(const GSLrng_t& /* rng */,
-                                  const dip_metadata& /*offspring_metadata*/,
+                                  const DiploidMetadata& /*offspring_metadata*/,
                                   const std::size_t /*parent1*/,
                                   const std::size_t /*parent2*/,
                                   const MlocusPop& /*pop*/) const = 0;
@@ -50,7 +50,7 @@ namespace fwdpy11
     {
         virtual double
         operator()(const GSLrng_t& /*rng*/,
-                   const dip_metadata& /*offspring_metadata*/,
+                   const DiploidMetadata& /*offspring_metadata*/,
                    const std::size_t /*parent1*/,
                    const std::size_t /*parent2*/,
                    const SlocusPop& /*pop*/) const
@@ -59,7 +59,7 @@ namespace fwdpy11
         }
         virtual double
         operator()(const GSLrng_t& /*rng*/,
-                   const dip_metadata& /*offspring_metadata*/,
+                   const DiploidMetadata& /*offspring_metadata*/,
                    const std::size_t /*parent1*/,
                    const std::size_t /*parent2*/,
                    const MlocusPop& /*pop*/) const

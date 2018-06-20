@@ -31,7 +31,7 @@ namespace fwdpy11
         return a.first == b.first && a.second == b.second;
     }
 
-    struct dip_metadata
+    struct DiploidMetadata
     /*!
       \brief Bare struct for metadata.  Used as Numpy dtype.
     */

@@ -152,6 +152,9 @@ wfSlocusPop(
     const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
 
+    // A stateful fitness model will need its data up-to-date,
+    // so we must call update(...) prior to calculating fitness,
+    // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
@@ -176,9 +179,9 @@ wfSlocusPop(
 
     const auto generate_offspring_metadata =
         [&rng](
-            fwdpy11::dip_metadata &offspring_metadata, const std::size_t p1,
+            fwdpy11::DiploidMetadata &offspring_metadata, const std::size_t p1,
             const std::size_t p2,
-            const std::vector<fwdpy11::dip_metadata> & /*parental_metadata*/) {
+            const std::vector<fwdpy11::DiploidMetadata> & /*parental_metadata*/) {
             offspring_metadata.deme = 0;
             offspring_metadata.parents[0] = p1;
             offspring_metadata.parents[1] = p2;

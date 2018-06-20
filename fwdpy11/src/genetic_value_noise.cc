@@ -30,7 +30,7 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     GaussianNoise(const double s, const double m) : sd{ s }, mean{ m } {}
     virtual double
     operator()(const fwdpy11::GSLrng_t& rng,
-               const fwdpy11::dip_metadata& /*offspring_metadata*/,
+               const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
                const std::size_t /*parent1*/, const std::size_t /*parent2*/,
                const fwdpy11::SlocusPop& /*pop*/) const
     {
@@ -38,7 +38,7 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     }
     virtual double
     operator()(const fwdpy11::GSLrng_t& rng,
-               const fwdpy11::dip_metadata& /*offspring_metadata*/,
+               const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
                const std::size_t /*parent1*/, const std::size_t /*parent2*/,
                const fwdpy11::MlocusPop& /*pop*/) const
     {

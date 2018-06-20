@@ -219,21 +219,21 @@ PYBIND11_MODULE(fwdpy11_types, m)
                 const fwdpy11::DiploidGenotype &b) { return a == b; });
 
     // TODO: pickling support
-    py::class_<fwdpy11::dip_metadata>(m, "DiploidMetadata",
+    py::class_<fwdpy11::DiploidMetadata>(m, "DiploidMetadata",
                                       "Diploid meta data.")
-        .def_readwrite("g", &fwdpy11::dip_metadata::g)
-        .def_readwrite("e", &fwdpy11::dip_metadata::e)
-        .def_readwrite("w", &fwdpy11::dip_metadata::w)
+        .def_readwrite("g", &fwdpy11::DiploidMetadata::g)
+        .def_readwrite("e", &fwdpy11::DiploidMetadata::e)
+        .def_readwrite("w", &fwdpy11::DiploidMetadata::w)
         .def_property("parents",
-                      [](const fwdpy11::dip_metadata &d) {
+                      [](const fwdpy11::DiploidMetadata &d) {
                           return py::make_tuple(d.parents[0], d.parents[1]);
                       },
-                      [](fwdpy11::dip_metadata &d,
+                      [](fwdpy11::DiploidMetadata &d,
                          const std::pair<std::size_t, std::size_t> &input) {
                           d.parents[0] = input.first;
                           d.parents[1] = input.second;
                       })
-        .def_readwrite("sex", &fwdpy11::dip_metadata::sex)
-        .def_readwrite("deme", &fwdpy11::dip_metadata::deme)
-        .def_readwrite("label", &fwdpy11::dip_metadata::label);
+        .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex)
+        .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme)
+        .def_readwrite("label", &fwdpy11::DiploidMetadata::label);
 }

@@ -34,7 +34,7 @@ namespace fwdpy11
         virtual double genetic_value_to_fitness(const double /*g*/,
                                                 const double /*e*/) const = 0;
         virtual double noise(const GSLrng_t& /*rng*/,
-                             const dip_metadata& /*offspring_metadata*/,
+                             const DiploidMetadata& /*offspring_metadata*/,
                              const std::size_t /*parent1*/,
                              const std::size_t /*parent2*/,
                              const MlocusPop& /*pop*/) const = 0;
