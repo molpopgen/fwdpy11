@@ -180,6 +180,10 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
             interlocus_rec.push_back(
                 py::cast<fwdpy11::interlocus_rec>(i).callback(rng));
         }
+    // A stateful fitness model will need its data up-to-date,
+    // so we must call update(...) prior to calculating fitness,
+    // else bad stuff like segfaults could happen.
+    genetic_value_fxn.update(pop);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
     // Generate our fxns for picking parents

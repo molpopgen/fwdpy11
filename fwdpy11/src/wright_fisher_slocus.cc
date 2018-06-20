@@ -152,6 +152,7 @@ wfSlocusPop(
     const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
 
+    genetic_value_fxn.update(pop);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
 
     // Generate our fxns for picking parents
