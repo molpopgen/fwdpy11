@@ -67,10 +67,9 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
 
     inline double
     operator()(const std::size_t diploid_index,
-               const fwdpy11::SlocusPop &pop) const
+               const fwdpy11::SlocusPop & /*pop*/) const
     {
-        return fwdpp::additive_diploid(2.0)(pop.diploids[diploid_index],
-                                            pop.gametes, pop.mutations);
+        return phenotypes[diploid_index];
     }
 
     inline double
