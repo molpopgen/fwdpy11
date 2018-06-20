@@ -129,7 +129,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     }
 
     inline double
-    genetic_value_to_fitness(const fwdpy11::DiploidMetaData &metadata) const
+    genetic_value_to_fitness(const fwdpy11::DiploidMetadata &metadata) const
     {
         double fitness = 0.0;
         double zself = metadata.g;
