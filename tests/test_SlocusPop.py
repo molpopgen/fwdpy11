@@ -34,20 +34,20 @@ class testSlocusPop(unittest.TestCase):
     def test_fitnesses(self):
         # All fitnesses should be 1
         self.assertEqual(
-            sum([i.w for i in self.pop.diploids]),
+            sum([i.w for i in self.pop.diploid_metadata]),
             float(self.pop.N))
 
     def test_labels(self):
         # All diploids should be labeled 0 to pop.N-1
         self.assertEqual(
-            [i.label for i in self.pop.diploids],
+            [i.label for i in self.pop.diploid_metadata],
             [i for i in range(self.pop.N)])
 
     def test_genetic_values(self):
-        self.assertEqual(sum([i.g for i in self.pop.diploids]), 0.0)
+        self.assertEqual(sum([i.g for i in self.pop.diploid_metadata]), 0.0)
 
     def test_e_values(self):
-        self.assertEqual(sum([i.e for i in self.pop.diploids]), 0.0)
+        self.assertEqual(sum([i.e for i in self.pop.diploid_metadata]), 0.0)
 
 
 class testSlocusPopExceptions(unittest.TestCase):
@@ -103,11 +103,11 @@ class testPythonObjects(unittest.TestCase):
         self.assertTrue(self.pop.popdata_user is None)
 
     def testParentalData(self):
-        from fwdpy11.model_params import SlocusParamsQ
-        from fwdpy11.wright_fisher_qtrait import evolve
-        params = SlocusParamsQ(**self.pdict)
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
         evolve(self.rng, self.pop, params)
-        parents = [i.parental_data for i in self.pop.diploids]
+        parents = [i.parents for i in self.pop.diploid_metadata]
         for i in parents:
             self.assertTrue(i is not None)
             self.assertTrue(len(i) == 2)
@@ -115,9 +115,9 @@ class testPythonObjects(unittest.TestCase):
             self.assertTrue(i[1] < self.pop.N)
 
     def testPopdataReadOnly(self):
-        from fwdpy11.model_params import SlocusParamsQ
-        from fwdpy11.wright_fisher_qtrait import evolve
-        params = SlocusParamsQ(**self.pdict)
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
         with self.assertRaises(Exception):
             class Recorder(object):
                 def __call__(self, pop):
@@ -126,9 +126,9 @@ class testPythonObjects(unittest.TestCase):
             evolve(self.rng, self.pop, params, r)
 
     def testPopdataUserAndPickling(self):
-        from fwdpy11.model_params import SlocusParamsQ
-        from fwdpy11.wright_fisher_qtrait import evolve
-        params = SlocusParamsQ(**self.pdict)
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
 
         class Recorder(object):
             def __call__(self, pop):
@@ -144,9 +144,9 @@ class testPythonObjects(unittest.TestCase):
         self.assertEqual(self.pop, up)
 
     def testMutationLookupTable(self):
-        from fwdpy11.model_params import SlocusParamsQ
-        from fwdpy11.wright_fisher_qtrait import evolve
-        params = SlocusParamsQ(**self.pdict)
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
         evolve(self.rng, self.pop, params)
         for i in self.pop.mut_lookup:
             self.assertEqual(i[0], self.pop.mutations[i[1]].pos)
