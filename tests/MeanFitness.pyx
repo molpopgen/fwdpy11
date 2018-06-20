@@ -12,7 +12,7 @@ cdef class MeanFitness(object):
         cdef size_t N = pop.N
         cdef np.ndarray[DTYPE_t,ndim=1] w = np.zeros(N,dtype=DTYPE)
         while i < N:
-            w[i]=pop.diploids[i].w
+            w[i]=pop.diploid_metadata[i].w
             i += 1
         self.d.append((pop.generation,w.mean()))
     def get_data(self):
