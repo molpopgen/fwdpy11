@@ -16,43 +16,54 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 %>
 // clang-format on
 
-//This is the only required header
-#include <fwdpy11/fitness/single_locus_stateless_fitness.hpp>
+#include <algorithm> //for std::max
+#include <pybind11/pybind11.h>
+#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/default_update.hpp>
 
-//This macro defines the function signature for you,
-//but hides the gory details. All you need to know
-//is that you have a diploid called "dip", a vector
-//of gametes called "gametes", and a vector of mutations
-//called "mutations".  These are standard C++ vectors
-//and mimic the Python types in fwdpy11 exactly.
-//If you want the gory details, see the header 
-//included above.
-//The macro argument is the name of your function.
-STATELESS_SLOCUS_FUNCTION(additive)
+struct additive : public fwdpy11::SlocusPopGeneticValue
 {
-    double s = 0.0;
-    for (auto&& i : gametes[dip.first].smutations)
-        s += mutations[i].s;
-    for (auto&& i : gametes[dip.second].smutations)
-        s += mutations[i].s;
-    return std::max(0.0, 1 + s);
-}
-END_STRUCT()
+    inline double
+    operator()(const std::size_t diploid_index,
+               const fwdpy11::SlocusPop& pop) const
+    {
+        double sum = 0;
+        for (auto m :
+             pop.gametes[pop.diploids[diploid_index].first].smutations)
+            {
+                sum += pop.mutations[m].s;
+            }
+        for (auto m :
+             pop.gametes[pop.diploids[diploid_index].second].smutations)
+            {
+                sum += pop.mutations[m].s;
+            }
+        return std::max(0.0, 1.0 + sum);
+    }
+
+    double
+    genetic_value_to_fitness(const fwdpy11::DiploidMetadata& metadata) const
+    {
+        return metadata.g;
+    }
+
+    double
+    noise(const fwdpy11::GSLrng_t& /*rng*/,
+          const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
+          const std::size_t /*parent1*/, const std::size_t /*parent2*/,
+          const fwdpy11::SlocusPop& /*pop*/) const
+    {
+        return 0.0;
+    }
+
+    DEFAULT_SLOCUSPOP_UPDATE();
+};
 
 //Standard pybind11 stuff goes here
 PYBIND11_MODULE(custom_additive, m)
 {
-    //Call this macro so that your custom
-    //class is recognizes are part of the 
-    //expected Python class hierarchy
-    FWDPY11_SINGLE_LOCUS_FITNESS()
-    //FWDPY11_SINGLE_LOCUS_STATELESS_FITNESS()
-    //This macro creates a Python function
-	//that will return an instance of 
-	//fwdpy11.fitness.SlocusCustomStatelessGeneticValue.
-    //The macro arguments are:
-    //1. The name of your function.
-    //2. The name of the Python function
-    //3. The name of the pybind11::module object
-	CREATE_STATELESS_SLOCUS_OBJECT(additive,"additive",m);
+    pybind11::object imported_custom_additive_base_class_type
+        = pybind11::module::import("fwdpy11.genetic_values")
+              .attr("SlocusPopGeneticValue");
+    pybind11::class_<additive>(m, "additive").def(pybind11::init<>());
 }
