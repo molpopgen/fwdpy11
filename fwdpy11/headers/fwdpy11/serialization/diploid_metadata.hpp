@@ -26,7 +26,6 @@ namespace fwdpy11
                     w(buffer, &md.sex);
                     w(buffer, md.nodes, 2);
                 }
-            pybind11::print("done");
         }
     };
 
