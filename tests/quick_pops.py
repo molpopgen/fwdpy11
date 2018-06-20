@@ -24,12 +24,12 @@
 
 def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11.ezparams import mslike
-    from fwdpy11.model_params import SlocusParams
+    from fwdpy11.model_params import ModelParams
     from fwdpy11 import SlocusPop, GSLrng
     from fwdpy11.wright_fisher import evolve
     pop = SlocusPop(N)
     params_dict = mslike(pop, simlen=simlen)
-    params = SlocusParams(**params_dict)
+    params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolve(rng, pop, params)
     return pop
@@ -37,36 +37,38 @@ def quick_neutral_slocus(N=1000, simlen=100):
 
 def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11.ezparams import mslike
-    from fwdpy11.model_params import SlocusParams
+    from fwdpy11.model_params import ModelParams
     from fwdpy11 import SlocusPop, GSLrng
     from fwdpy11.wright_fisher import evolve
     from fwdpy11 import ExpS
+    from fwdpy11.genetic_values import SlocusMult
     pop = SlocusPop(N)
     if dfe is None:
         dfe = ExpS(0, 1, 1, -0.1)
     params_dict = mslike(
         pop, simlen=simlen, dfe=dfe,
         pneutral=0.95)
-    params = SlocusParams(**params_dict)
+    params_dict['gvalue']=(SlocusMult, (2.0,))
+    params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolve(rng, pop, params)
     return pop
 
 
 def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
-    from fwdpy11.model_params import SlocusParamsQ
+    from fwdpy11.model_params import ModelParams
     from fwdpy11 import SlocusPop
-    from fwdpy11.wright_fisher_qtrait import GSS
+    from fwdpy11.genetic_values import GSS
+    from fwdpy11.genetic_values import SlocusAdditive
     from fwdpy11 import GaussianS, Region
-    from fwdpy11.trait_values import SlocusAdditiveTrait
     import numpy as np
     p = {'nregions': [],
          'sregions': [GaussianS(0, 1, 1, 0.25)],
          'recregions': [Region(0, 1, 1)],
          'rates': (0.0, 2e-3, 1e-3),
          'demography': np.array([N] * simlen, dtype=np.uint32),
-         'gvalue': SlocusAdditiveTrait(2.0),
-         'trait2w': GSS(1, 0),
+         'gvalue': (SlocusAdditive,(2.0,)),
+         'gv2w': (GSS,{'VS':1.0,'opt':0.0}),
          'prune_selected': False
          }
     pop = SlocusPop(N)
