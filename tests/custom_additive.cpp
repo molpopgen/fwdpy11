@@ -21,7 +21,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
-struct additive : public fwdpy11::SlocusPopGeneticValue
+    struct additive : public fwdpy11::SlocusPopGeneticValue
 {
     inline double
     operator()(const std::size_t diploid_index,
@@ -65,5 +65,6 @@ PYBIND11_MODULE(custom_additive, m)
     pybind11::object imported_custom_additive_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
               .attr("SlocusPopGeneticValue");
-    pybind11::class_<additive>(m, "additive").def(pybind11::init<>());
+    pybind11::class_<additive, fwdpy11::SlocusPopGeneticValue>(m, "additive")
+        .def(pybind11::init<>());
 }

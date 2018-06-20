@@ -65,5 +65,6 @@ PYBIND11_MODULE(custom_stateless_genotype, m)
     pybind11::object imported_custom_stateless_genotype_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
               .attr("SlocusPopGeneticValue");
-    pybind11::class_<GeneralW>(m, "GeneralW").def(pybind11::init<>());
+    pybind11::class_<GeneralW, fwdpy11::SlocusPopGeneticValue>(m, "GeneralW")
+        .def(pybind11::init<>());
 }
