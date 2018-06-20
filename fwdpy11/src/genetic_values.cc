@@ -184,7 +184,7 @@ PYBIND11_MODULE(genetic_values, m)
                  return fwdpy11::MlocusAdditive(
                      fwdpp::additive_diploid(
                          scaling, fwdpp::additive_diploid::policy::atrait),
-                     fwdpy11::aggregate_additive_fitness(), gv2w);
+                     fwdpy11::aggregate_additive_trait(), gv2w);
              }),
              py::arg("scaling"), py::arg("gv2w"))
         .def(py::init([](const double scaling,
@@ -193,7 +193,7 @@ PYBIND11_MODULE(genetic_values, m)
                  return fwdpy11::MlocusAdditive(
                      fwdpp::additive_diploid(
                          scaling, fwdpp::additive_diploid::policy::atrait),
-                     fwdpy11::aggregate_additive_fitness(), gv2w, noise);
+                     fwdpy11::aggregate_additive_trait(), gv2w, noise);
              }),
              py::arg("scaling"), py::arg("gv2w"), py::arg("noise"));
 
@@ -212,7 +212,7 @@ PYBIND11_MODULE(genetic_values, m)
                      fwdpp::multiplicative_diploid(
                          scaling,
                          fwdpp::multiplicative_diploid::policy::mtrait),
-                     fwdpy11::aggregate_mult_fitness(), gv2w);
+                     fwdpy11::aggregate_mult_trait(), gv2w);
              }),
              py::arg("scaling"), py::arg("gv2w"))
         .def(py::init([](const double scaling,
@@ -222,7 +222,7 @@ PYBIND11_MODULE(genetic_values, m)
                      fwdpp::multiplicative_diploid(
                          scaling,
                          fwdpp::multiplicative_diploid::policy::mtrait),
-                     fwdpy11::aggregate_mult_fitness(), gv2w, noise);
+                     fwdpy11::aggregate_mult_trait(), gv2w, noise);
              }),
              py::arg("scaling"), py::arg("gv2w"), py::arg("scaling"));
 
