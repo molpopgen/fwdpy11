@@ -38,8 +38,8 @@ namespace fwdpy11
 
     struct GeneticValueToFitnessMap
     {
-        virtual double operator()(const double /*g*/,
-                                  const double /*e*/) const = 0;
+        virtual double
+        operator()(const DiploidMetadata & /*metadata*/) const = 0;
         virtual void update(const SlocusPop & /*pop*/) = 0;
         virtual void update(const MlocusPop & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
@@ -48,9 +48,9 @@ namespace fwdpy11
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
         inline double
-        operator()(const double g, const double) const
+        operator()(const DiploidMetadata &metadata) const
         {
-            return g;
+            return metadata.g;
         }
 
         DEFAULT_SLOCUSPOP_UPDATE()
@@ -86,9 +86,10 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const double g, const double e) const
+        operator()(const DiploidMetadata &metadata) const
         {
-            return std::exp(-(std::pow(g + e - opt, 2.0) / (2.0 * VS)));
+            return std::exp(
+                -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
         }
 
         DEFAULT_SLOCUSPOP_UPDATE()
@@ -147,9 +148,10 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const double g, const double e) const
+        operator()(const DiploidMetadata &metadata) const
         {
-            return std::exp(-(std::pow(g + e - opt, 2.0) / (2.0 * VS)));
+            return std::exp(
+                -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
         }
 
         template <typename poptype>

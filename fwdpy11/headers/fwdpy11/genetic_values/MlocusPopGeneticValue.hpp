@@ -31,8 +31,8 @@ namespace fwdpy11
     {
         virtual double operator()(const std::size_t /*diploid*/,
                                   const fwdpy11::MlocusPop& /*pop*/) const = 0;
-        virtual double genetic_value_to_fitness(const double /*g*/,
-                                                const double /*e*/) const = 0;
+        virtual double genetic_value_to_fitness(
+            const DiploidMetadata& /*metadata*/) const = 0;
         virtual double noise(const GSLrng_t& /*rng*/,
                              const DiploidMetadata& /*offspring_metadata*/,
                              const std::size_t /*parent1*/,

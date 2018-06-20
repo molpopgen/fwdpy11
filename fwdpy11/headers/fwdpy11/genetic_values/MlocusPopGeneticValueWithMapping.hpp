@@ -45,9 +45,9 @@ namespace fwdpy11
         }
 
         inline virtual double
-        genetic_value_to_fitness(const double g, const double e) const
+        genetic_value_to_fitness(const DiploidMetadata & metadata) const
         {
-            return gv2w->operator()(g, e);
+            return gv2w->operator()(metadata);
         }
 
         inline virtual double

@@ -58,7 +58,7 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
                 pop.diploid_metadata[i].parents[1], pop);
             pop.diploid_metadata[i].w
                 = genetic_value_fxn.genetic_value_to_fitness(
-                    pop.diploid_metadata[i].g, pop.diploid_metadata[i].e);
+                    pop.diploid_metadata[i]);
             parental_fitnesses[i] = pop.diploid_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
@@ -177,15 +177,15 @@ wfSlocusPop(
               return gsl_ran_discrete(rng.get(), lookup.get());
           };
 
-    const auto generate_offspring_metadata =
-        [&rng](
-            fwdpy11::DiploidMetadata &offspring_metadata, const std::size_t p1,
-            const std::size_t p2,
-            const std::vector<fwdpy11::DiploidMetadata> & /*parental_metadata*/) {
-            offspring_metadata.deme = 0;
-            offspring_metadata.parents[0] = p1;
-            offspring_metadata.parents[1] = p2;
-        };
+    const auto generate_offspring_metadata
+        = [&rng](fwdpy11::DiploidMetadata &offspring_metadata,
+                 const std::size_t p1, const std::size_t p2,
+                 const std::vector<fwdpy11::DiploidMetadata>
+                     & /*parental_metadata*/) {
+              offspring_metadata.deme = 0;
+              offspring_metadata.parents[0] = p1;
+              offspring_metadata.parents[1] = p2;
+          };
 
     for (std::uint32_t gen = 0; gen < num_generations; ++gen)
         {
