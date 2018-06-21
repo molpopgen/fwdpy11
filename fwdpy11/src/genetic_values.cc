@@ -58,7 +58,19 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::SlocusPopGeneticValue>(
         m, "SlocusPopGeneticValue",
         "ABC for genetic value calculations for diploid members of "
-        ":class:`fwdpy11.SlocusPop`");
+        ":class:`fwdpy11.SlocusPop`")
+        .def("__call__",
+             [](const fwdpy11::SlocusPopGeneticValue& gv,
+                const std::size_t diploid_index,
+                const fwdpy11::SlocusPop& pop) {
+                 return gv(diploid_index, pop);
+             })
+        .def("fitness", [](const fwdpy11::SlocusPopGeneticValue& gv,
+                           const std::size_t diploid_index,
+                           const fwdpy11::SlocusPop& pop) {
+            return gv.genetic_value_to_fitness(
+                pop.diploid_metadata[diploid_index]);
+        });
 
     py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
                fwdpy11::SlocusPopGeneticValue>(
@@ -155,7 +167,19 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::MlocusPopGeneticValue>(
         m, "MlocusPopGeneticValue",
         "ABC for genetic value calculations for diploid members of "
-        ":class:`fwdpy11.MlocusPop`");
+        ":class:`fwdpy11.MlocusPop`")
+        .def("__call__",
+             [](const fwdpy11::MlocusPopGeneticValue& gv,
+                const std::size_t diploid_index,
+                const fwdpy11::MlocusPop& pop) {
+                 return gv(diploid_index, pop);
+             })
+        .def("fitness", [](const fwdpy11::MlocusPopGeneticValue& gv,
+                           const std::size_t diploid_index,
+                           const fwdpy11::MlocusPop& pop) {
+            return gv.genetic_value_to_fitness(
+                pop.diploid_metadata[diploid_index]);
+        });
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
