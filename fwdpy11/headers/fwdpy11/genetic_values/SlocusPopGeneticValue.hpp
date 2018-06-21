@@ -38,8 +38,7 @@ namespace fwdpy11
     /// In a simulation, we want the following operations:
     /// pop.diploid_metadata[i].g = gv(i,pop);
     /// pop.diploid_metadata[i].e = gv.noise(rng, pop.diploid_medatadata[i],p1,p2,pop);
-    /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i].g,
-    ///                                                         pop.diploid_metadata[i].e);
+    /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i]);
     /// At the end of a generation, update may be called.
     ///
     /// Things to note:
