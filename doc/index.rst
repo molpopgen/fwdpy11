@@ -108,6 +108,13 @@ fwdpy11.genetic_values
     :show-inheritance:
     :special-members:
 
+fwdpy11.genetic_value_noise
+------------------------------
+.. automodule:: fwdpy11.genetic_value_noise
+    :members:
+    :show-inheritance:
+    :special-members:
+
 fwdpy11.sampling
 ------------------------------
 .. automodule:: fwdpy11.sampling
