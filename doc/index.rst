@@ -101,6 +101,12 @@ fwdpy11._Populations
     :members:
     :show-inheritance:
 
+fwdpy11.genetic_values
+------------------------------
+.. automodule:: fwdpy11.genetic_values
+    :members:
+    :show-inheritance:
+
 fwdpy11.sampling
 ------------------------------
 .. automodule:: fwdpy11.sampling
