@@ -89,12 +89,6 @@ fwdpy11
     :imported-members:
     :show-inheritance:
 
-fwdpy11.fitness
-------------------------------
-.. automodule:: fwdpy11.fitness
-    :members:
-    :show-inheritance:
-
 fwdpy11._Population
 ------------------------------
 .. automodule:: fwdpy11._Population
@@ -104,12 +98,6 @@ fwdpy11._Population
 fwdpy11._Populations
 ------------------------------
 .. automodule:: fwdpy11._Populations
-    :members:
-    :show-inheritance:
-
-fwdpy11.trait_values
-------------------------------
-.. automodule:: fwdpy11.trait_values
     :members:
     :show-inheritance:
 
@@ -137,12 +125,6 @@ fwdpy11.wright_fisher
     :members:
     :show-inheritance:
 
-fwdpy11.wright_fisher_qtrait
-------------------------------
-.. automodule:: fwdpy11.wright_fisher_qtrait
-    :members:
-    :show-inheritance:
-
 fwdpy11.multilocus
 ------------------------------
 .. automodule:: fwdpy11.multilocus
@@ -152,12 +134,6 @@ fwdpy11.multilocus
 fwdpy11.util
 ------------------------------
 .. automodule:: fwdpy11.util
-    :members:
-    :show-inheritance:
-
-fwdpy11.python_genetic_values
-------------------------------------------------------------
-.. automodule:: fwdpy11.python_genetic_values
     :members:
     :show-inheritance:
 
