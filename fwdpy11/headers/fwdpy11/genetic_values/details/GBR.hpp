@@ -50,6 +50,8 @@ namespace fwdpy11
                 gametes[dip.second].smutations, mutations);
             return std::sqrt(h1 * h2);
         }
+        GBR(){}
+        GBR(const GBR &) = default;
     };
 } // namespace fwdpy11
 
