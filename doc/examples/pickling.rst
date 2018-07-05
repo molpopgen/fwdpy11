@@ -50,7 +50,7 @@ Some general notes:
     p = fwdpy11.ezparams.mslike(pop,
         simlen=100,
         rates=(1e-3,0.,1e-3))
-    params = fp11.model_params.SlocusParams(**p)
+    params = fp11.model_params.ModelParams(**p)
     rng = fp11.GSLrng(42)
     wf.evolve(rng,pop,params)
     #Pickle the pop in memory.
