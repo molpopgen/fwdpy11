@@ -93,24 +93,39 @@ PYBIND11_MODULE(genetic_values, m)
 
     py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
                fwdpy11::SlocusPopGeneticValue>(
-        m, "SlocusPopGeneticValueWithMapping")
+        m, "SlocusPopGeneticValueWithMapping",
+        "Genetic value calculations with flexible mapping of genetic value to "
+        "fitness.")
         .def_property_readonly(
             "gvalue_to_fitness",
             [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
                 return o.gv2w->clone();
-            })
+            },
+            "Access the genetic value to fitness map.")
         .def_property_readonly(
-            "noise", [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
+            "noise",
+            [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
                 return o.noise_fxn->clone();
-            });
+            },
+            "Access the random noise funcion");
 
     py::class_<fwdpy11::SlocusAdditive,
-               fwdpy11::SlocusPopGeneticValueWithMapping>(m, "SlocusAdditive")
+               fwdpy11::SlocusPopGeneticValueWithMapping>(
+        m, "SlocusAdditive", "Additive genetic values.")
         .def(py::init([](const double scaling) {
                  return fwdpy11::SlocusAdditive(fwdpp::additive_diploid(
                      scaling, fwdpp::additive_diploid::policy::aw));
              }),
-             py::arg("scaling"))
+             py::arg("scaling"),
+             R"delim(
+             Additive effects on fitness.
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+
+             For a model of fitness, the genetic value is 1, 1+e*h,
+             1+scaling*e for genotypes AA, Aa, and aa, respectively.
+             )delim")
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g) {
                  return fwdpy11::SlocusAdditive(
@@ -118,7 +133,16 @@ PYBIND11_MODULE(genetic_values, m)
                          scaling, fwdpp::additive_diploid::policy::atrait),
                      g);
              }),
-             py::arg("scaling"), py::arg("gv2w"))
+             py::arg("scaling"), py::arg("gv2w"),
+             R"delim(
+             Construct an object of additive effects on a trait with a specific
+             functional mapping from genetic value to fitness.
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+             :param gv2w: Map from genetic value to fitness.
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             )delim")
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g,
                          const fwdpy11::GeneticValueNoise& n) {
@@ -127,22 +151,46 @@ PYBIND11_MODULE(genetic_values, m)
                          scaling, fwdpp::additive_diploid::policy::atrait),
                      g, n);
              }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"))
+             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"),
+             R"delim(
+             Additive effects on a trait with a specific mapping from 
+             genetic value to fitness and random effects ("noise").
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+             :param gv2w: Map from genetic value to fitness.
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             :param noise: Function to generate random effects on trait value.
+             :type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+             )delim")
         .def_property_readonly(
             "scaling",
-            [](const fwdpy11::SlocusAdditive& wa) { return wa.gv.scaling; })
+            [](const fwdpy11::SlocusAdditive& wa) { return wa.gv.scaling; },
+            "Access to the scaling parameter.")
         .def_property_readonly(
-            "is_fitness", [](const fwdpy11::SlocusAdditive& wa) {
+            "is_fitness",
+            [](const fwdpy11::SlocusAdditive& wa) {
                 return wa.gv.p == fwdpp::additive_diploid::policy::aw;
-            });
+            },
+            "Returns True if instance calculates fitness as the genetic value "
+            "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::SlocusMult, fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusMult")
+        m, "SlocusMult", "Multiplicative genetic values.")
         .def(py::init([](const double scaling) {
                  return fwdpy11::SlocusMult(fwdpp::multiplicative_diploid(
                      scaling, fwdpp::multiplicative_diploid::policy::mw));
              }),
-             py::arg("scaling"))
+             py::arg("scaling"),
+             R"delim(
+             Multiplicative effects on fitness.
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+
+             For a model of fitness, the genetic value is 1, 1+e*h,
+             1+scaling*e for genotypes AA, Aa, and aa, respectively.
+             )delim")
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g) {
                  return fwdpy11::SlocusMult(
@@ -151,7 +199,16 @@ PYBIND11_MODULE(genetic_values, m)
                          fwdpp::multiplicative_diploid::policy::mtrait),
                      g);
              }),
-             py::arg("scaling"), py::arg("gv2w"))
+             py::arg("scaling"), py::arg("gv2w"),
+             R"delim(
+             Construct an object of multiplicative effects on a trait with a specific
+             functional mapping from genetic value to fitness.
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+             :param gv2w: Map from genetic value to fitness.
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             )delim")
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g,
                          const fwdpy11::GeneticValueNoise& n) {
@@ -161,26 +218,64 @@ PYBIND11_MODULE(genetic_values, m)
                          fwdpp::multiplicative_diploid::policy::mtrait),
                      g, n);
              }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"))
+             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"),
+             R"delim(
+             Multiplicative effects on a trait with a specific mapping from 
+             genetic value to fitness and random effects ("noise").
+
+             :param scaling: How to treat mutant homozygotes.
+             :type scaling: float
+             :param gv2w: Map from genetic value to fitness.
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             :param noise: Function to generate random effects on trait value.
+             :type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+             )delim")
         .def_property_readonly(
             "scaling",
-            [](const fwdpy11::SlocusMult& wa) { return wa.gv.scaling; })
+            [](const fwdpy11::SlocusMult& wa) { return wa.gv.scaling; },
+            "Access to the scaling parameter.")
         .def_property_readonly(
-            "is_fitness", [](const fwdpy11::SlocusMult& wa) {
+            "is_fitness",
+            [](const fwdpy11::SlocusMult& wa) {
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
-            });
+            },
+            "Returns True if instance calculates fitness as the genetic value "
+            "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusGBR")
+        m, "SlocusGBR",
+        R"delim(
+        The "gene-based recessive" trait model described in Thornton et al.
+        2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
+        http://dx.doi.org/10.1371/journal.pgen.1006573.
+
+        The trait value is the geometric mean of the sum of effect sizes on each haplotype.
+        It is undefined for the case where these sums are negative.
+        )delim")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
                  return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w);
              }),
-             py::arg("gv2w"))
+             py::arg("gv2w"),
+             R"delim(
+             Construct object with specific genetic value to fitness map.
+             
+             :param gv2w: Genetic value to fitness map
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             )delim")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
                  return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w, noise);
              }),
-             py::arg("gv2w"), py::arg("noise"));
+             py::arg("gv2w"), py::arg("noise"),
+             R"delim(
+             Construct object with specific genetic value to fitness map 
+             and random effects on trait value.
+             
+             :param gv2w: Genetic value to fitness map
+             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+             :param noise: Model of random effects on trait value.
+             :type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+             )delim");
 
     // Classes for Mlocus genetic values
     py::class_<fwdpy11::MlocusPopGeneticValue>(
@@ -221,16 +316,21 @@ PYBIND11_MODULE(genetic_values, m)
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
-        m, "MlocusPopGeneticValueWithMapping")
+        m, "MlocusPopGeneticValueWithMapping",
+        "Genetic value calculations with flexible mapping of genetic value to "
+        "fitness.")
         .def_property_readonly(
             "gvalue_to_fitness",
             [](const fwdpy11::MlocusPopGeneticValueWithMapping& o) {
                 return o.gv2w->clone();
-            })
+            },
+            "Access the genetic value to fitness map.")
         .def_property_readonly(
-            "noise", [](const fwdpy11::MlocusPopGeneticValueWithMapping& o) {
+            "noise",
+            [](const fwdpy11::MlocusPopGeneticValueWithMapping& o) {
                 return o.noise_fxn->clone();
-            });
+            },
+            "Access the random noise function.");
 
     py::class_<fwdpy11::MlocusAdditive,
                fwdpy11::MlocusPopGeneticValueWithMapping>(m, "MlocusAdditive")
@@ -289,7 +389,18 @@ PYBIND11_MODULE(genetic_values, m)
              py::arg("scaling"), py::arg("gv2w"), py::arg("scaling"));
 
     py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
-        m, "MlocusGBR")
+        m, "MlocusGBR"
+           R"delim(
+        The "gene-based recessive" trait model described in Thornton et al.
+        2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
+        http://dx.doi.org/10.1371/journal.pgen.1006573.
+
+        The trait value is the geometric mean of the sum of effect sizes on each haplotype.
+        It is undefined for the case where these sums are negative.
+
+        The final genetic value is additive across loci.  The GBR model is applied within
+        loci.
+        )delim")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
                  return fwdpy11::MlocusGBR(fwdpy11::GBR{},
                                            fwdpy11::aggregate_additive_trait(),
