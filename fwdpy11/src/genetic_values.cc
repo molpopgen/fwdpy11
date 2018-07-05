@@ -154,12 +154,12 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
         m, "SlocusGBR")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
-                 return fwdpy11::SlocusGBR(fwdpy11::GBR(), gv2w);
+                 return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w);
              }),
              py::arg("gv2w"))
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
-                 return fwdpy11::SlocusGBR(fwdpy11::GBR(), gv2w, noise);
+                 return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w, noise);
              }),
              py::arg("gv2w"), py::arg("noise"));
 
@@ -253,14 +253,14 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
         m, "MlocusGBR")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
-                 return fwdpy11::MlocusGBR(fwdpy11::GBR(),
+                 return fwdpy11::MlocusGBR(fwdpy11::GBR{},
                                            fwdpy11::aggregate_additive_trait(),
                                            gv2w);
              }),
              py::arg("gv2w"))
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
-                 return fwdpy11::MlocusGBR(fwdpy11::GBR(),
+                 return fwdpy11::MlocusGBR(fwdpy11::GBR{},
                                            fwdpy11::aggregate_additive_trait(),
                                            gv2w, noise);
              }),
