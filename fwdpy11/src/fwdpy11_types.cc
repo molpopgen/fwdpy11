@@ -220,10 +220,11 @@ PYBIND11_MODULE(fwdpy11_types, m)
 
     // TODO: pickling support
     py::class_<fwdpy11::DiploidMetadata>(m, "DiploidMetadata",
-                                      "Diploid meta data.")
-        .def_readwrite("g", &fwdpy11::DiploidMetadata::g)
-        .def_readwrite("e", &fwdpy11::DiploidMetadata::e)
-        .def_readwrite("w", &fwdpy11::DiploidMetadata::w)
+                                         "Diploid meta data.")
+        .def_readwrite("g", &fwdpy11::DiploidMetadata::g, "Genetic value.")
+        .def_readwrite("e", &fwdpy11::DiploidMetadata::e,
+                       "Random component of trait value.")
+        .def_readwrite("w", &fwdpy11::DiploidMetadata::w, "Fitness.")
         .def_property("parents",
                       [](const fwdpy11::DiploidMetadata &d) {
                           return py::make_tuple(d.parents[0], d.parents[1]);
@@ -232,8 +233,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
                          const std::pair<std::size_t, std::size_t> &input) {
                           d.parents[0] = input.first;
                           d.parents[1] = input.second;
-                      })
-        .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex)
-        .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme)
-        .def_readwrite("label", &fwdpy11::DiploidMetadata::label);
+                      },
+                      "Array containing the label fields of the parents.")
+        .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex, "Sex.")
+        .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
+        .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
+                       "Index of the individual in the population.");
 }
