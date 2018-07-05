@@ -64,13 +64,32 @@ PYBIND11_MODULE(genetic_values, m)
                 const std::size_t diploid_index,
                 const fwdpy11::SlocusPop& pop) {
                  return gv(diploid_index, pop);
-             })
-        .def("fitness", [](const fwdpy11::SlocusPopGeneticValue& gv,
-                           const std::size_t diploid_index,
-                           const fwdpy11::SlocusPop& pop) {
-            return gv.genetic_value_to_fitness(
-                pop.diploid_metadata[diploid_index]);
-        });
+             },
+             R"delim(
+             Calculate the genetic value for an individual.
+             
+             :param diploid_index: The index of the individual to calculate.
+             :type diploid_index: int >= 0
+             :param pop: The population object containing the individual.
+             :type pop: :class:`fwdpy11.SlocusPop`
+             )delim",
+             py::arg("diploid_index"), py::arg("pop"))
+        .def("fitness",
+             [](const fwdpy11::SlocusPopGeneticValue& gv,
+                const std::size_t diploid_index,
+                const fwdpy11::SlocusPop& pop) {
+                 return gv.genetic_value_to_fitness(
+                     pop.diploid_metadata[diploid_index]);
+             },
+             R"delim(
+        Return the fitness of an individual.
+        
+        :param diploid_index: The index of the individual
+        :type diploid_index: int >= 0
+        :param pop: The population containing the individual
+        :type pop: :class:`fwdpy11.SlocusPop`
+        )delim",
+             py::arg("diploid_index"), py::arg("pop"));
 
     py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
                fwdpy11::SlocusPopGeneticValue>(
@@ -173,13 +192,32 @@ PYBIND11_MODULE(genetic_values, m)
                 const std::size_t diploid_index,
                 const fwdpy11::MlocusPop& pop) {
                  return gv(diploid_index, pop);
-             })
-        .def("fitness", [](const fwdpy11::MlocusPopGeneticValue& gv,
-                           const std::size_t diploid_index,
-                           const fwdpy11::MlocusPop& pop) {
-            return gv.genetic_value_to_fitness(
-                pop.diploid_metadata[diploid_index]);
-        });
+             },
+             R"delim(
+             Calculate the genetic value for an individual.
+             
+             :param diploid_index: The index of the individual to calculate.
+             :type diploid_index: int >= 0
+             :param pop: The population object containing the individual.
+             :type pop: :class:`fwdpy11.MlocusPop`
+             )delim",
+             py::arg("diploid_index"), py::arg("pop"))
+        .def("fitness",
+             [](const fwdpy11::MlocusPopGeneticValue& gv,
+                const std::size_t diploid_index,
+                const fwdpy11::MlocusPop& pop) {
+                 return gv.genetic_value_to_fitness(
+                     pop.diploid_metadata[diploid_index]);
+             },
+             R"delim(
+             Calculate the genetic value for an individual.
+             
+             :param diploid_index: The index of the individual to calculate.
+             :type diploid_index: int >= 0
+             :param pop: The population object containing the individual.
+             :type pop: :class:`fwdpy11.MlocusPop`
+             )delim",
+             py::arg("diploid_index"), py::arg("pop"));
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
