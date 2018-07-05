@@ -106,6 +106,7 @@ fwdpy11.genetic_values
 .. automodule:: fwdpy11.genetic_values
     :members:
     :show-inheritance:
+    :special-members:
 
 fwdpy11.sampling
 ------------------------------
