@@ -62,9 +62,16 @@ PYBIND11_MODULE(genetic_value_noise, m)
         "ABC for noise classes affecting :class:`fwdpy11.SlocusPop`.");
 
     py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
-        m, "NoNoise")
+        m, "NoNoise", "Type implying no random effects on genetic values.")
         .def(py::init<>());
 
-    py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(m, "GaussianNoise")
-        .def(py::init<double, double>(), py::arg("sd"), py::arg("mean") = 0.0);
+    py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(
+        m, "GaussianNoise", "Gaussian noise added to genetic values.")
+        .def(py::init<double, double>(), py::arg("sd"), py::arg("mean") = 0.0,
+             R"delim(
+                :param sd: Standard deviation of noise.
+                :type sd: float
+                :param mean: Mean value of noise.
+                :type mean: float
+                )delim");
 }
