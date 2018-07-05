@@ -107,6 +107,7 @@ fwdpy11.genetic_values
     :members:
     :show-inheritance:
     :special-members:
+    :inherited-members:
 
 fwdpy11.sampling
 ------------------------------
