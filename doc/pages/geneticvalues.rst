@@ -13,7 +13,7 @@ Background reading:
 * :ref:`genetic_values`
 
 In order to calculate a diploid's fitness, we need to process its mutations, account for any random effects, and produce
-a final fitness value.  In other words, a diploid's _genetic value_ is a function of its mutations, and the final
+a final fitness value.  In other words, a diploid's *genetic value* is a function of its mutations, and the final
 fitness is the result of mapping that genetic value to fitness (accounting for any random effects). 
 
 Depending on the type of simulation we are doing, a diploid's genetic value, :math:`G`, may represent fitness
@@ -66,7 +66,7 @@ defined by the ABCs:
 In the above code, we created an instance of :class:`fwdpy11.genetic_values.SlocusMult`, which models multiplicative
 genetic values.  Our mapping of genetic value to fitness is handled by an instance of
 :class:`fwdpy11.genetic_values.GeneticValueIsFitness`.  As the name implies, we will be simulating mutations with
-_direct_ effects on fitness.  Thus, in the absence of random effects, :math:`w = G`.  Here, the type generating random
+*direct* effects on fitness.  Thus, in the absence of random effects, :math:`w = G`.  Here, the type generating random
 effets on genetic values is :class:`fwdpy11.genetic_value_noise.NoNoise`.  Again, the name should make it obvious what is
 going on: there are no random effects!  Thus, the variable `multiplicative` will model the standard population genetic
 scenario of multiplicative mutational effects on fitness.
@@ -107,7 +107,7 @@ Gaussian noise with mean zero and standard deviation 0.1 is added to :math:`G` t
 fitness, :math:`w` is modeled by Gaussian stabilizing selection (GSS) with an optimum trait value of zero and a strength
 of stabilizing selection, :math:`VS`, equal to one.
 
-The following types are provided in :py:mod:`fwdpy11.genetic_values` to calculate genetic_values/fitness:
+The following types are provided in :py:mod:`fwdpy11.genetic_values` to calculate genetic values/fitness:
 
 * :class:`fwdpy11.genetic_values.SlocusMult`
 * :class:`fwdpy11.genetic_values.SlocusAdditive`

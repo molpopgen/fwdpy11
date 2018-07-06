@@ -18,6 +18,9 @@ details.
 The changes to how diploid data are stored completely changes how custom genetic values calculations are implemented.
 See :ref:`customgvalues` and :ref:`stateful_fitness` for examples.
 
+Another major change is that genetic value and noise functions are no longer allowed to be written in Python.  We may
+bring that back in a later release.
+
 
 0.1.4
 -----------------------------------
