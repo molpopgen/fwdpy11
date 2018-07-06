@@ -33,9 +33,6 @@
 
 namespace fwdpy11
 {
-    using genetic_value_to_fitness_t
-        = std::function<double(const double, const double)>;
-
     struct GeneticValueToFitnessMap
     {
         virtual double
