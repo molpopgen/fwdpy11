@@ -172,6 +172,11 @@ type is defined in fwdpy11/src/genetic_values.cc.)  Note that these types make u
 type as arguments (see :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__`) while the former take a diploid type,
 gamete container, and mutation container as arguments.
 
+Further reading
+-----------------------------------------------------------
+
+To see how to specify the use of these objects in a simulation see :ref:`model_params`.
+
 The future
 -----------------------------------------------------------
 
