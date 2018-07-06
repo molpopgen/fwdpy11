@@ -5,13 +5,13 @@ Parameterizing a simulation
 
 .. versionadded:: 0.1.1
 
+.. versionchanged:: 0.1.5
+
+    Reduced from many classes to a single class.
+
 The parameters for a simulation are represented by the following classes:
 
 * :class:`fwdpy11.model_params.ModelParams`
-* :class:`fwdpy11.model_params.SlocusParams` 
-* :class:`fwdpy11.model_params.SlocusParamsQ` 
-* :class:`fwdpy11.model_params.MlocusParams` 
-* :class:`fwdpy11.model_params.MlocusParamsQ` 
 
 See the documentation for :mod:`fwdpy11.model_params` for more detail.
 
