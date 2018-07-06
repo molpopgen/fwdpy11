@@ -111,7 +111,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :param h: Dominance term (float)
 			 :param g: Origin time (unsigned integer)
 			 :param esizes: List of effect sizes (list of float)
-			 :param heffects: List of heterozygouse effects (list of float)
+			 :param heffects: List of heterozygous effects (list of float)
 			 :param label: Label (16 bit integer)
 				
 			 .. versionadded:: 0.1.5
