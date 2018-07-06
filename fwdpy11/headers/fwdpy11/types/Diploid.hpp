@@ -39,6 +39,7 @@ namespace fwdpy11
         double g;               // Genetic value
         double e;               // Random component of trait value
         double w;               // Fitness
+        double geography[3];    // Location in geographic space
         std::size_t label;      // Index of individual in pop container
         std::size_t parents[2]; // Indexes of parents
         std::uint32_t deme;

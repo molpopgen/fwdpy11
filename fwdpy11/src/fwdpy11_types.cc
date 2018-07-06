@@ -225,6 +225,19 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readwrite("e", &fwdpy11::DiploidMetadata::e,
                        "Random component of trait value.")
         .def_readwrite("w", &fwdpy11::DiploidMetadata::w, "Fitness.")
+        .def_property(
+            "geography",
+            [](const fwdpy11::DiploidMetadata &d) {
+                return py::make_tuple(d.geography[0], d.geography[1],
+                                      d.geography[2]);
+            },
+            [](fwdpy11::DiploidMetadata &d,
+               const std::tuple<double, double, double> &input) {
+                d.geography[0] = std::get<0>(input);
+                d.geography[1] = std::get<1>(input);
+                d.geography[2] = std::get<2>(input);
+            },
+            "Array containing the geographic location of the individual.")
         .def_property("parents",
                       [](const fwdpy11::DiploidMetadata &d) {
                           return py::make_tuple(d.parents[0], d.parents[1]);

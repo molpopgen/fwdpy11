@@ -20,6 +20,7 @@ namespace fwdpy11
                     w(buffer, &md.g);
                     w(buffer, &md.e);
                     w(buffer, &md.w);
+                    w(buffer, md.geography, 3);
                     w(buffer, &md.label);
                     w(buffer, md.parents, 2);
                     w(buffer, &md.deme);
@@ -47,6 +48,7 @@ namespace fwdpy11
                     r(buffer, &md.g);
                     r(buffer, &md.e);
                     r(buffer, &md.w);
+                    r(buffer, md.geography, 3);
                     r(buffer, &md.label);
                     r(buffer, md.parents, 2);
                     r(buffer, &md.deme);

@@ -136,6 +136,7 @@ The later class contains useful additional data about the individual:
     "w", "Fitness."
     "g", "Genetic value."
     "e", "Random component of trait value."
+    "geography", "The x,y,z location of the diploid. (Not used in 0.1.5)"
     "label", "The index of this diploid in the population."
     "deme", "The deme index of this diploid. New in 0.1.5."
     "sex", "The sex index of this diploid. New in 0.1.5."
