@@ -379,7 +379,18 @@ PYBIND11_MODULE(genetic_values, m)
                      fwdpy11::aggregate_additive_trait(), gv2w, noise);
              }),
              ADDITIVE_CONSTRUCTOR_3, py::arg("scaling"), py::arg("gv2w"),
-             py::arg("noise"));
+             py::arg("noise"))
+        .def_property_readonly(
+            "scaling",
+            [](const fwdpy11::MlocusAdditive& wa) { return wa.gv.scaling; },
+            "Access to the scaling parameter.")
+        .def_property_readonly(
+            "is_fitness",
+            [](const fwdpy11::MlocusAdditive& wa) {
+                return wa.gv.p == fwdpp::additive_diploid::policy::aw;
+            },
+            "Returns True if instance calculates fitness as the genetic value "
+            "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusMult, fwdpy11::MlocusPopGeneticValueWithMapping>(
         m, "MlocusMult")
@@ -409,7 +420,18 @@ PYBIND11_MODULE(genetic_values, m)
                      fwdpy11::aggregate_mult_trait(), gv2w, noise);
              }),
              MULT_CONSTRUCTOR_3, py::arg("scaling"), py::arg("gv2w"),
-             py::arg("scaling"));
+             py::arg("scaling"))
+        .def_property_readonly(
+            "scaling",
+            [](const fwdpy11::MlocusMult& wa) { return wa.gv.scaling; },
+            "Access to the scaling parameter.")
+        .def_property_readonly(
+            "is_fitness",
+            [](const fwdpy11::MlocusMult& wa) {
+                return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
+            },
+            "Returns True if instance calculates fitness as the genetic value "
+            "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
         m, "MlocusGBR"
