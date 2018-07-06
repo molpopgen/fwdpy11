@@ -59,6 +59,8 @@ class ModelParams(object):
     .. versionchanged:: 0.1.5
         Changed this from a horrible class hierarchy
         into a much simpler, single class.
+
+    See :ref:`model_params` for detailed documentation.
     """
 
     def __init__(self, **kwargs):
