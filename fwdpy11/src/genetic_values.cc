@@ -40,6 +40,28 @@
 
 namespace py = pybind11;
 
+// Define some docstrings as static variable to avoid
+// repetition below
+
+static const auto GBR_CONSTRUCTOR1 =
+    R"delim(
+ Construct object with specific genetic value to fitness map.
+ 
+ :param gv2w: Genetic value to fitness map
+ :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+ )delim";
+
+static const auto GBR_CONSTRUCTOR2 =
+    R"delim(
+Construct object with specific genetic value to fitness map 
+and random effects on trait value.
+
+:param gv2w: Genetic value to fitness map
+:type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+:param noise: Model of random effects on trait value.
+:type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+)delim";
+
 PYBIND11_MODULE(genetic_values, m)
 {
     auto imported_noise = static_cast<pybind11::object>(
@@ -255,27 +277,12 @@ PYBIND11_MODULE(genetic_values, m)
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
                  return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w);
              }),
-             py::arg("gv2w"),
-             R"delim(
-             Construct object with specific genetic value to fitness map.
-             
-             :param gv2w: Genetic value to fitness map
-             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
-             )delim")
+             py::arg("gv2w"), GBR_CONSTRUCTOR1)
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
                  return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w, noise);
              }),
-             py::arg("gv2w"), py::arg("noise"),
-             R"delim(
-             Construct object with specific genetic value to fitness map 
-             and random effects on trait value.
-             
-             :param gv2w: Genetic value to fitness map
-             :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
-             :param noise: Model of random effects on trait value.
-             :type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
-             )delim");
+             py::arg("gv2w"), py::arg("noise"), GBR_CONSTRUCTOR2);
 
     // Classes for Mlocus genetic values
     py::class_<fwdpy11::MlocusPopGeneticValue>(
@@ -406,14 +413,14 @@ PYBIND11_MODULE(genetic_values, m)
                                            fwdpy11::aggregate_additive_trait(),
                                            gv2w);
              }),
-             py::arg("gv2w"))
+             GBR_CONSTRUCTOR1, py::arg("gv2w"))
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
                  return fwdpy11::MlocusGBR(fwdpy11::GBR{},
                                            fwdpy11::aggregate_additive_trait(),
                                            gv2w, noise);
              }),
-             py::arg("gv2w"), py::arg("noise"));
+             GBR_CONSTRUCTOR2, py::arg("gv2w"), py::arg("noise"));
 
     py::class_<fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueToFitnessMap",
