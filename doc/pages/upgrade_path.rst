@@ -7,13 +7,17 @@ imperfect/incomplete.
 0.1.5
 --------------------------------------------------
 
+This release also separates out the data representing a diploid into two classes, :class:`fwdpy11.DiploidGenotype` and
+:class:`fwdpy11.DiploidMetadata`.  See :ref:`diploids` and :ref:`processingpopsNP` for type details and details on how
+these new classes affect processing populations using NumPy, respectively.
+
 This release contains major changes to how genetic values are calculated and to how simulations parameters are stored.
 These changes are major *simplifications* to the package.  See :ref:`genetic_values_types` and :ref:`model_params` for
 details.
 
-This release also separates out the data representing a diploid into two classes, :class:`fwdpy11.DiploidGenotype` and
-:class:`fwdpy11.DiploidMetadata`.  See :ref:`diploids` and :ref:`processingpopsNP` for type details and details on how
-these new classes affect processing populations using NumPy, respectively.
+The changes to how diploid data are stored completely changes how custom genetic values calculations are implemented.
+See :ref:`customgvalues` and :ref:`stateful_fitness` for examples.
+
 
 0.1.4
 -----------------------------------
