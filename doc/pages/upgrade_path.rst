@@ -11,6 +11,10 @@ This release contains major changes to how genetic values are calculated and to 
 These changes are major *simplifications* to the package.  See :ref:`genetic_values_types` and :ref:`model_params` for
 details.
 
+This release also separates out the data representing a diploid into two classes, :class:`fwdpy11.DiploidGenotype` and
+:class:`fwdpy11.DiploidMetadata`.  See :ref:`diploids` and :ref:`processingpopsNP` for type details and details on how
+these new classes affect processing populations using NumPy, respectively.
+
 0.1.4
 -----------------------------------
 
