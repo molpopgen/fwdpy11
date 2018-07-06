@@ -4,6 +4,13 @@ Upgrade path
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
 
+0.1.5
+--------------------------------------------------
+
+This release contains major changes to how genetic values are calculated and to how simulations parameters are stored.
+These changes are major *simplifications* to the package.  See :ref:`genetic_values_types` and :ref:`model_params` for
+details.
+
 0.1.4
 -----------------------------------
 
