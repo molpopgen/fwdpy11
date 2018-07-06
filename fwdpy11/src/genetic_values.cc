@@ -158,12 +158,12 @@ PYBIND11_MODULE(genetic_values, m)
                  return gv(diploid_index, pop);
              },
              R"delim(
-             Calculate the genetic value for an individual.
-             
              :param diploid_index: The index of the individual to calculate.
              :type diploid_index: int >= 0
              :param pop: The population object containing the individual.
              :type pop: :class:`fwdpy11.SlocusPop`
+             :return: The genetic value of an individual.
+             :rtype: float
              )delim",
              py::arg("diploid_index"), py::arg("pop"))
         .def("fitness",
@@ -174,12 +174,12 @@ PYBIND11_MODULE(genetic_values, m)
                      pop.diploid_metadata[diploid_index]);
              },
              R"delim(
-        Return the fitness of an individual.
-        
         :param diploid_index: The index of the individual
         :type diploid_index: int >= 0
         :param pop: The population containing the individual
         :type pop: :class:`fwdpy11.SlocusPop`
+        :return: The fitness of an individual.
+        :rtype: float
         )delim",
              py::arg("diploid_index"), py::arg("pop"));
 
@@ -310,12 +310,12 @@ PYBIND11_MODULE(genetic_values, m)
                  return gv(diploid_index, pop);
              },
              R"delim(
-             Calculate the genetic value for an individual.
-             
              :param diploid_index: The index of the individual to calculate.
              :type diploid_index: int >= 0
              :param pop: The population object containing the individual.
              :type pop: :class:`fwdpy11.MlocusPop`
+             :return: The genetic value of an individual.
+             :rtype: float
              )delim",
              py::arg("diploid_index"), py::arg("pop"))
         .def("fitness",
@@ -326,12 +326,12 @@ PYBIND11_MODULE(genetic_values, m)
                      pop.diploid_metadata[diploid_index]);
              },
              R"delim(
-             Calculate the genetic value for an individual.
-             
              :param diploid_index: The index of the individual to calculate.
              :type diploid_index: int >= 0
              :param pop: The population object containing the individual.
              :type pop: :class:`fwdpy11.MlocusPop`
+             :return: The fitness of an individual.
+             :rtype: float
              )delim",
              py::arg("diploid_index"), py::arg("pop"));
 
@@ -354,7 +354,8 @@ PYBIND11_MODULE(genetic_values, m)
             "Access the random noise function.");
 
     py::class_<fwdpy11::MlocusAdditive,
-               fwdpy11::MlocusPopGeneticValueWithMapping>(m, "MlocusAdditive")
+               fwdpy11::MlocusPopGeneticValueWithMapping>(
+        m, "MlocusAdditive", "Additive effects on trait values.")
         .def(py::init([](const double scaling) {
                  return fwdpy11::MlocusAdditive(
                      fwdpp::additive_diploid(
@@ -393,7 +394,7 @@ PYBIND11_MODULE(genetic_values, m)
             "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusMult, fwdpy11::MlocusPopGeneticValueWithMapping>(
-        m, "MlocusMult")
+        m, "MlocusMult", "Multiplicative effects on trait values")
         .def(py::init([](const double scaling) {
                  return fwdpy11::MlocusMult(
                      fwdpp::multiplicative_diploid(
@@ -434,8 +435,8 @@ PYBIND11_MODULE(genetic_values, m)
             "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
-        m, "MlocusGBR"
-           R"delim(
+        m, "MlocusGBR",
+        R"delim(
         The "gene-based recessive" trait model described in Thornton et al.
         2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
         http://dx.doi.org/10.1371/journal.pgen.1006573.
