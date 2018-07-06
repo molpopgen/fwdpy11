@@ -16,7 +16,6 @@ First, we'll quickly simulate a single deme for `N` generations:
 .. testcode::
 
     import fwdpy11
-    import fwdpy11.fitness
     import fwdpy11.model_params
     import fwdpy11.ezparams
     import fwdpy11.wright_fisher
@@ -29,7 +28,7 @@ First, we'll quickly simulate a single deme for `N` generations:
 
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,
         dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
-    params = fwdpy11.model_params.SlocusParams(**pdict)
+    params = fwdpy11.model_params.ModelParams(**pdict)
 
     fwdpy11.wright_fisher.evolve(rng,pop,params)
 
@@ -44,7 +43,7 @@ Method 1 is a direct summation:
 .. testcode::
 
     wbar1 = 0.0
-    for i in pop.diploids:
+    for i in pop.diploid_metadata:
         wbar1 += i.w
     wbar1 /= float(pop.N)
 
@@ -52,14 +51,14 @@ Method 2 involves a sum over a list comprehension over diploids:
 
 .. testcode::
 
-    wbar2 = sum([i.w for i in pop.diploids])/float(pop.N)
+    wbar2 = sum([i.w for i in pop.diploid_metadata])/float(pop.N)
 
 Method 3 uses Numpy because we can:
 
 .. testcode::
 
     import numpy as np
-    wbar3 = np.array([i.w for i in pop.diploids]).sum()/float(pop.N)
+    wbar3 = np.array([i.w for i in pop.diploid_metadata]).sum()/float(pop.N)
 
 The three methods are all conceptually identical and will be numerically identical modulo rounding 
 errors due to non-transitivity of floating-point addition.
@@ -148,7 +147,7 @@ indexing, etc.!).  A perhaps less error-prone method involves just asking `numpy
     #an opaque list
     import pickle
     assert(type(sample) is list)
-    assert(type(sample[0]) is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+    assert(type(sample[0]) is fwdpy11.fwdpy11_types.DiploidGenotype)
 
 
 

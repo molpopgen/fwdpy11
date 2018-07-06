@@ -16,24 +16,15 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_EVOLVE_QTRAIT_API__
-#define FWDPY11_EVOLVE_QTRAIT_API__
+#ifndef FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
+#define FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 
-#include <functional>
-#include <fwdpy11/types/Diploid.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
+#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
+#include "details/GBR.hpp"
 
 namespace fwdpy11
 {
-    using trait_to_fitness_function
-        = std::function<double(const double, const double)>;
-    using single_locus_noise_function = std::function<double(
-        const fwdpy11::Diploid &, const fwdpy11::Diploid &)>;
-    using multilocus_noise_function
-        = std::function<double(const fwdpy11::MlocusPop::diploid_t &,
-                               const fwdpy11::MlocusPop::diploid_t &)>;
-    using multilocus_aggregator_function
-        = std::function<double(const pybind11::array_t<double>)>;
-}
+    using SlocusGBR = fwdpp_slocus_gvalue<GBR>;
+} // namespace fwdpy11
 
 #endif

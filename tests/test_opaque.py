@@ -50,7 +50,7 @@ class testSlocusPop(unittest.TestCase):
     def test_a_diploid(self):
         self.assertTrue(
             type(self.pop.diploids[0])
-            is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+            is fwdpy11.fwdpy11_types.DiploidGenotype)
 
     def test_gametes(self):
         self.assertTrue(
@@ -66,19 +66,21 @@ class SlocusTypeSampler(object):
         assert(type(pop.mcounts) is fwdpy11.VecUint32)
         assert(type(pop.diploids) is fwdpy11.VecDiploid)
         assert(type(pop.diploids[0])
-               is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+               is fwdpy11.fwdpy11_types.DiploidGenotype)
         assert(type(pop.gametes) is fwdpy11.VecGamete)
 
 
 class testSlocusPopSampler(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
+    def setUp(self):
         from fwdpy11.ezparams import mslike
-        from fwdpy11.model_params import SlocusParams
+        from fwdpy11.genetic_values import SlocusMult
+        from fwdpy11.model_params import ModelParams
         self.sampler = SlocusTypeSampler()
         self.pop = fwdpy11.SlocusPop(1000)
         self.params_dict = mslike(self.pop, simlen=10)
-        self.params = SlocusParams(**self.params_dict)
+        self.params_dict['gvalue'] = (SlocusMult, (2.,))
+        self.params = ModelParams(**self.params_dict)
         self.rng = fwdpy11.GSLrng(42)
 
     def testSampler(self):

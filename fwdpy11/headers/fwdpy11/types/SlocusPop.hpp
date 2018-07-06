@@ -29,7 +29,7 @@ namespace fwdpy11
         }
 
       public:
-        using dipvector_t = std::vector<Diploid>;
+        using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
         using popbase_t = Population;
         using popmodel_t = fwdpp::sugar::SINGLELOC_TAG;
@@ -54,9 +54,10 @@ namespace fwdpy11
                     throw std::invalid_argument("population size must be > 0");
                 }
             std::size_t label = 0;
-            for (auto &&d : this->diploids)
+            for (auto &&d : this->diploid_metadata)
                 {
                     d.label = label++;
+                    d.w = 1.0;
                 }
         }
 

@@ -23,10 +23,10 @@ The general recipe is:
 
     import fwdpy11
     import fwdpy11.wright_fisher
+    import fwdpy11.genetic_values
     import fwdpy11.ezparams
     import concurrent.futures
     import numpy
-    import fwdpy11.fitness
     import fwdpy11.model_params
     import collections
 
@@ -64,11 +64,11 @@ Here is our function:
         N,repid,seed,recorderType=args
         pop = fwdpy11.SlocusPop(N)
         rng=fwdpy11.GSLrng(seed)
-        params=fwdpy11.model_params.SlocusParams(
+        params=fwdpy11.model_params.ModelParams(
             nregions=[fwdpy11.Region(0,1,1)],
             sregions=[fwdpy11.ExpS(0,1,1,-0.1,1.0)],
             recregions=[fwdpy11.Region(0,1,1)],
-            gvalue=fwdpy11.fitness.SlocusAdditive(2.0),
+            gvalue=(fwdpy11.genetic_values.SlocusAdditive,(2.0,)),
             #Only simulate 10 generations so 
             #that example runs quickly:
             demography=numpy.array([N]*10,dtype=np.uint32),

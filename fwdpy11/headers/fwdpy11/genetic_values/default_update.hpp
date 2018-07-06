@@ -16,16 +16,16 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_FITNESS_HPP__
-#define FWDPY11_FITNESS_HPP__
+#ifndef FWDPY11_GENETIC_VALUE_DEFAULT_UPDATE_HPP__
+#define FWDPY11_GENETIC_VALUE_DEFAULT_UPDATE_HPP__
 
-#include <functional>
-#include <cmath>
-#include <stdexcept>
-#include <string>
-#include <fwdpp/fitness_models.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 
-#include "single_locus_fitness.hpp"
-#include "multi_locus_fitness.hpp"
+#define DEFAULT_SLOCUSPOP_UPDATE()                                            \
+    inline void update(const fwdpy11::SlocusPop& /*pop*/) {}
+
+#define DEFAULT_MLOCUSPOP_UPDATE()                                            \
+    inline void update(const fwdpy11::MlocusPop& /*pop*/) {}
 
 #endif

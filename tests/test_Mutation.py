@@ -76,7 +76,7 @@ class testMultiEffectMutationSlocusPopPickling(unittest.TestCase):
             0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
         gametes.append(fwdpy11.Gamete(
             (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
-        diploids.append(fwdpy11.SingleLocusDiploid(0, 0))
+        diploids.append(fwdpy11.DiploidGenotype(0, 0))
         ftimes = fwdpy11.VecUint32([1])
         self.pop = fwdpy11.SlocusPop.create(diploids,
                                             gametes,
@@ -104,7 +104,7 @@ class testMultiEffectMutationMlocusPopPickling(unittest.TestCase):
         gametes.append(fwdpy11.Gamete(
             (4, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
         diploids.append(fwdpy11.VecDiploid(
-            [fwdpy11.SingleLocusDiploid(0, 0)] * 2))
+            [fwdpy11.DiploidGenotype(0, 0)] * 2))
         ftimes = fwdpy11.VecUint32([1])
         self.pop = fwdpy11.MlocusPop.create(diploids,
                                             gametes,

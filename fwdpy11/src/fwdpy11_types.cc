@@ -111,7 +111,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :param h: Dominance term (float)
 			 :param g: Origin time (unsigned integer)
 			 :param esizes: List of effect sizes (list of float)
-			 :param heffects: List of heterozygouse effects (list of float)
+			 :param heffects: List of heterozygous effects (list of float)
 			 :param label: Label (16 bit integer)
 				
 			 .. versionadded:: 0.1.5
@@ -195,59 +195,61 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def("__eq__", [](const fwdpy11::Mutation &a,
                           const fwdpy11::Mutation &b) { return a == b; });
 
-    py::class_<fwdpy11::Diploid>(
-        m, "SingleLocusDiploid",
+    py::class_<fwdpy11::DiploidGenotype>(
+        m, "DiploidGenotype",
         "Diploid data type for a single (usually contiguous) genomic region")
         .def(py::init<>())
         .def(py::init<std::size_t, std::size_t>())
-        .def_static("create", &fwdpy11::Diploid::create)
-        .def_readonly("first", &fwdpy11::Diploid::first,
+        .def_readonly("first", &fwdpy11::DiploidGenotype::first,
                       "Key to first gamete. (read-only)")
-        .def_readonly("second", &fwdpy11::Diploid::second,
+        .def_readonly("second", &fwdpy11::DiploidGenotype::second,
                       "Key to second gamete. (read-only)")
-        .def_readonly("w", &fwdpy11::Diploid::w, "Fitness. (read-only)")
-        .def_readonly("g", &fwdpy11::Diploid::g, "Genetic value (read-only).")
-        .def_readonly("e", &fwdpy11::Diploid::e,
-                      "Random/environmental effects (read-only).")
-        .def_readonly("label", &fwdpy11::Diploid::label,
-                      "Index of the diploid in its deme")
-        .def_readonly("deme", &fwdpy11::Diploid::deme,
-                      R"delim(
-                Deme label for individual.
-
-                .. versionadded:: 0.1.5
-                )delim")
-        .def_readonly("sex", &fwdpy11::Diploid::sex,
-                      R"delim(
-                Sex label for individual.
-
-                .. versionadded:: 0.1.5
-                )delim")
-        .def_readonly("parental_data", &fwdpy11::Diploid::parental_data,
-                      R"delim(
-				Python object representing information about parents.
-				The details are simulation-dependent.
-
-				.. versionadded:: 0.1.4
-				)delim")
         .def(py::pickle(
-            [](const fwdpy11::Diploid &d) {
-                return py::make_tuple(d.first, d.second, d.w, d.g, d.e,
-                                      d.label, d.parental_data, d.deme, d.sex);
+            [](const fwdpy11::DiploidGenotype &d) {
+                return py::make_tuple(d.first, d.second);
             },
             [](py::tuple t) {
-                std::unique_ptr<fwdpy11::Diploid> d(new fwdpy11::Diploid(
-                    t[0].cast<std::size_t>(), t[1].cast<std::size_t>()));
-                d->w = t[2].cast<double>();
-                d->g = t[3].cast<double>();
-                d->e = t[4].cast<double>();
-                d->label = t[5].cast<decltype(fwdpy11::Diploid::label)>();
-                d->parental_data
-                    = t[6].cast<std::tuple<std::size_t, std::size_t>>();
-                d->deme = t[7].cast<std::uint32_t>();
-                d->sex = t[8].cast<std::int32_t>();
+                std::unique_ptr<fwdpy11::DiploidGenotype> d(
+                    new fwdpy11::DiploidGenotype{ t[0].cast<std::size_t>(),
+                                                  t[1].cast<std::size_t>() });
                 return d;
             }))
-        .def("__eq__", [](const fwdpy11::Diploid &a,
-                          const fwdpy11::Diploid &b) { return a == b; });
+        .def("__eq__",
+             [](const fwdpy11::DiploidGenotype &a,
+                const fwdpy11::DiploidGenotype &b) { return a == b; });
+
+    // TODO: pickling support
+    py::class_<fwdpy11::DiploidMetadata>(m, "DiploidMetadata",
+                                         "Diploid meta data.")
+        .def_readwrite("g", &fwdpy11::DiploidMetadata::g, "Genetic value.")
+        .def_readwrite("e", &fwdpy11::DiploidMetadata::e,
+                       "Random component of trait value.")
+        .def_readwrite("w", &fwdpy11::DiploidMetadata::w, "Fitness.")
+        .def_property(
+            "geography",
+            [](const fwdpy11::DiploidMetadata &d) {
+                return py::make_tuple(d.geography[0], d.geography[1],
+                                      d.geography[2]);
+            },
+            [](fwdpy11::DiploidMetadata &d,
+               const std::tuple<double, double, double> &input) {
+                d.geography[0] = std::get<0>(input);
+                d.geography[1] = std::get<1>(input);
+                d.geography[2] = std::get<2>(input);
+            },
+            "Array containing the geographic location of the individual.")
+        .def_property("parents",
+                      [](const fwdpy11::DiploidMetadata &d) {
+                          return py::make_tuple(d.parents[0], d.parents[1]);
+                      },
+                      [](fwdpy11::DiploidMetadata &d,
+                         const std::pair<std::size_t, std::size_t> &input) {
+                          d.parents[0] = input.first;
+                          d.parents[1] = input.second;
+                      },
+                      "Array containing the label fields of the parents.")
+        .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex, "Sex.")
+        .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
+        .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
+                       "Index of the individual in the population.");
 }

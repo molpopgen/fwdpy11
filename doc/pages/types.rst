@@ -112,31 +112,38 @@ Gametes are stored in opaque lists of type :class:`fwdpy11.VecGamete`.
 Diploids
 -----------------------------------------------------------
 
-In a single-locus simulation, a diploid is represented by :class:`fwdpy11.SingleLocusDiploid`, which
-contains the following read-only properties:
 
-.. csv-table:: :class:`fwdpy11.SingleLocusDiploid` properties
+.. versionchanged:: 0.1.5
+    Meta data separated into a separate class from the gamete keys.
+
+In a single-locus simulation, a diploid is represented by two classes, :class:`fwdpy11.DiploidGenotype`, and 
+:class:`fwdpy11.DiploidMetadata`.  The former simply lists the two gametes making up a diploid:
+
+.. csv-table:: :class:`fwdpy11.DiploidGenotype` properties
     :header: "Property", "Definition"
     :widths: 5,5
 
     "first", "Index of the first gamete."
     "second", "Index of the second gamete."
+
+The later class contains useful additional data about the individual:
+
+
+.. csv-table:: :class:`fwdpy11.DiploidMetadata` properties
+    :header: "Property", "Definition"
+    :widths: 5,5
+
     "w", "Fitness."
     "g", "Genetic value."
     "e", "Random component of trait value."
+    "geography", "The x,y,z location of the diploid. (Not used in 0.1.5)"
     "label", "The index of this diploid in the population."
     "deme", "The deme index of this diploid. New in 0.1.5."
     "sex", "The sex index of this diploid. New in 0.1.5."
-    "parental_data", "A tuple with information about parents. In 0.1.5, this is a tuple containing parental label fields."
+    "parents", "A list containing the label fields of each parent."
+    "nodes", "The nodes in a tree sequence corresponding to this diploid. (Not used in 0.1.5)"
 
-The information stored in `parental_data` is simulation-dependent.  For models with no population structure, it will
-typically be a Python tuple containing the `label` value for each parent.  See :ref:`parentage` for an example.
-
-For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.VecDiploid`, which is an opaque list of :class:`fwdpy11.SingleLocusDiploid` objects.  **The w/g/e/label fields are only populated for the first locus.**
-
-.. note::
-
-    Future changes to fwdpp will likely make the storage of data in a multi-locus diploid more efficient and sensible.
+For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.VecDiploid`, which is an opaque list of :class:`fwdpy11.DiploidGenotype` objects.  
 
 In a single-locus simulation, diploids are stored in an opaque list of type
 :class:`fwdpy11.VecDiploid`.  For multi-locus simulations, diploids are stored in
@@ -168,7 +175,7 @@ Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:
 .. note::
 
     When simulating structured populations, `N` refers to the total number of individuals in the "meta-population",
-    and specific deme data for individuals is obtained through :attr:`fwdpy11.SingleLocusDiploid.deme`.
+    and specific deme data for individuals is obtained through :attr:`fwdpy11.DiploidMetadata.deme`.
     
 .. _slocuspop:
 
@@ -202,7 +209,7 @@ This class contains the following read-only properties, in addition to those fou
 
 .. _mlocuspop:
 
-Multi-locus, single-deme population objects
+Multi-locus population objects
 -----------------------------------------------------------
 
 The type :class:`fwdpy11.MlocusPop` is analagous to :class:`fwdpy11.SlocusPop` in all but

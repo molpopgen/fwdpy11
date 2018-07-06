@@ -160,32 +160,32 @@ ext_modules = [
         language='c++'
     ),
     Extension(
-        'fwdpy11.fitness',
-        ['fwdpy11/src/fwdpy11_fitness.cc'],
+        'fwdpy11.genetic_values',
+        ['fwdpy11/src/genetic_values.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
     Extension(
-        'fwdpy11.trait_values',
-        ['fwdpy11/src/fwdpy11_trait_values.cc'],
+        'fwdpy11.genetic_value_noise',
+        ['fwdpy11/src/genetic_value_noise.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
     Extension(
-        'fwdpy11.wfevolve',
-        ['fwdpy11/src/wfevolve.cc'],
+        'fwdpy11.wright_fisher_slocus',
+        ['fwdpy11/src/wright_fisher_slocus.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
     Extension(
-        'fwdpy11.wfevolve_qtrait',
-        ['fwdpy11/src/wfevolve_qtrait.cc'],
+        'fwdpy11.wright_fisher_mlocus',
+        ['fwdpy11/src/wright_fisher_mlocus.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],
@@ -210,14 +210,6 @@ ext_modules = [
     Extension(
         'fwdpy11.util',
         ['fwdpy11/src/fwdpy11_util.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.python_genetic_values',
-        ['fwdpy11/src/python_genetic_values.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=['gsl', 'gslcblas'],

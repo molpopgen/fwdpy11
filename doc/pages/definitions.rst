@@ -103,7 +103,7 @@ Consider the following two cases:
 First,  standard population genetic models of the sort that sfs_code_ or SLiM2_  are typically used for.  Mutations
 affecting fitness interact multiplicatively.  Here, mutations directly affect fitness.  In our terms, :math:`G = w`.
 
-Next, we thing about a quantitative trait under Gaussian stabilizing selection with respect to an optimum.  Mutations
+Next, we think about a quantitative trait under Gaussian stabilizing selection with respect to an optimum.  Mutations
 interact multiplicatively to generate :math:`G` and the final trait value is :math:`P = G + N(0,\sigma)`, reflecting
 environmental variation with mean zero and standard deviation :math:`\sigma`.  For an optimum trait value :math:`O`,
 fitness is calculated as 
@@ -113,7 +113,7 @@ fitness is calculated as
     w = e^{-\frac{(O-P)^2}{2VS}},
 
 where :math:`VS` reflects the intensity of selection against extreme values of :math:`P`. (See :ref:`heritability` for more 
-on :math:`VS`)
+on :math:`VS`.)
 
 We can see from these two examples that some modeling scenarios allow us to go straight from a diploid's data to fitness
 while others require multiple functions to go from genotype to genetic value to trait value and then, finally, to

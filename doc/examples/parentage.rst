@@ -13,7 +13,7 @@ This example shows one way to track parentage during a simulation.  We'll run a 
 :attr:`fwdpy11.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
 
 The mechanics are quite simple.  We define a custom recorder that gathers the parent data
-(:attr:`fwdpy11.SingleLocusDiploid.parental_data`) into a list each generation.  We will couple the parent
+(:attr:`fwdpy11.DiploidMetadata.parents`) into a list each generation.  We will couple the parent
 data along with the individual's label field.  This coupling facilitates later post-processing.
 
 For convenience, we coerce the data into a `collections.namedtuple`, which allows final storage into a
@@ -27,7 +27,6 @@ offspring, etc.
 .. ipython:: python
 
     import fwdpy11
-    import fwdpy11.fitness
     import fwdpy11.model_params
     import fwdpy11.ezparams
     import fwdpy11.wright_fisher
@@ -39,7 +38,7 @@ offspring, etc.
     # Our recorder is very simple:
     class RecordParents(object):
         def __call__(self,pop):
-            parents = [PedigreeData(pop.generation,i.label,*i.parental_data) for i in pop.diploids]
+            parents = [PedigreeData(pop.generation,i.label,*i.parents) for i in pop.diploid_metadata]
             pop.popdata_user.extend(parents)
 
     rng = fwdpy11.GSLrng(42)
@@ -51,7 +50,7 @@ offspring, etc.
     # value is None:
     pop.popdata_user = []
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N)
-    params = fwdpy11.model_params.SlocusParams(**pdict)
+    params = fwdpy11.model_params.ModelParams(**pdict)
 
     r = RecordParents()
     fwdpy11.wright_fisher.evolve(rng,pop,params,r)

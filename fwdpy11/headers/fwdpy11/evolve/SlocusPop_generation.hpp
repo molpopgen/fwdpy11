@@ -1,29 +1,47 @@
-#ifndef FWDPY11_EVOLVE_SLOCUSPOP_HPP__
-#define FWDPY11_EVOLVE_SLOCUSPOP_HPP__
+//
+// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
+//
+// This file is part of fwdpy11.
+//
+// fwdpy11 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// fwdpy11 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
+//
+#ifndef FWDPY11_EVOLVE_SLOCUSPOP_GENERATION_HPP__
+#define FWDPY11_EVOLVE_SLOCUSPOP_GENERATION_HPP__
 
 #include <tuple>
 #include <type_traits>
 #include <fwdpp/internal/gamete_cleaner.hpp>
 #include <fwdpp/insertion_policies.hpp>
 #include <fwdpp/mutate_recombine.hpp>
+#include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/samplers.hpp>
+#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+//#include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
 
 namespace fwdpy11
 {
     template <typename poptype, typename pick1_function,
               typename pick2_function, typename update_function,
-              typename mutation_model, typename recombination_model,
-              typename mutation_removal_policy>
+              typename mutation_model, typename recombination_model>
     void
-    evolve_generation(const GSLrng_t& rng, poptype& pop,
-                      const fwdpp::uint_t N_next, const double mu,
-                      const mutation_model& mmodel,
-                      const recombination_model& recmodel,
-                      const pick1_function& pick1, const pick2_function& pick2,
-                      const update_function& update,
-                      const mutation_removal_policy& mrp)
+    evolve_generation(
+        const GSLrng_t& rng, poptype& pop, const fwdpp::uint_t N_next,
+        const double mu,
+        const mutation_model& mmodel, const recombination_model& recmodel,
+        const pick1_function& pick1, const pick2_function& pick2,
+        const update_function& update)
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
@@ -44,13 +62,13 @@ namespace fwdpy11
             g.n = 0;
 
         decltype(pop.diploids) offspring(N_next);
-
+        decltype(pop.diploid_metadata) offspring_metadata(N_next);
         // Generate the offspring
         std::size_t label = 0;
         for (auto& dip : offspring)
             {
-                auto p1 = pick1(rng, pop);
-                auto p2 = pick2(rng, pop, p1);
+                auto p1 = pick1();
+                auto p2 = pick2(p1);
 
                 auto p1g1 = pop.diploids[p1].first;
                 auto p1g2 = pop.diploids[p1].second;
@@ -73,17 +91,17 @@ namespace fwdpy11
 
                 assert(pop.gametes[dip.first].n);
                 assert(pop.gametes[dip.second].n);
-                dip.label = label++;
-                update(rng, dip, pop, p1, p2);
+                offspring_metadata[label].label = label;
+                update(offspring_metadata[label++], p1, p2,
+                       pop.diploid_metadata);
             }
 
         fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
                                                pop.mcounts);
-        fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                              pop.mcounts, 2 * N_next, mrp);
         // This is constant-time
         pop.diploids.swap(offspring);
+        pop.diploid_metadata.swap(offspring_metadata);
     }
-}
+} // namespace fwdpy11
 
 #endif

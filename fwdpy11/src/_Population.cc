@@ -65,6 +65,7 @@ namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
@@ -102,6 +103,9 @@ PYBIND11_MODULE(_Population, m)
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
+        .def_readwrite("diploid_metadata",
+                      &fwdpy11::Population::diploid_metadata,
+                      "Container of diploid metadata.")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) {

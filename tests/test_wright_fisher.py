@@ -18,17 +18,19 @@ class GenerationRecorder(object):
 class testWFevolve(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        from fwdpy11.model_params import SlocusParams
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.genetic_values import SlocusMult
         self.pop = fp11.SlocusPop(1000)
         self.rng = fp11.GSLrng(42)
         self.recorder = GenerationRecorder()
         self.cython_recorder = MeanFitness()
-        self.p = SlocusParams()
+        self.p = ModelParams()
         self.p.rates = (1e-3, 1e-3, 1e-3)
         self.p.demography = np.array([1000] * 100, dtype=np.uint32)
         self.p.nregions = [fp11.Region(0, 1, 1)]
         self.p.sregions = [fp11.ExpS(0, 1, 1, -1e-2)]
         self.p.recregions = self.p.nregions
+        self.p.gvalue = (SlocusMult, (2.0,))
 
     def testEvolve(self):
         from fwdpy11.wright_fisher import evolve
@@ -44,16 +46,18 @@ class testWFevolve(unittest.TestCase):
 class testCythonRecorder(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        from fwdpy11.model_params import SlocusParams
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.genetic_values import SlocusMult
         self.pop = fp11.SlocusPop(1000)
         self.rng = fp11.GSLrng(42)
         self.cython_recorder = MeanFitness()
-        self.p = SlocusParams()
+        self.p = ModelParams()
         self.p.rates = (1e-3, 1e-3, 1e-3)
         self.p.demography = np.array([1000] * 100, dtype=np.uint32)
         self.p.nregions = [fp11.Region(0, 1, 1)]
         self.p.sregions = [fp11.ExpS(0, 1, 1, -1e-2)]
         self.p.recregions = self.p.nregions
+        self.p.gvalue = (SlocusMult, (2.0,))
 
     def testEvolve(self):
         from fwdpy11.wright_fisher import evolve

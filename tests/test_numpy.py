@@ -42,21 +42,21 @@ class test_SlocusPop(unittest.TestCase):
         self.assertAlmostEqual(ms, self.muts['s'].mean())
 
     def testDiploidTraits(self):
-        dips = np.array(self.pop.diploids.trait_array())
-        for i, j in zip(dips, self.pop.diploids):
+        dips = np.array(self.pop.diploid_metadata)
+        for i, j in zip(dips, self.pop.diploid_metadata):
             self.assertEqual(i['g'], j.g)
             self.assertEqual(i['e'], j.e)
             self.assertEqual(i['w'], j.w)
 
     def testDiploidTraitsSlice(self):
-        dips = np.array(self.pop.diploids.trait_array(slice(15, 103, 11)))
-        for i, j in zip(dips, self.pop.diploids[15:103:11]):
+        dips = np.array(self.pop.diploid_metadata[15: 103: 11])
+        for i, j in zip(dips, self.pop.diploid_metadata[15:103:11]):
             self.assertEqual(i['g'], j.g)
             self.assertEqual(i['e'], j.e)
             self.assertEqual(i['w'], j.w)
 
     def testDiploidKeys(self):
-        keys = np.array(self.pop.diploids.key_array())
+        keys = np.array(self.pop.diploids)
         for i, j in zip(keys, self.pop.diploids):
             self.assertEqual(i['first'], j.first)
             self.assertEqual(i['second'], j.second)
@@ -84,36 +84,18 @@ class test_MlocusPop(unittest.TestCase):
             self.assertEqual(i['s'], j.s)
 
     def testDiploidTraits(self):
-        dips = np.array(self.pop.diploids.trait_array())
-        for i, j in zip(dips, self.pop.diploids):
-            self.assertEqual(i['g'], j[0].g)
-            self.assertEqual(i['e'], j[0].e)
-            self.assertEqual(i['w'], j[0].w)
+        dips = np.array(self.pop.diploid_metadata)
+        for i, j in zip(dips, self.pop.diploid_metadata):
+            self.assertEqual(i['g'], j.g)
+            self.assertEqual(i['e'], j.e)
+            self.assertEqual(i['w'], j.w)
 
     def testDiploidTraitsSlice(self):
-        dips = np.array(self.pop.diploids.trait_array(slice(15, 103, 11)))
-        for i, j in zip(dips, self.pop.diploids[15:103:11]):
-            self.assertEqual(i['g'], j[0].g)
-            self.assertEqual(i['e'], j[0].e)
-            self.assertEqual(i['w'], j[0].w)
-
-    def testDiploidKeys(self):
-        keys = np.array(self.pop.diploids.key_array())
-        keys_per_dip_offsets = [i for i in range(len(keys))[::self.pop.nloci]]
-        self.assertEqual(len(keys_per_dip_offsets), len(self.pop.diploids))
-        for i, j in zip(keys_per_dip_offsets, self.pop.diploids):
-            for k, l in zip(keys[i:i + self.pop.nloci], j):
-                self.assertEqual(k['first'], l.first)
-                self.assertEqual(k['second'], l.second)
-
-    def testDiploidKeysSlice(self):
-        keys = np.array(self.pop.diploids.key_array(slice(15,103,11)))
-        i=0
-        for j in self.pop.diploids[slice(15,103,11)]:
-            for k in j:
-                self.assertEqual(k.first, keys['first'][i])
-                self.assertEqual(k.second,keys['second'][i])
-                i+=1
+        dips = np.array(self.pop.diploid_metadata[15:103:11])
+        for i, j in zip(dips, self.pop.diploid_metadata[15:103:11]):
+            self.assertEqual(i['g'], j.g)
+            self.assertEqual(i['e'], j.e)
+            self.assertEqual(i['w'], j.w)
 
 
 if __name__ == "__main__":

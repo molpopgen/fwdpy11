@@ -43,8 +43,8 @@ class testFixationsAreSortedSlocusPop(unittest.TestCase):
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
         gametes.append(fwdpy11.Gamete(
             (4, fwdpy11.VecUint32([1]), fwdpy11.VecUint32([0]))))
-        diploids.append(fwdpy11.SingleLocusDiploid(0, 0))
-        diploids.append(fwdpy11.SingleLocusDiploid(0, 0))
+        diploids.append(fwdpy11.DiploidGenotype(0, 0))
+        diploids.append(fwdpy11.DiploidGenotype(0, 0))
         self.pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
 
     def testSetup(self):
@@ -95,7 +95,7 @@ class testFixationsAreSortedMlocusPop(unittest.TestCase):
         gametes.append(fwdpy11.Gamete(
             (4, fwdpy11.VecUint32([2]), fwdpy11.VecUint32([3]))))
         dip = fwdpy11.VecDiploid(
-            [fwdpy11.SingleLocusDiploid(0, 0), fwdpy11.SingleLocusDiploid(1, 1)])
+            [fwdpy11.DiploidGenotype(0, 0), fwdpy11.DiploidGenotype(1, 1)])
         diploids.append(dip)
         diploids.append(dip)
         self.pop = fwdpy11.MlocusPop(
