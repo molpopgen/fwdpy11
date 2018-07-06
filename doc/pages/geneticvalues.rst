@@ -150,10 +150,33 @@ parameters that you input.  Pruning fixations results in faster simulations, bec
 fitness calculations.  However, you should *not* prune them when simulating additive models of fitness or when
 simulating phenotypes.  See :ref:`handling_fixations` for more details.
 
+Implementing custom genetic value models
+--------------------------------------------------------------------
+
+It is possible to provide custom functions for calculating genetic values.  There are multiple ways to do this, but they
+all require writing some C++ code.  Thus, custom genetic values are an "advanced topic", and you are now referred to:
+
+* :ref:`customgvalues`
+* :ref:`stateful_fitness`
+* The C++ header files in the directory fwdpy11/headers/fwdpy11/genetic_values.  Note that there is a one-to-one mapping of C++ type name to Python
+  type name, which make code sleuthing easier.
+
+The first two elements in the above list show how to implement classes derived from
+:class:`fwdpy11.genetic_values.SlocusPopGeneticValue`.
+
+To see examples of inheriting from
+:class:`fwdpy11.genetic_values.SlocusPopGeneticValueWithMapping`, you can look at the C++ code behind
+:class:`fwdpy11.genetic_values.SlocusAdditive`, found in the directory mentioned above. (The Python class of that
+type is defined in fwdpy11/src/genetic_values.cc.)  Note that these types make use of some C++ boiler plate code to mapp
+"fwdpp-like" genetic value calculations into "fwdpy11-like" calculations.  The latter accept an int and a population
+type as arguments (see :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__`) while the former take a diploid type,
+gamete container, and mutation container as arguments.
+
 The future
 -----------------------------------------------------------
 
 We hope to:
 
 * Add a GBR type for fitness.
+* Support genetic value functions written in Python.
 * Make all this stuff about fixations something that the user (you) doesn't have to worry about.
