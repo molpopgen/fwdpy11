@@ -74,7 +74,7 @@ Mutation objects to not track their own frequencies.  Rather, they are stored in
 Mutation positions
 -----------------------------------------------------------
 
-.. versionadded:: 0.1.5
+.. versionadded:: 0.2.0
 
 The positions of all extant variants, and their locations in the mutation container, are tracked via a list of tuples.
 The first element in each tuple is the mutation position (a float) and the second it its location (an unsigned integer).
@@ -113,7 +113,7 @@ Diploids
 -----------------------------------------------------------
 
 
-.. versionchanged:: 0.1.5
+.. versionchanged:: 0.2.0
     Meta data separated into a separate class from the gamete keys.
 
 In a single-locus simulation, a diploid is represented by two classes, :class:`fwdpy11.DiploidGenotype`, and 
@@ -136,12 +136,12 @@ The later class contains useful additional data about the individual:
     "w", "Fitness."
     "g", "Genetic value."
     "e", "Random component of trait value."
-    "geography", "The x,y,z location of the diploid. (Not used in 0.1.5)"
+    "geography", "The x,y,z location of the diploid. (Not used in 0.2.0)"
     "label", "The index of this diploid in the population."
-    "deme", "The deme index of this diploid. New in 0.1.5."
-    "sex", "The sex index of this diploid. New in 0.1.5."
+    "deme", "The deme index of this diploid. New in 0.2.0."
+    "sex", "The sex index of this diploid. New in 0.2.0."
     "parents", "A list containing the label fields of each parent."
-    "nodes", "The nodes in a tree sequence corresponding to this diploid. (Not used in 0.1.5)"
+    "nodes", "The nodes in a tree sequence corresponding to this diploid. (Not used in 0.2.0)"
 
 For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.VecDiploid`, which is an opaque list of :class:`fwdpy11.DiploidGenotype` objects.  
 
@@ -154,7 +154,7 @@ In a single-locus simulation, diploids are stored in an opaque list of type
 The population base class
 -----------------------------------------------------------
 
-.. versionadded:: 0.1.5
+.. versionadded:: 0.2.0
 
 All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
 :class:`fwdpy11.Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \

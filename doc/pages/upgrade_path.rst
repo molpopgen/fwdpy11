@@ -4,7 +4,7 @@ Upgrade path
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
 
-0.1.5
+0.2.0
 --------------------------------------------------
 
 This release also separates out the data representing a diploid into two classes, :class:`fwdpy11.DiploidGenotype` and

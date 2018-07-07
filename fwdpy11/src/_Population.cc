@@ -146,7 +146,7 @@ PYBIND11_MODULE(_Population, m)
 
              :returns: Index of mutation if found, or -1 otherwise.
 
-             .. versionadded:: 0.1.5
+             .. versionadded:: 0.2.0
              )delim")
         .def("find_fixation_by_key",
              [](const fwdpy11::Population& pop,
@@ -167,6 +167,6 @@ PYBIND11_MODULE(_Population, m)
 
              :returns: Index of fixation if found, or -1 otherwise.
 
-             .. versionadded:: 0.1.5
+             .. versionadded:: 0.2.0
              )delim");
 }

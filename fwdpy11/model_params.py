@@ -56,7 +56,7 @@ class ModelParams(object):
 
     .. versionadded:: 0.1.1
 
-    .. versionchanged:: 0.1.5
+    .. versionchanged:: 0.2.0
         Changed this from a horrible class hierarchy
         into a much simpler, single class.
 

@@ -20,7 +20,7 @@
 # As of 0.1.3a1, fixations are to be sorted by position
 # for all types of simulations, allowing for easier lookup.
 #
-# In 0.1.5, this unit test was refactored to skip simulation.
+# In 0.2.0, this unit test was refactored to skip simulation.
 # Instead, we use pybind11 + cppimport to expose the underlying
 # C++ API to Python, create pops manually, and test the API.
 

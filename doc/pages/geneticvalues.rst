@@ -3,7 +3,7 @@
 Objects for calculation of genetic values
 ====================================================================================
 
-.. versionchanged:: 0.1.5
+.. versionchanged:: 0.2.0
 
     Updated to cover new types in :py:mod:`fwdpy11.genetic_values`. These type unify several concepts into 
     a simpler Python framework with a simpler C++ back-end.

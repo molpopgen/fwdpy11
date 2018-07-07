@@ -5,7 +5,7 @@ Parameterizing a simulation
 
 .. versionadded:: 0.1.1
 
-.. versionchanged:: 0.1.5
+.. versionchanged:: 0.2.0
 
     Reduced from many classes to a single class.
 

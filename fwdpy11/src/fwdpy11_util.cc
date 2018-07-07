@@ -124,7 +124,7 @@ PYBIND11_MODULE(util, m)
 
         .. versionadded:: 0.1.3
 
-        .. versionchanged:: 0.1.5
+        .. versionchanged:: 0.2.0
 
             Modified to act on base class and handle vectors of effect sizes. Default values also updated.
         )delim");

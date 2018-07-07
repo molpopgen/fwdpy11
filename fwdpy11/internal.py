@@ -52,7 +52,7 @@ def makeMutationRegions(rng, pop, neutral, selected, pneutral):
             ...
         TypeError: 'NoneType' object is not iterable
 
-    .. versionchanged:: 0.1.5
+    .. versionchanged:: 0.2.0
         Added pneutral to handle changes in fwdpp 0.6.0
     """
     import math

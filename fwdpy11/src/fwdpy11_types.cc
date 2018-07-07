@@ -114,7 +114,7 @@ PYBIND11_MODULE(fwdpy11_types, m)
 			 :param heffects: List of heterozygous effects (list of float)
 			 :param label: Label (16 bit integer)
 				
-			 .. versionadded:: 0.1.5
+			 .. versionadded:: 0.2.0
 
 			 )delim")
         .def(py::init<fwdpy11::Mutation::constructor_tuple>(),
@@ -152,13 +152,13 @@ PYBIND11_MODULE(fwdpy11_types, m)
                       R"delim(
 				Vector of heterozygous effects.
 
-				.. versionadded:: 0.1.5
+				.. versionadded:: 0.2.0
 				)delim")
         .def_readonly("esizes", &fwdpy11::Mutation::esizes,
                       R"delim(
 				Vector of effect sizes.
 
-				.. versionadded:: 0.1.5
+				.. versionadded:: 0.2.0
 				)delim")
         .def_property_readonly(
             "key",
