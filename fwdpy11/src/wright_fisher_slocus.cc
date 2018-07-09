@@ -103,17 +103,17 @@ handle_fixations(const bool remove_selected_fixations,
                               2 * pop.N, remove_selected_fixations);
 }
 
+template <typename sampler_type, typename popsizes_type>
 void
 wfSlocusPop(
     const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
+    const popsizes_type &popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
     const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
         &mmodel,
     const fwdpp::extensions::discrete_rec_model &rmodel,
-    fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
-    const bool remove_selected_fixations)
+    fwdpy11::SlocusPopGeneticValue &genetic_value_fxn, sampler_type &recorder,
+    const double selfing_rate, const bool remove_selected_fixations)
 {
     //validate the input params
     if (!std::isfinite(mu_neutral))
@@ -208,5 +208,39 @@ PYBIND11_MODULE(wright_fisher_slocus, m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("WFSlocusPop", &wfSlocusPop);
+    m.def("WFSlocusPop",
+          [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+             py::array_t<std::uint32_t> popsizes, const double mu_neutral,
+             const double mu_selected, const double recrate,
+             const fwdpp::extensions::discrete_mut_model<
+                 fwdpy11::SlocusPop::mcont_t> &mmodel,
+             const fwdpp::extensions::discrete_rec_model &rmodel,
+             fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+             fwdpy11::SlocusPop_temporal_sampler &recorder,
+             const double selfing_rate, const bool remove_selected_fixations) {
+              wfSlocusPop(rng, pop, popsizes, mu_neutral, mu_selected, recrate,
+                          mmodel, rmodel, genetic_value_fxn, recorder,
+                          selfing_rate, remove_selected_fixations);
+          });
+
+    // This overload copies popsizes and release the GiL
+    m.def("WFSlocusPop",
+          [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+             py::array_t<std::uint32_t> popsizes, const double mu_neutral,
+             const double mu_selected, const double recrate,
+             const fwdpp::extensions::discrete_mut_model<
+                 fwdpy11::SlocusPop::mcont_t> &mmodel,
+             const fwdpp::extensions::discrete_rec_model &rmodel,
+             fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+             fwdpy11::TemporalSampler &recorder, const double selfing_rate,
+             const bool remove_selected_fixations) {
+              auto b = popsizes.request();
+              std::vector<std::uint32_t> popsizes_cpp(
+                  static_cast<std::uint32_t *>(b.ptr),
+                  static_cast<std::uint32_t *>(b.ptr) + popsizes.size());
+              py::gil_scoped_release release;
+              wfSlocusPop(rng, pop, popsizes_cpp, mu_neutral, mu_selected,
+                          recrate, mmodel, rmodel, genetic_value_fxn, recorder,
+                          selfing_rate, remove_selected_fixations);
+          });
 }
