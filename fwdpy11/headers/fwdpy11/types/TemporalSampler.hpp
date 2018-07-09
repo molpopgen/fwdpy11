@@ -28,20 +28,30 @@
 namespace fwdpy11
 {
     // The following two typedefs are used for the case
-    // of bare C++ samplers, or pure Python functions or 
+    // of bare C++ samplers, or pure Python functions or
     // callable classes
     using SlocusPop_temporal_sampler
-        = std::function<void(const fwdpy11::SlocusPop&)>;
+        = std::function<void(const fwdpy11::SlocusPop &)>;
 
     using MlocusPop_temporal_sampler
-        = std::function<void(const fwdpy11::MlocusPop&)>;
+        = std::function<void(const fwdpy11::MlocusPop &)>;
 
     struct TemporalSampler
     {
         virtual std::string serialize() const = 0;
         virtual void deserialize(std::string) = 0;
         virtual std::unique_ptr<TemporalSampler> clone() const = 0;
+        virtual void
+        operator()(const SlocusPop &)
+        {
+            throw std::logic_error("__call__ not implemented for SlocusPop");
+        }
+        virtual void
+        operator()(const MlocusPop &)
+        {
+            throw std::logic_error("__call__ not implemented for MlocusPop");
+        }
     };
-}
+} // namespace fwdpy11
 
 #endif
