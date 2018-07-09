@@ -20,18 +20,28 @@
 #define FWDPY11_SAMPLERS_HPP__
 
 #include <functional>
+#include <string>
+#include <memory>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
 
 namespace fwdpy11
 {
-    // Applied each generation to record any data of interest.
+    // The following two typedefs are used for the case
+    // of bare C++ samplers, or pure Python functions or 
+    // callable classes
     using SlocusPop_temporal_sampler
         = std::function<void(const fwdpy11::SlocusPop&)>;
 
-    // Applied each generation to record any data of interest.
     using MlocusPop_temporal_sampler
         = std::function<void(const fwdpy11::MlocusPop&)>;
+
+    struct TemporalSampler
+    {
+        virtual std::string serialize() const = 0;
+        virtual void deserialize(std::string) = 0;
+        virtual std::unique_ptr<TemporalSampler> clone() const = 0;
+    };
 }
 
 #endif

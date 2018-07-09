@@ -208,6 +208,14 @@ ext_modules = [
         language='c++'
     ),
     Extension(
+        'fwdpy11.temporal_sampler',
+        ['fwdpy11/src/temporal_sampler.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
         'fwdpy11.util',
         ['fwdpy11/src/fwdpy11_util.cc'],
         library_dirs=LIBRARY_DIRS,
