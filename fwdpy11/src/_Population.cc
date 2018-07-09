@@ -53,14 +53,6 @@ namespace
         To distinguish them, use the locations of nonzero values in "mcounts" 
         for an instance of this type."
     )delim";
-
-    static const auto POPDATA_DOCSTRING
-        = "Python object that may be written to by a simulation. Any data "
-          "written should be documented by the simulation function.\n\n.. "
-          "versionadded:: 0.1.4";
-
-    static const auto POPDATA_USER_DOCSTRING
-        = "A Python object with read-write access.\n\n.. versionadded:: 0.1.4";
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
@@ -123,10 +115,6 @@ PYBIND11_MODULE(_Population, m)
                       FIXATIONS_DOCSTRING)
         .def_readonly("fixation_times", &fwdpy11::Population::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
-        .def_readonly("popdata", &fwdpy11::Population::popdata,
-                      POPDATA_DOCSTRING)
-        .def_readwrite("popdata_user", &fwdpy11::Population::popdata_user,
-                       POPDATA_USER_DOCSTRING)
         .def("find_mutation_by_key",
              [](const fwdpy11::Population& pop,
                 const std::tuple<double, double, fwdpp::uint_t>& key,

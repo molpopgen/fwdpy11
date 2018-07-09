@@ -98,10 +98,6 @@ class testPythonObjects(unittest.TestCase):
         self.pop, self.pdict = quick_slocus_qtrait_pop_params()
         self.rng = fp11.GSLrng(101)
 
-    def testInitialState(self):
-        self.assertTrue(self.pop.popdata is None)
-        self.assertTrue(self.pop.popdata_user is None)
-
     def testParentalData(self):
         from fwdpy11.model_params import ModelParams
         from fwdpy11.wright_fisher import evolve
@@ -113,35 +109,6 @@ class testPythonObjects(unittest.TestCase):
             self.assertTrue(len(i) == 2)
             self.assertTrue(i[0] < self.pop.N)
             self.assertTrue(i[1] < self.pop.N)
-
-    def testPopdataReadOnly(self):
-        from fwdpy11.model_params import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-        with self.assertRaises(Exception):
-            class Recorder(object):
-                def __call__(self, pop):
-                    pop.popdata = []
-            r = Recorder()
-            evolve(self.rng, self.pop, params, r)
-
-    def testPopdataUserAndPickling(self):
-        from fwdpy11.model_params import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-
-        class Recorder(object):
-            def __call__(self, pop):
-                pop.popdata_user = pop.generation
-        r = Recorder()
-        evolve(self.rng, self.pop, params, r)
-        self.assertEqual(self.pop.generation, self.pop.popdata_user)
-
-        import pickle
-        d = pickle.dumps(self.pop)
-        up = pickle.loads(d)
-        self.assertEqual(up.popdata_user, self.pop.generation)
-        self.assertEqual(self.pop, up)
 
     def testMutationLookupTable(self):
         from fwdpy11.model_params import ModelParams

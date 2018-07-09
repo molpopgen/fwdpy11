@@ -135,32 +135,12 @@ PYBIND11_MODULE(_Populations, m)
             [](const fwdpy11::SlocusPop& pop) -> py::object {
                 auto pb = py::bytes(
                     fwdpy11::serialization::serialize_details(&pop));
-                return py::make_tuple(std::move(pb), pop.popdata,
-                                      pop.popdata_user);
+                return pb;
             },
             [](py::object pickled) -> fwdpy11::SlocusPop {
-                try
-                    {
-                        auto s = pickled.cast<py::bytes>();
-                        return fwdpy11::serialization::deserialize_details<
-                            fwdpy11::SlocusPop>()(s, 1);
-                    }
-                catch (std::runtime_error& eas)
-                    {
-                        PyErr_Clear();
-                    }
-                auto t = pickled.cast<py::tuple>();
-                if (t.size() != 3)
-                    {
-                        throw std::runtime_error(
-                            "expected tuple with 3 elements");
-                    }
-                auto s = t[0].cast<py::bytes>();
-                auto rv = fwdpy11::serialization::deserialize_details<
+                auto s = pickled.cast<py::bytes>();
+                return fwdpy11::serialization::deserialize_details<
                     fwdpy11::SlocusPop>()(s, 1);
-                rv.popdata = t[1];
-                rv.popdata_user = t[2];
-                return rv;
             }))
         .def("sample",
              [](const fwdpy11::SlocusPop& pop, const bool separate,
@@ -285,36 +265,13 @@ PYBIND11_MODULE(_Populations, m)
             [](const fwdpy11::MlocusPop& pop) -> py::object {
                 auto pb = py::bytes(
                     fwdpy11::serialization::serialize_details(&pop));
-                return py::make_tuple(std::move(pb), pop.popdata,
-                                      pop.popdata_user);
+                return pb;
             },
             [](py::object pickled) -> fwdpy11::MlocusPop {
-                try
-                    {
-                        auto s = pickled.cast<py::bytes>();
-                        return fwdpy11::serialization::deserialize_details<
-                            fwdpy11::MlocusPop>()(
-                            s, 1,
-                            std::vector<std::pair<double, double>>{
-                                { 0., 1 } });
-                    }
-                catch (std::runtime_error& eas)
-                    {
-                        PyErr_Clear();
-                    }
-                auto t = pickled.cast<py::tuple>();
-                if (t.size() != 3)
-                    {
-                        throw std::runtime_error(
-                            "expected tuple with 3 elements");
-                    }
-                auto s = t[0].cast<py::bytes>();
-                auto rv = fwdpy11::serialization::deserialize_details<
+                auto s = pickled.cast<py::bytes>();
+                return fwdpy11::serialization::deserialize_details<
                     fwdpy11::MlocusPop>()(
                     s, 1, std::vector<std::pair<double, double>>{ { 0., 1 } });
-                rv.popdata = t[1];
-                rv.popdata_user = t[2];
-                return rv;
             }))
         .def("sample",
              [](const fwdpy11::MlocusPop& pop, const bool separate,
