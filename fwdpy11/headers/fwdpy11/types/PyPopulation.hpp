@@ -3,7 +3,6 @@
 
 #include <tuple>
 #include <algorithm>
-#include <pybind11/pybind11.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/poptypes/popbase.hpp>
 #include "Diploid.hpp"
@@ -26,8 +25,6 @@ namespace fwdpy11
                                     ftvector, lookup_table_type>;
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
-        pybind11::object popdata;
-        pybind11::object popdata_user;
 
         std::vector<DiploidMetadata> diploid_metadata;
 
@@ -37,9 +34,7 @@ namespace fwdpy11
         PyPopulation(const PyPopulation &) = default;
 
         PyPopulation(fwdpp::uint_t N_)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
-              popdata{ pybind11::none() }, popdata_user{ pybind11::none() },
-              diploid_metadata(N)
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N)
         {
         }
 
@@ -50,9 +45,7 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 }, popdata{ pybind11::none() },
-              popdata_user{ pybind11::none() },
-              diploid_metadata(N)
+              N{ N_ }, generation{ 0 }, diploid_metadata(N)
         {
         }
 

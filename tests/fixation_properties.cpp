@@ -16,6 +16,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 %>
 // clang-format on
 
+#include <pybind11/pybind11.h>
 #include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
