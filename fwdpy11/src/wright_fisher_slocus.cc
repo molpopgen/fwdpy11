@@ -32,7 +32,7 @@
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/samplers.hpp>
+#include <fwdpy11/types/TemporalSampler.hpp>
 #include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
