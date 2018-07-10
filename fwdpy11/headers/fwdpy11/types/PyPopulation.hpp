@@ -117,14 +117,14 @@ namespace fwdpy11
             auto keys = fwdpp::mutation_keys(pop, individuals, true, true);
             //sort keys on position
             std::sort(keys.first.begin(), keys.first.end(),
-                      [&pop](const decltype(keys.first[0]) &a,
-                             const decltype(keys.first[0]) &b) {
+                      [&pop](decltype(keys.first[0]) &a,
+                             decltype(keys.first[0]) &b) {
                           return pop.mutations[a.first].pos
                                  < pop.mutations[b.first].pos;
                       });
             std::sort(keys.second.begin(), keys.second.end(),
-                      [&pop](const decltype(keys.second[0]) &a,
-                             const decltype(keys.second[0]) &b) {
+                      [&pop](decltype(keys.second[0]) &a,
+                             decltype(keys.second[0]) &b) {
                           return pop.mutations[a.first].pos
                                  < pop.mutations[b.first].pos;
                       });
