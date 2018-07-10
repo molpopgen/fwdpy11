@@ -60,8 +60,13 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Populations, m)
 {
+
     py::object base_class_module
         = (pybind11::object)pybind11::module::import("fwdpy11._Population");
+
+    py::object data_matrix_python_representation
+        = (pybind11::object)py::module::import("fwdpy11.sampling")
+              .attr("DataMatrix");
 
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
@@ -143,59 +148,59 @@ PYBIND11_MODULE(_Populations, m)
                     fwdpy11::SlocusPop>()(s, 1);
             }))
         .def("sample",
-             [](const fwdpy11::SlocusPop& pop, const bool separate,
-                const bool remove_fixed, py::kwargs kwargs) -> py::object {
-                 py::object rv;
-
-                 std::vector<std::size_t> ind = get_individuals(pop.N, kwargs);
-
-                 if (separate)
-                     {
-                         auto temp
-                             = fwdpp::sample_separate(pop, ind, remove_fixed);
-                         rv = py::make_tuple(temp.first, temp.second);
-                     }
-                 else
-                     {
-                         auto temp = fwdpp::sample(pop, ind, remove_fixed);
-                         py::list tlist = py::cast(temp);
-                         rv = tlist;
-                     }
-                 return rv;
+             [](const fwdpy11::SlocusPop& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool haplotype) {
+                 return pop.sample_individuals(individuals, haplotype);
              },
-             py::arg("separate") = true, py::arg("remove_fixed") = true,
              R"delim(
-             Sample diploids from the population.
+             Return a sample from a population.
 
-             :param separate: (True) Return neutral and selected variants separately.
-             :param remove_fixed: (True) Remove variants fixed in the sample.
-             :param kwargs: See below.
+             :param individuals: Indexes of individuals in the sample
+             :type individuals: list
+             :param haplotype: (True) Determines the encoding of the return type
+             :type haplotype: bool
 
-             :rtype: object
+             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
+             :rtype: :class:`fwdpy11.sampling.DataMatrix`
 
-             :returns: Haplotype information for a sample.
+             .. versionadded:: 0.1.4
 
-             The valid kwargs are:
+             .. versionchanged:: 0.2.0
 
-             * individuals, which should be a list of non-negative integers
-             * rng, which should be a :class:`fwdpy11.GSLrng`
-             * nsam, which should be a positive integer
-             
-             The latter two kwargs must be used together, and will generate a sample of
-             ``nsam`` individuals taken *with replacement* from the population. 
+                Change to an overloaded function returning a 
+                :class:`fwdpy11.sampling.DataMatrix` instead of 
+                the "classic libsequence" layout.
+             )delim",
+             py::arg("individuals"), py::arg("haplotype") = true)
+        .def("sample",
+             [](const fwdpy11::SlocusPop& pop, const fwdpy11::GSLrng_t& rng,
+                const std::uint32_t nsam, const bool haplotype) {
+                 return pop.sample_random_individuals(rng, nsam, haplotype);
+             },
+             py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
+             R"delim(
+             Return a sample from a population.
 
-             The return value is structured around a list of tuples.  Each tuple
-             is (position, genotype), where genotype are encoded as 0/1 = ancestral/derived.
-             From index 0 to 2*nsam - 1 (or 2*len(individuals) -1), adjacent pairs of 
-             values represent diploid genotype data.  Across sites, the data represent
-             individual haplotypes.
+             :param rng: Random number generator
+             :type rng: :class:`fwdpy11.GSLrng`
+             :param nsam: The sample size
+             :type nsam: int
+             :param haplotype: (True) Determines the encoding of the return type
+             :type haplotype: bool
 
-             When `separate` is `True`, a tuple of two such lists is returned.  The first
-             list is for genotypes at neutral variants.  The second list is for non-neutral
-             variants.
+             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
+             :rtype: :class:`fwdpy11.sampling.DataMatrix`
 
-			 .. versionadded:: 0.1.4
+             .. versionadded:: 0.1.4
+
+             .. versionchanged:: 0.2.0
+
+                Change to an overloaded function returning a 
+                :class:`fwdpy11.sampling.DataMatrix` instead of 
+                the "classic libsequence" layout.
              )delim")
+
         .def("add_mutations", &fwdpy11::SlocusPop::add_mutations);
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
@@ -274,58 +279,57 @@ PYBIND11_MODULE(_Populations, m)
                     s, 1, std::vector<std::pair<double, double>>{ { 0., 1 } });
             }))
         .def("sample",
-             [](const fwdpy11::MlocusPop& pop, const bool separate,
-                const bool remove_fixed, py::kwargs kwargs) -> py::list {
-                 py::list rv;
-
-                 std::vector<std::size_t> ind = get_individuals(pop.N, kwargs);
-
-                 if (separate)
-                     {
-                         auto temp
-                             = fwdpp::sample_separate(pop, ind, remove_fixed);
-                         rv = py::cast(temp);
-                     }
-                 else
-                     {
-                         auto temp = fwdpp::sample(pop, ind, remove_fixed);
-                         rv = py::cast(temp);
-                     }
-                 return rv;
+             [](const fwdpy11::MlocusPop& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool haplotype) {
+                 return pop.sample_individuals(individuals, haplotype);
              },
              R"delim(
-            Sample diploids from the population.
+             Return a sample from a population.
 
-             :param separate: (True) Return neutral and selected variants separately.
-             :param remove_fixed: (True) Remove variants fixed in the sample.
-             :param kwargs: See below.
+             :param individuals: Indexes of individuals in the sample
+             :type individuals: list
+             :param haplotype: (True) Determines the encoding of the return type
+             :type haplotype: bool
 
-             :rtype: list
+             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
+             :rtype: :class:`fwdpy11.sampling.DataMatrix`
 
-             :returns: Haplotype information for a sample.
+             .. versionadded:: 0.1.4
 
-             The valid kwargs are:
+             .. versionchanged:: 0.2.0
 
-             * individuals, which should be a list of non-negative integers
-             * rng, which should be a :class:`fwdpy11.GSLrng`
-             * nsam, which should be a positive integer
-             
-             The latter two kwargs must be used together, and will generate a sample of
-             ``nsam`` individuals taken *with replacement* from the population. 
-
-             The return value is structured around a list of tuples.  Each tuple
-             is (position, genotype), where genotype are encoded as 0/1 = ancestral/derived.
-             From index 0 to 2*nsam - 1 (or 2*len(individuals) -1), adjacent pairs of 
-             values represent diploid genotype data.  Across sites, the data represent
-             individual haplotypes.
-
-             When `separate` is `True`, a list of tuples is returned.  The length of this
-             list equals the number of loci, and each tuple has two elements. The first
-             element is a list genotypes at neutral variants, following the format described
-             above.   The second element is for non-neutral variants.
-
-			 .. versionadded:: 0.1.4
+                Change to an overloaded function returning a 
+                :class:`fwdpy11.sampling.DataMatrix` instead of 
+                the "classic libsequence" layout.
              )delim",
-             py::arg("separate") = true, py::arg("remove_fixed") = true)
+             py::arg("individuals"), py::arg("haplotype") = true)
+        .def("sample",
+             [](const fwdpy11::MlocusPop& pop, const fwdpy11::GSLrng_t& rng,
+                const std::uint32_t nsam, const bool haplotype) {
+                 return pop.sample_random_individuals(rng, nsam, haplotype);
+             },
+             py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
+             R"delim(
+             Return a sample from a population.
+
+             :param rng: Random number generator
+             :type rng: :class:`fwdpy11.GSLrng`
+             :param nsam: The sample size
+             :type nsam: int
+             :param haplotype: (True) Determines the encoding of the return type
+             :type haplotype: bool
+
+             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
+             :rtype: :class:`fwdpy11.sampling.DataMatrix`
+
+             .. versionadded:: 0.1.4
+
+             .. versionchanged:: 0.2.0
+
+                Change to an overloaded function returning a 
+                :class:`fwdpy11.sampling.DataMatrix` instead of 
+                the "classic libsequence" layout.
+             )delim")
         .def("add_mutations", &fwdpy11::MlocusPop::add_mutations);
 }
