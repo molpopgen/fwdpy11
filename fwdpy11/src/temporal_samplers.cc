@@ -22,7 +22,26 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(temporal_sampler, m)
+struct RecordNothing : public fwdpy11::TemporalSampler
+{
+    std::string serialize() const final{ return std::string(); }
+    void deserialize(std::string) final{};
+    std::unique_ptr<fwdpy11::TemporalSampler>
+    clone() const final
+    {
+        return std::unique_ptr<fwdpy11::TemporalSampler>(new RecordNothing());
+    }
+    void
+    operator()(const fwdpy11::SlocusPop &) final
+    {
+    }
+    void
+    operator()(const fwdpy11::MlocusPop &) final
+    {
+    }
+};
+
+PYBIND11_MODULE(temporal_samplers, m)
 {
     m.doc() = "Support for temporal samplers implemented in C++";
 
@@ -35,4 +54,10 @@ PYBIND11_MODULE(temporal_sampler, m)
             methods on the C++ side in order to implement
             pickling methods on the Python side.
             )delim");
+
+    py::class_<RecordNothing, fwdpy11::TemporalSampler>(m, "RecordNothing")
+        .def(py::init<>())
+        .def(py::pickle(
+             [](const RecordNothing &r) { return py::bytes(r.serialize()); },
+             [](py::bytes) { return RecordNothing(); }));
 }
