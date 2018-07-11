@@ -116,57 +116,9 @@ separate_samples_by_loci(
 
 PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
 
-#define SAMPLE_SEPARATE_RANDOM(POPTYPE, CLASSTYPE)                            \
-    m.def("sample_separate",                                                  \
-          [](const fwdpy11::GSLrng_t &rng, const POPTYPE &pop,                \
-             const fwdpp::uint_t samplesize, const bool removeFixed) {        \
-              return fwdpp::sample_separate(rng.get(), pop, samplesize,       \
-                                            removeFixed);                     \
-          },                                                                  \
-          "Take a sample of :math:`n` chromosomes from a population "         \
-          "(`n/2` diploids.\n\n"                                              \
-          ":param rng: A :class:`fwdpy11.GSLrng`\n"             \
-          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
-          ":param samplesize: (int) The sample size.\n"                       \
-          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
-          "include fixations.\n"                                              \
-          ":rtype: tuple\n\n"                                                 \
-          ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n\n"                    \
-          ".. deprecated:: 0.1.4\n",                                          \
-          py::arg("rng"), py::arg("pop"), py::arg("samplesize"),              \
-          py::arg("removeFixed") = true);
-
-#define SAMPLE_SEPARATE_IND(POPTYPE, CLASSTYPE)                               \
-    m.def("sample_separate",                                                  \
-          [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
-             const bool removeFixed) {                                        \
-              return fwdpp::sample_separate(pop, individuals, removeFixed);   \
-          },                                                                  \
-          "Take a sample of specific individuals from a population.\n\n "     \
-          ":param pop: A :class:`" CLASSTYPE "`\n"                            \
-          ":param individuals : (list of int) Indexes of individuals.\n"      \
-          ":param removeFixed: (boolean, defaults to True) Whether or not to" \
-          "include fixations.\n"                                              \
-          ":rtype: tuple\n\n"                                                 \
-          ":return: A tuple.  The first element contains neutral variants,"   \
-          "and the second contains selected variants.\n\n"                    \
-          ".. deprecated:: 0.1.4\n",                                          \
-          py::arg("pop"), py::arg("individuals"),                             \
-          py::arg("removeFixed") = true);
-
 PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
-
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::SlocusPop,
-                           "fwdpy11.SlocusPop")
-    SAMPLE_SEPARATE_RANDOM(fwdpy11::MlocusPop,
-                           "fwdpy11.MlocusPop")
-    SAMPLE_SEPARATE_IND(fwdpy11::SlocusPop,
-                        "fwdpy11.SlocusPop")
-    SAMPLE_SEPARATE_IND(fwdpy11::MlocusPop,
-                        "fwdpy11.MlocusPop")
 
     py::bind_vector<std::vector<std::int8_t>>(
         m, "VecInt8", py::buffer_protocol(),
