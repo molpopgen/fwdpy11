@@ -195,7 +195,7 @@ PYBIND11_MODULE(sampling, m)
         .def_property_readonly("ndim_neutral",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
-                                        dm.neutral.size() / dm.ncol, dm.ncol);
+                                       dm.neutral.size() / dm.ncol, dm.ncol);
                                },
                                R"delim(
              Return the dimensions of the neutral matrix
@@ -211,7 +211,7 @@ PYBIND11_MODULE(sampling, m)
         .def_property_readonly("ndim_selected",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
-                                        dm.selected.size() / dm.ncol, dm.ncol);
+                                       dm.selected.size() / dm.ncol, dm.ncol);
                                },
                                R"delim(
              Return the dimensions of the selected matrix
@@ -299,7 +299,7 @@ PYBIND11_MODULE(sampling, m)
           "neutral variants.\n"                                               \
           ":param selected: (True) A boolean indicating whether to include "  \
           "selected variants.\n\n"                                            \
-          ".. note:: Mutation keys are unsorted.\n",                          \
+          ".. note:: Mutation keys are returned unsorted.\n",                          \
           py::arg("pop"), py::arg("individuals"), py::arg("neutral") = true,  \
           py::arg("selected") = true);
 
@@ -312,7 +312,7 @@ PYBIND11_MODULE(sampling, m)
               return fwdpp::genotype_matrix<POPTYPE>(                         \
                   pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
-          "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
+          "Generate a :class:`fwdpy11.sampling.DataMatrix` from a "           \
           ":class:`" CLASSTYPE "` object.\n"                                  \
           "The DataMatrix will be encoded as diploid genotypes.\n\n"          \
           ":param pop: A population object.\n"                                \
@@ -328,7 +328,7 @@ PYBIND11_MODULE(sampling, m)
               return fwdpp::haplotype_matrix<POPTYPE>(                        \
                   pop, individuals, neutral_keys, selected_keys);             \
           },                                                                  \
-          "Generate a :class:fwdpy11.sampling.DataMatrix from a "             \
+          "Generate a :class:`fwdpy11.sampling.DataMatrix` from a "           \
           ":class:`" CLASSTYPE "` object.\n"                                  \
           "The DataMatrix will be encoded as haplotypes.\n\n"                 \
           ":param pop: A population object.\n"                                \
@@ -363,8 +363,10 @@ PYBIND11_MODULE(sampling, m)
 
           .. versionadded:: 0.1.1
 
-          :param m: A :class:`fwdpy11.sampling.DataMatrix`
-          :param neutral: (True) Return data for neutral or selected sites.
+          :param m: A data matrix
+          :type m: :class:`fwdpy11.sampling.DataMatrix`
+          :param neutral: Return data for neutral or selected sites. Default is True.
+          :type neutral: bool
 
           :rtype: list of tuples
 
