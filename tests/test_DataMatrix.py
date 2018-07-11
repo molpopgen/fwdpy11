@@ -46,66 +46,66 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         self.assertEqual(self.hm_neutral.ndim, 2)
         self.assertTrue(self.hm_selected.dtype == np.int8)
         self.assertEqual(self.hm_selected.ndim, 2)
-        # Get the row sums
-        rowSums = self.hm_neutral.sum(axis=1)
-        rowSumsSel = self.hm_selected.sum(axis=1)
-        self.assertEqual(len(rowSums), self.hm_neutral.shape[0])
-        self.assertEqual(len(rowSumsSel), self.hm_selected.shape[0])
+        # Get the col sums
+        colSums = self.hm_neutral.sum(axis=0)
+        colSumsSel = self.hm_selected.sum(axis=0)
+        self.assertEqual(len(colSums), self.hm_neutral.shape[1])
+        self.assertEqual(len(colSumsSel), self.hm_selected.shape[1])
         j = 0
         for i in range(100, 150):
             # Num neutral variants in diploid i, gamete 0
             nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
-            self.assertEqual(nmuts, rowSums[j])
+            self.assertEqual(nmuts, colSums[j])
             # Num neutral variants in diploid i, gamete 1
             nmuts = len(
                 self.pop.gametes[self.pop.diploids[i].second].mutations)
-            self.assertEqual(nmuts, rowSums[j + 1])
+            self.assertEqual(nmuts, colSums[j + 1])
 
             # Now, test numbers of selected
             nmuts = len(
                 self.pop.gametes[self.pop.diploids[i].first].smutations)
-            self.assertEqual(nmuts, rowSumsSel[j])
+            self.assertEqual(nmuts, colSumsSel[j])
             nmuts = len(
                 self.pop.gametes[self.pop.diploids[i].second].smutations)
-            self.assertEqual(nmuts, rowSumsSel[j + 1])
+            self.assertEqual(nmuts, colSumsSel[j + 1])
 
             j += 2
 
     def testGenoMat(self):
         self.assertTrue(self.gm_neutral.dtype == np.int8)
         self.assertEqual(self.gm_neutral.ndim, 2)
-        # Get the row sums
-        rowSums = self.gm_neutral.sum(axis=1)
-        rowSumsSel = self.gm_selected.sum(axis=1)
-        self.assertEqual(len(rowSums), self.gm_neutral.shape[0])
-        self.assertEqual(len(rowSumsSel), self.gm_selected.shape[0])
+        # Get the col sums
+        colSums = self.gm_neutral.sum(axis=0)
+        colSumsSel = self.gm_selected.sum(axis=0)
+        self.assertEqual(len(colSums), self.gm_neutral.shape[1])
+        self.assertEqual(len(colSumsSel), self.gm_selected.shape[1])
         j = 0
         for i in range(100, 150):
             nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
             nmuts += len(self.pop.gametes[self.pop.diploids[i].second].mutations)
-            self.assertEqual(nmuts, rowSums[j])
+            self.assertEqual(nmuts, colSums[j])
 
             # Now, test numbers of selected
             nmuts = len(
                 self.pop.gametes[self.pop.diploids[i].first].smutations)
             nmuts += len(self.pop.gametes[self.pop.diploids[i].second].smutations)
-            self.assertEqual(nmuts, rowSumsSel[j])
+            self.assertEqual(nmuts, colSumsSel[j])
 
             j += 1
 
     def testHapMatToSample(self):
         neut_sample = fwdpy11.sampling.matrix_to_sample(self.hm, True)
         sel_sample = fwdpy11.sampling.matrix_to_sample(self.hm, False)
-        colSums = self.hm_neutral.sum(axis=0)
-        colSumsSel = self.hm_selected.sum(axis=0)
-        self.assertEqual(len(neut_sample), self.hm_neutral.shape[1])
-        self.assertEqual(len(colSums), len(neut_sample))
-        self.assertEqual(len(sel_sample), self.hm_selected.shape[1])
-        self.assertEqual(len(colSumsSel), len(sel_sample))
+        rowSums = self.hm_neutral.sum(axis=1)
+        rowSumsSel = self.hm_selected.sum(axis=1)
+        self.assertEqual(len(neut_sample), self.hm_neutral.shape[0])
+        self.assertEqual(len(rowSums), len(neut_sample))
+        self.assertEqual(len(sel_sample), self.hm_selected.shape[0])
+        self.assertEqual(len(rowSumsSel), len(sel_sample))
         i = 0
         for ni in neut_sample:
             num_ones = ni[1].count('1')
-            self.assertEqual(num_ones, colSums[i])
+            self.assertEqual(num_ones, rowSums[i])
             i += 1
 
 
@@ -142,7 +142,7 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             for site in value:
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
-                self.assertTrue(len(site[1]) == self.hm_neutral.shape[0])
+                self.assertTrue(len(site[1]) == self.hm_neutral.shape[1])
 
     def testConvertGenoMatrixToSample(self):
         nsample = fwdpy11.sampling.matrix_to_sample(self.gm, True)
@@ -154,7 +154,7 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             for site in value:
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
-                self.assertTrue(len(site[1]) == self.gm_neutral.shape[0])
+                self.assertTrue(len(site[1]) == self.gm_neutral.shape[1])
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,27 +42,27 @@ static_assert(sizeof(char) == sizeof(std::int8_t),
 
 py::list
 matrix_to_sample(const std::vector<std::int8_t> &data,
-                 const std::vector<double> &pos, const std::size_t nrow)
+                 const std::vector<double> &pos, const std::size_t ncol)
 // returns a data structure compatible with libsequence/pylibseq iff
 // the data correspond to a haplotype matrix
 {
-    std::size_t ncol = data.size() / nrow;
+    std::size_t nrow = data.size() / ncol;
     const std::array<std::int8_t, 3> states{ '0', '1', '2' };
     auto v = gsl_matrix_char_const_view_array(
         reinterpret_cast<const char *>(data.data()), nrow, ncol);
     py::list rv;
-    for (std::size_t i = 0; i < ncol; ++i)
+    for (std::size_t i = 0; i < nrow; ++i)
         {
-            auto c = gsl_matrix_char_const_column(&v.matrix, i);
+            auto c = gsl_matrix_char_const_row(&v.matrix, i);
             std::string column_data;
             for (std::size_t j = 0; j < c.vector.size; ++j)
                 {
                     column_data.push_back(states[static_cast<std::int8_t>(
                         gsl_vector_char_get(&c.vector, j))]);
                 }
-            if (column_data.size() != nrow)
+            if (column_data.size() != ncol)
                 {
-                    throw std::runtime_error("column_data.size() != nrow");
+                    throw std::runtime_error("column_data.size() != ncol");
                 }
             rv.append(py::make_tuple(pos[i], std::move(column_data)));
         }
@@ -134,10 +134,12 @@ PYBIND11_MODULE(sampling, m)
 		There are two possible representations of the data:
 
 		1. As a genotype matrix, where individuals are encoded a 0,1, or 2
-		copies of the derived mutation. There is one row per diploid here.
+		copies of the derived mutation. There is one column per diploid here,
+        and one row per variable site.
 
-		2. As a haplotype matrix, with two rows per diploid, and each
-		column containing a 0 (ancestral) or 1 (derived) label.
+		2. As a haplotype matrix, with two columns per diploid, and each
+		column containing a 0 (ancestral) or 1 (derived) label. Each row
+        represents a variable site.
 
 		You do not create objects of this type directly.  Instead, you use one of 
 		the following functions:
@@ -148,9 +150,11 @@ PYBIND11_MODULE(sampling, m)
 		Please see :ref:`datamatrix` for examples of generating
 		instances of this type.  The API requires multiple steps, in order to 
 		maximize flexibility.
+
+        .. versionchanged:: 0.2.0
+
+            Changed layout to row = variable site. 
 		)delim")
-        .def(py::init<>())
-        .def(py::init<std::size_t>())
         .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
                 Return a buffer representing neutral variants.
@@ -191,7 +195,7 @@ PYBIND11_MODULE(sampling, m)
         .def_property_readonly("ndim_neutral",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
-                                       dm.nrow, dm.neutral.size() / dm.nrow);
+                                        dm.neutral.size() / dm.ncol, dm.ncol);
                                },
                                R"delim(
              Return the dimensions of the neutral matrix
@@ -207,7 +211,7 @@ PYBIND11_MODULE(sampling, m)
         .def_property_readonly("ndim_selected",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
-                                       dm.nrow, dm.selected.size() / dm.nrow);
+                                        dm.selected.size() / dm.ncol, dm.ncol);
                                },
                                R"delim(
              Return the dimensions of the selected matrix
@@ -224,7 +228,7 @@ PYBIND11_MODULE(sampling, m)
             [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
                 fwdpp::io::scalar_writer w;
-                w(o, &d.nrow, 1);
+                w(o, &d.ncol, 1);
                 auto nsites = d.neutral_positions.size();
                 w(o, &nsites, 1);
                 if (nsites)
@@ -349,9 +353,9 @@ PYBIND11_MODULE(sampling, m)
 
           {
               return (neutral) ? matrix_to_sample(m.neutral,
-                                                  m.neutral_positions, m.nrow)
+                                                  m.neutral_positions, m.ncol)
                                : matrix_to_sample(
-                                     m.selected, m.selected_positions, m.nrow);
+                                     m.selected, m.selected_positions, m.ncol);
           },
           R"delim(
           Convert a :class:`fwdpy11.sampling.DataMatrix` into a

@@ -107,7 +107,7 @@ The following example is a tour of the API:
     print(n.dtype)
     print(n.ndim)
     # This must be pop.N = 1,000:
-    print(n.shape[0])
+    print(n.shape[1])
 
     # The DataMatrix is picklable
     # As always with fwdpy11 types,
