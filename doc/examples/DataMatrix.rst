@@ -3,6 +3,11 @@
 Representing samples from a population in matrix form
 ====================================================================================
 
+.. versionchanged:: 0.2.0
+
+    The data are now encoded with rows as sites.  This is the same memory layout
+    used by msprime, scikit-allel, and the forthcoming libsequence 2.0.
+
 fwdpy11 allows viewing samples from populations (including the entire sample) in a matrix format.
 
 The relevant functions are:
@@ -95,7 +100,7 @@ The following example is a tour of the API:
         pop.mutations[selected_sorted_keys[i+1][0]].pos for i in range(len(selected_sorted_keys)-1)))
 
     # Step 4. -- get the DataMatrix encoded as a genotype matrix,
-    # meaning 1 row per diploid and column values are 0,1,2
+    # meaning 1 column per diploid with values of 0,1,2
     # copies of derived allele
     dm = fwdpy11.sampling.genotype_matrix(pop,individuals,neutral_sorted_keys,selected_sorted_keys)
 
@@ -162,14 +167,14 @@ The output of the above code is:
 Let's talk about what we did in this example.  We used the Python buffer protocol to view the genotypes at neutral
 variants.  The ``buffer=`` argument to ``np.ndarray`` means that our NumPy array is a thin wrapper on top of memory
 allocated in C++, giving us read-write access to the data.  The fact that we have write access allows our recoding of
-the columns to be propagated to the C++ side.  Further, these thin wrappers give us very fast access to the underlying
+the data to be propagated to the C++ side.  Further, these thin wrappers give us very fast access to the underlying
 data.
 
 There are several use cases for recoding the data.  A DataMatrix is encoded by number of copies of the derived allele.
 However, it may be useful to encode by number of copies of the minor allele, or the ``+`` allele when modeling a
-quantitative trait.  For such cases, you can selectively recode the columns on a case-by-case basis.
+quantitative trait.  For such cases, you can selectively recode the data on a case-by-case basis.
 
-It is possible to get a thin wrapper that is not writeable.  Doing so let's you have both fast access and safety. Let's revisit the above example:
+It is possible to get a thin wrapper that is not writeable.  Doing so lets you have both fast access and safety. Let's revisit the above example:
 
 .. ipython:: python
     :suppress:
