@@ -74,7 +74,7 @@ class testSampling(unittest.TestCase):
 
         with self.assertRaises(IndexError):
             """
-            Internally, we should catche cases where i >= N
+            Internally, we should catch cases where i >= N
             """
             self.pop.sample(individuals=range(self.pop.N, self.pop.N + 10))
 
