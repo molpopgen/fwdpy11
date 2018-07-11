@@ -117,17 +117,13 @@ namespace fwdpy11
             auto keys = fwdpp::mutation_keys(pop, individuals, true, true);
             using vtype = decltype(keys.first);
             using key_type = typename vtype::value_type;
+            const auto sorting_lambda = [&pop](const key_type &a,
+                                               const key_type &b) {
+                return pop.mutations[a.first].pos < pop.mutations[b.first].pos;
+            };
             //sort keys on position
-            std::sort(keys.first.begin(), keys.first.end(),
-                      [&pop](key_type &a, key_type &b) {
-                          return pop.mutations[a.first].pos
-                                 < pop.mutations[b.first].pos;
-                      });
-            std::sort(keys.second.begin(), keys.second.end(),
-                      [&pop](key_type &a, key_type &b) {
-                          return pop.mutations[a.first].pos
-                                 < pop.mutations[b.first].pos;
-                      });
+            std::sort(keys.first.begin(), keys.first.end(), sorting_lambda);
+            std::sort(keys.second.begin(), keys.second.end(), sorting_lambda);
             return (haplotype == true)
                        ? fwdpp::haplotype_matrix(pop, individuals, keys.first,
                                                  keys.second)
