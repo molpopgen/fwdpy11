@@ -115,16 +115,16 @@ namespace fwdpy11
                     throw std::out_of_range("individual index out of range");
                 }
             auto keys = fwdpp::mutation_keys(pop, individuals, true, true);
+            using vtype = decltype(keys.first);
+            using key_type = typename vtype::value_type;
             //sort keys on position
             std::sort(keys.first.begin(), keys.first.end(),
-                      [&pop](decltype(keys.first[0]) &a,
-                             decltype(keys.first[0]) &b) {
+                      [&pop](key_type &a, key_type &b) {
                           return pop.mutations[a.first].pos
                                  < pop.mutations[b.first].pos;
                       });
             std::sort(keys.second.begin(), keys.second.end(),
-                      [&pop](decltype(keys.second[0]) &a,
-                             decltype(keys.second[0]) &b) {
+                      [&pop](key_type &a, key_type &b) {
                           return pop.mutations[a.first].pos
                                  < pop.mutations[b.first].pos;
                       });
