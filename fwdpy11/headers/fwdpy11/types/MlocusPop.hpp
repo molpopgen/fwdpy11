@@ -199,6 +199,22 @@ namespace fwdpy11
                         }
                 }
         }
+
+        fwdpp::data_matrix
+        sample_individuals(const std::vector<std::size_t> &individuals,
+                           const bool haplotype) const
+        {
+            return sample_individuals_details(*this, individuals, haplotype);
+        }
+
+        fwdpp::data_matrix
+        sample_random_individuals(const GSLrng_t &rng,
+                                  const std::uint32_t nsam,
+                                  const bool haplotype) const
+        {
+            return sample_random_individuals_details(*this, rng, nsam,
+                                                     haplotype);
+        }
     };
 } // namespace fwdpy11
 #endif

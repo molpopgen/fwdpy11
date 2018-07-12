@@ -64,22 +64,17 @@ class testSampling(unittest.TestCase):
         self.rng = fp11.GSLrng(42)
 
     def testRandomSample(self):
-        x = self.pop.sample(rng=self.rng, nsam=10)
-        self.assertTrue(type(x) is tuple)
-        x = self.pop.sample(rng=self.rng, nsam=10, separate=False)
+        import fwdpy11.sampling
+        s = self.pop.sample(rng=self.rng, nsam=10)
+        x = fwdpy11.sampling.matrix_to_sample(s)
         self.assertTrue(type(x) is list)
-        x = self.pop.sample(rng=self.rng, nsam=10, remove_fixed=False)
-        self.assertTrue(type(x) is tuple)
-        x = self.pop.sample(rng=self.rng, nsam=10,
-                            separate=True, remove_fixed=False)
-        self.assertTrue(type(x) is tuple)
 
     def testDefinedSample(self):
         self.pop.sample(individuals=range(10))
 
         with self.assertRaises(IndexError):
             """
-            fwdpp catches case where i >= N
+            Internally, we should catch cases where i >= N
             """
             self.pop.sample(individuals=range(self.pop.N, self.pop.N + 10))
 
