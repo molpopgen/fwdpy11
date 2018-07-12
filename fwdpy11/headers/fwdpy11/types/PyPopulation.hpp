@@ -124,6 +124,20 @@ namespace fwdpy11
             //sort keys on position
             std::sort(keys.first.begin(), keys.first.end(), sorting_lambda);
             std::sort(keys.second.begin(), keys.second.end(), sorting_lambda);
+
+            //Remove keys to mutations that are fixed in the sample
+            keys.first.erase(
+                std::remove_if(keys.first.begin(), keys.first.end(),
+                               [&individuals](const key_type &k) {
+                                   return k.second == 2 * individuals.size();
+                               }),
+                keys.first.end());
+            keys.second.erase(
+                std::remove_if(keys.second.begin(), keys.second.end(),
+                               [&individuals](const key_type &k) {
+                                   return k.second == 2 * individuals.size();
+                               }),
+                keys.second.end());
             return (haplotype == true)
                        ? fwdpp::haplotype_matrix(pop, individuals, keys.first,
                                                  keys.second)
