@@ -116,6 +116,14 @@ class testPythonObjects(unittest.TestCase):
                 self.assertTrue(self.pop.mutations[i].pos in lookup)
                 self.assertTrue(i in lookup[self.pop.mutations[i].pos])
 
+    def testEmptyMutationLookupTable(self):
+        """
+        This test does not use the class fixture.
+        Instead, we use an empty pop object.
+        """
+        pop = fp11.SlocusPop(100)
+        self.assertTrue(pop.mut_lookup is None)
+
 
 if __name__ == "__main__":
     unittest.main()
