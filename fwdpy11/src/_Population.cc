@@ -128,6 +128,22 @@ PYBIND11_MODULE(_Population, m)
                 return rv;
             },
             "Mutation position lookup table.")
+        .def("mutation_indices",
+             [](const fwdpy11::Population& pop,
+                const double pos) -> py::object {
+                 auto r = pop.mut_lookup.equal_range(pos);
+                 if (r.first == r.second)
+                     {
+                         return py::none();
+                     }
+                 py::list rv;
+                 for (auto i = r.first; i != r.second; ++i)
+                     {
+                         rv.append(i->second);
+                     }
+                 rv.attr("sort")();
+                 return rv;
+             })
         .def_readonly("gametes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::Population::fixations,

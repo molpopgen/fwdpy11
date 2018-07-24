@@ -116,6 +116,18 @@ class testPythonObjects(unittest.TestCase):
                 self.assertTrue(self.pop.mutations[i].pos in lookup)
                 self.assertTrue(i in lookup[self.pop.mutations[i].pos])
 
+    def testMutationIndices(self):
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
+        evolve(self.rng, self.pop, params)
+        lookup = self.pop.mut_lookup
+        for key, val in lookup.items():
+            indices = self.pop.mutation_indices(key)
+            self.assertTrue(indices is not None)
+            for i in indices:
+                self.assertTrue(i in val)
+
     def testEmptyMutationLookupTable(self):
         """
         This test does not use the class fixture.
