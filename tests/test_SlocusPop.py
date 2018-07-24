@@ -110,8 +110,11 @@ class testPythonObjects(unittest.TestCase):
         from fwdpy11.wright_fisher import evolve
         params = ModelParams(**self.pdict)
         evolve(self.rng, self.pop, params)
-        for i in self.pop.mut_lookup:
-            self.assertEqual(i[0], self.pop.mutations[i[1]].pos)
+        lookup = self.pop.mut_lookup
+        for i in range(len(self.pop.mcounts)):
+            if self.pop.mcounts[i] > 0:
+                self.assertTrue(self.pop.mutations[i].pos in lookup)
+                self.assertTrue(i in lookup[self.pop.mutations[i].pos])
 
 
 if __name__ == "__main__":
