@@ -96,33 +96,89 @@ PYBIND11_MODULE(_Population, m)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
         .def_readwrite("diploid_metadata",
-                      &fwdpy11::Population::diploid_metadata,
-                      "Container of diploid metadata.")
+                       &fwdpy11::Population::diploid_metadata,
+                       "Container of diploid metadata.")
         .def_property_readonly(
             "mut_lookup",
-            [](const fwdpy11::Population& pop) {
-                py::list rv;
-                for (auto&& i : pop.mut_lookup)
+            [](const fwdpy11::Population& pop) -> py::object {
+                py::dict rv;
+                for (std::size_t i = 0; i < pop.mutations.size(); ++i)
                     {
-                        rv.append(py::make_tuple(i.first, i.second));
+                        if (pop.mcounts[i])
+                            {
+                                auto pos_handle
+                                    = py::cast(pop.mutations[i].pos);
+                                if (rv.contains(pos_handle))
+                                    {
+                                        py::list l = rv[pos_handle];
+                                        l.append(i);
+                                    }
+                                else
+                                    {
+                                        py::list l;
+                                        l.append(i);
+                                        rv[pos_handle] = l;
+                                    }
+                            }
+                    }
+                if (rv.size() == 0)
+                    {
+                        return py::none();
                     }
                 return rv;
             },
-            "Mutation position lookup table.")
+            R"delim(
+            Mutation position lookup table.
+            The format is a dict whose keys 
+            are mutation positions and values
+            are lists of indexes.  If no
+            extant mutations are present in the 
+            population, the value of this property is
+            None.
+            )delim")
+        .def("mutation_indexes",
+             [](const fwdpy11::Population& pop,
+                const double pos) -> py::object {
+                 auto r = pop.mut_lookup.equal_range(pos);
+                 if (r.first == r.second)
+                     {
+                         return py::none();
+                     }
+                 py::list rv;
+                 for (auto i = r.first; i != r.second; ++i)
+                     {
+                         rv.append(i->second);
+                     }
+                 rv.attr("sort")();
+                 return rv;
+             },
+             R"delim(
+             Get indexes associated with a mutation position.
+             
+             :param pos: A position
+             :type pos: float
+             :return: Indexes in mutation/mutation counts container associated with pos.
+             :rtype: object
+             
+             Returns None if pos does not refer to an extant variant.  Otherwise, 
+             returns a list.
+             )delim",
+             py::arg("pos"))
         .def_readonly("gametes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
-        .def_readonly("fixations", &fwdpy11::Population::fixations,
-                      FIXATIONS_DOCSTRING)
-        .def_readonly("fixation_times", &fwdpy11::Population::fixation_times,
-                      FIXATION_TIMES_DOCSTRING)
-        .def("find_mutation_by_key",
-             [](const fwdpy11::Population& pop,
-                const std::tuple<double, double, fwdpp::uint_t>& key,
-                const std::int64_t offset) {
-                 return pop.find_mutation_by_key(key, offset);
-             },
-             py::arg("pop"), py::arg("offset") = 0,
-             R"delim(
+            .def_readonly("fixations", &fwdpy11::Population::fixations,
+                          FIXATIONS_DOCSTRING)
+            .def_readonly("fixation_times",
+                          &fwdpy11::Population::fixation_times,
+                          FIXATION_TIMES_DOCSTRING)
+            .def("find_mutation_by_key",
+                 [](const fwdpy11::Population& pop,
+                    const std::tuple<double, double, fwdpp::uint_t>& key,
+                    const std::int64_t offset) {
+                     return pop.find_mutation_by_key(key, offset);
+                 },
+                 py::arg("pop"), py::arg("offset") = 0,
+                 R"delim(
              Find a mutation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
@@ -136,14 +192,14 @@ PYBIND11_MODULE(_Population, m)
 
              .. versionadded:: 0.2.0
              )delim")
-        .def("find_fixation_by_key",
-             [](const fwdpy11::Population& pop,
-                const std::tuple<double, double, fwdpp::uint_t>& key,
-                const std::int64_t offset) {
-                 return pop.find_fixation_by_key(key, offset);
-             },
-             py::arg("pop"), py::arg("offset") = 0,
-             R"delim(
+            .def("find_fixation_by_key",
+                 [](const fwdpy11::Population& pop,
+                    const std::tuple<double, double, fwdpp::uint_t>& key,
+                    const std::int64_t offset) {
+                     return pop.find_fixation_by_key(key, offset);
+                 },
+                 py::arg("pop"), py::arg("offset") = 0,
+                 R"delim(
              Find a fixation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.

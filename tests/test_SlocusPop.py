@@ -110,8 +110,31 @@ class testPythonObjects(unittest.TestCase):
         from fwdpy11.wright_fisher import evolve
         params = ModelParams(**self.pdict)
         evolve(self.rng, self.pop, params)
-        for i in self.pop.mut_lookup:
-            self.assertEqual(i[0], self.pop.mutations[i[1]].pos)
+        lookup = self.pop.mut_lookup
+        for i in range(len(self.pop.mcounts)):
+            if self.pop.mcounts[i] > 0:
+                self.assertTrue(self.pop.mutations[i].pos in lookup)
+                self.assertTrue(i in lookup[self.pop.mutations[i].pos])
+
+    def testMutationIndices(self):
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        params = ModelParams(**self.pdict)
+        evolve(self.rng, self.pop, params)
+        lookup = self.pop.mut_lookup
+        for key, val in lookup.items():
+            indexes = self.pop.mutation_indexes(key)
+            self.assertTrue(indexes is not None)
+            for i in indexes:
+                self.assertTrue(i in val)
+
+    def testEmptyMutationLookupTable(self):
+        """
+        This test does not use the class fixture.
+        Instead, we use an empty pop object.
+        """
+        pop = fp11.SlocusPop(100)
+        self.assertTrue(pop.mut_lookup is None)
 
 
 if __name__ == "__main__":
