@@ -96,15 +96,34 @@ PYBIND11_MODULE(_Population, m)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
         .def_readwrite("diploid_metadata",
-                      &fwdpy11::Population::diploid_metadata,
-                      "Container of diploid metadata.")
+                       &fwdpy11::Population::diploid_metadata,
+                       "Container of diploid metadata.")
         .def_property_readonly(
             "mut_lookup",
-            [](const fwdpy11::Population& pop) {
-                py::list rv;
-                for (auto&& i : pop.mut_lookup)
+            [](const fwdpy11::Population& pop) -> py::object {
+                py::dict rv;
+                for (std::size_t i = 0; i < pop.mutations.size(); ++i)
                     {
-                        rv.append(py::make_tuple(i.first, i.second));
+                        if (pop.mcounts[i])
+                            {
+                                auto pos_handle
+                                    = py::cast(pop.mutations[i].pos);
+                                if (rv.contains(pos_handle))
+                                    {
+                                        py::list l = rv[pos_handle];
+                                        l.append(i);
+                                    }
+                                else
+                                    {
+                                        py::list l;
+                                        l.append(i);
+                                        rv[pos_handle] = l;
+                                    }
+                            }
+                    }
+                if (rv.size() == 0)
+                    {
+                        return py::none();
                     }
                 return rv;
             },
