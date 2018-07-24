@@ -136,7 +136,7 @@ PYBIND11_MODULE(_Population, m)
             population, the value of this property is
             None.
             )delim")
-        .def("mutation_indices",
+        .def("mutation_indexes",
              [](const fwdpy11::Population& pop,
                 const double pos) -> py::object {
                  auto r = pop.mut_lookup.equal_range(pos);
@@ -153,7 +153,7 @@ PYBIND11_MODULE(_Population, m)
                  return rv;
              },
              R"delim(
-             Get indices associated with a mutation position.
+             Get indexes associated with a mutation position.
              
              :param pos: A position
              :type pos: float

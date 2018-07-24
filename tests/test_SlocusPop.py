@@ -123,9 +123,9 @@ class testPythonObjects(unittest.TestCase):
         evolve(self.rng, self.pop, params)
         lookup = self.pop.mut_lookup
         for key, val in lookup.items():
-            indices = self.pop.mutation_indices(key)
-            self.assertTrue(indices is not None)
-            for i in indices:
+            indexes = self.pop.mutation_indexes(key)
+            self.assertTrue(indexes is not None)
+            for i in indexes:
                 self.assertTrue(i in val)
 
     def testEmptyMutationLookupTable(self):
