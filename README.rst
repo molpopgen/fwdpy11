@@ -62,7 +62,7 @@ fwdpy11 is written for Python 3.  We will not modify the package to be compatibl
     git submodule init
     git submodule update
     python setup.py build_ext -i
-    python test.py
+    python -m unittest discover tests
 
 .. note::
     The clang compiler is the assumed default on OS X.  However, life is simpler
