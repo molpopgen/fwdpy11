@@ -18,6 +18,10 @@ if sys.version_info < (3, 3):
 if pybind11.__version__ < '2.2.2':
     raise RuntimeError("pybind11 >= " + '2.2.2' + " required")
 
+if sys.version_info >= (3,7):
+    if pybind11.__version__ < '2.3.0':
+        raise RuntimeError("Python 3.7 and newer required pybind11 2.3 or greater")
+
 
 # clang/llvm is default for OS X builds.
 # can over-ride darwin-specific options
