@@ -20,16 +20,16 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         self.gm = fwdpy11.sampling.genotype_matrix(
             self.pop, self.indlist, self.keys[0], self.keys[1])
         self.hm_neutral = np.ndarray(
-            self.hm.ndim_neutral,
+            self.hm.shape_neutral,
             buffer=self.hm.neutral, dtype=np.int8)
         self.hm_selected = np.ndarray(
-            self.hm.ndim_selected,
+            self.hm.shape_selected,
             buffer=self.hm.selected, dtype=np.int8)
         self.gm_neutral = np.ndarray(
-            self.gm.ndim_neutral,
+            self.gm.shape_neutral,
             buffer=self.gm.neutral, dtype=np.int8)
         self.gm_selected = np.ndarray(
-            self.gm.ndim_selected,
+            self.gm.shape_selected,
             buffer=self.gm.selected, dtype=np.int8)
 
     def testKeyNeutralityAndCount(self):
@@ -119,16 +119,16 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
         self.gm = fwdpy11.sampling.genotype_matrix(
             self.pop, self.indlist, self.keys[0], self.keys[1])
         self.hm_neutral = np.ndarray(
-            self.hm.ndim_neutral,
+            self.hm.shape_neutral,
             buffer=self.hm.neutral, dtype=np.int8)
         self.hm_selected = np.ndarray(
-            self.hm.ndim_selected,
+            self.hm.shape_selected,
             buffer=self.hm.selected, dtype=np.int8)
         self.gm_neutral = np.ndarray(
-            self.gm.ndim_neutral,
+            self.gm.shape_neutral,
             buffer=self.gm.neutral, dtype=np.int8)
         self.gm_selected = np.ndarray(
-            self.gm.ndim_selected,
+            self.gm.shape_selected,
             buffer=self.gm.selected, dtype=np.int8)
 
     def testConvertHapMatrixToSample(self):
