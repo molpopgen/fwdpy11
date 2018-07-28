@@ -115,7 +115,7 @@ PYBIND11_MODULE(sampling, m)
                       &fwdpp::data_matrix::selected_popfreq,
                       "The list of population frequencies of "
                       "selected mutations.")
-        .def_property_readonly("ndim_neutral",
+        .def_property_readonly("shape_neutral",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
                                        dm.neutral.size() / dm.ncol, dm.ncol);
@@ -130,8 +130,11 @@ PYBIND11_MODULE(sampling, m)
 
              .. versionchanged:: 0.1.4
                 Changed from a function to a readonly property
+
+             .. versionchanged:: 0.2.0
+                Renamed from ndim_neutral to shape_neutral
              )delim")
-        .def_property_readonly("ndim_selected",
+        .def_property_readonly("shape_selected",
                                [](const fwdpp::data_matrix &dm) {
                                    return py::make_tuple(
                                        dm.selected.size() / dm.ncol, dm.ncol);
@@ -146,6 +149,9 @@ PYBIND11_MODULE(sampling, m)
 
              .. versionchanged:: 0.1.4
                 Changed from a function to a readonly property
+
+             .. versionchanged:: 0.2.0
+                Renamed from ndim_selected to shape_selected
              )delim")
         .def(py::pickle(
             [](const fwdpp::data_matrix &d) {
