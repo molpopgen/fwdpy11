@@ -39,7 +39,7 @@ By default, a *haplotype* matrix is returned:
 .. ipython:: python
 
     print(np.unique(np.array(s.neutral)))
-    print(s.ndim_neutral)
+    print(s.shape_neutral)
 
 To get a genotype matrix:
 
@@ -47,7 +47,7 @@ To get a genotype matrix:
 
     s = pop.sample(individuals = [0,1,2,3], haplotype = False)
     print(np.unique(np.array(s.neutral)))
-    print(s.ndim_neutral)
+    print(s.shape_neutral)
 
 The :class:`fwdpy11.sampling.DataMatrix` format is compatible with scikit-allel_ and the new data structures that will
 be found in libsequence_ 2.0 (and therefore a future version of pylibseq_).  To work with the current pylibseq_, you

@@ -26,7 +26,7 @@ The API is extremely flexible, allowing for the inclusion or exclustion of selec
    position, effect size, etc.  You may also apply a frequency filter.  The data returned from :func:`fwdpy11.sampling.mutation_keys` records the sample frequency and the `mcounts` objects present in populations can be used to filter on population frequencies.
 4. Generate the fwdpy11.sampling.DataMatrix object by calling either :func:`fwdpy11.sampling.genotype_matrix` or
    `fwdpy11.sampling.haplotype_matrix`.
-5. Get the data as buffers via :attr:`fwdpy11.sampling.DataMatrix.neutral` or :attr:`fwdpy11.sampling.DataMatrix.selected`.  These buffers may be converted to numpy arrays with the help of :attr:`fwdpy11.sampling.DataMatrix.ndim_neutral`, :attr:`fwdpy11.sampling.DataMatrix.ndim_selected`.
+5. Get the data as buffers via :attr:`fwdpy11.sampling.DataMatrix.neutral` or :attr:`fwdpy11.sampling.DataMatrix.selected`.  These buffers may be converted to numpy arrays with the help of :attr:`fwdpy11.sampling.DataMatrix.shape_neutral`, :attr:`fwdpy11.sampling.DataMatrix.shape_selected`.
 
 The following is optional:
 
@@ -107,7 +107,7 @@ The following example is a tour of the API:
     print(type(dm))
 
     # Get the neutral genotypes out as a 2d 2d numpy array
-    n = np.ndarray(dm.ndim_neutral,buffer=dm.neutral,dtype=np.int8) 
+    n = np.ndarray(dm.shape_neutral,buffer=dm.neutral,dtype=np.int8) 
     print(type(n))
     print(n.dtype)
     print(n.ndim)
@@ -145,7 +145,7 @@ The following example is a tour of the API:
     # OK, let's prove that we've modified the C++
     # side.  We'll do that by making a new view,
     # and compare it to our copy:
-    n2 = np.ndarray(dm.ndim_neutral,buffer=dm.neutral,dtype=np.int8) 
+    n2 = np.ndarray(dm.shape_neutral,buffer=dm.neutral,dtype=np.int8) 
     assert(np.array_equal(n2, orig) == False)
 
     # Our new view is equivalent to our modified
@@ -207,7 +207,7 @@ It is possible to get a thin wrapper that is not writeable.  Doing so lets you h
     # Use a different syntax, to show that 
     # there are > 1 way to do things with
     # NumPy
-    n = np.array(dm.neutral,copy=False,dtype=np.int8).reshape(dm.ndim_neutral)
+    n = np.array(dm.neutral,copy=False,dtype=np.int8).reshape(dm.shape_neutral)
 
 Mark our new array as read-only:
 
