@@ -68,7 +68,7 @@ The following example is a tour of the API:
     # because this code is run as part of the
     # testing suite, and so we want things
     # to be over quickly.
-    pops = wf.evolve(rng, pop,params)
+    pops = wf.evolve(rng, pop, params)
 
     # Now, we are going to represent the entire population
     # as a numpy matrix with dtype=np.int8.

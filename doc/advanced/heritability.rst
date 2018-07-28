@@ -32,12 +32,28 @@ Thus, when we parameterize objects for our simulations, we should only pass :mat
     :suppress:
 
     import fwdpy11
-    import fwdpy11.wright_fisher_qtrait 
+    import fwdpy11.genetic_values
+    import fwdpy11.genetic_value_noise
+    import fwdpy11.model_params
     import math
 
 .. ipython:: python
 
     rng = fwdpy11.GSLrng(42)
-    trait_to_fitness = fwdpy11.wright_fisher_qtrait.GSS(VS-VE,0)
-    noise = fwdpy11.wright_fisher_qtrait.GaussianNoise(rng,math.sqrt(VE))
+    # Parameters dict with some
+    # arbitrary stuff in there:
+    p = {'nregions': [fwdpy11.Region(0,1,1)],
+         'sregions': [fwdpy11.ExpS(0, 1, 1, 0.25)],
+         'recregions': [fwdpy11.Region(0, 1, 1)],
+         'rates': (1e-3, 2e-3, 1e-3),
+         'gvalue': (fwdpy11.genetic_values.SlocusAdditive,(2.0,)),
+         'prune_selected': False,
+         }
+    # Set VS = 1-VE
+    p['gv2w'] = (fwdpy11.genetic_values.GSS,{'VS':1-VE,'opt':0})
+    # Set sigma of noise function to square root of VE
+    p['noise'] = (fwdpy11.genetic_value_noise.GaussianNoise,{'mean':0,'sd':np.sqrt(VE)})
+    params = fwdpy11.model_params.ModelParams(**p)
 
+Note that `gv2w` and `noise` would normally be written into `p` along with everything else.  However, Sphinx suppresses
+comments in multi-line code chunks, requiring us to write the commands out separately from the rest of the dict.

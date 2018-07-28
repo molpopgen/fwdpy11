@@ -9,7 +9,7 @@ gives me a place to put examples based on specific questions from users.
 .. ipython:: python
 
     import fwdpy11 as fp11
-    import fwdpy11.fitness as fp11w
+    import fwdpy11.genetic_values
     import fwdpy11.wright_fisher as fp11wf
     import fwdpy11.model_params
     import numpy as np
@@ -27,11 +27,10 @@ gives me a place to put examples based on specific questions from users.
             'sregions':sregions,
             'recregions':recregions,
             'demography':nlist,
-            'mutrate_n':theta/float(4*N),
-            'mutrate_s':1e-2,
-            'recrate':rho/float(4*N)
+            'rates':(theta/float(4*N),1e-2,rho/float(4*N)),
+            'gvalue':(fwdpy11.genetic_values.SlocusMult,(2.,))
             }
-    params = fwdpy11.model_params.SlocusParams(**pdict)
+    params = fwdpy11.model_params.ModelParams(**pdict)
 
 
     pop = fp11.SlocusPop(N)
@@ -73,15 +72,15 @@ Population mean fitness:
 
 .. ipython:: python
 
-    w = np.array([i.w for i in pop.diploids])
+    w = np.array([i.w for i in pop.diploid_metadata])
     print(w.mean())
 
 fwdpy11's fitness/trait value calculators can be called from outside of a running simulation:
 
 .. ipython:: python
 
-    a=fp11w.SlocusMult(2.0)
+    a=fwdpy11.genetic_values.SlocusMult(2.0)
 
-    print(pop.diploids[0].w,a(pop.diploids[0],pop))
-    for i in [(i.w,a(i,pop)) for i in pop.diploids]:
+    print(pop.diploid_metadata[0].w,a(0, pop))
+    for i in [(pop.diploid_metadata[i].w,a(i,pop)) for i in range(pop.N)]:
         assert(i[0] == i[1])
