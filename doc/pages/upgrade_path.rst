@@ -23,7 +23,11 @@ See :ref:`customgvalues` and :ref:`stateful_fitness` for examples.
 Another major change is that genetic value and noise functions are no longer allowed to be written in Python.  We may
 bring that back in a later release.
 
-The dimension attributes of :class:`fwdpy11.sampling.DataMatrix` have been renamed :attr:`fwdpy11.sampling.DataMatrix.shape_neutral` and  :attr:`fwdpy11.sampling.DataMatrix.shape_selected`. (They were previously called `ndim_neutral` and `ndim_selected`.
+The dimension attributes of :class:`fwdpy11.sampling.DataMatrix` have been renamed :attr:`fwdpy11.sampling.DataMatrix.shape_neutral` and  :attr:`fwdpy11.sampling.DataMatrix.shape_selected`. (They were previously called `ndim_neutral` and `ndim_selected`).
+
+The function :func:`fwdpy11.sampling.matrix_to_sample` now returns a tuple with two elements, which represent neutral
+and selected gentoypes, respectively.  The previous  API made you choose neutral or selected for the return value, which
+was a list.
 
 0.1.4
 -----------------------------------
