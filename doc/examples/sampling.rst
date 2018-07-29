@@ -57,8 +57,7 @@ need to convert the matrix format to a list of tuples:
 
     # Need a haplotype matrix
     s = pop.sample(individuals = [0,1,2,3])
-    neutral = fwdpy11.sampling.matrix_to_sample(s)
-    selected = fwdpy11.sampling.matrix_to_sample(s, False)
+    neutral, selected = fwdpy11.sampling.matrix_to_sample(s)
     print(neutral[0])
 
 The format of each tuple element is `(position, genotypes)`, where the genotypes are 0 = ancestral, 1 = derived, and the
