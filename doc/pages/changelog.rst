@@ -31,24 +31,38 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
+* :func:`fwdpy11.SlocusPop.sample` and :func:`fwdpy11.MlocusPop.sample` now return a :class:`fwdpy11.sampling.DataMatrix`.
+  `PR #117 <https://github.com/molpopgen/fwdpy11/pull/117>`_
+* :class:`fwdpy11.sampling.DataMatrix` is refactored now such that rows represent sites and columns
+  haplotypes/individuals.  `PR #119 <https://github.com/molpopgen/fwdpy11/pull/119>`_
+* :class:`fwdpy11.sampling.DataMatrix`'s dimension properties have been renamed.  See
+  :attr:`fwdpy11.sampling.DataMatrix.shape_neutral` and :attr:`fwdpy11.sampling.DataMatrix.shape_selected` 
+  `PR #126 <https://github.com/molpopgen/fwdpy11/pull/126>`_
+* :func:`fwdpy11.sampling.matrix_to_sample` now return a tuple with the neutral and selected data, respectively, as the
+  two elements.  `PR #128 <https://github.com/molpopgen/fwdpy11/pull/128>`_
 * Diploids have been refactored into two separate classes, :class:`fwdpy11.DiploidGenotype` and
-  :class:`fwdpy11.DiploidMetadata`.  Both classes are valid NumPy dtypes.  See :ref:`processingpopsNP`. `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_
-* :class:`fwdpy11.ModelParams` is massively simpilfied. There is now only one class! See :ref:`model_params`. `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_
-* The design of objects related to calculating genetic values is vastly simplified.  See :ref:`genetic_values_types`. `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_
+  :class:`fwdpy11.DiploidMetadata`.  Both classes are valid NumPy dtypes.  See :ref:`processingpopsNP`. `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_
+* :class:`fwdpy11.model_params.ModelParams` is massively simpilfied. There is now only one class! See :ref:`model_params`. `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_
+* The design of objects related to calculating genetic values is vastly simplified.  See :ref:`genetic_values_types`. `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_
 * Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  `PR #94 <https://github.com/molpopgen/fwdpy11/pull/94>`_
 * :class:`fwdpy11.MlocusPop` now requires that :attr:`fwdpy11.MlocusPop.locus_boundaries` be initialized upon
   construction. `PR #96 <https://github.com/molpopgen/fwdpy11/pull/96>`_
 * The mutation position lookup table of a population is now a read-only property. See :ref:`mpos`. `PR #103 <https://github.com/molpopgen/fwdpy11/pull/103>`_
+* The mutation position lookup table is now represented as a dict of lists. `PR #121 <https://github.com/molpopgen/fwdpy11/pull/121>`_
 * A mutation or fixation can now be rapidy found by its "key".  See :func:`fwdpy11.Population.find_mutation_by_key`
   and :func:`fwdpy11.Population.find_fixation_by_key`.  `PR #106 <https://github.com/molpopgen/fwdpy11/pull/106>`_
 
 Back-end changes
 ------------------------
 
-* `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_ changes the back-end for representing diploids and for
+* The C++ back-end of classes no longer contain any Python objects. `PR #114 <https://github.com/molpopgen/fwdpy11/pull/114>`_
+* `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_ changes the back-end for representing diploids and for
   calculating genetic values.
-* Refactored class hierarchy for populations. `PR #85 <https://github.com/molpopgen/fwdpy11/pull/85>`_
-* Updated to the fwdpp 0.6.x API. `PR #76 <https://github.com/molpopgen/fwdpy11/pull/76>`_ `PR #84 <https://github.com/molpopgen/fwdpy11/pull/84>`_ `PR #90 <https://github.com/molpopgen/fwdpy11/pull/90>`_
+* `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_ changes the definition of the populaton lookup table, using
+  the same model as `fwdpp PR #132 <https://github.com/molpopgen/fwdpp/pull/132>_`
+* Refactored class hierarchy for populations. `PR #85  <https://github.com/molpopgen/fwdpy11/pull/85>`_
+* Updated to the fwdpp 0.6.x API and cleanup various messes that resulted. `PR #76 <https://github.com/molpopgen/fwdpy11/pull/76>`_ `PR #84 <https://github.com/molpopgen/fwdpy11/pull/84>`_ `PR #90 <https://github.com/molpopgen/fwdpy11/pull/90>`_ `PR #109 <https://github.com/molpopgen/fwdpy11/pull/109>`_ `PR #110 <https://github.com/molpopgen/fwdpy11/pull/110>`_
+* The position of extinct variants is set to the max value of a C++ double. `PR #105 <https://github.com/molpopgen/fwdpy11/pull/105>`_
 * An entirely new mutation type was introduced on the C++ side.  It is API compatible with the previous type (fwdpp's
   "popgenmut"), but has extra fields for extra flexibility. `PR #77 <https://github.com/molpopgen/fwdpy11/pull/77>`_ `PR #88 <https://github.com/molpopgen/fwdpy11/pull/88>`_
 * Replaced `std::bind` with lambda closures for callbacks. `PR #80 <https://github.com/molpopgen/fwdpy11/pull/80>`_
