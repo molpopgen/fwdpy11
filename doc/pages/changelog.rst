@@ -59,7 +59,7 @@ Back-end changes
 * `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_ changes the back-end for representing diploids and for
   calculating genetic values.
 * `PR #98 <https://github.com/molpopgen/fwdpy11/pull/98>`_ changes the definition of the populaton lookup table, using
-  the same model as `fwdpp PR #132 <https://github.com/molpopgen/fwdpp/pull/132>_`
+  the same model as `fwdpp PR #132 <https://github.com/molpopgen/fwdpp/pull/132>`_
 * Refactored class hierarchy for populations. `PR #85  <https://github.com/molpopgen/fwdpy11/pull/85>`_
 * Updated to the fwdpp 0.6.x API and cleanup various messes that resulted. `PR #76 <https://github.com/molpopgen/fwdpy11/pull/76>`_ `PR #84 <https://github.com/molpopgen/fwdpy11/pull/84>`_ `PR #90 <https://github.com/molpopgen/fwdpy11/pull/90>`_ `PR #109 <https://github.com/molpopgen/fwdpy11/pull/109>`_ `PR #110 <https://github.com/molpopgen/fwdpy11/pull/110>`_
 * The position of extinct variants is set to the max value of a C++ double. `PR #105 <https://github.com/molpopgen/fwdpy11/pull/105>`_
