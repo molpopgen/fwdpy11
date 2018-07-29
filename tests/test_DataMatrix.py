@@ -93,8 +93,7 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
             j += 1
 
     def testHapMatToSample(self):
-        neut_sample = fwdpy11.sampling.matrix_to_sample(self.hm, True)
-        sel_sample = fwdpy11.sampling.matrix_to_sample(self.hm, False)
+        neut_sample, sel_sample = fwdpy11.sampling.matrix_to_sample(self.hm)
         rowSums = self.hm_neutral.sum(axis=1)
         rowSumsSel = self.hm_selected.sum(axis=1)
         self.assertEqual(len(neut_sample), self.hm_neutral.shape[0])
@@ -132,7 +131,7 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             buffer=self.gm.selected, dtype=np.int8)
 
     def testConvertHapMatrixToSample(self):
-        nsample = fwdpy11.sampling.matrix_to_sample(self.hm, True)
+        nsample, ssample = fwdpy11.sampling.matrix_to_sample(self.hm)
         nsample_split = fwdpy11.sampling.separate_samples_by_loci(
             self.pop.locus_boundaries, nsample)
         self.assertEqual(len(nsample_split), len(self.pop.locus_boundaries))
@@ -145,7 +144,7 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             key += 1
 
     def testConvertGenoMatrixToSample(self):
-        nsample = fwdpy11.sampling.matrix_to_sample(self.gm, True)
+        nsample, ssample = fwdpy11.sampling.matrix_to_sample(self.gm)
         nsample_split = fwdpy11.sampling.separate_samples_by_loci(
             self.pop.locus_boundaries, nsample)
         self.assertEqual(len(nsample_split), len(self.pop.locus_boundaries))

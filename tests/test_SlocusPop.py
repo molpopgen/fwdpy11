@@ -63,12 +63,6 @@ class testSampling(unittest.TestCase):
         self.pop = quick_nonneutral_slocus()
         self.rng = fp11.GSLrng(42)
 
-    def testRandomSample(self):
-        import fwdpy11.sampling
-        s = self.pop.sample(rng=self.rng, nsam=10)
-        x = fwdpy11.sampling.matrix_to_sample(s)
-        self.assertTrue(type(x) is list)
-
     def testDefinedSample(self):
         self.pop.sample(individuals=range(10))
 

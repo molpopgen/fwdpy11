@@ -278,28 +278,34 @@ PYBIND11_MODULE(sampling, m)
     HAPLOTYPE_MATRIX(fwdpy11::MlocusPop, "fwdpy11.MlocusPop");
 
     m.def("matrix_to_sample",
-          [](const fwdpp::data_matrix &m, const bool neutral)
+          [](const fwdpp::data_matrix &m)
 
           {
-              return (neutral) ? fwdpy11::matrix_to_sample(
-                                     m.neutral, m.neutral_positions, m.ncol)
-                               : fwdpy11::matrix_to_sample(
-                                     m.selected, m.selected_positions, m.ncol);
+              auto neutral = fwdpy11::matrix_to_sample(
+                  m.neutral, m.neutral_positions, m.ncol);
+              auto selected = fwdpy11::matrix_to_sample(
+                  m.selected, m.selected_positions, m.ncol);
+              return py::make_tuple(std::move(neutral), std::move(selected));
           },
           R"delim(
-          Convert a :class:`fwdpy11.sampling.DataMatrix` into a
-          list of tuples (float,string).
+          Convert a :class:`fwdpy11.sampling.DataMatrix` into a tuple representing the
+          neutral and selected data, resepectively, as a list of (positon, string) tuples.
+
+          See :ref:`sampling` and :ref:`datamatrix` for more details.
 
           .. versionadded:: 0.1.1
 
+          .. versionchanged:: 0.2.0
+                
+              The return value is now a tuple (neutral, selected)
+
           :param m: A data matrix
           :type m: :class:`fwdpy11.sampling.DataMatrix`
-          :param neutral: Return data for neutral or selected sites. Default is True.
-          :type neutral: bool
 
-          :rtype: list of tuples
+          :rtype: tuple
 
-          :return: The data in list format.  Positions are in same order 
+          :return: A tuple of the (neutral, selected) mutations. Each element of the tuple holds data in list format.
+              Positions are in same order 
               as the original matrix.  The genotypes are represented as strings
               with elements 0 through nrow-1 being in the same order as the original matrix.
 
@@ -313,7 +319,7 @@ PYBIND11_MODULE(sampling, m)
 			into separate lists for each locus.
 
           )delim",
-          py::arg("m"), py::arg("neutral") = true);
+          py::arg("m"));
 
     m.def("separate_samples_by_loci", &fwdpy11::separate_samples_by_loci,
           R"delim(
