@@ -82,12 +82,17 @@ namespace fwdpy11
         virtual pybind11::object
         pickle() const
         {
-            return pybind11::none();
+            return pybind11::bytes("NoNoise");
         }
 
-        static inline NoNoise
+        static inline const NoNoise
         unpickle(pybind11::object& o)
         {
+            auto s = o.cast<std::string>();
+            if (s != "NoNoise")
+                {
+                    throw std::runtime_error("invalid object state");
+                }
             return NoNoise();
         }
     };
