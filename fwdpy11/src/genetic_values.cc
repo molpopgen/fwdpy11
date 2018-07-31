@@ -296,7 +296,34 @@ PYBIND11_MODULE(genetic_values, m)
                          const fwdpy11::GeneticValueNoise& noise) {
                  return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w, noise);
              }),
-             py::arg("gv2w"), py::arg("noise"), GBR_CONSTRUCTOR2);
+             py::arg("gv2w"), py::arg("noise"), GBR_CONSTRUCTOR2)
+        .def(py::pickle(
+            [](const fwdpy11::SlocusGBR& g) {
+                auto p = py::module::import("pickle");
+                return py::make_tuple(
+                    g.pickle(), p.attr("dumps")(g.gv2w->clone(), -1),
+                    p.attr("dumps")(g.noise_fxn->clone(), -1));
+            },
+            [](py::tuple t) {
+                if (t.size() != 3)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                std::string s = t[0].cast<std::string>();
+                if (s != "GBR")
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                auto p = py::module::import("pickle");
+                auto t1 = p.attr("loads")(t[1]);
+                auto t2 = p.attr("loads")(t[2]);
+                //Do the casts in the constructor 
+                //to avoid any nasty issues w/
+                //refs to temp
+                return fwdpy11::SlocusGBR(fwdpy11::GBR{},
+                        t1.cast<const fwdpy11::GeneticValueIsTrait&>(),
+                        t2.cast<const fwdpy11::GeneticValueNoise&>());
+            }));
 
     // Classes for Mlocus genetic values
     py::class_<fwdpy11::MlocusPopGeneticValue>(
@@ -522,9 +549,9 @@ PYBIND11_MODULE(genetic_values, m)
             Each element of optima must be a tuple of 
             (generation, optimal trait value, VS)
             )delim")
-        .def_readonly("VS",&fwdpy11::GSSmo::VS)
-        .def_readonly("opt",&fwdpy11::GSSmo::opt)
-        .def_readonly("optima",&fwdpy11::GSSmo::optima)
+        .def_readonly("VS", &fwdpy11::GSSmo::VS)
+        .def_readonly("opt", &fwdpy11::GSSmo::opt)
+        .def_readonly("optima", &fwdpy11::GSSmo::optima)
         .def(py::pickle(
             [](const fwdpy11::GSSmo& g) { return g.pickle(); },
             [](py::object o) {
