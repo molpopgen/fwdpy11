@@ -112,7 +112,9 @@ PYBIND11_MODULE(genetic_value_noise, m)
         .def(py::init<>())
         .def(py::pickle(
             [](const fwdpy11::NoNoise& o) -> py::object { return o.pickle(); },
-            [](py::object& o) { return fwdpy11::NoNoise::unpickle(o); }));
+            [](py::object& o) {
+                return fwdpy11::NoNoise::unpickle(o);
+            }));
 
     py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(
         m, "GaussianNoise", "Gaussian noise added to genetic values.")
