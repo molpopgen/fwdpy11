@@ -28,7 +28,7 @@ import numpy as np
 import pickle
 
 
-class testParamsForSlocusPop(unittest.TestCase):
+class testGeneticValuesWithoutNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
         """
@@ -51,11 +51,20 @@ class testParamsForSlocusPop(unittest.TestCase):
         x = p.make_gvalue()
         self.assertEqual(x.scaling, 1.0)
 
+    def testGeneticValueWithoutNoiseException(self):
+        """
+        In response to GH issue #129
+        """
+        # This is a genetic value type of length 1.
+        # Gvalue now has an odd type, etc.,
+        # and accommodating this adds a lot more if/else
+        # to ModelParams.make_gvalue, which will probably
+        # already get longer in order to support dicts
+        # (see next test).
+        self.pdict['gvalue'] = fwdpy11.genetic_values.SlocusGBR
+
     def testGeneticValueWithoutNoiseDict(self):
         """
-        Genetic value parameters must be stored as objects
-        useable to compose an object instance.
-
         Ideally, we would support
         construction via a dict, too, but
         the *tuple vs **dict is a bit annoying
