@@ -20,6 +20,7 @@
 #define FWDPY11_GENETIC_VALUES_NOISE_HPP__
 
 #include <memory>
+#include <pybind11/pybind11.h>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
@@ -31,19 +32,22 @@ namespace fwdpy11
     struct GeneticValueNoise
     ///ABC for random effects on trait values
     {
-        virtual double operator()(const GSLrng_t& /* rng */,
-                                  const DiploidMetadata& /*offspring_metadata*/,
-                                  const std::size_t /*parent1*/,
-                                  const std::size_t /*parent2*/,
-                                  const SlocusPop& /*pop*/) const = 0;
-        virtual double operator()(const GSLrng_t& /* rng */,
-                                  const DiploidMetadata& /*offspring_metadata*/,
-                                  const std::size_t /*parent1*/,
-                                  const std::size_t /*parent2*/,
-                                  const MlocusPop& /*pop*/) const = 0;
-                virtual void update(const SlocusPop& /*pop*/) = 0;
+        virtual double
+        operator()(const GSLrng_t& /* rng */,
+                   const DiploidMetadata& /*offspring_metadata*/,
+                   const std::size_t /*parent1*/,
+                   const std::size_t /*parent2*/,
+                   const SlocusPop& /*pop*/) const = 0;
+        virtual double
+        operator()(const GSLrng_t& /* rng */,
+                   const DiploidMetadata& /*offspring_metadata*/,
+                   const std::size_t /*parent1*/,
+                   const std::size_t /*parent2*/,
+                   const MlocusPop& /*pop*/) const = 0;
+        virtual void update(const SlocusPop& /*pop*/) = 0;
         virtual void update(const MlocusPop& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
+        virtual pybind11::object pickle() const = 0;
     };
 
     struct NoNoise : public GeneticValueNoise
@@ -73,6 +77,18 @@ namespace fwdpy11
         clone() const
         {
             return std::unique_ptr<NoNoise>(new NoNoise());
+        }
+
+        virtual pybind11::object
+        pickle() const
+        {
+            return pybind11::none();
+        }
+
+        static inline NoNoise
+        unpickle(pybind11::object& o)
+        {
+            return NoNoise();
         }
     };
 } // namespace fwdpy11
