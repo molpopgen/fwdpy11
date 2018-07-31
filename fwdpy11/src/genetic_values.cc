@@ -522,6 +522,9 @@ PYBIND11_MODULE(genetic_values, m)
             Each element of optima must be a tuple of 
             (generation, optimal trait value, VS)
             )delim")
+        .def_readonly("VS",&fwdpy11::GSSmo::VS)
+        .def_readonly("opt",&fwdpy11::GSSmo::opt)
+        .def_readonly("optima",&fwdpy11::GSSmo::optima)
         .def(py::pickle(
             [](const fwdpy11::GSSmo& g) { return g.pickle(); },
             [](py::object o) {
