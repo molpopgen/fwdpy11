@@ -55,7 +55,7 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     virtual pybind11::object
     pickle() const
     {
-        return py::make_tuple(mean, sd);
+        return py::make_tuple(sd, mean);
     }
 
     static inline GaussianNoise
