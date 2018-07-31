@@ -123,6 +123,8 @@ PYBIND11_MODULE(genetic_value_noise, m)
                 :param mean: Mean value of noise.
                 :type mean: float
                 )delim")
+        .def_readonly("mean", &GaussianNoise::mean)
+        .def_readonly("sd", &GaussianNoise::sd)
         .def(py::pickle(
             [](const GaussianNoise& o) -> py::object { return o.pickle(); },
             [](py::object& o) { return GaussianNoise::unpickle(o); }));
