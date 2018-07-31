@@ -96,6 +96,31 @@ class testMlocusMult(unittest.TestCase):
         self.assertEqual(self.tn.is_fitness, False)
 
 
+class testSlocusGBR(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.gss = fwdpy11.genetic_values.GSS(0.0, 1.0)
+        self.gnoise = fwdpy11.genetic_value_noise.GaussianNoise(
+            mean=0.0, sd=1.0)
+        self.nonoise = fwdpy11.genetic_value_noise.NoNoise()
+
+    def testPicklingGSS(self):
+        import pickle
+        gbr = fwdpy11.genetic_values.SlocusGBR(self.gss)
+        p = pickle.dumps(gbr, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.nonoise), type(up.noise))
+        self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
+
+    def testPicklingGSSGaussianNoise(self):
+        import pickle
+        gbr = fwdpy11.genetic_values.SlocusGBR(self.gss, self.gnoise)
+        p = pickle.dumps(gbr, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.gnoise), type(up.noise))
+        self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
+
+
 class testGSS(unittest.TestCase):
     @classmethod
     def setUp(self):
