@@ -39,6 +39,7 @@ namespace fwdpy11
                              const std::size_t /*parent2*/,
                              const MlocusPop& /*pop*/) const = 0;
         virtual void update(const fwdpy11::MlocusPop& /*pop*/) = 0;
+        virtual pybind11::object pickle() const = 0;
     };
 } // namespace fwdpy11
 
