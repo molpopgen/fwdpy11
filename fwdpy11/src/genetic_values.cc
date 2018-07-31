@@ -475,7 +475,17 @@ PYBIND11_MODULE(genetic_values, m)
                fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueIsFitness",
         "Type implying the the genetic value is fitness.")
-        .def(py::init<>());
+        .def(py::init<>())
+        .def(py::pickle(
+            [](const fwdpy11::GeneticValueIsFitness& g) { return g.pickle(); },
+            [](py::object o) {
+                std::string s = o.cast<std::string>();
+                if (s.find("GeneticValueIsFitness") == std::string::npos)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                return fwdpy11::GeneticValueIsFitness();
+            }));
 
     py::class_<fwdpy11::GSS, fwdpy11::GeneticValueIsTrait>(
         m, "GSS", "Gaussian stabilizing selection.")
@@ -488,7 +498,17 @@ PYBIND11_MODULE(genetic_values, m)
                 )delim")
         .def_readonly("VS", &fwdpy11::GSS::VS, "Read-only access to VS")
         .def_readonly("opt", &fwdpy11::GSS::opt,
-                      "Read-only access to optimal trait value.");
+                      "Read-only access to optimal trait value.")
+        .def(py::pickle(
+            [](const fwdpy11::GSS& g) { return g.pickle(); },
+            [](py::object o) {
+                py::tuple t(o);
+                if (t.size() != 2)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                return fwdpy11::GSS(t[0].cast<double>(), t[1].cast<double>());
+            }));
 
     py::class_<fwdpy11::GSSmo, fwdpy11::GeneticValueIsTrait>(
         m, "GSSmo", "Gaussian stabilizing selection with a moving optimum.")
@@ -501,5 +521,24 @@ PYBIND11_MODULE(genetic_values, m)
             
             Each element of optima must be a tuple of 
             (generation, optimal trait value, VS)
-            )delim");
+            )delim")
+        .def(py::pickle(
+            [](const fwdpy11::GSSmo& g) { return g.pickle(); },
+            [](py::object o) {
+                py::tuple t(o);
+                if (t.size() != 4)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                auto opt = t[0].cast<double>();
+                auto VS = t[1].cast<double>();
+                auto co
+                    = t[2].cast<decltype(fwdpy11::GSSmo::current_optimum)>();
+                auto optima = t[3].cast<decltype(fwdpy11::GSSmo::optima)>();
+                auto rv = fwdpy11::GSSmo(std::move(optima));
+                rv.opt = opt;
+                rv.VS = VS;
+                rv.current_optimum = co;
+                return rv;
+            }));
 }
