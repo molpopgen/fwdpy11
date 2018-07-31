@@ -133,16 +133,9 @@ PYBIND11_MODULE(genetic_value_noise, m)
     // This is a concrete class that can be pickled.
     py::class_<Derived, Base>(m, "Derived")
         .def(py::pickle(
-            [](const Derived& o) -> py::object {
-                return py::make_tuple(py::bytes(o.repr()));
-            },
+            [](const Derived& o) -> py::object { return py::bytes(o.repr()); },
             [](py::object o) -> Derived {
-                py::tuple t(o);
-                if (t.size() != 1)
-                    {
-                        throw std::runtime_error("invalid object state");
-                    }
-                auto s = t[0].cast<std::string>();
+                auto s = o.cast<std::string>();
                 if (s.find("Derived") == std::string::npos)
                     {
                         throw std::runtime_error("invalid obect state");
