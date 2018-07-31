@@ -20,9 +20,11 @@
 #define FWDPY11_GENETIC_VALUES_MLOCUSADDITIVE_HPP__
 
 #include "fwdpp_wrappers/fwdpp_mlocus_gvalue.hpp"
+#include "details/pickle_additive.hpp"
 
 namespace fwdpy11
 {
-    using MlocusAdditive = fwdpp_mlocus_gvalue<fwdpp::additive_diploid>;
+    using MlocusAdditive
+        = fwdpp_mlocus_gvalue<fwdpp::additive_diploid, pickle_additive>;
 } // namespace fwdpy11
 #endif

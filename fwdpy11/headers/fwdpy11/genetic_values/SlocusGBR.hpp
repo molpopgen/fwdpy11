@@ -21,10 +21,11 @@
 
 #include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
 #include "details/GBR.hpp"
+#include "details/pickle_GBR.hpp"
 
 namespace fwdpy11
 {
-    using SlocusGBR = fwdpp_slocus_gvalue<GBR>;
+    using SlocusGBR = fwdpp_slocus_gvalue<GBR,pickle_GBR>;
 } // namespace fwdpy11
 
 #endif
