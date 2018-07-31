@@ -63,7 +63,7 @@ class testGeneticValuesWithoutNoise(unittest.TestCase):
         # (see next test).
         self.pdict['gvalue'] = fwdpy11.genetic_values.SlocusGBR
         p = fwdpy11.model_params.ModelParams(**self.pdict)
-        with self.assertRaise(TypeError):
+        with self.assertRaises(TypeError):
             """
             Type error b/c not of length 1
             """
