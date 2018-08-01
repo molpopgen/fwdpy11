@@ -46,6 +46,15 @@ class testSlocusAdditive(unittest.TestCase):
         self.assertEqual(type(up.gvalue_to_fitness),
                          type(self.t.gvalue_to_fitness))
 
+    def testPickleTraitWithNoise(self):
+        import pickle
+        p = pickle.dumps(self.tn)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.tn.scaling)
+        self.assertTrue(up.is_fitness is False)
+        self.assertEqual(type(up.noise), type(self.tn.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
 
 class testMlocusAdditive(unittest.TestCase):
     @classmethod
