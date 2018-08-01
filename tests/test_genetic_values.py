@@ -59,7 +59,7 @@ class testSlocusAdditive(unittest.TestCase):
     def testPickleTraitWithNoiseToFile(self):
         import pickle
         with open("ptest.pickle", "wb") as f:
-            pickle.dump( self.tn)
+            pickle.dump(self.tn, f)
 
         with open("ptest.pickle", "rb") as f:
             up = pickle.load(f)
@@ -248,6 +248,31 @@ class testSlocusGBR(unittest.TestCase):
     def testPicklingGSSGaussianNoise(self):
         import pickle
         gbr = fwdpy11.genetic_values.SlocusGBR(self.gss, self.gnoise)
+        p = pickle.dumps(gbr, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.gnoise), type(up.noise))
+        self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
+
+
+class testMlocusGBR(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.gss = fwdpy11.genetic_values.GSS(0.0, 1.0)
+        self.gnoise = fwdpy11.genetic_value_noise.GaussianNoise(
+            mean=0.0, sd=1.0)
+        self.nonoise = fwdpy11.genetic_value_noise.NoNoise()
+
+    def testPicklingGSS(self):
+        import pickle
+        gbr = fwdpy11.genetic_values.MlocusGBR(self.gss)
+        p = pickle.dumps(gbr, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(self.nonoise), type(up.noise))
+        self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
+
+    def testPicklingGSSGaussianNoise(self):
+        import pickle
+        gbr = fwdpy11.genetic_values.MlocusGBR(self.gss, self.gnoise)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.gnoise), type(up.noise))
