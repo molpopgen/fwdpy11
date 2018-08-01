@@ -42,17 +42,17 @@ Thus, when we parameterize objects for our simulations, we should only pass :mat
     rng = fwdpy11.GSLrng(42)
     # Parameters dict with some
     # arbitrary stuff in there:
+    # Set VS = 1-VE
+    gv2w = fwdpy11.genetic_values.GSS(VS=1-VE,opt=0)
+    # Set sigma of noise function to square root of VE
+    noise = fwdpy11.genetic_value_noise.GaussianNoise(mean=0,sd=np.sqrt(VE))
     p = {'nregions': [fwdpy11.Region(0,1,1)],
          'sregions': [fwdpy11.ExpS(0, 1, 1, 0.25)],
          'recregions': [fwdpy11.Region(0, 1, 1)],
          'rates': (1e-3, 2e-3, 1e-3),
-         'gvalue': (fwdpy11.genetic_values.SlocusAdditive,(2.0,)),
+         'gvalue': fwdpy11.genetic_values.SlocusAdditive(2.0,gv2w,noise),
          'prune_selected': False,
          }
-    # Set VS = 1-VE
-    p['gv2w'] = (fwdpy11.genetic_values.GSS,{'VS':1-VE,'opt':0})
-    # Set sigma of noise function to square root of VE
-    p['noise'] = (fwdpy11.genetic_value_noise.GaussianNoise,{'mean':0,'sd':np.sqrt(VE)})
     params = fwdpy11.model_params.ModelParams(**p)
 
 Note that `gv2w` and `noise` would normally be written into `p` along with everything else.  However, Sphinx suppresses

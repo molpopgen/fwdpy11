@@ -28,7 +28,7 @@ gives me a place to put examples based on specific questions from users.
             'recregions':recregions,
             'demography':nlist,
             'rates':(theta/float(4*N),1e-2,rho/float(4*N)),
-            'gvalue':(fwdpy11.genetic_values.SlocusMult,(2.,))
+            'gvalue':fwdpy11.genetic_values.SlocusMult(2.)
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
 

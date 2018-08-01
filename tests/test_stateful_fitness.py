@@ -51,7 +51,7 @@ def evolve_snowdrift(args):
     p = {'sregions': [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
          'recregions': [fp11.Region(0, 1, 1)],
          'nregions': [],
-         'gvalue': (snowdrift.SlocusSnowdrift, (0.2, -0.2, 1, -2)),
+         'gvalue': snowdrift.SlocusSnowdrift(0.2, -0.2, 1, -2),
          # evolve for 100 generations so that unit tests are
          # fast
          'demography': np.array([N] * 100, dtype=np.uint32),

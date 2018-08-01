@@ -54,7 +54,7 @@ def mslike(pop, **kwargs):
                         ((1.0-defaults['pneutral'])*defaults['theta']) /
                         (4.0*pop.N),
                         defaults['rho']/(4.0*float(pop.N))),
-              'gvalue': (fwdpy11.genetic_values.SlocusMult, (2.0,))
+              'gvalue': fwdpy11.genetic_values.SlocusMult(2.0)
               }
     if defaults['dfe'] is None:
         params['sregions'] = []

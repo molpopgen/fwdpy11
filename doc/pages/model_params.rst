@@ -51,7 +51,7 @@ The following example sets up a standard population simulation with multiplicati
                 'recregions': [fwdpy11.Region(0,1,1)],
                 'rates': (theta/(4.*popsize),1e-4,rho/(4.*popsize)),
                 'demography': np.array([popsize]*10, dtype = np.uint32),
-                'gvalue': (fwdpy11.genetic_values.SlocusMult, (1.0, ))
+                'gvalue': fwdpy11.genetic_values.SlocusMult(1.0)
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
     params.validate()
@@ -80,11 +80,15 @@ effects:
     import fwdpy11.wright_fisher
     import fwdpy11.multilocus
     import numpy as np
-
+    import inspect
     popsize = 1e4
     theta = 10000
     rho = theta
     locus_boundaries = [(float(i),float(i)+1.0) for i in range(5)]
+
+    gv2w = fwdpy11.genetic_values.GSS(VS=1.0,opt=0.0)
+    noise = fwdpy11.genetic_value_noise.GaussianNoise(mean=0.0, sd=0.1)
+    gvalue = fwdpy11.genetic_values.MlocusAdditive(1.0,gv2w,noise)
     pdict = {'nregions': [[fwdpy11.Region(i[0],i[1],1)] for i in locus_boundaries],
                 'sregions': [[fwdpy11.GaussianS(i[0],i[1],1,0.1)] for i in locus_boundaries],
                 'recregions': [[fwdpy11.Region(i[0],i[1],1)] for i in locus_boundaries],
@@ -93,10 +97,8 @@ effects:
                         [rho/(4.*popsize)]*len(locus_boundaries)),
                 'interlocus_rec': fwdpy11.multilocus.binomial_rec([0.5]*(len(locus_boundaries)-1)),
                 'demography': np.array([popsize]*10, dtype = np.uint32),
-                'gvalue': (fwdpy11.genetic_values.MlocusAdditive, (1.0, )),
-                'gv2w': (fwdpy11.genetic_values.GSS, {'VS':1.0, 'opt': 0.0}),
-                'noise': (fwdpy11.genetic_value_noise.GaussianNoise, {'mean': 0.0, 'sd':0.1}),
                 'prune_selected':False,
+                'gvalue':gvalue
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
     params.validate()
