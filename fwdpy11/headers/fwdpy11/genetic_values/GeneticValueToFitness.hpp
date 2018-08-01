@@ -157,7 +157,7 @@ namespace fwdpy11
         {
             if (current_optimum < optima.size())
                 {
-                    if (pop.generation >= std::get<0>(optima.front()))
+                    if (pop.generation >= std::get<0>(optima[current_optimum]))
                         {
                             opt = std::get<1>(optima[current_optimum]);
                             VS = std::get<2>(optima[current_optimum++]);
