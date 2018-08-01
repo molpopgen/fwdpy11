@@ -237,7 +237,37 @@ PYBIND11_MODULE(genetic_values, m)
                 return wa.gv.p == fwdpp::additive_diploid::policy::aw;
             },
             "Returns True if instance calculates fitness as the genetic value "
-            "and False if the genetic value is a trait value.");
+            "and False if the genetic value is a trait value.")
+        .def(py::pickle(
+            [](const fwdpy11::SlocusAdditive& a) {
+                auto p = py::module::import("pickle");
+                return py::make_tuple(
+                    a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
+                    p.attr("dumps")(a.noise_fxn->clone(), -1));
+            },
+            [](py::tuple t) {
+                if (t.size() != 3)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                auto t0 = t[0].cast<py::tuple>();
+                int pol = t0[0].cast<int>();
+
+                double scaling = t0[1].cast<double>();
+                auto p = py::module::import("pickle");
+                auto t1 = p.attr("loads")(t[1]);
+                auto t2 = p.attr("loads")(t[2]);
+                auto policy = (pol == 0)
+                                  ? fwdpp::additive_diploid::policy::aw
+                                  : fwdpp::additive_diploid::policy::atrait;
+                fwdpp::additive_diploid a(scaling, policy);
+                //Do the casts in the constructor
+                //to avoid any nasty issues w/
+                //refs to temp
+                return fwdpy11::SlocusAdditive(
+                    std::move(a), t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
+                    t2.cast<const fwdpy11::GeneticValueNoise&>());
+            }));
 
     py::class_<fwdpy11::SlocusMult, fwdpy11::SlocusPopGeneticValueWithMapping>(
         m, "SlocusMult", "Multiplicative genetic values.")
@@ -275,7 +305,8 @@ PYBIND11_MODULE(genetic_values, m)
             [](const fwdpy11::SlocusMult& wa) {
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             },
-            "Returns True if instance calculates fitness as the genetic value "
+            "Returns True if instance calculates fitness as the genetic "
+            "value "
             "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
@@ -317,12 +348,13 @@ PYBIND11_MODULE(genetic_values, m)
                 auto p = py::module::import("pickle");
                 auto t1 = p.attr("loads")(t[1]);
                 auto t2 = p.attr("loads")(t[2]);
-                //Do the casts in the constructor 
+                //Do the casts in the constructor
                 //to avoid any nasty issues w/
                 //refs to temp
-                return fwdpy11::SlocusGBR(fwdpy11::GBR{},
-                        t1.cast<const fwdpy11::GeneticValueIsTrait&>(),
-                        t2.cast<const fwdpy11::GeneticValueNoise&>());
+                return fwdpy11::SlocusGBR(
+                    fwdpy11::GBR{},
+                    t1.cast<const fwdpy11::GeneticValueIsTrait&>(),
+                    t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
 
     // Classes for Mlocus genetic values
@@ -365,7 +397,8 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
         m, "MlocusPopGeneticValueWithMapping",
-        "Genetic value calculations with flexible mapping of genetic value to "
+        "Genetic value calculations with flexible mapping of genetic "
+        "value to "
         "fitness.")
         .def_property_readonly(
             "gvalue_to_fitness",
@@ -417,7 +450,8 @@ PYBIND11_MODULE(genetic_values, m)
             [](const fwdpy11::MlocusAdditive& wa) {
                 return wa.gv.p == fwdpp::additive_diploid::policy::aw;
             },
-            "Returns True if instance calculates fitness as the genetic value "
+            "Returns True if instance calculates fitness as the genetic "
+            "value "
             "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusMult, fwdpy11::MlocusPopGeneticValueWithMapping>(
@@ -458,7 +492,8 @@ PYBIND11_MODULE(genetic_values, m)
             [](const fwdpy11::MlocusMult& wa) {
                 return wa.gv.p == fwdpp::multiplicative_diploid::policy::mw;
             },
-            "Returns True if instance calculates fitness as the genetic value "
+            "Returns True if instance calculates fitness as the genetic "
+            "value "
             "and False if the genetic value is a trait value.");
 
     py::class_<fwdpy11::MlocusGBR, fwdpy11::MlocusPopGeneticValueWithMapping>(
