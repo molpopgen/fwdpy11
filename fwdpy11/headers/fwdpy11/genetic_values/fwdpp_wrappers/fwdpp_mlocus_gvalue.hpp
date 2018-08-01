@@ -31,7 +31,7 @@ namespace fwdpy11
             : MlocusPopGeneticValueWithMapping{ GeneticValueIsFitness() },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               agg{ std::forward<agg_t>(agg_) }, per_locus_genetic_values{},
-              pickle_fxn{ pickleFunction() }
+              pickle_fxn(pickleFunction())
         {
         }
 
@@ -41,7 +41,7 @@ namespace fwdpy11
             : MlocusPopGeneticValueWithMapping{ gv2w_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               agg{ std::forward<agg_t>(agg_) }, per_locus_genetic_values{},
-              pickle_fxn{ pickleFunction() }
+              pickle_fxn(pickleFunction())
 
         {
         }
@@ -53,7 +53,7 @@ namespace fwdpy11
             : MlocusPopGeneticValueWithMapping{ gv2w_, noise_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               agg{ std::forward<agg_t>(agg_) }, per_locus_genetic_values{},
-              pickle_fxn{ pickleFunction() }
+              pickle_fxn(pickleFunction())
         {
         }
 

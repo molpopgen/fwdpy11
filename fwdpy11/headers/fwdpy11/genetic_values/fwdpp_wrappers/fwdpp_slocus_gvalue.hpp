@@ -25,9 +25,8 @@ namespace fwdpy11
         template <typename forwarded_fwdppT>
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_)
             : SlocusPopGeneticValueWithMapping{ GeneticValueIsFitness() },
-              gv{ std::forward<forwarded_fwdppT>(gv_) }, pickle_fxn{
-                  pickleFunction{}
-              }
+              gv{ std::forward<forwarded_fwdppT>(gv_) },
+              pickle_fxn(pickleFunction{})
         {
         }
 
@@ -35,9 +34,8 @@ namespace fwdpy11
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_)
             : SlocusPopGeneticValueWithMapping{ gv2w_ },
-              gv{ std::forward<forwarded_fwdppT>(gv_) }, pickle_fxn{
-                  pickleFunction()
-              }
+              gv{ std::forward<forwarded_fwdppT>(gv_) },
+              pickle_fxn(pickleFunction())
         {
         }
 
@@ -49,7 +47,7 @@ namespace fwdpy11
               gv{ std::forward<forwarded_fwdppT>(gv_)
 
               },
-              pickle_fxn{ pickleFunction() }
+              pickle_fxn(pickleFunction())
 
         {
         }
