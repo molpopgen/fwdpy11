@@ -1,9 +1,8 @@
 import unittest
 import fwdpy11 as fp11
-import fwdpy11.wright_fisher as wf
 import pyximport
 import numpy as np
-pyximport.install(setup_args={'include_dirs': np.get_include()})
+pyximport.install(setup_args={'include_dirs': np.get_include()})  # noqa
 from MeanFitness import MeanFitness
 
 
@@ -63,6 +62,6 @@ class testCythonRecorder(unittest.TestCase):
         from fwdpy11.wright_fisher import evolve
         evolve(self.rng, self.pop, self.p, self.cython_recorder)
 
+
 if __name__ == "__main__":
     unittest.main()
-
