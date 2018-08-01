@@ -59,7 +59,7 @@ The following example is a tour of the API:
        'recregions':[fp11.Region(0,1,1)],
        'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
        'rates':(theta/float(4*N),0.0,rho/float(4*N)),
-       'gvalue':(fwdpy11.genetic_values.SlocusMult,(2.0,))
+       'gvalue':fwdpy11.genetic_values.SlocusMult(2.0)
        }
     rng=fp11.GSLrng(42)
     params = fp11.model_params.ModelParams(**p)
