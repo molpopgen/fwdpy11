@@ -79,6 +79,36 @@ class testMlocusAdditive(unittest.TestCase):
         self.assertEqual(self.t.is_fitness, False)
         self.assertEqual(self.tn.is_fitness, False)
 
+    def testPickleFitness(self):
+        import pickle
+        p = pickle.dumps(self.w)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.w.scaling)
+        self.assertTrue(up.is_fitness)
+        self.assertEqual(type(up.noise), type(self.w.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.w.gvalue_to_fitness))
+
+    def testPickleTraitNoNoise(self):
+        import pickle
+        p = pickle.dumps(self.t)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.t.scaling)
+        self.assertTrue(up.is_fitness is False)
+        self.assertEqual(type(up.noise), type(self.t.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.t.gvalue_to_fitness))
+
+    def testPickleTraitWithNoise(self):
+        import pickle
+        p = pickle.dumps(self.tn)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.tn.scaling)
+        self.assertTrue(up.is_fitness is False)
+        self.assertEqual(type(up.noise), type(self.tn.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
+
 
 class testSlocusMult(unittest.TestCase):
     @classmethod
@@ -154,6 +184,36 @@ class testMlocusMult(unittest.TestCase):
         self.assertEqual(self.w.is_fitness, True)
         self.assertEqual(self.t.is_fitness, False)
         self.assertEqual(self.tn.is_fitness, False)
+
+    def testPickleFitness(self):
+        import pickle
+        p = pickle.dumps(self.w)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.w.scaling)
+        self.assertTrue(up.is_fitness)
+        self.assertEqual(type(up.noise), type(self.w.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.w.gvalue_to_fitness))
+
+    def testPickleTraitNoNoise(self):
+        import pickle
+        p = pickle.dumps(self.t)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.t.scaling)
+        self.assertTrue(up.is_fitness is False)
+        self.assertEqual(type(up.noise), type(self.t.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.t.gvalue_to_fitness))
+
+    def testPickleTraitWithNoise(self):
+        import pickle
+        p = pickle.dumps(self.tn)
+        up = pickle.loads(p)
+        self.assertEqual(up.scaling, self.tn.scaling)
+        self.assertTrue(up.is_fitness is False)
+        self.assertEqual(type(up.noise), type(self.tn.noise))
+        self.assertEqual(type(up.gvalue_to_fitness),
+                         type(self.tn.gvalue_to_fitness))
 
 
 class testSlocusGBR(unittest.TestCase):
