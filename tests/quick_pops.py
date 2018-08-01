@@ -30,7 +30,7 @@ def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11.wright_fisher import evolve
     pop = SlocusPop(N)
     params_dict = mslike(pop, simlen=simlen)
-    params_dict['gvalue'] = (SlocusMult, (2.,))
+    params_dict['gvalue'] = SlocusMult(2.)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolve(rng, pop, params)
@@ -50,7 +50,7 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     params_dict = mslike(
         pop, simlen=simlen, dfe=dfe,
         pneutral=0.95)
-    params_dict['gvalue'] = (SlocusMult, (2.0,))
+    params_dict['gvalue'] = SlocusMult(2.0)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
     evolve(rng, pop, params)
@@ -69,8 +69,7 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
          'recregions': [Region(0, 1, 1)],
          'rates': (0.0, 2e-3, 1e-3),
          'demography': np.array([N] * simlen, dtype=np.uint32),
-         'gvalue': (SlocusAdditive, (2.0,)),
-         'gv2w': (GSS, {'VS': 1.0, 'opt': 0.0}),
+         'gvalue': SlocusAdditive(2.0, GSS(VS=1.0,opt=0.0)),
          'prune_selected': False
          }
     pop = SlocusPop(N)
@@ -108,8 +107,7 @@ def quick_mlocus_qtrait_pop_params(N=1000, simlen=100):
                   'recregions': recregions,
                   'rates': (mutrates_n, mutrates_s, recrates),
                   'interlocus_rec': interlocus_rec,
-                  'gvalue': (MlocusAdditive, (2.0,)),
-                  'gv2w': (GSS, {'VS': 1, 'opt': 0.0}),
+                  'gvalue': MlocusAdditive(2.0,GSS(VS=1.0,opt=0.0)),
                   'demography': nlist,
                   'prune_selected': False
                   }
@@ -166,8 +164,7 @@ def quick_mlocus_qtrait_change_optimum(N=1000, simlen=100, prune_selected=False)
                   'mutrates_n': [theta / (4. * float(N))] * nloci,
                   'mutrates_s': [mu] * nloci,
                   'recrates': [rho / (4. * float(N))] * nloci,
-                  'gvalue': (MlocusAdditive, (2.0,)),
-                  'trait2w': (GSSmo, ([(0, 0, 1), (simlen / 2, 1, 1)])),
+                  'gvalue': MlocusAdditive(2.0,GSSmo([(0, 0, 1), (simlen / 2, 1, 1)])),
                   'demography': nlist,
                   'prune_selected': prune_selected}
     params = MlocusParamsQ(**param_dict)
