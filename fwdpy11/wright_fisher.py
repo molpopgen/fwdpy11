@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-#from .wfevolve import evolve_singlepop_regions_cpp
 
 
 def evolve(rng, pop, params, recorder=None):
@@ -54,8 +53,10 @@ def evolve(rng, pop, params, recorder=None):
             from fwdpy11.temporal_samplers import RecordNothing
             recorder = RecordNothing()
 
-        WFSlocusPop(rng, pop, params.demography, params.mutrate_n, params.mutrate_s,
-                    params.recrate, mm, rm, params.gvalue, recorder, params.pself, params.prune_selected)
+        WFSlocusPop(rng, pop, params.demography,
+                    params.mutrate_n, params.mutrate_s,
+                    params.recrate, mm, rm, params.gvalue,
+                    recorder, params.pself, params.prune_selected)
     else:
         from .wright_fisher_mlocus import WFMlocusPop
         mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
@@ -69,5 +70,7 @@ def evolve(rng, pop, params, recorder=None):
             from fwdpy11.temporal_samplers import RecordNothing
             recorder = RecordNothing()
 
-        WFMlocusPop(rng, pop, params.demography, params.mutrates_n, params.mutrates_s, mm, rm, params.interlocus_rec,
-                    params.gvalue, recorder, params.pself, params.prune_selected)
+        WFMlocusPop(rng, pop, params.demography, params.mutrates_n,
+                    params.mutrates_s, mm, rm, params.interlocus_rec,
+                    params.gvalue, recorder, params.pself,
+                    params.prune_selected)
