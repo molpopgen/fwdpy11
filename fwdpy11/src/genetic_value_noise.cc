@@ -51,6 +51,23 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     {
         return std::unique_ptr<GaussianNoise>(new GaussianNoise(*this));
     }
+
+    virtual pybind11::object
+    pickle() const
+    {
+        return py::make_tuple(sd, mean);
+    }
+
+    static inline GaussianNoise
+    unpickle(pybind11::object& o)
+    {
+        py::tuple t(o);
+        if (t.size() != 2)
+            {
+                throw std::runtime_error("invalid object state");
+            }
+        return GaussianNoise(t[0].cast<double>(), t[1].cast<double>());
+    }
 };
 
 PYBIND11_MODULE(genetic_value_noise, m)
@@ -63,7 +80,12 @@ PYBIND11_MODULE(genetic_value_noise, m)
 
     py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
         m, "NoNoise", "Type implying no random effects on genetic values.")
-        .def(py::init<>());
+        .def(py::init<>())
+        .def(py::pickle(
+            [](const fwdpy11::NoNoise& o) -> py::object { return o.pickle(); },
+            [](py::object& o) {
+                return fwdpy11::NoNoise::unpickle(o);
+            }));
 
     py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(
         m, "GaussianNoise", "Gaussian noise added to genetic values.")
@@ -73,5 +95,10 @@ PYBIND11_MODULE(genetic_value_noise, m)
                 :type sd: float
                 :param mean: Mean value of noise.
                 :type mean: float
-                )delim");
+                )delim")
+        .def_readonly("mean", &GaussianNoise::mean)
+        .def_readonly("sd", &GaussianNoise::sd)
+        .def(py::pickle(
+            [](const GaussianNoise& o) -> py::object { return o.pickle(); },
+            [](py::object& o) { return GaussianNoise::unpickle(o); }));
 }

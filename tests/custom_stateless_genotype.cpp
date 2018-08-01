@@ -56,6 +56,12 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
         return 0.0;
     }
 
+    pybind11::object
+    pickle() const
+    {
+        return pybind11::bytes("custom_stateless_genotype");
+    }
+
     DEFAULT_SLOCUSPOP_UPDATE();
 };
 
@@ -66,5 +72,16 @@ PYBIND11_MODULE(custom_stateless_genotype, m)
         = pybind11::module::import("fwdpy11.genetic_values")
               .attr("SlocusPopGeneticValue");
     pybind11::class_<GeneralW, fwdpy11::SlocusPopGeneticValue>(m, "GeneralW")
-        .def(pybind11::init<>());
+        .def(pybind11::init<>())
+        .def(pybind11::pickle([](const GeneralW& g) { return g.pickle(); },
+                              [](pybind11::object o) {
+                                  pybind11::bytes b(o);
+                                  auto s = b.cast<std::string>();
+                                  if (s != "custom_stateless_genotype")
+                                      {
+                                          throw std::runtime_error(
+                                              "invalid object state");
+                                      }
+                                  return GeneralW();
+                              }));
 }

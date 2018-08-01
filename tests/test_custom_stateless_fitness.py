@@ -1,15 +1,14 @@
 import cppimport
-cppimport.force_rebuild()
-ca = cppimport.imp("custom_additive")
-general = cppimport.imp("custom_stateless_genotype")
 import fwdpy11
 import fwdpy11.ezparams
 import fwdpy11.model_params
 import fwdpy11.wright_fisher
 import fwdpy11.fwdpy11_types
-import copy
 import pickle
 import unittest
+cppimport.force_rebuild()
+ca = cppimport.imp("custom_additive")
+general = cppimport.imp("custom_stateless_genotype")
 
 
 class testCustomAdditive(unittest.TestCase):
@@ -25,6 +24,12 @@ class testCustomAdditive(unittest.TestCase):
 
     def testEvolve(self):
         fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
+
+    def testPickle(self):
+        a = self.params.make_gvalue()
+        p = pickle.dumps(a, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(a), type(up))
 
     # TODO: test this once built-in SlocusAdditive is callable
     # def testCorrectNess(self):
@@ -45,6 +50,12 @@ class testGeneralModule(unittest.TestCase):
         self.pdict['gvalue'] = (general.GeneralW, )
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.model_params.ModelParams(**self.pdict)
+
+    def testPickle(self):
+        a = self.params.make_gvalue()
+        p = pickle.dumps(a, -1)
+        up = pickle.loads(p)
+        self.assertEqual(type(a), type(up))
 
     def testEvolve(self):
         fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)

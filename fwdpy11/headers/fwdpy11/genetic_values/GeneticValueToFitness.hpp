@@ -27,6 +27,7 @@
 #include <vector>
 #include <queue>
 #include <tuple>
+#include <pybind11/pybind11.h>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
@@ -40,6 +41,7 @@ namespace fwdpy11
         virtual void update(const SlocusPop & /*pop*/) = 0;
         virtual void update(const MlocusPop & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
+        virtual pybind11::object pickle() const = 0;
     };
 
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
@@ -58,6 +60,12 @@ namespace fwdpy11
         {
             return std::unique_ptr<GeneticValueIsFitness>(
                 new GeneticValueIsFitness());
+        }
+
+        virtual pybind11::object
+        pickle() const
+        {
+            return pybind11::bytes("GeneticValueIsFitness");
         }
     };
 
@@ -96,6 +104,12 @@ namespace fwdpy11
         clone() const
         {
             return std::unique_ptr<GSS>(new GSS(opt, VS));
+        }
+
+        virtual pybind11::object
+        pickle() const
+        {
+            return pybind11::make_tuple(opt, VS);
         }
     };
 
@@ -181,6 +195,12 @@ namespace fwdpy11
         clone() const
         {
             return std::unique_ptr<GSSmo>(new GSSmo(*this));
+        }
+
+        virtual pybind11::object
+        pickle() const
+        {
+            return pybind11::make_tuple(opt, VS, current_optimum, optima);
         }
     };
 } //namespace fwdpy11

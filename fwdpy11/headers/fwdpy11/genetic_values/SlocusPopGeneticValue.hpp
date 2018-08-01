@@ -20,6 +20,7 @@
 #define FWDPY11_SLOCUSPOP_GENETIC_VALUE_HPP__
 
 #include <cstdint>
+#include <pybind11/pybind11.h>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include "GeneticValueToFitness.hpp"
@@ -54,6 +55,7 @@ namespace fwdpy11
                              const std::size_t /*parent2*/,
                              const SlocusPop& /*pop*/) const = 0;
         virtual void update(const SlocusPop& /*pop*/) = 0;
+        virtual pybind11::object pickle() const = 0;
     };
 } //namespace fwdpy11
 

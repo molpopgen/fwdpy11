@@ -16,16 +16,29 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
-#define FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 
-#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
-#include "details/GBR.hpp"
-#include "details/pickle_GBR.hpp"
+#ifndef FWDPY11_GENETIC_VALUES_DETAILS_PICKLE_MULTIPLICATIVE_HPP
+#define FWDPY11_GENETIC_VALUES_DETAILS_PICKLE_MULTIPLICATIVE_HPP
+
+#include <pybind11/pybind11.h>
+#include <fwdpp/fitness_models.hpp>
 
 namespace fwdpy11
 {
-    using SlocusGBR = fwdpp_slocus_gvalue<GBR,pickle_GBR>;
+    struct pickle_multiplicative
+    {
+        inline pybind11::object
+        operator()(const fwdpp::multiplicative_diploid& m) const
+        {
+            int p = 0;
+            if (m.p == fwdpp::multiplicative_diploid::policy::mtrait)
+                {
+                    p = 1;
+                }
+            return pybind11::make_tuple(p, m.scaling);
+        }
+    };
 } // namespace fwdpy11
 
 #endif
+

@@ -16,16 +16,25 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
-#define FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 
-#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
-#include "details/GBR.hpp"
-#include "details/pickle_GBR.hpp"
+#ifndef FWDPY11_GENETIC_VALUES_DETAILS_PICKLE_GBR_HPP
+#define FWDPY11_GENETIC_VALUES_DETAILS_PICKLE_GBR_HPP
+
+#include <pybind11/pybind11.h>
+#include <fwdpp/fitness_models.hpp>
+#include "GBR.hpp"
 
 namespace fwdpy11
 {
-    using SlocusGBR = fwdpp_slocus_gvalue<GBR,pickle_GBR>;
+    struct pickle_GBR
+    {
+        inline pybind11::object
+        operator()(const GBR& g) const
+        {
+            return pybind11::bytes("GBR");
+        }
+    };
 } // namespace fwdpy11
 
 #endif
+
