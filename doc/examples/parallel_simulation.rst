@@ -68,7 +68,7 @@ Here is our function:
             nregions=[fwdpy11.Region(0,1,1)],
             sregions=[fwdpy11.ExpS(0,1,1,-0.1,1.0)],
             recregions=[fwdpy11.Region(0,1,1)],
-            gvalue=(fwdpy11.genetic_values.SlocusAdditive,(2.0,)),
+            gvalue=fwdpy11.genetic_values.SlocusAdditive(2.0),
             #Only simulate 10 generations so 
             #that example runs quickly:
             demography=numpy.array([N]*10,dtype=np.uint32),
