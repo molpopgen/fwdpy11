@@ -629,7 +629,27 @@ PYBIND11_MODULE(genetic_values, m)
                                            fwdpy11::aggregate_additive_trait(),
                                            gv2w, noise);
              }),
-             GBR_CONSTRUCTOR2, py::arg("gv2w"), py::arg("noise"));
+             GBR_CONSTRUCTOR2, py::arg("gv2w"), py::arg("noise"))
+        .def(py::pickle(
+            [](const fwdpy11::MlocusGBR& ma) {
+                auto p = py::module::import("pickle");
+                return py::make_tuple(
+                    ma.pickle(), p.attr("dumps")(ma.gv2w->clone(), -1),
+                    p.attr("dumps")(ma.noise_fxn->clone(), -1));
+            },
+            [](py::tuple t) {
+                if (t.size() != 3)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                auto p = py::module::import("pickle");
+                auto t1 = p.attr("loads")(t[1]);
+                auto t2 = p.attr("loads")(t[2]);
+                return fwdpy11::MlocusGBR(
+                    fwdpy11::GBR{}, fwdpy11::aggregate_mult_trait(),
+                    t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
+                    t2.cast<const fwdpy11::GeneticValueNoise&>());
+            }));
 
     py::class_<fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueToFitnessMap",
