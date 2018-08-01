@@ -55,7 +55,7 @@ def evolve(rng, pop, params, recorder=None):
             recorder = RecordNothing()
 
         WFSlocusPop(rng, pop, params.demography, params.mutrate_n, params.mutrate_s,
-                    params.recrate, mm, rm, params.make_gvalue(), recorder, params.pself, params.prune_selected)
+                    params.recrate, mm, rm, params.gvalue, recorder, params.pself, params.prune_selected)
     else:
         from .wright_fisher_mlocus import WFMlocusPop
         mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
@@ -70,4 +70,4 @@ def evolve(rng, pop, params, recorder=None):
             recorder = RecordNothing()
 
         WFMlocusPop(rng, pop, params.demography, params.mutrates_n, params.mutrates_s, mm, rm, params.interlocus_rec,
-                    params.make_gvalue(), recorder, params.pself, params.prune_selected)
+                    params.gvalue, recorder, params.pself, params.prune_selected)
