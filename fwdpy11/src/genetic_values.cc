@@ -265,7 +265,8 @@ PYBIND11_MODULE(genetic_values, m)
                 //to avoid any nasty issues w/
                 //refs to temp
                 return fwdpy11::SlocusAdditive(
-                    std::move(a), t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
+                    std::move(a),
+                    t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
 
@@ -307,7 +308,39 @@ PYBIND11_MODULE(genetic_values, m)
             },
             "Returns True if instance calculates fitness as the genetic "
             "value "
-            "and False if the genetic value is a trait value.");
+            "and False if the genetic value is a trait value.")
+        .def(py::pickle(
+            [](const fwdpy11::SlocusMult& a) {
+                auto p = py::module::import("pickle");
+                return py::make_tuple(
+                    a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
+                    p.attr("dumps")(a.noise_fxn->clone(), -1));
+            },
+            [](py::tuple t) {
+                if (t.size() != 3)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+                auto t0 = t[0].cast<py::tuple>();
+                int pol = t0[0].cast<int>();
+
+                double scaling = t0[1].cast<double>();
+                auto p = py::module::import("pickle");
+                auto t1 = p.attr("loads")(t[1]);
+                auto t2 = p.attr("loads")(t[2]);
+                auto policy
+                    = (pol == 0)
+                          ? fwdpp::multiplicative_diploid::policy::mw
+                          : fwdpp::multiplicative_diploid::policy::mtrait;
+                fwdpp::multiplicative_diploid a(scaling, policy);
+                //Do the casts in the constructor
+                //to avoid any nasty issues w/
+                //refs to temp
+                return fwdpy11::SlocusMult(
+                    std::move(a),
+                    t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
+                    t2.cast<const fwdpy11::GeneticValueNoise&>());
+            }));
 
     py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
         m, "SlocusGBR",
