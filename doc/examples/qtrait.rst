@@ -107,8 +107,8 @@ The following code block represents the following model:
     'recregions':[fp11.Region(0,1,1)],
     'rates':(0.0,2e-3,1e-3),
     'demography':np.array([N]*N,dtype=np.uint32),
-    'gvalue':(fwdpy11.genetic_values.SlocusAdditive,(2.0,)),
-    'gv2w':(fwdpy11.genetic_values.GSSmo,(gss_params,)),
+    'gvalue':fwdpy11.genetic_values.SlocusAdditive(2.0,
+                                                   fwdpy11.genetic_values.GSSmo(gss_params))
     }
 
     params = fp11.model_params.ModelParams(**p)

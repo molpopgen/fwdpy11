@@ -79,7 +79,7 @@ class testSlocusPopSampler(unittest.TestCase):
         self.sampler = SlocusTypeSampler()
         self.pop = fwdpy11.SlocusPop(1000)
         self.params_dict = mslike(self.pop, simlen=10)
-        self.params_dict['gvalue'] = (SlocusMult, (2.,))
+        self.params_dict['gvalue'] = SlocusMult(2.)
         self.params = ModelParams(**self.params_dict)
         self.rng = fwdpy11.GSLrng(42)
 

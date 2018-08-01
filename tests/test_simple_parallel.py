@@ -1,7 +1,5 @@
 import fwdpy11 as fp11
 import fwdpy11.ezparams as fp11ez
-import fwdpy11.model_params
-import fwdpy11.wright_fisher
 # concurrent.futures is Python 3 only
 import concurrent.futures as cf
 import numpy as np
@@ -28,7 +26,7 @@ def evolve_and_return(args):
     rng = fp11.GSLrng(seed)
     p = fp11ez.mslike(pop, simlen=100, rates=(
         theta / float(4 * pop.N), 1e-3, theta / float(4 * pop.N)))
-    p['gvalue'] = (SlocusMult, (2.,))
+    p['gvalue'] = SlocusMult(2.)
     params = fp11.model_params.ModelParams(**p)
     fp11.wright_fisher.evolve(rng, pop, params)
     # The population is picklable, and so
