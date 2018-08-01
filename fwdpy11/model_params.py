@@ -40,8 +40,6 @@
         will segfault if we copy.deepcopy the params objects.
 """
 
-import warnings
-
 
 def _validate_types(data, typename, strict):
     for i in data:
@@ -253,8 +251,6 @@ class ModelParams(object):
             raise TypeError("prune_selected cannot be None")
         if self.gvalue is None:
             raise TypeError("gvalue cannot be None")
-        # if self.noise is None:
-        #     raise TypeError("noise cannot be None")
         if self.rates is None:
             raise TypeError("rates cannot be None")
 
