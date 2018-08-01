@@ -3,7 +3,7 @@
 Processing simulated populations using fwdpy11's NumPy interface
 ======================================================================
 
-.. versiohchanged:: 0.2.0
+.. versionchanged:: 0.2.0
 
     Update to document how to deal separately with diploid genotype vs diploid metadata
     dtypes.
