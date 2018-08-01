@@ -3,18 +3,17 @@
 # a rebuild every time, but that clearly
 # wouldn't be needed for normal use.
 import cppimport
-cppimport.force_rebuild()
-cppimport.set_quiet(False)
-snowdrift = cppimport.imp("snowdrift")
 import unittest
 import pickle
 import numpy as np
 import fwdpy11 as fp11
 import fwdpy11.model_params
-import fwdpy11.temporal_samplers as fp11ts
 import fwdpy11.genetic_values
 import fwdpy11.wright_fisher
 import fwdpy11.ezparams
+cppimport.force_rebuild()
+cppimport.set_quiet(False)
+snowdrift = cppimport.imp("snowdrift")
 
 
 class SamplePhenotypes(object):
@@ -67,11 +66,19 @@ def evolve_snowdrift(args):
 
 
 class testSnowdrift(unittest.TestCase):
-    def test_create(self):
-        f = snowdrift.SlocusSnowdrift(1, -1, 0.1, 0.2)
+    @classmethod
+    def setUp(self):
+        self.f = snowdrift.SlocusSnowdrift(1, -1, 0.1, 0.2)
+
+    def testPickle(self):
+        self.f.phenotypes = [1, 2, 3, 4]
+        p = pickle.dumps(self.f, -1)
+        up = pickle.loads(p)
+        self.assertEqual(up.phenotypes, self.f. phenotypes)
 
     def test_evolve(self):
         p = evolve_snowdrift((1000, 42))
+        p
 
 
 if __name__ == "__main__":

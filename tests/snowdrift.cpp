@@ -66,9 +66,22 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     // diploids
     std::vector<double> phenotypes;
 
+    // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
         : fwdpy11::SlocusPopGeneticValue{}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
           phenotypes()
+    {
+    }
+
+    //This constructor makes object unpickling
+    //a bit more idiomatic from the C++ point
+    //of view.  We implement it as a so-called
+    //"perfect-forwarding constructor" to
+    //initialize the phenotypes w/o extra copies.
+    template <typename T>
+    snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
+        : fwdpy11::SlocusPopGeneticValue{}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+          phenotypes(std::forward<T>(p))
     {
     }
 
@@ -128,6 +141,17 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
                                                    pop.gametes, pop.mutations);
             }
     }
+
+    // In order to support pickling, the ABC requries
+    // that the following function be defined for a subclass.
+    // It must return the relevant data needed for serialization
+    // as a Python object.  pybind11 makes this easy (for most
+    // cases, most of the time).
+    py::object
+    pickle() const
+    {
+        return py::make_tuple(b1, b2, c1, c2, phenotypes);
+    }
 };
 
 PYBIND11_MODULE(snowdrift, m)
@@ -143,5 +167,41 @@ PYBIND11_MODULE(snowdrift, m)
     py::class_<snowdrift, fwdpy11::SlocusPopGeneticValue>(m, "SlocusSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
-        .def_readwrite("phenotypes", &snowdrift::phenotypes);
+        .def_readonly("b1", &snowdrift::b1)
+        .def_readonly("b2", &snowdrift::b2)
+        .def_readonly("c1", &snowdrift::c1)
+        .def_readonly("c2", &snowdrift::c2)
+        .def_readwrite("phenotypes", &snowdrift::phenotypes)
+        // Implement pickling support
+        .def(py::pickle(
+            //Pickling here is quite simple.  We simply
+            //return the results of the member fxn
+            [](const snowdrift &s) { return s.pickle(); },
+            //Unpickling is almost always harder:
+            //Note that any of the Python steps below
+            //will raise exceptions if they fail,
+            //making this code safe at run time.
+            [](py::object o) {
+                //Convert object to tuple.
+                py::tuple t(o);
+                // Check tuple size and
+                // throw error if it is not right
+                if (t.size() != 5)
+                    {
+                        throw std::runtime_error("invalid object state");
+                    }
+
+                //Get our data out via pybind11's casting
+                //mechanisms.  If things are not
+                //cast-able, exceptions are thrown
+                double b1 = t[0].cast<double>();
+                double b2 = t[1].cast<double>();
+                double c1 = t[2].cast<double>();
+                double c2 = t[3].cast<double>();
+                auto p = t[4].cast<std::vector<double>>();
+                //Create our object, using move semantics
+                //for efficiency
+                snowdrift rv(b1, b2, c1, c2, std::move(p));
+                return rv;
+            }));
 }
