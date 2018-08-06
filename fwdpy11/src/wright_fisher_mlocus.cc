@@ -162,8 +162,8 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
     //E[S_{ 2N }] I got the expression from Ewens.
     pop.mutations.reserve(
         std::ceil(std::log(2 * pop.N)
-                  * (4. * double(pop.N) * tot_mutrate
-                     + 0.667 * (4. * double(pop.N) * tot_mutrate))));
+                  * (4. * double(pop.N) * tot_mutrate)
+                     + 0.667 * (4. * double(pop.N) * tot_mutrate)));
 
     const auto bound_mmodel
         = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);

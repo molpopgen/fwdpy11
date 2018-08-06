@@ -145,8 +145,8 @@ wfSlocusPop(
     // E[S_{2N}] I got the expression from Ewens.
     pop.mutations.reserve(std::ceil(
         std::log(2 * pop.N)
-        * (4. * double(pop.N) * (mu_neutral + mu_selected)
-           + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected)))));
+        * (4. * double(pop.N) * (mu_neutral + mu_selected))
+           + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected))));
 
     const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
