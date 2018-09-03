@@ -8,21 +8,30 @@
 #include <array>
 #include <utility>
 #include <string>
+#include <fwdpp/data_matrix.hpp>
 #include <gsl/gsl_matrix_char.h>
 
 namespace fwdpy11
 {
     std::vector<std::pair<double, std::string>>
-    matrix_to_sample(const std::vector<std::int8_t> &data,
-                     const std::vector<double> &pos, const std::size_t ncol)
+    matrix_to_sample(const fwdpp::state_matrix &sm)
     // returns a data structure compatible with libsequence/pylibseq iff
     // the data correspond to a haplotype matrix
     {
-        std::size_t nrow = data.size() / ncol;
+        std::vector<std::pair<double, std::string>> rv;
+        if (sm.positions.empty())
+            {
+                return rv;
+            }
+        if (sm.data.empty())
+            {
+                throw std::runtime_error("StateMatrix data are empty");
+            }
+        std::size_t nrow = sm.positions.size();
+        std::size_t ncol = sm.data.size()/nrow;
         const std::array<std::int8_t, 3> states{ '0', '1', '2' };
         auto v = gsl_matrix_char_const_view_array(
-            reinterpret_cast<const char *>(data.data()), nrow, ncol);
-        std::vector<std::pair<double, std::string>> rv;
+            reinterpret_cast<const char *>(sm.data.data()), nrow, ncol);
         for (std::size_t i = 0; i < nrow; ++i)
             {
                 auto c = gsl_matrix_char_const_row(&v.matrix, i);
@@ -36,7 +45,7 @@ namespace fwdpy11
                     {
                         throw std::runtime_error("column_data.size() != ncol");
                     }
-                rv.push_back(std::make_pair(pos[i], std::move(column_data)));
+                rv.push_back(std::make_pair(sm.positions[i], std::move(column_data)));
             }
         return rv;
     }
@@ -51,7 +60,8 @@ namespace fwdpy11
     // is likely going to be triggered
     // The parameter "sample" is the return value of matrix_to_sample.
     {
-        std::vector<std::vector<std::pair<double, std::string>>> rv(boundaries.size());
+        std::vector<std::vector<std::pair<double, std::string>>> rv(
+            boundaries.size());
         if (sample.size() == 0)
             {
                 return rv;
@@ -61,8 +71,7 @@ namespace fwdpy11
                 auto itr = std::find_if(
                     boundaries.begin(), boundaries.end(),
                     [&site](const std::pair<double, double> &b) {
-                        return site.first >= b.first
-                               && site.first < b.second;
+                        return site.first >= b.first && site.first < b.second;
                     });
                 if (itr == boundaries.end())
                     {
