@@ -6,7 +6,7 @@
 #include <gsl/gsl_randist.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/sugar/poptypes/popbase.hpp>
-#include <fwdpp/sugar/matrix.hpp>
+#include <fwdpp/data_matrix.hpp>
 #include "../rng.hpp"
 #include "Diploid.hpp"
 
