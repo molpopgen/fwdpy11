@@ -1,4 +1,4 @@
-pybind11==2.2.2
+pybind11==2.2.3
 numpy
 
 #below are for building package,
