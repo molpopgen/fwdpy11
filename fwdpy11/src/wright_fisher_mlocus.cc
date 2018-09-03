@@ -89,15 +89,15 @@ handle_fixations(const bool remove_selected_fixations,
 {
     if (remove_selected_fixations)
         {
-            fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                                  pop.mcounts, 2 * N_next,
-                                                  std::true_type());
+            fwdpp::fwdpp_internal::gamete_cleaner(
+                pop.gametes, pop.mutations, pop.mcounts, 2 * N_next,
+                std::true_type(), std::true_type());
         }
     else
         {
-            fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                                  pop.mcounts, 2 * N_next,
-                                                  fwdpp::remove_neutral());
+            fwdpp::fwdpp_internal::gamete_cleaner(
+                pop.gametes, pop.mutations, pop.mcounts, 2 * N_next,
+                fwdpp::remove_neutral(), std::true_type());
         }
     fwdpy11::update_mutations(pop.mutations, pop.fixations, pop.fixation_times,
                               pop.mut_lookup, pop.mcounts, pop.generation,
@@ -161,9 +161,8 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
         = std::accumulate(total_mut_rates.begin(), total_mut_rates.end(), 0.);
     //E[S_{ 2N }] I got the expression from Ewens.
     pop.mutations.reserve(
-        std::ceil(std::log(2 * pop.N)
-                  * (4. * double(pop.N) * tot_mutrate)
-                     + 0.667 * (4. * double(pop.N) * tot_mutrate)));
+        std::ceil(std::log(2 * pop.N) * (4. * double(pop.N) * tot_mutrate)
+                  + 0.667 * (4. * double(pop.N) * tot_mutrate)));
 
     const auto bound_mmodel
         = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
