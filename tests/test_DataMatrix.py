@@ -113,10 +113,14 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
         self.pop = quick_mlocus_qtrait()
         self.indlist = [i for i in range(100, 150)]
         self.keys = fwdpy11.sampling.mutation_keys(self.pop, self.indlist)
+        self.nkeys = sorted(
+            self.keys[0], key=lambda x: self.pop.mutations[x[0]].pos)
+        self.skeys = sorted(
+            self.keys[1], key=lambda x: self.pop.mutations[x[0]].pos)
         self.hm = fwdpy11.sampling.haplotype_matrix(
-            self.pop, self.indlist, self.keys[0], self.keys[1])
+            self.pop, self.indlist, self.nkeys, self.skeys)
         self.gm = fwdpy11.sampling.genotype_matrix(
-            self.pop, self.indlist, self.keys[0], self.keys[1])
+            self.pop, self.indlist, self.nkeys, self.skeys)
         self.hm_neutral = np.ndarray(
             self.hm.shape_neutral,
             buffer=self.hm.neutral, dtype=np.int8)
@@ -135,8 +139,11 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
         nsample_split = fwdpy11.sampling.separate_samples_by_loci(
             self.pop.locus_boundaries, nsample)
         self.assertEqual(len(nsample_split), len(self.pop.locus_boundaries))
+        self.assertEqual(len(nsample_split), self.pop.nloci)
+        self.assertEqual(len(nsample_split), len(self.pop.locus_boundaries))
         key = 0
         for locus_data in nsample_split:
+            self.assertTrue(sorted(locus_data, key=lambda x: x[0]))
             for site in locus_data:
                 self.assertTrue(site[0] >= self.pop.locus_boundaries[key][0])
                 self.assertTrue(site[0] < self.pop.locus_boundaries[key][1])
