@@ -80,8 +80,13 @@ namespace fwdpy11
                     pop.mutations, pop.neutral, pop.selected, mutrates.data(),
                     mmodel);
 
-                assert(pop.gametes[dip.first].n);
-                assert(pop.gametes[dip.second].n);
+#ifndef NDEBUG
+                for (const auto& locus : dip)
+                    {
+                        assert(pop.gametes[locus.first].n);
+                        assert(pop.gametes[locus.second].n);
+                    }
+#endif
                 offspring_metadata[label].label = label;
                 update(offspring_metadata[label++], p1, p2,
                        pop.diploid_metadata);
