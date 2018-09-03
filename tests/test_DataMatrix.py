@@ -19,18 +19,10 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
             self.pop, self.indlist, self.keys[0], self.keys[1])
         self.gm = fwdpy11.sampling.genotype_matrix(
             self.pop, self.indlist, self.keys[0], self.keys[1])
-        self.hm_neutral = np.ndarray(
-            self.hm.shape_neutral,
-            buffer=self.hm.neutral, dtype=np.int8)
-        self.hm_selected = np.ndarray(
-            self.hm.shape_selected,
-            buffer=self.hm.selected, dtype=np.int8)
-        self.gm_neutral = np.ndarray(
-            self.gm.shape_neutral,
-            buffer=self.gm.neutral, dtype=np.int8)
-        self.gm_selected = np.ndarray(
-            self.gm.shape_selected,
-            buffer=self.gm.selected, dtype=np.int8)
+        self.hm_neutral = np.array(self.hm.neutral)
+        self.hm_selected = np.array(self.hm.selected)
+        self.gm_neutral = np.array(self.gm.neutral)
+        self.gm_selected = np.array(self.gm.selected)
 
     def testKeyNeutralityAndCount(self):
         for i in self.keys[0]:
@@ -121,18 +113,10 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
             self.pop, self.indlist, self.nkeys, self.skeys)
         self.gm = fwdpy11.sampling.genotype_matrix(
             self.pop, self.indlist, self.nkeys, self.skeys)
-        self.hm_neutral = np.ndarray(
-            self.hm.shape_neutral,
-            buffer=self.hm.neutral, dtype=np.int8)
-        self.hm_selected = np.ndarray(
-            self.hm.shape_selected,
-            buffer=self.hm.selected, dtype=np.int8)
-        self.gm_neutral = np.ndarray(
-            self.gm.shape_neutral,
-            buffer=self.gm.neutral, dtype=np.int8)
-        self.gm_selected = np.ndarray(
-            self.gm.shape_selected,
-            buffer=self.gm.selected, dtype=np.int8)
+        self.hm_neutral = np.array(self.hm.neutral)
+        self.hm_selected = np.array(self.hm.selected)
+        self.gm_neutral = np.array(self.gm.neutral)
+        self.gm_selected = np.array(self.gm.selected)
 
     def testConvertHapMatrixToSample(self):
         nsample, ssample = fwdpy11.sampling.matrix_to_sample(self.hm)
