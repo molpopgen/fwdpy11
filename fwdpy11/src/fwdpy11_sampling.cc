@@ -64,6 +64,7 @@ PYBIND11_MODULE(sampling, m)
                 return py::make_tuple(sm.positions.size(),
                                       sm.data.size() / sm.positions.size());
             })
+        .def_readonly("positions", &fwdpp::state_matrix::positions)
         .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
             using value_type = std::int8_t;
             auto nrow = sm.positions.size();
@@ -125,7 +126,66 @@ PYBIND11_MODULE(sampling, m)
 
                 .. versionchanged: 0.1.4
                     Allow read/write access instead of readonly
-                )delim");
+                )delim")
+        .def_readonly("ncol", &fwdpp::data_matrix::ncol)
+        .def_readonly("neutral_keys", &fwdpp::data_matrix::neutral_keys)
+        .def_readonly("selected_keys", &fwdpp::data_matrix::selected_keys)
+        .def(py::pickle(
+            [](const fwdpp::data_matrix &d) {
+                std::ostringstream o;
+                fwdpp::io::scalar_writer w;
+                auto nsites = d.neutral.positions.size();
+                auto dsize = d.neutral.data.size();
+                w(o, &nsites, 1);
+                w(o, &dsize, 1);
+                if (nsites)
+                    {
+                        w(o, d.neutral.data.data(), d.neutral.data.size());
+                        w(o, d.neutral.positions.data(), nsites);
+                        w(o, d.neutral_keys.data(), nsites);
+                    }
+                nsites = d.selected.positions.size();
+                dsize = d.selected.data.size();
+                w(o, &nsites, 1);
+                w(o, &dsize, 1);
+                if (nsites)
+                    {
+                        w(o, d.selected.data.data(), d.selected.data.size());
+                        w(o, d.selected.positions.data(), nsites);
+                        w(o, d.selected_keys.data(), nsites);
+                    }
+                return py::bytes(o.str());
+            },
+            [](py::bytes b) {
+                std::istringstream data(b);
+                fwdpp::io::scalar_reader r;
+                std::size_t nsites, dsize;
+                r(data, &nsites);
+                r(data, &dsize);
+                fwdpp::data_matrix d(dsize);
+                if (nsites)
+                    {
+                        d.neutral.data.resize(dsize);
+                        r(data, d.neutral.data.data(), dsize);
+                        d.neutral.positions.resize(nsites);
+                        r(data, d.neutral.positions.data(), nsites);
+                        d.neutral_keys.resize(nsites);
+                        r(data, d.neutral_keys.data(), nsites);
+                    }
+                r(data, &nsites);
+                r(data, &dsize);
+                if (nsites)
+                    {
+                        d.selected.data.resize(dsize);
+                        r(data, d.selected.data.data(), dsize);
+                        d.selected.positions.resize(nsites);
+                        r(data, d.selected.positions.data(), nsites);
+                        d.selected_keys.resize(nsites);
+                        r(data, d.selected_keys.data(), nsites);
+                    }
+                return std::unique_ptr<fwdpp::data_matrix>(
+                    new fwdpp::data_matrix(std::move(d)));
+            }));
     //.def_readonly("neutral_positions",
     //              &fwdpp::data_matrix::neutral_positions,
     //              "The list of neutral mutation positions.")
@@ -177,64 +237,6 @@ PYBIND11_MODULE(sampling, m)
     //     .. versionchanged:: 0.2.0
     //        Renamed from ndim_selected to shape_selected
     //     )delim")
-    //.def(py::pickle(
-    //    [](const fwdpp::data_matrix &d) {
-    //        std::ostringstream o;
-    //        fwdpp::io::scalar_writer w;
-    //        w(o, &d.ncol, 1);
-    //        auto nsites = d.neutral_positions.size();
-    //        w(o, &nsites, 1);
-    //        if (nsites)
-    //            {
-    //                auto l = d.neutral.size();
-    //                w(o, &l);
-    //                w(o, d.neutral.data(), d.neutral.size());
-    //                w(o, d.neutral_positions.data(), nsites);
-    //                w(o, d.neutral_popfreq.data(), nsites);
-    //            }
-    //        nsites = d.selected_positions.size();
-    //        w(o, &nsites, 1);
-    //        if (nsites)
-    //            {
-    //                auto l = d.neutral.size();
-    //                w(o, &l);
-    //                w(o, d.selected.data(), d.selected.size());
-    //                w(o, d.selected_positions.data(), nsites);
-    //                w(o, d.selected_popfreq.data(), nsites);
-    //            }
-    //        return py::bytes(o.str());
-    //    },
-    //    [](py::bytes b) {
-    //        std::istringstream data(b);
-    //        fwdpp::io::scalar_reader r;
-    //        std::size_t n, n2;
-    //        r(data, &n);
-    //        fwdpp::data_matrix d(n);
-    //        r(data, &n);
-    //        if (n)
-    //            {
-    //                r(data, &n2);
-    //                d.neutral.resize(n2);
-    //                r(data, d.neutral.data(), n2);
-    //                d.neutral_positions.resize(n);
-    //                r(data, d.neutral_positions.data(), n);
-    //                d.neutral_popfreq.resize(n);
-    //                r(data, d.neutral_popfreq.data(), n);
-    //            }
-    //        r(data, &n);
-    //        if (n)
-    //            {
-    //                r(data, &n2);
-    //                d.selected.resize(n2);
-    //                r(data, d.selected.data(), n2);
-    //                d.selected_positions.resize(n);
-    //                r(data, d.selected_positions.data(), n);
-    //                d.selected_popfreq.resize(n);
-    //                r(data, d.selected_popfreq.data(), n);
-    //            }
-    //        return std::unique_ptr<fwdpp::data_matrix>(
-    //            new fwdpp::data_matrix(std::move(d)));
-    //    }));
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
