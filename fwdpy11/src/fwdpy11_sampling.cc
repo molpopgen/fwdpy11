@@ -42,12 +42,12 @@ PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
 
-    py::bind_vector<std::vector<std::int8_t>>(
-        m, "VecInt8", py::buffer_protocol(),
-        "C++ vector of 8-bit integers.  Used by "
-        ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
-        ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
-        "data.");
+    //py::bind_vector<std::vector<std::int8_t>>(
+    //    m, "VecInt8", py::buffer_protocol(),
+    //    "C++ vector of 8-bit integers.  Used by "
+    //    ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
+    //    ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
+    //    "data.");
 
     py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
             R"delim(
