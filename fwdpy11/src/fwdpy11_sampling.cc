@@ -42,13 +42,6 @@ PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
 
-    //py::bind_vector<std::vector<std::int8_t>>(
-    //    m, "VecInt8", py::buffer_protocol(),
-    //    "C++ vector of 8-bit integers.  Used by "
-    //    ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
-    //    ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
-    //    "data.");
-
     py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
             R"delim(
             Simple matrix representation of variation data.
@@ -210,57 +203,6 @@ PYBIND11_MODULE(sampling, m)
                 return std::unique_ptr<fwdpp::data_matrix>(
                     new fwdpp::data_matrix(std::move(d)));
             }));
-    //.def_readonly("neutral_positions",
-    //              &fwdpp::data_matrix::neutral_positions,
-    //              "The list of neutral mutation positions.")
-    //.def_readonly("selected_positions",
-    //              &fwdpp::data_matrix::selected_positions,
-    //              "The list of selected mutation positions.")
-    //.def_readonly("neutral_popfreq", &fwdpp::data_matrix::neutral_popfreq,
-    //              "The list of population frequencies of "
-    //              "neutral mutations.")
-    //.def_readonly("selected_popfreq",
-    //              &fwdpp::data_matrix::selected_popfreq,
-    //              "The list of population frequencies of "
-    //              "selected mutations.")
-    //.def_property_readonly("shape_neutral",
-    //                       [](const fwdpp::data_matrix &dm) {
-    //                           return py::make_tuple(
-    //                               dm.neutral.size() / dm.ncol, dm.ncol);
-    //                       },
-    //                       R"delim(
-    //     Return the dimensions of the neutral matrix
-    //
-    //     :rtype: tuple
-
-    //     .. versionadded:: 0.1.2
-    //        Replaces ncol and nrow_neutral functions
-
-    //     .. versionchanged:: 0.1.4
-    //        Changed from a function to a readonly property
-
-    //     .. versionchanged:: 0.2.0
-    //        Renamed from ndim_neutral to shape_neutral
-    //     )delim")
-    //.def_property_readonly("shape_selected",
-    //                       [](const fwdpp::data_matrix &dm) {
-    //                           return py::make_tuple(
-    //                               dm.selected.size() / dm.ncol, dm.ncol);
-    //                       },
-    //                       R"delim(
-    //     Return the dimensions of the selected matrix
-
-    //     :rtype: tuple
-    //
-    //     .. versionadded:: 0.1.2
-    //        Replaces ncol and nrow_selected functions
-
-    //     .. versionchanged:: 0.1.4
-    //        Changed from a function to a readonly property
-
-    //     .. versionchanged:: 0.2.0
-    //        Renamed from ndim_selected to shape_selected
-    //     )delim")
 
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
