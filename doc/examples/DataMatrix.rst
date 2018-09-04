@@ -17,8 +17,14 @@ The relevant functions are:
 
 Both return :class:`fwdpy11.sampling.DataMatrix` objects.
 
-The API is extremely flexible, allowing for the inclusion or exclustion of selected markers.  Getting a 
-:class:`fwdpy11.sampling.DataMatrix` requires a few steps:
+For cases where you want all mutations in a sample, sorted by position, with the option of including variants that are
+fixed in the sample or not, you may get a data matrix from the following functions:
+
+* :func:`fwdpy11.SlocusPop.sample`
+* :func:`fwdpy11.MlocusPop.sample`
+
+The general API is extremely flexible, allowing for the inclusion or exclustion of markers based on arbitrary criteria.
+Getting a :class:`fwdpy11.sampling.DataMatrix` this way requires a few steps:
 
 1. Determine the individuals in your sample.  You may do this however you see fit.
 2. Get a list of mutation keys associated with that sample via a call to :func:`fwdpy11.sampling.mutation_keys`.
