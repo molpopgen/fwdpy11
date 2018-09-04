@@ -22,4 +22,11 @@ PYBIND11_MODULE(gsl_error, m)
             }
         gsl_matrix_free(m);
     });
+
+    // Causes a memory leak!
+    m.def("trigger_error_not_handled", []() {
+        gsl_matrix* m = gsl_matrix_alloc(2, 3); //non-square
+        gsl_matrix_transpose(m);
+        gsl_matrix_free(m);
+    });
 }
