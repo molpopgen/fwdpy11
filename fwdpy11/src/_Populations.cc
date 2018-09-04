@@ -286,6 +286,33 @@ PYBIND11_MODULE(_Populations, m)
                     fwdpy11::MlocusPop>()(
                     s, 1, std::vector<std::pair<double, double>>{ { 0., 1 } });
             }))
+        .def("sample_by_locus",
+             [](const fwdpy11::MlocusPop& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool remove_fixed) {
+                 return fwdpp::sample_individuals_by_window(
+                     pop, individuals, pop.locus_boundaries, true, true,
+                     remove_fixed);
+             },
+             R"delim(
+             Return one data matrix per locus.
+             
+             :param individuals: Indexes of the individuals in the sample
+             :type individuals: list
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
+
+             :returns: A list of haplotype matrix
+             :rtype: list
+
+             This function differs from :func:`fwdpy11.MlocusPop.sample`
+             in that a list of :class:`fwdpy11.sampling.DataMatrix` are returned.
+             The positional boundaries of each matrix are given by
+             :attr:`fwdpy11.MlocusPop.locus_boundaries`.
+
+             .. versionadded:: 0.2.0
+             )delim",
+             py::arg("individuals"), py::arg("remove_fixed") = true)
         .def("sample",
              [](const fwdpy11::MlocusPop& pop,
                 const std::vector<std::size_t>& individuals,
