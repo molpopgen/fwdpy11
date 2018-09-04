@@ -49,7 +49,18 @@ PYBIND11_MODULE(sampling, m)
         ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
         "data.");
 
-    py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol())
+    py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
+            R"delim(
+            Simple matrix representation of variation data.
+
+            These are not constructed directly.  Rather,
+            they are generated when a 
+            :class:`fwdpy11.sampling.DataMatrix` is generated.
+
+            This object supports the buffer protocol.
+
+            .. versionadded:: 0.2.0
+            )delim")
         .def_property_readonly(
             "shape",
             [](const fwdpp::state_matrix &sm) {
@@ -63,8 +74,9 @@ PYBIND11_MODULE(sampling, m)
                     }
                 return py::make_tuple(sm.positions.size(),
                                       sm.data.size() / sm.positions.size());
-            })
-        .def_readonly("positions", &fwdpp::state_matrix::positions)
+            },"Shape of the matrix.")
+        .def_readonly("positions", &fwdpp::state_matrix::positions,
+                      "The mutation positions")
         .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
             using value_type = std::int8_t;
             auto nrow = sm.positions.size();
@@ -102,6 +114,9 @@ PYBIND11_MODULE(sampling, m)
         .. versionchanged:: 0.2.0
 
             Changed layout to row = variable site. 
+            Changed to match fwdpp 0.7.0 layour where the neutral
+            and selected data are represented as a 
+            :class:`fwdpy11.sampling.StateMatrix`
 		)delim")
         .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
@@ -112,8 +127,11 @@ PYBIND11_MODULE(sampling, m)
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
 
-                .. versionchanged: 0.1.4
+                .. versionchanged:: 0.1.4
                     Allow read/write access instead of readonly
+
+                .. versionchanged:: 0.2.0
+                    Type is :class:`fwdpy11.sampling.StateMatrix`
                 )delim")
         .def_readwrite("selected", &fwdpp::data_matrix::selected,
                        R"delim(
@@ -124,12 +142,18 @@ PYBIND11_MODULE(sampling, m)
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
 
-                .. versionchanged: 0.1.4
+                .. versionchanged:: 0.1.4
                     Allow read/write access instead of readonly
+
+                .. versionchanged:: 0.2.0
+                    Type is :class:`fwdpy11.sampling.StateMatrix`
                 )delim")
-        .def_readonly("ncol", &fwdpp::data_matrix::ncol)
-        .def_readonly("neutral_keys", &fwdpp::data_matrix::neutral_keys)
-        .def_readonly("selected_keys", &fwdpp::data_matrix::selected_keys)
+        .def_readonly("ncol", &fwdpp::data_matrix::ncol,
+                      "Sample size of the matrix")
+        .def_readonly("neutral_keys", &fwdpp::data_matrix::neutral_keys,
+                      "Keys for neutral mutations used to generate matrix")
+        .def_readonly("selected_keys", &fwdpp::data_matrix::selected_keys,
+                      "Keys for selected mutations used to generate matrix")
         .def(py::pickle(
             [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
