@@ -151,6 +151,32 @@ class test_DataMatrixFromMlocusPop(unittest.TestCase):
                 self.assertTrue(len(site[1]) == self.gm_neutral.shape[1])
             key += 1
 
+    def testSampleByLocus(self):
+        lm = self.pop.sample_by_locus(self.indlist)
+        self.assertEqual(len(lm), self.pop.nloci)
+        dm = self.pop.sample(self.indlist)
+        nsample, ssample = fwdpy11.sampling.matrix_to_sample(dm)
+        nsample_split = fwdpy11.sampling.separate_samples_by_loci(
+            self.pop.locus_boundaries, nsample)
+        for i, j in zip(lm, nsample_split):
+            # Test that positons are the same
+            pi = [k for k in i.neutral.positions]
+            pj = [k[0] for k in j]
+            self.assertEqual(pi, pj)
+            im = np.array(i.neutral)
+
+            # convert sample data to matrix-like data
+            temp = []
+            for k in j:
+                for c in k[1]:
+                    if c == '0':
+                        temp.append(0)
+                    else:
+                        temp.append(1)
+
+            tempa = np.array(temp, dtype=im.dtype).reshape(im.shape)
+            self.assertTrue(np.array_equal(im, tempa))
+
 
 if __name__ == "__main__":
     unittest.main()
