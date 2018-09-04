@@ -24,6 +24,10 @@ class test_DataMatrixFromSlocusPop(unittest.TestCase):
         self.gm_neutral = np.array(self.gm.neutral)
         self.gm_selected = np.array(self.gm.selected)
 
+    def testNcol(self):
+        self.assertEqual(self.hm.ncol, 2*len(self.indlist))
+        self.assertEqual(self.gm.ncol, len(self.indlist))
+
     def testKeyNeutralityAndCount(self):
         for i in self.keys[0]:
             self.assertTrue(self.pop.mutations[i[0]].neutral)
