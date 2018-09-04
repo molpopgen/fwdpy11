@@ -27,7 +27,6 @@
 #include <fwdpy11/serialization.hpp>
 #include <fwdpy11/serialization/Mutation.hpp>
 #include <fwdpy11/serialization/Diploid.hpp>
-#include <fwdpp/sugar/sampling.hpp>
 #include "get_individuals.hpp"
 
 static_assert(std::is_same<fwdpy11::SlocusPop::gcont_t,
@@ -150,8 +149,9 @@ PYBIND11_MODULE(_Populations, m)
         .def("sample",
              [](const fwdpy11::SlocusPop& pop,
                 const std::vector<std::size_t>& individuals,
-                const bool haplotype) {
-                 return pop.sample_individuals(individuals, haplotype);
+                const bool haplotype, const bool remove_fixed) {
+                 return pop.sample_individuals(individuals, haplotype,
+                                               remove_fixed);
              },
              R"delim(
              Return a sample from a population.
@@ -160,6 +160,8 @@ PYBIND11_MODULE(_Populations, m)
              :type individuals: list
              :param haplotype: (True) Determines the encoding of the return type
              :type haplotype: bool
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
 
              :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
              :rtype: :class:`fwdpy11.sampling.DataMatrix`
@@ -172,13 +174,17 @@ PYBIND11_MODULE(_Populations, m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim",
-             py::arg("individuals"), py::arg("haplotype") = true)
+             py::arg("individuals"), py::arg("haplotype") = true,
+             py::arg("remove_fixed") = true)
         .def("sample",
              [](const fwdpy11::SlocusPop& pop, const fwdpy11::GSLrng_t& rng,
-                const std::uint32_t nsam, const bool haplotype) {
-                 return pop.sample_random_individuals(rng, nsam, haplotype);
+                const std::uint32_t nsam, const bool haplotype,
+                const bool remove_fixed) {
+                 return pop.sample_random_individuals(rng, nsam, haplotype,
+                                                      remove_fixed);
              },
              py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
+             py::arg("remove_fixed") = true,
              R"delim(
              Return a sample from a population.
 
@@ -188,6 +194,8 @@ PYBIND11_MODULE(_Populations, m)
              :type nsam: int
              :param haplotype: (True) Determines the encoding of the return type
              :type haplotype: bool
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
 
              :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
              :rtype: :class:`fwdpy11.sampling.DataMatrix`
@@ -278,11 +286,39 @@ PYBIND11_MODULE(_Populations, m)
                     fwdpy11::MlocusPop>()(
                     s, 1, std::vector<std::pair<double, double>>{ { 0., 1 } });
             }))
+        .def("sample_by_locus",
+             [](const fwdpy11::MlocusPop& pop,
+                const std::vector<std::size_t>& individuals,
+                const bool remove_fixed) {
+                 return fwdpp::sample_individuals_by_window(
+                     pop, individuals, pop.locus_boundaries, true, true,
+                     remove_fixed);
+             },
+             R"delim(
+             Return one data matrix per locus.
+             
+             :param individuals: Indexes of the individuals in the sample
+             :type individuals: list
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
+
+             :returns: A list of haplotype matrix
+             :rtype: list
+
+             This function differs from :func:`fwdpy11.MlocusPop.sample`
+             in that a list of :class:`fwdpy11.sampling.DataMatrix` are returned.
+             The positional boundaries of each matrix are given by
+             :attr:`fwdpy11.MlocusPop.locus_boundaries`.
+
+             .. versionadded:: 0.2.0
+             )delim",
+             py::arg("individuals"), py::arg("remove_fixed") = true)
         .def("sample",
              [](const fwdpy11::MlocusPop& pop,
                 const std::vector<std::size_t>& individuals,
-                const bool haplotype) {
-                 return pop.sample_individuals(individuals, haplotype);
+                const bool haplotype, const bool remove_fixed) {
+                 return pop.sample_individuals(individuals, haplotype,
+                                               remove_fixed);
              },
              R"delim(
              Return a sample from a population.
@@ -291,6 +327,8 @@ PYBIND11_MODULE(_Populations, m)
              :type individuals: list
              :param haplotype: (True) Determines the encoding of the return type
              :type haplotype: bool
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
 
              :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
              :rtype: :class:`fwdpy11.sampling.DataMatrix`
@@ -303,13 +341,17 @@ PYBIND11_MODULE(_Populations, m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim",
-             py::arg("individuals"), py::arg("haplotype") = true)
+             py::arg("individuals"), py::arg("haplotype") = true,
+             py::arg("remove_fixed") = true)
         .def("sample",
              [](const fwdpy11::MlocusPop& pop, const fwdpy11::GSLrng_t& rng,
-                const std::uint32_t nsam, const bool haplotype) {
-                 return pop.sample_random_individuals(rng, nsam, haplotype);
+                const std::uint32_t nsam, const bool haplotype,
+                const bool remove_fixed) {
+                 return pop.sample_random_individuals(rng, nsam, haplotype,
+                                                      remove_fixed);
              },
              py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
+             py::arg("remove_fixed") = true,
              R"delim(
              Return a sample from a population.
 
@@ -319,6 +361,8 @@ PYBIND11_MODULE(_Populations, m)
              :type nsam: int
              :param haplotype: (True) Determines the encoding of the return type
              :type haplotype: bool
+             :param remove_fixed: (True) Remove fixed variants from the sample
+             :type remove_fixed: bool
 
              :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
              :rtype: :class:`fwdpy11.sampling.DataMatrix`

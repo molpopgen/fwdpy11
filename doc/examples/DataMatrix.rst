@@ -17,8 +17,14 @@ The relevant functions are:
 
 Both return :class:`fwdpy11.sampling.DataMatrix` objects.
 
-The API is extremely flexible, allowing for the inclusion or exclustion of selected markers.  Getting a 
-:class:`fwdpy11.sampling.DataMatrix` requires a few steps:
+For cases where you want all mutations in a sample, sorted by position, with the option of including variants that are
+fixed in the sample or not, you may get a data matrix from the following functions:
+
+* :func:`fwdpy11.SlocusPop.sample`
+* :func:`fwdpy11.MlocusPop.sample`
+
+The general API is extremely flexible, allowing for the inclusion or exclustion of markers based on arbitrary criteria.
+Getting a :class:`fwdpy11.sampling.DataMatrix` this way requires a few steps:
 
 1. Determine the individuals in your sample.  You may do this however you see fit.
 2. Get a list of mutation keys associated with that sample via a call to :func:`fwdpy11.sampling.mutation_keys`.
@@ -107,12 +113,13 @@ The following example is a tour of the API:
     print(type(dm))
 
     # Get the neutral genotypes out as a 2d 2d numpy array
-    n = np.ndarray(dm.shape_neutral,buffer=dm.neutral,dtype=np.int8) 
+    n = np.array(dm.neutral, copy=False) 
     print(type(n))
     print(n.dtype)
     print(n.ndim)
     # This must be pop.N = 1,000:
     print(n.shape[1])
+    assert n.shape == dm.neutral.shape
 
     # The DataMatrix is picklable
     # As always with fwdpy11 types,
@@ -120,6 +127,9 @@ The following example is a tour of the API:
     # pickling protocol
     p = pickle.dumps(dm,-1)
     up = pickle.loads(p)
+    assert np.array_equal(np.array(dm.neutral),np.array(up.neutral))
+    assert dm.neutral_keys == up.neutral_keys
+    assert dm.neutral.positions == up.neutral.positions
 
     # We can also modify the data
     # in the array via Python's 
@@ -133,8 +143,8 @@ The following example is a tour of the API:
     # the existing view. 
     orig = n.copy()
 
-    assert(n.shape == orig.shape)
-    assert(np.array_equal(n, orig) == True)
+    assert n.shape == orig.shape
+    assert np.array_equal(n, orig) == True
 
     # We will swap all 0 and 2 encodings
     # in the data:
@@ -145,12 +155,12 @@ The following example is a tour of the API:
     # OK, let's prove that we've modified the C++
     # side.  We'll do that by making a new view,
     # and compare it to our copy:
-    n2 = np.ndarray(dm.shape_neutral,buffer=dm.neutral,dtype=np.int8) 
-    assert(np.array_equal(n2, orig) == False)
+    n2 = np.array(dm.neutral) 
+    assert np.array_equal(n2, orig) == False
 
     # Our new view is equivalent to our modified
     # view:
-    assert(np.array_equal(n, n2) == True)
+    assert np.array_equal(n, n2) == True
 
 The output of the above code is:
 
@@ -165,10 +175,8 @@ The output of the above code is:
     1000
 
 Let's talk about what we did in this example.  We used the Python buffer protocol to view the genotypes at neutral
-variants.  The ``buffer=`` argument to ``np.ndarray`` means that our NumPy array is a thin wrapper on top of memory
-allocated in C++, giving us read-write access to the data.  The fact that we have write access allows our recoding of
-the data to be propagated to the C++ side.  Further, these thin wrappers give us very fast access to the underlying
-data.
+variants.  Saying `copy=False` allows for *direct* access to the underlying C++ memory, which is very fast but also a
+bit dangerous.
 
 There are several use cases for recoding the data.  A DataMatrix is encoded by number of copies of the derived allele.
 However, it may be useful to encode by number of copies of the minor allele, or the ``+`` allele when modeling a
@@ -181,6 +189,7 @@ It is possible to get a thin wrapper that is not writeable.  Doing so lets you h
 
     import fwdpy11 as fp11
     import fwdpy11.wright_fisher as wf
+    import fwdpy11.genetic_values
     import fwdpy11.model_params
     import fwdpy11.sampling
     import numpy as np
@@ -192,7 +201,7 @@ It is possible to get a thin wrapper that is not writeable.  Doing so lets you h
        'nregions':[fp11.Region(0,1,1)],
        'recregions':[fp11.Region(0,1,1)],
        'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
-       'rates':(theta/float(4*N),0.0,rho/float(4*N))
+       'rates':(theta/float(4*N),0.0,rho/float(4*N)),
        'gvalue':fwdpy11.genetic_values.SlocusMult(2.0)
        }
     rng=fp11.GSLrng(42)
@@ -208,7 +217,7 @@ It is possible to get a thin wrapper that is not writeable.  Doing so lets you h
     # Use a different syntax, to show that 
     # there are > 1 way to do things with
     # NumPy
-    n = np.array(dm.neutral,copy=False,dtype=np.int8).reshape(dm.shape_neutral)
+    n = np.array(dm.neutral)
 
 Mark our new array as read-only:
 

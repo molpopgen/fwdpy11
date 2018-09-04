@@ -21,7 +21,6 @@
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/Mutation.hpp>
-#include <fwdpp/fwdpp/sugar/sampling.hpp>
 
 namespace py = pybind11;
 

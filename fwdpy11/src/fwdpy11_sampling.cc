@@ -24,8 +24,7 @@
 #include <pybind11/numpy.h>
 #include <array>
 #include <fwdpp/forward_types.hpp>
-#include <fwdpp/sugar/matrix.hpp>
-#include <fwdpp/sugar/sampling.hpp>
+#include <fwdpp/data_matrix.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
@@ -43,12 +42,43 @@ PYBIND11_MODULE(sampling, m)
 {
     m.doc() = "Taking samples from populations";
 
-    py::bind_vector<std::vector<std::int8_t>>(
-        m, "VecInt8", py::buffer_protocol(),
-        "C++ vector of 8-bit integers.  Used by "
-        ":attr:`fwdpy11.sampling.DataMatrix.neutral` and "
-        ":attr:`fwdpy11.sampling.DataMatrix.selected` to store marker "
-        "data.");
+    py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
+            R"delim(
+            Simple matrix representation of variation data.
+
+            These are not constructed directly.  Rather,
+            they are generated when a 
+            :class:`fwdpy11.sampling.DataMatrix` is generated.
+
+            This object supports the buffer protocol.
+
+            .. versionadded:: 0.2.0
+            )delim")
+        .def_property_readonly(
+            "shape",
+            [](const fwdpp::state_matrix &sm) {
+                if (sm.positions.empty())
+                    {
+                        return py::make_tuple(0, 0);
+                    }
+                if (sm.data.empty())
+                    {
+                        throw std::runtime_error("StatMatrix data are empty");
+                    }
+                return py::make_tuple(sm.positions.size(),
+                                      sm.data.size() / sm.positions.size());
+            },"Shape of the matrix.")
+        .def_readonly("positions", &fwdpp::state_matrix::positions,
+                      "The mutation positions")
+        .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
+            using value_type = std::int8_t;
+            auto nrow = sm.positions.size();
+            auto ncol = (nrow > 0) ? sm.data.size() / nrow : 0;
+            return py::buffer_info(
+                const_cast<value_type *>(sm.data.data()), sizeof(value_type),
+                py::format_descriptor<value_type>::format(), 2, { nrow, ncol },
+                { sizeof(value_type) * ncol, sizeof(value_type) });
+        });
 
     py::class_<fwdpp::data_matrix>(m, "DataMatrix",
                                    R"delim(
@@ -77,6 +107,9 @@ PYBIND11_MODULE(sampling, m)
         .. versionchanged:: 0.2.0
 
             Changed layout to row = variable site. 
+            Changed to match fwdpp 0.7.0 layour where the neutral
+            and selected data are represented as a 
+            :class:`fwdpy11.sampling.StateMatrix`
 		)delim")
         .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
@@ -87,8 +120,11 @@ PYBIND11_MODULE(sampling, m)
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
 
-                .. versionchanged: 0.1.4
+                .. versionchanged:: 0.1.4
                     Allow read/write access instead of readonly
+
+                .. versionchanged:: 0.2.0
+                    Type is :class:`fwdpy11.sampling.StateMatrix`
                 )delim")
         .def_readwrite("selected", &fwdpp::data_matrix::selected,
                        R"delim(
@@ -99,114 +135,70 @@ PYBIND11_MODULE(sampling, m)
                 .. versionchanged:: 0.1.2
                     Return a buffer instead of 1d numpy.array
 
-                .. versionchanged: 0.1.4
+                .. versionchanged:: 0.1.4
                     Allow read/write access instead of readonly
+
+                .. versionchanged:: 0.2.0
+                    Type is :class:`fwdpy11.sampling.StateMatrix`
                 )delim")
-        .def_readonly("neutral_positions",
-                      &fwdpp::data_matrix::neutral_positions,
-                      "The list of neutral mutation positions.")
-        .def_readonly("selected_positions",
-                      &fwdpp::data_matrix::selected_positions,
-                      "The list of selected mutation positions.")
-        .def_readonly("neutral_popfreq", &fwdpp::data_matrix::neutral_popfreq,
-                      "The list of population frequencies of "
-                      "neutral mutations.")
-        .def_readonly("selected_popfreq",
-                      &fwdpp::data_matrix::selected_popfreq,
-                      "The list of population frequencies of "
-                      "selected mutations.")
-        .def_property_readonly("shape_neutral",
-                               [](const fwdpp::data_matrix &dm) {
-                                   return py::make_tuple(
-                                       dm.neutral.size() / dm.ncol, dm.ncol);
-                               },
-                               R"delim(
-             Return the dimensions of the neutral matrix
-             
-             :rtype: tuple
-
-             .. versionadded:: 0.1.2
-                Replaces ncol and nrow_neutral functions
-
-             .. versionchanged:: 0.1.4
-                Changed from a function to a readonly property
-
-             .. versionchanged:: 0.2.0
-                Renamed from ndim_neutral to shape_neutral
-             )delim")
-        .def_property_readonly("shape_selected",
-                               [](const fwdpp::data_matrix &dm) {
-                                   return py::make_tuple(
-                                       dm.selected.size() / dm.ncol, dm.ncol);
-                               },
-                               R"delim(
-             Return the dimensions of the selected matrix
-
-             :rtype: tuple
-             
-             .. versionadded:: 0.1.2
-                Replaces ncol and nrow_selected functions
-
-             .. versionchanged:: 0.1.4
-                Changed from a function to a readonly property
-
-             .. versionchanged:: 0.2.0
-                Renamed from ndim_selected to shape_selected
-             )delim")
+        .def_readonly("ncol", &fwdpp::data_matrix::ncol,
+                      "Sample size of the matrix")
+        .def_readonly("neutral_keys", &fwdpp::data_matrix::neutral_keys,
+                      "Keys for neutral mutations used to generate matrix")
+        .def_readonly("selected_keys", &fwdpp::data_matrix::selected_keys,
+                      "Keys for selected mutations used to generate matrix")
         .def(py::pickle(
             [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
                 fwdpp::io::scalar_writer w;
-                w(o, &d.ncol, 1);
-                auto nsites = d.neutral_positions.size();
+                auto nsites = d.neutral.positions.size();
+                auto dsize = d.neutral.data.size();
                 w(o, &nsites, 1);
+                w(o, &dsize, 1);
                 if (nsites)
                     {
-                        auto l = d.neutral.size();
-                        w(o, &l);
-                        w(o, d.neutral.data(), d.neutral.size());
-                        w(o, d.neutral_positions.data(), nsites);
-                        w(o, d.neutral_popfreq.data(), nsites);
+                        w(o, d.neutral.data.data(), d.neutral.data.size());
+                        w(o, d.neutral.positions.data(), nsites);
+                        w(o, d.neutral_keys.data(), nsites);
                     }
-                nsites = d.selected_positions.size();
+                nsites = d.selected.positions.size();
+                dsize = d.selected.data.size();
                 w(o, &nsites, 1);
+                w(o, &dsize, 1);
                 if (nsites)
                     {
-                        auto l = d.neutral.size();
-                        w(o, &l);
-                        w(o, d.selected.data(), d.selected.size());
-                        w(o, d.selected_positions.data(), nsites);
-                        w(o, d.selected_popfreq.data(), nsites);
+                        w(o, d.selected.data.data(), d.selected.data.size());
+                        w(o, d.selected.positions.data(), nsites);
+                        w(o, d.selected_keys.data(), nsites);
                     }
                 return py::bytes(o.str());
             },
             [](py::bytes b) {
                 std::istringstream data(b);
                 fwdpp::io::scalar_reader r;
-                std::size_t n, n2;
-                r(data, &n);
-                fwdpp::data_matrix d(n);
-                r(data, &n);
-                if (n)
+                std::size_t nsites, dsize;
+                r(data, &nsites);
+                r(data, &dsize);
+                fwdpp::data_matrix d(dsize);
+                if (nsites)
                     {
-                        r(data, &n2);
-                        d.neutral.resize(n2);
-                        r(data, d.neutral.data(), n2);
-                        d.neutral_positions.resize(n);
-                        r(data, d.neutral_positions.data(), n);
-                        d.neutral_popfreq.resize(n);
-                        r(data, d.neutral_popfreq.data(), n);
+                        d.neutral.data.resize(dsize);
+                        r(data, d.neutral.data.data(), dsize);
+                        d.neutral.positions.resize(nsites);
+                        r(data, d.neutral.positions.data(), nsites);
+                        d.neutral_keys.resize(nsites);
+                        r(data, d.neutral_keys.data(), nsites);
                     }
-                r(data, &n);
-                if (n)
+                r(data, &nsites);
+                r(data, &dsize);
+                if (nsites)
                     {
-                        r(data, &n2);
-                        d.selected.resize(n2);
-                        r(data, d.selected.data(), n2);
-                        d.selected_positions.resize(n);
-                        r(data, d.selected_positions.data(), n);
-                        d.selected_popfreq.resize(n);
-                        r(data, d.selected_popfreq.data(), n);
+                        d.selected.data.resize(dsize);
+                        r(data, d.selected.data.data(), dsize);
+                        d.selected.positions.resize(nsites);
+                        r(data, d.selected.positions.data(), nsites);
+                        d.selected_keys.resize(nsites);
+                        r(data, d.selected_keys.data(), nsites);
                     }
                 return std::unique_ptr<fwdpp::data_matrix>(
                     new fwdpp::data_matrix(std::move(d)));
@@ -281,10 +273,8 @@ PYBIND11_MODULE(sampling, m)
           [](const fwdpp::data_matrix &m)
 
           {
-              auto neutral = fwdpy11::matrix_to_sample(
-                  m.neutral, m.neutral_positions, m.ncol);
-              auto selected = fwdpy11::matrix_to_sample(
-                  m.selected, m.selected_positions, m.ncol);
+              auto neutral = fwdpy11::matrix_to_sample(m.neutral);
+              auto selected = fwdpy11::matrix_to_sample(m.selected);
               return py::make_tuple(std::move(neutral), std::move(selected));
           },
           R"delim(
