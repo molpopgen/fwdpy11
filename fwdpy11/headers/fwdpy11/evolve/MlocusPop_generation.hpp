@@ -21,6 +21,7 @@
 
 #include <tuple>
 #include <vector>
+#include <stdexcept>
 #include <functional>
 #include <type_traits>
 #include <fwdpp/internal/gamete_cleaner.hpp>
@@ -83,8 +84,12 @@ namespace fwdpy11
 #ifndef NDEBUG
                 for (const auto& locus : dip)
                     {
-                        assert(pop.gametes[locus.first].n);
-                        assert(pop.gametes[locus.second].n);
+                        if (pop.gametes[locus.first].n == 0
+                            || pop.gametes[locus.second].n == 0)
+                            {
+                                throw std::runtime_error(
+                                    "DEBUG: locus has gamete with frequency zero");
+                            }
                     }
 #endif
                 offspring_metadata[label].label = label;
