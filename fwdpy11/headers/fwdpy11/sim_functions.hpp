@@ -70,10 +70,21 @@ namespace fwdpy11
             typename traits::is_mutation_t<
                 typename mcont_t::value_type>::type(),
             "mutation_type must be derived from fwdpp::mutation_base");
-        assert(mcounts.size() == mutations.size());
+#ifndef NDEBUG
+        if (mcounts.size() != mutations.size())
+            {
+                throw std::runtime_error("DEBUG: container size error");
+            }
+#endif
         for (unsigned i = 0; i < mcounts.size(); ++i)
             {
-                assert(mcounts[i] <= twoN);
+#ifndef NDEBUG
+                if (mcounts[i] > twoN)
+                    {
+                        throw std::runtime_error(
+                            "DEBUG: mutation count too large");
+                    }
+#endif
                 if (mcounts[i] == twoN)
                     {
                         auto loc = std::lower_bound(

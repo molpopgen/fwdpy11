@@ -129,12 +129,16 @@ Enabling debugging symbols in the C++ code
 Enabling assertions in the C++ code
 ------------------------------------------------------------------
 
-The C++ code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
+The fwdpp library code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
 enable them when hacking the code.  To do so:
 
 .. code-block:: bash
 
     python setup.py build_ext -i --assert
+
+When compiling this way, fwdpy11 makes some extra checks that will throw `RuntimeError` if they fail.  The fwdpp_ back
+end also makes extra checks.  If those fail, `abort` will be called, which will crash the Python interpreter.  Thus,
+compiling with this option is a "serious debugging mode only" option.
 
 .. note::
     Never install the package compiled in assert mode!  First, things will run much more slowly.  

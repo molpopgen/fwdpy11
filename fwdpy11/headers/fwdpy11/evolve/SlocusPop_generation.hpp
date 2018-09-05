@@ -21,13 +21,13 @@
 
 #include <tuple>
 #include <type_traits>
+#include <stdexcept>
 #include <fwdpp/internal/gamete_cleaner.hpp>
 #include <fwdpp/insertion_policies.hpp>
 #include <fwdpp/mutate_recombine.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
-//#include <fwdpy11/samplers.hpp>
 #include <gsl/gsl_randist.h>
 
 namespace fwdpy11
@@ -89,8 +89,13 @@ namespace fwdpy11
                     mu, gamete_recycling_bin, mutation_recycling_bin, dip,
                     pop.neutral, pop.selected);
 
-                assert(pop.gametes[dip.first].n);
-                assert(pop.gametes[dip.second].n);
+#ifndef NDEBUG
+                if(pop.gametes[dip.first].n == 0 || 
+                        pop.gametes[dip.second].n == 0)
+                {
+                    throw std::runtime_error("DEBUG: diploid has gamete with frequency zero");
+                }
+#endif
                 offspring_metadata[label].label = label;
                 update(offspring_metadata[label++], p1, p2,
                        pop.diploid_metadata);
