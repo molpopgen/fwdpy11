@@ -9,6 +9,10 @@ class testGSLerror(unittest.TestCase):
     def testErrorHandler(self):
         with self.assertRaises(RuntimeError):
             gsl.trigger_error()
+        try:
+            gsl.trigger_error()
+        except RuntimeError as e:
+            self.assertEqual(str(e), "matrix not square")
 
     def testUnhandledGSLError(self):
         with self.assertRaises(RuntimeError):
