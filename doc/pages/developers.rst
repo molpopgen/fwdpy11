@@ -39,3 +39,9 @@ Extensions using cppimport_ require "mako" headers to guide compilation.  You ma
 
 .. _cppimport: https://github.com/tbenthompson/cppimport
 
+
+Dealing with GSL errors
+-----------------------------------------
+
+The GSL uses C-like error handling.  Here, this means that there is a global error handling function
+that will print the error to screen and then abort the running process.
