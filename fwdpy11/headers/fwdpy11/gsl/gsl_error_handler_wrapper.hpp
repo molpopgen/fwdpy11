@@ -6,6 +6,14 @@
 namespace fwdpy11
 {
     struct gsl_error_handler_wrapper
+    /*!
+     * Manages turning off and resetting the GSL error
+     * handler.
+     *
+     * The handler is restored via the destructor,
+     * so this class is like a "smart pointer" for
+     * turning off the handler.
+     */
     {
         gsl_error_handler_t* e;
         gsl_error_handler_wrapper() : e{ gsl_set_error_handler_off() } {}
