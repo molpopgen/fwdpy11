@@ -8,7 +8,7 @@ channels:
 dependencies:
     - python==3.5
     - sphinx_rtd_theme==0.1.9
-    - pybind11==2.2.1
+    - pybind11==2.2.3
     - gsl
     - msprime
     - numpy
