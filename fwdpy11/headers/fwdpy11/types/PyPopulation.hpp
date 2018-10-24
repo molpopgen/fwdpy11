@@ -42,19 +42,22 @@ namespace fwdpy11
         PyPopulation(PyPopulation &&) = default;
         PyPopulation(const PyPopulation &) = default;
 
-        PyPopulation(fwdpp::uint_t N_)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N)
+        PyPopulation(fwdpp::uint_t N_, const double L)
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{}, tables(L)
         {
         }
 
         template <typename gametes_input, typename mutations_input>
         explicit PyPopulation(
             const fwdpp::uint_t N_, gametes_input &&g, mutations_input &&m,
+            const double L,
             typename fwdpp_base::gamete_t::mutation_container::size_type
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 }, diploid_metadata(N)
+              N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{}, tables(L)
         {
         }
 
