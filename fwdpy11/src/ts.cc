@@ -6,6 +6,9 @@
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 
+#include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/rng.hpp>
+
 namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
@@ -59,6 +62,8 @@ PYBIND11_MODULE(ts, m)
     // A table_collection will not be user-constructible.  Rather,
     // they will be members of the Population classes.
     // TODO: work out conversion to msprime format
+    // TODO: allow preserved_nodes to be cleared
+    // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::table_collection>(m, "TableCollection")
         .def_readonly("L", &fwdpp::ts::table_collection::L)
         .def_readonly("edges", &fwdpp::ts::table_collection::edge_table)
@@ -68,4 +73,32 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right);
+
+    py::class_<fwdpp::ts::table_simplifier>(m, "TableSimplifier")
+        .def(py::init<double>(), py::arg("region_length"))
+        .def(py::init([](const fwdpp::ts::table_collection& tables) {
+            return fwdpp::ts::table_simplifier(tables.L);
+        }))
+        .def("__call__",
+             [](fwdpp::ts::table_simplifier& simplifier,
+                const fwdpy11::Population& pop,
+                fwdpp::ts::table_collection& tables,
+                const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
+                 return simplifier.simplify(tables, samples, pop.mutations);
+             })
+        .def("simplify_copy",
+             [](fwdpp::ts::table_simplifier& simplifier,
+                const fwdpy11::Population& pop,
+                const fwdpp::ts::table_collection& tables,
+                const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
+                 auto t(tables);
+                 auto idmap = simplifier.simplify(t, samples, pop.mutations);
+                 return py::make_tuple(std::move(t), std::move(idmap));
+             });
+
+    m.def("infinite_sites",
+          [](const fwdpy11::GSLrng_t& rng, fwdpp::ts::table_collection& tables,
+             const std::vector<fwdpp::ts::TS_NODE_INT>& samples, const double mu) {
+              //TODO: implement
+          });
 }
