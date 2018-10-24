@@ -8,6 +8,7 @@
 #include <fwdpp/sugar/poptypes/popbase.hpp>
 #include <fwdpp/sampling_functions.hpp>
 #include <fwdpp/data_matrix.hpp>
+#include <fwdpp/ts/table_collection.hpp>
 #include "../rng.hpp"
 #include "Diploid.hpp"
 
@@ -30,7 +31,11 @@ namespace fwdpy11
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
-        std::vector<DiploidMetadata> diploid_metadata;
+        //TODO: initalized ancient_sample_metadata and tables,
+        //TODO figure out what to do with class constructor??
+        //TODO Introduce types for ancient sample individual and node tracking
+        std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
+        fwdpp::ts::table_collection tables;
 
         virtual ~PyPopulation() = default;
 
