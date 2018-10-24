@@ -219,6 +219,14 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.ts',
+        ['fwdpy11/src/ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
 ]
 
 
