@@ -36,9 +36,9 @@ else
     then
         exit 1
     fi
-    cd doc && make doctest
-    if [ "$?" != "0" ];
-    then
-        exit 1
-    fi
+    # cd doc && make doctest
+    # if [ "$?" != "0" ];
+    # then
+    #     exit 1
+    # fi
 fi
