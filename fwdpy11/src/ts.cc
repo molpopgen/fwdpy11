@@ -38,7 +38,9 @@ simplify(const fwdpy11::Population& pop,
         }
     if (std::any_of(samples.begin(), samples.end(),
                     [&pop](const fwdpp::ts::TS_NODE_INT s) {
-                        return s >= pop.tables.num_nodes();
+                        return s == fwdpp::ts::TS_NULL_NODE
+                               || static_cast<std::size_t>(s)
+                                      >= pop.tables.num_nodes();
                     }))
         {
             throw std::invalid_argument("invalid sample list");
@@ -106,9 +108,26 @@ PYBIND11_MODULE(ts, m)
                       &fwdpp::ts::table_collection::mutation_table)
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
-                      &fwdpp::ts::table_collection::output_right);
+                      &fwdpp::ts::table_collection::output_right)
+        .def_readonly("preserved_nodes",&fwdpp::ts::table_collection::preserved_nodes);
 
-    m.def("simplify", &simplify);
+    m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
+            R"delim(
+            Simplify a TableCollection.
+
+            :param pop: A :class:`fwdpy11.Population`
+            :param samples: A list of samples (node indexes).
+                
+            :return: The simplified tables and list mapping input sample IDs to output IDS
+
+            :rtype: :class:`fwdpy11.ts.TableCollection`
+
+            Note that the samples argument is agnostic with respect to the time of
+            the nodes in the input tables. Thus, you may do things like simplify
+            to a set of "currently-alive" nodes plus some or all ancient samples by
+            including some node IDs from :attr:`fwdpy11.ts.TableCollection.preserved_nodes`.
+
+            )delim");
 
     m.def("infinite_sites",
           [](const fwdpy11::GSLrng_t& rng, fwdpp::ts::table_collection& tables,
