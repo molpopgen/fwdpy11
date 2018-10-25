@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <vector>
+#include <stdexcept>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -28,6 +31,17 @@ simplify(const fwdpy11::Population& pop,
         {
             throw std::invalid_argument(
                 "population has empty TableCollection");
+        }
+    if (samples.empty())
+        {
+            throw std::invalid_argument("empty sample list");
+        }
+    if (std::any_of(samples.begin(), samples.end(),
+                    [&pop](const fwdpp::ts::TS_NODE_INT s) {
+                        return s >= pop.tables.num_nodes();
+                    }))
+        {
+            throw std::invalid_argument("invalid sample list");
         }
     auto t(pop.tables);
     fwdpp::ts::table_simplifier simplifier(pop.tables.L);
