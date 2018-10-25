@@ -62,22 +62,51 @@ PYBIND11_MODULE(ts, m)
     PYBIND11_NUMPY_DTYPE(fwdpp::ts::mutation_record, node, key);
 
     // The low level types are also Python classes
-    py::class_<fwdpp::ts::node>(m, "Node")
-        .def_readonly("population", &fwdpp::ts::node::population)
-        .def_readonly("time", &fwdpp::ts::node::time);
+    py::class_<fwdpp::ts::node>(m, "Node",
+                                R"delim(
+            A node in a tree sequence.
 
-    py::class_<fwdpp::ts::edge>(m, "Edge")
-        .def_readonly("left", &fwdpp::ts::edge::left)
-        .def_readonly("right", &fwdpp::ts::edge::right)
-        .def_readonly("parent", &fwdpp::ts::edge::parent)
-        .def_readonly("child", &fwdpp::ts::edge::child);
+            .. versionadded:: 0.2.0
+            )delim")
+        .def_readonly("population", &fwdpp::ts::node::population,
+                      R"delim(
+            For models of discrete population structure,
+            this field is the population of the node.
+            )delim")
+        .def_readonly("time", &fwdpp::ts::node::time,
+                      "Birth time of the node, recorded forwards in time.");
 
-    py::class_<fwdpp::ts::mutation_record>(m, "MutationRecord")
-        .def_readonly("node", &fwdpp::ts::mutation_record::node)
-        .def_readonly("key", &fwdpp::ts::mutation_record::key);
+    py::class_<fwdpp::ts::edge>(m, "Edge",
+                                R"delim(
+            An edge in a tree sequence.  An edge
+            represents the transmission of the
+            half-open genomic interval [left,right) from
+            parent to child.
 
-    // indexed_edge cannot be a dtype.  That's probably ok,
-    // as no-one will be using them for purposes other than viewing?
+            .. versionadded:: 0.2.0
+            )delim")
+        .def_readonly("left", &fwdpp::ts::edge::left,
+                      "Left edge of interval, inclusive.")
+        .def_readonly("right", &fwdpp::ts::edge::right,
+                      "Right edge of interval, exclusive.")
+        .def_readonly("parent", &fwdpp::ts::edge::parent, "Node id of parent")
+        .def_readonly("child", &fwdpp::ts::edge::child, "Node id of child");
+
+    py::class_<fwdpp::ts::mutation_record>(m, "MutationRecord",
+                                           R"delim(
+            A mutation entry in a tree sequence. A MutationRecord
+            stores the node ID of the mutation and the index
+            ("key") of the mutation in the population.
+
+            .. versionadded:: 0.2.0
+            )delim")
+        .def_readonly("node", &fwdpp::ts::mutation_record::node,
+                      "Node id of the mutation")
+        .def_readonly("key", &fwdpp::ts::mutation_record::key,
+                      "Index of the mutation in the population");
+
+    // indexed_edge cannot be a dtype because it has a constructor.
+    // That's probably ok, as no-one will be using them for purposes other than viewing?
     // For now, I won't even bind the C++ vector of these...
     py::class_<fwdpp::ts::indexed_edge>(
         m, "IndexedEdge",
@@ -89,11 +118,40 @@ PYBIND11_MODULE(ts, m)
 
     // The tables are visible w/o copy via numpy
     py::bind_vector<fwdpp::ts::edge_vector>(
-        m, "EdgeTable", py::buffer_protocol(), py::module_local(false));
+        m, "EdgeTable", py::buffer_protocol(), py::module_local(false),
+        R"delim(
+        An EdgeTable is a container of :class:`fwdpy11.ts.Edge`.
+
+        An EdgeTable supports the Python buffer protocol, allowing data
+        to be viewed in Python as a numpy record array.  No copy is made
+        when generating such views.
+
+        .. versionadded:: 0.2.0
+        )delim");
+
     py::bind_vector<fwdpp::ts::node_vector>(
-        m, "NodeTable", py::buffer_protocol(), py::module_local(false));
+        m, "NodeTable", py::buffer_protocol(), py::module_local(false),
+        R"delim(
+        An NodeTable is a container of :class:`fwdpy11.ts.Node`.
+
+        An NodeTable supports the Python buffer protocol, allowing data
+        to be viewed in Python as a numpy record array.  No copy is made
+        when generating such views.
+
+        .. versionadded:: 0.2.0
+        )delim");
+
     py::bind_vector<fwdpp::ts::mutation_key_vector>(
-        m, "MutationTable", py::buffer_protocol(), py::module_local(false));
+        m, "MutationTable", py::buffer_protocol(), py::module_local(false),
+        R"delim(
+        An MutationTable is a container of :class:`fwdpy11.ts.MutationRecord`.
+
+        An MutationTable supports the Python buffer protocol, allowing data
+        to be viewed in Python as a numpy record array.  No copy is made
+        when generating such views.
+
+        .. versionadded:: 0.2.0
+        )delim");
 
     // A table_collection will not be user-constructible.  Rather,
     // they will be members of the Population classes.
@@ -101,18 +159,23 @@ PYBIND11_MODULE(ts, m)
     // TODO: allow preserved_nodes to be cleared
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::table_collection>(m, "TableCollection")
-        .def_readonly("L", &fwdpp::ts::table_collection::L)
-        .def_readonly("edges", &fwdpp::ts::table_collection::edge_table)
-        .def_readonly("nodes", &fwdpp::ts::table_collection::node_table)
+        .def_readonly("L", &fwdpp::ts::table_collection::L, "Genome length")
+        .def_readonly("edges", &fwdpp::ts::table_collection::edge_table,
+                      "The :class:`fwdpy11.ts.EdgeTable`.")
+        .def_readonly("nodes", &fwdpp::ts::table_collection::node_table,
+                      "The :class:`fwdpy11.ts.NodeTable`.")
         .def_readonly("mutations",
-                      &fwdpp::ts::table_collection::mutation_table)
+                      &fwdpp::ts::table_collection::mutation_table,
+                      "The :class:`fwdpy11.ts.MutationTable`.")
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right)
-        .def_readonly("preserved_nodes",&fwdpp::ts::table_collection::preserved_nodes);
+        .def_readonly("preserved_nodes",
+                      &fwdpp::ts::table_collection::preserved_nodes,
+                      "List of nodes corresponding to ancient samples.");
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
-            R"delim(
+          R"delim(
             Simplify a TableCollection.
 
             :param pop: A :class:`fwdpy11.Population`
