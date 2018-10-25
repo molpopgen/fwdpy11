@@ -32,6 +32,7 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/types
+    pages/tstypes
     pages/rng
     pages/regions
     pages/geneticvalues
