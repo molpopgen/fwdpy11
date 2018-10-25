@@ -46,8 +46,8 @@ namespace fwdpy11
         SlocusPop &operator=(const SlocusPop &) = default;
 
         // Constructors for Python
-        SlocusPop(const fwdpp::uint_t N)
-            : Population{ N }, diploids(N, { 0, 0 })
+        SlocusPop(const fwdpp::uint_t N, const double length)
+            : Population{ N, length }, diploids(N, { 0, 0 })
         {
             if (!N)
                 {
@@ -64,10 +64,10 @@ namespace fwdpy11
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
         explicit SlocusPop(diploids_input &&d, gametes_input &&g,
-                           mutations_input &&m)
+                           mutations_input &&m, const double length)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
-                         std::forward<mutations_input>(m), 100),
+                         std::forward<mutations_input>(m), length, 100),
               diploids(std::forward<diploids_input>(d))
         //! Constructor for pre-determined population status
         {
