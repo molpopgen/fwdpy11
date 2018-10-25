@@ -15,6 +15,26 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
+py::tuple
+simplify(const fwdpy11::Population& pop,
+         const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+{
+    if (pop.tables.L == std::numeric_limits<double>::max())
+        {
+            throw std::invalid_argument(
+                "population is not using tree sequences");
+        }
+    if (pop.tables.num_nodes() == 0)
+        {
+            throw std::invalid_argument(
+                "population has empty TableCollection");
+        }
+    auto t(pop.tables);
+    fwdpp::ts::table_simplifier simplifier(pop.tables.L);
+    auto idmap = simplifier.simplify(t, samples, pop.mutations);
+    return py::make_tuple(std::move(t), std::move(idmap));
+}
+
 PYBIND11_MODULE(ts, m)
 {
     // TODO: how do I docstring this?
@@ -74,31 +94,12 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right);
 
-    py::class_<fwdpp::ts::table_simplifier>(m, "TableSimplifier")
-        .def(py::init<double>(), py::arg("region_length"))
-        .def(py::init([](const fwdpp::ts::table_collection& tables) {
-            return fwdpp::ts::table_simplifier(tables.L);
-        }))
-        .def("__call__",
-             [](fwdpp::ts::table_simplifier& simplifier,
-                const fwdpy11::Population& pop,
-                fwdpp::ts::table_collection& tables,
-                const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
-                 return simplifier.simplify(tables, samples, pop.mutations);
-             })
-        .def("simplify_copy",
-             [](fwdpp::ts::table_simplifier& simplifier,
-                const fwdpy11::Population& pop,
-                const fwdpp::ts::table_collection& tables,
-                const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
-                 auto t(tables);
-                 auto idmap = simplifier.simplify(t, samples, pop.mutations);
-                 return py::make_tuple(std::move(t), std::move(idmap));
-             });
+    m.def("simplify", &simplify);
 
     m.def("infinite_sites",
           [](const fwdpy11::GSLrng_t& rng, fwdpp::ts::table_collection& tables,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples, const double mu) {
+             const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+             const double mu) {
               //TODO: implement
           });
 }
