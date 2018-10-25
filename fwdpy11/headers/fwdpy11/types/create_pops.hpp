@@ -12,11 +12,11 @@ namespace fwdpy11
                   typename mutations_input>
         inline poptype
         operator()(diploids_input &&diploids, gametes_input &&gametes,
-                   mutations_input &&mutations) const
+                   mutations_input &&mutations,const double length) const
         {
             return poptype(std::forward<diploids_input>(diploids),
                            std::forward<gametes_input>(gametes),
-                           std::forward<mutations_input>(mutations));
+                           std::forward<mutations_input>(mutations),length);
         }
 
         template <typename diploids_input, typename gametes_input,
@@ -25,12 +25,12 @@ namespace fwdpy11
         operator()(
             diploids_input &&diploids, gametes_input &&gametes,
             mutations_input &&mutations,
-            std::vector<std::pair<double, double>> &&locus_boundaries) const
+            std::vector<std::pair<double, double>> &&locus_boundaries,const double length) const
         {
             return poptype(std::forward<diploids_input>(diploids),
                            std::forward<gametes_input>(gametes),
                            std::forward<mutations_input>(mutations),
-                           std::move(locus_boundaries));
+                           std::move(locus_boundaries),length);
         }
 
         template <typename diploids_input, typename gametes_input,
@@ -39,12 +39,12 @@ namespace fwdpy11
         operator()(diploids_input &&diploids, gametes_input &&gametes,
                    mutations_input &&mutations, mutations_input &&fixations,
                    std::vector<fwdpp::uint_t> &&fixation_times,
-                   fwdpp::uint_t generation) const
+                   fwdpp::uint_t generation,const double length) const
         {
             auto rv
                 = this->operator()(std::forward<diploids_input>(diploids),
                                    std::forward<gametes_input>(gametes),
-                                   std::forward<mutations_input>(mutations));
+                                   std::forward<mutations_input>(mutations),length);
 
             rv.fixations.swap(fixations);
             rv.fixation_times.swap(fixation_times);
@@ -60,13 +60,13 @@ namespace fwdpy11
                    std::vector<std::pair<double, double>> &&locus_boundaries,
                    mutations_input &&fixations,
                    std::vector<fwdpp::uint_t> &&fixation_times,
-                   fwdpp::uint_t generation) const
+                   fwdpp::uint_t generation,const double length) const
         {
             auto rv
                 = this->operator()(std::forward<diploids_input>(diploids),
                                    std::forward<gametes_input>(gametes),
                                    std::forward<mutations_input>(mutations),
-                                   std::move(locus_boundaries));
+                                   std::move(locus_boundaries),length);
 
             rv.fixations.swap(fixations);
             rv.fixation_times.swap(fixation_times);
