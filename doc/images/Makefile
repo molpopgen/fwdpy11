@@ -1,6 +1,6 @@
-all: tree.png nodetable.png
+all: tree.png tables.png
 	dot -Kfdp -n -Tpng tree.dot -o tree.png -Gsize=3,5\!
-	dot -Kfdp -n -Tpng nodetable.dot -o nodetable.png -Gsize=3,5\!
+	dot -Kfdp -n -Tpng tables.dot -o tables.png -Gsize=3,5\!
 
-nodetable.png: nodetable.dot
+tables.png: tables.dot
 

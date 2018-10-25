@@ -158,7 +158,8 @@ PYBIND11_MODULE(ts, m)
     // TODO: work out conversion to msprime format
     // TODO: allow preserved_nodes to be cleared
     // TODO: allow access to the "right" member functions
-    py::class_<fwdpp::ts::table_collection>(m, "TableCollection")
+    py::class_<fwdpp::ts::table_collection>(m, "TableCollection",
+            "A table collection representing a succinct tree sequence.")
         .def_readonly("L", &fwdpp::ts::table_collection::L, "Genome length")
         .def_readonly("edges", &fwdpp::ts::table_collection::edge_table,
                       "The :class:`fwdpy11.ts.EdgeTable`.")
