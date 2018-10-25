@@ -81,11 +81,10 @@ namespace fwdpy11
                   typename mutations_input>
         explicit MlocusPop(
             diploids_input &&d, gametes_input &&g, mutations_input &&m,
-            std::vector<std::pair<double, double>> locus_boundaries_,
-            const double length)
+            std::vector<std::pair<double, double>> locus_boundaries_)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
-                         std::forward<mutations_input>(m), length, 100),
+                         std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d)),
               nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
               locus_boundaries{ std::move(locus_boundaries_) }

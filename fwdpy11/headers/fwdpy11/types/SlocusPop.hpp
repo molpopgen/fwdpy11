@@ -64,10 +64,10 @@ namespace fwdpy11
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
         explicit SlocusPop(diploids_input &&d, gametes_input &&g,
-                           mutations_input &&m, const double length)
+                           mutations_input &&m)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
-                         std::forward<mutations_input>(m), length, 100),
+                         std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d))
         //! Constructor for pre-determined population status
         {
