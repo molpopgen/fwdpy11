@@ -24,6 +24,19 @@ namespace fwdpy11
       private:
         virtual void process_individual_input() = 0;
 
+        static fwdpp::ts::table_collection
+        init_tables(const fwdpp::uint_t N, const double L)
+        // Default initialization of tables.
+        // We ensure that there are 2N nodes in pop zero
+        // at time 0
+        {
+            if (L == std::numeric_limits<double>::max())
+                {
+                    return fwdpp::ts::table_collection(L);
+                }
+            return fwdpp::ts::table_collection(2 * N, 0, 0, L);
+        }
+
       public:
         using fwdpp_base
             = fwdpp::sugar::popbase<mutation_type, mcont, gcont, mvector,
@@ -46,7 +59,7 @@ namespace fwdpy11
         PyPopulation(fwdpp::uint_t N_, const double L)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
               ancient_sample_metadata{}, mcounts_from_preserved_nodes{},
-              tables(L)
+              tables(init_tables(N_, L))
         {
         }
 
