@@ -214,6 +214,8 @@ PYBIND11_MODULE(ts, m)
 
             )delim");
 
+    //TODO: we should consider removing the samples argument in favor
+    //of having populations keep track of the range of currently-alive nodes
     m.def("infinite_sites",
           [](const fwdpy11::GSLrng_t& rng, fwdpy11::Population& pop,
              const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
