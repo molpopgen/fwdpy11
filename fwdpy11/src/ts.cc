@@ -22,7 +22,7 @@ py::tuple
 simplify(const fwdpy11::Population& pop,
          const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
 {
-    if (pop.tables.L == std::numeric_limits<double>::max())
+    if (pop.tables.genome_length() == std::numeric_limits<double>::max())
         {
             throw std::invalid_argument(
                 "population is not using tree sequences");
@@ -46,7 +46,7 @@ simplify(const fwdpy11::Population& pop,
             throw std::invalid_argument("invalid sample list");
         }
     auto t(pop.tables);
-    fwdpp::ts::table_simplifier simplifier(pop.tables.L);
+    fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     auto idmap = simplifier.simplify(t, samples, pop.mutations);
     return py::make_tuple(std::move(t), std::move(idmap));
 }
@@ -160,7 +160,7 @@ PYBIND11_MODULE(ts, m)
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::table_collection>(m, "TableCollection",
             "A table collection representing a succinct tree sequence.")
-        .def_readonly("L", &fwdpp::ts::table_collection::L, "Genome length")
+        .def_property_readonly("L", &fwdpp::ts::table_collection::genome_length, "Genome length")
         .def_readonly("edges", &fwdpp::ts::table_collection::edge_table,
                       "The :class:`fwdpy11.ts.EdgeTable`.")
         .def_readonly("nodes", &fwdpp::ts::table_collection::node_table,
