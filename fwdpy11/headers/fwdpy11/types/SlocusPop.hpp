@@ -77,7 +77,8 @@ namespace fwdpy11
         bool
         operator==(const SlocusPop &rhs) const
         {
-            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs);
+            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs)
+                   && popbase_t::tables_equal(rhs);
         };
 
         void

@@ -105,7 +105,7 @@ namespace fwdpy11
         {
             return this->diploids == rhs.diploids
                    && this->locus_boundaries == rhs.locus_boundaries
-                   && popbase_t::is_equal(rhs);
+                   && popbase_t::is_equal(rhs) && popbase_t::tables_equal(rhs);
         };
 
         void
