@@ -8,6 +8,7 @@
 
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
+#include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/mutate_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -195,6 +196,25 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("preserved_nodes",
                       &fwdpp::ts::table_collection::preserved_nodes,
                       "List of nodes corresponding to ancient samples.");
+
+    py::class_<fwdpp::ts::marginal_tree>(
+        m, "MarginalTree",
+        "A sparse tree representation of a non-recombining genomic segment. "
+        "See :ref:`ts_data_types` for details.")
+        .def_readonly("parents", &fwdpp::ts::marginal_tree::parents,
+                      "Vector of child -> parent relationships")
+        .def_readonly("leaf_counts", &fwdpp::ts::marginal_tree::leaf_counts)
+        .def_readonly("preserved_leaf_counts",
+                      &fwdpp::ts::marginal_tree::preserved_leaf_counts)
+        .def_readonly("left_sib", &fwdpp::ts::marginal_tree::left_sib)
+        .def_readonly("right_sib", &fwdpp::ts::marginal_tree::right_sib)
+        .def_readonly("left_child", &fwdpp::ts::marginal_tree::left_child)
+        .def_readonly("right_child", &fwdpp::ts::marginal_tree::right_child)
+        .def_readonly("left_sample", &fwdpp::ts::marginal_tree::left_sample)
+        .def_readonly("right_sample", &fwdpp::ts::marginal_tree::right_sample)
+        .def_readonly("next_sample", &fwdpp::ts::marginal_tree::next_sample)
+        .def_readonly("sample_index_map",
+                      &fwdpp::ts::marginal_tree::sample_index_map);
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
