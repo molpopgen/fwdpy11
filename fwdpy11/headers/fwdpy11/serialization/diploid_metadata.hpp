@@ -1,6 +1,7 @@
 #ifndef FWDPY11_SERIALIZATION_DIPLOID_METADATA_HPP__
 #define FWDPY11_SERIALIZATION_DIPLOID_METADATA_HPP__
 
+#include <vector>
 #include <fwdpy11/types/Diploid.hpp>
 
 namespace fwdpy11
@@ -55,6 +56,46 @@ namespace fwdpy11
                     r(buffer, &md.sex);
                     r(buffer, md.nodes, 2);
                     vmd.emplace_back(md);
+                }
+        }
+    };
+
+    struct serialize_ancient_sample_records
+    {
+        template <typename streamtype>
+        inline void
+        operator()(
+            streamtype& buffer,
+            const std::vector<fwdpy11::ancient_sample_record>& var) const
+        {
+            fwdpp::io::scalar_writer w;
+            std::size_t s = var.size();
+            w(buffer, &s);
+            for (const auto& ar : var)
+                {
+                    w(buffer, &ar.time);
+                    w(buffer, &ar.n1);
+                    w(buffer, &ar.n2);
+                }
+        }
+    };
+    struct deserialize_ancient_sample_records
+    {
+        template <typename streamtype>
+        inline void
+        operator()(streamtype& buffer,
+                   std::vector<fwdpy11::ancient_sample_record>& var) const
+        {
+            fwdpp::io::scalar_reader r;
+            std::size_t s = var.size();
+            r(buffer, &s);
+            var.clear();
+            ancient_sample_record ar;
+            for (std::size_t i = 0; i < s; ++i)
+                {
+                    r(buffer, &ar.time);
+                    r(buffer, &ar.n1);
+                    r(buffer, &ar.n2);
                 }
         }
     };
