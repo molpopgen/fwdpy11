@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <vector>
 #include <tuple>
+#include <fwdpp/ts/definitions.hpp>
 
 namespace fwdpy11
 {
@@ -44,7 +45,19 @@ namespace fwdpy11
         std::size_t parents[2]; // Indexes of parents
         std::uint32_t deme;
         std::int32_t sex;
-        std::int32_t nodes[2];  // Nodes in TreeSequence
+        std::int32_t nodes[2]; // Nodes in TreeSequence
+    };
+
+    struct ancient_sample_record
+    /*! When tracking ancient samples, 
+     * We want to be able to provide access to
+     * the individual's metadata PLUS
+     * when they existed and what nodes 
+     * on the tree they are.
+     */
+    {
+        double time;
+        fwdpp::ts::TS_NODE_INT n1, n2;
     };
 
     //! Typedef for container of diploids

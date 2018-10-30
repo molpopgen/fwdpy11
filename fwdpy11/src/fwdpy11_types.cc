@@ -251,4 +251,10 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
         .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
                        "Index of the individual in the population.");
+
+    py::class_<fwdpy11::ancient_sample_record>(m, "AncientSampleRecord",
+            "Additional data relating to ancient samples.")
+        .def_readonly("time", &fwdpy11::ancient_sample_record::time,"Time when individual existed")
+        .def_readonly("n1", &fwdpy11::ancient_sample_record::n1,"First node on tree.")
+        .def_readonly("n2", &fwdpy11::ancient_sample_record::n2,"Second node on tree.");
 }

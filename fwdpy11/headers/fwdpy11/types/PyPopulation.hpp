@@ -48,6 +48,7 @@ namespace fwdpy11
         //TODO figure out what to do with class constructor??
         //TODO Introduce types for ancient sample individual and node tracking
         std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
+        std::vector<ancient_sample_record> ancient_sample_records;
         std::vector<fwdpp::uint_t> mcounts_from_preserved_nodes;
         fwdpp::ts::table_collection tables;
 
@@ -57,8 +58,9 @@ namespace fwdpy11
         PyPopulation(const PyPopulation &) = default;
 
         PyPopulation(fwdpp::uint_t N_, const double L)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
-              ancient_sample_metadata{}, mcounts_from_preserved_nodes{},
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}, mcounts_from_preserved_nodes{},
               tables(init_tables(N_, L))
         {
         }
@@ -70,8 +72,9 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 }, diploid_metadata(N),
-              ancient_sample_metadata{}, mcounts_from_preserved_nodes{},
+              N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}, mcounts_from_preserved_nodes{},
               tables(std::numeric_limits<double>::max())
         {
         }

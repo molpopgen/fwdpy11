@@ -101,6 +101,9 @@ PYBIND11_MODULE(_Population, m)
         .def_readwrite("diploid_metadata",
                        &fwdpy11::Population::diploid_metadata,
                        "Container of diploid metadata.")
+        .def_readwrite("ancient_sample_metadata",
+                       &fwdpy11::Population::ancient_sample_metadata,
+                       "Container of metadata for ancient samples.")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) -> py::object {
