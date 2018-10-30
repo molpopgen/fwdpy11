@@ -85,6 +85,24 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
     return rv;
 }
 
+template <typename poptype>
+void
+remap_ancient_samples(poptype &pop,
+                      const std::vector<fwdpp::ts::TS_NODE_INT> &idmap)
+{
+    for (auto &a : pop.ancient_sample_records)
+        {
+            a.n1 = idmap[a.n1];
+            a.n2 = idmap[a.n2];
+            if (a.n1 == fwdpp::ts::TS_NULL_NODE
+                || a.n2 == fwdpp::ts::TS_NULL_NODE)
+                {
+                    throw std::runtime_error(
+                        "error simplifying with respect to ancient samples");
+                }
+        }
+}
+
 // TODO: allow for neutral mutations in the future
 void
 wfSlocusPop_ts(
@@ -163,6 +181,7 @@ wfSlocusPop_ts(
                            next_index = 2 * pop.diploids.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
+    std::vector<fwdpp::ts::TS_NODE_INT> ancient_samples;
     for (std::uint32_t gen = 0; gen < num_generations; ++gen)
         {
             ++pop.generation;
@@ -188,7 +207,7 @@ wfSlocusPop_ts(
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
-                    // TODO: deal with ancient sample tracking!
+                    remap_ancient_samples(pop, idmap);
                 }
             else
                 {
@@ -199,13 +218,45 @@ wfSlocusPop_ts(
             // The user may now analyze the pop'n and record ancient samples
             recorder(pop, sr);
             // TODO: deal with the result of the recorder populating sr
+            if (!sr.samples.empty())
+                {
+                    ancient_samples.clear();
+                    for (auto i : sr.samples)
+                        {
+                            if (i >= pop.N)
+                                {
+                                    throw std::invalid_argument(
+                                        "ancient sample index greater than "
+                                        "current population size");
+                                }
+                            // Get the nodes
+                            auto x = fwdpp::ts::get_parent_ids(
+                                first_parental_index, i, 0);
+                            ancient_samples.push_back(x.first);
+                            ancient_samples.push_back(x.second);
+
+                            // Record the metadata for this individual
+                            pop.ancient_sample_metadata.push_back(
+                                pop.diploid_metadata[i]);
+                            // Record the time and nodes for this individual
+                            pop.ancient_sample_records.emplace_back(
+                                fwdpy11::ancient_sample_record{
+                                    static_cast<double>(pop.generation),
+                                    x.first, x.second });
+                        }
+                    // NOTE: this can throw an exception
+                    pop.tables.record_preserved_nodes(ancient_samples);
+                    // Finally, clear the input
+                    sr.samples.clear();
+                }
         }
     if (!simplified)
         {
             auto idmap = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
                 pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N);
-            // TODO: deal with ancient sample tracking!
+
+            remap_ancient_samples(pop, idmap);
         }
 }
 
