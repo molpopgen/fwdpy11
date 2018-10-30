@@ -34,10 +34,11 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
-#include <fwdpy11/sim_functions.hpp>
+//#include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
+#include <fwdpy11/evolvets/simplify_tables.hpp>
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 
 namespace py = pybind11;
@@ -84,21 +85,26 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
     return rv;
 }
 
-
 // TODO: allow for neutral mutations in the future
 void
 wfSlocusPop_ts(
     const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+    const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
     const double mu_selected, const double recrate,
     const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
         &mmodel,
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
+    fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     const bool remove_selected_fixations)
 {
     //validate the input params
+    if (pop.tables.genome_length() == std::numeric_limits<double>::max())
+        {
+            throw std::invalid_argument(
+                "Population is not initialized with tree sequence support");
+        }
     if (!std::isfinite(mu_selected))
         {
             throw std::invalid_argument(
@@ -132,6 +138,16 @@ wfSlocusPop_ts(
         return gsl_ran_discrete(rng.get(), lookup.get());
     };
 
+    const auto pick_second_parent
+        = [&rng, &lookup, selfing_rate](const std::size_t p1) {
+              if (selfing_rate == 1.0
+                  || (selfing_rate > 0.0
+                      && gsl_rng_uniform(rng.get()) < selfing_rate))
+                  {
+                      return p1;
+                  }
+              return gsl_ran_discrete(rng.get(), lookup.get());
+          };
     const auto generate_offspring_metadata
         = [&rng](fwdpy11::DiploidMetadata &offspring_metadata,
                  const std::size_t p1, const std::size_t p2,
@@ -141,6 +157,56 @@ wfSlocusPop_ts(
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
           };
+    fwdpy11::samplerecorder sr;
+    std::queue<std::size_t> mutation_recycling_bin;
+    fwdpp::ts::TS_NODE_INT first_parental_index = 0,
+                           next_index = 2 * pop.diploids.size();
+    bool simplified = false;
+    fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
+    for (std::uint32_t gen = 0; gen < num_generations; ++gen)
+        {
+            ++pop.generation;
+            const auto N_next = popsizes.at(gen);
+            fwdpy11::evolve_generation_ts(
+                rng, pop, N_next, mu_selected, pick_first_parent,
+                pick_second_parent, generate_offspring_metadata, bound_mmodel,
+                mutation_recycling_bin, bound_rmodel, pop.generation,
+                pop.tables, first_parental_index, next_index);
+
+            pop.N = N_next;
+            // TODO: deal with random effects
+            genetic_value_fxn.update(pop);
+            lookup = calculate_fitness(rng, pop, genetic_value_fxn);
+            if (gen % simplification_interval == 0.0)
+                {
+                    auto idmap = fwdpy11::simplify_tables(
+                        pop, pop.mcounts_from_preserved_nodes, pop.tables,
+                        simplifier, pop.tables.num_nodes() - 2 * pop.N,
+                        2 * pop.N);
+                    mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                        pop.mcounts, pop.mcounts_from_preserved_nodes);
+                    simplified = true;
+                    next_index = pop.tables.num_nodes();
+                    first_parental_index = 0;
+                    // TODO: deal with ancient sample tracking!
+                }
+            else
+                {
+                    simplified = false;
+                    first_parental_index = next_index;
+                    next_index += 2 * pop.N;
+                }
+            // The user may now analyze the pop'n and record ancient samples
+            recorder(pop, sr);
+            // TODO: deal with the result of the recorder populating sr
+        }
+    if (!simplified)
+        {
+            auto idmap = fwdpy11::simplify_tables(
+                pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
+                pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N);
+            // TODO: deal with ancient sample tracking!
+        }
 }
 
 PYBIND11_MODULE(wright_fisher_slocus_ts, m)
