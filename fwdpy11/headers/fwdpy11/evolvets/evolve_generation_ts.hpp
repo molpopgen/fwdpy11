@@ -83,18 +83,18 @@ namespace fwdpy11
               typename pick_parent2_fxn, typename offspring_metadata_fxn,
               typename breakpoint_function, typename mutation_model>
     void
-    evolve_generation(const rng_t& rng, poptype& pop,
-                      const fwdpp::uint_t N_next, const double mu,
-                      const pick_parent1_fxn& pick1,
-                      const pick_parent2_fxn& pick2,
-                      const offspring_metadata_fxn& update_offspring,
-                      const mutation_model& mmodel,
-                      std::queue<std::size_t>& mutation_recycling_bin,
-                      const breakpoint_function& recmodel,
-                      const fwdpp::uint_t generation,
-                      fwdpp::ts::table_collection& tables,
-                      std::int32_t first_parental_index,
-                      std::int32_t next_index)
+    evolve_generation_ts(const rng_t& rng, poptype& pop,
+                         const fwdpp::uint_t N_next, const double mu,
+                         const pick_parent1_fxn& pick1,
+                         const pick_parent2_fxn& pick2,
+                         const offspring_metadata_fxn& update_offspring,
+                         const mutation_model& mmodel,
+                         std::queue<std::size_t>& mutation_recycling_bin,
+                         const breakpoint_function& recmodel,
+                         const fwdpp::uint_t generation,
+                         fwdpp::ts::table_collection& tables,
+                         std::int32_t first_parental_index,
+                         std::int32_t next_index)
     {
 
         auto gamete_recycling_bin
@@ -105,6 +105,7 @@ namespace fwdpy11
             }
 
         decltype(pop.diploids) offspring(N_next);
+        decltype(pop.diploid_metadata) offspring_metadata(N_next);
 
         // Generate the offspring
         auto next_index_local = next_index;
@@ -145,7 +146,8 @@ namespace fwdpy11
                 // Give the caller a chance to generate
                 // any metadata for the offspring that
                 // may depend on the parents
-                update_offspring(next_offspring, p1, p2);
+                update_offspring(offspring_metadata[next_offspring], p1, p2,
+                                 pop.diploid_metadata);
             }
         assert(next_index_local
                == next_index + 2 * static_cast<std::int32_t>(N_next));
