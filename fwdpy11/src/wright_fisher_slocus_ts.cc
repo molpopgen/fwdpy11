@@ -196,7 +196,7 @@ wfSlocusPop_ts(
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
             lookup = calculate_fitness(rng, pop, genetic_value_fxn);
-            if (gen % simplification_interval == 0.0)
+            if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     auto idmap = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
