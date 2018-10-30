@@ -58,6 +58,8 @@ namespace fwdpy11
 #endif
         fwdpp::ts::count_mutations(tables, pop.mutations, samples, pop.mcounts,
                                    mcounts_from_preserved_nodes);
+        // TODO: the next several calls need to be updated
+        // for qtrait sims.
         tables.mutation_table.erase(
             std::remove_if(
                 tables.mutation_table.begin(), tables.mutation_table.end(),
@@ -67,8 +69,6 @@ namespace fwdpy11
                            && mcounts_from_preserved_nodes[mr.key] == 0;
                 }),
             tables.mutation_table.end());
-        // TODO: need to deal with this properly for
-        // qtrait sims!!!
         fwdpp::ts::remove_fixations_from_gametes(
             pop.gametes, pop.mutations, pop.mcounts,
             mcounts_from_preserved_nodes, 2 * pop.diploids.size());
