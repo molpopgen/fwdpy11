@@ -235,6 +235,14 @@ ext_modules = [
         libraries=[],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.wright_fisher_slocus_ts',
+        ['fwdpy11/src/wright_fisher_slocus_ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
 ]
 
 
