@@ -85,6 +85,7 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
     return rv;
 }
 
+// TODO: put in header for reuse
 template <typename poptype>
 void
 remap_ancient_samples(poptype &pop,
