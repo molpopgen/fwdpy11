@@ -11,6 +11,17 @@
 namespace fwdpy11
 {
     struct samplerecorder
+    /*! This type will be passed to a user-supplied callable
+     * during simulations with tree sequences.
+     *
+     * The callable is expected to populate the object with 
+     * the indexes of individuals (NOT NODES) to be preserved
+     * as ancient samples.
+     *
+     * It is then the responsibility of the simulation routine
+     * to map individual indexes to node indexes and preserve
+     * them as ancient samples, along with relevant metadata, etc.
+     */
     {
         std::vector<fwdpp::uint_t> samples;
 
