@@ -18,13 +18,14 @@
 #
 
 
-def evolve(rng, pop, params, recorder=None):
+def evolve(rng, pop, params, simplification_interval, recorder=None):
     """
     Evolve a population
 
     :param rng: An instance of :class:`fwdpy11.GSLrng`
     :param pop: An instance of :class:`fwdpy11.SlocusPop`
     :param params: An instance of :class:`fwdpy11.model_params.SlocusParams`
+    :param simplification_interval: Number of generations between simplifications.
     :param recorder: (None) A temporal sampler/data recorder.
 
     .. note::
@@ -52,7 +53,8 @@ def evolve(rng, pop, params, recorder=None):
     from .internal import makeMutationRegions, makeRecombinationRegions
     # if pop.__class__ is fwdpy11.SlocusPop:
     from .wright_fisher_slocus_ts import WFSlocusPop_ts
-    pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
+    # TODO: update to allow neutral mutations
+    pneutral = 0  # params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = makeMutationRegions(rng, pop, params.nregions,
                              params.sregions, pneutral)
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
@@ -61,9 +63,9 @@ def evolve(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
-    WFSlocusPop_ts(rng, pop, params.demography, params.mutrate_s,
-                params.recrate, mm, rm, params.gvalue,
-                recorder, params.pself, params.prune_selected==True)
+    WFSlocusPop_ts(rng, pop, simplification_interval, params.demography, params.mutrate_s,
+                   params.recrate, mm, rm, params.gvalue,
+                   recorder, params.pself, params.prune_selected == True)
     # else
     #     from .wright_fisher_mlocus import WFMlocusPop
     #     mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
