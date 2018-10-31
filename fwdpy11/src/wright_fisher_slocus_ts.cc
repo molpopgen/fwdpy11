@@ -116,7 +116,7 @@ wfSlocusPop_ts(
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
-    const bool remove_selected_fixations)
+    const bool preserve_selected_fixations)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -199,10 +199,11 @@ wfSlocusPop_ts(
             lookup = calculate_fitness(rng, pop, genetic_value_fxn);
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
+                    // TODO: update this to allow neutral mutations to be simulated
                     auto idmap = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
                         simplifier, pop.tables.num_nodes() - 2 * pop.N,
-                        2 * pop.N);
+                        2 * pop.N, preserve_selected_fixations, false);
                     mutation_recycling_bin = fwdpp::ts::make_mut_queue(
                         pop.mcounts, pop.mcounts_from_preserved_nodes);
                     simplified = true;
@@ -253,9 +254,11 @@ wfSlocusPop_ts(
         }
     if (!simplified)
         {
+            // TODO: update this to allow neutral mutations to be simulated
             auto idmap = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
-                pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N);
+                pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N,
+                preserve_selected_fixations, false);
 
             remap_ancient_samples(pop, idmap);
         }
