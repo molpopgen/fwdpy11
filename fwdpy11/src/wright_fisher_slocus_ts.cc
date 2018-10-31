@@ -116,6 +116,7 @@ wfSlocusPop_ts(
     const fwdpp::extensions::discrete_rec_model &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
+    // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations)
 {
     //validate the input params
