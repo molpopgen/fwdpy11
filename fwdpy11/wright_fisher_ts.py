@@ -60,8 +60,8 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     if recorder is None:
-        from fwdpy11.temporal_samplers import RecordNothing
-        recorder = RecordNothing()
+        from fwdpy11._tsevolveutils import NoAncientSamples
+        recorder = NoAncientSamples()
 
     WFSlocusPop_ts(rng, pop, simplification_interval, params.demography, params.mutrate_s,
                    params.recrate, mm, rm, params.gvalue,
