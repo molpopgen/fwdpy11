@@ -58,6 +58,7 @@ namespace
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::ancient_sample_record>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
@@ -66,7 +67,7 @@ PYBIND11_MODULE(_Population, m)
 
     auto imported_ts = static_cast<pybind11::object>(
         pybind11::module::import("fwdpy11.ts"));
-    
+
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
         py::buffer_protocol())
@@ -104,6 +105,9 @@ PYBIND11_MODULE(_Population, m)
         .def_readwrite("ancient_sample_metadata",
                        &fwdpy11::Population::ancient_sample_metadata,
                        "Container of metadata for ancient samples.")
+        .def_readwrite("ancient_sample_records",
+                       &fwdpy11::Population::ancient_sample_records,
+                       "Container of time and node data for ancient samples")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) -> py::object {
@@ -220,7 +224,7 @@ PYBIND11_MODULE(_Population, m)
              )delim")
         // TODO: why does readwrite fail?
         .def_readonly("tables", &fwdpy11::Population::tables,
-                       R"delim(
+                      R"delim(
                 Give access to the population's 
                 :class:`fwdpy11.ts.TableCollection`
                 )delim");
