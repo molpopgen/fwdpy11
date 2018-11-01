@@ -33,7 +33,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
         then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     """
-    import fwdpy11.SlocusPop
+    # import fwdpy11.SlocusPop
     # import fwdpy11.MlocusPop
     import warnings
 
@@ -67,7 +67,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
     sr = SampleRecorder()
     WFSlocusPop_ts(rng, pop, sr, simplification_interval, params.demography, params.mutrate_s,
                    params.recrate, mm, rm, params.gvalue,
-                   recorder, params.pself, params.prune_selected == True)
+                   recorder, params.pself, params.prune_selected is True)
     # else
     #     from .wright_fisher_mlocus import WFMlocusPop
     #     mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
