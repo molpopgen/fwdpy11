@@ -108,7 +108,7 @@ remap_ancient_samples(poptype &pop,
 void
 wfSlocusPop_ts(
     const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-    const unsigned simplification_interval,
+    fwdpy11::samplerecorder &sr, const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
     const double mu_selected, const double recrate,
     const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
@@ -177,7 +177,6 @@ wfSlocusPop_ts(
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
           };
-    fwdpy11::samplerecorder sr;
     std::queue<std::size_t> mutation_recycling_bin;
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
                            next_index = 2 * pop.diploids.size();
