@@ -19,8 +19,12 @@
 #ifndef FWDPY11_EVOLVETS_RECORDERS_HPP
 #define FWDPY11_EVOLVETS_RECORDERS_HPP
 
+#include <vector>
+#include <algorithm>
+#include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
+#include <gsl/gsl_randist.h>
 #include "samplerecorder.hpp"
 
 namespace fwdpy11
@@ -33,15 +37,58 @@ namespace fwdpy11
      */
     {
         inline void
-        operator()(const fwdpy11::SlocusPop&,
-                   const fwdpy11::samplerecorder&) const
+        operator()(const SlocusPop&, samplerecorder&) const
         {
         }
         inline void
-        operator()(const fwdpy11::MlocusPop&,
-                   const fwdpy11::samplerecorder&) const
+        operator()(const MlocusPop&, samplerecorder&) const
         {
         }
     };
+
+    struct random_ancient_samples
+    {
+        GSLrng_t rng;
+        std::vector<fwdpp::uint_t> individuals, timepoints;
+        fwdpp::uint_t samplesize;
+        std::size_t next_timepoint;
+
+        random_ancient_samples(const std::uint32_t seed, const fwdpp::uint_t n,
+                               std::vector<fwdpp::uint_t> t)
+            : rng(seed), individuals{}, timepoints(std::move(t)),
+              samplesize(n), next_timepoint(0)
+        {
+        }
+
+        template <typename poptype>
+        void
+        sample(const poptype& pop, samplerecorder& sr)
+        {
+            if (next_timepoint < timepoints.size()
+                && pop.generation == timepoints[next_timepoint])
+                {
+                    individuals.resize(pop.N);
+                    std::iota(individuals.begin(), individuals.end(), 0);
+                    sr.samples.resize(samplesize);
+                    gsl_ran_choose(rng.get(), sr.samples.data(), samplesize,
+                                   individuals.data(), pop.N,
+                                   sizeof(fwdpp::uint_t));
+                    ++next_timepoint;
+                }
+        }
+
+        inline void
+        operator()(const SlocusPop& pop, samplerecorder& sr)
+        {
+            sample(pop, sr);
+        }
+
+        inline void
+        operator()(const MlocusPop& pop, samplerecorder& sr)
+        {
+            sample(pop, sr);
+        }
+    };
+
 } // namespace fwdpy11
 #endif

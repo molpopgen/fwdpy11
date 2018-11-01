@@ -60,7 +60,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
 
     if recorder is None:
-        from fwdpy11._tsevolveutils import NoAncientSamples
+        from fwdpy11.tsrecorders import NoAncientSamples
         recorder = NoAncientSamples()
 
     from fwdpy11._tsevolveutils import SampleRecorder

@@ -1,7 +1,6 @@
 #include <pybind11/pybind11.h>
 
 #include <fwdpy11/evolvets/samplerecorder.hpp>
-#include <fwdpy11/evolvets/recorders.hpp>
 
 namespace py = pybind11;
 
@@ -22,15 +21,4 @@ PYBIND11_MODULE(_tsevolveutils, m)
         .def("assign", &fwdpy11::samplerecorder::assign, py::arg("samples"),
              "Add a list of individuals to the list of samples.  Input is a "
              "numpy array with dtype np.uint32");
-
-    py::class_<fwdpy11::no_ancient_samples>(
-        m, "NoAncientSamples",
-        "A recorder for tree sequence simulations that does nothing.")
-        .def(py::init<>())
-        .def("__call__",
-             [](fwdpy11::no_ancient_samples& na, const fwdpy11::SlocusPop& pop,
-                const fwdpy11::samplerecorder& sr) { na(pop, sr); })
-        .def("__call__",
-             [](fwdpy11::no_ancient_samples& na, const fwdpy11::MlocusPop& pop,
-                const fwdpy11::samplerecorder& sr) { na(pop, sr); });
 }
