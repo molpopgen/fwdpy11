@@ -63,6 +63,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
         from fwdpy11._tsevolveutils import NoAncientSamples
         recorder = NoAncientSamples()
 
+    from fwdpy11._tsevolveutils import SampleRecorder
     WFSlocusPop_ts(rng, pop, simplification_interval, params.demography, params.mutrate_s,
                    params.recrate, mm, rm, params.gvalue,
                    recorder, params.pself, params.prune_selected == True)
