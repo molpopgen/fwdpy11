@@ -234,34 +234,30 @@ PYBIND11_MODULE(ts, m)
 
             )delim");
 
-    //TODO: we should consider removing the samples argument in favor
-    //of having populations keep track of the range of currently-alive nodes
-    m.def("infinite_sites",
-          [](const fwdpy11::GSLrng_t& rng, fwdpy11::Population& pop,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-             const double mu) {
-              std::queue<std::size_t> recycling_bin
-                  = fwdpp::ts::make_mut_queue(
-                      pop.mcounts, pop.mcounts_from_preserved_nodes);
-              const auto apply_mutations
-                  = [&recycling_bin, &rng, &pop, &samples,
-                     mu](const double left, const double right,
-                         const fwdpp::uint_t generation) {
-                        return generate_neutral_variants(
-                            recycling_bin, pop, rng, left, right, generation);
-                    };
-              auto nmuts = fwdpp::ts::mutate_tables(rng, apply_mutations,
-                                                    pop.tables, samples, mu);
-              std::sort(pop.tables.mutation_table.begin(),
-                        pop.tables.mutation_table.end(),
-                        [&pop](const fwdpp::ts::mutation_record& a,
-                               const fwdpp::ts::mutation_record& b) {
-                            return pop.mutations[a.key].pos
-                                   < pop.mutations[b.key].pos;
-                        });
-              fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
-                                         pop.mcounts,
-                                         pop.mcounts_from_preserved_nodes);
-              return nmuts;
-          });
+    m.def("infinite_sites", [](const fwdpy11::GSLrng_t& rng,
+                               fwdpy11::Population& pop, const double mu) {
+        std::queue<std::size_t> recycling_bin = fwdpp::ts::make_mut_queue(
+            pop.mcounts, pop.mcounts_from_preserved_nodes);
+        std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
+        std::iota(samples.begin(), samples.end(), 0);
+        const auto apply_mutations
+            = [&recycling_bin, &rng, &pop, &samples,
+               mu](const double left, const double right,
+                   const fwdpp::uint_t generation) {
+                  return generate_neutral_variants(recycling_bin, pop, rng,
+                                                   left, right, generation);
+              };
+        auto nmuts = fwdpp::ts::mutate_tables(rng, apply_mutations, pop.tables,
+                                              samples, mu);
+        std::sort(
+            pop.tables.mutation_table.begin(), pop.tables.mutation_table.end(),
+            [&pop](const fwdpp::ts::mutation_record& a,
+                   const fwdpp::ts::mutation_record& b) {
+                return pop.mutations[a.key].pos < pop.mutations[b.key].pos;
+            });
+        fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
+                                   pop.mcounts,
+                                   pop.mcounts_from_preserved_nodes);
+        return nmuts;
+    });
 }
