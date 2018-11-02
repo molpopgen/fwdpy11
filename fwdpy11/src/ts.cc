@@ -24,7 +24,7 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
-// TODO: need to clear out ancient nodes after 
+// TODO: need to clear out ancient nodes after
 // copy.  The user should include them in "samples"
 // if they are wanted.
 py::tuple
@@ -199,7 +199,9 @@ PYBIND11_MODULE(ts, m)
                       &fwdpp::ts::table_collection::output_right)
         .def_readonly("preserved_nodes",
                       &fwdpp::ts::table_collection::preserved_nodes,
-                      "List of nodes corresponding to ancient samples.");
+                      "List of nodes corresponding to ancient samples.")
+        .def("genome_length", &fwdpp::ts::table_collection::genome_length,
+             "Return the genome/sequence length.");
 
     py::class_<fwdpp::ts::marginal_tree>(
         m, "MarginalTree",
