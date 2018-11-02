@@ -235,9 +235,17 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
-        Extension(
+    Extension(
         'fwdpy11._tsevolveutils',
         ['fwdpy11/src/tsevolveutils.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=[],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.ts_from_msprime',
+        ['fwdpy11/src/ts_from_msprime.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
         libraries=[],

@@ -108,6 +108,12 @@ fwdpy11.ts
     :members:
     :show-inheritance:
 
+fwdpy11.ts_from_msprime
+------------------------------
+.. automodule:: fwdpy11.ts_from_msprime
+    :members:
+    :show-inheritance:
+
 fwdpy11.genetic_values
 ------------------------------
 .. automodule:: fwdpy11.genetic_values
