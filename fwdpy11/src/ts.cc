@@ -220,7 +220,8 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("right_sample", &fwdpp::ts::marginal_tree::right_sample)
         .def_readonly("next_sample", &fwdpp::ts::marginal_tree::next_sample)
         .def_readonly("sample_index_map",
-                      &fwdpp::ts::marginal_tree::sample_index_map);
+                      &fwdpp::ts::marginal_tree::sample_index_map)
+        .def_readonly("sample_size",&fwdpp::ts::marginal_tree::sample_size);
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
