@@ -11,15 +11,10 @@ Overview
 ------------------------------------
 
 
-Recording ancient samples during a simulation
-------------------------------------------------------------------------
-
 
 Viewing a TableCollection
 ------------------------------------
 
-Viewing data for ancient samples
-------------------------------------------------------------------------
 
 Iterating over trees
 ------------------------------------
@@ -27,6 +22,12 @@ Iterating over trees
 .. todo:: 
 
     Expose fwdpp's table_iterator to Python
+
+Recording ancient samples during a simulation
+------------------------------------------------------------------------
+
+Viewing data for ancient samples
+------------------------------------------------------------------------
 
 Initializing a simulation using msprime
 ------------------------------------------------------------------------
