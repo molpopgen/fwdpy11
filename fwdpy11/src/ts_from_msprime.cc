@@ -60,7 +60,8 @@ convert_tables_from_msprime(py::object ts, const bool discretize_time)
             nodes.push_back(fwdpp::ts::node{ population_(i), t });
         }
 
-    return py::make_tuple(std::move(nodes), std::move(edges));
+    double l = ts.attr("get_sequence_length")().cast<double>();
+    return py::make_tuple(std::move(nodes), std::move(edges), l);
 }
 
 PYBIND11_MODULE(ts_from_msprime, m)
@@ -73,9 +74,9 @@ PYBIND11_MODULE(ts_from_msprime, m)
     auto imported_ts = static_cast<pybind11::object>(
         pybind11::module::import("fwdpy11.ts"));
 
-    m.def("convert_tables", &convert_tables_from_msprime,
-            py::arg("ts"),py::arg("discretize_time"),
-        R"delim(
+    m.def("convert_tables", &convert_tables_from_msprime, py::arg("ts"),
+          py::arg("discretize_time"),
+          R"delim(
         Get node and edge tables from msprime.
 
         This function primarily exists to help construct populations
@@ -88,7 +89,7 @@ PYBIND11_MODULE(ts_from_msprime, m)
         :type discretize_time: boolean
 
         :rtype: tuple
-        :returns: :class:`fwdpy11.ts.NodeTable`, :class:`fwdpy11.ts.EdgeTable`
+        :returns: :class:`fwdpy11.ts.NodeTable`, :class:`fwdpy11.ts.EdgeTable`, sequence length
 
         The node table has had time values reversed so that tip times are zero
         and ancestral node times are negative.
