@@ -248,7 +248,7 @@ ext_modules = [
         ['fwdpy11/src/ts_from_msprime.cc'],
         library_dirs=LIBRARY_DIRS,
         include_dirs=INCLUDES,
-        libraries=[],
+        libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
     Extension(
