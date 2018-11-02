@@ -2,6 +2,7 @@
 #include <utility>
 #include <cstdint>
 #include <cmath>
+#include <tuple>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <fwdpp/ts/definitions.hpp>
@@ -11,7 +12,8 @@
 
 namespace py = pybind11;
 
-py::tuple
+// TODO put this in a header in case anyone else finds it useful?
+std::tuple<fwdpp::ts::node_vector,fwdpp::ts::edge_vector,int,double>
 convert_tables_from_msprime(py::object ts, const bool discretize_time)
 {
     py::object tstables = ts.attr("tables");
@@ -67,23 +69,22 @@ convert_tables_from_msprime(py::object ts, const bool discretize_time)
         }
 
     double l = ts.attr("get_sequence_length")().cast<double>();
-    return py::make_tuple(std::move(nodes), std::move(edges), ntips, l);
+    return std::make_tuple(std::move(nodes), std::move(edges), ntips, l);
 }
 
 fwdpy11::SlocusPop
 create_SlocusPop_from_tree_sequence(py::object ts, const bool discretize_time)
 {
     auto t = convert_tables_from_msprime(ts, discretize_time);
-    auto nodes = t[0].cast<std::vector<fwdpp::ts::node>>();
-    auto edges = t[1].cast<std::vector<fwdpp::ts::edge>>();
-    auto twoN = t[2].cast<int>();
+    auto nodes(std::move(std::get<0>(t)));
+    auto edges(std::move(std::get<1>(t)));
+    auto twoN = std::get<2>(t);
+    auto l = std::get<3>(t);
     if (twoN % 2 != 0.0)
         {
             throw std::invalid_argument(
                 "tree sequence has odd number of tips");
         }
-    auto l = t[3].cast<double>();
-    t.release();
 
     fwdpy11::SlocusPop pop(twoN / 2, l);
     pop.tables.node_table.swap(nodes);
@@ -107,38 +108,9 @@ PYBIND11_MODULE(ts_from_msprime, m)
     auto imported_ts = static_cast<pybind11::object>(
         pybind11::module::import("fwdpy11.ts"));
 
-    m.def("convert_tables", &convert_tables_from_msprime, py::arg("ts"),
-          py::arg("discretize_time"),
-          R"delim(
-        Get node and edge tables from msprime.
+    // Expose this for unit-testing purposes
+    m.def("_convert_tables",&convert_tables_from_msprime);
 
-        This function primarily exists to help construct populations
-        from the output of a coalescent simulation.  You probably won't call
-        it directly.
-
-        :param ts: A tree sequence from msprime
-        :type ts: msprime.TreeSequence
-        :param discretize_time: Whether to convert time into integer values
-        :type discretize_time: boolean
-
-        :rtype: tuple
-        :returns: :class:`fwdpy11.ts.NodeTable`, :class:`fwdpy11.ts.EdgeTable`, sequence length
-
-        The node table has had time values reversed so that tip times are zero
-        and ancestral node times are negative.
-
-        When `discretize_time` is `True`, all time values are converted to their floors.
-
-        .. versionadded:: 0.2.0
-
-        .. note::
-
-            It is not always straightforward to start a forward simulation
-            with a valid tree from a coalescent simulation! Pay very careful
-            attention to parameter scaling.  Also, be very careful when 
-            mixing trees from coalescent simulations with forward simulations 
-            that are not doing Wright-Fisher dynamics.
-        )delim");
-
+    // This is the back-end for fwdpy11.SlocusPop.create_from_msprime
     m.def("_create_SlocusPop", &create_SlocusPop_from_tree_sequence);
 }
