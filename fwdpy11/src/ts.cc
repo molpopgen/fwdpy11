@@ -24,6 +24,9 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
+// TODO: need to clear out ancient nodes after 
+// copy.  The user should include them in "samples"
+// if they are wanted.
 py::tuple
 simplify(const fwdpy11::Population& pop,
          const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
