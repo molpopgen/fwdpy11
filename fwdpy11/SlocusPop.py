@@ -63,5 +63,31 @@ class SlocusPop(_SlocusPop):
 
     @staticmethod
     def create_from_msprime(ts, discretize_time):
+        """
+        Create a new object from an msprime.TreeSequence
+
+        :param ts: A tree sequence from msprime
+        :type ts: msprime.TreeSequence
+        :param discretize_time: Convert time into integers?
+        :type discretize_time: boolean
+
+        :rtype: :class:`fwdpy11.SlocusPop`
+        :returns: A population object with an initialized
+        :class:`fwdpy11.ts.TableCollection`
+
+        .. versionadded:: 0.2.0
+
+        .. note::
+
+            In general, initializing a population using
+            the output from a coalescent simulation is
+            a tricky business.  There are issues of
+            parameter scaling and the appropriateness
+            of the coalescent model itself. A key issue
+            is that your input tree sequence must have
+            node times in the correct time units! (Generations,
+            for example.) See :ref:`ts` for more discussion
+
+        """
         from fwdpy11.ts_from_msprime import _create_SlocusPop
         return _create_SlocusPop(ts, discretize_time)
