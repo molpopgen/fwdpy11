@@ -33,6 +33,7 @@ Welcome to fwdpy11's documentation!
 
     pages/types
     pages/tstypes
+    pages/ts
     pages/rng
     pages/regions
     pages/geneticvalues
