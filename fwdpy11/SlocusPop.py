@@ -62,14 +62,12 @@ class SlocusPop(_SlocusPop):
                                            args))
 
     @staticmethod
-    def create_from_msprime(ts, discretize_time):
+    def create_from_msprime(ts):
         """
         Create a new object from an msprime.TreeSequence
 
         :param ts: A tree sequence from msprime
         :type ts: msprime.TreeSequence
-        :param discretize_time: Convert time into integers?
-        :type discretize_time: boolean
 
         :rtype: :class:`fwdpy11.SlocusPop`
         :returns: A population object with an initialized
@@ -90,7 +88,7 @@ class SlocusPop(_SlocusPop):
 
         """
         from fwdpy11.ts_from_msprime import _create_SlocusPop
-        return SlocusPop(_create_SlocusPop(ts, discretize_time))
+        return SlocusPop(_create_SlocusPop(ts, False))
 
     def dump_tables_to_msprime(self):
         """
