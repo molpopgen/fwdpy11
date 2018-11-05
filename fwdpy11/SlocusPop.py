@@ -90,4 +90,18 @@ class SlocusPop(_SlocusPop):
 
         """
         from fwdpy11.ts_from_msprime import _create_SlocusPop
-        return _create_SlocusPop(ts, discretize_time)
+        return SlocusPop(_create_SlocusPop(ts, discretize_time))
+
+    def dump_tables_to_msprime(self):
+        """
+        Dump the population's TableCollection into
+        an msprime TreeSequence
+
+        :rtype: msprime.TreeSequence
+
+        .. todo::
+
+            Incorporate the various metadata values.
+        """
+        import fwdpy11._tables_to_msprime as t2msp
+        return t2msp.dump_tables_to_msprime(self)
