@@ -1,6 +1,5 @@
 import numpy as np
 import msprime
-import pickle
 
 
 # TODO: mutation origin times are recorded forwards in time,
