@@ -109,6 +109,12 @@ fwdpy11.ts
     :members:
     :show-inheritance:
 
+fwdpy11.tsrecorders
+------------------------------
+.. automodule:: fwdpy11.tsrecorders
+    :members:
+    :show-inheritance:
+
 fwdpy11.ts_from_msprime
 ------------------------------
 .. automodule:: fwdpy11.ts_from_msprime
