@@ -1,5 +1,4 @@
 import unittest
-import msprime
 import fwdpy11.ts_from_msprime
 import numpy as np
 import fwdpy11
@@ -8,6 +7,7 @@ import fwdpy11
 class testConversion(unittest.TestCase):
     @classmethod
     def setUp(self):
+        import msprime
         self.ts = msprime.simulate(10, recombination_rate=0.025, Ne=1000)
 
     def testGetTables(self):
