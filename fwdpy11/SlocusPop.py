@@ -88,7 +88,7 @@ class SlocusPop(_SlocusPop):
 
         """
         from fwdpy11.ts_from_msprime import _create_SlocusPop
-        return SlocusPop(_create_SlocusPop(ts, False))
+        return SlocusPop(_create_SlocusPop(ts))
 
     def dump_tables_to_msprime(self):
         """

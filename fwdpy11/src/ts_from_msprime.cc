@@ -13,8 +13,8 @@
 namespace py = pybind11;
 
 // TODO put this in a header in case anyone else finds it useful?
-std::tuple<fwdpp::ts::node_vector,fwdpp::ts::edge_vector,int,double>
-convert_tables_from_msprime(py::object ts, const bool discretize_time)
+std::tuple<fwdpp::ts::node_vector, fwdpp::ts::edge_vector, int, double>
+convert_tables_from_msprime(py::object ts)
 {
     py::object tstables = ts.attr("tables");
     py::object tsnodes = tstables.attr("nodes");
@@ -53,10 +53,6 @@ convert_tables_from_msprime(py::object ts, const bool discretize_time)
         {
             // reverse direction of time
             auto t = time_(i);
-            if (discretize_time)
-                {
-                    t = std::ceil(t);
-                }
             if (t != 0.0)
                 {
                     t *= -1.0;
@@ -73,9 +69,9 @@ convert_tables_from_msprime(py::object ts, const bool discretize_time)
 }
 
 fwdpy11::SlocusPop
-create_SlocusPop_from_tree_sequence(py::object ts, const bool discretize_time)
+create_SlocusPop_from_tree_sequence(py::object ts)
 {
-    auto t = convert_tables_from_msprime(ts, discretize_time);
+    auto t = convert_tables_from_msprime(ts);
     auto nodes(std::move(std::get<0>(t)));
     auto edges(std::move(std::get<1>(t)));
     auto twoN = std::get<2>(t);
@@ -109,7 +105,7 @@ PYBIND11_MODULE(ts_from_msprime, m)
         pybind11::module::import("fwdpy11.ts"));
 
     // Expose this for unit-testing purposes
-    m.def("_convert_tables",&convert_tables_from_msprime);
+    m.def("_convert_tables", &convert_tables_from_msprime);
 
     // This is the back-end for fwdpy11.SlocusPop.create_from_msprime
     m.def("_create_SlocusPop", &create_SlocusPop_from_tree_sequence);
