@@ -141,6 +141,10 @@ wfSlocusPop_ts(
         {
             throw std::invalid_argument("empty list of population sizes");
         }
+    if (pop.tables.node_table.empty())
+        {
+            throw std::invalid_argument("node table is not initialized");
+        }
     const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
 
@@ -179,17 +183,7 @@ wfSlocusPop_ts(
           };
     std::queue<std::size_t> mutation_recycling_bin;
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
-                           next_index = 2 * pop.diploids.size();
-    // If the node table is NOT empty,
-    // then we have an initial tree sequence
-    // to work with.  This could be from
-    // msprime, or b/c we've already evolved the pop'n.
-    // Either way, the next node index is at the
-    // end of the node table in this case
-    if (!pop.tables.node_table.empty())
-        {
-            next_index = pop.tables.node_table.size();
-        }
+                           next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     std::vector<fwdpp::ts::TS_NODE_INT> ancient_samples;
