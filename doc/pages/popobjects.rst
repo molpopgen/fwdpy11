@@ -183,7 +183,6 @@ The output of msprime_ will be used to fill containers that we then use to const
     import fwdpy11
     import msprime
 
-
     def find_all_derived(s):
         """
         Returns indexes of all
