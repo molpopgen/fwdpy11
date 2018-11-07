@@ -32,7 +32,6 @@ gives me a place to put examples based on specific questions from users.
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
 
-
     pop = fp11.SlocusPop(N)
     pops = fp11wf.evolve(rng, pop, params)
 
