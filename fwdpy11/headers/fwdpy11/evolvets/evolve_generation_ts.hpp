@@ -146,6 +146,7 @@ namespace fwdpy11
                 // Give the caller a chance to generate
                 // any metadata for the offspring that
                 // may depend on the parents
+                offspring_metadata[next_offspring].label = next_offspring;
                 update_offspring(offspring_metadata[next_offspring], p1, p2,
                                  pop.diploid_metadata);
             }
@@ -153,6 +154,7 @@ namespace fwdpy11
                == next_index + 2 * static_cast<std::int32_t>(N_next));
         // This is constant-time
         pop.diploids.swap(offspring);
+        pop.diploid_metadata.swap(offspring_metadata);
     }
 } // namespace fwdpy11
 #endif
