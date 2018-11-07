@@ -249,8 +249,65 @@ The other form of metadata is the same as for alive individuals:
     print(md.dtype)
     print(md[:5])
 
+
+Obtaining genotype data from tree sequences
+------------------------------------------------------------------------
+
+You may obtain genotype data in the form of :class:`fwdpy11.sampling.DataMatrix`
+objects. (See :ref:`datamatrix`.)  
+
+The matrixes are constructed from a list of *node* ids (as opposed to individual indexes
+as in :ref:`datamatrix`).  So, to get a matrix for our first 50 diploids:
+
+.. ipython:: python
+
+    m = fwdpy11.ts.make_data_matrix(pop, [i for i in range(100)], True, True)
+
+The last two boolean arguments are whether or not to build data for neutral and selected
+sites, respectively.  
+
+The return value contains the following:
+
+.. ipython:: python
+
+    print(np.array(m.neutral))
+    print(np.array(m.selected))
+
+The neutral block is empty because we haven't added neutral mutations to our tree sequence yet (see above).
+
+You may access the various fields using the usual operations:
+
+.. ipython:: python
+
+    print(m.selected.positions[:5])
+    for i in range(5):
+        assert m.selected.positions[i] == pop.mutations[m.selected_keys[i]].pos
+
+The node id list passed to :func:`fwdpy11.ts.make_data_matrix` may contain nodes for alive samples 
+or for ancient samples, allowing you to compare modern vs ancient nodes on the trees.
+
+To get a list of node ids for ancient samples that are in the same order as the individuals to
+which they belong, the following trick helps:
+
+.. ipython:: python
+
+    # Revisit our ancient node data
+    print(ar[:5])
+    # Stack and flatten gives us the nodes
+    # for the individuals in the same order
+    # as in ar:
+    anodes = np.stack((ar['n1'],ar['n2']), axis=1).flatten()
+    print(anodes[:10])
+
+
 Initializing a simulation using msprime
 ------------------------------------------------------------------------
 
+.. todo:: needs more testing
+
 Outputting tables to msprime
 ------------------------------------------------------------------------
+
+.. todo::
+
+    Need to work out tables for individual metadata
