@@ -188,12 +188,66 @@ population at user-specified time points:
                     sr.assign(s)
                 self.timepoints.pop(0)
 
+.. note::
+
+    It is an error to attempt to preserve individuals from the final generation
+    of a simulation as ancient samples.
 
 The need to take random samples is so common that a class to do this is already provided.
-See :class:`fwdpy11.tsrecorders.RandomAncientSamples` for details.
+See :class:`fwdpy11.tsrecorders.RandomAncientSamples` for details. We will use this built-in
+type in the following section.
 
 Viewing data for ancient samples
 ------------------------------------------------------------------------
+
+.. ipython:: python
+
+    import fwdpy11.tsrecorders
+    pop = fwdpy11.SlocusPop(N,1.0)
+    times = [i for i in range(2000, 10*pop.N, 2000)]
+    # Parameters are: seed, sample size, time points:
+    rec = fwdpy11.tsrecorders.RandomAncientSamples(14351, 50, times)
+    fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100, rec)
+
+At the end of the simulation, our population has a list of nodes corresponding to its
+ancient samples:
+
+.. ipython:: python
+
+    print(pop.tables.preserved_nodes[:10])
+
+Their node times must conform to what we expect:
+
+.. ipython:: python
+
+    print(np.unique([pop.tables.nodes[i].time for i in pop.tables.preserved_nodes]))
+
+We also have *metadata* associated with our ancient samples.  For example, we 
+have a mapping from their nodes to what individual they were:
+
+.. ipython:: python
+
+    print(pop.ancient_sample_records)
+    for i in pop.ancient_sample_records[:5]:
+        # time, node 1, node 2
+        print(i.time, i.n1, i.n2)
+
+We may view the same data using a numpy array:
+
+.. ipython:: python
+
+    ar = np.array(pop.ancient_sample_records, copy=False)
+    print(ar.dtype)
+    print(ar[:5])
+
+The other form of metadata is the same as for alive individuals:
+
+.. ipython:: python
+
+    print(type(pop.ancient_sample_metadata[0]))
+    md = np.array(pop.ancient_sample_metadata)
+    print(md.dtype)
+    print(md[:5])
 
 Initializing a simulation using msprime
 ------------------------------------------------------------------------
