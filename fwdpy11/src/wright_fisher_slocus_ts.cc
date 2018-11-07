@@ -201,7 +201,7 @@ wfSlocusPop_ts(
                 rng, pop, N_next, mu_selected, pick_first_parent,
                 pick_second_parent, generate_offspring_metadata, bound_mmodel,
                 mutation_recycling_bin, bound_rmodel, pop.generation,
-                pop.tables, first_parental_index, next_index);
+                first_parental_index, next_index);
 
             pop.N = N_next;
             // TODO: deal with random effects

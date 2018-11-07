@@ -48,7 +48,7 @@ namespace fwdpy11
         const std::tuple<std::int32_t, std::int32_t>& parent_nodes,
         const std::int32_t generation, const std::int32_t next_index,
         poptype& pop, std::size_t& offspring_gamete,
-        fwdpp::ts::table_collection& tables, mrecbin& mutation_recycling_bin,
+        mrecbin& mutation_recycling_bin,
         grecbin& gamete_recycling_bin)
     {
         auto breakpoints = recmodel();
@@ -73,7 +73,7 @@ namespace fwdpy11
             breakpoints, parent_g1, parent_g2, pop.gametes, pop.mutations,
             gamete_recycling_bin, pop.neutral, pop.selected);
         //TODO: generalize this for offspring deme != 0
-        tables.add_offspring_data(next_index, breakpoints, new_mutations,
+        pop.tables.add_offspring_data(next_index, breakpoints, new_mutations,
                                   parent_nodes, 0, generation);
         return next_index + 1;
     }
@@ -92,7 +92,6 @@ namespace fwdpy11
                          std::queue<std::size_t>& mutation_recycling_bin,
                          const breakpoint_function& recmodel,
                          const fwdpp::uint_t generation,
-                         fwdpp::ts::table_collection& tables,
                          std::int32_t first_parental_index,
                          std::int32_t next_index)
     {
@@ -135,11 +134,11 @@ namespace fwdpy11
                 auto& dip = offspring[next_offspring];
                 next_index_local = generate_offspring(
                     rng, recmodel, mmodel, mu, p1, p1g1, p1g2, p1id,
-                    generation, next_index_local, pop, dip.first, tables,
+                    generation, next_index_local, pop, dip.first,
                     mutation_recycling_bin, gamete_recycling_bin);
                 next_index_local = generate_offspring(
                     rng, recmodel, mmodel, mu, p2, p2g1, p2g2, p2id,
-                    generation, next_index_local, pop, dip.second, tables,
+                    generation, next_index_local, pop, dip.second,
                     mutation_recycling_bin, gamete_recycling_bin);
                 pop.gametes[dip.first].n++;
                 pop.gametes[dip.second].n++;
