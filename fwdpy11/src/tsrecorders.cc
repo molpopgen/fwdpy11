@@ -10,6 +10,20 @@ PYBIND11_MODULE(tsrecorders, m)
 {
     m.doc() = "Classes for recording ancient samples.";
 
+    py::class_<fwdpy11::samplerecorder>(
+        m, "SampleRecorder",
+        "Allow recording of ancient samples during simulations with tree "
+        "sequences.")
+        .def(py::init<>())
+        .def_readonly("samples", &fwdpy11::samplerecorder::samples,
+                      "Access to samples. For unit-testing purposes")
+        .def("add_sample", &fwdpy11::samplerecorder::add_sample,
+             py::arg("individual"),
+             "Add the index of an individual to the list of samples")
+        .def("assign", &fwdpy11::samplerecorder::assign, py::arg("samples"),
+             "Add a list of individuals to the list of samples.  Input is a "
+             "numpy array with dtype np.uint32");
+
     py::class_<fwdpy11::no_ancient_samples>(
         m, "NoAncientSamples",
         "A recorder for tree sequence simulations that does nothing.")
