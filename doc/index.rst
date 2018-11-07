@@ -32,6 +32,8 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/types
+    pages/tstypes
+    pages/ts
     pages/rng
     pages/regions
     pages/geneticvalues
@@ -98,6 +100,24 @@ fwdpy11._Population
 fwdpy11._Populations
 ------------------------------
 .. automodule:: fwdpy11._Populations
+    :members:
+    :show-inheritance:
+
+fwdpy11.ts
+------------------------------
+.. automodule:: fwdpy11.ts
+    :members:
+    :show-inheritance:
+
+fwdpy11.tsrecorders
+------------------------------
+.. automodule:: fwdpy11.tsrecorders
+    :members:
+    :show-inheritance:
+
+fwdpy11.ts_from_msprime
+------------------------------
+.. automodule:: fwdpy11.ts_from_msprime
     :members:
     :show-inheritance:
 

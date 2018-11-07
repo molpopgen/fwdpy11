@@ -219,6 +219,38 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.ts',
+        ['fwdpy11/src/ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.tsrecorders',
+        ['fwdpy11/src/tsrecorders.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.ts_from_msprime',
+        ['fwdpy11/src/ts_from_msprime.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.wright_fisher_slocus_ts',
+        ['fwdpy11/src/wright_fisher_slocus_ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
 ]
 
 

@@ -1,6 +1,7 @@
 #ifndef FWDPY11_CREATE_POPS_HPP__
 #define FWDPY11_CREATE_POPS_HPP__
 
+#include <limits>
 #include <vector>
 #include <utility>
 

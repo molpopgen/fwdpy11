@@ -1,0 +1,44 @@
+digraph NH {
+rankdir=LR;
+NodeTable [
+    pos="0,0!",
+    fontsize=32,
+    shape=plaintext
+    label=<
+
+
+    <table border='1' cellborder='0'>
+        <tr><td>ID</td><td>time</td></tr>
+        <tr><td>0</td><td>21</td></tr>
+        <tr><td>1</td><td>21</td></tr>
+        <tr><td>2</td><td>21</td></tr>
+        <tr><td>3</td><td>21</td></tr>
+        <tr><td>4</td><td>19</td></tr>
+        <tr><td>5</td><td>15</td></tr>
+        <tr><td>6</td><td>10</td></tr>
+    </table>
+
+    >
+];
+
+EdgeTable [
+    pos="4,0!",
+    fontsize=32,
+    shape=plain
+    label=<
+    <table border='1' cellborder='0'>
+        <tr><td>left</td><td>right</td><td>parent</td><td>child</td></tr>
+        <tr><td>l</td><td>r</td><td>4</td><td>0</td></tr>
+        <tr><td>l</td><td>r</td><td>4</td><td>1</td></tr>
+        <tr><td>l</td><td>r</td><td>5</td><td>2</td></tr>
+        <tr><td>l</td><td>r</td><td>5</td><td>3</td></tr>
+        <tr><td>l</td><td>r</td><td>6</td><td>4</td></tr>
+        <tr><td>l</td><td>r</td><td>6</td><td>5</td></tr>
+    </table>
+
+    >
+]
+
+
+}
+    

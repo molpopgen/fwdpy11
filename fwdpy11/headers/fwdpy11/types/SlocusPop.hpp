@@ -46,8 +46,8 @@ namespace fwdpy11
         SlocusPop &operator=(const SlocusPop &) = default;
 
         // Constructors for Python
-        SlocusPop(const fwdpp::uint_t N)
-            : Population{ N }, diploids(N, { 0, 0 })
+        SlocusPop(const fwdpp::uint_t N, const double length)
+            : Population{ N, length }, diploids(N, { 0, 0 })
         {
             if (!N)
                 {
@@ -77,7 +77,8 @@ namespace fwdpy11
         bool
         operator==(const SlocusPop &rhs) const
         {
-            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs);
+            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs)
+                   && popbase_t::tables_equal(rhs);
         };
 
         void

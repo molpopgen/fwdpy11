@@ -15,8 +15,8 @@ __version__ = '0.2.0a0'
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
-if pybind11.__version__ < '2.2.2':
-    raise RuntimeError("pybind11 >= " + '2.2.2' + " required")
+if pybind11.__version__ < '2.2.3':
+    raise RuntimeError("pybind11 >= " + '2.2.3' + " required")
 
 if sys.version_info >= (3,7):
     if pybind11.__version__ < '2.3.0':
@@ -219,6 +219,38 @@ ext_modules = [
         libraries=['gsl', 'gslcblas'],
         language='c++'
     ),
+    Extension(
+        'fwdpy11.ts',
+        ['fwdpy11/src/ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.tsrecorders',
+        ['fwdpy11/src/tsrecorders.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.ts_from_msprime',
+        ['fwdpy11/src/ts_from_msprime.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
+    Extension(
+        'fwdpy11.wright_fisher_slocus_ts',
+        ['fwdpy11/src/wright_fisher_slocus_ts.cc'],
+        library_dirs=LIBRARY_DIRS,
+        include_dirs=INCLUDES,
+        libraries=['gsl', 'gslcblas'],
+        language='c++'
+    ),
 ]
 
 
@@ -342,7 +374,7 @@ setup(
     data_files=[('fwdpy11', ['COPYING', 'README.rst'])],
     long_description=long_desc,
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2.2', 'numpy'],
+    install_requires=['pybind11>=2.2.3', 'numpy'],
     cmdclass={'build_ext': BuildExt},
     packages=PKGS,
     package_data=generated_package_data,

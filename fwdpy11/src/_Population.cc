@@ -58,11 +58,15 @@ namespace
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::ancient_sample_record>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Population, m)
 {
     m.doc() = "Defines the ABC :class:`fwdpy11._Population`";
+
+    auto imported_ts = static_cast<pybind11::object>(
+        pybind11::module::import("fwdpy11.ts"));
 
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
@@ -98,6 +102,12 @@ PYBIND11_MODULE(_Population, m)
         .def_readwrite("diploid_metadata",
                        &fwdpy11::Population::diploid_metadata,
                        "Container of diploid metadata.")
+        .def_readwrite("ancient_sample_metadata",
+                       &fwdpy11::Population::ancient_sample_metadata,
+                       "Container of metadata for ancient samples.")
+        .def_readwrite("ancient_sample_records",
+                       &fwdpy11::Population::ancient_sample_records,
+                       "Container of time and node data for ancient samples")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) -> py::object {
@@ -166,19 +176,18 @@ PYBIND11_MODULE(_Population, m)
              py::arg("pos"))
         .def_readonly("gametes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
-            .def_readonly("fixations", &fwdpy11::Population::fixations,
-                          FIXATIONS_DOCSTRING)
-            .def_readonly("fixation_times",
-                          &fwdpy11::Population::fixation_times,
-                          FIXATION_TIMES_DOCSTRING)
-            .def("find_mutation_by_key",
-                 [](const fwdpy11::Population& pop,
-                    const std::tuple<double, double, fwdpp::uint_t>& key,
-                    const std::int64_t offset) {
-                     return pop.find_mutation_by_key(key, offset);
-                 },
-                 py::arg("pop"), py::arg("offset") = 0,
-                 R"delim(
+        .def_readonly("fixations", &fwdpy11::Population::fixations,
+                      FIXATIONS_DOCSTRING)
+        .def_readonly("fixation_times", &fwdpy11::Population::fixation_times,
+                      FIXATION_TIMES_DOCSTRING)
+        .def("find_mutation_by_key",
+             [](const fwdpy11::Population& pop,
+                const std::tuple<double, double, fwdpp::uint_t>& key,
+                const std::int64_t offset) {
+                 return pop.find_mutation_by_key(key, offset);
+             },
+             py::arg("pop"), py::arg("offset") = 0,
+             R"delim(
              Find a mutation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
@@ -192,14 +201,14 @@ PYBIND11_MODULE(_Population, m)
 
              .. versionadded:: 0.2.0
              )delim")
-            .def("find_fixation_by_key",
-                 [](const fwdpy11::Population& pop,
-                    const std::tuple<double, double, fwdpp::uint_t>& key,
-                    const std::int64_t offset) {
-                     return pop.find_fixation_by_key(key, offset);
-                 },
-                 py::arg("pop"), py::arg("offset") = 0,
-                 R"delim(
+        .def("find_fixation_by_key",
+             [](const fwdpy11::Population& pop,
+                const std::tuple<double, double, fwdpp::uint_t>& key,
+                const std::int64_t offset) {
+                 return pop.find_fixation_by_key(key, offset);
+             },
+             py::arg("pop"), py::arg("offset") = 0,
+             R"delim(
              Find a fixation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
@@ -212,5 +221,11 @@ PYBIND11_MODULE(_Population, m)
              :returns: Index of fixation if found, or -1 otherwise.
 
              .. versionadded:: 0.2.0
-             )delim");
+             )delim")
+        // TODO: why does readwrite fail?
+        .def_readonly("tables", &fwdpy11::Population::tables,
+                      R"delim(
+                Give access to the population's 
+                :class:`fwdpy11.ts.TableCollection`
+                )delim");
 }

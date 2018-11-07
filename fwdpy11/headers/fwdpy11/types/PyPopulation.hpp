@@ -8,6 +8,7 @@
 #include <fwdpp/sugar/poptypes/popbase.hpp>
 #include <fwdpp/sampling_functions.hpp>
 #include <fwdpp/data_matrix.hpp>
+#include <fwdpp/ts/table_collection.hpp>
 #include "../rng.hpp"
 #include "Diploid.hpp"
 
@@ -23,6 +24,19 @@ namespace fwdpy11
       private:
         virtual void process_individual_input() = 0;
 
+        static fwdpp::ts::table_collection
+        init_tables(const fwdpp::uint_t N, const double L)
+        // Default initialization of tables.
+        // We ensure that there are 2N nodes in pop zero
+        // at time 0
+        {
+            if (L == std::numeric_limits<double>::max())
+                {
+                    return fwdpp::ts::table_collection(L);
+                }
+            return fwdpp::ts::table_collection(2 * N, 0, 0, L);
+        }
+
       public:
         using fwdpp_base
             = fwdpp::sugar::popbase<mutation_type, mcont, gcont, mvector,
@@ -30,15 +44,24 @@ namespace fwdpy11
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
-        std::vector<DiploidMetadata> diploid_metadata;
+        //TODO: initalized ancient_sample_metadata and tables,
+        //TODO figure out what to do with class constructor??
+        //TODO Introduce types for ancient sample individual and node tracking
+        std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
+        std::vector<ancient_sample_record> ancient_sample_records;
+        std::vector<fwdpp::uint_t> mcounts_from_preserved_nodes;
+        fwdpp::ts::table_collection tables;
 
         virtual ~PyPopulation() = default;
 
         PyPopulation(PyPopulation &&) = default;
         PyPopulation(const PyPopulation &) = default;
 
-        PyPopulation(fwdpp::uint_t N_)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N)
+        PyPopulation(fwdpp::uint_t N_, const double L)
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}, mcounts_from_preserved_nodes{},
+              tables(init_tables(N_, L))
         {
         }
 
@@ -49,7 +72,10 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 }, diploid_metadata(N)
+              N{ N_ }, generation{ 0 },
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}, mcounts_from_preserved_nodes{},
+              tables(std::numeric_limits<double>::max())
         {
         }
 
@@ -155,6 +181,60 @@ namespace fwdpy11
                            sizeof(std::size_t));
             return sample_individuals_details(pop, individuals, haplotype,
                                               remove_fixed);
+        }
+
+        // TODO: redo once fwdpp adds comparison operator for table_collection
+        bool
+        tables_equal(const PyPopulation &rhs) const
+        {
+            return mcounts_from_preserved_nodes
+                   == rhs.mcounts_from_preserved_nodes;
+            if (tables.genome_length() != rhs.tables.genome_length())
+                {
+                    return false;
+                }
+            if (tables.edge_table.size() != rhs.tables.edge_table.size()
+                || tables.node_table.size() != rhs.tables.node_table.size()
+                || tables.mutation_table.size()
+                       != rhs.tables.mutation_table.size())
+                {
+                    return false;
+                }
+            for (std::size_t i = 0; i < tables.edge_table.size(); ++i)
+                {
+                    auto e1 = tables.edge_table[i];
+                    auto e2 = rhs.tables.edge_table[i];
+                    bool l = (e1.left == e2.left);
+                    bool r = (e1.right == e2.right);
+                    bool p = (e1.parent == e2.parent);
+                    bool c = (e1.child == e2.child);
+                    if (!l || !r || !p || !c)
+                        {
+                            return false;
+                        }
+                }
+            for (std::size_t i = 0; i < tables.node_table.size(); ++i)
+                {
+                    auto n1 = tables.node_table[i];
+                    auto n2 = rhs.tables.node_table[i];
+                    bool p = (n1.population == n2.population);
+                    bool t = (n1.time == n2.time);
+                    if (!p || !t)
+                        {
+                            return false;
+                        }
+                }
+            for (std::size_t i = 0; i < tables.mutation_table.size(); ++i)
+                {
+                    auto mr1 = tables.mutation_table[i];
+                    auto mr2 = rhs.tables.mutation_table[i];
+                    bool n = (mr1.node == mr2.node);
+                    bool k = (mr1.key == mr2.key);
+                    if (!n || !k)
+                        {
+                            return false;
+                        }
+                }
         }
     };
 } // namespace fwdpy11

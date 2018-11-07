@@ -24,6 +24,7 @@
 #include <sstream>
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
+#include <fwdpp/ts/serialization.hpp>
 #include <fwdpy11/serialization/diploid_metadata.hpp>
 
 namespace fwdpy11
@@ -46,8 +47,14 @@ namespace fwdpy11
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
-            fwdpy11::serialize_diploid_metadata()(buffer, pop->diploid_metadata);
+            fwdpy11::serialize_diploid_metadata()(buffer,
+                                                  pop->diploid_metadata);
+            fwdpy11::serialize_diploid_metadata()(
+                buffer, pop->ancient_sample_metadata);
+            fwdpy11::serialize_ancient_sample_records()(
+                buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
+            fwdpp::ts::io::serialize_tables(buffer, pop->tables);
             return buffer.str();
         }
 
@@ -86,7 +93,12 @@ namespace fwdpy11
                 buffer.read(reinterpret_cast<char *>(&pop.generation),
                             sizeof(unsigned));
                 deserialize_diploid_metadata()(buffer, pop.diploid_metadata);
+                deserialize_diploid_metadata()(buffer,
+                                               pop.ancient_sample_metadata);
+                fwdpy11::deserialize_ancient_sample_records()(
+                    buffer, pop.ancient_sample_records);
                 fwdpp::io::deserialize_population(buffer, pop);
+                pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
                 return pop;
             }
         };

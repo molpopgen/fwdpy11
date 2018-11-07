@@ -52,9 +52,11 @@ namespace fwdpy11
 
         // Constructors for Python
         MlocusPop(const fwdpp::uint_t N,
-                  std::vector<std::pair<double, double>> locus_boundaries_)
-            : Population{ N }, diploids(N, diploid_t(locus_boundaries_.size(),
-                                                     DiploidGenotype{ 0, 0 })),
+                  std::vector<std::pair<double, double>> locus_boundaries_,
+                  const double length)
+            : Population{ N, length },
+              diploids(N, diploid_t(locus_boundaries_.size(),
+                                    DiploidGenotype{ 0, 0 })),
               nloci{ static_cast<fwdpp::uint_t>(locus_boundaries_.size()) },
               locus_boundaries{ std::move(locus_boundaries_) }
         {
@@ -103,7 +105,7 @@ namespace fwdpy11
         {
             return this->diploids == rhs.diploids
                    && this->locus_boundaries == rhs.locus_boundaries
-                   && popbase_t::is_equal(rhs);
+                   && popbase_t::is_equal(rhs) && popbase_t::tables_equal(rhs);
         };
 
         void
