@@ -9,6 +9,11 @@ Background reading:
 
 .. todo:: Section on serialization
 
+.. note::
+
+    This page is currently limited in scope.  We'll add in more
+    details in later releases.
+
 Overview
 ------------------------------------
 
@@ -45,9 +50,9 @@ a :class:`fwdpy11.ts.TableCollection`
 
     rho=1000.0
 
-Set up a sim w/no neutral params
+Set up a sim w/no neutral parameters
 Currently, attempting to simulate
-neutral variant will throw an error b/c
+neutral variant will throw an error because
 I've not put some of the requisite tooling 
 into the back-end, but that will come soon.
 
@@ -63,8 +68,8 @@ into the back-end, but that will come soon.
     params = fwdpy11.model_params.ModelParams(**p)
     params.demography=np.array([N]*10*N,dtype=np.uint32)
 
-Run it, simplifying every 100 generations.  Note that we are calling a different evolve function,
-:func:`fwdpy11.wright_fisher_ts.evolve`:
+Run it, simplifying every 100 generations.  Note that we are calling 
+:func:`fwdpy11.wright_fisher_ts.evolve`: to evolve the population.
 
 .. ipython:: python
 
@@ -152,8 +157,46 @@ Iterating over trees
 Recording ancient samples during a simulation
 ------------------------------------------------------------------------
 
+One of the selling points of tree sequences is a very efficient new method
+of analyzing time series samples from simulations.  Without tree sequences,
+we used "recorder" classes to analyze our populations during evolution. See
+:ref:`recorders` for details.
+
+Recording samples with tree sequences deciding which individuals to record
+and then passing their indexes on to an instance of 
+:class:`fwdpy11.tsrecorders.SampleRecorder`.  This class is a bridge between
+you and the C++ back end.  The best way to show how to cross that bridge is 
+to provide an example of a class that will take random samples from the
+population at user-specified time points:
+
+.. code-block:: python
+
+    class RandomSamples(object):
+        def __init__(self, nsam, timepoints):
+            self.nsam = nsam
+            self.timepoints = timepoints
+
+        def __call__(self, pop, sr):
+            if len(self.timepoints) > 0 and pop.generation > 0:
+                if pop.generation == self.timepoints[0]:
+                    # Make list of possible samples.  
+                    # Note the dtype.
+                    ind = np.arange(0, pop.N, dtype=np.uint32)
+                    # requires that numpy be seeded
+                    s = np.random.choice(ind, self.nsam, replace=False)
+                    # Assign data to the SampleRecorder
+                    sr.assign(s)
+                self.timepoints.pop(0)
+
+
+The need to take random samples is so common that a class to do this is already provided.
+See :class:`fwdpy11.tsrecorders.RandomAncientSamples` for details.
+
 Viewing data for ancient samples
 ------------------------------------------------------------------------
 
 Initializing a simulation using msprime
+------------------------------------------------------------------------
+
+Outputting tables to msprime
 ------------------------------------------------------------------------
