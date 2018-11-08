@@ -9,6 +9,7 @@
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
+#include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/mutate_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -207,6 +208,10 @@ PYBIND11_MODULE(ts, m)
         m, "MarginalTree",
         "A sparse tree representation of a non-recombining genomic segment. "
         "See :ref:`ts_data_types` for details.")
+        .def_readonly("left", &fwdpp::ts::marginal_tree::left,
+                      "Left edge of genomic interval (inclusive)")
+        .def_readonly("right", &fwdpp::ts::marginal_tree::right,
+                      "Right edge of genomic interval (exclusive")
         .def_readonly("parents", &fwdpp::ts::marginal_tree::parents,
                       "Vector of child -> parent relationships")
         .def_readonly("leaf_counts", &fwdpp::ts::marginal_tree::leaf_counts)
@@ -221,7 +226,29 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("next_sample", &fwdpp::ts::marginal_tree::next_sample)
         .def_readonly("sample_index_map",
                       &fwdpp::ts::marginal_tree::sample_index_map)
-        .def_readonly("sample_size",&fwdpp::ts::marginal_tree::sample_size);
+        .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size);
+
+    py::class_<fwdpp::ts::tree_visitor>(m, "TreeVisitor")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>())
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>())
+        .def("tree", &fwdpp::ts::tree_visitor::tree,
+             py::return_value_policy::reference_internal)
+        .def("__call__",
+             [](fwdpp::ts::tree_visitor& tv, const bool update_samples) {
+                 bool rv = false;
+                 if (update_samples)
+                     {
+                         rv = tv(std::true_type(), std::true_type());
+                     }
+                 else
+                     {
+                         rv = tv(std::true_type(), std::false_type());
+                     }
+                 return rv;
+             });
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
