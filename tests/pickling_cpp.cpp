@@ -36,7 +36,7 @@ py::bytes
 general_pickler(py::object p)
 {
     auto f = py::module::import("pickle").attr("dumps");
-    return f(p);
+    return f(p,-1);
 }
 
 PYBIND11_MODULE(pickling_cpp, m)
