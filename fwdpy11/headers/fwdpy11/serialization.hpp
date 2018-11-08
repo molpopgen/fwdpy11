@@ -25,6 +25,7 @@
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
 #include <fwdpp/ts/serialization.hpp>
+#include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpy11/serialization/diploid_metadata.hpp>
 
 namespace fwdpy11
@@ -39,7 +40,7 @@ namespace fwdpy11
 
         template <typename ostream, typename poptype>
         ostream &
-        serialize_details(ostream & buffer,const poptype *pop)
+        serialize_details(ostream &buffer, const poptype *pop)
         {
             buffer << "fp11";
             auto m = magic();
@@ -59,9 +60,9 @@ namespace fwdpy11
 
         struct deserialize_details
         {
-            template <typename istream,typename poptype>
+            template <typename istream, typename poptype>
             inline istream &
-            operator()(istream & buffer, poptype & pop) const
+            operator()(istream &buffer, poptype &pop) const
             {
                 char c[4];
                 buffer.read(&c[0], 4 * sizeof(char));
@@ -95,6 +96,15 @@ namespace fwdpy11
                     buffer, pop.ancient_sample_records);
                 fwdpp::io::deserialize_population(buffer, pop);
                 pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
+                if (!pop.tables.edge_table.empty())
+                    {
+                        std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
+                        std::iota(samples.begin(), samples.end(), 0);
+                        fwdpp::ts::count_mutations(
+                            pop.tables, pop.mutations, samples, pop.mcounts,
+                            pop.mcounts_from_preserved_nodes);
+                    }
+
                 return buffer;
             }
         };
