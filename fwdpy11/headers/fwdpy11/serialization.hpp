@@ -21,7 +21,7 @@
  */
 #ifndef FWDPY11_SERIALIZATION_HPP
 #define FWDPY11_SERIALIZATION_HPP
-#include <sstream>
+
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
 #include <fwdpp/ts/serialization.hpp>
@@ -37,11 +37,10 @@ namespace fwdpy11
             return 2;
         }
 
-        template <typename poptype>
-        std::string
-        serialize_details(const poptype *pop)
+        template <typename ostream, typename poptype>
+        ostream &
+        serialize_details(ostream & buffer,const poptype *pop)
         {
-            std::ostringstream buffer;
             buffer << "fp11";
             auto m = magic();
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
@@ -55,30 +54,27 @@ namespace fwdpy11
                 buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
             fwdpp::ts::io::serialize_tables(buffer, pop->tables);
-            return buffer.str();
+            return buffer;
         }
 
-        template <typename poptype> struct deserialize_details
+        struct deserialize_details
         {
-            template <typename... constructor_data>
-            inline poptype
-            operator()(const std::string &s, constructor_data... cdata)
+            template <typename istream,typename poptype>
+            inline istream &
+            operator()(istream & buffer, poptype & pop) const
             {
-                std::istringstream buffer;
-                buffer.str(s);
-                buffer.seekg(0);
-                poptype pop(cdata...);
+                char c[4];
+                buffer.read(&c[0], 4 * sizeof(char));
+                std::string s(c);
                 // We need to test for existance of serialization
                 // version numbers, introduced in 0.1.3.  Prior to that,
                 // it was wild west :).
-                bool have_magic = (s.substr(0, 4) == "fp11") ? true : false;
+                bool have_magic = (s == "fp11") ? true : false;
                 // We default to version 1, which includes all
                 // previous releases that had no version numbers
                 int version = 1;
                 if (have_magic)
                     {
-                        char c[4];
-                        buffer.read(&c[0], 4 * sizeof(char));
                         buffer.read(reinterpret_cast<char *>(&version),
                                     sizeof(int));
                     }
@@ -99,7 +95,7 @@ namespace fwdpy11
                     buffer, pop.ancient_sample_records);
                 fwdpp::io::deserialize_population(buffer, pop);
                 pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
-                return pop;
+                return buffer;
             }
         };
 
