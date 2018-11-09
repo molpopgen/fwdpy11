@@ -48,7 +48,7 @@ a :class:`fwdpy11.ts.TableCollection`
 
     rng = fwdpy11.GSLrng(42)
 
-    rho=1000.0
+    rho=100.0
 
 Set up a sim w/no neutral parameters
 Currently, attempting to simulate
@@ -143,16 +143,101 @@ So far, our population doesn't have any neutral variants.  Let's fix that:
         m = pop.mutations[i] 
         print(m.s,m.h,pop.mcounts[i])
 
-We just added about 8,000 neutral mutations!
 
 .. todo:: document limitations and future plans
 
 Iterating over trees
 ------------------------------------
 
-.. todo:: 
+At the end of a simulation, a population's :class:`fwdpy11.ts.TableCollection` is 
+population with a bunch of nodes, edges, etc..  But the "sequence" part of "tree
+sequence" implies something about *iteration* that we haven't discussed yet.  fwdpy11
+provides an efficient means of traversing the trees in a table collection in a 
+left-to-right order along the genome.  The "visiting" of each tree is 
+handled by :class:`fwdpy11.ts.TreeVisitor`, which gives you access to the 
+:class:`fwdpy11.ts.MarginalTree` for each segment of the genome.
 
-    Expose fwdpp's table_iterator to Python
+Traversing the trees is the core idea underying efficient algorithms for data analysis.
+The multiply-linked list data structures stored in a :class:`fwdpy11.ts.MarginalTree` allow
+for very rapid tree traversal.  Let's look at a concrete example.  We will calculate the 
+average length of a marginal tree in our simulation.  To do this, we have to recognize the following: 
+
+1. In these Wright-Fisher simulations, the tree times are in units of generations.
+2. Each tree corresponds to a specific genomic segment, and these segment lengths differ
+3. Thus, the mean total time on a tree is the weighted sum of the indiviudal marginal tree lengths.  
+4. The weight on each tree is its genomic segment length divided by the genome length.
+5. Here, the genome length is 1.0, which makes things easy (for once).
+
+The numbers in comments at the ends of lines of code correspond to annotations following
+immediately afterwards:
+
+.. ipython:: python
+    :okexcept:
+
+    tv = fwdpy11.ts.TreeVisitor(pop.tables, [i for i in range(2*pop.N)])
+    nodes = np.array(pop.tables.nodes, copy=False) # 1
+    time = nodes['time'] # 1
+    mean_total_time = 0.0
+    while tv(False) is True: # 2
+        m = tv.tree() # 3
+        p = m.parents # 1
+        segment_length = m.right - m.left
+        tt_tree = 0.0
+        for i in range(len(nodes)):
+            if p[i] != fwdpy11.ts.NULL_NODE:
+                branch_len = time[i] - time[p[i]] # 4
+                mean_total_time += branch_len*segment_length
+    print(mean_total_time/(4*pop.N))
+
+1. We make several numpy arrays to view the data.  Internally, the data are stored in C++ containers.
+   Thus, the numpy array is really a "view" of the data, and it requires no copies of the data.  However,
+   It does take a small amount of time to make the view.  Thus, if we did not store the parents list in the 
+   variable `p`, and instead referred to `m.parents` instead, we would end up creating the view of the 
+   parental data an additional `2*len(nodes)` times, and our calculation would slow down noticeably.
+2. The `False` passed to the `__call__` function means "do not update the sample lists" for each tree.  The leaf
+   count lists are always updated, however.  Saying `True` here updates the sample lists.  Sample list updating
+   is relatively costly, which is why it is optional.
+3. Internally, our TreeVisitor stores a C++ representation of a MarginalTree.  Here, through some C++ magic
+   by the authors of pybind11, we are getting copy-free access to that stored data.
+4. Time is measured from *past* to *present*. (This is a difference from msprime.)
+
+The above loop is "Python fast", meaning that it is a pretty good mix of Python and numpy.  The main performance hits in
+code like this are the looping and the round-trip from Python to numpy when accessing indexes in the numpy arrays.
+These two performance bottlenecks have nothing to do with fwdpy11.  Rather, they are what we expect.  To do better, one
+turns to the normal tricks, such as using Cython to move the operations entirely down to C.
+
+It is now a good time to point out that total time counting is built-in because it is such a common operation:
+
+.. ipython:: python
+
+    # Need to construct a new visitor, as ours is all "iterated out"
+    # from above
+    tv = fwdpy11.ts.TreeVisitor(pop.tables, [i for i in range(2*pop.N)])
+    mean_total_time = 0.0
+    while tv(False) is True:
+        m = tv.tree() # 3
+        segment_length = m.right - m.left
+        mean_total_time += segment_length*m.total_time(pop.tables.nodes)
+
+    print(mean_total_time/(4*N))
+
+
+The above loop is almost entirely composed of C++-side operations, and is thus extremely fast.
+
+Constructing the TreeVisitor
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+In the above example, the tree visitor was initialized using a :class:`fwdpy11.ts.TableCollection`
+and a list of samples.  By setting the samples list equal to :math:`[0,2N)`, we are initializing with
+respect to the last generation of the simulation.  Thus, the tree traversal will be updating the trees
+for the entire population.  If you wish to iterate over the trees corresponding to a subset of the last generation,
+simply create the approprate list, noting that the list may not contain redundant node ids.
+
+A second method of initializing a TreeVisitor involves passing in two sample lists.  The intent here is that
+the first list corresponds to the current generation ("alive nodes") and the latter to preserved nodes ("ancient
+samples").  When passing in two lists, the tree iteration scheme tracks leaf counts separately for these two lists, 
+via the fields :attr:`fwdpy11.ts.leaf_counts` and :attr:`fwdpy11.ts.preserved_leaf_counts`.  We'll see this in action
+below.
 
 Recording ancient samples during a simulation
 ------------------------------------------------------------------------
@@ -198,13 +283,13 @@ See :class:`fwdpy11.tsrecorders.RandomAncientSamples` for details. We will use t
 type in the following section.
 
 Viewing data for ancient samples
-------------------------------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. ipython:: python
 
     import fwdpy11.tsrecorders
     pop = fwdpy11.SlocusPop(N,1.0)
-    times = [i for i in range(2000, 10*pop.N, 2000)]
+    times = [5000]
     # Parameters are: seed, sample size, time points:
     rec = fwdpy11.tsrecorders.RandomAncientSamples(14351, 50, times)
     fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100, rec)
@@ -251,7 +336,7 @@ The other form of metadata is the same as for alive individuals:
 
 
 Obtaining genotype data from tree sequences
-------------------------------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 You may obtain genotype data in the form of :class:`fwdpy11.sampling.DataMatrix`
 objects. (See :ref:`datamatrix`.)  
@@ -299,6 +384,10 @@ which they belong, the following trick helps:
     anodes = np.stack((ar['n1'],ar['n2']), axis=1).flatten()
     print(anodes[:10])
 
+Tracking leaf counts separateley for preserved and alive samples
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+
+.. todo:: show example
 
 Initializing a simulation using msprime
 ------------------------------------------------------------------------
