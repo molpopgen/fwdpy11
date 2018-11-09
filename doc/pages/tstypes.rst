@@ -72,8 +72,7 @@ recombination rates.  First, let's get a tree sequence:
 
     import msprime
 
-    # Kirk Lohmeuller should be fired if he can't figure out my
-    # seeding scheme...
+    # The following makes use of the Kirk Lohmeuller seed.
     ts = msprime.simulate(10, random_seed=101*405*10*110)
     print(ts.first().draw(format="unicode"))
 
@@ -136,12 +135,12 @@ Now, let's look at the sibling relationships:
 
     def get_sibs(tree, i):
         ls = tree.left_sib(i)
-        rs = tree_right_sib(i)
+        rs = tree.right_sib(i)
         if ls == msprime.NULL_NODE and rs == msprime.NULL_NODE:
             return "{}->NULL".format(i)
         return "{}->".format(i) + str((ls, rs))
 
-    smap = {i:get_children(t,i) for i in range(len(ts.tables.nodes))}
+    smap = {i:get_sibs(t,i) for i in range(len(ts.tables.nodes))}
     print(t.draw(format="unicode", node_labels=smap))
 
 Multiply-linked lists
