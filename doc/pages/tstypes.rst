@@ -180,7 +180,7 @@ any further.
     happens, left_child and right_child refer to the left-most and right-most children, respectively. Thus, to "walk"
     along the descendants of a node, you proceed to left_child, and then march along right_sib until a value of -1 is
     seen.  This "walking" method is the same as what you would do for a bifurcating tree, but I want to point out that 
-    counting the number of immediate descendants of anode requires counting the number of steps that the walk requires,
+    counting the number of immediate descendants of a node requires counting the number of steps that the walk requires,
     and that it may be longer than two steps.
 
 The last five arrays show above correspond to the following attributes of :class:`fwdpy11.ts.MarginalTree`:
