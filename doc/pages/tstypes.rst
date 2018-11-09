@@ -150,7 +150,7 @@ Multiply-linked lists
 
 Under the hood, the data structures representing marginal trees consist of several arrays
 represening a multiply-linked list allowing traversal up/down/left/right along a marginal tree.
-By convention, the value -1 is taken as a NULL value, signifying that you there are no more nodes in
+By convention, the value -1 is taken as a NULL value, signifying that there are no more nodes in
 "that" direction along the tree.  
 
 We can look directly at what theses arrays look like in our tree:
