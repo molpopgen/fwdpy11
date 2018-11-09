@@ -21,6 +21,7 @@
 
 #include <limits>
 #include <sstream>
+#include <fstream>
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -221,8 +222,33 @@ PYBIND11_MODULE(_Populations, m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim")
-
-        .def("add_mutations", &fwdpy11::SlocusPop::add_mutations);
+        .def("add_mutations", &fwdpy11::SlocusPop::add_mutations)
+        .def("dump_to_file",
+             [](const fwdpy11::SlocusPop& pop, const std::string filename) {
+                 std::ofstream out(filename.c_str(), std::ios_base::binary);
+                 if (!out)
+                     {
+                         throw std::runtime_error(
+                             "could not open file for writing");
+                     }
+                 fwdpy11::serialization::serialize_details(out, &pop);
+                 out.close();
+             },
+             "Write a population to a file in binary format.")
+        .def_static(
+            "load_from_file",
+            [](const std::string filename) {
+                std::ifstream in(filename.c_str(), std::ios_base::binary);
+                if (!in)
+                    {
+                        throw std::runtime_error(
+                            "could not open file for reading");
+                    }
+                fwdpy11::SlocusPop pop(1, std::numeric_limits<double>::max());
+                fwdpy11::serialization::deserialize_details()(in, pop);
+                return pop;
+            },
+            "Load a population from a binary file.");
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
         m, "_MlocusPop", "Representation of a multi-locus population")
@@ -398,5 +424,33 @@ PYBIND11_MODULE(_Populations, m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim")
-        .def("add_mutations", &fwdpy11::MlocusPop::add_mutations);
+        .def("add_mutations", &fwdpy11::MlocusPop::add_mutations)
+        .def("dump_to_file",
+             [](const fwdpy11::MlocusPop& pop, const std::string filename) {
+                 std::ofstream out(filename.c_str(), std::ios_base::binary);
+                 if (!out)
+                     {
+                         throw std::runtime_error(
+                             "could not open file for writing");
+                     }
+                 fwdpy11::serialization::serialize_details(out, &pop);
+                 out.close();
+             },
+             "Write a population to a file in binary format.")
+        .def_static(
+            "load_from_file",
+            [](const std::string filename) {
+                std::ifstream in(filename.c_str(), std::ios_base::binary);
+                if (!in)
+                    {
+                        throw std::runtime_error(
+                            "could not open file for reading");
+                    }
+                fwdpy11::MlocusPop pop(
+                    1, std::vector<std::pair<double, double>>{ { 0, 1 } },
+                    std::numeric_limits<double>::max());
+                fwdpy11::serialization::deserialize_details()(in, pop);
+                return pop;
+            },
+            "Load a population from a binary file.");
 }
