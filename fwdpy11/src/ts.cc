@@ -214,13 +214,19 @@ PYBIND11_MODULE(ts, m)
                       "Right edge of genomic interval (exclusive")
         .def_readonly("parents", &fwdpp::ts::marginal_tree::parents,
                       "Vector of child -> parent relationships")
-        .def_readonly("leaf_counts", &fwdpp::ts::marginal_tree::leaf_counts)
+        .def_readonly("leaf_counts", &fwdpp::ts::marginal_tree::leaf_counts,
+                      "Leaf counts for each node")
         .def_readonly("preserved_leaf_counts",
-                      &fwdpp::ts::marginal_tree::preserved_leaf_counts)
-        .def_readonly("left_sib", &fwdpp::ts::marginal_tree::left_sib)
-        .def_readonly("right_sib", &fwdpp::ts::marginal_tree::right_sib)
-        .def_readonly("left_child", &fwdpp::ts::marginal_tree::left_child)
-        .def_readonly("right_child", &fwdpp::ts::marginal_tree::right_child)
+                      &fwdpp::ts::marginal_tree::preserved_leaf_counts,
+                      "Ancient sample leaf counts for each node")
+        .def_readonly("left_sib", &fwdpp::ts::marginal_tree::left_sib,
+                      "Return the left sibling of the current node")
+        .def_readonly("right_sib", &fwdpp::ts::marginal_tree::right_sib,
+                      "Return the right sibling of the current node")
+        .def_readonly("left_child", &fwdpp::ts::marginal_tree::left_child,
+                      "Mapping of current node id to its left child")
+        .def_readonly("right_child", &fwdpp::ts::marginal_tree::right_child,
+                      "Mapping of current node id to its right child")
         .def_readonly("left_sample", &fwdpp::ts::marginal_tree::left_sample)
         .def_readonly("right_sample", &fwdpp::ts::marginal_tree::right_sample)
         .def_readonly("next_sample", &fwdpp::ts::marginal_tree::next_sample)
@@ -228,14 +234,21 @@ PYBIND11_MODULE(ts, m)
                       &fwdpp::ts::marginal_tree::sample_index_map)
         .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size);
 
-    py::class_<fwdpp::ts::tree_visitor>(m, "TreeVisitor")
+    py::class_<fwdpp::ts::tree_visitor>(
+        m, "TreeVisitor",
+        "Allows left-to-right visiting of the marginal trees embedded in a "
+        ":class:`fwdpy11.ts.TableCollection`")
         .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&>())
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::arg("tables"), py::arg("samples"))
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&>())
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"))
         .def("tree", &fwdpp::ts::tree_visitor::tree,
-             py::return_value_policy::reference_internal)
+             py::return_value_policy::reference_internal,
+             "Obtain the current marginal tree as an instance of "
+             ":class:`fwdpy11.ts.MarginalTree")
         .def("__call__",
              [](fwdpp::ts::tree_visitor& tv, const bool update_samples) {
                  bool rv = false;
@@ -248,7 +261,18 @@ PYBIND11_MODULE(ts, m)
                          rv = tv(std::true_type(), std::false_type());
                      }
                  return rv;
-             });
+             },
+             py::arg("update_samples"),
+             R"delim(
+             Advance to the next tree.
+
+             :param update_samples: If True, update the "samples list"
+             :type update_samples: booliean
+
+             By default, leaf counts and ancestral leaf counts are
+             always updated. The latter is only updated if you separated
+             modern from ancient samples when constructing the object.
+             )delim");
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
