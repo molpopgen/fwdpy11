@@ -236,7 +236,7 @@ simply create the approprate list, noting that the list may not contain redundan
 A second method of initializing a TreeVisitor involves passing in two sample lists.  The intent here is that
 the first list corresponds to the current generation ("alive nodes") and the latter to preserved nodes ("ancient
 samples").  When passing in two lists, the tree iteration scheme tracks leaf counts separately for these two lists, 
-via the fields :attr:`fwdpy11.ts.leaf_counts` and :attr:`fwdpy11.ts.preserved_leaf_counts`.  We'll see this in action
+via the fields :attr:`fwdpy11.ts.MarginalTree.leaf_counts` and :attr:`fwdpy11.ts.MarginalTree.preserved_leaf_counts`.  We'll see this in action
 below.
 
 Recording ancient samples during a simulation
