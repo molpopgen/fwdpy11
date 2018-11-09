@@ -20,6 +20,7 @@
 // TODO: make a versionchanged entry for all things affected by "length"
 
 #include <limits>
+#include <sstream>
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -146,15 +147,17 @@ PYBIND11_MODULE(_Populations, m)
             py::arg("args"))
         .def(py::pickle(
             [](const fwdpy11::SlocusPop& pop) -> py::object {
-                auto pb = py::bytes(
-                    fwdpy11::serialization::serialize_details(&pop));
+                std::ostringstream o;
+                fwdpy11::serialization::serialize_details(o, &pop);
+                auto pb = py::bytes(o.str());
                 return pb;
             },
             [](py::object pickled) -> fwdpy11::SlocusPop {
-                auto s = pickled.cast<py::bytes>();
-                return fwdpy11::serialization::deserialize_details<
-                    fwdpy11::SlocusPop>()(s, 1,
-                                          std::numeric_limits<double>::max());
+                auto s = pickled.cast<py::bytes>().cast<std::string>();
+                fwdpy11::SlocusPop pop(1, std::numeric_limits<double>::max());
+                std::istringstream in(std::move(s));
+                fwdpy11::serialization::deserialize_details()(in, pop);
+                return pop;
             }))
         .def("sample",
              [](const fwdpy11::SlocusPop& pop,
@@ -292,16 +295,19 @@ PYBIND11_MODULE(_Populations, m)
             py::arg("locus_boundaries"), py::arg("args"))
         .def(py::pickle(
             [](const fwdpy11::MlocusPop& pop) -> py::object {
-                auto pb = py::bytes(
-                    fwdpy11::serialization::serialize_details(&pop));
+                std::ostringstream o;
+                fwdpy11::serialization::serialize_details(o, &pop);
+                auto pb = py::bytes(o.str());
                 return pb;
             },
             [](py::object pickled) -> fwdpy11::MlocusPop {
-                auto s = pickled.cast<py::bytes>();
-                return fwdpy11::serialization::deserialize_details<
-                    fwdpy11::MlocusPop>()(
-                    s, 1, std::vector<std::pair<double, double>>{ { 0., 1 } },
+                auto s = pickled.cast<py::bytes>().cast<std::string>();
+                fwdpy11::MlocusPop pop(
+                    1, std::vector<std::pair<double, double>>{ { 0., 1 } },
                     std::numeric_limits<double>::max());
+                std::istringstream in(std::move(s));
+                fwdpy11::serialization::deserialize_details()(in, pop);
+                return pop;
             }))
         .def("sample_by_locus",
              [](const fwdpy11::MlocusPop& pop,
