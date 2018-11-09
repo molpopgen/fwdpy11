@@ -192,7 +192,7 @@ immediately afterwards:
 1. We make several numpy arrays to view the data.  Internally, the data are stored in C++ containers.
    Thus, the numpy array is really a "view" of the data, and it requires no copies of the data.  However,
    It does take a small amount of time to make the view.  Thus, if we did not store the parents list in the 
-   variable `p`, and instead referred to `m.parents` instead, we would end up creating the view of the 
+   variable `p`, and instead referred to `m.parents` repeatedly, we would end up creating the view of the 
    parental data an additional `2*len(nodes)` times, and our calculation would slow down noticeably.
 2. The `False` passed to the `__call__` function means "do not update the sample lists" for each tree.  The leaf
    count lists are always updated, however.  Saying `True` here updates the sample lists.  Sample list updating
