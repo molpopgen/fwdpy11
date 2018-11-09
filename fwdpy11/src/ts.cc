@@ -273,7 +273,28 @@ PYBIND11_MODULE(ts, m)
                                [](const fwdpp::ts::marginal_tree& m) {
                                    return make_1d_ndarray(m.sample_index_map);
                                })
-        .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size);
+        .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size)
+        .def("total_time",
+             [](const fwdpp::ts::marginal_tree& m,
+                const fwdpp::ts::node_vector& nodes) {
+                 if (m.parents.size() != nodes.size())
+                     {
+                         throw std::invalid_argument(
+                             "node table length does not equal number of "
+                             "nodes in marginal tree");
+                     }
+                 double tt = 0.0;
+                 for (std::size_t i = 0; i < m.parents.size(); ++i)
+                     {
+                         if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
+                             {
+                                 tt += nodes[i].time
+                                       - nodes[m.parents[i]].time;
+                             }
+                     }
+                 return tt;
+             },
+             "Return the sum of branch lengths");
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
