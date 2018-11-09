@@ -3,6 +3,7 @@
 Data structures related to tree sequences
 ======================================================================
 
+practice, adjacent trees are highly-correlated, meaning that very few values need updating. The
 To start out, let us consider the follwing tree:
 
 .. figure:: ../images/tree.png
@@ -195,7 +196,7 @@ The last five arrays show above correspond to the following attributes of :class
 The key to efficiency is how these linked lists are updated as you move from tree :math:`i` to tree :math:`i+1`.  Given
 an approprate set of indexes, these lists are only updated at the positions that differ between the two trees.  In
 practice, adjacent trees are highly-correlated, meaning that very few values need updating. The
-construction of these indexes is described immediatlely above the description of "Algorithm T" in the Kelleher et al. (2016) describing msprime_.
+construction of these indexes is described immediatlely above the description of "Algorithm T" in the Kelleher et al. (2016) paper describing msprime_.
 
 .. _msprime: http://msprime.readthedocs.io
 The building of those indexes is a key determinant of performance for algorithms on tree sequences.  Fortunately, you
