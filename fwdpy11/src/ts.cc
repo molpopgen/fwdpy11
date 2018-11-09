@@ -9,6 +9,7 @@
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
+#include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/mutate_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -73,6 +74,15 @@ generate_neutral_variants(std::queue<std::size_t>& recycling_bin,
     return fwdpy11::infsites_Mutation(recycling_bin, pop.mutations,
                                       pop.mut_lookup, generation, uniform,
                                       return_zero, return_zero, 0);
+}
+
+template <typename T>
+inline py::array_t<T>
+make_1d_ndarray(const std::vector<T>& v)
+{
+    auto rv
+        = py::array_t<T>({ v.size() }, { sizeof(T) }, v.data(), py::cast(v));
+    return rv;
 }
 
 PYBIND11_MODULE(ts, m)
@@ -207,21 +217,124 @@ PYBIND11_MODULE(ts, m)
         m, "MarginalTree",
         "A sparse tree representation of a non-recombining genomic segment. "
         "See :ref:`ts_data_types` for details.")
-        .def_readonly("parents", &fwdpp::ts::marginal_tree::parents,
-                      "Vector of child -> parent relationships")
-        .def_readonly("leaf_counts", &fwdpp::ts::marginal_tree::leaf_counts)
-        .def_readonly("preserved_leaf_counts",
-                      &fwdpp::ts::marginal_tree::preserved_leaf_counts)
-        .def_readonly("left_sib", &fwdpp::ts::marginal_tree::left_sib)
-        .def_readonly("right_sib", &fwdpp::ts::marginal_tree::right_sib)
-        .def_readonly("left_child", &fwdpp::ts::marginal_tree::left_child)
-        .def_readonly("right_child", &fwdpp::ts::marginal_tree::right_child)
-        .def_readonly("left_sample", &fwdpp::ts::marginal_tree::left_sample)
-        .def_readonly("right_sample", &fwdpp::ts::marginal_tree::right_sample)
-        .def_readonly("next_sample", &fwdpp::ts::marginal_tree::next_sample)
-        .def_readonly("sample_index_map",
-                      &fwdpp::ts::marginal_tree::sample_index_map)
-        .def_readonly("sample_size",&fwdpp::ts::marginal_tree::sample_size);
+        .def_readonly("left", &fwdpp::ts::marginal_tree::left,
+                      "Left edge of genomic interval (inclusive)")
+        .def_readonly("right", &fwdpp::ts::marginal_tree::right,
+                      "Right edge of genomic interval (exclusive")
+        .def_property_readonly("parents",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.parents);
+                               },
+                               "Vector of child -> parent relationships")
+        .def_property_readonly("leaf_counts",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.leaf_counts);
+                               },
+                               "Leaf counts for each node")
+        .def_property_readonly("preserved_leaf_counts",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(
+                                       m.preserved_leaf_counts);
+                               },
+                               "Ancient sample leaf counts for each node")
+        .def_property_readonly("left_sib",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.left_sib);
+                               },
+                               "Return the left sibling of the current node")
+        .def_property_readonly("right_sib",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.right_sib);
+                               },
+                               "Return the right sibling of the current node")
+        .def_property_readonly("left_child",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.left_child);
+                               },
+                               "Mapping of current node id to its left child")
+        .def_property_readonly("right_child",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.right_child);
+                               },
+                               "Mapping of current node id to its right child")
+        .def_property_readonly("left_sample",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.left_sample);
+                               })
+        .def_property_readonly("right_sample",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.right_sample);
+                               })
+        .def_property_readonly("next_sample",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.next_sample);
+                               })
+        .def_property_readonly("sample_index_map",
+                               [](const fwdpp::ts::marginal_tree& m) {
+                                   return make_1d_ndarray(m.sample_index_map);
+                               })
+        .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size)
+        .def("total_time",
+             [](const fwdpp::ts::marginal_tree& m,
+                const fwdpp::ts::node_vector& nodes) {
+                 if (m.parents.size() != nodes.size())
+                     {
+                         throw std::invalid_argument(
+                             "node table length does not equal number of "
+                             "nodes in marginal tree");
+                     }
+                 double tt = 0.0;
+                 for (std::size_t i = 0; i < m.parents.size(); ++i)
+                     {
+                         if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
+                             {
+                                 tt += nodes[i].time
+                                       - nodes[m.parents[i]].time;
+                             }
+                     }
+                 return tt;
+             },
+             "Return the sum of branch lengths");
+
+    py::class_<fwdpp::ts::tree_visitor>(
+        m, "TreeVisitor",
+        "Allows left-to-right visiting of the marginal trees embedded in a "
+        ":class:`fwdpy11.ts.TableCollection`")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::arg("tables"), py::arg("samples"))
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"))
+        .def("tree", &fwdpp::ts::tree_visitor::tree,
+             py::return_value_policy::reference_internal,
+             "Obtain the current marginal tree as an instance of "
+             ":class:`fwdpy11.ts.MarginalTree")
+        .def("__call__",
+             [](fwdpp::ts::tree_visitor& tv, const bool update_samples) {
+                 bool rv = false;
+                 if (update_samples)
+                     {
+                         rv = tv(std::true_type(), std::true_type());
+                     }
+                 else
+                     {
+                         rv = tv(std::true_type(), std::false_type());
+                     }
+                 return rv;
+             },
+             py::arg("update_samples"),
+             R"delim(
+             Advance to the next tree.
+
+             :param update_samples: If True, update the "samples list"
+             :type update_samples: booliean
+
+             By default, leaf counts and ancestral leaf counts are
+             always updated. The latter is only updated if you separated
+             modern from ancient samples when constructing the object.
+             )delim");
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
