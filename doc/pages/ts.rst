@@ -96,7 +96,7 @@ There must be 2N nodes with time equal to the current generation:
 .. ipython:: python
 
     x = np.where(node_view['time'] == pop.generation)
-    assert(len(x[0]) == 2*pop.N)
+    assert len(x[0]) == 2*pop.N, "Node time error"
 
 We may also look at the edges in the tree sequence:
 
