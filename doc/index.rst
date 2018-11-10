@@ -43,6 +43,7 @@ Welcome to fwdpy11's documentation!
     :caption: Tree sequence recording
     :maxdepth: 2
 
+    pages/tsoverview
     pages/tstypes
     pages/ts
 
