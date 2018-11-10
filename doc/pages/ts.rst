@@ -385,8 +385,8 @@ which they belong, the following trick helps:
     print(anodes[:10])
 
 
-Tracking leaf counts separateley for preserved and alive samples
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+Tracking leaf counts separately for preserved and alive samples
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. todo:: show example
 
