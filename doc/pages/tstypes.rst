@@ -3,7 +3,6 @@
 Data structures related to tree sequences
 ======================================================================
 
-practice, adjacent trees are highly-correlated, meaning that very few values need updating. The
 To start out, let us consider the follwing tree:
 
 .. figure:: ../images/tree.png
