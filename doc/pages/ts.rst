@@ -384,7 +384,8 @@ which they belong, the following trick helps:
     anodes = np.stack((ar['n1'],ar['n2']), axis=1).flatten()
     print(anodes[:10])
 
-# Tracking leaf counts separateley for preserved and alive samples
+
+Tracking leaf counts separateley for preserved and alive samples
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
 
 .. todo:: show example
