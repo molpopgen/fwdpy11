@@ -21,7 +21,9 @@
  */
 #ifndef FWDPY11_SERIALIZATION_HPP
 #define FWDPY11_SERIALIZATION_HPP
-#include <sstream>
+
+#include <string>
+#include <stdexcept>
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
 #include <fwdpp/ts/serialization.hpp>
@@ -38,11 +40,10 @@ namespace fwdpy11
             return 2;
         }
 
-        template <typename poptype>
-        std::string
-        serialize_details(const poptype *pop)
+        template <typename streamtype, typename poptype>
+        streamtype &
+        serialize_details(streamtype &buffer, const poptype *pop)
         {
-            std::ostringstream buffer;
             buffer << "fp11";
             auto m = magic();
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
@@ -56,19 +57,18 @@ namespace fwdpy11
                 buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
             fwdpp::ts::io::serialize_tables(buffer, pop->tables);
-            return buffer.str();
+            return buffer;
         }
 
-        template <typename poptype> struct deserialize_details
+        struct deserialize_details
         {
-            template <typename... constructor_data>
-            inline poptype
-            operator()(const std::string &s, constructor_data... cdata)
+            template <typename streamtype, typename poptype>
+            inline streamtype &
+            operator()(streamtype &buffer, poptype &pop)
             {
-                std::istringstream buffer;
-                buffer.str(s);
-                buffer.seekg(0);
-                poptype pop(cdata...);
+                char c[4];
+                buffer.read(&c[0], 4 * sizeof(char));
+                std::string s(c, c + 4);
                 // We need to test for existance of serialization
                 // version numbers, introduced in 0.1.3.  Prior to that,
                 // it was wild west :).
@@ -78,8 +78,6 @@ namespace fwdpy11
                 int version = 1;
                 if (have_magic)
                     {
-                        char c[4];
-                        buffer.read(&c[0], 4 * sizeof(char));
                         buffer.read(reinterpret_cast<char *>(&version),
                                     sizeof(int));
                     }
@@ -108,7 +106,7 @@ namespace fwdpy11
                             pop.tables, pop.mutations, samples, pop.mcounts,
                             pop.mcounts_from_preserved_nodes);
                     }
-                return pop;
+                return buffer;
             }
         };
 
