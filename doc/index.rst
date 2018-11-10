@@ -32,14 +32,19 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/types
-    pages/tstypes
-    pages/ts
     pages/rng
     pages/regions
     pages/geneticvalues
     pages/fixations
     pages/model_params
     pages/recorders
+
+.. toctree::
+    :caption: Tree sequence recording
+    :maxdepth: 2
+
+    pages/tstypes
+    pages/ts
 
 .. toctree::
     :caption: Examples
