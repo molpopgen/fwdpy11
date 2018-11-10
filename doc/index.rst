@@ -159,6 +159,12 @@ fwdpy11.wright_fisher
     :members:
     :show-inheritance:
 
+fwdpy11.wright_fisher_ts
+------------------------------
+.. automodule:: fwdpy11.wright_fisher_ts
+    :members:
+    :show-inheritance:
+
 fwdpy11.multilocus
 ------------------------------
 .. automodule:: fwdpy11.multilocus
