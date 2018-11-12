@@ -71,7 +71,7 @@ transmission events that quickly go extinct.  The simplification algorithm descr
 takes this "messy" node and edge table and returns "simplified" node and edge tables.
 
 We can visualize this process using an example taken from the `tskit` tutorials_, which implements the discrete-time
-Wright-Fisher model for a diploid population without recombination:
+Wright-Fisher model for a diploid population without recombination and without selection:
 
 .. ipython:: python
 
