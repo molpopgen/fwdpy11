@@ -154,9 +154,16 @@ in such a manner that relative ordering is preserved.
  
 Thus, the most pratical view of TSR is this: we speed up the simulations by *not* simulating neutral mutations.
 We only have to simulate the selected variants and occasionally simplify our messy trees.  The realized speedups are
-huge, and I refer you to the 2018 paper for the data on that.
+huge, and I refer you to the 2018 paper for the data on that.  But our simulations are not only faster.  They record
+much more information.  The tables of nodes, edges, etc., record the entire history of the simulation with respect to a
+set of sample nodes.
 
-Anyone interested in some of the more technical details can take a look at the tutorials_ accompanying the 2018 paper.
+Anyone interested in some of the more technical details of implementing TSR can take a look at the tutorials_ accompanying the 2018 paper.
 
+
+Sample recording
+++++++++++++++++++++++++++++++++++++++++++++++
+
+.. todo:: discuss the current generation vs historical/ancient/preserved samples.
 
 .. _tutorials: https://tskit-dev.github.io/tutorials/
