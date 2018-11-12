@@ -32,6 +32,8 @@
 namespace fwdpy11
 {
 
+    // TODO allow for fixation recording
+    // and simulation of neutral variants
     template <typename poptype>
     std::vector<fwdpp::ts::TS_NODE_INT>
     simplify_tables(poptype &pop,
@@ -82,12 +84,19 @@ namespace fwdpy11
             mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
             preserve_selected_fixations);
 
+        // TODO: the blocks below should be abstracted out into a closure
+        // that removes these if statements
         if (!preserve_selected_fixations && !simulating_neutral_variants)
             {
                 fwdpp::ts::flag_mutations_for_recycling(
-                    pop.mutations, pop.mcounts, mcounts_from_preserved_nodes,
-                    pop.mut_lookup, 2 * pop.diploids.size(),
-                    preserve_selected_fixations);
+                    pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                    pop.generation, std::false_type(), std::false_type());
+            }
+        else if (preserve_selected_fixations && !simulating_neutral_variants)
+            {
+                fwdpp::ts::flag_mutations_for_recycling(
+                    pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                    pop.generation, std::true_type(), std::false_type());
             }
         //confirm_mutation_counts(pop, tables);
         return idmap;
