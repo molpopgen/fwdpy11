@@ -32,14 +32,22 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/types
-    pages/tstypes
-    pages/ts
     pages/rng
     pages/regions
     pages/geneticvalues
     pages/fixations
     pages/model_params
     pages/recorders
+    pages/pickling
+    pages/binary
+
+.. toctree::
+    :caption: Tree sequence recording
+    :maxdepth: 2
+
+    pages/tsoverview
+    pages/tstypes
+    pages/ts
 
 .. toctree::
     :caption: Examples
@@ -50,7 +58,6 @@ Welcome to fwdpy11's documentation!
     examples/parallel_simulation
     examples/customgvalue
     examples/stateful_fitness
-    examples/pickling
     examples/DataMatrix
     examples/qtrait
     examples/parentage
@@ -156,6 +163,12 @@ fwdpy11.temporal_samplers
 fwdpy11.wright_fisher
 ------------------------------
 .. automodule:: fwdpy11.wright_fisher
+    :members:
+    :show-inheritance:
+
+fwdpy11.wright_fisher_ts
+------------------------------
+.. automodule:: fwdpy11.wright_fisher_ts
     :members:
     :show-inheritance:
 

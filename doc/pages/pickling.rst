@@ -10,10 +10,7 @@ starting conditions.
 The pickling is implemented via fwdpp's binary serialization methods.  This is faster and more space-efficient than
 natively pickling the Python representation of the underlying C++ types.  
 
-Full support for pickling is only possible with Python 3.  Under Python 2, you may pickle/unpickle to/from memory just
-fine, but you cannot unpickle from a file.
-
-In order to pickle a file, you must also use the latest pickling protocol.
+In order to pickle a file, you must use the latest pickling protocol.
 
 Some general notes:
 
@@ -32,10 +29,7 @@ Some general notes:
     simulating on the order of 10 megabases of variation under the Tennessen_ model of European demography. The 
     last few time points of that model involve very large population sizes.
     
-    Future versions of fwdpy11 may allow direct serialization to a file, which 
-    avoids this problem at the cost of a less convenient API. A workaround is to pickle a sample from the 
-    population, rather than the whole thing.  In this case, you may also wish to pickle the fixations, etc.,
-    or whatever additional data you may need.  
+    If you wish to serialize a population to file, an alternative to pickling is described in :ref:`binary_pops`.
 
 .. testcode::
 

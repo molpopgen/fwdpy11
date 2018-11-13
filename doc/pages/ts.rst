@@ -7,8 +7,6 @@ Background reading:
 
 1. :ref:`ts_data_types` gives links to the main data types involved.
 
-.. todo:: Section on serialization
-
 .. note::
 
     This page is currently limited in scope.  We'll add in more
@@ -75,6 +73,7 @@ Run it, simplifying every 100 generations.  Note that we are calling
 
     fwdpy11.wright_fisher_ts.evolve(rng,pop,params,100)
 
+
 Viewing a TableCollection
 ------------------------------------
 
@@ -126,6 +125,13 @@ The `key` field is the index of the mutation in the population's mutation vector
     for i in mut_view['key'][:5]:
         m = pop.mutations[i] 
         print(m.s,m.h,pop.mcounts[i])
+
+
+Saving tree sequences to files
+-----------------------------------------------
+
+Tree sequences are member data of populations.  Thus, they are serialized along with the population when it is pickled.
+See :ref:`pickling_pops` for more details.
 
 Adding neutral mutations to a TableCollection
 ------------------------------------------------------------------------
@@ -385,8 +391,8 @@ which they belong, the following trick helps:
     print(anodes[:10])
 
 
-Tracking leaf counts separateley for preserved and alive samples
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+Tracking leaf counts separately for preserved and alive samples
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. todo:: show example
 
