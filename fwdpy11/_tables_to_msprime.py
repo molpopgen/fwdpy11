@@ -36,6 +36,17 @@ def _generate_mutation_metadata(pop):
     return msprime.pack_bytes(muts)
 
 
+def _initializePopulationTable(node_view, tc):
+    population_metadata = []
+    for i in sorted(np.unique(node_view['population'])):
+        md = "deme"+str(i)
+        population_metadata.append(md.encode("utf-8"))
+
+    pmd, pmdo = msprime.pack_bytes(population_metadata)
+    tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
+    return tc
+
+
 def dump_tables_to_msprime(pop):
     node_view = np.array(pop.tables.nodes, copy=True)
     node_view['time'] -= node_view['time'].max()
@@ -43,9 +54,11 @@ def dump_tables_to_msprime(pop):
     edge_view = np.array(pop.tables.edges, copy=False)
     mut_view = np.array(pop.tables.mutations, copy=False)
 
-    flags = [1]*2*pop.N + [0]*(len(node_view) - 2*pop.N)
     tc = msprime.TableCollection(pop.tables.genome_length())
-    tc.nodes.set_columns(flags=flags, time=node_view['time'])
+    tc = _initializePopulationTable(node_view, tc)
+    flags = [1]*2*pop.N + [0]*(len(node_view) - 2*pop.N)
+    tc.nodes.set_columns(flags=flags, time=node_view['time'],
+                         population=node_view['population'])
     tc.edges.set_columns(left=edge_view['left'],
                          right=edge_view['right'],
                          parent=edge_view['parent'],
