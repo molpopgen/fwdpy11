@@ -52,7 +52,7 @@ recombination rates.  First, let's get a tree sequence:
     print(ts.first().draw(format="unicode"))
 
 
-The above three correponds to a sample size of 10 haplotypes.  The tree shows the node labels.  The nodes labelled 0
+The above tree correponds to a sample size of 10 haplotypes.  The tree shows the node labels.  The nodes labelled 0
 through 9 correspond to the present time point--these are "alive nodes" or the "current generation" if we are thinking
 about a forward simulation.  Further, we can describe the branches leading to these sample nodes as the "tips" or
 "leaves" of a tree.  
