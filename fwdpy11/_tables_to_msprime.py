@@ -55,6 +55,13 @@ def dump_tables_to_msprime(pop):
     mut_view = np.array(pop.tables.mutations, copy=False)
 
     tc = msprime.TableCollection(pop.tables.genome_length())
+
+    # We must initialize population and individual
+    # tables before we can do anything else.
+    # Attempting to set population to anything
+    # other than -1 in an msprime.NodeTable will
+    # raise an exception if the PopulationTable
+    # isn't set up.
     tc = _initializePopulationTable(node_view, tc)
     flags = [1]*2*pop.N + [0]*(len(node_view) - 2*pop.N)
     tc.nodes.set_columns(flags=flags, time=node_view['time'],
