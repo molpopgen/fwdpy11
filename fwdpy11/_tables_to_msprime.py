@@ -44,10 +44,43 @@ def _initializePopulationTable(node_view, tc):
 
     pmd, pmdo = msprime.pack_bytes(population_metadata)
     tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
-    return tc
+
+
+def _generate_individual_metadata(dmd, tc):
+    strings = []
+    for i in dmd:
+        d = {'g': i.g,
+             'e': i.e,
+             'w': i.w,
+             'geography': i.geography,
+             'parents': i.parents,
+             'sex': i.sex,
+             'deme': i.deme,
+             'label': i.label}
+        strings.append(str(d).encode("utf-8"))
+    return msprime.pack_bytes(strings)
+
+
+def _initializeIndividualTable(pop, tc):
+    """
+    Returns node ID -> individual map
+    """
+    # First, alive individuals:
+    individal_nodes = {}
+    for i in range(pop.N):
+        individal_nodes[2*i] = i
+        individal_nodes[2*i+1] = i
+    md, mdo = _generate_individual_metadata(pop.diploid_metadata, tc)
+    flags = [0 for i in range(pop.N)]
+    tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
+    return individal_nodes
 
 
 def dump_tables_to_msprime(pop):
+    """
+    Converts fwdpy11.ts.TableCollection to an
+    msprime.TreeSequence
+    """
     node_view = np.array(pop.tables.nodes, copy=True)
     node_view['time'] -= node_view['time'].max()
     node_view['time'][np.where(node_view['time'] != 0.0)[0]] *= -1.0
@@ -62,10 +95,16 @@ def dump_tables_to_msprime(pop):
     # other than -1 in an msprime.NodeTable will
     # raise an exception if the PopulationTable
     # isn't set up.
-    tc = _initializePopulationTable(node_view, tc)
+    _initializePopulationTable(node_view, tc)
+    node_to_individual = _initializeIndividualTable(pop, tc)
+
+    individual = [-1 for i in range(len(node_view))]
+    for k, v in node_to_individual.items():
+        individual[k] = v
     flags = [1]*2*pop.N + [0]*(len(node_view) - 2*pop.N)
     tc.nodes.set_columns(flags=flags, time=node_view['time'],
-                         population=node_view['population'])
+                         population=node_view['population'],
+                         individual=individual)
     tc.edges.set_columns(left=edge_view['left'],
                          right=edge_view['right'],
                          parent=edge_view['parent'],
