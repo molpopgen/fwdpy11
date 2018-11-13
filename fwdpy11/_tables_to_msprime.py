@@ -31,7 +31,8 @@ def _generate_mutation_metadata(pop):
              # 'g': m.g,
              'label': m.label,
              'esizes': list(m.esizes),
-             'heffects': list(m.heffects)}
+             'heffects': list(m.heffects),
+             'neutral': m.neutral}
         muts.append(str(d).encode('utf-8'))
     return msprime.pack_bytes(muts)
 
