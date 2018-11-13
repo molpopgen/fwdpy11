@@ -410,7 +410,7 @@ You may convert the tables from a :class:`fwdpy11.ts.TableCollection` to a :clas
 
     ts = pop.dump_tables_to_msprime()
 
-The tables include information about mutations and individuals as metadata.  The metadata themselves are `UTF8`-encoded
+The tables include information about mutations and individuals as metadata.  Each metadata record is a `UTF8`-encoded
 string representations of `dict` objects.  Thus, to get the metadata back into something to work with, you may use
 `eval`:
 
@@ -419,10 +419,10 @@ string representations of `dict` objects.  Thus, to get the metadata back into s
     individial_zero_md = eval(ts.tables.individuals[0].metadata)
     print(individial_zero_md)
 
-Note that it is only straightforward to get the first metadata record out!  The metadata are encoded as a big binary
-string.  The tree sequence objects contain sets of vectors describing the *offset* of each metadata record, which is the
-location of the start of each metadata record.  Let's see how to use this and get the distribution of selection
-coefficients:
+Note that it is only straightforward to get the first metadata record out!  The metadata columns are encoded as a big binary
+blobs.  The tree sequence objects contain sets of vectors describing the *offset* of each metadata record, which is the
+location of the start of each metadata record.  Thus, to access each record, you need to know its :math:`[start,end)`
+position in the blob. Let's see how to use this and get the distribution of selection coefficients:
 
 .. ipython:: python
     :okexcept:
