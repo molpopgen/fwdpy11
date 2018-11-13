@@ -404,6 +404,56 @@ Initializing a simulation using msprime
 Outputting tables to msprime
 ------------------------------------------------------------------------
 
-.. todo::
+You may convert the tables from a :class:`fwdpy11.ts.TableCollection` to a :class:`msprime.TreeSequence` as follows:
 
-    Need to work out tables for individual metadata
+.. ipython:: python
+
+    ts = pop.dump_tables_to_msprime()
+
+The tables include information about mutations and individuals as metadata.  The metadata themselves are `UTF8`-encoded
+string representations of `dict` objects.  Thus, to get the metadata back into something to work with, you may use
+`eval`:
+
+.. ipython:: python
+
+    individial_zero_md = eval(ts.tables.individuals[0].metadata)
+    print(individial_zero_md)
+
+Note that it is only straightforward to get the first metadata record out!  The metadata are encoded as a big binary
+string.  The tree sequence objects contain sets of vectors describing the *offset* of each metadata record, which is the
+location of the start of each metadata record.  Let's see how to use this and get the distribution of selection
+coefficients:
+
+.. ipython:: python
+    :okexcept:
+
+    s = []
+    for i in range(len(ts.tables.mutations)):
+        j = ts.tables.mutations.metadata_offset[i]
+        k = ts.tables.mutations.metadata_offset[i+1]
+        d = eval(ts.tables.mutations.metadata[j:k])
+        if d['neutral'] is False:
+            s.append(d['s'])
+
+    sa = np.array(s)
+    print(sa.mean(), sa.min(), sa.max())
+
+Let's sanity-check our result:
+
+.. ipython:: python
+    :okexcept:
+
+    s2 = []
+    for i in pop.tables.mutations:
+        if pop.mutations[i.key].neutral is False:
+            s2.append(pop.mutations[i.key].s)
+    s2a = np.array(s2)
+    print(s2a.mean(), s2a.min(), s2a.max())
+
+Future releases of msprime will make metadata decoding a bit easier.
+
+At this point, the major difference to be aware of is that the direction of time has been reversed.  With
+that in mind, you may process the data in msprime, save it to a "trees file", etc.. See the msprime documentation_
+for more details.
+
+.. _documentation: https://msprime.readthedocs.io/en/stable/
