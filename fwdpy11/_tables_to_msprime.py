@@ -71,20 +71,20 @@ def _initializeIndividualTable(pop, tc):
         individal_nodes[2*i] = i
         individal_nodes[2*i+1] = i
     metadata_strings = _generate_individual_metadata(pop.diploid_metadata, tc)
-    flags = [0 for i in range(pop.N)]
 
     # Now, preserved nodes
-    num_ind_nodes = len(individal_nodes)
+    num_ind_nodes = pop.N
     for i in pop.ancient_sample_records:
         assert i not in individal_nodes, "indivudal record error"
         individal_nodes[i.n1] = num_ind_nodes
-        individal_nodes[i.n2] = num_ind_nodes+1
+        individal_nodes[i.n2] = num_ind_nodes
+        num_ind_nodes += 1
 
     metadata_strings.extend(_generate_individual_metadata(
         pop.ancient_sample_metadata, tc))
 
     md, mdo = msprime.pack_bytes(metadata_strings)
-
+    flags = [0 for i in range(pop.N+len(pop.ancient_sample_records))]
     tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
     return individal_nodes
 
