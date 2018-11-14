@@ -48,16 +48,16 @@ namespace fwdpy11
         tables.sort_tables(pop.mutations);
         std::vector<std::int32_t> samples(num_samples);
         std::iota(samples.begin(), samples.end(), first_sample_node);
-        auto idmap = simplifier.simplify(tables, samples, pop.mutations);
+        auto rv = simplifier.simplify(tables, samples, pop.mutations);
         tables.build_indexes();
         for (auto &s : samples)
             {
-                s = idmap[s];
+                s = rv.first[s];
             }
 #ifndef NDEBUG
         for (auto &s : tables.preserved_nodes)
             {
-                assert(idmap[s] != 1);
+                assert(rv.first[s] != 1);
             }
 #endif
         fwdpp::ts::count_mutations(tables, pop.mutations, samples, pop.mcounts,
@@ -99,7 +99,8 @@ namespace fwdpy11
                     pop.generation, std::true_type(), std::false_type());
             }
         //confirm_mutation_counts(pop, tables);
-        return idmap;
+        // TODO: return the entire data?
+        return rv.first;
     }
 } // namespace fwdpy11
 #endif
