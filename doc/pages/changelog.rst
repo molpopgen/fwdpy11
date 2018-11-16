@@ -56,6 +56,7 @@ API changes/new features:
 Back-end changes
 ------------------------
 
+* The build system now uses cmake.  `PR #151 <https://github.com/molpopgen/fwdpy11/pull/151>`_ `PR #152 <https://github.com/molpopgen/fwdpy11/pull/152>`_
 * Most uses of C's assert macro are replaced with c++ exceptions.  `PR #141 <https://github.com/molpopgen/fwdpy11/pull/141>`_
 * The C++ back-end of classes no longer contain any Python objects. `PR #114 <https://github.com/molpopgen/fwdpy11/pull/114>`_
 * `PR #108 <https://github.com/molpopgen/fwdpy11/pull/108>`_ changes the back-end for representing diploids and for
