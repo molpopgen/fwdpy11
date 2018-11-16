@@ -1,4 +1,6 @@
-pybind11==2.2.3
+# As of 0.2.0, pybind11 
+# must not be installed via pip
+# pybind11==2.2.3
 numpy
 
 #below are for building package,
