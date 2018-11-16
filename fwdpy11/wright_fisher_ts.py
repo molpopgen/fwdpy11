@@ -18,7 +18,8 @@
 #
 
 
-def evolve(rng, pop, params, simplification_interval, recorder=None):
+def evolve(rng, pop, params, simplification_interval, recorder=None,
+           suppress_table_indexing=False):
     """
     Evolve a population
 
@@ -68,7 +69,8 @@ def evolve(rng, pop, params, simplification_interval, recorder=None):
     WFSlocusPop_ts(rng, pop, sr, simplification_interval,
                    params.demography, params.mutrate_s,
                    params.recrate, mm, rm, params.gvalue,
-                   recorder, params.pself, params.prune_selected is True)
+                   recorder, params.pself, params.prune_selected is True,
+                   suppress_table_indexing)
     # else
     #     from .wright_fisher_mlocus import WFMlocusPop
     #     mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
