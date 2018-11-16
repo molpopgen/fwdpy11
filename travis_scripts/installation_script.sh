@@ -42,7 +42,7 @@ else
     curl -L https://github.com/pybind/pybind11/archive/v2.2.4.tar.gz > pybind11-2.2.4.tar.gz
     tar xzf pybind11-2.2.4.tar.gz
     echo "python version is $TRAVIS_PYTHON_VERSION"
-    pyenv $TRAVIS_PYTHON_VERSION
+    pyenv global $TRAVIS_PYTHON_VERSION
     # Skip running the pybind11 unit suite--not needed...
     cd pybind11-2.2.4 && cmake . -DPYBIND11_TEST=0 && sudo make install && cd ..
 fi
