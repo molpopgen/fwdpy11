@@ -35,7 +35,7 @@ namespace fwdpy11
     // TODO allow for fixation recording
     // and simulation of neutral variants
     template <typename poptype>
-    std::vector<fwdpp::ts::TS_NODE_INT>
+    std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
     simplify_tables(poptype &pop,
                     std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
                     fwdpp::ts::table_collection &tables,
@@ -43,13 +43,14 @@ namespace fwdpy11
                     const fwdpp::ts::TS_NODE_INT first_sample_node,
                     const std::size_t num_samples,
                     const bool preserve_selected_fixations,
-                    const bool simulating_neutral_variants)
+                    const bool simulating_neutral_variants,
+                    const bool suppress_edge_table_indexing)
     {
         tables.sort_tables(pop.mutations);
         std::vector<std::int32_t> samples(num_samples);
         std::iota(samples.begin(), samples.end(), first_sample_node);
         auto rv = simplifier.simplify(tables, samples, pop.mutations);
-        tables.build_indexes();
+
         for (auto &s : samples)
             {
                 s = rv.first[s];
@@ -57,9 +58,14 @@ namespace fwdpy11
 #ifndef NDEBUG
         for (auto &s : tables.preserved_nodes)
             {
-                assert(rv.first[s] != 1);
+                assert(rv.first[s] != -1);
             }
 #endif
+        if (suppress_edge_table_indexing == true)
+            {
+                return rv;
+            }
+        tables.build_indexes();
         fwdpp::ts::count_mutations(tables, pop.mutations, samples, pop.mcounts,
                                    mcounts_from_preserved_nodes);
         // TODO: update this to allow neutral mutations to be simulated
@@ -78,11 +84,11 @@ namespace fwdpy11
                                           == 0;
                         }),
                     tables.mutation_table.end());
+                fwdpp::ts::remove_fixations_from_gametes(
+                    pop.gametes, pop.mutations, pop.mcounts,
+                    mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                    preserve_selected_fixations);
             }
-        fwdpp::ts::remove_fixations_from_gametes(
-            pop.gametes, pop.mutations, pop.mcounts,
-            mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-            preserve_selected_fixations);
 
         // TODO: the blocks below should be abstracted out into a closure
         // that removes these if statements
@@ -99,8 +105,7 @@ namespace fwdpy11
                     pop.generation, std::true_type(), std::false_type());
             }
         //confirm_mutation_counts(pop, tables);
-        // TODO: return the entire data?
-        return rv.first;
+        return rv;
     }
 } // namespace fwdpy11
 #endif
