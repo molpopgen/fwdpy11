@@ -16,5 +16,6 @@ dependencies:
     - pandas
     - matplotlib
     - ipython
+    - cmake
     - pip:
         - cppimport

@@ -26,14 +26,14 @@ then
         conda install gcc;
     fi
     conda install cython numpy python==3.6 gsl
-    conda install -c conda-forge pybind11==2.2.3 msprime openblas
+    conda install -c conda-forge pybind11==2.2.3 msprime openblas cmake
     # conda install -c conda-forge sphinx nbsphinx ipython matplotlib msprime
     pip install cppimport
     echo `which python`
     echo `which python3`
 else
     sudo apt-get update -qq
-    sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev
+    sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake
     ./travis_scripts/gsl2.sh
     pip install -r requirements.txt
 fi

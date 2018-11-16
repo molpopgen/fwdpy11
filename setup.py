@@ -5,7 +5,11 @@ import sys
 import pybind11
 import setuptools
 import os
+import platform
 import glob
+import subprocess
+from distutils.version import LooseVersion
+
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
@@ -18,9 +22,10 @@ if sys.version_info < (3, 3):
 if pybind11.__version__ < '2.2.3':
     raise RuntimeError("pybind11 >= " + '2.2.3' + " required")
 
-if sys.version_info >= (3,7):
+if sys.version_info >= (3, 7):
     if pybind11.__version__ < '2.3.0':
-        raise RuntimeError("Python 3.7 and newer required pybind11 2.3 or greater")
+        raise RuntimeError(
+            "Python 3.7 and newer required pybind11 2.3 or greater")
 
 
 # clang/llvm is default for OS X builds.
@@ -42,6 +47,59 @@ if '--assert' in sys.argv:
     sys.argv.remove('--assert')
 else:
     ASSERT_MODE = False
+
+
+class CMakeExtension(Extension):
+    def __init__(self, name, sourcedir=''):
+        Extension.__init__(self, name, sources=[])
+        self.sourcedir = os.path.abspath(sourcedir)
+
+
+class CMakeBuild(build_ext):
+    def run(self):
+        try:
+            out = subprocess.check_output(['cmake', '--version'])
+        except OSError:
+            raise RuntimeError("CMake must be installed to build the following extensions: " +
+                               ", ".join(e.name for e in self.extensions))
+
+        if platform.system() == "Windows":
+            cmake_version = LooseVersion(
+                re.search(r'version\s*([\d.]+)', out.decode()).group(1))
+            if cmake_version < '3.1.0':
+                raise RuntimeError("CMake >= 3.1.0 is required on Windows")
+
+        for ext in self.extensions:
+            self.build_extension(ext)
+
+    def build_extension(self, ext):
+        extdir = os.path.abspath(os.path.dirname(
+            self.get_ext_fullpath(ext.name)))
+        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
+                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+
+        cfg = 'Debug' if self.debug else 'Release'
+        build_args = ['--config', cfg]
+
+        if platform.system() == "Windows":
+            cmake_args += [
+                '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
+            if sys.maxsize > 2**32:
+                cmake_args += ['-A', 'x64']
+            build_args += ['--', '/m']
+        else:
+            cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
+            build_args += ['--', '-j4']
+
+        env = os.environ.copy()
+        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
+                                                              self.distribution.get_version())
+        if not os.path.exists(self.build_temp):
+            os.makedirs(self.build_temp)
+        subprocess.check_call(['cmake', ext.sourcedir] +
+                              cmake_args, cwd=self.build_temp, env=env)
+        subprocess.check_call(['cmake', '--build', '.'] +
+                              build_args, cwd=self.build_temp)
 
 
 class get_pybind_include(object):
@@ -75,182 +133,25 @@ LIBRARY_DIRS = [
 ]
 
 ext_modules = [
-    Extension(
-        'fwdpy11._init',
-        ['fwdpy11/src/_init.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-        Extension(
-        'fwdpy11.fwdpp_types',
-        ['fwdpy11/src/fwdpp_types.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._opaque_gametes',
-        ['fwdpy11/src/_opaque_gametes.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._opaque_mutations',
-        ['fwdpy11/src/_opaque_mutations.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._opaque_diploids',
-        ['fwdpy11/src/_opaque_diploids.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.fwdpp_extensions',
-        ['fwdpy11/src/fwdpp_extensions.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._Population',
-        ['fwdpy11/src/_Population.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=[],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._Populations',
-        ['fwdpy11/src/_Populations.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.fwdpy11_types',
-        ['fwdpy11/src/fwdpy11_types.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11._gslrng',
-        ['fwdpy11/src/_gslrng.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.sampling',
-        ['fwdpy11/src/fwdpy11_sampling.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.genetic_values',
-        ['fwdpy11/src/genetic_values.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.genetic_value_noise',
-        ['fwdpy11/src/genetic_value_noise.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.wright_fisher_slocus',
-        ['fwdpy11/src/wright_fisher_slocus.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.wright_fisher_mlocus',
-        ['fwdpy11/src/wright_fisher_mlocus.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.gsl_random',
-        ['fwdpy11/src/gsl_random.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.multilocus',
-        ['fwdpy11/src/multilocus.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.util',
-        ['fwdpy11/src/fwdpy11_util.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.ts',
-        ['fwdpy11/src/ts.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.tsrecorders',
-        ['fwdpy11/src/tsrecorders.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.ts_from_msprime',
-        ['fwdpy11/src/ts_from_msprime.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
-    Extension(
-        'fwdpy11.wright_fisher_slocus_ts',
-        ['fwdpy11/src/wright_fisher_slocus_ts.cc'],
-        library_dirs=LIBRARY_DIRS,
-        include_dirs=INCLUDES,
-        libraries=['gsl', 'gslcblas'],
-        language='c++'
-    ),
+    CMakeExtension('fwdpy11._init'),
+    CMakeExtension('fwdpy11.fwdpp_types'),
+    CMakeExtension('fwdpy11._opaque_gametes'),
+    CMakeExtension('fwdpy11._opaque_mutations'),
+    CMakeExtension('fwdpy11._opaque_diploids'),
+    CMakeExtension('fwdpy11.fwdpp_extensions'),
+    CMakeExtension('fwdpy11._Population'),
+    CMakeExtension('fwdpy11._Populations'),
+    CMakeExtension('fwdpy11.fwdpy11_types'),
+    CMakeExtension('fwdpy11.genetic_value_noise',),
+    CMakeExtension('fwdpy11.wright_fisher_slocus',),
+    CMakeExtension('fwdpy11.wright_fisher_mlocus',),
+    CMakeExtension('fwdpy11.gsl_random',),
+    CMakeExtension('fwdpy11.multilocus'),
+    CMakeExtension('fwdpy11.util'),
+    CMakeExtension('fwdpy11.ts',),
+    CMakeExtension('fwdpy11.tsrecorders',),
+    CMakeExtension('fwdpy11.ts_from_msprime',),
+    CMakeExtension('fwdpy11.wright_fisher_slocus_ts',),
 ]
 
 
@@ -375,7 +276,7 @@ setup(
     long_description=long_desc,
     ext_modules=ext_modules,
     install_requires=['pybind11>=2.2.3', 'numpy'],
-    cmdclass={'build_ext': BuildExt},
+    cmdclass={'build_ext': CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
     zip_safe=False,
