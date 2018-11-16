@@ -4,6 +4,7 @@ from setuptools.command.build_ext import build_ext
 import sys
 import pybind11
 import setuptools
+import re
 import os
 import platform
 import glob
@@ -78,7 +79,8 @@ class CMakeBuild(build_ext):
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
 
-        cfg = 'Debug' if self.debug else 'Release'
+        cfg = 'Debug' if DEBUG_MODE is True else 'Release'
+
         build_args = ['--config', cfg]
 
         if platform.system() == "Windows":
@@ -94,6 +96,9 @@ class CMakeBuild(build_ext):
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
+        if ASSERT_MODE is True:
+            env['CXXFLAGS'] += ' -UNDEBUG'
+
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         subprocess.check_call(['cmake', ext.sourcedir] +

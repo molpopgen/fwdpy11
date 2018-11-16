@@ -134,24 +134,27 @@ Enabling debugging symbols in the C++ code
 
     python setup.py build_ext -i --debug
 
+Debug mode disables all compiler optimizations, allows C-like assertions, and generated debug symbols.
+
+.. note::
+    Never install the package compiled in debug mode!  First, things will run much more slowly.  
+    Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
+    exist as a brute-force method to help developers quickly identify bugs.
+
 Enabling assertions in the C++ code
 ------------------------------------------------------------------
 
 The fwdpp library code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
-enable them when hacking the code.  To do so:
+enable them when hacking the code.  To do so, you must manually set your compiler flags with cmake:
 
 .. code-block:: bash
-
-    python setup.py build_ext -i --assert
+    
+    cmake . -DCMAKE_CXX_FLAGS="-UNDEBUG -O2 -g"
 
 When compiling this way, fwdpy11 makes some extra checks that will throw `RuntimeError` if they fail.  The fwdpp_ back
 end also makes extra checks.  If those fail, `abort` will be called, which will crash the Python interpreter.  Thus,
 compiling with this option is a "serious debugging mode only" option.
 
-.. note::
-    Never install the package compiled in assert mode!  First, things will run much more slowly.  
-    Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
-    exist as a brute-force method to help developers quickly identify bugs.
 
 Bioconda
 =================================
