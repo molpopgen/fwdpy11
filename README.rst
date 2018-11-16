@@ -43,9 +43,17 @@ Dependencies
 The following must be present on your system:
 
 * GSL_. This is a C library.  It is available via `conda`.  fwdpy11 requires version 2.2 or greater.
-* pybind11_. This should be installed via `pip` or `conda` as appropriate for your system.
+* pybind11_. This should be installed `conda` as appropriate for your system, or via your system's package manager or
+  manually.  See note below.
+* cmake_. This should be installed by `conda` or your favorite package manager.
 
 fwdpy11_ also uses fwdpp_, which is included as a submodule.
+
+.. note::
+
+    The C++ modules are built using cmake_, which requires that pybind11_'s cmake macros are visible.
+    Installing pybind11_ via `pip` does **not** install the macros.  However, installs using `conda`, 
+    apt-get, or manual installation from source will install both the Python module and the cmake macros.
 
 License
 -----------------------
@@ -164,3 +172,4 @@ The OS X build is built using gcc.
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
 .. _bioconda: https://bioconda.github.io/
 .. _release: https://github.com/molpopgen/fwdpy11/releases
+.. _cmake: https://cmake.org
