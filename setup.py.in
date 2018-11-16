@@ -4,6 +4,7 @@ from setuptools.command.build_ext import build_ext
 import sys
 import pybind11
 import setuptools
+import re
 import os
 import platform
 import glob
@@ -42,11 +43,11 @@ if '--debug' in sys.argv:
 else:
     DEBUG_MODE = False
 
-if '--assert' in sys.argv:
-    ASSERT_MODE = True
-    sys.argv.remove('--assert')
-else:
-    ASSERT_MODE = False
+# if '--assert' in sys.argv:
+#     ASSERT_MODE = True
+#     sys.argv.remove('--assert')
+# else:
+#     ASSERT_MODE = False
 
 
 class CMakeExtension(Extension):
@@ -78,7 +79,8 @@ class CMakeBuild(build_ext):
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
 
-        cfg = 'Debug' if self.debug else 'Release'
+        cfg = 'Debug' if DEBUG_MODE is True else 'Release'
+
         build_args = ['--config', cfg]
 
         if platform.system() == "Windows":
@@ -94,6 +96,7 @@ class CMakeBuild(build_ext):
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
+
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         subprocess.check_call(['cmake', ext.sourcedir] +
@@ -153,71 +156,6 @@ ext_modules = [
     CMakeExtension('fwdpy11.ts_from_msprime',),
     CMakeExtension('fwdpy11.wright_fisher_slocus_ts',),
 ]
-
-
-# As of Python 3.6, CCompiler has a `has_flag` method.
-# cf http://bugs.python.org/issue26689
-def has_flag(compiler, flagname):
-    """Return a boolean indicating whether a flag name is supported on
-    the specified compiler.
-    """
-    import tempfile
-    with tempfile.NamedTemporaryFile('w', suffix='.cpp') as f:
-        f.write('int main (int argc, char **argv) { return 0; }')
-        try:
-            compiler.compile([f.name], extra_postargs=[flagname])
-        except setuptools.distutils.errors.CompileError:
-            return False
-    return True
-
-
-def cpp_flag(compiler):
-    """Return the -std=c++[11/14] compiler flag.
-
-    The c++14 is prefered over c++11 (when it is available).
-    """
-    if has_flag(compiler, '-std=c++14'):
-        return '-std=c++14'
-    elif has_flag(compiler, '-std=c++11'):
-        return '-std=c++11'
-    else:
-        raise RuntimeError('Unsupported compiler -- at least C++11 support '
-                           'is needed!')
-
-
-class BuildExt(build_ext):
-    """A custom build extension for adding compiler-specific options."""
-    c_opts = {
-        'msvc': ['/EHsc'],
-        'unix': [],
-    }
-
-    if sys.platform == 'darwin' and USE_GCC is False:
-        c_opts['unix'] += ['-stdlib=libc++', '-mmacosx-version-min=10.7']
-
-    def build_extensions(self):
-        ct = self.compiler.compiler_type
-        opts = self.c_opts.get(ct, [])
-        if ct == 'unix':
-            opts.append('-DVERSION_INFO="%s"' %
-                        self.distribution.get_version())
-            opts.append(cpp_flag(self.compiler))
-            if has_flag(self.compiler, '-fvisibility=hidden') and \
-                       (sys.platform != 'darwin' or USE_GCC is True):
-                opts.append('-fvisibility=hidden')
-            if has_flag(self.compiler, '-g0') and DEBUG_MODE is False:
-                opts.append('-g0')
-            if ASSERT_MODE is True:
-                opts.append('-UNDEBUG')
-        elif ct == 'msvc':
-            opts.append('/DVERSION_INFO=\\"%s\\"' %
-                        self.distribution.get_version())
-        for ext in self.extensions:
-            ext.extra_compile_args = opts
-            if sys.platform == 'darwin' and USE_GCC is False:
-                ext.extra_link_args = ['-stdlib=libc++',
-                                       '-mmacosx-version-min=10.7']
-        build_ext.build_extensions(self)
 
 
 # Figure out the headers we need to install:
