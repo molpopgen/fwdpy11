@@ -23,19 +23,24 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     """
     Evolve a population
 
-    :param rng: An instance of :class:`fwdpy11.GSLrng`
-    :param pop: An instance of :class:`fwdpy11.SlocusPop`
-    :param params: An instance of :class:`fwdpy11.model_params.SlocusParams`
+    :param rng: random number generator
+    :type rng: :class:`fwdpy11.GSLrng`
+    :param pop: A population
+    :type pop: :class:`fwdpy11.SlocusPop`
+    :param params: simulation parameters
+    :type params: :class:`fwdpy11.model_params.SlocusParams`
     :param simplification_interval: Number of generations between simplifications.
+    :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
+    :type recorder: callable
+    :param suppress_table_indexing: (False) Prevents edge table indexing until end of simulation
+    :type suppress_table_indexing: boolean
 
     .. note::
         If recorder is None,
         then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     """
-    # import fwdpy11.SlocusPop
-    # import fwdpy11.MlocusPop
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -52,10 +57,9 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         params.validate()
 
     from .internal import makeMutationRegions, makeRecombinationRegions
-    # if pop.__class__ is fwdpy11.SlocusPop:
     from .wright_fisher_slocus_ts import WFSlocusPop_ts
     # TODO: update to allow neutral mutations
-    pneutral = 0  # params.mutrate_n/(params.mutrate_n+params.mutrate_s)
+    pneutral = 0
     mm = makeMutationRegions(rng, pop, params.nregions,
                              params.sregions, pneutral)
     rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
@@ -71,20 +75,3 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                    params.recrate, mm, rm, params.gvalue,
                    recorder, params.pself, params.prune_selected is True,
                    suppress_table_indexing)
-    # else
-    #     from .wright_fisher_mlocus import WFMlocusPop
-    #     mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
-    #           i, j, n, s in zip(params.nregions,
-    #                             params.sregions,
-    #                             params.mutrates_n, params.mutrates_s)]
-    #     rm = [makeRecombinationRegions(rng, i, j) for i, j in zip(
-    #         params.recrates, params.recregions)]
-
-    #     if recorder is None:
-    #         from fwdpy11.temporal_samplers import RecordNothing
-    #         recorder = RecordNothing()
-
-    #     WFMlocusPop(rng, pop, params.demography, params.mutrates_n,
-    #                 params.mutrates_s, mm, rm, params.interlocus_rec,
-    #                 params.gvalue, recorder, params.pself,
-    #                 params.prune_selected)
