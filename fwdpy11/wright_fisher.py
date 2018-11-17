@@ -22,10 +22,14 @@ def evolve(rng, pop, params, recorder=None):
     """
     Evolve a population
 
-    :param rng: An instance of :class:`fwdpy11.GSLrng`
-    :param pop: An instance of :class:`fwdpy11.SlocusPop`
-    :param params: An instance of :class:`fwdpy11.model_params.SlocusParams`
+    :param rng: random number generator
+    :type rng: :class:`fwdpy11.GSLrng`
+    :param pop: A population
+    :type pop: :class:`fwdpy11.SlocusPop`
+    :param params: simulation parameters
+    :type params: :class:`fwdpy11.model_params.ModelParams`
     :param recorder: (None) A temporal sampler/data recorder.
+    :type recorder: callable
 
     .. note::
         If recorder is None,

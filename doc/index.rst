@@ -48,6 +48,7 @@ Welcome to fwdpy11's documentation!
     pages/tsoverview
     pages/tstypes
     pages/ts
+    pages/tsdetails
 
 .. toctree::
     :caption: Examples

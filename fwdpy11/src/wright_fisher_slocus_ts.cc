@@ -117,7 +117,8 @@ wfSlocusPop_ts(
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
-    const bool preserve_selected_fixations)
+    const bool preserve_selected_fixations,
+    const bool suppress_edge_table_indexing)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -204,16 +205,25 @@ wfSlocusPop_ts(
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
-                    auto idmap = fwdpy11::simplify_tables(
+                    auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
                         simplifier, pop.tables.num_nodes() - 2 * pop.N,
-                        2 * pop.N, preserve_selected_fixations, false);
-                    mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                        pop.mcounts, pop.mcounts_from_preserved_nodes);
+                        2 * pop.N, preserve_selected_fixations, false,
+                        suppress_edge_table_indexing);
+                    if (suppress_edge_table_indexing == false)
+                        {
+                            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                                pop.mcounts, pop.mcounts_from_preserved_nodes);
+                        }
+                    else
+                        {
+                            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                                rv.second, pop.mutations.size());
+                        }
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
-                    remap_ancient_samples(pop, idmap);
+                    remap_ancient_samples(pop, rv.first);
                 }
             else
                 {
@@ -259,12 +269,22 @@ wfSlocusPop_ts(
     if (!simplified)
         {
             // TODO: update this to allow neutral mutations to be simulated
-            auto idmap = fwdpy11::simplify_tables(
+            auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
                 pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N,
-                preserve_selected_fixations, false);
+                preserve_selected_fixations, false,
+                suppress_edge_table_indexing);
 
-            remap_ancient_samples(pop, idmap);
+            remap_ancient_samples(pop, rv.first);
+        }
+    if (suppress_edge_table_indexing == true)
+        {
+            pop.tables.build_indexes();
+            std::vector<std::int32_t> samples(2 * pop.N);
+            std::iota(samples.begin(), samples.end(), 0);
+            fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
+                                       pop.mcounts,
+                                       pop.mcounts_from_preserved_nodes);
         }
 }
 
