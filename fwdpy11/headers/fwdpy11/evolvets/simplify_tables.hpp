@@ -58,7 +58,7 @@ namespace fwdpy11
 #ifndef NDEBUG
         for (auto &s : tables.preserved_nodes)
             {
-                assert(rv.first[s] != -1);
+                assert(s != -1);
             }
 #endif
         if (suppress_edge_table_indexing == true)
