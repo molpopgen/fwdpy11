@@ -1,3 +1,4 @@
 *.so
 *.rendered*
 *.cppimporthash
+*.pyc
