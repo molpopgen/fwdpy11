@@ -28,7 +28,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     :param pop: A population
     :type pop: :class:`fwdpy11.SlocusPop`
     :param params: simulation parameters
-    :type params: :class:`fwdpy11.model_params.SlocusParams`
+    :type params: :class:`fwdpy11.model_params.ModelParams`
     :param simplification_interval: Number of generations between simplifications.
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
@@ -38,7 +38,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     .. note::
         If recorder is None,
-        then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
+        then :class:`fwdpy11.tsrecorders.NoAncientSamples` will be used.
 
     """
     import warnings
