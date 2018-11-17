@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <stdexcept>
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -58,7 +59,11 @@ namespace fwdpy11
 #ifndef NDEBUG
         for (auto &s : tables.preserved_nodes)
             {
-                assert(s != -1);
+                if (s == -1)
+                    {
+                        throw std::runtime_error("ancient sample node is NULL "
+                                                 "after simplification");
+                    }
             }
 #endif
         if (suppress_edge_table_indexing == true)
