@@ -30,15 +30,29 @@ def print_includes():
     print(' '.join('-I' + idir for idir in idirs))
 
 
+def get_fwdpy11_includes():
+    from ._dev import get_includes
+    return get_includes()
+
+
+def get_fwdpp_includes():
+    from ._dev import get_fwdpp_includes
+    return get_fwdpp_includes()
+
+
 def print_mako():
     from ._dev import minimal_mako
-    print (minimal_mako())
+    print(minimal_mako())
 
 
 def main():
     parser = argparse.ArgumentParser(prog='python -m fwdpy11')
     parser.add_argument('--includes', action='store_true',
-                        help='Print include paths for fwdpy11 and fwdpp.')
+                        help='Print the CPPFLAGS required to use fwdpy11 and fwdpp headers.')
+    parser.add_argument('--fwdpy11_headers', action='store_true',
+                        help='Get location of fwdpy11 headers')
+    parser.add_argument('--fwdpp_headers', action='store_true',
+                        help='Get location of fwdpp headers')
     parser.add_argument('--mako', action='store_true',
                         help="Print minimal mako header for use with cppimport.")
     args = parser.parse_args()
@@ -46,6 +60,12 @@ def main():
         parser.print_help()
     if args.includes:
         print_includes()
+        return
+    if args.fwdpy11_headers:
+        print(get_fwdpy11_includes())
+        return
+    if args.fwdpp_headers:
+        print(get_fwdpp_includes())
         return
     if args.mako:
         print_mako()
