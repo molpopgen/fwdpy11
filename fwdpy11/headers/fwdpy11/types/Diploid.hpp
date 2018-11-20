@@ -43,7 +43,7 @@ namespace fwdpy11
         double geography[3];    // Location in geographic space
         std::size_t label;      // Index of individual in pop container
         std::size_t parents[2]; // Indexes of parents
-        std::uint32_t deme;
+        std::int32_t deme;
         std::int32_t sex;
         std::int32_t nodes[2]; // Nodes in TreeSequence
     };
