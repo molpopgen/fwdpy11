@@ -88,6 +88,12 @@ class testPickleSlocusPop(unittest.TestCase):
         for i, j in zip(p, self.pop.diploids):
             self.assertEqual(i, j)
 
+    def testPicklePopPy(self):
+        import pickle
+        p = pickle.dumps(self.pop, -1);
+        pp = pickle.loads(p)
+        self.assertEqual(pp, self.pop)
+
     def testPicklePopCpp(self):
         import pickle
         p = pickling_cpp.general_pickler(self.pop)
@@ -120,47 +126,6 @@ class testPickleMlocusPop(unittest.TestCase):
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
 
-
-# class testSlocusPopGeneralMut(unittest.TestCase):
-#     @classmethod
-#     def setUp(self):
-#         import fwdpy11
-#         self.pop = fwdpy11.SlocusPopGeneralMutVec(100)
-# 
-#     def testPicklePopPy(self):
-#         import pickle
-#         p = pickle.dumps(self.pop, -1)
-#         pp = pickle.loads(p)
-#         self.assertEqual(pp, self.pop)
-# 
-#     def testPicklePopCpp(self):
-#         import pickle
-#         p = pickling_cpp.general_pickler(self.pop)
-#         pp = pickle.loads(p)
-#         self.assertEqual(pp, self.pop)
-# 
-# 
-# class testVectorGeneralMutVec(unittest.TestCase):
-#     """
-#     As of 0.1.4, SlocusPopGeneralMutVec is
-#     not used by any sims, and so there
-#     is no evolve function to make a pop. Therefore,
-#     we test that vectors of the mutation type
-#     are pickleable.  We test that by making one.
-#     """
-#     @classmethod
-#     def setUp(self):
-#         import fwdpy11
-#         s = fwdpy11.VecDouble([0.1, -0.1])
-#         h = fwdpy11.VecDouble([0., 1.])
-#         self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
-# 
-#     def testPickleVector(self):
-#         import pickle
-#         p = pickle.dumps(self.mutations)
-#         pp = pickle.loads(p)
-#         for i, j in zip(pp, self.mutations):
-#             self.assertEqual(i, j)
 
 
 if __name__ == "__main__":

@@ -42,10 +42,18 @@ Dependencies
 
 The following must be present on your system:
 
-* GSL_. This is a C library.  It is available via `conda`.
-* pybind11_. This should be installed via `pip` or `conda` as appropriate for your system.
+* GSL_. This is a C library.  It is available via `conda`.  fwdpy11 requires version 2.2 or greater.
+* pybind11_. This should be installed `conda` as appropriate for your system, or via your system's package manager or
+  manually.  See note below.
+* cmake_. This should be installed by `conda` or your favorite package manager.
 
 fwdpy11_ also uses fwdpp_, which is included as a submodule.
+
+.. note::
+
+    The C++ modules are built using cmake_, which requires that pybind11_'s cmake macros are visible.
+    Installing pybind11_ via `pip` does **not** install the macros.  However, installs using `conda`, 
+    apt-get, or manual installation from source will install both the Python module and the cmake macros.
 
 License
 -----------------------
@@ -62,7 +70,7 @@ fwdpy11 is written for Python 3.  We will not modify the package to be compatibl
     git submodule init
     git submodule update
     python setup.py build_ext -i
-    python test.py
+    python -m unittest discover tests
 
 .. note::
     The clang compiler is the assumed default on OS X.  However, life is simpler
@@ -126,20 +134,27 @@ Enabling debugging symbols in the C++ code
 
     python setup.py build_ext -i --debug
 
+Debug mode disables all compiler optimizations, allows C-like assertions, and generated debug symbols.
+
+.. note::
+    Never install the package compiled in debug mode!  First, things will run much more slowly.  
+    Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
+    exist as a brute-force method to help developers quickly identify bugs.
+
 Enabling assertions in the C++ code
 ------------------------------------------------------------------
 
-The C++ code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
-enable them when hacking the code.  To do so:
+The fwdpp library code uses C's assert macros in several places.  These are disabled by default.  However, it can be useful to
+enable them when hacking the code.  To do so, you must manually set your compiler flags with cmake:
 
 .. code-block:: bash
+    
+    cmake . -DCMAKE_CXX_FLAGS="-UNDEBUG -O2 -g"
 
-    python setup.py build_ext -i --assert
+When compiling this way, fwdpy11 makes some extra checks that will throw `RuntimeError` if they fail.  The fwdpp_ back
+end also makes extra checks.  If those fail, `abort` will be called, which will crash the Python interpreter.  Thus,
+compiling with this option is a "serious debugging mode only" option.
 
-.. note::
-    Never install the package compiled in assert mode!  First, things will run much more slowly.  
-    Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
-    exist as a brute-force method to help developers quickly identify bugs.
 
 Bioconda
 =================================
@@ -160,3 +175,4 @@ The OS X build is built using gcc.
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
 .. _bioconda: https://bioconda.github.io/
 .. _release: https://github.com/molpopgen/fwdpy11/releases
+.. _cmake: https://cmake.org

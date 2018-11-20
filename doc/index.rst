@@ -38,6 +38,17 @@ Welcome to fwdpy11's documentation!
     pages/fixations
     pages/model_params
     pages/recorders
+    pages/pickling
+    pages/binary
+
+.. toctree::
+    :caption: Tree sequence recording
+    :maxdepth: 2
+
+    pages/tsoverview
+    pages/tstypes
+    pages/ts
+    pages/tsdetails
 
 .. toctree::
     :caption: Examples
@@ -48,7 +59,6 @@ Welcome to fwdpy11's documentation!
     examples/parallel_simulation
     examples/customgvalue
     examples/stateful_fitness
-    examples/pickling
     examples/DataMatrix
     examples/qtrait
     examples/parentage
@@ -58,6 +68,7 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/popobjects
+    pages/manip_mutations
 
 .. toctree::
     :caption: Maximizing performance
@@ -88,17 +99,49 @@ fwdpy11
     :imported-members:
     :show-inheritance:
 
-fwdpy11.fitness
+fwdpy11._Population
 ------------------------------
-.. automodule:: fwdpy11.fitness
+.. automodule:: fwdpy11._Population
     :members:
     :show-inheritance:
 
-fwdpy11.trait_values
+fwdpy11._Populations
 ------------------------------
-.. automodule:: fwdpy11.trait_values
+.. automodule:: fwdpy11._Populations
     :members:
     :show-inheritance:
+
+fwdpy11.ts
+------------------------------
+.. automodule:: fwdpy11.ts
+    :members:
+    :show-inheritance:
+
+fwdpy11.tsrecorders
+------------------------------
+.. automodule:: fwdpy11.tsrecorders
+    :members:
+    :show-inheritance:
+
+fwdpy11.ts_from_msprime
+------------------------------
+.. automodule:: fwdpy11.ts_from_msprime
+    :members:
+    :show-inheritance:
+
+fwdpy11.genetic_values
+------------------------------
+.. automodule:: fwdpy11.genetic_values
+    :members:
+    :show-inheritance:
+    :special-members:
+
+fwdpy11.genetic_value_noise
+------------------------------
+.. automodule:: fwdpy11.genetic_value_noise
+    :members:
+    :show-inheritance:
+    :special-members:
 
 fwdpy11.sampling
 ------------------------------
@@ -124,9 +167,9 @@ fwdpy11.wright_fisher
     :members:
     :show-inheritance:
 
-fwdpy11.wright_fisher_qtrait
+fwdpy11.wright_fisher_ts
 ------------------------------
-.. automodule:: fwdpy11.wright_fisher_qtrait
+.. automodule:: fwdpy11.wright_fisher_ts
     :members:
     :show-inheritance:
 
@@ -139,12 +182,6 @@ fwdpy11.multilocus
 fwdpy11.util
 ------------------------------
 .. automodule:: fwdpy11.util
-    :members:
-    :show-inheritance:
-
-fwdpy11.python_genetic_values
-------------------------------------------------------------
-.. automodule:: fwdpy11.python_genetic_values
     :members:
     :show-inheritance:
 

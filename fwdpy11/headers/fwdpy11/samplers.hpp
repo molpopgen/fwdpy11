@@ -20,17 +20,18 @@
 #define FWDPY11_SAMPLERS_HPP__
 
 #include <functional>
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/MlocusPop.hpp>
 
 namespace fwdpy11
 {
     // Applied each generation to record any data of interest.
-    using singlepop_temporal_sampler
-        = std::function<void(const fwdpy11::singlepop_t&)>;
+    using SlocusPop_temporal_sampler
+        = std::function<void(const fwdpy11::SlocusPop&)>;
 
     // Applied each generation to record any data of interest.
-    using multilocus_temporal_sampler
-        = std::function<void(const fwdpy11::multilocus_t&)>;
+    using MlocusPop_temporal_sampler
+        = std::function<void(const fwdpy11::MlocusPop&)>;
 }
 
 #endif

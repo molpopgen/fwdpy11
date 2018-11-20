@@ -1,8 +1,36 @@
+.. _upgrade_path:
+
 Upgrade path
 ====================================================================================
 
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
+
+0.2.0
+--------------------------------------------------
+
+This release also separates out the data representing a diploid into two classes, :class:`fwdpy11.DiploidGenotype` and
+:class:`fwdpy11.DiploidMetadata`.  See :ref:`diploids` and :ref:`processingpopsNP` for type details and details on how
+these new classes affect processing populations using NumPy, respectively.
+
+This release contains major changes to how genetic values are calculated and to how simulations parameters are stored.
+These changes are major *simplifications* to the package.  See :ref:`genetic_values_types` and :ref:`model_params` for
+details.
+
+The changes to how diploid data are stored completely changes how custom genetic values calculations are implemented.
+See :ref:`customgvalues` and :ref:`stateful_fitness` for examples.
+
+Another major change is that genetic value and noise functions are no longer allowed to be written in Python.  We may
+bring that back in a later release.
+
+class:`fwdpy11.sampling.DataMatrix` has been completely refactored.  See :ref:`datamatrix` for overview of current API.
+
+The function :func:`fwdpy11.sampling.matrix_to_sample` now returns a tuple with two elements, which represent neutral
+and selected gentoypes, respectively.  The previous  API made you choose neutral or selected for the return value, which
+was a list.
+
+Support for tree sequences will likely have a big impact on how you think about carrying out simulations.  See :ref:`ts`
+and :ref:`ts_data_types` for details.
 
 0.1.4
 -----------------------------------

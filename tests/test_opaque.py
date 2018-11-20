@@ -50,7 +50,7 @@ class testSlocusPop(unittest.TestCase):
     def test_a_diploid(self):
         self.assertTrue(
             type(self.pop.diploids[0])
-            is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+            is fwdpy11.fwdpy11_types.DiploidGenotype)
 
     def test_gametes(self):
         self.assertTrue(
@@ -66,19 +66,21 @@ class SlocusTypeSampler(object):
         assert(type(pop.mcounts) is fwdpy11.VecUint32)
         assert(type(pop.diploids) is fwdpy11.VecDiploid)
         assert(type(pop.diploids[0])
-               is fwdpy11.fwdpy11_types.SingleLocusDiploid)
+               is fwdpy11.fwdpy11_types.DiploidGenotype)
         assert(type(pop.gametes) is fwdpy11.VecGamete)
 
 
 class testSlocusPopSampler(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
+    def setUp(self):
         from fwdpy11.ezparams import mslike
-        from fwdpy11.model_params import SlocusParams
+        from fwdpy11.genetic_values import SlocusMult
+        from fwdpy11.model_params import ModelParams
         self.sampler = SlocusTypeSampler()
         self.pop = fwdpy11.SlocusPop(1000)
         self.params_dict = mslike(self.pop, simlen=10)
-        self.params = SlocusParams(**self.params_dict)
+        self.params_dict['gvalue'] = SlocusMult(2.)
+        self.params = ModelParams(**self.params_dict)
         self.rng = fwdpy11.GSLrng(42)
 
     def testSampler(self):
@@ -92,7 +94,7 @@ class testSlocusPopSampler(unittest.TestCase):
 class testMlocusPop(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fwdpy11.MlocusPop(1000, 5)
+        self.pop = fwdpy11.MlocusPop(1000, [(i, i + 1) for i in range(5)])
 
     def test_mutations(self):
         self.assertTrue(
@@ -121,37 +123,6 @@ class testMlocusPop(unittest.TestCase):
         self.assertTrue(
             type(self.pop.gametes)
             is fwdpy11.VecGamete)
-
-
-# class testVectorGeneralMutVec(unittest.TestCase):
-#     """
-#     Test that the s,h fields
-#     are opaque containers and
-#     not converted to lists.
-#     """
-#     @classmethod
-#     def setUp(self):
-#         import fwdpy11
-#         s = fwdpy11.VecDouble([0.1, -0.1])
-#         h = fwdpy11.VecDouble([0., 1.])
-#         self.mutations = [fwdpy11.GeneralMutVec((s, h, 0.1, 3, 0))]
-# 
-#     def test_opaque(self):
-#         self.assertTrue(type(self.mutations[0].s
-#                              is fwdpy11.VecDouble))
-#         self.assertTrue(type(self.mutations[0].h
-#                              is fwdpy11.VecDouble))
-# 
-#     def test_opaque_conversion(self):
-#         """
-#         This tests something that is quite
-#         unsafe to do unless you really
-#         know what you are doing.
-#         """
-#         import numpy as np
-#         x = np.array(self.mutations[0].s, copy=False)
-#         x[0] = 303.0
-#         self.assertEqual(self.mutations[0].s[0], 303.0)
 
 
 if __name__ == "__main__":

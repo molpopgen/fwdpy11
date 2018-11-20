@@ -1,4 +1,4 @@
-#include <fwdpy11/types.hpp>
+#include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 #include <pybind11/pybind11.h>
 #include <numeric>
@@ -8,58 +8,66 @@ namespace py = pybind11;
 
 struct additive_diploid_trait_fxn
 {
-    const KTfwd::additive_diploid w;
-    additive_diploid_trait_fxn()
-        : w{ KTfwd::additive_diploid(KTfwd::atrait()) }
+    const fwdpp::additive_diploid w;
+    additive_diploid_trait_fxn(const double scaling)
+        : w{ fwdpp::additive_diploid(scaling,
+                                     fwdpp::additive_diploid::policy::atrait) }
     {
     }
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations, const double scaling) const
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
-        return w(dip, gametes, mutations, scaling);
+        return w(dip, gametes, mutations);
     }
 };
 
 struct multiplicative_diploid_trait_fxn
 {
-    const KTfwd::multiplicative_diploid w;
-    multiplicative_diploid_trait_fxn()
-        : w{ KTfwd::multiplicative_diploid(KTfwd::mtrait()) }
+    const fwdpp::multiplicative_diploid w;
+    multiplicative_diploid_trait_fxn(const double scaling)
+        : w{ fwdpp::multiplicative_diploid(
+              scaling, fwdpp::multiplicative_diploid::policy::mtrait) }
     {
     }
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations, const double scaling) const
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
-        return w(dip, gametes, mutations, scaling);
+        return w(dip, gametes, mutations);
     }
 };
 
 struct gbr_diploid_trait_fxn
 {
+    gbr_diploid_trait_fxn() {}
+    gbr_diploid_trait_fxn(double) {} // hack to make API happy
     inline double
-    operator()(const fwdpy11::diploid_t &dip, const fwdpy11::gcont_t &gametes,
-               const fwdpy11::mcont_t &mutations, const double) const
+    operator()(const fwdpy11::Diploid &dip,
+               const fwdpy11::Population::gcont_t &gametes,
+               const fwdpy11::Population::mcont_t &mutations) const
     {
         auto sum1 = std::accumulate(
             gametes[dip.first].smutations.cbegin(),
             gametes[dip.first].smutations.cend(), 0.,
-            [&mutations](const double s, const KTfwd::uint_t key) {
+            [&mutations](const double s, const fwdpp::uint_t key) {
                 return s + mutations[key].s;
             });
         auto sum2 = std::accumulate(
             gametes[dip.second].smutations.cbegin(),
             gametes[dip.second].smutations.cend(), 0.,
-            [&mutations](const double s, const KTfwd::uint_t key) {
+            [&mutations](const double s, const fwdpp::uint_t key) {
                 return s + mutations[key].s;
             });
         return std::sqrt(sum1 * sum2);
     }
 };
 
-using single_locus_multiplicative_trait_wrapper = fwdpy11::
-    fwdpp_single_locus_fitness_wrapper<multiplicative_diploid_trait_fxn>;
+using single_locus_multiplicative_trait_wrapper
+    = fwdpy11::fwdpp_single_locus_fitness_wrapper<
+        multiplicative_diploid_trait_fxn>;
 using single_locus_additive_trait_wrapper
     = fwdpy11::fwdpp_single_locus_fitness_wrapper<additive_diploid_trait_fxn>;
 using gbr_trait_wrapper
@@ -120,9 +128,9 @@ PYBIND11_MODULE(trait_values, m)
                 return py::make_tuple(w.scaling);
             },
             [](py::tuple t) {
-                return std::
-                    make_shared<single_locus_multiplicative_trait_wrapper>(
-                        t[0].cast<double>());
+                return std::make_shared<
+                    single_locus_multiplicative_trait_wrapper>(
+                    t[0].cast<double>());
             }));
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,

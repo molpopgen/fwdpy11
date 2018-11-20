@@ -45,7 +45,7 @@ dnl 2) package version (i.e. 1.2)
 dnl 3) bug/info/project email address (i.e. bug-foo@gnu.org)
 dnl----
 dnl
-AC_INIT([fwdpy11], [0.1.4], [krthornt@uci.edu])
+AC_INIT([fwdpy11], [0.2.0a0], [krthornt@uci.edu])
 
 dnl----
 dnl If you plan to use Automake, initialize it hre
@@ -397,11 +397,11 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([setup.py requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py])
+AC_CONFIG_FILES([setup.py CMakeLists.txt requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py])
 
 dnl stuff added by KRT
 
-MINPYBIND11="2.2.0"
+MINPYBIND11="2.2.3"
 AC_SUBST(PYBIND11,$MINPYBIND11)
 
 AC_DEFINE_UNQUOTED([GSL_VERSION],["$GSLVERSION"],[The version of GSL used to compile this software])

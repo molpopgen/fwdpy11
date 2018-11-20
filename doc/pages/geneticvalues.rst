@@ -3,80 +3,144 @@
 Objects for calculation of genetic values
 ====================================================================================
 
+.. versionchanged:: 0.2.0
+
+    Updated to cover new types in :py:mod:`fwdpy11.genetic_values`. These type unify several concepts into 
+    a simpler Python framework with a simpler C++ back-end.
+
 Background reading:
 
 * :ref:`genetic_values`
 
-For the calculation of *fitness* in a single-region simulation, the following objects are available:
+In order to calculate a diploid's fitness, we need to process its mutations, account for any random effects, and produce
+a final fitness value.  In other words, a diploid's *genetic value* is a function of its mutations, and the final
+fitness is the result of mapping that genetic value to fitness (accounting for any random effects). 
 
-* :class:`fwdpy11.fitness.SlocusAdditive`
-* :class:`fwdpy11.fitness.SlocusMult`
+Depending on the type of simulation we are doing, a diploid's genetic value, :math:`G`, may represent fitness
+(:math:`w`) itself or it may represent a trait value (a "phenotype").  The module :py:mod:`fwdpy11.genetic_values` provides a flexible Python
+class hierarchy to accomodate these different scenarios.  There are two different class hiarchies.  One is used for
+simulations involving :class:`fwdpy11.SlocusPop` and the other applies to :class:`fwdpy11.MlocusPop`.  The base class of
+each is an Abstract Base Class (ABC):
 
-These two classes take a **scaling** parameter as a constructor argument:
+* :class:`fwdpy11.genetic_values.SlocusPopGeneticValue`
+* :class:`fwdpy11.genetic_values.MlocusPopGeneticValue`
+
+Because these two classes are ABCs, you may not make instances of them.  They exist to provide the following minimal
+interface to the user:
+
+* They are callable types, capable of returning the genetic value of the :math:`i^{th}` diploid in a :class:`fwdpy11.Population`.
+  See the documentation for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__` and
+  :func:`fwdpy11.genetic_values.MlocusPopGeneticValue.__call__`.
+* The may return the fitness of the :math:`i^{th}` diploid.  See docstrings for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.fitness`
+  and :func:`fwdpy11.genetic_values.MlocusPopGeneticValue.fitness`.
+
+Internally, objects in these class hierarchies provide the following functionality:
+
+* Calculate genetic value based on mutations.
+* Calculate any random effects, or "noise".
+* Map genetic value to fitness.
+
+Two more ABCs define Python classes capable of flexibly modeling noise and mappings of genetic values to fitness:
+
+* :class:`fwdpy11.genetic_values.SlocusPopGeneticValueWithMapping`
+* :class:`fwdpy11.genetic_values.MlocusPopGeneticValueWithMapping`
+
+These two types inherit from the two ABCs described above, and thus provide the same public interface.  They
+additionally provide:
+
+* The ability to access the genetic value to fitness map.  
+* Acccess to the "noise" function.
+
+At this point, it helps to look at a concrete class, which will allow us to look at the behavior of the interfaces
+defined by the ABCs:
 
 .. ipython:: python
 
-    import fwdpy11.fitness
+    import fwdpy11.genetic_values
 
-    # For a single mutation, fitness is
-    # 1, 1+sh, 1+s
-    a1 = fwdpy11.fitness.SlocusAdditive(1.0)
+    multiplicative = fwdpy11.genetic_values.SlocusMult(2.0)
 
-    # For a single mutation, fitness is
-    # 1, 1+sh, 1+2*s
-    a2 = fwdpy11.fitness.SlocusAdditive(2.0)
+    print(type(multiplicative.gvalue_to_fitness))
+    print(type(multiplicative.noise))
 
-For the calculation of *genetic values* in a single-region simulation, the following objects are available:
-
-* :class:`fwdpy11.trait_values.SlocusAdditiveTrait`
-* :class:`fwdpy11.trait_values.SlocusMultTrait`
-* :class:`fwdpy11.trait_values.SlocusGBRTrait`
-
-The first two objects also take **scaling** parameters as constructor arguments.  The third class is only valid for
-distributions of effects sizes returning non-negative values.
-
-For multi-region simulations, calculations are run through instances of
-:class:`fwdpy11.multilocus.MultiLocusGeneticValue`.  Instances of this object hold lists of single-region objects:
-
-.. ipython:: python
-
-    import fwdpy11.trait_values
-    import fwdpy11.multilocus
-
-    # Genetic value calculator for a quantitative trait simulation
-    # of ten regions under a "Turelli-like" additive model of 
-    # genotype -> phenotype:
-    am = fwdpy11.multilocus.MultiLocusGeneticValue([fwdpy11.trait_values.SlocusAdditiveTrait(2.0)]*10)
-
-During a simulation, each function stored is applied to each region.  The result is a list of floating-point values,
-which are the genetic values due to each locus.  These have to be *aggregated* into a final genetic value for an
-individual.  An aggregator is any callable accepting a NumPy array and returning a single float.  We provide the
-following built-in aggregator types:
-
-* :class:`fwdpy11.multilocus.AggAddFitness`
-* :class:`fwdpy11.multilocus.AggMultFitness`
-* :class:`fwdpy11.multilocus.AggAddTrait`
-* :class:`fwdpy11.multilocus.AggMultTrait`
-
-The first two are for *fitness* calculations and the latter two for *genetic value* calculations (for quantitative trait
-simulations).
-
-You may provide your own aggregators, written either in C++ or in Python.
+In the above code, we created an instance of :class:`fwdpy11.genetic_values.SlocusMult`, which models multiplicative
+genetic values.  Our mapping of genetic value to fitness is handled by an instance of
+:class:`fwdpy11.genetic_values.GeneticValueIsFitness`.  As the name implies, we will be simulating mutations with
+*direct* effects on fitness.  Thus, in the absence of random effects, :math:`w = G`.  Here, the type generating random
+effets on genetic values is :class:`fwdpy11.genetic_value_noise.NoNoise`.  Again, the name should make it obvious what is
+going on: there are no random effects!  Thus, the variable `multiplicative` will model the standard population genetic
+scenario of multiplicative mutational effects on fitness.
 
 .. note::
 
-    It is really important to match your aggregator types to your single-locus types.  Mixing a list of
-    :class:`fwdpy11.trait_values.SlocusAdditiveTrait` with :class:`fwdpy11.multilocus.AggAddFitness` for
-    an aggregator will give strange results, as you are mixing a zero-centered calculator with an aggregator centered on
-    one.
+    You have just learned that the types handling noise are in :py:mod:`fwdpy11.genetic_value_noise`.
+
+Let's look at a few more properties of our variable:
+
+.. ipython:: python
+
+    # Does this type model fitness or a trait?
+    print(multiplicative.is_fitness)
+    # What is the scaling parameter?
+    print(multiplicative.scaling)
+    # What are the relations of this type to our class hierarchy?
+    print(isinstance(multiplicative, fwdpy11.genetic_values.SlocusPopGeneticValueWithMapping))
+    print(isinstance(multiplicative, fwdpy11.genetic_values.SlocusPopGeneticValue))
+
+.. note::
+
+    For more details on the scaling parameter, see the documentation for :class:`fwdpy11.genetic_values.SlocusMult`.
+
+Let's look at an example where :math:`G \neq w` and there are random effects:
+
+.. ipython:: python
+
+    import fwdpy11.genetic_value_noise
+
+    mult_trait = fwdpy11.genetic_values.SlocusMult(2.0, 
+        fwdpy11.genetic_values.GSS(opt = 0.0, VS = 1.0),
+        fwdpy11.genetic_value_noise.GaussianNoise(mean=0.0, sd=0.1))
+    print(mult_trait.is_fitness)
+
+Now, we have a model where :math:`G` is a genetic value determined by multiplicative interactions amongst mutations.
+Gaussian noise with mean zero and standard deviation 0.1 is added to :math:`G` to determine the final phenotype and
+fitness, :math:`w` is modeled by Gaussian stabilizing selection (GSS) with an optimum trait value of zero and a strength
+of stabilizing selection, :math:`VS`, equal to one.
+
+The following types are provided in :py:mod:`fwdpy11.genetic_values` to calculate genetic values/fitness:
+
+* :class:`fwdpy11.genetic_values.SlocusMult`
+* :class:`fwdpy11.genetic_values.SlocusAdditive`
+* :class:`fwdpy11.genetic_values.SlocusGBR`
+* :class:`fwdpy11.genetic_values.MlocusMult`
+* :class:`fwdpy11.genetic_values.MlocusAdditive`
+* :class:`fwdpy11.genetic_values.MlocusGBR`
+
+.. note::
+
+    The "GBR" types are only usable for models of quantitative traits and not for models of direct effects on fitness.
+    See the relevant papers, which are cited in the docstrings for the classes, for details.
+
+The following types map genetic value to fitness:
+
+* :class:`fwdpy11.genetic_values.GeneticValueIsFitness`
+* :class:`fwdpy11.genetic_values.GSS`
+* :class:`fwdpy11.genetic_values.GSSmo`
+
+In the above list, the first type (:class:`fwdpy11.genetic_values.GeneticValueIsFitness`) is used for "standard
+population genetic" simulations.  In our first example code block above, we see that it is used as a default value.  The
+latter two classes are used to model quantitative traits.
+
+To learn more about random effects, see :py:mod:`fwdpy11.genetic_value_noise`.
+
 
 The relationship to fixations
 --------------------------------------------------------------------
 
 For standard population-genetic simulations, relative fitness is what matters.  Relative fitnesses are unaffected by
 fixations under multiplicative models, but the same is not true under additive models.  Please note that multiplicative
-models are typically assumed, and thus you should use :class:`fwdpy11.fitness.SlocusMult` most of the time.  Doing so
-will simply make your life easier (and your simulations more efficient--keep reading...).
+models are typically assumed, and thus you should use :class:`fwdpy11.genetic_values.SlocusMult` or :class:`fwdpy11.genetic_values.MlocusMult` 
+most of the time.  Doing so will simply make your life easier (and your simulations more efficient--keep reading...).
 
 For simulations of phenotypes where fitness is determined by comparing phenotype to some optimum value, fixations always
 affect the distance of an individual from this optimum.
@@ -86,12 +150,38 @@ parameters that you input.  Pruning fixations results in faster simulations, bec
 fitness calculations.  However, you should *not* prune them when simulating additive models of fitness or when
 simulating phenotypes.  See :ref:`handling_fixations` for more details.
 
+Implementing custom genetic value models
+--------------------------------------------------------------------
+
+It is possible to provide custom functions for calculating genetic values.  There are multiple ways to do this, but they
+all require writing some C++ code.  Thus, custom genetic values are an "advanced topic", and you are now referred to:
+
+* :ref:`customgvalues`
+* :ref:`stateful_fitness`
+* The C++ header files in the directory fwdpy11/headers/fwdpy11/genetic_values.  Note that there is a one-to-one mapping of C++ type name to Python
+  type name, which make code sleuthing easier.
+
+The first two elements in the above list show how to implement classes derived from
+:class:`fwdpy11.genetic_values.SlocusPopGeneticValue`.
+
+To see examples of inheriting from
+:class:`fwdpy11.genetic_values.SlocusPopGeneticValueWithMapping`, you can look at the C++ code behind
+:class:`fwdpy11.genetic_values.SlocusAdditive`, found in the directory mentioned above. (The Python class of that
+type is defined in fwdpy11/src/genetic_values.cc.)  Note that these types make use of some C++ boiler plate code to mapp
+"fwdpp-like" genetic value calculations into "fwdpy11-like" calculations.  The latter accept an int and a population
+type as arguments (see :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__`) while the former take a diploid type,
+gamete container, and mutation container as arguments.
+
+Further reading
+-----------------------------------------------------------
+
+To see how to specify the use of these objects in a simulation see :ref:`model_params`.
+
 The future
 -----------------------------------------------------------
 
 We hope to:
 
-* Reduce the number of single locus types so that the trait-vs-fitness decision is a constructor argument.
 * Add a GBR type for fitness.
-* Reduce the complexity of the code underyling all this, which will hopefully enable the above.
+* Support genetic value functions written in Python.
 * Make all this stuff about fixations something that the user (you) doesn't have to worry about.

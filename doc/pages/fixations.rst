@@ -31,9 +31,9 @@ The software engineering issue is:
 The "pruning" of fixations always results in faster simulations (assuming that you are simulating selected mutations).
 Whether or not it is the right thing to do depends on the modeling scenario.  
 
-Here ar examples of doing the wrong thing:
+Here are examples of doing the wrong thing:
 
-1. You are simulating additive effects on fitness, using :class:`fwdpy11.fitness.SlocusAdditive`.  If you prune
+1. You are simulating additive effects on fitness, using :class:`fwdpy11.genetic_values.SlocusAdditive`.  If you prune
    fixations, you will be removing an *additive constant* from every diploid, meaning that relative fitnesses are
    affected.  We can illustrate this as follows, using a simple numerical example:
 

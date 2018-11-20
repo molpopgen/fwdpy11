@@ -3,6 +3,11 @@
 Processing simulated populations using fwdpy11's NumPy interface
 ======================================================================
 
+.. versionchanged:: 0.2.0
+
+    Update to document how to deal separately with diploid genotype vs diploid metadata
+    dtypes.
+
 You should read the following sections first:
 
 * :ref:`processingpops`
@@ -12,7 +17,6 @@ First, we'll quickly simulate a single deme for `N` generations:
 .. ipython:: python
 
     import fwdpy11
-    import fwdpy11.fitness
     import fwdpy11.model_params
     import fwdpy11.ezparams
     import fwdpy11.wright_fisher
@@ -25,29 +29,27 @@ First, we'll quickly simulate a single deme for `N` generations:
 
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
 
-    params = fwdpy11.model_params.SlocusParams(**pdict)
+    params = fwdpy11.model_params.ModelParams(**pdict)
     fwdpy11.wright_fisher.evolve(rng,pop,params)
 
-Accessing diploid genetic values and fitness
+Accessing diploid metadata
 --------------------------------------------------------------------------------------
-
-To get the g,e, and w fields of a diploid:
 
 .. ipython:: python
 
-    dip_traits = np.array(pop.diploids.trait_array())
-    dip_traits.dtype
+    dip_metadata = np.array(pop.diploid_metadata)
+    dip_metadata.dtype
 
 You can easily get mean fitness, etc., now:
 
 .. ipython:: python
 
     #Use our structured array:
-    dip_traits['w'].mean()
-    #Access via the diploid objects + list comprehension:
-    np.array([i.w for i in pop.diploids]).mean()
+    dip_metadata['w'].mean()
+    #Access via the diploid metadata objects + list comprehension:
+    np.array([i.w for i in pop.diploid_metadata]).mean()
     #Do it with pure Python:
-    sum([i.w for i in pop.diploids])/float(len(pop.diploids))
+    sum([i.w for i in pop.diploid_metadata])/float(len(pop.diploids))
 
 .. note::
     The above three calculations give two different numerical results.
@@ -60,15 +62,15 @@ What's the fastest way to get mean fitness?
 
 .. ipython:: python
 
-    %timeit -n 10 -r 1 np.array(pop.diploids.trait_array())['w'].mean()
+    %timeit -n 10 -r 1 np.array(pop.diploid_metadata)['w'].mean()
 
 .. ipython:: python
 
-    %timeit -n 10 -r 1 np.array([i.w for i in pop.diploids]).mean()
+    %timeit -n 10 -r 1 np.array([i.w for i in pop.diploid_metadata]).mean()
 
 .. ipython:: python
 
-    %timeit -n 10 -r 1 sum([i.w for i in pop.diploids])/float(len(pop.diploids))
+    %timeit -n 10 -r 1 sum([i.w for i in pop.diploid_metadata])/float(len(pop.diploids))
 
 Using our stuctured array is vastly more efficient.  For the record, a simple Python loop is the slowest way to go:
 
@@ -76,8 +78,8 @@ Using our stuctured array is vastly more efficient.  For the record, a simple Py
 
     def wbar(pop):
         s=0.0
-        for i in range(len(pop.diploids)):
-            s += pop.diploids[i].w
+        for i in range(len(pop.diploid_metadata)):
+            s += pop.diploid_metadata[i].w
         return s/float(len(pop.diploids))
 
     %timeit -n 10 -r 1 wbar(pop)
@@ -90,31 +92,17 @@ To get these fields for a subset of individuals, index with a numpy array:
 
 .. ipython:: python
 
-    dip_traits_first_10 = np.array(pop.diploids.trait_array(np.array([i for i in range(10)])))
+    dip_metadata_first_10 = np.array(pop.diploid_metadata)[np.array([i for i in range(10)])]
 
-    dip_traits[:10] == dip_traits_first_10
+    print(dip_metadata_first_10)
 
 You may also access with a slice:
 
 .. ipython:: python
 
-    dip_traits_first_10_via_slice = np.array(pop.diploids.trait_array(slice(0,10,2)))
+    dip_metadata_first_10_via_slice = np.array(pop.diploid_metadata)[slice(0,10,2)]
 
-    dip_traits_first_10[::2] == dip_traits_first_10_via_slice
-
-The accesses are all range-checked and will raise exceptions when necessary:
-
-.. ipython:: python
-
-    #This tries to access past the end of the population:
-    pop.diploids.trait_array(np.array([len(pop.diploids)+10]))
-
-Slices are smart and can accomodate some types of input error:
-
-.. ipython:: python
-
-    #Oops--slice out of range!  But no exception will get raised:
-    np.array(pop.diploids.trait_array(slice(len(pop.diploids)-10,len(pop.diploids)+10,3)))
+    print(dip_metadata_first_10_via_slice)
 
 Accessing diploid gamete keys
 -------------------------------------------
@@ -123,8 +111,9 @@ You may also obtain structured arrays indicating the gametes in each individual:
 
 .. ipython:: python
 
-    gkeys = np.array(pop.diploids.key_array())
+    gkeys = np.array(pop.diploids)
     gkeys.dtype
+    print(gkeys[:4])
 
 Just like the previous section, you may get data for subsets of the population using 
 numpy arrays or slices.
@@ -164,6 +153,7 @@ You may access the mutation indexes in a gamete as follows:
     to prevent bad things from happening
 
 .. ipython:: python
+    :okexcept:
 
     nkeys.flags.writeable = False
     #Now, attempting to write raises an error
@@ -229,7 +219,7 @@ Now, let's rewrite the above taking advantage of numpy arrays:
 
     def esize_sum_np(pop):
         rv=np.zeros((pop.N,2),dtype=[('first',np.float),('second',np.float)])
-        d = np.array(pop.diploids.key_array())
+        d = np.array(pop.diploids,copy=False)
         s = np.array(pop.mutations.array())['s']
         for i in range(d.shape[0]):
             g1 = get_esize_sum_np(np.array(pop.gametes[d['first'][i]].smutations,copy=False),s)

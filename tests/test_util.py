@@ -31,32 +31,14 @@ class testAddMutations(unittest.TestCase):
         self.pop = quick_neutral_slocus()
         self.rng = fwdpy11.GSLrng(42)
 
-    def test_add_selected(self):
-        ncopies = 103
-        x = fwdpy11.util.add_mutation(
-            self.rng, self.pop, ncopies, (0.77, -0.1, 0.11))
-        self.assertTrue(x < len(self.pop.mutations))
-        self.assertTrue(self.pop.mcounts[x] == ncopies)
-
-    def test_mutate_at_existing_position(self):
-        ncopies = 213
-        extant_pos = [self.pop.mutations[i].pos
-                      for i in range(len(self.pop.mcounts))
-                      if self.pop.mcounts[i] > 0]
-        with self.assertRaises(ValueError):
-            x = fwdpy11.util.add_mutation(
-                self.rng, self.pop, ncopies, (extant_pos[0], -0.1, 0.11))
-            x
-
 
 class test_ChangeEsizeSlocus(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
+    def setUp(self):
         self.pop = quick_neutral_slocus()
         self.rng = fwdpy11.GSLrng(42)
 
     def test_change_esize(self):
-        self.setUpClass()
         # Get extant mutations
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
@@ -76,7 +58,6 @@ class test_ChangeEsizeSlocus(unittest.TestCase):
         """
         Same test as above, but we change s from 0 to 0
         """
-        self.setUpClass()
         # Get extant mutations
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
@@ -92,10 +73,28 @@ class test_ChangeEsizeSlocus(unittest.TestCase):
               self.pop.gametes[i[0]].n > 0]
         self.assertEqual(g, g2)
 
+    def testVectorEffects(self):
+        extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
+        g = [i[0] for i in enumerate(
+            self.pop.gametes) if extant[0][0] in i[1].mutations and
+            self.pop.gametes[i[0]].n > 0]
+        fwdpy11.util.change_effect_size(self.pop, extant[0][0],
+                                        0.0, 0.0, [1.], [-1.])
+        self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
+        self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 1.0)
+        self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
+
+        # Now, replace it w/a neutral mutation
+        fwdpy11.util.change_effect_size(self.pop, extant[0][0],
+                                        0.0, 0.0, [0.], [-1.])
+        self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
+        self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 0.0)
+        self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
+
 
 class test_ChangeEsizeMlocus(unittest.TestCase):
     @classmethod
-    def setUpClass(self):
+    def setUp(self):
         self.pop = quick_mlocus_qtrait()
 
     def test_change_esize(self):

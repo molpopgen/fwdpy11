@@ -18,12 +18,16 @@
 #
 
 
-def makeMutationRegions(neutral, selected):
+def makeMutationRegions(rng, pop, neutral, selected, pneutral):
     """
     Convert user input into :class:`~fwdpy11.fwdpp_extensions.MutationRegions`
 
+    :param rng: A :class:`fwdpy11.GSLrng`
+    :param pop: A :class:`fwdp11.Population`
     :param neutral: A list of :class:`fwdpy11.regions.Region` objects.
     :param selected: A list of :class:`fwdpy11.regions.Sregion` objects.
+    :param pneutral: The probability that a new mutation is neutral
+    :ptype neutral: float
 
     :rtype: :class:`fwdpy11.fwdpp_extensions.MutationRegions`
 
@@ -33,51 +37,76 @@ def makeMutationRegions(neutral, selected):
         >>> import fwdpy11 as fp11
         >>> nregions = [fp11.Region(0,0.5,1),fp11.Region(1,1.5,1)]
         >>> sregions = [fp11.ExpS(0,0.5,1,1),fp11.GaussianS(1,1.5,1,0.25)]
-        >>> mr = fp11.makeMutationRegions(nregions,sregions)
+        >>> mr = fp11.makeMutationRegions(nregions,sregions,0.1)
         >>> type(mr)
         <class 'fwdpy11.fwdpp_extensions.MutationRegions'>
 
     One or both lists may be empty:
 
-        >>> mr = fp11.makeMutationRegions([],[])
+        >>> mr = fp11.makeMutationRegions([],[],0.0)
 
     Neither list may be None:
 
-        >>> mr = fp11.makeMutationRegions([],None)
+        >>> mr = fp11.makeMutationRegions([],None,0.0)
         Traceback (most recent call last):
             ...
         TypeError: 'NoneType' object is not iterable
+
+    .. versionchanged:: 0.2.0
+        Added pneutral to handle changes in fwdpp 0.6.0
     """
-    nbeg = [i.b for i in neutral]
-    nend = [i.e for i in neutral]
-    nweights = [i.w for i in neutral]
-    nlabels = [i.l for i in neutral]
-    sbeg = [i.b for i in selected]
-    send = [i.e for i in selected]
-    sweights = [i.w for i in selected]
-    sh = [i.callback() for i in selected]
-    slabels = [i.l for i in selected]
+    import math
+    if math.isfinite(pneutral) is False:
+        raise ValueError("pneutral not finite")
+    elif pneutral < 0.0 or pneutral > 1.0:
+        raise ValueError("pneutral must be in the range [0.0, 1.0]")
+    import numpy as np
+
+    # We need to reweight the user input so that new
+    # mutations come out at the expected rates.
+    # This is necessary b/c the user inputs weights
+    # *separately* for neutral and selected variants.
+    # These weights have to get combined into a single
+    # weight vector on the C++ side, meaning that we
+    # have some normalization to do:
+    neutral_region_weights = np.array([i.w for i in neutral], dtype=np.float64)
+    neutral_region_weights /= neutral_region_weights.sum()
+    neutral_region_weights *= pneutral
+    selected_region_weights = np.array([i.w for i in selected], dtype=np.float64)
+    selected_region_weights /= selected_region_weights.sum()
+    selected_region_weights *= (1.0-pneutral)
+    summed_weights = neutral_region_weights.sum() + selected_region_weights.sum()
+    neutral_region_weights /= summed_weights
+    selected_region_weights /= summed_weights
+    ntuples = [(i.b, i.e, j, i.l)
+               for i, j in zip(neutral, neutral_region_weights)]
+    stuples = [(i.b, i.e, j, i.l)
+               for i, j in zip(selected, selected_region_weights)]
+    callbacks = [i.callback() for i in selected]
     from .fwdpp_extensions import MutationRegions
-    return MutationRegions(nbeg, nend, nweights, sbeg, send, sweights, sh, nlabels, slabels)
+    return MutationRegions(rng, pop, ntuples, stuples, callbacks)
 
 
-def makeRecombinationRegions(regions):
+def makeRecombinationRegions(rng, recrate, regions):
     """
     Convert user input into
     :class:`~fwdpy11.fwdpp_extensions.RecombinationRegions`
 
-    :param neutral: A list of :class:`fwdpy11.regions.Region` objects.
-    :param selected: A list of :class:`fwdpy11.regions.Sregion` objects.
+    :param rng: :class:`fwdpy11.GSLrng`
+    :param recrate: (float) Recombination reate.
+    :param regions: A list of :class:`fwdpy11.Region`
 
-    :rtype: :class:`fwdpy11.fwdpp_extensions.MutationRegions`
+    :rtype: :class:`fwdpy11.fwdpp_extensions.RecombinationRegions`
+
 
     .. note::
         Used by various "evolve" functions.
         Users probably won't need to call this.
 
         >>> import fwdpy11 as fp11
+        >>> rng = fwdpy11.GSLrng(42)
         >>> rregions = [fp11.Region(0,0.5,1),fp11.Region(1,1.5,1)]
-        >>> rr = fp11.makeRecombinationRegions(rregions)
+        >>> rr = fp11.makeRecombinationRegions(rng, 1e-3, rregions)
         >>> type(rr)
         <class 'fwdpy11.fwdpp_extensions.RecombinationRegions'>
 
@@ -86,4 +115,4 @@ def makeRecombinationRegions(regions):
     end = [i.e for i in regions]
     weights = [i.w for i in regions]
     from .fwdpp_extensions import RecombinationRegions
-    return RecombinationRegions(beg, end, weights)
+    return RecombinationRegions(rng, recrate, beg, end, weights)

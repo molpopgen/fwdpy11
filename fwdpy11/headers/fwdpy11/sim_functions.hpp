@@ -33,7 +33,6 @@
 #include <algorithm>
 #include <fwdpp/util.hpp>
 
-
 namespace fwdpy11
 {
     /// This function is similar in name and interface to the current fwdpp
@@ -62,19 +61,30 @@ namespace fwdpy11
     update_mutations(mcont_t &mutations, fixation_container_t &fixations,
                      fixation_time_container_t &fixation_times,
                      mutation_lookup_table &lookup,
-                     std::vector<KTfwd::uint_t> &mcounts,
+                     std::vector<fwdpp::uint_t> &mcounts,
                      const unsigned &generation, const unsigned &twoN,
                      const bool remove_selected_fixations)
     {
-        using namespace KTfwd;
+        using namespace fwdpp;
         static_assert(
             typename traits::is_mutation_t<
                 typename mcont_t::value_type>::type(),
-            "mutation_type must be derived from KTfwd::mutation_base");
-        assert(mcounts.size() == mutations.size());
+            "mutation_type must be derived from fwdpp::mutation_base");
+#ifndef NDEBUG
+        if (mcounts.size() != mutations.size())
+            {
+                throw std::runtime_error("DEBUG: container size error");
+            }
+#endif
         for (unsigned i = 0; i < mcounts.size(); ++i)
             {
-                assert(mcounts[i] <= twoN);
+#ifndef NDEBUG
+                if (mcounts[i] > twoN)
+                    {
+                        throw std::runtime_error(
+                            "DEBUG: mutation count too large");
+                    }
+#endif
                 if (mcounts[i] == twoN)
                     {
                         auto loc = std::lower_bound(
@@ -84,7 +94,7 @@ namespace fwdpy11
                                    &mut,
                                const std::tuple<double, std::uint32_t>
                                    &value) noexcept {
-                                return std::tie(mut.pos,mut.g) < value;
+                                return std::tie(mut.pos, mut.g) < value;
                             });
                         auto d = std::distance(fixations.begin(), loc);
                         if (mutations[i].neutral
@@ -95,10 +105,22 @@ namespace fwdpy11
                                     fixation_times.begin() + d, generation);
                                 mcounts[i] = 0; // set count to zero to mark
                                                 // mutation as "recyclable"
-                                lookup.erase(mutations[i].pos); // remove
-                                                                // mutation
-                                                                // position
-                                                                // from lookup
+                                auto itr
+                                    = lookup.equal_range(mutations[i].pos);
+                                // Make position max double so that a user
+                                // cannot accidentally track this as a zero-frequency
+                                // variant
+                                mutations[i].pos
+                                    = std::numeric_limits<double>::max();
+                                while (itr.first != itr.second)
+                                    {
+                                        if (itr.first->second == i)
+                                            {
+                                                lookup.erase(itr.first);
+                                                break;
+                                            }
+                                        ++itr.first;
+                                    }
                             }
                         else
                             {
@@ -113,30 +135,47 @@ namespace fwdpy11
                                     }
                             }
                     }
-                if (!mcounts[i])
-                    lookup.erase(mutations[i].pos);
+                else if (!mcounts[i])
+                    {
+                        auto itr = lookup.equal_range(mutations[i].pos);
+                        while (itr.first != itr.second)
+                            {
+                                if (itr.first->second == i)
+                                    {
+                                        // Make position max double so that a user
+                                        // cannot accidentally track this as a zero-frequency
+                                        // variant
+                                        mutations[itr.first->second].pos
+                                            = std::numeric_limits<
+                                                double>::max();
+                                        lookup.erase(itr.first);
+                                        break;
+                                    }
+                                ++itr.first;
+                            }
+                    }
             }
-    }
 
-    //    struct update_mutations_wrapper
-    //    {
-    //        template <typename... args>
-    //        inline void
-    //        operator()(args &&... Args) const
-    //        {
-    //            KTfwd::update_mutations(std::forward<args>(Args)...);
-    //        }
-    //    };
-    //
-    //    struct update_mutations_n_wrapper
-    //    {
-    //        template <typename... args>
-    //        inline void
-    //        operator()(args &&... Args) const
-    //        {
-    //            fwdpy11::update_mutations_n(std::forward<args>(Args)...);
-    //        }
-    //    };
-}
+        //    struct update_mutations_wrapper
+        //    {
+        //        template <typename... args>
+        //        inline void
+        //        operator()(args &&... Args) const
+        //        {
+        //            fwdpp::update_mutations(std::forward<args>(Args)...);
+        //        }
+        //    };
+        //
+        //    struct update_mutations_n_wrapper
+        //    {
+        //        template <typename... args>
+        //        inline void
+        //        operator()(args &&... Args) const
+        //        {
+        //            fwdpy11::update_mutations_n(std::forward<args>(Args)...);
+        //        }
+        //    };
+    }
+} // namespace fwdpy11
 
 #endif

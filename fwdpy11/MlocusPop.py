@@ -16,16 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from fwdpy11.fwdpy11_types import MlocusPop
+from fwdpy11._Populations import _MlocusPop
 
 
-class MlocusPop(MlocusPop):
+class MlocusPop(_MlocusPop):
     """
-    Representation of a multi-locus, single
-    deme system.
+    Representation of a multi-locus system.
     """
     @staticmethod
-    def create(diploids, gametes, mutations, *args):
+    def create(diploids, gametes, mutations, locus_boundaries, *args):
         """
         Create a new object from input data.
         Unlike the constructor method, this method results
@@ -34,6 +33,7 @@ class MlocusPop(MlocusPop):
         :param diplods: A :class:`fwdpy11.VecVecDiploid`
         :param gametes: A :class:`fwdpy11.VecGamete`
         :param mutations: A :class:`fwdpy11.VecMutation`
+        :param locus_boundaries: Positional boundaries of each locus
         :param args: Fixations, fixation times, and generation
 
         :rtype: :class:`fwdpy11.MlocusPop`
@@ -55,7 +55,4 @@ class MlocusPop(MlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return MlocusPop(super(MlocusPop,
-                               MlocusPop).create(diploids,
-                                                 gametes, mutations,
-                                                 args))
+        return MlocusPop(_MlocusPop.create(diploids, gametes, mutations, locus_boundaries, args))
