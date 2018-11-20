@@ -83,8 +83,6 @@ Welcome to fwdpy11's documentation!
 
     advanced/heritability
     advanced/manip
-    advanced/mpi
-    advanced/mpi2
 
 
 .. toctree::
