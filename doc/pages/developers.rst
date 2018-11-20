@@ -28,6 +28,16 @@ If using a `Makefile`, it is handy to get the above info via the shell, which is
 
     python3 -m fwdpy11 --includes
 
+The above command prepends the paths with `-I`.  If that is not desired, you may get the paths separately for fwdpp and
+fdwpy11:
+
+.. code-block:: bash
+
+    python3 -m fwdpy11 --fwdpp_headers
+    python3 -m fwdpy11 --fwdpy11_headers
+
+The above two commands are useful when using tools like `cmake` to configure build systems.
+
 Mako headers for cppimport
 ------------------------------------------
 
