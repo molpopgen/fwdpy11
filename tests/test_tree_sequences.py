@@ -11,6 +11,7 @@ import numpy as np
 class testTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
+        # TODO add neutral and selected variants
         self.N = 1000
         self.demography = np.array([self.N]*self.N, dtype=np.uint32)
         self.rho = 1.
@@ -35,6 +36,8 @@ class testTreeSequences(unittest.TestCase):
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
 
     def test_dump_to_msprime(self):
+        # TODO: test leaf counts of mutations in msprmie
+        # vs fwdpy11 and cross-references with self.pop.mcounts
         dumped_ts = self.pop.dump_tables_to_msprime()
         self.assertEqual(len(dumped_ts.tables.nodes),
                          len(self.pop.tables.nodes))
