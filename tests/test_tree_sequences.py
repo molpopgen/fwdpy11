@@ -12,8 +12,8 @@ class testTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.N = 1000
-        self.demography = np.array([self.N]*25, dtype=np.uint32)
-        self.rho = 100.
+        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
+        self.rho = 1.
         self.theta = 100.
         self.nreps = 500
         self.mu = self.theta/(4*self.N)
@@ -51,18 +51,22 @@ class testTreeSequences(unittest.TestCase):
                          dumped_ts.tables.edges.left.sum())
         self.assertEqual(eview['right'].sum(),
                          dumped_ts.tables.edges.right.sum())
-        nview = np.array(self.pop.tables.nodes, copy=False)
-        st1 = np.sort(nview['time'])
-        st2 = np.sort(dumped_ts.tables.nodes.time)
-        self.assertTrue(np.array_equal(st1, st2))
+        tv = fwdpy11.ts.TreeVisitor(self.pop.tables,
+                                    [i for i in range(2*self.pop.N)])
+        tt_fwd = 0
+        while tv(False) is True:
+            m = tv.tree()
+            tt_fwd += m.total_time(self.pop.tables.nodes)
+        tt_msprime = 0
+        for t in dumped_ts.trees():
+            tt_msprime += t.get_total_branch_length()
+        self.assertEqual(tt_fwd, tt_msprime)
 
     def test_simplify_to_sample(self):
         dumped_ts = self.pop.dump_tables_to_msprime()
         tt = 0.0
         for i in self.pop.tables.nodes:
             tt += i.time
-        print(tt)
-        print(dumped_ts.tables.nodes.time.sum())
         tc = msprime.TableCollection(self.pop.tables.genome_length())
         tc.nodes.set_columns(flags=dumped_ts.tables.nodes.flags,
                              time=dumped_ts.tables.nodes.time)
@@ -73,14 +77,10 @@ class testTreeSequences(unittest.TestCase):
         tc.sort()
         ts = tc.tree_sequence()
         nv = np.array(self.pop.tables.nodes, copy=False)
-        print(ts.tables.nodes.time.sum(), nv['time'].sum())
         samples = np.arange(0, 2*self.pop.N, 50, dtype=np.int32)
         mspts = ts.simplify(samples=samples.tolist())
         fp11ts, maps = fwdpy11.ts.simplify(self.pop, samples)
         nv = np.array(fp11ts.nodes, copy=False)
-        print(nv)
-        print("??", len(mspts.tables.nodes.time))
-        print(mspts.tables.nodes.time.sum(), nv['time'].sum())
 
 
 if __name__ == "__main__":
