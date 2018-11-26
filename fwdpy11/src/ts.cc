@@ -58,6 +58,7 @@ simplify(const fwdpy11::Population& pop,
     auto t(pop.tables);
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     auto rv = simplifier.simplify(t, samples, pop.mutations);
+    t.build_indexes();
     return py::make_tuple(std::move(t), std::move(rv.first));
 }
 
