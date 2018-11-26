@@ -57,8 +57,8 @@ simplify(const fwdpy11::Population& pop,
         }
     auto t(pop.tables);
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    auto idmap = simplifier.simplify(t, samples, pop.mutations);
-    return py::make_tuple(std::move(t), std::move(idmap));
+    auto rv = simplifier.simplify(t, samples, pop.mutations);
+    return py::make_tuple(std::move(t), std::move(rv.first));
 }
 
 inline std::size_t
