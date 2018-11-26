@@ -79,22 +79,12 @@ class testTreeSequences(unittest.TestCase):
                                  self.pop.mcounts[i[1]])
 
     def test_simplify_to_sample(self):
-        import msprime
         dumped_ts = self.pop.dump_tables_to_msprime()
         tt = 0.0
         for i in self.pop.tables.nodes:
             tt += i.time
-        tc = msprime.TableCollection(self.pop.tables.genome_length())
-        tc.nodes.set_columns(flags=dumped_ts.tables.nodes.flags,
-                             time=dumped_ts.tables.nodes.time)
-        tc.edges.set_columns(parent=dumped_ts.tables.edges.parent,
-                             child=dumped_ts.tables.edges.child,
-                             left=dumped_ts.tables.edges.left,
-                             right=dumped_ts.tables.edges.right)
-        tc.sort()
-        ts = tc.tree_sequence()
         samples = np.arange(0, 2*self.pop.N, 50, dtype=np.int32)
-        mspts = ts.simplify(samples=samples.tolist())
+        mspts = dumped_ts.simplify(samples=samples.tolist())
         fp11ts, idmap = fwdpy11.ts.simplify(self.pop, samples)
         for i in range(len(fp11ts.edges)):
             self.assertTrue(fp11ts.edges[i].parent < len(fp11ts.nodes))
