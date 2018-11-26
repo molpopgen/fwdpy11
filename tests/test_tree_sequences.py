@@ -24,7 +24,7 @@ class testTreeSequences(unittest.TestCase):
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.0, self.r),
+                  'rates': (0.0, 0.025, self.r),
                   'gvalue': a,
                   'prune_selected': False,
                   'demography': self.demography
@@ -63,6 +63,20 @@ class testTreeSequences(unittest.TestCase):
         for t in dumped_ts.trees():
             tt_msprime += t.get_total_branch_length()
         self.assertEqual(tt_fwd, tt_msprime)
+
+    def test_leaf_counts_vs_mcounts(self):
+        tv = fwdpy11.ts.TreeVisitor(self.pop.tables,
+                                    [i for i in range(2*self.pop.N)])
+        mv = np.array(self.pop.tables.mutations, copy=False)
+        muts = np.array(self.pop.mutations.array())
+        p = muts['pos']
+        while tv(False) is True:
+            m = tv.tree()
+            l, r = m.left, m.right
+            mt = [i for i in mv if p[i[1]] >= l and p[i[1]] < r]
+            for i in mt:
+                self.assertEqual(m.leaf_counts[i[0]],
+                                 self.pop.mcounts[i[1]])
 
     def test_simplify_to_sample(self):
         import msprime
