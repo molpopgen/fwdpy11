@@ -11,4 +11,4 @@ sphinx
 pandas
 ipython
 matplotlib
-msprime
+msprime>=0.6.1
