@@ -4,7 +4,6 @@ import fwdpy11.genetic_values
 import fwdpy11.ts
 import fwdpy11.model_params
 import fwdpy11.wright_fisher_ts
-import msprime
 import numpy as np
 
 
@@ -66,6 +65,7 @@ class testTreeSequences(unittest.TestCase):
         self.assertEqual(tt_fwd, tt_msprime)
 
     def test_simplify_to_sample(self):
+        import msprime
         dumped_ts = self.pop.dump_tables_to_msprime()
         tt = 0.0
         for i in self.pop.tables.nodes:
