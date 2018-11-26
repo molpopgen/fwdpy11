@@ -79,11 +79,24 @@ class testTreeSequences(unittest.TestCase):
                              right=dumped_ts.tables.edges.right)
         tc.sort()
         ts = tc.tree_sequence()
-        nv = np.array(self.pop.tables.nodes, copy=False)
         samples = np.arange(0, 2*self.pop.N, 50, dtype=np.int32)
         mspts = ts.simplify(samples=samples.tolist())
-        fp11ts, maps = fwdpy11.ts.simplify(self.pop, samples)
-        nv = np.array(fp11ts.nodes, copy=False)
+        fp11ts, idmap = fwdpy11.ts.simplify(self.pop, samples)
+        for i in range(len(fp11ts.edges)):
+            self.assertTrue(fp11ts.edges[i].parent < len(fp11ts.nodes))
+            self.assertTrue(fp11ts.edges[i].child < len(fp11ts.nodes))
+        for s in samples:
+            self.assertEqual(
+                fp11ts.nodes[idmap[s]].time, self.pop.generation)
+        tt_fwd = 0.0
+        tv = fwdpy11.ts.TreeVisitor(fp11ts, [i for i in range(len(samples))])
+        while tv(False) is True:
+            m = tv.tree()
+            tt_fwd += m.total_time(fp11ts.nodes)
+        tt_msprime = 0.0
+        for t in mspts.trees():
+            tt_msprime += t.get_total_branch_length()
+        self.assertEqual(tt_fwd, tt_msprime)
 
 
 if __name__ == "__main__":
