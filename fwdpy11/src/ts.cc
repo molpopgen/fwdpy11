@@ -122,7 +122,7 @@ struct VariantIterator
         auto m = tv.tree();
         if (pos[mbeg->key] >= m.right)
             {
-                auto flag = tv(std::true_type(), std::false_type());
+                auto flag = tv(std::true_type(), std::true_type());
                 if (flag == false)
                     {
                         return py::none();

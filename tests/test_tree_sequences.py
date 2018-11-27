@@ -165,6 +165,7 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(c, v.sum())
             v = vi.next_variant()
             i += 1
+        self.assertEqual(i, len(self.pop.tables.mutations))
 
 
 if __name__ == "__main__":
