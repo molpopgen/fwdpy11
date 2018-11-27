@@ -430,6 +430,19 @@ PYBIND11_MODULE(ts, m)
              :param samples: Samples list
              :type samples: list
             )delim")
+        .def(py::init([](const fwdpy11::Population& pop,
+                         const bool include_preserved) {
+                 std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
+                 std::iota(samples.begin(), samples.end(), 0);
+                 if (include_preserved)
+                     {
+                         samples.insert(samples.end(),
+                                        pop.tables.preserved_nodes.begin(),
+                                        pop.tables.preserved_nodes.end());
+                     }
+                 return VariantIterator(pop.tables, pop.mutations, samples);
+             }),
+             py::arg("pop"), py::arg("include_preserved_nodes") = false)
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; },
              py::keep_alive<0, 1>())
@@ -493,7 +506,7 @@ PYBIND11_MODULE(ts, m)
           py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
           py::arg("record_selected"),
           R"delim(
-     Create a :class:`fwpdy11.sampling.DataMatrix` from a table collection.
+     Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
      
      :param pop: A population
      :type pop: :class:`fwdpy11.Population`

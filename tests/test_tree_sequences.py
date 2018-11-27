@@ -171,6 +171,21 @@ class testTreeSequences(unittest.TestCase):
             i += 1
         self.assertEqual(i, len(self.pop.tables.mutations))
 
+    def test_VariantIteratorFromPopulation(self):
+        dm = fwdpy11.ts.make_data_matrix(self.pop,
+                                         [i for i in range(2*self.pop.N)],
+                                         False, True)
+        sa = np.array(dm.selected)
+        cs = np.sum(sa, axis=1)
+        i = 0
+        vi = fwdpy11.ts.VariantIterator(self.pop)
+        for v in vi:
+            c = self.pop.mcounts[self.pop.tables.mutations[i].key]
+            self.assertEqual(c, cs[i])
+            self.assertEqual(c, v.genotypes.sum())
+            i += 1
+        self.assertEqual(i, len(self.pop.tables.mutations))
+
 
 if __name__ == "__main__":
     unittest.main()
