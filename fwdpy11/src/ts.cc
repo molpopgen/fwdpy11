@@ -133,6 +133,7 @@ struct VariantIterator
         if (ls != fwdpp::ts::TS_NULL_NODE)
             {
                 auto rs = m.right_sample[mbeg->node];
+                int nsteps = 1;
                 while (true)
                     {
                         if (genotypes[ls] == 1)
@@ -146,6 +147,12 @@ struct VariantIterator
                                 break;
                             }
                         ls = m.next_sample[ls];
+                        ++nsteps;
+                    }
+                if (nsteps != m.leaf_counts[mbeg->node])
+                    {
+                        throw std::runtime_error(
+                            "VariantIterator: sample traversal error");
                     }
             }
         //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
