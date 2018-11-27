@@ -149,15 +149,21 @@ class testTreeSequences(unittest.TestCase):
         self.assertTrue(np.array_equal(cs, mc))
 
     def test_VariantIterator(self):
-        vi = fwdpy11.ts.VariantIterator(self.pop.tables,
-                                        self.pop.mutations,
-                                        [i for i in range(2*self.pop.N)])
+        """
+        Test VariantIterator by asserting
+        that sum of genotypes equal values in
+        the corresponding DataMatrix and
+        those in pop.mcounts
+        """
         dm = fwdpy11.ts.make_data_matrix(self.pop,
                                          [i for i in range(2*self.pop.N)],
                                          False, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
+        vi = fwdpy11.ts.VariantIterator(self.pop.tables,
+                                        self.pop.mutations,
+                                        [i for i in range(2*self.pop.N)])
         for v in vi:
             c = self.pop.mcounts[self.pop.tables.mutations[i].key]
             self.assertEqual(c, cs[i])
