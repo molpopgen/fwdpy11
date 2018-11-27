@@ -113,7 +113,8 @@ struct VariantIterator
             }
     }
 
-    VariantIterator& next_variant()
+    VariantIterator&
+    next_variant()
     {
         if (!(mbeg < mend))
             {
@@ -413,15 +414,26 @@ PYBIND11_MODULE(ts, m)
              modern from ancient samples when constructing the object.
              )delim");
 
-    py::class_<VariantIterator>(m, "VariantIterator")
+    py::class_<VariantIterator>(
+        m, "VariantIterator",
+        "An iterable class for traversing genotypes in a tree sequence.")
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
-             py::keep_alive<1, 2>())
-        .def("next_variant", &VariantIterator::next_variant)
-        .def("__iter__", [](VariantIterator& v) ->VariantIterator&{ return v; },
+             py::keep_alive<1, 2>(), py::arg("tables"), py::arg("mutations"),
+             py::arg("samples"),
+             R"delim(
+             :param tables: The table collection
+             :type tables: :class:`fwdpy11.ts.TableCollection`
+             :param mutations: Mutation container
+             :type mutations: :class`fwdpy11.VecMutation`
+             :param samples: Samples list
+             :type samples: list
+            )delim")
+        .def("__iter__",
+             [](VariantIterator& v) -> VariantIterator& { return v; },
              py::keep_alive<0, 1>())
-        .def("__next__",&VariantIterator::next_variant)
+        .def("__next__", &VariantIterator::next_variant)
         .def_readonly("genotypes", &VariantIterator::genotypes);
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
