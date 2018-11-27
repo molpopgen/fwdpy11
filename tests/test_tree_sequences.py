@@ -157,13 +157,11 @@ class testTreeSequences(unittest.TestCase):
                                          False, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
-        v = vi.next_variant()
         i = 0
-        while v is not None:
+        for v in vi:
             c = self.pop.mcounts[self.pop.tables.mutations[i].key]
             self.assertEqual(c, cs[i])
-            self.assertEqual(c, v.sum())
-            v = vi.next_variant()
+            self.assertEqual(c, v.genotypes.sum())
             i += 1
         self.assertEqual(i, len(self.pop.tables.mutations))
 

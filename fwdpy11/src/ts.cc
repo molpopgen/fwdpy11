@@ -91,12 +91,14 @@ struct VariantIterator
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
     std::vector<double> pos;
     fwdpp::ts::tree_visitor tv;
-    std::vector<std::int8_t> genotypes;
+    std::vector<std::int8_t> genotype_data;
+    py::array_t<std::int8_t> genotypes;
     VariantIterator(const fwdpp::ts::table_collection& tc,
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
         : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
-          pos(), tv(tc, samples), genotypes(samples.size(), 0)
+          pos(), tv(tc, samples), genotype_data(samples.size(), 0),
+          genotypes(make_1d_ndarray(genotype_data))
     {
         // Advance to first tree
         auto flag = tv(std::true_type(), std::true_type());
@@ -111,12 +113,10 @@ struct VariantIterator
             }
     }
 
-    py::object
-    next_variant()
+    VariantIterator& next_variant()
     {
         if (!(mbeg < mend))
             {
-                return py::none();
                 throw py::stop_iteration();
             }
         const auto& m = tv.tree();
@@ -129,7 +129,7 @@ struct VariantIterator
                             "VariantIterator: tree traversal error");
                     }
             }
-        std::fill(genotypes.begin(), genotypes.end(), 0);
+        std::fill(genotype_data.begin(), genotype_data.end(), 0);
         auto ls = m.left_sample[mbeg->node];
         if (ls != fwdpp::ts::TS_NULL_NODE)
             {
@@ -137,12 +137,12 @@ struct VariantIterator
                 int nsteps = 1;
                 while (true)
                     {
-                        if (genotypes[ls] == 1)
+                        if (genotype_data[ls] == 1)
                             {
                                 throw std::runtime_error(
                                     "VariantIterator error");
                             }
-                        genotypes[ls] = 1;
+                        genotype_data[ls] = 1;
                         if (ls == rs)
                             {
                                 break;
@@ -158,7 +158,7 @@ struct VariantIterator
             }
         //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
         ++mbeg;
-        return make_1d_ndarray(genotypes);
+        return *this;
     }
 };
 
@@ -419,8 +419,10 @@ PYBIND11_MODULE(ts, m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
              py::keep_alive<1, 2>())
         .def("next_variant", &VariantIterator::next_variant)
-        .def("__iter__", [](VariantIterator& v) { return v.next_variant(); },
-             py::keep_alive<0, 1>());
+        .def("__iter__", [](VariantIterator& v) ->VariantIterator&{ return v; },
+             py::keep_alive<0, 1>())
+        .def("__next__",&VariantIterator::next_variant)
+        .def_readonly("genotypes", &VariantIterator::genotypes);
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
