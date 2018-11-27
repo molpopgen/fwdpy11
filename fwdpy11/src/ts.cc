@@ -57,8 +57,9 @@ simplify(const fwdpy11::Population& pop,
         }
     auto t(pop.tables);
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    auto idmap = simplifier.simplify(t, samples, pop.mutations);
-    return py::make_tuple(std::move(t), std::move(idmap));
+    auto rv = simplifier.simplify(t, samples, pop.mutations);
+    t.build_indexes();
+    return py::make_tuple(std::move(t), std::move(rv.first));
 }
 
 inline std::size_t
@@ -84,6 +85,83 @@ make_1d_ndarray(const std::vector<T>& v)
         = py::array_t<T>({ v.size() }, { sizeof(T) }, v.data(), py::cast(v));
     return rv;
 }
+
+struct VariantIterator
+{
+    std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
+    std::vector<double> pos;
+    fwdpp::ts::tree_visitor tv;
+    std::vector<std::int8_t> genotype_data;
+    py::array_t<std::int8_t> genotypes;
+    VariantIterator(const fwdpp::ts::table_collection& tc,
+                    const std::vector<fwdpy11::Mutation>& mutations,
+                    const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+        : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
+          pos(), tv(tc, samples), genotype_data(samples.size(), 0),
+          genotypes(make_1d_ndarray(genotype_data))
+    {
+        // Advance to first tree
+        auto flag = tv(std::true_type(), std::true_type());
+        if (flag == false)
+            {
+                throw std::invalid_argument(
+                    "TableCollection contains no trees");
+            }
+        for (auto& m : mutations)
+            {
+                pos.push_back(m.pos);
+            }
+    }
+
+    VariantIterator&
+    next_variant()
+    {
+        if (!(mbeg < mend))
+            {
+                throw py::stop_iteration();
+            }
+        const auto& m = tv.tree();
+        while (pos[mbeg->key] < m.left || pos[mbeg->key] >= m.right)
+            {
+                auto flag = tv(std::true_type(), std::true_type());
+                if (flag == false)
+                    {
+                        throw std::runtime_error(
+                            "VariantIterator: tree traversal error");
+                    }
+            }
+        std::fill(genotype_data.begin(), genotype_data.end(), 0);
+        auto ls = m.left_sample[mbeg->node];
+        if (ls != fwdpp::ts::TS_NULL_NODE)
+            {
+                auto rs = m.right_sample[mbeg->node];
+                int nsteps = 1;
+                while (true)
+                    {
+                        if (genotype_data[ls] == 1)
+                            {
+                                throw std::runtime_error(
+                                    "VariantIterator error");
+                            }
+                        genotype_data[ls] = 1;
+                        if (ls == rs)
+                            {
+                                break;
+                            }
+                        ls = m.next_sample[ls];
+                        ++nsteps;
+                    }
+                if (nsteps != m.leaf_counts[mbeg->node])
+                    {
+                        throw std::runtime_error(
+                            "VariantIterator: sample traversal error");
+                    }
+            }
+        //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
+        ++mbeg;
+        return *this;
+    }
+};
 
 PYBIND11_MODULE(ts, m)
 {
@@ -336,6 +414,42 @@ PYBIND11_MODULE(ts, m)
              modern from ancient samples when constructing the object.
              )delim");
 
+    py::class_<VariantIterator>(
+        m, "VariantIterator",
+        "An iterable class for traversing genotypes in a tree sequence.")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpy11::Mutation>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::keep_alive<1, 2>(), py::arg("tables"), py::arg("mutations"),
+             py::arg("samples"),
+             R"delim(
+             :param tables: The table collection
+             :type tables: :class:`fwdpy11.ts.TableCollection`
+             :param mutations: Mutation container
+             :type mutations: :class:`fwdpy11.VecMutation`
+             :param samples: Samples list
+             :type samples: list
+            )delim")
+        .def(py::init([](const fwdpy11::Population& pop,
+                         const bool include_preserved) {
+                 std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
+                 std::iota(samples.begin(), samples.end(), 0);
+                 if (include_preserved)
+                     {
+                         samples.insert(samples.end(),
+                                        pop.tables.preserved_nodes.begin(),
+                                        pop.tables.preserved_nodes.end());
+                     }
+                 return VariantIterator(pop.tables, pop.mutations, samples);
+             }),
+             py::arg("pop"), py::arg("include_preserved_nodes") = false)
+        .def("__iter__",
+             [](VariantIterator& v) -> VariantIterator& { return v; },
+             py::keep_alive<0, 1>())
+        .def("__next__", &VariantIterator::next_variant)
+        .def_readonly("genotypes", &VariantIterator::genotypes,
+                      "Genotype array.  Index order is same as sample input");
+
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
             Simplify a TableCollection.
@@ -392,7 +506,7 @@ PYBIND11_MODULE(ts, m)
           py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
           py::arg("record_selected"),
           R"delim(
-     Create a :class:`fwpdy11.sampling.DataMatrix` from a table collection.
+     Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
      
      :param pop: A population
      :type pop: :class:`fwdpy11.Population`

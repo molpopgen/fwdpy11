@@ -43,11 +43,11 @@ if '--debug' in sys.argv:
 else:
     DEBUG_MODE = False
 
-if '--assert' in sys.argv:
-    ASSERT_MODE = True
-    sys.argv.remove('--assert')
-else:
-    ASSERT_MODE = False
+# if '--assert' in sys.argv:
+#     ASSERT_MODE = True
+#     sys.argv.remove('--assert')
+# else:
+#     ASSERT_MODE = False
 
 
 class CMakeExtension(Extension):
@@ -96,8 +96,6 @@ class CMakeBuild(build_ext):
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
-        if ASSERT_MODE is True:
-            env['CXXFLAGS'] += ' -UNDEBUG'
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
@@ -209,13 +207,13 @@ setup(
                  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)'],
     description='Forward-time population genetic simulation in Python',
     license='GPL >= 3',
-    requires=['pybind11', 'numpy'],
+    requires=['pybind11', 'numpy', 'msprime'],
     provides=['fwdpy11'],
     obsoletes=['none'],
     data_files=[('fwdpy11', ['COPYING', 'README.rst'])],
     long_description=long_desc,
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2.3', 'numpy'],
+    install_requires=['pybind11>=2.2.3', 'numpy', 'msprime>=0.6.1'],
     cmdclass={'build_ext': CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
