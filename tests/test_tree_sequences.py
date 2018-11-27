@@ -10,7 +10,7 @@ import numpy as np
 class testTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
-        # TODO add neutral and selected variants
+        # TODO add neutral variants
         self.N = 1000
         self.demography = np.array([self.N]*self.N, dtype=np.uint32)
         self.rho = 1.
@@ -79,6 +79,13 @@ class testTreeSequences(unittest.TestCase):
                                  self.pop.mcounts[i[1]])
 
     def test_simplify_to_sample(self):
+        """
+        Simplify to a sample using fwdpy11.ts and
+        msprime, then test that total time on output
+        is the same from both sources and that
+        the mutation tables contain the same
+        positions after simplification.
+        """
         dumped_ts = self.pop.dump_tables_to_msprime()
         tt = 0.0
         for i in self.pop.tables.nodes:
@@ -101,6 +108,14 @@ class testTreeSequences(unittest.TestCase):
         for t in mspts.trees():
             tt_msprime += t.get_total_branch_length()
         self.assertEqual(tt_fwd, tt_msprime)
+
+        self.assertEqual(len(fp11ts.mutations),
+                         len(mspts.tables.mutations))
+        fp11_pos = np.array([self.pop.mutations[i.key].pos
+                            for i in fp11ts.mutations])
+        fp11_pos = np.sort(fp11_pos)
+        msp_pos = np.sort(mspts.tables.sites.position)
+        self.assertTrue(np.array_equal(fp11_pos, msp_pos))
 
 
 if __name__ == "__main__":
