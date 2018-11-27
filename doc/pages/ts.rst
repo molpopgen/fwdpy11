@@ -48,9 +48,9 @@ a :class:`fwdpy11.ts.TableCollection`
 
     rho=100.0
 
-Set up a sim w/no neutral parameters
+Set up a sim with no neutral regions.
 Currently, attempting to simulate
-neutral variant will throw an error because
+neutral variants will throw an error because
 I've not put some of the requisite tooling 
 into the back-end, but that will come soon.
 
