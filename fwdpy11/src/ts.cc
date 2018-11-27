@@ -119,13 +119,14 @@ struct VariantIterator
                 return py::none();
                 throw py::stop_iteration();
             }
-        auto m = tv.tree();
-        if (pos[mbeg->key] >= m.right)
+        const auto& m = tv.tree();
+        while (pos[mbeg->key] < m.left || pos[mbeg->key] >= m.right)
             {
                 auto flag = tv(std::true_type(), std::true_type());
                 if (flag == false)
                     {
-                        return py::none();
+                        throw std::runtime_error(
+                            "VariantIterator: tree traversal error");
                     }
             }
         std::fill(genotypes.begin(), genotypes.end(), 0);
