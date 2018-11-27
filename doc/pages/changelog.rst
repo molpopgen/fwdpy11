@@ -21,6 +21,7 @@ Dependency changes:
 --------------------------
 
 * GSL >= 2.2 is now required.
+* cmake is now required to build the package.
 
 Bug fixes:
 --------------------------
