@@ -117,6 +117,18 @@ class testTreeSequences(unittest.TestCase):
         msp_pos = np.sort(mspts.tables.sites.position)
         self.assertTrue(np.array_equal(fp11_pos, msp_pos))
 
+    def test_genotype_matrix(self):
+        dm = fwdpy11.ts.make_data_matrix(self.pop,
+                                         [i for i in range(2*self.pop.N)],
+                                         False, True)
+        sa = np.array(dm.selected)
+        cs = np.sum(sa, axis=1)
+        dumped_ts = self.pop.dump_tables_to_msprime()
+        mm = dumped_ts.genotype_matrix()
+        mc = np.sum(mm, axis=1)
+        self.assertTrue(np.array_equal(sa, mm))
+        self.assertTrue(np.array_equal(cs, mc))
+
     def test_VariantIterator(self):
         vi = fwdpy11.ts.VariantIterator(self.pop.tables,
                                         self.pop.mutations,
