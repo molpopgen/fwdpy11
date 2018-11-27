@@ -86,6 +86,74 @@ make_1d_ndarray(const std::vector<T>& v)
     return rv;
 }
 
+struct VariantIterator
+{
+    std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
+    std::vector<double> pos;
+    fwdpp::ts::tree_visitor tv;
+    std::vector<std::int8_t> genotypes;
+    VariantIterator(const fwdpp::ts::table_collection& tc,
+                    const std::vector<fwdpy11::Mutation>& mutations,
+                    const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+        : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
+          pos(), tv(tc, samples), genotypes(samples.size(), 0)
+    {
+        // Advance to first tree
+        auto flag = tv(std::true_type(), std::true_type());
+        if (flag == false)
+            {
+                throw std::invalid_argument(
+                    "TableCollection contains no trees");
+            }
+        for (auto& m : mutations)
+            {
+                pos.push_back(m.pos);
+            }
+    }
+
+    py::object
+    next_variant()
+    {
+        if (!(mbeg < mend))
+            {
+                return py::none();
+                throw py::stop_iteration();
+            }
+        auto m = tv.tree();
+        if (pos[mbeg->key] >= m.right)
+            {
+                auto flag = tv(std::true_type(), std::false_type());
+                if (flag == false)
+                    {
+                        return py::none();
+                    }
+            }
+        std::fill(genotypes.begin(), genotypes.end(), 0);
+        auto ls = m.left_sample[mbeg->node];
+        if (ls != fwdpp::ts::TS_NULL_NODE)
+            {
+                auto rs = m.right_sample[mbeg->node];
+                while (true)
+                    {
+                        if (genotypes[ls] == 1)
+                            {
+                                throw std::runtime_error(
+                                    "VariantIterator error");
+                            }
+                        genotypes[ls] = 1;
+                        if (ls == rs)
+                            {
+                                break;
+                            }
+                        ls = m.next_sample[ls];
+                    }
+            }
+        //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
+        ++mbeg;
+        return make_1d_ndarray(genotypes);
+    }
+};
+
 PYBIND11_MODULE(ts, m)
 {
     // TODO: how do I docstring this?
@@ -336,6 +404,15 @@ PYBIND11_MODULE(ts, m)
              always updated. The latter is only updated if you separated
              modern from ancient samples when constructing the object.
              )delim");
+
+    py::class_<VariantIterator>(m, "VariantIterator")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpy11::Mutation>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::keep_alive<1, 2>())
+        .def("next_variant", &VariantIterator::next_variant)
+        .def("__iter__", [](VariantIterator& v) { return v.next_variant(); },
+             py::keep_alive<0, 1>());
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(

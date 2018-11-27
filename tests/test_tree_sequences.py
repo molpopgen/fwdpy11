@@ -112,10 +112,28 @@ class testTreeSequences(unittest.TestCase):
         self.assertEqual(len(fp11ts.mutations),
                          len(mspts.tables.mutations))
         fp11_pos = np.array([self.pop.mutations[i.key].pos
-                            for i in fp11ts.mutations])
+                             for i in fp11ts.mutations])
         fp11_pos = np.sort(fp11_pos)
         msp_pos = np.sort(mspts.tables.sites.position)
         self.assertTrue(np.array_equal(fp11_pos, msp_pos))
+
+    def test_VariantIterator(self):
+        vi = fwdpy11.ts.VariantIterator(self.pop.tables,
+                                        self.pop.mutations,
+                                        [i for i in range(2*self.pop.N)])
+        dm = fwdpy11.ts.make_data_matrix(self.pop,
+                                         [i for i in range(2*self.pop.N)],
+                                         False, True)
+        sa = np.array(dm.selected)
+        cs = np.sum(sa, axis=1)
+        v = vi.next_variant()
+        i = 0
+        while v is not None:
+            c = self.pop.mcounts[self.pop.tables.mutations[i].key]
+            self.assertEqual(c, cs[i])
+            self.assertEqual(c, v.sum())
+            v = vi.next_variant()
+            i += 1
 
 
 if __name__ == "__main__":
