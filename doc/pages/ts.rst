@@ -390,6 +390,15 @@ which they belong, the following trick helps:
     anodes = np.stack((ar['n1'],ar['n2']), axis=1).flatten()
     print(anodes[:10])
 
+You may also iterate over the genotypes on a per-marker basis using :class:`fwdpy11.ts.VariantIterator`:
+
+.. ipython:: python
+
+    vs = fwdpy11.ts.VariantIterator(pop.tables, pop.mutations, [i for i in range(2*pop.N)])
+    for v, i in zip(vs, pop.tables.mutations):
+        assert(v.genotypes.sum() == pop.mcounts[i.key])
+
+The type of :attr:`fwdpy11.ts.VariantIterator.genotypes` is a numpy array with dtype `int8`.
 
 Tracking leaf counts separately for preserved and alive samples
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

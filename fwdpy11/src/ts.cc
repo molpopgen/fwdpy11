@@ -426,7 +426,7 @@ PYBIND11_MODULE(ts, m)
              :param tables: The table collection
              :type tables: :class:`fwdpy11.ts.TableCollection`
              :param mutations: Mutation container
-             :type mutations: :class`fwdpy11.VecMutation`
+             :type mutations: :class:`fwdpy11.VecMutation`
              :param samples: Samples list
              :type samples: list
             )delim")
@@ -434,7 +434,8 @@ PYBIND11_MODULE(ts, m)
              [](VariantIterator& v) -> VariantIterator& { return v; },
              py::keep_alive<0, 1>())
         .def("__next__", &VariantIterator::next_variant)
-        .def_readonly("genotypes", &VariantIterator::genotypes);
+        .def_readonly("genotypes", &VariantIterator::genotypes,
+                      "Genotype array.  Index order is same as sample input");
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
