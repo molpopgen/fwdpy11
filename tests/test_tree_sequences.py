@@ -118,6 +118,11 @@ class testTreeSequences(unittest.TestCase):
         self.assertTrue(np.array_equal(fp11_pos, msp_pos))
 
     def test_genotype_matrix(self):
+        """
+        Make data matrix objects from the tree sequences
+        and compare their contents to those of msprime
+        as well as to an explicit calculation of mutation counts.
+        """
         dm = fwdpy11.ts.make_data_matrix(self.pop,
                                          [i for i in range(2*self.pop.N)],
                                          False, True)
@@ -126,6 +131,20 @@ class testTreeSequences(unittest.TestCase):
         dumped_ts = self.pop.dump_tables_to_msprime()
         mm = dumped_ts.genotype_matrix()
         mc = np.sum(mm, axis=1)
+        ec = np.zeros(len(self.pop.mutations), dtype=np.uint32)
+        for d in self.pop.diploids:
+            for m in self.pop.gametes[d.first].smutations:
+                ec[m] += 1
+            for m in self.pop.gametes[d.second].smutations:
+                ec[m] += 1
+        for i, j, k in zip(self.pop.tables.mutations, cs, mc):
+            self.assertEqual(self.pop.mcounts[i.key],
+                             ec[i.key])
+            self.assertEqual(ec[i.key], j)
+            self.assertEqual(ec[i.key], k)
+        self.assertTrue(np.array_equal(ec, np.array(self.pop.mcounts)))
+        self.assertEqual(ec.sum(), cs.sum())
+        self.assertEqual(ec.sum(), mc.sum())
         self.assertTrue(np.array_equal(sa, mm))
         self.assertTrue(np.array_equal(cs, mc))
 
