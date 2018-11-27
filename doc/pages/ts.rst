@@ -394,7 +394,7 @@ You may also iterate over the genotypes on a per-marker basis using :class:`fwdp
 
 .. ipython:: python
 
-    vs = fwdpy11.ts.VariantIterator(pop.tables, pop.mutations, [i for i in range(2*pop.N)])
+    vs = fwdpy11.ts.VariantIterator(pop)
     for v, i in zip(vs, pop.tables.mutations):
         assert(v.genotypes.sum() == pop.mcounts[i.key])
 
