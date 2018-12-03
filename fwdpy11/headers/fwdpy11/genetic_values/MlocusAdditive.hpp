@@ -26,5 +26,38 @@ namespace fwdpy11
 {
     using MlocusAdditive
         = fwdpp_mlocus_gvalue<fwdpp::additive_diploid, pickle_additive>;
+
+    inline MlocusAdditive
+    create_MlocusAdditive(const fwdpp::trait t,
+                          const fwdpy11::GeneticValueToFitnessMap& gv2w)
+    {
+        return MlocusAdditive(fwdpp::additive_diploid(t),
+                              aggregate_additive_trait(), gv2w);
+    }
+
+    inline MlocusAdditive
+    create_MlocusAdditive(const fwdpp::trait t,
+                          const fwdpy11::GeneticValueToFitnessMap& gv2w,
+                          const fwdpy11::GeneticValueNoise& noise)
+    {
+        return MlocusAdditive(fwdpp::additive_diploid(t),
+                              aggregate_additive_trait(), gv2w, noise);
+    }
+
+    inline MlocusAdditive
+    create_MlocusAdditive(const fwdpp::fitness t)
+    {
+        return MlocusAdditive(fwdpp::additive_diploid(t),
+                              aggregate_additive_fitness());
+    }
+
+    inline MlocusAdditive
+    create_MlocusAdditive(const fwdpp::fitness t,
+                          const fwdpy11::GeneticValueToFitnessMap& gv2w,
+                          const fwdpy11::GeneticValueNoise& noise)
+    {
+        return MlocusAdditive(fwdpp::additive_diploid(t),
+                              aggregate_additive_fitness(), gv2w, noise);
+    }
 } // namespace fwdpy11
 #endif

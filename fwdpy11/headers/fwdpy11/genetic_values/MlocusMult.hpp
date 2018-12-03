@@ -26,5 +26,37 @@ namespace fwdpy11
 {
     using MlocusMult = fwdpp_mlocus_gvalue<fwdpp::multiplicative_diploid,
                                            pickle_multiplicative>;
+    inline MlocusMult
+    create_MlocusMult(const fwdpp::trait t,
+                      const fwdpy11::GeneticValueToFitnessMap& gv2w)
+    {
+        return MlocusMult(fwdpp::multiplicative_diploid(t),
+                          aggregate_mult_trait(), gv2w);
+    }
+
+    inline MlocusMult
+    create_MlocusMult(const fwdpp::trait t,
+                      const fwdpy11::GeneticValueToFitnessMap& gv2w,
+                      const fwdpy11::GeneticValueNoise& noise)
+    {
+        return MlocusMult(fwdpp::multiplicative_diploid(t),
+                          aggregate_mult_trait(), gv2w, noise);
+    }
+
+    inline MlocusMult
+    create_MlocusMult(const fwdpp::fitness t)
+    {
+        return MlocusMult(fwdpp::multiplicative_diploid(t),
+                          aggregate_mult_fitness());
+    }
+
+    inline MlocusMult
+    create_MlocusMult(const fwdpp::fitness t,
+                      const fwdpy11::GeneticValueToFitnessMap& gv2w,
+                      const fwdpy11::GeneticValueNoise& noise)
+    {
+        return MlocusMult(fwdpp::multiplicative_diploid(t),
+                          aggregate_mult_fitness(), gv2w, noise);
+    }
 } // namespace fwdpy11
 #endif

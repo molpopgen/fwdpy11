@@ -430,24 +430,21 @@ PYBIND11_MODULE(genetic_values, m)
                fwdpy11::MlocusPopGeneticValueWithMapping>(
         m, "MlocusAdditive", "Additive effects on trait values.")
         .def(py::init([](const double scaling) {
-                 return fwdpy11::MlocusAdditive(
-                     fwdpp::additive_diploid(fwdpp::fitness(scaling)),
-                     fwdpy11::aggregate_additive_fitness());
+                 return fwdpy11::create_MlocusAdditive(
+                     fwdpp::fitness(scaling));
              }),
              ADDITIVE_CONSTRUCTOR_1, py::arg("scaling"))
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& gv2w) {
-                 return fwdpy11::MlocusAdditive(
-                     fwdpp::additive_diploid(fwdpp::trait(scaling)),
-                     fwdpy11::aggregate_additive_trait(), gv2w);
+                 return fwdpy11::create_MlocusAdditive(fwdpp::trait(scaling),
+                                                       gv2w);
              }),
              ADDITIVE_CONSTRUCTOR_2, py::arg("scaling"), py::arg("gv2w"))
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
-                 return fwdpy11::MlocusAdditive(
-                     fwdpp::additive_diploid(fwdpp::trait(scaling)),
-                     fwdpy11::aggregate_additive_trait(), gv2w, noise);
+                 return fwdpy11::create_MlocusAdditive(fwdpp::trait(scaling),
+                                                       gv2w, noise);
              }),
              ADDITIVE_CONSTRUCTOR_3, py::arg("scaling"), py::arg("gv2w"),
              py::arg("noise"))
@@ -485,16 +482,14 @@ PYBIND11_MODULE(genetic_values, m)
                 // TODO: make sure that this is unit-testable
                 if (pol)
                     {
-                        return fwdpy11::MlocusAdditive(
-                            fwdpp::additive_diploid(fwdpp::trait(scaling)),
-                            fwdpy11::aggregate_additive_trait(),
+                        return fwdpy11::create_MlocusAdditive(
+                            fwdpp::trait(scaling),
                             t1.cast<
                                 const fwdpy11::GeneticValueToFitnessMap&>(),
                             t2.cast<const fwdpy11::GeneticValueNoise&>());
                     }
-                return fwdpy11::MlocusAdditive(
-                    fwdpp::additive_diploid(fwdpp::fitness(scaling)),
-                    fwdpy11::aggregate_additive_fitness(),
+                return fwdpy11::create_MlocusAdditive(
+                    fwdpp::fitness(scaling),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
@@ -502,24 +497,20 @@ PYBIND11_MODULE(genetic_values, m)
     py::class_<fwdpy11::MlocusMult, fwdpy11::MlocusPopGeneticValueWithMapping>(
         m, "MlocusMult", "Multiplicative effects on trait values")
         .def(py::init([](const double scaling) {
-                 return fwdpy11::MlocusMult(
-                     fwdpp::multiplicative_diploid(fwdpp::fitness(scaling)),
-                     fwdpy11::aggregate_mult_fitness());
+                 return fwdpy11::create_MlocusMult(fwdpp::fitness(scaling));
              }),
              MULT_CONSTRUCTOR_1, py::arg("scaling"))
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& gv2w) {
-                 return fwdpy11::MlocusMult(
-                     fwdpp::multiplicative_diploid(fwdpp::trait(scaling)),
-                     fwdpy11::aggregate_mult_trait(), gv2w);
+                 return fwdpy11::create_MlocusMult(fwdpp::trait(scaling),
+                                                   gv2w);
              }),
              MULT_CONSTRUCTOR_2, py::arg("scaling"), py::arg("gv2w"))
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
-                 return fwdpy11::MlocusMult(
-                     fwdpp::multiplicative_diploid(fwdpp::trait(scaling)),
-                     fwdpy11::aggregate_mult_trait(), gv2w, noise);
+                 return fwdpy11::create_MlocusMult(fwdpp::trait(scaling), gv2w,
+                                                   noise);
              }),
              MULT_CONSTRUCTOR_3, py::arg("scaling"), py::arg("gv2w"),
              py::arg("scaling"))
@@ -557,18 +548,14 @@ PYBIND11_MODULE(genetic_values, m)
                 // TODO: make sure that this is unit-testable
                 if (pol)
                     {
-                        return fwdpy11::MlocusMult(
-                            fwdpp::multiplicative_diploid(
-                                fwdpp::trait(scaling)),
-                            fwdpy11::aggregate_mult_trait(),
+                        return fwdpy11::create_MlocusMult(
+                            fwdpp::trait(scaling),
                             t1.cast<
                                 const fwdpy11::GeneticValueToFitnessMap&>(),
                             t2.cast<const fwdpy11::GeneticValueNoise&>());
                     }
-
-                return fwdpy11::MlocusMult(
-                    fwdpp::multiplicative_diploid(fwdpp::fitness(scaling)),
-                    fwdpy11::aggregate_mult_fitness(),
+                return fwdpy11::create_MlocusMult(
+                    fwdpp::fitness(scaling),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
