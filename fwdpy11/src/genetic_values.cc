@@ -482,21 +482,19 @@ PYBIND11_MODULE(genetic_values, m)
                 auto p = py::module::import("pickle");
                 auto t1 = p.attr("loads")(t[1]);
                 auto t2 = p.attr("loads")(t[2]);
-                auto a
-                    = (pol == 1)
-                          ? fwdpp::additive_diploid(fwdpp::trait(scaling))
-                          : fwdpp::additive_diploid(fwdpp::fitness(scaling));
                 // TODO: make sure that this is unit-testable
-                if (!pol)
+                if (pol)
                     {
                         return fwdpy11::MlocusAdditive(
-                            std::move(a), fwdpy11::aggregate_additive_trait(),
+                            fwdpp::additive_diploid(fwdpp::trait(scaling)),
+                            fwdpy11::aggregate_additive_trait(),
                             t1.cast<
                                 const fwdpy11::GeneticValueToFitnessMap&>(),
                             t2.cast<const fwdpy11::GeneticValueNoise&>());
                     }
                 return fwdpy11::MlocusAdditive(
-                    std::move(a), fwdpy11::aggregate_additive_fitness(),
+                    fwdpp::additive_diploid(fwdpp::fitness(scaling)),
+                    fwdpy11::aggregate_additive_fitness(),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
@@ -556,21 +554,21 @@ PYBIND11_MODULE(genetic_values, m)
                 auto p = py::module::import("pickle");
                 auto t1 = p.attr("loads")(t[1]);
                 auto t2 = p.attr("loads")(t[2]);
-                auto a = (pol == 1) ? fwdpp::multiplicative_diploid(
-                                          fwdpp::trait(scaling))
-                                    : fwdpp::multiplicative_diploid(
-                                          fwdpp::fitness(scaling));
                 // TODO: make sure that this is unit-testable
-                if (!pol)
+                if (pol)
                     {
                         return fwdpy11::MlocusMult(
-                            std::move(a), fwdpy11::aggregate_mult_fitness(),
+                            fwdpp::multiplicative_diploid(
+                                fwdpp::trait(scaling)),
+                            fwdpy11::aggregate_mult_trait(),
                             t1.cast<
                                 const fwdpy11::GeneticValueToFitnessMap&>(),
                             t2.cast<const fwdpy11::GeneticValueNoise&>());
                     }
+
                 return fwdpy11::MlocusMult(
-                    std::move(a), fwdpy11::aggregate_mult_trait(),
+                    fwdpp::multiplicative_diploid(fwdpp::fitness(scaling)),
+                    fwdpy11::aggregate_mult_fitness(),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
