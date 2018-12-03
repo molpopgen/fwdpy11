@@ -137,8 +137,8 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
                 // A diploid tracks its index via
                 // fwdpy11::DiploidMetadata::label
                 phenotypes[pop.diploid_metadata[i].label]
-                    = fwdpp::additive_diploid(2.0)(pop.diploids[i],
-                                                   pop.gametes, pop.mutations);
+                    = fwdpp::additive_diploid(fwdpp::trait(2.0))(
+                        pop.diploids[i], pop.gametes, pop.mutations);
             }
     }
 
