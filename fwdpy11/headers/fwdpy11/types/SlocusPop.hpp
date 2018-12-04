@@ -6,7 +6,7 @@
 #include "create_pops.hpp"
 #include <stdexcept>
 #include <unordered_set>
-#include <fwdpp/sugar/poptypes/tags.hpp>
+#include <fwdpp/poptypes/tags.hpp>
 #include <fwdpp/sugar/add_mutation.hpp>
 
 namespace fwdpy11
