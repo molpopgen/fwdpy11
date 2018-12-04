@@ -29,7 +29,6 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/sugar/GSLrng_t.hpp>
 #include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>

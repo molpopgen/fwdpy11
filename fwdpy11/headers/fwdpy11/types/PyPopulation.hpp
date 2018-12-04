@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <gsl/gsl_randist.h>
 #include <fwdpp/forward_types.hpp>
-#include <fwdpp/sugar/poptypes/popbase.hpp>
+#include <fwdpp/poptypes/popbase.hpp>
 #include <fwdpp/sampling_functions.hpp>
 #include <fwdpp/data_matrix.hpp>
 #include <fwdpp/ts/table_collection.hpp>

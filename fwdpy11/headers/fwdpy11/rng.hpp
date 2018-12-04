@@ -19,7 +19,7 @@
 #ifndef FWDPY11_RNG_HPP__
 #define FWDPY11_RNG_HPP__
 
-#include <fwdpp/sugar/GSLrng_t.hpp>
+#include <fwdpp/GSLrng_t.hpp>
 
 namespace fwdpy11
 {

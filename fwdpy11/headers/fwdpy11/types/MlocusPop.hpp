@@ -7,7 +7,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <fwdpp/sugar/add_mutation.hpp>
-#include <fwdpp/sugar/poptypes/tags.hpp>
+#include <fwdpp/poptypes/tags.hpp>
 
 namespace fwdpy11
 {
