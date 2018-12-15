@@ -130,7 +130,7 @@ That's life.
 Enabling debugging symbols in the C++ code
 ------------------------------------------------------------------
 
-.. code_block:: bash
+.. code-block:: bash
 
     python setup.py build_ext -i --debug
 
