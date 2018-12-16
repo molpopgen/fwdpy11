@@ -4,6 +4,11 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Version 0.2.1
+++++++++++++++++++++++++++
+
+This is a point release fixing some minor packaging problems in 0.2.0.
+
 Version 0.2.0
 ++++++++++++++++++++++++++
 
