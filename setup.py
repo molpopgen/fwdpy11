@@ -15,7 +15,7 @@ from distutils.version import LooseVersion
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
@@ -145,16 +145,16 @@ ext_modules = [
     CMakeExtension('fwdpy11._Population'),
     CMakeExtension('fwdpy11._Populations'),
     CMakeExtension('fwdpy11.fwdpy11_types'),
-    CMakeExtension('fwdpy11.genetic_value_noise',),
-    CMakeExtension('fwdpy11.wright_fisher_slocus',),
-    CMakeExtension('fwdpy11.wright_fisher_mlocus',),
-    CMakeExtension('fwdpy11.gsl_random',),
+    CMakeExtension('fwdpy11.genetic_value_noise'),
+    CMakeExtension('fwdpy11.wright_fisher_slocus'),
+    CMakeExtension('fwdpy11.wright_fisher_mlocus'),
+    CMakeExtension('fwdpy11.gsl_random'),
     CMakeExtension('fwdpy11.multilocus'),
     CMakeExtension('fwdpy11.util'),
-    CMakeExtension('fwdpy11.ts',),
-    CMakeExtension('fwdpy11.tsrecorders',),
-    CMakeExtension('fwdpy11.ts_from_msprime',),
-    CMakeExtension('fwdpy11.wright_fisher_slocus_ts',),
+    CMakeExtension('fwdpy11.ts'),
+    CMakeExtension('fwdpy11.tsrecorders'),
+    CMakeExtension('fwdpy11.ts_from_msprime'),
+    CMakeExtension('fwdpy11.wright_fisher_slocus_ts'),
 ]
 
 
