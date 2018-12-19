@@ -31,7 +31,7 @@ namespace fwdpy11
         operator()(const fwdpp::multiplicative_diploid& m) const
         {
             int p = 0;
-            if (m.gvalue_is_trait.get() == true)
+            if (m.gvalue_is_trait == true)
                 {
                     p = 1;
                 }

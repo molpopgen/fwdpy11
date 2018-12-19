@@ -47,13 +47,13 @@ namespace fwdpy11
         const update_function& update)
     {
         static_assert(std::is_same<typename poptype::popmodel_t,
-                                   fwdpp::sugar::MULTILOC_TAG>::value,
+                                   fwdpp::poptypes::MULTILOC_TAG>::value,
                       "Population type must be a multi-locus type.");
 
         auto gamete_recycling_bin
-            = fwdpp::fwdpp_internal::make_gamete_queue(pop.gametes);
+            = fwdpp::make_gamete_queue(pop.gametes);
         auto mutation_recycling_bin
-            = fwdpp::fwdpp_internal::make_mut_queue(pop.mcounts);
+            = fwdpp::make_mut_queue(pop.mcounts);
 
         // Efficiency hit.  Unavoidable
         // in use case of a sampler looking

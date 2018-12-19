@@ -63,7 +63,7 @@ simplify(const fwdpy11::Population& pop,
 }
 
 inline std::size_t
-generate_neutral_variants(std::queue<std::size_t>& recycling_bin,
+generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                           fwdpy11::Population& pop,
                           const fwdpy11::GSLrng_t& rng, const double left,
                           const double right, const fwdpp::uint_t generation)
@@ -470,8 +470,9 @@ PYBIND11_MODULE(ts, m)
 
     m.def("infinite_sites", [](const fwdpy11::GSLrng_t& rng,
                                fwdpy11::Population& pop, const double mu) {
-        std::queue<std::size_t> recycling_bin = fwdpp::ts::make_mut_queue(
-            pop.mcounts, pop.mcounts_from_preserved_nodes);
+        fwdpp::flagged_mutation_queue recycling_bin
+            = fwdpp::ts::make_mut_queue(pop.mcounts,
+                                        pop.mcounts_from_preserved_nodes);
         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
         std::iota(samples.begin(), samples.end(), 0);
         const auto apply_mutations

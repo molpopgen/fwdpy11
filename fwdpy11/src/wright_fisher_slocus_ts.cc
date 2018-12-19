@@ -181,7 +181,7 @@ wfSlocusPop_ts(
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
           };
-    std::queue<std::size_t> mutation_recycling_bin;
+    fwdpp::flagged_mutation_queue mutation_recycling_bin = fwdpp::empty_mutation_queue();
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
                            next_index = pop.tables.node_table.size();
     bool simplified = false;

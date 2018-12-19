@@ -220,7 +220,7 @@ PYBIND11_MODULE(genetic_values, m)
         .def_property_readonly(
             "is_fitness",
             [](const fwdpy11::SlocusAdditive& wa) {
-                return wa.gv.gvalue_is_fitness.get();
+                return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic value "
             "and False if the genetic value is a trait value.")
@@ -285,7 +285,7 @@ PYBIND11_MODULE(genetic_values, m)
         .def_property_readonly(
             "is_fitness",
             [](const fwdpy11::SlocusMult& wa) {
-                return wa.gv.gvalue_is_fitness.get();
+                return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic "
             "value "
@@ -455,7 +455,7 @@ PYBIND11_MODULE(genetic_values, m)
         .def_property_readonly(
             "is_fitness",
             [](const fwdpy11::MlocusAdditive& wa) {
-                return wa.gv.gvalue_is_fitness.get();
+                return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic "
             "value "
@@ -521,7 +521,7 @@ PYBIND11_MODULE(genetic_values, m)
         .def_property_readonly(
             "is_fitness",
             [](const fwdpy11::MlocusMult& wa) {
-                return wa.gv.gvalue_is_fitness.get();
+                return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic "
             "value "

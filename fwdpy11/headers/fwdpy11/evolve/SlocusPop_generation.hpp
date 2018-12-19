@@ -36,22 +36,20 @@ namespace fwdpy11
               typename pick2_function, typename update_function,
               typename mutation_model, typename recombination_model>
     void
-    evolve_generation(
-        const GSLrng_t& rng, poptype& pop, const fwdpp::uint_t N_next,
-        const double mu,
-        const mutation_model& mmodel, const recombination_model& recmodel,
-        const pick1_function& pick1, const pick2_function& pick2,
-        const update_function& update)
+    evolve_generation(const GSLrng_t& rng, poptype& pop,
+                      const fwdpp::uint_t N_next, const double mu,
+                      const mutation_model& mmodel,
+                      const recombination_model& recmodel,
+                      const pick1_function& pick1, const pick2_function& pick2,
+                      const update_function& update)
     {
         static_assert(
             std::is_same<typename poptype::popmodel_t,
-                         fwdpp::sugar::SINGLELOC_TAG>::value,
+                         fwdpp::poptypes::SINGLELOC_TAG>::value,
             "Population type must be a single-locus, single-deme type.");
 
-        auto gamete_recycling_bin
-            = fwdpp::fwdpp_internal::make_gamete_queue(pop.gametes);
-        auto mutation_recycling_bin
-            = fwdpp::fwdpp_internal::make_mut_queue(pop.mcounts);
+        auto gamete_recycling_bin = fwdpp::make_gamete_queue(pop.gametes);
+        auto mutation_recycling_bin = fwdpp::make_mut_queue(pop.mcounts);
 
         // Efficiency hit.  Unavoidable
         // in use case of a sampler looking
@@ -90,11 +88,12 @@ namespace fwdpy11
                     pop.neutral, pop.selected);
 
 #ifndef NDEBUG
-                if(pop.gametes[dip.first].n == 0 || 
-                        pop.gametes[dip.second].n == 0)
-                {
-                    throw std::runtime_error("DEBUG: diploid has gamete with frequency zero");
-                }
+                if (pop.gametes[dip.first].n == 0
+                    || pop.gametes[dip.second].n == 0)
+                    {
+                        throw std::runtime_error(
+                            "DEBUG: diploid has gamete with frequency zero");
+                    }
 #endif
                 offspring_metadata[label].label = label;
                 update(offspring_metadata[label++], p1, p2,
