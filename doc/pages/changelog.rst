@@ -4,6 +4,12 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+Current development branch
+++++++++++++++++++++++++++
+
+* :attr:`fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations
+  with tree sequences. `commit <https://github.com/molpopgen/fwdpy11/commit/b557c4162cbfdfba6c9126ebec14c7f3f43884eb>`_. 
+
 Version 0.2.1
 ++++++++++++++++++++++++++
 
