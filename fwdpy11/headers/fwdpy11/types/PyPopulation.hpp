@@ -17,8 +17,8 @@ namespace fwdpy11
     template <typename mutation_type, typename mcont, typename gcont,
               typename mvector, typename ftvector, typename lookup_table_type>
     class PyPopulation
-        : public fwdpp::sugar::popbase<mutation_type, mcont, gcont, mvector,
-                                       ftvector, lookup_table_type>
+        : public fwdpp::poptypes::popbase<mutation_type, mcont, gcont, mvector,
+                                          ftvector, lookup_table_type>
     // Abstract base class (ABC) for population types
     {
       private:
@@ -39,8 +39,8 @@ namespace fwdpy11
 
       public:
         using fwdpp_base
-            = fwdpp::sugar::popbase<mutation_type, mcont, gcont, mvector,
-                                    ftvector, lookup_table_type>;
+            = fwdpp::poptypes::popbase<mutation_type, mcont, gcont, mvector,
+                                       ftvector, lookup_table_type>;
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
@@ -57,9 +57,8 @@ namespace fwdpy11
         PyPopulation(const PyPopulation &) = default;
 
         PyPopulation(fwdpp::uint_t N_, const double L)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
-              diploid_metadata(N), ancient_sample_metadata{},
-              ancient_sample_records{},
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
+              ancient_sample_metadata{}, ancient_sample_records{},
               tables(init_tables(N_, L))
         {
         }
@@ -71,9 +70,8 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 },
-              diploid_metadata(N), ancient_sample_metadata{},
-              ancient_sample_records{},
+              N{ N_ }, generation{ 0 }, diploid_metadata(N),
+              ancient_sample_metadata{}, ancient_sample_records{},
               tables(std::numeric_limits<double>::max())
         {
         }

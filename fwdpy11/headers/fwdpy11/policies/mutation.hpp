@@ -22,14 +22,14 @@
 
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/types/Mutation.hpp>
-#include <fwdpp/internal/recycling.hpp>
+#include <fwdpp/simfunctions/recycling.hpp>
 
 namespace fwdpy11
 {
     template <typename position_function, typename effect_size_function,
               typename dominance_function>
     std::size_t
-    infsites_Mutation(std::queue<std::size_t> &recycling_bin,
+    infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
                       Population::mcont_t &mutations,
                       Population::lookup_table_t &lookup,
                       const fwdpp::uint_t &generation,
@@ -74,12 +74,12 @@ namespace fwdpy11
             {
                 pos = posmaker();
             }
-        auto idx = fwdpp::fwdpp_internal::recycle_mutation_helper(
-            recycling_bin, mutations, pos, esize_maker(), hmaker(), generation,
-            x);
+        auto idx = fwdpp::recycle_mutation_helper(recycling_bin, mutations,
+                                                  pos, esize_maker(), hmaker(),
+                                                  generation, x);
         lookup.emplace(pos, idx);
         return idx;
     }
-}
+} // namespace fwdpy11
 
 #endif

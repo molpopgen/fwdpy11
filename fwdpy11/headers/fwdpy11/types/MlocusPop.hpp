@@ -35,7 +35,7 @@ namespace fwdpy11
         using dipvector_t = std::vector<std::vector<DiploidGenotype>>;
         using diploid_t = dipvector_t::value_type;
         using popbase_t = Population;
-        using popmodel_t = fwdpp::sugar::MULTILOC_TAG;
+        using popmodel_t = fwdpp::poptypes::MULTILOC_TAG;
         using fitness_t
             = fwdpp::traits::fitness_fxn_t<dipvector_t,
                                            typename popbase_t::gcont_t,

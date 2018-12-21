@@ -149,7 +149,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto label = std::get<3>(i);
                         weights.push_back(std::get<2>(i));
                         auto mf = [&r, &pop, start, stop, label](
-                                      std::queue<std::size_t> &recbin,
+                                      fwdpp::flagged_mutation_queue &recbin,
                                       fwdpy11::SlocusPop::mcont_t &mutations) {
                             return fwdpy11::infsites_Mutation(
                                 recbin, mutations, pop.mut_lookup,
@@ -171,7 +171,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         weights.push_back(
                             std::get<2>(selected_mut_regions.at(i)));
                         auto mf = [&r, &pop, start, stop, label, sh](
-                                      std::queue<std::size_t> &recbin,
+                                      fwdpp::flagged_mutation_queue &recbin,
                                       fwdpy11::SlocusPop::mcont_t &mutations) {
                             return fwdpy11::infsites_Mutation(
                                 recbin, mutations, pop.mut_lookup,
@@ -202,7 +202,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         auto label = std::get<3>(i);
                         weights.push_back(std::get<2>(i));
                         auto mf = [&r, &pop, start, stop, label](
-                                      std::queue<std::size_t> &recbin,
+                                      fwdpp::flagged_mutation_queue &recbin,
                                       fwdpy11::MlocusPop::mcont_t &mutations) {
                             return fwdpy11::infsites_Mutation(
                                 recbin, mutations, pop.mut_lookup,
@@ -224,7 +224,7 @@ PYBIND11_MODULE(fwdpp_extensions, m)
                         weights.push_back(
                             std::get<2>(selected_mut_regions.at(i)));
                         auto mf = [&r, &pop, start, stop, label, sh](
-                                      std::queue<std::size_t> &recbin,
+                                      fwdpp::flagged_mutation_queue &recbin,
                                       fwdpy11::MlocusPop::mcont_t &mutations) {
                             return fwdpy11::infsites_Mutation(
                                 recbin, mutations, pop.mut_lookup,

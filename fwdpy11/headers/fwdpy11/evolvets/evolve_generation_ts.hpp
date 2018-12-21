@@ -48,8 +48,7 @@ namespace fwdpy11
         const std::tuple<std::int32_t, std::int32_t>& parent_nodes,
         const std::int32_t generation, const std::int32_t next_index,
         poptype& pop, std::size_t& offspring_gamete,
-        mrecbin& mutation_recycling_bin,
-        grecbin& gamete_recycling_bin)
+        mrecbin& mutation_recycling_bin, grecbin& gamete_recycling_bin)
     {
         auto breakpoints = recmodel();
         auto new_mutations = fwdpp::generate_new_mutations(
@@ -74,7 +73,7 @@ namespace fwdpy11
             gamete_recycling_bin, pop.neutral, pop.selected);
         //TODO: generalize this for offspring deme != 0
         pop.tables.add_offspring_data(next_index, breakpoints, new_mutations,
-                                  parent_nodes, 0, generation);
+                                      parent_nodes, 0, generation);
         return next_index + 1;
     }
 
@@ -89,15 +88,14 @@ namespace fwdpy11
                          const pick_parent2_fxn& pick2,
                          const offspring_metadata_fxn& update_offspring,
                          const mutation_model& mmodel,
-                         std::queue<std::size_t>& mutation_recycling_bin,
+                         fwdpp::flagged_mutation_queue& mutation_recycling_bin,
                          const breakpoint_function& recmodel,
                          const fwdpp::uint_t generation,
                          std::int32_t first_parental_index,
                          std::int32_t next_index)
     {
 
-        auto gamete_recycling_bin
-            = fwdpp::fwdpp_internal::make_gamete_queue(pop.gametes);
+        auto gamete_recycling_bin = fwdpp::make_gamete_queue(pop.gametes);
         for (auto& dip : pop.diploids)
             {
                 pop.gametes[dip.first].n = pop.gametes[dip.second].n = 0;
