@@ -181,7 +181,8 @@ wfSlocusPop_ts(
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
           };
-    fwdpp::flagged_mutation_queue mutation_recycling_bin = fwdpp::empty_mutation_queue();
+    fwdpp::flagged_mutation_queue mutation_recycling_bin
+        = fwdpp::empty_mutation_queue();
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
                            next_index = pop.tables.node_table.size();
     bool simplified = false;
@@ -267,6 +268,26 @@ wfSlocusPop_ts(
         }
     if (!simplified)
         {
+            // NOTE: if tables.preserved_nodes overlaps with samples,
+            // then simplification throws an error. But, since it is annoying
+            // for a user to have to remember not to do that, we filter the list
+            // here
+            if (std::any_of(pop.tables.preserved_nodes.rbegin(),
+                            pop.tables.preserved_nodes.rend(),
+                            [&pop](const fwdpp::ts::TS_NODE_INT l) {
+                                return l >= pop.tables.num_nodes() - 2 * pop.N;
+                            }))
+                {
+                    auto itr = std::remove_if(
+                        begin(pop.tables.preserved_nodes),
+                        end(pop.tables.preserved_nodes),
+                        [&pop](const fwdpp::ts::TS_NODE_INT l) {
+                            return l >= pop.tables.num_nodes() - 2 * pop.N;
+                        });
+                    pop.tables.preserved_nodes.erase(
+                        itr, end(pop.tables.preserved_nodes));
+                }
+
             // TODO: update this to allow neutral mutations to be simulated
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,

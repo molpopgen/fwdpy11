@@ -2,6 +2,7 @@ import unittest
 import fwdpy11
 import fwdpy11.genetic_values
 import fwdpy11.ts
+import fwdpy11.tsrecorders
 import fwdpy11.model_params
 import fwdpy11.wright_fisher_ts
 import numpy as np
@@ -185,6 +186,39 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(c, v.genotypes.sum())
             i += 1
         self.assertEqual(i, len(self.pop.tables.mutations))
+
+
+class testSamplePreservation(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.N = 1000
+        self.demography = np.array([self.N]*100, dtype=np.uint32)
+        self.rho = 1.
+        self.theta = 100.
+        self.nreps = 500
+        self.mu = self.theta/(4*self.N)
+        self.r = self.rho/(4*self.N)
+        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
+        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
+                                                                 samplesize=10,
+                                                                 timepoints=[i for i in range(1, 101)])
+        fwdpy11.wright_fisher_ts.evolve(
+            self.rng, self.pop, self.params, 100, self.recorder)
+
+    def test_Simulation(self):
+        self.assertEqual(self.pop.generation, 100)
 
 
 if __name__ == "__main__":
