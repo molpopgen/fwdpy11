@@ -272,8 +272,8 @@ wfSlocusPop_ts(
             // then simplification throws an error. But, since it is annoying
             // for a user to have to remember not to do that, we filter the list
             // here
-            if (std::any_of(rbegin(pop.tables.preserved_nodes),
-                            rend(pop.tables.preserved_nodes),
+            if (std::any_of(pop.tables.preserved_nodes.rbegin(),
+                            pop.tables.preserved_nodes.rend(),
                             [&pop](const fwdpp::ts::TS_NODE_INT l) {
                                 return l >= pop.tables.num_nodes() - 2 * pop.N;
                             }))
