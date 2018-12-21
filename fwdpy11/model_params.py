@@ -62,7 +62,7 @@ class ModelParams(object):
     """
 
     def __init__(self, **kwargs):
-        self.__nregions = None
+        self.__nregions = []
         self.__sregions = None
         self.__recregions = None
         self.__interlocus_rec = None
