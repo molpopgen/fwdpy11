@@ -20,6 +20,7 @@
 #ifndef FWDPY11_POLICIES_HPP__
 #define FWDPY11_POLICIES_HPP__
 
+#include <cstdint>
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/types/Mutation.hpp>
 #include <fwdpp/simfunctions/recycling.hpp>
