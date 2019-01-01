@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/simfunctions/recycling.hpp>
 #include <fwdpp/types/Mutation.hpp>
@@ -40,8 +41,11 @@ namespace fwdpy11
         }
 
         virtual std::unique_ptr<Sregion> clone() = 0;
-        virtual std::uint32_t operator()(fwdpp::flagged_mutation_queue &,
-                                         std::vector<Mutation> &)
+        virtual std::uint32_t operator()(
+            fwdpp::flagged_mutation_queue& /*recycling_bin*/,
+            std::vector<Mutation>& /*mutations*/,
+            std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
+            const std::uint32_t /*generation*/)
             = 0;
     };
 } // namespace fwdpy11
