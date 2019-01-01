@@ -12,6 +12,8 @@ init_Sregion(py::module& m)
         .def_property_readonly(
             "end", [](const fwdpy11::Sregion& s) { return s.end(); })
         .def_property_readonly(
-            "weight", [](const fwdpy11::Sregion& s) { return s.weight(); });
+            "weight", [](const fwdpy11::Sregion& s) { return s.weight(); })
+        .def_readonly("scaling", &fwdpy11::Sregion::scaling)
+        .def_readonly("label", &fwdpy11::Sregion::label);
 }
 

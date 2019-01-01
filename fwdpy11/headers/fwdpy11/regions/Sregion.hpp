@@ -7,6 +7,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/simfunctions/recycling.hpp>
 #include <fwdpy11/types/Mutation.hpp>
+#include <fwdpy11/rng.hpp>
 #include "Region.hpp"
 
 namespace fwdpy11
@@ -45,7 +46,8 @@ namespace fwdpy11
             fwdpp::flagged_mutation_queue& /*recycling_bin*/,
             std::vector<Mutation>& /*mutations*/,
             std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
-            const std::uint32_t /*generation*/) const = 0;
+            const std::uint32_t /*generation*/,
+            const GSLrng_t& /*rng*/) const = 0;
     };
 } // namespace fwdpy11
 
