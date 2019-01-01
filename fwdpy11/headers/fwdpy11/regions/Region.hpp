@@ -1,8 +1,10 @@
 #ifndef FWDPY11_REGION_HPP
 #define FWDPY11_REGION_HPP
 
+#include <gsl/gsl_randist.h>
 #include <cmath>
 #include <stdexcept>
+#include <fwdpy11/rng.hpp>
 
 namespace fwdpy11
 {
@@ -35,6 +37,12 @@ namespace fwdpy11
                     throw std::invalid_argument(
                         "end must be greater than beg");
                 }
+        }
+
+        inline double
+        operator()(const GSLrng_t& rng) const
+        {
+            return gsl_ran_flat(rng.get(), beg, end);
         }
     };
 } // namespace fwdpy11
