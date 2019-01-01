@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/simfunctions/recycling.hpp>
-#include <fwdpp/types/Mutation.hpp>
+#include <fwdpy11/types/Mutation.hpp>
 #include "Region.hpp"
 
 namespace fwdpy11
