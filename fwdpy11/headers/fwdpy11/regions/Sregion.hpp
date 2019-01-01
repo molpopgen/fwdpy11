@@ -2,6 +2,10 @@
 #define FWDPY11_SREGION_HPP
 
 #include <memory>
+#include <vector>
+#include <fwdpp/forward_types.hpp>
+#include <fwdpp/simfunctions/recycling.hpp>
+#include <fwdpp/types/Mutation.hpp>
 #include "Region.hpp"
 
 namespace fwdpy11
@@ -36,6 +40,9 @@ namespace fwdpy11
         }
 
         virtual std::unique_ptr<Sregion> clone() = 0;
+        virtual std::uint32_t operator()(fwdpp::flagged_mutation_queue &,
+                                         std::vector<Mutation> &)
+            = 0;
     };
 } // namespace fwdpy11
 
