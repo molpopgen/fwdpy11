@@ -5,7 +5,8 @@ include_directories(BEFORE ${GSL_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
-set(REGION_SOURCES src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc)
+set(REGION_SOURCES src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
+    src/regions/ExpS.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
