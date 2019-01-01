@@ -8,8 +8,8 @@ namespace fwdpy11
 {
     struct Region
     {
-        const double beg, end, weight;
-        const bool coupled;
+        double beg, end, weight;
+        bool coupled;
         Region(double b, double e, double w, bool c)
             : beg(b), end(e), weight((c == true) ? (end - beg) * w : w),
               coupled(c)
