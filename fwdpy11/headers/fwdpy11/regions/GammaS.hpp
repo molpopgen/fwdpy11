@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
 
 namespace fwdpy11
@@ -38,7 +39,13 @@ namespace fwdpy11
             std::unordered_multimap<double, std::uint32_t>& lookup_table,
             const std::uint32_t generation, const GSLrng_t& rng) const
         {
-            return 0;
+            return infsites_Mutation(
+                recycling_bin, mutations, lookup_table, generation,
+                [this, &rng]() { return region(rng); },
+                [this, &rng]() {
+                    return gsl_ran_gamma(rng.get(), shape, mean / shape);
+                },
+                [this]() { return dominance; }, this->label);
         }
     };
 } // namespace fwdpy11
