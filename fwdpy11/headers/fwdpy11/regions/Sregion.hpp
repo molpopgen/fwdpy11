@@ -40,13 +40,12 @@ namespace fwdpy11
             return region.weight;
         }
 
-        virtual std::unique_ptr<Sregion> clone() = 0;
+        virtual std::unique_ptr<Sregion> clone() const = 0;
         virtual std::uint32_t operator()(
             fwdpp::flagged_mutation_queue& /*recycling_bin*/,
             std::vector<Mutation>& /*mutations*/,
             std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
-            const std::uint32_t /*generation*/)
-            = 0;
+            const std::uint32_t /*generation*/) const = 0;
     };
 } // namespace fwdpy11
 
