@@ -3,6 +3,7 @@
 
 #include <limits>
 #include <vector>
+#include <algorithm>
 #include <fwdpp/internal/gsl_discrete.hpp>
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/rng.hpp>
@@ -42,6 +43,7 @@ namespace fwdpy11
                     std::size_t x = gsl_ran_discrete(rng.get(), lookup.get());
                     rv.push_back(regions[x](rng));
                 }
+            std::sort(begin(rv), end(rv));
             rv.push_back(std::numeric_limits<double>::max());
             return rv;
         }
