@@ -10,8 +10,10 @@ void init_ExpS(py::module &);
 void init_UniformS(py::module &);
 void init_GaussianS(py::module &);
 void init_MutationRegions(py::module &);
+void init_RecombinationRegions(py::module &);
 
-void initialize_regions(py::module & m)
+void
+initialize_regions(py::module &m)
 {
     init_Region(m);
     init_Sregion(m);
@@ -21,4 +23,5 @@ void initialize_regions(py::module & m)
     init_UniformS(m);
     init_GaussianS(m);
     init_MutationRegions(m);
+    init_RecombinationRegions(m);
 }

@@ -12,8 +12,20 @@ class testMutationRegions(unittest.TestCase):
             0, 1, 1, -0.1, 0.25), fwdpy11.ExpS(0, 1, 0.001, 0.01, 1.0)]
 
     def test_create(self):
-        mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)
-        mr
+        mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions) # NOQA
+
+
+class testRecombinationRegions(unittest.TestCase):
+    def test_create(self):
+        rr = fwdpy11.RecombinationRegions(
+            [fwdpy11.Region(0, 1, 1), fwdpy11.Region(1, 2, 1)])
+        self.assertEqual(len(rr.weights), 2)
+
+    def test_bad_input(self):
+        with self.assertRaises(TypeError):
+            rr = fwdpy11.RecombinationRegions(
+                [fwdpy11.ExpS(0, 1, 1, -0.2), fwdpy11.GaussianS(1, 2, 1, 0.25)])
+
 
 # class test_Region_repr(unittest.TestCase):
 #     @classmethod
