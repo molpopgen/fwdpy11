@@ -10,9 +10,8 @@ void init_ExpS(py::module &);
 void init_UniformS(py::module &);
 void init_GaussianS(py::module &);
 
-PYBIND11_MODULE(_fwdpy11, m)
+void initialize_regions(py::module & m)
 {
-    //Regions
     init_Region(m);
     init_Sregion(m);
     init_GammaS(m);
@@ -20,4 +19,9 @@ PYBIND11_MODULE(_fwdpy11, m)
     init_ExpS(m);
     init_UniformS(m);
     init_GaussianS(m);
+}
+
+PYBIND11_MODULE(_fwdpy11, m)
+{
+    initialize_regions(m);
 }
