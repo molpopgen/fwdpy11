@@ -64,7 +64,7 @@ namespace fwdpy11
         // TODO: rename this variable--I think it is confusing
         std::vector<MutationRegions> regions;
         MlocusMutationRegions() : regions() {}
-        void
+        inline void
         append(MutationRegions& m)
         {
             regions.emplace_back(std::move(m));
