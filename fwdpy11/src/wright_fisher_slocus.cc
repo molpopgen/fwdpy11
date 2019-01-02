@@ -28,7 +28,6 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
@@ -36,6 +35,8 @@
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolve/SlocusPop_generation.hpp>
+#include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/regions/MutationRegions.hpp>
 
 namespace py = pybind11;
 
@@ -103,16 +104,14 @@ handle_fixations(const bool remove_selected_fixations,
 }
 
 void
-wfSlocusPop(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
-    const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
-        &mmodel,
-    const fwdpp::extensions::discrete_rec_model &rmodel,
-    fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPop_temporal_sampler recorder, const double selfing_rate,
-    const bool remove_selected_fixations)
+wfSlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+            py::array_t<std::uint32_t> popsizes, const double mu_neutral,
+            const double mu_selected, const double recrate,
+            const fwdpy11::MutationRegions &mmodel,
+            const fwdpy11::RecombinationRegions &rmodel,
+            fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+            fwdpy11::SlocusPop_temporal_sampler recorder,
+            const double selfing_rate, const bool remove_selected_fixations)
 {
     //validate the input params
     if (!std::isfinite(mu_neutral))
@@ -143,12 +142,18 @@ wfSlocusPop(
 
     // E[S_{2N}] I got the expression from Ewens.
     pop.mutations.reserve(std::ceil(
-        std::log(2 * pop.N)
-        * (4. * double(pop.N) * (mu_neutral + mu_selected))
-           + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected))));
+        std::log(2 * pop.N) * (4. * double(pop.N) * (mu_neutral + mu_selected))
+        + 0.667 * (4. * double(pop.N) * (mu_neutral + mu_selected))));
 
-    const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
-    const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
+    const auto bound_mmodel
+        = [&rng, &mmodel, &pop](fwdpp::flagged_mutation_queue &recycling_bin,
+                                std::vector<fwdpy11::Mutation> &mutations) {
+              std::size_t x = gsl_ran_discrete(rng.get(), mmodel.lookup.get());
+              return mmodel.regions[x]->operator()(recycling_bin, mutations,
+                                                   pop.mut_lookup,
+                                                   pop.generation, rng);
+          };
+    const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,
