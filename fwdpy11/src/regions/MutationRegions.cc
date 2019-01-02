@@ -11,6 +11,7 @@ void
 init_MutationRegions(py::module& m)
 {
     py::class_<fwdpy11::MutationRegions>(m, "MutationRegions")
+        .def_readonly("weights",&fwdpy11::MutationRegions::weights)
         .def_static(
             "create",
             [](double pneutral, const std::vector<fwdpy11::Region>& neutral,
