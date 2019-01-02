@@ -7,6 +7,8 @@ version, etc.
 Current development branch
 ++++++++++++++++++++++++++
 
+* The types :class:`fwdpy11.Region` and :class:`fwdpy11.Sregion` have be re-implemented as C++-based classes, replacing 
+  the previous pure Python classes.  `PR 163 <https://github.com/molpopgen/fwdpy11/pull/163>`_
 * :attr:`fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations
   with tree sequences. `commit <https://github.com/molpopgen/fwdpy11/commit/b557c4162cbfdfba6c9126ebec14c7f3f43884eb>`_. 
 * When simulating with tree sequences, it is no longer an error to attempt to record ancient samples from the last

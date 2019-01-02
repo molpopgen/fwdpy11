@@ -43,6 +43,10 @@ init_Sregion(py::module& m)
 
         .. versionchanged:: 0.13.a2
             Added "scaling" attribute.
+
+        .. versionchanged:: 0.3.0
+            Refactored from a pure Python class to a C++/pybind11 class
+
         )delim")
         .def_property_readonly(
             "b", [](const fwdpy11::Sregion& s) { return s.beg(); },

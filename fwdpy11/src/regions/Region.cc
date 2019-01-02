@@ -27,6 +27,10 @@ init_Region(py::module& m)
         as a "per base pair"
         (or per unit, generally speaking) term.
 
+        .. versionchanged:: 0.3.0
+
+            Refactored from a pure Python class to a C++/pybind11 class
+
         Example:
 
         .. testcode::
