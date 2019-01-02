@@ -1,7 +1,98 @@
 # Unit tests for fwdpy11.regions
 
 import fwdpy11
+import numpy as np
 import unittest
+
+
+class testRegion(unittest.TestCase):
+    """
+    These tests all apply to Sregions b/c an
+    Sregion contains a Region
+    """
+    def testBadBoundaries(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(np.nan, 1, 1.0)
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(0, np.nan, 1.0)
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(0, 0, 1.0)
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(0, -1, 1.0)
+
+    def testBadWeight(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(0, 1, np.nan)
+        with self.assertRaises(ValueError):
+            fwdpy11.Region(0, 1, -1e-3)
+
+
+class testExpS(unittest.TestCase):
+    # NOTE: this tests applies to all Sregions
+    # b/c the scaling param is part of the base class
+    def testBadScaling(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.ExpS(0, 1, 1.0, -0.1, scaling=np.nan)
+
+    def testBadMean(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.ExpS(0, 1, 1, np.nan)
+
+    def testBadDominance(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.ExpS(0, 1, 1, -1.0, h=np.nan)
+
+
+class testGammaS(unittest.TestCase):
+    def testBadMean(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.GammaS(0, 1, 1, mean=np.nan, shape=1.0)
+
+    def testBadShape(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.GammaS(0, 1, 1, mean=1., shape=np.nan)
+
+    def testBadDominance(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.GammaS(0, 1, 1, mean=1., shape=1., h=np.nan)
+
+
+class testUniformS(unittest.TestCase):
+    def testBadRange(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.UniformS(0, 1, 1, 0, 0)
+        with self.assertRaises(ValueError):
+            fwdpy11.UniformS(0, 1, 1, np.nan, 1)
+        with self.assertRaises(ValueError):
+            fwdpy11.UniformS(0, 1, 1, 1, np.nan)
+
+    def testBadDominance(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.UniformS(0, 1, 1, lo=1., hi=1., h=np.nan)
+
+
+class testGaussianS(unittest.TestCase):
+    def testBadStdDev(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.GaussianS(0, 1, 1, np.nan)
+        with self.assertRaises(ValueError):
+            fwdpy11.GaussianS(0, 1, 1, 0)
+        with self.assertRaises(ValueError):
+            fwdpy11.GaussianS(0, 1, 1, -1e-3)
+
+    def testBadDominance(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.GaussianS(0, 1, 1, 1e-3, h=np.nan)
+
+
+class testConstantS(unittest.TestCase):
+    def testBadValue(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.ConstantS(0, 1, 1, np.nan)
+
+    def testBadDominance(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.ConstantS(0, 1, 1, 1, np.nan)
 
 
 class testMutationRegions(unittest.TestCase):
@@ -41,7 +132,7 @@ class testRecombinationRegions(unittest.TestCase):
     def test_bad_input(self):
         with self.assertRaises(TypeError):
             rr = fwdpy11.RecombinationRegions(1e-3,
-                [fwdpy11.ExpS(0, 1, 1, -0.2), fwdpy11.GaussianS(1, 2, 1, 0.25)])
+                                              [fwdpy11.ExpS(0, 1, 1, -0.2), fwdpy11.GaussianS(1, 2, 1, 0.25)])
 
 
 # class test_Region_repr(unittest.TestCase):

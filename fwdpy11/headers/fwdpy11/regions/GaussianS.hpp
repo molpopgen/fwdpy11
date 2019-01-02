@@ -20,6 +20,10 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("sd must be finite");
                 }
+            if (!(sd > 0))
+                {
+                    throw std::invalid_argument("sd must be > 0");
+                }
             if (!std::isfinite(dominance))
                 {
                     throw std::invalid_argument("dominance must be finite");

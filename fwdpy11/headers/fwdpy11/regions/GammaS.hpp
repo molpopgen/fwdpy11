@@ -24,6 +24,10 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("shape must be finite");
                 }
+            if (!std::isfinite(dominance))
+                {
+                    throw std::invalid_argument("dominance must be finite");
+                }
         }
 
         std::unique_ptr<Sregion>

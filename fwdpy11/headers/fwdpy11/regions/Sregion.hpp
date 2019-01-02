@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <cmath>
 #include <unordered_map>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/simfunctions/recycling.hpp>
@@ -18,8 +19,12 @@ namespace fwdpy11
         double scaling;
         Sregion(double b, double e, double w, bool c, std::uint16_t l,
                 double s)
-            : region(b, e, w, c, l),  scaling(s)
+            : region(b, e, w, c, l), scaling(s)
         {
+            if (!std::isfinite(scaling))
+                {
+                    throw std::invalid_argument("scaling must be finite");
+                }
         }
 
         inline double

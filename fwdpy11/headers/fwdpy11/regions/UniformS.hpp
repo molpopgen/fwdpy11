@@ -28,6 +28,10 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
+            if (!(hi > lo))
+                {
+                    throw std::invalid_argument("hi must be > lo");
+                }
         }
 
         std::unique_ptr<Sregion>
