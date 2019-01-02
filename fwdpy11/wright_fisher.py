@@ -45,13 +45,13 @@ def evolve(rng, pop, params, recorder=None):
         # Will throw exception if anything is wrong:
         params.validate()
 
-    from .internal import makeMutationRegions, makeRecombinationRegions
+    from fwdpy11 import MutationRegions
+    from fwdpy11 import RecombinationRegions
     if pop.__class__ is fwdpy11.SlocusPop:
         from .wright_fisher_slocus import WFSlocusPop
         pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
-        mm = makeMutationRegions(rng, pop, params.nregions,
-                                 params.sregions, pneutral)
-        rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
+        mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
+        rm = RecombinationRegions(params.recrate, params.recregions)
 
         if recorder is None:
             from fwdpy11.temporal_samplers import RecordNothing
@@ -63,13 +63,19 @@ def evolve(rng, pop, params, recorder=None):
                     recorder, params.pself, params.prune_selected)
     else:
         from .wright_fisher_mlocus import WFMlocusPop
-        mm = [makeMutationRegions(rng, pop, i, j, n/(n+s)) for
-              i, j, n, s in zip(params.nregions,
-                                params.sregions,
-                                params.mutrates_n, params.mutrates_s)]
-        rm = [makeRecombinationRegions(rng, i, j) for i, j in zip(
-            params.recrates, params.recregions)]
-
+        from fwdpy11 import MlocusMutationRegions
+        from fwdpy11 import MlocusRecombinationRegions
+        mm = MlocusMutationRegions()
+        for n, s, i, j in zip(params.mutrate_n,
+                              params.mutrate_s,
+                              params.nregions,
+                              params.sregions):
+            pn = n/(n+s)
+            temp = MutationRegions.create(pn, i, j)
+            mm.append(temp)
+        rm = MlocusRecombinationRegions()
+        for i, j in zip(params.recrates, params.recregions):
+            rm.append(RecombinationRegions(i, j))
         if recorder is None:
             from fwdpy11.temporal_samplers import RecordNothing
             recorder = RecordNothing()

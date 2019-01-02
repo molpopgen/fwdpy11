@@ -45,7 +45,19 @@ namespace fwdpy11
             rv.push_back(std::numeric_limits<double>::max());
             return rv;
         }
-    }; 
+    };
+
+    struct MlocusRecombinationRegions
+    {
+        //TODO: rename
+        std::vector<RecombinationRegions> regions;
+        MlocusRecombinationRegions() : regions() {}
+        inline void
+        append(RecombinationRegions& r)
+        {
+            regions.emplace_back(std::move(r));
+        }
+    };
 } // namespace fwdpy11
 
 #endif

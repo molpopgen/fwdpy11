@@ -10,4 +10,9 @@ init_RecombinationRegions(py::module& m)
     py::class_<fwdpy11::RecombinationRegions>(m, "RecombinationRegions")
         .def(py::init<double, std::vector<fwdpy11::Region>>())
         .def_readonly("weights", &fwdpy11::RecombinationRegions::weights);
+
+    py::class_<fwdpy11::MlocusRecombinationRegions>(
+        m, "MlocusRecombinationRegions")
+        .def(py::init<>())
+        .def("append", &fwdpy11::MlocusRecombinationRegions::append);
 }
