@@ -8,6 +8,6 @@ void
 init_RecombinationRegions(py::module& m)
 {
     py::class_<fwdpy11::RecombinationRegions>(m, "RecombinationRegions")
-        .def(py::init<std::vector<fwdpy11::Region>>())
+        .def(py::init<double, std::vector<fwdpy11::Region>>())
         .def_readonly("weights", &fwdpy11::RecombinationRegions::weights);
 }
