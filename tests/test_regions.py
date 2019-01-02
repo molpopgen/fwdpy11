@@ -12,7 +12,23 @@ class testMutationRegions(unittest.TestCase):
             0, 1, 1, -0.1, 0.25), fwdpy11.ExpS(0, 1, 0.001, 0.01, 1.0)]
 
     def test_create(self):
-        mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions) # NOQA
+        mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
+
+
+class testMlocusMutationRegions(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.nregions = [fwdpy11.Region(0, 1, 1)]
+        self.sregions = [fwdpy11.ConstantS(
+            0, 1, 1, -0.1, 0.25), fwdpy11.ExpS(0, 1, 0.001, 0.01, 1.0)]
+
+    def test_create(self):
+        mr = [fwdpy11.MutationRegions.create(
+            0.5, self.nregions, self.sregions)] * 5
+        mmr = fwdpy11.MlocusMutationRegions()
+        for i in mr:
+            mmr.append(i)
+        self.assertEqual(len(mmr), 5)
 
 
 class testRecombinationRegions(unittest.TestCase):
