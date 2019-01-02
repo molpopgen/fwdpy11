@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <numeric>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/ConstantS.hpp>
 
