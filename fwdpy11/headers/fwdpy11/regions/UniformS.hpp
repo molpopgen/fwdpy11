@@ -46,7 +46,9 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, generation,
                 [this, &rng]() { return region(rng); },
-                [this, &rng]() { return gsl_ran_flat(rng.get(), lo, hi); },
+                [this, &rng]() {
+                    return gsl_ran_flat(rng.get(), lo, hi) / scaling;
+                },
                 [this]() { return dominance; }, this->label());
         }
     };

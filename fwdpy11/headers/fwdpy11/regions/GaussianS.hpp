@@ -43,7 +43,7 @@ namespace fwdpy11
                 recycling_bin, mutations, lookup_table, generation,
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() {
-                    return gsl_ran_gaussian_ziggurat(rng.get(), sd);
+                    return gsl_ran_gaussian_ziggurat(rng.get(), sd) / scaling;
                 },
                 [this]() { return dominance; }, this->label());
         }

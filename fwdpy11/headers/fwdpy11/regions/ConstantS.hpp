@@ -42,7 +42,7 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return esize; },
+                [this]() { return esize/scaling; },
                 [this]() { return dominance; },
                 this->label());
         }
