@@ -29,7 +29,6 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
@@ -39,6 +38,8 @@
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
+#include <fwdpy11/regions/MutationRegions.hpp>
+#include <fwdpy11/regions/RecombinationRegions.hpp>
 
 namespace py = pybind11;
 
@@ -110,9 +111,8 @@ wfSlocusPop_ts(
     fwdpy11::samplerecorder &sr, const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
     const double mu_selected, const double recrate,
-    const fwdpp::extensions::discrete_mut_model<fwdpy11::SlocusPop::mcont_t>
-        &mmodel,
-    const fwdpp::extensions::discrete_rec_model &rmodel,
+    const fwdpy11::MutationRegions &mmodel,
+    const fwdpy11::RecombinationRegions &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
@@ -145,8 +145,16 @@ wfSlocusPop_ts(
         {
             throw std::invalid_argument("node table is not initialized");
         }
-    const auto bound_mmodel = fwdpp::extensions::bind_dmm(rng.get(), mmodel);
-    const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng.get()); };
+
+    const auto bound_mmodel
+        = [&rng, &mmodel, &pop](fwdpp::flagged_mutation_queue &recycling_bin,
+                                std::vector<fwdpy11::Mutation> &mutations) {
+              std::size_t x = gsl_ran_discrete(rng.get(), mmodel.lookup.get());
+              return mmodel.regions[x]->operator()(recycling_bin, mutations,
+                                                   pop.mut_lookup,
+                                                   pop.generation, rng);
+          };
+    const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,

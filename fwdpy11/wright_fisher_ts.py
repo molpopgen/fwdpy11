@@ -56,13 +56,13 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         # Will throw exception if anything is wrong:
         params.validate()
 
-    from .internal import makeMutationRegions, makeRecombinationRegions
+    from fwdpy11 import MutationRegions
+    from fwdpy11 import RecombinationRegions
     from .wright_fisher_slocus_ts import WFSlocusPop_ts
     # TODO: update to allow neutral mutations
     pneutral = 0
-    mm = makeMutationRegions(rng, pop, params.nregions,
-                             params.sregions, pneutral)
-    rm = makeRecombinationRegions(rng, params.recrate, params.recregions)
+    mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
+    rm = RecombinationRegions(params.recrate, params.recregions)
 
     if recorder is None:
         from fwdpy11.tsrecorders import NoAncientSamples
