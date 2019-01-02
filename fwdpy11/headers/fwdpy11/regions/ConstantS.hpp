@@ -44,7 +44,7 @@ namespace fwdpy11
                 [this, &rng]() { return region(rng); },
                 [this]() { return esize; },
                 [this]() { return dominance; },
-                this->label);
+                this->label());
         }
     };
 } // namespace fwdpy11

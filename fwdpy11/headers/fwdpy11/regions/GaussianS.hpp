@@ -45,7 +45,7 @@ namespace fwdpy11
                 [this, &rng]() {
                     return gsl_ran_gaussian_ziggurat(rng.get(), sd);
                 },
-                [this]() { return dominance; }, this->label);
+                [this]() { return dominance; }, this->label());
         }
     };
 } // namespace fwdpy11

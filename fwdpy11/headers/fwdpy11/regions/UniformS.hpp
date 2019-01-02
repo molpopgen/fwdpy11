@@ -47,7 +47,7 @@ namespace fwdpy11
                 recycling_bin, mutations, lookup_table, generation,
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() { return gsl_ran_flat(rng.get(), lo, hi); },
-                [this]() { return dominance; }, this->label);
+                [this]() { return dominance; }, this->label());
         }
     };
 } // namespace fwdpy11

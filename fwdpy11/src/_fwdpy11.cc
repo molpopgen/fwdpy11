@@ -9,6 +9,7 @@ void init_ConstantS(py::module &);
 void init_ExpS(py::module &);
 void init_UniformS(py::module &);
 void init_GaussianS(py::module &);
+void init_MutationRegions(py::module &);
 
 void initialize_regions(py::module & m)
 {
@@ -19,6 +20,7 @@ void initialize_regions(py::module & m)
     init_ExpS(m);
     init_UniformS(m);
     init_GaussianS(m);
+    init_MutationRegions(m);
 }
 
 PYBIND11_MODULE(_fwdpy11, m)

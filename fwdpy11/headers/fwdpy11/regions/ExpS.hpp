@@ -45,7 +45,7 @@ namespace fwdpy11
                 [this, &rng]() {
                     return gsl_ran_exponential(rng.get(), mean);
                 },
-                [this]() { return dominance; }, this->label);
+                [this]() { return dominance; }, this->label());
         }
     };
 } // namespace fwdpy11

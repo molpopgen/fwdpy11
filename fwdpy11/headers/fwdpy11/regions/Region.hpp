@@ -4,6 +4,7 @@
 #include <gsl/gsl_randist.h>
 #include <cmath>
 #include <stdexcept>
+#include <cstdint>
 #include <fwdpy11/rng.hpp>
 
 namespace fwdpy11
@@ -11,10 +12,11 @@ namespace fwdpy11
     struct Region
     {
         double beg, end, weight;
+        std::uint16_t label;
         bool coupled;
-        Region(double b, double e, double w, bool c)
+        Region(double b, double e, double w, bool c, std::uint16_t l)
             : beg(b), end(e), weight((c == true) ? (end - beg) * w : w),
-              coupled(c)
+              label(l), coupled(c)
         {
             if (!std::isfinite(beg))
                 {
