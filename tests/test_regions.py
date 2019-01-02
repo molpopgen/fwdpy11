@@ -17,8 +17,9 @@ class testMutationRegions(unittest.TestCase):
 
 class testRecombinationRegions(unittest.TestCase):
     def test_create(self):
-        rr = fwdpy11.RecombinationRegions(
-            [fwdpy11.Region(0, 1, 1), fwdpy11.Region(1, 2, 1)])
+        rr = fwdpy11.RecombinationRegions(1e-3,
+                                          [fwdpy11.Region(0, 1, 1),
+                                              fwdpy11.Region(1, 2, 1)])
         self.assertEqual(len(rr.weights), 2)
 
     def test_bad_input(self):
