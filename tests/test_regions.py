@@ -40,7 +40,7 @@ class testRecombinationRegions(unittest.TestCase):
 
     def test_bad_input(self):
         with self.assertRaises(TypeError):
-            rr = fwdpy11.RecombinationRegions(
+            rr = fwdpy11.RecombinationRegions(1e-3,
                 [fwdpy11.ExpS(0, 1, 1, -0.2), fwdpy11.GaussianS(1, 2, 1, 0.25)])
 
 
