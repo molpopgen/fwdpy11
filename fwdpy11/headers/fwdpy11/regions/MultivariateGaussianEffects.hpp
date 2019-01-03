@@ -29,6 +29,8 @@ namespace fwdpy11
                                     bool coupled,
                                     const gsl_matrix &input_matrix, double s,
                                     double h, std::uint16_t label,
+                                    // NOTE: matrix_is_covariance is
+                                    // NOT exposed to Python
                                     bool matrix_is_covariance)
             : Sregion(beg, end, weight, coupled, label, 1.0),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
@@ -41,6 +43,10 @@ namespace fwdpy11
         // Cholesky decomposition.  If matrix_is_covariance is false,
         // then input_matrix is assumed to be a valid Cholesky decomposition.
         {
+            if (!std::isfinite(fixed_effect))
+                {
+                    throw std::invalid_argument("fixed_effect must be finite");
+                }
             if (!std::isfinite(dominance))
                 {
                     throw std::invalid_argument("dominance must be finite");
