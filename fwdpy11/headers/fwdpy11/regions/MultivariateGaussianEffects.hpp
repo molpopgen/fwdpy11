@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <functional>
 #include <memory>
+#include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
 
 namespace fwdpy11
@@ -19,10 +20,13 @@ namespace fwdpy11
             = std::unique_ptr<gsl_matrix, std::function<void(gsl_matrix *)>>;
         using vector_ptr
             = std::unique_ptr<gsl_vector, std::function<void(gsl_vector *)>>;
+        std::vector<double> effect_sizes, dominance_values;
         // Stores the Cholesky decomposition
         matrix_ptr matrix;
         // Stores the results of gsl_ran_multivariate_gaussian
-        vector_ptr res;
+        mutable gsl_vector_view res;
+        // Stores the means of the mvn distribution, which are all zero
+        vector_ptr mu;
         double fixed_effect, dominance;
 
         MultivariateGaussianEffects(double beg, double end, double weight,
@@ -33,10 +37,16 @@ namespace fwdpy11
                                     // NOT exposed to Python
                                     bool matrix_is_covariance)
             : Sregion(beg, end, weight, coupled, label, 1.0),
+              effect_sizes(input_matrix.size1),
+              dominance_values(input_matrix.size1, h),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
-              res(gsl_vector_alloc(input_matrix.size1),
-                  [](gsl_vector *v) { gsl_vector_free(v); }),
+              // Holds the results of calls to mvn, and maps the 
+              // output to effect_sizes
+              res(gsl_vector_view_array(effect_sizes.data(),effect_sizes.size())),
+              // NOTE: use of calloc to initialize mu to all zeros
+              mu(gsl_vector_calloc(input_matrix.size1),
+                 [](gsl_vector *v) { gsl_vector_free(v); }),
               fixed_effect(s), dominance(h)
         // If matrix_is_covariance is true, then the input_matrix is treated
         // as a covariance matrix, meaning that we copy it and store its
@@ -99,7 +109,21 @@ namespace fwdpy11
             std::unordered_multimap<double, std::uint32_t> &lookup_table,
             const std::uint32_t generation, const GSLrng_t &rng) const
         {
-            return 0;
+            int rv = gsl_ran_multivariate_gaussian(rng.get(), mu.get(),
+                                                   matrix.get(), &res.vector);
+            if (rv != GSL_SUCCESS)
+                {
+                    throw std::runtime_error(
+                        "call to gsl_ran_multivariate_gaussian failed");
+                }
+            return infsites_Mutation(
+                recycling_bin, mutations, lookup_table, generation,
+                [this, &rng]() { return region(rng); },
+                [this]() { return fixed_effect; },
+                [this]() { return dominance; },
+                [this]() { return effect_sizes; },
+                [this]() { return dominance_values; },
+                this->label());
         }
     };
 } // namespace fwdpy11
