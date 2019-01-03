@@ -9,6 +9,8 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc)
 
+set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusPopMultivariateEffectsStrictAdditive.cc)
+
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
@@ -32,7 +34,7 @@ pybind11_add_module(_gslrng MODULE src/_gslrng.cc)
 target_link_libraries(_gslrng PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(sampling MODULE src/fwdpy11_sampling.cc)
 target_link_libraries(sampling PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(genetic_values MODULE src/genetic_values.cc)
+pybind11_add_module(genetic_values MODULE src/genetic_values.cc ${GENETIC_VALUE_SOURCES})
 target_link_libraries(genetic_values PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
 target_link_libraries(genetic_value_noise PRIVATE GSL::gsl GSL::gslcblas)

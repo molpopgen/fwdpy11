@@ -132,6 +132,8 @@ genetic value to fitness and random effects ("noise").
 :type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
 )delim";
 
+void init_genetic_values(py::module&);
+
 PYBIND11_MODULE(genetic_values, m)
 {
     auto imported_noise = static_cast<pybind11::object>(
@@ -690,4 +692,6 @@ PYBIND11_MODULE(genetic_values, m)
                 rv.current_optimum = co;
                 return rv;
             }));
+
+    init_genetic_values(m);
 }
