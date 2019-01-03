@@ -136,12 +136,12 @@ LIBRARY_DIRS = [
 ]
 
 ext_modules = [
+    CMakeExtension('fwdpy11._fwdpy11'),
     CMakeExtension('fwdpy11._init'),
     CMakeExtension('fwdpy11.fwdpp_types'),
     CMakeExtension('fwdpy11._opaque_gametes'),
     CMakeExtension('fwdpy11._opaque_mutations'),
     CMakeExtension('fwdpy11._opaque_diploids'),
-    CMakeExtension('fwdpy11.fwdpp_extensions'),
     CMakeExtension('fwdpy11._Population'),
     CMakeExtension('fwdpy11._Populations'),
     CMakeExtension('fwdpy11.fwdpy11_types'),

@@ -28,7 +28,6 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
-#include <fwdpp/extensions/regions.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/multilocus.hpp>
@@ -37,6 +36,8 @@
 #include <fwdpy11/genetic_values/MlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolve/MlocusPop_generation.hpp>
+#include <fwdpy11/regions/MutationRegions.hpp>
+#include <fwdpy11/regions/RecombinationRegions.hpp>
 
 namespace py = pybind11;
 
@@ -108,9 +109,8 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
             py::array_t<std::uint32_t> popsizes,
             const std::vector<double> &neutral_mutation_rates,
             const std::vector<double> &selected_mutation_rates,
-            const std::vector<fwdpp::extensions::discrete_mut_model<
-                fwdpy11::MlocusPop::mcont_t>> &mmodels,
-            const std::vector<fwdpp::extensions::discrete_rec_model> &rmodels,
+            const fwdpy11::MlocusMutationRegions &mmodels,
+            const fwdpy11::MlocusRecombinationRegions &rmodels,
             py::list interlocus_rec_list,
             fwdpy11::MlocusPopGeneticValue &genetic_value_fxn,
             fwdpy11::MlocusPop_temporal_sampler recorder,
@@ -163,12 +163,30 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
         std::ceil(std::log(2 * pop.N) * (4. * double(pop.N) * tot_mutrate)
                   + 0.667 * (4. * double(pop.N) * tot_mutrate)));
 
-    const auto bound_mmodel
-        = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
-    std::vector<std::function<std::vector<double>()>> bound_recmodels;
-    for (auto &rm : rmodels)
+    //const auto bound_mmodel
+    //    = fwdpp::extensions::bind_vec_dmm(rng.get(), mmodels);
+    std::vector<std::function<std::uint32_t(fwdpp::flagged_mutation_queue &,
+                                            std::vector<fwdpy11::Mutation> &)>>
+        bound_mmodel;
+    for (std::size_t i = 0; i < mmodels.regions.size(); ++i)
         {
-            bound_recmodels.push_back([&rng, rm]() { return rm(rng.get()); });
+            auto bound_mmodel_locus_i
+                = [i, &rng, &mmodels,
+                   &pop](fwdpp::flagged_mutation_queue &recycling_bin,
+                         std::vector<fwdpy11::Mutation> &mutations) {
+                      std::size_t x = gsl_ran_discrete(
+                          rng.get(), mmodels.regions[i].lookup.get());
+                      return mmodels.regions[i].regions[x]->operator()(
+                          recycling_bin, mutations, pop.mut_lookup,
+                          pop.generation, rng);
+                  };
+            bound_mmodel.emplace_back(std::move(bound_mmodel_locus_i));
+        }
+    std::vector<std::function<std::vector<double>()>> bound_recmodels;
+    for (std::size_t i = 0; i < rmodels.regions.size(); ++i)
+        {
+            auto m = [i, &rng, &rmodels]() { return rmodels.regions[i](rng); };
+            bound_recmodels.emplace_back(std::move(m));
         }
 
     std::vector<std::function<unsigned(void)>> interlocus_rec;

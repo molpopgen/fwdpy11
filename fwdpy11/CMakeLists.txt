@@ -5,7 +5,13 @@ include_directories(BEFORE ${GSL_INCLUDE_DIRS})
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
+set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
+    src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
+    src/regions/RecombinationRegions.cc)
+
 # These are the main modules
+pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
+target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_init MODULE src/_init.cc)
 target_link_libraries(_init PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(fwdpp_types MODULE src/fwdpp_types.cc)
@@ -16,8 +22,6 @@ pybind11_add_module(_opaque_mutations MODULE src/_opaque_mutations.cc)
 target_link_libraries(_opaque_mutations PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_opaque_diploids MODULE src/_opaque_diploids.cc)
 target_link_libraries(_opaque_diploids PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(fwdpp_extensions MODULE src/fwdpp_extensions.cc)
-target_link_libraries(fwdpp_extensions PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Population MODULE src/_Population.cc)
 # target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Populations MODULE src/_Populations.cc)
