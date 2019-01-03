@@ -136,6 +136,12 @@ class testMultivariateGaussianEffects(unittest.TestCase):
             fwdpy11.MultivariateGaussianEffects(
                 0, 1, 1, m)
 
+    def testMatrixWithNAN(self):
+        m=np.identity(4).reshape((4,4))
+        m[0,1]=np.nan
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(0,1,1,m)
+
 
 class testMlocusMutationRegions(unittest.TestCase):
     @classmethod

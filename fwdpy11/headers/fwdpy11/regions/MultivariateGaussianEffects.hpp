@@ -6,6 +6,8 @@
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_errno.h>
+#include <cmath>
+#include <algorithm>
 #include <stdexcept>
 #include <functional>
 #include <memory>
@@ -41,9 +43,10 @@ namespace fwdpy11
               dominance_values(input_matrix.size1, h),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
-              // Holds the results of calls to mvn, and maps the 
+              // Holds the results of calls to mvn, and maps the
               // output to effect_sizes
-              res(gsl_vector_view_array(effect_sizes.data(),effect_sizes.size())),
+              res(gsl_vector_view_array(effect_sizes.data(),
+                                        effect_sizes.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_calloc(input_matrix.size1),
                  [](gsl_vector *v) { gsl_vector_free(v); }),
@@ -64,6 +67,16 @@ namespace fwdpy11
             if (matrix->size1 != matrix->size2)
                 {
                     throw std::invalid_argument("input matrix must be square");
+                }
+            // If any values are non-finite, throw an exception
+            if (std::any_of(input_matrix.data,
+                            input_matrix.data
+                                + input_matrix.size1 * input_matrix.size2,
+                            [](double d) { return !std::isfinite(d); })
+                == true)
+                {
+                    throw std::invalid_argument(
+                        "input matrix contains non-finite values");
                 }
 
             // Assign the matrix and do the Cholesky decomposition
@@ -122,8 +135,7 @@ namespace fwdpy11
                 [this]() { return fixed_effect; },
                 [this]() { return dominance; },
                 [this]() { return effect_sizes; },
-                [this]() { return dominance_values; },
-                this->label());
+                [this]() { return dominance_values; }, this->label());
         }
     };
 } // namespace fwdpy11
