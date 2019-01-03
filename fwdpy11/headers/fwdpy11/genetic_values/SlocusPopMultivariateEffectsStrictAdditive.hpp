@@ -27,6 +27,17 @@ namespace fwdpy11
             : SlocusPopGeneticValueWithMapping(gv2w_, noise_),
               summed_effects(ndim, 0.0), focal_trait_index(focal_trait)
         {
+        }            
+
+        void
+        operator()(const GSLrng_t& rng, std::size_t diploid_index,
+                   const SlocusPop& pop, DiploidMetadata& metadata,
+                   std::size_t parent1_index, std::size_t parent2_index) const
+        {
+            //TODO: fill genetic value
+            metadata.e = noise_fxn->operator()(
+                rng, metadata, metadata.parents[0], metadata.parents[1], pop);
+            metadata.w = gv2w->operator()(metadata);
         }
 
         double
