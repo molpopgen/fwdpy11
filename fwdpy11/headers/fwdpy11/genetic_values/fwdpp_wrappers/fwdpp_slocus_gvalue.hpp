@@ -53,22 +53,20 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const std::size_t diploid_index,
-                   const fwdpy11::SlocusPop& pop) const
+        calculate_gvalue(const std::size_t diploid_index,
+                         const fwdpy11::SlocusPop& pop) const
         {
             return gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
         }
 
         void
         operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const SlocusPop& pop, DiploidMetadata& metadata,
-                   std::size_t parent1_index, std::size_t parent2_index) const
+                   const SlocusPop& pop, DiploidMetadata& metadata) const
         {
-            metadata.g
-                = gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
-            metadata.e = noise_fxn->operator()(
-                rng, metadata, metadata.parents[0], metadata.parents[1], pop);
-            metadata.w = gv2w->operator()(metadata);
+            metadata.g = calculate_gvalue(diploid_index, pop);
+            metadata.e = noise(rng, metadata, metadata.parents[0],
+                               metadata.parents[1], pop);
+            metadata.w = genetic_value_to_fitness(metadata);
         }
 
         inline void
