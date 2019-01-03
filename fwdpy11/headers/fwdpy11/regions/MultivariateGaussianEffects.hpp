@@ -62,6 +62,8 @@ namespace fwdpy11
             int rv = gsl_matrix_memcpy(matrix.get(), &input_matrix);
             if (rv != GSL_SUCCESS)
                 {
+                    // Reset error handler on the way out
+                    gsl_set_error_handler(error_handler);
                     throw std::runtime_error("failure copying input matrix");
                 }
             if (matrix_is_covariance)
@@ -69,6 +71,8 @@ namespace fwdpy11
                     rv = gsl_linalg_cholesky_decomp1(matrix.get());
                     if (rv == GSL_EDOM)
                         {
+                            // Reset error handler on the way out
+                            gsl_set_error_handler(error_handler);
                             throw std::invalid_argument(
                                 "Cholesky decomposition failed");
                         }
