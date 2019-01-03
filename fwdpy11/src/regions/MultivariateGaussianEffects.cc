@@ -57,7 +57,8 @@ init_MultivariateGaussianEffects(py::module& m)
              :type label: np.uint16
 
              The input matrix must be square and semi-positive definite.   If either
-             of these conditions are not met, TypeError will be raised.
+             of these conditions are not met, ValueError will be raised. ValueError
+             will also be raised if the input matrix contains any non-finite values.
             
              .. note::
 
