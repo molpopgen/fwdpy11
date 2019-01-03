@@ -63,7 +63,7 @@ namespace fwdpy11
                     rv = gsl_linalg_cholesky_decomp1(matrix.get());
                     if (rv == GSL_EDOM)
                         {
-                            throw std::runtime_error(
+                            throw std::invalid_argument(
                                 "Cholesky decomposition failed");
                         }
                 }
