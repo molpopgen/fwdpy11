@@ -7,13 +7,13 @@
 
 namespace fwdpy11
 {
-    struct SlocusPopMultivariateEffectsStrictAdditive
+    struct SlocusMultivariateEffectsStrictAdditive
         : public SlocusPopGeneticValueWithMapping
     {
         mutable std::vector<double> summed_effects;
         std::size_t focal_trait_index;
 
-        SlocusPopMultivariateEffectsStrictAdditive(
+        SlocusMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
             const GeneticValueIsTrait &gv2w_)
             : SlocusPopGeneticValueWithMapping(gv2w_),
@@ -21,17 +21,17 @@ namespace fwdpy11
         {
         }
 
-        SlocusPopMultivariateEffectsStrictAdditive(
+        SlocusMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
             const GeneticValueIsTrait &gv2w_, const GeneticValueNoise &noise_)
             : SlocusPopGeneticValueWithMapping(gv2w_, noise_),
               summed_effects(ndim, 0.0), focal_trait_index(focal_trait)
         {
-        }            
+        }
 
         void
-        operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const SlocusPop& pop, DiploidMetadata& metadata,
+        operator()(const GSLrng_t &rng, std::size_t diploid_index,
+                   const SlocusPop &pop, DiploidMetadata &metadata,
                    std::size_t parent1_index, std::size_t parent2_index) const
         {
             //TODO: fill genetic value

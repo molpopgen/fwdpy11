@@ -2,11 +2,11 @@
 
 namespace py = pybind11;
 
-void init_SlocusPopMultivariateEffectsStrictAdditive(py::module&);
+void init_SlocusMultivariateEffectsStrictAdditive(py::module&);
 
 void
 init_genetic_values(py::module& m)
 {
-    init_SlocusPopMultivariateEffectsStrictAdditive(m);
+    init_SlocusMultivariateEffectsStrictAdditive(m);
 }
 
