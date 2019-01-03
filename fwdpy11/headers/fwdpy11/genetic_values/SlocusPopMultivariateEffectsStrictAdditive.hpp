@@ -2,6 +2,7 @@
 #define FWDPY11_SLOCUSPOP_MULTIVARIATE_STRICT_ADDITIVE_HPP
 
 #include <vector>
+#include <stdexcept>
 #include "SlocusPopGeneticValueWithMapping.hpp"
 
 namespace fwdpy11
@@ -10,20 +11,41 @@ namespace fwdpy11
         : public SlocusPopGeneticValueWithMapping
     {
         mutable std::vector<double> summed_effects;
+        std::size_t focal_trait_index;
 
         SlocusPopMultivariateEffectsStrictAdditive(
-            std::size_t ndim, const GeneticValueIsTrait &gv2w_)
+            std::size_t ndim, std::size_t focal_trait,
+            const GeneticValueIsTrait &gv2w_)
             : SlocusPopGeneticValueWithMapping(gv2w_),
-              summed_effects(ndim, 0.0)
+              summed_effects(ndim, 0.0), focal_trait_index(focal_trait)
         {
         }
 
         SlocusPopMultivariateEffectsStrictAdditive(
-            std::size_t ndim, const GeneticValueIsTrait &gv2w_,
-            const GeneticValueNoise &noise_)
+            std::size_t ndim, std::size_t focal_trait,
+            const GeneticValueIsTrait &gv2w_, const GeneticValueNoise &noise_)
             : SlocusPopGeneticValueWithMapping(gv2w_, noise_),
-              summed_effects(ndim, 0.0)
+              summed_effects(ndim, 0.0), focal_trait_index(focal_trait)
         {
+        }
+
+        double
+        operator()(const std::size_t diploid_index, const SlocusPop &pop) const
+        {
+            return 0.0;
+        }
+
+        void
+        update(const SlocusPop &pop)
+        {
+            gv2w->update(pop);
+            noise_fxn->update(pop);
+        }
+
+        pybind11::object
+        pickle() const
+        {
+            return pybind11::none();
         }
     };
 } // namespace fwdpy11

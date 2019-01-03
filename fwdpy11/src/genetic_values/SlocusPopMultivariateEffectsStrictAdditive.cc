@@ -8,5 +8,10 @@ init_SlocusPopMultivariateEffectsStrictAdditive(py::module& m)
 {
     py::class_<fwdpy11::SlocusPopMultivariateEffectsStrictAdditive,
                fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusPopMultivariateEffectsStrictAdditive");
+        m, "SlocusPopMultivariateEffectsStrictAdditive")
+        .def(py::init<std::size_t, std::size_t,
+                      const fwdpy11::GeneticValueIsTrait&>())
+        .def(py::init<std::size_t, std::size_t,
+                      const fwdpy11::GeneticValueIsTrait&,
+                      const fwdpy11::GeneticValueNoise&>());
 }
