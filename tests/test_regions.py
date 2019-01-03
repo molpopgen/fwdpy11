@@ -10,6 +10,7 @@ class testRegion(unittest.TestCase):
     These tests all apply to Sregions b/c an
     Sregion contains a Region
     """
+
     def testBadBoundaries(self):
         with self.assertRaises(ValueError):
             fwdpy11.Region(np.nan, 1, 1.0)
@@ -104,6 +105,12 @@ class testMutationRegions(unittest.TestCase):
 
     def test_create(self):
         mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
+
+
+class testMultivariateGaussianEffects(unittest.TestCase):
+    def testConstruction(self):
+        fwdpy11.MultivariateGaussianEffects(
+            0, 1, 1, np.identity(2), 1.0, True, 0)
 
 
 class testMlocusMutationRegions(unittest.TestCase):
