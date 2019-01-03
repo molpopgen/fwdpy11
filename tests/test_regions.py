@@ -119,13 +119,20 @@ class testMultivariateGaussianEffects(unittest.TestCase):
             fwdpy11.MultivariateGaussianEffects(
                 0, 1, 1, m)
 
-    def testInvalidMatrix(self):
-        # This is not a positive-definite covariance
-        # matrix:
-        m = np.array([-1.0] * 4).reshape((2,2))
+    def testInvalidMatrixShape2(self):
+        m = np.array([-1.0] * 6).reshape((3, 2))
         with self.assertRaises(ValueError):
             fwdpy11.MultivariateGaussianEffects(
                 0, 1, 1, m)
+
+    def testInvalidMatrix(self):
+        # This is not a positive-definite covariance
+        # matrix:
+        m = np.array([-1.0] * 4).reshape((2, 2))
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, m)
+
 
 class testMlocusMutationRegions(unittest.TestCase):
     @classmethod
