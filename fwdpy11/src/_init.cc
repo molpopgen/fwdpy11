@@ -24,7 +24,7 @@
 #include <type_traits>
 
 static_assert(GSL_MAJOR_VERSION >= 2, "GSL major version >= 2 required");
-static_assert(GSL_MINOR_VERSION >= 2, "GSL minor version >= 2 required");
+static_assert(GSL_MINOR_VERSION >= 3, "GSL minor version >= 3 required");
 
 namespace py = pybind11;
 
