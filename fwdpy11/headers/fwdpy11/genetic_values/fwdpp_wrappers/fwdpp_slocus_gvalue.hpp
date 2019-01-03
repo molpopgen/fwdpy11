@@ -59,16 +59,6 @@ namespace fwdpy11
             return gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
         }
 
-        void
-        operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const SlocusPop& pop, DiploidMetadata& metadata) const
-        {
-            metadata.g = calculate_gvalue(diploid_index, pop);
-            metadata.e = noise(rng, metadata, metadata.parents[0],
-                               metadata.parents[1], pop);
-            metadata.w = genetic_value_to_fitness(metadata);
-        }
-
         inline void
         update(const fwdpy11::SlocusPop& pop)
         {

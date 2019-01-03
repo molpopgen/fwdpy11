@@ -50,11 +50,16 @@ namespace fwdpy11
         virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
                                         const SlocusPop& /*pop*/) const = 0;
         // To be called from w/in a simulation
-        virtual void operator()(const GSLrng_t& /*rng*/,
-                                std::size_t /*diploid_index*/,
-                                const SlocusPop& /*pop*/,
-                                DiploidMetadata& /*offspring_metadata*/
-                                ) const = 0;
+        virtual void
+        operator()(const GSLrng_t& rng, std::size_t diploid_index,
+                   const SlocusPop& pop, DiploidMetadata& metadata) const
+        {
+            metadata.g = calculate_gvalue(diploid_index, pop);
+            metadata.e = noise(rng, metadata, metadata.parents[0],
+                               metadata.parents[1], pop);
+            metadata.w = genetic_value_to_fitness(metadata);
+        }
+
         virtual double genetic_value_to_fitness(
             const DiploidMetadata& /*metadata*/) const = 0;
         virtual double noise(const GSLrng_t& /*rng*/,

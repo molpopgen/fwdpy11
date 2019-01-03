@@ -29,16 +29,6 @@ namespace fwdpy11
         {
         }
 
-        void
-        operator()(const GSLrng_t &rng, std::size_t diploid_index,
-                   const SlocusPop &pop, DiploidMetadata &metadata) const
-        {
-            metadata.g = calculate_gvalue(diploid_index, pop);
-            metadata.e = noise_fxn->operator()(
-                rng, metadata, metadata.parents[0], metadata.parents[1], pop);
-            metadata.w = gv2w->operator()(metadata);
-        }
-
         double
         calculate_gvalue(const std::size_t diploid_index,
                          const SlocusPop &pop) const
