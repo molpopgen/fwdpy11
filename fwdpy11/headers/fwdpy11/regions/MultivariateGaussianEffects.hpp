@@ -23,17 +23,23 @@ namespace fwdpy11
         matrix_ptr matrix;
         // Stores the results of gsl_ran_multivariate_gaussian
         vector_ptr res;
-        double dominance;
+        double fixed_effect, dominance;
 
         MultivariateGaussianEffects(double beg, double end, double weight,
-                                    bool coupled, gsl_matrix_const_view &view,
-                                    double h, std::uint16_t label)
+                                    bool coupled,
+                                    const gsl_matrix &input_matrix, double s,
+                                    double h, std::uint16_t label,
+                                    bool matrix_is_covariance)
             : Sregion(beg, end, weight, coupled, label, 1.0),
-              matrix(gsl_matrix_alloc(view.matrix.size1, view.matrix.size2),
+              matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
-              res(gsl_vector_alloc(view.matrix.size1),
+              res(gsl_vector_alloc(input_matrix.size1),
                   [](gsl_vector *v) { gsl_vector_free(v); }),
-              dominance(h)
+              fixed_effect(s), dominance(h)
+        // If matrix_is_covariance is true, then the input_matrix is treated
+        // as a covariance matrix, meaning that we copy it and store its
+        // Cholesky decomposition.  If matrix_is_covariance is false,
+        // then input_matrix is assumed to be a valid Cholesky decomposition.
         {
             if (!std::isfinite(dominance))
                 {
@@ -47,15 +53,19 @@ namespace fwdpy11
             // Assign the matrix and do the Cholesky decomposition
             auto error_handler = gsl_set_error_handler_off();
 
-            int rv = gsl_matrix_memcpy(matrix.get(), &view.matrix);
+            int rv = gsl_matrix_memcpy(matrix.get(), &input_matrix);
             if (rv != GSL_SUCCESS)
                 {
                     throw std::runtime_error("failure copying input matrix");
                 }
-            rv = gsl_linalg_cholesky_decomp1(matrix.get());
-            if (rv == GSL_EDOM)
+            if (matrix_is_covariance)
                 {
-                    throw std::runtime_error("Cholesky decomposition failed");
+                    rv = gsl_linalg_cholesky_decomp1(matrix.get());
+                    if (rv == GSL_EDOM)
+                        {
+                            throw std::runtime_error(
+                                "Cholesky decomposition failed");
+                        }
                 }
 
             // Reset error handler on the way out
@@ -65,12 +75,11 @@ namespace fwdpy11
         virtual std::unique_ptr<Sregion>
         clone() const
         {
-            gsl_matrix_const_view v = gsl_matrix_const_submatrix(
-                matrix.get(), 0, 0, matrix->size1, matrix->size2);
             return std::unique_ptr<MultivariateGaussianEffects>(
                 new MultivariateGaussianEffects(
                     this->beg(), this->end(), this->weight(),
-                    this->region.coupled, v, this->dominance, this->label()));
+                    this->region.coupled, *matrix.get(), this->fixed_effect,
+                    this->dominance, this->label(), false));
         }
 
         virtual std::uint32_t

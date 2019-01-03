@@ -110,7 +110,7 @@ class testMutationRegions(unittest.TestCase):
 class testMultivariateGaussianEffects(unittest.TestCase):
     def testConstruction(self):
         fwdpy11.MultivariateGaussianEffects(
-            0, 1, 1, np.identity(2), 1.0, True, 0)
+            0, 1, 1, np.identity(2))
 
 
 class testMlocusMutationRegions(unittest.TestCase):
