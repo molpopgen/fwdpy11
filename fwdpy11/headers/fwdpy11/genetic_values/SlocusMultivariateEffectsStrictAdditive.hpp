@@ -37,7 +37,8 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t diploid_index,
                          const SlocusPop &pop) const
         {
-            std::fill(begin(multivariate_effects), end(multivariate_effects), 0.0);
+            std::fill(begin(multivariate_effects), end(multivariate_effects),
+                      0.0);
 
             for (auto key :
                  pop.gametes[pop.diploids[diploid_index].first].smutations)
@@ -50,9 +51,24 @@ namespace fwdpy11
                         }
                     std::transform(begin(mut.esizes), end(mut.esizes),
                                    begin(multivariate_effects),
-                                   begin(multivariate_effects), std::plus<double>());
+                                   begin(multivariate_effects),
+                                   std::plus<double>());
                 }
 
+            for (auto key :
+                 pop.gametes[pop.diploids[diploid_index].second].smutations)
+                {
+                    const auto &mut = pop.mutations[key];
+                    if (mut.esizes.size() != multivariate_effects.size())
+                        {
+                            throw std::runtime_error(
+                                "dimensionality mismatch");
+                        }
+                    std::transform(begin(mut.esizes), end(mut.esizes),
+                                   begin(multivariate_effects),
+                                   begin(multivariate_effects),
+                                   std::plus<double>());
+                }
             return multivariate_effects[focal_trait_index];
         }
 
