@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include "SlocusPopGeneticValueWithMapping.hpp"
+#include "default_update.hpp"
 
 namespace fwdpy11
 {
@@ -37,12 +38,7 @@ namespace fwdpy11
             return 0.0;
         }
 
-        void
-        update(const SlocusPop &pop)
-        {
-            gv2w->update(pop);
-            noise_fxn->update(pop);
-        }
+        DEFAULT_SLOCUSPOP_UPDATE();
 
         pybind11::object
         pickle() const
