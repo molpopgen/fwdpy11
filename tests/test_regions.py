@@ -109,8 +109,11 @@ class testMutationRegions(unittest.TestCase):
 
 class testMultivariateGaussianEffects(unittest.TestCase):
     def testConstruction(self):
-        fwdpy11.MultivariateGaussianEffects(
-            0, 1, 1, np.identity(2))
+        try:
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, np.identity(2))
+        except Exception:
+            self.fail("Unexpected exception during object construction")
 
     def testInvalidMatrixShape(self):
         # Input matrix has wrong shape:
