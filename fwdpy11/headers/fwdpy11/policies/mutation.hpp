@@ -66,8 +66,6 @@ namespace fwdpy11
      * \note "Neutral" mutations get assigned a dominance of zero.  The xtra
      * field is not written to.
      *
-     * \version 0.6.0
-     * Added to library
      */
     {
         auto pos = posmaker();
@@ -78,6 +76,63 @@ namespace fwdpy11
         auto idx = fwdpp::recycle_mutation_helper(recycling_bin, mutations,
                                                   pos, esize_maker(), hmaker(),
                                                   generation, x);
+        lookup.emplace(pos, idx);
+        return idx;
+    }
+
+    template <typename position_function, typename fixed_effect_size_function,
+              typename fixed_dominance_function,
+              typename effect_sizes_function,
+              typename dominance_values_function>
+    std::size_t
+    infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
+                      Population::mcont_t &mutations,
+                      Population::lookup_table_t &lookup,
+                      const fwdpp::uint_t &generation,
+                      const position_function &posmaker,
+                      const fixed_effect_size_function &fixed_esize_maker,
+                      const fixed_dominance_function &fixed_hmaker,
+                      const effect_sizes_function &esizes,
+                      const dominance_values_function &dominance,
+                      const decltype(Mutation::xtra) x = 0)
+    /*!
+     * Mutation function to add a fwdpp::Mutation to a population.
+     *
+     * Generate mutations with single effect size.
+     *
+     * This implementation is a modification of fwdpp::infsites_popgenmut,
+     * from the fwdpp library
+     *
+     * In order to use this function, it must be bound to a callable
+     * that is a valid mutation function.  See examples for details.
+     *
+     * \param recycling_bin Recycling queue for mutations.
+     * \param mutations Container of mutations
+     * \param lookup Lookup table for mutation positions
+     * \param generation The generation that is being mutated
+     * \param pselected  The probability that a new mutation affects fitness
+     * \param posmaker A function generating a mutation position.  Must be
+     * convertible to std::function<double()>.
+     * \param esize_maker A function to generate an effect size, given that a
+     * mutation affects fitness. Must be convertible to
+     * std::function<double()>.
+     * \param hmaker A function to generate a dominance value, given that a
+     * mutation affects fitness. Must be convertible to
+     * std::function<double()>.
+     *
+     * \note "Neutral" mutations get assigned a dominance of zero.  The xtra
+     * field is not written to.
+     *
+     */
+    {
+        auto pos = posmaker();
+        while (lookup.find(pos) != lookup.end())
+            {
+                pos = posmaker();
+            }
+        auto idx = fwdpp::recycle_mutation_helper(
+            recycling_bin, mutations, pos, fixed_esize_maker(), fixed_hmaker(),
+            generation, esizes(), dominance(), x);
         lookup.emplace(pos, idx);
         return idx;
     }
