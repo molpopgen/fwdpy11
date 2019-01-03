@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <stdexcept>
+#include <algorithm>
+#include <functional>
 #include "SlocusPopGeneticValueWithMapping.hpp"
 #include "default_update.hpp"
 
@@ -34,8 +36,23 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t diploid_index,
                          const SlocusPop &pop) const
         {
-            //TODO: implement!
-            return 0.0;
+            std::fill(begin(summed_effects), end(summed_effects), 0.0);
+
+            for (auto key :
+                 pop.gametes[pop.diploids[diploid_index].first].smutations)
+                {
+                    const auto &mut = pop.mutations[key];
+                    if (mut.esizes.size() != summed_effects.size())
+                        {
+                            throw std::runtime_error(
+                                "dimensionality mismatch");
+                        }
+                    std::transform(begin(mut.esizes), end(mut.esizes),
+                                   begin(summed_effects),
+                                   begin(summed_effects), std::plus<double>());
+                }
+
+            return summed_effects[focal_trait_index];
         }
 
         DEFAULT_SLOCUSPOP_UPDATE();
