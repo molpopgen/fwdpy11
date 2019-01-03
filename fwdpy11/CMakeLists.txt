@@ -9,7 +9,8 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc)
 
-set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMultivariateEffectsStrictAdditive.cc)
+set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMultivariateEffectsStrictAdditive.cc
+    src/genetic_values/SlocusMultivariateGeneticValueWithMapping.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
