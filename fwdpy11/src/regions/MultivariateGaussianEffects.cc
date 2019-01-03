@@ -8,7 +8,15 @@ void
 init_MultivariateGaussianEffects(py::module& m)
 {
     py::class_<fwdpy11::MultivariateGaussianEffects, fwdpy11::Sregion>(
-        m, "MultivariateGaussianEffects")
+        m, "MultivariateGaussianEffects",
+        R"delim(
+        Pleiotropic effects via a multivariate Gaussian distribution.
+
+        This class can be used to generate mutations with both vectors
+        of effect sizes as well as a separate fixed effect.
+
+        .. versionadded:: 0.3.0
+        )delim")
         .def(py::init([](double beg, double end, double weight,
                          py::array_t<double> cov_matrix, double fixed_effect,
                          double h, bool coupled, std::uint16_t label) {
@@ -25,7 +33,35 @@ init_MultivariateGaussianEffects(py::module& m)
                      label, true);
              }),
              py::arg("beg"), py::arg("end"), py::arg("weight"),
-             py::arg("covariance_matrix"), py::arg("fixed_effect") = 0.0,
+             py::arg("matrix"), py::arg("fixed_effect") = 0.0,
              py::arg("h") = 1.0, py::arg("coupled") = true,
-             py::arg("label") = 0);
+             py::arg("label") = 0,
+             R"delim(
+             Constructor
+
+             :param beg: Beginning of the region
+             :type beg: float
+             :param end: End of the region
+             :type end: float
+             :param weight: Weight on the region
+             :type weight: float
+             :param matrix: Variance-covariance matrix
+             :type matrix: numpy ndarray
+             :param fixed_effect: Fixed effect size. Defaults to 0.0.
+             :type fixed_effect: float
+             :param h: Dominance. Defaults to 1.0
+             :type h: float
+             :param coupled: Specify if weight is function of end-beg or not. Defaults to True
+             :type coupled: bool
+             :param label: Label for mutations from this region. Defaults to 0.
+             :type label: np.uint16
+
+             The input matrix must be square and semi-positive definite.   If either
+             of these conditions are not met, TypeError will be raised.
+            
+             .. note::
+
+                The dominance parameter (`h`) applies to both the fixed effect and those
+                drawn from a multivariate normal.
+             )delim");
 }
