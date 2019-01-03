@@ -9,8 +9,8 @@ init_MultivariateGaussianEffects(py::module& m)
 {
     py::class_<fwdpy11::MultivariateGaussianEffects, fwdpy11::Sregion>(
         m, "MultivariateGaussianEffects")
-        .def(py::init([](double beg, double end, double weight, bool coupled,
-                         py::array_t<double> cov_matrix, double h,
+        .def(py::init([](double beg, double end, double weight, 
+                         py::array_t<double> cov_matrix, double h, bool coupled,
                          std::uint16_t label) {
             auto r = cov_matrix.unchecked<2>();
             if (r.shape(0) != r.shape(1))
