@@ -10,8 +10,12 @@ init_SlocusMultivariateEffectsStrictAdditive(py::module& m)
                fwdpy11::SlocusPopMultivariateGeneticValueWithMapping>(
         m, "SlocusMultivariateEffectsStrictAdditive")
         .def(py::init<std::size_t, std::size_t,
-                      const fwdpy11::MultivariateGeneticValueToFitnessMap&>())
+                      const fwdpy11::MultivariateGeneticValueToFitnessMap&>(),
+             py::arg("ndimensions"), py::arg("focal_trait"),
+             py::arg("genetic_values_to_fitness_map"))
         .def(py::init<std::size_t, std::size_t,
                       const fwdpy11::MultivariateGeneticValueToFitnessMap&,
-                      const fwdpy11::GeneticValueNoise&>());
+                      const fwdpy11::GeneticValueNoise&>(),
+             py::arg("ndimensions"), py::arg("focal_trait"),
+             py::arg("genetic_values_to_fitness_map"), py::arg("noise"));
 }
