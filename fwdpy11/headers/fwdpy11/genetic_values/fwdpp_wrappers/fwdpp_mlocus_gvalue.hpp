@@ -58,8 +58,8 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const std::size_t diploid_index,
-                   const fwdpy11::MlocusPop& pop) const
+        calculate_gvalue(const std::size_t diploid_index,
+                         const fwdpy11::MlocusPop& pop) const
         {
             per_locus_genetic_values.clear();
             // Back inserter amoritizes memory allocations very quickly.

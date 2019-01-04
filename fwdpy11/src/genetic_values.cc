@@ -381,7 +381,7 @@ PYBIND11_MODULE(genetic_values, m)
              [](const fwdpy11::MlocusPopGeneticValue& gv,
                 const std::size_t diploid_index,
                 const fwdpy11::MlocusPop& pop) {
-                 return gv(diploid_index, pop);
+                 return gv.calculate_gvalue(diploid_index, pop);
              },
              R"delim(
              :param diploid_index: The index of the individual to calculate.

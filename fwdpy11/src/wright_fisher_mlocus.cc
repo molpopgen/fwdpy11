@@ -50,15 +50,7 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
     double sum_parental_fitnesses = 0.0;
     for (std::size_t i = 0; i < pop.diploids.size(); ++i)
         {
-            auto g = genetic_value_fxn(i, pop);
-            pop.diploid_metadata[i].g = g;
-            pop.diploid_metadata[i].e = genetic_value_fxn.noise(
-                rng, pop.diploid_metadata[i],
-                pop.diploid_metadata[i].parents[0],
-                pop.diploid_metadata[i].parents[1], pop);
-            pop.diploid_metadata[i].w
-                = genetic_value_fxn.genetic_value_to_fitness(
-                    pop.diploid_metadata[i]);
+            genetic_value_fxn(rng, i, pop, pop.diploid_metadata[i]);
             parental_fitnesses[i] = pop.diploid_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
