@@ -39,8 +39,8 @@ namespace
     static const auto FIXATIONS_DOCSTRING
         = R"delim(A :class:`fwdpy11.VecMutation` of fixed variants.)delim";
 
-    static const auto FIXATION_TIMES_DOCSTRING =
-        R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
+    static const auto FIXATION_TIMES_DOCSTRING
+        = R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
 
     static const auto GAMETES_DOCSTRING
         = R"delim(A :class:`fwdpy11.VecGamete`.)delim";
@@ -99,6 +99,10 @@ PYBIND11_MODULE(_Population, m)
                       MUTATIONS_DOCSTRING)
         .def_readonly("mcounts", &fwdpy11::Population::mcounts,
                       MCOUNTS_DOCSTRING)
+        .def_readonly(
+            "mcounts_ancient_samples",
+            &fwdpy11::Population::mcounts_from_preserved_nodes,
+            "The contribution that ancient samples make to mutation counts")
         .def_readwrite("diploid_metadata",
                        &fwdpy11::Population::diploid_metadata,
                        "Container of diploid metadata.")
