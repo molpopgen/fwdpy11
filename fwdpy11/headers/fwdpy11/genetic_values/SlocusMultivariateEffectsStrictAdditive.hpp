@@ -77,7 +77,8 @@ namespace fwdpy11
         pybind11::object
         pickle() const
         {
-            return pybind11::none();
+            return pybind11::make_tuple(multivariate_effects.size(),
+                                        focal_trait_index);
         }
     };
 } // namespace fwdpy11
