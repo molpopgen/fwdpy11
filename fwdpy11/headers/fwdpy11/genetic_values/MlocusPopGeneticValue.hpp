@@ -29,8 +29,22 @@ namespace fwdpy11
     /// Concepts we have to deal with:
     /// Noise and aggregation are a bit trickier here?
     {
-        virtual double operator()(const std::size_t /*diploid*/,
-                                  const fwdpy11::MlocusPop& /*pop*/) const = 0;
+        // Callable from Python
+        virtual double
+        calculate_gvalue(const std::size_t /*diploid*/,
+                         const fwdpy11::MlocusPop& /*pop*/) const = 0;
+
+        // To be called from w/in a simulation
+        virtual void
+        operator()(const GSLrng_t& rng, std::size_t diploid_index,
+                   const MlocusPop& pop, DiploidMetadata& metadata) const
+        {
+            metadata.g = calculate_gvalue(diploid_index, pop);
+            metadata.e = noise(rng, metadata, metadata.parents[0],
+                               metadata.parents[1], pop);
+            metadata.w = genetic_value_to_fitness(metadata);
+        }
+
         virtual double genetic_value_to_fitness(
             const DiploidMetadata& /*metadata*/) const = 0;
         virtual double noise(const GSLrng_t& /*rng*/,
