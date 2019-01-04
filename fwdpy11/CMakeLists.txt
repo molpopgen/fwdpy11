@@ -10,6 +10,7 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc)
 
 set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMultivariateEffectsStrictAdditive.cc
+    src/genetic_values/MultivariateGeneticValueToFitnessMap.cc
     src/genetic_values/SlocusMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariatGSS.cc)
 
 # These are the main modules
