@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/genetic_values/MultivariateGSSmo.hpp>
 
 namespace py = pybind11;
@@ -21,5 +22,17 @@ init_MultivariateGSSmo(py::module& m)
 
             return fwdpy11::MultivariateGSSmo(std::move(it), std::move(io),
                                               VS);
-        }));
+        }))
+        .def(py::pickle(
+            [](const fwdpy11::MultivariateGSSmo& self) {
+                return self.pickle();
+            },
+            [](py::object o) {
+                auto t = o.cast<py::tuple>();
+                auto tp = t[0].cast<std::vector<std::uint32_t>>();
+                auto optima = t[1].cast<std::vector<double>>();
+                double vs = t[2].cast<double>();
+                return fwdpy11::MultivariateGSSmo(std::move(tp),
+                                                  std::move(optima), vs);
+            }));
 }

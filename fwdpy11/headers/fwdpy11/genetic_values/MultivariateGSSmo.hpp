@@ -97,7 +97,12 @@ namespace fwdpy11
                 {
                     l.append(x);
                 }
-            return pybind11::make_tuple(l, VS);
+            pybind11::list tp;
+            for (auto x : timepoints)
+                {
+                    tp.append(x);
+                }
+            return pybind11::make_tuple(tp, l, VS);
         }
 
         template <typename poptype>
