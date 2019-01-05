@@ -7,6 +7,9 @@ version, etc.
 Current development branch
 ++++++++++++++++++++++++++
 
+* :func:`fwdpy11.ts.simplify` no longer retains ancient samples present in the input by default. To do so, explicitly
+  label any ancient samples to retain as part of the the samples list passed to the function.
+  `PR 169 <https://github.com/molpopgen/fwdpy11/pull/169>`_
 * The types :class:`fwdpy11.Region` and :class:`fwdpy11.Sregion` have be re-implemented as C++-based classes, replacing 
   the previous pure Python classes.  `PR 163 <https://github.com/molpopgen/fwdpy11/pull/163>`_
 * :attr:`fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations

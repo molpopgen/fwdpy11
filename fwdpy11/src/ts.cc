@@ -25,9 +25,6 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
-// TODO: need to clear out ancient nodes after
-// copy.  The user should include them in "samples"
-// if they are wanted.
 py::tuple
 simplify(const fwdpy11::Population& pop,
          const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
@@ -56,6 +53,9 @@ simplify(const fwdpy11::Population& pop,
             throw std::invalid_argument("invalid sample list");
         }
     auto t(pop.tables);
+    // NOTE: If the user wants to keep ancient samples, 
+    // they must pass them in to the samples list
+    t.preserved_nodes.clear();
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     auto rv = simplifier.simplify(t, samples, pop.mutations);
     t.build_indexes();
@@ -465,6 +465,20 @@ PYBIND11_MODULE(ts, m)
             the nodes in the input tables. Thus, you may do things like simplify
             to a set of "currently-alive" nodes plus some or all ancient samples by
             including some node IDs from :attr:`fwdpy11.ts.TableCollection.preserved_nodes`.
+            
+            If the input contains ancient samples, and you wish to include them in the output,
+            then you need to include their IDs in the samples argument.
+
+            .. note::
+
+                Due to node ID remapping, the metadata corresponding to nodes becomes a bit more
+                difficult to look up.  You need to use the output ID map, the original IDs, and 
+                the population's metadata containers.
+
+
+            .. versionchanged:: 0.3.0
+
+                Ancient samples are no longer kept by default
 
             )delim");
 
