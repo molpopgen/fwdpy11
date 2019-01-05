@@ -7,5 +7,7 @@ void
 init_MultivariateGeneticValueToFitnessMap(py::module &m)
 {
     py::class_<fwdpy11::MultivariateGeneticValueToFitnessMap>(
-        m, "MultivariateGeneticValueToFitnessMap");
+        m, "MultivariateGeneticValueToFitnessMap",
+        "ABC for classes representing mappings of multivariate traits to "
+        "fitness.");
 }

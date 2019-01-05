@@ -10,12 +10,36 @@ init_MultivariateGSS(py::module& m)
 {
     py::class_<fwdpy11::MultivariateGSS,
                fwdpy11::MultivariateGeneticValueToFitnessMap>(
-        m, "MultivariateGSS")
+        m, "MultivariateGSS",
+        R"delim(
+        Multivariate gaussian stablizing selection.
+
+        Maps a multidimensional trait to fitness using the Euclidian 
+        distance of a vector of trait values to a vector of optima.
+
+        Essentially, this is Equation 1 of
+
+        Simons, Yuval B., Kevin Bullaughey, Richard R. Hudson, and Guy Sella. 2018.
+        "A Population Genetic Interpretation of GWAS Findings for Human Quantitative Traits."
+        PLoS Biology 16 (3): e2002985.
+
+        For the case of moving optima, see :class:`fwdpy11.genetic_values.MultivariateGSSmo`.
+        )delim")
         .def(py::init([](py::array_t<double> optima, double VS) {
             auto r = optima.unchecked<1>();
             std::vector<double> voptima(r.data(0), r.data(0) + r.shape(0));
             return fwdpy11::MultivariateGSS(std::move(voptima), VS);
-        }))
+        }),
+        R"delim(
+        :param optima: The optimum value for each trait
+        :type optima: np.array
+        :param VS: Strength of stablizing selection
+        :type VS: float
+
+        .. note::
+
+            VS is :math:`\omega^2` in the Simons et al. notation
+        )delim")
         .def(py::pickle(
             [](const fwdpy11::MultivariateGSS& self) { return self.pickle(); },
             [](py::object o) {

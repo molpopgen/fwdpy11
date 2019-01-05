@@ -10,7 +10,8 @@ init_MultivariateGSSmo(py::module& m)
 {
     py::class_<fwdpy11::MultivariateGSSmo,
                fwdpy11::MultivariateGeneticValueToFitnessMap>(
-        m, "MultivariateGSSmo")
+        m, "MultivariateGSSmo",
+        "Multivariate Gaussian stabilizing selection with moving optima.")
         .def(py::init([](py::array_t<std::uint32_t> timepoints,
                          py::array_t<double> optima, double VS) {
             auto t = timepoints.unchecked<1>();
@@ -22,7 +23,15 @@ init_MultivariateGSSmo(py::module& m)
 
             return fwdpy11::MultivariateGSSmo(std::move(it), std::move(io),
                                               VS);
-        }))
+        }),
+        R"delim(
+        :param timepoints: Time when the optima change
+        :type timepoints: numpy.array
+        :param optima: The optima corresponding to each time point
+        :type optima: numpy.ndarray
+        :param VS: Strength of stabilizing selection
+        :type VS: float
+        )delim")
         .def(py::pickle(
             [](const fwdpy11::MultivariateGSSmo& self) {
                 return self.pickle();

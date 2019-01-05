@@ -8,16 +8,46 @@ init_SlocusMultivariateEffectsStrictAdditive(py::module& m)
 {
     py::class_<fwdpy11::SlocusMultivariateEffectsStrictAdditive,
                fwdpy11::SlocusPopMultivariateGeneticValueWithMapping>(
-        m, "SlocusMultivariateEffectsStrictAdditive")
+        m, "SlocusMultivariateEffectsStrictAdditive",
+        R"delim(
+        Multivariate trait values under strictly additive effects.
+
+        Calculate the trait value for a diploid in a :class:`fwdpy11.SlocusPop`
+        for a multidimensional trait.
+
+        This class is restricted to the case of simple additive effects, meaning
+        that any dominance terms associated with mutations are ignored.
+
+        During a simulation, :attr:`fwdpy11.DiploidMetadata.g` is filled with the 
+        genetic value corresponding to a "focal" trait specified upon object construction.
+        )delim")
         .def(py::init<std::size_t, std::size_t,
                       const fwdpy11::MultivariateGeneticValueToFitnessMap&>(),
-             py::arg("ndimensions"), py::arg("focal_trait"),
-             py::arg("genetic_values_to_fitness_map"))
+             py::arg("ndimensions"), py::arg("focal_trait"), py::arg("gv2w"),
+             R"delim(
+:param ndim: Number of trait dimensions
+:type ndim: int
+:param focal_trait: Index of the focal trait
+:type focal_trait: int
+:param gv2w: Function mapping trait value to fitness
+:type gv2w: :class:`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`
+            )delim")
         .def(py::init<std::size_t, std::size_t,
                       const fwdpy11::MultivariateGeneticValueToFitnessMap&,
                       const fwdpy11::GeneticValueNoise&>(),
              py::arg("ndimensions"), py::arg("focal_trait"),
-             py::arg("genetic_values_to_fitness_map"), py::arg("noise"))
+             py::arg("genetic_values_to_fitness_map"), py::arg("noise"),
+             R"delim(
+:param ndim: Number of trait dimensions
+:type ndim: int
+:param focal_trait: Index of the focal trait
+:type focal_trait: int
+:param gv2w: Function mapping trait value to fitness
+:type gv2w: :class:`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`
+:param noise: Function adding random additive noise to trait value
+:type noise: :class:`fwdpy11.genetic_values.GeneticValueNoise`
+            )delim")
+
         .def(py::pickle(
             [](const fwdpy11::SlocusMultivariateEffectsStrictAdditive& self) {
                 auto p = py::module::import("pickle");
