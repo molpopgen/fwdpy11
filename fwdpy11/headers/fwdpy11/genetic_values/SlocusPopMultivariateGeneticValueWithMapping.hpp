@@ -67,6 +67,13 @@ namespace fwdpy11
             return noise_fxn->operator()(rng, offspring_metadata, parent1,
                                          parent2, pop);
         }
+
+        inline void
+        update(const fwdpy11::SlocusPop& pop)
+        {
+            gv2w->update(pop);
+            noise_fxn->update(pop);
+        }
     };
 } // namespace fwdpy11
 
