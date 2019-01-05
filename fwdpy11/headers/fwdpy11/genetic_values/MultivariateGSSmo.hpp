@@ -79,8 +79,7 @@ namespace fwdpy11
                         values[i]
                         - gsl_vector_get(&current_optimum.vector, i));
                 }
-
-            return 0.0;
+            return std::exp(-sqdiff / (2.0 * VS));
         }
 
         std::unique_ptr<MultivariateGeneticValueToFitnessMap>
