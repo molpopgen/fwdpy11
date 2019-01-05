@@ -31,6 +31,23 @@ init_MultivariateGSSmo(py::module& m)
         :type optima: numpy.ndarray
         :param VS: Strength of stabilizing selection
         :type VS: float
+
+        The rows of optima should correpond to the optimal trait values at
+        each time point.  The first row must correspond to a time point of zero.
+
+        The following example changes the optimum from 0 to 1 for the first
+        trait at 10N generations into a simulation:
+        
+        .. testcode::
+
+            import fwdpy11.genetic_values
+            import numpy as np
+            popsize = 1000
+            timepoints = np.array([0,10*popsize], dtype=np.uint32)
+            ntraits = 3
+            optima = np.array(np.zeros(2*ntraits)).reshape((len(timepoints), ntraits))
+            optima[1,0] = 1
+            mvgssmo = fwdpy11.genetic_values.MultivariateGSSmo(timepoints,optima, 1)
         )delim")
         .def(py::pickle(
             [](const fwdpy11::MultivariateGSSmo& self) {
