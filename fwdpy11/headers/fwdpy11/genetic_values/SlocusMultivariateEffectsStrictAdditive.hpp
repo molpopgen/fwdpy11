@@ -72,8 +72,6 @@ namespace fwdpy11
             return multivariate_effects[focal_trait_index];
         }
 
-        DEFAULT_SLOCUSPOP_UPDATE();
-
         pybind11::object
         pickle() const
         {
