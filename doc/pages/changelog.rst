@@ -7,6 +7,34 @@ version, etc.
 Current development branch
 ++++++++++++++++++++++++++
 
+Support for multivariate mutational effects
+-------------------------------------------------------------
+
+`PR 164 <https://github.com/molpopgen/fwdpy11/pull/164>`_ introduced support for multidimensional mutational effects.
+This pull request introduced several changes: 
+
+The following new types are added:
+
+* :class:`fwdpy11.MultivariateGaussianEffects`, which is a new "region" type
+* :class:`fwdpy11.genetic_values.SlocusPopMultivariateGeneticValueWithMapping`, which is a new ABC for multivariate genetic values
+* :class:`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`, which is a new ABC mapping multivariate trait values down to a (single) fitness value.
+* :class:`fwdpy11.genetic_values.MultivariateGSS`, which is GSS based on the Euclidean distance from multiple optima
+* :class:`fwdpy11.genetic_values.MultivariateGSSmo`, which is the multi-dimensional analog to the existing GSSmo
+* :class:`fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive`, which is a new genetic value class for pleiotropic traits.
+
+Changes to the C++ back end:
+
+* The API for the C++ class fwdpy11::SlocusPopGeneticValue was slightly changed in order to accommodate the new types.  The old operator() is renamed calculate_gvalue().
+* Analogous changes were made to fwdpy11::MlocusPopGeneticValue.
+
+
+Dependency changes:
+
+* Change minimum GSL version required to 2.3
+
+Other changes in this release include:
+-------------------------------------------------------------
+
 * :func:`fwdpy11.ts.simplify` no longer retains ancient samples present in the input by default. To do so, explicitly
   label any ancient samples to retain as part of the the samples list passed to the function.
   `PR 169 <https://github.com/molpopgen/fwdpy11/pull/169>`_
