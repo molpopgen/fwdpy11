@@ -11,6 +11,8 @@ void init_UniformS(py::module &);
 void init_GaussianS(py::module &);
 void init_MutationRegions(py::module &);
 void init_RecombinationRegions(py::module &);
+void
+init_MultivariateGaussianEffects(py::module& );
 
 void
 initialize_regions(py::module &m)
@@ -24,4 +26,5 @@ initialize_regions(py::module &m)
     init_GaussianS(m);
     init_MutationRegions(m);
     init_RecombinationRegions(m);
+    init_MultivariateGaussianEffects(m);
 }

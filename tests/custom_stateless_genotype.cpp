@@ -29,8 +29,8 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
     GeneralW() : fwdpy11::SlocusPopGeneticValue{}, w{} {}
 
     inline double
-    operator()(const std::size_t diploid_index,
-               const fwdpy11::SlocusPop& pop) const
+    calculate_gvalue(const std::size_t diploid_index,
+                     const fwdpy11::SlocusPop& pop) const
     {
         return std::max(
             0.0,

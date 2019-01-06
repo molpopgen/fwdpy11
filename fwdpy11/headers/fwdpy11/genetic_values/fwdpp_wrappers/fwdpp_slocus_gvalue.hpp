@@ -53,8 +53,8 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const std::size_t diploid_index,
-                   const fwdpy11::SlocusPop& pop) const
+        calculate_gvalue(const std::size_t diploid_index,
+                         const fwdpy11::SlocusPop& pop) const
         {
             return gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
         }

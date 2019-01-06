@@ -24,8 +24,8 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
     struct additive : public fwdpy11::SlocusPopGeneticValue
 {
     inline double
-    operator()(const std::size_t diploid_index,
-               const fwdpy11::SlocusPop& pop) const
+    calculate_gvalue(const std::size_t diploid_index,
+                     const fwdpy11::SlocusPop& pop) const
     {
         double sum = 0;
         for (auto m :

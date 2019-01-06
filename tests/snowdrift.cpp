@@ -86,8 +86,8 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     }
 
     inline double
-    operator()(const std::size_t diploid_index,
-               const fwdpy11::SlocusPop & /*pop*/) const
+    calculate_gvalue(const std::size_t diploid_index,
+                     const fwdpy11::SlocusPop & /*pop*/) const
     // The call operator must return the genetic value of an individual
     {
         return phenotypes[diploid_index];

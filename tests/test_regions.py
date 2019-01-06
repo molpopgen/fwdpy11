@@ -10,6 +10,7 @@ class testRegion(unittest.TestCase):
     These tests all apply to Sregions b/c an
     Sregion contains a Region
     """
+
     def testBadBoundaries(self):
         with self.assertRaises(ValueError):
             fwdpy11.Region(np.nan, 1, 1.0)
@@ -104,6 +105,42 @@ class testMutationRegions(unittest.TestCase):
 
     def test_create(self):
         mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
+
+
+class testMultivariateGaussianEffects(unittest.TestCase):
+    def testConstruction(self):
+        try:
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, np.identity(2))
+        except Exception:
+            self.fail("Unexpected exception during object construction")
+
+    def testInvalidMatrixShape(self):
+        # Input matrix has wrong shape:
+        m = np.array([-1.0] * 4)
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, m)
+
+    def testInvalidMatrixShape2(self):
+        m = np.array([-1.0] * 6).reshape((3, 2))
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, m)
+
+    def testInvalidMatrix(self):
+        # This is not a positive-definite covariance
+        # matrix:
+        m = np.array([-1.0] * 4).reshape((2, 2))
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(
+                0, 1, 1, m)
+
+    def testMatrixWithNAN(self):
+        m=np.identity(4).reshape((4,4))
+        m[0,1]=np.nan
+        with self.assertRaises(ValueError):
+            fwdpy11.MultivariateGaussianEffects(0,1,1,m)
 
 
 class testMlocusMutationRegions(unittest.TestCase):
