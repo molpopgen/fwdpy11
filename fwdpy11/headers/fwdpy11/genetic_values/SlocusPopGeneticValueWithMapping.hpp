@@ -65,6 +65,10 @@ namespace fwdpy11
         pybind11::tuple
         shape() const
         {
+            if (total_dim != 1 || total_dim != gvalues.size())
+                {
+                    throw std::runtime_error("dimensionality mismatch");
+                }
             return pybind11::make_tuple(total_dim);
         }
     };
