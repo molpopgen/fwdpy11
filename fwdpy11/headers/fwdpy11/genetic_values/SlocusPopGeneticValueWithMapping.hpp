@@ -34,18 +34,21 @@ namespace fwdpy11
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         SlocusPopGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_)
-            : gv2w{ std::move(gv2w_.clone()) }, noise_fxn{ new NoNoise() }
+            : SlocusPopGeneticValue(1), gv2w{ std::move(gv2w_.clone()) },
+              noise_fxn{ new NoNoise() }
         {
         }
 
         SlocusPopGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_,
                                          const GeneticValueNoise& noise_)
-            : gv2w{ gv2w_.clone() }, noise_fxn{ noise_.clone() }
+            : SlocusPopGeneticValue(1), gv2w{ gv2w_.clone() }, noise_fxn{
+                  noise_.clone()
+              }
         {
         }
 
         inline virtual double
-        genetic_value_to_fitness(const DiploidMetadata & metadata ) const
+        genetic_value_to_fitness(const DiploidMetadata& metadata) const
         {
             return gv2w->operator()(metadata);
         }
@@ -57,6 +60,12 @@ namespace fwdpy11
         {
             return noise_fxn->operator()(rng, offspring_metadata, parent1,
                                          parent2, pop);
+        }
+
+        pybind11::tuple
+        shape() const
+        {
+            return pybind11::make_tuple(total_dim);
         }
     };
 } // namespace fwdpy11
