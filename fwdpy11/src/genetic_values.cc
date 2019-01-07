@@ -415,7 +415,15 @@ PYBIND11_MODULE(genetic_values, m)
              :return: The fitness of an individual.
              :rtype: float
              )delim",
-             py::arg("diploid_index"), py::arg("pop"));
+             py::arg("diploid_index"), py::arg("pop"))
+        .def_property_readonly("shape",
+                               [](const fwdpy11::MlocusPopGeneticValue& self) {
+                                   return self.shape();
+                               },
+                               "Return dimensions of genetic values")
+        .def_readonly("genetic_values",
+                      &fwdpy11::MlocusPopGeneticValue::gvalues,
+                      "Return the list of genetic values.");
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
