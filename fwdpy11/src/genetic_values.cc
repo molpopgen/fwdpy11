@@ -178,10 +178,18 @@ PYBIND11_MODULE(genetic_values, m)
                                [](const fwdpy11::SlocusPopGeneticValue& self) {
                                    return self.shape();
                                },
-                               "Return the dimensions of the genetic values.")
+                               R"delim(
+                               Return the dimensions of the genetic values.
+
+                               .. versionadded:: 0.3.0
+                               )delim")
         .def_readonly("genetic_values",
                       &fwdpy11::SlocusPopGeneticValue::gvalues,
-                      "Return the list of genetic values.");
+                      R"delim(
+                      Return the list of genetic values.
+
+                      .. versionadded:: 0.3.0
+                      )delim");
 
     py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
                fwdpy11::SlocusPopGeneticValue>(
@@ -420,10 +428,18 @@ PYBIND11_MODULE(genetic_values, m)
                                [](const fwdpy11::MlocusPopGeneticValue& self) {
                                    return self.shape();
                                },
-                               "Return dimensions of genetic values")
+                               R"delim(
+                               Return dimensions of genetic values.
+
+                               .. versionadded:: 0.3.0
+                               )delim")
         .def_readonly("genetic_values",
                       &fwdpy11::MlocusPopGeneticValue::gvalues,
-                      "Return the list of genetic values.");
+                      R"delim(
+                      Return the list of genetic values.
+
+                      .. versinadded:: 0.3.0
+                      )delim");
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(
