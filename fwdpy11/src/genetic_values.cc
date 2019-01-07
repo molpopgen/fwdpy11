@@ -174,8 +174,11 @@ PYBIND11_MODULE(genetic_values, m)
         :rtype: float
         )delim",
              py::arg("diploid_index"), py::arg("pop"))
-        .def("shape", &fwdpy11::SlocusPopGeneticValue::shape,
-             "Return the dimensions of the genetic values.")
+        .def_property_readonly("shape",
+                               [](const fwdpy11::SlocusPopGeneticValue& self) {
+                                   return self.shape();
+                               },
+                               "Return the dimensions of the genetic values.")
         .def_readonly("genetic_values",
                       &fwdpy11::SlocusPopGeneticValue::gvalues,
                       "Return the list of genetic values.");
