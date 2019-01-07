@@ -45,17 +45,21 @@ namespace py = pybind11;
 
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
 calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-                  const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn)
+                  const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+                  std::vector<fwdpy11::DiploidMetadata> &new_metadata)
 {
     // Calculate parental fitnesses
     std::vector<double> parental_fitnesses(pop.diploids.size());
     double sum_parental_fitnesses = 0.0;
+    new_metadata.resize(pop.N);
     for (std::size_t i = 0; i < pop.diploids.size(); ++i)
         {
-            genetic_value_fxn(rng, i, pop, pop.diploid_metadata[i]);
-            parental_fitnesses[i] = pop.diploid_metadata[i].w;
+            new_metadata[i] = pop.diploid_metadata[i];
+            genetic_value_fxn(rng, i, pop, new_metadata[i]);
+            parental_fitnesses[i] = new_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
+    pop.diploid_metadata.swap(new_metadata);
     // If the sum of parental fitnesses is not finite,
     // then the genetic value calculator returned a non-finite value/
     // Unfortunately, gsl_ran_discrete_preproc allows such values through
@@ -152,7 +156,8 @@ wfSlocusPop_ts(
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn);
+    std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
+    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
 
     // Generate our fxns for picking parents
 
@@ -201,7 +206,8 @@ wfSlocusPop_ts(
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup = calculate_fitness(rng, pop, genetic_value_fxn);
+            lookup
+                = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
