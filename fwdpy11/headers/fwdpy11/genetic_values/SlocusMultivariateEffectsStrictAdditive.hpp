@@ -37,21 +37,19 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t diploid_index,
                          const SlocusPop &pop) const
         {
-            std::fill(begin(multivariate_effects), end(multivariate_effects),
-                      0.0);
+            std::fill(begin(gvalues), end(gvalues), 0.0);
 
             for (auto key :
                  pop.gametes[pop.diploids[diploid_index].first].smutations)
                 {
                     const auto &mut = pop.mutations[key];
-                    if (mut.esizes.size() != multivariate_effects.size())
+                    if (mut.esizes.size() != gvalues.size())
                         {
                             throw std::runtime_error(
                                 "dimensionality mismatch");
                         }
                     std::transform(begin(mut.esizes), end(mut.esizes),
-                                   begin(multivariate_effects),
-                                   begin(multivariate_effects),
+                                   begin(gvalues), begin(gvalues),
                                    std::plus<double>());
                 }
 
@@ -59,24 +57,22 @@ namespace fwdpy11
                  pop.gametes[pop.diploids[diploid_index].second].smutations)
                 {
                     const auto &mut = pop.mutations[key];
-                    if (mut.esizes.size() != multivariate_effects.size())
+                    if (mut.esizes.size() != gvalues.size())
                         {
                             throw std::runtime_error(
                                 "dimensionality mismatch");
                         }
                     std::transform(begin(mut.esizes), end(mut.esizes),
-                                   begin(multivariate_effects),
-                                   begin(multivariate_effects),
+                                   begin(gvalues), begin(gvalues),
                                    std::plus<double>());
                 }
-            return multivariate_effects[focal_trait_index];
+            return gvalues[focal_trait_index];
         }
 
         pybind11::object
         pickle() const
         {
-            return pybind11::make_tuple(multivariate_effects.size(),
-                                        focal_trait_index);
+            return pybind11::make_tuple(gvalues.size(), focal_trait_index);
         }
     };
 } // namespace fwdpy11

@@ -23,6 +23,8 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 
     struct additive : public fwdpy11::SlocusPopGeneticValue
 {
+    additive() : fwdpy11::SlocusPopGeneticValue(1) {}
+
     inline double
     calculate_gvalue(const std::size_t diploid_index,
                      const fwdpy11::SlocusPop& pop) const
@@ -38,7 +40,8 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
             {
                 sum += pop.mutations[m].s;
             }
-        return std::max(0.0, 1.0 + sum);
+        gvalues[0] = std::max(0.0, 1.0 + sum);
+        return gvalues[0];
     }
 
     double
@@ -62,6 +65,12 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
         return pybind11::bytes("custom_additive");
     }
     DEFAULT_SLOCUSPOP_UPDATE();
+
+    pybind11::tuple
+    shape() const
+    {
+        return pybind11::make_tuple(1);
+    }
 };
 
 //Standard pybind11 stuff goes here

@@ -20,6 +20,7 @@
 #define FWDPY11_SLOCUSPOP_GENETIC_VALUE_HPP__
 
 #include <cstdint>
+#include <vector>
 #include <pybind11/pybind11.h>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
@@ -46,6 +47,14 @@ namespace fwdpy11
     /// Things to note:
     /// Any deme/geography-specific details must be handled by the derived class.
     {
+        std::size_t total_dim;
+        mutable std::vector<double> gvalues;
+
+        explicit SlocusPopGeneticValue(std::size_t dimensonality)
+            : total_dim(dimensonality), gvalues(total_dim, 0.0)
+        {
+        }
+
         // Callable from Python
         virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
                                         const SlocusPop& /*pop*/) const = 0;
@@ -69,6 +78,14 @@ namespace fwdpy11
                              const SlocusPop& /*pop*/) const = 0;
         virtual void update(const SlocusPop& /*pop*/) = 0;
         virtual pybind11::object pickle() const = 0;
+
+        virtual pybind11::tuple shape() const = 0;
+
+        std::vector<double>
+        genetic_values() const
+        {
+            return gvalues;
+        }
     };
 } //namespace fwdpy11
 

@@ -29,7 +29,6 @@ namespace fwdpy11
     struct SlocusPopMultivariateGeneticValueWithMapping
         : public SlocusPopGeneticValue
     {
-        mutable std::vector<double> multivariate_effects;
         /// Classes deriving from this must call gv2w->update
         /// from their own update functions.
         std::unique_ptr<MultivariateGeneticValueToFitnessMap> gv2w;
@@ -39,8 +38,9 @@ namespace fwdpy11
         SlocusPopMultivariateGeneticValueWithMapping(
             std::size_t ndim,
             const MultivariateGeneticValueToFitnessMap& gv2w_)
-            : multivariate_effects(ndim, 0.0), gv2w{ gv2w_.clone() },
-              noise_fxn{ new NoNoise() }
+            : SlocusPopGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
+                  new NoNoise()
+              }
         {
         }
 
@@ -48,15 +48,16 @@ namespace fwdpy11
             std::size_t ndim,
             const MultivariateGeneticValueToFitnessMap& gv2w_,
             const GeneticValueNoise& noise_)
-            : multivariate_effects(ndim, 0.0), gv2w{ gv2w_.clone() },
-              noise_fxn{ noise_.clone() }
+            : SlocusPopGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
+                  noise_.clone()
+              }
         {
         }
 
         virtual double
         genetic_value_to_fitness(const DiploidMetadata& metadata) const
         {
-            return gv2w->operator()(metadata, multivariate_effects);
+            return gv2w->operator()(metadata, gvalues);
         }
 
         virtual double
@@ -73,6 +74,12 @@ namespace fwdpy11
         {
             gv2w->update(pop);
             noise_fxn->update(pop);
+        }
+
+        pybind11::tuple
+        shape() const
+        {
+            return pybind11::make_tuple(total_dim);
         }
     };
 } // namespace fwdpy11

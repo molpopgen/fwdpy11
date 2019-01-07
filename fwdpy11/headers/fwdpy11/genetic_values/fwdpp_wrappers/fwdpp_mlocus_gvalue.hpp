@@ -69,7 +69,8 @@ namespace fwdpy11
                            [this, &pop](const DiploidGenotype& g) {
                                return gv(g, pop.gametes, pop.mutations);
                            });
-            return agg(per_locus_genetic_values);
+            gvalues[0] = agg(per_locus_genetic_values);
+            return gvalues[0];
         }
 
         inline void
@@ -78,6 +79,7 @@ namespace fwdpy11
             gv2w->update(pop);
             noise_fxn->update(pop);
         }
+
         virtual pybind11::object
         pickle() const
         {

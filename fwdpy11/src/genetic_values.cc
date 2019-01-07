@@ -173,7 +173,23 @@ PYBIND11_MODULE(genetic_values, m)
         :return: The fitness of an individual.
         :rtype: float
         )delim",
-             py::arg("diploid_index"), py::arg("pop"));
+             py::arg("diploid_index"), py::arg("pop"))
+        .def_property_readonly("shape",
+                               [](const fwdpy11::SlocusPopGeneticValue& self) {
+                                   return self.shape();
+                               },
+                               R"delim(
+                               Return the dimensions of the genetic values.
+
+                               .. versionadded:: 0.3.0
+                               )delim")
+        .def_readonly("genetic_values",
+                      &fwdpy11::SlocusPopGeneticValue::gvalues,
+                      R"delim(
+                      Return the list of genetic values.
+
+                      .. versionadded:: 0.3.0
+                      )delim");
 
     py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
                fwdpy11::SlocusPopGeneticValue>(
@@ -407,7 +423,23 @@ PYBIND11_MODULE(genetic_values, m)
              :return: The fitness of an individual.
              :rtype: float
              )delim",
-             py::arg("diploid_index"), py::arg("pop"));
+             py::arg("diploid_index"), py::arg("pop"))
+        .def_property_readonly("shape",
+                               [](const fwdpy11::MlocusPopGeneticValue& self) {
+                                   return self.shape();
+                               },
+                               R"delim(
+                               Return dimensions of genetic values.
+
+                               .. versionadded:: 0.3.0
+                               )delim")
+        .def_readonly("genetic_values",
+                      &fwdpy11::MlocusPopGeneticValue::gvalues,
+                      R"delim(
+                      Return the list of genetic values.
+
+                      .. versinadded:: 0.3.0
+                      )delim");
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
                fwdpy11::MlocusPopGeneticValue>(

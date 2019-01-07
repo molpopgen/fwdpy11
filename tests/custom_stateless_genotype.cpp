@@ -26,19 +26,20 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
 {
     fwdpp::site_dependent_genetic_value w;
 
-    GeneralW() : fwdpy11::SlocusPopGeneticValue{}, w{} {}
+    GeneralW() : fwdpy11::SlocusPopGeneticValue{1}, w{} {}
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
                      const fwdpy11::SlocusPop& pop) const
     {
-        return std::max(
+        gvalues[0] = std::max(
             0.0,
             w(pop.diploids[diploid_index], pop.gametes, pop.mutations,
               [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
               [](double& g, const fwdpy11::Mutation& m) {
                   g *= (1.0 + m.h);
               }));
+        return gvalues[0];
     }
 
     double
@@ -63,6 +64,12 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes() ])
     }
 
     DEFAULT_SLOCUSPOP_UPDATE();
+
+    pybind11::tuple
+    shape() const
+    {
+        return pybind11::make_tuple(1);
+    }
 };
 
 //Standard pybind11 stuff goes here

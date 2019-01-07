@@ -29,6 +29,13 @@ namespace fwdpy11
     /// Concepts we have to deal with:
     /// Noise and aggregation are a bit trickier here?
     {
+        std::size_t total_dim;
+        mutable std::vector<double> gvalues;
+
+        explicit MlocusPopGeneticValue(std::size_t dimensonality)
+            : total_dim(dimensonality), gvalues(total_dim, 0.0)
+        {
+        }
         // Callable from Python
         virtual double
         calculate_gvalue(const std::size_t /*diploid*/,
@@ -53,6 +60,13 @@ namespace fwdpy11
                              const std::size_t /*parent2*/,
                              const MlocusPop& /*pop*/) const = 0;
         virtual void update(const fwdpy11::MlocusPop& /*pop*/) = 0;
+        virtual pybind11::tuple shape() const = 0;
+
+        std::vector<double>
+        genetic_values() const
+        {
+            return gvalues;
+        }
         virtual pybind11::object pickle() const = 0;
     };
 } // namespace fwdpy11
