@@ -70,6 +70,14 @@ class testSnowdrift(unittest.TestCase):
     def setUp(self):
         self.f = snowdrift.SlocusSnowdrift(1, -1, 0.1, 0.2)
 
+    def testShape(self):
+        s = self.f.shape
+        self.assertEqual(len(s), 1)
+        self.assertEqual(s[0], 1)
+
+    def test_genetic_values(self):
+        self.assertEqual(len(self.f.genetic_values), 1)
+
     def testPickle(self):
         self.f.phenotypes = [1, 2, 3, 4]
         p = pickle.dumps(self.f, -1)

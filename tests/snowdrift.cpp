@@ -68,8 +68,8 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::SlocusPopGeneticValue{}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
-          phenotypes()
+        : fwdpy11::SlocusPopGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), phenotypes()
     {
     }
 
@@ -80,7 +80,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::SlocusPopGeneticValue{}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+        : fwdpy11::SlocusPopGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
           phenotypes(std::forward<T>(p))
     {
     }
@@ -90,7 +90,8 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
                      const fwdpy11::SlocusPop & /*pop*/) const
     // The call operator must return the genetic value of an individual
     {
-        return phenotypes[diploid_index];
+        gvalues[0] = phenotypes[diploid_index];
+        return gvalues[0];
     }
 
     inline double
@@ -151,6 +152,12 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     pickle() const
     {
         return py::make_tuple(b1, b2, c1, c2, phenotypes);
+    }
+
+    py::tuple
+    shape() const
+    {
+        return py::make_tuple(1);
     }
 };
 
