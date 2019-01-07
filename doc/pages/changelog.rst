@@ -7,6 +7,13 @@ version, etc.
 Current development branch
 ++++++++++++++++++++++++++
 
+Bug fixes
+-------------------------------------------------------------
+
+* A bug in how diploid metadata were updated by genetic value types has been fixed.  It is unlikely that this bug
+  affected anyone unless they had written custom genetic value calculations where the offspring's genetic value 
+  depended on the parental metadata. `PR 173 <https://github.com/molpopgen/fwdpy11/pull/173>`_
+
 Support for multivariate mutational effects
 -------------------------------------------------------------
 
@@ -44,6 +51,11 @@ Other changes in this release include:
   with tree sequences. `commit <https://github.com/molpopgen/fwdpy11/commit/b557c4162cbfdfba6c9126ebec14c7f3f43884eb>`_. 
 * When simulating with tree sequences, it is no longer an error to attempt to record ancient samples from the last
   generation of a simulation. `PR 162 <https://github.com/molpopgen/fwdpy11/pull/162>`_
+
+Changes to the C++ back-end include:
+
+* The genetic value types now store a vector of genetic values.  The idea is to generalize the type to handle both uni-
+  and multi- variate genetic values. `PR 172 <https://github.com/molpopgen/fwdpy11/pull/172>`_
 
 Version 0.2.1
 ++++++++++++++++++++++++++
