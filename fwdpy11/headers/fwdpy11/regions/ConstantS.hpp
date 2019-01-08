@@ -26,6 +26,12 @@ namespace fwdpy11
                 }
         }
 
+        ConstantS(const Region& r, const double s, const double es,
+                  const double h)
+            : Sregion(r, s), esize(es), dominance(h)
+        {
+        }
+
         std::unique_ptr<Sregion>
         clone() const
         {
@@ -42,9 +48,27 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return esize/scaling; },
-                [this]() { return dominance; },
-                this->label());
+                [this]() { return esize / scaling; },
+                [this]() { return dominance; }, this->label());
+        }
+
+        pybind11::tuple
+        pickle() const
+        {
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), esize,
+                                        dominance);
+        }
+
+        static ConstantS
+        unpickle(pybind11::tuple t)
+        {
+            if (t.size() != 3)
+                {
+                    throw std::runtime_error("invalid tuple size");
+                }
+            auto base = t[0].cast<pybind11::tuple>();
+            return ConstantS(Region::unpickle(base[0]), base[1].cast<double>(),
+                             t[1].cast<double>(), t[2].cast<double>());
         }
     };
 } // namespace fwdpy11

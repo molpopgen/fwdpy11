@@ -106,6 +106,19 @@ class testConstantS(unittest.TestCase):
         with self.assertRaises(ValueError):
             fwdpy11.ConstantS(0, 1, 1, 1, np.nan)
 
+    def test_pickling(self):
+        c = fwdpy11.ConstantS(0, 1, 1, -1, 3, False, 2, 4)
+        p = pickle.dumps(c, -1)
+        up = pickle.loads(p)
+        self.assertEqual(up.b, 0)
+        self.assertEqual(up.e, 1)
+        self.assertEqual(up.w, 1)
+        self.assertEqual(up.s, -1)
+        self.assertEqual(up.h, 3)
+        self.assertEqual(up.c, False)
+        self.assertEqual(up.l, 2)
+        self.assertEqual(up.scaling, 4)
+
 
 class testMutationRegions(unittest.TestCase):
     @classmethod
