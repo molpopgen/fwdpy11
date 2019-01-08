@@ -8,8 +8,13 @@ init_ExpS(py::module& m)
 {
     py::class_<fwdpy11::ExpS, fwdpy11::Sregion>(
         m, "ExpS", "Exponential distribution of effect sizes")
-        .def(py::init<double, double, double, double, double, bool,
-                      std::uint16_t, double>(),
+        .def(py::init([](double beg, double end, double weight, double mean,
+                         double h, bool coupled, std::uint16_t label,
+                         double scaling) {
+                 return fwdpy11::ExpS(
+                     fwdpy11::Region(beg, end, weight, coupled, label),
+                     scaling, mean, h);
+             }),
              py::arg("beg"), py::arg("end"), py::arg("weight"),
              py::arg("mean"), py::arg("h") = 1.0, py::arg("coupled") = true,
              py::arg("label") = 0, py::arg("scaling") = 1.0,

@@ -12,9 +12,9 @@ namespace fwdpy11
     struct ExpS : public Sregion
     {
         double mean, dominance;
-        ExpS(double b, double e, double w, double m, double h, bool c,
-             std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), mean(m), dominance(h)
+
+        ExpS(const Region& r, double sc, double m, double h)
+            : Sregion(r, sc), mean(m), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
@@ -24,11 +24,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
-        }
-
-        ExpS(const Region& r, double sc, double m, double h)
-            : Sregion(r, sc), mean(m), dominance(h)
-        {
         }
 
         std::unique_ptr<Sregion>
