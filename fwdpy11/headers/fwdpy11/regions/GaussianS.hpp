@@ -12,9 +12,9 @@ namespace fwdpy11
     struct GaussianS : public Sregion
     {
         double sd, dominance;
-        GaussianS(double b, double e, double w, double sd_, double h, bool c,
-                  std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), sd(sd_), dominance(h)
+
+        GaussianS(const Region& r, double sc, double sd_, double h)
+            : Sregion(r, sc), sd(sd_), dominance(h)
         {
             if (!std::isfinite(sd))
                 {
@@ -28,11 +28,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
-        }
-
-        GaussianS(const Region& r, double sc, double sd_, double h)
-            : Sregion(r, sc), sd(sd_), dominance(h)
-        {
         }
 
         std::unique_ptr<Sregion>
