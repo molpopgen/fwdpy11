@@ -64,7 +64,7 @@ init_MultivariateGaussianEffects(py::module& m)
 
                 The dominance parameter (`h`) applies to both the fixed effect and those
                 drawn from a multivariate normal.
-             )delim"),
+             )delim")
         .def(py::pickle(
             [](const fwdpy11::MultivariateGaussianEffects& self) {
                 return self.pickle();
