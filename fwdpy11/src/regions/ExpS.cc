@@ -41,6 +41,9 @@ init_ExpS(py::module& m)
             expS = fwdpy11.ExpS(0,1,1,-0.1,0)
         )delim")
         .def_readonly("mean", &fwdpy11::ExpS::mean)
-        .def_readonly("h", &fwdpy11::ExpS::dominance);
+        .def_readonly("h", &fwdpy11::ExpS::dominance)
+        .def(py::pickle(
+            [](const fwdpy11::ExpS& self) { return self.pickle(); },
+            [](py::tuple t) { return fwdpy11::ExpS::unpickle(t); }));
 }
 
