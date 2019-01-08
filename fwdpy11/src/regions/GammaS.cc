@@ -43,5 +43,8 @@ init_GammaS(py::module& m)
         )delim")
         .def_readonly("mean", &fwdpy11::GammaS::mean)
         .def_readonly("shape", &fwdpy11::GammaS::shape)
-        .def_readonly("h", &fwdpy11::GammaS::dominance);
+        .def_readonly("h", &fwdpy11::GammaS::dominance)
+        .def(py::pickle(
+            [](const fwdpy11::GammaS& self) { return self.pickle(); },
+            [](py::tuple t) { return fwdpy11::GammaS::unpickle(t); }));
 }
