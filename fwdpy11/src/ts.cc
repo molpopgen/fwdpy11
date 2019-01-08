@@ -18,6 +18,7 @@
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/policies/mutation.hpp>
+#include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
 
@@ -79,15 +80,6 @@ generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                                       return_zero, return_zero, 0);
 }
 
-template <typename T>
-inline py::array_t<T>
-make_1d_ndarray(const std::vector<T>& v)
-{
-    auto rv
-        = py::array_t<T>({ v.size() }, { sizeof(T) }, v.data(), py::cast(v));
-    return rv;
-}
-
 struct VariantIterator
 {
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
@@ -100,7 +92,7 @@ struct VariantIterator
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
         : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
           pos(), tv(tc, samples), genotype_data(samples.size(), 0),
-          genotypes(make_1d_ndarray(genotype_data))
+          genotypes(fwdpy11::make_1d_ndarray(genotype_data))
     {
         // Advance to first tree
         auto flag = tv(std::true_type(), std::true_type());
@@ -309,55 +301,55 @@ PYBIND11_MODULE(ts, m)
                       "Right edge of genomic interval (exclusive")
         .def_property_readonly("parents",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.parents);
+                                   return fwdpy11::make_1d_ndarray(m.parents);
                                },
                                "Vector of child -> parent relationships")
         .def_property_readonly("leaf_counts",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.leaf_counts);
+                                   return fwdpy11::make_1d_ndarray(m.leaf_counts);
                                },
                                "Leaf counts for each node")
         .def_property_readonly("preserved_leaf_counts",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(
+                                   return fwdpy11::make_1d_ndarray(
                                        m.preserved_leaf_counts);
                                },
                                "Ancient sample leaf counts for each node")
         .def_property_readonly("left_sib",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.left_sib);
+                                   return fwdpy11::make_1d_ndarray(m.left_sib);
                                },
                                "Return the left sibling of the current node")
         .def_property_readonly("right_sib",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.right_sib);
+                                   return fwdpy11::make_1d_ndarray(m.right_sib);
                                },
                                "Return the right sibling of the current node")
         .def_property_readonly("left_child",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.left_child);
+                                   return fwdpy11::make_1d_ndarray(m.left_child);
                                },
                                "Mapping of current node id to its left child")
         .def_property_readonly("right_child",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.right_child);
+                                   return fwdpy11::make_1d_ndarray(m.right_child);
                                },
                                "Mapping of current node id to its right child")
         .def_property_readonly("left_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.left_sample);
+                                   return fwdpy11::make_1d_ndarray(m.left_sample);
                                })
         .def_property_readonly("right_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.right_sample);
+                                   return fwdpy11::make_1d_ndarray(m.right_sample);
                                })
         .def_property_readonly("next_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.next_sample);
+                                   return fwdpy11::make_1d_ndarray(m.next_sample);
                                })
         .def_property_readonly("sample_index_map",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return make_1d_ndarray(m.sample_index_map);
+                                   return fwdpy11::make_1d_ndarray(m.sample_index_map);
                                })
         .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size)
         .def("total_time",
