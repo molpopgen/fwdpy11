@@ -8,8 +8,13 @@ init_GaussianS(py::module& m)
 {
     py::class_<fwdpy11::GaussianS, fwdpy11::Sregion>(
         m, "GaussianS", "Gaussian distribution of effect sizes")
-        .def(py::init<double, double, double, double, double, bool,
-                      std::uint16_t, double>(),
+        .def(py::init([](double beg, double end, double weight, double sd,
+                         double h, bool coupled, std::uint16_t label,
+                         double scaling) {
+                 return fwdpy11::GaussianS(
+                     fwdpy11::Region(beg, end, weight, coupled, label),
+                     scaling, sd, h);
+             }),
              py::arg("beg"), py::arg("end"), py::arg("weight"), py::arg("sd"),
              py::arg("h") = 1.0, py::arg("coupled") = true,
              py::arg("label") = 0, py::arg("scaling") = 1.0,
@@ -41,6 +46,9 @@ init_GaussianS(py::module& m)
             gaussianS = fwdpy11.GaussianS(0,1,1,0.1,1)
         )delim")
         .def_readonly("sd", &fwdpy11::GaussianS::sd)
-        .def_readonly("h", &fwdpy11::GaussianS::dominance);
+        .def_readonly("h", &fwdpy11::GaussianS::dominance)
+        .def(py::pickle(
+            [](const fwdpy11::GaussianS& self) { return self.pickle(); },
+            [](py::tuple t) { return fwdpy11::GaussianS::unpickle(t); }));
 }
 

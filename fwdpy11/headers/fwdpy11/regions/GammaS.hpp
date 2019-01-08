@@ -12,9 +12,9 @@ namespace fwdpy11
     struct GammaS : public Sregion
     {
         double mean, shape, dominance;
-        GammaS(double b, double e, double w, double m, double s, double h,
-               bool c, std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), mean(m), shape(s), dominance(h)
+
+        GammaS(const Region& r, double sc, double m, double s, double h)
+            : Sregion(r, sc), mean(m), shape(s), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
@@ -51,6 +51,26 @@ namespace fwdpy11
                            / scaling;
                 },
                 [this]() { return dominance; }, this->label());
+        }
+
+        pybind11::tuple
+        pickle() const
+        {
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), mean, shape,
+                                        dominance);
+        }
+
+        static GammaS
+        unpickle(pybind11::tuple t)
+        {
+            if (t.size() != 4)
+                {
+                    throw std::runtime_error("invalid tuple size");
+                }
+            auto base = t[0].cast<pybind11::tuple>();
+            return GammaS(Region::unpickle(base[0]), base[1].cast<double>(),
+                          t[1].cast<double>(), t[2].cast<double>(),
+                          t[3].cast<double>());
         }
     };
 } // namespace fwdpy11

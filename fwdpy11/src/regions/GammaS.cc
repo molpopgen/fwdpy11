@@ -8,8 +8,13 @@ init_GammaS(py::module& m)
 {
     py::class_<fwdpy11::GammaS, fwdpy11::Sregion>(
         m, "GammaS", "Gamma distribution of effect sizes")
-        .def(py::init<double, double, double, double, double, double, bool,
-                      std::uint16_t, double>(),
+        .def(py::init([](double beg, double end, double weight, double mean,
+                         double shape, double h, bool coupled,
+                         std::uint16_t label, double scaling) {
+                 return fwdpy11::GammaS(
+                     fwdpy11::Region(beg, end, weight, coupled, label), scaling, mean,
+                     shape, h);
+             }),
              py::arg("beg"), py::arg("end"), py::arg("weight"),
              py::arg("mean"), py::arg("shape"), py::arg("h") = 1.0,
              py::arg("coupled") = true, py::arg("label") = 0,
@@ -43,5 +48,8 @@ init_GammaS(py::module& m)
         )delim")
         .def_readonly("mean", &fwdpy11::GammaS::mean)
         .def_readonly("shape", &fwdpy11::GammaS::shape)
-        .def_readonly("h", &fwdpy11::GammaS::dominance);
+        .def_readonly("h", &fwdpy11::GammaS::dominance)
+        .def(py::pickle(
+            [](const fwdpy11::GammaS& self) { return self.pickle(); },
+            [](py::tuple t) { return fwdpy11::GammaS::unpickle(t); }));
 }

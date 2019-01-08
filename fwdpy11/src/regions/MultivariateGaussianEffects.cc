@@ -29,8 +29,8 @@ init_MultivariateGaussianEffects(py::module& m)
                  gsl_matrix_const_view v = gsl_matrix_const_view_array(
                      r.data(0, 0), r.shape(0), r.shape(1));
                  return fwdpy11::MultivariateGaussianEffects(
-                     beg, end, weight, coupled, v.matrix, fixed_effect, h,
-                     label, true);
+                     fwdpy11::Region(beg, end, weight, coupled, label), 1.0,
+                     v.matrix, fixed_effect, h, true);
              }),
              py::arg("beg"), py::arg("end"), py::arg("weight"),
              py::arg("matrix"), py::arg("fixed_effect") = 0.0,
@@ -64,5 +64,16 @@ init_MultivariateGaussianEffects(py::module& m)
 
                 The dominance parameter (`h`) applies to both the fixed effect and those
                 drawn from a multivariate normal.
-             )delim");
+             )delim")
+        .def(py::pickle(
+            [](const fwdpy11::MultivariateGaussianEffects& self) {
+                return self.pickle();
+            },
+            [](py::tuple t) {
+                return fwdpy11::MultivariateGaussianEffects::unpickle(t);
+            }))
+        .def("__eq__", [](const fwdpy11::MultivariateGaussianEffects& lhs,
+                          const fwdpy11::MultivariateGaussianEffects& rhs) {
+            return lhs == rhs;
+        });
 }

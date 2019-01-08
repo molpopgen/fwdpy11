@@ -12,9 +12,9 @@ namespace fwdpy11
     struct GaussianS : public Sregion
     {
         double sd, dominance;
-        GaussianS(double b, double e, double w, double sd, double h, bool c,
-                  std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), sd(sd), dominance(h)
+
+        GaussianS(const Region& r, double sc, double sd_, double h)
+            : Sregion(r, sc), sd(sd_), dominance(h)
         {
             if (!std::isfinite(sd))
                 {
@@ -50,6 +50,25 @@ namespace fwdpy11
                     return gsl_ran_gaussian_ziggurat(rng.get(), sd) / scaling;
                 },
                 [this]() { return dominance; }, this->label());
+        }
+
+        pybind11::tuple
+        pickle() const
+        {
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), sd,
+                                        dominance);
+        }
+
+        static GaussianS
+        unpickle(pybind11::tuple t)
+        {
+            if (t.size() != 3)
+                {
+                    throw std::runtime_error("invalid tuple size");
+                }
+            auto base = t[0].cast<pybind11::tuple>();
+            return GaussianS(Region::unpickle(base[0]), base[1].cast<double>(),
+                             t[1].cast<double>(), t[2].cast<double>());
         }
     };
 } // namespace fwdpy11

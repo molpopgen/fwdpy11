@@ -31,15 +31,12 @@ namespace fwdpy11
         vector_ptr mu;
         double fixed_effect, dominance;
 
-        MultivariateGaussianEffects(double beg, double end, double weight,
-                                    bool coupled,
+        MultivariateGaussianEffects(const Region &r, const double sc,
                                     const gsl_matrix &input_matrix, double s,
-                                    double h, std::uint16_t label,
                                     // NOTE: matrix_is_covariance is
                                     // NOT exposed to Python
-                                    bool matrix_is_covariance)
-            : Sregion(beg, end, weight, coupled, label, 1.0),
-              effect_sizes(input_matrix.size1),
+                                    double h, bool matrix_is_covariance)
+            : Sregion(r, sc), effect_sizes(input_matrix.size1),
               dominance_values(input_matrix.size1, h),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
@@ -110,9 +107,10 @@ namespace fwdpy11
         {
             return std::unique_ptr<MultivariateGaussianEffects>(
                 new MultivariateGaussianEffects(
-                    this->beg(), this->end(), this->weight(),
-                    this->region.coupled, *matrix.get(), this->fixed_effect,
-                    this->dominance, this->label(), false));
+                    fwdpy11::Region(this->beg(), this->end(), this->weight(),
+                                    this->region.coupled, this->label()),
+                    1.0, *matrix.get(), this->fixed_effect, this->dominance,
+                    false));
         }
 
         virtual std::uint32_t
@@ -137,7 +135,63 @@ namespace fwdpy11
                 [this]() { return effect_sizes; },
                 [this]() { return dominance_values; }, this->label());
         }
+
+        pybind11::tuple
+        pickle() const
+        {
+            pybind11::list matrix_data;
+            for (std::size_t i = 0; i < matrix->size1; ++i)
+                {
+                    for (std::size_t j = 0; j < matrix->size2; ++j)
+                        {
+                            matrix_data.append(
+                                gsl_matrix_get(matrix.get(), i, j));
+                        }
+                }
+
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), matrix_data,
+                                        matrix->size1, matrix->size2,
+                                        fixed_effect, dominance);
+        }
+
+        static MultivariateGaussianEffects
+        unpickle(pybind11::tuple t)
+        {
+            if (t.size() != 6)
+                {
+                    throw std::runtime_error("invalid tuple size");
+                }
+            auto base = t[0].cast<pybind11::tuple>();
+            std::vector<double> input_matrix_data;
+            pybind11::list input_matrix_list = t[1].cast<pybind11::list>();
+            std::size_t size1 = t[2].cast<std::size_t>();
+            std::size_t size2 = t[3].cast<std::size_t>();
+            for (auto i : input_matrix_list)
+                {
+                    input_matrix_data.push_back(i.cast<double>());
+                }
+            auto v = gsl_matrix_const_view_array(input_matrix_data.data(),
+                                                 size1, size2);
+            return MultivariateGaussianEffects(
+                Region::unpickle(base[0]), base[1].cast<double>(), v.matrix,
+                t[4].cast<double>(), t[5].cast<double>(), false);
+        }
     };
+
+    bool
+    operator==(const MultivariateGaussianEffects &lhs,
+               const MultivariateGaussianEffects &rhs)
+    {
+        bool base_equal = lhs.is_equal(rhs);
+        if (base_equal == false)
+            {
+                return false;
+            }
+        return rhs.fixed_effect == rhs.fixed_effect
+               && rhs.dominance == rhs.dominance
+               && gsl_matrix_equal(rhs.matrix.get(), rhs.matrix.get());
+    }
+
 } // namespace fwdpy11
 
 #endif
