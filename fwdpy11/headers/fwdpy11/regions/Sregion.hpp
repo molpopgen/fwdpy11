@@ -17,18 +17,14 @@ namespace fwdpy11
     {
         Region region; // For returning positions
         double scaling;
-        Sregion(double b, double e, double w, bool c, std::uint16_t l,
-                double s)
-            : region(b, e, w, c, l), scaling(s)
+
+        Sregion(const Region& r, double s) : region(r), scaling(s)
         {
             if (!std::isfinite(scaling))
                 {
                     throw std::invalid_argument("scaling must be finite");
                 }
         }
-
-        // This constructor aids unpickling
-        Sregion(const Region& r, double s) : region(r), scaling(s) {}
 
         inline double
         beg() const
@@ -79,7 +75,11 @@ namespace fwdpy11
                                    t[1].cast<double>());
         }
 
-        virtual pybind11::tuple pickle() const { return pybind11::none(); }
+        virtual pybind11::tuple
+        pickle() const
+        {
+            return pybind11::none();
+        }
     };
 } // namespace fwdpy11
 
