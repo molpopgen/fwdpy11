@@ -27,6 +27,9 @@ namespace fwdpy11
                 }
         }
 
+        // This constructor aids unpickling
+        Sregion(const Region& r, double s) : region(r), scaling(s) {}
+
         inline double
         beg() const
         {
@@ -58,6 +61,25 @@ namespace fwdpy11
             std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
             const std::uint32_t /*generation*/,
             const GSLrng_t& /*rng*/) const = 0;
+
+        pybind11::tuple
+        pickle_Sregion() const
+        {
+            return pybind11::make_tuple(region.pickle(), scaling);
+        }
+
+        static std::tuple<Region, double>
+        unpickle_Sregion(pybind11::tuple t)
+        {
+            if (t.size() != 2)
+                {
+                    throw std::runtime_error("inalid tuple size");
+                }
+            return std::make_tuple(Region::unpickle(t[0]),
+                                   t[1].cast<double>());
+        }
+
+        virtual pybind11::tuple pickle() const { return pybind11::none(); }
     };
 } // namespace fwdpy11
 
