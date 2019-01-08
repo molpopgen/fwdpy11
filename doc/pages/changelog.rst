@@ -10,6 +10,9 @@ Current development branch
 Bug fixes
 -------------------------------------------------------------
 
+* Updates to the fwdpp submodule fix a bug in :func:`fwdpy11.ts.infinite_sites`.  Previously, if the genome size 
+  was not 1.0, then the number of mutations would be off by a factor of the genome size divided by 1.0.  The error was
+  due to a bug upstream in fwdpp.
 * A bug in how diploid metadata were updated by genetic value types has been fixed.  It is unlikely that this bug
   affected anyone unless they had written custom genetic value calculations where the offspring's genetic value 
   depended on the parental metadata. `PR 173 <https://github.com/molpopgen/fwdpy11/pull/173>`_
