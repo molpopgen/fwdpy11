@@ -41,6 +41,9 @@ init_GaussianS(py::module& m)
             gaussianS = fwdpy11.GaussianS(0,1,1,0.1,1)
         )delim")
         .def_readonly("sd", &fwdpy11::GaussianS::sd)
-        .def_readonly("h", &fwdpy11::GaussianS::dominance);
+        .def_readonly("h", &fwdpy11::GaussianS::dominance)
+        .def(py::pickle(
+            [](const fwdpy11::GaussianS& self) { return self.pickle(); },
+            [](py::tuple t) { return fwdpy11::GaussianS::unpickle(t); }));
 }
 
