@@ -25,8 +25,9 @@ init_MutationRegions(py::module& m)
                     {
                         nweights.push_back(n.weight);
                         nregions.emplace_back(new fwdpy11::ConstantS(
-                            n.beg, n.end, n.weight, 0.0, 0.0, n.coupled,
-                            n.label, 1.0));
+                            fwdpy11::Region(n.beg, n.end, n.weight, n.coupled,
+                                            n.label),
+                            1.0, 0.0, 0.0));
                     }
 
                 for (auto& s : selected)
