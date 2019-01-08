@@ -3,6 +3,7 @@
 import fwdpy11
 import numpy as np
 import unittest
+import pickle
 
 
 class testRegion(unittest.TestCase):
@@ -26,6 +27,16 @@ class testRegion(unittest.TestCase):
             fwdpy11.Region(0, 1, np.nan)
         with self.assertRaises(ValueError):
             fwdpy11.Region(0, 1, -1e-3)
+
+    def test_pickling(self):
+        r = fwdpy11.Region(0, 1, 1, True, 3)
+        p = pickle.dumps(r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(r.b, up.b)
+        self.assertEqual(r.e, up.e)
+        self.assertEqual(r.w, up.w)
+        self.assertEqual(r.c, up.c)
+        self.assertEqual(r.l, up.l)
 
 
 class testExpS(unittest.TestCase):
@@ -137,10 +148,10 @@ class testMultivariateGaussianEffects(unittest.TestCase):
                 0, 1, 1, m)
 
     def testMatrixWithNAN(self):
-        m=np.identity(4).reshape((4,4))
-        m[0,1]=np.nan
+        m = np.identity(4).reshape((4, 4))
+        m[0, 1] = np.nan
         with self.assertRaises(ValueError):
-            fwdpy11.MultivariateGaussianEffects(0,1,1,m)
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, m)
 
 
 class testMlocusMutationRegions(unittest.TestCase):
