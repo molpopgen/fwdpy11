@@ -12,9 +12,9 @@ namespace fwdpy11
     struct GammaS : public Sregion
     {
         double mean, shape, dominance;
-        GammaS(double b, double e, double w, double m, double s, double h,
-               bool c, std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), mean(m), shape(s), dominance(h)
+
+        GammaS(const Region& r, double sc, double m, double s, double h)
+            : Sregion(r, sc), mean(m), shape(s), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
@@ -28,11 +28,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
-        }
-
-        GammaS(const Region& r, double sc, double m, double s, double h)
-            : Sregion(r, sc), mean(m), shape(s), dominance(h)
-        {
         }
 
         std::unique_ptr<Sregion>
