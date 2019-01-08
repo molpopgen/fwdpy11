@@ -233,15 +233,40 @@ PYBIND11_MODULE(_Population, m)
                 Give access to the population's 
                 :class:`fwdpy11.ts.TableCollection`
                 )delim")
-        .def_property_readonly("genetic_values",
-                               [](const fwdpy11::Population& self) {
-                                   return fwdpy11::make_1d_ndarray(
-                                       self.genetic_value_matrix);
-                               })
+        .def_property_readonly(
+            "genetic_values",
+            [](const fwdpy11::Population& self) {
+                py::print(self.N, self.genetic_value_matrix.size());
+                //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
+                return fwdpy11::make_2d_ndarray(
+                    self.genetic_value_matrix, self.N,
+                    self.genetic_value_matrix.size() / self.N);
+            },
+            R"delim(
+        Return the genetic values as a 2d matrix.
+        
+        The array is read-write, so be careful!
+        
+        Rows are individuals.  Columns are genetic values.
+        
+        ..  versionadded 0.3.0
+        )delim")
         .def_property_readonly(
             "ancient_sample_genetic_values",
             [](const fwdpy11::Population& self) {
-                return fwdpy11::make_1d_ndarray(
-                    self.ancient_sample_genetic_value_matrix);
-            });
+                return fwdpy11::make_2d_ndarray(
+                    self.ancient_sample_genetic_value_matrix,
+                    self.ancient_sample_metadata.size(),
+                    self.ancient_sample_genetic_value_matrix.size()
+                        / self.ancient_sample_metadata.size());
+            },
+            R"delim(
+        Return the genetic values for ancient samples as a 2d matrix.
+        
+        The array is read-write, so be careful!
+        
+        Rows are individuals.  Columns are genetic values.
+        
+        ..  versionadded 0.3.0
+        )delim");
 }
