@@ -5,6 +5,9 @@ import numpy as np
 import unittest
 import pickle
 
+# Choose global values that differ from default values in Python class constructors
+BEG, END, WEIGHT, DOM, LABEL, COUPLED = 0.0, 1.0, 0.5, 0.5, 63, False
+
 
 class testRegion(unittest.TestCase):
     """
@@ -28,15 +31,20 @@ class testRegion(unittest.TestCase):
         with self.assertRaises(ValueError):
             fwdpy11.Region(0, 1, -1e-3)
 
+
+class test_PickleRegion(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.Region(BEG, END, WEIGHT, COUPLED, LABEL)
+
     def test_pickling(self):
-        r = fwdpy11.Region(0, 1, 1, True, 3)
-        p = pickle.dumps(r, -1)
+        p = pickle.dumps(self.r, -1)
         up = pickle.loads(p)
-        self.assertEqual(r.b, up.b)
-        self.assertEqual(r.e, up.e)
-        self.assertEqual(r.w, up.w)
-        self.assertEqual(r.c, up.c)
-        self.assertEqual(r.l, up.l)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
 
 
 class testExpS(unittest.TestCase):
@@ -55,6 +63,23 @@ class testExpS(unittest.TestCase):
             fwdpy11.ExpS(0, 1, 1, -1.0, h=np.nan)
 
 
+class test_PickleExpS(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.ExpS(BEG, END, WEIGHT, -0.2, DOM, COUPLED, LABEL)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
+        self.assertEqual(up.mean, -0.2)
+        self.assertEqual(up.h, DOM)
+
+
 class testGammaS(unittest.TestCase):
     def testBadMean(self):
         with self.assertRaises(ValueError):
@@ -67,6 +92,25 @@ class testGammaS(unittest.TestCase):
     def testBadDominance(self):
         with self.assertRaises(ValueError):
             fwdpy11.GammaS(0, 1, 1, mean=1., shape=1., h=np.nan)
+
+
+class test_PickleGammaS(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.GammaS(BEG, END, WEIGHT,
+                                -0.2, 0.5, DOM, COUPLED, LABEL)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
+        self.assertEqual(up.mean, -0.2)
+        self.assertEqual(up.shape, 0.5)
+        self.assertEqual(up.h, DOM)
 
 
 class testUniformS(unittest.TestCase):
@@ -83,6 +127,25 @@ class testUniformS(unittest.TestCase):
             fwdpy11.UniformS(0, 1, 1, lo=1., hi=1., h=np.nan)
 
 
+class test_PickleUniformS(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.UniformS(BEG, END, WEIGHT,
+                                  -0.2, 0.5, DOM, COUPLED, LABEL)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
+        self.assertEqual(up.lo, -0.2)
+        self.assertEqual(up.hi, 0.5)
+        self.assertEqual(up.h, DOM)
+
+
 class testGaussianS(unittest.TestCase):
     def testBadStdDev(self):
         with self.assertRaises(ValueError):
@@ -97,6 +160,24 @@ class testGaussianS(unittest.TestCase):
             fwdpy11.GaussianS(0, 1, 1, 1e-3, h=np.nan)
 
 
+class test_PickleGaussianS(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.GaussianS(BEG, END, WEIGHT,
+                                   0.5, DOM, COUPLED, LABEL)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
+        self.assertEqual(up.sd, 0.5)
+        self.assertEqual(up.h, DOM)
+
+
 class testConstantS(unittest.TestCase):
     def testBadValue(self):
         with self.assertRaises(ValueError):
@@ -106,18 +187,23 @@ class testConstantS(unittest.TestCase):
         with self.assertRaises(ValueError):
             fwdpy11.ConstantS(0, 1, 1, 1, np.nan)
 
+
+class test_PickleConstantS(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.ConstantS(BEG, END, WEIGHT,
+                                   0.5, DOM, COUPLED, LABEL)
+
     def test_pickling(self):
-        c = fwdpy11.ConstantS(0, 1, 1, -1, 3, False, 2, 4)
-        p = pickle.dumps(c, -1)
+        p = pickle.dumps(self.r, -1)
         up = pickle.loads(p)
-        self.assertEqual(up.b, 0)
-        self.assertEqual(up.e, 1)
-        self.assertEqual(up.w, 1)
-        self.assertEqual(up.s, -1)
-        self.assertEqual(up.h, 3)
-        self.assertEqual(up.c, False)
-        self.assertEqual(up.l, 2)
-        self.assertEqual(up.scaling, 4)
+        self.assertEqual(self.r.b, up.b)
+        self.assertEqual(self.r.e, up.e)
+        self.assertEqual(self.r.w, up.w)
+        self.assertEqual(self.r.c, up.c)
+        self.assertEqual(self.r.l, up.l)
+        self.assertEqual(up.s, 0.5)
+        self.assertEqual(up.h, DOM)
 
 
 class testMutationRegions(unittest.TestCase):

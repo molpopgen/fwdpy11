@@ -58,7 +58,7 @@ namespace fwdpy11
         pybind11::tuple
         pickle() const
         {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), hi, lo,
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), lo, hi,
                                         dominance);
         }
 
