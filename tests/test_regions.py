@@ -253,6 +253,18 @@ class testMultivariateGaussianEffects(unittest.TestCase):
             fwdpy11.MultivariateGaussianEffects(0, 1, 1, m)
 
 
+class test_PickleMultivariateGaussianEffects(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.r = fwdpy11.MultivariateGaussianEffects(
+            BEG, END, WEIGHT, np.identity(2), -0.3, DOM, COUPLED, LABEL)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertEqual(self.r, up)
+
+
 class testMlocusMutationRegions(unittest.TestCase):
     @classmethod
     def setUp(self):

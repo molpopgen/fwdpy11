@@ -164,8 +164,8 @@ namespace fwdpy11
             auto base = t[0].cast<pybind11::tuple>();
             std::vector<double> input_matrix_data;
             pybind11::list input_matrix_list = t[1].cast<pybind11::list>();
-            std::size_t size1 = t[1].cast<std::size_t>();
-            std::size_t size2 = t[2].cast<std::size_t>();
+            std::size_t size1 = t[2].cast<std::size_t>();
+            std::size_t size2 = t[3].cast<std::size_t>();
             for (auto i : input_matrix_list)
                 {
                     input_matrix_data.push_back(i.cast<double>());
@@ -174,7 +174,7 @@ namespace fwdpy11
                                                  size1, size2);
             return MultivariateGaussianEffects(
                 Region::unpickle(base[0]), base[1].cast<double>(), v.matrix,
-                t[3].cast<double>(), t[4].cast<double>(), false);
+                t[4].cast<double>(), t[5].cast<double>(), false);
         }
     };
 

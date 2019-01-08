@@ -71,5 +71,9 @@ init_MultivariateGaussianEffects(py::module& m)
             },
             [](py::tuple t) {
                 return fwdpy11::MultivariateGaussianEffects::unpickle(t);
-            }));
+            }))
+        .def("__eq__", [](const fwdpy11::MultivariateGaussianEffects& lhs,
+                          const fwdpy11::MultivariateGaussianEffects& rhs) {
+            return lhs == rhs;
+        });
 }
