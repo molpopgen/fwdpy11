@@ -51,6 +51,13 @@ namespace fwdpy11
         std::vector<ancient_sample_record> ancient_sample_records;
         fwdpp::ts::table_collection tables;
 
+        // These track genetic values for the individuals differently
+        // from what diploid_metadata/ancient_sample_metadata do.
+        // For the case of a multivariate trait, we imagine this to
+        // represent a matrix of N rows by "dimensions" columns.
+        std::vector<double> genetic_value_matrix,
+            ancient_sample_genetic_value_matrix;
+
         virtual ~PyPopulation() = default;
 
         PyPopulation(PyPopulation &&) = default;
@@ -59,7 +66,8 @@ namespace fwdpy11
         PyPopulation(fwdpp::uint_t N_, const double L)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
               ancient_sample_metadata{}, ancient_sample_records{},
-              tables(init_tables(N_, L))
+              tables(init_tables(N_, L)), genetic_value_matrix{},
+              ancient_sample_genetic_value_matrix{}
         {
         }
 
@@ -72,7 +80,8 @@ namespace fwdpy11
                           std::forward<mutations_input>(m), reserve_size },
               N{ N_ }, generation{ 0 }, diploid_metadata(N),
               ancient_sample_metadata{}, ancient_sample_records{},
-              tables(std::numeric_limits<double>::max())
+              tables(std::numeric_limits<double>::max()),
+              genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {
         }
 
