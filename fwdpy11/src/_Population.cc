@@ -21,6 +21,7 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
 
@@ -231,5 +232,16 @@ PYBIND11_MODULE(_Population, m)
                       R"delim(
                 Give access to the population's 
                 :class:`fwdpy11.ts.TableCollection`
-                )delim");
+                )delim")
+        .def_property_readonly("genetic_values",
+                               [](const fwdpy11::Population& self) {
+                                   return fwdpy11::make_1d_ndarray(
+                                       self.genetic_value_matrix);
+                               })
+        .def_property_readonly(
+            "ancient_sample_genetic_values",
+            [](const fwdpy11::Population& self) {
+                return fwdpy11::make_1d_ndarray(
+                    self.ancient_sample_genetic_value_matrix);
+            });
 }
