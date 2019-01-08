@@ -17,6 +17,18 @@ namespace fwdpy11
                                        pybind11::cast(v));
         return rv;
     }
+
+    template <typename T>
+    inline pybind11::array_t<T>
+    make_2d_ndarray(const std::vector<T>& v, std::size_t dim1,
+                    std::size_t dim2)
+    // Returns a 2d numpy array that does not own
+    // its data.
+    {
+        auto rv = pybind11::array_t<T>({ dim1, dim2 }, v.data(),
+                                       pybind11::cast(v));
+        return rv;
+    }
 } // namespace fwdpy11
 
 #endif
