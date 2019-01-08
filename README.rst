@@ -65,6 +65,12 @@ Suppored Python version
 
 fwdpy11 is written for Python 3.  We will not modify the package to be compatible with Python 2.7.
 
+
+Installation
+---------------------------------
+
+Building from the git repository:
+
 .. code-block:: bash
 
     git submodule init
@@ -76,9 +82,6 @@ fwdpy11 is written for Python 3.  We will not modify the package to be compatibl
     The clang compiler is the assumed default on OS X.  However, life is simpler
     if you use gcc.  The setup.py takes a --gcc option that eliminates OS X-specific
     (really Xcode clang-specific) features so that an OS X/gcc build is possible.
-
-Installation
----------------------------------
 
 Using pip on OS X and Linux (or pip3 as appropriate for your system):
 
@@ -99,6 +102,14 @@ You may or may not need to prefix the above with
     CC=gcc CXX=g++
 
 depending on whether or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
+
+It is possible that the cmake macros to detect the GSL can fail to detect the correct version.  Issues like this are a
+basic weakness of cmake.  I've seen this in conda environments, where the macro prefers the system version over the
+newer version in the environment.  To "fix" this, give it a hint:
+
+.. code-block:: bash
+
+    GSL_ROOT_DIR=/path/to/gsl python3 setup.py build_ext -i
 
 Caution
 ==================================
