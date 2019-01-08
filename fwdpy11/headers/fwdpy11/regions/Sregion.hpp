@@ -80,6 +80,12 @@ namespace fwdpy11
         {
             return pybind11::none();
         }
+
+        inline bool
+        is_equal(const Sregion& rhs) const
+        {
+            return this->region == rhs.region && this->scaling == rhs.scaling;
+        }
     };
 } // namespace fwdpy11
 

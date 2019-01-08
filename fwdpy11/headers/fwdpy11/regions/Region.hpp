@@ -66,6 +66,14 @@ namespace fwdpy11
                           t[4].cast<std::uint16_t>());
         }
     };
+
+    inline bool
+    operator==(const Region& lhs, const Region& rhs)
+    {
+        return lhs.beg == rhs.beg && lhs.end == rhs.end
+               && lhs.weight == rhs.weight && lhs.coupled == rhs.coupled
+               && lhs.label == rhs.label;
+    }
 } // namespace fwdpy11
 
 #endif

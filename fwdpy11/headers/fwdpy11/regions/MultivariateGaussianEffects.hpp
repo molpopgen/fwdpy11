@@ -177,6 +177,21 @@ namespace fwdpy11
                 t[3].cast<double>(), t[4].cast<double>(), false);
         }
     };
+
+    bool
+    operator==(const MultivariateGaussianEffects &lhs,
+               const MultivariateGaussianEffects &rhs)
+    {
+        bool base_equal = lhs.is_equal(rhs);
+        if (base_equal == false)
+            {
+                return false;
+            }
+        return rhs.fixed_effect == rhs.fixed_effect
+               && rhs.dominance == rhs.dominance
+               && gsl_matrix_equal(rhs.matrix.get(), rhs.matrix.get());
+    }
+
 } // namespace fwdpy11
 
 #endif
