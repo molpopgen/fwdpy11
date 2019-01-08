@@ -12,9 +12,10 @@ namespace fwdpy11
     struct ConstantS : public Sregion
     {
         double esize, dominance;
-        ConstantS(double b, double e, double w, double es, double h, bool c,
-                  std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), esize(es), dominance(h)
+
+        ConstantS(const Region& r, const double s, const double es,
+                  const double h)
+            : Sregion(r, s), esize(es), dominance(h)
         {
             if (!std::isfinite(esize))
                 {
@@ -24,12 +25,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
-        }
-
-        ConstantS(const Region& r, const double s, const double es,
-                  const double h)
-            : Sregion(r, s), esize(es), dominance(h)
-        {
         }
 
         std::unique_ptr<Sregion>

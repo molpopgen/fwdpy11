@@ -12,9 +12,9 @@ namespace fwdpy11
     struct UniformS : public Sregion
     {
         double lo, hi, dominance;
-        UniformS(double b, double e, double w, double lo_, double hi_,
-                 double h, bool c, std::uint16_t l, double sc)
-            : Sregion(b, e, w, c, l, sc), lo(lo_), hi(hi_), dominance(h)
+
+        UniformS(const Region& r, double sc, double lo_, double hi_, double h)
+            : Sregion(r, sc), lo(lo_), hi(hi_), dominance(h)
         {
             if (!std::isfinite(lo))
                 {
@@ -32,11 +32,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("hi must be > lo");
                 }
-        }
-
-        UniformS(const Region& r, double sc, double lo_, double hi_, double h)
-            : Sregion(r, sc), lo(lo_), hi(hi_), dominance(h)
-        {
         }
 
         std::unique_ptr<Sregion>
