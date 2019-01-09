@@ -43,25 +43,56 @@
 
 namespace py = pybind11;
 
+inline void
+resize_genotype_matrix(std::vector<double> &new_diploid_gvalues,
+                       std::size_t newsize, std::true_type)
+{
+    new_diploid_gvalues.resize(newsize);
+}
+
+inline void
+resize_genotype_matrix(std::vector<double> & /*new_diploid_gvalues*/,
+                       std::size_t /*newsize*/, std::false_type)
+{
+}
+
+template <typename gvalue_fxn>
+inline void
+copy_genetic_values(double *beg, const gvalue_fxn &genetic_value_fxn,
+                    std::true_type)
+{
+    std::copy(begin(genetic_value_fxn.gvalues), end(genetic_value_fxn.gvalues),
+              beg);
+}
+
+template <typename gvalue_fxn>
+inline void
+copy_genetic_values(double * /*beg*/, const gvalue_fxn & /*genetic_value_fxn*/,
+                    std::false_type)
+{
+}
+
+template <typename update_genotype_matrix>
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
-calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-                  const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-                  std::vector<fwdpy11::DiploidMetadata> &new_metadata,
-                  std::vector<double> new_diploid_gvalues)
+calculate_fitness_details(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+    const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+    std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+    std::vector<double> &new_diploid_gvalues, const update_genotype_matrix um)
 {
     // Calculate parental fitnesses
     std::vector<double> parental_fitnesses(pop.diploids.size());
     double sum_parental_fitnesses = 0.0;
     new_metadata.resize(pop.N);
-    new_diploid_gvalues.resize(pop.N * genetic_value_fxn.total_dim);
+    resize_genotype_matrix(new_diploid_gvalues,
+                           pop.N * genetic_value_fxn.total_dim, um);
     auto gvoffset = new_diploid_gvalues.data();
     for (std::size_t i = 0; i < pop.diploids.size();
          ++i, gvoffset += genetic_value_fxn.total_dim)
         {
             new_metadata[i] = pop.diploid_metadata[i];
             genetic_value_fxn(rng, i, pop, new_metadata[i]);
-            std::copy(begin(genetic_value_fxn.gvalues),
-                      end(genetic_value_fxn.gvalues), gvoffset);
+            copy_genetic_values(gvoffset, genetic_value_fxn, um);
             parental_fitnesses[i] = new_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
@@ -86,6 +117,33 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
                 "fitness lookup table could not be generated");
         }
     return rv;
+}
+
+std::function<fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
+    const fwdpy11::GSLrng_t &g, fwdpy11::SlocusPop &,
+    const fwdpy11::SlocusPopGeneticValue &,
+    std::vector<fwdpy11::DiploidMetadata> &, std::vector<double> &)>
+wrap_calculate_fitness(bool update_genotype_matrix)
+{
+    if (update_genotype_matrix)
+        {
+            return [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+                      const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+                      std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+                      std::vector<double> &new_diploid_gvalues) {
+                return calculate_fitness_details(
+                    rng, pop, genetic_value_fxn, new_metadata,
+                    new_diploid_gvalues, std::true_type());
+            };
+        }
+    return [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+              const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+              std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+              std::vector<double> &new_diploid_gvalues) {
+        return calculate_fitness_details(rng, pop, genetic_value_fxn,
+                                         new_metadata, new_diploid_gvalues,
+                                         std::false_type());
+    };
 }
 
 // TODO: put in header for reuse
@@ -120,7 +178,7 @@ wfSlocusPop_ts(
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
-    const bool suppress_edge_table_indexing)
+    const bool suppress_edge_table_indexing, bool record_genotype_matrix)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -164,8 +222,8 @@ wfSlocusPop_ts(
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
-    std::vector<double> new_diploid_gvalues(pop.N
-                                            * genetic_value_fxn.total_dim);
+    std::vector<double> new_diploid_gvalues;
+    auto calculate_fitness = wrap_calculate_fitness(record_genotype_matrix);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
                                     new_diploid_gvalues);
 
