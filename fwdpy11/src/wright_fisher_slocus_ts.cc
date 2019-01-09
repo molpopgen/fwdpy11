@@ -46,20 +46,27 @@ namespace py = pybind11;
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
 calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
                   const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-                  std::vector<fwdpy11::DiploidMetadata> &new_metadata)
+                  std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+                  std::vector<double> new_diploid_gvalues)
 {
     // Calculate parental fitnesses
     std::vector<double> parental_fitnesses(pop.diploids.size());
     double sum_parental_fitnesses = 0.0;
     new_metadata.resize(pop.N);
-    for (std::size_t i = 0; i < pop.diploids.size(); ++i)
+    new_diploid_gvalues.resize(pop.N * genetic_value_fxn.total_dim);
+    auto gvoffset = new_diploid_gvalues.data();
+    for (std::size_t i = 0; i < pop.diploids.size();
+         ++i, gvoffset += genetic_value_fxn.total_dim)
         {
             new_metadata[i] = pop.diploid_metadata[i];
             genetic_value_fxn(rng, i, pop, new_metadata[i]);
+            std::copy(begin(genetic_value_fxn.gvalues),
+                      end(genetic_value_fxn.gvalues), gvoffset);
             parental_fitnesses[i] = new_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
     pop.diploid_metadata.swap(new_metadata);
+    pop.genetic_value_matrix.swap(new_diploid_gvalues);
     // If the sum of parental fitnesses is not finite,
     // then the genetic value calculator returned a non-finite value/
     // Unfortunately, gsl_ran_discrete_preproc allows such values through
@@ -157,7 +164,10 @@ wfSlocusPop_ts(
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
+    std::vector<double> new_diploid_gvalues(pop.N
+                                            * genetic_value_fxn.total_dim);
+    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
+                                    new_diploid_gvalues);
 
     // Generate our fxns for picking parents
 
@@ -206,8 +216,9 @@ wfSlocusPop_ts(
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup
-                = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
+            lookup = calculate_fitness(rng, pop, genetic_value_fxn,
+                                       new_metadata, new_diploid_gvalues);
+            auto d = pop.genetic_value_matrix.data();
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
