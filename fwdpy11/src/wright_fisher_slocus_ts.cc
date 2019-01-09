@@ -271,6 +271,16 @@ wfSlocusPop_ts(
                             // Record the metadata for this individual
                             pop.ancient_sample_metadata.push_back(
                                 pop.diploid_metadata[i]);
+                            // Update the genotype matrix w.r.to
+                            // the new ancient samples
+                            if (!pop.genetic_value_matrix.empty())
+                                {
+                                    pop.ancient_sample_genetic_value_matrix.insert(
+                                        end(pop.ancient_sample_genetic_value_matrix),
+                                        begin(pop.genetic_value_matrix) + i,
+                                        begin(pop.genetic_value_matrix) + i
+                                            + genetic_value_fxn.total_dim);
+                                }
                             // Record the time and nodes for this individual
                             pop.ancient_sample_records.emplace_back(
                                 fwdpy11::ancient_sample_record{
