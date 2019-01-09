@@ -19,7 +19,7 @@
 
 
 def evolve(rng, pop, params, simplification_interval, recorder=None,
-           suppress_table_indexing=False):
+           suppress_table_indexing=False, record_gvalue_matrix=False):
     """
     Evolve a population
 
@@ -35,6 +35,13 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     :type recorder: callable
     :param suppress_table_indexing: (False) Prevents edge table indexing until end of simulation
     :type suppress_table_indexing: boolean
+    :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.Population.genetic_values`.
+    :type record_gvalue_matrix: boolean
+
+    The recording of genetic values into :attr:`fwdpy11.Population.genetic_values` is supprssed by default.  First, it
+    is redundant with :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a single trait.
+    Second, we save some memory by not tracking these matrices.  However, it is useful to track these data for some
+    cases when simulating multivariate mutational effects (pleiotropy).
 
     .. note::
         If recorder is None,
@@ -74,4 +81,4 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                    params.demography, params.mutrate_s,
                    params.recrate, mm, rm, params.gvalue,
                    recorder, params.pself, params.prune_selected is True,
-                   suppress_table_indexing)
+                   suppress_table_indexing,record_gvalue_matrix)
