@@ -236,7 +236,6 @@ PYBIND11_MODULE(_Population, m)
         .def_property_readonly(
             "genetic_values",
             [](const fwdpy11::Population& self) {
-                py::print(self.N, self.genetic_value_matrix.size());
                 //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
                 return fwdpy11::make_2d_ndarray(
                     self.genetic_value_matrix, self.N,
