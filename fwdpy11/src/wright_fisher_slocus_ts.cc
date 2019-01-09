@@ -218,7 +218,6 @@ wfSlocusPop_ts(
             genetic_value_fxn.update(pop);
             lookup = calculate_fitness(rng, pop, genetic_value_fxn,
                                        new_metadata, new_diploid_gvalues);
-            auto d = pop.genetic_value_matrix.data();
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
