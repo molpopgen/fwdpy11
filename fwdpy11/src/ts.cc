@@ -53,7 +53,7 @@ simplify(const fwdpy11::Population& pop,
             throw std::invalid_argument("invalid sample list");
         }
     auto t(pop.tables);
-    // NOTE: If the user wants to keep ancient samples, 
+    // NOTE: If the user wants to keep ancient samples,
     // they must pass them in to the samples list
     t.preserved_nodes.clear();
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
@@ -160,6 +160,35 @@ struct VariantIterator
         //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
         ++mbeg;
         return *this;
+    }
+};
+
+struct tree_visitor_wrapper
+{
+    fwdpp::ts::tree_visitor visitor;
+    py::array_t<double> parents;
+    py::array_t<double> leaf_counts;
+    tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
+                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+        : visitor(tables, samples),
+          parents(make_1d_ndarray(visitor.tree().parents)),
+          leaf_counts(make_1d_ndarray(visitor.tree().leaf_counts))
+    {
+    }
+
+    inline bool
+    operator()(const bool update_samples)
+    {
+        bool rv = false;
+        if (update_samples)
+            {
+                rv = visitor(std::true_type(), std::true_type());
+            }
+        else
+            {
+                rv = visitor(std::true_type(), std::false_type());
+            }
+        return rv;
     }
 };
 
@@ -373,6 +402,13 @@ PYBIND11_MODULE(ts, m)
                  return tt;
              },
              "Return the sum of branch lengths");
+
+    py::class_<tree_visitor_wrapper>(m, "TreeVisitor2")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+             py::arg("tables"), py::arg("samples"))
+        .def_readonly("parents", &tree_visitor_wrapper::parents)
+        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts);
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
