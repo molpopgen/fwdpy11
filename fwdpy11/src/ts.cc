@@ -166,8 +166,8 @@ struct VariantIterator
 struct tree_visitor_wrapper
 {
     fwdpp::ts::tree_visitor visitor;
-    py::array_t<double> parents;
-    py::array_t<double> leaf_counts;
+    py::array parents;
+    py::array leaf_counts;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
         : visitor(tables, samples),
@@ -407,8 +407,33 @@ PYBIND11_MODULE(ts, m)
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
              py::arg("tables"), py::arg("samples"))
-        .def_readonly("parents", &tree_visitor_wrapper::parents)
-        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts);
+        .def_readwrite("parents", &tree_visitor_wrapper::parents)
+        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts)
+        .def_property_readonly("left",[](const tree_visitor_wrapper&self){return self.visitor.tree().left;})
+        .def_property_readonly("right",[](const tree_visitor_wrapper&self){return self.visitor.tree().right;})
+        .def("__call__",&tree_visitor_wrapper::operator())
+        .def("total_time",
+             [](const tree_visitor_wrapper& self,
+                const fwdpp::ts::node_vector& nodes) {
+             const auto & m = self.visitor.tree();
+                 if (m.parents.size() != nodes.size())
+                     {
+                         throw std::invalid_argument(
+                             "node table length does not equal number of "
+                             "nodes in marginal tree");
+                     }
+                 double tt = 0.0;
+                 for (std::size_t i = 0; i < m.parents.size(); ++i)
+                     {
+                         if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
+                             {
+                                 tt += nodes[i].time
+                                       - nodes[m.parents[i]].time;
+                             }
+                     }
+                 return tt;
+             },
+             "Return the sum of branch lengths");
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
