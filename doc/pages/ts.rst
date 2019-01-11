@@ -3,6 +3,12 @@
 Tree sequence recording
 ======================================================================
 
+.. versionchanged:: 0.3.0
+
+    The types :class:`fwdpy11.ts.TreeVisitor` and :class:`fwdpy11.ts.MarginalTree` are now deprecated, and their
+    combined functionality are found in the new type, :class:`fwdpy11.ts.TreeIterator`, which provides much
+    more efficient access to the marginal tree data.
+
 Background reading:
 
 1. :ref:`ts_data_types` gives links to the main data types involved.
@@ -160,11 +166,11 @@ population with a bunch of nodes, edges, etc..  But the "sequence" part of "tree
 sequence" implies something about *iteration* that we haven't discussed yet.  fwdpy11
 provides an efficient means of traversing the trees in a table collection in a 
 left-to-right order along the genome.  The "visiting" of each tree is 
-handled by :class:`fwdpy11.ts.TreeVisitor`, which gives you access to the 
-:class:`fwdpy11.ts.MarginalTree` for each segment of the genome.
+handled by :class:`fwdpy11.ts.TreeIterator`, which gives you access to the 
+marginal tree data for each segment of the genome.
 
 Traversing the trees is the core idea underying efficient algorithms for data analysis.
-The multiply-linked list data structures stored in a :class:`fwdpy11.ts.MarginalTree` allow
+The multiply-linked list data structures stored in a :class:`fwdpy11.ts.TreeIterator` allow
 for very rapid tree traversal.  Let's look at a concrete example.  We will calculate the 
 average length of a marginal tree in our simulation.  To do this, we have to recognize the following: 
 
@@ -180,14 +186,13 @@ immediately afterwards:
 .. ipython:: python
     :okexcept:
 
-    tv = fwdpy11.ts.TreeVisitor(pop.tables, [i for i in range(2*pop.N)])
+    ti = fwdpy11.ts.TreeIterator(pop.tables, [i for i in range(2*pop.N)])
     nodes = np.array(pop.tables.nodes, copy=False) # 1
     time = nodes['time'] # 1
     mean_total_time = 0.0
-    while tv(False) is True: # 2
-        m = tv.tree() # 3
-        p = m.parents # 1
-        segment_length = m.right - m.left
+    while ti() is True: # 2
+        p = ti.parents # 1
+        segment_length = ti.right - ti.left
         tt_tree = 0.0
         for i in range(len(nodes)):
             if p[i] != fwdpy11.ts.NULL_NODE:
@@ -198,14 +203,12 @@ immediately afterwards:
 1. We make several numpy arrays to view the data.  Internally, the data are stored in C++ containers.
    Thus, the numpy array is really a "view" of the data, and it requires no copies of the data.  However,
    It does take a small amount of time to make the view.  Thus, if we did not store the parents list in the 
-   variable `p`, and instead referred to `m.parents` repeatedly, we would end up creating the view of the 
+   variable `p`, and instead referred to `ti.parents` repeatedly, we would end up creating the view of the 
    parental data an additional `2*len(nodes)` times, and our calculation would slow down noticeably.
-2. The `False` passed to the `__call__` function means "do not update the sample lists" for each tree.  The leaf
-   count lists are always updated, however.  Saying `True` here updates the sample lists.  Sample list updating
-   is relatively costly, which is why it is optional.
-3. Internally, our TreeVisitor stores a C++ representation of a MarginalTree.  Here, through some C++ magic
-   by the authors of pybind11, we are getting copy-free access to that stored data.
-4. Time is measured from *past* to *present*. (This is a difference from msprime.)
+2. This is the call to "advance to the next tree".  When no more trees remain, `False` gets returned.
+   By default, only "leaf counts" are updated as trees are advanced.  To update the sample lists for each tree,
+   pass `True` as the last parameter to the `TreeIterator` constructor.
+3. Time is measured from *past* to *present*. (This is a difference from msprime.)
 
 The above loop is "Python fast", meaning that it is a pretty good mix of Python and numpy.  The main performance hits in
 code like this are the looping and the round-trip from Python to numpy when accessing indexes in the numpy arrays.
@@ -218,19 +221,18 @@ It is now a good time to point out that total time counting is built-in because 
 
     # Need to construct a new visitor, as ours is all "iterated out"
     # from above
-    tv = fwdpy11.ts.TreeVisitor(pop.tables, [i for i in range(2*pop.N)])
+    ti = fwdpy11.ts.TreeIterator(pop.tables, [i for i in range(2*pop.N)])
     mean_total_time = 0.0
-    while tv(False) is True:
-        m = tv.tree() # 3
-        segment_length = m.right - m.left
-        mean_total_time += segment_length*m.total_time(pop.tables.nodes)
+    while ti() is True:
+        segment_length = ti.right - ti.left
+        mean_total_time += segment_length*ti.total_time(pop.tables.nodes)
 
     print(mean_total_time/(4*N))
 
 
 The above loop is almost entirely composed of C++-side operations, and is thus extremely fast.
 
-Constructing the TreeVisitor
+Constructing the TreeIterator
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 In the above example, the tree visitor was initialized using a :class:`fwdpy11.ts.TableCollection`
@@ -239,10 +241,10 @@ respect to the last generation of the simulation.  Thus, the tree traversal will
 for the entire population.  If you wish to iterate over the trees corresponding to a subset of the last generation,
 simply create the approprate list, noting that the list may not contain redundant node ids.
 
-A second method of initializing a TreeVisitor involves passing in two sample lists.  The intent here is that
+A second method of initializing a TreeIterator involves passing in two sample lists.  The intent here is that
 the first list corresponds to the current generation ("alive nodes") and the latter to preserved nodes ("ancient
 samples").  When passing in two lists, the tree iteration scheme tracks leaf counts separately for these two lists, 
-via the fields :attr:`fwdpy11.ts.MarginalTree.leaf_counts` and :attr:`fwdpy11.ts.MarginalTree.preserved_leaf_counts`.  We'll see this in action
+via the fields :attr:`fwdpy11.ts.TreeIterator.leaf_counts` and :attr:`fwdpy11.ts.TreeIterator.preserved_leaf_counts`.  We'll see this in action
 below.
 
 Recording ancient samples during a simulation
