@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
 
@@ -13,6 +14,10 @@ make_1d_ndarray(const std::vector<T>& v)
         = py::array_t<T>({ v.size() }, { sizeof(T) }, v.data(), py::cast(v));
     return rv;
 }
+
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
 
 struct tree_visitor_wrapper
@@ -62,7 +67,7 @@ struct tree_visitor_wrapper
 };
 
 void
-init_tree_iterator_wrapper(py::module& m)
+init_tree_iterator(py::module& m)
 {
     py::class_<tree_visitor_wrapper>(m, "TreeIterator",
                                      R"delim(
