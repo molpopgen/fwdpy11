@@ -296,8 +296,13 @@ PYBIND11_MODULE(ts, m)
 
     py::class_<fwdpp::ts::marginal_tree>(
         m, "MarginalTree",
-        "A sparse tree representation of a non-recombining genomic segment. "
-        "See :ref:`ts_data_types` for details.")
+        R"delim(A sparse tree representation of a non-recombining genomic segment.
+        See :ref:`ts_data_types` for details.
+        
+        .. deprecated:: 0.3.0
+
+            Deprecated in favor of :class:`fwdpy11.ts.TreeIterator`
+        )delim")
         .def_readonly("left", &fwdpp::ts::marginal_tree::left,
                       "Left edge of genomic interval (inclusive)")
         .def_readonly("right", &fwdpp::ts::marginal_tree::right,
@@ -380,8 +385,13 @@ PYBIND11_MODULE(ts, m)
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
-        "Allows left-to-right visiting of the marginal trees embedded in a "
-        ":class:`fwdpy11.ts.TableCollection`")
+        R"delim(Allows left-to-right visiting of the marginal trees embedded in a
+        :class:`fwdpy11.ts.TableCollection`
+        
+        .. deprecated:: 0.3.0
+
+            Deprecated in favor of :class:`fwdpy11.ts.TreeIterator`
+        )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
              py::arg("tables"), py::arg("samples"))
