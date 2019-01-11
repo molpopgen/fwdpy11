@@ -3,17 +3,9 @@
 #include <pybind11/stl.h>
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
+#include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
-
-template <typename T>
-inline py::array_t<T>
-make_1d_ndarray(const std::vector<T>& v)
-{
-    auto rv
-        = py::array_t<T>({ v.size() }, { sizeof(T) }, v.data(), py::cast(v));
-    return rv;
-}
 
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
@@ -30,18 +22,18 @@ struct tree_visitor_wrapper
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_sample_list)
         : visitor(tables, samples),
-          parents(make_1d_ndarray(visitor.tree().parents)),
-          leaf_counts(make_1d_ndarray(visitor.tree().leaf_counts)),
+          parents(fwdpy11::make_1d_ndarray(visitor.tree().parents)),
+          leaf_counts(fwdpy11::make_1d_ndarray(visitor.tree().leaf_counts)),
           preserved_leaf_counts(
-              make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
-          left_sib(make_1d_ndarray(visitor.tree().left_sib)),
-          right_sib(make_1d_ndarray(visitor.tree().right_sib)),
-          left_child(make_1d_ndarray(visitor.tree().left_child)),
-          right_child(make_1d_ndarray(visitor.tree().right_child)),
-          left_sample(make_1d_ndarray(visitor.tree().left_sample)),
-          right_sample(make_1d_ndarray(visitor.tree().right_sample)),
-          next_sample(make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(make_1d_ndarray(visitor.tree().sample_index_map)),
+              fwdpy11::make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
+          left_sib(fwdpy11::make_1d_ndarray(visitor.tree().left_sib)),
+          right_sib(fwdpy11::make_1d_ndarray(visitor.tree().right_sib)),
+          left_child(fwdpy11::make_1d_ndarray(visitor.tree().left_child)),
+          right_child(fwdpy11::make_1d_ndarray(visitor.tree().right_child)),
+          left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
+          right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
+          next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
+          sample_index_map(fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
           update_samples(update_sample_list)
     {
     }
@@ -52,18 +44,18 @@ struct tree_visitor_wrapper
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_sample_list)
         : visitor(tables, samples),
-          parents(make_1d_ndarray(visitor.tree().parents)),
-          leaf_counts(make_1d_ndarray(visitor.tree().leaf_counts)),
+          parents(fwdpy11::make_1d_ndarray(visitor.tree().parents)),
+          leaf_counts(fwdpy11::make_1d_ndarray(visitor.tree().leaf_counts)),
           preserved_leaf_counts(
-              make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
-          left_sib(make_1d_ndarray(visitor.tree().left_sib)),
-          right_sib(make_1d_ndarray(visitor.tree().right_sib)),
-          left_child(make_1d_ndarray(visitor.tree().left_child)),
-          right_child(make_1d_ndarray(visitor.tree().right_child)),
-          left_sample(make_1d_ndarray(visitor.tree().left_sample)),
-          right_sample(make_1d_ndarray(visitor.tree().right_sample)),
-          next_sample(make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(make_1d_ndarray(visitor.tree().sample_index_map)),
+              fwdpy11::make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
+          left_sib(fwdpy11::make_1d_ndarray(visitor.tree().left_sib)),
+          right_sib(fwdpy11::make_1d_ndarray(visitor.tree().right_sib)),
+          left_child(fwdpy11::make_1d_ndarray(visitor.tree().left_child)),
+          right_child(fwdpy11::make_1d_ndarray(visitor.tree().right_child)),
+          left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
+          right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
+          next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
+          sample_index_map(fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
           update_samples(update_sample_list)
     {
     }
