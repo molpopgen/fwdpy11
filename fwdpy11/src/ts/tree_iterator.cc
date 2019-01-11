@@ -108,27 +108,36 @@ init_tree_iterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
              py::arg("update_sample_list") = false)
-        .def_readwrite("parents", &tree_visitor_wrapper::parents)
-        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts)
+        .def_readwrite("parents", &tree_visitor_wrapper::parents,
+                       "Vector of child -> parent relationships")
+        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts,
+                      "Leaf counts for each node")
         .def_readonly("preserved_leaf_counts",
-                      &tree_visitor_wrapper::preserved_leaf_counts)
-        .def_readonly("left_sib", &tree_visitor_wrapper::left_sib)
-        .def_readonly("right_sib", &tree_visitor_wrapper::right_sib)
-        .def_readonly("left_child", &tree_visitor_wrapper::left_child)
-        .def_readonly("right_child", &tree_visitor_wrapper::right_child)
-        .def_readonly("left_sample", &tree_visitor_wrapper::leaf_counts)
-        .def_readonly("right_sample", &tree_visitor_wrapper::leaf_counts)
+                      &tree_visitor_wrapper::preserved_leaf_counts,
+                      "Ancient sample leaf counts for each node")
+        .def_readonly("left_sib", &tree_visitor_wrapper::left_sib,
+                      "Return the left sibling of the current node")
+        .def_readonly("right_sib", &tree_visitor_wrapper::right_sib,
+                      "Return the right sibling of the current node")
+        .def_readonly("left_child", &tree_visitor_wrapper::left_child,
+                      "Mapping of current node id to its left child")
+        .def_readonly("right_child", &tree_visitor_wrapper::right_child,
+                      "Mapping of current node id to its right child")
+        .def_readonly("left_sample", &tree_visitor_wrapper::left_sample)
+        .def_readonly("right_sample", &tree_visitor_wrapper::right_sample)
         .def_readonly("next_sample", &tree_visitor_wrapper::next_sample)
         .def_readonly("sample_index_map",
                       &tree_visitor_wrapper::sample_index_map)
         .def_property_readonly("left",
                                [](const tree_visitor_wrapper& self) {
                                    return self.visitor.tree().left;
-                               })
+                               },
+                               "Left edge of genomic interval (inclusive)")
         .def_property_readonly("right",
                                [](const tree_visitor_wrapper& self) {
                                    return self.visitor.tree().right;
-                               })
+                               },
+                               "Right edge of genomic interval (exclusive)")
         .def("__call__", &tree_visitor_wrapper::operator())
         .def("total_time",
              [](const tree_visitor_wrapper& self,
