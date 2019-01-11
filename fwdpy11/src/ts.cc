@@ -201,6 +201,12 @@ struct tree_visitor_wrapper
             }
         return rv;
     }
+
+    fwdpp::ts::TS_NODE_INT
+    sample_size() const
+    {
+        return visitor.tree().sample_size;
+    }
 };
 
 PYBIND11_MODULE(ts, m)
@@ -414,7 +420,7 @@ PYBIND11_MODULE(ts, m)
              },
              "Return the sum of branch lengths");
 
-    py::class_<tree_visitor_wrapper>(m, "TreeVisitor2")
+    py::class_<tree_visitor_wrapper>(m, "TreeIterator")
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
              py::arg("tables"), py::arg("samples"))
@@ -461,7 +467,11 @@ PYBIND11_MODULE(ts, m)
                      }
                  return tt;
              },
-             "Return the sum of branch lengths");
+             "Return the sum of branch lengths")
+        .def_property_readonly("sample_size",
+                               [](const tree_visitor_wrapper& self) {
+                                   return self.sample_size();
+                               });
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
