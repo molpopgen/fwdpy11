@@ -14,6 +14,8 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
     src/genetic_values/SlocusMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
     src/genetic_values/MultivariateGSSmo.cc)
 
+set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc)
+
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
@@ -51,7 +53,7 @@ pybind11_add_module(multilocus MODULE src/multilocus.cc)
 target_link_libraries(multilocus PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(util MODULE src/fwdpy11_util.cc)
 target_link_libraries(util PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(ts MODULE src/ts.cc)
+pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})
 target_link_libraries(ts PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(tsrecorders MODULE src/tsrecorders.cc)
 target_link_libraries(tsrecorders PRIVATE GSL::gsl GSL::gslcblas)
