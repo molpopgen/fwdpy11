@@ -19,15 +19,16 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
-
 struct tree_visitor_wrapper
 {
     fwdpp::ts::tree_visitor visitor;
     py::array parents, leaf_counts, preserved_leaf_counts, left_sib, right_sib,
         left_child, right_child, left_sample, right_sample, next_sample,
         sample_index_map;
+    bool update_samples;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
-                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                         bool update_sample_list)
         : visitor(tables, samples),
           parents(make_1d_ndarray(visitor.tree().parents)),
           leaf_counts(make_1d_ndarray(visitor.tree().leaf_counts)),
@@ -40,12 +41,35 @@ struct tree_visitor_wrapper
           left_sample(make_1d_ndarray(visitor.tree().left_sample)),
           right_sample(make_1d_ndarray(visitor.tree().right_sample)),
           next_sample(make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(make_1d_ndarray(visitor.tree().sample_index_map))
+          sample_index_map(make_1d_ndarray(visitor.tree().sample_index_map)),
+          update_samples(update_sample_list)
+    {
+    }
+
+    tree_visitor_wrapper(
+        const fwdpp::ts::table_collection& tables,
+        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+        const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
+        bool update_sample_list)
+        : visitor(tables, samples),
+          parents(make_1d_ndarray(visitor.tree().parents)),
+          leaf_counts(make_1d_ndarray(visitor.tree().leaf_counts)),
+          preserved_leaf_counts(
+              make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
+          left_sib(make_1d_ndarray(visitor.tree().left_sib)),
+          right_sib(make_1d_ndarray(visitor.tree().right_sib)),
+          left_child(make_1d_ndarray(visitor.tree().left_child)),
+          right_child(make_1d_ndarray(visitor.tree().right_child)),
+          left_sample(make_1d_ndarray(visitor.tree().left_sample)),
+          right_sample(make_1d_ndarray(visitor.tree().right_sample)),
+          next_sample(make_1d_ndarray(visitor.tree().next_sample)),
+          sample_index_map(make_1d_ndarray(visitor.tree().sample_index_map)),
+          update_samples(update_sample_list)
     {
     }
 
     inline bool
-    operator()(const bool update_samples)
+    operator()()
     {
         bool rv = false;
         if (update_samples)
@@ -76,8 +100,14 @@ init_tree_iterator(py::module& m)
             .. versionadded 0.3.0
             )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
-             py::arg("tables"), py::arg("samples"))
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
+             py::arg("tables"), py::arg("samples"),
+             py::arg("update_sample_list") = false)
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
+             py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
+             py::arg("update_sample_list") = false)
         .def_readwrite("parents", &tree_visitor_wrapper::parents)
         .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts)
         .def_readonly("preserved_leaf_counts",
