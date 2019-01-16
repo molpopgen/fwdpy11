@@ -37,7 +37,9 @@ namespace fwdpy11
         inline constexpr int
         magic()
         {
-            return 2;
+            // Changed to 3 im 0.3.0
+            // to handle genetic value matrices
+            return 3;
         }
 
         template <typename streamtype, typename poptype>
@@ -57,6 +59,20 @@ namespace fwdpy11
                 buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
             fwdpp::ts::io::serialize_tables(buffer, pop->tables);
+            std::size_t msize = pop->genetic_value_matrix.size();
+            fwdpp::io::scalar_writer w;
+            w(buffer, &msize);
+            if (msize > 0)
+                {
+                    w(buffer, pop->genetic_value_matrix.data(), msize);
+                }
+            msize = pop->ancient_sample_genetic_value_matrix.size();
+            w(buffer, &msize);
+            if (msize > 0)
+                {
+                    w(buffer, pop->genetic_value_matrix.data(), msize);
+                }
+
             return buffer;
         }
 
@@ -105,6 +121,28 @@ namespace fwdpy11
                         fwdpp::ts::count_mutations(
                             pop.tables, pop.mutations, samples, pop.mcounts,
                             pop.mcounts_from_preserved_nodes);
+                    }
+                if (version > 2)
+                    {
+                        std::size_t msize;
+                        fwdpp::io::scalar_reader r;
+                        r(buffer, &msize);
+                        if (msize > 0)
+                            {
+                                pop.genetic_value_matrix.resize(msize);
+                                r(buffer, pop.genetic_value_matrix.data(),
+                                  msize);
+                            }
+                        r(buffer, &msize);
+                        if (msize > 0)
+                            {
+                                pop.ancient_sample_genetic_value_matrix.resize(
+                                    msize);
+                                r(buffer,
+                                  pop.ancient_sample_genetic_value_matrix
+                                      .data(),
+                                  msize);
+                            }
                     }
                 return buffer;
             }
