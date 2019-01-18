@@ -156,6 +156,10 @@ The population base class
 
 .. versionadded:: 0.2.0
 
+.. versionchanged:: 0.3.0
+
+    Added `genetic_values` and `ancient_samaple_genetic_values`.
+
 All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
 :class:`fwdpy11.Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
 Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:`fwdpy11.MlocusPop`.
@@ -171,6 +175,8 @@ Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:
     "gametes", "A :class:`fwdpy11.VecGamete`.  See :ref:`gametes`."
     "fixations", "A :class:`fwdpy11.VecMutation` storing fixations. See :ref:`popgenmuts`."
     "fixation_times", "A :class:`fwdpy11.VecUint32` storing fixation times."
+    "genetic_values", "A 2d numpy array of genetic values."
+    "ancient_samaple_genetic_values", "A 2d numpy array of genetic values corresponding to ancient samples."
 
 .. note::
 
