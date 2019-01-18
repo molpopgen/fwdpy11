@@ -32,6 +32,10 @@ The following new types are added:
 * :class:`fwdpy11.genetic_values.MultivariateGSSmo`, which is the multi-dimensional analog to the existing GSSmo
 * :class:`fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive`, which is a new genetic value class for pleiotropic traits.
 
+`PR 175 <https://github.com/molpopgen/fwdpy11/pull/175>`_ adds tracking of genetic values during simulation as numpy
+arrays via :attr:`fwdpy11.Population.genetic_values` and :attr:`fwdpy11.Population.ancient_sample_genetic_values`.
+Currently, filling these arrays is only supported for simulations with tree sequence recording.
+
 Changes to the C++ back end:
 
 * The API for the C++ class fwdpy11::SlocusPopGeneticValue was slightly changed in order to accommodate the new types.  The old operator() is renamed calculate_gvalue().
@@ -95,7 +99,7 @@ Bug fixes:
 API changes/new features:
 ----------------------------------------------------
 
-* Added support for tree sequence recordring.  `PR #142 <https://github.com/molpopgen/fwdpy11/pull/142>`_
+* Added support for tree sequence recording.  `PR #142 <https://github.com/molpopgen/fwdpy11/pull/142>`_
 * Populations may now be dumped/loaded to/from files. See :func:`fwdpy11.SlocusPop.dump_to_file` and
   :func:`fwdpy11.SlocusPop.load_from_file`.  Analagous functions exist for MlocusPop. `PR #148 <https://github.com/molpopgen/fwdpy11/pull/148>`_
 * :func:`fwdpy11.SlocusPop.sample` and :func:`fwdpy11.MlocusPop.sample` now return a :class:`fwdpy11.sampling.DataMatrix`.
