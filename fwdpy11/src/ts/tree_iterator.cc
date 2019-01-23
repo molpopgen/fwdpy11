@@ -18,6 +18,7 @@ struct tree_visitor_wrapper
         left_child, right_child, left_sample, right_sample, next_sample,
         sample_index_map;
     bool update_samples;
+    std::vector<fwdpp::ts::TS_NODE_INT> sample_list_buffer;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_sample_list)
@@ -33,8 +34,9 @@ struct tree_visitor_wrapper
           left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
           right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
           next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
-          update_samples(update_sample_list)
+          sample_index_map(
+              fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
+          update_samples(update_sample_list), sample_list_buffer()
     {
     }
 
@@ -55,8 +57,9 @@ struct tree_visitor_wrapper
           left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
           right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
           next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
-          update_samples(update_sample_list)
+          sample_index_map(
+              fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
+          update_samples(update_sample_list), sample_list_buffer()
     {
     }
 
@@ -79,6 +82,41 @@ struct tree_visitor_wrapper
     sample_size() const
     {
         return visitor.tree().sample_size;
+    }
+
+    py::array
+    sample_list(const fwdpp::ts::TS_NODE_INT node, bool sorted)
+    {
+        if (!update_samples)
+            {
+                throw std::invalid_argument("sample tracking not initialized");
+            }
+        if (node == fwdpp::ts::TS_NULL_NODE)
+            {
+                throw std::invalid_argument("invalid node");
+            }
+        sample_list_buffer.clear();
+        const auto& marginal = visitor.tree();
+        auto right = marginal.right_sample[node];
+        auto index = marginal.left_sample[node];
+        while (true)
+            {
+                sample_list_buffer.push_back(index);
+                if (index == right)
+                    {
+                        break;
+                    }
+                index = marginal.next_sample[index];
+            }
+        if (sorted)
+            {
+                std::sort(begin(sample_list_buffer), end(sample_list_buffer));
+            }
+        auto capsule = py::capsule(&sample_list_buffer, [](void* x) {
+            reinterpret_cast<decltype(sample_list_buffer)*>(x)->clear();
+        });
+        return py::array(sample_list_buffer.size(), sample_list_buffer.data(),
+                         capsule);
     }
 };
 
@@ -156,5 +194,20 @@ init_tree_iterator(py::module& m)
         .def_property_readonly("sample_size",
                                [](const tree_visitor_wrapper& self) {
                                    return self.sample_size();
-                               });
+                               })
+        .def("sample_list", &tree_visitor_wrapper::sample_list,
+             R"delim(
+            Return the list of samples descending from a node.
+
+            :param node: A node id
+            :type node: int
+            :param sorted: (False) Whether or not to sort sample node IDs.
+            :type sorted: boolean
+
+            .. note::
+
+                Do not store these sample lists without making a "deep"
+                copy.  The internal buffer is re-used.
+            )delim",
+             py::arg("node"), py::arg("sorted") = false);
 }
