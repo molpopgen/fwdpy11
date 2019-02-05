@@ -26,7 +26,7 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
-void init_ts(py::module &);
+void init_ts(py::module&);
 
 py::tuple
 simplify(const fwdpy11::Population& pop,
@@ -87,12 +87,14 @@ struct VariantIterator
     fwdpp::ts::tree_visitor tv;
     std::vector<std::int8_t> genotype_data;
     py::array_t<std::int8_t> genotypes;
+    double current_position;
     VariantIterator(const fwdpp::ts::table_collection& tc,
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
         : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
           pos(), tv(tc, samples), genotype_data(samples.size(), 0),
-          genotypes(fwdpy11::make_1d_ndarray(genotype_data))
+          genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
+          current_position(std::numeric_limits<double>::quiet_NaN())
     {
         // Advance to first tree
         auto flag = tv(std::true_type(), std::true_type());
@@ -126,8 +128,10 @@ struct VariantIterator
             }
         std::fill(genotype_data.begin(), genotype_data.end(), 0);
         auto ls = m.left_sample[mbeg->node];
+        current_position = std::numeric_limits<double>::quiet_NaN();
         if (ls != fwdpp::ts::TS_NULL_NODE)
             {
+                current_position = pos[mbeg->key];
                 auto rs = m.right_sample[mbeg->node];
                 int nsteps = 1;
                 while (true)
@@ -156,7 +160,6 @@ struct VariantIterator
         return *this;
     }
 };
-
 
 PYBIND11_MODULE(ts, m)
 {
@@ -306,7 +309,8 @@ PYBIND11_MODULE(ts, m)
                                "Vector of child -> parent relationships")
         .def_property_readonly("leaf_counts",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.leaf_counts);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.leaf_counts);
                                },
                                "Leaf counts for each node")
         .def_property_readonly("preserved_leaf_counts",
@@ -322,34 +326,41 @@ PYBIND11_MODULE(ts, m)
                                "Return the left sibling of the current node")
         .def_property_readonly("right_sib",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.right_sib);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.right_sib);
                                },
                                "Return the right sibling of the current node")
         .def_property_readonly("left_child",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.left_child);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.left_child);
                                },
                                "Mapping of current node id to its left child")
         .def_property_readonly("right_child",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.right_child);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.right_child);
                                },
                                "Mapping of current node id to its right child")
         .def_property_readonly("left_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.left_sample);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.left_sample);
                                })
         .def_property_readonly("right_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.right_sample);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.right_sample);
                                })
         .def_property_readonly("next_sample",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.next_sample);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.next_sample);
                                })
         .def_property_readonly("sample_index_map",
                                [](const fwdpp::ts::marginal_tree& m) {
-                                   return fwdpy11::make_1d_ndarray(m.sample_index_map);
+                                   return fwdpy11::make_1d_ndarray(
+                                       m.sample_index_map);
                                })
         .def_readonly("sample_size", &fwdpp::ts::marginal_tree::sample_size)
         .def("total_time",
@@ -373,7 +384,6 @@ PYBIND11_MODULE(ts, m)
                  return tt;
              },
              "Return the sum of branch lengths");
-
 
     py::class_<fwdpp::ts::tree_visitor>(
         m, "TreeVisitor",
@@ -454,7 +464,9 @@ PYBIND11_MODULE(ts, m)
              py::keep_alive<0, 1>())
         .def("__next__", &VariantIterator::next_variant)
         .def_readonly("genotypes", &VariantIterator::genotypes,
-                      "Genotype array.  Index order is same as sample input");
+                      "Genotype array.  Index order is same as sample input")
+        .def_readonly("position", &VariantIterator::current_position,
+                      "Current mutation position");
 
     m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
           R"delim(
