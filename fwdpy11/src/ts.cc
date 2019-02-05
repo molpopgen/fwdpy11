@@ -80,8 +80,38 @@ generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                                       return_zero, return_zero, 0);
 }
 
-struct VariantIterator
+class VariantIterator
 {
+  private:
+    std::vector<fwdpp::ts::mutation_record>::const_iterator
+    advance_trees_and_mutations()
+    {
+        ++mbeg;
+        while (mbeg < mend)
+            {
+                const auto& m = tv.tree();
+                while (pos[mbeg->key] < m.left || pos[mbeg->key] >= m.right)
+                    {
+                        auto flag = tv(std::true_type(), std::true_type());
+                        if (flag == false)
+                            {
+                                throw std::runtime_error(
+                                    "VariantIterator: tree traversal "
+                                    "error");
+                            }
+                    }
+                if (m.leaf_counts[mbeg->node]
+                        + m.preserved_leaf_counts[mbeg->node]
+                    != 0)
+                    {
+                        return mbeg;
+                    }
+                ++mbeg;
+            }
+        return mbeg;
+    }
+
+  public:
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
     std::vector<double> pos;
     fwdpp::ts::tree_visitor tv;
@@ -117,15 +147,6 @@ struct VariantIterator
                 throw py::stop_iteration();
             }
         const auto& m = tv.tree();
-        while (pos[mbeg->key] < m.left || pos[mbeg->key] >= m.right)
-            {
-                auto flag = tv(std::true_type(), std::true_type());
-                if (flag == false)
-                    {
-                        throw std::runtime_error(
-                            "VariantIterator: tree traversal error");
-                    }
-            }
         std::fill(genotype_data.begin(), genotype_data.end(), 0);
         auto ls = m.left_sample[mbeg->node];
         current_position = std::numeric_limits<double>::quiet_NaN();
@@ -155,8 +176,7 @@ struct VariantIterator
                             "VariantIterator: sample traversal error");
                     }
             }
-        //py::print(std::distance(mbeg, mend), pos[mbeg->key], m.left, m.right);
-        ++mbeg;
+        mbeg = advance_trees_and_mutations();
         return *this;
     }
 };
