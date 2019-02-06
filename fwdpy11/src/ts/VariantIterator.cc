@@ -45,13 +45,16 @@ class VariantIterator
     std::vector<std::int8_t> genotype_data;
     py::array_t<std::int8_t> genotypes;
     double current_position;
+    fwdpp::ts::mutation_record current_record;
     VariantIterator(const fwdpp::ts::table_collection& tc,
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
         : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
           pos(), tv(tc, samples), genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
-          current_position(std::numeric_limits<double>::quiet_NaN())
+          current_position(std::numeric_limits<double>::quiet_NaN()),
+          current_record{ fwdpp::ts::TS_NULL_NODE,
+                          std::numeric_limits<std::size_t>::max() }
     {
         // Advance to first tree
         auto flag = tv(std::true_type(), std::true_type());
@@ -77,9 +80,12 @@ class VariantIterator
         std::fill(genotype_data.begin(), genotype_data.end(), 0);
         auto ls = m.left_sample[mbeg->node];
         current_position = std::numeric_limits<double>::quiet_NaN();
+        current_record.key = std::numeric_limits<std::size_t>::max();
+        current_record.node = fwdpp::ts::TS_NULL_NODE;
         if (ls != fwdpp::ts::TS_NULL_NODE)
             {
                 current_position = pos[mbeg->key];
+                current_record = *mbeg;
                 auto rs = m.right_sample[mbeg->node];
                 int nsteps = 1;
                 while (true)
@@ -146,6 +152,8 @@ init_variant_iterator(py::module& m)
         .def("__next__", &VariantIterator::next_variant)
         .def_readonly("genotypes", &VariantIterator::genotypes,
                       "Genotype array.  Index order is same as sample input")
+        .def_readonly("record", &VariantIterator::current_record,
+                      "Current mutation record")
         .def_readonly("position", &VariantIterator::current_position,
                       "Current mutation position");
 }
