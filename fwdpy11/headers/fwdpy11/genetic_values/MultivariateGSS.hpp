@@ -38,7 +38,7 @@ namespace fwdpy11
         }
 
         virtual double
-        operator()(const DiploidMetadata& /*metadata*/,
+        operator()(const DiploidMetadata& metadata,
                    const std::vector<double>& values) const
         {
             if (values.size() != optima.size())
@@ -50,7 +50,8 @@ namespace fwdpy11
                 {
                     sqdiff += gsl_pow_2(values[i] - optima[i]);
                 }
-            return std::exp(-sqdiff / (2.0 * VS));
+            return std::exp(-std::pow(std::sqrt(sqdiff) + metadata.e, 2.0)
+                            / (2.0 * VS));
         }
 
         std::unique_ptr<MultivariateGeneticValueToFitnessMap>
