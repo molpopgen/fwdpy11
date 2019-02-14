@@ -14,7 +14,8 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
     src/genetic_values/SlocusMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
     src/genetic_values/MultivariateGSSmo.cc)
 
-set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc)
+set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
+    src/ts/count_mutations.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
