@@ -227,6 +227,13 @@ class testSamplePreservation(unittest.TestCase):
     def test_Simulation(self):
         self.assertEqual(self.pop.generation, 100)
 
+    def test_count_mutations_preserved_samples(self):
+        mc = fwdpy11.ts.count_mutations(self.pop,
+                                        self.pop.tables.preserved_nodes)
+        for i in mc:
+            self.assertTrue(i[1] > 0)
+            self.assertEqual(self.pop.mcounts_ancient_samples[i[0]], i[1])
+
 
 if __name__ == "__main__":
     unittest.main()
