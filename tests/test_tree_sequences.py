@@ -187,6 +187,13 @@ class testTreeSequences(unittest.TestCase):
             i += 1
         self.assertEqual(i, len(self.pop.tables.mutations))
 
+    def test_count_mutations(self):
+        mc = fwdpy11.ts.count_mutations(self.pop,
+                                        [i for i in range(2*self.pop.N)])
+        for i in mc:
+            self.assertTrue(i[1] > 0)
+            self.assertEqual(self.pop.mcounts[i[0]], i[1])
+
 
 class testSamplePreservation(unittest.TestCase):
     @classmethod
