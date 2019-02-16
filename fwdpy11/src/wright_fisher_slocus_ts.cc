@@ -29,6 +29,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
+#include <fwdpp/simparams.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/samplers.hpp>
@@ -207,16 +208,32 @@ wfSlocusPop_ts(
             throw std::invalid_argument("node table is not initialized");
         }
 
-    const auto bound_mmodel
-        = [&rng, &mmodel, &pop](fwdpp::flagged_mutation_queue &recycling_bin,
-                                std::vector<fwdpy11::Mutation> &mutations) {
-              std::size_t x = gsl_ran_discrete(rng.get(), mmodel.lookup.get());
-              return mmodel.regions[x]->operator()(recycling_bin, mutations,
-                                                   pop.mut_lookup,
-                                                   pop.generation, rng);
-          };
+    const auto bound_mmodel = [&rng, &mmodel, &pop, mu_selected](
+                                  fwdpp::flagged_mutation_queue &recycling_bin,
+                                  std::vector<fwdpy11::Mutation> &mutations) {
+        std::vector<fwdpp::uint_t> rv;
+        unsigned nmuts = gsl_ran_poisson(rng.get(), mu_selected);
+        for (unsigned i = 0; i < nmuts; ++i)
+            {
+                std::size_t x
+                    = gsl_ran_discrete(rng.get(), mmodel.lookup.get());
+                auto key = mmodel.regions[x]->operator()(
+                    recycling_bin, mutations, pop.mut_lookup, pop.generation,
+                    rng);
+                rv.push_back(key);
+            }
+        std::sort(begin(rv), end(rv),
+                  [&mutations](const fwdpp::uint_t a, const fwdpp::uint_t b) {
+                      return mutations[a].pos < mutations[b].pos;
+                  });
+        return rv;
+    };
+
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
+    auto genetics = fwdpp::make_genetic_parameters(
+        &genetic_value_fxn, std::move(bound_mmodel),
+        std::move(bound_rmodel));
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.
@@ -224,8 +241,8 @@ wfSlocusPop_ts(
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
     std::vector<double> new_diploid_gvalues;
     auto calculate_fitness = wrap_calculate_fitness(record_genotype_matrix);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
-                                    new_diploid_gvalues);
+    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn,
+                                    new_metadata, new_diploid_gvalues);
 
     // Generate our fxns for picking parents
 
@@ -265,11 +282,17 @@ wfSlocusPop_ts(
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
+            // TODO: can simplify function further b/c we are referring
+            // to data that fwdpy11 Populations contain.
             fwdpy11::evolve_generation_ts(
-                rng, pop, N_next, mu_selected, pick_first_parent,
-                pick_second_parent, generate_offspring_metadata, bound_mmodel,
-                mutation_recycling_bin, bound_rmodel, pop.generation,
-                first_parental_index, next_index);
+                rng, pop, genetics, N_next, pick_first_parent,
+                pick_second_parent, generate_offspring_metadata,
+                pop.generation, pop.tables, first_parental_index, next_index);
+
+            //N_next, mu_selected, pick_first_parent,
+            //pick_second_parent, generate_offspring_metadata, bound_mmodel,
+            //mutation_recycling_bin, bound_rmodel, pop.generation,
+            //first_parental_index, next_index);
 
             pop.N = N_next;
             // TODO: deal with random effects
