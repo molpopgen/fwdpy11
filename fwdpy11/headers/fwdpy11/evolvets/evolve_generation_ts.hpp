@@ -111,6 +111,11 @@ namespace fwdpy11
                 offspring_metadata[next_offspring].label = next_offspring;
                 update_offspring(offspring_metadata[next_offspring], p1, p2,
                                  pop.diploid_metadata);
+                // Update nodes of for offspring
+                offspring_metadata[next_offspring].nodes[0]
+                    = next_index_local - 2;
+                offspring_metadata[next_offspring].nodes[1]
+                    = next_index_local - 1;
             }
         assert(next_index_local
                == next_index + 2 * static_cast<std::int32_t>(N_next));
