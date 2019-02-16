@@ -116,6 +116,7 @@ namespace fwdpy11
                == next_index + 2 * static_cast<std::int32_t>(N_next));
         // This is constant-time
         pop.diploids.swap(offspring);
+        pop.diploid_metadata.swap(offspring_metadata);
     }
 
     // Wow, that's a lot of stuff needed:
