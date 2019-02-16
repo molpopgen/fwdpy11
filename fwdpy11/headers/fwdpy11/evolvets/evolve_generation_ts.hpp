@@ -16,7 +16,7 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-// This file is copied from the fwdpp version 0.7.0 examples folder.
+// This file is copied from the fwdpp version 0.7.4 examples folder.
 // Author is Kevin Thornton.
 #ifndef FWDPY11_EVOLVE_GENERATION_TS
 #define FWDPY11_EVOLVE_GENERATION_TS
