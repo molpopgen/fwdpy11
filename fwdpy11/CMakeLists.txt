@@ -18,6 +18,7 @@ set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc)
 
 set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc src/tsevolution/slocuspop.cc src/tsevolution/util.cc
+    src/tsevolution/genetic_value_common.cc
     src/tsevolution/slocus_fitness.cc)
 
 # These are the main modules

@@ -6,19 +6,6 @@
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpp/ts/definitions.hpp>
 
-void resize_genotype_matrix(std::vector<double> &new_diploid_gvalues,
-                            std::size_t newsize, std::true_type);
-
-void resize_genotype_matrix(std::vector<double> & /*new_diploid_gvalues*/,
-                            std::size_t /*newsize*/, std::false_type);
-
-void copy_genetic_values(double *beg, const std::vector<double> &gvalues,
-                         std::true_type);
-
-void copy_genetic_values(double * /*beg*/,
-                         const std::vector<double> & /*genetic_value_fxn*/,
-                         std::false_type);
-
 void
 remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
                const std::vector<fwdpp::ts::TS_NODE_INT> &idmap);
