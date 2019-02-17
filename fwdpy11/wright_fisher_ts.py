@@ -65,7 +65,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
-    from .tsevolution import WFSlocusPop_ts
+    from ._tsevolution import WFSlocusPop_ts
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
