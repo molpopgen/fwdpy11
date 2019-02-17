@@ -17,6 +17,8 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc)
 
+set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc src/tsevolution/slocuspop.cc src/tsevolution/util.cc)
+
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
@@ -62,3 +64,5 @@ pybind11_add_module(ts_from_msprime MODULE src/ts_from_msprime.cc)
 target_link_libraries(ts_from_msprime PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(wright_fisher_slocus_ts MODULE src/wright_fisher_slocus_ts.cc)
 target_link_libraries(wright_fisher_slocus_ts PRIVATE GSL::gsl GSL::gslcblas)
+pybind11_add_module(tsevolution MODULE ${TSEVOLUTION_SOURCES})
+target_link_libraries(tsevolution PRIVATE GSL::gsl GSL::gslcblas)
