@@ -24,16 +24,12 @@
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
 #include <functional>
-#include <tuple>
-#include <queue>
 #include <cmath>
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/samplers.hpp>
-//#include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
