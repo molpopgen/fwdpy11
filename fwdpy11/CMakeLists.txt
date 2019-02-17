@@ -17,7 +17,8 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc)
 
-set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc src/tsevolution/slocuspop.cc src/tsevolution/util.cc)
+set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc src/tsevolution/slocuspop.cc src/tsevolution/util.cc
+    src/tsevolution/slocus_fitness.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
