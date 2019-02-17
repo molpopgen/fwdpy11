@@ -1,5 +1,5 @@
 #include "slocus_fitness.hpp"
-#include "util.hpp"
+#include "genetic_value_common.hpp"
 
 template <typename update_genotype_matrix>
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
