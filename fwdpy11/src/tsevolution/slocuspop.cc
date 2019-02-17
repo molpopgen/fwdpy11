@@ -119,43 +119,6 @@ wrap_calculate_fitness(bool update_genotype_matrix)
     };
 }
 
-// TODO: put in header for reuse
-template <typename poptype>
-void
-remap_ancient_samples(poptype &pop,
-                      const std::vector<fwdpp::ts::TS_NODE_INT> &idmap)
-{
-    for (auto &a : pop.ancient_sample_records)
-        {
-            a.n1 = idmap[a.n1];
-            a.n2 = idmap[a.n2];
-            if (a.n1 == fwdpp::ts::TS_NULL_NODE
-                || a.n2 == fwdpp::ts::TS_NULL_NODE)
-                {
-                    throw std::runtime_error(
-                        "error simplifying with respect to ancient samples");
-                }
-        }
-}
-
-// TODO: move to standalone source file.
-void
-remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
-               const std::vector<fwdpp::ts::TS_NODE_INT> &idmap)
-{
-    for (auto &m : metadata)
-        {
-            m.nodes[0] = idmap[m.nodes[0]];
-            m.nodes[1] = idmap[m.nodes[1]];
-            if (m.nodes[0] == fwdpp::ts::TS_NULL_NODE
-                || m.nodes[1] == fwdpp::ts::TS_NULL_NODE)
-                {
-                    throw std::runtime_error(
-                        "error remapping node field of individual metadata");
-                }
-        }
-}
-
 // TODO: allow for neutral mutations in the future
 void
 wfSlocusPop_ts(
@@ -309,7 +272,8 @@ wfSlocusPop_ts(
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
-                    remap_ancient_samples(pop, rv.first);
+                    remap_ancient_samples(pop.ancient_sample_records,
+                                          rv.first);
                     remap_metadata(pop.ancient_sample_metadata, rv.first);
                     remap_metadata(pop.diploid_metadata, rv.first);
                 }
@@ -393,7 +357,9 @@ wfSlocusPop_ts(
                 preserve_selected_fixations, false,
                 suppress_edge_table_indexing);
 
-            remap_ancient_samples(pop, rv.first);
+            remap_ancient_samples(pop.ancient_sample_records, rv.first);
+            remap_metadata(pop.ancient_sample_metadata, rv.first);
+            remap_metadata(pop.diploid_metadata, rv.first);
         }
     if (suppress_edge_table_indexing == true)
         {
@@ -406,7 +372,8 @@ wfSlocusPop_ts(
         }
 }
 
-void init_slocus_evolution(py::module & m)
+void
+init_slocus_evolution(py::module &m)
 {
-    m.def("WFSlocusPop_ts",&wfSlocusPop_ts);
+    m.def("WFSlocusPop_ts", &wfSlocusPop_ts);
 }
