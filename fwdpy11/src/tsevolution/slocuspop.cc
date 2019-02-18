@@ -31,7 +31,6 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
-#include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
