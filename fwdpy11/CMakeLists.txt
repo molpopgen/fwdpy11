@@ -17,9 +17,13 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc)
 
-set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc src/tsevolution/slocuspop.cc src/tsevolution/util.cc
+set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
+    src/tsevolution/slocuspop.cc
+    src/tsevolution/mlocuspop.cc
+    src/tsevolution/util.cc
     src/tsevolution/genetic_value_common.cc
     src/tsevolution/slocus_fitness.cc
+    src/tsevolution/mlocus_fitness.cc
     src/tsevolution/index_and_count_mutations.cc)
 
 # These are the main modules
