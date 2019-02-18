@@ -13,7 +13,6 @@ class VariantIterator
     std::vector<fwdpp::ts::mutation_record>::const_iterator
     advance_trees_and_mutations()
     {
-        ++mbeg;
         while (mbeg < mend)
             {
                 const auto& m = tv.tree();
@@ -67,6 +66,7 @@ class VariantIterator
             {
                 pos.push_back(m.pos);
             }
+        mbeg = advance_trees_and_mutations();
     }
 
     VariantIterator&
@@ -109,6 +109,7 @@ class VariantIterator
                             "VariantIterator: sample traversal error");
                     }
             }
+        mbeg++;
         mbeg = advance_trees_and_mutations();
         return *this;
     }
