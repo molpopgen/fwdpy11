@@ -170,6 +170,8 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(c, cs[i])
             self.assertEqual(c, v.genotypes.sum())
             i += 1
+        mc = np.array(self.pop.mcounts)
+        self.assertEqual(i, len(np.where(mc > 0)[0]))
         self.assertEqual(i, len(self.pop.tables.mutations))
 
     def test_VariantIteratorFromPopulation(self):
@@ -185,6 +187,8 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(c, cs[i])
             self.assertEqual(c, v.genotypes.sum())
             i += 1
+        mc = np.array(self.pop.mcounts)
+        self.assertEqual(i, len(np.where(mc > 0)[0]))
         self.assertEqual(i, len(self.pop.tables.mutations))
 
     def test_count_mutations(self):
@@ -233,6 +237,19 @@ class testSamplePreservation(unittest.TestCase):
         for i in mc:
             self.assertTrue(i[1] > 0)
             self.assertEqual(self.pop.mcounts_ancient_samples[i[0]], i[1])
+
+    def test_VariantIteratorFromPreservedSamples(self):
+        n = np.array(self.pop.tables.nodes)
+        pn = np.array(self.pop.tables.preserved_nodes)
+        at = n['time'][pn]
+        for u in np.unique(at):
+            n = pn[np.where(at == u)[0]]
+            vi = fwdpy11.ts.VariantIterator(self.pop.tables,
+                                            self.pop.mutations, n)
+            for variant in vi:
+                k = variant.record
+                self.assertNotEqual(k.node, fwdpy11.ts.NULL_NODE)
+                self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
 
 if __name__ == "__main__":
