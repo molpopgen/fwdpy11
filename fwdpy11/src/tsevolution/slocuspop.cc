@@ -39,6 +39,7 @@
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include "util.hpp"
 #include "slocus_fitness.hpp"
+#include "index_and_count_mutations.hpp"
 
 namespace py = pybind11;
 
@@ -115,7 +116,8 @@ wfSlocusPop_ts(
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
     std::vector<double> new_diploid_gvalues;
-    auto calculate_fitness = wrap_calculate_fitness_SlocusPop(record_genotype_matrix);
+    auto calculate_fitness
+        = wrap_calculate_fitness_SlocusPop(record_genotype_matrix);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
                                     new_diploid_gvalues);
 
@@ -284,15 +286,9 @@ wfSlocusPop_ts(
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);
         }
-    if (suppress_edge_table_indexing == true)
-        {
-            pop.tables.build_indexes();
-            std::vector<std::int32_t> samples(2 * pop.N);
-            std::iota(samples.begin(), samples.end(), 0);
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
-                                       pop.mcounts,
-                                       pop.mcounts_from_preserved_nodes);
-        }
+    index_and_count_mutations(suppress_edge_table_indexing, 2 * pop.N,
+                              pop.mutations, pop.tables, pop.mcounts,
+                              pop.mcounts_from_preserved_nodes);
 }
 
 void
