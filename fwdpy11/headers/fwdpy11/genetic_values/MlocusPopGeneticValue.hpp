@@ -21,6 +21,7 @@
 
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/MlocusPop.hpp>
+#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
