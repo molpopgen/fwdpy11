@@ -40,6 +40,7 @@
 #include "util.hpp"
 #include "mlocus_fitness.hpp"
 #include "index_and_count_mutations.hpp"
+#include "cleanup_metadata.hpp"
 
 namespace py = pybind11;
 
@@ -342,6 +343,7 @@ wfMlocusPop_ts(
     index_and_count_mutations(suppress_edge_table_indexing, 2 * pop.N,
                               pop.mutations, pop.tables, pop.mcounts,
                               pop.mcounts_from_preserved_nodes);
+    cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
 }
 
 void

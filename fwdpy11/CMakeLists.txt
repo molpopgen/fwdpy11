@@ -21,6 +21,7 @@ set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/slocuspop.cc
     src/tsevolution/mlocuspop.cc
     src/tsevolution/util.cc
+    src/tsevolution/cleanup_metadata.cc
     src/tsevolution/genetic_value_common.cc
     src/tsevolution/slocus_fitness.cc
     src/tsevolution/mlocus_fitness.cc
