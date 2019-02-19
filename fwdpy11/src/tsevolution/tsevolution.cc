@@ -10,5 +10,6 @@ PYBIND11_MODULE(_tsevolution, m)
     m.doc() = "Evolution under a Wright-Fisher model using tree sequences.";
 
     init_slocus_evolution(m);
+    init_mlocus_evolution(m);
 }
 
