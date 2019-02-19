@@ -48,6 +48,8 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         then :class:`fwdpy11.tsrecorders.NoAncientSamples` will be used.
 
     """
+    import fwdpy11.SlocusPop
+    import fwdpy11.MlocusPop
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -63,22 +65,51 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         # Will throw exception if anything is wrong:
         params.validate()
 
-    from fwdpy11 import MutationRegions
-    from fwdpy11 import RecombinationRegions
-    from ._tsevolution import WFSlocusPop_ts
-    # TODO: update to allow neutral mutations
-    pneutral = 0
-    mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    rm = RecombinationRegions(params.recrate, params.recregions)
-
     if recorder is None:
         from fwdpy11.tsrecorders import NoAncientSamples
         recorder = NoAncientSamples()
 
-    from fwdpy11.tsrecorders import SampleRecorder
-    sr = SampleRecorder()
-    WFSlocusPop_ts(rng, pop, sr, simplification_interval,
-                   params.demography, params.mutrate_s,
-                   params.recrate, mm, rm, params.gvalue,
-                   recorder, params.pself, params.prune_selected is True,
-                   suppress_table_indexing,record_gvalue_matrix)
+    from fwdpy11 import MutationRegions
+    from fwdpy11 import RecombinationRegions
+    if pop.__class__ is fwdpy11.SlocusPop:
+        from ._tsevolution import WFSlocusPop_ts
+        # TODO: update to allow neutral mutations
+        pneutral = 0
+        mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
+        rm = RecombinationRegions(params.recrate, params.recregions)
+
+        from fwdpy11.tsrecorders import SampleRecorder
+        sr = SampleRecorder()
+        WFSlocusPop_ts(rng, pop, sr, simplification_interval,
+                       params.demography, params.mutrate_s,
+                       params.recrate, mm, rm, params.gvalue,
+                       recorder, params.pself, params.prune_selected is True,
+                       suppress_table_indexing, record_gvalue_matrix)
+    else:
+        from ._tsevolution import WFMlocusPop_ts
+        from fwdpy11 import MlocusMutationRegions
+        from fwdpy11 import MlocusRecombinationRegions
+        mm = MlocusMutationRegions()
+        for n, s, i, j in zip(params.mutrate_n,
+                              params.mutrate_s,
+                              params.nregions,
+                              params.sregions):
+            pn = n/(n+s)
+            if pn != 0.0:
+                raise ValueError("neutral mutations not allowed")
+            temp = MutationRegions.create(pn, i, j)
+            mm.append(temp)
+        rm = MlocusRecombinationRegions()
+        for i, j in zip(params.recrates, params.recregions):
+            rm.append(RecombinationRegions(i, j))
+        if recorder is None:
+            from fwdpy11.temporal_samplers import RecordNothing
+            recorder = RecordNothing()
+        from fwdpy11.tsrecorders import SampleRecorder
+        sr = SampleRecorder()
+        WFMlocusPop_ts(rng, pop, sr, simplification_interval,
+                       params.demography, params.mutrate_s,
+                       mm, rm,
+                       params.interlocus_rec, params.gvalue,
+                       recorder, params.pself, params.prune_selected is True,
+                       suppress_table_indexing, record_gvalue_matrix)
