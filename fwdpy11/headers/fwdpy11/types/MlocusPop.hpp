@@ -75,6 +75,10 @@ namespace fwdpy11
                     d.label = label++;
                     d.w = 1.0;
                 }
+            if(length < locus_boundaries.back().second)
+            {
+                throw std::invalid_argument("genome length must be >= last value in locus_boundaries");
+            }
         }
 
         template <typename diploids_input, typename gametes_input,
