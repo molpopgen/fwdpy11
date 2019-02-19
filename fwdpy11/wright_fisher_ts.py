@@ -90,9 +90,17 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         from fwdpy11 import MlocusMutationRegions
         from fwdpy11 import MlocusRecombinationRegions
         mm = MlocusMutationRegions()
+        # The user is allowed to input an empty list
+        # for nregions.  However, to make our lives
+        # sane, we need to detect that case
+        # and create a proxy object of a list of empty
+        # lists
+        nregion_proxy = params.nregions
+        if len(nregion_proxy) == 0:
+            nregion_proxy = [[]]*len(params.sregions)
         for n, s, i, j in zip(params.mutrate_n,
                               params.mutrate_s,
-                              params.nregions,
+                              nregion_proxy,
                               params.sregions):
             pn = n/(n+s)
             if pn != 0.0:
