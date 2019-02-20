@@ -250,5 +250,13 @@ PYBIND11_MODULE(fwdpy11_types, m)
         .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex, "Sex.")
         .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
         .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
-                       "Index of the individual in the population.");
+                       "Index of the individual in the population.")
+        .def_property_readonly("nodes",
+                               [](const fwdpy11::DiploidMetadata &md) {
+                                   py::list rv;
+                                   rv.append(md.nodes[0]);
+                                   rv.append(md.nodes[1]);
+                                   return rv;
+                               },
+                               "Node ids for individual");
 }

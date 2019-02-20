@@ -99,6 +99,24 @@ class testPythonObjects(unittest.TestCase):
             self.assertTrue(i[0] < self.pop.N)
             self.assertTrue(i[1] < self.pop.N)
 
+    def test_nodes(self):
+        import fwdpy11.ts
+        self.assertEqual(len(self.pop.diploids),
+                         len(self.pop.diploid_metadata))
+        for i in self.pop.diploid_metadata:
+            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
+
+    def test_nodes_after_evolution(self):
+        from fwdpy11.model_params import ModelParams
+        from fwdpy11.wright_fisher import evolve
+        import fwdpy11.ts
+        params = ModelParams(**self.pdict)
+        evolve(self.rng, self.pop, params)
+        for i in self.pop.diploid_metadata:
+            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
+
     def testMutationLookupTable(self):
         from fwdpy11.model_params import ModelParams
         from fwdpy11.wright_fisher import evolve

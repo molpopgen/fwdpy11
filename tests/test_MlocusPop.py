@@ -49,6 +49,14 @@ class testMlocusPop(unittest.TestCase):
     def test_e_values(self):
         self.assertEqual(sum([i.e for i in self.pop.diploid_metadata]), 0.0)
 
+    def test_nodes(self):
+        self.assertEqual(len(self.pop.diploids),
+                         len(self.pop.diploid_metadata))
+        import fwdpy11.ts
+        for i in self.pop.diploid_metadata:
+            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
+
 
 class testMlocusPopExceptions(unittest.TestCase):
     def testNzero(self):
@@ -102,6 +110,12 @@ class testSampling(unittest.TestCase):
             numbers to a list of unsigned types.
             """
             self.pop.sample(individuals=range(-10, 10))
+
+    def test_nodes(self):
+        import fwdpy11.ts
+        for i in self.pop.diploid_metadata:
+            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
 
 
 class testBadLocusBoundaries(unittest.TestCase):

@@ -225,6 +225,7 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
               offspring_metadata.deme = 0;
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
+              offspring_metadata.nodes[0] = offspring_metadata.nodes[1] = -1;
           };
 
     for (std::uint32_t gen = 0; gen < num_generations; ++gen)
