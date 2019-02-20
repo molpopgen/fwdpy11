@@ -74,6 +74,10 @@ namespace fwdpy11
                 {
                     d.label = label++;
                     d.w = 1.0;
+                    if (length == std::numeric_limits<double>::max())
+                        {
+                            d.nodes[0] = d.nodes[1] = -1;
+                        }
                 }
             if(length < locus_boundaries.back().second)
             {
