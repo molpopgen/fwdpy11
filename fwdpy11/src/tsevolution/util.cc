@@ -22,19 +22,3 @@ remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
         }
 }
 
-void
-remap_ancient_samples(std::vector<fwdpy11::ancient_sample_record> &records,
-                      const std::vector<fwdpp::ts::TS_NODE_INT> &idmap)
-{
-    for (auto &a : records)
-        {
-            a.n1 = idmap[a.n1];
-            a.n2 = idmap[a.n2];
-            if (a.n1 == fwdpp::ts::TS_NULL_NODE
-                || a.n2 == fwdpp::ts::TS_NULL_NODE)
-                {
-                    throw std::runtime_error(
-                        "error simplifying with respect to ancient samples");
-                }
-        }
-}

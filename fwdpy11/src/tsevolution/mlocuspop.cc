@@ -251,8 +251,6 @@ wfMlocusPop_ts(
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
-                    remap_ancient_samples(pop.ancient_sample_records,
-                                          rv.first);
                     remap_metadata(pop.ancient_sample_metadata, rv.first);
                     remap_metadata(pop.diploid_metadata, rv.first);
                 }
@@ -336,7 +334,6 @@ wfMlocusPop_ts(
                 preserve_selected_fixations, false,
                 suppress_edge_table_indexing);
 
-            remap_ancient_samples(pop.ancient_sample_records, rv.first);
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);
         }
