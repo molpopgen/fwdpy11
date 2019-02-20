@@ -320,28 +320,18 @@ have a mapping from their nodes to what individual they were:
 
 .. ipython:: python
 
-    print(pop.ancient_sample_records)
-    for i in pop.ancient_sample_records[:5]:
-        # time, node 1, node 2
-        print(i.time, i.n1, i.n2)
+    print(pop.ancient_sample_metadata)
+    for i in pop.ancient_sample_metadata[:5]:
+        print(i.nodes)
 
-We may view the same data using a numpy array:
+We may view the same data using a numpy array.  These data are the same
+format as for "alive" individuals.
 
 .. ipython:: python
 
-    ar = np.array(pop.ancient_sample_records, copy=False)
+    ar = np.array(pop.metadata, copy=False)
     print(ar.dtype)
     print(ar[:5])
-
-The other form of metadata is the same as for alive individuals:
-
-.. ipython:: python
-
-    print(type(pop.ancient_sample_metadata[0]))
-    md = np.array(pop.ancient_sample_metadata)
-    print(md.dtype)
-    print(md[:5])
-
 
 Obtaining genotype data from tree sequences
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

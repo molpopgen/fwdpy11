@@ -141,7 +141,7 @@ The later class contains useful additional data about the individual:
     "deme", "The deme index of this diploid. New in 0.2.0."
     "sex", "The sex index of this diploid. New in 0.2.0."
     "parents", "A list containing the label fields of each parent."
-    "nodes", "The nodes in a tree sequence corresponding to this diploid. (Not used in 0.2.0)"
+    "nodes", "The nodes in a tree sequence corresponding to this diploid."
 
 For a multi-locus simulation, the diploid genotype at each locus is stored in a :class:`fwdpy11.VecDiploid`, which is an opaque list of :class:`fwdpy11.DiploidGenotype` objects.  
 
