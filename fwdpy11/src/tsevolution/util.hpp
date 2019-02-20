@@ -10,7 +10,4 @@ void
 remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
                const std::vector<fwdpp::ts::TS_NODE_INT> &idmap);
 
-void
-remap_ancient_samples(std::vector<fwdpy11::ancient_sample_record> &records,
-                      const std::vector<fwdpp::ts::TS_NODE_INT> &idmap);
 #endif
