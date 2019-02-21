@@ -72,8 +72,11 @@ namespace fwdpy11
                 {
                     c->operator()(rng, rv);
                 }
-            std::sort(begin(rv), end(rv));
-            rv.push_back(std::numeric_limits<double>::max());
+            if (!rv.empty())
+                {
+                    std::sort(begin(rv), end(rv));
+                    rv.push_back(std::numeric_limits<double>::max());
+                }
             return rv;
         }
     };
