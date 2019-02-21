@@ -398,7 +398,8 @@ You may also iterate over the genotypes on a per-marker basis using :class:`fwdp
 
     vs = fwdpy11.ts.VariantIterator(pop)
     for v, i in zip(vs, pop.tables.mutations):
-        assert(v.genotypes.sum() == pop.mcounts[i.key])
+        r = v.record
+        assert(v.genotypes.sum() == pop.mcounts[r.key])
 
 The type of :attr:`fwdpy11.ts.VariantIterator.genotypes` is a numpy array with dtype `int8`.  The encoding is `0` for
 the ancestral state and `1` for the derived.
