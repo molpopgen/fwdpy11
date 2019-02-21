@@ -6,5 +6,9 @@ void
 init_GeneticMapUnit(py::module& m)
 {
     py::class_<fwdpy11::GeneticMapUnit>(m, "GeneticMapUnit",
-                                        "ABC for components of genetic maps");
+                                        R"delim(
+                                        ABC for components of genetic maps
+
+                                        .. versionadded:: 0.3.0
+                                        )delim");
 }

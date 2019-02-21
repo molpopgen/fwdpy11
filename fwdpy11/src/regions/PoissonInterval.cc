@@ -7,7 +7,11 @@ init_PoissonInterval(py::module& m)
 {
     py::class_<fwdpy11::PoissonInterval, fwdpy11::GeneticMapUnit>(
         m, "PoissonInterval",
-        "Generate poisson number of crossover breakpoints.")
+        R"delim(
+        Generate poisson number of crossover breakpoints.
+        
+        .. versionadded:: 0.3.0
+        )delim")
         .def(py::init<double, double, double>(), py::arg("beg"),
              py::arg("end"), py::arg("mean"))
         .def_readonly("beg", &fwdpy11::PoissonInterval::beg,
