@@ -10,20 +10,20 @@ namespace fwdpy11
 {
     struct PoissonPoint : public GeneticMapUnit
     {
-        double position, rate;
-        PoissonPoint(const double pos, const double r) : position(pos), rate(r)
+        double position, mean;
+        PoissonPoint(const double pos, const double m) : position(pos), mean(m)
         {
             if (!std::isfinite(pos))
                 {
                     throw std::invalid_argument("position must be finite");
                 }
-            if (!std::isfinite(rate))
+            if (!std::isfinite(mean))
                 {
-                    throw std::invalid_argument("rate must be finite");
+                    throw std::invalid_argument("mean must be finite");
                 }
-            if (rate < 0)
+            if (mean < 0)
                 {
-                    throw std::invalid_argument("rate must be non-negative");
+                    throw std::invalid_argument("mean must be non-negative");
                 }
         }
 
@@ -31,7 +31,7 @@ namespace fwdpy11
         operator()(const GSLrng_t& rng,
                    std::vector<double>& breakpoints) const final
         {
-            unsigned n = gsl_ran_poisson(rng.get(), rate);
+            unsigned n = gsl_ran_poisson(rng.get(), mean);
             if (n % 2 != 0.0)
                 {
                     breakpoints.push_back(position);
@@ -41,7 +41,7 @@ namespace fwdpy11
         pybind11::object
         pickle() const final
         {
-            return pybind11::make_tuple(position, rate);
+            return pybind11::make_tuple(position, mean);
         }
 
         static PoissonPoint
