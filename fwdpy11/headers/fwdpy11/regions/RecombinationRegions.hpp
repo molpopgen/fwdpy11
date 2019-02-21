@@ -11,7 +11,12 @@
 
 namespace fwdpy11
 {
-    struct RecombinationRegions
+    struct GeneticMap
+    {
+        virtual std::vector<double> operator()(const GSLrng_t& rng) const = 0;
+    };
+
+    struct RecombinationRegions : public GeneticMap
     {
         std::vector<Region> regions;
         std::vector<double> weights;
@@ -28,8 +33,8 @@ namespace fwdpy11
                 gsl_ran_discrete_preproc(weights.size(), weights.data()));
         }
 
-        inline std::vector<double>
-        operator()(const GSLrng_t& rng) const
+        std::vector<double>
+        operator()(const GSLrng_t& rng) const final
         {
             unsigned nbreaks = gsl_ran_poisson(rng.get(), recrate);
             if (nbreaks == 0)
