@@ -4,10 +4,12 @@
 #include <limits>
 #include <vector>
 #include <algorithm>
+#include <functional>
 #include <fwdpp/internal/gsl_discrete.hpp>
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/rng.hpp>
 #include "Region.hpp"
+#include "GeneticMapUnit.hpp"
 
 namespace fwdpy11
 {
@@ -47,6 +49,28 @@ namespace fwdpy11
                 {
                     std::size_t x = gsl_ran_discrete(rng.get(), lookup.get());
                     rv.push_back(regions[x](rng));
+                }
+            std::sort(begin(rv), end(rv));
+            rv.push_back(std::numeric_limits<double>::max());
+            return rv;
+        }
+    };
+
+    struct GeneralizedGeneticMap : public GeneticMap
+    {
+        std::vector<std::unique_ptr<GeneticMapUnit>> callbacks;
+        GeneralizedGeneticMap(std::vector<std::unique_ptr<GeneticMapUnit>> c)
+            : callbacks(std::move(c))
+        {
+        }
+
+        std::vector<double>
+        operator()(const GSLrng_t& rng) const final
+        {
+            std::vector<double> rv;
+            for (auto&& c : callbacks)
+                {
+                    c->operator()(rng, rv);
                 }
             std::sort(begin(rv), end(rv));
             rv.push_back(std::numeric_limits<double>::max());
