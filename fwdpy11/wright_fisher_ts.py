@@ -86,7 +86,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         sr = SampleRecorder()
         WFSlocusPop_ts(rng, pop, sr, simplification_interval,
                        params.demography, params.mutrate_s,
-                       params.recrate, mm, rm, params.gvalue,
+                       mm, rm, params.gvalue,
                        recorder, params.pself, params.prune_selected is True,
                        suppress_table_indexing, record_gvalue_matrix)
     else:
