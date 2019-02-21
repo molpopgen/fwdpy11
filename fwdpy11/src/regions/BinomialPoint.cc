@@ -11,6 +11,8 @@ init_BinomialPoint(py::module& m)
         Generate a crossover breakpoint at a fixed position with a
         fixed probability.  This class represents genetic distance
         as centiMorgans/100.
+
+        .. versionadded:: 0.3.0
         )delim")
         .def(py::init<double, double>(), py::arg("position"),
              py::arg("probability"))
