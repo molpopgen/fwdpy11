@@ -305,7 +305,7 @@ class testPoissonInterval(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(up.beg, self.pi.beg)
         self.assertEqual(up.end, self.pi.end)
-        self.assertEqual(up.rate, self.pi.rate)
+        self.assertEqual(up.mean, self.pi.mean)
 
 
 class testPoissonPoint(unittest.TestCase):
@@ -317,7 +317,7 @@ class testPoissonPoint(unittest.TestCase):
         p = pickle.dumps(self.pi)
         up = pickle.loads(p)
         self.assertEqual(up.position, self.pi.position)
-        self.assertEqual(up.rate, self.pi.rate)
+        self.assertEqual(up.mean, self.pi.mean)
 
 # class test_Region_repr(unittest.TestCase):
 #     @classmethod

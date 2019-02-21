@@ -10,8 +10,8 @@ namespace fwdpy11
 {
     struct PoissonInterval : public GeneticMapUnit
     {
-        double beg, end, rate;
-        PoissonInterval(double b, double e, double r) : beg(b), end(e), rate(r)
+        double beg, end, mean;
+        PoissonInterval(double b, double e, double m) : beg(b), end(e), mean(m)
         {
             if (!std::isfinite(b))
                 {
@@ -21,18 +21,18 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("end must be finite");
                 }
-            if (!std::isfinite(r))
+            if (!std::isfinite(mean))
                 {
-                    throw std::invalid_argument("rate must be finite");
+                    throw std::invalid_argument("mean must be finite");
                 }
             if (e <= b)
                 {
                     throw std::invalid_argument(
                         "end must be greater than beg");
                 }
-            if (r < 0)
+            if (mean < 0)
                 {
-                    throw std::invalid_argument("rate must be non-negative");
+                    throw std::invalid_argument("mean must be non-negative");
                 }
         }
 
@@ -40,7 +40,7 @@ namespace fwdpy11
         operator()(const GSLrng_t& rng,
                    std::vector<double>& breakpoints) const final
         {
-            unsigned n = gsl_ran_poisson(rng.get(), rate);
+            unsigned n = gsl_ran_poisson(rng.get(), mean);
             for (unsigned i = 0; i < n; ++i)
                 {
                     breakpoints.push_back(gsl_ran_flat(rng.get(), beg, end));
@@ -50,7 +50,7 @@ namespace fwdpy11
         pybind11::object
         pickle() const final
         {
-            return pybind11::make_tuple(beg, end, rate);
+            return pybind11::make_tuple(beg, end, mean);
         }
 
         std::unique_ptr<GeneticMapUnit>
