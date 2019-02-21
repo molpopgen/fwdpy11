@@ -64,6 +64,24 @@ thus an equivalent specification would be this:
     for i in recRegions:
         print (i)
 
+A more general approach to genetic maps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.3.0
+
+An alternative approach to modeling variation in recombination rates involves classes derived from
+:class:`fwdpy11.GeneticMapUnit` (which is an ABC).  These classes allow you to "compose" a genetic map that is a mixture of continuous
+intervals and point processes.
+
+The relevant classes are:
+
+* :class:`fwdpy11.PoissonInterval`, which specifies that the number of breakpoints are Poisson-distributed and positions
+  uniform on the interval :math:`[beg, end)`.
+* :class:`fwdpy11.BinomialPoint` represents recombination events occurring at a specific position with a specific
+  probability.
+* :class:`fwdpy11.PoissonPoint` also represents recombination events occurring at a fixed position.  The number of
+  breakpoints is Poisson-distributed, and a breakpoint is inserted if the total number is odd.
+
 
 Specific examples
 -------------------
@@ -136,7 +154,7 @@ Crossover rate variation
 Just like neutral mutations, intervals with different crossover rates are specified by different :class:`fwdpy11.Region` objects.  Let's set up the following concrete example:
 
 * A region where crossovers occur between positions [0,1)
-* Positions [0,0.45) and [0.55,1) have uniform recombintion rates at the "background" rate.
+* Positions [0,0.45) and [0.55,1) have uniform recombination rates at the "background" rate.
 * Positions [0.45,0.55) are a recombination hotspot with 100x the background intensity (per "base pair").
 
 The above model can be represented as:
@@ -156,6 +174,17 @@ Internally, this is what will happen to the above input:
 * The weight on the hotspot will be :math:`100\times(0.55-0.45) = 10`
 
 This gives us what we want: the hotspot is 100x hotter "per base", and is 10% of the total region in length.  We therefore expect 10x as many crossovers in that region as in the flanking regions.
+
+To model two continuous regions separated by 25 centiMorgans:
+
+.. ipython:: python
+
+    recRegions = [fwdpy11.PoissonInterval(0, 1, 1e-3),
+                  fwdpy11.BinomialPoint(1, 0.25),
+                  fwdpy11.PoissonInterval(1, 2, 1e-3)]
+
+The number of recombination in the intervals :math:`[0,1)` and :math:`[1,2)` will both be Poisson-distributed with means
+of :math:`10^{-3}`.  A recombination event *between* the two regions will happen in 25% of meioses.
 
 How to set up a model
 ---------------------------------
