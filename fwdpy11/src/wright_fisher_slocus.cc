@@ -104,7 +104,7 @@ wfSlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
             py::array_t<std::uint32_t> popsizes, const double mu_neutral,
             const double mu_selected, const double recrate,
             const fwdpy11::MutationRegions &mmodel,
-            const fwdpy11::RecombinationRegions &rmodel,
+            const fwdpy11::GeneticMap &rmodel,
             fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
             fwdpy11::SlocusPop_temporal_sampler recorder,
             const double selfing_rate, const bool remove_selected_fixations)
