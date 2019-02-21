@@ -7,7 +7,10 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
-    src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc)
+    src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
+    src/regions/GeneticMapUnit.cc src/regions/PoissonInterval.cc 
+    src/regions/BinomialPoint.cc
+    src/regions/PoissonPoint.cc)
 
 set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMultivariateEffectsStrictAdditive.cc
     src/genetic_values/MultivariateGeneticValueToFitnessMap.cc

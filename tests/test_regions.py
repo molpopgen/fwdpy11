@@ -295,6 +295,30 @@ class testRecombinationRegions(unittest.TestCase):
                                           fwdpy11.GaussianS(1, 2, 1, 0.25)])
 
 
+class testPoissonInterval(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pi = fwdpy11.PoissonInterval(0, 1, 1e-3)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.pi)
+        up = pickle.loads(p)
+        self.assertEqual(up.beg, self.pi.beg)
+        self.assertEqual(up.end, self.pi.end)
+        self.assertEqual(up.rate, self.pi.rate)
+
+
+class testPoissonPoint(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pi = fwdpy11.PoissonPoint(1., 0.5)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.pi)
+        up = pickle.loads(p)
+        self.assertEqual(up.position, self.pi.position)
+        self.assertEqual(up.rate, self.pi.rate)
+
 # class test_Region_repr(unittest.TestCase):
 #     @classmethod
 #     def setUpClass(self):
