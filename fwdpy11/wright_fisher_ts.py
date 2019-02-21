@@ -72,11 +72,15 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
     if pop.__class__ is fwdpy11.SlocusPop:
+        from fwdpy11 import GeneralizedGeneticMap
         from ._tsevolution import WFSlocusPop_ts
         # TODO: update to allow neutral mutations
         pneutral = 0
         mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-        rm = RecombinationRegions(params.recrate, params.recregions)
+        if all([i.__class__ is fwdpy11.Region for i in params.recregions]) is True:
+            rm = RecombinationRegions(params.recrate, params.recregions)
+        else:
+            rm = GeneralizedGeneticMap(params.recregions)
 
         from fwdpy11.tsrecorders import SampleRecorder
         sr = SampleRecorder()
