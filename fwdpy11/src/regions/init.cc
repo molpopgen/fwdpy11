@@ -16,6 +16,7 @@ void init_GeneticMapUnit(py::module &);
 void init_PoissonInterval(py::module &);
 void init_BinomialPoint(py::module &);
 void init_PoissonPoint(py::module &);
+void init_FixedCrossovers(py::module &);
 
 void
 initialize_regions(py::module &m)
@@ -34,4 +35,5 @@ initialize_regions(py::module &m)
     init_PoissonInterval(m);
     init_BinomialPoint(m);
     init_PoissonPoint(m);
+    init_FixedCrossovers(m);
 }

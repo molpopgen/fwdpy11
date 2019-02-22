@@ -76,7 +76,9 @@ intervals and point processes.
 The relevant classes are:
 
 * :class:`fwdpy11.PoissonInterval`, which specifies that the number of breakpoints are Poisson-distributed and positions
-  uniform on the interval :math:`[beg, end)`.
+  uniform on the continuous interval :math:`[beg, end)`.
+* :class:`fwdpy11.FixedCrossovers` generates a fixed number of breakpoints whose positions are 
+  uniform on the continuous interval :math:`[beg, end)`.
 * :class:`fwdpy11.BinomialPoint` represents recombination events occurring at a specific position with a specific
   probability.
 * :class:`fwdpy11.PoissonPoint` also represents recombination events occurring at a fixed position.  The number of

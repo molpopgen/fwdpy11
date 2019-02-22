@@ -308,6 +308,19 @@ class testPoissonInterval(unittest.TestCase):
         self.assertEqual(up.mean, self.pi.mean)
 
 
+class testFixedCrossovers(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pi = fwdpy11.FixedCrossovers(0, 1, 10)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.pi)
+        up = pickle.loads(p)
+        self.assertEqual(up.beg, self.pi.beg)
+        self.assertEqual(up.end, self.pi.end)
+        self.assertEqual(up.nxovers, self.pi.nxovers)
+
+
 class testPoissonPoint(unittest.TestCase):
     @classmethod
     def setUp(self):
