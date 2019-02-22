@@ -329,7 +329,7 @@ format as for "alive" individuals.
 
 .. ipython:: python
 
-    ar = np.array(pop.metadata, copy=False)
+    ar = np.array(pop.ancient_sample_metadata, copy=False)
     print(ar.dtype)
     print(ar[:5])
 
@@ -376,10 +376,7 @@ which they belong, the following trick helps:
 
     # Revisit our ancient node data
     print(ar[:5])
-    # Stack and flatten gives us the nodes
-    # for the individuals in the same order
-    # as in ar:
-    anodes = np.stack((ar['n1'],ar['n2']), axis=1).flatten()
+    anodes = ar['nodes'].flatten()
     print(anodes[:10])
 
 You may also iterate over the genotypes on a per-marker basis using :class:`fwdpy11.ts.VariantIterator`:
