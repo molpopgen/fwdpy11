@@ -185,6 +185,12 @@ To model two continuous regions separated by 25 centiMorgans:
                   fwdpy11.BinomialPoint(1, 0.25),
                   fwdpy11.PoissonInterval(1, 2, 1e-3)]
 
+To model a genomic segment having exactly one crossover on the interval :math:`[0,1)`:
+
+.. ipython:: python
+
+    recRegions = [fwdpy11.FixedCrossovers(0, 1, 1)]
+
 The number of recombination breakpoints in the intervals :math:`[0,1)` and :math:`[1,2)` will both be Poisson-distributed with means
 of :math:`10^{-3}`.  A recombination event *between* the two regions will happen in 25% of meioses.
 
