@@ -332,6 +332,18 @@ class testPoissonPoint(unittest.TestCase):
         self.assertEqual(up.position, self.pi.position)
         self.assertEqual(up.mean, self.pi.mean)
 
+
+class testBinomialPoint(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pi = fwdpy11.BinomialPoint(1., 0.5)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.pi)
+        up = pickle.loads(p)
+        self.assertEqual(up.position, self.pi.position)
+        self.assertEqual(up.probability, self.pi.probability)
+
 # class test_Region_repr(unittest.TestCase):
 #     @classmethod
 #     def setUpClass(self):
