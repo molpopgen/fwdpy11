@@ -17,14 +17,11 @@ Background
 --------------------------------------------------
 The models are parameterized through Python's "new-style" class system.
 
-Mutation rates, recombination rates, and a weighting system
+Regions and weights
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A simulation will typically have a mutation rate, :math:`\\mu`, which represents the mean of a Poisson number of mutations per gamete per generation), and a recombination rate, :math:`r`, which again is the mean of Poisson number of crossover events (per diploid, per generation).  These parameters are the _total_ rates across an entire simulated region.  Variation in these parameters along the region are affected by a set of positions coupled with "weights", which the user specifies.
-
-The base class: :class:`fwdpy11.Region`
-
-A :class:`fwdpy11.Region` is a Python class with the following members:
+A "region" refers to a continuous genomic interval associated with a weight.  The base class for a region is
+:class:`fwdpy11.Region`, which contains the following members:
 
 * :math:`b`, which is the beginning/start of the region. The type is "float". 
 * :math:`e`, which is the end/stop of the region. The type is "float".
@@ -32,66 +29,35 @@ A :class:`fwdpy11.Region` is a Python class with the following members:
 
 The members are used to inform the C++ code about the relative abundance of new mutations or recombination events will occur in what region.  Briefly, the number of events that occur in region :math:`i` are proportional to :math:`w_i/\sum_i w`, *i.e*, the weight assigned to region :math:`i` divided by the sum of weights assigned to all regions.  The weights for mutation events and for recombination events are considered separately.  Thus, in order to model a correlation between mutational processes and recombination, it is up to the user to generate regions whose weights are correlated.
 
-fwdpy allows the :math:`w` slot to be interpreted in one of two ways:
+fwdpy11 allows the :math:`w` slot to be interpreted in one of two ways:
 
 * It is *not*  affected by the length of region.  Interally, the weight assigned is simply :math:`w`. 
 * It is affected by the length of a region :math:`(e - b)`.
 
 These two options are determined by arguments to class constructors, which we will see in examples below.  The latter is the default.
 
-These two approaches allow for considerable modeling flexibility.  For example, the latter approach allows :math:`w` to be interpreted as a "per base-pair" rate.  Imagine that you wanted to simulate variation in recombination along discrete 100 kilobase chunks, and the rate of crossing-over *per base pair* increases in each chunk, and includes an initial chunk with no recombination:
+.. note:: 
+ 
+    The 'weights' that you assign are *relative* and need not sum to 1.  Each weight must be :math:`\geq 0`, though.
 
-1. start=1,stop= :math:`10^5`, :math:`r_{bp}=0`
-2. start= :math:`10^5`,stop= :math:`2 \times 10^5`, :math:`r_{bp}=10^{-8}`
-3. start= :math:`2 \times 10^5`,stop= :math:`3 \times 10^5`, :math:`r_{bp}=10^{-7}`  
-
-
-This model boils down to the relative number of crossing overs per region occuring in the ratio :math:`0 : 10^{-8} : 10^{-7}`.  This is easily represented using fwdpy's classes:
-
-.. ipython:: python
-
-    import fwdpy11
-    recRegions = [fwdpy11.Region(1,1e5,0),fwdpy11.Region(1e5,2e5,1e-8),fwdpy11.Region(2e5,3e5,1e-7)]
-    for i in recRegions:
-        print (i)
-
-For this hypothetical example, the region lengths are all identical, and
-thus an equivalent specification would be this:
-
-.. ipython:: python
-
-    recRegions = [fwdpy11.Region(1,1e5,0,False),fwdpy11.Region(1e5,2e5,1e-8,False),fwdpy11.Region(2e5,3e5,1e-7,False)]
-    for i in recRegions:
-        print (i)
-
-A more general approach to genetic maps
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. versionadded:: 0.3.0
-
-An alternative approach to modeling variation in recombination rates involves classes derived from
-:class:`fwdpy11.GeneticMapUnit` (which is an ABC).  These classes allow you to "compose" a genetic map that is a mixture of continuous
-intervals and point processes.
-
-The relevant classes are:
-
-* :class:`fwdpy11.PoissonInterval`, which specifies that the number of breakpoints are Poisson-distributed and positions
-  uniform on the continuous interval :math:`[beg, end)`.
-* :class:`fwdpy11.FixedCrossovers` generates a fixed number of breakpoints whose positions are 
-  uniform on the continuous interval :math:`[beg, end)`.
-* :class:`fwdpy11.BinomialPoint` represents recombination events occurring at a specific position with a specific
-  probability.
-* :class:`fwdpy11.PoissonPoint` also represents recombination events occurring at a fixed position.  The number of
-  breakpoints is Poisson-distributed, and a breakpoint is inserted if the total number is odd.
-
-
-Specific examples
--------------------
+Variation in mutation rates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Mutations not affecting fitness ("neutral" mutations)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. note:: 
+    
+   This section only applies to simulations *without* tree sequence recording.
+   When simulating with tree sequence recording, neutral mutations are added *after*
+   the simulation is complete.
 
 You specify regions where neutral mutations arise via the class :class:`fwdpy11.Region`.  A region has a beginning, end, and a weight Thus, the following list would specify that 100% of neutral mutations occur on the continuous interval [0,1):
+
+.. ipython:: python
+    :suppress:
+    
+    import fwdpy11
 
 .. ipython:: python
 
@@ -132,7 +98,7 @@ See the difference in the above? (Look at the "weight" term in the
 second line of each set.)
 
 Mutations affecting fitness
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+++++++++++++++++++++++++++++++++
 
 Type types of mutations affecting fitness that we consider will have two parameters associated with them:
 
@@ -151,33 +117,39 @@ In a simulation, we may place a distribution on either :math:`s` itself or on th
     Added ability to have these DFE objects represent distributions of scaled selection parameter via the "scaling"
     attribute.
   
-Crossover rate variation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Just like neutral mutations, intervals with different crossover rates are specified by different :class:`fwdpy11.Region` objects.  Let's set up the following concrete example:
+Variation in recombination rates
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* A region where crossovers occur between positions [0,1)
-* Positions [0,0.45) and [0.55,1) have uniform recombination rates at the "background" rate.
-* Positions [0.45,0.55) are a recombination hotspot with 100x the background intensity (per "base pair").
+.. versionchanged:: 0.3.0
 
-The above model can be represented as:
+    Update to discuss more general approach to genetic maps
 
-.. ipython:: python
+There are two approaches to modeling variation in recombination rates.  
 
-    #recrate[2] is the hotspot:
-    recrates = [fwdpy11.Region(0.,0.45,1.),fwdpy11.Region(0.55,1.,1.,),fwdpy11.Region(0.45,0.55,100.)]
-    for i in recrates:
-        print (i)
+First, the simulation may specify a recombination rate, `r`, and then use a list of :class:`fwdpy11.Region`
+to model variation along the genome. This is essentially the same approach described above for neutral mutations.
 
+A more general approach to genetic maps
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Internally, this is what will happen to the above input:
+.. versionadded:: 0.3.0
 
-* The total weight on the first region will be :math:`w = w \times (e-b) = 1\times(0.45-0) = 0.45`
-* The weight on the second region will be :math:`1\times(1-0.55) = 0.45`
-* The weight on the hotspot will be :math:`100\times(0.55-0.45) = 10`
+An alternative approach to modeling variation in recombination rates involves classes derived from
+:class:`fwdpy11.GeneticMapUnit` (which is an ABC).  These classes allow you to "compose" a genetic map that is a mixture of continuous
+intervals and point processes.
 
-This gives us what we want: the hotspot is 100x hotter "per base", and is 10% of the total region in length.  We therefore expect 10x as many crossovers in that region as in the flanking regions.
+The relevant classes are:
 
-To model two continuous regions separated by 25 centiMorgans:
+* :class:`fwdpy11.PoissonInterval`, which specifies that the number of breakpoints are Poisson-distributed and positions
+  uniform on the continuous interval :math:`[beg, end)`.
+* :class:`fwdpy11.FixedCrossovers` generates a fixed number of breakpoints whose positions are 
+  uniform on the continuous interval :math:`[beg, end)`.
+* :class:`fwdpy11.BinomialPoint` represents recombination events occurring at a specific position with a specific
+  probability.
+* :class:`fwdpy11.PoissonPoint` also represents recombination events occurring at a fixed position.  The number of
+  breakpoints is Poisson-distributed, and a breakpoint is inserted if the total number is odd.
+
+For example, to model two continuous regions separated by 25 centiMorgans:
 
 .. ipython:: python
 
@@ -194,10 +166,9 @@ To model a genomic segment having exactly one crossover on the interval :math:`[
 The number of recombination breakpoints in the intervals :math:`[0,1)` and :math:`[1,2)` will both be Poisson-distributed with means
 of :math:`10^{-3}`.  A recombination event *between* the two regions will happen in 25% of meioses.
 
-How to set up a model
----------------------------------
+.. note::
 
-When setting up a model, it is important that you think in terms of conditional probabilities.  In other words, if the total rate to neutral variants is :math:`\mu_n`, then the weights passed along to a function have the interpretations "Given that a neutral mutation occurs, the probability that it occurs in a certain interval is :math:`x`", where :math:`x` is determined by the relative weight assigned to an interval.
+    This scheme differs from the above (based on Regions) in that there is no overall recombination rate that needs to be specified.
+    Rather, the rates are used to construct the individual objects.
 
-The 'weights' that you assign are *relative* and need not sum to 1.  Each weight must be :math:`\geq 0`, though.
 
