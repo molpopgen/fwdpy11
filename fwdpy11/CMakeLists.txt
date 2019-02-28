@@ -19,7 +19,8 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMu
     src/genetic_values/MultivariateGSSmo.cc)
 
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
-    src/ts/count_mutations.cc)
+    src/ts/count_mutations.cc
+    src/ts/simplify.cc)
 
 set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/slocuspop.cc

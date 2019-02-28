@@ -35,6 +35,30 @@ class testTreeSequences(unittest.TestCase):
         self.pop = fwdpy11.SlocusPop(self.N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
 
+    def test_simplify(self):
+        tables, idmap = fwdpy11.ts.simplify(self.pop, [i for i in range(10)])
+        for i in range(10):
+            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+
+    def test_simplify_tables(self):
+        tables, idmap = fwdpy11.ts.simplify_tables(
+            self.pop.tables, self.pop.mutations, [i for i in range(10)])
+        for i in range(10):
+            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+
+    def test_simplify_numpy_array(self):
+        tables, idmap = fwdpy11.ts.simplify(
+            self.pop, np.array([i for i in range(10)]))
+        for i in range(10):
+            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+
+    def test_simplify_tables_numpy_array(self):
+        tables, idmap = fwdpy11.ts.simplify_tables(
+            self.pop.tables, self.pop.mutations,
+            np.array([i for i in range(10)]))
+        for i in range(10):
+            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+
     def test_dump_to_msprime(self):
         # TODO: test leaf counts of mutations in msprmie
         # vs fwdpy11 and cross-references with self.pop.mcounts

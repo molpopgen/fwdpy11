@@ -7,7 +7,6 @@
 #include <pybind11/stl_bind.h>
 
 #include <fwdpp/ts/table_collection.hpp>
-#include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/recycling.hpp>
@@ -28,42 +27,6 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
 void init_ts(py::module&);
 
-py::tuple
-simplify(const fwdpy11::Population& pop,
-         const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
-{
-    if (pop.tables.genome_length() == std::numeric_limits<double>::max())
-        {
-            throw std::invalid_argument(
-                "population is not using tree sequences");
-        }
-    if (pop.tables.num_nodes() == 0)
-        {
-            throw std::invalid_argument(
-                "population has empty TableCollection");
-        }
-    if (samples.empty())
-        {
-            throw std::invalid_argument("empty sample list");
-        }
-    if (std::any_of(samples.begin(), samples.end(),
-                    [&pop](const fwdpp::ts::TS_NODE_INT s) {
-                        return s == fwdpp::ts::TS_NULL_NODE
-                               || static_cast<std::size_t>(s)
-                                      >= pop.tables.num_nodes();
-                    }))
-        {
-            throw std::invalid_argument("invalid sample list");
-        }
-    auto t(pop.tables);
-    // NOTE: If the user wants to keep ancient samples,
-    // they must pass them in to the samples list
-    t.preserved_nodes.clear();
-    fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    auto rv = simplifier.simplify(t, samples, pop.mutations);
-    t.build_indexes();
-    return py::make_tuple(std::move(t), std::move(rv.first));
-}
 
 inline std::size_t
 generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
@@ -348,38 +311,6 @@ PYBIND11_MODULE(ts, m)
              always updated. The latter is only updated if you separated
              modern from ancient samples when constructing the object.
              )delim");
-
-    m.def("simplify", &simplify, py::arg("pop"), py::arg("samples"),
-          R"delim(
-            Simplify a TableCollection.
-
-            :param pop: A :class:`fwdpy11.Population`
-            :param samples: A list of samples (node indexes).
-                
-            :return: The simplified tables and list mapping input sample IDs to output IDS
-
-            :rtype: :class:`fwdpy11.ts.TableCollection`
-
-            Note that the samples argument is agnostic with respect to the time of
-            the nodes in the input tables. Thus, you may do things like simplify
-            to a set of "currently-alive" nodes plus some or all ancient samples by
-            including some node IDs from :attr:`fwdpy11.ts.TableCollection.preserved_nodes`.
-            
-            If the input contains ancient samples, and you wish to include them in the output,
-            then you need to include their IDs in the samples argument.
-
-            .. note::
-
-                Due to node ID remapping, the metadata corresponding to nodes becomes a bit more
-                difficult to look up.  You need to use the output ID map, the original IDs, and 
-                the population's metadata containers.
-
-
-            .. versionchanged:: 0.3.0
-
-                Ancient samples are no longer kept by default
-
-            )delim");
 
     m.def("infinite_sites", [](const fwdpy11::GSLrng_t& rng,
                                fwdpy11::Population& pop, const double mu) {
