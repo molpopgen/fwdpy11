@@ -180,9 +180,11 @@ class testTreeSequences(unittest.TestCase):
         the corresponding DataMatrix and
         those in pop.mcounts
         """
-        dm = fwdpy11.ts.make_data_matrix(self.pop,
-                                         [i for i in range(2*self.pop.N)],
-                                         False, True)
+        dm = fwdpy11.ts.data_matrix_from_tables(self.pop.tables,
+                                                self.pop.mutations,
+                                                [i for i in range(
+                                                    2*self.pop.N)],
+                                                False, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
@@ -199,9 +201,11 @@ class testTreeSequences(unittest.TestCase):
         self.assertEqual(i, len(self.pop.tables.mutations))
 
     def test_VariantIteratorFromPopulation(self):
-        dm = fwdpy11.ts.make_data_matrix(self.pop,
-                                         [i for i in range(2*self.pop.N)],
-                                         False, True)
+        dm = fwdpy11.ts.data_matrix_from_tables(self.pop.tables,
+                                                self.pop.mutations,
+                                                [i for i in range(
+                                                    2*self.pop.N)],
+                                                False, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0

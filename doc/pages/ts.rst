@@ -344,7 +344,7 @@ as in :ref:`datamatrix`).  So, to get a matrix for our first 50 diploids:
 
 .. ipython:: python
 
-    m = fwdpy11.ts.make_data_matrix(pop, [i for i in range(100)], True, True)
+    m = fwdpy11.ts.data_matrix_from_tables(pop.tables, pop.mutations, [i for i in range(100)], True, True)
 
 The last two boolean arguments are whether or not to build data for neutral and selected
 sites, respectively.  
@@ -366,7 +366,7 @@ You may access the various fields using the usual operations:
     for i in range(5):
         assert m.selected.positions[i] == pop.mutations[m.selected_keys[i]].pos
 
-The node id list passed to :func:`fwdpy11.ts.make_data_matrix` may contain nodes for alive samples 
+The node id list passed to :func:`fwdpy11.ts.data_matrix_from_tables` may contain nodes for alive samples 
 or for ancient samples, allowing you to compare modern vs ancient nodes on the trees.
 
 To get a list of node ids for ancient samples that are in the same order as the individuals to

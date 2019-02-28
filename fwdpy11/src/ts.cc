@@ -12,7 +12,6 @@
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/mutate_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
-#include <fwdpp/ts/generate_data_matrix.hpp>
 
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/rng.hpp>
@@ -340,28 +339,6 @@ PYBIND11_MODULE(ts, m)
         return nmuts;
     });
 
-    m.def("make_data_matrix",
-          [](const fwdpy11::Population& pop,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-             const bool record_neutral, const bool record_selected) {
-              return fwdpp::ts::generate_data_matrix(
-                  pop.tables, samples, pop.mutations, record_neutral,
-                  record_selected);
-          },
-          py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
-          py::arg("record_selected"),
-          R"delim(
-     Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
-     
-     :param pop: A population
-     :type pop: :class:`fwdpy11.Population`
-     :param samples: A list of sample nodes
-     :type samples: list
-     :param record_neutral: If True, generate data for neutral variants
-     :type record_neutral: boolean
-     :param record_selected: If True, generate data for selected variants
-     :type record_selected: boolean
-     )delim");
 
     init_ts(m);
 }
