@@ -84,10 +84,16 @@ Welcome to fwdpy11's documentation!
     advanced/heritability
     advanced/manip
 
+.. toctree::
+    :caption: Examples of complete simulations and work flows
+    :maxdepth: 1
+
+    examples/gss
 
 .. toctree::
     :caption: Modules
     :maxdepth: 2
+
 
 fwdpy11
 ------------------------------
