@@ -121,9 +121,9 @@ fwdpy11.tsrecorders
     :members:
     :show-inheritance:
 
-fwdpy11.ts_from_msprime
+fwdpy11.ts_from_tskit
 ------------------------------
-.. automodule:: fwdpy11.ts_from_msprime
+.. automodule:: fwdpy11.ts_from_tskit
     :members:
     :show-inheritance:
 

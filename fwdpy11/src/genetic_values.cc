@@ -438,7 +438,7 @@ PYBIND11_MODULE(genetic_values, m)
                       R"delim(
                       Return the list of genetic values.
 
-                      .. versinadded:: 0.3.0
+                      .. versionadded:: 0.3.0
                       )delim");
 
     py::class_<fwdpy11::MlocusPopGeneticValueWithMapping,
