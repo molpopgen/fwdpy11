@@ -59,10 +59,10 @@ class testTreeSequences(unittest.TestCase):
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
 
-    def test_dump_to_msprime(self):
+    def test_dump_to_tskit(self):
         # TODO: test leaf counts of mutations in msprmie
         # vs fwdpy11 and cross-references with self.pop.mcounts
-        dumped_ts = self.pop.dump_tables_to_msprime()
+        dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(len(dumped_ts.tables.nodes),
                          len(self.pop.tables.nodes))
         self.assertEqual(len(dumped_ts.tables.edges),
@@ -84,10 +84,10 @@ class testTreeSequences(unittest.TestCase):
         while tv(False) is True:
             m = tv.tree()
             tt_fwd += m.total_time(self.pop.tables.nodes)
-        tt_msprime = 0
+        tt_tskit = 0
         for t in dumped_ts.trees():
-            tt_msprime += t.get_total_branch_length()
-        self.assertEqual(tt_fwd, tt_msprime)
+            tt_tskit += t.get_total_branch_length()
+        self.assertEqual(tt_fwd, tt_tskit)
 
     def test_leaf_counts_vs_mcounts(self):
         tv = fwdpy11.ts.TreeVisitor(self.pop.tables,
@@ -106,12 +106,12 @@ class testTreeSequences(unittest.TestCase):
     def test_simplify_to_sample(self):
         """
         Simplify to a sample using fwdpy11.ts and
-        msprime, then test that total time on output
+        tskit, then test that total time on output
         is the same from both sources and that
         the mutation tables contain the same
         positions after simplification.
         """
-        dumped_ts = self.pop.dump_tables_to_msprime()
+        dumped_ts = self.pop.dump_tables_to_tskit()
         tt = 0.0
         for i in self.pop.tables.nodes:
             tt += i.time
@@ -129,10 +129,10 @@ class testTreeSequences(unittest.TestCase):
         while tv(False) is True:
             m = tv.tree()
             tt_fwd += m.total_time(fp11ts.nodes)
-        tt_msprime = 0.0
+        tt_tskit = 0.0
         for t in mspts.trees():
-            tt_msprime += t.get_total_branch_length()
-        self.assertEqual(tt_fwd, tt_msprime)
+            tt_tskit += t.get_total_branch_length()
+        self.assertEqual(tt_fwd, tt_tskit)
 
         self.assertEqual(len(fp11ts.mutations),
                          len(mspts.tables.mutations))
@@ -145,7 +145,7 @@ class testTreeSequences(unittest.TestCase):
     def test_genotype_matrix(self):
         """
         Make data matrix objects from the tree sequences
-        and compare their contents to those of msprime
+        and compare their contents to those of tskit
         as well as to an explicit calculation of mutation counts.
         """
         dm = fwdpy11.ts.make_data_matrix(self.pop,
@@ -153,7 +153,7 @@ class testTreeSequences(unittest.TestCase):
                                          False, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
-        dumped_ts = self.pop.dump_tables_to_msprime()
+        dumped_ts = self.pop.dump_tables_to_tskit()
         mm = dumped_ts.genotype_matrix()
         mc = np.sum(mm, axis=1)
         ec = np.zeros(len(self.pop.mutations), dtype=np.uint32)

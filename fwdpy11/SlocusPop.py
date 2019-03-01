@@ -62,12 +62,12 @@ class SlocusPop(_SlocusPop):
                                            args))
 
     @staticmethod
-    def create_from_msprime(ts):
+    def create_from_tskit(ts):
         """
-        Create a new object from an msprime.TreeSequence
+        Create a new object from an tskit.TreeSequence
 
-        :param ts: A tree sequence from msprime
-        :type ts: msprime.TreeSequence
+        :param ts: A tree sequence from tskit
+        :type ts: tskit.TreeSequence
 
         :rtype: :class:`fwdpy11.SlocusPop`
         :returns: A population object with an initialized
@@ -87,19 +87,19 @@ class SlocusPop(_SlocusPop):
             for example.) See :ref:`ts` for more discussion
 
         """
-        from fwdpy11.ts_from_msprime import _create_SlocusPop
+        from fwdpy11.ts_from_tskit import _create_SlocusPop
         return SlocusPop(_create_SlocusPop(ts))
 
-    def dump_tables_to_msprime(self):
+    def dump_tables_to_tskit(self):
         """
         Dump the population's TableCollection into
-        an msprime TreeSequence
+        an tskit TreeSequence
 
-        :rtype: msprime.TreeSequence
+        :rtype: tskit.TreeSequence
 
         .. todo::
 
             Incorporate the various metadata values.
         """
-        import fwdpy11._tables_to_msprime as t2msp
-        return t2msp.dump_tables_to_msprime(self)
+        import fwdpy11._tables_to_tskit as t2msp
+        return t2msp.dump_tables_to_tskit(self)

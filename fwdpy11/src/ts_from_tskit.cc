@@ -14,7 +14,7 @@ namespace py = pybind11;
 
 // TODO put this in a header in case anyone else finds it useful?
 std::tuple<fwdpp::ts::node_vector, fwdpp::ts::edge_vector, int, double>
-convert_tables_from_msprime(py::object ts)
+convert_tables_from_tskit(py::object ts)
 {
     py::object tstables = ts.attr("tables");
     py::object tsnodes = tstables.attr("nodes");
@@ -71,7 +71,7 @@ convert_tables_from_msprime(py::object ts)
 fwdpy11::SlocusPop
 create_SlocusPop_from_tree_sequence(py::object ts)
 {
-    auto t = convert_tables_from_msprime(ts);
+    auto t = convert_tables_from_tskit(ts);
     auto nodes(std::move(std::get<0>(t)));
     auto edges(std::move(std::get<1>(t)));
     auto twoN = std::get<2>(t);
@@ -94,10 +94,10 @@ create_SlocusPop_from_tree_sequence(py::object ts)
     return pop;
 }
 
-PYBIND11_MODULE(ts_from_msprime, m)
+PYBIND11_MODULE(ts_from_tskit, m)
 {
     m.doc() = "Converts node and edge data from tree sequences generated in "
-              "msprime";
+              "tskit";
 
     // Import fwdpy11.ts so that relevant C++ types
     // have their Python wrappers visible here
@@ -105,8 +105,8 @@ PYBIND11_MODULE(ts_from_msprime, m)
         pybind11::module::import("fwdpy11.ts"));
 
     // Expose this for unit-testing purposes
-    m.def("_convert_tables", &convert_tables_from_msprime);
+    m.def("_convert_tables", &convert_tables_from_tskit);
 
-    // This is the back-end for fwdpy11.SlocusPop.create_from_msprime
+    // This is the back-end for fwdpy11.SlocusPop.create_from_tskit
     m.def("_create_SlocusPop", &create_SlocusPop_from_tree_sequence);
 }

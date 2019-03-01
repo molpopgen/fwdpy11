@@ -17,7 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import numpy as np
-import msprime
+import tskit
 
 
 # TODO: mutation origin times are recorded forwards in time,
@@ -34,7 +34,7 @@ def _generate_mutation_metadata(pop):
              'heffects': list(m.heffects),
              'neutral': m.neutral}
         muts.append(str(d).encode('utf-8'))
-    return msprime.pack_bytes(muts)
+    return tskit.pack_bytes(muts)
 
 
 def _initializePopulationTable(node_view, tc):
@@ -43,7 +43,7 @@ def _initializePopulationTable(node_view, tc):
         md = "deme"+str(i)
         population_metadata.append(md.encode("utf-8"))
 
-    pmd, pmdo = msprime.pack_bytes(population_metadata)
+    pmd, pmdo = tskit.pack_bytes(population_metadata)
     tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
 
 
@@ -84,16 +84,16 @@ def _initializeIndividualTable(pop, tc):
     metadata_strings.extend(_generate_individual_metadata(
         pop.ancient_sample_metadata, tc))
 
-    md, mdo = msprime.pack_bytes(metadata_strings)
+    md, mdo = tskit.pack_bytes(metadata_strings)
     flags = [0 for i in range(pop.N+len(pop.ancient_sample_metadata))]
     tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
     return individal_nodes
 
 
-def dump_tables_to_msprime(pop):
+def dump_tables_to_tskit(pop):
     """
     Converts fwdpy11.ts.TableCollection to an
-    msprime.TreeSequence
+    tskit.TreeSequence
     """
     node_view = np.array(pop.tables.nodes, copy=True)
     node_view['time'] -= node_view['time'].max()
@@ -101,12 +101,12 @@ def dump_tables_to_msprime(pop):
     edge_view = np.array(pop.tables.edges, copy=False)
     mut_view = np.array(pop.tables.mutations, copy=False)
 
-    tc = msprime.TableCollection(pop.tables.genome_length())
+    tc = tskit.TableCollection(pop.tables.genome_length())
 
     # We must initialize population and individual
     # tables before we can do anything else.
     # Attempting to set population to anything
-    # other than -1 in an msprime.NodeTable will
+    # other than -1 in an tskit.NodeTable will
     # raise an exception if the PopulationTable
     # isn't set up.
     _initializePopulationTable(node_view, tc)
