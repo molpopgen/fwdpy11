@@ -127,7 +127,7 @@ Let's take another look at our tree, labelled with node ids:
     print(t.draw(format="unicode"))
 
 
-Let's ponder node 15 for a moment.  It has two immediate descendants, nodes 10 and 13.  We may consider
+Let's ponder node 15 for a moment.  It has two immediate descendants, nodes 5 and 13.  We may consider
 these the left and right children, respectively, of node 15.  
 
 .. ipython:: python
