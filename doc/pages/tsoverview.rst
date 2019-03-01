@@ -75,17 +75,17 @@ Wright-Fisher model for a diploid population without recombination and without s
 
 .. ipython:: python
 
-    import msprime
+    import tskit
     import numpy as np
 
     def wf1(N, ngens):
-        tc = msprime.TableCollection(1.0) 
+        tc = tskit.TableCollection(1.0) 
         # Add 2N nodes at time = 0.
         # These nodes represent the 
         # initial list of parental
         # gametes
         for i in range(2*N):
-            tc.nodes.add_row(time=0, flags=msprime.NODE_IS_SAMPLE)
+            tc.nodes.add_row(time=0, flags=tskit.NODE_IS_SAMPLE)
         next_offspring_index = len(tc.nodes)
         first_parental_index = 0
         for gen in range(1,ngens+1):
@@ -100,8 +100,8 @@ Wright-Fisher model for a diploid population without recombination and without s
                 g2 = first_parental_index + 2*parent2 + (mendel[1] < 0.5)
                 # Add nodes for our offspring's
                 # two gametes
-                tc.nodes.add_row(time=gen, flags=msprime.NODE_IS_SAMPLE)
-                tc.nodes.add_row(time=gen, flags=msprime.NODE_IS_SAMPLE)
+                tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
+                tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
                 # Add edges reflecting the
                 # transmission from parental
                 # nodes to offspring nodes
@@ -122,7 +122,7 @@ Let's run the simulation for a few generations and look at the resulting tree:
     # Before we can get a tree sequence from
     # the data, we must change direction of 
     # time from foward to backwards to satisty
-    # msprime:
+    # tskit:
     t = tc.nodes.time
     t -= tc.nodes.time.max()
     t *= -1.0

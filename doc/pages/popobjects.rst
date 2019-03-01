@@ -168,78 +168,6 @@ Other conditions that will lead to errors include:
 2. Mutation keys in gametes must be sorted according to mutation position.
 
 
-Seeding a single-locus simulation from msprime
----------------------------------------------------------------------------------------------------------
-
-In this section, we will use msprime_ to simulate data for 2,000 chromosomes with scaled mutation and recombintion rates
-of :math:`\theta=1,000` and :math:`\rho=1,000`, respectively.  Mutation and crossover positions will be on the unit
-interval :math:`[0,1)`.
-
-The output of msprime_ will be used to fill containers that we then use to construct an instantce of
-:class:`fwdpy11.SlocusPop`.
-
-.. ipython:: python
-
-    import fwdpy11
-    import msprime
-
-    def find_all_derived(s):
-        """
-        Returns indexes of all
-        derived mutation states
-        """
-        return fwdpy11.VecUint32([i for i, ltr in enumerate(s) if ltr == '1'])
-
-
-    def convert_mutations(m, mutation_dominance, mutation_label):
-        mutations = fwdpy11.VecMutation(
-            [fwdpy11.Mutation(i.position, 0, mutation_dominance, 0, mutation_label) for i in m.mutations()])
-        return mutations
-
-
-    def convert_single_locus_haplotypes(m):
-        s = fwdpy11.VecUint32()
-        gametes = fwdpy11.VecGamete(
-            [fwdpy11.Gamete((1, find_all_derived(i), s)) for i in m.haplotypes()])
-        return gametes
-
-
-    def generate_diploids(N):
-        # Testing showed that a listcomp
-        # here really ate RAM, so we
-        # do a for loop instead:
-        diploids = fwdpy11.VecDiploid()
-        for i in range(int(N)):
-            diploids.append(fwdpy11.DiploidGenotype(2 * i, 2 * i + 1))
-        return diploids
-
-
-    def msprime2fwdpy11(m, mutation_dominance=1.0, mutation_label=0):
-        if m.get_sample_size() % 2 != 0.0:
-            raise ValueError("require a TreeSequence with an even sample size")
-        mutations = convert_mutations(m, mutation_dominance, mutation_label)
-        gametes = convert_single_locus_haplotypes(m)
-        diploids = generate_diploids(int(m.get_sample_size())/2)
-        return fwdpy11.SlocusPop.create(diploids, gametes, mutations)
-
-
-    m = msprime.simulate(2000, mutation_rate=1000, recombination_rate=1000)
-    pop = msprime2fwdpy11(m)
-    assert(pop.N == 1000)
-    pop_pos = [i.pos for i in pop.mutations]
-    msp_pos = [i.position for i in m.mutations()]
-    assert(pop_pos == msp_pos)
-
-Being able to seed from msprime_ is very useful.  For example, imagine we wanted to simulate "evolve and resequence"
-expermiments.  We could use :func:`fwdpy11.util.change_effect_size` to make one of the mutations in the data have an
-effect on fitness/trait value, use :func:`copy.deepcopy` to "replicate" the base population, evolve them, and analyze.
-When I did this sort of work_ with Jim Baldwin-Brown, it was much trickier at the time, involving a lot more files!
-Now, we could redo much of that paper with a single script.
-
-.. note::
-
-    The above example is simplified because msprime_ output is already sorted appropriately.
-
 Dealing with unsorted mutation input 
 ---------------------------------------------------------------------------------------------------------
 Consider the following example with two mutations:
@@ -310,12 +238,5 @@ The sorting takes place on the C++ side because of how the relevant container ty
     ...
     ValueError: gamete contains unsorted keys 
 
-Seeding a multi-locus simulation from msprime
----------------------------------------------------------------------------------------------------------
-
-WIP
-
-
 .. _fwdpp: http://molpopgen.github.io/fwdpp
-.. _msprime: https://github.com/jeromekelleher/msprime
 .. _work: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3969567/
