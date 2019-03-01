@@ -52,34 +52,40 @@ recombination rates.  First, let's get a tree sequence:
 
     import tskit
     import numpy as np
-
+    
     # The following makes use of the Kirk Lohmueller seed.
     np.random.seed(101*405*10*110)
-
+    
     tc = tskit.TableCollection(1)
-
+    
     nsam = 10
-
+    
     for i in range(nsam):
         tc.nodes.add_row(time=0)
-
+    
     current_nodes = [i for i in range(nsam)]
     next_node = len(current_nodes)
     time = 0.0
+
+
+.. ipython:: python
+
     while len(current_nodes) > 1:
         rcoal = (len(current_nodes)*(len(current_nodes)-1))/2.
         tcoal = np.random.exponential(1./rcoal)
         time += tcoal
         nodes = np.random.choice(len(current_nodes), 2, replace=False)
         tc.nodes.add_row(time=time)
-        tc.edges.add_row(left=0., right=1., parent=next_node,
-                         child=current_nodes[nodes[0]])
-        tc.edges.add_row(left=0., right=1., parent=next_node,
-                         child=current_nodes[nodes[1]])
+        tc.edges.add_row(left=0., right=1., parent=next_node, child=current_nodes[nodes[0]])
+        tc.edges.add_row(left=0., right=1., parent=next_node, child=current_nodes[nodes[1]])
         for i in sorted(nodes)[::-1]:
             current_nodes.pop(i)
         current_nodes.append(next_node)
         next_node += 1
+
+    
+.. ipython:: python
+
     tc.sort()
     ts = tc.tree_sequence()
     # Simplifying forces tables to get indexed,
