@@ -27,7 +27,7 @@ then
         conda install gcc;
     fi
     conda install cython numpy python==3.6 gsl
-    conda install -c conda-forge pybind11==2.2.4 msprime openblas cmake
+    conda install -c conda-forge pybind11==2.2.4 numpy==1.16.2 msprime openblas cmake
     # conda install -c conda-forge sphinx nbsphinx ipython matplotlib msprime
     pip install cppimport
     echo `which python`
