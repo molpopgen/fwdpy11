@@ -56,7 +56,10 @@ wfMlocusPop_ts(
     const fwdpy11::MlocusRecombinationRegions &rmodels,
     py::list interlocus_rec_list,
     fwdpy11::MlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::MlocusPop_sample_recorder recorder, const double selfing_rate,
+    fwdpy11::MlocusPop_sample_recorder recorder,
+    std::function<bool(const fwdpy11::MlocusPop &, const bool)>
+        &stopping_criteron,
+    const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
     const bool suppress_edge_table_indexing, bool record_genotype_matrix,
@@ -210,7 +213,10 @@ wfMlocusPop_ts(
                            next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    for (std::uint32_t gen = 0; gen < num_generations; ++gen)
+    std::vector<fwdpp::ts::TS_NODE_INT> ancient_samples;
+    bool stopping_criteron_met = false;
+    for (std::uint32_t gen = 0; gen < num_generations && !stopping_criteron_met;
+         ++gen)
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
@@ -306,6 +312,7 @@ wfMlocusPop_ts(
                     // Finally, clear the input
                     sr.samples.clear();
                 }
+            stopping_criteron_met = stopping_criteron(pop, simplified);
         }
     // NOTE: if tables.preserved_nodes overlaps with samples,
     // then simplification throws an error. But, since it is annoying
