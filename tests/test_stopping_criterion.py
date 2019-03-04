@@ -27,6 +27,8 @@ class test_stopping_criterion_SlocusPop(unittest.TestCase):
         def generation(pop, simplified):
             if pop.generation >= 50:
                 return True
+            return False
+
         fwdpy11.wright_fisher_ts.evolve(
             rng, self.pop, self.params, 100,
             stopping_criterion=generation)
