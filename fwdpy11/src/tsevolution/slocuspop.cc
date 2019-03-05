@@ -49,8 +49,7 @@ wfSlocusPop_ts(
     const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
     fwdpy11::samplerecorder &sr, const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
-    const double mu_selected, 
-    const fwdpy11::MutationRegions &mmodel,
+    const double mu_selected, const fwdpy11::MutationRegions &mmodel,
     const fwdpy11::GeneticMap &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
@@ -251,28 +250,19 @@ wfSlocusPop_ts(
                     sr.samples.clear();
                 }
         }
+    // NOTE: if tables.preserved_nodes overlaps with samples,
+    // then simplification throws an error. But, since it is annoying
+    // for a user to have to remember not to do that, we filter the list
+    // here
+    auto itr = std::remove_if(
+        begin(pop.tables.preserved_nodes), end(pop.tables.preserved_nodes),
+        [&pop](const fwdpp::ts::TS_NODE_INT l) {
+            return pop.tables.node_table[l].time == pop.generation;
+        });
+    pop.tables.preserved_nodes.erase(itr, end(pop.tables.preserved_nodes));
+
     if (!simplified)
         {
-            // NOTE: if tables.preserved_nodes overlaps with samples,
-            // then simplification throws an error. But, since it is annoying
-            // for a user to have to remember not to do that, we filter the list
-            // here
-            if (std::any_of(pop.tables.preserved_nodes.rbegin(),
-                            pop.tables.preserved_nodes.rend(),
-                            [&pop](const fwdpp::ts::TS_NODE_INT l) {
-                                return l >= pop.tables.num_nodes() - 2 * pop.N;
-                            }))
-                {
-                    auto itr = std::remove_if(
-                        begin(pop.tables.preserved_nodes),
-                        end(pop.tables.preserved_nodes),
-                        [&pop](const fwdpp::ts::TS_NODE_INT l) {
-                            return l >= pop.tables.num_nodes() - 2 * pop.N;
-                        });
-                    pop.tables.preserved_nodes.erase(
-                        itr, end(pop.tables.preserved_nodes));
-                }
-
             // TODO: update this to allow neutral mutations to be simulated
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
