@@ -100,6 +100,13 @@ class testPickleSlocusPop(unittest.TestCase):
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
 
+    def testPickleTableCollection(self):
+        import pickle
+        import numpy as np
+        p = pickle.dumps(self.pop.tables)
+        up = pickle.loads(p)
+        self.assertEqual(up.genome_length(), np.finfo(np.float).max)
+
 
 class testPickleSlocusPopTreeSequences(unittest.TestCase):
     @classmethod
