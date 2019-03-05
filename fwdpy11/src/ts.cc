@@ -26,7 +26,6 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
 void init_ts(py::module&);
 
-
 inline std::size_t
 generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                           fwdpy11::Population& pop,
@@ -65,7 +64,17 @@ PYBIND11_MODULE(ts, m)
             this field is the population of the node.
             )delim")
         .def_readonly("time", &fwdpp::ts::node::time,
-                      "Birth time of the node, recorded forwards in time.");
+                      "Birth time of the node, recorded forwards in time.")
+        .def(py::pickle(
+            [](const fwdpp::ts::node& n) {
+                return py::make_tuple(n.population, n.time);
+            },
+            [](py::tuple t) {
+                return fwdpp::ts::node{
+                    t[0].cast<decltype(fwdpp::ts::node::population)>(),
+                    t[1].cast<double>()
+                };
+            }));
 
     py::class_<fwdpp::ts::edge>(m, "Edge",
                                 R"delim(
@@ -130,7 +139,25 @@ PYBIND11_MODULE(ts, m)
         when generating such views.
 
         .. versionadded:: 0.2.0
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpp::ts::node_vector& nodes) {
+                py::list rv;
+                for (auto n : nodes)
+                    {
+                        rv.append(n);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                fwdpp::ts::node_vector rv;
+                rv.reserve(l.size());
+                for (auto& i : l)
+                    {
+                        rv.push_back(i.cast<fwdpp::ts::node>());
+                    }
+                return rv;
+            }));
 
     py::bind_vector<fwdpp::ts::mutation_key_vector>(
         m, "MutationTable", py::buffer_protocol(), py::module_local(false),
@@ -338,7 +365,6 @@ PYBIND11_MODULE(ts, m)
                                    pop.mcounts_from_preserved_nodes);
         return nmuts;
     });
-
 
     init_ts(m);
 }

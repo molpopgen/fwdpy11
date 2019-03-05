@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import unittest
 import cppimport
 cppimport.force_rebuild()
 cppimport.set_quiet(False)
 pickling_cpp = cppimport.imp("pickling_cpp")
-import unittest
 
 
 class testPickleMutation(unittest.TestCase):
@@ -90,7 +90,7 @@ class testPickleSlocusPop(unittest.TestCase):
 
     def testPicklePopPy(self):
         import pickle
-        p = pickle.dumps(self.pop, -1);
+        p = pickle.dumps(self.pop, -1)
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
 
@@ -99,6 +99,45 @@ class testPickleSlocusPop(unittest.TestCase):
         p = pickling_cpp.general_pickler(self.pop)
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
+
+
+class testPickleSlocusPopTreeSequences(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        import fwdpy11.genetic_values
+        import fwdpy11.wright_fisher_ts
+        import numpy as np
+        self.N = 1000
+        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
+        self.rho = 1.
+        self.theta = 100.
+        self.nreps = 500
+        self.mu = self.theta/(4*self.N)
+        self.r = self.rho/(4*self.N)
+
+        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
+        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
+
+    def testPickleNodeTable(self):
+        import pickle
+        import numpy as np
+        pn = pickle.dumps(self.pop.tables.nodes)
+        up = pickle.loads(pn)
+        nodes = np.array(self.pop.tables.nodes)
+        nodes2 = np.array(up)
+        self.assertTrue(np.array_equal(nodes, nodes2))
 
 
 class testPickleMlocusPop(unittest.TestCase):
@@ -125,7 +164,6 @@ class testPickleMlocusPop(unittest.TestCase):
         p = pickling_cpp.general_pickler(self.pop)
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
-
 
 
 if __name__ == "__main__":
