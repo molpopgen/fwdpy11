@@ -163,6 +163,15 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         u = pickle.loads(p)
         self.assertTrue(u == self.pop.tables)
 
+    def testPickleMetaData(self):
+        import pickle
+        import numpy as np
+        p = pickle.dumps(self.pop.diploid_metadata)
+        up = pickle.loads(p)
+        md = np.array(self.pop.diploid_metadata)
+        md2 = np.array(up)
+        self.assertTrue(np.array_equal(md, md2))
+
 
 class testPickleMlocusPop(unittest.TestCase):
     @classmethod
