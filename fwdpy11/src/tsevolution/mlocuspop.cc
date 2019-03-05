@@ -208,7 +208,6 @@ wfMlocusPop_ts(
                            next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    std::vector<fwdpp::ts::TS_NODE_INT> ancient_samples;
     for (std::uint32_t gen = 0; gen < num_generations; ++gen)
         {
             ++pop.generation;
@@ -265,7 +264,6 @@ wfMlocusPop_ts(
             // TODO: deal with the result of the recorder populating sr
             if (!sr.samples.empty())
                 {
-                    ancient_samples.clear();
                     for (auto i : sr.samples)
                         {
                             if (i >= pop.N)
@@ -277,9 +275,8 @@ wfMlocusPop_ts(
                             // Get the nodes
                             auto x = fwdpp::ts::get_parent_ids(
                                 first_parental_index, i, 0);
-                            ancient_samples.push_back(x.first);
-                            ancient_samples.push_back(x.second);
-
+                            pop.tables.preserved_nodes.push_back(x.first);
+                            pop.tables.preserved_nodes.push_back(x.second);
                             // Record the metadata for this individual
                             pop.ancient_sample_metadata.push_back(
                                 pop.diploid_metadata[i]);
@@ -299,8 +296,6 @@ wfMlocusPop_ts(
                                     static_cast<double>(pop.generation),
                                     x.first, x.second });
                         }
-                    // NOTE: this can throw an exception
-                    pop.tables.record_preserved_nodes(ancient_samples);
                     // Finally, clear the input
                     sr.samples.clear();
                 }
