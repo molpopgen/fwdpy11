@@ -280,5 +280,40 @@ class testSamplePreservation(unittest.TestCase):
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
 
+class testSimplificationInterval(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.N = 1000
+        self.demography = np.array([self.N]*100, dtype=np.uint32)
+        self.rho = 1.
+        self.theta = 100.
+        self.nreps = 500
+        self.mu = self.theta/(4*self.N)
+        self.r = self.rho/(4*self.N)
+        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
+        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
+                                                                 samplesize=10,
+                                                                 timepoints=[i for i in range(1, 101)])
+
+    def testEvolve(self):
+        fwdpy11.wright_fisher_ts.evolve(
+            self.rng, self.pop, self.params, 1, self.recorder)
+        samples = [i for i in range(2*self.pop.N)] + \
+            self.pop.tables.preserved_nodes
+        vi = fwdpy11.ts.TreeIterator(self.pop.tables, samples)
+
+
 if __name__ == "__main__":
     unittest.main()
