@@ -179,6 +179,25 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         md2 = np.array(up)
         self.assertTrue(np.array_equal(md, md2))
 
+    def testPicklingToFile(self):
+        import fwdpy11
+        import lzma
+        import os
+        fname = "pickleFileTesting.pickle"
+        with lzma.open(fname, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with lzma.open(fname, 'rb') as f:
+            pop = fwdpy11.SlocusPop.load_from_pickle_file(f)
+        self.assertEqual(pop.N, self.pop.N)
+        self.assertEqual(pop.generation, self.pop.generation)
+        self.assertTrue(pop.diploids == self.pop.diploids)
+        self.assertTrue(pop.gametes == self.pop.gametes)
+        self.assertTrue(pop.mutations == self.pop.mutations)
+        self.assertTrue(pop.mcounts == self.pop.mcounts)
+        self.assertTrue(pop.tables == self.pop.tables)
+        self.assertTrue(pop == self.pop)
+        os.remove(fname)
+
 
 class testPickleMlocusPop(unittest.TestCase):
     @classmethod
