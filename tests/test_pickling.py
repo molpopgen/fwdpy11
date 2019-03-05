@@ -139,6 +139,30 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         nodes2 = np.array(up)
         self.assertTrue(np.array_equal(nodes, nodes2))
 
+    def testPickleEdgeTable(self):
+        import pickle
+        import numpy as np
+        p = pickle.dumps(self.pop.tables.edges)
+        u = pickle.loads(p)
+        edges = np.array(self.pop.tables.edges)
+        edges2 = np.array(u)
+        self.assertTrue(np.array_equal(edges, edges2))
+
+    def testPickleMutationTable(self):
+        import pickle
+        import numpy as np
+        p = pickle.dumps(self.pop.tables.mutations)
+        u = pickle.loads(p)
+        mutations = np.array(self.pop.tables.mutations)
+        mutations2 = np.array(u)
+        self.assertTrue(np.array_equal(mutations, mutations2))
+
+    def testPickleTableCollection(self):
+        import pickle
+        p = pickle.dumps(self.pop.tables)
+        u = pickle.loads(p)
+        self.assertTrue(u == self.pop.tables)
+
 
 class testPickleMlocusPop(unittest.TestCase):
     @classmethod
