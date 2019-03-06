@@ -40,6 +40,7 @@
 #include "slocus_fitness.hpp"
 #include "index_and_count_mutations.hpp"
 #include "cleanup_metadata.hpp"
+#include "track_mutation_counts.hpp"
 
 namespace py = pybind11;
 
@@ -55,7 +56,8 @@ wfSlocusPop_ts(
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
-    const bool suppress_edge_table_indexing, bool record_genotype_matrix)
+    const bool suppress_edge_table_indexing, bool record_genotype_matrix,
+    const bool track_mutation_counts_during_sim)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -204,6 +206,11 @@ wfSlocusPop_ts(
                     first_parental_index = next_index;
                     next_index += 2 * pop.N;
                 }
+            if (track_mutation_counts_during_sim)
+                {
+                    track_mutation_counts(pop, simplified,
+                                          suppress_edge_table_indexing);
+                }
             // The user may now analyze the pop'n and record ancient samples
             recorder(pop, sr);
             // TODO: deal with the result of the recorder populating sr
@@ -246,6 +253,7 @@ wfSlocusPop_ts(
                     sr.samples.clear();
                 }
         }
+
     // NOTE: if tables.preserved_nodes overlaps with samples,
     // then simplification throws an error. But, since it is annoying
     // for a user to have to remember not to do that, we filter the list

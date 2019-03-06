@@ -31,7 +31,8 @@ set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/genetic_value_common.cc
     src/tsevolution/slocus_fitness.cc
     src/tsevolution/mlocus_fitness.cc
-    src/tsevolution/index_and_count_mutations.cc)
+    src/tsevolution/index_and_count_mutations.cc
+    src/tsevolution/track_mutation_counts.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
