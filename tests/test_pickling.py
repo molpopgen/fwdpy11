@@ -224,6 +224,19 @@ class testPickleMlocusPop(unittest.TestCase):
         pp = pickle.loads(p)
         self.assertEqual(pp, self.pop)
 
+    def testPicklingToFile(self):
+        import fwdpy11
+        import lzma
+        import os
+        fname = "pickleFileTestingMlocus.pickle"
+        with lzma.open(fname, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with lzma.open(fname, 'rb') as f:
+            pop = fwdpy11.MlocusPop.load_from_pickle_file(f)
+        self.assertTrue(pop == self.pop)
+        self.assertEqual(pop.N, self.pop.N)
+        os.remove(fname)
+
 
 if __name__ == "__main__":
     unittest.main()
