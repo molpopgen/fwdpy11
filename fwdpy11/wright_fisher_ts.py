@@ -126,4 +126,5 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                        mm, rm,
                        params.interlocus_rec, params.gvalue,
                        recorder, params.pself, params.prune_selected is True,
-                       suppress_table_indexing, record_gvalue_matrix)
+                       suppress_table_indexing, record_gvalue_matrix,
+                       track_mutation_counts)
