@@ -86,5 +86,23 @@ PYBIND11_MODULE(_opaque_diploids, m)
         py::buffer_protocol(),
         R"delim(
         Container of diploid metadata.
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const std::vector<fwdpy11::DiploidMetadata>& md) {
+                py::list rv;
+                for (auto& i : md)
+                    {
+                        rv.append(i);
+                    }
+                return rv;
+            },
+            [](py::list l) {
+                std::vector<fwdpy11::DiploidMetadata> rv;
+                rv.reserve(l.size());
+                for (auto i : l)
+                    {
+                        rv.push_back(i.cast<fwdpy11::DiploidMetadata>());
+                    }
+                return rv;
+            }));
 }

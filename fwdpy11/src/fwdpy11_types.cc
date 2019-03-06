@@ -217,7 +217,6 @@ PYBIND11_MODULE(fwdpy11_types, m)
              [](const fwdpy11::DiploidGenotype &a,
                 const fwdpy11::DiploidGenotype &b) { return a == b; });
 
-    // TODO: pickling support
     py::class_<fwdpy11::DiploidMetadata>(m, "DiploidMetadata",
                                          "Diploid meta data.")
         .def_readwrite("g", &fwdpy11::DiploidMetadata::g, "Genetic value.")
@@ -258,5 +257,34 @@ PYBIND11_MODULE(fwdpy11_types, m)
                                    rv.append(md.nodes[1]);
                                    return rv;
                                },
-                               "Node ids for individual");
+                               "Node ids for individual")
+        .def(py::pickle(
+            [](const fwdpy11::DiploidMetadata &md) {
+                return py::make_tuple(
+                    md.g, md.e, md.w,
+                    py::make_tuple(md.geography[0], md.geography[1],
+                                   md.geography[2]),
+                    md.label, py::make_tuple(md.parents[0], md.parents[1]),
+                    md.deme, md.sex, py::make_tuple(md.nodes[0], md.nodes[1]));
+            },
+            [](py::tuple t) {
+                fwdpy11::DiploidMetadata rv;
+                rv.g = t[0].cast<double>();
+                rv.e = t[1].cast<double>();
+                rv.w = t[2].cast<double>();
+                auto ttuple = t[3].cast<py::tuple>();
+                rv.geography[0] = ttuple[0].cast<double>();
+                rv.geography[1] = ttuple[1].cast<double>();
+                rv.geography[2] = ttuple[2].cast<double>();
+                rv.label = t[4].cast<std::size_t>();
+                ttuple = t[5].cast<py::tuple>();
+                rv.parents[0] = ttuple[0].cast<std::size_t>();
+                rv.parents[1] = ttuple[1].cast<std::size_t>();
+                rv.deme=t[6].cast<std::int32_t>();
+                rv.sex=t[7].cast<std::int32_t>();
+                ttuple = t[8].cast<py::tuple>();
+                rv.nodes[0]=ttuple[0].cast<fwdpp::ts::TS_NODE_INT>();
+                rv.nodes[1]=ttuple[1].cast<fwdpp::ts::TS_NODE_INT>();
+                return rv;
+            }));
 }

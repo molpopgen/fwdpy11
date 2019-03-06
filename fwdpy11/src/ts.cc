@@ -26,7 +26,6 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
 void init_ts(py::module&);
 
-
 inline std::size_t
 generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                           fwdpy11::Population& pop,
@@ -40,6 +39,31 @@ generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
     return fwdpy11::infsites_Mutation(recycling_bin, pop.mutations,
                                       pop.mut_lookup, generation, uniform,
                                       return_zero, return_zero, 0);
+}
+
+template <typename T>
+py::list
+vector_to_list(const T& t)
+{
+    py::list rv;
+    for (auto& i : t)
+        {
+            rv.append(i);
+        }
+    return rv;
+}
+
+template <typename T>
+T
+list_to_vector(py::list l)
+{
+    T rv;
+    rv.reserve(l.size());
+    for (auto& i : l)
+        {
+            rv.push_back(i.cast<typename T::value_type>());
+        }
+    return rv;
 }
 
 PYBIND11_MODULE(ts, m)
@@ -65,7 +89,17 @@ PYBIND11_MODULE(ts, m)
             this field is the population of the node.
             )delim")
         .def_readonly("time", &fwdpp::ts::node::time,
-                      "Birth time of the node, recorded forwards in time.");
+                      "Birth time of the node, recorded forwards in time.")
+        .def(py::pickle(
+            [](const fwdpp::ts::node& n) {
+                return py::make_tuple(n.population, n.time);
+            },
+            [](py::tuple t) {
+                return fwdpp::ts::node{
+                    t[0].cast<decltype(fwdpp::ts::node::population)>(),
+                    t[1].cast<double>()
+                };
+            }));
 
     py::class_<fwdpp::ts::edge>(m, "Edge",
                                 R"delim(
@@ -81,7 +115,19 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("right", &fwdpp::ts::edge::right,
                       "Right edge of interval, exclusive.")
         .def_readonly("parent", &fwdpp::ts::edge::parent, "Node id of parent")
-        .def_readonly("child", &fwdpp::ts::edge::child, "Node id of child");
+        .def_readonly("child", &fwdpp::ts::edge::child, "Node id of child")
+        .def(py::pickle(
+            [](const fwdpp::ts::edge& e) {
+                return py::make_tuple(e.left, e.right, e.parent, e.child);
+            },
+            [](py::tuple t) {
+                return fwdpp::ts::edge{
+                    t[0].cast<decltype(fwdpp::ts::edge::left)>(),
+                    t[1].cast<decltype(fwdpp::ts::edge::right)>(),
+                    t[2].cast<decltype(fwdpp::ts::edge::parent)>(),
+                    t[3].cast<decltype(fwdpp::ts::edge::child)>()
+                };
+            }));
 
     py::class_<fwdpp::ts::mutation_record>(m, "MutationRecord",
                                            R"delim(
@@ -94,7 +140,17 @@ PYBIND11_MODULE(ts, m)
         .def_readonly("node", &fwdpp::ts::mutation_record::node,
                       "Node id of the mutation")
         .def_readonly("key", &fwdpp::ts::mutation_record::key,
-                      "Index of the mutation in the population");
+                      "Index of the mutation in the population")
+        .def(py::pickle(
+            [](const fwdpp::ts::mutation_record& m) {
+                return py::make_tuple(m.node, m.key);
+            },
+            [](py::tuple t) {
+                return fwdpp::ts::mutation_record{
+                    t[0].cast<decltype(fwdpp::ts::mutation_record::node)>(),
+                    t[1].cast<decltype(fwdpp::ts::mutation_record::key)>()
+                };
+            }));
 
     // indexed_edge cannot be a dtype because it has a constructor.
     // That's probably ok, as no-one will be using them for purposes other than viewing?
@@ -118,7 +174,14 @@ PYBIND11_MODULE(ts, m)
         when generating such views.
 
         .. versionadded:: 0.2.0
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpp::ts::edge_vector& edges) {
+                return vector_to_list(edges);
+            },
+            [](py::list l) {
+                return list_to_vector<fwdpp::ts::edge_vector>(l);
+            }));
 
     py::bind_vector<fwdpp::ts::node_vector>(
         m, "NodeTable", py::buffer_protocol(), py::module_local(false),
@@ -130,7 +193,14 @@ PYBIND11_MODULE(ts, m)
         when generating such views.
 
         .. versionadded:: 0.2.0
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpp::ts::node_vector& nodes) {
+                return vector_to_list(nodes);
+            },
+            [](py::list l) {
+                return list_to_vector<fwdpp::ts::node_vector>(l);
+            }));
 
     py::bind_vector<fwdpp::ts::mutation_key_vector>(
         m, "MutationTable", py::buffer_protocol(), py::module_local(false),
@@ -142,7 +212,14 @@ PYBIND11_MODULE(ts, m)
         when generating such views.
 
         .. versionadded:: 0.2.0
-        )delim");
+        )delim")
+        .def(py::pickle(
+            [](const fwdpp::ts::mutation_key_vector& mutations) {
+                return vector_to_list(mutations);
+            },
+            [](py::list l) {
+                return list_to_vector<fwdpp::ts::mutation_key_vector>(l);
+            }));
 
     // A table_collection will not be user-constructible.  Rather,
     // they will be members of the Population classes.
@@ -168,7 +245,34 @@ PYBIND11_MODULE(ts, m)
                       &fwdpp::ts::table_collection::preserved_nodes,
                       "List of nodes corresponding to ancient samples.")
         .def("genome_length", &fwdpp::ts::table_collection::genome_length,
-             "Return the genome/sequence length.");
+             "Return the genome/sequence length.")
+        .def("__eq__",
+             [](const fwdpp::ts::table_collection& lhs,
+                const fwdpp::ts::table_collection& rhs) { return lhs == rhs; })
+        .def(py::pickle(
+            [](const fwdpp::ts::table_collection& tables) {
+                return py::make_tuple(tables.genome_length(),
+                                      vector_to_list(tables.node_table),
+                                      vector_to_list(tables.edge_table),
+                                      vector_to_list(tables.mutation_table),
+                                      vector_to_list(tables.preserved_nodes));
+            },
+            [](py::tuple t) {
+                auto length = t[0].cast<double>();
+                fwdpp::ts::table_collection tables(length);
+                tables.node_table = list_to_vector<fwdpp::ts::node_vector>(
+                    t[1].cast<py::list>());
+                tables.edge_table = list_to_vector<fwdpp::ts::edge_vector>(
+                    t[2].cast<py::list>());
+                tables.mutation_table
+                    = list_to_vector<fwdpp::ts::mutation_key_vector>(
+                        t[3].cast<py::list>());
+                tables.preserved_nodes = list_to_vector<decltype(
+                    fwdpp::ts::table_collection::preserved_nodes)>(
+                    t[4].cast<py::list>());
+                tables.build_indexes();
+                return tables;
+            }));
 
     py::class_<fwdpp::ts::marginal_tree>(
         m, "MarginalTree",
@@ -338,7 +442,6 @@ PYBIND11_MODULE(ts, m)
                                    pop.mcounts_from_preserved_nodes);
         return nmuts;
     });
-
 
     init_ts(m);
 }
