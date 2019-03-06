@@ -20,7 +20,8 @@ Some general notes:
 
 .. note::
     If you are pickling populations to a file, you should be aware that you can (and probably should) compress the output.
-    We have found that lzma_ compression is ideal when pickling fwdpy11 population objects.
+    We have found that lzma_ compression results in the smallest files, but takes the longest to compress.  The gzip_
+    module is a good balance between speed and final file size.
 
 .. warning::
     If you are simulating very large populations and/or a very large number of mutations, it is possible to 
@@ -30,6 +31,14 @@ Some general notes:
     last few time points of that model involve very large population sizes.
     
     If you wish to serialize a population to file, an alternative to pickling is described in :ref:`binary_pops`.
+
+In fwdpy11 0.3.0, :class:`fwdpy11.SlocusPop` has two new functions that avoid high memory consumption while pickling.
+The cost is that pickling is slower.  The functions are:
+
+* :func:`fwdpy11.SlocusPop.pickle_to_file`, which is an instance method
+* :func:`fwdpy11.SlocusPop.load_from_pickle_file`, which is a static method
+
+Please notes that these functions must be used in a coordinated manner!  See documentation for details.
 
 .. testcode::
 
@@ -61,4 +70,5 @@ Some general notes:
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
 .. _concurrent.futures: https://docs.python.org/3/library/concurrent.futures.html
 .. _lzma: https://docs.python.org/3/library/lzma.html
+.. _gzip: https://docs.python.org/3/library/gzip.html
 .. _Tennessen: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3708544/

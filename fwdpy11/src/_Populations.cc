@@ -298,84 +298,112 @@ PYBIND11_MODULE(_Populations, m)
                          dump(m, f);
                      }
                  dump(self.tables.preserved_nodes, f);
-             })
-        .def_static("load_from_pickle_file", [](py::object f) {
-            auto load = py::module::import("pickle").attr("load");
-            py::tuple popdata = load(f);
-            fwdpy11::SlocusPop rv(popdata[0].cast<fwdpp::uint_t>(),
-                                  popdata[4].cast<double>());
-            rv.generation
-                = popdata[3].cast<decltype(fwdpy11::SlocusPop::generation)>();
-            auto ndips = popdata[0].cast<std::size_t>();
-            auto ngams = popdata[1].cast<std::size_t>();
-            auto nmuts = popdata[2].cast<std::size_t>();
-            rv.diploids.clear();
-            rv.gametes.clear();
-            rv.mutations.clear();
-            rv.diploids.reserve(ndips);
-            for (std::size_t i = 0; i < ndips; ++i)
-                {
-                    rv.diploids.push_back(
-                        load(f).cast<fwdpy11::DiploidGenotype>());
-                }
-            rv.gametes.reserve(ngams);
-            for (std::size_t i = 0; i < ngams; ++i)
-                {
-                    rv.gametes.push_back(load(f).cast<fwdpp::gamete>());
-                }
-            rv.mutations.reserve(nmuts);
-            for (std::size_t i = 0; i < nmuts; ++i)
-                {
-                    rv.mutations.push_back(load(f).cast<fwdpy11::Mutation>());
-                }
-            rv.mcounts = load(f).cast<decltype(rv.mcounts)>();
-            rv.mcounts_from_preserved_nodes
-                = load(f).cast<decltype(rv.mcounts_from_preserved_nodes)>();
-            py::tuple metadata_data = load(f);
-            rv.diploid_metadata.clear();
-            rv.ancient_sample_metadata.clear();
-            auto lmd = metadata_data[0].cast<std::size_t>();
-            auto lamd = metadata_data[1].cast<std::size_t>();
-            rv.diploid_metadata.reserve(lmd);
-            for (std::size_t i = 0; i < lmd; ++i)
-                {
-                    rv.diploid_metadata.push_back(
-                        load(f).cast<fwdpy11::DiploidMetadata>());
-                }
-            rv.ancient_sample_metadata.reserve(lamd);
-            for (std::size_t i = 0; i < lamd; ++i)
-                {
-                    rv.ancient_sample_metadata.push_back(
-                        load(f).cast<fwdpy11::DiploidMetadata>());
-                }
-            py::tuple table_data = load(f);
-            auto table_len = table_data[0].cast<std::size_t>();
-            rv.tables.clear();
-            rv.tables.node_table.reserve(table_len);
-            for (std::size_t i = 0; i < table_len; ++i)
-                {
-                    rv.tables.node_table.push_back(
-                        load(f).cast<fwdpp::ts::node>());
-                }
-            table_len = table_data[1].cast<std::size_t>();
-            rv.tables.edge_table.reserve(table_len);
-            for (std::size_t i = 0; i < table_len; ++i)
-                {
-                    rv.tables.edge_table.push_back(
-                        load(f).cast<fwdpp::ts::edge>());
-                }
-            table_len = table_data[2].cast<std::size_t>();
-            rv.tables.mutation_table.reserve(table_len);
-            for (std::size_t i = 0; i < table_len; ++i)
-                {
-                    rv.tables.mutation_table.push_back(
-                        load(f).cast<fwdpp::ts::mutation_record>());
-                }
-            rv.tables.preserved_nodes
-                = load(f).cast<decltype(rv.tables.preserved_nodes)>();
-            rv.tables.build_indexes();
-            return rv;
-        });
+             },
+             R"delim(
+             Pickle the population to an open file.
+
+             This function may be preferred over 
+             the direct pickling method because it uses less
+             memory.  It is, however, slower.
+
+             To read the population back in, you must call
+             :func:`fwdpy11.SlocusPop.load_from_pickle_file`.
+
+             :param f: A handle to an open file
+
+             .. versionadded:: 0.3.0
+             )delim")
+        .def_static(
+            "load_from_pickle_file",
+            [](py::object f) {
+                auto load = py::module::import("pickle").attr("load");
+                py::tuple popdata = load(f);
+                fwdpy11::SlocusPop rv(popdata[0].cast<fwdpp::uint_t>(),
+                                      popdata[4].cast<double>());
+                rv.generation
+                    = popdata[3]
+                          .cast<decltype(fwdpy11::SlocusPop::generation)>();
+                auto ndips = popdata[0].cast<std::size_t>();
+                auto ngams = popdata[1].cast<std::size_t>();
+                auto nmuts = popdata[2].cast<std::size_t>();
+                rv.diploids.clear();
+                rv.gametes.clear();
+                rv.mutations.clear();
+                rv.diploids.reserve(ndips);
+                for (std::size_t i = 0; i < ndips; ++i)
+                    {
+                        rv.diploids.push_back(
+                            load(f).cast<fwdpy11::DiploidGenotype>());
+                    }
+                rv.gametes.reserve(ngams);
+                for (std::size_t i = 0; i < ngams; ++i)
+                    {
+                        rv.gametes.push_back(load(f).cast<fwdpp::gamete>());
+                    }
+                rv.mutations.reserve(nmuts);
+                for (std::size_t i = 0; i < nmuts; ++i)
+                    {
+                        rv.mutations.push_back(
+                            load(f).cast<fwdpy11::Mutation>());
+                    }
+                rv.mcounts = load(f).cast<decltype(rv.mcounts)>();
+                rv.mcounts_from_preserved_nodes
+                    = load(f)
+                          .cast<decltype(rv.mcounts_from_preserved_nodes)>();
+                py::tuple metadata_data = load(f);
+                rv.diploid_metadata.clear();
+                rv.ancient_sample_metadata.clear();
+                auto lmd = metadata_data[0].cast<std::size_t>();
+                auto lamd = metadata_data[1].cast<std::size_t>();
+                rv.diploid_metadata.reserve(lmd);
+                for (std::size_t i = 0; i < lmd; ++i)
+                    {
+                        rv.diploid_metadata.push_back(
+                            load(f).cast<fwdpy11::DiploidMetadata>());
+                    }
+                rv.ancient_sample_metadata.reserve(lamd);
+                for (std::size_t i = 0; i < lamd; ++i)
+                    {
+                        rv.ancient_sample_metadata.push_back(
+                            load(f).cast<fwdpy11::DiploidMetadata>());
+                    }
+                py::tuple table_data = load(f);
+                auto table_len = table_data[0].cast<std::size_t>();
+                rv.tables.clear();
+                rv.tables.node_table.reserve(table_len);
+                for (std::size_t i = 0; i < table_len; ++i)
+                    {
+                        rv.tables.node_table.push_back(
+                            load(f).cast<fwdpp::ts::node>());
+                    }
+                table_len = table_data[1].cast<std::size_t>();
+                rv.tables.edge_table.reserve(table_len);
+                for (std::size_t i = 0; i < table_len; ++i)
+                    {
+                        rv.tables.edge_table.push_back(
+                            load(f).cast<fwdpp::ts::edge>());
+                    }
+                table_len = table_data[2].cast<std::size_t>();
+                rv.tables.mutation_table.reserve(table_len);
+                for (std::size_t i = 0; i < table_len; ++i)
+                    {
+                        rv.tables.mutation_table.push_back(
+                            load(f).cast<fwdpp::ts::mutation_record>());
+                    }
+                rv.tables.preserved_nodes
+                    = load(f).cast<decltype(rv.tables.preserved_nodes)>();
+                rv.tables.build_indexes();
+                return rv;
+            },
+            R"delim(
+            Read in a pickled population from a file.
+            The file muse have been generated by
+            a call to :func:`fwdpy11.SlocusPop.pickle_to_file`.
+
+            :param f: A handle to a file opened in 'rb' mode.
+
+            .. versionadded: 0.3.0
+            )delim");
 
     py::class_<fwdpy11::MlocusPop, fwdpy11::Population>(
         m, "_MlocusPop", "Representation of a multi-locus population")
