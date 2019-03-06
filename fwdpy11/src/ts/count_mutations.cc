@@ -37,5 +37,27 @@ init_count_mutations(py::module& m)
           :return: List of (key, count) tuples.
           :rtype: list
           )delim");
-}
 
+    m.def("count_mutations",
+          [](const fwdpp::ts::table_collection& tables,
+             const std::vector<fwdpy11::Mutation>& mutations,
+             const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
+              std::vector<fwdpp::uint_t> mc(mutations.size(), 0);
+              fwdpp::ts::count_mutations(tables, mutations, samples, mc);
+              return mc;
+          },
+          R"delim(
+          Count mutation occurrences in a sample of nodes.
+
+          :param tables: A table collection
+          :type tables: :class:`fwdpy11.ts.TableCollection`
+          :param mutations: Mutation list
+          :type mutations: :class:`fwdpy11.VecMutation`
+          :param samples: List of samples
+          :type samples: list
+
+          :return: List of (key, count) tuples.
+          :rtype: list
+          )delim");
+
+}
