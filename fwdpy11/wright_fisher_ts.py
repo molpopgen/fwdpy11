@@ -19,7 +19,8 @@
 
 
 def evolve(rng, pop, params, simplification_interval, recorder=None,
-           suppress_table_indexing=False, record_gvalue_matrix=False):
+           suppress_table_indexing=False, record_gvalue_matrix=False,
+           track_mutation_counts=False):
     """
     Evolve a population
 
@@ -88,7 +89,8 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                        params.demography, params.mutrate_s,
                        mm, rm, params.gvalue,
                        recorder, params.pself, params.prune_selected is True,
-                       suppress_table_indexing, record_gvalue_matrix)
+                       suppress_table_indexing, record_gvalue_matrix,
+                       track_mutation_counts)
     else:
         from ._tsevolution import WFMlocusPop_ts
         from fwdpy11 import MlocusMutationRegions

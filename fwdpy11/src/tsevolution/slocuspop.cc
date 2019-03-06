@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
+#include <fwdpp/internal/sample_diploid_helpers.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
 #include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
@@ -55,7 +56,8 @@ wfSlocusPop_ts(
     fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
-    const bool suppress_edge_table_indexing, bool record_genotype_matrix)
+    const bool suppress_edge_table_indexing, bool record_genotype_matrix,
+    const bool track_mutation_counts)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -203,6 +205,45 @@ wfSlocusPop_ts(
                     simplified = false;
                     first_parental_index = next_index;
                     next_index += 2 * pop.N;
+                }
+            if (track_mutation_counts)
+                {
+                    if (!simplified
+                        || (simplified && suppress_edge_table_indexing))
+                        {
+                            fwdpp::fwdpp_internal::process_gametes(
+                                pop.gametes, pop.mutations, pop.mcounts);
+                        }
+                    for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
+                        {
+                            if (pop.mcounts[i] == 2 * pop.N)
+                                {
+                                    auto loc = std::lower_bound(
+                                        pop.fixations.begin(),
+                                        pop.fixations.end(),
+                                        std::make_tuple(pop.mutations[i].g,
+                                                        pop.mutations[i].pos),
+                                        [](const fwdpy11::Mutation &mut,
+                                           const std::tuple<double,
+                                                            std::uint32_t>
+                                               &value) noexcept {
+                                            return std::tie(mut.g, mut.pos)
+                                                   < value;
+                                        });
+                                    auto d = std::distance(
+                                        pop.fixations.begin(), loc);
+                                    if (loc == end(pop.fixations)
+                                        || (loc->pos != pop.mutations[i].pos
+                                            && loc->g != pop.mutations[i].g))
+                                        {
+                                            pop.fixations.insert(
+                                                loc, pop.mutations[i]);
+                                            pop.fixation_times.insert(
+                                                begin(pop.fixation_times) + d,
+                                                pop.generation);
+                                        }
+                                }
+                        }
                 }
             // The user may now analyze the pop'n and record ancient samples
             recorder(pop, sr);
