@@ -20,6 +20,7 @@
 
 def evolve(rng, pop, params, simplification_interval, recorder=None,
            suppress_table_indexing=False, record_gvalue_matrix=False,
+           stopping_criterion=None,
            track_mutation_counts=False):
     """
     Evolve a population
@@ -70,6 +71,10 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         from fwdpy11.tsrecorders import NoAncientSamples
         recorder = NoAncientSamples()
 
+    if stopping_criterion is None:
+        from ._tsevolution import _no_stopping
+        stopping_criterion = _no_stopping
+
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
     if pop.__class__ is fwdpy11.SlocusPop:
@@ -88,7 +93,8 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         WFSlocusPop_ts(rng, pop, sr, simplification_interval,
                        params.demography, params.mutrate_s,
                        mm, rm, params.gvalue,
-                       recorder, params.pself, params.prune_selected is True,
+                       recorder, stopping_criterion,
+                       params.pself, params.prune_selected is True,
                        suppress_table_indexing, record_gvalue_matrix,
                        track_mutation_counts)
     else:
@@ -125,6 +131,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                        params.demography, params.mutrate_s,
                        mm, rm,
                        params.interlocus_rec, params.gvalue,
-                       recorder, params.pself, params.prune_selected is True,
+                       recorder, stopping_criterion,
+                       params.pself, params.prune_selected is True,
                        suppress_table_indexing, record_gvalue_matrix,
                        track_mutation_counts)

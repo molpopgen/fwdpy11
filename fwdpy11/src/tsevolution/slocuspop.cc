@@ -53,7 +53,10 @@ wfSlocusPop_ts(
     const double mu_selected, const fwdpy11::MutationRegions &mmodel,
     const fwdpy11::GeneticMap &rmodel,
     fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPop_sample_recorder recorder, const double selfing_rate,
+    fwdpy11::SlocusPop_sample_recorder recorder,
+    std::function<bool(const fwdpy11::SlocusPop &, const bool)>
+        &stopping_criteron,
+    const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
     const bool suppress_edge_table_indexing, bool record_genotype_matrix,
@@ -155,7 +158,9 @@ wfSlocusPop_ts(
                            next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    for (std::uint32_t gen = 0; gen < num_generations; ++gen)
+    bool stopping_criteron_met = false;
+    for (std::uint32_t gen = 0;
+         gen < num_generations && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
@@ -252,6 +257,7 @@ wfSlocusPop_ts(
                     // Finally, clear the input
                     sr.samples.clear();
                 }
+            stopping_criteron_met = stopping_criteron(pop, simplified);
         }
 
     // NOTE: if tables.preserved_nodes overlaps with samples,

@@ -58,3 +58,36 @@ When should you use this option?  When some or all of the following apply:
 
 .. [2] Note that you may still analyze all individual metadata each generation.  Those data are always kept up to date.
 
+Ending simulations early
+-------------------------------------------------
+
+.. versionadded:: 0.3.0
+
+It is sometimes useful to simulate until a certain contition is met. fwdpy11 allows you to pass a callable to 
+:func:`fwdpy11.wright_fisher_ts.evolve` that will return `True` if the desired condition is met and, if so, end the
+simulation.  Let's consider a concrete example.  For example, when simulation a model of quantitative traits evolving to
+an optimum shift, you may wish to end the simulation when the mean trait value gets above a certain value.  We can
+represent this criterion via the following class:
+
+.. code-block:: python
+
+    import numpy as np
+
+    class TraitValueHitsX(object):
+        def __init__(self, threshold):
+            self.threshold = threshold
+
+        def __call__(population, simplified):
+            md = np.array(population.diploid_metadata)
+            if md['g'].mean() >= self.threshold:
+                return True
+            return False
+
+The second parameter, `simplified` is `True` if the population's table collection has been simplified.
+Stopping criteria depending on properties of mutations will only be efficient if this value is `True`.
+Currently, such conditions are a bit tricky to handle, but one solution is to switch the simplification interval
+to a smaller value when needed.
+
+It is also possible to write these criteria as plain Python functions or as any C++ type convertible to
+`std::function<bool(const fwdpy11::Population &, const bool)>`.
+            
