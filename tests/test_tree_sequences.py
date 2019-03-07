@@ -222,9 +222,8 @@ class testTreeSequences(unittest.TestCase):
     def test_count_mutations(self):
         mc = fwdpy11.ts.count_mutations(self.pop,
                                         [i for i in range(2*self.pop.N)])
-        for i in mc:
-            self.assertTrue(i[1] > 0)
-            self.assertEqual(self.pop.mcounts[i[0]], i[1])
+        pmc = np.array(self.pop.mcounts)
+        self.assertTrue(np.array_equal(mc, pmc))
 
 
 class testSamplePreservation(unittest.TestCase):
@@ -262,9 +261,8 @@ class testSamplePreservation(unittest.TestCase):
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.ts.count_mutations(self.pop,
                                         self.pop.tables.preserved_nodes)
-        for i in mc:
-            self.assertTrue(i[1] > 0)
-            self.assertEqual(self.pop.mcounts_ancient_samples[i[0]], i[1])
+        pmc = np.array(self.pop.mcounts_ancient_samples)
+        self.assertTrue(np.array_equal(mc, pmc))
 
     def test_VariantIteratorFromPreservedSamples(self):
         n = np.array(self.pop.tables.nodes)
