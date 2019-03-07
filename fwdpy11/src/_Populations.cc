@@ -711,7 +711,7 @@ PYBIND11_MODULE(_Populations, m)
                 auto ndips = popdata[0].cast<std::size_t>();
                 auto ngams = popdata[1].cast<std::size_t>();
                 auto nmuts = popdata[2].cast<std::size_t>();
-                auto nfixations = popdata[4].cast<std::size_t>();
+                auto nfixations = popdata[3].cast<std::size_t>();
                 rv.diploids.clear();
                 rv.gametes.clear();
                 rv.mutations.clear();
