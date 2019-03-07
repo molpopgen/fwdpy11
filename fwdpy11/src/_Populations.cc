@@ -253,7 +253,8 @@ PYBIND11_MODULE(_Populations, m)
              [](const fwdpy11::SlocusPop& self, py::object f) {
                  auto dump = py::module::import("pickle").attr("dump");
                  dump(py::make_tuple(self.diploids.size(), self.gametes.size(),
-                                     self.mutations.size(), self.generation,
+                                     self.mutations.size(),
+                                     self.fixations.size(), self.generation,
                                      self.tables.genome_length()),
                       f);
                  for (auto& d : self.diploids)
@@ -268,6 +269,11 @@ PYBIND11_MODULE(_Populations, m)
                      {
                          dump(m, f);
                      }
+                 for (auto& m : self.fixations)
+                     {
+                         dump(m, f);
+                     }
+                 dump(self.fixation_times, f);
                  dump(self.mcounts, f);
                  dump(self.mcounts_from_preserved_nodes, f);
                  dump(py::make_tuple(self.diploid_metadata.size(),
@@ -319,16 +325,18 @@ PYBIND11_MODULE(_Populations, m)
                 auto load = py::module::import("pickle").attr("load");
                 py::tuple popdata = load(f);
                 fwdpy11::SlocusPop rv(popdata[0].cast<fwdpp::uint_t>(),
-                                      popdata[4].cast<double>());
+                                      popdata[5].cast<double>());
                 rv.generation
-                    = popdata[3]
+                    = popdata[4]
                           .cast<decltype(fwdpy11::SlocusPop::generation)>();
                 auto ndips = popdata[0].cast<std::size_t>();
                 auto ngams = popdata[1].cast<std::size_t>();
                 auto nmuts = popdata[2].cast<std::size_t>();
+                auto nfixations = popdata[3].cast<std::size_t>();
                 rv.diploids.clear();
                 rv.gametes.clear();
                 rv.mutations.clear();
+                rv.fixations.clear();
                 rv.diploids.reserve(ndips);
                 for (std::size_t i = 0; i < ndips; ++i)
                     {
@@ -346,6 +354,14 @@ PYBIND11_MODULE(_Populations, m)
                         rv.mutations.push_back(
                             load(f).cast<fwdpy11::Mutation>());
                     }
+                rv.fixations.reserve(nfixations);
+                for (std::size_t i = 0; i < nfixations; ++i)
+                    {
+                        rv.fixations.push_back(
+                            load(f).cast<fwdpy11::Mutation>());
+                    }
+                rv.fixation_times
+                    = load(f).cast<decltype(rv.fixation_times)>();
                 rv.mcounts = load(f).cast<decltype(rv.mcounts)>();
                 rv.mcounts_from_preserved_nodes
                     = load(f)
@@ -612,7 +628,8 @@ PYBIND11_MODULE(_Populations, m)
              [](const fwdpy11::MlocusPop& self, py::object f) {
                  auto dump = py::module::import("pickle").attr("dump");
                  dump(py::make_tuple(self.diploids.size(), self.gametes.size(),
-                                     self.mutations.size(), self.generation,
+                                     self.mutations.size(),
+                                     self.fixations.size(), self.generation,
                                      self.tables.genome_length()),
                       f);
                  dump(self.locus_boundaries, f);
@@ -628,6 +645,11 @@ PYBIND11_MODULE(_Populations, m)
                      {
                          dump(m, f);
                      }
+                 for (auto& m : self.fixations)
+                     {
+                         dump(m, f);
+                     }
+                 dump(self.fixation_times, f);
                  dump(self.mcounts, f);
                  dump(self.mcounts_from_preserved_nodes, f);
                  dump(py::make_tuple(self.diploid_metadata.size(),
@@ -682,16 +704,18 @@ PYBIND11_MODULE(_Populations, m)
                     = load(f).cast<std::vector<std::pair<double, double>>>();
                 fwdpy11::MlocusPop rv(popdata[0].cast<fwdpp::uint_t>(),
                                       locus_boundaries,
-                                      popdata[4].cast<double>());
+                                      popdata[5].cast<double>());
                 rv.generation
-                    = popdata[3]
+                    = popdata[4]
                           .cast<decltype(fwdpy11::SlocusPop::generation)>();
                 auto ndips = popdata[0].cast<std::size_t>();
                 auto ngams = popdata[1].cast<std::size_t>();
                 auto nmuts = popdata[2].cast<std::size_t>();
+                auto nfixations = popdata[4].cast<std::size_t>();
                 rv.diploids.clear();
                 rv.gametes.clear();
                 rv.mutations.clear();
+                rv.fixations.clear();
                 rv.diploids.reserve(ndips);
                 for (std::size_t i = 0; i < ndips; ++i)
                     {
@@ -709,6 +733,14 @@ PYBIND11_MODULE(_Populations, m)
                         rv.mutations.push_back(
                             load(f).cast<fwdpy11::Mutation>());
                     }
+                rv.fixations.reserve(nfixations);
+                for (std::size_t i = 0; i < nfixations; ++i)
+                    {
+                        rv.fixations.push_back(
+                            load(f).cast<fwdpy11::Mutation>());
+                    }
+                rv.fixation_times
+                    = load(f).cast<decltype(rv.fixation_times)>();
                 rv.mcounts = load(f).cast<decltype(rv.mcounts)>();
                 rv.mcounts_from_preserved_nodes
                     = load(f)
