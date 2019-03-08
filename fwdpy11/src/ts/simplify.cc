@@ -1,5 +1,6 @@
 #include <fwdpy11/types/Population.hpp>
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #include <fwdpp/ts/table_simplifier.hpp>
 
@@ -39,7 +40,12 @@ simplify(const fwdpy11::Population& pop,
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     auto rv = simplifier.simplify(t, samples, pop.mutations);
     t.build_indexes();
-    return py::make_tuple(std::move(t), std::move(rv.first));
+    decltype(rv.first)* idmap = new decltype(rv.first)(std::move(rv.first));
+    py::capsule cap(idmap, [](void* v) {
+        delete reinterpret_cast<decltype(rv.first)*>(v);
+    });
+    return py::make_tuple(std::move(t),
+                          py::array(idmap->size(), idmap->data(), cap));
 }
 
 void
@@ -52,9 +58,9 @@ init_simplify_functions(py::module& m)
             :param pop: A :class:`fwdpy11.Population`
             :param samples: A list of samples (node indexes).
                 
-            :return: The simplified tables and list mapping input sample IDs to output IDS
+            :return: The simplified tables and array mapping input sample IDs to output IDS
 
-            :rtype: :class:`fwdpy11.ts.TableCollection`
+            :rtype: tuple
 
             Note that the samples argument is agnostic with respect to the time of
             the nodes in the input tables. Thus, you may do things like simplify
@@ -89,7 +95,13 @@ init_simplify_functions(py::module& m)
               fwdpp::ts::table_simplifier simplifier(tables.genome_length());
               auto rv = simplifier.simplify(t, samples, mutations);
               t.build_indexes();
-              return py::make_tuple(std::move(t), std::move(rv.first));
+              decltype(rv.first)* idmap
+                  = new decltype(rv.first)(std::move(rv.first));
+              py::capsule cap(idmap, [](void* v) {
+                  delete reinterpret_cast<decltype(rv.first)*>(v);
+              });
+              return py::make_tuple(
+                  std::move(t), py::array(idmap->size(), idmap->data(), cap));
           },
           R"delim(
           Simplify a TableCollection.
@@ -101,8 +113,8 @@ init_simplify_functions(py::module& m)
           :param samples: list of samples
           :type list: list-like or array-like
 
-          :returns: A simplified TableCollection
-          :rtype: :class:`fwdpy11.ts.TableCollection`
+          :returns: A simplified TableCollection and an array containing remapped sample ids.
+          :rtype: tuple
 
           .. versionadded:: 0.3.0
           )delim");
