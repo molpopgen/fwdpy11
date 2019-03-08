@@ -143,5 +143,52 @@ class testFixationsAreSortedMlocusPop(unittest.TestCase):
                 self.assertEqual(mc, 4)
 
 
+class testFixationPreservation(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        import fwdpy11.wright_fisher
+        import fwdpy11.genetic_values
+        import numpy as np
+        N = 1000
+        demography = np.array([N]*10*N, dtype=np.uint32)
+        rho = 1.
+        r = rho/(4*N)
+
+        a = fwdpy11.genetic_values.SlocusMult(2.0)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.00005, r),
+                  'gvalue': a,
+                  'demography': demography
+                  }
+        self.pop = fwdpy11.SlocusPop(N)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+
+    def testPopGenSimWithoutPruning(self):
+        import fwdpy11.model_params
+        import numpy as np
+        self.p['prune_selected'] = False
+        params = fwdpy11.model_params.ModelParams(**self.p)
+        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        assert len(
+            self.pop.fixations) > 0, "Test is meaningless without fixations"
+        mc = np.array(self.pop.mcounts)
+        self.assertEqual(len(np.where(mc == 2*self.pop.N)
+                             [0]), len(self.pop.fixations))
+
+    def testPopGenSimWithPruning(self):
+        import fwdpy11.model_params
+        import numpy as np
+        self.p['prune_selected'] = True
+        params = fwdpy11.model_params.ModelParams(**self.p)
+        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        assert len(
+            self.pop.fixations) > 0, "Test is meaningless without fixations"
+        mc = np.array(self.pop.mcounts)
+        self.assertEqual(len(np.where(mc == 2*self.pop.N)
+                             [0]), 0)
+
+
 if __name__ == "__main__":
     unittest.main()
