@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.6-stretch
+    working_directory: /home/circleci/fwdpy11
+    steps:
+      - checkout
+      - run: sudo chown -R circleci:circleci *
+      - restore_cache:
+          key: fwdpy11-{{ .Branch }}
+      - run:
+          name: Checkout submodules
+          command: |
+            git submodule update --init --recursive 
+            # Write out the status for debugging purposes. Are we checked out at tags?
+            git submodule status --recursive
+      - run:
+          name: Install dependencies and set path
+          command: |
+            sudo apt-get update
+            sudo apt-get install libgsl0-dev libcunit1-dev libconfig-dev cmake
+            pip install --user -r requirements.txt
+            pip install --user cppimport
+            curl -L https://github.com/pybind/pybind11/archive/v2.2.4.tar.gz > pybind11-2.2.4.tar.gz
+            tar xzf pybind11-2.2.4.tar.gz
+            # Skip running the pybind11 unit suite--not needed...
+            cd pybind11-2.2.4 && cmake . -DPYBIND11_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION -DPYBIND11_TEST=0 && sudo make install && cd ..
+            # way to set path persistently https://circleci.com/docs/2.0/env-vars/#setting-path
+            echo 'export PATH=/home/circleci/.local/bin:$PATH' >> $BASH_ENV
+      - save_cache:
+          key: fwdpy11-{{ .Branch }}
+          paths:
+            - "/home/circleci/.local"
+
+      - run:
+          name: Compile package
+          command: |
+            python setup.py build_ext --inplace
+
+      - run:
+          name: Run test suite
+          command: |
+            python -m unittest discover tests
+
+      - run:
+          name: Make sure we can build a distribution tarball.
+          command: python setup.py sdist
+      - run:
+          name: Install from the distribution tarball
+          command: |
+            python -m venv venv
+            source venv/bin/activate 
+            pip install --upgrade setuptools pip
+            pip install dist/*.tar.gz 
