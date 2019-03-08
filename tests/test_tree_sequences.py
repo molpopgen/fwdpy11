@@ -389,5 +389,78 @@ class testFixationPreservation(unittest.TestCase):
         self.assertTrue(np.array_equal(brute_force, pop.mcounts))
 
 
+class testMetaData(unittest.TestCase):
+    """
+    Integration test.
+
+    Rebuild genetic values from mutations
+    stored in tree sequence
+    """
+
+    def testQtraitSim(self):
+        N = 1000
+        demography = np.array([N]*10*N, dtype=np.uint32)
+        rho = 1.
+        r = rho/(4*N)
+
+        GSS = fwdpy11.genetic_values.GSS(VS=1, opt=1)
+        a = fwdpy11.genetic_values.SlocusAdditive(2.0, GSS)
+        p = {'nregions': [],
+             'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+             'recregions': [fwdpy11.Region(0, 1, 1)],
+             'rates': (0.0, 0.005, r),
+             'gvalue': a,
+             'prune_selected': False,
+             'demography': demography
+             }
+        params = fwdpy11.model_params.ModelParams(**p)
+        rng = fwdpy11.GSLrng(101*45*110*210)
+        pop = fwdpy11.SlocusPop(N, 1.0)
+
+        class Recorder(object):
+            """ Records entire pop every 100 generations """
+
+            def __call__(self, pop, recorder):
+                if pop.generation % 100 == 0.0:
+                    recorder.assign(np.arange(pop.N, dtype=np.int32))
+
+        r = Recorder()
+        fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100, r)
+
+        ancient_sample_metadata = np.array(
+            pop.ancient_sample_metadata, copy=False)
+        alive_sample_metadata = np.array(pop.diploid_metadata, copy=False)
+        metadata = np.hstack((ancient_sample_metadata, alive_sample_metadata))
+
+        nodes = np.array(pop.tables.nodes, copy=False)
+        metadata_nodes = metadata['nodes'].flatten()
+        metadata_node_times = nodes['time'][metadata_nodes]
+        metadata_record_times = nodes['time'][metadata['nodes'][:, 0]]
+
+        genetic_trait_values_from_sim = []
+        genetic_values_from_ts = []
+        for u in np.unique(metadata_node_times):
+            samples_at_time_u = metadata_nodes[np.where(
+                metadata_node_times == u)]
+            vi = fwdpy11.ts.VariantIterator(
+                pop.tables, pop.mutations, samples_at_time_u)
+            sum_esizes = np.zeros(len(samples_at_time_u))
+            for variant in vi:
+                g = variant.genotypes
+                r = variant.record
+                mutant = np.where(g == 1)[0]
+                sum_esizes[mutant] += pop.mutations[r.key].s
+            ind = int(len(samples_at_time_u)/2)
+            temp_gvalues = np.zeros(ind)
+            temp_gvalues += sum_esizes[0::2]
+            temp_gvalues += sum_esizes[1::2]
+            genetic_values_from_ts.extend(temp_gvalues.tolist())
+            genetic_trait_values_from_sim.extend(
+                metadata['g'][np.where(metadata_record_times == u)[0]].tolist())
+
+        for i, j in zip(genetic_trait_values_from_sim, genetic_values_from_ts):
+            self.assertAlmostEqual(i, j)
+
+
 if __name__ == "__main__":
     unittest.main()
