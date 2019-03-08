@@ -12,10 +12,16 @@ Master:
 .. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=master
     :target: https://travis-ci.org/molpopgen/fwdpy11
 
+.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/master
+
 Development: 
 
 .. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=dev
     :target: https://travis-ci.org/molpopgen/fwdpy11
+
+.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/dev.svg?style=svg
+    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/dev
 
 Manual
 -----------------------
