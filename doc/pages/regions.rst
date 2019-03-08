@@ -129,6 +129,8 @@ There are two approaches to modeling variation in recombination rates.
 First, the simulation may specify a recombination rate, `r`, and then use a list of :class:`fwdpy11.Region`
 to model variation along the genome. This is essentially the same approach described above for neutral mutations.
 
+.. _generalized_maps: 
+
 A more general approach to genetic maps
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

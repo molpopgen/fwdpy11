@@ -4,18 +4,27 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
-Current development branch
+0.3.0
 ++++++++++++++++++++++++++
+
+Deprecations of note
+-------------------------------------------------------------
+
+* :class:`fwdpy11.MlocusPop` is *tentatively* deprecated.  The new features described in :ref:`generalized_maps` make
+  this class obsolete, but we will await a final verdict pending more testing.
 
 Bug fixes
 -------------------------------------------------------------
 
+* A bug in handling fixations during simulations with tree sequence recording is fixed. This bug is 
+  GitHub `Issue 200 <https://github.com/molpopgen/fwdpy11/issues/200>`_ and the fix is
+  `PR 201 <https://github.com/molpopgen/fwdpy11/pull/201>`_.
 * Updates to the fwdpp submodule fix a bug in :func:`fwdpy11.ts.infinite_sites`.  Previously, if the genome size 
   was not 1.0, then the number of mutations would be off by a factor of the genome size divided by 1.0.  The error was
   due to a bug upstream in fwdpp.
 * A bug in how diploid metadata were updated by genetic value types has been fixed.  It is unlikely that this bug
   affected anyone unless they had written custom genetic value calculations where the offspring's genetic value 
-  depended on the parental metadata. `PR 173 <https://github.com/molpopgen/fwdpy11/pull/173>`_
+  depended on the parental metadata. `PR 173 <https://github.com/molpopgen/fwdpy11/pull/173>`_. 
 
 Support for multivariate mutational effects
 -------------------------------------------------------------
@@ -42,18 +51,38 @@ Changes to the C++ back end:
 * Analogous changes were made to fwdpy11::MlocusPopGeneticValue.
 
 
-Dependency changes:
+Dependency changes
+-------------------------------------------------------------
 
 * Change minimum GSL version required to 2.3
 
-Other changes in this release include:
+Other changes in this release include
 -------------------------------------------------------------
 
+It may be helpful to look at the following documentation pages:
+
+* :ref:`pickling_pops`
+* :ref:`generalized_maps`
+
+Detailed changes:
+
+* Add new function to pickle populations while using less memory. `PR 195 <https://github.com/molpopgen/fwdpy11/pull/195>`_,
+  `PR 201 <https://github.com/molpopgen/fwdpy11/pull/201>`_
+* Improved performance of simulations tracking lots of ancient samples. `PR 194 <https://github.com/molpopgen/fwdpy11/pull/194>`_
+* Generalized genetic maps for single-locus simulations.  You can now do much of the "multi-locus" stuff with
+  `SlocusPop` now. `PR 189 <https://github.com/molpopgen/fwdpy11/pull/189>`_
+* Tree sequence recording now possible for mulit-locus simulations. `PR 185 <https://github.com/molpopgen/fwdpy11/pull/185>`_
+* :func:`fwdpy11.ts.count_mutations` added. `PR 183 <https://github.com/molpopgen/fwdpy11/pull/183>`_, `PR 196 <https://github.com/molpopgen/fwdpy11/pull/196>`_, `PR 199 <https://github.com/molpopgen/fwdpy11/pull/199>`_
+* Position and key properties added to :class:`fwdpy11.ts.VariantIterator`. `PR 180 <https://github.com/molpopgen/fwdpy11/pull/180>`_
+  `PR 181 <https://github.com/molpopgen/fwdpy11/pull/181>`_
+* :class:`fwdpy11.ts.TreeIterator` is added, which provides much faster tree traversal. `PR 176 <https://github.com/molpopgen/fwdpy11/pull/176>`_,
+  `PR 177 <https://github.com/molpopgen/fwdpy11/pull/177>`_
 * :func:`fwdpy11.ts.simplify` no longer retains ancient samples present in the input by default. To do so, explicitly
   label any ancient samples to retain as part of the the samples list passed to the function.
   `PR 169 <https://github.com/molpopgen/fwdpy11/pull/169>`_
 * The types :class:`fwdpy11.Region` and :class:`fwdpy11.Sregion` have be re-implemented as C++-based classes, replacing 
-  the previous pure Python classes.  `PR 163 <https://github.com/molpopgen/fwdpy11/pull/163>`_
+  the previous pure Python classes.  `PR 163 <https://github.com/molpopgen/fwdpy11/pull/163>`_,
+  `PR 174 <https://github.com/molpopgen/fwdpy11/pull/163>`_
 * :attr:`fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations
   with tree sequences. `commit <https://github.com/molpopgen/fwdpy11/commit/b557c4162cbfdfba6c9126ebec14c7f3f43884eb>`_. 
 * When simulating with tree sequences, it is no longer an error to attempt to record ancient samples from the last
