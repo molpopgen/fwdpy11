@@ -20,12 +20,12 @@ The output file, `pop.lzma`, is a compressed file containing the pickled populat
 Processing the samples stored in tree sequences
 ----------------------------------------------------------------------------------
 
-This script plots the meant trait value at every time point as a function of time:
+This script plots the mean trait value at every time point as a function of time:
 
 .. literalinclude:: ../../examples/gss/plot_genetic_values_from_tree_sequences.py
 
-This script goes over every time point, iterates over the variants, and re-caculates the genetic values.
-The output is a plot of the genetic value stored in the metadata versus the recalcualted value.  The reason we can do 
+This script goes over every time point, iterates over the variants, and re-calculates the genetic values.
+The output is a plot of the genetic value stored in the metadata versus the recalculated value.  The reason we can do 
 this is that the simulation assumes strict additivity.
 
 .. literalinclude:: ../../examples/gss/iterate_variants_in_tree_sequences.py
