@@ -41,6 +41,7 @@
 #include "index_and_count_mutations.hpp"
 #include "cleanup_metadata.hpp"
 #include "track_mutation_counts.hpp"
+#include "remove_extinct_mutations.hpp"
 
 namespace py = pybind11;
 
@@ -287,6 +288,7 @@ wfSlocusPop_ts(
                               pop.mutations, pop.tables, pop.mcounts,
                               pop.mcounts_from_preserved_nodes);
     cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
+    remove_extinct_mutations(pop);
 }
 
 void
