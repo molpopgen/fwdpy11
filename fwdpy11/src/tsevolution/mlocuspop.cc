@@ -42,6 +42,7 @@
 #include "index_and_count_mutations.hpp"
 #include "cleanup_metadata.hpp"
 #include "track_mutation_counts.hpp"
+#include "remove_extinct_mutations.hpp"
 
 namespace py = pybind11;
 
@@ -63,7 +64,8 @@ wfMlocusPop_ts(
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations,
     const bool suppress_edge_table_indexing, bool record_genotype_matrix,
-    const bool track_mutation_counts_during_sim)
+    const bool track_mutation_counts_during_sim,
+    const bool remove_extinct_mutations_at_finish)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -209,14 +211,21 @@ wfMlocusPop_ts(
           };
     fwdpp::flagged_mutation_queue mutation_recycling_bin
         = fwdpp::empty_mutation_queue();
+    if (!pop.mutations.empty())
+        {
+            // Then we assume pop exists in an "already simulated"
+            // state and is properly-book-kept
+            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                pop.mcounts, pop.mcounts_from_preserved_nodes);
+        }
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
                            next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     std::vector<fwdpp::ts::TS_NODE_INT> ancient_samples;
     bool stopping_criteron_met = false;
-    for (std::uint32_t gen = 0; gen < num_generations && !stopping_criteron_met;
-         ++gen)
+    for (std::uint32_t gen = 0;
+         gen < num_generations && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
@@ -340,6 +349,10 @@ wfMlocusPop_ts(
                               pop.mutations, pop.tables, pop.mcounts,
                               pop.mcounts_from_preserved_nodes);
     cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
+    if (remove_extinct_mutations_at_finish)
+        {
+            remove_extinct_mutations(pop);
+        }
 }
 
 void
