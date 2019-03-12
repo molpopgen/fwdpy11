@@ -13,7 +13,7 @@ namespace
     {
         auto f = std::find(begin(indexes), end(indexes), input_index);
         auto d = std::distance(begin(indexes), f);
-        return indexes[d];
+        return d;
     }
 
     void
@@ -83,6 +83,13 @@ remove_extinct_mutations(fwdpy11::Population& pop)
                     reindex_container(indexes, g.mutations);
                     reindex_container(indexes, g.smutations);
                 }
+        }
+
+    // Easiest way to update the lookup table:
+    pop.mut_lookup.clear();
+    for (std::size_t i = 0; i < pop.mutations.size(); ++i)
+        {
+            pop.mut_lookup.insert(std::make_pair(pop.mutations[i].pos, i));
         }
 }
 
