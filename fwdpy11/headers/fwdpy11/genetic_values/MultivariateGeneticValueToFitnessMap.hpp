@@ -35,6 +35,7 @@ namespace fwdpy11
 {
     struct MultivariateGeneticValueToFitnessMap
     {
+        virtual ~MultivariateGeneticValueToFitnessMap() = default;
         virtual double
         operator()(const DiploidMetadata& /*metadata*/,
                    const std::vector<double>& /*values*/) const = 0;

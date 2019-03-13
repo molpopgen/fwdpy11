@@ -15,6 +15,7 @@ namespace fwdpy11
 {
     struct GeneticMap
     {
+        virtual ~GeneticMap() = default;
         virtual std::vector<double> operator()(const GSLrng_t& rng) const = 0;
     };
 

@@ -218,7 +218,7 @@ wfMlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::MlocusPop &pop,
           };
 
     const auto generate_offspring_metadata
-        = [&rng](fwdpy11::DiploidMetadata &offspring_metadata,
+        = [](fwdpy11::DiploidMetadata &offspring_metadata,
                  const std::size_t p1, const std::size_t p2,
                  const std::vector<fwdpy11::DiploidMetadata>
                      & /*parental_metadata*/) {

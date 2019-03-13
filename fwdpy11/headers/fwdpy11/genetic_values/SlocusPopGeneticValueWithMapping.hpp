@@ -34,7 +34,7 @@ namespace fwdpy11
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         SlocusPopGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_)
-            : SlocusPopGeneticValue(1), gv2w{ std::move(gv2w_.clone()) },
+            : SlocusPopGeneticValue(1), gv2w{ gv2w_.clone() },
               noise_fxn{ new NoNoise() }
         {
         }
