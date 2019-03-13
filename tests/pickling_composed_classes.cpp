@@ -19,6 +19,7 @@ cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
 
 struct Base
 {
+    virtual ~Base() = default;
     virtual py::object repr() const = 0;
     virtual std::unique_ptr<Base> clone() const = 0;
 };
