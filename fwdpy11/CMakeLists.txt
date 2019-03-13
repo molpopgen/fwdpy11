@@ -3,6 +3,7 @@ include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURC
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
 include_directories(BEFORE ${GSL_INCLUDE_DIRS})
 
+add_compile_options(-Weffc++)
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
