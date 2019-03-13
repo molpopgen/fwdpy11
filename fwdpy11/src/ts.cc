@@ -422,13 +422,12 @@ PYBIND11_MODULE(ts, m)
                                         pop.mcounts_from_preserved_nodes);
         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
         std::iota(samples.begin(), samples.end(), 0);
-        const auto apply_mutations
-            = [&recycling_bin, &rng, &pop, &samples,
-               mu](const double left, const double right,
-                   const fwdpp::uint_t generation) {
-                  return generate_neutral_variants(recycling_bin, pop, rng,
-                                                   left, right, generation);
-              };
+        const auto apply_mutations =
+            [&recycling_bin, &rng, &pop](const double left, const double right,
+                                         const fwdpp::uint_t generation) {
+                return generate_neutral_variants(recycling_bin, pop, rng, left,
+                                                 right, generation);
+            };
         auto nmuts = fwdpp::ts::mutate_tables(rng, apply_mutations, pop.tables,
                                               samples, mu);
         std::sort(
