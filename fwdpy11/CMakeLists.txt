@@ -1,9 +1,13 @@
 find_package(GSL REQUIRED)
+option(USE_WEFFCPP "Use -Weffc++ during compilation" ON)
 include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp)
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
 include_directories(BEFORE ${GSL_INCLUDE_DIRS})
 
-add_compile_options(-Weffc++)
+if (USE_WEFFCPP)
+    add_compile_options(-Weffc++)
+endif()
+
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc

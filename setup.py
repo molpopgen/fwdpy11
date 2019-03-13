@@ -38,6 +38,12 @@ if '--gcc' in sys.argv:
 else:
     USE_GCC = False
 
+if '--no-weffcpp' in sys.argv:
+    USE_WEFFCPP = False
+    sys.argv.remove('--no-weffcpp')
+else:
+    USE_WEFFCPP = True
+
 if '--debug' in sys.argv:
     DEBUG_MODE = True
 else:
@@ -97,6 +103,8 @@ class CMakeBuild(build_ext):
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
                                                               self.distribution.get_version())
 
+        if USE_WEFFCPP is False:
+            cmake_args.append('-DUSE_WEFFCPP=OFF')
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         subprocess.check_call(['cmake', ext.sourcedir] +
