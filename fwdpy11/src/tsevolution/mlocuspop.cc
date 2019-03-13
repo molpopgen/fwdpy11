@@ -169,7 +169,7 @@ wfMlocusPop_ts(
     //const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
     auto genetics = fwdpp::make_genetic_parameters(
-        &genetic_value_fxn, std::move(bound_mmodels),
+        std::ref(genetic_value_fxn), std::move(bound_mmodels),
         std::move(intralocus_recombination), std::move(interlocus_rec));
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,
