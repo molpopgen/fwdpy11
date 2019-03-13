@@ -36,6 +36,7 @@ namespace fwdpy11
 {
     struct GeneticValueToFitnessMap
     {
+        virtual ~GeneticValueToFitnessMap() = default;
         virtual double
         operator()(const DiploidMetadata & /*metadata*/) const = 0;
         virtual void update(const SlocusPop & /*pop*/) = 0;

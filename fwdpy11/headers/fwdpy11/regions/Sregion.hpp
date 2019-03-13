@@ -18,6 +18,8 @@ namespace fwdpy11
         Region region; // For returning positions
         double scaling;
 
+        virtual ~Sregion() = default;
+
         Sregion(const Region& r, double s) : region(r), scaling(s)
         {
             if (!std::isfinite(scaling))

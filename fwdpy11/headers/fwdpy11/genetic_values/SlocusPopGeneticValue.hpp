@@ -55,6 +55,8 @@ namespace fwdpy11
         {
         }
 
+        virtual ~SlocusPopGeneticValue() = default;
+
         // Callable from Python
         virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
                                         const SlocusPop& /*pop*/) const = 0;

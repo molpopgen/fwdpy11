@@ -32,6 +32,7 @@ namespace fwdpy11
     struct GeneticValueNoise
     ///ABC for random effects on trait values
     {
+        virtual ~GeneticValueNoise() = default;
         virtual double
         operator()(const GSLrng_t& /* rng */,
                    const DiploidMetadata& /*offspring_metadata*/,

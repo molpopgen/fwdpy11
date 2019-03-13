@@ -54,6 +54,15 @@ namespace fwdpy11
         {
         }
 
+        SlocusPopMultivariateGeneticValueWithMapping(
+            const SlocusPopMultivariateGeneticValueWithMapping& other)
+            : SlocusPopGeneticValue(other.total_dim), gv2w{ other.gv2w->clone() },
+              noise_fxn{ other.noise_fxn->clone() }
+        {
+        }
+
+        virtual ~SlocusPopMultivariateGeneticValueWithMapping() = default;
+
         virtual double
         genetic_value_to_fitness(const DiploidMetadata& metadata) const
         {

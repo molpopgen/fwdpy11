@@ -37,6 +37,9 @@ namespace fwdpy11
             : total_dim(dimensonality), gvalues(total_dim, 0.0)
         {
         }
+
+        virtual ~MlocusPopGeneticValue() = default;
+
         // Callable from Python
         virtual double
         calculate_gvalue(const std::size_t /*diploid*/,
