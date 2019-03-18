@@ -49,40 +49,5 @@ namespace fwdpy11
             }
         return rv;
     }
-
-    std::vector<std::vector<std::pair<double, std::string>>>
-    separate_samples_by_loci(
-        const std::vector<std::pair<double, double>> &boundaries,
-        const std::vector<std::pair<double, std::string>> &sample)
-    // For a multi-locus pop, it is convenient to split samples by
-    // loci.  This function does that using pop.locus_boundaries.
-    // If pop.locus_boundaries is not properly set, an exception
-    // is likely going to be triggered
-    // The parameter "sample" is the return value of matrix_to_sample.
-    {
-        std::vector<std::vector<std::pair<double, std::string>>> rv(
-            boundaries.size());
-        if (sample.size() == 0)
-            {
-                return rv;
-            }
-        for (auto &&site : sample)
-            {
-                auto itr = std::find_if(
-                    boundaries.begin(), boundaries.end(),
-                    [&site](const std::pair<double, double> &b) {
-                        return site.first >= b.first && site.first < b.second;
-                    });
-                if (itr == boundaries.end())
-                    {
-                        throw std::runtime_error(
-                            "could not find locus for mutation at position"
-                            + std::to_string(site.first));
-                    }
-                auto d = std::distance(boundaries.begin(), itr);
-                rv[d].push_back(site);
-            }
-        return rv;
-    }
 } // namespace fwdpy11
 #endif

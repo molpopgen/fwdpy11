@@ -300,35 +300,6 @@ PYBIND11_MODULE(sampling, m)
             may be further processed using `pylibseq <http://molpopgen.github.io/pylibseq/>`_.
             Any filtering on position, frequency, etc., should have aleady been done when the 
             original matrix was generated.  However, you may filter the return value as you see fit.
-            If the matrix was created from a multi-locus simulation, you may wish to use
-            :func:`fwdpy11.sampling.separate_samples_by_loci` to split the return value up
-			into separate lists for each locus.
-
           )delim",
           py::arg("m"));
-
-    m.def("separate_samples_by_loci", &fwdpy11::separate_samples_by_loci,
-          R"delim(
-            Convert the output from :func:`fwdpy11.sampling.matrix_to_sample` into 
-            separate records per locus.
-
-			.. versionadded:: 0.1.1
-
-			.. versionchanged:: 0.1.2
-				Take a list of positions as arguments and not a population object.
-		
-            .. versionchanged:: 0.2.0
-                Return type changed from dict to list
-
-            :param boundaries: A list of [start,stop) tuples representing positions.
-            :param sample: The return value of :func:`fwdpy11.sampling.matrix_to_sample`
-
-            :rtype: list
-
-            :return: The data returned follow the same structure 
-				as :func:`fwdpy11.sampling.matrix_to_sample`,
-                but there is one entry per locus. The data for
-                consecutive loci are consecutive elements
-                in the return value.
-            )delim");
 }
