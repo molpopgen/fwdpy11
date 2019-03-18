@@ -52,7 +52,6 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     """
     import fwdpy11.SlocusPop
-    import fwdpy11.MlocusPop
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -78,62 +77,23 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
-    if pop.__class__ is fwdpy11.SlocusPop:
-        from fwdpy11 import GeneralizedGeneticMap
-        from ._tsevolution import WFSlocusPop_ts
-        # TODO: update to allow neutral mutations
-        pneutral = 0
-        mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-        if all([i.__class__ is fwdpy11.Region for i in params.recregions]) is True:
-            rm = RecombinationRegions(params.recrate, params.recregions)
-        else:
-            rm = GeneralizedGeneticMap(params.recregions)
-
-        from fwdpy11.tsrecorders import SampleRecorder
-        sr = SampleRecorder()
-        WFSlocusPop_ts(rng, pop, sr, simplification_interval,
-                       params.demography, params.mutrate_s,
-                       mm, rm, params.gvalue,
-                       recorder, stopping_criterion,
-                       params.pself, params.prune_selected is False,
-                       suppress_table_indexing, record_gvalue_matrix,
-                       track_mutation_counts,
-                       remove_extinct_variants)
+    from fwdpy11 import GeneralizedGeneticMap
+    from ._tsevolution import WFSlocusPop_ts
+    # TODO: update to allow neutral mutations
+    pneutral = 0
+    mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
+    if all([i.__class__ is fwdpy11.Region for i in params.recregions]) is True:
+        rm = RecombinationRegions(params.recrate, params.recregions)
     else:
-        from ._tsevolution import WFMlocusPop_ts
-        from fwdpy11 import MlocusMutationRegions
-        from fwdpy11 import MlocusRecombinationRegions
-        mm = MlocusMutationRegions()
-        # The user is allowed to input an empty list
-        # for nregions.  However, to make our lives
-        # sane, we need to detect that case
-        # and create a proxy object of a list of empty
-        # lists
-        nregion_proxy = params.nregions
-        if len(nregion_proxy) == 0:
-            nregion_proxy = [[]]*len(params.sregions)
-        for n, s, i, j in zip(params.mutrate_n,
-                              params.mutrate_s,
-                              nregion_proxy,
-                              params.sregions):
-            if n != 0.0:
-                raise ValueError("neutral mutations not allowed")
-            temp = MutationRegions.create(n, i, j)
-            mm.append(temp)
-        rm = MlocusRecombinationRegions()
-        for i, j in zip(params.recrates, params.recregions):
-            rm.append(RecombinationRegions(i, j))
-        if recorder is None:
-            from fwdpy11.temporal_samplers import RecordNothing
-            recorder = RecordNothing()
-        from fwdpy11.tsrecorders import SampleRecorder
-        sr = SampleRecorder()
-        WFMlocusPop_ts(rng, pop, sr, simplification_interval,
-                       params.demography, params.mutrate_s,
-                       mm, rm,
-                       params.interlocus_rec, params.gvalue,
-                       recorder, stopping_criterion,
-                       params.pself, params.prune_selected is False,
-                       suppress_table_indexing, record_gvalue_matrix,
-                       track_mutation_counts,
-                       remove_extinct_variants)
+        rm = GeneralizedGeneticMap(params.recregions)
+
+    from fwdpy11.tsrecorders import SampleRecorder
+    sr = SampleRecorder()
+    WFSlocusPop_ts(rng, pop, sr, simplification_interval,
+                   params.demography, params.mutrate_s,
+                   mm, rm, params.gvalue,
+                   recorder, stopping_criterion,
+                   params.pself, params.prune_selected is False,
+                   suppress_table_indexing, record_gvalue_matrix,
+                   track_mutation_counts,
+                   remove_extinct_variants)
