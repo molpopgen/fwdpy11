@@ -22,7 +22,6 @@
 
 #include <functional>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
 #include "samplerecorder.hpp"
 
 // Typedefs for functions that will record ancient samples
@@ -31,8 +30,6 @@ namespace fwdpy11
 {
     using SlocusPop_sample_recorder
         = std::function<void(const SlocusPop &, samplerecorder &)>;
-    using MlocusPop_sample_recorder
-        = std::function<void(const MlocusPop &, samplerecorder &)>;
 } // namespace fwdpy11
 
 #endif

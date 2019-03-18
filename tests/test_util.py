@@ -20,7 +20,7 @@
 # Unit tests of fwdpy11.util
 
 import unittest
-from quick_pops import quick_neutral_slocus, quick_mlocus_qtrait
+from quick_pops import quick_neutral_slocus
 import fwdpy11
 import fwdpy11.util
 
@@ -90,28 +90,6 @@ class test_ChangeEsizeSlocus(unittest.TestCase):
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
         self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
-
-
-class test_ChangeEsizeMlocus(unittest.TestCase):
-    @classmethod
-    def setUp(self):
-        self.pop = quick_mlocus_qtrait()
-
-    def test_change_esize(self):
-        extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
-        # Get gametes with this mutation
-        g = [i[0] for i in enumerate(
-            self.pop.gametes) if extant[0][0] in i[1].mutations and
-            self.pop.gametes[i[0]].n > 0]
-        self.assertEqual(sum([self.pop.gametes[i].n for i in g]), extant[0][1])
-        fwdpy11.util.change_effect_size(self.pop, extant[0][0], -0.1)
-        self.assertEqual(self.pop.mutations[extant[0][0]].s, -0.1)
-        self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
-        g2 = [i[0] for i in enumerate(self.pop.gametes) if
-              extant[0][0] in i[1].smutations and
-              self.pop.gametes[i[0]].n > 0]
-        self.assertEqual(g, g2)
-
 
 if __name__ == "__main__":
     unittest.main()

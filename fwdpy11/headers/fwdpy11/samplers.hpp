@@ -21,17 +21,12 @@
 
 #include <functional>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
 
 namespace fwdpy11
 {
     // Applied each generation to record any data of interest.
     using SlocusPop_temporal_sampler
         = std::function<void(const fwdpy11::SlocusPop&)>;
-
-    // Applied each generation to record any data of interest.
-    using MlocusPop_temporal_sampler
-        = std::function<void(const fwdpy11::MlocusPop&)>;
 }
 
 #endif

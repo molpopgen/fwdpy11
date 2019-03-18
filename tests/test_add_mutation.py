@@ -25,7 +25,6 @@ class testSlocusPopAddMutations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.SlocusPop(1000)
-        self.mpop = fwdpy11.MlocusPop(1000, [(0, 1), (1, 2)])
         self.mvec = fwdpy11.VecMutation()
         self.nmut = fwdpy11.Mutation(0.1, 0.0, 0.0, 0, 0)
         self.smut = fwdpy11.Mutation(1.2, -0.01, 0.0, 0, 0)
@@ -135,25 +134,6 @@ class testSlocusPopAddMutations(unittest.TestCase):
         self.mvec.append(self.nmut)
         with self.assertRaises(ValueError):
             m = self.pop.add_mutations(self.mvec, [0], [0])
-
-    def testAddMlocus(self):
-        self.mvec.append(self.nmut)
-        self.mvec.append(self.smut)
-        m = self.mpop.add_mutations(self.mvec, [0], [0])
-        d = self.mpop.diploids[0]
-        g1l0 = self.mpop.gametes[d[0].first]
-        g2l0 = self.mpop.gametes[d[0].second]
-        g1l1 = self.mpop.gametes[d[1].first]
-        g2l1 = self.mpop.gametes[d[1].second]
-
-        self.assertEqual(len(g1l0.mutations), 1)
-        self.assertEqual(len(g1l0.smutations), 0)
-        self.assertEqual(len(g2l0.mutations), 0)
-        self.assertEqual(len(g2l0.smutations), 0)
-        self.assertEqual(len(g1l1.mutations), 0)
-        self.assertEqual(len(g1l1.smutations), 1)
-        self.assertEqual(len(g2l1.mutations), 0)
-        self.assertEqual(len(g2l1.smutations), 0)
 
     # Test errors that we expect from fwdpp.
     # Note: these should all be ValueError,

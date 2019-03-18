@@ -30,9 +30,6 @@ PYBIND11_MODULE(tsrecorders, m)
         .def(py::init<>())
         .def("__call__",
              [](fwdpy11::no_ancient_samples& na, const fwdpy11::SlocusPop& pop,
-                fwdpy11::samplerecorder& sr) { na(pop, sr); })
-        .def("__call__",
-             [](fwdpy11::no_ancient_samples& na, const fwdpy11::MlocusPop& pop,
                 fwdpy11::samplerecorder& sr) { na(pop, sr); });
 
     py::class_<fwdpy11::random_ancient_samples>(
@@ -43,9 +40,6 @@ PYBIND11_MODULE(tsrecorders, m)
              py::arg("seed"), py::arg("samplesize"), py::arg("timepoints"))
         .def("__call__", [](fwdpy11::random_ancient_samples& na,
                             const fwdpy11::SlocusPop& pop,
-                            fwdpy11::samplerecorder& sr) { na(pop, sr); })
-        .def("__call__", [](fwdpy11::random_ancient_samples& na,
-                            const fwdpy11::MlocusPop& pop,
                             fwdpy11::samplerecorder& sr) { na(pop, sr); });
 }
 

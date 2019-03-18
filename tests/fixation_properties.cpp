@@ -9,9 +9,8 @@ common_mako.setup_mako(cfg)
 #include <pybind11/pybind11.h>
 #include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
 
-    namespace py = pybind11;
+namespace py = pybind11;
 
 void
 update_mutations(fwdpy11::Population& pop, const unsigned generation,
