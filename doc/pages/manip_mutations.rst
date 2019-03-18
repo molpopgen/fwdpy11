@@ -6,7 +6,6 @@ Adding mutations to a population
 To add one or more new mutations to a population, make a call to the following member functions:
 
 * :attr:`fwdpy11.SlocusPop.add_mutations`
-* :attr:`fwdpy11.MlocusPop.add_mutations`
 
 Briefly, mutations are added to specific gametes of individuals.  For example, to add a new mutation
 to the second gamete of the third individual in the population:

@@ -37,8 +37,6 @@ The cost is that pickling is slower.  The functions are:
 
 * :func:`fwdpy11.SlocusPop.pickle_to_file`, which is an instance method
 * :func:`fwdpy11.SlocusPop.load_from_pickle_file`, which is a static method
-* :func:`fwdpy11.MlocusPop.pickle_to_file`, which is an instance method
-* :func:`fwdpy11.MlocusPop.load_from_pickle_file`, which is a static method
 
 Please notes that these functions must be used in a coordinated manner!  See documentation for details.
 
