@@ -84,30 +84,11 @@ Building from the git repository:
     python setup.py build_ext -i
     python -m unittest discover tests
 
-.. note::
-    The clang compiler is the assumed default on OS X.  However, life is simpler
-    if you use gcc.  The setup.py takes a --gcc option that eliminates OS X-specific
-    (really Xcode clang-specific) features so that an OS X/gcc build is possible.
-
 Using pip on OS X and Linux (or pip3 as appropriate for your system):
 
 .. code-block:: bash
 
     pip install --upgrade fwdpy11
-
-If you prefer a pip install on OS X using GCC instead of clang:
-
-.. code-block:: bash
-
-    pip install --upgrade fwdpy11 --install-option=--gcc
-
-You may or may not need to prefix the above with
-
-.. code-block:: bash
-
-    CC=gcc CXX=g++
-
-depending on whether or not your user's `$PATH` is set up to override Xcode's symlink of gcc to clang.
 
 It is possible that the cmake macros to detect the GSL can fail to detect the correct version.  Issues like this are a
 basic weakness of cmake.  I've seen this in conda environments, where the macro prefers the system version over the
@@ -116,6 +97,24 @@ newer version in the environment.  To "fix" this, give it a hint:
 .. code-block:: bash
 
     GSL_ROOT_DIR=/path/to/gsl python3 setup.py build_ext -i
+
+OS X
+==================================
+
+On Apple's OS X, we strongly encourage that you use conda with the clang-4.0 compiler packages:
+
+.. code-block:: bash
+
+    conda install clang_osx_64 clangxx_osx-64
+
+Installing these packages will mean that you can get away from the relatively old versions of these compilers that ship
+with Xcode.   However, you do need to add the following flag when building the package:
+
+.. code-block:: bash
+
+    CONDA_BUILD_SYSROOT=/ python3 setup.py build_ext -i
+
+Do the same for a `pip install` from the source directory.
 
 Caution
 ==================================
