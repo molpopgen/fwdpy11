@@ -1,10 +1,8 @@
 // clang-format off
 <% 
 setup_pybind11(cfg) 
-#import fwdpy11 so we can find its C++ headers
-import fwdpy11 as fp11 
-#add fwdpy11 header locations to the include path
-cfg['include_dirs'].extend([ fp11.get_includes(), fp11.get_fwdpp_includes()])
+import common_mako
+common_mako.setup_mako(cfg)
 %>
 // clang-format on
 
