@@ -199,44 +199,5 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         os.remove(fname)
 
 
-class testPickleMlocusPop(unittest.TestCase):
-    @classmethod
-    def setUp(self):
-        from quick_pops import quick_mlocus_qtrait
-        self.pop = quick_mlocus_qtrait(N=500, simlen=10)
-
-    def testPickleDiploids(self):
-        import pickle
-        x = pickle.dumps(self.pop.diploids)
-        p = pickle.loads(x)
-        for i, j in zip(p, self.pop.diploids):
-            self.assertEqual(i, j)
-
-    def testPicklePopPy(self):
-        import pickle
-        p = pickle.dumps(self.pop, -1)
-        pp = pickle.loads(p)
-        self.assertEqual(pp, self.pop)
-
-    def testPicklePopCpp(self):
-        import pickle
-        p = pickling_cpp.general_pickler(self.pop)
-        pp = pickle.loads(p)
-        self.assertEqual(pp, self.pop)
-
-    def testPicklingToFile(self):
-        import fwdpy11
-        import lzma
-        import os
-        fname = "pickleFileTestingMlocus.pickle"
-        with lzma.open(fname, 'wb') as f:
-            self.pop.pickle_to_file(f)
-        with lzma.open(fname, 'rb') as f:
-            pop = fwdpy11.MlocusPop.load_from_pickle_file(f)
-        self.assertTrue(pop == self.pop)
-        self.assertEqual(pop.N, self.pop.N)
-        os.remove(fname)
-
-
 if __name__ == "__main__":
     unittest.main()

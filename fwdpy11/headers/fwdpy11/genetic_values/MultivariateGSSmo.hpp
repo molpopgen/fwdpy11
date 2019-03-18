@@ -123,12 +123,6 @@ namespace fwdpy11
         {
             update_details(pop);
         }
-
-        inline void
-        update(const MlocusPop &pop)
-        {
-            update_details(pop);
-        }
     };
 } // namespace fwdpy11
 

@@ -91,39 +91,5 @@ class testSlocusPopSampler(unittest.TestCase):
             self.fail("unexpcted AssertionError")
 
 
-class testMlocusPop(unittest.TestCase):
-    @classmethod
-    def setUpClass(self):
-        self.pop = fwdpy11.MlocusPop(1000, [(i, i + 1) for i in range(5)])
-
-    def test_mutations(self):
-        self.assertTrue(
-            type(self.pop.mutations)
-            is fwdpy11.VecMutation)
-        self.assertFalse(type(self.pop.mutations) is list)
-        self.assertTrue(type(list(self.pop.mutations)) is list)
-
-    def test_mcount(self):
-        self.assertTrue(
-            type(self.pop.mcounts)
-            is fwdpy11.VecUint32)
-
-    def test_diploids(self):
-        self.assertFalse(type(self.pop.diploids) is list)
-        self.assertTrue(
-            type(self.pop.diploids)
-            is fwdpy11.VecVecDiploid)
-
-    def test_a_diploid(self):
-        self.assertTrue(
-            type(self.pop.diploids[0])
-            is fwdpy11.VecDiploid)
-
-    def test_gametes(self):
-        self.assertTrue(
-            type(self.pop.gametes)
-            is fwdpy11.VecGamete)
-
-
 if __name__ == "__main__":
     unittest.main()
