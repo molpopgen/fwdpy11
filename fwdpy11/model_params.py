@@ -65,7 +65,6 @@ class ModelParams(object):
         self.__nregions = []
         self.__sregions = None
         self.__recregions = None
-        self.__interlocus_rec = None
         self.__demography = None
         self.__prune_selected = True
         self.__rates = None
@@ -188,38 +187,6 @@ class ModelParams(object):
         Return recombination rate(s).
         """
         return self.__rates[2]
-
-    @property
-    def mutrates_n(self):
-        """
-        Return neutral mutation rate(s).
-        """
-        return self.mutrate_n
-
-    @property
-    def mutrates_s(self):
-        """
-        Return selected mutation rate(s).
-        """
-        return self.mutrate_s
-
-    @property
-    def recrates(self):
-        """
-        Return recombination rate(s).
-        """
-        return self.recrate
-
-    @property
-    def interlocus_rec(self):
-        """
-        Get/set interlocus recombination functions.
-        """
-        return self.__interlocus_rec
-
-    @interlocus_rec.setter
-    def interlocus_rec(self, ir):
-        self.__interlocus_rec = ir
 
     @property
     def pself(self):
