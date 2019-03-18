@@ -90,34 +90,5 @@ class testMultiEffectMutationSlocusPopPickling(unittest.TestCase):
         self.assertEqual(self.pop, up)
 
 
-class testMultiEffectMutationMlocusPopPickling(unittest.TestCase):
-    @classmethod
-    def setUp(self):
-        mutations = fwdpy11.VecMutation()
-        fixations = fwdpy11.VecMutation()
-        gametes = fwdpy11.VecGamete()
-        diploids = fwdpy11.VecVecDiploid()
-        mutations.append(fwdpy11.Mutation(
-            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
-        fixations.append(fwdpy11.Mutation(
-            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
-        gametes.append(fwdpy11.Gamete(
-            (4, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
-        diploids.append(fwdpy11.VecDiploid(
-            [fwdpy11.DiploidGenotype(0, 0)] * 2))
-        ftimes = fwdpy11.VecUint32([1])
-        self.pop = fwdpy11.MlocusPop.create(diploids,
-                                            gametes,
-                                            mutations,
-                                            [(0, 1), (1, 2)],
-                                            fixations,
-                                            ftimes, 2)
-
-    def testPickle(self):
-        p = pickle.dumps(self.pop)
-        up = pickle.loads(p)
-        self.assertEqual(self.pop, up)
-
-
 if __name__ == "__main__":
     unittest.main()

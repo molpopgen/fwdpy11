@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
 #include <gsl/gsl_randist.h>
 #include "samplerecorder.hpp"
 
@@ -38,10 +37,6 @@ namespace fwdpy11
     {
         inline void
         operator()(const SlocusPop&, samplerecorder&) const
-        {
-        }
-        inline void
-        operator()(const MlocusPop&, samplerecorder&) const
         {
         }
     };
@@ -79,12 +74,6 @@ namespace fwdpy11
 
         inline void
         operator()(const SlocusPop& pop, samplerecorder& sr)
-        {
-            sample(pop, sr);
-        }
-
-        inline void
-        operator()(const MlocusPop& pop, samplerecorder& sr)
         {
             sample(pop, sr);
         }

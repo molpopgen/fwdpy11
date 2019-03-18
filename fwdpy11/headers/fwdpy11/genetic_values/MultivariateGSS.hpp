@@ -71,8 +71,7 @@ namespace fwdpy11
             return pybind11::make_tuple(l, VS);
         }
 
-        DEFAULT_MLOCUSPOP_UPDATE();
-        DEFAULT_SLOCUSPOP_UPDATE();
+        DEFAULT_SLOCUSPOP_UPDATE()
     };
 } // namespace fwdpy11
 
