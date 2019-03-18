@@ -41,13 +41,9 @@ namespace
    A :class:`fwdpy11.VecDiploid`.
    )delim";
 
-    static const auto MLDIPLOIDS_DOCSTRING = R"delim(
-   A :class:`fwdpy11.VecVecDiploid`.
-   )delim";
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
-PYBIND11_MAKE_OPAQUE(std::vector<std::vector<fwdpy11::DiploidGenotype>>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
