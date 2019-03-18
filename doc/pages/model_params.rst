@@ -68,53 +68,6 @@ The key points are:
   second element is the constructor arguments required to generate an instance of that type.  See the next example 
   for extending this idea to simulations of traits and random effects.
 
-This example sets up a multi-locus simulation of a quantitative trait under Gaussian stabilizing selection with random
-effects:
-
-.. testcode::
-
-    import fwdpy11
-    import fwdpy11.model_params
-    import fwdpy11.genetic_values
-    import fwdpy11.genetic_value_noise
-    import fwdpy11.wright_fisher
-    import fwdpy11.multilocus
-    import numpy as np
-    import inspect
-    popsize = 1e4
-    theta = 10000
-    rho = theta
-    locus_boundaries = [(float(i),float(i)+1.0) for i in range(5)]
-
-    gv2w = fwdpy11.genetic_values.GSS(VS=1.0,opt=0.0)
-    noise = fwdpy11.genetic_value_noise.GaussianNoise(mean=0.0, sd=0.1)
-    gvalue = fwdpy11.genetic_values.MlocusAdditive(1.0,gv2w,noise)
-    pdict = {'nregions': [[fwdpy11.Region(i[0],i[1],1)] for i in locus_boundaries],
-                'sregions': [[fwdpy11.GaussianS(i[0],i[1],1,0.1)] for i in locus_boundaries],
-                'recregions': [[fwdpy11.Region(i[0],i[1],1)] for i in locus_boundaries],
-                'rates': ([theta/(4.*popsize)]*len(locus_boundaries),
-                        [1e-4]*len(locus_boundaries),
-                        [rho/(4.*popsize)]*len(locus_boundaries)),
-                'interlocus_rec': fwdpy11.multilocus.binomial_rec([0.5]*(len(locus_boundaries)-1)),
-                'demography': np.array([popsize]*10, dtype = np.uint32),
-                'prune_selected':False,
-                'gvalue':gvalue
-            }
-    params = fwdpy11.model_params.ModelParams(**pdict)
-    params.validate()
-    pop = fwdpy11.MlocusPop(int(popsize), locus_boundaries)
-    rng = fwdpy11.GSLrng(42)
-    fwdpy11.wright_fisher.evolve(rng, pop, params)
-
-The key differences from the single-locus example are:
-
-* You pass in lists of lists of regions.  There is one list per locus, and each list specifies variation in rates for
-  each locus separately.
-* You pass in tuples of lists of rates.
-* You have to specify how recombination occurs *between* loci.  See :py:mod:`fwdpy11.multilocus`.
-* As with the genetic value, we pass in tuples of type names plust constructor argumetns to specify the genetic 
-  value to fitness map ('gv2w') and the random effects on trait values ('noise').
-
 Examples:
 
 * :ref:`qtraits1`

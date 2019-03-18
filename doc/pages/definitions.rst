@@ -38,9 +38,6 @@ being evolved.  Within that locus, you may have as many regions as you want.  Yo
 "genes" (aka loci), but that is a different locus concept from what we are using here. See :ref:`slocuspop` for more
 details on this type.
 
-Evolving a multi-locus system in a single deme means evolving a :class:`fwdpy11.MlocusPop` object.  See
-:ref:`mlocuspop` for details.
-
 
 .. _simtypes:
 

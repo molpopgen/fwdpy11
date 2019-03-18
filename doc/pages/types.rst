@@ -162,7 +162,7 @@ The population base class
 
 All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
 :class:`fwdpy11.Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
-Rather, you work with the derived classes :class:`fwdpy11.SlocusPop` and :class:`fwdpy11.MlocusPop`.
+Rather, you work with the derived classes :class:`fwdpy11.SlocusPop`.
 
 .. csv-table:: :class:`fwdpy11.Population` properties
     :header: "Property", "Definition"
@@ -212,28 +212,6 @@ This class contains the following read-only properties, in addition to those fou
     :header: "Property", "Definition"
     
     "diploids", "A :class:`fwdpy11.VecDiploid`.  See :ref:`diploids`."
-
-.. _mlocuspop:
-
-Multi-locus population objects
------------------------------------------------------------
-
-The type :class:`fwdpy11.MlocusPop` is analagous to :class:`fwdpy11.SlocusPop` in all but
-one respect.  The `diploids` property type is :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`
-for details.  The class has all of the properties of :class:`fwdpy11.Population` plus the following:
-
-.. csv-table:: :class:`fwdpy11.MlocusPop` properties
-    :header: "Property", "Definition"
-
-    "diploids", "A :class:`fwdpy11.VecVecDiploid`.  See :ref:`diploids`."
-    "nloci", "The number of loci"
-    "locus_boundaries", "The [begin,end) positions for each locus"
-
-The need for `locus_boundaries` will be discussed elsewhere.
-
-.. todo::
-
-    Discuss locus boundaries somewhere.
 
 Python data types stored in population objects
 ---------------------------------------------------------------------------------

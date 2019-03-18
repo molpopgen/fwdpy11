@@ -21,7 +21,6 @@ For cases where you want all mutations in a sample, sorted by position, with the
 fixed in the sample or not, you may get a data matrix from the following functions:
 
 * :func:`fwdpy11.SlocusPop.sample`
-* :func:`fwdpy11.MlocusPop.sample`
 
 The general API is extremely flexible, allowing for the inclusion or exclustion of markers based on arbitrary criteria.
 Getting a :class:`fwdpy11.sampling.DataMatrix` this way requires a few steps:
