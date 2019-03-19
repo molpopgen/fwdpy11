@@ -1,7 +1,5 @@
 import unittest
-import fwdpy11 as fp11
-import fwdpy11.sampling
-import numpy as np
+import fwdpy11
 import numpy as np
 import pyximport
 pyximport.install(setup_args={'include_dirs': np.get_include()})
