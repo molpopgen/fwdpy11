@@ -43,7 +43,7 @@ namespace
     }
 } // namespace
 
-PYBIND11_MODULE(util, m)
+void init_sort_gamete_keys(py::module & m)
 {
     m.def("sort_gamete_keys",
           [](fwdpy11::Population::gcont_t& gametes,
