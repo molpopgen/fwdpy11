@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_EVOLVE_SLOCUSPOP_GENERATION_HPP__
-#define FWDPY11_EVOLVE_SLOCUSPOP_GENERATION_HPP__
+#ifndef FWDPY11_EVOLVE_POP_GENERATION_HPP__
+#define FWDPY11_EVOLVE_POP_GENERATION_HPP__
 
 #include <tuple>
 #include <type_traits>

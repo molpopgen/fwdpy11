@@ -51,7 +51,7 @@ namespace fwdpy11
             return metadata.g;
         }
 
-        DEFAULT_SLOCUSPOP_UPDATE()
+        DEFAULT_DIPLOID_POP_UPDATE()
 
         inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
@@ -95,7 +95,7 @@ namespace fwdpy11
                 -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
         }
 
-        DEFAULT_SLOCUSPOP_UPDATE()
+        DEFAULT_DIPLOID_POP_UPDATE()
 
         inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const

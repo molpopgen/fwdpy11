@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_GENETIC_VALUES_SLOCUSMULT_HPP__
-#define FWDPY11_GENETIC_VALUES_SLOCUSMULT_HPP__
+#ifndef FWDPY11_GENETIC_VALUES_MULT_HPP__
+#define FWDPY11_GENETIC_VALUES_MULT_HPP__
 
 #include <fwdpp/fitness_models.hpp>
 #include "details/pickle_multiplicative.hpp"
