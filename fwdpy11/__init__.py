@@ -32,7 +32,6 @@ from ._opaque_diploids import *
 from ._Population import VecUint32
 # from ._regions import *
 from ._dev import *
-from ._gslrng import GSLrng
 from ._Population import Population
 from .DiploidPopulation import DiploidPopulation
 
