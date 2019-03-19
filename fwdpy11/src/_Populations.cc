@@ -55,7 +55,7 @@ PYBIND11_MODULE(_Populations, m)
         = (pybind11::object)pybind11::module::import("fwdpy11._Population");
 
     py::object data_matrix_python_representation
-        = (pybind11::object)py::module::import("fwdpy11.sampling")
+        = (pybind11::object)py::module::import("fwdpy11._fwdpy11")
               .attr("DataMatrix");
 
     py::bind_vector<std::vector<fwdpp::uint_t>>(
