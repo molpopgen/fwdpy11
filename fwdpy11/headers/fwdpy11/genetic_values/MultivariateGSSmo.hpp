@@ -119,7 +119,7 @@ namespace fwdpy11
         }
 
         inline void
-        update(const SlocusPop &pop)
+        update(const DiploidPopulation &pop)
         {
             update_details(pop);
         }

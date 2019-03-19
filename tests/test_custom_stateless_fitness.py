@@ -14,7 +14,7 @@ general = cppimport.imp("custom_stateless_genotype")
 class testCustomAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.pop = fwdpy11.SlocusPop(1000)
+        self.pop = fwdpy11.DiploidPopulation(1000)
         self.pdict = fwdpy11.ezparams.mslike(self.pop,
                                              dfe=fwdpy11.ExpS(0, 1, 1, -0.05),
                                              pneutral=0.95, simlen=10)
@@ -31,10 +31,10 @@ class testCustomAdditive(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(type(a), type(up))
 
-    # TODO: test this once built-in SlocusAdditive is callable
+    # TODO: test this once built-in DiploidAdditive is callable
     # def testCorrectNess(self):
     #     fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
-    #     a = fwdpy11.fitness.SlocusAdditive(2.0)
+    #     a = fwdpy11.fitness.DiploidAdditive(2.0)
     #     for i in self.pop.diploids:
     #         self.assertEqual(i.w, a(i, self.pop))
 
@@ -42,7 +42,7 @@ class testCustomAdditive(unittest.TestCase):
 class testGeneralModule(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.pop = fwdpy11.SlocusPop(1000)
+        self.pop = fwdpy11.DiploidPopulation(1000)
         self.pdict = fwdpy11.ezparams.mslike(self.pop,
                                              dfe=fwdpy11.ConstantS(
                                                  0, 1, 1, -0.05, 0.05),

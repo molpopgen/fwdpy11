@@ -28,7 +28,7 @@
 #include <queue>
 #include <tuple>
 #include <pybind11/pybind11.h>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace fwdpy11
 {
@@ -38,7 +38,7 @@ namespace fwdpy11
         virtual double
         operator()(const DiploidMetadata& /*metadata*/,
                    const std::vector<double>& /*values*/) const = 0;
-        virtual void update(const SlocusPop& /*pop*/) = 0;
+        virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<MultivariateGeneticValueToFitnessMap>
         clone() const = 0;
         virtual pybind11::object pickle() const = 0;

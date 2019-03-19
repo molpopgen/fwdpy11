@@ -1,4 +1,4 @@
-// Wright-Fisher simulation for a fwdpy11::SlocusPop with
+// Wright-Fisher simulation for a fwdpy11::DiploidPopulation with
 // tree sequences.
 //
 // Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
@@ -29,15 +29,15 @@
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
 #include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include "util.hpp"
-#include "slocus_fitness.hpp"
+#include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
 #include "cleanup_metadata.hpp"
 #include "track_mutation_counts.hpp"
@@ -47,15 +47,15 @@ namespace py = pybind11;
 
 // TODO: allow for neutral mutations in the future
 void
-wfSlocusPop_ts(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+wfDiploidPopulation_ts(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::samplerecorder &sr, const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
     const double mu_selected, const fwdpy11::MutationRegions &mmodel,
     const fwdpy11::GeneticMap &rmodel,
-    fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-    fwdpy11::SlocusPop_sample_recorder recorder,
-    std::function<bool(const fwdpy11::SlocusPop &, const bool)>
+    fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    fwdpy11::DiploidPopulation_sample_recorder recorder,
+    std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,
     const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
@@ -123,7 +123,7 @@ wfSlocusPop_ts(
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
     std::vector<double> new_diploid_gvalues;
     auto calculate_fitness
-        = wrap_calculate_fitness_SlocusPop(record_genotype_matrix);
+        = wrap_calculate_fitness_DiploidPopulation(record_genotype_matrix);
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
                                     new_diploid_gvalues);
 
@@ -306,5 +306,5 @@ wfSlocusPop_ts(
 void
 init_slocus_evolution(py::module &m)
 {
-    m.def("WFSlocusPop_ts", &wfSlocusPop_ts);
+    m.def("WFDiploidPopulation_ts", &wfDiploidPopulation_ts);
 }

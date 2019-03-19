@@ -8,7 +8,7 @@
 #include <fwdpp/ts/definitions.hpp>
 #include <fwdpp/ts/edge.hpp>
 #include <fwdpp/ts/node.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace py = pybind11;
 
@@ -68,8 +68,8 @@ convert_tables_from_tskit(py::object ts)
     return std::make_tuple(std::move(nodes), std::move(edges), ntips, l);
 }
 
-fwdpy11::SlocusPop
-create_SlocusPop_from_tree_sequence(py::object ts)
+fwdpy11::DiploidPopulation
+create_DiploidPopulation_from_tree_sequence(py::object ts)
 {
     auto t = convert_tables_from_tskit(ts);
     auto nodes(std::move(std::get<0>(t)));
@@ -82,7 +82,7 @@ create_SlocusPop_from_tree_sequence(py::object ts)
                 "tree sequence has odd number of tips");
         }
 
-    fwdpy11::SlocusPop pop(twoN / 2, l);
+    fwdpy11::DiploidPopulation pop(twoN / 2, l);
     pop.tables.node_table.swap(nodes);
     pop.tables.edge_table.swap(edges);
     pop.tables.update_offset();
@@ -107,6 +107,6 @@ PYBIND11_MODULE(ts_from_tskit, m)
     // Expose this for unit-testing purposes
     m.def("_convert_tables", &convert_tables_from_tskit);
 
-    // This is the back-end for fwdpy11.SlocusPop.create_from_tskit
-    m.def("_create_SlocusPop", &create_SlocusPop_from_tree_sequence);
+    // This is the back-end for fwdpy11.DiploidPopulation.create_from_tskit
+    m.def("_create_DiploidPopulation", &create_DiploidPopulation_from_tree_sequence);
 }

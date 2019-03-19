@@ -4,14 +4,14 @@ import fwdpy11.genetic_values
 import numpy as np
 
 
-class testSlocusAdditive(unittest.TestCase):
+class testDiploidAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
         from fwdpy11.genetic_value_noise import GaussianNoise
-        self.w = fwdpy11.genetic_values.SlocusAdditive(2.0)
-        self.t = fwdpy11.genetic_values.SlocusAdditive(
+        self.w = fwdpy11.genetic_values.DiploidAdditive(2.0)
+        self.t = fwdpy11.genetic_values.DiploidAdditive(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.tn = fwdpy11.genetic_values.SlocusAdditive(1.0,
+        self.tn = fwdpy11.genetic_values.DiploidAdditive(1.0,
                                                         fwdpy11.genetic_values.GSS(
                                                             0.0, 1.0),
                                                         GaussianNoise(mean=0.1, sd=2.0))
@@ -70,14 +70,14 @@ class testSlocusAdditive(unittest.TestCase):
                          type(self.tn.gvalue_to_fitness))
 
 
-class testSlocusMult(unittest.TestCase):
+class testDiploidMult(unittest.TestCase):
     @classmethod
     def setUp(self):
         from fwdpy11.genetic_value_noise import GaussianNoise
-        self.w = fwdpy11.genetic_values.SlocusMult(2.0)
-        self.t = fwdpy11.genetic_values.SlocusMult(
+        self.w = fwdpy11.genetic_values.DiploidMult(2.0)
+        self.t = fwdpy11.genetic_values.DiploidMult(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.tn = fwdpy11.genetic_values.SlocusMult(1.0,
+        self.tn = fwdpy11.genetic_values.DiploidMult(1.0,
                                                     fwdpy11.genetic_values.GSS(
                                                         0.0, 1.0),
                                                     GaussianNoise(mean=0.1, sd=2.0))
@@ -123,7 +123,7 @@ class testSlocusMult(unittest.TestCase):
                          type(self.tn.gvalue_to_fitness))
 
 
-class testSlocusGBR(unittest.TestCase):
+class testDiploidGBR(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.gss = fwdpy11.genetic_values.GSS(0.0, 1.0)
@@ -133,7 +133,7 @@ class testSlocusGBR(unittest.TestCase):
 
     def testPicklingGSS(self):
         import pickle
-        gbr = fwdpy11.genetic_values.SlocusGBR(self.gss)
+        gbr = fwdpy11.genetic_values.DiploidGBR(self.gss)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.nonoise), type(up.noise))
@@ -141,7 +141,7 @@ class testSlocusGBR(unittest.TestCase):
 
     def testPicklingGSSGaussianNoise(self):
         import pickle
-        gbr = fwdpy11.genetic_values.SlocusGBR(self.gss, self.gnoise)
+        gbr = fwdpy11.genetic_values.DiploidGBR(self.gss, self.gnoise)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.gnoise), type(up.noise))
@@ -167,11 +167,11 @@ class testGSSandGSSmoConsistency(unittest.TestCase):
     """
     @classmethod
     def setUp(self):
-        self.a = fwdpy11.genetic_values.SlocusAdditive(
+        self.a = fwdpy11.genetic_values.DiploidAdditive(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.b = fwdpy11.genetic_values.SlocusAdditive(
+        self.b = fwdpy11.genetic_values.DiploidAdditive(
             2.0, fwdpy11.genetic_values.GSSmo([(0, 0.0, 1.0)]))
-        self.pop = fwdpy11.SlocusPop(1000)
+        self.pop = fwdpy11.DiploidPopulation(1000)
 
     def testFitnesses(self):
         wa = [self.a.fitness(i, self.pop) for i in range(self.pop.N)]

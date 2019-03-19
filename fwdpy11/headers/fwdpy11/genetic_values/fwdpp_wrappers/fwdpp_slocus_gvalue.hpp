@@ -3,14 +3,14 @@
 
 #include <type_traits>
 #include <functional>
-#include "../SlocusPopGeneticValueWithMapping.hpp"
+#include "../DiploidPopulationGeneticValueWithMapping.hpp"
 #include "../noise.hpp"
 
 namespace fwdpy11
 {
     template <typename fwdppT, typename pickleFunction>
     struct fwdpp_slocus_gvalue
-        : public fwdpy11::SlocusPopGeneticValueWithMapping
+        : public fwdpy11::DiploidPopulationGeneticValueWithMapping
     {
         using gvalue_map_ptr
             = std::unique_ptr<fwdpy11::GeneticValueToFitnessMap>;
@@ -24,7 +24,7 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_)
-            : SlocusPopGeneticValueWithMapping{ GeneticValueIsFitness() },
+            : DiploidPopulationGeneticValueWithMapping{ GeneticValueIsFitness() },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction{})
         {
@@ -33,7 +33,7 @@ namespace fwdpy11
         template <typename forwarded_fwdppT>
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_)
-            : SlocusPopGeneticValueWithMapping{ gv2w_ },
+            : DiploidPopulationGeneticValueWithMapping{ gv2w_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
         {
@@ -43,7 +43,7 @@ namespace fwdpy11
         fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_,
                             const GeneticValueNoise& noise_)
-            : SlocusPopGeneticValueWithMapping{ gv2w_, noise_ },
+            : DiploidPopulationGeneticValueWithMapping{ gv2w_, noise_ },
               gv{ std::forward<forwarded_fwdppT>(gv_)
 
               },
@@ -54,7 +54,7 @@ namespace fwdpy11
 
         inline double
         calculate_gvalue(const std::size_t diploid_index,
-                         const fwdpy11::SlocusPop& pop) const
+                         const fwdpy11::DiploidPopulation& pop) const
         {
             gvalues[0]
                 = gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
@@ -62,7 +62,7 @@ namespace fwdpy11
         }
 
         inline void
-        update(const fwdpy11::SlocusPop& pop)
+        update(const fwdpy11::DiploidPopulation& pop)
         {
             gv2w->update(pop);
             noise_fxn->update(pop);

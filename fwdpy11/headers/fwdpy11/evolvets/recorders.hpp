@@ -22,7 +22,7 @@
 #include <vector>
 #include <algorithm>
 #include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <gsl/gsl_randist.h>
 #include "samplerecorder.hpp"
 
@@ -36,7 +36,7 @@ namespace fwdpy11
      */
     {
         inline void
-        operator()(const SlocusPop&, samplerecorder&) const
+        operator()(const DiploidPopulation&, samplerecorder&) const
         {
         }
     };
@@ -73,7 +73,7 @@ namespace fwdpy11
         }
 
         inline void
-        operator()(const SlocusPop& pop, samplerecorder& sr)
+        operator()(const DiploidPopulation& pop, samplerecorder& sr)
         {
             sample(pop, sr);
         }

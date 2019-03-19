@@ -4,7 +4,7 @@ import numpy as np
 from quick_pops import quick_nonneutral_slocus
 
 
-class test_DataMatrixFromSlocusPop(unittest.TestCase):
+class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
     """
     Much of this is already tested in fwdpp's unit tests,
     but the purpose here is to make sure that the wrappers

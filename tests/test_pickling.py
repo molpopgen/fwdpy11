@@ -42,7 +42,7 @@ class testPickleMutation(unittest.TestCase):
         self.assertEqual(m, self.m)
 
 
-class testPickleSlocusPop(unittest.TestCase):
+class testPickleDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):
         from quick_pops import quick_neutral_slocus
@@ -108,7 +108,7 @@ class testPickleSlocusPop(unittest.TestCase):
         self.assertEqual(up.genome_length(), np.finfo(np.float).max)
 
 
-class testPickleSlocusPopTreeSequences(unittest.TestCase):
+class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11.genetic_values
@@ -123,7 +123,7 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         self.r = self.rho/(4*self.N)
 
         self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -134,7 +134,7 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
                   }
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
 
     def testPickleNodeTable(self):
@@ -187,7 +187,7 @@ class testPickleSlocusPopTreeSequences(unittest.TestCase):
         with lzma.open(fname, 'wb') as f:
             self.pop.pickle_to_file(f)
         with lzma.open(fname, 'rb') as f:
-            pop = fwdpy11.SlocusPop.load_from_pickle_file(f)
+            pop = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
         self.assertEqual(pop.N, self.pop.N)
         self.assertEqual(pop.generation, self.pop.generation)
         self.assertTrue(pop.diploids == self.pop.diploids)

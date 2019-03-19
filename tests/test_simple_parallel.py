@@ -16,17 +16,17 @@ def evolve_and_return(args):
     For this function, the arguments are the population
     size and a random number seed.
     """
-    from fwdpy11.genetic_values import SlocusMult
+    from fwdpy11.genetic_values import DiploidMult
     N, seed = args
     # Construct as single-deme object
     # with N diploids
-    pop = fp11.SlocusPop(N)
+    pop = fp11.DiploidPopulation(N)
     theta = 100.0
     # Initialize a random number generator
     rng = fp11.GSLrng(seed)
     p = fp11ez.mslike(pop, simlen=100, rates=(
         theta / float(4 * pop.N), 1e-3, theta / float(4 * pop.N)))
-    p['gvalue'] = SlocusMult(2.)
+    p['gvalue'] = DiploidMult(2.)
     params = fp11.model_params.ModelParams(**p)
     fp11.wright_fisher.evolve(rng, pop, params)
     # The population is picklable, and so

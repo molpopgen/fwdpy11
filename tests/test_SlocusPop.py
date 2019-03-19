@@ -20,10 +20,10 @@ import unittest
 import fwdpy11 as fp11
 
 
-class testSlocusPop(unittest.TestCase):
+class testDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fp11.SlocusPop(1000)
+        self.pop = fp11.DiploidPopulation(1000)
 
     def test_N(self):
         self.assertEqual(self.pop.N, 1000)
@@ -50,10 +50,10 @@ class testSlocusPop(unittest.TestCase):
         self.assertEqual(sum([i.e for i in self.pop.diploid_metadata]), 0.0)
 
 
-class testSlocusPopExceptions(unittest.TestCase):
+class testDiploidPopulationExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            fp11.SlocusPop(0)
+            fp11.DiploidPopulation(0)
 
 
 class testSampling(unittest.TestCase):
@@ -145,7 +145,7 @@ class testPythonObjects(unittest.TestCase):
         This test does not use the class fixture.
         Instead, we use an empty pop object.
         """
-        pop = fp11.SlocusPop(100)
+        pop = fp11.DiploidPopulation(100)
         self.assertTrue(pop.mut_lookup is None)
 
 

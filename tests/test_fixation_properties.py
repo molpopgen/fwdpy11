@@ -32,7 +32,7 @@ cppimport.force_rebuild()
 fp = cppimport.imp("fixation_properties")
 
 
-class testFixationsAreSortedSlocusPop(unittest.TestCase):
+class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):
         mutations = fwdpy11.VecMutation()
@@ -45,7 +45,7 @@ class testFixationsAreSortedSlocusPop(unittest.TestCase):
             (4, fwdpy11.VecUint32([1]), fwdpy11.VecUint32([0]))))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
-        self.pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+        self.pop = fwdpy11.DiploidPopulation(diploids, gametes, mutations)
 
     def testSetup(self):
         self.assertEqual(len(self.pop.mutations), 2)
@@ -90,7 +90,7 @@ class testFixationPreservation(unittest.TestCase):
         rho = 1.
         r = rho/(4*N)
 
-        a = fwdpy11.genetic_values.SlocusMult(2.0)
+        a = fwdpy11.genetic_values.DiploidMult(2.0)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -98,7 +98,7 @@ class testFixationPreservation(unittest.TestCase):
                   'gvalue': a,
                   'demography': demography
                   }
-        self.pop = fwdpy11.SlocusPop(N)
+        self.pop = fwdpy11.DiploidPopulation(N)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
 
     def testPopGenSimWithoutPruning(self):

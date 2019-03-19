@@ -26,7 +26,7 @@ class SamplePhenotypes(object):
 
     def __init__(self, f):
         self.f = f
-        # self.a = fwdpy11.genetic_values.SlocusAdditive(2.0)
+        # self.a = fwdpy11.genetic_values.DiploidAdditive(2.0)
 
     def __call__(self, pop):
         pass
@@ -45,13 +45,13 @@ def evolve_snowdrift(args):
     N, seed = args
     # Construct as single-deme object
     # with N diploids
-    pop = fp11.SlocusPop(N)
+    pop = fp11.DiploidPopulation(N)
     # Initialize a random number generator
     rng = fp11.GSLrng(seed)
     p = {'sregions': [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
          'recregions': [fp11.Region(0, 1, 1)],
          'nregions': [],
-         'gvalue': snowdrift.SlocusSnowdrift(0.2, -0.2, 1, -2),
+         'gvalue': snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2),
          # evolve for 100 generations so that unit tests are
          # fast
          'demography': np.array([N] * 100, dtype=np.uint32),
@@ -68,7 +68,7 @@ def evolve_snowdrift(args):
 class testSnowdrift(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.f = snowdrift.SlocusSnowdrift(1, -1, 0.1, 0.2)
+        self.f = snowdrift.DiploidSnowdrift(1, -1, 0.1, 0.2)
 
     def testShape(self):
         s = self.f.shape

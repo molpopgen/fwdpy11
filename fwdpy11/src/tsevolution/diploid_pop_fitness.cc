@@ -1,11 +1,11 @@
-#include "slocus_fitness.hpp"
+#include "diploid_pop_fitness.hpp"
 #include "genetic_value_common.hpp"
 
 template <typename update_genotype_matrix>
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
 calculate_fitness_details(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-    const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
     std::vector<fwdpy11::DiploidMetadata> &new_metadata,
     std::vector<double> &new_diploid_gvalues, const update_genotype_matrix um)
 {
@@ -49,15 +49,15 @@ calculate_fitness_details(
 }
 
 std::function<fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
-    const fwdpy11::GSLrng_t &g, fwdpy11::SlocusPop &,
-    const fwdpy11::SlocusPopGeneticValue &,
+    const fwdpy11::GSLrng_t &g, fwdpy11::DiploidPopulation &,
+    const fwdpy11::DiploidPopulationGeneticValue &,
     std::vector<fwdpy11::DiploidMetadata> &, std::vector<double> &)>
-wrap_calculate_fitness_SlocusPop(bool update_genotype_matrix)
+wrap_calculate_fitness_DiploidPopulation(bool update_genotype_matrix)
 {
     if (update_genotype_matrix)
         {
-            return [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-                      const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+            return [](const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+                      const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
                       std::vector<fwdpy11::DiploidMetadata> &new_metadata,
                       std::vector<double> &new_diploid_gvalues) {
                 return calculate_fitness_details(
@@ -65,8 +65,8 @@ wrap_calculate_fitness_SlocusPop(bool update_genotype_matrix)
                     new_diploid_gvalues, std::true_type());
             };
         }
-    return [](const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-              const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+    return [](const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+              const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
               std::vector<fwdpy11::DiploidMetadata> &new_metadata,
               std::vector<double> &new_diploid_gvalues) {
         return calculate_fitness_details(rng, pop, genetic_value_fxn,

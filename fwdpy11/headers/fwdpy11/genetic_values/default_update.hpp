@@ -19,9 +19,9 @@
 #ifndef FWDPY11_GENETIC_VALUE_DEFAULT_UPDATE_HPP__
 #define FWDPY11_GENETIC_VALUE_DEFAULT_UPDATE_HPP__
 
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 #define DEFAULT_SLOCUSPOP_UPDATE()                                            \
-    inline void update(const fwdpy11::SlocusPop& /*pop*/) {}
+    inline void update(const fwdpy11::DiploidPopulation& /*pop*/) {}
 
 #endif
