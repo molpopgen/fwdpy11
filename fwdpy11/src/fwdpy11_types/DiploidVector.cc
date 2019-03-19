@@ -27,13 +27,12 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
-PYBIND11_MODULE(_opaque_diploids, m)
+void init_DiploidVector(py::module & m)
 {
-    m.doc() = "Expose C++ containers of diploids to Python without copies.";
     PYBIND11_NUMPY_DTYPE(fwdpy11::DiploidGenotype, first, second);
 
     py::bind_vector<fwdpy11::dipvector_t>(
-        m, "VecDiploid", py::buffer_protocol(), py::module_local(false),
+        m, "DiploidVector", py::buffer_protocol(), py::module_local(false),
         "C++ representation of a list of "
         ":class:`fwdpy11."
         "DiploidGenotype`.  Typically, access will be read-only.")
@@ -59,7 +58,7 @@ PYBIND11_MODULE(_opaque_diploids, m)
                          parents, deme, sex, nodes);
 
     py::bind_vector<std::vector<fwdpy11::DiploidMetadata>>(
-        m, "VecDiploidMetaData", py::module_local(false),
+        m, "DiploidMetadataVector", py::module_local(false),
         py::buffer_protocol(),
         R"delim(
         Container of diploid metadata.

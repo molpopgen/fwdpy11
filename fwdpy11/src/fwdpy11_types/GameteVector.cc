@@ -23,12 +23,10 @@ namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::gamete>);
 
-PYBIND11_MODULE(_opaque_gametes, m)
+void init_GameteVector(py::module & m)
 {
-    m.doc() = "Expose C++ vectors of gametes to Python without copies.";
-
     py::bind_vector<std::vector<fwdpp::gamete>>(
-        m, "VecGamete", py::module_local(false),
+        m, "GameteVector", py::module_local(false),
         "C++ representations of a list of "
         ":class:`fwdpy11.Gamete`.  "
         "Typically, access will be read-only.")

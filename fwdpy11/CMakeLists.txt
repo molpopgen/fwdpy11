@@ -20,8 +20,11 @@ set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
 
 set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/Mutation.cc
+    src/fwdpy11_types/MutationVector.cc
     src/fwdpy11_types/DiploidGenotype.cc
     src/fwdpy11_types/DiploidMetadata.cc
+    src/fwdpy11_types/DiploidVector.cc
+    src/fwdpy11_types/GameteVector.cc
     src/fwdpy11_types/rng.cc)
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
@@ -63,12 +66,6 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${REGION_SOURCES}
     ${GSL_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_opaque_gametes MODULE src/_opaque_gametes.cc)
-target_link_libraries(_opaque_gametes PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_opaque_mutations MODULE src/_opaque_mutations.cc)
-target_link_libraries(_opaque_mutations PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_opaque_diploids MODULE src/_opaque_diploids.cc)
-target_link_libraries(_opaque_diploids PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Population MODULE src/_Population.cc)
 # target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Populations MODULE src/_Populations.cc)
