@@ -51,11 +51,11 @@ The following example sets up a standard population simulation with multiplicati
                 'recregions': [fwdpy11.Region(0,1,1)],
                 'rates': (theta/(4.*popsize),1e-4,rho/(4.*popsize)),
                 'demography': np.array([popsize]*10, dtype = np.uint32),
-                'gvalue': fwdpy11.genetic_values.SlocusMult(1.0)
+                'gvalue': fwdpy11.genetic_values.DiploidMult(1.0)
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
     params.validate()
-    pop = fwdpy11.SlocusPop(int(popsize))
+    pop = fwdpy11.DiploidPopulation(int(popsize))
     rng = fwdpy11.GSLrng(42)
     fwdpy11.wright_fisher.evolve(rng, pop, params)
 

@@ -20,7 +20,7 @@ Both return :class:`fwdpy11.sampling.DataMatrix` objects.
 For cases where you want all mutations in a sample, sorted by position, with the option of including variants that are
 fixed in the sample or not, you may get a data matrix from the following functions:
 
-* :func:`fwdpy11.SlocusPop.sample`
+* :func:`fwdpy11.DiploidPopulation.sample`
 
 The general API is extremely flexible, allowing for the inclusion or exclustion of markers based on arbitrary criteria.
 Getting a :class:`fwdpy11.sampling.DataMatrix` this way requires a few steps:
@@ -64,11 +64,11 @@ The following example is a tour of the API:
        'recregions':[fp11.Region(0,1,1)],
        'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
        'rates':(theta/float(4*N),0.0,rho/float(4*N)),
-       'gvalue':fwdpy11.genetic_values.SlocusMult(2.0)
+       'gvalue':fwdpy11.genetic_values.DiploidMult(2.0)
        }
     rng=fp11.GSLrng(42)
     params = fp11.model_params.ModelParams(**p)
-    pop=fp11.SlocusPop(N)
+    pop=fp11.DiploidPopulation(N)
     # We simulate for N generations
     # because this code is run as part of the
     # testing suite, and so we want things
@@ -201,11 +201,11 @@ It is possible to get a thin wrapper that is not writeable.  Doing so lets you h
        'recregions':[fp11.Region(0,1,1)],
        'sregions':[fp11.ExpS(0,1,1,0.25,0.25)],
        'rates':(theta/float(4*N),0.0,rho/float(4*N)),
-       'gvalue':fwdpy11.genetic_values.SlocusMult(2.0)
+       'gvalue':fwdpy11.genetic_values.DiploidMult(2.0)
        }
     rng=fp11.GSLrng(42)
     params = fp11.model_params.ModelParams(**p)
-    pop=fp11.SlocusPop(N)
+    pop=fp11.DiploidPopulation(N)
     wf.evolve(rng, pop, params)
 
     keys = fwdpy11.sampling.mutation_keys(pop, range(10))

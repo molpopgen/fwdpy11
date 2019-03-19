@@ -11,11 +11,11 @@ to preserve 50 randomly-chosen individuals every 10 generations (starting from t
 
 .. code-block:: bash
 
-    python3 SlocusPopGSSmo.py -N 5000 --mu 5e-3 --sigma 0.1 --preserve 10 --num_ind 50 --filename pop.lzma
+    python3 DiploidPopulationGSSmo.py -N 5000 --mu 5e-3 --sigma 0.1 --preserve 10 --num_ind 50 --filename pop.lzma
 
 The output file, `pop.lzma`, is a compressed file containing the pickled population and its corresponding tree sequence.
 
-.. literalinclude:: ../../examples/gss/SlocusPopGSSmo.py
+.. literalinclude:: ../../examples/gss/DiploidPopulationGSSmo.py
 
 Processing the samples stored in tree sequences
 ----------------------------------------------------------------------------------

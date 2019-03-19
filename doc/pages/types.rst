@@ -162,7 +162,7 @@ The population base class
 
 All populations based around :class:`fwdpy11.Mutation` and :class:`fwdpy11.Gamete` inherit from a common base class,
 :class:`fwdpy11.Population`.  This class in an Abstract Base Class, or ABC. You may not create instances of this class. \
-Rather, you work with the derived classes :class:`fwdpy11.SlocusPop`.
+Rather, you work with the derived classes :class:`fwdpy11.DiploidPopulation`.
 
 .. csv-table:: :class:`fwdpy11.Population` properties
     :header: "Property", "Definition"
@@ -188,13 +188,13 @@ Rather, you work with the derived classes :class:`fwdpy11.SlocusPop`.
 Single-locus population objects
 -----------------------------------------------------------
 
-To simulate a single locus in a single deme, you use :class:`fwdpy11.SlocusPop`.  Instances of this
+To simulate a single locus in a single deme, you use :class:`fwdpy11.DiploidPopulation`.  Instances of this
 class are constructed with a population size:
 
 .. testcode::
 
     import fwdpy11 as fp11
-    pop = fp11.SlocusPop(10000)
+    pop = fp11.DiploidPopulation(10000)
     print(pop.N)
     print(pop.generation)
 
@@ -208,7 +208,7 @@ These objects can be pickled. See :ref:`pickling_pops`.
 This class contains the following read-only properties, in addition to those found in the base class
 :class:`fwdpy11.Population`:
 
-.. csv-table:: :class:`fwdpy11.SlocusPop` properties
+.. csv-table:: :class:`fwdpy11.DiploidPopulation` properties
     :header: "Property", "Definition"
     
     "diploids", "A :class:`fwdpy11.VecDiploid`.  See :ref:`diploids`."

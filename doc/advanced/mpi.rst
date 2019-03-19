@@ -175,13 +175,13 @@ The example below does the following:
         #For each replicate, run a simulation:
         for seed,repid in zip(seeds,repids):
             N=1000
-            pop = fwdpy11.SlocusPop(N)
+            pop = fwdpy11.DiploidPopulation(N)
             rng=fwdpy11.GSLrng(seed)
-            params=fwdpy11.model_params.SlocusParams(
+            params=fwdpy11.model_params.DiploidParams(
                 nregions=[fwdpy11.Region(0,1,1)],
                 sregions=[fwdpy11.ExpS(0,1,1,-0.1,1.0)],
                 recregions=[fwdpy11.Region(0,1,1)],
-                gvalue=fwdpy11.fitness.SlocusAdditive(2.0),
+                gvalue=fwdpy11.fitness.DiploidAdditive(2.0),
                 demography=np.array([N]*10*N,dtype=np.uint32),
                 rates=(1e-3,5e-3,1e-3))
 
