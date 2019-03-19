@@ -42,7 +42,13 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
 set(GSL_SOURCES src/gsl/init.cc
     src/gsl/gsl_random.cc)
 
-set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
+set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc
+    src/genetic_values/GeneticValue.cc
+    src/genetic_values/GeneticValueWithMapping.cc
+    src/genetic_values/Additive.cc
+    src/genetic_values/Multiplicative.cc
+    src/genetic_values/GBR.cc
+    src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
     src/genetic_values/MultivariateGeneticValueToFitnessMap.cc
     src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
     src/genetic_values/MultivariateGSSmo.cc)
