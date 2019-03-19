@@ -26,7 +26,6 @@
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
 #include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/genetic_values/DiploidPopulationGeneticValueWithMapping.hpp>
-#include <fwdpy11/genetic_values/details/mlocus_aggregators.hpp>
 #include <fwdpy11/genetic_values/noise.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
