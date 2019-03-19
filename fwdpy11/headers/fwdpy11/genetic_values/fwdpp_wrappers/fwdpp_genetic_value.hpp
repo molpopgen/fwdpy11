@@ -9,7 +9,7 @@
 namespace fwdpy11
 {
     template <typename fwdppT, typename pickleFunction>
-    struct fwdpp_slocus_gvalue
+    struct fwdpp_genetic_value
         : public fwdpy11::DiploidPopulationGeneticValueWithMapping
     {
         using gvalue_map_ptr
@@ -23,7 +23,7 @@ namespace fwdpy11
             "std::function<pybind11::object(const fwdppT*)>");
 
         template <typename forwarded_fwdppT>
-        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_)
+        fwdpp_genetic_value(forwarded_fwdppT&& gv_)
             : DiploidPopulationGeneticValueWithMapping{ GeneticValueIsFitness() },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction{})
@@ -31,8 +31,8 @@ namespace fwdpy11
         }
 
         template <typename forwarded_fwdppT>
-        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
-                            const GeneticValueToFitnessMap& gv2w_)
+        fwdpp_genetic_value(forwarded_fwdppT&& gv_,
+                                   const GeneticValueToFitnessMap& gv2w_)
             : DiploidPopulationGeneticValueWithMapping{ gv2w_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
@@ -40,9 +40,9 @@ namespace fwdpy11
         }
 
         template <typename forwarded_fwdppT>
-        fwdpp_slocus_gvalue(forwarded_fwdppT&& gv_,
-                            const GeneticValueToFitnessMap& gv2w_,
-                            const GeneticValueNoise& noise_)
+        fwdpp_genetic_value(forwarded_fwdppT&& gv_,
+                                   const GeneticValueToFitnessMap& gv2w_,
+                                   const GeneticValueNoise& noise_)
             : DiploidPopulationGeneticValueWithMapping{ gv2w_, noise_ },
               gv{ std::forward<forwarded_fwdppT>(gv_)
 

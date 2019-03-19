@@ -21,11 +21,11 @@
 
 #include <fwdpp/fitness_models.hpp>
 #include "details/pickle_multiplicative.hpp"
-#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
+#include "fwdpp_wrappers/fwdpp_genetic_value.hpp"
 
 namespace fwdpy11
 {
-    using DiploidMult = fwdpp_slocus_gvalue<fwdpp::multiplicative_diploid,
+    using DiploidMult = fwdpp_genetic_value<fwdpp::multiplicative_diploid,
                                            pickle_multiplicative>;
 } // namespace fwdpy11
 #endif
