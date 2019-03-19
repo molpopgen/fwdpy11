@@ -3,7 +3,6 @@ import fwdpy11
 import fwdpy11.ezparams
 import fwdpy11.model_params
 import fwdpy11.wright_fisher
-import fwdpy11.fwdpy11_types
 import pickle
 import unittest
 cppimport.force_rebuild()
