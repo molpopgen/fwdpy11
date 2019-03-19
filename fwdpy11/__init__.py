@@ -22,7 +22,6 @@ import sys
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-from fwdpy11._init import * # NOQA
 from fwdpy11._version import __version__ # NOQA
 from ._fwdpy11 import * # NOQA
 
