@@ -63,8 +63,6 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${REGION_SOURCES}
     ${GSL_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_init MODULE src/_init.cc)
-target_link_libraries(_init PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_opaque_gametes MODULE src/_opaque_gametes.cc)
 target_link_libraries(_opaque_gametes PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_opaque_mutations MODULE src/_opaque_mutations.cc)
