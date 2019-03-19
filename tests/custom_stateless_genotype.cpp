@@ -53,7 +53,7 @@ common_mako.setup_mako(cfg)
         return pybind11::bytes("custom_stateless_genotype");
     }
 
-    DEFAULT_SLOCUSPOP_UPDATE();
+    DEFAULT_DIPLOID_POP_UPDATE();
 
     pybind11::tuple
     shape() const
