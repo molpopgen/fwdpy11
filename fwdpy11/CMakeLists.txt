@@ -10,6 +10,10 @@ endif()
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
+set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
+    src/fwdpp_types/mutation_base.cc
+    src/fwdpp_types/gamete.cc)
+
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
@@ -40,12 +44,10 @@ set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/remove_extinct_mutations.cc)
 
 # These are the main modules
-pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${REGION_SOURCES})
+pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES} ${REGION_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_init MODULE src/_init.cc)
 target_link_libraries(_init PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(fwdpp_types MODULE src/fwdpp_types.cc)
-target_link_libraries(fwdpp_types PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_opaque_gametes MODULE src/_opaque_gametes.cc)
 target_link_libraries(_opaque_gametes PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_opaque_mutations MODULE src/_opaque_mutations.cc)

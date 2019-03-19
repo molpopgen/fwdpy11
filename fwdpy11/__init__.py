@@ -26,7 +26,6 @@ from fwdpy11._init import * # NOQA
 from fwdpy11._version import __version__ # NOQA
 from ._fwdpy11 import * # NOQA
 
-from .fwdpp_types import *
 from ._opaque_gametes import *
 from ._opaque_mutations import *
 from ._opaque_diploids import *
