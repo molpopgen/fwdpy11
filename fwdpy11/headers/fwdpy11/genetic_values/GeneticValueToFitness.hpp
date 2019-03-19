@@ -29,7 +29,6 @@
 #include <tuple>
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/MlocusPop.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
 namespace fwdpy11
@@ -40,7 +39,6 @@ namespace fwdpy11
         virtual double
         operator()(const DiploidMetadata & /*metadata*/) const = 0;
         virtual void update(const SlocusPop & /*pop*/) = 0;
-        virtual void update(const MlocusPop & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
     };
@@ -54,7 +52,6 @@ namespace fwdpy11
         }
 
         DEFAULT_SLOCUSPOP_UPDATE()
-        DEFAULT_MLOCUSPOP_UPDATE()
 
         inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
@@ -99,7 +96,6 @@ namespace fwdpy11
         }
 
         DEFAULT_SLOCUSPOP_UPDATE()
-        DEFAULT_MLOCUSPOP_UPDATE()
 
         inline std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
@@ -182,12 +178,6 @@ namespace fwdpy11
 
         inline void
         update(const SlocusPop &pop)
-        {
-            update_details(pop);
-        }
-
-        inline void
-        update(const MlocusPop &pop)
         {
             update_details(pop);
         }

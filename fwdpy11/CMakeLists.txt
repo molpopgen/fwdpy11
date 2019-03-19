@@ -30,12 +30,10 @@ set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
 
 set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/slocuspop.cc
-    src/tsevolution/mlocuspop.cc
     src/tsevolution/util.cc
     src/tsevolution/cleanup_metadata.cc
     src/tsevolution/genetic_value_common.cc
     src/tsevolution/slocus_fitness.cc
-    src/tsevolution/mlocus_fitness.cc
     src/tsevolution/index_and_count_mutations.cc
     src/tsevolution/track_mutation_counts.cc
     src/tsevolution/no_stopping.cc
@@ -70,12 +68,8 @@ pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
 target_link_libraries(genetic_value_noise PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(wright_fisher_slocus MODULE src/wright_fisher_slocus.cc)
 target_link_libraries(wright_fisher_slocus PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(wright_fisher_mlocus MODULE src/wright_fisher_mlocus.cc)
-target_link_libraries(wright_fisher_mlocus PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(gsl_random MODULE src/gsl_random.cc)
 target_link_libraries(gsl_random PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(multilocus MODULE src/multilocus.cc)
-target_link_libraries(multilocus PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(util MODULE src/fwdpy11_util.cc)
 target_link_libraries(util PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})

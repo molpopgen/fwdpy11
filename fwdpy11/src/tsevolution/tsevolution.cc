@@ -5,7 +5,6 @@ namespace py = pybind11;
 
 void init_no_stopping(py::module &);
 void init_slocus_evolution(py::module &);
-void init_mlocus_evolution(py::module &);
 
 PYBIND11_MODULE(_tsevolution, m)
 {
@@ -13,6 +12,5 @@ PYBIND11_MODULE(_tsevolution, m)
 
     init_no_stopping(m);
     init_slocus_evolution(m);
-    init_mlocus_evolution(m);
 }
 

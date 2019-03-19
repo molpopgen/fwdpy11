@@ -18,21 +18,16 @@ fitness is the result of mapping that genetic value to fitness (accounting for a
 
 Depending on the type of simulation we are doing, a diploid's genetic value, :math:`G`, may represent fitness
 (:math:`w`) itself or it may represent a trait value (a "phenotype").  The module :py:mod:`fwdpy11.genetic_values` provides a flexible Python
-class hierarchy to accomodate these different scenarios.  There are two different class hiarchies.  One is used for
-simulations involving :class:`fwdpy11.SlocusPop` and the other applies to :class:`fwdpy11.MlocusPop`.  The base class of
-each is an Abstract Base Class (ABC):
+class hierarchy to accomodate these different scenarios.  There are two different class hiarchies.
 
 * :class:`fwdpy11.genetic_values.SlocusPopGeneticValue`
-* :class:`fwdpy11.genetic_values.MlocusPopGeneticValue`
 
 Because these two classes are ABCs, you may not make instances of them.  They exist to provide the following minimal
 interface to the user:
 
 * They are callable types, capable of returning the genetic value of the :math:`i^{th}` diploid in a :class:`fwdpy11.Population`.
-  See the documentation for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__` and
-  :func:`fwdpy11.genetic_values.MlocusPopGeneticValue.__call__`.
-* The may return the fitness of the :math:`i^{th}` diploid.  See docstrings for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.fitness`
-  and :func:`fwdpy11.genetic_values.MlocusPopGeneticValue.fitness`.
+  See the documentation for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.__call__`.
+* The may return the fitness of the :math:`i^{th}` diploid.  See docstrings for :func:`fwdpy11.genetic_values.SlocusPopGeneticValue.fitness`.
 
 Internally, objects in these class hierarchies provide the following functionality:
 
@@ -43,7 +38,6 @@ Internally, objects in these class hierarchies provide the following functionali
 Two more ABCs define Python classes capable of flexibly modeling noise and mappings of genetic values to fitness:
 
 * :class:`fwdpy11.genetic_values.SlocusPopGeneticValueWithMapping`
-* :class:`fwdpy11.genetic_values.MlocusPopGeneticValueWithMapping`
 
 These two types inherit from the two ABCs described above, and thus provide the same public interface.  They
 additionally provide:
@@ -112,9 +106,6 @@ The following types are provided in :py:mod:`fwdpy11.genetic_values` to calculat
 * :class:`fwdpy11.genetic_values.SlocusMult`
 * :class:`fwdpy11.genetic_values.SlocusAdditive`
 * :class:`fwdpy11.genetic_values.SlocusGBR`
-* :class:`fwdpy11.genetic_values.MlocusMult`
-* :class:`fwdpy11.genetic_values.MlocusAdditive`
-* :class:`fwdpy11.genetic_values.MlocusGBR`
 
 .. note::
 
@@ -139,8 +130,8 @@ The relationship to fixations
 
 For standard population-genetic simulations, relative fitness is what matters.  Relative fitnesses are unaffected by
 fixations under multiplicative models, but the same is not true under additive models.  Please note that multiplicative
-models are typically assumed, and thus you should use :class:`fwdpy11.genetic_values.SlocusMult` or :class:`fwdpy11.genetic_values.MlocusMult` 
-most of the time.  Doing so will simply make your life easier (and your simulations more efficient--keep reading...).
+models are typically assumed, and thus you should use :class:`fwdpy11.genetic_values.SlocusMult` most of the time.
+Doing so will simply make your life easier (and your simulations more efficient--keep reading...).
 
 For simulations of phenotypes where fitness is determined by comparing phenotype to some optimum value, fixations always
 affect the distance of an individual from this optimum.

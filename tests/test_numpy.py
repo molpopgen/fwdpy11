@@ -62,41 +62,5 @@ class test_SlocusPop(unittest.TestCase):
             self.assertEqual(i['second'], j.second)
 
 
-class test_MlocusPop(unittest.TestCase):
-    """
-    Test coercion of population data
-    to numpy arrays
-    """
-    @classmethod
-    def setUpClass(self):
-        from quick_pops import quick_mlocus_qtrait
-        self.pop = quick_mlocus_qtrait()
-        self.muts = np.array(self.pop.mutations.array())
-
-    def testMutations(self):
-        self.assertTrue(isinstance(self.muts, np.ndarray))
-        self.assertEqual(self.muts.shape[0], len(self.pop.mutations))
-        for i, j in zip(self.muts, self.pop.mutations):
-            self.assertEqual(i['neutral'], j.neutral)
-            self.assertEqual(i['h'], j.h)
-            self.assertEqual(i['pos'], j.pos)
-            self.assertEqual(i['g'], j.g)
-            self.assertEqual(i['s'], j.s)
-
-    def testDiploidTraits(self):
-        dips = np.array(self.pop.diploid_metadata)
-        for i, j in zip(dips, self.pop.diploid_metadata):
-            self.assertEqual(i['g'], j.g)
-            self.assertEqual(i['e'], j.e)
-            self.assertEqual(i['w'], j.w)
-
-    def testDiploidTraitsSlice(self):
-        dips = np.array(self.pop.diploid_metadata[15:103:11])
-        for i, j in zip(dips, self.pop.diploid_metadata[15:103:11]):
-            self.assertEqual(i['g'], j.g)
-            self.assertEqual(i['e'], j.e)
-            self.assertEqual(i['w'], j.w)
-
-
 if __name__ == "__main__":
     unittest.main()

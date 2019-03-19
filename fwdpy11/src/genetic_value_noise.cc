@@ -36,16 +36,9 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     {
         return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
     }
-    virtual double
-    operator()(const fwdpy11::GSLrng_t& rng,
-               const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
-               const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-               const fwdpy11::MlocusPop& /*pop*/) const
-    {
-        return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
-    }
+
     DEFAULT_SLOCUSPOP_UPDATE();
-    DEFAULT_MLOCUSPOP_UPDATE();
+    
     std::unique_ptr<fwdpy11::GeneticValueNoise>
     clone() const
     {
