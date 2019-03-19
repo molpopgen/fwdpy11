@@ -28,11 +28,11 @@ gives me a place to put examples based on specific questions from users.
             'recregions':recregions,
             'demography':nlist,
             'rates':(theta/float(4*N),1e-2,rho/float(4*N)),
-            'gvalue':fwdpy11.genetic_values.SlocusMult(2.)
+            'gvalue':fwdpy11.genetic_values.DiploidMult(2.)
             }
     params = fwdpy11.model_params.ModelParams(**pdict)
 
-    pop = fp11.SlocusPop(N)
+    pop = fp11.DiploidPopulation(N)
     pops = fp11wf.evolve(rng, pop, params)
 
 Exracting info about the mutations
@@ -78,7 +78,7 @@ fwdpy11's fitness/trait value calculators can be called from outside of a runnin
 
 .. ipython:: python
 
-    a=fwdpy11.genetic_values.SlocusMult(2.0)
+    a=fwdpy11.genetic_values.DiploidMult(2.0)
 
     print(pop.diploid_metadata[0].w,a(0, pop))
     for i in [(pop.diploid_metadata[i].w,a(i,pop)) for i in range(pop.N)]:

@@ -10,7 +10,7 @@ Background reading:
 * :ref:`recorders`
 
 This example shows one way to track parentage during a simulation.  We'll run a single-deme simulation and use
-:attr:`fwdpy11.SlocusPop.popdata_user` to record the complete pedigree for the population over time.
+:attr:`fwdpy11.DiploidPopulation.popdata_user` to record the complete pedigree for the population over time.
 
 The mechanics are quite simple.  We define a custom recorder that gathers the parent data
 (:attr:`fwdpy11.DiploidMetadata.parents`) into a list each generation.  We will couple the parent
@@ -43,7 +43,7 @@ offspring, etc.
 
     rng = fwdpy11.GSLrng(42)
 
-    pop = fwdpy11.SlocusPop(10)
+    pop = fwdpy11.DiploidPopulation(10)
 
     # It is important to initialize
     # popdata_user, whose default

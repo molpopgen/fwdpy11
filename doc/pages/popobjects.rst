@@ -13,7 +13,7 @@ methods.  However, some care is required, and you should be familiar with the ma
 covers how populations are represented in memory.
 
 .. note::
-    This page uses :class:`fwdpy11.SlocusPop` in its examples.
+    This page uses :class:`fwdpy11.DiploidPopulation` in its examples.
     However, analagous functionality is available for all supported population types.
     
 Quick start example
@@ -51,7 +51,7 @@ in:
     diploids.append(fwdpy11.DiploidGenotype(0,0))
     
     # Create a population from our containers
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation(diploids, gametes, mutations)
 
     # Check that our pop is as expected:
     assert(pop.N == 1)
@@ -83,7 +83,7 @@ Efficient construction of large populations
 When building a large population programmatically, a naive approach would leave us with a data copy on both the Python
 and on the C++ side, which is not ideal.  We can avoid that via class methods that use C++11's move semantics to "steal"
 the data from our input containers. The following example is the same as above, except that we create the function via
-:func:`fwdpy11.SlocusPop.create`:
+:func:`fwdpy11.DiploidPopulation.create`:
 
 .. testcode:: move_constructing_pops
 
@@ -99,7 +99,7 @@ the data from our input containers. The following example is the same as above, 
 
     diploids.append(fwdpy11.DiploidGenotype(0,0))
     
-    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation.create(diploids, gametes, mutations)
     assert(len(diploids) == 0)
     assert(len(gametes) == 0)
     assert(len(mutations) == 0)
@@ -127,7 +127,7 @@ Incorrect gamete count:
     # The gamete is incorrectly labelled as occurring once:
     gametes.append(fwdpy11.Gamete((1,fwdpy11.VecUint32([]),fwdpy11.VecUint32([0]))))
     diploids.append(fwdpy11.DiploidGenotype(0,0))
-    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation.create(diploids, gametes, mutations)
 
 The result is a `RuntimeError`:
 
@@ -151,7 +151,7 @@ Neutral or non-neutral mutations in the incorrect gamete container:
     # putting it in the Gametes.mutations container:
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([0]),fwdpy11.VecUint32([]))))
     diploids.append(fwdpy11.DiploidGenotype(0,0))
-    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation.create(diploids, gametes, mutations)
 
 The result is a `RuntimeError`:
 
@@ -203,7 +203,7 @@ We will get an exception when we try to create a population:
 .. ipython:: python
     :okexcept:
 
-    pop = fwdpy11.SlocusPop(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation(diploids, gametes, mutations)
 
 We can sort the input data with a call to :func:`fwdpy11.util.sort_gamete_keys`:
 
@@ -211,7 +211,7 @@ We can sort the input data with a call to :func:`fwdpy11.util.sort_gamete_keys`:
 
     from fwdpy11.util import sort_gamete_keys
     sort_gamete_keys(gametes,mutations)
-    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation.create(diploids, gametes, mutations)
 
 The sorting takes place on the C++ side because of how the relevant container types are exposed to Python.
 
@@ -229,7 +229,7 @@ The sorting takes place on the C++ side because of how the relevant container ty
     # as far as mutation position is concerned:
     gametes.append(fwdpy11.Gamete((2,fwdpy11.VecUint32([]),fwdpy11.VecUint32([1,0]))))
     diploids.append(fwdpy11.DiploidGenotype(0,0))
-    pop = fwdpy11.SlocusPop.create(diploids, gametes, mutations)
+    pop = fwdpy11.DiploidPopulation.create(diploids, gametes, mutations)
 
 .. testoutput::
     :hide:

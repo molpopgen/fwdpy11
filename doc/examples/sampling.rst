@@ -8,7 +8,7 @@ Sampling from simulated populations
     The return value of sampling routines changed to a :class:`fwdpy11.sampling.DataMatrix`
 
 To take a sample of :math:`n` diploids from a population, you have two ways to do things.  The first is to directly call
-the `sample` member function of a population.  For example, :func:`fwdpy11.SlocusPop.sample`, as seen in the following
+the `sample` member function of a population.  For example, :func:`fwdpy11.DiploidPopulation.sample`, as seen in the following
 example:
 
 .. ipython:: python
@@ -20,7 +20,7 @@ example:
     import fwdpy11.wright_fisher
     import numpy as np
     rng = fwdpy11.GSLrng(42)
-    pop = fwdpy11.SlocusPop(1000)
+    pop = fwdpy11.DiploidPopulation(1000)
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N, dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)
     params = fwdpy11.model_params.ModelParams(**pdict)
     fwdpy11.wright_fisher.evolve(rng,pop,params)
