@@ -25,7 +25,7 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000)
-        self.mvec = fwdpy11.VecMutation()
+        self.mvec = fwdpy11.MutationVector()
         self.nmut = fwdpy11.Mutation(0.1, 0.0, 0.0, 0, 0)
         self.smut = fwdpy11.Mutation(1.2, -0.01, 0.0, 0, 0)
         self.smut_vec = fwdpy11.Mutation(1.3, 0., 0., 0, [-1., 0], [1, 1], 0)
@@ -130,7 +130,7 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
     def testAddSameMutationPosition(self):
         self.mvec.append(self.nmut)
         m = self.pop.add_mutations(self.mvec, [0], [0])
-        self.mvec = fwdpy11.VecMutation()
+        self.mvec = fwdpy11.MutationVector()
         self.mvec.append(self.nmut)
         with self.assertRaises(ValueError):
             m = self.pop.add_mutations(self.mvec, [0], [0])
