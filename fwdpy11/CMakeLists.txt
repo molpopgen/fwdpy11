@@ -32,6 +32,9 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/PoissonPoint.cc
     src/regions/FixedCrossovers.cc)
 
+set(GSL_SOURCES src/gsl/init.cc
+    src/gsl/gsl_random.cc)
+
 set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
     src/genetic_values/MultivariateGeneticValueToFitnessMap.cc
     src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
@@ -57,7 +60,8 @@ set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
-    ${REGION_SOURCES})
+    ${REGION_SOURCES}
+    ${GSL_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_init MODULE src/_init.cc)
 target_link_libraries(_init PRIVATE GSL::gsl GSL::gslcblas)
@@ -77,8 +81,6 @@ pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
 target_link_libraries(genetic_value_noise PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(gsl_random MODULE src/gsl_random.cc)
-target_link_libraries(gsl_random PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(util MODULE src/fwdpy11_util.cc)
 target_link_libraries(util PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})
