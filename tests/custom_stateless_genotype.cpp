@@ -66,8 +66,8 @@ common_mako.setup_mako(cfg)
 PYBIND11_MODULE(custom_stateless_genotype, m)
 {
     pybind11::object imported_custom_stateless_genotype_base_class_type
-        = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("DiploidPopulationGeneticValue");
+        = pybind11::module::import("fwdpy11")
+              .attr("GeneticValue");
     pybind11::class_<GeneralW, fwdpy11::DiploidPopulationGeneticValue>(m, "GeneralW")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const GeneralW& g) { return g.pickle(); },

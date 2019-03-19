@@ -67,8 +67,8 @@ common_mako.setup_mako(cfg)
 PYBIND11_MODULE(custom_additive, m)
 {
     pybind11::object imported_custom_additive_base_class_type
-        = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("DiploidPopulationGeneticValue");
+        = pybind11::module::import("fwdpy11")
+              .attr("GeneticValue");
     pybind11::class_<additive, fwdpy11::DiploidPopulationGeneticValue>(m, "additive")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const additive& a) { return a.pickle(); },

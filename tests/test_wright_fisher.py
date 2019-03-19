@@ -18,7 +18,7 @@ class testWFevolve(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         from fwdpy11.model_params import ModelParams
-        from fwdpy11.genetic_values import DiploidMult
+        from fwdpy11 import Multiplicative
         self.pop = fp11.DiploidPopulation(1000)
         self.rng = fp11.GSLrng(42)
         self.recorder = GenerationRecorder()
@@ -29,7 +29,7 @@ class testWFevolve(unittest.TestCase):
         self.p.nregions = [fp11.Region(0, 1, 1)]
         self.p.sregions = [fp11.ExpS(0, 1, 1, -1e-2)]
         self.p.recregions = self.p.nregions
-        self.p.gvalue = DiploidMult(2.0)
+        self.p.gvalue = Multiplicative(2.0)
 
     def testEvolve(self):
         from fwdpy11.wright_fisher import evolve
@@ -46,7 +46,7 @@ class testCythonRecorder(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         from fwdpy11.model_params import ModelParams
-        from fwdpy11.genetic_values import DiploidMult
+        from fwdpy11 import Multiplicative
         self.pop = fp11.DiploidPopulation(1000)
         self.rng = fp11.GSLrng(42)
         self.cython_recorder = MeanFitness()
@@ -56,7 +56,7 @@ class testCythonRecorder(unittest.TestCase):
         self.p.nregions = [fp11.Region(0, 1, 1)]
         self.p.sregions = [fp11.ExpS(0, 1, 1, -1e-2)]
         self.p.recregions = self.p.nregions
-        self.p.gvalue = DiploidMult(2.0)
+        self.p.gvalue = Multiplicative(2.0)
 
     def testEvolve(self):
         from fwdpy11.wright_fisher import evolve

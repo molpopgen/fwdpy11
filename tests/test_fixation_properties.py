@@ -83,14 +83,13 @@ class testFixationPreservation(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11.wright_fisher
-        import fwdpy11.genetic_values
         import numpy as np
         N = 1000
         demography = np.array([N]*10*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
-        a = fwdpy11.genetic_values.DiploidMult(2.0)
+        a = fwdpy11.Multiplicative(2.0)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],

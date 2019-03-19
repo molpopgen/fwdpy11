@@ -25,6 +25,9 @@ void initialize_fwdpp_functions(py::module &);
 void initialize_fwdpy11_types(py::module &m);
 void initialize_fwdpy11_functions(py::module &);
 void initialize_regions(py::module &);
+void initialize_genetic_value_noise(py::module &);
+void initialize_genetic_value_to_fitness(py::module &);
+void init_genetic_values(py::module &);
 void init_GSL(py::module &);
 
 PYBIND11_MODULE(_fwdpy11, m)
@@ -45,5 +48,8 @@ PYBIND11_MODULE(_fwdpy11, m)
     initialize_fwdpy11_types(m);
     initialize_fwdpy11_functions(m);
     initialize_regions(m);
+    initialize_genetic_value_noise(m);
+    initialize_genetic_value_to_fitness(m);
+    init_genetic_values(m);
     init_GSL(m);
 }

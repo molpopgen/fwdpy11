@@ -1,6 +1,5 @@
 import unittest
 import fwdpy11
-import fwdpy11.genetic_values
 import fwdpy11.ts
 import fwdpy11.tsrecorders
 import fwdpy11.model_params
@@ -20,8 +19,8 @@ class testTreeSequences(unittest.TestCase):
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
 
-        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -236,8 +235,8 @@ class testSamplePreservation(unittest.TestCase):
         self.nreps = 500
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
-        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -288,8 +287,8 @@ class testSimplificationInterval(unittest.TestCase):
         self.nreps = 500
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
-        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -321,8 +320,8 @@ class testFixationPreservation(unittest.TestCase):
         rho = 1.
         r = rho/(4*N)
 
-        GSS = fwdpy11.genetic_values.GSS(VS=1, opt=1)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, GSS)
+        GSS = fwdpy11.GSS(VS=1, opt=1)
+        a = fwdpy11.Additive(2.0, GSS)
         p = {'nregions': [],
              'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -358,7 +357,7 @@ class testFixationPreservation(unittest.TestCase):
         rho = 1.
         r = rho/(4*N)
 
-        a = fwdpy11.genetic_values.DiploidMult(2.0)
+        a = fwdpy11.Multiplicative(2.0)
         p = {'nregions': [],
              'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -403,8 +402,8 @@ class testMetaData(unittest.TestCase):
         rho = 1.
         r = rho/(4*N)
 
-        GSS = fwdpy11.genetic_values.GSS(VS=1, opt=1)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, GSS)
+        GSS = fwdpy11.GSS(VS=1, opt=1)
+        a = fwdpy11.Additive(2.0, GSS)
         p = {'nregions': [],
              'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
              'recregions': [fwdpy11.Region(0, 1, 1)],

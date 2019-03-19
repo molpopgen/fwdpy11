@@ -1,4 +1,6 @@
 import fwdpy11 as fp11
+import fwdpy11.model_params
+import fwdpy11.wright_fisher
 import fwdpy11.ezparams as fp11ez
 # concurrent.futures is Python 3 only
 import concurrent.futures as cf
@@ -16,7 +18,7 @@ def evolve_and_return(args):
     For this function, the arguments are the population
     size and a random number seed.
     """
-    from fwdpy11.genetic_values import DiploidMult
+    from fwdpy11 import Multiplicative
     N, seed = args
     # Construct as single-deme object
     # with N diploids
@@ -26,7 +28,7 @@ def evolve_and_return(args):
     rng = fp11.GSLrng(seed)
     p = fp11ez.mslike(pop, simlen=100, rates=(
         theta / float(4 * pop.N), 1e-3, theta / float(4 * pop.N)))
-    p['gvalue'] = DiploidMult(2.)
+    p['gvalue'] = Multiplicative(2.)
     params = fp11.model_params.ModelParams(**p)
     fp11.wright_fisher.evolve(rng, pop, params)
     # The population is picklable, and so
