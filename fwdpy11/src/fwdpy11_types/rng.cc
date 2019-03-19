@@ -3,7 +3,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(_gslrng, m)
+void init_rng(py::module & m)
 {
     py::class_<fwdpy11::GSLrng_t>(m, "GSLrng", "Random number generator based "
                                                "on GNU Scientific Library "
@@ -11,3 +11,4 @@ PYBIND11_MODULE(_gslrng, m)
         .def(py::init<unsigned>(),
              "Constructor takes unsigned integer as a seed");
 }
+

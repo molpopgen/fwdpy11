@@ -21,7 +21,8 @@ set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
 set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/Mutation.cc
     src/fwdpy11_types/DiploidGenotype.cc
-    src/fwdpy11_types/DiploidMetadata.cc)
+    src/fwdpy11_types/DiploidMetadata.cc
+    src/fwdpy11_types/rng.cc)
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
@@ -70,8 +71,6 @@ pybind11_add_module(_Population MODULE src/_Population.cc)
 # target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Populations MODULE src/_Populations.cc)
 target_link_libraries(_Populations PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_gslrng MODULE src/_gslrng.cc)
-target_link_libraries(_gslrng PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(genetic_values MODULE src/genetic_values.cc ${GENETIC_VALUE_SOURCES})
 target_link_libraries(genetic_values PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
