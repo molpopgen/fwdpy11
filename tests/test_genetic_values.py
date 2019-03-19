@@ -4,17 +4,17 @@ import fwdpy11.genetic_values
 import numpy as np
 
 
-class testDiploidAdditive(unittest.TestCase):
+class testAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
         from fwdpy11.genetic_value_noise import GaussianNoise
-        self.w = fwdpy11.genetic_values.DiploidAdditive(2.0)
-        self.t = fwdpy11.genetic_values.DiploidAdditive(
+        self.w = fwdpy11.genetic_values.Additive(2.0)
+        self.t = fwdpy11.genetic_values.Additive(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.tn = fwdpy11.genetic_values.DiploidAdditive(1.0,
-                                                        fwdpy11.genetic_values.GSS(
-                                                            0.0, 1.0),
-                                                        GaussianNoise(mean=0.1, sd=2.0))
+        self.tn = fwdpy11.genetic_values.Additive(1.0,
+                                                  fwdpy11.genetic_values.GSS(
+                                                      0.0, 1.0),
+                                                  GaussianNoise(mean=0.1, sd=2.0))
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -70,17 +70,17 @@ class testDiploidAdditive(unittest.TestCase):
                          type(self.tn.gvalue_to_fitness))
 
 
-class testDiploidMult(unittest.TestCase):
+class testMultiplicative(unittest.TestCase):
     @classmethod
     def setUp(self):
         from fwdpy11.genetic_value_noise import GaussianNoise
-        self.w = fwdpy11.genetic_values.DiploidMult(2.0)
-        self.t = fwdpy11.genetic_values.DiploidMult(
+        self.w = fwdpy11.genetic_values.Multiplicative(2.0)
+        self.t = fwdpy11.genetic_values.Multiplicative(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.tn = fwdpy11.genetic_values.DiploidMult(1.0,
-                                                    fwdpy11.genetic_values.GSS(
-                                                        0.0, 1.0),
-                                                    GaussianNoise(mean=0.1, sd=2.0))
+        self.tn = fwdpy11.genetic_values.Multiplicative(1.0,
+                                                        fwdpy11.genetic_values.GSS(
+                                                            0.0, 1.0),
+                                                        GaussianNoise(mean=0.1, sd=2.0))
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -123,7 +123,7 @@ class testDiploidMult(unittest.TestCase):
                          type(self.tn.gvalue_to_fitness))
 
 
-class testDiploidGBR(unittest.TestCase):
+class testGBR(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.gss = fwdpy11.genetic_values.GSS(0.0, 1.0)
@@ -133,7 +133,7 @@ class testDiploidGBR(unittest.TestCase):
 
     def testPicklingGSS(self):
         import pickle
-        gbr = fwdpy11.genetic_values.DiploidGBR(self.gss)
+        gbr = fwdpy11.genetic_values.GBR(self.gss)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.nonoise), type(up.noise))
@@ -141,7 +141,7 @@ class testDiploidGBR(unittest.TestCase):
 
     def testPicklingGSSGaussianNoise(self):
         import pickle
-        gbr = fwdpy11.genetic_values.DiploidGBR(self.gss, self.gnoise)
+        gbr = fwdpy11.genetic_values.GBR(self.gss, self.gnoise)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.gnoise), type(up.noise))
@@ -167,9 +167,9 @@ class testGSSandGSSmoConsistency(unittest.TestCase):
     """
     @classmethod
     def setUp(self):
-        self.a = fwdpy11.genetic_values.DiploidAdditive(
+        self.a = fwdpy11.genetic_values.Additive(
             2.0, fwdpy11.genetic_values.GSS(0.0, 1.0))
-        self.b = fwdpy11.genetic_values.DiploidAdditive(
+        self.b = fwdpy11.genetic_values.Additive(
             2.0, fwdpy11.genetic_values.GSSmo([(0, 0.0, 1.0)]))
         self.pop = fwdpy11.DiploidPopulation(1000)
 
