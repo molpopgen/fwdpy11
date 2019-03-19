@@ -30,14 +30,6 @@
     The module fwdpy11.ezparams contains some functions for rapidly setting up
     dictionaries of parameters for common cases.
 
-    .. todo::
-        The classes should make deep copies of the input so that data
-        from the calling environment are not changed, which can happen
-        in some cases.
-        There is an issue for C++ types holding
-        things like Python objects.  Currently,
-        tests/test_python_genetic_values.py
-        will segfault if we copy.deepcopy the params objects.
 """
 
 
