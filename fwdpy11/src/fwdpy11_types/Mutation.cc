@@ -1,35 +1,13 @@
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-#include <pybind11/pybind11.h>
+#include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
-#include <fwdpy11/types/Diploid.hpp>
-#include <fwdpy11/types/Mutation.hpp>
 
 namespace py = pybind11;
-
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
-PYBIND11_MODULE(fwdpy11_types, m)
+void
+init_Mutation(py::module &m)
 {
-    m.doc() = "Wrap C++ types specific to fwdpy11.";
-
     py::bind_vector<std::vector<double>>(
         m, "VecDouble", "C++ vector of 64 bit floats.", py::buffer_protocol())
         .def(py::pickle(
@@ -193,98 +171,5 @@ PYBIND11_MODULE(fwdpy11_types, m)
              })
         .def("__eq__", [](const fwdpy11::Mutation &a,
                           const fwdpy11::Mutation &b) { return a == b; });
-
-    py::class_<fwdpy11::DiploidGenotype>(
-        m, "DiploidGenotype",
-        "Diploid data type for a single (usually contiguous) genomic region")
-        .def(py::init<>())
-        .def(py::init<std::size_t, std::size_t>())
-        .def_readonly("first", &fwdpy11::DiploidGenotype::first,
-                      "Key to first gamete. (read-only)")
-        .def_readonly("second", &fwdpy11::DiploidGenotype::second,
-                      "Key to second gamete. (read-only)")
-        .def(py::pickle(
-            [](const fwdpy11::DiploidGenotype &d) {
-                return py::make_tuple(d.first, d.second);
-            },
-            [](py::tuple t) {
-                std::unique_ptr<fwdpy11::DiploidGenotype> d(
-                    new fwdpy11::DiploidGenotype{ t[0].cast<std::size_t>(),
-                                                  t[1].cast<std::size_t>() });
-                return d;
-            }))
-        .def("__eq__",
-             [](const fwdpy11::DiploidGenotype &a,
-                const fwdpy11::DiploidGenotype &b) { return a == b; });
-
-    py::class_<fwdpy11::DiploidMetadata>(m, "DiploidMetadata",
-                                         "Diploid meta data.")
-        .def_readwrite("g", &fwdpy11::DiploidMetadata::g, "Genetic value.")
-        .def_readwrite("e", &fwdpy11::DiploidMetadata::e,
-                       "Random component of trait value.")
-        .def_readwrite("w", &fwdpy11::DiploidMetadata::w, "Fitness.")
-        .def_property(
-            "geography",
-            [](const fwdpy11::DiploidMetadata &d) {
-                return py::make_tuple(d.geography[0], d.geography[1],
-                                      d.geography[2]);
-            },
-            [](fwdpy11::DiploidMetadata &d,
-               const std::tuple<double, double, double> &input) {
-                d.geography[0] = std::get<0>(input);
-                d.geography[1] = std::get<1>(input);
-                d.geography[2] = std::get<2>(input);
-            },
-            "Array containing the geographic location of the individual.")
-        .def_property("parents",
-                      [](const fwdpy11::DiploidMetadata &d) {
-                          return py::make_tuple(d.parents[0], d.parents[1]);
-                      },
-                      [](fwdpy11::DiploidMetadata &d,
-                         const std::pair<std::size_t, std::size_t> &input) {
-                          d.parents[0] = input.first;
-                          d.parents[1] = input.second;
-                      },
-                      "Array containing the label fields of the parents.")
-        .def_readwrite("sex", &fwdpy11::DiploidMetadata::sex, "Sex.")
-        .def_readwrite("deme", &fwdpy11::DiploidMetadata::deme, "Deme.")
-        .def_readwrite("label", &fwdpy11::DiploidMetadata::label,
-                       "Index of the individual in the population.")
-        .def_property_readonly("nodes",
-                               [](const fwdpy11::DiploidMetadata &md) {
-                                   py::list rv;
-                                   rv.append(md.nodes[0]);
-                                   rv.append(md.nodes[1]);
-                                   return rv;
-                               },
-                               "Node ids for individual")
-        .def(py::pickle(
-            [](const fwdpy11::DiploidMetadata &md) {
-                return py::make_tuple(
-                    md.g, md.e, md.w,
-                    py::make_tuple(md.geography[0], md.geography[1],
-                                   md.geography[2]),
-                    md.label, py::make_tuple(md.parents[0], md.parents[1]),
-                    md.deme, md.sex, py::make_tuple(md.nodes[0], md.nodes[1]));
-            },
-            [](py::tuple t) {
-                fwdpy11::DiploidMetadata rv;
-                rv.g = t[0].cast<double>();
-                rv.e = t[1].cast<double>();
-                rv.w = t[2].cast<double>();
-                auto ttuple = t[3].cast<py::tuple>();
-                rv.geography[0] = ttuple[0].cast<double>();
-                rv.geography[1] = ttuple[1].cast<double>();
-                rv.geography[2] = ttuple[2].cast<double>();
-                rv.label = t[4].cast<std::size_t>();
-                ttuple = t[5].cast<py::tuple>();
-                rv.parents[0] = ttuple[0].cast<std::size_t>();
-                rv.parents[1] = ttuple[1].cast<std::size_t>();
-                rv.deme=t[6].cast<std::int32_t>();
-                rv.sex=t[7].cast<std::int32_t>();
-                ttuple = t[8].cast<py::tuple>();
-                rv.nodes[0]=ttuple[0].cast<fwdpp::ts::TS_NODE_INT>();
-                rv.nodes[1]=ttuple[1].cast<fwdpp::ts::TS_NODE_INT>();
-                return rv;
-            }));
 }
+
