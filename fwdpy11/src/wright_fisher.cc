@@ -207,7 +207,7 @@ wfDiploidPopulation(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &po
         }
 }
 
-PYBIND11_MODULE(wright_fisher_slocus, m)
+PYBIND11_MODULE(_wright_fisher, m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
