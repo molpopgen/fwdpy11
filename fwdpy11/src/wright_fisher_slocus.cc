@@ -1,4 +1,4 @@
-// Wright-Fisher simulation for a fwdpy11::SlocusPop
+// Wright-Fisher simulation for a fwdpy11::DiploidPopulation
 //
 // Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
 //
@@ -29,20 +29,20 @@
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/sim_functions.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
-#include <fwdpy11/evolve/SlocusPop_generation.hpp>
+#include <fwdpy11/evolve/DiploidPopulation_generation.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 
 namespace py = pybind11;
 
 fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
-calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
-                  const fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
+calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+                  const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
                   std::vector<fwdpy11::DiploidMetadata> &new_metadata)
 {
     // Calculate parental fitnesses
@@ -80,7 +80,7 @@ calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
 
 void
 handle_fixations(const bool remove_selected_fixations,
-                 const std::uint32_t N_next, fwdpy11::SlocusPop &pop)
+                 const std::uint32_t N_next, fwdpy11::DiploidPopulation &pop)
 {
     if (remove_selected_fixations)
         {
@@ -100,13 +100,13 @@ handle_fixations(const bool remove_selected_fixations,
 }
 
 void
-wfSlocusPop(const fwdpy11::GSLrng_t &rng, fwdpy11::SlocusPop &pop,
+wfDiploidPopulation(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
             py::array_t<std::uint32_t> popsizes, const double mu_neutral,
             const double mu_selected, const double recrate,
             const fwdpy11::MutationRegions &mmodel,
             const fwdpy11::GeneticMap &rmodel,
-            fwdpy11::SlocusPopGeneticValue &genetic_value_fxn,
-            fwdpy11::SlocusPop_temporal_sampler recorder,
+            fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+            fwdpy11::DiploidPopulation_temporal_sampler recorder,
             const double selfing_rate, const bool remove_selected_fixations)
 {
     //validate the input params
@@ -211,5 +211,5 @@ PYBIND11_MODULE(wright_fisher_slocus, m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("WFSlocusPop", &wfSlocusPop);
+    m.def("WFDiploidPopulation", &wfDiploidPopulation);
 }

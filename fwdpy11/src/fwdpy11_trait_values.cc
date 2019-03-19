@@ -81,7 +81,7 @@ PYBIND11_MODULE(trait_values, m)
 
     py::class_<single_locus_additive_trait_wrapper,
                std::shared_ptr<single_locus_additive_trait_wrapper>,
-               fwdpy11::single_locus_fitness>(m, "SlocusAdditiveTrait",
+               fwdpy11::single_locus_fitness>(m, "DiploidAdditiveTrait",
                                               R"delim(
                 Additive trait value, centered on zero.
 
@@ -94,7 +94,7 @@ PYBIND11_MODULE(trait_values, m)
                       "Get the scaling attribute.")
         .def("__repr__",
              [](const single_locus_additive_trait_wrapper &a) {
-                 std::string rv = "trait_values.SlocusAdditiveTrait(";
+                 std::string rv = "trait_values.DiploidAdditiveTrait(";
                  rv += std::to_string(a.scaling) + ")";
                  return rv;
              })
@@ -109,7 +109,7 @@ PYBIND11_MODULE(trait_values, m)
 
     py::class_<single_locus_multiplicative_trait_wrapper,
                std::shared_ptr<single_locus_multiplicative_trait_wrapper>,
-               fwdpy11::single_locus_fitness>(m, "SlocusMultTrait",
+               fwdpy11::single_locus_fitness>(m, "DiploidMultTrait",
                                               R"delim(
                 Multiplicative trait value, centered on zero.
                 )delim")
@@ -119,7 +119,7 @@ PYBIND11_MODULE(trait_values, m)
                       "Get the scaling attribute.")
         .def("__repr__",
              [](const single_locus_multiplicative_trait_wrapper &a) {
-                 std::string rv = "trait_values.SlocusMultTrait(";
+                 std::string rv = "trait_values.DiploidMultTrait(";
                  rv += std::to_string(a.scaling) + ")";
                  return rv;
              })
@@ -134,7 +134,7 @@ PYBIND11_MODULE(trait_values, m)
             }));
 
     py::class_<gbr_trait_wrapper, std::shared_ptr<gbr_trait_wrapper>,
-               fwdpy11::single_locus_fitness>(m, "SlocusGBRTrait",
+               fwdpy11::single_locus_fitness>(m, "DiploidGBRTrait",
                                               R"delim(
             The "gene-based recessive" model from Thornton et al.
             2013 http://dx.doi.org/10.1371/journal.pgen.1003258 
@@ -146,7 +146,7 @@ PYBIND11_MODULE(trait_values, m)
         .def(py::init<>())
         .def("__repr__",
              [](const gbr_trait_wrapper &a) {
-                 std::string rv = "trait_values.SlocusGBRTrait()";
+                 std::string rv = "trait_values.DiploidGBRTrait()";
                  return rv;
              })
         .def(py::pickle(

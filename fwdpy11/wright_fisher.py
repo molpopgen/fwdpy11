@@ -25,7 +25,7 @@ def evolve(rng, pop, params, recorder=None):
     :param rng: random number generator
     :type rng: :class:`fwdpy11.GSLrng`
     :param pop: A population
-    :type pop: :class:`fwdpy11.SlocusPop`
+    :type pop: :class:`fwdpy11.DiploidPopulation`
     :param params: simulation parameters
     :type params: :class:`fwdpy11.model_params.ModelParams`
     :param recorder: (None) A temporal sampler/data recorder.
@@ -36,7 +36,7 @@ def evolve(rng, pop, params, recorder=None):
         then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     """
-    import fwdpy11.SlocusPop
+    import fwdpy11.DiploidPopulation
     import warnings
     # Test parameters while suppressing warnings
     with warnings.catch_warnings():
@@ -46,7 +46,7 @@ def evolve(rng, pop, params, recorder=None):
 
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
-    from .wright_fisher_slocus import WFSlocusPop
+    from .wright_fisher_slocus import WFDiploidPopulation
     from fwdpy11 import GeneralizedGeneticMap
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
@@ -59,7 +59,7 @@ def evolve(rng, pop, params, recorder=None):
         from fwdpy11.temporal_samplers import RecordNothing
         recorder = RecordNothing()
 
-    WFSlocusPop(rng, pop, params.demography,
+    WFDiploidPopulation(rng, pop, params.demography,
                 params.mutrate_n, params.mutrate_s,
                 params.recrate, mm, rm, params.gvalue,
                 recorder, params.pself, params.prune_selected)

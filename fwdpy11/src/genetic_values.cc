@@ -24,11 +24,11 @@
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
 #include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValueWithMapping.hpp>
-#include <fwdpy11/genetic_values/SlocusAdditive.hpp>
-#include <fwdpy11/genetic_values/SlocusMult.hpp>
-#include <fwdpy11/genetic_values/SlocusGBR.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValueWithMapping.hpp>
+#include <fwdpy11/genetic_values/DiploidAdditive.hpp>
+#include <fwdpy11/genetic_values/DiploidMult.hpp>
+#include <fwdpy11/genetic_values/DiploidGBR.hpp>
 #include <fwdpy11/genetic_values/details/mlocus_aggregators.hpp>
 #include <fwdpy11/genetic_values/noise.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
@@ -134,29 +134,29 @@ PYBIND11_MODULE(genetic_values, m)
     auto imported_noise = static_cast<pybind11::object>(
         pybind11::module::import("fwdpy11.genetic_value_noise"));
 
-    py::class_<fwdpy11::SlocusPopGeneticValue>(
-        m, "SlocusPopGeneticValue",
+    py::class_<fwdpy11::DiploidPopulationGeneticValue>(
+        m, "DiploidPopulationGeneticValue",
         "ABC for genetic value calculations for diploid members of "
-        ":class:`fwdpy11.SlocusPop`")
+        ":class:`fwdpy11.DiploidPopulation`")
         .def("__call__",
-             [](const fwdpy11::SlocusPopGeneticValue& gv,
+             [](const fwdpy11::DiploidPopulationGeneticValue& gv,
                 const std::size_t diploid_index,
-                const fwdpy11::SlocusPop& pop) {
+                const fwdpy11::DiploidPopulation& pop) {
                  return gv.calculate_gvalue(diploid_index, pop);
              },
              R"delim(
              :param diploid_index: The index of the individual to calculate.
              :type diploid_index: int >= 0
              :param pop: The population object containing the individual.
-             :type pop: :class:`fwdpy11.SlocusPop`
+             :type pop: :class:`fwdpy11.DiploidPopulation`
              :return: The genetic value of an individual.
              :rtype: float
              )delim",
              py::arg("diploid_index"), py::arg("pop"))
         .def("fitness",
-             [](const fwdpy11::SlocusPopGeneticValue& gv,
+             [](const fwdpy11::DiploidPopulationGeneticValue& gv,
                 const std::size_t diploid_index,
-                const fwdpy11::SlocusPop& pop) {
+                const fwdpy11::DiploidPopulation& pop) {
                  return gv.genetic_value_to_fitness(
                      pop.diploid_metadata[diploid_index]);
              },
@@ -164,13 +164,13 @@ PYBIND11_MODULE(genetic_values, m)
         :param diploid_index: The index of the individual
         :type diploid_index: int >= 0
         :param pop: The population containing the individual
-        :type pop: :class:`fwdpy11.SlocusPop`
+        :type pop: :class:`fwdpy11.DiploidPopulation`
         :return: The fitness of an individual.
         :rtype: float
         )delim",
              py::arg("diploid_index"), py::arg("pop"))
         .def_property_readonly("shape",
-                               [](const fwdpy11::SlocusPopGeneticValue& self) {
+                               [](const fwdpy11::DiploidPopulationGeneticValue& self) {
                                    return self.shape();
                                },
                                R"delim(
@@ -179,66 +179,66 @@ PYBIND11_MODULE(genetic_values, m)
                                .. versionadded:: 0.3.0
                                )delim")
         .def_readonly("genetic_values",
-                      &fwdpy11::SlocusPopGeneticValue::gvalues,
+                      &fwdpy11::DiploidPopulationGeneticValue::gvalues,
                       R"delim(
                       Return the list of genetic values.
 
                       .. versionadded:: 0.3.0
                       )delim");
 
-    py::class_<fwdpy11::SlocusPopGeneticValueWithMapping,
-               fwdpy11::SlocusPopGeneticValue>(
-        m, "SlocusPopGeneticValueWithMapping",
+    py::class_<fwdpy11::DiploidPopulationGeneticValueWithMapping,
+               fwdpy11::DiploidPopulationGeneticValue>(
+        m, "DiploidPopulationGeneticValueWithMapping",
         "Genetic value calculations with flexible mapping of genetic value to "
         "fitness.")
         .def_property_readonly(
             "gvalue_to_fitness",
-            [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
+            [](const fwdpy11::DiploidPopulationGeneticValueWithMapping& o) {
                 return o.gv2w->clone();
             },
             "Access the genetic value to fitness map.")
         .def_property_readonly(
             "noise",
-            [](const fwdpy11::SlocusPopGeneticValueWithMapping& o) {
+            [](const fwdpy11::DiploidPopulationGeneticValueWithMapping& o) {
                 return o.noise_fxn->clone();
             },
             "Access the random noise funcion");
 
-    py::class_<fwdpy11::SlocusAdditive,
-               fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusAdditive", "Additive genetic values.")
+    py::class_<fwdpy11::DiploidAdditive,
+               fwdpy11::DiploidPopulationGeneticValueWithMapping>(
+        m, "DiploidAdditive", "Additive genetic values.")
         .def(py::init([](const double scaling) {
-                 return fwdpy11::SlocusAdditive(
+                 return fwdpy11::DiploidAdditive(
                      fwdpp::additive_diploid(fwdpp::fitness(scaling)));
              }),
              py::arg("scaling"), ADDITIVE_CONSTRUCTOR_1)
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g) {
-                 return fwdpy11::SlocusAdditive(
+                 return fwdpy11::DiploidAdditive(
                      fwdpp::additive_diploid(fwdpp::trait(scaling)), g);
              }),
              py::arg("scaling"), py::arg("gv2w"), ADDITIVE_CONSTRUCTOR_2)
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g,
                          const fwdpy11::GeneticValueNoise& n) {
-                 return fwdpy11::SlocusAdditive(
+                 return fwdpy11::DiploidAdditive(
                      fwdpp::additive_diploid(fwdpp::trait(scaling)), g, n);
              }),
              py::arg("scaling"), py::arg("gv2w"), py::arg("noise"),
              ADDITIVE_CONSTRUCTOR_3)
         .def_property_readonly(
             "scaling",
-            [](const fwdpy11::SlocusAdditive& wa) { return wa.gv.scaling; },
+            [](const fwdpy11::DiploidAdditive& wa) { return wa.gv.scaling; },
             "Access to the scaling parameter.")
         .def_property_readonly(
             "is_fitness",
-            [](const fwdpy11::SlocusAdditive& wa) {
+            [](const fwdpy11::DiploidAdditive& wa) {
                 return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic value "
             "and False if the genetic value is a trait value.")
         .def(py::pickle(
-            [](const fwdpy11::SlocusAdditive& a) {
+            [](const fwdpy11::DiploidAdditive& a) {
                 auto p = py::module::import("pickle");
                 return py::make_tuple(
                     a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
@@ -263,29 +263,29 @@ PYBIND11_MODULE(genetic_values, m)
                 //Do the casts in the constructor
                 //to avoid any nasty issues w/
                 //refs to temp
-                return fwdpy11::SlocusAdditive(
+                return fwdpy11::DiploidAdditive(
                     std::move(a),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
 
-    py::class_<fwdpy11::SlocusMult, fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusMult", "Multiplicative genetic values.")
+    py::class_<fwdpy11::DiploidMult, fwdpy11::DiploidPopulationGeneticValueWithMapping>(
+        m, "DiploidMult", "Multiplicative genetic values.")
         .def(py::init([](const double scaling) {
-                 return fwdpy11::SlocusMult(
+                 return fwdpy11::DiploidMult(
                      fwdpp::multiplicative_diploid(fwdpp::fitness(scaling)));
              }),
              py::arg("scaling"), MULT_CONSTRUCTOR_1)
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g) {
-                 return fwdpy11::SlocusMult(
+                 return fwdpy11::DiploidMult(
                      fwdpp::multiplicative_diploid(fwdpp::trait(scaling)), g);
              }),
              py::arg("scaling"), py::arg("gv2w"), MULT_CONSTRUCTOR_2)
         .def(py::init([](const double scaling,
                          const fwdpy11::GeneticValueIsTrait& g,
                          const fwdpy11::GeneticValueNoise& n) {
-                 return fwdpy11::SlocusMult(
+                 return fwdpy11::DiploidMult(
                      fwdpp::multiplicative_diploid(fwdpp::trait(scaling)), g,
                      n);
              }),
@@ -293,18 +293,18 @@ PYBIND11_MODULE(genetic_values, m)
              MULT_CONSTRUCTOR_3)
         .def_property_readonly(
             "scaling",
-            [](const fwdpy11::SlocusMult& wa) { return wa.gv.scaling; },
+            [](const fwdpy11::DiploidMult& wa) { return wa.gv.scaling; },
             "Access to the scaling parameter.")
         .def_property_readonly(
             "is_fitness",
-            [](const fwdpy11::SlocusMult& wa) {
+            [](const fwdpy11::DiploidMult& wa) {
                 return wa.gv.gvalue_is_fitness;
             },
             "Returns True if instance calculates fitness as the genetic "
             "value "
             "and False if the genetic value is a trait value.")
         .def(py::pickle(
-            [](const fwdpy11::SlocusMult& a) {
+            [](const fwdpy11::DiploidMult& a) {
                 auto p = py::module::import("pickle");
                 return py::make_tuple(
                     a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
@@ -329,14 +329,14 @@ PYBIND11_MODULE(genetic_values, m)
                 //Do the casts in the constructor
                 //to avoid any nasty issues w/
                 //refs to temp
-                return fwdpy11::SlocusMult(
+                return fwdpy11::DiploidMult(
                     std::move(a),
                     t1.cast<const fwdpy11::GeneticValueToFitnessMap&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());
             }));
 
-    py::class_<fwdpy11::SlocusGBR, fwdpy11::SlocusPopGeneticValueWithMapping>(
-        m, "SlocusGBR",
+    py::class_<fwdpy11::DiploidGBR, fwdpy11::DiploidPopulationGeneticValueWithMapping>(
+        m, "DiploidGBR",
         R"delim(
         The "gene-based recessive" trait model described in Thornton et al.
         2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
@@ -346,16 +346,16 @@ PYBIND11_MODULE(genetic_values, m)
         It is undefined for the case where these sums are negative.
         )delim")
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w) {
-                 return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w);
+                 return fwdpy11::DiploidGBR(fwdpy11::GBR{}, gv2w);
              }),
              py::arg("gv2w"), GBR_CONSTRUCTOR1)
         .def(py::init([](const fwdpy11::GeneticValueIsTrait& gv2w,
                          const fwdpy11::GeneticValueNoise& noise) {
-                 return fwdpy11::SlocusGBR(fwdpy11::GBR{}, gv2w, noise);
+                 return fwdpy11::DiploidGBR(fwdpy11::GBR{}, gv2w, noise);
              }),
              py::arg("gv2w"), py::arg("noise"), GBR_CONSTRUCTOR2)
         .def(py::pickle(
-            [](const fwdpy11::SlocusGBR& g) {
+            [](const fwdpy11::DiploidGBR& g) {
                 auto p = py::module::import("pickle");
                 return py::make_tuple(
                     g.pickle(), p.attr("dumps")(g.gv2w->clone(), -1),
@@ -377,7 +377,7 @@ PYBIND11_MODULE(genetic_values, m)
                 //Do the casts in the constructor
                 //to avoid any nasty issues w/
                 //refs to temp
-                return fwdpy11::SlocusGBR(
+                return fwdpy11::DiploidGBR(
                     fwdpy11::GBR{},
                     t1.cast<const fwdpy11::GeneticValueIsTrait&>(),
                     t2.cast<const fwdpy11::GeneticValueNoise&>());

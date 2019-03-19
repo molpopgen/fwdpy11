@@ -9,18 +9,18 @@ common_mako.setup_mako(cfg)
 #include <algorithm> //for std::max
 #include <pybind11/pybind11.h>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
-    struct GeneralW : public fwdpy11::SlocusPopGeneticValue
+    struct GeneralW : public fwdpy11::DiploidPopulationGeneticValue
 {
     fwdpp::site_dependent_genetic_value w;
 
-    GeneralW() : fwdpy11::SlocusPopGeneticValue{1}, w{} {}
+    GeneralW() : fwdpy11::DiploidPopulationGeneticValue{1}, w{} {}
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::SlocusPop& pop) const
+                     const fwdpy11::DiploidPopulation& pop) const
     {
         gvalues[0] = std::max(
             0.0,
@@ -42,7 +42,7 @@ common_mako.setup_mako(cfg)
     noise(const fwdpy11::GSLrng_t& /*rng*/,
           const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
           const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::SlocusPop& /*pop*/) const
+          const fwdpy11::DiploidPopulation& /*pop*/) const
     {
         return 0.0;
     }
@@ -67,8 +67,8 @@ PYBIND11_MODULE(custom_stateless_genotype, m)
 {
     pybind11::object imported_custom_stateless_genotype_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("SlocusPopGeneticValue");
-    pybind11::class_<GeneralW, fwdpy11::SlocusPopGeneticValue>(m, "GeneralW")
+              .attr("DiploidPopulationGeneticValue");
+    pybind11::class_<GeneralW, fwdpy11::DiploidPopulationGeneticValue>(m, "GeneralW")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const GeneralW& g) { return g.pickle(); },
                               [](pybind11::object o) {

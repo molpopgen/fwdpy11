@@ -63,7 +63,7 @@ class testMultiEffectMutation(unittest.TestCase):
         self.assertEqual(up, self.m)
 
 
-class testMultiEffectMutationSlocusPopPickling(unittest.TestCase):
+class testMultiEffectMutationDiploidPopulationPickling(unittest.TestCase):
     @classmethod
     def setUp(self):
         mutations = fwdpy11.VecMutation()
@@ -78,7 +78,7 @@ class testMultiEffectMutationSlocusPopPickling(unittest.TestCase):
             (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         ftimes = fwdpy11.VecUint32([1])
-        self.pop = fwdpy11.SlocusPop.create(diploids,
+        self.pop = fwdpy11.DiploidPopulation.create(diploids,
                                             gametes,
                                             mutations,
                                             fixations,

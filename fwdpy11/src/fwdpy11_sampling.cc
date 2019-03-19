@@ -27,7 +27,7 @@
 #include <fwdpp/data_matrix.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
 #include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/sampling/data_matrix_functions.hpp>
 #include <gsl/gsl_matrix_char.h>
 namespace py = pybind11;
@@ -259,11 +259,11 @@ PYBIND11_MODULE(sampling, m)
           ":rtype: :class:`fwdpy11.sampling.DataMatrix` encoded as a "        \
           "haplotype matrix\n");
 
-    MUTATION_KEYS(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    MUTATION_KEYS(fwdpy11::DiploidPopulation, "fwdpy11.DiploidPopulation");
 
-    GENOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    GENOTYPE_MATRIX(fwdpy11::DiploidPopulation, "fwdpy11.DiploidPopulation");
 
-    HAPLOTYPE_MATRIX(fwdpy11::SlocusPop, "fwdpy11.SlocusPop");
+    HAPLOTYPE_MATRIX(fwdpy11::DiploidPopulation, "fwdpy11.DiploidPopulation");
 
     m.def("matrix_to_sample",
           [](const fwdpp::data_matrix &m)

@@ -8,16 +8,16 @@ common_mako.setup_mako(cfg)
 
 #include <algorithm> //for std::max
 #include <pybind11/pybind11.h>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
-    struct additive : public fwdpy11::SlocusPopGeneticValue
+    struct additive : public fwdpy11::DiploidPopulationGeneticValue
 {
-    additive() : fwdpy11::SlocusPopGeneticValue(1) {}
+    additive() : fwdpy11::DiploidPopulationGeneticValue(1) {}
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::SlocusPop& pop) const
+                     const fwdpy11::DiploidPopulation& pop) const
     {
         double sum = 0;
         for (auto m :
@@ -44,7 +44,7 @@ common_mako.setup_mako(cfg)
     noise(const fwdpy11::GSLrng_t& /*rng*/,
           const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
           const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::SlocusPop& /*pop*/) const
+          const fwdpy11::DiploidPopulation& /*pop*/) const
     {
         return 0.0;
     }
@@ -68,8 +68,8 @@ PYBIND11_MODULE(custom_additive, m)
 {
     pybind11::object imported_custom_additive_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("SlocusPopGeneticValue");
-    pybind11::class_<additive, fwdpy11::SlocusPopGeneticValue>(m, "additive")
+              .attr("DiploidPopulationGeneticValue");
+    pybind11::class_<additive, fwdpy11::DiploidPopulationGeneticValue>(m, "additive")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const additive& a) { return a.pickle(); },
                               [](pybind11::object o) {

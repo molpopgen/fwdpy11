@@ -20,13 +20,13 @@
 #define FWDPY11_SAMPLERS_HPP__
 
 #include <functional>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace fwdpy11
 {
     // Applied each generation to record any data of interest.
-    using SlocusPop_temporal_sampler
-        = std::function<void(const fwdpy11::SlocusPop&)>;
+    using DiploidPopulation_temporal_sampler
+        = std::function<void(const fwdpy11::DiploidPopulation&)>;
 }
 
 #endif

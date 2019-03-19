@@ -25,8 +25,8 @@ class testConversion(unittest.TestCase):
     #     tzero = np.where(na['time'] == 0.0)
     #     self.assertTrue(len(tzero[0]) == 10)
 
-    def testCreateSlocusPop(self):
-        pop = fwdpy11.SlocusPop.create_from_tskit(self.ts)
+    def testCreateDiploidPopulation(self):
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(self.ts)
         self.assertEqual(pop.N, 5)
         self.assertEqual(pop.tables.genome_length(), 1.0)
 

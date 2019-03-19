@@ -8,7 +8,7 @@ pyximport.install(setup_args={'include_dirs': np.get_include()})
 from mean_sel_coeff import mean_s
 
 
-class test_SlocusPop(unittest.TestCase):
+class test_DiploidPopulation(unittest.TestCase):
     """
     Test coercion of population data
     to numpy arrays

@@ -29,7 +29,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     :param rng: random number generator
     :type rng: :class:`fwdpy11.GSLrng`
     :param pop: A population
-    :type pop: :class:`fwdpy11.SlocusPop`
+    :type pop: :class:`fwdpy11.DiploidPopulation`
     :param params: simulation parameters
     :type params: :class:`fwdpy11.model_params.ModelParams`
     :param simplification_interval: Number of generations between simplifications.
@@ -51,7 +51,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         then :class:`fwdpy11.tsrecorders.NoAncientSamples` will be used.
 
     """
-    import fwdpy11.SlocusPop
+    import fwdpy11.DiploidPopulation
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -78,7 +78,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
     from fwdpy11 import GeneralizedGeneticMap
-    from ._tsevolution import WFSlocusPop_ts
+    from ._tsevolution import WFDiploidPopulation_ts
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
@@ -89,7 +89,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     from fwdpy11.tsrecorders import SampleRecorder
     sr = SampleRecorder()
-    WFSlocusPop_ts(rng, pop, sr, simplification_interval,
+    WFDiploidPopulation_ts(rng, pop, sr, simplification_interval,
                    params.demography, params.mutrate_s,
                    mm, rm, params.gvalue,
                    recorder, stopping_criterion,

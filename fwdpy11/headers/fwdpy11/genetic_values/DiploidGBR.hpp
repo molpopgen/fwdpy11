@@ -1,4 +1,3 @@
-
 //
 // Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
 //
@@ -17,19 +16,16 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_EVOLVETS_SAMPLE_RECORDER_TYPES_HPP
-#define FWDPY11_EVOLVETS_SAMPLE_RECORDER_TYPES_HPP
+#ifndef FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
+#define FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 
-#include <functional>
-#include <fwdpy11/types/DiploidPopulation.hpp>
-#include "samplerecorder.hpp"
+#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
+#include "details/GBR.hpp"
+#include "details/pickle_GBR.hpp"
 
-// Typedefs for functions that will record ancient samples
-// during simulations with tree sequences
 namespace fwdpy11
 {
-    using DiploidPopulation_sample_recorder
-        = std::function<void(const DiploidPopulation &, samplerecorder &)>;
+    using DiploidGBR = fwdpp_slocus_gvalue<GBR,pickle_GBR>;
 } // namespace fwdpy11
 
 #endif
