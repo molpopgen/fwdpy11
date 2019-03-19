@@ -304,7 +304,7 @@ wfDiploidPopulation_ts(
 }
 
 void
-init_slocus_evolution(py::module &m)
+init_diploid_evolution(py::module &m)
 {
     m.def("WFDiploidPopulation_ts", &wfDiploidPopulation_ts);
 }
