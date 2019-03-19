@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_SLOCUSPOP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
-#define FWDPY11_SLOCUSPOP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
+#ifndef FWDPY11_POP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
+#define FWDPY11_POP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
 
 #include <memory>
 #include "DiploidPopulationGeneticValue.hpp"

@@ -55,7 +55,7 @@ namespace fwdpy11
             return 0.;
         }
 
-        DEFAULT_SLOCUSPOP_UPDATE();
+        DEFAULT_DIPLOID_POP_UPDATE();
 
         std::unique_ptr<GeneticValueNoise>
         clone() const
