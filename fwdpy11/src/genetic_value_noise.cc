@@ -32,7 +32,7 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     operator()(const fwdpy11::GSLrng_t& rng,
                const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
                const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-               const fwdpy11::SlocusPop& /*pop*/) const
+               const fwdpy11::DiploidPopulation& /*pop*/) const
     {
         return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
     }
@@ -69,7 +69,7 @@ PYBIND11_MODULE(genetic_value_noise, m)
 
     py::class_<fwdpy11::GeneticValueNoise>(
         m, "GeneticValueNoise",
-        "ABC for noise classes affecting :class:`fwdpy11.SlocusPop`.");
+        "ABC for noise classes affecting :class:`fwdpy11.DiploidPopulation`.");
 
     py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
         m, "NoNoise", "Type implying no random effects on genetic values.")

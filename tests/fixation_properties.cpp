@@ -8,7 +8,7 @@ common_mako.setup_mako(cfg)
 
 #include <pybind11/pybind11.h>
 #include <fwdpy11/sim_functions.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace py = pybind11;
 

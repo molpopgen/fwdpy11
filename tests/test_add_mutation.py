@@ -21,10 +21,10 @@ import unittest
 import fwdpy11
 
 
-class testSlocusPopAddMutations(unittest.TestCase):
+class testDiploidPopulationAddMutations(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.pop = fwdpy11.SlocusPop(1000)
+        self.pop = fwdpy11.DiploidPopulation(1000)
         self.mvec = fwdpy11.VecMutation()
         self.nmut = fwdpy11.Mutation(0.1, 0.0, 0.0, 0, 0)
         self.smut = fwdpy11.Mutation(1.2, -0.01, 0.0, 0, 0)

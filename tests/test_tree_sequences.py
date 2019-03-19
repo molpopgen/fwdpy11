@@ -21,7 +21,7 @@ class testTreeSequences(unittest.TestCase):
         self.r = self.rho/(4*self.N)
 
         self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -32,7 +32,7 @@ class testTreeSequences(unittest.TestCase):
                   }
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
 
     def test_simplify(self):
@@ -237,7 +237,7 @@ class testSamplePreservation(unittest.TestCase):
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
         self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -248,7 +248,7 @@ class testSamplePreservation(unittest.TestCase):
                   }
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
                                                                  samplesize=10,
                                                                  timepoints=[i for i in range(1, 101)])
@@ -289,7 +289,7 @@ class testSimplificationInterval(unittest.TestCase):
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
         self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, self.GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -300,7 +300,7 @@ class testSimplificationInterval(unittest.TestCase):
                   }
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.SlocusPop(self.N, 1.0)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
                                                                  samplesize=10,
                                                                  timepoints=[i for i in range(1, 101)])
@@ -322,7 +322,7 @@ class testFixationPreservation(unittest.TestCase):
         r = rho/(4*N)
 
         GSS = fwdpy11.genetic_values.GSS(VS=1, opt=1)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, GSS)
         p = {'nregions': [],
              'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -333,7 +333,7 @@ class testFixationPreservation(unittest.TestCase):
              }
         params = fwdpy11.model_params.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
-        pop = fwdpy11.SlocusPop(N, 1.0)
+        pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
                                         track_mutation_counts=True)
         mc = fwdpy11.ts.count_mutations(pop.tables, pop.mutations,
@@ -358,7 +358,7 @@ class testFixationPreservation(unittest.TestCase):
         rho = 1.
         r = rho/(4*N)
 
-        a = fwdpy11.genetic_values.SlocusMult(2.0)
+        a = fwdpy11.genetic_values.DiploidMult(2.0)
         p = {'nregions': [],
              'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -369,7 +369,7 @@ class testFixationPreservation(unittest.TestCase):
              }
         params = fwdpy11.model_params.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
-        pop = fwdpy11.SlocusPop(N, 1.0)
+        pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
                                         track_mutation_counts=True)
         mc = fwdpy11.ts.count_mutations(pop.tables, pop.mutations,
@@ -404,7 +404,7 @@ class testMetaData(unittest.TestCase):
         r = rho/(4*N)
 
         GSS = fwdpy11.genetic_values.GSS(VS=1, opt=1)
-        a = fwdpy11.genetic_values.SlocusAdditive(2.0, GSS)
+        a = fwdpy11.genetic_values.DiploidAdditive(2.0, GSS)
         p = {'nregions': [],
              'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -415,7 +415,7 @@ class testMetaData(unittest.TestCase):
              }
         params = fwdpy11.model_params.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
-        pop = fwdpy11.SlocusPop(N, 1.0)
+        pop = fwdpy11.DiploidPopulation(N, 1.0)
 
         class Recorder(object):
             """ Records entire pop every 100 generations """

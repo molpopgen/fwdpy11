@@ -18,9 +18,9 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/PoissonPoint.cc
     src/regions/FixedCrossovers.cc)
 
-set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/SlocusMultivariateEffectsStrictAdditive.cc
+set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
     src/genetic_values/MultivariateGeneticValueToFitnessMap.cc
-    src/genetic_values/SlocusMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
+    src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
     src/genetic_values/MultivariateGSSmo.cc)
 
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
@@ -29,11 +29,11 @@ set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/data_matrix_from_tables.cc)
 
 set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
-    src/tsevolution/slocuspop.cc
+    src/tsevolution/diploidpop.cc
     src/tsevolution/util.cc
     src/tsevolution/cleanup_metadata.cc
     src/tsevolution/genetic_value_common.cc
-    src/tsevolution/slocus_fitness.cc
+    src/tsevolution/diploid_pop_fitness.cc
     src/tsevolution/index_and_count_mutations.cc
     src/tsevolution/track_mutation_counts.cc
     src/tsevolution/no_stopping.cc

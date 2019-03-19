@@ -32,7 +32,7 @@ class testAddMutations(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(42)
 
 
-class test_ChangeEsizeSlocus(unittest.TestCase):
+class test_ChangeEsizeDiploid(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = quick_neutral_slocus()

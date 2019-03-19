@@ -30,34 +30,34 @@ PYBIND11_MODULE(fitness, m)
 
     py::class_<fwdpy11::single_locus_fitness,
                std::shared_ptr<fwdpy11::single_locus_fitness>>(m,
-                                                               "SlocusFitness",
+                                                               "DiploidFitness",
                                                                R"delim(
             A fitness function or trait value function
             for a single-deme, single-region simulation (
-            :class:`fwdpy11.Slocus`).
+            :class:`fwdpy11.Diploid`).
             
             Current fitness ovjects derived from this type are:
             
-            * :class:`fwdpy11.fitness.SlocusAdditive`
-            * :class:`fwdpy11.fitness.SlocusMult`
+            * :class:`fwdpy11.fitness.DiploidAdditive`
+            * :class:`fwdpy11.fitness.DiploidMult`
             
             Current trait value objects derived from this type are:
 
-            * :class:`fwdpy11.trait_values.SlocusAdditiveTrait`
-            * :class:`fwdpy11.trait_values.SlocusMultTrait`
-            * :class:`fwdpy11.trait_values.SlocusGBRTrait`
+            * :class:`fwdpy11.trait_values.DiploidAdditiveTrait`
+            * :class:`fwdpy11.trait_values.DiploidMultTrait`
+            * :class:`fwdpy11.trait_values.DiploidGBRTrait`
             )delim")
         .def("__call__",
              [](const std::shared_ptr<fwdpy11::single_locus_fitness>& aw,
                 const fwdpy11::Diploid& dip,
-                const fwdpy11::SlocusPop& pop) {
+                const fwdpy11::DiploidPopulation& pop) {
                  return aw->callback()(dip, pop.gametes, pop.mutations);
              });
 
     // pybind11::class_<fwdpy11::single_locus_stateless_fitness,
     //                 std::shared_ptr<fwdpy11::single_locus_stateless_fitness>,
     //                 fwdpy11::single_locus_fitness>(
-    //    m, "SlocusCustomStatelessGeneticValue", "Custom stateless genetic "
+    //    m, "DiploidCustomStatelessGeneticValue", "Custom stateless genetic "
     //                                            "value/fitness function. See
     //                                            "
     //                                            ":ref:`customgvaluecpp`.")
@@ -65,7 +65,7 @@ PYBIND11_MODULE(fitness, m)
 
     py::class_<fwdpy11::single_locus_mult_wrapper,
                std::shared_ptr<fwdpy11::single_locus_mult_wrapper>,
-               fwdpy11::single_locus_fitness>(m, "SlocusMult", R"delim(
+               fwdpy11::single_locus_fitness>(m, "DiploidMult", R"delim(
         Multiplicative fitness for single-deme simulations.
         At a single mutation, fitness is 0, 1+sh, 1+scaling*s
         for genotypes AA, Aa, and aa, respectively. The scaling
@@ -74,14 +74,14 @@ PYBIND11_MODULE(fitness, m)
         .. testcode::
 
             import fwdpy11.fitness as fp11w
-            w = fp11w.SlocusMult(1.0)
+            w = fp11w.DiploidMult(1.0)
                        )delim")
         .def(py::init<double>(), py::arg("scaling") = 2.0)
         .def_readonly("scaling", &fwdpy11::single_locus_mult_wrapper::scaling,
                       "Get the scaling parameter.")
         .def("__repr__",
              [](const fwdpy11::single_locus_mult_wrapper& m) {
-                 std::string rv = "fitness.SlocusMult(";
+                 std::string rv = "fitness.DiploidMult(";
                  rv += std::to_string(m.scaling);
                  rv += ')';
                  return rv;
@@ -97,7 +97,7 @@ PYBIND11_MODULE(fitness, m)
 
     py::class_<fwdpy11::single_locus_additive_wrapper,
                std::shared_ptr<fwdpy11::single_locus_additive_wrapper>,
-               fwdpy11::single_locus_fitness>(m, "SlocusAdditive", R"delim(
+               fwdpy11::single_locus_fitness>(m, "DiploidAdditive", R"delim(
         Additive fitness for single-deme simulations.
         Fitness is max(0,1 + :math:`\sum_{i} x_i`), 
         where :math:`x_i = 0, sh,\ \mathrm{or\ }scaling \times s`
@@ -106,7 +106,7 @@ PYBIND11_MODULE(fitness, m)
         .. testcode::
 
             import fwdpy11.fitness as fp11w
-            w = fp11w.SlocusAdditive(2.0)
+            w = fp11w.DiploidAdditive(2.0)
         )delim")
         .def_readonly("scaling",
                       &fwdpy11::single_locus_additive_wrapper::scaling,
@@ -114,7 +114,7 @@ PYBIND11_MODULE(fitness, m)
         .def(py::init<double>(), py::arg("scaling") = 2.0)
         .def("__repr__",
              [](const fwdpy11::single_locus_additive_wrapper& m) {
-                 std::string rv = "fitness.SlocusAdditive(";
+                 std::string rv = "fitness.DiploidAdditive(";
                  rv += std::to_string(m.scaling);
                  rv += ')';
                  return rv;

@@ -16,10 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.If not, see < http: //www.gnu.org/licenses/>.
 #
-from fwdpy11._Populations import _SlocusPop
+from fwdpy11._Populations import _DiploidPopulation
 
 
-class SlocusPop(_SlocusPop):
+class DiploidPopulation(_DiploidPopulation):
     """
     Population object representing a single
     locus.
@@ -38,7 +38,7 @@ class SlocusPop(_SlocusPop):
         :param mutations: A :class:`fwdpy11.VecMutation`
         :param args: Fixations, fixation times, and generation
 
-        :rtype: :class:`fwdpy11.SlocusPop`
+        :rtype: :class:`fwdpy11.DiploidPopulation`
 
         See :ref:`popobjects` for example use.
 
@@ -57,7 +57,7 @@ class SlocusPop(_SlocusPop):
         .. versionadded:: 0.1.4
 
         """
-        return SlocusPop(_SlocusPop.create(diploids,
+        return DiploidPopulation(_DiploidPopulation.create(diploids,
                                            gametes, mutations,
                                            args))
 
@@ -69,7 +69,7 @@ class SlocusPop(_SlocusPop):
         :param ts: A tree sequence from tskit
         :type ts: tskit.TreeSequence
 
-        :rtype: :class:`fwdpy11.SlocusPop`
+        :rtype: :class:`fwdpy11.DiploidPopulation`
         :returns: A population object with an initialized
         :class:`fwdpy11.ts.TableCollection`
 
@@ -87,8 +87,8 @@ class SlocusPop(_SlocusPop):
             for example.) See :ref:`ts` for more discussion
 
         """
-        from fwdpy11.ts_from_tskit import _create_SlocusPop
-        return SlocusPop(_create_SlocusPop(ts))
+        from fwdpy11.ts_from_tskit import _create_DiploidPopulation
+        return DiploidPopulation(_create_DiploidPopulation(ts))
 
     def dump_tables_to_tskit(self):
         """

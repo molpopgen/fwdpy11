@@ -26,7 +26,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/types/create_pops.hpp>
 #include <fwdpy11/serialization.hpp>
 #include <fwdpy11/serialization/Mutation.hpp>
@@ -44,8 +44,8 @@ namespace
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
-PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::gcont_t);
-PYBIND11_MAKE_OPAQUE(fwdpy11::SlocusPop::mcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 PYBIND11_MODULE(_Populations, m)
@@ -79,53 +79,53 @@ PYBIND11_MODULE(_Populations, m)
                 return rv;
             }));
 
-    py::class_<fwdpy11::SlocusPop, fwdpy11::Population>(
-        m, "_SlocusPop", "Representation of a single-locus population")
+    py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
+        m, "_DiploidPopulation", "Representation of a single-locus population")
         .def(py::init<fwdpp::uint_t, double>(),
              "Construct with an unsigned integer "
              "representing the initial "
              "population size.",
              py::arg("N"),
              py::arg("length") = std::numeric_limits<double>::max())
-        .def(py::init<const fwdpy11::SlocusPop::dipvector_t&,
-                      const fwdpy11::SlocusPop::gcont_t&,
-                      const fwdpy11::SlocusPop::mcont_t&>(),
+        .def(py::init<const fwdpy11::DiploidPopulation::dipvector_t&,
+                      const fwdpy11::DiploidPopulation::gcont_t&,
+                      const fwdpy11::DiploidPopulation::mcont_t&>(),
              R"delim(
              Construct with tuple of (diploids, gametes, mutations).
              
              .. versionadded:: 0.1.4
              )delim",
              py::arg("diploids"), py::arg("gametes"), py::arg("mutations"))
-        .def(py::init<const fwdpy11::SlocusPop&>(),
+        .def(py::init<const fwdpy11::DiploidPopulation&>(),
              R"delim(
                 Copy constructor
 
                 .. versionadded:: 0.1.4
                 )delim")
-        .def("clear", &fwdpy11::SlocusPop::clear,
+        .def("clear", &fwdpy11::DiploidPopulation::clear,
              "Clears all population data.")
         .def("__eq__",
-             [](const fwdpy11::SlocusPop& lhs, const fwdpy11::SlocusPop& rhs) {
+             [](const fwdpy11::DiploidPopulation& lhs, const fwdpy11::DiploidPopulation& rhs) {
                  return lhs == rhs;
              })
-        .def_readonly("diploids", &fwdpy11::SlocusPop::diploids,
+        .def_readonly("diploids", &fwdpy11::DiploidPopulation::diploids,
                       DIPLOIDS_DOCSTRING)
         .def_static(
             "create",
-            [](fwdpy11::SlocusPop::dipvector_t& diploids,
-               fwdpy11::SlocusPop::gcont_t& gametes,
-               fwdpy11::SlocusPop::mcont_t& mutations,
-               py::tuple args) -> fwdpy11::SlocusPop {
+            [](fwdpy11::DiploidPopulation::dipvector_t& diploids,
+               fwdpy11::DiploidPopulation::gcont_t& gametes,
+               fwdpy11::DiploidPopulation::mcont_t& mutations,
+               py::tuple args) -> fwdpy11::DiploidPopulation {
                 if (args.size() == 0)
                     {
-                        return fwdpy11::create_wrapper<fwdpy11::SlocusPop>()(
+                        return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
                             std::move(diploids), std::move(gametes),
                             std::move(mutations));
                     }
-                auto& fixations = args[0].cast<fwdpy11::SlocusPop::mcont_t&>();
+                auto& fixations = args[0].cast<fwdpy11::DiploidPopulation::mcont_t&>();
                 auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
                 auto g = args[2].cast<fwdpp::uint_t>();
-                return fwdpy11::create_wrapper<fwdpy11::SlocusPop>()(
+                return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
                     std::move(diploids), std::move(gametes),
                     std::move(mutations), std::move(fixations),
                     std::move(ftimes), g);
@@ -133,21 +133,21 @@ PYBIND11_MODULE(_Populations, m)
             py::arg("diploids"), py::arg("gametes"), py::arg("mutations"),
             py::arg("args"))
         .def(py::pickle(
-            [](const fwdpy11::SlocusPop& pop) -> py::object {
+            [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;
                 fwdpy11::serialization::serialize_details(o, &pop);
                 auto pb = py::bytes(o.str());
                 return pb;
             },
-            [](py::object pickled) -> fwdpy11::SlocusPop {
+            [](py::object pickled) -> fwdpy11::DiploidPopulation {
                 auto s = pickled.cast<py::bytes>().cast<std::string>();
-                fwdpy11::SlocusPop pop(1, std::numeric_limits<double>::max());
+                fwdpy11::DiploidPopulation pop(1, std::numeric_limits<double>::max());
                 std::istringstream in(std::move(s));
                 fwdpy11::serialization::deserialize_details()(in, pop);
                 return pop;
             }))
         .def("sample",
-             [](const fwdpy11::SlocusPop& pop,
+             [](const fwdpy11::DiploidPopulation& pop,
                 const std::vector<std::size_t>& individuals,
                 const bool haplotype, const bool remove_fixed) {
                  return pop.sample_individuals(individuals, haplotype,
@@ -177,7 +177,7 @@ PYBIND11_MODULE(_Populations, m)
              py::arg("individuals"), py::arg("haplotype") = true,
              py::arg("remove_fixed") = true)
         .def("sample",
-             [](const fwdpy11::SlocusPop& pop, const fwdpy11::GSLrng_t& rng,
+             [](const fwdpy11::DiploidPopulation& pop, const fwdpy11::GSLrng_t& rng,
                 const std::uint32_t nsam, const bool haplotype,
                 const bool remove_fixed) {
                  return pop.sample_random_individuals(rng, nsam, haplotype,
@@ -208,9 +208,9 @@ PYBIND11_MODULE(_Populations, m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim")
-        .def("add_mutations", &fwdpy11::SlocusPop::add_mutations)
+        .def("add_mutations", &fwdpy11::DiploidPopulation::add_mutations)
         .def("dump_to_file",
-             [](const fwdpy11::SlocusPop& pop, const std::string filename) {
+             [](const fwdpy11::DiploidPopulation& pop, const std::string filename) {
                  std::ofstream out(filename.c_str(), std::ios_base::binary);
                  if (!out)
                      {
@@ -230,13 +230,13 @@ PYBIND11_MODULE(_Populations, m)
                         throw std::runtime_error(
                             "could not open file for reading");
                     }
-                fwdpy11::SlocusPop pop(1, std::numeric_limits<double>::max());
+                fwdpy11::DiploidPopulation pop(1, std::numeric_limits<double>::max());
                 fwdpy11::serialization::deserialize_details()(in, pop);
                 return pop;
             },
             "Load a population from a binary file.")
         .def("pickle_to_file",
-             [](const fwdpy11::SlocusPop& self, py::object f) {
+             [](const fwdpy11::DiploidPopulation& self, py::object f) {
                  auto dump = py::module::import("pickle").attr("dump");
                  dump(py::make_tuple(self.diploids.size(), self.gametes.size(),
                                      self.mutations.size(),
@@ -299,7 +299,7 @@ PYBIND11_MODULE(_Populations, m)
              memory.  It is, however, slower.
 
              To read the population back in, you must call
-             :func:`fwdpy11.SlocusPop.load_from_pickle_file`.
+             :func:`fwdpy11.DiploidPopulation.load_from_pickle_file`.
 
              :param f: A handle to an open file
 
@@ -310,11 +310,11 @@ PYBIND11_MODULE(_Populations, m)
             [](py::object f) {
                 auto load = py::module::import("pickle").attr("load");
                 py::tuple popdata = load(f);
-                fwdpy11::SlocusPop rv(popdata[0].cast<fwdpp::uint_t>(),
+                fwdpy11::DiploidPopulation rv(popdata[0].cast<fwdpp::uint_t>(),
                                       popdata[5].cast<double>());
                 rv.generation
                     = popdata[4]
-                          .cast<decltype(fwdpy11::SlocusPop::generation)>();
+                          .cast<decltype(fwdpy11::DiploidPopulation::generation)>();
                 auto ndips = popdata[0].cast<std::size_t>();
                 auto ngams = popdata[1].cast<std::size_t>();
                 auto nmuts = popdata[2].cast<std::size_t>();
@@ -400,7 +400,7 @@ PYBIND11_MODULE(_Populations, m)
             R"delim(
             Read in a pickled population from a file.
             The file muse have been generated by
-            a call to :func:`fwdpy11.SlocusPop.pickle_to_file`.
+            a call to :func:`fwdpy11.DiploidPopulation.pickle_to_file`.
 
             :param f: A handle to a file opened in 'rb' mode.
 

@@ -36,7 +36,7 @@ class testDiploidCreate(unittest.TestCase):
         self.assertEqual(dd.second, 0)
 
 
-class testSlocusPopCreate(unittest.TestCase):
+class testDiploidPopulationCreate(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.mutations = fwdpy11.VecMutation()
@@ -50,13 +50,13 @@ class testSlocusPopCreate(unittest.TestCase):
         self.diploids.append(fwdpy11.DiploidGenotype(0, 0))
 
     def testConstruction(self):
-        pop = fwdpy11.SlocusPop(self.diploids, self.gametes, self.mutations)
+        pop = fwdpy11.DiploidPopulation(self.diploids, self.gametes, self.mutations)
         self.assertTrue(pop.N, 1)
 
     def testStaticMethod(self):
-        pop = fwdpy11.SlocusPop.create(
+        pop = fwdpy11.DiploidPopulation.create(
             self.diploids, self.gametes, self.mutations)
-        self.assertTrue(type(pop) is fwdpy11.SlocusPop)
+        self.assertTrue(type(pop) is fwdpy11.DiploidPopulation)
         # Test that data were moved and not copied:
         self.assertEqual(len(self.diploids), 0)
         self.assertEqual(len(self.gametes), 0)
@@ -64,12 +64,12 @@ class testSlocusPopCreate(unittest.TestCase):
 
     def testStaticMethodWithFixations(self):
         ftimes = fwdpy11.VecUint32([1])
-        pop = fwdpy11.SlocusPop.create(self.diploids,
+        pop = fwdpy11.DiploidPopulation.create(self.diploids,
                                        self.gametes,
                                        self.mutations,
                                        self.fixations,
                                        ftimes, 2)
-        self.assertTrue(type(pop) is fwdpy11.SlocusPop)
+        self.assertTrue(type(pop) is fwdpy11.DiploidPopulation)
         self.assertEqual(len(pop.fixations), len(pop.fixation_times))
         # Test that data were moved and not copied:
         self.assertEqual(len(self.diploids), 0)
@@ -96,13 +96,13 @@ class testGameteKeySorting(unittest.TestCase):
 
     def testUnsortedGametes(self):
         with self.assertRaises(ValueError):
-            pop = fwdpy11.SlocusPop.create(
+            pop = fwdpy11.DiploidPopulation.create(
                 self.diploids, self.gametes, self.mutations)
 
     def testSortingGametes(self):
         import fwdpy11.util
         fwdpy11.util.sort_gamete_keys(self.gametes, self.mutations)
-        pop = fwdpy11.SlocusPop.create(
+        pop = fwdpy11.DiploidPopulation.create(
             self.diploids, self.gametes, self.mutations)
 
 

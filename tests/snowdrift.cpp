@@ -1,6 +1,6 @@
 /* Implement a stateful fitness model.
  * We define a new C++ type that will be
- * wrapped as a fwdpy11.fitness.SlocusFitness
+ * wrapped as a fwdpy11.fitness.DiploidFitness
  * object.
  *
  * Such a fitness model is ultimately responsible
@@ -25,22 +25,22 @@ common_mako.setup_mako(cfg)
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/genetic_values/SlocusPopGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 
     namespace py = pybind11;
 
-struct snowdrift : public fwdpy11::SlocusPopGeneticValue
+struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
 /* This is our stateful fitness object.
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
- * Here, we publicly inherit from fwdpy11::SlocusPopGeneticValue,
+ * Here, we publicly inherit from fwdpy11::DiploidPopulationGeneticValue,
  * which is defined in the header included above.  It is
  * an abstract class in C++ terms, and is reflected
  * as a Python Abstract Base Class (ABC) called
- * fwdpy11.genetic_values.SlocusPopGeneticValue.
+ * fwdpy11.genetic_values.DiploidPopulationGeneticValue.
  *
  * The phenotypes get updated each generation during
  * the simulation.
@@ -58,7 +58,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::SlocusPopGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+        : fwdpy11::DiploidPopulationGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
           c2(c2_), phenotypes()
     {
     }
@@ -70,14 +70,14 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::SlocusPopGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+        : fwdpy11::DiploidPopulationGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
           phenotypes(std::forward<T>(p))
     {
     }
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::SlocusPop & /*pop*/) const
+                     const fwdpy11::DiploidPopulation & /*pop*/) const
     // The call operator must return the genetic value of an individual
     {
         gvalues[0] = phenotypes[diploid_index];
@@ -111,7 +111,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     noise(const fwdpy11::GSLrng_t & /*rng*/,
           const fwdpy11::DiploidMetadata & /*offspring_metadata*/,
           const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::SlocusPop & /*pop*/) const
+          const fwdpy11::DiploidPopulation & /*pop*/) const
     // This function may be used to model random effects...
     {
         //...but there are no random effects here.
@@ -119,7 +119,7 @@ struct snowdrift : public fwdpy11::SlocusPopGeneticValue
     }
 
     inline void
-    update(const fwdpy11::SlocusPop &pop)
+    update(const fwdpy11::DiploidPopulation &pop)
     // A stateful fitness model needs updating.
     {
         phenotypes.resize(pop.N);
@@ -158,10 +158,10 @@ PYBIND11_MODULE(snowdrift, m)
     // We need to import the Python version of our base class:
     pybind11::object imported_snowdrift_base_class_type
         = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("SlocusPopGeneticValue");
+              .attr("DiploidPopulationGeneticValue");
 
     // Create a Python class based on our new type
-    py::class_<snowdrift, fwdpy11::SlocusPopGeneticValue>(m, "SlocusSnowdrift")
+    py::class_<snowdrift, fwdpy11::DiploidPopulationGeneticValue>(m, "DiploidSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
         .def_readonly("b1", &snowdrift::b1)

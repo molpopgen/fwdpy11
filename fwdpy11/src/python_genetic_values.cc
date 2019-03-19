@@ -19,8 +19,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
-#include <fwdpy11/types/SlocusPop.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/fitness/fitness.hpp>
 
 namespace py = pybind11;
@@ -28,19 +28,19 @@ namespace py = pybind11;
 struct genetic_value : public fwdpy11::single_locus_fitness
 {
     fwdpy11::single_locus_fitness_fxn ff;
-    std::function<void(const fwdpy11::SlocusPop &)> slocuspop_updater;
+    std::function<void(const fwdpy11::DiploidPopulation &)> slocuspop_updater;
     std::function<void(const fwdpy11::MlocusPop &)> mlocuspop_updater;
 
     genetic_value(fwdpy11::single_locus_fitness_fxn ff_)
         : ff{ std::move(ff_) }, slocuspop_updater{}, mlocuspop_updater{}
     {
-        slocuspop_updater = [this](const fwdpy11::SlocusPop &pop) {};
+        slocuspop_updater = [this](const fwdpy11::DiploidPopulation &pop) {};
         mlocuspop_updater = [this](const fwdpy11::MlocusPop &pop) {};
     }
 
     genetic_value(
         fwdpy11::single_locus_fitness_fxn ff_,
-        std::function<void(const fwdpy11::SlocusPop &)> slocuspop_updater_)
+        std::function<void(const fwdpy11::DiploidPopulation &)> slocuspop_updater_)
         : ff{ std::move(ff_) },
           slocuspop_updater{ std::move(slocuspop_updater_) },
           mlocuspop_updater{}
@@ -50,7 +50,7 @@ struct genetic_value : public fwdpy11::single_locus_fitness
 
     genetic_value(
         fwdpy11::single_locus_fitness_fxn ff_,
-        std::function<void(const fwdpy11::SlocusPop &)> slocuspop_updater_,
+        std::function<void(const fwdpy11::DiploidPopulation &)> slocuspop_updater_,
         std::function<void(const fwdpy11::MlocusPop &)> mlocuspop_updater_)
         : ff{ std::move(ff_) },
           slocuspop_updater{ std::move(slocuspop_updater_) },
@@ -59,7 +59,7 @@ struct genetic_value : public fwdpy11::single_locus_fitness
     }
 
     void
-    update(const fwdpy11::SlocusPop &pop)
+    update(const fwdpy11::DiploidPopulation &pop)
     {
         slocuspop_updater(pop);
     }
@@ -92,13 +92,13 @@ PYBIND11_MODULE(python_genetic_values, m)
                            "Python. See :ref:`customgvalues` for details.")
         .def(py::init<fwdpy11::single_locus_fitness_fxn>())
         .def(py::init<fwdpy11::single_locus_fitness_fxn,
-                      std::function<void(const fwdpy11::SlocusPop &)>>())
+                      std::function<void(const fwdpy11::DiploidPopulation &)>>())
         .def(py::init<fwdpy11::single_locus_fitness_fxn,
-                      std::function<void(const fwdpy11::SlocusPop &)>,
+                      std::function<void(const fwdpy11::DiploidPopulation &)>,
                       std::function<void(const fwdpy11::MlocusPop &)>>())
         .def("__call__", [](const std::shared_ptr<genetic_value> &aw,
                             const fwdpy11::Diploid &dip,
-                            const fwdpy11::SlocusPop &pop) {
+                            const fwdpy11::DiploidPopulation &pop) {
             return aw->callback()(dip, pop.gametes, pop.mutations);
         });
 }

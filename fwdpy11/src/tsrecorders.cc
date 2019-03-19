@@ -29,7 +29,7 @@ PYBIND11_MODULE(tsrecorders, m)
         "A recorder for tree sequence simulations that does nothing.")
         .def(py::init<>())
         .def("__call__",
-             [](fwdpy11::no_ancient_samples& na, const fwdpy11::SlocusPop& pop,
+             [](fwdpy11::no_ancient_samples& na, const fwdpy11::DiploidPopulation& pop,
                 fwdpy11::samplerecorder& sr) { na(pop, sr); });
 
     py::class_<fwdpy11::random_ancient_samples>(
@@ -39,7 +39,7 @@ PYBIND11_MODULE(tsrecorders, m)
                       std::vector<fwdpp::uint_t>>(),
              py::arg("seed"), py::arg("samplesize"), py::arg("timepoints"))
         .def("__call__", [](fwdpy11::random_ancient_samples& na,
-                            const fwdpy11::SlocusPop& pop,
+                            const fwdpy11::DiploidPopulation& pop,
                             fwdpy11::samplerecorder& sr) { na(pop, sr); });
 }
 

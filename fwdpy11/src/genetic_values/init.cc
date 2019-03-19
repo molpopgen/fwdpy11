@@ -5,14 +5,14 @@ namespace py = pybind11;
 void init_MultivariateGeneticValueToFitnessMap(py::module&);
 void init_MultivariateGSS(py::module&);
 void init_MultivariateGSSmo(py::module&);
-void init_SlocusPopMultivariateGeneticValueWithMapping(py::module&);
-void init_SlocusMultivariateEffectsStrictAdditive(py::module&);
+void init_DiploidPopulationMultivariateGeneticValueWithMapping(py::module&);
+void init_DiploidMultivariateEffectsStrictAdditive(py::module&);
 
 void
 init_base_classes(py::module& m)
 {
     init_MultivariateGeneticValueToFitnessMap(m);
-    init_SlocusPopMultivariateGeneticValueWithMapping(m);
+    init_DiploidPopulationMultivariateGeneticValueWithMapping(m);
 }
 
 void
@@ -25,7 +25,7 @@ init_gvalue_to_fitness_classes(py::module& m)
 void
 init_genetic_value_classes(py::module& m)
 {
-    init_SlocusMultivariateEffectsStrictAdditive(m);
+    init_DiploidMultivariateEffectsStrictAdditive(m);
 }
 
 void

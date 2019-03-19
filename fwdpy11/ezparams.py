@@ -24,11 +24,11 @@ def mslike(pop, **kwargs):
     for a single-locus simulation for standard pop-gen
     modeling scenarios.
 
-    :params pop: An instance of :class:`fwdpy11.SlocusPop`
+    :params pop: An instance of :class:`fwdpy11.DiploidPopulation`
     :params kwargs: Keyword arguments.
     """
     import fwdpy11
-    if isinstance(pop, fwdpy11.SlocusPop) is False:
+    if isinstance(pop, fwdpy11.DiploidPopulation) is False:
         raise ValueError("incorrect pop type: " + str(type(pop)))
     import fwdpy11.genetic_values
     defaults = {'simlen': 10*pop.N,
@@ -54,7 +54,7 @@ def mslike(pop, **kwargs):
                         ((1.0-defaults['pneutral'])*defaults['theta']) /
                         (4.0*pop.N),
                         defaults['rho']/(4.0*float(pop.N))),
-              'gvalue': fwdpy11.genetic_values.SlocusMult(2.0)
+              'gvalue': fwdpy11.genetic_values.DiploidMult(2.0)
               }
     if defaults['dfe'] is None:
         params['sregions'] = []
