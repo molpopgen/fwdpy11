@@ -27,6 +27,10 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/GameteVector.cc
     src/fwdpy11_types/rng.cc)
 
+set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
+    src/fwdpy11_functions/change_effect_size.cc
+    src/fwdpy11_functions/sort_gamete_keys.cc)
+
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
@@ -63,8 +67,10 @@ set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
+    ${FWDPY11_FUNCTIONS_SOURCES}
     ${REGION_SOURCES}
     ${GSL_SOURCES})
+
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Population MODULE src/_Population.cc)
 # target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
@@ -76,8 +82,6 @@ pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
 target_link_libraries(genetic_value_noise PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(util MODULE src/fwdpy11_util.cc)
-target_link_libraries(util PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})
 target_link_libraries(ts PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(tsrecorders MODULE src/tsrecorders.cc)
