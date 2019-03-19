@@ -35,10 +35,10 @@ fp = cppimport.imp("fixation_properties")
 class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        mutations = fwdpy11.VecMutation()
-        fixations = fwdpy11.VecMutation()
-        gametes = fwdpy11.VecGamete()
-        diploids = fwdpy11.VecDiploid()
+        mutations = fwdpy11.MutationVector()
+        fixations = fwdpy11.MutationVector()
+        gametes = fwdpy11.GameteVector()
+        diploids = fwdpy11.DiploidVector()
         mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
         gametes.append(fwdpy11.Gamete(

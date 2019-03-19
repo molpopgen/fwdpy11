@@ -39,10 +39,10 @@ class testDiploidCreate(unittest.TestCase):
 class testDiploidPopulationCreate(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.mutations = fwdpy11.VecMutation()
-        self.fixations = fwdpy11.VecMutation()
-        self.gametes = fwdpy11.VecGamete()
-        self.diploids = fwdpy11.VecDiploid()
+        self.mutations = fwdpy11.MutationVector()
+        self.fixations = fwdpy11.MutationVector()
+        self.gametes = fwdpy11.GameteVector()
+        self.diploids = fwdpy11.DiploidVector()
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.fixations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
@@ -82,10 +82,10 @@ class testDiploidPopulationCreate(unittest.TestCase):
 class testGameteKeySorting(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.mutations = fwdpy11.VecMutation()
-        self.fixations = fwdpy11.VecMutation()
-        self.gametes = fwdpy11.VecGamete()
-        self.diploids = fwdpy11.VecDiploid()
+        self.mutations = fwdpy11.MutationVector()
+        self.fixations = fwdpy11.MutationVector()
+        self.gametes = fwdpy11.GameteVector()
+        self.diploids = fwdpy11.DiploidVector()
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.mutations.append(fwdpy11.Mutation(0.01, -2, 1, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
@@ -100,8 +100,7 @@ class testGameteKeySorting(unittest.TestCase):
                 self.diploids, self.gametes, self.mutations)
 
     def testSortingGametes(self):
-        import fwdpy11.util
-        fwdpy11.util.sort_gamete_keys(self.gametes, self.mutations)
+        fwdpy11.sort_gamete_keys(self.gametes, self.mutations)
         pop = fwdpy11.DiploidPopulation.create(
             self.diploids, self.gametes, self.mutations)
 
