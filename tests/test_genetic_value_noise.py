@@ -23,8 +23,8 @@ import unittest
 class testNoNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_value_noise
-        self.n = fwdpy11.genetic_value_noise.NoNoise()
+        import fwdpy11
+        self.n = fwdpy11.NoNoise()
 
     def testPickle(self):
         import pickle
@@ -36,7 +36,7 @@ class testNoNoise(unittest.TestCase):
 class testNoNoisePackageAlias(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_value_noise as fancyname
+        import fwdpy11 as fancyname
         self.n = fancyname.NoNoise()
 
     def testPickle(self):
@@ -49,10 +49,10 @@ class testNoNoisePackageAlias(unittest.TestCase):
 class testGaussianNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_value_noise
+        import fwdpy11
         self.sd = 1.0
         self.mean = 0.0
-        self.n = fwdpy11.genetic_value_noise.GaussianNoise(
+        self.n = fwdpy11.GaussianNoise(
             sd=self.sd, mean=self.mean)
 
     def testPickle(self):

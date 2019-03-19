@@ -17,14 +17,14 @@
 
 # Main goal is to test pickling
 
+import fwdpy11
 import unittest
 
 
 class testGeneticValueIsFitness(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_values
-        self.g = fwdpy11.genetic_values.GeneticValueIsFitness()
+        self.g = fwdpy11.GeneticValueIsFitness()
 
     def testPickle(self):
         import pickle
@@ -36,10 +36,9 @@ class testGeneticValueIsFitness(unittest.TestCase):
 class testGSS(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_values
         self.VS = 1.0
         self.opt = 0.0
-        self.g = fwdpy11.genetic_values.GSS(VS=self.VS, opt=self.opt)
+        self.g = fwdpy11.GSS(VS=self.VS, opt=self.opt)
 
     def testPickle(self):
         import pickle
@@ -52,9 +51,8 @@ class testGSS(unittest.TestCase):
 class testGSSmo(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_values
         self.optima = [(0, 0.0, 1.0), (100, 1.0, 1.0)]
-        self.g = fwdpy11.genetic_values.GSSmo(self.optima)
+        self.g = fwdpy11.GSSmo(self.optima)
 
     def testPickle(self):
         import pickle

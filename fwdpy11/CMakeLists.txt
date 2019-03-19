@@ -49,9 +49,24 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc
     src/genetic_values/Multiplicative.cc
     src/genetic_values/GBR.cc
     src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
-    src/genetic_values/MultivariateGeneticValueToFitnessMap.cc
-    src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc src/genetic_values/MultivariateGSS.cc
-    src/genetic_values/MultivariateGSSmo.cc)
+    src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc)
+
+set(GENETIC_VALUE_TO_FITNESS_SOURCES
+    src/genetic_value_to_fitness/init.cc
+    src/genetic_value_to_fitness/GeneticValueToFitnessMap.cc
+    src/genetic_value_to_fitness/GeneticValueIsFitness.cc
+    src/genetic_value_to_fitness/GeneticValueIsTrait.cc
+    src/genetic_value_to_fitness/GSS.cc
+    src/genetic_value_to_fitness/GSSmo.cc
+    src/genetic_value_to_fitness/MultivariateGeneticValueToFitnessMap.cc
+    src/genetic_value_to_fitness/MultivariateGSS.cc
+    src/genetic_value_to_fitness/MultivariateGSSmo.cc)
+
+set(GENETIC_VALUE_NOISE_SOURCES
+    src/genetic_value_noise/init.cc
+    src/genetic_value_noise/GeneticValueNoise.cc
+    src/genetic_value_noise/NoNoise.cc
+    src/genetic_value_noise/GaussianNoise.cc)
 
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc
@@ -75,6 +90,9 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
     ${FWDPY11_FUNCTIONS_SOURCES}
     ${REGION_SOURCES}
+    ${GENETIC_VALUE_NOISE_SOURCES}
+    ${GENETIC_VALUE_TO_FITNESS_SOURCES}
+    ${GENETIC_VALUE_SOURCES}
     ${GSL_SOURCES})
 
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
@@ -82,10 +100,6 @@ pybind11_add_module(_Population MODULE src/_Population.cc)
 # target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_Populations MODULE src/_Populations.cc)
 target_link_libraries(_Populations PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(genetic_values MODULE src/genetic_values.cc ${GENETIC_VALUE_SOURCES})
-target_link_libraries(genetic_values PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(genetic_value_noise MODULE src/genetic_value_noise.cc)
-target_link_libraries(genetic_value_noise PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})

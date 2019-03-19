@@ -1,22 +1,3 @@
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-
 #include <gsl/gsl_randist.h>
 #include <pybind11/pybind11.h>
 #include <fwdpy11/genetic_values/noise.hpp>
@@ -63,23 +44,9 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     }
 };
 
-PYBIND11_MODULE(genetic_value_noise, m)
+void
+init_GaussianNoise(py::module& m)
 {
-    m.doc() = "\"Noise\" added to genetic values.";
-
-    py::class_<fwdpy11::GeneticValueNoise>(
-        m, "GeneticValueNoise",
-        "ABC for noise classes affecting :class:`fwdpy11.DiploidPopulation`.");
-
-    py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
-        m, "NoNoise", "Type implying no random effects on genetic values.")
-        .def(py::init<>())
-        .def(py::pickle(
-            [](const fwdpy11::NoNoise& o) -> py::object { return o.pickle(); },
-            [](py::object& o) {
-                return fwdpy11::NoNoise::unpickle(o);
-            }));
-
     py::class_<GaussianNoise, fwdpy11::GeneticValueNoise>(
         m, "GaussianNoise", "Gaussian noise added to genetic values.")
         .def(py::init<double, double>(), py::arg("sd"), py::arg("mean") = 0.0,
@@ -95,3 +62,4 @@ PYBIND11_MODULE(genetic_value_noise, m)
             [](const GaussianNoise& o) -> py::object { return o.pickle(); },
             [](py::object& o) { return GaussianNoise::unpickle(o); }));
 }
+

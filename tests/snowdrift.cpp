@@ -157,8 +157,8 @@ PYBIND11_MODULE(snowdrift, m)
 
     // We need to import the Python version of our base class:
     pybind11::object imported_snowdrift_base_class_type
-        = pybind11::module::import("fwdpy11.genetic_values")
-              .attr("DiploidPopulationGeneticValue");
+        = pybind11::module::import("fwdpy11")
+              .attr("GeneticValue");
 
     // Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::DiploidPopulationGeneticValue>(m, "DiploidSnowdrift")

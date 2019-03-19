@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 import fwdpy11
 import fwdpy11.model_params
-import fwdpy11.genetic_values
 import fwdpy11.wright_fisher_ts
 
 
@@ -11,7 +10,7 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000, 1.0)
         p = {'nregions': [],  # No neutral mutations -- add them later!
-             'gvalue': fwdpy11.genetic_values.DiploidAdditive(2.0),
+             'gvalue': fwdpy11.Additive(2.0),
              'sregions': [fwdpy11.ExpS(0, 1, 1, -0.1)],
              'recregions': [fwdpy11.Region(0, 1, 1)],
              'rates': (0.0, 1e-3, 1e-3),

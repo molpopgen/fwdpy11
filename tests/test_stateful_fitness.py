@@ -8,7 +8,6 @@ import pickle
 import numpy as np
 import fwdpy11 as fp11
 import fwdpy11.model_params
-import fwdpy11.genetic_values
 import fwdpy11.wright_fisher
 import fwdpy11.ezparams
 cppimport.force_rebuild()
