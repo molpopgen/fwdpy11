@@ -23,10 +23,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(gsl_random, m)
+void
+init_gsl_random(py::module& m)
 {
-    m.doc() = "Wrappers around the GSL random number distributions";
-
     m.def("gsl_ran_gaussian_ziggurat",
           [](const fwdpy11::GSLrng_t& rng, const double sd) {
               return gsl_ran_gaussian_ziggurat(rng.get(), sd);
