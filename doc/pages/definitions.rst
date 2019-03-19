@@ -33,7 +33,7 @@ A locus contains the following properties:
 * Regions specify how recombination and mutation occur in a gamete.  See :ref:`gametes`.
 * Loci cannot overlap, but recombination can occur between them.
 
-A "single locus" simulation of a single deme means that an object of type :class:`fwdpy11.SlocusPop` is
+A "single locus" simulation of a single deme means that an object of type :class:`fwdpy11.DiploidPopulation` is
 being evolved.  Within that locus, you may have as many regions as you want.  You may even think of them as different
 "genes" (aka loci), but that is a different locus concept from what we are using here. See :ref:`slocuspop` for more
 details on this type.

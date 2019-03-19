@@ -24,7 +24,7 @@ First, we'll quickly simulate a single deme for `N` generations:
     rng = fwdpy11.GSLrng(42)
 
     theta,rho = 100.0,100.0
-    pop = fwdpy11.SlocusPop(1000)
+    pop = fwdpy11.DiploidPopulation(1000)
 
     pdict = fwdpy11.ezparams.mslike(pop,simlen=pop.N,
         dfe=fwdpy11.ExpS(0,1,1,-0.1,1),pneutral = 0.95)

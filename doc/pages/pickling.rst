@@ -35,8 +35,8 @@ Some general notes:
 In fwdpy11 0.3.0, population classes have two new functions that avoid high memory consumption while pickling.
 The cost is that pickling is slower.  The functions are:
 
-* :func:`fwdpy11.SlocusPop.pickle_to_file`, which is an instance method
-* :func:`fwdpy11.SlocusPop.load_from_pickle_file`, which is a static method
+* :func:`fwdpy11.DiploidPopulation.pickle_to_file`, which is an instance method
+* :func:`fwdpy11.DiploidPopulation.load_from_pickle_file`, which is a static method
 
 Please notes that these functions must be used in a coordinated manner!  See documentation for details.
 
@@ -49,7 +49,7 @@ Please notes that these functions must be used in a coordinated manner!  See doc
     import numpy as np
     import pickle
 
-    pop = fp11.SlocusPop(1000)
+    pop = fp11.DiploidPopulation(1000)
     p = fwdpy11.ezparams.mslike(pop,
         simlen=100,
         rates=(1e-3,0.,1e-3))

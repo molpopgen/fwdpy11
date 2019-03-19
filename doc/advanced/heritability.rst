@@ -50,7 +50,7 @@ Thus, when we parameterize objects for our simulations, we should only pass :mat
          'sregions': [fwdpy11.ExpS(0, 1, 1, 0.25)],
          'recregions': [fwdpy11.Region(0, 1, 1)],
          'rates': (1e-3, 2e-3, 1e-3),
-         'gvalue': fwdpy11.genetic_values.SlocusAdditive(2.0,gv2w,noise),
+         'gvalue': fwdpy11.genetic_values.DiploidAdditive(2.0,gv2w,noise),
          'prune_selected': False,
          }
     params = fwdpy11.model_params.ModelParams(**p)
