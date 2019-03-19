@@ -1,5 +1,5 @@
 import unittest
-import fwdpy11.sampling
+import fwdpy11
 import numpy as np
 from quick_pops import quick_nonneutral_slocus
 
@@ -14,10 +14,10 @@ class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
     def setUpClass(self):
         self.pop = quick_nonneutral_slocus()
         self.indlist = [i for i in range(100, 150)]
-        self.keys = fwdpy11.sampling.mutation_keys(self.pop, self.indlist)
-        self.hm = fwdpy11.sampling.haplotype_matrix(
+        self.keys = fwdpy11.mutation_keys(self.pop, self.indlist)
+        self.hm = fwdpy11.haplotype_matrix(
             self.pop, self.indlist, self.keys[0], self.keys[1])
-        self.gm = fwdpy11.sampling.genotype_matrix(
+        self.gm = fwdpy11.genotype_matrix(
             self.pop, self.indlist, self.keys[0], self.keys[1])
         self.hm_neutral = np.array(self.hm.neutral)
         self.hm_selected = np.array(self.hm.selected)
@@ -89,7 +89,7 @@ class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
             j += 1
 
     def testHapMatToSample(self):
-        neut_sample, sel_sample = fwdpy11.sampling.matrix_to_sample(self.hm)
+        neut_sample, sel_sample = fwdpy11.matrix_to_sample(self.hm)
         rowSums = self.hm_neutral.sum(axis=1)
         rowSumsSel = self.hm_selected.sum(axis=1)
         self.assertEqual(len(neut_sample), self.hm_neutral.shape[0])

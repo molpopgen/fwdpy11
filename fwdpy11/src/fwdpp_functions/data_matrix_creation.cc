@@ -1,45 +1,15 @@
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-
-#include <pybind11/functional.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
-#include <pybind11/numpy.h>
-#include <array>
-#include <fwdpp/forward_types.hpp>
 #include <fwdpp/data_matrix.hpp>
-#include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/sampling/data_matrix_functions.hpp>
-#include <gsl/gsl_matrix_char.h>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
 namespace py = pybind11;
 
-static_assert(sizeof(char) == sizeof(std::int8_t),
-              "sizeof(char) must equal sizeof(std::int8_t)");
 
-PYBIND11_MAKE_OPAQUE(std::vector<std::int8_t>);
-
-PYBIND11_MODULE(sampling, m)
+void
+init_data_matrix_creation_functions(py::module &m)
 {
-    m.doc() = "Taking samples from populations";
-
 #define MUTATION_KEYS(POPTYPE, CLASSTYPE)                                     \
     m.def("mutation_keys",                                                    \
           [](const POPTYPE &pop, const std::vector<std::size_t> &individuals, \
@@ -140,3 +110,4 @@ PYBIND11_MODULE(sampling, m)
           )delim",
           py::arg("m"));
 }
+
