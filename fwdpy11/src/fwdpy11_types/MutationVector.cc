@@ -35,17 +35,16 @@ struct flattened_Mutation
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 PYBIND11_MAKE_OPAQUE(std::vector<flattened_Mutation>);
 
-PYBIND11_MODULE(_opaque_mutations, m)
+void
+init_MutationVector(py::module& m)
 {
-    m.doc()
-        = "Expose C++ vectors of Mutation objects to Python without copies.";
-
     PYBIND11_NUMPY_DTYPE(flattened_Mutation, pos, s, h, g, label, neutral);
 
     py::bind_vector<std::vector<fwdpy11::Mutation>>(
-        m, "VecMutation", "C++ representation of a list of "
-                          ":class:`fwdpy11.Mutation`.  "
-                          "Typically, access will be read-only.",
+        m, "MutationVector",
+        "C++ representation of a list of "
+        ":class:`fwdpy11.Mutation`.  "
+        "Typically, access will be read-only.",
         py::module_local(false))
         .def("array",
              [](const std::vector<fwdpy11::Mutation>& mc) {
@@ -85,7 +84,7 @@ PYBIND11_MODULE(_opaque_mutations, m)
             }));
 
     py::bind_vector<std::vector<flattened_Mutation>>(
-        m, "VecMutationDtype", py::buffer_protocol(), py::module_local(false),
+        m, "MutationDtypeVector", py::buffer_protocol(), py::module_local(false),
         R"delim(
         Vector of the data fields in a "
         ":class:`fwdpy11.Mutation`.
