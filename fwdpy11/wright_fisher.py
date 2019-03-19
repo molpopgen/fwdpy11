@@ -46,7 +46,7 @@ def evolve(rng, pop, params, recorder=None):
 
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
-    from .wright_fisher_slocus import WFDiploidPopulation
+    from ._wright_fisher import WFDiploidPopulation
     from fwdpy11 import GeneralizedGeneticMap
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
