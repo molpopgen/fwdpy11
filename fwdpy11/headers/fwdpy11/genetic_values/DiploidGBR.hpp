@@ -19,13 +19,13 @@
 #ifndef FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 #define FWDPY11_GENETIC_VALUES_SLOCUSGBR_HPP__
 
-#include "fwdpp_wrappers/fwdpp_slocus_gvalue.hpp"
+#include "fwdpp_wrappers/fwdpp_genetic_value.hpp"
 #include "details/GBR.hpp"
 #include "details/pickle_GBR.hpp"
 
 namespace fwdpy11
 {
-    using DiploidGBR = fwdpp_slocus_gvalue<GBR,pickle_GBR>;
+    using DiploidGBR = fwdpp_genetic_value<GBR,pickle_GBR>;
 } // namespace fwdpy11
 
 #endif
