@@ -71,7 +71,7 @@ class DiploidPopulation(_DiploidPopulation):
 
         :rtype: :class:`fwdpy11.DiploidPopulation`
         :returns: A population object with an initialized
-        :class:`fwdpy11.ts.TableCollection`
+        :class:`fwdpy11.TableCollection`
 
         .. versionadded:: 0.2.0
 
