@@ -33,7 +33,7 @@ def evolve(rng, pop, params, recorder=None):
 
     .. note::
         If recorder is None,
-        then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
+        then :class:`fwdpy11.RecordNothing` will be used.
 
     """
     import warnings
@@ -56,7 +56,7 @@ def evolve(rng, pop, params, recorder=None):
         rm = GeneralizedGeneticMap(params.recregions)
 
     if recorder is None:
-        from fwdpy11.temporal_samplers import RecordNothing
+        from fwdpy11 import RecordNothing
         recorder = RecordNothing()
 
     WFDiploidPopulation(rng, pop, params.demography,
