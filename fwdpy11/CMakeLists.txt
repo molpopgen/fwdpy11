@@ -34,7 +34,9 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/DiploidMetadata.cc
     src/fwdpy11_types/DiploidVector.cc
     src/fwdpy11_types/GameteVector.cc
-    src/fwdpy11_types/rng.cc)
+    src/fwdpy11_types/rng.cc
+    src/fwdpy11_types/PopulationBase.cc
+    src/fwdpy11_types/DiploidPopulation.cc)
 
 set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
     src/fwdpy11_functions/change_effect_size.cc
@@ -107,10 +109,6 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${GSL_SOURCES})
 
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_Population MODULE src/_Population.cc)
-# target_link_libraries(_Population PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_Populations MODULE src/_Populations.cc)
-target_link_libraries(_Populations PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(tsrecorders MODULE src/tsrecorders.cc)

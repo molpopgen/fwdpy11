@@ -9,6 +9,8 @@ void init_DiploidMetadata(py::module &m);
 void init_DiploidVector(py::module & m);
 void init_GameteVector(py::module & m);
 void init_rng(py::module &);
+void init_PopulationBase(py::module & m);
+void init_DiploidPopulation(py::module & m);
 
 void initialize_fwdpy11_types(py::module & m)
 {
@@ -19,4 +21,6 @@ void initialize_fwdpy11_types(py::module & m)
     init_DiploidVector(m);
     init_GameteVector(m);
     init_rng(m);
+    init_PopulationBase(m);
+    init_DiploidPopulation(m);
 }
