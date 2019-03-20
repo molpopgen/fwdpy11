@@ -99,11 +99,6 @@ PYBIND11_MODULE(ts_from_tskit, m)
     m.doc() = "Converts node and edge data from tree sequences generated in "
               "tskit";
 
-    // Import fwdpy11.ts so that relevant C++ types
-    // have their Python wrappers visible here
-    auto imported_ts = static_cast<pybind11::object>(
-        pybind11::module::import("fwdpy11.ts"));
-
     // Expose this for unit-testing purposes
     m.def("_convert_tables", &convert_tables_from_tskit);
 
