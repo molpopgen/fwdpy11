@@ -25,6 +25,7 @@
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/eval.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/types/create_pops.hpp>
@@ -48,39 +49,18 @@ PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
-PYBIND11_MODULE(_Populations, m)
+void
+init_DiploidPopulation(py::module& m)
 {
+    //py::object base_class_module
+    //    = (pybind11::object)pybind11::module::import("fwdpy11._Population");
 
-    py::object base_class_module
-        = (pybind11::object)pybind11::module::import("fwdpy11._Population");
-
-    py::object data_matrix_python_representation
-        = (pybind11::object)py::module::import("fwdpy11._fwdpy11")
-              .attr("DataMatrix");
-
-    py::bind_vector<std::vector<fwdpp::uint_t>>(
-        m, "VecUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol())
-        .def(py::pickle(
-            [](const std::vector<fwdpp::uint_t>& v) {
-                py::list rv;
-                for (auto&& i : v)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<fwdpp::uint_t> rv;
-                for (auto&& i : l)
-                    {
-                        rv.push_back(i.cast<fwdpp::uint_t>());
-                    }
-                return rv;
-            }));
+    //py::object data_matrix_python_representation
+    //    = (pybind11::object)py::module::import("fwdpy11._fwdpy11")
+    //          .attr("DataMatrix");
 
     py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
-        m, "_DiploidPopulation", "Representation of a single-locus population")
+        m, "DiploidPopulation", "Representation of a single-locus population")
         .def(py::init<fwdpp::uint_t, double>(),
              "Construct with an unsigned integer "
              "representing the initial "
@@ -105,9 +85,8 @@ PYBIND11_MODULE(_Populations, m)
         .def("clear", &fwdpy11::DiploidPopulation::clear,
              "Clears all population data.")
         .def("__eq__",
-             [](const fwdpy11::DiploidPopulation& lhs, const fwdpy11::DiploidPopulation& rhs) {
-                 return lhs == rhs;
-             })
+             [](const fwdpy11::DiploidPopulation& lhs,
+                const fwdpy11::DiploidPopulation& rhs) { return lhs == rhs; })
         .def_readonly("diploids", &fwdpy11::DiploidPopulation::diploids,
                       DIPLOIDS_DOCSTRING)
         .def_static(
@@ -118,11 +97,13 @@ PYBIND11_MODULE(_Populations, m)
                py::tuple args) -> fwdpy11::DiploidPopulation {
                 if (args.size() == 0)
                     {
-                        return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
+                        return fwdpy11::create_wrapper<
+                            fwdpy11::DiploidPopulation>()(
                             std::move(diploids), std::move(gametes),
                             std::move(mutations));
                     }
-                auto& fixations = args[0].cast<fwdpy11::DiploidPopulation::mcont_t&>();
+                auto& fixations
+                    = args[0].cast<fwdpy11::DiploidPopulation::mcont_t&>();
                 auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
                 auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
@@ -141,7 +122,8 @@ PYBIND11_MODULE(_Populations, m)
             },
             [](py::object pickled) -> fwdpy11::DiploidPopulation {
                 auto s = pickled.cast<py::bytes>().cast<std::string>();
-                fwdpy11::DiploidPopulation pop(1, std::numeric_limits<double>::max());
+                fwdpy11::DiploidPopulation pop(
+                    1, std::numeric_limits<double>::max());
                 std::istringstream in(std::move(s));
                 fwdpy11::serialization::deserialize_details()(in, pop);
                 return pop;
@@ -177,9 +159,9 @@ PYBIND11_MODULE(_Populations, m)
              py::arg("individuals"), py::arg("haplotype") = true,
              py::arg("remove_fixed") = true)
         .def("sample",
-             [](const fwdpy11::DiploidPopulation& pop, const fwdpy11::GSLrng_t& rng,
-                const std::uint32_t nsam, const bool haplotype,
-                const bool remove_fixed) {
+             [](const fwdpy11::DiploidPopulation& pop,
+                const fwdpy11::GSLrng_t& rng, const std::uint32_t nsam,
+                const bool haplotype, const bool remove_fixed) {
                  return pop.sample_random_individuals(rng, nsam, haplotype,
                                                       remove_fixed);
              },
@@ -210,7 +192,8 @@ PYBIND11_MODULE(_Populations, m)
              )delim")
         .def("add_mutations", &fwdpy11::DiploidPopulation::add_mutations)
         .def("dump_to_file",
-             [](const fwdpy11::DiploidPopulation& pop, const std::string filename) {
+             [](const fwdpy11::DiploidPopulation& pop,
+                const std::string filename) {
                  std::ofstream out(filename.c_str(), std::ios_base::binary);
                  if (!out)
                      {
@@ -221,20 +204,21 @@ PYBIND11_MODULE(_Populations, m)
                  out.close();
              },
              "Write a population to a file in binary format.")
-        .def_static(
-            "load_from_file",
-            [](const std::string filename) {
-                std::ifstream in(filename.c_str(), std::ios_base::binary);
-                if (!in)
-                    {
-                        throw std::runtime_error(
-                            "could not open file for reading");
-                    }
-                fwdpy11::DiploidPopulation pop(1, std::numeric_limits<double>::max());
-                fwdpy11::serialization::deserialize_details()(in, pop);
-                return pop;
-            },
-            "Load a population from a binary file.")
+        .def_static("load_from_file",
+                    [](const std::string filename) {
+                        std::ifstream in(filename.c_str(),
+                                         std::ios_base::binary);
+                        if (!in)
+                            {
+                                throw std::runtime_error(
+                                    "could not open file for reading");
+                            }
+                        fwdpy11::DiploidPopulation pop(
+                            1, std::numeric_limits<double>::max());
+                        fwdpy11::serialization::deserialize_details()(in, pop);
+                        return pop;
+                    },
+                    "Load a population from a binary file.")
         .def("pickle_to_file",
              [](const fwdpy11::DiploidPopulation& self, py::object f) {
                  auto dump = py::module::import("pickle").attr("dump");
@@ -243,6 +227,10 @@ PYBIND11_MODULE(_Populations, m)
                                      self.fixations.size(), self.generation,
                                      self.tables.genome_length()),
                       f);
+                 py::object scope
+                     = py::module::import("__main__").attr("__dict__");
+                 py::eval(R"(print("wahoo!"))");
+
                  for (auto& d : self.diploids)
                      {
                          dump(d, f);
@@ -311,10 +299,11 @@ PYBIND11_MODULE(_Populations, m)
                 auto load = py::module::import("pickle").attr("load");
                 py::tuple popdata = load(f);
                 fwdpy11::DiploidPopulation rv(popdata[0].cast<fwdpp::uint_t>(),
-                                      popdata[5].cast<double>());
+                                              popdata[5].cast<double>());
                 rv.generation
                     = popdata[4]
-                          .cast<decltype(fwdpy11::DiploidPopulation::generation)>();
+                          .cast<decltype(
+                              fwdpy11::DiploidPopulation::generation)>();
                 auto ndips = popdata[0].cast<std::size_t>();
                 auto ngams = popdata[1].cast<std::size_t>();
                 auto nmuts = popdata[2].cast<std::size_t>();

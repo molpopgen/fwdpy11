@@ -51,7 +51,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         then :class:`fwdpy11.tsrecorders.NoAncientSamples` will be used.
 
     """
-    import fwdpy11.DiploidPopulation
+    from ._fwdpy11 import DiploidPopulation
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -78,11 +78,12 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     from fwdpy11 import MutationRegions
     from fwdpy11 import RecombinationRegions
     from fwdpy11 import GeneralizedGeneticMap
+    from fwdpy11 import Region
     from ._tsevolution import WFDiploidPopulation_ts
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    if all([i.__class__ is fwdpy11.Region for i in params.recregions]) is True:
+    if all([i.__class__ is Region for i in params.recregions]) is True:
         rm = RecombinationRegions(params.recrate, params.recregions)
     else:
         rm = GeneralizedGeneticMap(params.recregions)
