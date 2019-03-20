@@ -19,6 +19,7 @@
 
 import fwdpy11
 import unittest
+import numpy as np
 
 
 class testGeneticValueIsFitness(unittest.TestCase):
@@ -61,6 +62,21 @@ class testGSSmo(unittest.TestCase):
         self.assertEqual(up.VS, 1.0)
         self.assertEqual(up.opt, 0.0)
         self.assertEqual(up.optima, self.optima)
+
+
+class testMultivariateGSSmo(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.optima = np.array([0., 0., 1., 1.]).reshape(2, 2)
+        self.timepoints = [0, 100]
+        self.mvgssmo = fwdpy11.MultivariateGSSmo(
+            self.timepoints, self.optima, 1.0)
+
+    def test_pickle(self):
+        import pickle
+        p = pickle.dumps(self.mvgssmo)
+        up = pickle.loads(p)
+        self.assertEqual(self.mvgssmo, up)
 
 
 if __name__ == "__main__":
