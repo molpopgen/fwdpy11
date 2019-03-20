@@ -29,6 +29,7 @@ void initialize_genetic_value_noise(py::module &);
 void initialize_genetic_value_to_fitness(py::module &);
 void init_genetic_values(py::module &);
 void init_GSL(py::module &);
+void init_ts(py::module&);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
@@ -52,4 +53,5 @@ PYBIND11_MODULE(_fwdpy11, m)
     initialize_genetic_value_to_fitness(m);
     init_genetic_values(m);
     init_GSL(m);
+    init_ts(m);
 }
