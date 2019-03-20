@@ -89,7 +89,7 @@ init_DiploidPopulation(py::module& m)
             [](fwdpy11::DiploidPopulation::dipvector_t& diploids,
                fwdpy11::DiploidPopulation::gcont_t& gametes,
                fwdpy11::DiploidPopulation::mcont_t& mutations,
-               py::tuple args) -> fwdpy11::DiploidPopulation {
+               py::args args) -> fwdpy11::DiploidPopulation {
                 if (args.size() == 0)
                     {
                         return fwdpy11::create_wrapper<
@@ -107,7 +107,34 @@ init_DiploidPopulation(py::module& m)
                     std::move(ftimes), g);
             },
             py::arg("diploids"), py::arg("gametes"), py::arg("mutations"),
-            py::arg("args"))
+            R"delim(
+        Create a new object from input data.
+        Unlike the constructor method, this method results
+        in no temporary copies of input data.
+
+        :param diplods: A :class:`fwdpy11.VecDiploid`
+        :param gametes: A :class:`fwdpy11.VecGamete`
+        :param mutations: A :class:`fwdpy11.VecMutation`
+        :param args: Fixations, fixation times, and generation
+
+        :rtype: :class:`fwdpy11.DiploidPopulation`
+
+        See :ref:`popobjects` for example use.
+
+        When passing in extra args, they must be the following:
+
+        fixations: A :class:`fwdpy11.VecMutation`
+        fixation times: A :class:`fwdpy11.VecUint32`
+        generation: A non-negative integer
+
+        It is required that len(fixations) == len(fixation times).
+
+        The result of passing in these extra args will be an object
+        with its fixation data populated and its generation set
+        to the input value.
+
+        .. versionadded:: 0.1.4
+        )delim")
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;
