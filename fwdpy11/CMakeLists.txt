@@ -80,7 +80,8 @@ set(GENETIC_VALUE_NOISE_SOURCES
 set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc
     src/ts/simplify.cc
-    src/ts/data_matrix_from_tables.cc)
+    src/ts/data_matrix_from_tables.cc
+    src/ts/infinite_sites.cc)
 
 set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
     src/tsevolution/diploidpop.cc
@@ -102,6 +103,7 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${GENETIC_VALUE_NOISE_SOURCES}
     ${GENETIC_VALUE_TO_FITNESS_SOURCES}
     ${GENETIC_VALUE_SOURCES}
+    ${TS_SOURCES}
     ${GSL_SOURCES})
 
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
@@ -111,8 +113,6 @@ pybind11_add_module(_Populations MODULE src/_Populations.cc)
 target_link_libraries(_Populations PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(ts MODULE src/ts.cc ${TS_SOURCES})
-target_link_libraries(ts PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(tsrecorders MODULE src/tsrecorders.cc)
 target_link_libraries(tsrecorders PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(ts_from_tskit MODULE src/ts_from_tskit.cc)
