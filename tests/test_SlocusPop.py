@@ -17,13 +17,13 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import unittest
-import fwdpy11 as fp11
+import fwdpy11
 
 
 class testDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.pop = fp11.DiploidPopulation(1000)
+        self.pop = fwdpy11.DiploidPopulation(1000)
 
     def test_N(self):
         self.assertEqual(self.pop.N, 1000)
@@ -53,7 +53,7 @@ class testDiploidPopulation(unittest.TestCase):
 class testDiploidPopulationExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
-            fp11.DiploidPopulation(0)
+            fwdpy11.DiploidPopulation(0)
 
 
 class testSampling(unittest.TestCase):
@@ -61,7 +61,7 @@ class testSampling(unittest.TestCase):
     def setUpClass(self):
         from quick_pops import quick_nonneutral_slocus
         self.pop = quick_nonneutral_slocus()
-        self.rng = fp11.GSLrng(42)
+        self.rng = fwdpy11.GSLrng(42)
 
     def testDefinedSample(self):
         self.pop.sample(individuals=range(10))
@@ -85,7 +85,7 @@ class testPythonObjects(unittest.TestCase):
     def setUp(self):
         from quick_pops import quick_slocus_qtrait_pop_params
         self.pop, self.pdict = quick_slocus_qtrait_pop_params()
-        self.rng = fp11.GSLrng(101)
+        self.rng = fwdpy11.GSLrng(101)
 
     def testParentalData(self):
         from fwdpy11.model_params import ModelParams
@@ -100,22 +100,20 @@ class testPythonObjects(unittest.TestCase):
             self.assertTrue(i[1] < self.pop.N)
 
     def test_nodes(self):
-        import fwdpy11.ts
         self.assertEqual(len(self.pop.diploids),
                          len(self.pop.diploid_metadata))
         for i in self.pop.diploid_metadata:
-            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
-            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[0], fwdpy11.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.NULL_NODE)
 
     def test_nodes_after_evolution(self):
         from fwdpy11.model_params import ModelParams
         from fwdpy11.wright_fisher import evolve
-        import fwdpy11.ts
         params = ModelParams(**self.pdict)
         evolve(self.rng, self.pop, params)
         for i in self.pop.diploid_metadata:
-            self.assertEqual(i.nodes[0], fwdpy11.ts.NULL_NODE)
-            self.assertEqual(i.nodes[1], fwdpy11.ts.NULL_NODE)
+            self.assertEqual(i.nodes[0], fwdpy11.NULL_NODE)
+            self.assertEqual(i.nodes[1], fwdpy11.NULL_NODE)
 
     def testMutationLookupTable(self):
         from fwdpy11.model_params import ModelParams
@@ -145,7 +143,7 @@ class testPythonObjects(unittest.TestCase):
         This test does not use the class fixture.
         Instead, we use an empty pop object.
         """
-        pop = fp11.DiploidPopulation(100)
+        pop = fwdpy11.DiploidPopulation(100)
         self.assertTrue(pop.mut_lookup is None)
 
 
