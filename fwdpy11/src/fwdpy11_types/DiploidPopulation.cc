@@ -52,13 +52,6 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 void
 init_DiploidPopulation(py::module& m)
 {
-    //py::object base_class_module
-    //    = (pybind11::object)pybind11::module::import("fwdpy11._Population");
-
-    //py::object data_matrix_python_representation
-    //    = (pybind11::object)py::module::import("fwdpy11._fwdpy11")
-    //          .attr("DataMatrix");
-
     py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
         m, "DiploidPopulation", "Representation of a single-locus population")
         .def(py::init<fwdpp::uint_t, double>(),
