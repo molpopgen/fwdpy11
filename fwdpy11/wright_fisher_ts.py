@@ -48,7 +48,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     .. note::
         If recorder is None,
-        then :class:`fwdpy11.tsrecorders.NoAncientSamples` will be used.
+        then :class:`fwdpy11.NoAncientSamples` will be used.
 
     """
     from ._fwdpy11 import DiploidPopulation
@@ -68,7 +68,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         params.validate()
 
     if recorder is None:
-        from fwdpy11.tsrecorders import NoAncientSamples
+        from fwdpy11 import NoAncientSamples
         recorder = NoAncientSamples()
 
     if stopping_criterion is None:
@@ -88,7 +88,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     else:
         rm = GeneralizedGeneticMap(params.recregions)
 
-    from fwdpy11.tsrecorders import SampleRecorder
+    from fwdpy11 import SampleRecorder
     sr = SampleRecorder()
     WFDiploidPopulation_ts(rng, pop, sr, simplification_interval,
                    params.demography, params.mutrate_s,

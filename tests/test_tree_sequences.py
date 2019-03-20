@@ -1,6 +1,5 @@
 import unittest
 import fwdpy11
-import fwdpy11.tsrecorders
 import fwdpy11.model_params
 import fwdpy11.wright_fisher_ts
 import numpy as np
@@ -244,7 +243,7 @@ class testSamplePreservation(unittest.TestCase):
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
+        self.recorder = fwdpy11.RandomAncientSamples(seed=42,
                                                                  samplesize=10,
                                                                  timepoints=[i for i in range(1, 101)])
         fwdpy11.wright_fisher_ts.evolve(
@@ -296,7 +295,7 @@ class testSimplificationInterval(unittest.TestCase):
         self.params = fwdpy11.model_params.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        self.recorder = fwdpy11.tsrecorders.RandomAncientSamples(seed=42,
+        self.recorder = fwdpy11.RandomAncientSamples(seed=42,
                                                                  samplesize=10,
                                                                  timepoints=[i for i in range(1, 101)])
 
