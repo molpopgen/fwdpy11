@@ -36,7 +36,6 @@ def evolve(rng, pop, params, recorder=None):
         then :class:`fwdpy11.temporal_samplers.RecordNothing` will be used.
 
     """
-    import fwdpy11.DiploidPopulation
     import warnings
     # Test parameters while suppressing warnings
     with warnings.catch_warnings():
@@ -48,9 +47,10 @@ def evolve(rng, pop, params, recorder=None):
     from fwdpy11 import RecombinationRegions
     from ._wright_fisher import WFDiploidPopulation
     from fwdpy11 import GeneralizedGeneticMap
+    from fwdpy11 import Region
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    if all([i.__class__ is fwdpy11.Region for i in params.recregions]) is True:
+    if all([i.__class__ is Region for i in params.recregions]) is True:
         rm = RecombinationRegions(params.recrate, params.recregions)
     else:
         rm = GeneralizedGeneticMap(params.recregions)
