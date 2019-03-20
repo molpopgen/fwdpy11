@@ -65,8 +65,8 @@ PYBIND11_MODULE(_Population, m)
 {
     m.doc() = "Defines the ABC :class:`fwdpy11._Population`";
 
-    auto imported_ts = static_cast<pybind11::object>(
-        pybind11::module::import("fwdpy11.ts"));
+    //auto imported_ts = static_cast<pybind11::object>(
+    //    pybind11::module::import("fwdpy11._fwdpy11"));
 
     py::bind_vector<std::vector<fwdpp::uint_t>>(
         m, "VecUint32", "Vector of unsigned 32-bit integers.",
@@ -229,15 +229,15 @@ PYBIND11_MODULE(_Population, m)
                 Give access to the population's 
                 :class:`fwdpy11.ts.TableCollection`
                 )delim")
-        .def_property_readonly(
-            "genetic_values",
-            [](const fwdpy11::Population& self) {
-                //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
-                return fwdpy11::make_2d_ndarray(
-                    self.genetic_value_matrix, self.N,
-                    self.genetic_value_matrix.size() / self.N);
-            },
-            R"delim(
+        .def_property_readonly("genetic_values",
+                               [](const fwdpy11::Population& self) {
+                                   //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
+                                   return fwdpy11::make_2d_ndarray(
+                                       self.genetic_value_matrix, self.N,
+                                       self.genetic_value_matrix.size()
+                                           / self.N);
+                               },
+                               R"delim(
         Return the genetic values as a 2d matrix.
         
         The array is read-write, so be careful!
