@@ -38,7 +38,8 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/PopulationBase.cc
     src/fwdpy11_types/DiploidPopulation.cc
     src/fwdpy11_types/ts_from_tskit.cc
-    src/fwdpy11_types/tsrecorders.cc)
+    src/fwdpy11_types/tsrecorders.cc
+    src/fwdpy11_types/RecordNothing.cc)
 
 set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
     src/fwdpy11_functions/change_effect_size.cc
