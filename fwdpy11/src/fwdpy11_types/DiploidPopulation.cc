@@ -25,7 +25,6 @@
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/eval.h>
 #include <pybind11/stl_bind.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/types/create_pops.hpp>
@@ -223,10 +222,6 @@ init_DiploidPopulation(py::module& m)
                                      self.fixations.size(), self.generation,
                                      self.tables.genome_length()),
                       f);
-                 py::object scope
-                     = py::module::import("__main__").attr("__dict__");
-                 py::eval(R"(print("wahoo!"))");
-
                  for (auto& d : self.diploids)
                      {
                          dump(d, f);
