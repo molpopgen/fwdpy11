@@ -5,6 +5,8 @@
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
+
 void
 init_data_matrix_from_tables(py::module& m)
 {
