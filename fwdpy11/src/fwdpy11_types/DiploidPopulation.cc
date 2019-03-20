@@ -49,6 +49,9 @@ PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
+fwdpy11::DiploidPopulation
+create_DiploidPopulation_from_tree_sequence(py::object ts);
+
 void
 init_DiploidPopulation(py::module& m)
 {
@@ -387,5 +390,48 @@ init_DiploidPopulation(py::module& m)
             :param f: A handle to a file opened in 'rb' mode.
 
             .. versionadded: 0.3.0
-            )delim");
+            )delim")
+        .def("dump_tables_to_tskit",
+             [](const fwdpy11::DiploidPopulation& self) {
+                 py::object m = py::module::import("fwdpy11._tables_to_tskit");
+                 auto dump = m.attr("dump_tables_to_tskit");
+                 return dump(self);
+             },
+             R"delim(
+        Dump the population's TableCollection into
+        an tskit TreeSequence
+
+        :rtype: tskit.TreeSequence
+
+        .. todo::
+
+            Incorporate the various metadata values.
+        )delim")
+        .def_static("create_from_tskit",
+                    [](py::object ts) {
+                        return create_DiploidPopulation_from_tree_sequence(ts);
+                    },
+                    R"delim(
+        Create a new object from an tskit.TreeSequence
+
+        :param ts: A tree sequence from tskit
+        :type ts: tskit.TreeSequence
+
+        :rtype: :class:`fwdpy11.DiploidPopulation`
+        :returns: A population object with an initialized
+        :class:`fwdpy11.TableCollection`
+
+        .. versionadded:: 0.2.0
+
+        .. note::
+
+            In general, initializing a population using
+            the output from a coalescent simulation is
+            a tricky business.  There are issues of
+            parameter scaling and the appropriateness
+            of the coalescent model itself. A key issue
+            is that your input tree sequence must have
+            node times in the correct time units! (Generations,
+            for example.) See :ref:`ts` for more discussion
+        )delim");
 }
