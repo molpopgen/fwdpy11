@@ -11,9 +11,9 @@ endif()
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
 set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
-    src/fwdpp_types/mutation_base.cc
-    src/fwdpp_types/gamete.cc
-    src/fwdpp_types/data_matrix.cc)
+    src/fwdpp_types/MutationBase.cc
+    src/fwdpp_types/Gamete.cc
+    src/fwdpp_types/DataMatrix.cc)
 
 set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
     src/fwdpp_functions/data_matrix_creation.cc)
