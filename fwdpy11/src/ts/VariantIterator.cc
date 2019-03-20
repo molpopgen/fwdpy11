@@ -7,6 +7,8 @@
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
+
 class VariantIterator
 {
   private:

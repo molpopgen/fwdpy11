@@ -6,6 +6,8 @@
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
+
 py::tuple
 simplify(const fwdpy11::Population& pop,
          const std::vector<fwdpp::ts::TS_NODE_INT>& samples)

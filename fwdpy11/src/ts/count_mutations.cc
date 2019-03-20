@@ -6,6 +6,8 @@
 
 namespace py = pybind11;
 
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
+
 void
 init_count_mutations(py::module& m)
 {
