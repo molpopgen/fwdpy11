@@ -37,26 +37,26 @@ class testTreeSequences(unittest.TestCase):
     def test_simplify(self):
         tables, idmap = fwdpy11.ts.simplify(self.pop, [i for i in range(10)])
         for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_simplify_tables(self):
         tables, idmap = fwdpy11.ts.simplify_tables(
             self.pop.tables, self.pop.mutations, [i for i in range(10)])
         for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_simplify_numpy_array(self):
         tables, idmap = fwdpy11.ts.simplify(
             self.pop, np.array([i for i in range(10)]))
         for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_simplify_tables_numpy_array(self):
         tables, idmap = fwdpy11.ts.simplify_tables(
             self.pop.tables, self.pop.mutations,
             np.array([i for i in range(10)]))
         for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.ts.NULL_NODE)
+            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_dump_to_tskit(self):
         # TODO: test leaf counts of mutations in msprmie
@@ -273,7 +273,7 @@ class testSamplePreservation(unittest.TestCase):
                                             self.pop.mutations, n)
             for variant in vi:
                 k = variant.record
-                self.assertNotEqual(k.node, fwdpy11.ts.NULL_NODE)
+                self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
 

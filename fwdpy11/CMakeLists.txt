@@ -13,7 +13,16 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
     src/fwdpp_types/MutationBase.cc
     src/fwdpp_types/Gamete.cc
-    src/fwdpp_types/DataMatrix.cc)
+    src/fwdpp_types/DataMatrix.cc
+    src/fwdpp_types/NULL_NODE.cc
+    src/fwdpp_types/Node.cc
+    src/fwdpp_types/Edge.cc
+    src/fwdpp_types/MutationRecord.cc
+    src/fwdpp_types/IndexedEdge.cc
+    src/fwdpp_types/NodeTable.cc
+    src/fwdpp_types/EdgeTable.cc
+    src/fwdpp_types/MutationTable.cc
+    src/fwdpp_types/TableCollection.cc)
 
 set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
     src/fwdpp_functions/data_matrix_creation.cc)
