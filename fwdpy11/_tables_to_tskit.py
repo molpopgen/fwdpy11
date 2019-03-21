@@ -116,6 +116,9 @@ def dump_tables_to_tskit(pop):
     for k, v in node_to_individual.items():
         individual[k] = v
     flags = [1]*2*pop.N + [0]*(len(node_view) - 2*pop.N)
+    # Bug fixed in 0.3.1: add preserved nodes to samples list
+    for i in pop.tables.preserved_nodes:
+        flags[i] = 1
     tc.nodes.set_columns(flags=flags, time=node_view['time'],
                          population=node_view['population'],
                          individual=individual)
