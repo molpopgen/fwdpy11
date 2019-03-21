@@ -17,6 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+
 class ModelParams(object):
     """
     Class to hold simulation parameters
