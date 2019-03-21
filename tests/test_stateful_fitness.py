@@ -7,7 +7,7 @@ import unittest
 import pickle
 import numpy as np
 import fwdpy11 as fp11
-import fwdpy11.model_params
+import fwdpy11
 import fwdpy11.wright_fisher
 import fwdpy11.ezparams
 cppimport.force_rebuild()
@@ -57,7 +57,7 @@ def evolve_snowdrift(args):
          'rates': (0.0, 0.0025, 0.001),
          'prune_selected': False
          }
-    params = fwdpy11.model_params.ModelParams(**p)
+    params = fwdpy11.ModelParams(**p)
     sampler = SamplePhenotypes(params.gvalue)
     fp11.wright_fisher.evolve(rng, pop, params, sampler)
     # return our pop

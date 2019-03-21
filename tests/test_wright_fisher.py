@@ -17,7 +17,7 @@ class GenerationRecorder(object):
 class testWFevolve(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        from fwdpy11.model_params import ModelParams
+        from fwdpy11 import ModelParams
         from fwdpy11 import Multiplicative
         self.pop = fp11.DiploidPopulation(1000)
         self.rng = fp11.GSLrng(42)
@@ -45,7 +45,7 @@ class testWFevolve(unittest.TestCase):
 class testCythonRecorder(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        from fwdpy11.model_params import ModelParams
+        from fwdpy11 import ModelParams
         from fwdpy11 import Multiplicative
         self.pop = fp11.DiploidPopulation(1000)
         self.rng = fp11.GSLrng(42)

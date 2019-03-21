@@ -75,7 +75,7 @@ class testDiploidPopulationSampler(unittest.TestCase):
     def setUp(self):
         from fwdpy11.ezparams import mslike
         from fwdpy11 import Multiplicative
-        from fwdpy11.model_params import ModelParams
+        from fwdpy11 import ModelParams
         self.sampler = DiploidTypeSampler()
         self.pop = fwdpy11.DiploidPopulation(1000)
         self.params_dict = mslike(self.pop, simlen=10)

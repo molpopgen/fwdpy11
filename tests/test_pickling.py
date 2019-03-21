@@ -131,7 +131,7 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
                   'prune_selected': False,
                   'demography': self.demography
                   }
-        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)

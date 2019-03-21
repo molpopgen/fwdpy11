@@ -1,5 +1,5 @@
 import fwdpy11 as fp11
-import fwdpy11.model_params
+import fwdpy11
 import fwdpy11.wright_fisher
 import fwdpy11.ezparams as fp11ez
 # concurrent.futures is Python 3 only
@@ -29,7 +29,7 @@ def evolve_and_return(args):
     p = fp11ez.mslike(pop, simlen=100, rates=(
         theta / float(4 * pop.N), 1e-3, theta / float(4 * pop.N)))
     p['gvalue'] = Multiplicative(2.)
-    params = fp11.model_params.ModelParams(**p)
+    params = fp11.ModelParams(**p)
     fp11.wright_fisher.evolve(rng, pop, params)
     # The population is picklable, and so
     # we can return it from another process

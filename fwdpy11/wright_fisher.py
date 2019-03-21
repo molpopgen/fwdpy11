@@ -27,7 +27,7 @@ def evolve(rng, pop, params, recorder=None):
     :param pop: A population
     :type pop: :class:`fwdpy11.DiploidPopulation`
     :param params: simulation parameters
-    :type params: :class:`fwdpy11.model_params.ModelParams`
+    :type params: :class:`fwdpy11.ModelParams`
     :param recorder: (None) A temporal sampler/data recorder.
     :type recorder: callable
 

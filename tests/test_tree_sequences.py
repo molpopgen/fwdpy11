@@ -1,6 +1,5 @@
 import unittest
 import fwdpy11
-import fwdpy11.model_params
 import fwdpy11.wright_fisher_ts
 import numpy as np
 
@@ -27,7 +26,7 @@ class testTreeSequences(unittest.TestCase):
                   'prune_selected': False,
                   'demography': self.demography
                   }
-        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
@@ -240,7 +239,7 @@ class testSamplePreservation(unittest.TestCase):
                   'prune_selected': False,
                   'demography': self.demography
                   }
-        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.RandomAncientSamples(seed=42,
@@ -292,7 +291,7 @@ class testSimplificationInterval(unittest.TestCase):
                   'prune_selected': False,
                   'demography': self.demography
                   }
-        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.RandomAncientSamples(seed=42,
@@ -325,7 +324,7 @@ class testFixationPreservation(unittest.TestCase):
              'prune_selected': False,
              'demography': demography
              }
-        params = fwdpy11.model_params.ModelParams(**p)
+        params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
@@ -361,7 +360,7 @@ class testFixationPreservation(unittest.TestCase):
              'prune_selected': True,
              'demography': demography
              }
-        params = fwdpy11.model_params.ModelParams(**p)
+        params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
@@ -407,7 +406,7 @@ class testMetaData(unittest.TestCase):
              'prune_selected': False,
              'demography': demography
              }
-        params = fwdpy11.model_params.ModelParams(**p)
+        params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
 
