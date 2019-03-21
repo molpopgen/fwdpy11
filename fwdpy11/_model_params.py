@@ -33,13 +33,6 @@
 """
 
 
-def _validate_types(data, typename, strict):
-    for i in data:
-        if (strict is True and type(i) is not typename) or \
-           isinstance(i, typename) is False:
-            raise TypeError("invalid type: " + str(typename))
-
-
 class ModelParams(object):
     """
     Class to hold simulation parameters
@@ -212,21 +205,3 @@ class ModelParams(object):
             raise TypeError("gvalue cannot be None")
         if self.rates is None:
             raise TypeError("rates cannot be None")
-
-
-def _validate_single_deme_demography(value):
-    import numpy as np
-    if any(i < 0 for i in value):
-        raise ValueError("all population sizes must be > 0")
-    if (type(value) is np.ndarray) is False:
-        raise ValueError("Type for population size " +
-                         "history must be numpy.array")
-
-
-def _validate_single_locus_rates(data):
-    for key, value in data.items():
-        if value is None:
-            raise ValueError(key + " cannot be None")
-        if value < 0.:
-            raise ValueError("All mutation and recombination " +
-                             "rates must be non-negative.")
