@@ -31,7 +31,7 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     :param pop: A population
     :type pop: :class:`fwdpy11.DiploidPopulation`
     :param params: simulation parameters
-    :type params: :class:`fwdpy11.model_params.ModelParams`
+    :type params: :class:`fwdpy11.ModelParams`
     :param simplification_interval: Number of generations between simplifications.
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.

@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import fwdpy11
-import fwdpy11.model_params
+import fwdpy11
 import fwdpy11.wright_fisher_ts
 
 
@@ -18,7 +18,7 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
              'prune_selected': False,
              'demography':  np.array([1000]*10000, dtype=np.uint32)
              }
-        self.params = fwdpy11.model_params.ModelParams(**p)
+        self.params = fwdpy11.ModelParams(**p)
 
     def test_stop(self):
         rng = fwdpy11.GSLrng(42)

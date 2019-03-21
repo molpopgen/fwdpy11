@@ -101,10 +101,10 @@ class testFixationPreservation(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(101*45*110*210)
 
     def testPopGenSimWithoutPruning(self):
-        import fwdpy11.model_params
+        import fwdpy11
         import numpy as np
         self.p['prune_selected'] = False
-        params = fwdpy11.model_params.ModelParams(**self.p)
+        params = fwdpy11.ModelParams(**self.p)
         fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"
@@ -113,10 +113,10 @@ class testFixationPreservation(unittest.TestCase):
                              [0]), len(self.pop.fixations))
 
     def testPopGenSimWithPruning(self):
-        import fwdpy11.model_params
+        import fwdpy11
         import numpy as np
         self.p['prune_selected'] = True
-        params = fwdpy11.model_params.ModelParams(**self.p)
+        params = fwdpy11.ModelParams(**self.p)
         fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"

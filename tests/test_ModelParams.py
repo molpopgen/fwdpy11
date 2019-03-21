@@ -21,7 +21,7 @@ import unittest
 # TODO reimplement to test new API
 
 # import fwdpy11 as fp11
-# import fwdpy11.model_params as fp11mp
+# import fwdpy11 as fp11mp
 # import fwdpy11.multilocus as ml
 # import fwdpy11.wright_fisher_qtrait as wfq
 # from fwdpy11.fitness import DiploidAdditive

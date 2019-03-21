@@ -1,7 +1,7 @@
 import cppimport
 import fwdpy11
 import fwdpy11.ezparams
-import fwdpy11.model_params
+import fwdpy11
 import fwdpy11.wright_fisher
 import pickle
 import unittest
@@ -19,7 +19,7 @@ class testCustomAdditive(unittest.TestCase):
                                              pneutral=0.95, simlen=10)
         self.pdict['gvalue'] = ca.additive()
         self.rng = fwdpy11.GSLrng(42)
-        self.params = fwdpy11.model_params.ModelParams(**self.pdict)
+        self.params = fwdpy11.ModelParams(**self.pdict)
 
     def testEvolve(self):
         fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
@@ -48,7 +48,7 @@ class testGeneralModule(unittest.TestCase):
                                              pneutral=0.95, simlen=10)
         self.pdict['gvalue'] = general.GeneralW()
         self.rng = fwdpy11.GSLrng(42)
-        self.params = fwdpy11.model_params.ModelParams(**self.pdict)
+        self.params = fwdpy11.ModelParams(**self.pdict)
 
     def testPickle(self):
         a = self.params.gvalue
