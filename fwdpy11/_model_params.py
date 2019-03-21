@@ -17,22 +17,6 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-"""
-    Define classes for parameterizing simulations.
-
-    The classes take either kwargs or an expanded dict as arguments.
-    The names of the kwargs are the same as the names of class properties.
-    The properties themselves are gettable/settable in the usual way.
-
-    Each class has a validate function that attempts to do a
-    full error-checking on the data stored in a class instance.
-
-    The module fwdpy11.ezparams contains some functions for rapidly setting up
-    dictionaries of parameters for common cases.
-
-"""
-
-
 class ModelParams(object):
     """
     Class to hold simulation parameters
