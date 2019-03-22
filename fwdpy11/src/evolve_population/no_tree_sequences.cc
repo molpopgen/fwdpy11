@@ -37,7 +37,7 @@
 #include <fwdpy11/evolve/DiploidPopulation_generation.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
-#include "tsevolution/diploid_pop_fitness.hpp"
+#include "diploid_pop_fitness.hpp"
 
 namespace py = pybind11;
 
@@ -173,9 +173,9 @@ wfDiploidPopulation(
         }
 }
 
-PYBIND11_MODULE(_wright_fisher, m)
+void init_evolve_without_tree_sequences(py::module & m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("WFDiploidPopulation", &wfDiploidPopulation);
+    m.def("init_evolve_without_tree_sequences", &wfDiploidPopulation);
 }

@@ -304,7 +304,7 @@ wfDiploidPopulation_ts(
 }
 
 void
-init_diploid_evolution(py::module &m)
+init_evolve_with_tree_sequences(py::module &m)
 {
-    m.def("WFDiploidPopulation_ts", &wfDiploidPopulation_ts);
+    m.def("evolve_with_tree_sequences", &wfDiploidPopulation_ts);
 }
