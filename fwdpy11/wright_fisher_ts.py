@@ -51,7 +51,6 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         then :class:`fwdpy11.NoAncientSamples` will be used.
 
     """
-    from ._fwdpy11 import DiploidPopulation
     import warnings
 
     # Currently, we do not support simulating neutral mutations
@@ -72,12 +71,12 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         recorder = NoAncientSamples()
 
     if stopping_criterion is None:
-        from ._tsevolution import _no_stopping
+        from ._evolve_population import _no_stopping
         stopping_criterion = _no_stopping
 
     from fwdpy11 import MutationRegions
     from fwdpy11 import dispatch_create_GeneticMap
-    from ._tsevolution import WFDiploidPopulation_ts
+    from ._evolve_population import evolve_with_tree_sequences
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
@@ -85,11 +84,11 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
 
     from fwdpy11 import SampleRecorder
     sr = SampleRecorder()
-    WFDiploidPopulation_ts(rng, pop, sr, simplification_interval,
-                   params.demography, params.mutrate_s,
-                   mm, rm, params.gvalue,
-                   recorder, stopping_criterion,
-                   params.pself, params.prune_selected is False,
-                   suppress_table_indexing, record_gvalue_matrix,
-                   track_mutation_counts,
-                   remove_extinct_variants)
+    evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
+                               params.demography, params.mutrate_s,
+                               mm, rm, params.gvalue,
+                               recorder, stopping_criterion,
+                               params.pself, params.prune_selected is False,
+                               suppress_table_indexing, record_gvalue_matrix,
+                               track_mutation_counts,
+                               remove_extinct_variants)
