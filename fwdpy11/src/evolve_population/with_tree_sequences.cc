@@ -47,7 +47,7 @@ namespace py = pybind11;
 
 // TODO: allow for neutral mutations in the future
 void
-wfDiploidPopulation_ts(
+evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::samplerecorder &sr, const unsigned simplification_interval,
     py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
@@ -306,5 +306,5 @@ wfDiploidPopulation_ts(
 void
 init_evolve_with_tree_sequences(py::module &m)
 {
-    m.def("evolve_with_tree_sequences", &wfDiploidPopulation_ts);
+    m.def("evolve_with_tree_sequences", &evolve_with_tree_sequences);
 }

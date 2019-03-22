@@ -63,7 +63,7 @@ handle_fixations(const bool remove_selected_fixations,
 }
 
 void
-wfDiploidPopulation(
+evolve_without_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const double recrate,
@@ -173,9 +173,10 @@ wfDiploidPopulation(
         }
 }
 
-void init_evolve_without_tree_sequences(py::module & m)
+void
+init_evolve_without_tree_sequences(py::module &m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("evolve_without_tree_sequences", &wfDiploidPopulation);
+    m.def("evolve_without_tree_sequences", &evolve_without_tree_sequences);
 }
