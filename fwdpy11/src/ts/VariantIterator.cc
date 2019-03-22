@@ -124,8 +124,7 @@ init_variant_iterator(py::module& m)
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
-             py::keep_alive<1, 2>(), py::arg("tables"), py::arg("mutations"),
-             py::arg("samples"),
+             py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              R"delim(
              :param tables: The table collection
              :type tables: :class:`fwdpy11.ts.TableCollection`
@@ -148,8 +147,7 @@ init_variant_iterator(py::module& m)
              }),
              py::arg("pop"), py::arg("include_preserved_nodes") = false)
         .def("__iter__",
-             [](VariantIterator& v) -> VariantIterator& { return v; },
-             py::keep_alive<0, 1>())
+             [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
         .def_readonly("genotypes", &VariantIterator::genotypes,
                       "Genotype array.  Index order is same as sample input")
