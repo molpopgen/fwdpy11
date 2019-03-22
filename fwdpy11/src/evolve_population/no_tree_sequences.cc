@@ -177,5 +177,5 @@ void init_evolve_without_tree_sequences(py::module & m)
 {
     m.doc() = "Evolution under a Wright-Fisher model.";
 
-    m.def("init_evolve_without_tree_sequences", &wfDiploidPopulation);
+    m.def("evolve_without_tree_sequences", &wfDiploidPopulation);
 }
