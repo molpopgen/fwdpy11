@@ -44,7 +44,7 @@ def evolve(rng, pop, params, recorder=None):
         params.validate()
 
     from fwdpy11 import MutationRegions
-    from ._wright_fisher import WFDiploidPopulation
+    from ._evolve_population import evolve_without_tree_sequences
     from fwdpy11 import dispatch_create_GeneticMap
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
@@ -54,7 +54,7 @@ def evolve(rng, pop, params, recorder=None):
         from fwdpy11 import RecordNothing
         recorder = RecordNothing()
 
-    WFDiploidPopulation(rng, pop, params.demography,
-                params.mutrate_n, params.mutrate_s,
-                params.recrate, mm, rm, params.gvalue,
-                recorder, params.pself, params.prune_selected)
+    evolve_without_tree_sequences(rng, pop, params.demography,
+                                  params.mutrate_n, params.mutrate_s,
+                                  params.recrate, mm, rm, params.gvalue,
+                                  recorder, params.pself, params.prune_selected)
