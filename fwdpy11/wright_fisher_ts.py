@@ -76,9 +76,6 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         stopping_criterion = _no_stopping
 
     from fwdpy11 import MutationRegions
-    from fwdpy11 import RecombinationRegions
-    from fwdpy11 import GeneralizedGeneticMap
-    from fwdpy11 import Region
     from fwdpy11 import dispatch_create_GeneticMap
     from ._tsevolution import WFDiploidPopulation_ts
     # TODO: update to allow neutral mutations
