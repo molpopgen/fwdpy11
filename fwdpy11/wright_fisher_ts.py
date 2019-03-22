@@ -79,14 +79,12 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
     from fwdpy11 import RecombinationRegions
     from fwdpy11 import GeneralizedGeneticMap
     from fwdpy11 import Region
+    from fwdpy11 import dispatch_create_GeneticMap
     from ._tsevolution import WFDiploidPopulation_ts
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    if all([i.__class__ is Region for i in params.recregions]) is True:
-        rm = RecombinationRegions(params.recrate, params.recregions)
-    else:
-        rm = GeneralizedGeneticMap(params.recregions)
+    rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     from fwdpy11 import SampleRecorder
     sr = SampleRecorder()
