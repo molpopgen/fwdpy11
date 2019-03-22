@@ -88,16 +88,17 @@ set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
     src/ts/data_matrix_from_tables.cc
     src/ts/infinite_sites.cc)
 
-set(TSEVOLUTION_SOURCES src/tsevolution/tsevolution.cc
-    src/tsevolution/diploidpop.cc
-    src/tsevolution/util.cc
-    src/tsevolution/cleanup_metadata.cc
-    src/tsevolution/genetic_value_common.cc
-    src/tsevolution/diploid_pop_fitness.cc
-    src/tsevolution/index_and_count_mutations.cc
-    src/tsevolution/track_mutation_counts.cc
-    src/tsevolution/no_stopping.cc
-    src/tsevolution/remove_extinct_mutations.cc)
+set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
+    src/evolve_population/with_tree_sequences.cc
+    src/evolve_population/no_tree_sequences.cc
+    src/evolve_population/util.cc
+    src/evolve_population/cleanup_metadata.cc
+    src/evolve_population/genetic_value_common.cc
+    src/evolve_population/diploid_pop_fitness.cc
+    src/evolve_population/index_and_count_mutations.cc
+    src/evolve_population/track_mutation_counts.cc
+    src/evolve_population/no_stopping.cc
+    src/evolve_population/remove_extinct_mutations.cc)
 
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
@@ -112,8 +113,5 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${GSL_SOURCES})
 
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc src/tsevolution/diploid_pop_fitness.cc
-    src/tsevolution/genetic_value_common.cc)
-target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_tsevolution MODULE ${TSEVOLUTION_SOURCES})
-target_link_libraries(_tsevolution PRIVATE GSL::gsl GSL::gslcblas)
+pybind11_add_module(_evolve_population MODULE ${EVOLVE_POPULATION_SOURCES})
+target_link_libraries(_evolve_population PRIVATE GSL::gsl GSL::gslcblas)
