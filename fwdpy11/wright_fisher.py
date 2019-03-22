@@ -48,12 +48,10 @@ def evolve(rng, pop, params, recorder=None):
     from ._wright_fisher import WFDiploidPopulation
     from fwdpy11 import GeneralizedGeneticMap
     from fwdpy11 import Region
+    from fwdpy11 import dispatch_create_GeneticMap
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    if all([i.__class__ is Region for i in params.recregions]) is True:
-        rm = RecombinationRegions(params.recrate, params.recregions)
-    else:
-        rm = GeneralizedGeneticMap(params.recregions)
+    rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     if recorder is None:
         from fwdpy11 import RecordNothing
