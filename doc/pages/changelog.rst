@@ -4,6 +4,15 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.3.1
+++++++++++++++++++++++++++
+
+Minor bugfix release:
+
+* Preserved nodes are now recorded as samples when table collections are saved to `tskit`
+* The fwdpp submodule is updated to include fixes to some debugging code
+* Minor updates to the C++ backend of VariantIterator
+
 0.3.0
 ++++++++++++++++++++++++++
 
