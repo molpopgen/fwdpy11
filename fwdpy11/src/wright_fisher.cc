@@ -37,46 +37,9 @@
 #include <fwdpy11/evolve/DiploidPopulation_generation.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
+#include "tsevolution/diploid_pop_fitness.hpp"
 
 namespace py = pybind11;
-
-fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
-calculate_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-                  const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
-                  std::vector<fwdpy11::DiploidMetadata> &new_metadata)
-{
-    // Calculate parental fitnesses
-    std::vector<double> parental_fitnesses(pop.diploids.size());
-    double sum_parental_fitnesses = 0.0;
-    new_metadata.resize(pop.N);
-    for (std::size_t i = 0; i < pop.diploids.size(); ++i)
-        {
-            new_metadata[i] = pop.diploid_metadata[i];
-            genetic_value_fxn(rng, i, pop, new_metadata[i]);
-            parental_fitnesses[i] = new_metadata[i].w;
-            sum_parental_fitnesses += parental_fitnesses[i];
-        }
-    pop.diploid_metadata.swap(new_metadata);
-    // If the sum of parental fitnesses is not finite,
-    // then the genetic value calculator returned a non-finite value/
-    // Unfortunately, gsl_ran_discrete_preproc allows such values through
-    // without raising an error, so we have to check things here.
-    if (!std::isfinite(sum_parental_fitnesses))
-        {
-            throw std::runtime_error("non-finite fitnesses encountered");
-        }
-
-    auto rv = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
-        gsl_ran_discrete_preproc(parental_fitnesses.size(),
-                                 parental_fitnesses.data()));
-    if (rv == nullptr)
-        {
-            // This is due to negative fitnesses
-            throw std::runtime_error(
-                "fitness lookup table could not be generated");
-        }
-    return rv;
-}
 
 void
 handle_fixations(const bool remove_selected_fixations,
@@ -100,14 +63,14 @@ handle_fixations(const bool remove_selected_fixations,
 }
 
 void
-wfDiploidPopulation(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-            py::array_t<std::uint32_t> popsizes, const double mu_neutral,
-            const double mu_selected, const double recrate,
-            const fwdpy11::MutationRegions &mmodel,
-            const fwdpy11::GeneticMap &rmodel,
-            fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
-            fwdpy11::DiploidPopulation_temporal_sampler recorder,
-            const double selfing_rate, const bool remove_selected_fixations)
+wfDiploidPopulation(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
+    const double mu_selected, const double recrate,
+    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
+    fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    fwdpy11::DiploidPopulation_temporal_sampler recorder,
+    const double selfing_rate, const bool remove_selected_fixations)
 {
     //validate the input params
     if (!std::isfinite(mu_neutral))
@@ -156,7 +119,10 @@ wfDiploidPopulation(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &po
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
+    std::vector<double> new_diploid_gvalues;
+    auto calculate_fitness = wrap_calculate_fitness_DiploidPopulation(false);
+    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
+                                    new_diploid_gvalues);
 
     // Generate our fxns for picking parents
 
@@ -201,8 +167,8 @@ wfDiploidPopulation(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &po
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup
-                = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata);
+            lookup = calculate_fitness(rng, pop, genetic_value_fxn,
+                                       new_metadata, new_diploid_gvalues);
             recorder(pop); // The user may now analyze the pop'n
         }
 }

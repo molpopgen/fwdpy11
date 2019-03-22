@@ -112,7 +112,8 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${GSL_SOURCES})
 
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc)
+pybind11_add_module(_wright_fisher MODULE src/wright_fisher.cc src/tsevolution/diploid_pop_fitness.cc
+    src/tsevolution/genetic_value_common.cc)
 target_link_libraries(_wright_fisher PRIVATE GSL::gsl GSL::gslcblas)
 pybind11_add_module(_tsevolution MODULE ${TSEVOLUTION_SOURCES})
 target_link_libraries(_tsevolution PRIVATE GSL::gsl GSL::gslcblas)
