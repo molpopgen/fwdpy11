@@ -193,6 +193,24 @@ init_tree_iterator(py::module& m)
              "Return the sum of branch lengths")
         .def_property_readonly("sample_size",
                                &tree_visitor_wrapper::sample_size)
+        .def_property_readonly(
+            "roots",
+            [](const tree_visitor_wrapper& self) {
+                std::vector<fwdpp::ts::TS_NODE_INT>* roots
+                    = new std::vector<fwdpp::ts::TS_NODE_INT>();
+
+                auto capsule = py::capsule(roots, [](void* x) {
+                    delete reinterpret_cast<
+                        std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+                });
+
+                return py::array(roots->size(), roots->data(), capsule);
+            },
+            R"delim(
+            Return marginal tree roots as numpy.ndarray
+            
+            .. versionadded:: 0.4.0
+            )delim")
         .def("sample_list", &tree_visitor_wrapper::sample_list,
              R"delim(
             Return the list of samples descending from a node.
