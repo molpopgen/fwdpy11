@@ -165,8 +165,8 @@ init_tree_iterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
              py::arg("update_sample_list") = false)
-        .def_readonly("parent", &tree_visitor_wrapper::parent,
-                      "Return parent of a node")
+        .def("parent", &tree_visitor_wrapper::parent,
+             "Return parent of a node")
         .def("leaf_counts", &tree_visitor_wrapper::leaf_counts,
              "Leaf counts for a node")
         .def("preserved_leaf_counts",
