@@ -1,15 +1,3 @@
-find_package(GSL REQUIRED)
-option(USE_WEFFCPP "Use -Weffc++ during compilation" ON)
-include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp)
-message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
-include_directories(BEFORE ${GSL_INCLUDE_DIRS})
-
-if (USE_WEFFCPP)
-    add_compile_options(-Weffc++)
-endif()
-
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
-
 set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
     src/fwdpp_types/MutationBase.cc
     src/fwdpp_types/Gamete.cc

@@ -1,17 +1,10 @@
-# We use cppimport to build the module.
-# For the sake of unit testing, we force
-# a rebuild every time, but that clearly
-# wouldn't be needed for normal use.
-import cppimport
 import unittest
 import pickle
 import numpy as np
 import fwdpy11 as fp11
 import fwdpy11
 import fwdpy11.ezparams
-cppimport.force_rebuild()
-cppimport.set_quiet(False)
-snowdrift = cppimport.imp("snowdrift")
+import snowdrift
 
 
 class SamplePhenotypes(object):
