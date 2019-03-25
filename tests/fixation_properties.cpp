@@ -1,11 +1,3 @@
-// clang-format off
-<% 
-setup_pybind11(cfg) 
-import common_mako
-common_mako.setup_mako(cfg)
-%>
-// clang-format on
-
 #include <pybind11/pybind11.h>
 #include <fwdpy11/sim_functions.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>

@@ -27,9 +27,7 @@
 import unittest
 import os
 import fwdpy11
-import cppimport
-cppimport.force_rebuild()
-fp = cppimport.imp("fixation_properties")
+import fixation_properties as fp
 
 
 class testFixationsAreSortedDiploidPopulation(unittest.TestCase):

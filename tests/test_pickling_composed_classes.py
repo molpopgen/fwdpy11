@@ -1,8 +1,5 @@
 import unittest
-import cppimport
-cppimport.force_rebuild()
-cppimport.set_quiet(False)
-PC = cppimport.imp("pickling_composed_classes")
+import pickling_composed_classes as PC
 
 
 class testPickleComposedClass(unittest.TestCase):

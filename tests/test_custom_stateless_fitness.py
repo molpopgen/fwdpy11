@@ -1,12 +1,10 @@
-import cppimport
 import fwdpy11
 import fwdpy11.ezparams
 import fwdpy11
 import pickle
 import unittest
-cppimport.force_rebuild()
-ca = cppimport.imp("custom_additive")
-general = cppimport.imp("custom_stateless_genotype")
+import custom_additive as ca
+import custom_stateless_genotype as general
 
 
 class testCustomAdditive(unittest.TestCase):
