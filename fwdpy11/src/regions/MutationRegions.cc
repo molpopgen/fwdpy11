@@ -40,11 +40,4 @@ init_MutationRegions(py::module& m)
                 return fwdpy11::MutationRegions::create(
                     pneutral, nweights, sweights, nregions, sregions);
             });
-
-    py::class_<fwdpy11::MlocusMutationRegions>(m, "MlocusMutationRegions")
-        .def(py::init<>())
-        .def("append", &fwdpy11::MlocusMutationRegions::append)
-        .def("__len__", [](const fwdpy11::MlocusMutationRegions& mmr) {
-            return mmr.regions.size();
-        });
 }
