@@ -93,7 +93,7 @@ class testTreeSequences(unittest.TestCase):
             l, r = tv.left, tv.right
             mt = [i for i in mv if p[i[1]] >= l and p[i[1]] < r]
             for i in mt:
-                self.assertEqual(tv.leaf_counts[i[0]],
+                self.assertEqual(tv.leaf_counts(i[0]),
                                  self.pop.mcounts[i[1]])
 
     def test_simplify_to_sample(self):
