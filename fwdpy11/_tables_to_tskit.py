@@ -92,7 +92,7 @@ def _initializeIndividualTable(pop, tc):
 
 def dump_tables_to_tskit(pop):
     """
-    Converts fwdpy11.ts.TableCollection to an
+    Converts fwdpy11.TableCollection to an
     tskit.TreeSequence
     """
     node_view = np.array(pop.tables.nodes, copy=True)

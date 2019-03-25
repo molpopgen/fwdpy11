@@ -1,12 +1,12 @@
 import unittest
 import numpy as np
-import fwdpy11.tsrecorders as tsr
+import fwdpy11
 
 
 class testSampleRecorder(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.sr = tsr.SampleRecorder()
+        self.sr = fwdpy11.SampleRecorder()
 
     def test_add_sample(self):
         self.sr.add_sample(1)

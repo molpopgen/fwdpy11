@@ -111,8 +111,7 @@ class testPickleDiploidPopulation(unittest.TestCase):
 class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.genetic_values
-        import fwdpy11.wright_fisher_ts
+        import fwdpy11
         import numpy as np
         self.N = 1000
         self.demography = np.array([self.N]*self.N, dtype=np.uint32)
@@ -122,8 +121,8 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
         self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
 
-        self.GSS = fwdpy11.genetic_values.GSS(VS=1, opt=0)
-        a = fwdpy11.genetic_values.DiploidAdditive(2.0, self.GSS)
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -132,10 +131,10 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
                   'prune_selected': False,
                   'demography': self.demography
                   }
-        self.params = fwdpy11.model_params.ModelParams(**self.p)
+        self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
 
     def testPickleNodeTable(self):
         import pickle

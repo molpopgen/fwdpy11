@@ -33,7 +33,7 @@ class testDiploidPopulation(unittest.TestCase):
     def test_mutations(self):
         self.assertTrue(
             type(self.pop.mutations)
-            is fwdpy11.VecMutation)
+            is fwdpy11.MutationVector)
         self.assertFalse(type(self.pop.mutations) is list)
         self.assertTrue(type(list(self.pop.mutations)) is list)
 
@@ -45,50 +45,50 @@ class testDiploidPopulation(unittest.TestCase):
     def test_diploids(self):
         self.assertTrue(
             type(self.pop.diploids)
-            is fwdpy11.VecDiploid)
+            is fwdpy11.DiploidVector)
 
     def test_a_diploid(self):
         self.assertTrue(
             type(self.pop.diploids[0])
-            is fwdpy11.fwdpy11_types.DiploidGenotype)
+            is fwdpy11.DiploidGenotype)
 
     def test_gametes(self):
         self.assertTrue(
             type(self.pop.gametes)
-            is fwdpy11.VecGamete)
+            is fwdpy11.GameteVector)
 
 
 class DiploidTypeSampler(object):
     def __call__(self, pop):
-        assert(type(pop.mutations) is fwdpy11.VecMutation)
+        assert(type(pop.mutations) is fwdpy11.MutationVector)
         assert(type(pop.mutations) is not list)
         assert(type(list(pop.mutations)) is list)
         assert(type(pop.mcounts) is fwdpy11.VecUint32)
-        assert(type(pop.diploids) is fwdpy11.VecDiploid)
+        assert(type(pop.diploids) is fwdpy11.DiploidVector)
         assert(type(pop.diploids[0])
-               is fwdpy11.fwdpy11_types.DiploidGenotype)
-        assert(type(pop.gametes) is fwdpy11.VecGamete)
+               is fwdpy11.DiploidGenotype)
+        assert(type(pop.gametes) is fwdpy11.GameteVector)
 
 
 class testDiploidPopulationSampler(unittest.TestCase):
     @classmethod
     def setUp(self):
         from fwdpy11.ezparams import mslike
-        from fwdpy11.genetic_values import DiploidMult
-        from fwdpy11.model_params import ModelParams
+        from fwdpy11 import Multiplicative
+        from fwdpy11 import ModelParams
         self.sampler = DiploidTypeSampler()
         self.pop = fwdpy11.DiploidPopulation(1000)
         self.params_dict = mslike(self.pop, simlen=10)
-        self.params_dict['gvalue'] = DiploidMult(2.)
+        self.params_dict['gvalue'] = Multiplicative(2.)
         self.params = ModelParams(**self.params_dict)
         self.rng = fwdpy11.GSLrng(42)
 
     def testSampler(self):
-        from fwdpy11.wright_fisher import evolve
+        from fwdpy11 import evolve_genomes as evolve
         try:
             evolve(self.rng, self.pop, self.params, self.sampler)
         except:
-            self.fail("unexpcted AssertionError")
+            self.fail("unexpected AssertionError")
 
 
 if __name__ == "__main__":

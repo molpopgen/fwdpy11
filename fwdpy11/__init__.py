@@ -22,21 +22,9 @@ import sys
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-from fwdpy11._init import * # NOQA
 from fwdpy11._version import __version__ # NOQA
 from ._fwdpy11 import * # NOQA
-
-from .fwdpp_types import *
-from ._opaque_gametes import *
-from ._opaque_mutations import *
-from ._opaque_diploids import *
-from ._Population import VecUint32
-from .fwdpy11_types import DiploidGenotype
-from .fwdpy11_types import DiploidMetadata
-from .fwdpy11_types import Mutation
-# from ._regions import *
 from ._dev import *
-from ._gslrng import GSLrng
-from ._Population import Population
-from .DiploidPopulation import DiploidPopulation
-
+from ._model_params import *
+from ._evolve_genomes import *
+from ._evolvets import *

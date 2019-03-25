@@ -17,12 +17,11 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Unit tests of fwdpy11.util
+# Unit tests of fwdpy11
 
 import unittest
 from quick_pops import quick_neutral_slocus
 import fwdpy11
-import fwdpy11.util
 
 
 class testAddMutations(unittest.TestCase):
@@ -46,7 +45,7 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
             self.pop.gametes) if extant[0][0] in i[1].mutations and
             self.pop.gametes[i[0]].n > 0]
         self.assertEqual(sum([self.pop.gametes[i].n for i in g]), extant[0][1])
-        fwdpy11.util.change_effect_size(self.pop, extant[0][0], -0.1)
+        fwdpy11.change_effect_size(self.pop, extant[0][0], -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
         g2 = [i[0] for i in enumerate(self.pop.gametes) if
@@ -65,7 +64,7 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
             self.pop.gametes) if extant[0][0] in i[1].mutations and
             self.pop.gametes[i[0]].n > 0]
         self.assertEqual(sum([self.pop.gametes[i].n for i in g]), extant[0][1])
-        fwdpy11.util.change_effect_size(self.pop, extant[0][0], 0.0)
+        fwdpy11.change_effect_size(self.pop, extant[0][0], 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
         g2 = [i[0] for i in enumerate(self.pop.gametes) if
@@ -78,14 +77,14 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
         g = [i[0] for i in enumerate(
             self.pop.gametes) if extant[0][0] in i[1].mutations and
             self.pop.gametes[i[0]].n > 0]
-        fwdpy11.util.change_effect_size(self.pop, extant[0][0],
+        fwdpy11.change_effect_size(self.pop, extant[0][0],
                                         0.0, 0.0, [1.], [-1.])
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
         self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 1.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
 
         # Now, replace it w/a neutral mutation
-        fwdpy11.util.change_effect_size(self.pop, extant[0][0],
+        fwdpy11.change_effect_size(self.pop, extant[0][0],
                                         0.0, 0.0, [0.], [-1.])
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
         self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 0.0)

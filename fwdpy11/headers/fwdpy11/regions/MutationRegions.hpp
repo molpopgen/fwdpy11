@@ -58,19 +58,6 @@ namespace fwdpy11
             return MutationRegions(std::move(combined), std::move(weights));
         }
     };
-
-    struct MlocusMutationRegions
-    {
-        // TODO: rename this variable--I think it is confusing
-        std::vector<MutationRegions> regions;
-        MlocusMutationRegions() : regions() {}
-        inline void
-        append(MutationRegions& m)
-        {
-            regions.emplace_back(std::move(m));
-        }
-    };
-
 } // namespace fwdpy11
 
 #endif

@@ -28,6 +28,7 @@
 #include <queue>
 #include <tuple>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 

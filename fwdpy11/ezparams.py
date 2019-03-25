@@ -30,7 +30,6 @@ def mslike(pop, **kwargs):
     import fwdpy11
     if isinstance(pop, fwdpy11.DiploidPopulation) is False:
         raise ValueError("incorrect pop type: " + str(type(pop)))
-    import fwdpy11.genetic_values
     defaults = {'simlen': 10*pop.N,
                 'beg': 0.0,
                 'end': 1.0,
@@ -54,7 +53,7 @@ def mslike(pop, **kwargs):
                         ((1.0-defaults['pneutral'])*defaults['theta']) /
                         (4.0*pop.N),
                         defaults['rho']/(4.0*float(pop.N))),
-              'gvalue': fwdpy11.genetic_values.DiploidMult(2.0)
+              'gvalue': fwdpy11.Multiplicative(2.0)
               }
     if defaults['dfe'] is None:
         params['sregions'] = []

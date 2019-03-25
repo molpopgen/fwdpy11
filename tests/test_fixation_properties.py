@@ -35,10 +35,10 @@ fp = cppimport.imp("fixation_properties")
 class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        mutations = fwdpy11.VecMutation()
-        fixations = fwdpy11.VecMutation()
-        gametes = fwdpy11.VecGamete()
-        diploids = fwdpy11.VecDiploid()
+        mutations = fwdpy11.MutationVector()
+        fixations = fwdpy11.MutationVector()
+        gametes = fwdpy11.GameteVector()
+        diploids = fwdpy11.DiploidVector()
         mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
         gametes.append(fwdpy11.Gamete(
@@ -82,15 +82,13 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
 class testFixationPreservation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.wright_fisher
-        import fwdpy11.genetic_values
         import numpy as np
         N = 1000
         demography = np.array([N]*10*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
-        a = fwdpy11.genetic_values.DiploidMult(2.0)
+        a = fwdpy11.Multiplicative(2.0)
         self.p = {'nregions': [],
                   'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
                   'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -102,11 +100,11 @@ class testFixationPreservation(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(101*45*110*210)
 
     def testPopGenSimWithoutPruning(self):
-        import fwdpy11.model_params
+        import fwdpy11
         import numpy as np
         self.p['prune_selected'] = False
-        params = fwdpy11.model_params.ModelParams(**self.p)
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.p)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)
@@ -114,11 +112,11 @@ class testFixationPreservation(unittest.TestCase):
                              [0]), len(self.pop.fixations))
 
     def testPopGenSimWithPruning(self):
-        import fwdpy11.model_params
+        import fwdpy11
         import numpy as np
         self.p['prune_selected'] = True
-        params = fwdpy11.model_params.ModelParams(**self.p)
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.p)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)

@@ -24,43 +24,43 @@
 
 def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11.ezparams import mslike
-    from fwdpy11.model_params import ModelParams
+    from fwdpy11 import ModelParams
     from fwdpy11 import DiploidPopulation, GSLrng
-    from fwdpy11.genetic_values import DiploidMult
-    from fwdpy11.wright_fisher import evolve
+    from fwdpy11 import Multiplicative
+    from fwdpy11 import evolve_genomes
     pop = DiploidPopulation(N)
     params_dict = mslike(pop, simlen=simlen)
-    params_dict['gvalue'] = DiploidMult(2.)
+    params_dict['gvalue'] = Multiplicative(2.)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
-    evolve(rng, pop, params)
+    evolve_genomes(rng, pop, params)
     return pop
 
 
 def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11.ezparams import mslike
-    from fwdpy11.model_params import ModelParams
+    from fwdpy11 import ModelParams
     from fwdpy11 import DiploidPopulation, GSLrng
-    from fwdpy11.wright_fisher import evolve
+    from fwdpy11 import evolve_genomes
     from fwdpy11 import ExpS
-    from fwdpy11.genetic_values import DiploidMult
+    from fwdpy11 import Multiplicative
     pop = DiploidPopulation(N)
     if dfe is None:
         dfe = ExpS(0, 1, 1, -0.1)
     params_dict = mslike(
         pop, simlen=simlen, dfe=dfe,
         pneutral=0.95)
-    params_dict['gvalue'] = DiploidMult(2.0)
+    params_dict['gvalue'] = Multiplicative(2.0)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
-    evolve(rng, pop, params)
+    evolve_genomes(rng, pop, params)
     return pop
 
 
 def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
     from fwdpy11 import DiploidPopulation
-    from fwdpy11.genetic_values import GSS
-    from fwdpy11.genetic_values import DiploidAdditive
+    from fwdpy11 import GSS
+    from fwdpy11 import Additive
     from fwdpy11 import GaussianS, Region
     import numpy as np
     p = {'nregions': [],
@@ -68,7 +68,7 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
          'recregions': [Region(0, 1, 1)],
          'rates': (0.0, 2e-3, 1e-3),
          'demography': np.array([N] * simlen, dtype=np.uint32),
-         'gvalue': DiploidAdditive(2.0, GSS(VS=1.0, opt=0.0)),
+         'gvalue': Additive(2.0, GSS(VS=1.0, opt=0.0)),
          'prune_selected': False
          }
     pop = DiploidPopulation(N)
