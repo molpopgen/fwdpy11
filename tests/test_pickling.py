@@ -17,10 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import unittest
-import cppimport
-cppimport.force_rebuild()
-cppimport.set_quiet(False)
-pickling_cpp = cppimport.imp("pickling_cpp")
+import pickling_cpp
 
 
 class testPickleMutation(unittest.TestCase):

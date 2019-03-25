@@ -1,11 +1,3 @@
-// clang-format off
-<% 
-setup_pybind11(cfg) 
-import common_mako
-common_mako.setup_mako(cfg)
-%>
-// clang-format on
-
 // Mocking what it takes to get pickling support for a class structure
 // and then an object that is composed of unique_ptr to base classes
 
