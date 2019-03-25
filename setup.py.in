@@ -49,6 +49,12 @@ if '--debug' in sys.argv:
 else:
     DEBUG_MODE = False
 
+if '--skip_tests' in sys.argv:
+    SKIP_BUILDING_TESTS = True
+    sys.argv.remove('--skip_tests')
+else:
+    SKIP_BUILDING_TESTS = False
+
 # if '--assert' in sys.argv:
 #     ASSERT_MODE = True
 #     sys.argv.remove('--assert')
@@ -107,6 +113,8 @@ class CMakeBuild(build_ext):
             cmake_args.append('-DUSE_WEFFCPP=OFF')
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
+        if SKIP_BUILDING_TESTS is True:
+            cmake_args.append('-DBUILD_UNIT_TESTS=OFF')
         subprocess.check_call(['cmake', ext.sourcedir] +
                               cmake_args, cwd=self.build_temp, env=env)
         subprocess.check_call(['cmake', '--build', '.'] +
