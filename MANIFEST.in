@@ -5,6 +5,7 @@ recursive-include examples COPYING *.rst *.py
 include COPYING
 include CMakeLists.txt
 include fwdpy11/CMakeLists.txt
+include tests/CMakeLists.txt
 include configure
 include setup.py.in
 include doc/conf.py
