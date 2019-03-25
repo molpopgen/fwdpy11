@@ -190,7 +190,19 @@ init_tree_iterator(py::module& m)
                                    return self.visitor.tree().right;
                                },
                                "Right edge of genomic interval (exclusive)")
-        .def("__call__", &tree_visitor_wrapper::operator())
+        .def("__next__",
+             [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
+                 auto x = self();
+                 if (x == false)
+                     {
+                         throw py::stop_iteration();
+                     }
+                return self;
+             })
+        .def("__iter__",
+             [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
+                 return self;
+             })
         .def("total_time",
              [](const tree_visitor_wrapper& self,
                 const fwdpp::ts::node_vector& nodes) {
