@@ -9,6 +9,7 @@ endif()
 
 find_package(GSL REQUIRED)
 option(USE_WEFFCPP "Use -Weffc++ during compilation" ON)
+option(BUILD_UNIT_TESTS "Build C++ modules for unit tests" ON)
 include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp)
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
 include_directories(BEFORE ${GSL_INCLUDE_DIRS})
@@ -21,5 +22,6 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 
 add_subdirectory(fwdpy11)
 
-add_subdirectory(tests)
-
+if(BUILD_UNIT_TESTS)
+    add_subdirectory(tests)
+endif(BUILD_UNIT_TESTS)
