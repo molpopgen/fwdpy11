@@ -8,7 +8,6 @@ import pickle
 import numpy as np
 import fwdpy11 as fp11
 import fwdpy11
-import fwdpy11.wright_fisher
 import fwdpy11.ezparams
 cppimport.force_rebuild()
 cppimport.set_quiet(False)
@@ -59,7 +58,7 @@ def evolve_snowdrift(args):
          }
     params = fwdpy11.ModelParams(**p)
     sampler = SamplePhenotypes(params.gvalue)
-    fp11.wright_fisher.evolve(rng, pop, params, sampler)
+    fp11.evolve_genomes(rng, pop, params, sampler)
     # return our pop
     return pop
 

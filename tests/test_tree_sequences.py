@@ -1,6 +1,5 @@
 import unittest
 import fwdpy11
-import fwdpy11.wright_fisher_ts
 import numpy as np
 
 
@@ -29,7 +28,7 @@ class testTreeSequences(unittest.TestCase):
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        fwdpy11.wright_fisher_ts.evolve(self.rng, self.pop, self.params, 100)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
 
     def test_simplify(self):
         tables, idmap = fwdpy11.simplify(self.pop, [i for i in range(10)])
@@ -245,7 +244,7 @@ class testSamplePreservation(unittest.TestCase):
         self.recorder = fwdpy11.RandomAncientSamples(seed=42,
                                                                  samplesize=10,
                                                                  timepoints=[i for i in range(1, 101)])
-        fwdpy11.wright_fisher_ts.evolve(
+        fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
 
     def test_Simulation(self):
@@ -300,7 +299,7 @@ class testSimplificationInterval(unittest.TestCase):
 
     def testEvolve(self):
         # TODO: actually test something here :)
-        fwdpy11.wright_fisher_ts.evolve(
+        fwdpy11.evolvets(
             self.rng, self.pop, self.params, 1, self.recorder)
         samples = [i for i in range(2*self.pop.N)] + \
             self.pop.tables.preserved_nodes
@@ -327,7 +326,7 @@ class testFixationPreservation(unittest.TestCase):
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
-        fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
+        fwdpy11.evolvets(rng, pop, params, 100,
                                         track_mutation_counts=True)
         mc = fwdpy11.count_mutations(pop.tables, pop.mutations,
                                      [i for i in range(2*pop.N)])
@@ -363,7 +362,7 @@ class testFixationPreservation(unittest.TestCase):
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
-        fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100,
+        fwdpy11.evolvets(rng, pop, params, 100,
                                         track_mutation_counts=True)
         mc = fwdpy11.count_mutations(pop.tables, pop.mutations,
                                      [i for i in range(2*pop.N)])
@@ -418,7 +417,7 @@ class testMetaData(unittest.TestCase):
                     recorder.assign(np.arange(pop.N, dtype=np.int32))
 
         r = Recorder()
-        fwdpy11.wright_fisher_ts.evolve(rng, pop, params, 100, r)
+        fwdpy11.evolvets(rng, pop, params, 100, r)
 
         ancient_sample_metadata = np.array(
             pop.ancient_sample_metadata, copy=False)

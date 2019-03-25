@@ -18,13 +18,13 @@
 #
 
 
-def evolve(rng, pop, params, simplification_interval, recorder=None,
+def evolvets(rng, pop, params, simplification_interval, recorder=None,
            suppress_table_indexing=False, record_gvalue_matrix=False,
            stopping_criterion=None,
            track_mutation_counts=False,
            remove_extinct_variants=True):
     """
-    Evolve a population
+    Evolve a population with tree sequence recording
 
     :param rng: random number generator
     :type rng: :class:`fwdpy11.GSLrng`
@@ -67,22 +67,22 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
         params.validate()
 
     if recorder is None:
-        from fwdpy11 import NoAncientSamples
+        from ._fwdpy11 import NoAncientSamples
         recorder = NoAncientSamples()
 
     if stopping_criterion is None:
-        from ._evolve_population import _no_stopping
+        from ._fwdpy11 import _no_stopping
         stopping_criterion = _no_stopping
 
-    from fwdpy11 import MutationRegions
-    from fwdpy11 import dispatch_create_GeneticMap
-    from ._evolve_population import evolve_with_tree_sequences
+    from ._fwdpy11 import MutationRegions
+    from ._fwdpy11 import dispatch_create_GeneticMap
+    from ._fwdpy11 import evolve_with_tree_sequences
     # TODO: update to allow neutral mutations
     pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
-    from fwdpy11 import SampleRecorder
+    from ._fwdpy11 import SampleRecorder
     sr = SampleRecorder()
     evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
                                params.demography, params.mutrate_s,

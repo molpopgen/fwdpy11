@@ -27,13 +27,13 @@ def quick_neutral_slocus(N=1000, simlen=100):
     from fwdpy11 import ModelParams
     from fwdpy11 import DiploidPopulation, GSLrng
     from fwdpy11 import Multiplicative
-    from fwdpy11.wright_fisher import evolve
+    from fwdpy11 import evolve_genomes
     pop = DiploidPopulation(N)
     params_dict = mslike(pop, simlen=simlen)
     params_dict['gvalue'] = Multiplicative(2.)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
-    evolve(rng, pop, params)
+    evolve_genomes(rng, pop, params)
     return pop
 
 
@@ -41,7 +41,7 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     from fwdpy11.ezparams import mslike
     from fwdpy11 import ModelParams
     from fwdpy11 import DiploidPopulation, GSLrng
-    from fwdpy11.wright_fisher import evolve
+    from fwdpy11 import evolve_genomes
     from fwdpy11 import ExpS
     from fwdpy11 import Multiplicative
     pop = DiploidPopulation(N)
@@ -53,7 +53,7 @@ def quick_nonneutral_slocus(N=1000, simlen=100, dfe=None):
     params_dict['gvalue'] = Multiplicative(2.0)
     params = ModelParams(**params_dict)
     rng = GSLrng(42)
-    evolve(rng, pop, params)
+    evolve_genomes(rng, pop, params)
     return pop
 
 
