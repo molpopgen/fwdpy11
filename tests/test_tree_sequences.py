@@ -74,10 +74,10 @@ class testTreeSequences(unittest.TestCase):
         self.assertEqual(eview['right'].sum(),
                          dumped_ts.tables.edges.right.sum())
         tv = fwdpy11.TreeIterator(self.pop.tables,
-                                 [i for i in range(2*self.pop.N)])
+                                  [i for i in range(2*self.pop.N)])
         tt_fwd = 0
-        while tv() is True:
-            tt_fwd += tv.total_time(self.pop.tables.nodes)
+        for t in tv:
+            tt_fwd += t.total_time(self.pop.tables.nodes)
         tt_tskit = 0
         for t in dumped_ts.trees():
             tt_tskit += t.get_total_branch_length()
@@ -85,15 +85,15 @@ class testTreeSequences(unittest.TestCase):
 
     def test_leaf_counts_vs_mcounts(self):
         tv = fwdpy11.TreeIterator(self.pop.tables,
-                                 [i for i in range(2*self.pop.N)])
+                                  [i for i in range(2*self.pop.N)])
         mv = np.array(self.pop.tables.mutations, copy=False)
         muts = np.array(self.pop.mutations.array())
         p = muts['pos']
-        while tv() is True:
-            l, r = tv.left, tv.right
+        for t in tv:
+            l, r = t.left, t.right
             mt = [i for i in mv if p[i[1]] >= l and p[i[1]] < r]
             for i in mt:
-                self.assertEqual(tv.leaf_counts[i[0]],
+                self.assertEqual(t.leaf_counts(i[0]),
                                  self.pop.mcounts[i[1]])
 
     def test_simplify_to_sample(self):
@@ -119,8 +119,8 @@ class testTreeSequences(unittest.TestCase):
                 fp11ts.nodes[idmap[s]].time, self.pop.generation)
         tt_fwd = 0.0
         tv = fwdpy11.TreeIterator(fp11ts, [i for i in range(len(samples))])
-        while tv() is True:
-            tt_fwd += tv.total_time(fp11ts.nodes)
+        for t in tv:
+            tt_fwd += t.total_time(fp11ts.nodes)
         tt_tskit = 0.0
         for t in mspts.trees():
             tt_tskit += t.get_total_branch_length()
@@ -242,8 +242,8 @@ class testSamplePreservation(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.RandomAncientSamples(seed=42,
-                                                                 samplesize=10,
-                                                                 timepoints=[i for i in range(1, 101)])
+                                                     samplesize=10,
+                                                     timepoints=[i for i in range(1, 101)])
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
 
@@ -294,8 +294,8 @@ class testSimplificationInterval(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
         self.recorder = fwdpy11.RandomAncientSamples(seed=42,
-                                                                 samplesize=10,
-                                                                 timepoints=[i for i in range(1, 101)])
+                                                     samplesize=10,
+                                                     timepoints=[i for i in range(1, 101)])
 
     def testEvolve(self):
         # TODO: actually test something here :)
@@ -327,7 +327,7 @@ class testFixationPreservation(unittest.TestCase):
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.evolvets(rng, pop, params, 100,
-                                        track_mutation_counts=True)
+                         track_mutation_counts=True)
         mc = fwdpy11.count_mutations(pop.tables, pop.mutations,
                                      [i for i in range(2*pop.N)])
         assert len(pop.fixations) > 0, "Test is meaningless without fixations"
@@ -363,7 +363,7 @@ class testFixationPreservation(unittest.TestCase):
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
         fwdpy11.evolvets(rng, pop, params, 100,
-                                        track_mutation_counts=True)
+                         track_mutation_counts=True)
         mc = fwdpy11.count_mutations(pop.tables, pop.mutations,
                                      [i for i in range(2*pop.N)])
         assert len(pop.fixations) > 0, "Test is meaningless without fixations"

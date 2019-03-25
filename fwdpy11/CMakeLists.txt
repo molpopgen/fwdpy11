@@ -82,7 +82,7 @@ set(GENETIC_VALUE_NOISE_SOURCES
     src/genetic_value_noise/NoNoise.cc
     src/genetic_value_noise/GaussianNoise.cc)
 
-set(TS_SOURCES src/ts/init.cc src/ts/tree_iterator.cc src/ts/VariantIterator.cc
+set(TS_SOURCES src/ts/init.cc src/ts/TreeIterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc
     src/ts/simplify.cc
     src/ts/data_matrix_from_tables.cc

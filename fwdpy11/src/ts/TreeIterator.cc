@@ -11,32 +11,30 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
 
-struct tree_visitor_wrapper
+class tree_visitor_wrapper
 {
-    fwdpp::ts::tree_visitor visitor;
-    py::array parents, leaf_counts, preserved_leaf_counts, left_sib, right_sib,
-        left_child, right_child, left_sample, right_sample, next_sample,
-        sample_index_map;
+  private:
+    inline fwdpp::ts::TS_NODE_INT
+    fetch(const std::vector<fwdpp::ts::TS_NODE_INT>& data,
+          fwdpp::ts::TS_NODE_INT index)
+    {
+        if (static_cast<std::size_t>(index) >= data.size())
+            {
+                throw std::out_of_range("node index is our of range");
+            }
+        return data[index];
+    }
+
     bool update_samples;
+
+  public:
+    fwdpp::ts::tree_visitor visitor;
     std::vector<fwdpp::ts::TS_NODE_INT> sample_list_buffer;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_sample_list)
-        : visitor(tables, samples),
-          parents(fwdpy11::make_1d_ndarray(visitor.tree().parents)),
-          leaf_counts(fwdpy11::make_1d_ndarray(visitor.tree().leaf_counts)),
-          preserved_leaf_counts(
-              fwdpy11::make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
-          left_sib(fwdpy11::make_1d_ndarray(visitor.tree().left_sib)),
-          right_sib(fwdpy11::make_1d_ndarray(visitor.tree().right_sib)),
-          left_child(fwdpy11::make_1d_ndarray(visitor.tree().left_child)),
-          right_child(fwdpy11::make_1d_ndarray(visitor.tree().right_child)),
-          left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
-          right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
-          next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(
-              fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
-          update_samples(update_sample_list), sample_list_buffer()
+        : update_samples(update_sample_list), visitor(tables, samples),
+          sample_list_buffer()
     {
     }
 
@@ -45,21 +43,8 @@ struct tree_visitor_wrapper
         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_sample_list)
-        : visitor(tables, samples),
-          parents(fwdpy11::make_1d_ndarray(visitor.tree().parents)),
-          leaf_counts(fwdpy11::make_1d_ndarray(visitor.tree().leaf_counts)),
-          preserved_leaf_counts(
-              fwdpy11::make_1d_ndarray(visitor.tree().preserved_leaf_counts)),
-          left_sib(fwdpy11::make_1d_ndarray(visitor.tree().left_sib)),
-          right_sib(fwdpy11::make_1d_ndarray(visitor.tree().right_sib)),
-          left_child(fwdpy11::make_1d_ndarray(visitor.tree().left_child)),
-          right_child(fwdpy11::make_1d_ndarray(visitor.tree().right_child)),
-          left_sample(fwdpy11::make_1d_ndarray(visitor.tree().left_sample)),
-          right_sample(fwdpy11::make_1d_ndarray(visitor.tree().right_sample)),
-          next_sample(fwdpy11::make_1d_ndarray(visitor.tree().next_sample)),
-          sample_index_map(
-              fwdpy11::make_1d_ndarray(visitor.tree().sample_index_map)),
-          update_samples(update_sample_list), sample_list_buffer()
+        : update_samples(update_sample_list), visitor(tables, samples),
+          sample_list_buffer()
     {
     }
 
@@ -118,6 +103,48 @@ struct tree_visitor_wrapper
         return py::array(sample_list_buffer.size(), sample_list_buffer.data(),
                          capsule);
     }
+
+    fwdpp::ts::TS_NODE_INT
+    parent(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().parents, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    left_sib(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().left_sib, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    right_sib(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().right_sib, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    left_child(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().left_child, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    right_child(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().right_child, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    leaf_counts(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().leaf_counts, u);
+    }
+
+    fwdpp::ts::TS_NODE_INT
+    preserved_leaf_counts(fwdpp::ts::TS_NODE_INT u)
+    {
+        return fetch(this->visitor.tree().preserved_leaf_counts, u);
+    }
 };
 
 void
@@ -138,26 +165,21 @@ init_tree_iterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
              py::arg("update_sample_list") = false)
-        .def_readwrite("parents", &tree_visitor_wrapper::parents,
-                       "Vector of child -> parent relationships")
-        .def_readonly("leaf_counts", &tree_visitor_wrapper::leaf_counts,
-                      "Leaf counts for each node")
-        .def_readonly("preserved_leaf_counts",
-                      &tree_visitor_wrapper::preserved_leaf_counts,
-                      "Ancient sample leaf counts for each node")
-        .def_readonly("left_sib", &tree_visitor_wrapper::left_sib,
-                      "Return the left sibling of the current node")
-        .def_readonly("right_sib", &tree_visitor_wrapper::right_sib,
-                      "Return the right sibling of the current node")
-        .def_readonly("left_child", &tree_visitor_wrapper::left_child,
-                      "Mapping of current node id to its left child")
-        .def_readonly("right_child", &tree_visitor_wrapper::right_child,
-                      "Mapping of current node id to its right child")
-        .def_readonly("left_sample", &tree_visitor_wrapper::left_sample)
-        .def_readonly("right_sample", &tree_visitor_wrapper::right_sample)
-        .def_readonly("next_sample", &tree_visitor_wrapper::next_sample)
-        .def_readonly("sample_index_map",
-                      &tree_visitor_wrapper::sample_index_map)
+        .def("parent", &tree_visitor_wrapper::parent,
+             "Return parent of a node")
+        .def("leaf_counts", &tree_visitor_wrapper::leaf_counts,
+             "Leaf counts for a node")
+        .def("preserved_leaf_counts",
+             &tree_visitor_wrapper::preserved_leaf_counts,
+             "Ancient sample leaf counts for a node")
+        .def("left_sib", &tree_visitor_wrapper::left_sib,
+             "Return the left sibling of the current node")
+        .def("right_sib", &tree_visitor_wrapper::right_sib,
+             "Return the right sibling of the current node")
+        .def("left_child", &tree_visitor_wrapper::left_child,
+             "Mapping of current node id to its left child")
+        .def("right_child", &tree_visitor_wrapper::right_child,
+             "Mapping of current node id to its right child")
         .def_property_readonly("left",
                                [](const tree_visitor_wrapper& self) {
                                    return self.visitor.tree().left;
@@ -168,7 +190,19 @@ init_tree_iterator(py::module& m)
                                    return self.visitor.tree().right;
                                },
                                "Right edge of genomic interval (exclusive)")
-        .def("__call__", &tree_visitor_wrapper::operator())
+        .def("__next__",
+             [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
+                 auto x = self();
+                 if (x == false)
+                     {
+                         throw py::stop_iteration();
+                     }
+                return self;
+             })
+        .def("__iter__",
+             [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
+                 return self;
+             })
         .def("total_time",
              [](const tree_visitor_wrapper& self,
                 const fwdpp::ts::node_vector& nodes) {
@@ -192,9 +226,25 @@ init_tree_iterator(py::module& m)
              },
              "Return the sum of branch lengths")
         .def_property_readonly("sample_size",
-                               [](const tree_visitor_wrapper& self) {
-                                   return self.sample_size();
-                               })
+                               &tree_visitor_wrapper::sample_size)
+        .def_property_readonly(
+            "roots",
+            [](const tree_visitor_wrapper& self) {
+                std::vector<fwdpp::ts::TS_NODE_INT>* roots
+                    = new std::vector<fwdpp::ts::TS_NODE_INT>();
+
+                auto capsule = py::capsule(roots, [](void* x) {
+                    delete reinterpret_cast<
+                        std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+                });
+
+                return py::array(roots->size(), roots->data(), capsule);
+            },
+            R"delim(
+            Return marginal tree roots as numpy.ndarray
+            
+            .. versionadded:: 0.4.0
+            )delim")
         .def("sample_list", &tree_visitor_wrapper::sample_list,
              R"delim(
             Return the list of samples descending from a node.
