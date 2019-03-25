@@ -192,9 +192,7 @@ init_tree_iterator(py::module& m)
              },
              "Return the sum of branch lengths")
         .def_property_readonly("sample_size",
-                               [](const tree_visitor_wrapper& self) {
-                                   return self.sample_size();
-                               })
+                               &tree_visitor_wrapper::sample_size)
         .def("sample_list", &tree_visitor_wrapper::sample_list,
              R"delim(
             Return the list of samples descending from a node.
