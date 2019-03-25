@@ -1,8 +1,6 @@
 import unittest
 import numpy as np
 import fwdpy11
-import fwdpy11
-import fwdpy11.wright_fisher_ts
 
 
 class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
@@ -28,7 +26,7 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
                 return True
             return False
 
-        fwdpy11.wright_fisher_ts.evolve(
+        fwdpy11.evolvets(
             rng, self.pop, self.params, 100,
             stopping_criterion=generation)
         self.assertEqual(self.pop.generation, 50)

@@ -30,6 +30,7 @@ void initialize_genetic_value_to_fitness(py::module &);
 void init_genetic_values(py::module &);
 void init_GSL(py::module &);
 void init_ts(py::module&);
+void init_evolution_functions(py::module&);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
@@ -54,4 +55,5 @@ PYBIND11_MODULE(_fwdpy11, m)
     init_genetic_values(m);
     init_GSL(m);
     init_ts(m);
+    init_evolution_functions(m);
 }

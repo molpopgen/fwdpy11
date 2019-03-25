@@ -110,8 +110,6 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${GENETIC_VALUE_TO_FITNESS_SOURCES}
     ${GENETIC_VALUE_SOURCES}
     ${TS_SOURCES}
-    ${GSL_SOURCES})
-
+    ${GSL_SOURCES}
+    ${EVOLVE_POPULATION_SOURCES})
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
-pybind11_add_module(_evolve_population MODULE ${EVOLVE_POPULATION_SOURCES})
-target_link_libraries(_evolve_population PRIVATE GSL::gsl GSL::gslcblas)

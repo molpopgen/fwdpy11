@@ -88,10 +88,8 @@ class testPythonObjects(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(101)
 
     def testParentalData(self):
-        from fwdpy11 import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-        evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         parents = [i.parents for i in self.pop.diploid_metadata]
         for i in parents:
             self.assertTrue(i is not None)
@@ -107,19 +105,15 @@ class testPythonObjects(unittest.TestCase):
             self.assertEqual(i.nodes[1], fwdpy11.NULL_NODE)
 
     def test_nodes_after_evolution(self):
-        from fwdpy11 import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-        evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         for i in self.pop.diploid_metadata:
             self.assertEqual(i.nodes[0], fwdpy11.NULL_NODE)
             self.assertEqual(i.nodes[1], fwdpy11.NULL_NODE)
 
     def testMutationLookupTable(self):
-        from fwdpy11 import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-        evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         lookup = self.pop.mut_lookup
         for i in range(len(self.pop.mcounts)):
             if self.pop.mcounts[i] > 0:
@@ -127,10 +121,8 @@ class testPythonObjects(unittest.TestCase):
                 self.assertTrue(i in lookup[self.pop.mutations[i].pos])
 
     def testMutationIndices(self):
-        from fwdpy11 import ModelParams
-        from fwdpy11.wright_fisher import evolve
-        params = ModelParams(**self.pdict)
-        evolve(self.rng, self.pop, params)
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         lookup = self.pop.mut_lookup
         for key, val in lookup.items():
             indexes = self.pop.mutation_indexes(key)

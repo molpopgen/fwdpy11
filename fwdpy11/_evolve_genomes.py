@@ -18,9 +18,10 @@
 #
 
 
-def evolve(rng, pop, params, recorder=None):
+def evolve_genomes(rng, pop, params, recorder=None):
     """
-    Evolve a population
+    Evolve a population without tree sequence recordings.  In other words,
+    complete genomes must be simulated and tracked.
 
     :param rng: random number generator
     :type rng: :class:`fwdpy11.GSLrng`
@@ -43,15 +44,15 @@ def evolve(rng, pop, params, recorder=None):
         # Will throw exception if anything is wrong:
         params.validate()
 
-    from fwdpy11 import MutationRegions
-    from ._evolve_population import evolve_without_tree_sequences
-    from fwdpy11 import dispatch_create_GeneticMap
+    from ._fwdpy11 import MutationRegions
+    from ._fwdpy11 import evolve_without_tree_sequences
+    from ._fwdpy11 import dispatch_create_GeneticMap
     pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     if recorder is None:
-        from fwdpy11 import RecordNothing
+        from ._fwdpy11 import RecordNothing
         recorder = RecordNothing()
 
     evolve_without_tree_sequences(rng, pop, params.demography,

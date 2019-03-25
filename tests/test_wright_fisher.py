@@ -32,7 +32,7 @@ class testWFevolve(unittest.TestCase):
         self.p.gvalue = Multiplicative(2.0)
 
     def testEvolve(self):
-        from fwdpy11.wright_fisher import evolve
+        from fwdpy11 import evolve_genomes as evolve
         evolve(self.rng, self.pop, self.p, self.recorder)
         self.assertEqual(self.recorder.generations,
                          [i + 1 for i in range(100)])
@@ -59,7 +59,7 @@ class testCythonRecorder(unittest.TestCase):
         self.p.gvalue = Multiplicative(2.0)
 
     def testEvolve(self):
-        from fwdpy11.wright_fisher import evolve
+        from fwdpy11 import evolve_genomes as evolve
         evolve(self.rng, self.pop, self.p, self.cython_recorder)
 
 

@@ -82,7 +82,6 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
 class testFixationPreservation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import fwdpy11.wright_fisher
         import numpy as np
         N = 1000
         demography = np.array([N]*10*N, dtype=np.uint32)
@@ -105,7 +104,7 @@ class testFixationPreservation(unittest.TestCase):
         import numpy as np
         self.p['prune_selected'] = False
         params = fwdpy11.ModelParams(**self.p)
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)
@@ -117,7 +116,7 @@ class testFixationPreservation(unittest.TestCase):
         import numpy as np
         self.p['prune_selected'] = True
         params = fwdpy11.ModelParams(**self.p)
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, params)
+        fwdpy11.evolve_genomes(self.rng, self.pop, params)
         assert len(
             self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)

@@ -2,7 +2,6 @@ import cppimport
 import fwdpy11
 import fwdpy11.ezparams
 import fwdpy11
-import fwdpy11.wright_fisher
 import pickle
 import unittest
 cppimport.force_rebuild()
@@ -22,7 +21,7 @@ class testCustomAdditive(unittest.TestCase):
         self.params = fwdpy11.ModelParams(**self.pdict)
 
     def testEvolve(self):
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
+        fwdpy11.evolve_genomes(self.rng, self.pop, self.params)
 
     def testPickle(self):
         a = self.params.gvalue
@@ -32,7 +31,7 @@ class testCustomAdditive(unittest.TestCase):
 
     # TODO: test this once built-in DiploidAdditive is callable
     # def testCorrectNess(self):
-    #     fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
+    #     fwdpy11.evolve_genomes(self.rng, self.pop, self.params)
     #     a = fwdpy11.fitness.DiploidAdditive(2.0)
     #     for i in self.pop.diploids:
     #         self.assertEqual(i.w, a(i, self.pop))
@@ -57,7 +56,7 @@ class testGeneralModule(unittest.TestCase):
         self.assertEqual(type(a), type(up))
 
     def testEvolve(self):
-        fwdpy11.wright_fisher.evolve(self.rng, self.pop, self.params)
+        fwdpy11.evolve_genomes(self.rng, self.pop, self.params)
 
 
 if __name__ == "__main__":

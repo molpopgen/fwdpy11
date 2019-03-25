@@ -26,3 +26,5 @@ from fwdpy11._version import __version__ # NOQA
 from ._fwdpy11 import * # NOQA
 from ._dev import *
 from ._model_params import *
+from ._evolve_genomes import *
+from ._evolvets import *

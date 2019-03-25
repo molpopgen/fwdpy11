@@ -84,11 +84,11 @@ class testDiploidPopulationSampler(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(42)
 
     def testSampler(self):
-        from fwdpy11.wright_fisher import evolve
+        from fwdpy11 import evolve_genomes as evolve
         try:
             evolve(self.rng, self.pop, self.params, self.sampler)
         except:
-            self.fail("unexpcted AssertionError")
+            self.fail("unexpected AssertionError")
 
 
 if __name__ == "__main__":
