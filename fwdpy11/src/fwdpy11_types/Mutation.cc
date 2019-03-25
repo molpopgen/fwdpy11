@@ -1,33 +1,12 @@
 #include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
+#include <pybind11/numpy.h>
 
 namespace py = pybind11;
-PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
 void
 init_Mutation(py::module &m)
 {
-    py::bind_vector<std::vector<double>>(
-        m, "VecDouble", "C++ vector of 64 bit floats.", py::buffer_protocol())
-        .def(py::pickle(
-            [](const std::vector<double> &v) {
-                py::list rv;
-                for (auto &&i : v)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<double> rv;
-                for (auto &&i : l)
-                    {
-                        rv.push_back(i.cast<double>());
-                    }
-                return rv;
-            }));
-
     // Sugar types
     py::class_<fwdpy11::Mutation, fwdpp::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
@@ -125,17 +104,37 @@ init_Mutation(py::module &m)
                       "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &fwdpy11::Mutation::h,
                       "Dominance/effect in heterozygotes. (read-only)")
-        .def_readonly("heffects", &fwdpy11::Mutation::heffects,
-                      R"delim(
+        .def_property_readonly(
+            "heffects",
+            [](const fwdpy11::Mutation &self) {
+                auto capsule = py::capsule(&self.heffects, [](void *) {});
+                return py::array(self.heffects.size(), self.heffects.data(),
+                                 capsule);
+            },
+            R"delim(
 				Vector of heterozygous effects.
 
 				.. versionadded:: 0.2.0
+
+                .. versionchanged:: 0.4.0
+
+                    Property is now a numpy.ndarray
 				)delim")
-        .def_readonly("esizes", &fwdpy11::Mutation::esizes,
-                      R"delim(
+        .def_property_readonly(
+            "esizes",
+            [](const fwdpy11::Mutation &self) {
+                auto capsule = py::capsule(&self.esizes, [](void *) {});
+                return py::array(self.esizes.size(), self.esizes.data(),
+                                 capsule);
+            },
+            R"delim(
 				Vector of effect sizes.
 
 				.. versionadded:: 0.2.0
+
+                .. versionchanged:: 0.4.0
+
+                    Property is now a numpy.ndarray
 				)delim")
         .def_property_readonly(
             "key",
