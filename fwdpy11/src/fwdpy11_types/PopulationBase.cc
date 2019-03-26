@@ -60,7 +60,8 @@ PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
-void init_PopulationBase(py::module & m)
+void
+init_PopulationBase(py::module& m)
 {
     py::class_<fwdpy11::Population>(m, "Population",
                                     "Abstract base class for populations "
@@ -70,11 +71,18 @@ void init_PopulationBase(py::module & m)
                       "Curent generation.")
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
-        .def_readonly("mcounts", &fwdpy11::Population::mcounts,
-                      MCOUNTS_DOCSTRING)
-        .def_readonly(
+        .def_property_readonly("mcounts",
+                               [](const fwdpy11::Population& self) {
+                                   return fwdpy11::make_1d_ndarray_readonly(
+                                       self.mcounts);
+                               },
+                               MCOUNTS_DOCSTRING)
+        .def_property_readonly(
             "mcounts_ancient_samples",
-            &fwdpy11::Population::mcounts_from_preserved_nodes,
+            [](const fwdpy11::Population& self) {
+                return fwdpy11::make_1d_ndarray_readonly(
+                    self.mcounts_from_preserved_nodes);
+            },
             "The contribution that ancient samples make to mutation counts")
         .def_readwrite("diploid_metadata",
                        &fwdpy11::Population::diploid_metadata,
@@ -204,16 +212,13 @@ void init_PopulationBase(py::module & m)
                 )delim")
         .def_property_readonly("genetic_values",
                                [](const fwdpy11::Population& self) {
-                                   //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
-                                   return fwdpy11::make_2d_ndarray(
+                                   return fwdpy11::make_2d_ndarray_readonly(
                                        self.genetic_value_matrix, self.N,
                                        self.genetic_value_matrix.size()
                                            / self.N);
                                },
                                R"delim(
-        Return the genetic values as a 2d matrix.
-        
-        The array is read-write, so be careful!
+        Return the genetic values as a readonly 2d numpy.ndarray.
         
         Rows are individuals.  Columns are genetic values.
         
@@ -222,16 +227,15 @@ void init_PopulationBase(py::module & m)
         .def_property_readonly(
             "ancient_sample_genetic_values",
             [](const fwdpy11::Population& self) {
-                return fwdpy11::make_2d_ndarray(
+                return fwdpy11::make_2d_ndarray_readonly(
                     self.ancient_sample_genetic_value_matrix,
                     self.ancient_sample_metadata.size(),
                     self.ancient_sample_genetic_value_matrix.size()
                         / self.ancient_sample_metadata.size());
             },
             R"delim(
-        Return the genetic values for ancient samples as a 2d matrix.
-        
-        The array is read-write, so be careful!
+        Return the genetic values for ancient samples as a readonly 2d 
+        numpy.ndarray.
         
         Rows are individuals.  Columns are genetic values.
         
