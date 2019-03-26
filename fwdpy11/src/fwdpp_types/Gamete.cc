@@ -19,10 +19,7 @@ init_gamete(py::module &m)
                 .. testcode::
 
                     import fwdpy11
-                    # Note the cast that is needed: 
-                    g = fwdpy11.Gamete((1,
-                                        fwdpy11.VecUint32([2]),
-                                        fwdpy11.VecUint32([0])))
+                    g = fwdpy11.Gamete((1, [2], [0]))
                     print(g.n)
                     print(list(g.mutations))
                     print(list(g.smutations))
