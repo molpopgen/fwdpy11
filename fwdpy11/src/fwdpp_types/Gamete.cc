@@ -1,6 +1,7 @@
 #include <fwdpp/forward_types.hpp>
 #include <pybind11/stl.h>
-#include <pybind11/numpy.h>
+#include <fwdpy11/numpy/array.hpp>
+
 namespace py = pybind11;
 
 void
@@ -37,9 +38,7 @@ init_gamete(py::module &m)
         .def_property_readonly(
             "mutations",
             [](const fwdpp::gamete &self) {
-                auto capsule = py::capsule(&self.mutations, [](void *) {});
-                return py::array(self.mutations.size(), self.mutations.data(),
-                                 capsule);
+                return fwdpy11::make_1d_ndarray_readonly(self.mutations);
             },
             "List of keys to neutral mutations. Contains unsigned "
             "32-bit integers corresponding to mutations in the "
@@ -47,9 +46,7 @@ init_gamete(py::module &m)
         .def_property_readonly(
             "smutations",
             [](const fwdpp::gamete &self) {
-                auto capsule = py::capsule(&self.smutations, [](void *) {});
-                return py::array(self.smutations.size(),
-                                 self.smutations.data(), capsule);
+                return fwdpy11::make_1d_ndarray_readonly(self.smutations);
             },
             "List of keys to selected mutations. Contains unsigned "
             "32-bit integers corresponding to mutations in the "
