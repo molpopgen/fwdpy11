@@ -46,7 +46,7 @@ class testDiploidPopulationCreate(unittest.TestCase):
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.fixations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
-            (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+            (2, [], [0])))
         self.diploids.append(fwdpy11.DiploidGenotype(0, 0))
 
     def testConstruction(self):
@@ -63,7 +63,9 @@ class testDiploidPopulationCreate(unittest.TestCase):
         self.assertEqual(len(self.mutations), 0)
 
     def testStaticMethodWithFixations(self):
-        ftimes = fwdpy11.VecUint32([1])
+        # NOTE: this test kinda stinks,
+        # as the "move" requirement is a bit silly in hindsight
+        ftimes = [1]
         pop = fwdpy11.DiploidPopulation.create(self.diploids,
                                        self.gametes,
                                        self.mutations,
@@ -76,7 +78,7 @@ class testDiploidPopulationCreate(unittest.TestCase):
         self.assertEqual(len(self.gametes), 0)
         self.assertEqual(len(self.mutations), 0)
         self.assertEqual(len(self.fixations), 0)
-        self.assertEqual(len(ftimes), 0)
+        self.assertEqual(len(ftimes), 1)
 
 
 class testGameteKeySorting(unittest.TestCase):
@@ -89,9 +91,9 @@ class testGameteKeySorting(unittest.TestCase):
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.mutations.append(fwdpy11.Mutation(0.01, -2, 1, 0, 0))
         self.gametes.append(fwdpy11.Gamete(
-            (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+            (1, [], [0])))
         self.gametes.append(fwdpy11.Gamete(
-            (1, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0, 1]))))
+            (1, [], [0, 1])))
         self.diploids.append(fwdpy11.DiploidGenotype(0, 1))
 
     def testUnsortedGametes(self):
