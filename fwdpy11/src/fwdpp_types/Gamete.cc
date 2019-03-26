@@ -1,34 +1,11 @@
 #include <fwdpp/forward_types.hpp>
 #include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
+#include <pybind11/numpy.h>
 namespace py = pybind11;
-
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 void
 init_gamete(py::module &m)
 {
-    py::bind_vector<std::vector<fwdpp::uint_t>>(
-        m, "VecUint32", "Vector of unsigned 32-bit integers.",
-        py::buffer_protocol())
-        .def(py::pickle(
-            [](const std::vector<fwdpp::uint_t> &v) {
-                py::list rv;
-                for (auto &&i : v)
-                    {
-                        rv.append(i);
-                    }
-                return rv;
-            },
-            [](py::list l) {
-                std::vector<fwdpp::uint_t> rv;
-                for (auto &&i : l)
-                    {
-                        rv.push_back(i.cast<fwdpp::uint_t>());
-                    }
-                return rv;
-            }));
-
     py::class_<fwdpp::gamete>(m, "Gamete", R"delim(
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.
@@ -60,14 +37,26 @@ init_gamete(py::module &m)
                       "Number of occurrences in the population. This has "
                       "little meaning beyond book-keeping used by the C++ "
                       "back-end. (read-only)")
-        .def_readonly("mutations", &fwdpp::gamete::mutations,
-                      "List of keys to neutral mutations. Contains unsigned "
-                      "32-bit integers corresponding to mutations in the "
-                      "population. (read-only)")
-        .def_readonly("smutations", &fwdpp::gamete::smutations,
-                      "List of keys to selected mutations. Contains unsigned "
-                      "32-bit integers corresponding to mutations in the "
-                      "population. (read-only)")
+        .def_property_readonly(
+            "mutations",
+            [](const fwdpp::gamete &self) {
+                auto capsule = py::capsule(&self.mutations, [](void *) {});
+                return py::array(self.mutations.size(), self.mutations.data(),
+                                 capsule);
+            },
+            "List of keys to neutral mutations. Contains unsigned "
+            "32-bit integers corresponding to mutations in the "
+            "population. (read-only)")
+        .def_property_readonly(
+            "smutations",
+            [](const fwdpp::gamete &self) {
+                auto capsule = py::capsule(&self.smutations, [](void *) {});
+                return py::array(self.smutations.size(),
+                                 self.smutations.data(), capsule);
+            },
+            "List of keys to selected mutations. Contains unsigned "
+            "32-bit integers corresponding to mutations in the "
+            "population. (read-only)")
         .def("as_dict",
              // This lambda shows that
              // we can return dicts
