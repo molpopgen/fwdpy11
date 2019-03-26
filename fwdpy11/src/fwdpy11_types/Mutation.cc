@@ -1,6 +1,6 @@
 #include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/stl.h>
-#include <pybind11/numpy.h>
+#include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
 
@@ -104,37 +104,33 @@ init_Mutation(py::module &m)
                       "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &fwdpy11::Mutation::h,
                       "Dominance/effect in heterozygotes. (read-only)")
-        .def_property_readonly(
-            "heffects",
-            [](const fwdpy11::Mutation &self) {
-                auto capsule = py::capsule(&self.heffects, [](void *) {});
-                return py::array(self.heffects.size(), self.heffects.data(),
-                                 capsule);
-            },
-            R"delim(
+        .def_property_readonly("heffects",
+                               [](const fwdpy11::Mutation &self) {
+                                   return fwdpy11::make_1d_ndarray_readonly(
+                                       self.heffects);
+                               },
+                               R"delim(
 				Vector of heterozygous effects.
 
 				.. versionadded:: 0.2.0
 
                 .. versionchanged:: 0.4.0
 
-                    Property is now a numpy.ndarray
+                    Property is now a readonly numpy.ndarray
 				)delim")
-        .def_property_readonly(
-            "esizes",
-            [](const fwdpy11::Mutation &self) {
-                auto capsule = py::capsule(&self.esizes, [](void *) {});
-                return py::array(self.esizes.size(), self.esizes.data(),
-                                 capsule);
-            },
-            R"delim(
+        .def_property_readonly("esizes",
+                               [](const fwdpy11::Mutation &self) {
+                                   return fwdpy11::make_1d_ndarray_readonly(
+                                       self.esizes);
+                               },
+                               R"delim(
 				Vector of effect sizes.
 
 				.. versionadded:: 0.2.0
 
                 .. versionchanged:: 0.4.0
 
-                    Property is now a numpy.ndarray
+                    Property is now a readonly numpy.ndarray
 				)delim")
         .def_property_readonly(
             "key",
