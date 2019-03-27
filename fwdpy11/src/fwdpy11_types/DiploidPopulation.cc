@@ -138,7 +138,7 @@ init_DiploidPopulation(py::module& m)
                 std::ostringstream o;
                 fwdpy11::serialization::serialize_details(o, &pop);
                 auto pb = py::bytes(o.str());
-                return pb;
+                return py::object(std::move(pb));
             },
             [](py::object pickled) -> fwdpy11::DiploidPopulation {
                 auto s = pickled.cast<py::bytes>().cast<std::string>();
