@@ -161,7 +161,7 @@ init_PopulationBase(py::module& m)
                     {
                         return py::none();
                     }
-                return rv;
+                return py::object(std::move(rv));
             },
             R"delim(
             Mutation position lookup table.
@@ -180,13 +180,16 @@ init_PopulationBase(py::module& m)
                      {
                          return py::none();
                      }
-                 py::list rv;
+                 std::vector<std::size_t>* rv = new std::vector<std::size_t>();
                  for (auto i = r.first; i != r.second; ++i)
                      {
-                         rv.append(i->second);
+                         rv->push_back(i->second);
                      }
-                 rv.attr("sort")();
-                 return rv;
+                 std::sort(begin(*rv), end(*rv));
+                 auto capsule = py::capsule(rv, [](void* v) {
+                     delete reinterpret_cast<std::vector<std::size_t>*>(v);
+                 });
+                 return py::array(rv->size(), rv->data(), capsule);
              },
              R"delim(
              Get indexes associated with a mutation position.
@@ -194,7 +197,7 @@ init_PopulationBase(py::module& m)
              :param pos: A position
              :type pos: float
              :return: Indexes in mutation/mutation counts container associated with pos.
-             :rtype: object
+             :rtype: numpy.array
              
              Returns None if pos does not refer to an extant variant.  Otherwise, 
              returns a list.
