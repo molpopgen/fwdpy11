@@ -66,7 +66,8 @@ namespace
     make_flattened_Mutation_array(
         const fwdpy11::Population::mcont_t& mutations)
     {
-        std::vector<flattened_Mutation>* vfm = new std::vector<flattened_Mutation>();
+        std::vector<flattened_Mutation>* vfm
+            = new std::vector<flattened_Mutation>();
         vfm->reserve(mutations.size());
         for (auto&& m : mutations)
             {
@@ -103,7 +104,17 @@ init_PopulationBase(py::module& m)
                                [](const fwdpy11::Population& self) {
                                    return make_flattened_Mutation_array(
                                        self.mutations);
-                               })
+                               },
+                               R"delim(
+                               Return readonly numpy.ndarray of mutation data.
+                               The data are returned as a copy.
+
+                               The esizes and heffects fields are not part of the 
+                               array, as their size is not constant and therefore
+                               they canot be part of a numpy "dtype".
+
+                               .. versionadded:: 0.4.0
+                               )delim")
         .def_property_readonly("mcounts",
                                [](const fwdpy11::Population& self) {
                                    return fwdpy11::make_1d_ndarray_readonly(
