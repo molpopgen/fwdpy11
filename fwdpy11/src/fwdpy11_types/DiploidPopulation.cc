@@ -45,6 +45,7 @@ namespace
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
 fwdpy11::DiploidPopulation
 create_DiploidPopulation_from_tree_sequence(py::object ts);
@@ -82,6 +83,12 @@ init_DiploidPopulation(py::module& m)
                 const fwdpy11::DiploidPopulation& rhs) { return lhs == rhs; })
         .def_readonly("diploids", &fwdpy11::DiploidPopulation::diploids,
                       DIPLOIDS_DOCSTRING)
+        .def_readwrite("diploid_metadata",
+                       &fwdpy11::DiploidPopulation::diploid_metadata,
+                       "Container of diploid metadata.")
+        .def_readwrite("ancient_sample_metadata",
+                       &fwdpy11::DiploidPopulation::ancient_sample_metadata,
+                       "Container of metadata for ancient samples.")
         .def_static(
             "create",
             [](fwdpy11::DiploidPopulation::dipvector_t& diploids,

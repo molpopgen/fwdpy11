@@ -85,7 +85,6 @@ namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
 void
 init_PopulationBase(py::module& m)
@@ -128,12 +127,6 @@ init_PopulationBase(py::module& m)
                     self.mcounts_from_preserved_nodes);
             },
             "The contribution that ancient samples make to mutation counts")
-        .def_readwrite("diploid_metadata",
-                       &fwdpy11::Population::diploid_metadata,
-                       "Container of diploid metadata.")
-        .def_readwrite("ancient_sample_metadata",
-                       &fwdpy11::Population::ancient_sample_metadata,
-                       "Container of metadata for ancient samples.")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) -> py::object {
@@ -276,9 +269,9 @@ init_PopulationBase(py::module& m)
             [](const fwdpy11::Population& self) {
                 return fwdpy11::make_2d_ndarray_readonly(
                     self.ancient_sample_genetic_value_matrix,
-                    self.ancient_sample_metadata.size(),
+                    self.tables.preserved_nodes.size(),
                     self.ancient_sample_genetic_value_matrix.size()
-                        / self.ancient_sample_metadata.size());
+                        / self.tables.preserved_nodes.size());
             },
             R"delim(
         Return the genetic values for ancient samples as a readonly 2d 

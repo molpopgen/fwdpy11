@@ -44,10 +44,6 @@ namespace fwdpy11
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
-        //TODO: initalized ancient_sample_metadata and tables,
-        //TODO figure out what to do with class constructor??
-        //TODO Introduce types for ancient sample individual and node tracking
-        std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
         std::vector<ancient_sample_record> ancient_sample_records;
         fwdpp::ts::table_collection tables;
 
@@ -64,8 +60,8 @@ namespace fwdpy11
         PyPopulation(const PyPopulation &) = default;
 
         PyPopulation(fwdpp::uint_t N_, const double L)
-            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
-              ancient_sample_metadata{}, ancient_sample_records{},
+            : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
+              ancient_sample_records{},
               tables(init_tables(N_, L)), genetic_value_matrix{},
               ancient_sample_genetic_value_matrix{}
         {
@@ -78,8 +74,7 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
-              N{ N_ }, generation{ 0 }, diploid_metadata(N),
-              ancient_sample_metadata{}, ancient_sample_records{},
+              N{ N_ }, generation{ 0 },  ancient_sample_records{},
               tables(std::numeric_limits<double>::max()),
               genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {

@@ -39,6 +39,7 @@ namespace fwdpy11
                                            typename popbase_t::mcont_t>;
 
         dipvector_t diploids;
+        std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
 
         DiploidPopulation(DiploidPopulation &&) = default;
         DiploidPopulation(const DiploidPopulation &) = default;
@@ -47,7 +48,8 @@ namespace fwdpy11
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
-            : Population{ N, length }, diploids(N, { 0, 0 })
+            : Population{ N, length }, diploids(N, { 0, 0 }),
+              diploid_metadata(N), ancient_sample_metadata{}
         {
             if (!N)
                 {
@@ -68,11 +70,13 @@ namespace fwdpy11
         template <typename diploids_input, typename gametes_input,
                   typename mutations_input>
         explicit DiploidPopulation(diploids_input &&d, gametes_input &&g,
-                           mutations_input &&m)
+                                   mutations_input &&m)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d))
+              diploids(std::forward<diploids_input>(d)),
+              diploid_metadata(diploids.size()), ancient_sample_metadata{}
+
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();
