@@ -15,7 +15,7 @@ class test_DiploidPopulation(unittest.TestCase):
     def setUpClass(self):
         from quick_pops import quick_nonneutral_slocus
         self.pop = quick_nonneutral_slocus()
-        self.muts = np.array(self.pop.mutations.array())
+        self.muts = self.pop.mutations_ndarray
 
     def testMutations(self):
         self.assertTrue(isinstance(self.muts, np.ndarray))
