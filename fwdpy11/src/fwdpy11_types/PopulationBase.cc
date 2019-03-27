@@ -19,7 +19,6 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/numpy/array.hpp>
 
