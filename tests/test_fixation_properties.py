@@ -40,7 +40,7 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
         mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
         gametes.append(fwdpy11.Gamete(
-            (4, fwdpy11.VecUint32([1]), fwdpy11.VecUint32([0]))))
+            (4, [1], [0])))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         self.pop = fwdpy11.DiploidPopulation(diploids, gametes, mutations)

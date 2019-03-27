@@ -25,7 +25,6 @@
 #include <type_traits>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/types/create_pops.hpp>
 #include <fwdpy11/serialization.hpp>
@@ -46,7 +45,6 @@ namespace
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
 fwdpy11::DiploidPopulation
 create_DiploidPopulation_from_tree_sequence(py::object ts);
@@ -99,7 +97,7 @@ init_DiploidPopulation(py::module& m)
                     }
                 auto& fixations
                     = args[0].cast<fwdpy11::DiploidPopulation::mcont_t&>();
-                auto& ftimes = args[1].cast<std::vector<fwdpp::uint_t>&>();
+                auto ftimes = args[1].cast<std::vector<fwdpp::uint_t>>();
                 auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
                     std::move(diploids), std::move(gametes),
@@ -140,7 +138,7 @@ init_DiploidPopulation(py::module& m)
                 std::ostringstream o;
                 fwdpy11::serialization::serialize_details(o, &pop);
                 auto pb = py::bytes(o.str());
-                return pb;
+                return py::object(std::move(pb));
             },
             [](py::object pickled) -> fwdpy11::DiploidPopulation {
                 auto s = pickled.cast<py::bytes>().cast<std::string>();

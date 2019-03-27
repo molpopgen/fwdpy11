@@ -5,7 +5,6 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<std::uint32_t>);
 
 void
 init_MultivariateGSSmo(py::module& m)

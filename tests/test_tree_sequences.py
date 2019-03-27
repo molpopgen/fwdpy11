@@ -87,7 +87,7 @@ class testTreeSequences(unittest.TestCase):
         tv = fwdpy11.TreeIterator(self.pop.tables,
                                   [i for i in range(2*self.pop.N)])
         mv = np.array(self.pop.tables.mutations, copy=False)
-        muts = np.array(self.pop.mutations.array())
+        muts = self.pop.mutations_ndarray
         p = muts['pos']
         for t in tv:
             l, r = t.left, t.right

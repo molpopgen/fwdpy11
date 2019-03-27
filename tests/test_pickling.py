@@ -18,6 +18,7 @@
 #
 import unittest
 import pickling_cpp
+import numpy as np
 
 
 class testPickleMutation(unittest.TestCase):
@@ -189,7 +190,7 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
         self.assertTrue(pop.diploids == self.pop.diploids)
         self.assertTrue(pop.gametes == self.pop.gametes)
         self.assertTrue(pop.mutations == self.pop.mutations)
-        self.assertTrue(pop.mcounts == self.pop.mcounts)
+        self.assertTrue(np.array_equal(pop.mcounts, self.pop.mcounts))
         self.assertTrue(pop.tables == self.pop.tables)
         self.assertTrue(pop == self.pop)
         os.remove(fname)

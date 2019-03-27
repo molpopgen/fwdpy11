@@ -75,9 +75,9 @@ class testMultiEffectMutationDiploidPopulationPickling(unittest.TestCase):
         fixations.append(fwdpy11.Mutation(
             0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
         gametes.append(fwdpy11.Gamete(
-            (2, fwdpy11.VecUint32([]), fwdpy11.VecUint32([0]))))
+            (2, [], [0])))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
-        ftimes = fwdpy11.VecUint32([1])
+        ftimes = [1]
         self.pop = fwdpy11.DiploidPopulation.create(diploids,
                                             gametes,
                                             mutations,

@@ -24,47 +24,17 @@
 
 namespace py = pybind11;
 
-struct flattened_Mutation
-{
-    double pos, s, h;
-    fwdpp::uint_t g;
-    decltype(fwdpy11::Mutation::xtra) label;
-    std::int16_t neutral;
-};
-
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
-PYBIND11_MAKE_OPAQUE(std::vector<flattened_Mutation>);
 
 void
 init_MutationVector(py::module& m)
 {
-    PYBIND11_NUMPY_DTYPE(flattened_Mutation, pos, s, h, g, label, neutral);
-
     py::bind_vector<std::vector<fwdpy11::Mutation>>(
         m, "MutationVector",
         "C++ representation of a list of "
         ":class:`fwdpy11.Mutation`.  "
         "Typically, access will be read-only.",
         py::module_local(false))
-        .def("array",
-             [](const std::vector<fwdpy11::Mutation>& mc) {
-                 std::vector<flattened_Mutation> rv;
-                 rv.reserve(mc.size());
-                 for (auto&& m : mc)
-                     {
-                         rv.push_back(flattened_Mutation{ m.pos, m.s, m.h, m.g,
-                                                          m.xtra, m.neutral });
-                     }
-                 return rv;
-             },
-             R"delim(
-        :rtype: :class:`fwdpy11.VecMutationDtype`.
-        
-        The return value should be coerced into a Numpy 
-        array for processing.
-
-        .. versionadded: 0.1.2
-        )delim")
         .def(py::pickle(
             [](const std::vector<fwdpy11::Mutation>& mutations) {
                 py::list rv;
@@ -82,13 +52,4 @@ init_MutationVector(py::module& m)
                     }
                 return rv;
             }));
-
-    py::bind_vector<std::vector<flattened_Mutation>>(
-        m, "MutationDtypeVector", py::buffer_protocol(), py::module_local(false),
-        R"delim(
-        Vector of the data fields in a "
-        ":class:`fwdpy11.Mutation`.
-
-        .. versionadded: 0.1.2
-        )delim");
 }

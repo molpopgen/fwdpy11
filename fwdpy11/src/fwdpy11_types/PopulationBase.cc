@@ -19,11 +19,18 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/stl_bind.h>
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
+
+struct flattened_Mutation
+{
+    double pos, s, h;
+    fwdpp::uint_t g;
+    decltype(fwdpy11::Mutation::xtra) label;
+    std::int16_t neutral;
+};
 
 namespace
 {
@@ -54,15 +61,37 @@ namespace
         To distinguish them, use the locations of nonzero values in "mcounts" 
         for an instance of this type."
     )delim";
+
+    py::array
+    make_flattened_Mutation_array(
+        const fwdpy11::Population::mcont_t& mutations)
+    {
+        std::vector<flattened_Mutation>* vfm
+            = new std::vector<flattened_Mutation>();
+        vfm->reserve(mutations.size());
+        for (auto&& m : mutations)
+            {
+                vfm->push_back(flattened_Mutation{ m.pos, m.s, m.h, m.g,
+                                                   m.xtra, m.neutral });
+            }
+        auto capsule = py::capsule(vfm, [](void* v) {
+            delete reinterpret_cast<std::vector<flattened_Mutation>*>(v);
+        });
+        auto rv = py::array(vfm->size(), vfm->data(), capsule);
+        rv.attr("flags").attr("writeable") = false;
+        return rv;
+    }
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::uint_t>);
 
-void init_PopulationBase(py::module & m)
+void
+init_PopulationBase(py::module& m)
 {
+    PYBIND11_NUMPY_DTYPE(flattened_Mutation, pos, s, h, g, label, neutral);
+
     py::class_<fwdpy11::Population>(m, "Population",
                                     "Abstract base class for populations "
                                     "based on :class:`fwdpy11.Mutation`")
@@ -71,11 +100,33 @@ void init_PopulationBase(py::module & m)
                       "Curent generation.")
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
-        .def_readonly("mcounts", &fwdpy11::Population::mcounts,
-                      MCOUNTS_DOCSTRING)
-        .def_readonly(
+        .def_property_readonly("mutations_ndarray",
+                               [](const fwdpy11::Population& self) {
+                                   return make_flattened_Mutation_array(
+                                       self.mutations);
+                               },
+                               R"delim(
+                               Return readonly numpy.ndarray of mutation data.
+                               The data are returned as a copy.
+
+                               The esizes and heffects fields are not part of the 
+                               array, as their size is not constant and therefore
+                               they canot be part of a numpy "dtype".
+
+                               .. versionadded:: 0.4.0
+                               )delim")
+        .def_property_readonly("mcounts",
+                               [](const fwdpy11::Population& self) {
+                                   return fwdpy11::make_1d_ndarray_readonly(
+                                       self.mcounts);
+                               },
+                               MCOUNTS_DOCSTRING)
+        .def_property_readonly(
             "mcounts_ancient_samples",
-            &fwdpy11::Population::mcounts_from_preserved_nodes,
+            [](const fwdpy11::Population& self) {
+                return fwdpy11::make_1d_ndarray_readonly(
+                    self.mcounts_from_preserved_nodes);
+            },
             "The contribution that ancient samples make to mutation counts")
         .def_readwrite("diploid_metadata",
                        &fwdpy11::Population::diploid_metadata,
@@ -110,7 +161,7 @@ void init_PopulationBase(py::module & m)
                     {
                         return py::none();
                     }
-                return rv;
+                return py::object(std::move(rv));
             },
             R"delim(
             Mutation position lookup table.
@@ -129,13 +180,16 @@ void init_PopulationBase(py::module & m)
                      {
                          return py::none();
                      }
-                 py::list rv;
+                 std::vector<std::size_t>* rv = new std::vector<std::size_t>();
                  for (auto i = r.first; i != r.second; ++i)
                      {
-                         rv.append(i->second);
+                         rv->push_back(i->second);
                      }
-                 rv.attr("sort")();
-                 return rv;
+                 std::sort(begin(*rv), end(*rv));
+                 auto capsule = py::capsule(rv, [](void* v) {
+                     delete reinterpret_cast<std::vector<std::size_t>*>(v);
+                 });
+                 return py::array(rv->size(), rv->data(), capsule);
              },
              R"delim(
              Get indexes associated with a mutation position.
@@ -143,7 +197,7 @@ void init_PopulationBase(py::module & m)
              :param pos: A position
              :type pos: float
              :return: Indexes in mutation/mutation counts container associated with pos.
-             :rtype: object
+             :rtype: numpy.array
              
              Returns None if pos does not refer to an extant variant.  Otherwise, 
              returns a list.
@@ -205,16 +259,13 @@ void init_PopulationBase(py::module & m)
                 )delim")
         .def_property_readonly("genetic_values",
                                [](const fwdpy11::Population& self) {
-                                   //return fwdpy11::make_1d_ndarray(self.genetic_value_matrix);
-                                   return fwdpy11::make_2d_ndarray(
+                                   return fwdpy11::make_2d_ndarray_readonly(
                                        self.genetic_value_matrix, self.N,
                                        self.genetic_value_matrix.size()
                                            / self.N);
                                },
                                R"delim(
-        Return the genetic values as a 2d matrix.
-        
-        The array is read-write, so be careful!
+        Return the genetic values as a readonly 2d numpy.ndarray.
         
         Rows are individuals.  Columns are genetic values.
         
@@ -223,16 +274,15 @@ void init_PopulationBase(py::module & m)
         .def_property_readonly(
             "ancient_sample_genetic_values",
             [](const fwdpy11::Population& self) {
-                return fwdpy11::make_2d_ndarray(
+                return fwdpy11::make_2d_ndarray_readonly(
                     self.ancient_sample_genetic_value_matrix,
                     self.ancient_sample_metadata.size(),
                     self.ancient_sample_genetic_value_matrix.size()
                         / self.ancient_sample_metadata.size());
             },
             R"delim(
-        Return the genetic values for ancient samples as a 2d matrix.
-        
-        The array is read-write, so be careful!
+        Return the genetic values for ancient samples as a readonly 2d 
+        numpy.ndarray.
         
         Rows are individuals.  Columns are genetic values.
         

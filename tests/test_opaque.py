@@ -37,11 +37,6 @@ class testDiploidPopulation(unittest.TestCase):
         self.assertFalse(type(self.pop.mutations) is list)
         self.assertTrue(type(list(self.pop.mutations)) is list)
 
-    def test_mcount(self):
-        self.assertTrue(
-            type(self.pop.mcounts)
-            is fwdpy11.VecUint32)
-
     def test_diploids(self):
         self.assertTrue(
             type(self.pop.diploids)
@@ -63,7 +58,6 @@ class DiploidTypeSampler(object):
         assert(type(pop.mutations) is fwdpy11.MutationVector)
         assert(type(pop.mutations) is not list)
         assert(type(list(pop.mutations)) is list)
-        assert(type(pop.mcounts) is fwdpy11.VecUint32)
         assert(type(pop.diploids) is fwdpy11.DiploidVector)
         assert(type(pop.diploids[0])
                is fwdpy11.DiploidGenotype)
