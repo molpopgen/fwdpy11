@@ -24,6 +24,14 @@
 
 namespace py = pybind11;
 
+struct flattened_Mutation
+{
+    double pos, s, h;
+    fwdpp::uint_t g;
+    decltype(fwdpy11::Mutation::xtra) label;
+    std::int16_t neutral;
+};
+
 namespace
 {
     static const auto MCOUNTS_DOCSTRING = R"delim(
@@ -53,6 +61,25 @@ namespace
         To distinguish them, use the locations of nonzero values in "mcounts" 
         for an instance of this type."
     )delim";
+
+    py::array
+    make_flattened_Mutation_array(
+        const fwdpy11::Population::mcont_t& mutations)
+    {
+        std::vector<flattened_Mutation>* vfm = new std::vector<flattened_Mutation>();
+        vfm->reserve(mutations.size());
+        for (auto&& m : mutations)
+            {
+                vfm->push_back(flattened_Mutation{ m.pos, m.s, m.h, m.g,
+                                                   m.xtra, m.neutral });
+            }
+        auto capsule = py::capsule(vfm, [](void* v) {
+            delete reinterpret_cast<std::vector<flattened_Mutation>*>(v);
+        });
+        auto rv = py::array(vfm->size(), vfm->data(), capsule);
+        rv.attr("flags").attr("writeable") = false;
+        return rv;
+    }
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
@@ -62,6 +89,8 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 void
 init_PopulationBase(py::module& m)
 {
+    PYBIND11_NUMPY_DTYPE(flattened_Mutation, pos, s, h, g, label, neutral);
+
     py::class_<fwdpy11::Population>(m, "Population",
                                     "Abstract base class for populations "
                                     "based on :class:`fwdpy11.Mutation`")
@@ -70,6 +99,11 @@ init_PopulationBase(py::module& m)
                       "Curent generation.")
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
+        .def_property_readonly("mutations_ndarray",
+                               [](const fwdpy11::Population& self) {
+                                   return make_flattened_Mutation_array(
+                                       self.mutations);
+                               })
         .def_property_readonly("mcounts",
                                [](const fwdpy11::Population& self) {
                                    return fwdpy11::make_1d_ndarray_readonly(
