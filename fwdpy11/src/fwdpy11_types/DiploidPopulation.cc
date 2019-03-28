@@ -37,7 +37,7 @@ namespace py = pybind11;
 namespace
 {
     static const auto DIPLOIDS_DOCSTRING = R"delim(
-   A :class:`fwdpy11.VecDiploid`.
+   A :class:`fwdpy11.DiploidVector`.
    )delim";
 
 } // namespace

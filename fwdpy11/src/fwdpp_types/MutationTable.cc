@@ -15,7 +15,7 @@ init_ts_MutationTable(py::module& m)
     py::bind_vector<std::vector<fwdpp::ts::mutation_record>>(
         m, "MutationTable", py::buffer_protocol(), py::module_local(false),
         R"delim(
-        An MutationTable is a container of :class:`fwdpy11.ts.MutationRecord`.
+        An MutationTable is a container of :class:`fwdpy11.MutationRecord`.
 
         An MutationTable supports the Python buffer protocol, allowing data
         to be viewed in Python as a numpy record array.  No copy is made
