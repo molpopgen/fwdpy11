@@ -28,16 +28,22 @@ Welcome to fwdpy11's documentation!
     pages/definitions
 
 .. toctree::
-    :caption: Data Types
-    :maxdepth: 2
+    :caption: Introction by way of example
 
-    pages/types
+    pages/introexample.rst
 
 .. toctree::
     :caption: Tree sequence recording
     :maxdepth: 2
 
     pages/tsoverview
+
+.. toctree::
+    :caption: Data Types
+    :maxdepth: 2
+
+    pages/types
+
 
 .. toctree::
     :caption: Modules
