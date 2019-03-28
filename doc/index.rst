@@ -28,7 +28,7 @@ Welcome to fwdpy11's documentation!
     pages/definitions
 
 .. toctree::
-    :caption: Introction by way of example
+    :caption: Introduction by way of example
 
     pages/introexample.rst
 
