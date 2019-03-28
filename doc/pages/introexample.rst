@@ -83,20 +83,37 @@ We also need a random number generator, which takes a 32-bit unsigned integer as
 
     rng = fwdpy11.GSLrng(42)
 
+fwdpy11 allows you to define arbitrary callables that process the population during simulation.
+When recording tree sequences, a major use case for this processing is to define nodes to "preserve"
+as "ancient samples".  What this means is that, at the end of the simulation, the nodes corresponding to 
+these individuals will be retained in the tree sequences.  Their metadata will be preserved, too.
+
+The callable must take two arguments. The first is the population, and the second is a Python object.  The 
+type of the second argument's type is an internal detail.  It has a single user-facing interface, which is a function
+called `assign`.  This function expects a numpy array (with a 32-bit signed integer dtype) containing the indexes of 
+**individuals** to preserve.  Internally, these individual indexes will be converted to node indexes.
+
+Below, we define a class that records **all** individuals in the population each generation after we have evolved to
+equilibrium.  While we are at it, we will also record the generation and mean trait value, "because we can", and because 
+it shows that we can basically do (almost) anything we want here in terms of time-series analysis.
+
 .. ipython:: python
 
     class Recorder(object):
-        def __init__(self):
+        def __init__(self, popsize):
             self.gbar = []
+            self.individuals = np.arange(popsize, dtype=np.int32)
         def __call__(self, pop, ancient_sampler_recorder):
             if pop.generation >= 10*pop.N:
                 md = np.array(pop.diploid_metadata, copy=False)
                 self.gbar.append((pop.generation, md['g'].mean()))
-                ancient_sampler_recorder.assign(np.arange(pop.N, dtype=np.int32))
+                ancient_sampler_recorder.assign(self.individuals)
+
+.. todo:: need to write a separate page on the details of recorders and tree sequences
 
 .. ipython:: python
 
-    recorder = Recorder()
+    recorder = Recorder(N)
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
 We can use the metadata to analyze our population. The metadata are represnted by 
@@ -115,9 +132,8 @@ through structured arrays.
     print(alive_metadata.dtype)
 
     # Note that alive_metadata does not own its data,
-    # which means that the numpy array is just a thin
-    # wrapper to the C++ data, which means we have
-    # avoided making a copy.
+    # which means that the numpy array is just a
+    # way to "view" to the C++ data without copying it.
     print(alive_metadata.flags)
 
 Let's look at some properties of the final generation using both the Python class
