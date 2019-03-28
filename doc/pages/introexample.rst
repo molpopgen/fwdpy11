@@ -99,12 +99,32 @@ We also need a random number generator, which takes a 32-bit unsigned integer as
     recorder = Recorder()
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
+We can use the metadata to analyze our population. The metadata are represnted by 
+the Python class :class:`fwdpy11.DiploidMetadata`.  The underlying C++ data 
+structure is also registered as a numpy dtype, allowing more efficient analysis
+through structured arrays.
+
 .. ipython:: python
 
     # Let's get the mean trait value, the genetic variance and fitness
     # for the current generation
     alive_metadata = np.array(pop.diploid_metadata, copy=False)
+
+    # The dtype names are the same as the DiploidMetadata 
+    # class attributes.
     print(alive_metadata.dtype)
+
+    # Note that alive_metadata does not own its data,
+    # which means that the numpy array is just a thin
+    # wrapper to the C++ data, which means we have
+    # avoided making a copy.
+    print(alive_metadata.flags)
+
+Let's look at some properties of the final generation using both the Python class
+and the structured array methods:
+
+.. ipython:: python
+
     print(alive_metadata['g'].mean(), alive_metadata['g'].var(), alive_metadata['w'].mean())
 
     print(np.mean([i.g for i in pop.diploid_metadata]))
@@ -112,14 +132,40 @@ We also need a random number generator, which takes a 32-bit unsigned integer as
     print(np.mean([i.w for i in pop.diploid_metadata]))
 
 
-Plot the mean genetic value over time:
+Next, we will plot the mean trait value over time from the metadata.
+The first thing we may want to take care of is that our metadata for 'alive'
+and for 'ancient' samples are stored separately.  Let's fix that:
 
 .. ipython:: python
 
     ancient_md = np.array(pop.ancient_sample_metadata, copy = False)
+    all_md = np.concatenate((ancient_md, alive_metadata))
+
+    # Combining the metadata resulted in a copy,
+    # which you can see in the flags.  The new
+    # object owns its data
+    print(all_md.flags)
+
+The access to fwdpy11 object data via numpy means that we can use the entire Python data stack.
+Here, we will use `pandas` to get the mean trait value over time.  To do this, we first need 
+the node times associated with our metadata nodes.  We will get these times by converting the population's
+:class:`fwdpy11.NodeTable` into a structured array:
+
+.. ipython:: python
+
     node_table = np.array(pop.tables.nodes, copy=False)
     print(node_table.dtype)
-    ancient_md_times = node_table['time'][ancient_md['nodes'][:,0]]
+    mdtimes = node_table['time'][all_md['nodes'][:,0]]
+
+Now, it is straightforward to create a `pandas.DataFrame` and aggregate with respect to time:
+    
+.. ipython:: python
+
+    import pandas as pd
+    df = pd.DataFrame(data={'time':mdtimes, 'g':all_md['g']})
+    df = df.groupby(['time']).mean().reset_index()
+
+The plotting is standard, too:
 
 .. ipython:: python
 
@@ -127,12 +173,8 @@ Plot the mean genetic value over time:
     rc('font',**{'size':18})
     rc('text', usetex=True)
     import matplotlib.pyplot as plt
-    mean_genetic_values = []
-    for t in np.unique(ancient_md_times):
-        samples_at_t = np.where(ancient_md_times == t)[0]
-        mean_genetic_values.append(ancient_md['g'][samples_at_t].mean())
 
-    plt.plot(np.unique(ancient_md_times), mean_genetic_values);
+    plt.plot(df.time, df.g);
     plt.ylabel("Mean trait value");
     plt.title("Adaptive walk to new optimum");
     plt.xlabel("Generation");
@@ -141,21 +183,12 @@ Plot the mean genetic value over time:
 
 Sanity check our calculations:
 
-.. TODO::
+.. ipython:: python
 
-    comment on np.concatenate to merge ancient + alive metadata
+    assert np.allclose(np.array([i[1] for i in recorder.gbar]), df.g) is True
 
 .. ipython:: python
 
-    assert all([i==j[1] for i,j in zip(mean_genetic_values,recorder.gbar[:-1])]) is True
-    assert recorder.gbar[-1][1] == alive_metadata['g'].mean()
-
-
-.. ipython:: python
-
-    all_md = np.concatenate((ancient_md, alive_metadata))
-    print(all_md.flags)
-    mdtimes = node_table['time'][all_md['nodes'][:,0]]
     ssh_over_time = []
     nmuts = fwdpy11.infinite_sites(rng, pop, THETA/(4*N))
     np.random.seed(54321)
