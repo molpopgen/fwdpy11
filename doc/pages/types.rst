@@ -143,7 +143,7 @@ Python list, but its actual representation is a contiguous array
 that is handled on the C++ side.
 
 Types related to tree sequence recording
-----------------------------------------------------------
+==========================================================
 
 .. autoclass:: fwdpy11.TableCollection
 .. autoclass:: fwdpy11.EdgeTable
@@ -172,3 +172,8 @@ Types related to tree sequence recording
 
     .. autoattribute:: node
 
+.. autoclass:: fwdpy11.TreeIterator
+    :members:
+
+.. autoclass:: fwdpy11.VariantIterator
+    :members:

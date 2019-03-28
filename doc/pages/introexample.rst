@@ -1,19 +1,66 @@
 Example
 ======================================================================
 
+All of fwdpy11 is contained in a single import:
 
 .. ipython:: python
 
     import fwdpy11
     import numpy as np
 
+Let's set up some global variables for our simulation.  These are fairly standard:
+
+.. ipython:: python
+
     N = 1000
     GENOME_LEN = 1.0
     THETA, RHO = 1000.0, 1000.0
     MU = 1e-3
-    
+
+We are simulating an additive effects model of a phenotype.  Fitness is determed by
+the squared deviation from an optimum trait value using the classic model of Gaussian 
+stabilizing selection.  In this simulation, the optimum will start out at zero and then change 
+to 1 after `10N` generations of evolution.  We will use :class:`fwdpy11.GSSmo` to paramterize 
+the optimum shift:
+
+.. ipython:: python
+
+    # The tuples are (generation, optimum, VS), where
+    # VS is the inverse strength of stabilizing selection
     gssmo = fwdpy11.GSSmo([(0,0,1), (10*N,1,1)]) 
-    pdict = {'gvalue': fwdpy11.Additive(2.0, gssmo),
+
+
+Our `gssmo` variable is an instance of a class that maps genetic values to fitness, and we use it to construct
+our additive effect object, which is an instance of :class:`fwdpy11.Additive`:
+
+.. ipython:: python
+
+    additive_gss = fwdpy11.Additive(2.0, gssmo)
+
+In the last cell, the `2` means that the model is additive over `0`, `sh`, and `2s` for `AA`, `Aa`, and `aa`
+genotypes, respectively, where `a` is the mutant allele.  If you use a value of 1.0 instead, you will get the same
+scaling as simulators like `slim`.  However, the 2.0 is useful here for the model of a quantitative trait.
+
+.. note::
+
+    The only difference between a simulation of a trait and a simulation of direct effects on 
+    fitness is now the genetic value object is constructed. If no object derived from
+    :class:`fwdpy11.GeneticValueToFitnessMap` is used, then the genetic value is treated as
+    fitness itself.  In other words, if the previous cell had ommited the second argument, 
+    then our simulation would be a standard simulation of additive effects on fitness:
+
+    .. code-block:: python
+
+        additive = fwdpy11.Additive(2.0)
+
+Now, we use our parameters to construct an instance of :class:`fwdpy11.ModelParams`, which 
+holds our parameters for us.  The `ModelParams` class takes `kwargs` as arguments. Our
+preferred method for construction is to "explode" a `dict` containing our parameters:
+
+
+.. ipython:: python
+
+    pdict = {'gvalue': additive_gss,
             'nregions': [],
             'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.15, 1)],
             'recregions': [fwdpy11.Region(0,1,1)],
@@ -23,9 +70,20 @@ Example
             }
     params = fwdpy11.ModelParams(**pdict)
 
+
+Our population is an instance of :class:`fwdpy11.DiploidPopulation`:
+
+.. ipython:: python
+
     pop = fwdpy11.DiploidPopulation(N, GENOME_LEN)
 
+We also need a random number generator, which takes a 32-bit unsigned integer as a seed:
+
+.. ipython:: python
+
     rng = fwdpy11.GSLrng(42)
+
+.. ipython:: python
 
     class Recorder(object):
         def __init__(self):
@@ -36,10 +94,12 @@ Example
                 self.gbar.append((pop.generation, md['g'].mean()))
                 ancient_sampler_recorder.assign(np.arange(pop.N, dtype=np.int32))
 
+.. ipython:: python
+
     recorder = Recorder()
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
-    print(pop.generation)
+.. ipython:: python
 
     # Let's get the mean trait value, the genetic variance and fitness
     # for the current generation

@@ -152,7 +152,7 @@ init_tree_iterator(py::module& m)
 {
     py::class_<tree_visitor_wrapper>(m, "TreeIterator",
                                      R"delim(
-            Iterate over the marginal trees in a :class:`fwdpy11.ts.TableCollection`
+            Iterate over the marginal trees in a :class:`fwdpy11.TableCollection`
             
             .. versionadded 0.3.0
             )delim")

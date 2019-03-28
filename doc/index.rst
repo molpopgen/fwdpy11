@@ -37,12 +37,16 @@ Welcome to fwdpy11's documentation!
     :maxdepth: 2
 
     pages/tsoverview
+    pages/tstypes
 
 .. toctree::
     :caption: Data Types
     :maxdepth: 2
 
     pages/types
+    pages/genetic_values
+    pages/gvalue_to_fitness
+    pages/model_params
 
 
 .. toctree::

@@ -255,7 +255,7 @@ init_PopulationBase(py::module& m)
         .def_readonly("tables", &fwdpy11::Population::tables,
                       R"delim(
                 Give access to the population's 
-                :class:`fwdpy11.ts.TableCollection`
+                :class:`fwdpy11.TableCollection`
                 )delim")
         .def_property_readonly("genetic_values",
                                [](const fwdpy11::Population& self) {
