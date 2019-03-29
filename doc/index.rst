@@ -40,11 +40,18 @@ Welcome to fwdpy11's documentation!
     pages/tstypes
 
 .. toctree::
+    :caption: Mutation and recombination
+
+    pages/recombination.rst
+
+
+.. toctree::
     :caption: Data types and functions
     :maxdepth: 2
 
     pages/types
     pages/genetic_values
+    pages/regions
     pages/gvalue_to_fitness
     pages/model_params
     pages/functions
