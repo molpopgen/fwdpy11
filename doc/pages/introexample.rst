@@ -262,3 +262,66 @@ optimum.
     @savefig pi_over_time.png width=6in
     plt.xlabel("Generation");
 
+We may also analyze our current generation by using the various containers present in a population.  In this example, we
+will obtain the number of mutations on each haploid genome of each diploid.  We will compare the result to that obtained 
+from the tree sequences.  
+
+.. ipython:: python
+
+    nmuts = np.zeros(2*pop.N, dtype=np.int32)
+    for i, dip in enumerate(pop.diploids):
+        first = pop.haploid_genomes[dip.first].smutations
+        second = pop.haploid_genomes[dip.second].smutations
+        nmuts[2*i] = len(first)
+        nmuts[2*i+1] = len(second)
+            
+
+When using the tree sequences for the calculation, note that we have to avoid neutral variants,
+as we added them in above.
+
+.. ipython:: python
+
+    current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
+    nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
+    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, current_generation)
+    for v in vi:
+        g = v.genotypes
+        r = v.record
+        if pop.mutations[r.key].neutral is False:
+            who = np.where(g == 1)[0]
+            nmuts_ts[who] += 1
+        
+    assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
+
+It is important to note that the first loop is much faster than the second. However, the comparison is not
+apples-to-apples.  The latter approach processes the data more efficiently.  However, it is having to work much
+harder because:
+
+1. This tree sequence contains a large number of ancient samples. Thus, its tree structure is not
+   "maximally" simplified with respect to any single time point.  Rather, it is simplified with
+   respect to the nodes from all sampled time points.
+2. This tree sequence contains our selected mutations **and** the neutral mutations that we added,
+   meaning it has a lot more work todo than the loop over haploid genomes, which separates
+   the two classes of mutations.
+
+To fix the first issue, we can obtain a new table collection simplified with respect to the
+final generation, which gives about a tenfold speedup compared to iterating over the larger
+tree sequence:
+
+.. ipython:: python
+
+    tables, idmap = fwdpy11.simplify(pop, current_generation)
+    remapped_samples = idmap[current_generation]
+    nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
+    vi = fwdpy11.VariantIterator(tables, pop.mutations, remapped_samples)
+    for v in vi:
+        g = v.genotypes
+        r = v.record
+        if pop.mutations[r.key].neutral is False:
+            who = np.where(g == 1)[0]
+            nmuts_simplified_ts[who] += 1
+       
+    assert np.array_equal(nmuts_ts, nmuts_simplified_ts), "Simplification error"
+
+Repeating the exercise without putting the neutral mutations onto the trees results in the tree-sequence-based
+approach being about 3x faster.
