@@ -6,6 +6,12 @@ All of fwdpy11 is contained in a single import:
 .. ipython:: python
 
     import fwdpy11
+
+Many of the fwdpy11 data structures are best manipulated as numpy arrays, so we'll usually 
+import that as well.
+
+.. ipython:: python
+
     import numpy as np
 
 Let's set up some global variables for our simulation.  These are fairly standard:
@@ -13,9 +19,15 @@ Let's set up some global variables for our simulation.  These are fairly standar
 .. ipython:: python
 
     N = 1000
-    GENOME_LEN = 1.0
     THETA, RHO = 1000.0, 1000.0
     MU = 1e-3
+
+For simulations with tree sequences, we need to know the total length of the genome.  We'll follow the tradition of 
+`ms` here, modeling the genome as a continuous unit interval:
+
+.. ipython:: python
+
+    GENOME_LEN = 1.0
 
 We are simulating an additive effects model of a phenotype.  Fitness is determed by
 the squared deviation from an optimum trait value using the classic model of Gaussian 
