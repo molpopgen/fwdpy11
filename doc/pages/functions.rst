@@ -12,3 +12,7 @@ Function documentation
 
     :return: Number of mutations added
     :rtype: int
+
+.. autofunction:: fwdpy11.simplify
+
+.. autofunction:: fwdpy11.simplify_tables
