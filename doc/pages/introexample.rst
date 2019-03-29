@@ -310,7 +310,7 @@ tree sequence:
 
 .. ipython:: python
 
-    tables, idmap = fwdpy11.simplify(pop, current_generation)
+    tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.mutations, current_generation)
     remapped_samples = idmap[current_generation]
     nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
     vi = fwdpy11.VariantIterator(tables, pop.mutations, remapped_samples)

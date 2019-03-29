@@ -105,13 +105,14 @@ init_simplify_functions(py::module& m)
               return py::make_tuple(
                   std::move(t), py::array(idmap->size(), idmap->data(), cap));
           },
+          py::arg("tables"), py::arg("mutations"), py::arg("samples"),
           R"delim(
           Simplify a TableCollection.
           
           :param pop: A table collection.
           :type pop: :class:`fwdpy11.TableCollection`
           :param mutations: Container of mutations
-          :type mutations: :class:`fwdpy11.VecMutation`
+          :type mutations: :class:`fwdpy11.MutationVector`
           :param samples: list of samples
           :type list: list-like or array-like
 
