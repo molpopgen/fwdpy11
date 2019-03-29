@@ -23,12 +23,12 @@ namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::gamete>);
 
-void init_GameteVector(py::module & m)
+void init_HaploidGenomeVector(py::module & m)
 {
     py::bind_vector<std::vector<fwdpp::gamete>>(
-        m, "GameteVector", py::module_local(false),
+        m, "HaploidGenomeVector", py::module_local(false),
         "C++ representations of a list of "
-        ":class:`fwdpy11.Gamete`.  "
+        ":class:`fwdpy11.HaploidGenome`.  "
         "Typically, access will be read-only.")
         .def(py::pickle(
             [](const std::vector<fwdpp::gamete>& gametes) {

@@ -150,9 +150,9 @@ class testTreeSequences(unittest.TestCase):
         mc = np.sum(mm, axis=1)
         ec = np.zeros(len(self.pop.mutations), dtype=np.uint32)
         for d in self.pop.diploids:
-            for m in self.pop.gametes[d.first].smutations:
+            for m in self.pop.haploid_genomes[d.first].smutations:
                 ec[m] += 1
-            for m in self.pop.gametes[d.second].smutations:
+            for m in self.pop.haploid_genomes[d.second].smutations:
                 ec[m] += 1
         for i, j, k in zip(self.pop.tables.mutations, cs, mc):
             self.assertEqual(self.pop.mcounts[i.key],
@@ -336,7 +336,7 @@ class testFixationPreservation(unittest.TestCase):
 
         # Brute-force calculation of fixations
         brute_force = np.zeros(len(pop.mutations), dtype=np.int32)
-        for g in pop.gametes:
+        for g in pop.haploid_genomes:
             if g.n > 0:
                 for k in g.smutations:
                     brute_force[k] += g.n
@@ -372,7 +372,7 @@ class testFixationPreservation(unittest.TestCase):
 
         # Brute-force calculation of fixations
         brute_force = np.zeros(len(pop.mutations), dtype=np.int32)
-        for g in pop.gametes:
+        for g in pop.haploid_genomes:
             if g.n > 0:
                 for k in g.smutations:
                     brute_force[k] += g.n

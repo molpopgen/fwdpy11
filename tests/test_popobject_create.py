@@ -41,25 +41,25 @@ class testDiploidPopulationCreate(unittest.TestCase):
     def setUp(self):
         self.mutations = fwdpy11.MutationVector()
         self.fixations = fwdpy11.MutationVector()
-        self.gametes = fwdpy11.GameteVector()
+        self.haploid_genomes = fwdpy11.HaploidGenomeVector()
         self.diploids = fwdpy11.DiploidVector()
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.fixations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
-        self.gametes.append(fwdpy11.Gamete(
+        self.haploid_genomes.append(fwdpy11.HaploidGenome(
             (2, [], [0])))
         self.diploids.append(fwdpy11.DiploidGenotype(0, 0))
 
     def testConstruction(self):
-        pop = fwdpy11.DiploidPopulation(self.diploids, self.gametes, self.mutations)
+        pop = fwdpy11.DiploidPopulation(self.diploids, self.haploid_genomes, self.mutations)
         self.assertTrue(pop.N, 1)
 
     def testStaticMethod(self):
         pop = fwdpy11.DiploidPopulation.create(
-            self.diploids, self.gametes, self.mutations)
+            self.diploids, self.haploid_genomes, self.mutations)
         self.assertTrue(type(pop) is fwdpy11.DiploidPopulation)
         # Test that data were moved and not copied:
         self.assertEqual(len(self.diploids), 0)
-        self.assertEqual(len(self.gametes), 0)
+        self.assertEqual(len(self.haploid_genomes), 0)
         self.assertEqual(len(self.mutations), 0)
 
     def testStaticMethodWithFixations(self):
@@ -67,7 +67,7 @@ class testDiploidPopulationCreate(unittest.TestCase):
         # as the "move" requirement is a bit silly in hindsight
         ftimes = [1]
         pop = fwdpy11.DiploidPopulation.create(self.diploids,
-                                       self.gametes,
+                                       self.haploid_genomes,
                                        self.mutations,
                                        self.fixations,
                                        ftimes, 2)
@@ -75,36 +75,36 @@ class testDiploidPopulationCreate(unittest.TestCase):
         self.assertEqual(len(pop.fixations), len(pop.fixation_times))
         # Test that data were moved and not copied:
         self.assertEqual(len(self.diploids), 0)
-        self.assertEqual(len(self.gametes), 0)
+        self.assertEqual(len(self.haploid_genomes), 0)
         self.assertEqual(len(self.mutations), 0)
         self.assertEqual(len(self.fixations), 0)
         self.assertEqual(len(ftimes), 1)
 
 
-class testGameteKeySorting(unittest.TestCase):
+class testHaploidGenomeKeySorting(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.mutations = fwdpy11.MutationVector()
         self.fixations = fwdpy11.MutationVector()
-        self.gametes = fwdpy11.GameteVector()
+        self.haploid_genomes = fwdpy11.HaploidGenomeVector()
         self.diploids = fwdpy11.DiploidVector()
         self.mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         self.mutations.append(fwdpy11.Mutation(0.01, -2, 1, 0, 0))
-        self.gametes.append(fwdpy11.Gamete(
+        self.haploid_genomes.append(fwdpy11.HaploidGenome(
             (1, [], [0])))
-        self.gametes.append(fwdpy11.Gamete(
+        self.haploid_genomes.append(fwdpy11.HaploidGenome(
             (1, [], [0, 1])))
         self.diploids.append(fwdpy11.DiploidGenotype(0, 1))
 
-    def testUnsortedGametes(self):
+    def testUnsortedHaploidGenomes(self):
         with self.assertRaises(ValueError):
             pop = fwdpy11.DiploidPopulation.create(
-                self.diploids, self.gametes, self.mutations)
+                self.diploids, self.haploid_genomes, self.mutations)
 
-    def testSortingGametes(self):
-        fwdpy11.sort_gamete_keys(self.gametes, self.mutations)
+    def testSortingHaploidGenomes(self):
+        fwdpy11.sort_gamete_keys(self.haploid_genomes, self.mutations)
         pop = fwdpy11.DiploidPopulation.create(
-            self.diploids, self.gametes, self.mutations)
+            self.diploids, self.haploid_genomes, self.mutations)
 
 
 if __name__ == "__main__":

@@ -5,9 +5,9 @@
 namespace py = pybind11;
 
 void
-init_gamete(py::module &m)
+init_HaploidGenome(py::module &m)
 {
-    py::class_<fwdpp::gamete>(m, "Gamete", R"delim(
+    py::class_<fwdpp::gamete>(m, "HaploidGenome", R"delim(
     A gamete.  This object represents a haplotype
     in a contiguous genomic region.
 )delim")
@@ -20,7 +20,7 @@ init_gamete(py::module &m)
                 .. testcode::
 
                     import fwdpy11
-                    g = fwdpy11.Gamete((1, [2], [0]))
+                    g = fwdpy11.HaploidGenome((1, [2], [0]))
                     print(g.n)
                     print(list(g.mutations))
                     print(list(g.smutations))

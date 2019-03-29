@@ -49,8 +49,8 @@ class testDiploidPopulation(unittest.TestCase):
 
     def test_gametes(self):
         self.assertTrue(
-            type(self.pop.gametes)
-            is fwdpy11.GameteVector)
+            type(self.pop.haploid_genomes)
+            is fwdpy11.HaploidGenomeVector)
 
 
 class DiploidTypeSampler(object):
@@ -61,7 +61,7 @@ class DiploidTypeSampler(object):
         assert(type(pop.diploids) is fwdpy11.DiploidVector)
         assert(type(pop.diploids[0])
                is fwdpy11.DiploidGenotype)
-        assert(type(pop.gametes) is fwdpy11.GameteVector)
+        assert(type(pop.haploid_genomes) is fwdpy11.HaploidGenomeVector)
 
 
 class testDiploidPopulationSampler(unittest.TestCase):
