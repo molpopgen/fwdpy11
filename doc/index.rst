@@ -40,7 +40,7 @@ Welcome to fwdpy11's documentation!
     pages/tstypes
 
 .. toctree::
-    :caption: Data Types
+    :caption: Data types and functions
     :maxdepth: 2
 
     pages/types
