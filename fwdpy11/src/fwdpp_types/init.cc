@@ -3,7 +3,7 @@
 namespace py = pybind11;
 
 void init_mutation_base(py::module &);
-void init_gamete(py::module &);
+void init_HaploidGenome(py::module &);
 void init_data_matrix(py::module &);
 void init_ts_Node(py::module &);
 void init_ts_Edge(py::module &);
@@ -18,7 +18,7 @@ void
 initialize_fwdpp_types(py::module &m)
 {
     init_mutation_base(m);
-    init_gamete(m);
+    init_HaploidGenome(m);
     init_data_matrix(m);
 
     // Types related to tree sequenc recording

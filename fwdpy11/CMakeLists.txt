@@ -1,6 +1,6 @@
 set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
     src/fwdpp_types/MutationBase.cc
-    src/fwdpp_types/Gamete.cc
+    src/fwdpp_types/HaploidGenome.cc
     src/fwdpp_types/DataMatrix.cc
     src/fwdpp_types/NULL_NODE.cc
     src/fwdpp_types/Node.cc
@@ -21,7 +21,7 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/DiploidGenotype.cc
     src/fwdpy11_types/DiploidMetadata.cc
     src/fwdpy11_types/DiploidVector.cc
-    src/fwdpy11_types/GameteVector.cc
+    src/fwdpy11_types/HaploidGenomeVector.cc
     src/fwdpy11_types/rng.cc
     src/fwdpy11_types/PopulationBase.cc
     src/fwdpy11_types/DiploidPopulation.cc

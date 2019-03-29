@@ -49,19 +49,20 @@ class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
         j = 0
         for i in range(100, 150):
             # Num neutral variants in diploid i, gamete 0
-            nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
+            nmuts = len(
+                self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
             self.assertEqual(nmuts, colSums[j])
             # Num neutral variants in diploid i, gamete 1
             nmuts = len(
-                self.pop.gametes[self.pop.diploids[i].second].mutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].second].mutations)
             self.assertEqual(nmuts, colSums[j + 1])
 
             # Now, test numbers of selected
             nmuts = len(
-                self.pop.gametes[self.pop.diploids[i].first].smutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
             self.assertEqual(nmuts, colSumsSel[j])
             nmuts = len(
-                self.pop.gametes[self.pop.diploids[i].second].smutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
             self.assertEqual(nmuts, colSumsSel[j + 1])
 
             j += 2
@@ -76,14 +77,17 @@ class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
         self.assertEqual(len(colSumsSel), self.gm_selected.shape[1])
         j = 0
         for i in range(100, 150):
-            nmuts = len(self.pop.gametes[self.pop.diploids[i].first].mutations)
-            nmuts += len(self.pop.gametes[self.pop.diploids[i].second].mutations)
+            nmuts = len(
+                self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
+            nmuts += len(
+                self.pop.haploid_genomes[self.pop.diploids[i].second].mutations)
             self.assertEqual(nmuts, colSums[j])
 
             # Now, test numbers of selected
             nmuts = len(
-                self.pop.gametes[self.pop.diploids[i].first].smutations)
-            nmuts += len(self.pop.gametes[self.pop.diploids[i].second].smutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
+            nmuts += len(
+                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
             self.assertEqual(nmuts, colSumsSel[j])
 
             j += 1
