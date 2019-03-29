@@ -31,3 +31,29 @@ Setting up genomic intervals
 .. autoclass:: fwdpy11.MultivariateGaussianEffects
 
     .. automethod:: __init__
+
+.. autoclass:: fwdpy11.GeneticMapUnit
+
+.. autoclass:: fwdpy11.PoissonInterval
+
+    This class inherits from :class:`fwdpy11.GeneticMapUnit`
+
+    .. automethod:: __init__
+    
+.. autoclass:: fwdpy11.PoissonPoint
+
+    This class inherits from :class:`fwdpy11.GeneticMapUnit`
+
+    .. automethod:: __init__
+
+.. autoclass:: fwdpy11.BinomialPoint
+
+    This class inherits from :class:`fwdpy11.GeneticMapUnit`
+
+    .. automethod:: __init__
+
+.. autoclass:: fwdpy11.FixedCrossovers
+
+    This class inherits from :class:`fwdpy11.GeneticMapUnit`
+
+    .. automethod:: __init__
