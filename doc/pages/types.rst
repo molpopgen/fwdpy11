@@ -3,10 +3,40 @@
 Data types related to simulated populations
 ======================================================================
 
+Base class for populations
+----------------------------------------------------------
+
+.. autoclass:: fwdpy11.Population
+
+.. note:: 
+
+    This base class is imperfect, and contains some attributes
+    and functions that assume diploidy.  These issues will be
+    fixed in future releases, largely by moving the diploid-specific
+    stuff to the derived classes. To hopefully avoid confusion,
+    the oddly-placed attributes are documented in 
+    :class:`fwdpy11.DiploidPopulation`.
+
+.. autoattribute:: fwdpy11.Population.haploid_genomes
+
+    .. note::
+
+        The haploid_genomes container contains extant and extinct
+        genomes. For the latter, :attr:`fwdpy11.HaploidGenome.n`
+        equals 0.
+
+.. autoattribute:: fwdpy11.Population.mutations
+
+.. autoattribute:: fwdpy11.Population.mcounts
+
+.. autoattribute:: fwdpy11.Population.tables
+
 Populations of diploids
 ----------------------------------------------------------
 
 .. autoclass:: fwdpy11.DiploidPopulation
+    
+    This class inherits from :class:`fwdpy11.Population`.
 
 .. autoattribute:: fwdpy11.DiploidPopulation.diploids
 
@@ -20,19 +50,6 @@ The metadata are stored separately for the current generation and for ancient sa
 
 .. autoattribute:: fwdpy11.DiploidPopulation.ancient_sample_metadata
 
-.. autoattribute:: fwdpy11.DiploidPopulation.gametes
-
-    .. note::
-
-        The gametes container contains extant and extinct
-        gametes. For the latter, :attr:`fwdpy11.Gamete.n`
-        equals 0.
-
-.. autoattribute:: fwdpy11.DiploidPopulation.mutations
-
-.. autoattribute:: fwdpy11.DiploidPopulation.mcounts
-
-.. autoattribute:: fwdpy11.DiploidPopulation.tables
 
 
 Diploid Genotypes
@@ -40,7 +57,7 @@ Diploid Genotypes
 
 This class contains two integers pointing to the 
 genomes making up the individual.  The genomes themselves
-are represented by :class:`fwdpy11.Gamete`.
+are represented by :class:`fwdpy11.HaploidGenome`.
 
 .. autoclass:: fwdpy11.DiploidGenotype
 
@@ -77,20 +94,20 @@ This type supports the Python buffer protocol, meaning that it
 can be cast to a numpy structured array without a copy, and the attribute
 names are used as field names. 
 
-Gametes
+HaploidGenomes
 -----------------------------------------------------------
 
-Class :class:`fwdpy11.Gamete` describes a gamete:
+Class :class:`fwdpy11.HaploidGenome` describes a gamete:
 
-.. autoclass:: fwdpy11.Gamete
+.. autoclass:: fwdpy11.HaploidGenome
 
     .. autoattribute:: n
     .. autoattribute:: mutations
     .. autoattribute:: smutations
 
-Gametes are stored in the following container:
+HaploidGenomes are stored in the following container:
 
-.. autoclass:: fwdpy11.GameteVector
+.. autoclass:: fwdpy11.HaploidGenomeVector
 
 For all intents and purposes, this container behaves as a standard
 Python list, but its actual representation is a contiguous array

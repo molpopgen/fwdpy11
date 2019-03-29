@@ -129,9 +129,9 @@ init_variant_iterator(py::module& m)
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              R"delim(
              :param tables: The table collection
-             :type tables: :class:`fwdpy11.ts.TableCollection`
+             :type tables: :class:`fwdpy11.TableCollection`
              :param mutations: Mutation container
-             :type mutations: :class:`fwdpy11.VecMutation`
+             :type mutations: :class:`fwdpy11.MutationVector`
              :param samples: Samples list
              :type samples: list
             )delim")

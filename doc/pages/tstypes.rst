@@ -18,7 +18,7 @@ Table collections
 ----------------------------------------------------------
 
 The above data types are encapsulated into the Python class :class:`fwdpy11.TableCollection`.  Instances of this
-class are data fields of populations, via :attr:`fwdpy11.DiploidPopulation.tables`.
+class are data fields of populations, via :attr:`fwdpy11.Population.tables`.
 
 Representing trees
 ----------------------------------------------------------

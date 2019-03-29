@@ -51,7 +51,7 @@ namespace
         = R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
 
     static const auto GAMETES_DOCSTRING
-        = R"delim(A :class:`fwdpy11.GameteVector`.)delim";
+        = R"delim(A :class:`fwdpy11.HaploidGenomeVector`.)delim";
 
     static const auto MUTATIONS_DOCSTRING = R"delim(
     List of :class:`fwdpy11.Mutation`.
