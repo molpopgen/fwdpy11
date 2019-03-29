@@ -129,23 +129,38 @@ it shows that we can basically do (almost) anything we want here in terms of tim
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
 We can use the metadata to analyze our population. The metadata are represnted by 
-the Python class :class:`fwdpy11.DiploidMetadata`.  The underlying C++ data 
-structure is also registered as a numpy dtype, allowing more efficient analysis
-through structured arrays.
+the Python class :class:`fwdpy11.DiploidMetadata`, and :attr:`fwdpy11.DiploidPopulation.diploid_metadata`
+can be iterated over as if it were a Python `list`.  Let's get some summaries of trait values and fitness
+using standard iteration plus numpy methods for the numeric operations:
 
 .. ipython:: python
 
-    # Let's get the mean trait value, the genetic variance and fitness
-    # for the current generation
+    # Mean genetic value
+    print(np.mean([i.g for i in pop.diploid_metadata]))
+    # Genetic variance = variance of genetic values
+    print(np.var([i.g for i in pop.diploid_metadata]))
+    # Mean fitness.
+    print(np.mean([i.w for i in pop.diploid_metadata]))
+
+The C++ data type underlying :class:`fwdpy11.DiploidMetadata` is registered as a numpy dtype, 
+and we can view the container as a record array.  Importantly, we can do so *without* making a 
+copy of the underlying data:
+
+.. ipython:: python
+
     alive_metadata = np.array(pop.diploid_metadata, copy=False)
 
-    # The dtype names are the same as the DiploidMetadata 
-    # class attributes.
+The dtype names are the same as the :class:`fwdpy11.DiploidMetadata`
+class attributes:
+
+.. ipython:: python
+
     print(alive_metadata.dtype)
 
-    # Note that alive_metadata does not own its data,
-    # which means that the numpy array is just a
-    # way to "view" to the C++ data without copying it.
+Inspecting the flags shows that the structured aray object does not own its data.
+
+.. ipython:: python
+
     print(alive_metadata.flags)
 
 Let's look at some properties of the final generation using both the Python class
@@ -154,11 +169,6 @@ and the structured array methods:
 .. ipython:: python
 
     print(alive_metadata['g'].mean(), alive_metadata['g'].var(), alive_metadata['w'].mean())
-
-    print(np.mean([i.g for i in pop.diploid_metadata]))
-    print(np.var([i.g for i in pop.diploid_metadata]))
-    print(np.mean([i.w for i in pop.diploid_metadata]))
-
 
 Next, we will plot the mean trait value over time from the metadata.
 The first thing we may want to take care of is that our metadata for 'alive'
@@ -169,9 +179,11 @@ and for 'ancient' samples are stored separately.  Let's fix that:
     ancient_md = np.array(pop.ancient_sample_metadata, copy = False)
     all_md = np.concatenate((ancient_md, alive_metadata))
 
-    # Combining the metadata resulted in a copy,
-    # which you can see in the flags.  The new
-    # object owns its data
+Combining the metadata resulted in a copy, which you can see in the flags. The new
+object owns its data:
+
+.. ipython:: python
+
     print(all_md.flags)
 
 The access to fwdpy11 object data via numpy means that we can use the entire Python data stack.
@@ -215,10 +227,20 @@ Sanity check our calculations:
 
     assert np.allclose(np.array([i[1] for i in recorder.gbar]), df.g) is True
 
+An advantage of tree sequences is that we can efficiently iterate over genotypes at
+individual variants with respect to arbitrary sets of nodes.  Such iteration is handled by
+:class:`fwdpy11.VariantIterator`.
+
+For the next example, we will add neutral mutations to our tree sequence via :func:`fwdpy11.infinite_sites`
+and then calculate :math:`\pi` (the sum of heterozygosity at each site) in a random sample of 25 diploids from each time point.
+The end result will allow us to plot how genetic diversity in a sample changes over time during adaptation to the new
+optimum.
+
 .. ipython:: python
 
-    ssh_over_time = []
     nmuts = fwdpy11.infinite_sites(rng, pop, THETA/(4*N))
+
+    ssh_over_time = []
     np.random.seed(54321)
     for t in np.unique(mdtimes):
         samples_at_t = np.where(mdtimes == t)[0]
