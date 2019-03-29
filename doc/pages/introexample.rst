@@ -223,8 +223,8 @@ Sanity check our calculations:
                 ssh += het
         ssh_over_time.append(ssh)
 
-
     plt.plot(np.unique(mdtimes), ssh_over_time);
     plt.ylabel(r'$\pi$');
     @savefig pi_over_time.png width=6in
     plt.xlabel("Generation");
+
