@@ -203,7 +203,7 @@ init_PopulationBase(py::module& m)
              returns a list.
              )delim",
              py::arg("pos"))
-        .def_readonly("gametes", &fwdpy11::Population::gametes,
+        .def_readonly("haploid_genomes", &fwdpy11::Population::gametes,
                       GAMETES_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::Population::fixations,
                       FIXATIONS_DOCSTRING)

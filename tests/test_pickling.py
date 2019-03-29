@@ -57,15 +57,15 @@ class testPickleDiploidPopulation(unittest.TestCase):
         for i, j in zip(p, self.pop.mutations):
             self.assertEqual(i, j)
 
-    def testPickleGametes(self):
+    def testPickleHaploidGenomes(self):
         import pickle
-        p = [pickling_cpp.general_pickler(i) for i in self.pop.gametes]
-        for i, j in zip(p, self.pop.gametes):
+        p = [pickling_cpp.general_pickler(i) for i in self.pop.haploid_genomes]
+        for i, j in zip(p, self.pop.haploid_genomes):
             m = pickle.loads(i)
             self.assertEqual(m, j)
-        x = pickling_cpp.general_pickler(self.pop.gametes)
+        x = pickling_cpp.general_pickler(self.pop.haploid_genomes)
         p = pickle.loads(x)
-        for i, j in zip(p, self.pop.gametes):
+        for i, j in zip(p, self.pop.haploid_genomes):
             self.assertEqual(i, j)
 
     def testPickleDiploidsPy(self):
@@ -188,7 +188,7 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
         self.assertEqual(pop.N, self.pop.N)
         self.assertEqual(pop.generation, self.pop.generation)
         self.assertTrue(pop.diploids == self.pop.diploids)
-        self.assertTrue(pop.gametes == self.pop.gametes)
+        self.assertTrue(pop.haploid_genomes == self.pop.haploid_genomes)
         self.assertTrue(pop.mutations == self.pop.mutations)
         self.assertTrue(np.array_equal(pop.mcounts, self.pop.mcounts))
         self.assertTrue(pop.tables == self.pop.tables)

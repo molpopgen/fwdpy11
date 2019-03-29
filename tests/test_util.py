@@ -42,15 +42,15 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
         g = [i[0] for i in enumerate(
-            self.pop.gametes) if extant[0][0] in i[1].mutations and
-            self.pop.gametes[i[0]].n > 0]
-        self.assertEqual(sum([self.pop.gametes[i].n for i in g]), extant[0][1])
+            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
+            self.pop.haploid_genomes[i[0]].n > 0]
+        self.assertEqual(sum([self.pop.haploid_genomes[i].n for i in g]), extant[0][1])
         fwdpy11.change_effect_size(self.pop, extant[0][0], -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
-        g2 = [i[0] for i in enumerate(self.pop.gametes) if
+        g2 = [i[0] for i in enumerate(self.pop.haploid_genomes) if
               extant[0][0] in i[1].smutations and
-              self.pop.gametes[i[0]].n > 0]
+              self.pop.haploid_genomes[i[0]].n > 0]
         self.assertEqual(g, g2)
 
     def test_change_esize_nothing_happens(self):
@@ -61,22 +61,22 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
         g = [i[0] for i in enumerate(
-            self.pop.gametes) if extant[0][0] in i[1].mutations and
-            self.pop.gametes[i[0]].n > 0]
-        self.assertEqual(sum([self.pop.gametes[i].n for i in g]), extant[0][1])
+            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
+            self.pop.haploid_genomes[i[0]].n > 0]
+        self.assertEqual(sum([self.pop.haploid_genomes[i].n for i in g]), extant[0][1])
         fwdpy11.change_effect_size(self.pop, extant[0][0], 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
-        g2 = [i[0] for i in enumerate(self.pop.gametes) if
+        g2 = [i[0] for i in enumerate(self.pop.haploid_genomes) if
               extant[0][0] in i[1].mutations and
-              self.pop.gametes[i[0]].n > 0]
+              self.pop.haploid_genomes[i[0]].n > 0]
         self.assertEqual(g, g2)
 
     def testVectorEffects(self):
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         g = [i[0] for i in enumerate(
-            self.pop.gametes) if extant[0][0] in i[1].mutations and
-            self.pop.gametes[i[0]].n > 0]
+            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
+            self.pop.haploid_genomes[i[0]].n > 0]
         fwdpy11.change_effect_size(self.pop, extant[0][0],
                                         0.0, 0.0, [1.], [-1.])
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)

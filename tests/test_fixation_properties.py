@@ -35,11 +35,11 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     def setUp(self):
         mutations = fwdpy11.MutationVector()
         fixations = fwdpy11.MutationVector()
-        gametes = fwdpy11.GameteVector()
+        gametes = fwdpy11.HaploidGenomeVector()
         diploids = fwdpy11.DiploidVector()
         mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
-        gametes.append(fwdpy11.Gamete(
+        gametes.append(fwdpy11.HaploidGenome(
             (4, [1], [0])))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
@@ -47,9 +47,9 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
 
     def testSetup(self):
         self.assertEqual(len(self.pop.mutations), 2)
-        self.assertEqual(len(self.pop.gametes), 1)
+        self.assertEqual(len(self.pop.haploid_genomes), 1)
         self.assertEqual(len(self.pop.diploids), 2)
-        for g in self.pop.gametes:
+        for g in self.pop.haploid_genomes:
             self.assertEqual(len(g.mutations), 1)
             self.assertEqual(len(g.smutations), 1)
         for mc in self.pop.mcounts:
