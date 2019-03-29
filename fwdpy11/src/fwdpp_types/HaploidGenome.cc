@@ -8,8 +8,8 @@ void
 init_HaploidGenome(py::module &m)
 {
     py::class_<fwdpp::gamete>(m, "HaploidGenome", R"delim(
-    A gamete.  This object represents a haplotype
-    in a contiguous genomic region.
+    A haploid genome.  This object represents the ordered
+    mutations inherited from a single parent.
 )delim")
         .def(py::init<fwdpp::gamete::constructor_tuple>(),
              R"delim(
@@ -65,7 +65,7 @@ init_HaploidGenome(py::module &m)
                      = obj(pybind11::cast(g.smutations));
                  return rv;
              },
-             "Return dictionary representaton of the gamete.")
+             "Return dictionary representaton of the genome.")
         .def(py::pickle(
             [](const fwdpp::gamete &g) {
                 return py::make_tuple(g.n, g.mutations, g.smutations);
