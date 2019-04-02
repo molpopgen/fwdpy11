@@ -4,6 +4,9 @@ Variation in mutation rates
 Variation in mutation rates to neutral variants
 ------------------------------------------------------------------------------------------------
 
+When simulating tree sequences, fwdpy11 currently does not allow variation in the neutral mutation rate.
+Allowing this will come in future releases.
+
 Variation in mutation rates to selected (non-neutral) variants
 ------------------------------------------------------------------------------------------------
 
