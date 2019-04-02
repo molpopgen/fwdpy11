@@ -65,8 +65,12 @@ Let's take a look at the mutations for one of the genomes:
 .. ipython:: python
 
     for k in pop.haploid_genomes[pop.diploids[0].first].smutations:
-        print(pop.mutations[k].pos, pop.mutations[k].g, pop.mutations[k].s)
+        print(k,"-> {0:0.2f} {1:0.0f} {2:0.2f}".format(
+              pop.mutations[k].pos,
+              pop.mutations[k].g,
+              pop.mutations[k].s))
 
-The outputs are the mutation position, generation when the mutation arose, and the
-mutation's effect size.  See :class:`fwdpy11.Mutation` for more attributes associated
+The outputs are the mutation index, followed by the position,
+generation when the mutation arose, and the mutation's effect size.
+See :class:`fwdpy11.Mutation` for more attributes associated
 with this type.
