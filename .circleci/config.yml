@@ -43,8 +43,10 @@ jobs:
           command: |
             python -m unittest discover tests
       - run:
-          name: Build the manual 
-          command: make html -C doc
+          name: Build the manual and run doctests
+          command: |
+            make html -C doc
+            make doctest -C doc
 
       - run:
           name: Make sure we can build a distribution tarball.
