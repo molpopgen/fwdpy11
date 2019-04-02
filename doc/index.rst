@@ -42,7 +42,8 @@ Welcome to fwdpy11's documentation!
 .. toctree::
     :caption: Mutation and recombination
 
-    pages/recombination.rst
+    pages/mutation
+    pages/recombination
 
 
 .. toctree::
