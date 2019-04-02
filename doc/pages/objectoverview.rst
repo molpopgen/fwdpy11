@@ -35,17 +35,21 @@ To go from haploid genomes to their mutations:
     they are actually C++ containers and some magic has been done to allow you to access their
     data very efficiently.
 
-Let's take a look at the population simulated in :ref:`introexample`:
+Let's take a look at the population simulated in :ref:`introexample`.
+
+The indexes of the genomes of the first diploid are:
 
 .. ipython:: python
 
     print(pop.diploids[0].first, pop.diploids[0].second)
 
+Let's print the contents of those genomes and some type info:
+
 .. ipython:: python
 
     for i in (pop.diploids[0].first, pop.diploids[0].second):
         print(pop.haploid_genomes[i].smutations,
-              type(pop.haploid_genomes[i].smutations))
+              type(pop.haploid_genomes[i].smutations),
               pop.haploid_genomes[i].smutations.dtype)
 
 So we see that mutation indexes are stored in numpy arrays.
@@ -63,3 +67,6 @@ Let's take a look at the mutations for one of the genomes:
     for k in pop.haploid_genomes[pop.diploids[0].first].smutations:
         print(pop.mutations[k].pos, pop.mutations[k].g, pop.mutations[k].s)
 
+The outputs are the mutation position, generation when the mutation arose, and the
+mutation's effect size.  See :class:`fwdpy11.Mutation` for more attributes associated
+with this type.
