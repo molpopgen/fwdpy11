@@ -42,6 +42,7 @@ Welcome to fwdpy11's documentation!
 .. toctree::
     :caption: Mutation and recombination
 
+    pages/objectoverview
     pages/mutation
     pages/recombination
     pages/recorders
