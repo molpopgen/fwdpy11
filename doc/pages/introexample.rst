@@ -1,4 +1,6 @@
-Example
+.. _introexample:
+
+Overview of fwdpy11
 ======================================================================
 
 All of fwdpy11 is contained in a single import:

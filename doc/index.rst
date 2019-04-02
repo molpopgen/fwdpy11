@@ -44,6 +44,7 @@ Welcome to fwdpy11's documentation!
 
     pages/mutation
     pages/recombination
+    pages/recorders
 
 
 .. toctree::
