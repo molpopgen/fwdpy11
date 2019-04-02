@@ -211,7 +211,6 @@ The plotting is standard, too:
 
     from matplotlib import rc
     rc('font',**{'size':18})
-    rc('text', usetex=True)
     import matplotlib.pyplot as plt
 
     plt.plot(df.time, df.g);
