@@ -9,30 +9,30 @@ by :class:`fwdpy11.DiploidPopulation`.
 .. note::
 
     :class:`fwdpy11.DiploidPopulation` inherits from the base class
-    :class:`fwdpy11.Population`, and thus inherits its public attributes.
+    :class:`fwdpy11.PopulationBase`, and thus inherits its public attributes.
     Below, you will see attribute references to the base class. Keep
     in mind that those attributes are inherited.
 
 * A diploid is made up of two haploid genomes, one from each parent.
 * A haploid genome is represented by :class:`fwdpy11.HaploidGenome`.
-* Haploid genomes are stored in :attr:`fwdpy11.Population.haploid_genomes`.
+* Haploid genomes are stored in :attr:`fwdpy11.PopulationBase.haploid_genomes`.
 * A diploid is represented by :class:`fwdpy11.DiploidGenotype`, whose attributes
   :attr:`fwdpy11.DiploidGenotype.first` and :attr:`fwdpy11.DiploidGenotype.second`
-  refer to *indexes* in :attr:`fwdpy11.Population.haploid_genomes`
+  refer to *indexes* in :attr:`fwdpy11.PopulationBase.haploid_genomes`
 * Instances of :class:`fwdpy11.DiploidGenotype` are stored in :attr:`fwdpy11.DiploidPopulation.diploids`
 
 To go from haploid genomes to their mutations:
 
 * Mutations are represented by :class:`fwdpy11.Mutation`
-* Mutation instances are stored in :attr:`fwdpy11.Population.mutations`.
-* Instances of haploid genomes store *indexes* into :attr:`fwdpy11.Population.mutations`.
+* Mutation instances are stored in :attr:`fwdpy11.PopulationBase.mutations`.
+* Instances of haploid genomes store *indexes* into :attr:`fwdpy11.PopulationBase.mutations`.
 * These indexes are stored *separately* for neutral and selected mutations in
   :attr:`fwdpy11.HaploidGenome.mutations` and :attr:`fwdpy11.HaploidGenome.smutations`,
   respectively.
 
 .. note::
 
-    The attributes :attr:`fwdpy11.Population.haploid_genomes`, :attr:`fwdpy11.Population.mutations`,
+    The attributes :attr:`fwdpy11.PopulationBase.haploid_genomes`, :attr:`fwdpy11.PopulationBase.mutations`,
     and :attr:`fwdpy11.DiploidPopulation.diploids` mostly behave as regular Python lists.  However,
     they are actually C++ containers and some magic has been done to allow you to access their
     data very efficiently.
@@ -102,7 +102,12 @@ It may be useful to read the following sections for background:
 In :ref:`tsoverview`, we define a convention of labelling the *nodes* corresponding to the
 haploid genomes of a diploid individual with adjactent integers.  For the current generation of a diploid population,
 and assuming that the tree sequences are simplified, the nodes corresponding to our :math:`N` diploids have integer labels
-:math:`[0, 2N)`.  The haploid genomes of individual 0 correspond to nodes 0 and 1, respectively, etc..
+:math:`[0, 2N)`.  The haploid genomes of individual 0 correspond to nodes 0 and 1, respectively, etc., and we can get
+the node labels from the metadata:
+
+.. ipython:: python
+
+    print(pop.diploid_metadata[0].nodes)
 
 Let's use :class:`fwdpy11.VariantIterator` to determine which selected mutations are in the first diploid. We will have
 to filter on neutral-vs-selected because neutral mutations have been added to the table collection:
@@ -110,7 +115,9 @@ to filter on neutral-vs-selected because neutral mutations have been added to th
 .. ipython:: python
 
     keys = []
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, [0, 1])
+    vi = fwdpy11.VariantIterator(pop.tables,
+                                 pop.mutations,
+                                 pop.diploid_metadata[0].nodes)
     for v in vi:
         r = v.record
         if pop.mutations[r.key].neutral is False:
@@ -124,7 +131,9 @@ Let's create the full genotype matrix for this individual at selected variants:
 .. ipython:: python
 
     genotypes = np.array([], dtype=np.int8)
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, [0, 1])
+    vi = fwdpy11.VariantIterator(pop.tables,
+                                 pop.mutations,
+                                 pop.diploid_metadata[0].nodes)
     for v in vi:
         r = v.record
         if pop.mutations[r.key].neutral is False:
@@ -141,7 +150,7 @@ The examples using :class:`fwdpy11.VariantIterator` are examples of efficient al
 described in Kelleher *et al.* (2016), in the paper describing msprime_.   You also have access to the raw tables
 themselves:
 
-* :attr:`fwdpy11.Population.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes include the node, edge,
+* :attr:`fwdpy11.PopulationBase.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes include the node, edge,
   and mutation tables.
 
 .. _msprime: https://msprime.readthedocs.io

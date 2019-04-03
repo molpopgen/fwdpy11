@@ -6,7 +6,7 @@ Data types related to simulated populations
 Base class for populations
 ----------------------------------------------------------
 
-.. autoclass:: fwdpy11.Population
+.. autoclass:: fwdpy11.PopulationBase
 
 .. note:: 
 
@@ -17,7 +17,7 @@ Base class for populations
     the oddly-placed attributes are documented in 
     :class:`fwdpy11.DiploidPopulation`.
 
-.. autoattribute:: fwdpy11.Population.haploid_genomes
+.. autoattribute:: fwdpy11.PopulationBase.haploid_genomes
 
     .. note::
 
@@ -25,18 +25,18 @@ Base class for populations
         genomes. For the latter, :attr:`fwdpy11.HaploidGenome.n`
         equals 0.
 
-.. autoattribute:: fwdpy11.Population.mutations
+.. autoattribute:: fwdpy11.PopulationBase.mutations
 
-.. autoattribute:: fwdpy11.Population.mcounts
+.. autoattribute:: fwdpy11.PopulationBase.mcounts
 
-.. autoattribute:: fwdpy11.Population.tables
+.. autoattribute:: fwdpy11.PopulationBase.tables
 
 Populations of diploids
 ----------------------------------------------------------
 
 .. autoclass:: fwdpy11.DiploidPopulation
     
-    This class inherits from :class:`fwdpy11.Population`.
+    This class inherits from :class:`fwdpy11.PopulationBase`.
 
 .. autoattribute:: fwdpy11.DiploidPopulation.diploids
 
