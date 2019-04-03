@@ -101,7 +101,7 @@ def dump_tables_to_tskit(pop):
     edge_view = np.array(pop.tables.edges, copy=False)
     mut_view = np.array(pop.tables.mutations, copy=False)
 
-    tc = tskit.TableCollection(pop.tables.genome_length())
+    tc = tskit.TableCollection(pop.tables.genome_length)
 
     # We must initialize population and individual
     # tables before we can do anything else.
