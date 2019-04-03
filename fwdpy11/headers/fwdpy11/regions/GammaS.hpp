@@ -36,6 +36,17 @@ namespace fwdpy11
             return std::unique_ptr<GammaS>(new GammaS(*this));
         }
 
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "GammaS(";
+            this->region.region_repr(out);
+            out << ", mean=" << this->mean << ", shape=" << this->shape
+                << ", h=" << this->dominance << ")";
+            return out.str();
+        }
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,

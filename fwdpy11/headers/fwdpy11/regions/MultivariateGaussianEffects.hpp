@@ -112,6 +112,17 @@ namespace fwdpy11
                     1.0, *matrix.get(), this->fixed_effect, this->dominance,
                     false));
         }
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "MultivariateGaussianEffects(";
+            this->region.region_repr(out);
+            out << ", s=" << this->fixed_effect << ", h=" << this->dominance
+            << ", matrix at " << matrix.get() << ')';
+            return out.str();
+        }
 
         virtual std::uint32_t
         operator()(
