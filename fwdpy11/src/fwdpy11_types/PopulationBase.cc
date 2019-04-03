@@ -92,7 +92,7 @@ init_PopulationBase(py::module& m)
 {
     PYBIND11_NUMPY_DTYPE(flattened_Mutation, pos, s, h, g, label, neutral);
 
-    py::class_<fwdpy11::Population>(m, "Population",
+    py::class_<fwdpy11::Population>(m, "PopulationBase",
                                     "Abstract base class for populations "
                                     "based on :class:`fwdpy11.Mutation`")
         .def_readonly("N", &fwdpy11::Population::N, "Current population size.")
