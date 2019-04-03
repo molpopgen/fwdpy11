@@ -1,3 +1,5 @@
+.. _typeoverview:
+
 Overview of types
 =============================================
 
@@ -74,3 +76,25 @@ The outputs are the mutation index, followed by the position,
 generation when the mutation arose, and the mutation's effect size.
 See :class:`fwdpy11.Mutation` for more attributes associated
 with this type.
+
+Tree sequences
+----------------------------------------------
+
+It may be useful to read the following sections for background:
+
+* :ref:`tsoverview`
+* :ref:`ts_data_types`
+
+In the first section (:ref:`tsoverview`), we define a convention of labelling the *nodes* corresponding to the
+haploid genomes of a diploid individual with adjacted integers.  For the current generation of a diploid population,
+and assuming that the tree sequence is simplified, the nodes corresponding to our :math:`N` diploids have integer labels
+:math:`[0, 2N)`.  The haploid genomes of individual 0 correspond to nodes 0 and 1, respectively, etc..
+
+.. ipython:: python
+
+    gm = fwdpy11.data_matrix_from_tables(pop.tables, pop.mutations, [0,1], False, True)
+    print(gm.selected_keys)
+    
+    mcounts = np.array(pop.mcounts)
+    for i in (pop.diploids[0].first, pop.diploids[0].second):
+        print(mcounts[pop.haploid_genomes[i].smutations])

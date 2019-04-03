@@ -130,6 +130,8 @@ it shows that we can basically do (almost) anything we want here in terms of tim
     recorder = Recorder(N)
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
+At this point, it may be helpful to read :ref:`typeoverview` before proceeding.
+
 We can use the metadata to analyze our population. The metadata are represnted by 
 the Python class :class:`fwdpy11.DiploidMetadata`, and :attr:`fwdpy11.DiploidPopulation.diploid_metadata`
 can be iterated over as if it were a Python `list`.  Let's get some summaries of trait values and fitness

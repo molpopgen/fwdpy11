@@ -8,7 +8,7 @@ Low-level data types
 
 * :class:`fwdpy11.Node` defines nodes
 * :class:`fwdpy11.Edge` defines edges
-* :class:`fwdpy11.MutationRecord` defines mutations locations on trees and in :class:`fwdpy11.DiploidPopulation` objects.
+* :class:`fwdpy11.MutationRecord` defines mutations locations on trees and in :class:`fwdpy11.Population` objects.
 
 * :class:`fwdpy11.NodeTable` represents a node table
 * :class:`fwdpy11.EdgeTable` represents an edge table
