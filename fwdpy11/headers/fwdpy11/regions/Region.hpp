@@ -4,6 +4,7 @@
 #include <gsl/gsl_randist.h>
 #include <cmath>
 #include <stdexcept>
+#include <sstream>
 #include <cstdint>
 #include <fwdpy11/rng.hpp>
 #include <pybind11/pybind11.h>
@@ -64,6 +65,24 @@ namespace fwdpy11
             return Region(t[0].cast<double>(), t[1].cast<double>(),
                           t[2].cast<double>(), t[3].cast<bool>(),
                           t[4].cast<std::uint16_t>());
+        }
+
+        void
+        region_repr(std::ostringstream& o) const
+        {
+            o << "beg=" << this->beg << ", end=" << this->end
+              << ", weight=" << this->weight;
+        }
+
+        std::string
+        repr() const
+        {
+            std::ostringstream o;
+            o.precision(4);
+            o << "Region(";
+            this->region_repr(o);
+            o << ")";
+            return o.str();
         }
     };
 
