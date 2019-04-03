@@ -32,6 +32,17 @@ namespace fwdpy11
             return std::unique_ptr<ExpS>(new ExpS(*this));
         }
 
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "ExpS(";
+            this->region.region_repr(out);
+            out << ", mean=" << this->mean << ", h=" << this->dominance << ')';
+            return out.str();
+        }
+
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,

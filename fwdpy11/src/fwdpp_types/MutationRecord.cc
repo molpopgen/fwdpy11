@@ -1,6 +1,7 @@
 #include <fwdpp/ts/mutation_record.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <sstream>
 
 namespace py = pybind11;
 
@@ -20,6 +21,13 @@ init_ts_MutationRecord(py::module& m)
                       "Node id of the mutation")
         .def_readonly("key", &fwdpp::ts::mutation_record::key,
                       "Index of the mutation in the population")
+        .def("__repr__",
+             [](const fwdpp::ts::mutation_record& self) {
+                 std::ostringstream out;
+                 out << "MutationRecord(node=" << self.node
+                     << ", key=" << self.key << ")";
+                 return out.str();
+             })
         .def(py::pickle(
             [](const fwdpp::ts::mutation_record& m) {
                 return py::make_tuple(m.node, m.key);
@@ -31,5 +39,4 @@ init_ts_MutationRecord(py::module& m)
                 };
             }));
 }
-
 

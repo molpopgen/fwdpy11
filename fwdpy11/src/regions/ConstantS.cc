@@ -48,6 +48,7 @@ init_ConstantS(py::module& m)
         .def_readonly("esize", &fwdpy11::ConstantS::esize)
         .def_readonly("s", &fwdpy11::ConstantS::esize)
         .def_readonly("h", &fwdpy11::ConstantS::dominance)
+        .def("__repr__",&fwdpy11::ConstantS::repr)
         .def(py::pickle(
             [](const fwdpy11::ConstantS& self) { return self.pickle(); },
             [](py::tuple t) { return fwdpy11::ConstantS::unpickle(t); }));

@@ -1,6 +1,7 @@
 #include <fwdpp/ts/edge.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <sstream>
 
 namespace py = pybind11;
 
@@ -23,6 +24,15 @@ init_ts_Edge(py::module& m)
                       "Right edge of interval, exclusive.")
         .def_readonly("parent", &fwdpp::ts::edge::parent, "Node id of parent")
         .def_readonly("child", &fwdpp::ts::edge::child, "Node id of child")
+        .def("__repr__",
+             [](const fwdpp::ts::edge& self) {
+                 std::ostringstream out;
+                 out.precision(4);
+                 out << "Edge(parent=" << self.parent
+                     << ", child=" << self.child << ", left=" << self.left
+                     << ", right=" << self.right << ")";
+                 return out.str();
+             })
         .def(py::pickle(
             [](const fwdpp::ts::edge& e) {
                 return py::make_tuple(e.left, e.right, e.parent, e.child);

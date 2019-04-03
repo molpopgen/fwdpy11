@@ -51,6 +51,7 @@ init_Region(py::module& m)
                       "If True, total weight is a function of end-beg")
         .def_readonly("l", &fwdpy11::Region::label,
                       "Label associated with the region")
+        .def("__repr__", &fwdpy11::Region::repr)
         .def(py::pickle(
             [](const fwdpy11::Region& self) { return self.pickle(); },
             [](py::tuple t) { return fwdpy11::Region::unpickle(t); }));

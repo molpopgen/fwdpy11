@@ -49,6 +49,7 @@ init_UniformS(py::module& m)
         .def_readonly("lo", &fwdpy11::UniformS::lo)
         .def_readonly("hi", &fwdpy11::UniformS::hi)
         .def_readonly("h", &fwdpy11::UniformS::dominance)
+        .def("__repr__",&fwdpy11::UniformS::repr)
         .def(py::pickle(
             [](const fwdpy11::UniformS& self) { return self.pickle(); },
             [](py::tuple t) { return fwdpy11::UniformS::unpickle(t); }));

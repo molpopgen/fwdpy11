@@ -1,10 +1,12 @@
 #include <fwdpp/ts/node.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <sstream>
 
 namespace py = pybind11;
 
-void init_ts_Node(py::module & m)
+void
+init_ts_Node(py::module& m)
 {
     PYBIND11_NUMPY_DTYPE(fwdpp::ts::node, population, time);
 
@@ -22,6 +24,14 @@ void init_ts_Node(py::module & m)
             )delim")
         .def_readonly("time", &fwdpp::ts::node::time,
                       "Birth time of the node, recorded forwards in time.")
+        .def("__repr__",
+             [](const fwdpp::ts::node& self) {
+                 std::ostringstream out;
+                 out.precision(4);
+                 out << "Node(time=" << self.time
+                     << ", population=" << self.population << ")";
+                 return out.str();
+             })
         .def(py::pickle(
             [](const fwdpp::ts::node& n) {
                 return py::make_tuple(n.population, n.time);

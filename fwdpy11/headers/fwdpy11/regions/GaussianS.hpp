@@ -36,6 +36,17 @@ namespace fwdpy11
             return std::unique_ptr<GaussianS>(new GaussianS(*this));
         }
 
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "GaussianS(";
+            this->region.region_repr(out);
+            out << ", sd=" << this->sd << ", h=" << this->dominance << ')';
+            return out.str();
+        }
+
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
