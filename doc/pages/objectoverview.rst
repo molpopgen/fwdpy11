@@ -77,6 +77,9 @@ generation when the mutation arose, and the mutation's effect size.
 See :class:`fwdpy11.Mutation` for more attributes associated
 with this type.
 
+Diploid metadata
+----------------------------------------------------------------
+
 Tree sequences
 ----------------------------------------------
 
@@ -85,16 +88,49 @@ It may be useful to read the following sections for background:
 * :ref:`tsoverview`
 * :ref:`ts_data_types`
 
-In the first section (:ref:`tsoverview`), we define a convention of labelling the *nodes* corresponding to the
-haploid genomes of a diploid individual with adjacted integers.  For the current generation of a diploid population,
-and assuming that the tree sequence is simplified, the nodes corresponding to our :math:`N` diploids have integer labels
+In :ref:`tsoverview`, we define a convention of labelling the *nodes* corresponding to the
+haploid genomes of a diploid individual with adjactent integers.  For the current generation of a diploid population,
+and assuming that the tree sequences are simplified, the nodes corresponding to our :math:`N` diploids have integer labels
 :math:`[0, 2N)`.  The haploid genomes of individual 0 correspond to nodes 0 and 1, respectively, etc..
+
+Let's use :class:`fwdpy11.VariantIterator` to determine which selected mutations are in the first diploid. We will have
+to filter on neutral-vs-selected because neutral mutations have been added to the table collection:
 
 .. ipython:: python
 
-    gm = fwdpy11.data_matrix_from_tables(pop.tables, pop.mutations, [0,1], False, True)
-    print(gm.selected_keys)
+    keys = []
+    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, [0, 1])
+    for v in vi:
+        r = v.record
+        if pop.mutations[r.key].neutral is False:
+            keys.append(r.key)
+    print(keys)
+
+The variable `keys` hold the same values that we saw above when we interated over haploid genomes.
+
+Let's create the full genotype matrix for this individual at selected variants:
+
+.. ipython:: python
+
+    genotypes = np.array([], dtype=np.int8)
+    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, [0, 1])
+    for v in vi:
+        r = v.record
+        if pop.mutations[r.key].neutral is False:
+            genotypes = np.concatenate((genotypes, v.genotypes))
+    genotypes = genotypes.reshape(len(keys), 2)
+    print(genotypes)
+
+The output follows the "ms" convention of labelling the ancestral state zero and the derived state one.
+Unlike ms, but like msprime, the matrix is written with sites as rows and haplotypes as columns.
     
-    mcounts = np.array(pop.mcounts)
-    for i in (pop.diploids[0].first, pop.diploids[0].second):
-        print(mcounts[pop.haploid_genomes[i].smutations])
+The individual is heterozygous only for the second row, which corresponds to the second key with value 11.
+
+The examples using :class:`fwdpy11.VariantIterator` are examples of efficient algorithms on tree sequences, of the sort
+described in Kelleher *et al.* (2016), in the paper describing msprime_.   You also have access to the raw tables
+themselves:
+
+* :attr:`fwdpy11.Population.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes inclue the node, edge,
+  and mutation tables.
+
+.. _msprime: https://msprime.readthedocs.io

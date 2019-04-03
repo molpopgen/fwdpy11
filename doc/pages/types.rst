@@ -163,7 +163,9 @@ Types related to tree sequence recording
 ==========================================================
 
 .. autoclass:: fwdpy11.TableCollection
+
 .. autoclass:: fwdpy11.EdgeTable
+
 .. autoclass:: fwdpy11.Edge
 
     .. autoattribute:: parent
