@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types/Diploid.hpp>
+#include <sstream>
 namespace py = pybind11;
 
 void
@@ -46,6 +47,23 @@ init_DiploidMetadata(py::module &m)
                                    return rv;
                                },
                                "Node ids for individual")
+        .def("__repr__",
+             [](const fwdpy11::DiploidMetadata &self) {
+                 std::ostringstream out;
+                 out.precision(4);
+                 out << "DiploidMetadata("
+                     << "g=" << self.g << ',' << "w=" << self.w << ','
+                     << "e=" << self.e << ',' << "label=" << self.label << ','
+                     << "nodes=[" << self.nodes[0] << ',' << self.nodes[1]
+                     << "],"
+                     << "parents=[" << self.parents[0] << ','
+                     << self.parents[1] << "],"
+                     << "sex=" << self.sex << ',' << "deme=" << self.deme
+                     << ',' << "geography=[" << self.geography[0] << ','
+                     << self.geography[1] << ',' << self.geography[2] << "]"
+                     << ')';
+                 return out.str();
+             })
         .def(py::pickle(
             [](const fwdpy11::DiploidMetadata &md) {
                 return py::make_tuple(
