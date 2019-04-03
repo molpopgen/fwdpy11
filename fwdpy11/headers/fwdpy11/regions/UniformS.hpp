@@ -40,6 +40,18 @@ namespace fwdpy11
             return std::unique_ptr<UniformS>(new UniformS(*this));
         }
 
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "UniformS(";
+            this->region.region_repr(out);
+            out << ", lo=" << this->lo << ", hi=" << this->hi
+                << ", h=" << this->dominance << ')';
+            return out.str();
+        }
+
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,

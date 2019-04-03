@@ -33,6 +33,16 @@ namespace fwdpy11
             return std::unique_ptr<ConstantS>(new ConstantS(*this));
         }
 
+        std::string
+        repr() const
+        {
+            std::ostringstream out;
+            out.precision(4);
+            out << "ConstantS(";
+            this->region.region_repr(out);
+            out << ", s=" << this->esize << ", h=" << this->dominance << ')';
+            return out.str();
+        }
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
