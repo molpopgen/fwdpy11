@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types/Diploid.hpp>
+#include <sstream>
 namespace py = pybind11;
 
 void
@@ -24,6 +25,14 @@ init_DiploidGenotype(py::module &m)
                                                   t[1].cast<std::size_t>() });
                 return d;
             }))
+        .def("__repr__",
+             [](const fwdpy11::DiploidGenotype &self) {
+                 std::ostringstream out;
+                 out.precision(4);
+                 out << "DiploidGenotype(first=" << self.first
+                     << ", second=" << self.second << ')';
+                 return out.str();
+             })
         .def("__eq__",
              [](const fwdpy11::DiploidGenotype &a,
                 const fwdpy11::DiploidGenotype &b) { return a == b; });
