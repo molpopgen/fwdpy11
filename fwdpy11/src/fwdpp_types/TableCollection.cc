@@ -37,26 +37,30 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("preserved_nodes",
                       &fwdpp::ts::table_collection::preserved_nodes,
                       "List of nodes corresponding to ancient samples.")
-        .def("genome_length", &fwdpp::ts::table_collection::genome_length,
-             "Return the genome/sequence length.")
+        .def_property_readonly("genome_length",
+                               &fwdpp::ts::table_collection::genome_length,
+                               "Return the genome/sequence length.")
         .def("__eq__",
              [](const fwdpp::ts::table_collection& lhs,
                 const fwdpp::ts::table_collection& rhs) { return lhs == rhs; })
         .def(py::pickle(
             [](const fwdpp::ts::table_collection& tables) {
-                return py::make_tuple(tables.genome_length(),
-                                      fwdpy11::vector_to_list(tables.node_table),
-                                      fwdpy11::vector_to_list(tables.edge_table),
-                                      fwdpy11::vector_to_list(tables.mutation_table),
-                                      fwdpy11::vector_to_list(tables.preserved_nodes));
+                return py::make_tuple(
+                    tables.genome_length(),
+                    fwdpy11::vector_to_list(tables.node_table),
+                    fwdpy11::vector_to_list(tables.edge_table),
+                    fwdpy11::vector_to_list(tables.mutation_table),
+                    fwdpy11::vector_to_list(tables.preserved_nodes));
             },
             [](py::tuple t) {
                 auto length = t[0].cast<double>();
                 fwdpp::ts::table_collection tables(length);
-                tables.node_table = fwdpy11::list_to_vector<fwdpp::ts::node_vector>(
-                    t[1].cast<py::list>());
-                tables.edge_table = fwdpy11::list_to_vector<fwdpp::ts::edge_vector>(
-                    t[2].cast<py::list>());
+                tables.node_table
+                    = fwdpy11::list_to_vector<fwdpp::ts::node_vector>(
+                        t[1].cast<py::list>());
+                tables.edge_table
+                    = fwdpy11::list_to_vector<fwdpp::ts::edge_vector>(
+                        t[2].cast<py::list>());
                 tables.mutation_table
                     = fwdpy11::list_to_vector<fwdpp::ts::mutation_key_vector>(
                         t[3].cast<py::list>());
@@ -67,5 +71,4 @@ init_ts_TableCollection(py::module& m)
                 return tables;
             }));
 }
-
 
