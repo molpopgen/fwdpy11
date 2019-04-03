@@ -19,7 +19,7 @@ class testConversion(unittest.TestCase):
     def testCreateDiploidPopulation(self):
         pop = fwdpy11.DiploidPopulation.create_from_tskit(self.ts)
         self.assertEqual(pop.N, 5)
-        self.assertEqual(pop.tables.genome_length(), 1.0)
+        self.assertEqual(pop.tables.genome_length, 1.0)
 
 
 if __name__ == "__main__":
