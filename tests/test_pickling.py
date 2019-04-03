@@ -103,7 +103,7 @@ class testPickleDiploidPopulation(unittest.TestCase):
         import numpy as np
         p = pickle.dumps(self.pop.tables)
         up = pickle.loads(p)
-        self.assertEqual(up.genome_length(), np.finfo(np.float).max)
+        self.assertEqual(up.genome_length, np.finfo(np.float).max)
 
 
 class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
