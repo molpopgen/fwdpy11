@@ -130,7 +130,7 @@ The examples using :class:`fwdpy11.VariantIterator` are examples of efficient al
 described in Kelleher *et al.* (2016), in the paper describing msprime_.   You also have access to the raw tables
 themselves:
 
-* :attr:`fwdpy11.Population.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes inclue the node, edge,
+* :attr:`fwdpy11.Population.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes include the node, edge,
   and mutation tables.
 
 .. _msprime: https://msprime.readthedocs.io

@@ -164,6 +164,12 @@ Types related to tree sequence recording
 
 .. autoclass:: fwdpy11.TableCollection
 
+    .. autoattribute:: edges
+    .. autoattribute:: nodes
+    .. autoattribute:: mutations
+    .. autoattribute:: genome_length
+
+
 .. autoclass:: fwdpy11.EdgeTable
 
 .. autoclass:: fwdpy11.Edge
