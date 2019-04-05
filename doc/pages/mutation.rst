@@ -34,8 +34,6 @@ The previous example uses argument names for clarity, and the following is equiv
 
     ConstantS(beg=0, end=1, weight=1, s=-0.01, h=0.25, scaling=1)
 
-The attribute names tested above are inherited from :class:`fwdpy11.Region`.
-
 Note that the constructor parameters for these classes often have default values--see the specific class documentation 
 for details.
 
