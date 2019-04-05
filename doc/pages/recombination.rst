@@ -18,11 +18,19 @@ On approach uses an overall recombination rate and instances of :class:`fwdpy11.
     recrate = 1e-3
     recregions = [fwdpy11.Region(0, 5, 2),
                   fwdpy11.Region(5, 10, 1)]
+    print(recregions[0])
+    print(recregions[1])
+
+.. testoutput::
+
+    Region(beg=0, end=5, weight=10)
+    Region(beg=5, end=10, weight=5)
 
 The constructor arguments for the above are `start`, `stop`, and `weight`.
 
 By default, a "region" object's total weight is recorded internally as 
-:math:`weight\times (stop-start)`.  Therefore it is helpful to view
+:math:`weight\times (stop-start)`, which you can see in the output from the
+print statements above.  Therefore it is helpful to view
 :math:`weight` as the "rate per unit" and :math:`stop-start` as the 
 number of units in the region.  This behavior can be changed, and the following
 is equivalent to the above (because :math:`stop-start` is the same for each region):
@@ -31,6 +39,13 @@ is equivalent to the above (because :math:`stop-start` is the same for each regi
 
     recregions = [fwdpy11.Region(0, 5, 2, coupled=False),
                   fwdpy11.Region(5, 10, 1, coupled=False)]
+    print(recregions[0])
+    print(recregions[1])
+
+.. testoutput::
+
+    Region(beg=0, end=5, weight=2)
+    Region(beg=5, end=10, weight=1)
 
 Now, the `weight` arguments are treated as *absolute*, or exactly `2` and `1`.
 

@@ -39,7 +39,8 @@ namespace fwdpy11
             out.precision(4);
             out << "ExpS(";
             this->region.region_repr(out);
-            out << ", mean=" << this->mean << ", h=" << this->dominance << ')';
+            out << ", mean=" << this->mean << ", h=" << this->dominance
+                << ", scaling=" << this->scaling << ')';
             return out.str();
         }
 

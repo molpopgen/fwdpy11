@@ -28,11 +28,11 @@ The previous example uses argument names for clarity, and the following is equiv
 
     import fwdpy11
     sregions = [fwdpy11.ConstantS(0,1,1,-0.01,0.25)]
-    assert sregions[0].b == 0, "Begin error"
-    assert sregions[0].e == 1, "End error"
-    assert sregions[0].w == 1, "Weight error"
-    assert sregions[0].s == -0.01, "Effect size error"
-    assert sregions[0].h == 0.25, "Dominance error"
+    print(sregions[0])
+
+.. testoutput::
+
+    ConstantS(beg=0, end=1, weight=1, s=-0.01, h=0.25, scaling=1)
 
 The attribute names tested above are inherited from :class:`fwdpy11.Region`.
 
@@ -50,8 +50,12 @@ fwdpy11:
     MEAN_ALPHA = -10
     N = 1000
     sregions = [fwdpy11.ExpS(0,1,1,MEAN_ALPHA,scaling=2*N)]
-    # Example of a default value:
-    assert sregions[0].h == 1.0, "Dominance error"
+
+    print(sregions[0])
+
+.. testoutput::
+
+    ExpS(beg=0, end=1, weight=1, mean=-10, h=1, scaling=2000)
 
 .. note::
 
