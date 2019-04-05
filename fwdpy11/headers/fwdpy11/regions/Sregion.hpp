@@ -78,12 +78,6 @@ namespace fwdpy11
                                    t[1].cast<double>());
         }
 
-        virtual pybind11::tuple
-        pickle() const
-        {
-            return pybind11::none();
-        }
-
         inline bool
         is_equal(const Sregion& rhs) const
         {
