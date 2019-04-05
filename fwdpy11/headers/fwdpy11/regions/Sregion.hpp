@@ -54,6 +54,7 @@ namespace fwdpy11
 
         virtual std::unique_ptr<Sregion> clone() const = 0;
         virtual std::string repr() const = 0;
+        virtual pybind11::tuple pickle() const = 0;
         virtual std::uint32_t operator()(
             fwdpp::flagged_mutation_queue& /*recycling_bin*/,
             std::vector<Mutation>& /*mutations*/,
