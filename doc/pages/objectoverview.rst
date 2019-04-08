@@ -89,7 +89,27 @@ Diploid metadata
 
 In addition to the genomes, individuals are associated metadata represented as
 instances of :class:`fwdpy11.DiploidMetadata`, stored in
-:attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+:attr:`fwdpy11.DiploidPopulation.diploid_metadata`.  Let's look at the data for
+our first few individuals:
+
+.. ipython:: python
+
+    for i in pop.diploid_metadata[:5]:
+        print(i)
+
+The fields are defined in the class documentation.
+
+An important point regarding efficiency is that we may view the data as a structured
+array:
+
+.. ipython:: python
+
+    md = np.array(pop.diploid_metadata, copy=False)
+    print(md.dtype)
+    print(md[:5])
+
+For many applications, access via a structured array should be preferred, as it will outperform
+the access via Python objects by an order of magnitude or so.
 
 Tree sequences
 ----------------------------------------------
