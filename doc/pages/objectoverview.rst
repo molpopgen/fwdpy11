@@ -162,7 +162,7 @@ Let's create the full genotype matrix for this individual at selected variants:
     print(genotypes)
 
 The output follows the "ms" convention of labelling the ancestral state zero and the derived state one.
-Unlike ms, but like msprime, the matrix is written with sites as rows and haplotypes as columns.
+Unlike ms, but like msprime's Python API, the matrix is written with sites as rows and haplotypes as columns.
     
 The individual is heterozygous only for the second row, which corresponds to the second key with value 11.
 
