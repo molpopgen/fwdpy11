@@ -51,7 +51,7 @@ namespace
         = R"delim(A list of fixation times corresponding to the elements in "fixations" for this type.)delim";
 
     static const auto GAMETES_DOCSTRING
-        = R"delim(A :class:`fwdpy11.VecGamete`.)delim";
+        = R"delim(A :class:`fwdpy11.HaploidGenomeVector`.)delim";
 
     static const auto MUTATIONS_DOCSTRING = R"delim(
     List of :class:`fwdpy11.Mutation`.
@@ -255,7 +255,7 @@ init_PopulationBase(py::module& m)
         .def_readonly("tables", &fwdpy11::Population::tables,
                       R"delim(
                 Give access to the population's 
-                :class:`fwdpy11.ts.TableCollection`
+                :class:`fwdpy11.TableCollection`
                 )delim")
         .def_property_readonly("genetic_values",
                                [](const fwdpy11::Population& self) {

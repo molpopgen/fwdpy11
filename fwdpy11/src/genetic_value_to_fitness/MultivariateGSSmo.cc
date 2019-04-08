@@ -42,14 +42,14 @@ init_MultivariateGSSmo(py::module& m)
         
         .. testcode::
 
-            import fwdpy11.genetic_values
+            import fwdpy11
             import numpy as np
             popsize = 1000
             timepoints = np.array([0,10*popsize], dtype=np.uint32)
             ntraits = 3
             optima = np.array(np.zeros(2*ntraits)).reshape((len(timepoints), ntraits))
             optima[1,0] = 1
-            mvgssmo = fwdpy11.genetic_values.MultivariateGSSmo(timepoints,optima, 1)
+            mvgssmo = fwdpy11.MultivariateGSSmo(timepoints,optima, 1)
         )delim")
         .def(py::pickle(
             [](const fwdpy11::MultivariateGSSmo& self) {

@@ -5,40 +5,6 @@ Definitions
 
 We need to start out by defining some terms that will be used throughout the documentation.  
 
-Region vs locus
------------------------------------------------------------
-
-fwdpy11 allows mutation and recombination parameters to vary along a genomic segment.  We apply the following definitions:
-
-.. glossary:: 
-
-    locus
-        A genomic segment
-
-    region
-        A subset of a locus.  Recombination and mutation parameters may vary across regions. Regions may overlap.
-
-Regions have the following properties:
-
-* They are parameterized by objects in the :class:`fwdpy11.Region` class hierarchy.
-* They may overlap.  For example, a "coding region" may be modeled as two overlapping regions, one in which neutral
-  mutations occur, and another in which selected mutations occur.  There could even be more than one "selected
-  region"--one for deleterious mutations and another for beneficial mutations.
-
-See :ref:`regions` for details on defining regions in fwdpy11.
-
-A locus contains the following properties:
-
-* They contain regions.
-* Regions specify how recombination and mutation occur in a gamete.  See :ref:`gametes`.
-* Loci cannot overlap, but recombination can occur between them.
-
-A "single locus" simulation of a single deme means that an object of type :class:`fwdpy11.DiploidPopulation` is
-being evolved.  Within that locus, you may have as many regions as you want.  You may even think of them as different
-"genes" (aka loci), but that is a different locus concept from what we are using here. See :ref:`slocuspop` for more
-details on this type.
-
-
 .. _simtypes:
 
 Simulation types
@@ -70,8 +36,6 @@ Thus, we have two types of simulation:
 
         A simulation where mutations affect trait (phenotype) values first, which in turn affects fitness.
 
-
-.. _genetic_values:
 
 Genetic values, fitness, etc.
 -----------------------------------------------------------
@@ -109,8 +73,7 @@ fitness is calculated as
 
     w = e^{-\frac{(O-P)^2}{2VS}},
 
-where :math:`VS` reflects the intensity of selection against extreme values of :math:`P`. (See :ref:`heritability` for more 
-on :math:`VS`.)
+where :math:`VS` reflects the intensity of selection against extreme values of :math:`P`. 
 
 We can see from these two examples that some modeling scenarios allow us to go straight from a diploid's data to fitness
 while others require multiple functions to go from genotype to genetic value to trait value and then, finally, to
@@ -118,8 +81,7 @@ fitness.
 
 More details on these topics can be found in:
 
-* :ref:`model_params`
-* :ref:`qtraits1`
+* :ref:`genetic_values`
 
 Stateful vs stateless genetic value calculations
 -----------------------------------------------------------

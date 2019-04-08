@@ -1,3 +1,5 @@
+.. _tsoverview:
+
 Conceptual overview of tree sequence recording
 --------------------------------------------------------------
 

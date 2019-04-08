@@ -9,7 +9,7 @@ init_GeneticValueWithMapping(py::module& m)
     py::class_<fwdpy11::DiploidPopulationGeneticValueWithMapping,
                fwdpy11::DiploidPopulationGeneticValue>(
         m, "GeneticValueWithMapping",
-        "Genetic value calculations with flexible mapping of genetic value to "
+        "ABC for genetic value calculations with flexible mapping of genetic value to "
         "fitness.")
         .def_property_readonly(
             "gvalue_to_fitness",

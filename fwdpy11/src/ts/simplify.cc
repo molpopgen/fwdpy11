@@ -67,7 +67,7 @@ init_simplify_functions(py::module& m)
             Note that the samples argument is agnostic with respect to the time of
             the nodes in the input tables. Thus, you may do things like simplify
             to a set of "currently-alive" nodes plus some or all ancient samples by
-            including some node IDs from :attr:`fwdpy11.ts.TableCollection.preserved_nodes`.
+            including some node IDs from :attr:`fwdpy11.TableCollection.preserved_nodes`.
             
             If the input contains ancient samples, and you wish to include them in the output,
             then you need to include their IDs in the samples argument.
@@ -80,7 +80,7 @@ init_simplify_functions(py::module& m)
 
             .. deprecated:: 0.3.0
 
-                Prefer :func:`fwdpp.ts.simplify_tables`
+                Prefer :func:`fwdpp.simplify_tables`
 
             
             .. versionchanged:: 0.3.0
@@ -105,13 +105,14 @@ init_simplify_functions(py::module& m)
               return py::make_tuple(
                   std::move(t), py::array(idmap->size(), idmap->data(), cap));
           },
+          py::arg("tables"), py::arg("mutations"), py::arg("samples"),
           R"delim(
           Simplify a TableCollection.
           
           :param pop: A table collection.
-          :type pop: :class:`fwdpy11.ts.TableCollection`
+          :type pop: :class:`fwdpy11.TableCollection`
           :param mutations: Container of mutations
-          :type mutations: :class:`fwdpy11.VecMutation`
+          :type mutations: :class:`fwdpy11.MutationVector`
           :param samples: list of samples
           :type list: list-like or array-like
 

@@ -37,7 +37,7 @@ namespace py = pybind11;
 namespace
 {
     static const auto DIPLOIDS_DOCSTRING = R"delim(
-   A :class:`fwdpy11.VecDiploid`.
+   A :class:`fwdpy11.DiploidVector`.
    )delim";
 
 } // namespace
@@ -53,7 +53,7 @@ void
 init_DiploidPopulation(py::module& m)
 {
     py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
-        m, "DiploidPopulation", "Representation of a single-locus population")
+        m, "DiploidPopulation", "Representation of a diploid population")
         .def(py::init<fwdpp::uint_t, double>(),
              "Construct with an unsigned integer "
              "representing the initial "

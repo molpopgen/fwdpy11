@@ -8,7 +8,7 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
 {
     py::class_<fwdpy11::DiploidMultivariateEffectsStrictAdditive,
                fwdpy11::DiploidPopulationMultivariateGeneticValueWithMapping>(
-        m, "DiploidMultivariateEffectsStrictAdditive",
+        m, "StrictAdditiveMultivariateEffects",
         R"delim(
         Multivariate trait values under strictly additive effects.
 
@@ -30,7 +30,7 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
 :param focal_trait: Index of the focal trait
 :type focal_trait: int
 :param gv2w: Function mapping trait value to fitness
-:type gv2w: :class:`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`
+:type gv2w: :class:`fwdpy11.MultivariateGeneticValueToFitnessMap`
             )delim")
         .def(py::init<std::size_t, std::size_t,
                       const fwdpy11::MultivariateGeneticValueToFitnessMap&,
@@ -43,9 +43,9 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
 :param focal_trait: Index of the focal trait
 :type focal_trait: int
 :param gv2w: Function mapping trait value to fitness
-:type gv2w: :class:`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`
+:type gv2w: :class:`fwdpy11.MultivariateGeneticValueToFitnessMap`
 :param noise: Function adding random additive noise to trait value
-:type noise: :class:`fwdpy11.genetic_values.GeneticValueNoise`
+:type noise: :class:`fwdpy11.GeneticValueNoise`
             )delim")
 
         .def(py::pickle(

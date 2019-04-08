@@ -48,7 +48,8 @@ namespace fwdpy11
             out << "UniformS(";
             this->region.region_repr(out);
             out << ", lo=" << this->lo << ", hi=" << this->hi
-                << ", h=" << this->dominance << ')';
+                << ", h=" << this->dominance << ", scaling=" << this->scaling
+                << ')';
             return out.str();
         }
 
