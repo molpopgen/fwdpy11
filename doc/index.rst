@@ -33,18 +33,13 @@ Welcome to fwdpy11's documentation!
     pages/introexample.rst
 
 .. toctree::
-    :caption: Tree sequence recording
-    :maxdepth: 2
-
-    pages/tsoverview
-    pages/tstypes
-
-.. toctree::
-    :caption: Mutation and recombination
+    :caption: Objects and concepts
 
     pages/objectoverview
     pages/mutation
     pages/recombination
+    pages/tsoverview
+    pages/tstypes
     pages/recorders
 
 
@@ -64,3 +59,4 @@ Welcome to fwdpy11's documentation!
 
     examples/bgs
     examples/gss
+    examples/snowdrift
