@@ -59,7 +59,8 @@ Welcome to fwdpy11's documentation!
     pages/model_params
     pages/functions
 
-
 .. toctree::
-    :caption: Modules
-    :maxdepth: 2
+    :caption: Examples
+
+    examples/bgs
+    examples/gss
