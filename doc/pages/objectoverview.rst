@@ -173,4 +173,36 @@ themselves:
 * :attr:`fwdpy11.PopulationBase.tables` is an instance of :class:`fwdpy11.TableCollection`, whose attributes include the node, edge,
   and mutation tables.
 
+Each of the tables may be interacted with as regular Python objects or as structured arrays.  The latter is much more
+performant.  Let us find all edges that lead to the two genomes of the first diploid:
+
+.. ipython:: python
+
+    e = [i for i in pop.tables.edges if i.child == 0 or i.child == 1]
+    print(e)
+
+The times associated with the parents are:
+
+.. ipython:: python
+
+    for ei in e:
+        print(pop.tables.nodes[ei.parent].time)
+
+Repeating the above using structured arrays:
+
+.. ipython:: python
+
+    edges = np.array(pop.tables.edges, copy=False)
+    nodes = np.array(pop.tables.nodes, copy=False)
+    edge_indexes = ((edges['child']==0) | (edges['child']==1)).nonzero()
+    print(edges[edge_indexes])
+    print(nodes['time'][edges['parent'][edge_indexes]])
+
+The relevant numpy dtypes are:
+
+.. ipython:: python
+
+    print(edges.dtype)
+    print(nodes.dtype)
+
 .. _msprime: https://msprime.readthedocs.io
