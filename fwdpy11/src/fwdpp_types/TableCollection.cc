@@ -25,12 +25,12 @@ init_ts_TableCollection(py::module& m)
         .def_property_readonly(
             "L", &fwdpp::ts::table_collection::genome_length, "Genome length")
         .def_readonly("edges", &fwdpp::ts::table_collection::edge_table,
-                      "The :class:`fwdpy11.ts.EdgeTable`.")
+                      "The :class:`fwdpy11.EdgeTable`.")
         .def_readonly("nodes", &fwdpp::ts::table_collection::node_table,
-                      "The :class:`fwdpy11.ts.NodeTable`.")
+                      "The :class:`fwdpy11.NodeTable`.")
         .def_readonly("mutations",
                       &fwdpp::ts::table_collection::mutation_table,
-                      "The :class:`fwdpy11.ts.MutationTable`.")
+                      "The :class:`fwdpy11.MutationTable`.")
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right)

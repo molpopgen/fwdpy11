@@ -43,7 +43,8 @@ namespace fwdpy11
             out.precision(4);
             out << "GaussianS(";
             this->region.region_repr(out);
-            out << ", sd=" << this->sd << ", h=" << this->dominance << ')';
+            out << ", sd=" << this->sd << ", h=" << this->dominance
+                << ", scaling=" << this->scaling << ')';
             return out.str();
         }
 

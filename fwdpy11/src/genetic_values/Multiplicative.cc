@@ -22,7 +22,7 @@ functional mapping from genetic value to fitness.
 :param scaling: How to treat mutant homozygotes.
 :type scaling: float
 :param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
 )delim";
 
 static const auto MULT_CONSTRUCTOR_3 =
@@ -33,9 +33,9 @@ genetic value to fitness and random effects ("noise").
 :param scaling: How to treat mutant homozygotes.
 :type scaling: float
 :param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
 :param noise: Function to generate random effects on trait value.
-:type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+:type noise: :class:`fwdpy11.GeneticValueNoise`
 )delim";
 void
 init_Multiplicative(py::module& m)

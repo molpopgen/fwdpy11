@@ -6,35 +6,28 @@ Data structures related to tree sequences
 Low-level data types
 ----------------------------------------------------------
 
-* :class:`fwdpy11.ts.Node` defines nodes
-* :class:`fwdpy11.ts.Edge` defines edges
-* :class:`fwdpy11.ts.MutationRecord` defines mutations locations on trees and in :class:`fwdpy11.Population` objects.
+* :class:`fwdpy11.Node` defines nodes
+* :class:`fwdpy11.Edge` defines edges
+* :class:`fwdpy11.MutationRecord` defines mutations locations on trees and in :class:`fwdpy11.PopulationBase` objects.
 
-* :class:`fwdpy11.ts.NodeTable` represents a node table
-* :class:`fwdpy11.ts.EdgeTable` represents an edge table
-* :class:`fwdpy11.ts.MutationTable` represents a mutation table
+* :class:`fwdpy11.NodeTable` represents a node table
+* :class:`fwdpy11.EdgeTable` represents an edge table
+* :class:`fwdpy11.MutationTable` represents a mutation table
 
 Table collections
 ----------------------------------------------------------
 
-The above data types are encapsulated into the Python class :class:`fwdpy11.ts.TableCollection`.  Instances of this
-class are data fields of populations, via :attr:`fwdpy11.Population.tables`.
+The above data types are encapsulated into the Python class :class:`fwdpy11.TableCollection`.  Instances of this
+class are data fields of populations, via :attr:`fwdpy11.PopulationBase.tables`.
 
 Representing trees
 ----------------------------------------------------------
 
-.. versionchanged:: 0.3.0
-
-    The types :class:`fwdpy11.ts.TreeVisitor` and :class:`fwdpy11.ts.MarginalTree` are now deprecated, and their
-    combined functionality are found in the new type, :class:`fwdpy11.ts.TreeIterator`, which provides much
-    more efficient access to the marginal tree data.
-
 An edge table and a node table contain all the data required to generate what we may call "marginal trees", which are the trees
-corresponding to genomic intervals :math:`[left, right)`. In fwdpy11, :class:`fwdpy11.ts.TreeIterator` allows
+corresponding to genomic intervals :math:`[left, right)`. In fwdpy11, :class:`fwdpy11.TreeIterator` allows
 left-to-tright traversal across marginal trees as well as access to their data.
 
-You'll see these types in action in the next section, :ref:`ts`.  Here, I want
-to describe the structure of the marginal trees and get some terminology out of the way.  I will use Jerome Kelleher's
+The intent of this section is to describe the structure of the marginal trees and get some terminology out of the way.  I will use Jerome Kelleher's
 tskit_ package to illustrate the concepts.  fwdpy11 uses the same basic data model, and it is more convenient to use trees
 generated via a coalescent simulation that to run forward simulations.  Plus, we can use the great "draw" methods from
 tskit_!
@@ -203,13 +196,13 @@ any further.
     counting the number of immediate descendants of a node requires counting the number of steps that the walk requires,
     and that it may be longer than two steps.
 
-The last five arrays show above correspond to the following attributes of :class:`fwdpy11.ts.TreeIterator`:
+The last five arrays show above correspond to the following attributes of :class:`fwdpy11.TreeIterator`:
 
-* :attr:`fwdpy11.ts.TreeIterator.parents`
-* :attr:`fwdpy11.ts.TreeIterator.left_child`
-* :attr:`fwdpy11.ts.TreeIterator.right_child`
-* :attr:`fwdpy11.ts.TreeIterator.left_sib`
-* :attr:`fwdpy11.ts.TreeIterator.right_sib`
+* :attr:`fwdpy11.TreeIterator.parent`
+* :attr:`fwdpy11.TreeIterator.left_child`
+* :attr:`fwdpy11.TreeIterator.right_child`
+* :attr:`fwdpy11.TreeIterator.left_sib`
+* :attr:`fwdpy11.TreeIterator.right_sib`
 
 The key to efficiency is how these linked lists are updated as you move from tree :math:`i` to tree :math:`i+1`.  Given
 an approprate set of indexes, these lists are only updated at the positions that differ between the two trees.  In

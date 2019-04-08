@@ -15,7 +15,7 @@ init_ts_NodeTable(py::module& m)
     py::bind_vector<std::vector<fwdpp::ts::node>>(
         m, "NodeTable", py::buffer_protocol(), py::module_local(false),
         R"delim(
-        An NodeTable is a container of :class:`fwdpy11.ts.Node`.
+        An NodeTable is a container of :class:`fwdpy11.Node`.
 
         An NodeTable supports the Python buffer protocol, allowing data
         to be viewed in Python as a numpy record array.  No copy is made

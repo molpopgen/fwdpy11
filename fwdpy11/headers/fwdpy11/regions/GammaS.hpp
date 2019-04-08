@@ -44,7 +44,8 @@ namespace fwdpy11
             out << "GammaS(";
             this->region.region_repr(out);
             out << ", mean=" << this->mean << ", shape=" << this->shape
-                << ", h=" << this->dominance << ")";
+                << ", h=" << this->dominance << ", scaling=" << this->scaling
+                << ')';
             return out.str();
         }
         std::uint32_t

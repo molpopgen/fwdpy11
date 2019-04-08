@@ -40,7 +40,8 @@ namespace fwdpy11
             out.precision(4);
             out << "ConstantS(";
             this->region.region_repr(out);
-            out << ", s=" << this->esize << ", h=" << this->dominance << ')';
+            out << ", s=" << this->esize << ", h=" << this->dominance
+                << ", scaling=" << this->scaling << ')';
             return out.str();
         }
         std::uint32_t

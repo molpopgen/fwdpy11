@@ -8,8 +8,8 @@ void
 init_HaploidGenome(py::module &m)
 {
     py::class_<fwdpp::gamete>(m, "HaploidGenome", R"delim(
-    A gamete.  This object represents a haplotype
-    in a contiguous genomic region.
+    A haploid genome.  This object represents the ordered
+    mutations inherited from a single parent.
 )delim")
         .def(py::init<fwdpp::gamete::constructor_tuple>(),
              R"delim(
@@ -51,21 +51,6 @@ init_HaploidGenome(py::module &m)
             "List of keys to selected mutations. Contains unsigned "
             "32-bit integers corresponding to mutations in the "
             "population. (read-only)")
-        .def("as_dict",
-             // This lambda shows that
-             // we can return dicts
-             // with a mix of scalars + containers
-             [](const fwdpp::gamete &g) noexcept {
-                 using obj = pybind11::object;
-                 pybind11::dict rv;
-                 rv[obj(pybind11::cast("n"))] = obj(pybind11::cast(g.n));
-                 rv[obj(pybind11::cast("mutations"))]
-                     = obj(pybind11::cast(g.mutations));
-                 rv[obj(pybind11::cast("smutations"))]
-                     = obj(pybind11::cast(g.smutations));
-                 return rv;
-             },
-             "Return dictionary representaton of the gamete.")
         .def(py::pickle(
             [](const fwdpp::gamete &g) {
                 return py::make_tuple(g.n, g.mutations, g.smutations);
