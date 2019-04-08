@@ -17,7 +17,7 @@ Construct object with specific genetic value to fitness map
 and random effects on trait value.
 
 :param gv2w: Genetic value to fitness map
-:type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
 :param noise: Model of random effects on trait value.
 :type noise: :class:`fwdpy11.GeneticValueNoise`
 )delim";
