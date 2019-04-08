@@ -8,5 +8,6 @@ init_DiploidPopulationMultivariateGeneticValueWithMapping(py::module& m)
 {
     py::class_<fwdpy11::DiploidPopulationMultivariateGeneticValueWithMapping,
                fwdpy11::DiploidPopulationGeneticValue>(
-        m, "DiploidPopulationMultivariateGeneticValueWithMapping");
+        m, "MultivariateGeneticValueWithMapping",
+        "ABC for multivariate traits.");
 }

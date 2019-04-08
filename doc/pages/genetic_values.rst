@@ -58,15 +58,32 @@ Guassiant stablizing selection around a constant optimum trait value of zero wit
 
 To model an optimum that changes over time, we can use :class:`fwdpy11.GSSmo`, which is used in :ref:`gss`.
 
+.. autoclass:: fwdpy11.GeneticValue
+
+.. autoclass:: fwdpy11.GeneticValueWithMapping
+
+    Inherits from :class:`fwdpy11.GeneticValue`
 
 .. autoclass:: fwdpy11.Additive
     :members:
 
+    Inherits from :class:`fwdpy11.GeneticValueWithMapping`
+
 .. autoclass:: fwdpy11.Multiplicative
     :members:
 
+    Inherits from :class:`fwdpy11.GeneticValueWithMapping`
+
 .. autoclass:: fwdpy11.GBR
     :members:
+
+    Inherits from :class:`fwdpy11.GeneticValueWithMapping`
+
+    .. testcode::
+
+        import fwdpy11
+        g = fwdpy11.GBR(fwdpy11.GSS(0, 1))
+        g = fwdpy11.GBR(fwdpy11.GSS(0, 1), fwdpy11.GaussianNoise(0, 0.1))
 
 .. autoclass:: fwdpy11.StrictAdditiveMultivariateEffects
     :members:
