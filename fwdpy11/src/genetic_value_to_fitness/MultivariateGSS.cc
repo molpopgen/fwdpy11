@@ -23,7 +23,7 @@ init_MultivariateGSS(py::module& m)
         "A Population Genetic Interpretation of GWAS Findings for Human Quantitative Traits."
         PLoS Biology 16 (3): e2002985.
 
-        For the case of moving optima, see :class:`fwdpy11.genetic_values.MultivariateGSSmo`.
+        For the case of moving optima, see :class:`fwdpy11.MultivariateGSSmo`.
         )delim")
         .def(py::init([](py::array_t<double> optima, double VS) {
             auto r = optima.unchecked<1>();

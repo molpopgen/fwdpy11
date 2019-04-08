@@ -8,7 +8,7 @@ static const auto GBR_CONSTRUCTOR1 =
  Construct object with specific genetic value to fitness map.
  
  :param gv2w: Genetic value to fitness map
- :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
+ :type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
  )delim";
 
 static const auto GBR_CONSTRUCTOR2 =
@@ -19,7 +19,7 @@ and random effects on trait value.
 :param gv2w: Genetic value to fitness map
 :type gv2w: :class:`fwdpy11.genetic_values.GeneticValueIsTrait`
 :param noise: Model of random effects on trait value.
-:type noise: :class:`fwdpy11.genetic_value_noise.GeneticValueNoise`
+:type noise: :class:`fwdpy11.GeneticValueNoise`
 )delim";
 
 void

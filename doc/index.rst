@@ -49,8 +49,9 @@ Welcome to fwdpy11's documentation!
 
     pages/types
     pages/genetic_values
-    pages/regiontypes
     pages/gvalue_to_fitness
+    pages/gvaluenoise
+    pages/regiontypes
     pages/model_params
     pages/functions
 
