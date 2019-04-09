@@ -123,7 +123,7 @@ it shows that we can basically do (almost) anything we want here in terms of tim
                 self.gbar.append((pop.generation, md['g'].mean()))
                 ancient_sampler_recorder.assign(self.individuals)
 
-.. todo:: need to write a separate page on the details of recorders and tree sequences
+See :ref:`timeseries` for more details about these sorts of types.
 
 .. ipython:: python
 
@@ -304,7 +304,7 @@ harder because:
    "maximally" simplified with respect to any single time point.  Rather, it is simplified with
    respect to the nodes from all sampled time points.
 2. This tree sequence contains our selected mutations **and** the neutral mutations that we added,
-   meaning it has a lot more work todo than the loop over haploid genomes, which separates
+   meaning it has a lot more work to do than the loop over haploid genomes, which separates
    the two classes of mutations.
 
 To fix the first issue, we can obtain a new table collection simplified with respect to the
