@@ -181,8 +181,6 @@ fwdpy11 is available through bioconda_ for Linux and for OS X:
 
     conda install -c bioconda fwdpy11
 
-The OS X build is built using gcc.
-
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _GSL: http://gnu.org/software/gsl
