@@ -4,6 +4,20 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.0
+++++++++++++++++++++++++++++++++++
+
+This is a major refactoring:
+
+* The package is now contained in a single namespace, `fwdpy11`.
+* The `MlocusPop` concept from previous versions is removed, and :class:`fwdpy11.DiploidPopulation` is the only
+  population class now.
+* Many Python class names are changed to reflect that there is only one population type now.
+* The manual has been rewritten.
+
+The details for this release are best tracked via the cards in `Project 9 <https://github.com/molpopgen/fwdpy11/projects/9>`_ on GitHub.
+
+
 0.3.1
 ++++++++++++++++++++++++++
 
