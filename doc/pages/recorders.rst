@@ -1,4 +1,4 @@
-.. _timeseries::
+.. _timeseries:
 
 Time series analysis
 ========================================================
@@ -24,7 +24,7 @@ There are built-in types to handle common scenarios:
         N = 1000
         seed = 42
         samplesize = 10
-        r = fwdpy11.RandomAncientSamples(seed, samplesize, np.arange(0, 10*N, N))
+        r = fwdpy12.RandomAncientSamples(seed, samplesize, np.arange(0, 10*N, N))
 
 When implementing your own callables, the arguments to the type must be of the following form:
 

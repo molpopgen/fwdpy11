@@ -61,3 +61,4 @@ Welcome to fwdpy11's documentation!
     examples/bgs
     examples/gss
     examples/snowdrift
+    examples/recorder
