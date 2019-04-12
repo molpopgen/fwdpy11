@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
-#include <fwdpy11/evolvets/samplerecorder.hpp>
+#include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/evolvets/recorders.hpp>
 #include <fwdpy11/numpy/array.hpp>
 
@@ -9,21 +9,21 @@ namespace py = pybind11;
 void
 init_tsrecorders(py::module& m)
 {
-    py::class_<fwdpy11::samplerecorder>(
+    py::class_<fwdpy11::SampleRecorder>(
         m, "SampleRecorder",
         "Allow recording of ancient samples during simulations with tree "
         "sequences.")
         .def(py::init<>())
         .def_property_readonly("samples",
-                               [](const fwdpy11::samplerecorder& self) {
+                               [](const fwdpy11::SampleRecorder& self) {
                                    return fwdpy11::make_1d_ndarray(
                                        self.samples);
                                },
                                "Access to samples. For unit-testing purposes")
-        .def("add_sample", &fwdpy11::samplerecorder::add_sample,
+        .def("add_sample", &fwdpy11::SampleRecorder::add_sample,
              py::arg("individual"),
              "Add the index of an individual to the list of samples")
-        .def("assign", &fwdpy11::samplerecorder::assign, py::arg("samples"),
+        .def("assign", &fwdpy11::SampleRecorder::assign, py::arg("samples"),
              "Add a list of individuals to the list of samples.  Input is a "
              "numpy array with dtype np.uint32");
 
@@ -33,7 +33,7 @@ init_tsrecorders(py::module& m)
         .def(py::init<>())
         .def("__call__", [](fwdpy11::no_ancient_samples& na,
                             const fwdpy11::DiploidPopulation& pop,
-                            fwdpy11::samplerecorder& sr) { na(pop, sr); });
+                            fwdpy11::SampleRecorder& sr) { na(pop, sr); });
 
     py::class_<fwdpy11::random_ancient_samples>(
         m, "RandomAncientSamples",
@@ -52,6 +52,6 @@ init_tsrecorders(py::module& m)
              py::arg("seed"), py::arg("samplesize"), py::arg("timepoints"))
         .def("__call__", [](fwdpy11::random_ancient_samples& na,
                             const fwdpy11::DiploidPopulation& pop,
-                            fwdpy11::samplerecorder& sr) { na(pop, sr); });
+                            fwdpy11::SampleRecorder& sr) { na(pop, sr); });
 }
 

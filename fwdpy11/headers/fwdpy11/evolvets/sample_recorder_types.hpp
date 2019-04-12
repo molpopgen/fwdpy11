@@ -22,14 +22,14 @@
 
 #include <functional>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include "samplerecorder.hpp"
+#include "SampleRecorder.hpp"
 
 // Typedefs for functions that will record ancient samples
 // during simulations with tree sequences
 namespace fwdpy11
 {
     using DiploidPopulation_sample_recorder
-        = std::function<void(const DiploidPopulation &, samplerecorder &)>;
+        = std::function<void(const DiploidPopulation &, SampleRecorder &)>;
 } // namespace fwdpy11
 
 #endif

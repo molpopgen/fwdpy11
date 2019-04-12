@@ -28,7 +28,7 @@
 
 namespace fwdpy11
 {
-    struct samplerecorder
+    struct SampleRecorder
     /*! This type will be passed to a user-supplied callable
      * during simulations with tree sequences.
      *
@@ -43,7 +43,7 @@ namespace fwdpy11
     {
         std::vector<fwdpp::uint_t> samples;
 
-        samplerecorder() : samples{} {}
+        SampleRecorder() : samples{} {}
 
         void
         add_sample(const fwdpp::uint_t i)

@@ -24,7 +24,7 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <gsl/gsl_randist.h>
-#include "samplerecorder.hpp"
+#include "SampleRecorder.hpp"
 
 namespace fwdpy11
 {
@@ -36,7 +36,7 @@ namespace fwdpy11
      */
     {
         inline void
-        operator()(const DiploidPopulation&, samplerecorder&) const
+        operator()(const DiploidPopulation&, SampleRecorder&) const
         {
         }
     };
@@ -57,7 +57,7 @@ namespace fwdpy11
 
         template <typename poptype>
         void
-        sample(const poptype& pop, samplerecorder& sr)
+        sample(const poptype& pop, SampleRecorder& sr)
         {
             if (next_timepoint < timepoints.size()
                 && pop.generation == timepoints[next_timepoint])
@@ -73,7 +73,7 @@ namespace fwdpy11
         }
 
         inline void
-        operator()(const DiploidPopulation& pop, samplerecorder& sr)
+        operator()(const DiploidPopulation& pop, SampleRecorder& sr)
         {
             sample(pop, sr);
         }
