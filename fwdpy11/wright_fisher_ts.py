@@ -116,10 +116,9 @@ def evolve(rng, pop, params, simplification_interval, recorder=None,
                               params.mutrate_s,
                               nregion_proxy,
                               params.sregions):
-            pn = n/(n+s)
-            if pn != 0.0:
+            if n != 0.0:
                 raise ValueError("neutral mutations not allowed")
-            temp = MutationRegions.create(pn, i, j)
+            temp = MutationRegions.create(n, i, j)
             mm.append(temp)
         rm = MlocusRecombinationRegions()
         for i, j in zip(params.recrates, params.recregions):
