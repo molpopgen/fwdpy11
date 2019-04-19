@@ -75,8 +75,13 @@ init_data_matrix_from_tables(py::module& m)
      :type record_neutral: boolean
      :param record_selected: If True, generate data for selected variants
      :type record_selected: boolean
+     :param begin: (None) Start of range, inclusive
+     :param end: (None) End of range, exclusive
 
      :rtype: :class:`fwdpy11.sampling.DataMatrix`
+
+     If None is passed in for begin or end, 0 and tables.genome_length are used,
+     respectively.
 
      .. versionadded:: 0.3.0
      )delim");
