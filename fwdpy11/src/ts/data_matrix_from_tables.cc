@@ -7,6 +7,27 @@ namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
+fwdpp::data_matrix
+generate_data_matrix(const fwdpp::ts::table_collection& tables,
+                     const std::vector<fwdpy11::Mutation>& mutations,
+                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                     bool record_neutral, bool record_selected,
+                     py::object start, py::object stop)
+{
+    double b = 0.0;
+    double e = tables.genome_length();
+    if (!start.is_none())
+        {
+            b = start.cast<double>();
+        }
+    if (!stop.is_none())
+        {
+            e = stop.cast<double>();
+        }
+    return fwdpp::ts::generate_data_matrix(
+        tables, samples, mutations, record_neutral, record_selected, b, e);
+}
+
 void
 init_data_matrix_from_tables(py::module& m)
 {
@@ -37,14 +58,10 @@ init_data_matrix_from_tables(py::module& m)
         Prefer :func:`fwdpy11.ts.data_matrix_from_tables`.
      )delim");
 
-    m.def("data_matrix_from_tables",
-          [](const fwdpp::ts::table_collection& tables,
-             const std::vector<fwdpy11::Mutation>& mutations,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-             bool record_neutral, bool record_selected) {
-              return fwdpp::ts::generate_data_matrix(
-                  tables, samples, mutations, record_neutral, record_selected);
-          },
+    m.def("data_matrix_from_tables", &generate_data_matrix, py::arg("tables"),
+          py::arg("mutations"), py::arg("samples"), py::arg("record_neutral"),
+          py::arg("record_selected"), py::arg("begin") = py::none(),
+          py::arg("end") = py::none(),
           R"delim(
      Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
      
@@ -63,5 +80,4 @@ init_data_matrix_from_tables(py::module& m)
 
      .. versionadded:: 0.3.0
      )delim");
-
 }
