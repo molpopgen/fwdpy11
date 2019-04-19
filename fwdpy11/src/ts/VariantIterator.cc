@@ -12,7 +12,10 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 class VariantIterator
 {
   private:
-    std::vector<fwdpp::ts::mutation_record>::const_iterator
+    using mut_table_itr
+        = std::vector<fwdpp::ts::mutation_record>::const_iterator;
+
+    mut_table_itr
     advance_trees_and_mutations()
     {
         while (mbeg < mend)
@@ -39,6 +42,38 @@ class VariantIterator
         return mbeg;
     }
 
+    mut_table_itr
+    set_mbeg(mut_table_itr mtbeg, mut_table_itr mtend, const double start,
+             const std::vector<fwdpy11::Mutation>& mutations)
+    {
+        if (std::isnan(start))
+            {
+                return mtbeg;
+            }
+        return std::lower_bound(
+            mtbeg, mtend, start,
+            [&mutations](const fwdpp::ts::mutation_record& mr,
+                         const double v) {
+                return mutations[mr.key].pos < v;
+            });
+    }
+
+    mut_table_itr
+    set_mend(mut_table_itr mtbeg, mut_table_itr mtend, const double end,
+             const std::vector<fwdpy11::Mutation>& mutations)
+    {
+        if (std::isnan(end))
+            {
+                return mtend;
+            }
+        return std::upper_bound(
+            mtbeg, mtend, end,
+            [&mutations](const double v,
+                         const fwdpp::ts::mutation_record& mr) {
+                return v < mutations[mr.key].pos;
+            });
+    }
+
   public:
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
     std::vector<double> pos;
@@ -49,14 +84,25 @@ class VariantIterator
     fwdpp::ts::mutation_record current_record;
     VariantIterator(const fwdpp::ts::table_collection& tc,
                     const std::vector<fwdpy11::Mutation>& mutations,
-                    const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
-        : mbeg(tc.mutation_table.begin()), mend(tc.mutation_table.end()),
-          pos(), tv(tc, samples), genotype_data(samples.size(), 0),
+                    const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                    const double beg, const double end)
+        : mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
+                        beg, mutations)),
+          mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)), pos(),
+          tv(tc, samples), genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
           current_position(std::numeric_limits<double>::quiet_NaN()),
           current_record{ fwdpp::ts::TS_NULL_NODE,
                           std::numeric_limits<std::size_t>::max() }
     {
+        if (!std::isnan(beg) && !std::isnan(end))
+            {
+                if (!(end > beg))
+                    {
+                        throw std::invalid_argument(
+                            "invalid position interval");
+                    }
+            }
         // Advance to first tree
         auto flag = tv(std::true_type(), std::true_type());
         if (flag == false)
@@ -123,10 +169,24 @@ init_variant_iterator(py::module& m)
     py::class_<VariantIterator>(
         m, "VariantIterator",
         "An iterable class for traversing genotypes in a tree sequence.")
-        .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpy11::Mutation>&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&>(),
+        .def(py::init([](const fwdpp::ts::table_collection& tables,
+                         const std::vector<fwdpy11::Mutation>& mutations,
+                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                         py::object begin, py::object end) {
+                 double b = std::numeric_limits<double>::quiet_NaN();
+                 double e = std::numeric_limits<double>::quiet_NaN();
+                 if (!begin.is_none())
+                     {
+                         b = begin.cast<double>();
+                     }
+                 if (!end.is_none())
+                     {
+                         e = end.cast<double>();
+                     }
+                 return VariantIterator(tables, mutations, samples, b, e);
+             }),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
+             py::arg("begin") = py::none(), py::arg("end") = py::none(),
              R"delim(
              :param tables: The table collection
              :type tables: :class:`fwdpy11.TableCollection`
@@ -136,7 +196,8 @@ init_variant_iterator(py::module& m)
              :type samples: list
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
-                         const bool include_preserved) {
+                         const bool include_preserved, py::object begin,
+                         py::object end) {
                  std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
                  std::iota(samples.begin(), samples.end(), 0);
                  if (include_preserved)
@@ -145,9 +206,21 @@ init_variant_iterator(py::module& m)
                                         pop.tables.preserved_nodes.begin(),
                                         pop.tables.preserved_nodes.end());
                      }
-                 return VariantIterator(pop.tables, pop.mutations, samples);
+                 double b = std::numeric_limits<double>::quiet_NaN();
+                 double e = std::numeric_limits<double>::quiet_NaN();
+                 if (!begin.is_none())
+                     {
+                         b = begin.cast<double>();
+                     }
+                 if (!end.is_none())
+                     {
+                         e = end.cast<double>();
+                     }
+                 return VariantIterator(pop.tables, pop.mutations, samples, b,
+                                        e);
              }),
-             py::arg("pop"), py::arg("include_preserved_nodes") = false)
+             py::arg("pop"), py::arg("include_preserved_nodes") = false,
+             py::arg("begin") = py::none(), py::arg("end") = py::none())
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
