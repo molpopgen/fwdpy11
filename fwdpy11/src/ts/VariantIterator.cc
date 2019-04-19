@@ -194,6 +194,8 @@ init_variant_iterator(py::module& m)
              :type mutations: :class:`fwdpy11.MutationVector`
              :param samples: Samples list
              :type samples: list
+             :param begin: (None) First position, inclusive.
+             :param end: (None) Last position, exclusive.
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
                          const bool include_preserved, py::object begin,
