@@ -165,6 +165,23 @@ class testTreeSequences(unittest.TestCase):
         self.assertTrue(np.array_equal(sa, mm))
         self.assertTrue(np.array_equal(cs, mc))
 
+    def test_genotype_matrix_ranges(self):
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             self.pop.mutations,
+                                             [i for i in range(
+                                                 2*self.pop.N)],
+                                             False, True)
+        spos = np.array(dm.selected.positions)
+        for i in np.arange(0, self.pop.tables.genome_length, 0.1):
+            dmi = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                                  self.pop.mutations,
+                                                  [i for i in range(
+                                                      2*self.pop.N)],
+                                                  False, True, i, i+0.1)
+            w = np.where((spos >= i) & (spos < i+0.1))[0]
+            self.assertTrue(np.array_equal(
+                spos[w], np.array(dmi.selected.positions)))
+
     def test_VariantIterator(self):
         """
         Test VariantIterator by asserting
@@ -210,6 +227,25 @@ class testTreeSequences(unittest.TestCase):
         mc = np.array(self.pop.mcounts)
         self.assertEqual(i, len(np.where(mc > 0)[0]))
         self.assertEqual(i, len(self.pop.tables.mutations))
+
+    def test_VariantIteratorBeginEnd(self):
+        for i in np.arange(0, self.pop.tables.genome_length, 0.1):
+            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
+                                         [i for i in range(2*self.pop.N)], i, i+0.1)
+            nm = len([j for j in self.pop.tables.mutations if self.pop.mutations[j.key].pos >= i and
+                      self.pop.mutations[j.key].pos < i+0.1])
+            nseen = 0
+            for v in vi:
+                r = v.record
+                self.assertTrue(self.pop.mutations[r.key].pos >= i)
+                self.assertTrue(self.pop.mutations[r.key].pos < i+0.1)
+                nseen += 1
+            self.assertEqual(nm, nseen)
+
+        # test bad start/stop
+        with self.assertRaises(ValueError):
+            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
+                                         [i for i in range(2*self.pop.N)], begin=0.5, end=0.25)
 
     def test_count_mutations(self):
         mc = fwdpy11.count_mutations(self.pop,
