@@ -11,37 +11,29 @@ fwdpp::data_matrix
 generate_data_matrix(const fwdpp::ts::table_collection& tables,
                      const std::vector<fwdpy11::Mutation>& mutations,
                      const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                     bool record_neutral, bool record_selected,
-                     py::object start, py::object stop)
+                     bool record_neutral, bool record_selected, double start,
+                     double stop)
 {
-    double b = 0.0;
-    double e = tables.genome_length();
-    if (!start.is_none())
-        {
-            b = start.cast<double>();
-        }
-    if (!stop.is_none())
-        {
-            e = stop.cast<double>();
-        }
-    return fwdpp::ts::generate_data_matrix(
-        tables, samples, mutations, record_neutral, record_selected, b, e);
+    return fwdpp::ts::generate_data_matrix(tables, samples, mutations,
+                                           record_neutral, record_selected,
+                                           start, stop);
 }
 
 void
 init_data_matrix_from_tables(py::module& m)
 {
-    m.def("make_data_matrix",
-          [](const fwdpy11::Population& pop,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-             const bool record_neutral, const bool record_selected) {
-              return fwdpp::ts::generate_data_matrix(
-                  pop.tables, samples, pop.mutations, record_neutral,
-                  record_selected);
-          },
-          py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
-          py::arg("record_selected"),
-          R"delim(
+    m.def(
+        "make_data_matrix",
+        [](const fwdpy11::Population& pop,
+           const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+           const bool record_neutral, const bool record_selected) {
+            return fwdpp::ts::generate_data_matrix(
+                pop.tables, samples, pop.mutations, record_neutral,
+                record_selected);
+        },
+        py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
+        py::arg("record_selected"),
+        R"delim(
      Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
      
      :param pop: A population
@@ -60,8 +52,8 @@ init_data_matrix_from_tables(py::module& m)
 
     m.def("data_matrix_from_tables", &generate_data_matrix, py::arg("tables"),
           py::arg("mutations"), py::arg("samples"), py::arg("record_neutral"),
-          py::arg("record_selected"), py::arg("begin") = py::none(),
-          py::arg("end") = py::none(),
+          py::arg("record_selected"), py::arg("begin") = 0.0,
+          py::arg("end") = std::numeric_limits<double>::max(),
           R"delim(
      Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
      
@@ -75,8 +67,8 @@ init_data_matrix_from_tables(py::module& m)
      :type record_neutral: boolean
      :param record_selected: If True, generate data for selected variants
      :type record_selected: boolean
-     :param begin: (None) Start of range, inclusive
-     :param end: (None) End of range, exclusive
+     :param begin: (0.0) Start of range, inclusive
+     :param end: (max float) End of range, exclusive
 
      :rtype: :class:`fwdpy11.sampling.DataMatrix`
 
