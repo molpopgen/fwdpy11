@@ -25,16 +25,27 @@ class tree_visitor_wrapper
         return data[index];
     }
 
+    void
+    validate_from_until(const double genome_length)
+    {
+        if (!std::isfinite(from) || !std::isfinite(until)
+            || from >= genome_length || !(until > from))
+            {
+                throw std::invalid_argument("invalid position range");
+            }
+    }
+
     bool update_samples;
+    const double from, until;
 
   public:
     fwdpp::ts::tree_visitor visitor;
     std::vector<fwdpp::ts::TS_NODE_INT> sample_list_buffer;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                         bool update_sample_list)
-        : update_samples(update_sample_list), visitor(tables, samples),
-          sample_list_buffer()
+                         bool update_sample_list, double start, double stop)
+        : update_samples(update_sample_list), from(start), until(stop),
+          visitor(tables, samples), sample_list_buffer()
     {
     }
 
@@ -42,9 +53,9 @@ class tree_visitor_wrapper
         const fwdpp::ts::table_collection& tables,
         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
-        bool update_sample_list)
-        : update_samples(update_sample_list), visitor(tables, samples),
-          sample_list_buffer()
+        bool update_sample_list, double start, double stop)
+        : update_samples(update_sample_list), from(start), until(stop),
+          visitor(tables, samples), sample_list_buffer()
     {
     }
 
@@ -55,10 +66,22 @@ class tree_visitor_wrapper
         if (update_samples)
             {
                 rv = visitor(std::true_type(), std::true_type());
+                while (visitor.tree().right < from)
+                    {
+                        rv = visitor(std::true_type(), std::true_type());
+                    }
             }
         else
             {
                 rv = visitor(std::true_type(), std::false_type());
+                while (visitor.tree().right < from)
+                    {
+                        rv = visitor(std::true_type(), std::false_type());
+                    }
+            }
+        if (visitor.tree().left >= until)
+            {
+                return false;
             }
         return rv;
     }
@@ -157,14 +180,18 @@ init_tree_iterator(py::module& m)
             .. versionadded 0.3.0
             )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
+                      double>(),
              py::arg("tables"), py::arg("samples"),
-             py::arg("update_sample_list") = false)
+             py::arg("update_sample_list") = false, py::arg("begin") = 0.0,
+             py::arg("end") = std::numeric_limits<double>::max())
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool>(),
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
+                      double>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
-             py::arg("update_sample_list") = false)
+             py::arg("update_sample_list") = false, py::arg("begin") = 0.0,
+             py::arg("end") = std::numeric_limits<double>::max())
         .def("parent", &tree_visitor_wrapper::parent,
              "Return parent of a node")
         .def("leaf_counts", &tree_visitor_wrapper::leaf_counts,
@@ -180,16 +207,18 @@ init_tree_iterator(py::module& m)
              "Mapping of current node id to its left child")
         .def("right_child", &tree_visitor_wrapper::right_child,
              "Mapping of current node id to its right child")
-        .def_property_readonly("left",
-                               [](const tree_visitor_wrapper& self) {
-                                   return self.visitor.tree().left;
-                               },
-                               "Left edge of genomic interval (inclusive)")
-        .def_property_readonly("right",
-                               [](const tree_visitor_wrapper& self) {
-                                   return self.visitor.tree().right;
-                               },
-                               "Right edge of genomic interval (exclusive)")
+        .def_property_readonly(
+            "left",
+            [](const tree_visitor_wrapper& self) {
+                return self.visitor.tree().left;
+            },
+            "Left edge of genomic interval (inclusive)")
+        .def_property_readonly(
+            "right",
+            [](const tree_visitor_wrapper& self) {
+                return self.visitor.tree().right;
+            },
+            "Right edge of genomic interval (exclusive)")
         .def("__next__",
              [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
                  auto x = self();
@@ -197,34 +226,34 @@ init_tree_iterator(py::module& m)
                      {
                          throw py::stop_iteration();
                      }
-                return self;
+                 return self;
              })
         .def("__iter__",
              [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
                  return self;
              })
-        .def("total_time",
-             [](const tree_visitor_wrapper& self,
-                const fwdpp::ts::node_vector& nodes) {
-                 const auto& m = self.visitor.tree();
-                 if (m.parents.size() != nodes.size())
-                     {
-                         throw std::invalid_argument(
-                             "node table length does not equal number of "
-                             "nodes in marginal tree");
-                     }
-                 double tt = 0.0;
-                 for (std::size_t i = 0; i < m.parents.size(); ++i)
-                     {
-                         if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
-                             {
-                                 tt += nodes[i].time
-                                       - nodes[m.parents[i]].time;
-                             }
-                     }
-                 return tt;
-             },
-             "Return the sum of branch lengths")
+        .def(
+            "total_time",
+            [](const tree_visitor_wrapper& self,
+               const fwdpp::ts::node_vector& nodes) {
+                const auto& m = self.visitor.tree();
+                if (m.parents.size() != nodes.size())
+                    {
+                        throw std::invalid_argument(
+                            "node table length does not equal number of "
+                            "nodes in marginal tree");
+                    }
+                double tt = 0.0;
+                for (std::size_t i = 0; i < m.parents.size(); ++i)
+                    {
+                        if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
+                            {
+                                tt += nodes[i].time - nodes[m.parents[i]].time;
+                            }
+                    }
+                return tt;
+            },
+            "Return the sum of branch lengths")
         .def_property_readonly("sample_size",
                                &tree_visitor_wrapper::sample_size)
         .def_property_readonly(
