@@ -83,6 +83,33 @@ class testTreeSequences(unittest.TestCase):
             tt_tskit += t.get_total_branch_length()
         self.assertEqual(tt_fwd, tt_tskit)
 
+    def test_TreeIterator(self):
+        with self.assertRaises(ValueError):
+            tv = fwdpy11.TreeIterator(self.pop.tables,
+                                      [i for i in range(2*self.pop.N)],
+                                      True, 1, 0)
+        with self.assertRaises(ValueError):
+            tv = fwdpy11.TreeIterator(self.pop.tables,
+                                      [i for i in range(2*self.pop.N)],
+                                      False, 1, 0)
+
+        for i in np.arange(0., 1., 0.1):
+            tv = fwdpy11.TreeIterator(self.pop.tables,
+                                      [i for i in range(2*self.pop.N)],
+                                      True, i, i+0.1)
+            for ti in tv:
+                a = ti.left < i+0.1
+                b = i < ti.right
+                self.assertTrue(a and b)
+
+            tv = fwdpy11.TreeIterator(self.pop.tables,
+                                      [i for i in range(2*self.pop.N)],
+                                      False, i, i+0.1)
+            for ti in tv:
+                a = ti.left < i+0.1
+                b = i < ti.right
+                self.assertTrue(a and b)
+
     def test_leaf_counts_vs_mcounts(self):
         tv = fwdpy11.TreeIterator(self.pop.tables,
                                   [i for i in range(2*self.pop.N)])
