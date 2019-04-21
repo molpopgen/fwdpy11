@@ -47,6 +47,7 @@ class tree_visitor_wrapper
         : update_samples(update_sample_list), from(start), until(stop),
           visitor(tables, samples), sample_list_buffer()
     {
+        validate_from_until(tables.genome_length());
     }
 
     tree_visitor_wrapper(
@@ -57,6 +58,7 @@ class tree_visitor_wrapper
         : update_samples(update_sample_list), from(start), until(stop),
           visitor(tables, samples), sample_list_buffer()
     {
+        validate_from_until(tables.genome_length());
     }
 
     inline bool
