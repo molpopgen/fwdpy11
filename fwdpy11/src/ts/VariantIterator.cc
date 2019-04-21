@@ -172,21 +172,12 @@ init_variant_iterator(py::module& m)
         .def(py::init([](const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpy11::Mutation>& mutations,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                         py::object begin, py::object end) {
-                 double b = std::numeric_limits<double>::quiet_NaN();
-                 double e = std::numeric_limits<double>::quiet_NaN();
-                 if (!begin.is_none())
-                     {
-                         b = begin.cast<double>();
-                     }
-                 if (!end.is_none())
-                     {
-                         e = end.cast<double>();
-                     }
-                 return VariantIterator(tables, mutations, samples, b, e);
+                         double begin, double end) {
+                 return VariantIterator(tables, mutations, samples, begin, end);
              }),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
-             py::arg("begin") = py::none(), py::arg("end") = py::none(),
+             py::arg("begin") = 0.0,
+             py::arg("end") = std::numeric_limits<double>::max(),
              R"delim(
              :param tables: The table collection
              :type tables: :class:`fwdpy11.TableCollection`
@@ -194,12 +185,12 @@ init_variant_iterator(py::module& m)
              :type mutations: :class:`fwdpy11.MutationVector`
              :param samples: Samples list
              :type samples: list
-             :param begin: (None) First position, inclusive.
-             :param end: (None) Last position, exclusive.
+             :param begin: (0.0) First position, inclusive.
+             :param end: (max float) Last position, exclusive.
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
-                         const bool include_preserved, py::object begin,
-                         py::object end) {
+                         const bool include_preserved, double begin,
+                         double end) {
                  std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
                  std::iota(samples.begin(), samples.end(), 0);
                  if (include_preserved)
@@ -208,21 +199,11 @@ init_variant_iterator(py::module& m)
                                         pop.tables.preserved_nodes.begin(),
                                         pop.tables.preserved_nodes.end());
                      }
-                 double b = std::numeric_limits<double>::quiet_NaN();
-                 double e = std::numeric_limits<double>::quiet_NaN();
-                 if (!begin.is_none())
-                     {
-                         b = begin.cast<double>();
-                     }
-                 if (!end.is_none())
-                     {
-                         e = end.cast<double>();
-                     }
-                 return VariantIterator(pop.tables, pop.mutations, samples, b,
-                                        e);
+                 return VariantIterator(pop.tables, pop.mutations, samples,
+                                        begin, end);
              }),
              py::arg("pop"), py::arg("include_preserved_nodes") = false,
-             py::arg("begin") = py::none(), py::arg("end") = py::none())
+             py::arg("begin") = 0.0, py::arg("end") = std::numeric_limits<double>::max())
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
