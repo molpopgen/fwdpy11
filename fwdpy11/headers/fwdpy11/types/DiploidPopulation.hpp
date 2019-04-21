@@ -40,11 +40,6 @@ namespace fwdpy11
 
         dipvector_t diploids;
 
-        DiploidPopulation(DiploidPopulation &&) = default;
-        DiploidPopulation(const DiploidPopulation &) = default;
-        DiploidPopulation &operator=(DiploidPopulation &&) = default;
-        DiploidPopulation &operator=(const DiploidPopulation &) = default;
-
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
             : Population{ N, length }, diploids(N, { 0, 0 })
@@ -77,6 +72,12 @@ namespace fwdpy11
         {
             this->process_individual_input();
         }
+
+        ~DiploidPopulation() = default;
+        DiploidPopulation(DiploidPopulation&&)=default;
+        DiploidPopulation(const DiploidPopulation&)=default;
+        DiploidPopulation&operator=(const DiploidPopulation&)=default;
+        DiploidPopulation&operator=(DiploidPopulation&&)=default;
 
         bool
         operator==(const DiploidPopulation &rhs) const

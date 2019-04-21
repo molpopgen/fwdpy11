@@ -58,10 +58,6 @@ namespace fwdpy11
         std::vector<double> genetic_value_matrix,
             ancient_sample_genetic_value_matrix;
 
-        virtual ~PyPopulation() = default;
-
-        PyPopulation(PyPopulation &&) = default;
-        PyPopulation(const PyPopulation &) = default;
 
         PyPopulation(fwdpp::uint_t N_, const double L)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
@@ -84,6 +80,12 @@ namespace fwdpy11
               genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {
         }
+
+        virtual ~PyPopulation() = default;
+        PyPopulation(PyPopulation&&) = default;
+        PyPopulation(const PyPopulation&) = default;
+        PyPopulation&operator=(const PyPopulation&) = default;
+        PyPopulation&operator=(PyPopulation&&) = default;
 
         virtual std::vector<std::size_t>
         add_mutations(typename fwdpp_base::mcont_t &mutations,
