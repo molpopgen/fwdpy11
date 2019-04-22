@@ -34,7 +34,7 @@ init_data_matrix_from_tables(py::module& m)
         py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
         py::arg("record_selected"),
         R"delim(
-     Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
+     Create a :class:`fwdpy11.DataMatrix` from a table collection.
      
      :param pop: A population
      :type pop: :class:`fwdpy11.Population`
@@ -56,7 +56,7 @@ init_data_matrix_from_tables(py::module& m)
           py::arg("include_fixations") = false, py::arg("begin") = 0.0,
           py::arg("end") = std::numeric_limits<double>::max(),
           R"delim(
-     Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
+     Create a :class:`fwdpy11.DataMatrix` from a table collection.
      
      :param tables: A TableCollection
      :type tables: :class:`fwdpy11.ts.TableCollection`
