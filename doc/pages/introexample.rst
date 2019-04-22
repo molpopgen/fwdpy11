@@ -234,6 +234,11 @@ An advantage of tree sequences is that we can efficiently iterate over genotypes
 individual variants with respect to arbitrary sets of nodes.  Such iteration is handled by
 :class:`fwdpy11.VariantIterator`.
 
+.. note::
+
+   For more on how to access genotype data and the individual "marginal" trees, see
+   :ref:`genotypes_trees`.
+
 For the next example, we will add neutral mutations to our tree sequence via :func:`fwdpy11.infinite_sites`
 and then calculate :math:`\pi` (the sum of heterozygosity at each site) in a random sample of 25 diploids from each time point.
 The end result will allow us to plot how genetic diversity in a sample changes over time during adaptation to the new

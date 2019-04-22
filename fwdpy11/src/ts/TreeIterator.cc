@@ -180,6 +180,10 @@ init_tree_iterator(py::module& m)
             Iterate over the marginal trees in a :class:`fwdpy11.TableCollection`
             
             .. versionadded 0.3.0
+
+            .. versionchanged:: 0.4.1
+        
+                Add begin, end options as floats for initializing
             )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,

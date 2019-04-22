@@ -187,6 +187,10 @@ init_variant_iterator(py::module& m)
              :type samples: list
              :param begin: (0.0) First position, inclusive.
              :param end: (max float) Last position, exclusive.
+
+             .. versionchanged:: 0.4.1
+        
+                 Add begin, end options as floats
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
                          const bool include_preserved, double begin,

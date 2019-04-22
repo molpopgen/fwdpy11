@@ -40,6 +40,7 @@ Welcome to fwdpy11's documentation!
     pages/tsoverview
     pages/tstypes
     pages/recorders
+    pages/working_with_genotypes_trees
 
 
 .. toctree::
@@ -51,6 +52,7 @@ Welcome to fwdpy11's documentation!
     pages/gvalue_to_fitness
     pages/gvaluenoise
     pages/regiontypes
+    pages/datamatrix
     pages/model_params
     pages/functions
 

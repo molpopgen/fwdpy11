@@ -18,7 +18,7 @@ void init_data_matrix(py::module & m)
 
             These are not constructed directly.  Rather,
             they are generated when a 
-            :class:`fwdpy11.sampling.DataMatrix` is generated.
+            :class:`fwdpy11.DataMatrix` is generated.
 
             This object supports the buffer protocol.
 
@@ -64,22 +64,12 @@ void init_data_matrix(py::module & m)
 		column containing a 0 (ancestral) or 1 (derived) label. Each row
         represents a variable site.
 
-		You do not create objects of this type directly.  Instead, you use one of 
-		the following functions:
-
-		* :func:`fwdpy11.sampling.genotype_matrix`
-		* :func:`fwdpy11.sampling.haplotype_matrix`
-		
-		Please see :ref:`datamatrix` for examples of generating
-		instances of this type.  The API requires multiple steps, in order to 
-		maximize flexibility.
-
         .. versionchanged:: 0.2.0
 
             Changed layout to row = variable site. 
-            Changed to match fwdpp 0.7.0 layour where the neutral
+            Changed to match fwdpp 0.7.0 layout where the neutral
             and selected data are represented as a 
-            :class:`fwdpy11.sampling.StateMatrix`
+            :class:`fwdpy11.StateMatrix`
 		)delim")
         .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
@@ -94,7 +84,7 @@ void init_data_matrix(py::module & m)
                     Allow read/write access instead of readonly
 
                 .. versionchanged:: 0.2.0
-                    Type is :class:`fwdpy11.sampling.StateMatrix`
+                    Type is :class:`fwdpy11.StateMatrix`
                 )delim")
         .def_readwrite("selected", &fwdpp::data_matrix::selected,
                        R"delim(
@@ -109,7 +99,7 @@ void init_data_matrix(py::module & m)
                     Allow read/write access instead of readonly
 
                 .. versionchanged:: 0.2.0
-                    Type is :class:`fwdpy11.sampling.StateMatrix`
+                    Type is :class:`fwdpy11.StateMatrix`
                 )delim")
         .def_readonly("ncol", &fwdpp::data_matrix::ncol,
                       "Sample size of the matrix")
