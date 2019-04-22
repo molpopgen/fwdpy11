@@ -4,6 +4,16 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.1
+++++++++++++++++++++++++++++++++++
+
+Minor release:
+
+* Added position ranges to tree traversal.  `PR 232 <https://github.com/molpopgen/fwdpy11/pull/232>`_.
+* Changed default type for range arguments for VariantIterator and data matrix generation. `PR 233 <https://github.com/molpopgen/fwdpy11/pull/233>`_.
+* The C++ back-end for population classes was changed to avoid deleting move constructors. `PR 231 <https://github.com/molpopgen/fwdpy11/pull/231>`_.
+* Documentation updates
+
 0.4.0
 ++++++++++++++++++++++++++++++++++
 
