@@ -13,7 +13,6 @@ Welcome to fwdpy11's documentation!
     :caption: Miscellaneous notes
     :maxdepth: 1
 
-    misc/conventions
     misc/changelog
     misc/upgrade_path
     misc/deprecated
