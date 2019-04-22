@@ -204,7 +204,9 @@ class testTreeSequences(unittest.TestCase):
                                                   self.pop.mutations,
                                                   [i for i in range(
                                                       2*self.pop.N)],
-                                                  False, True, i, i+0.1)
+                                                  record_neutral=False,
+                                                  record_selected=True,
+                                                  begin=i, end=i+0.1)
             w = np.where((spos >= i) & (spos < i+0.1))[0]
             self.assertTrue(np.array_equal(
                 spos[w], np.array(dmi.selected.positions)))
