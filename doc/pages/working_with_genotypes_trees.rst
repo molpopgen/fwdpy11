@@ -87,7 +87,7 @@ Tree traversal
 
 .. ipython:: python
 
-   ti = fwdpy11.TreeIterator(pop.tables, [i for i in range(50)]
+   ti = fwdpy11.TreeIterator(pop.tables, [i for i in range(50)])
 
 For each tree, you may access the parent/child/etc. elements described in :ref:`representing_trees`.  In general,
 tree access is an advanced topic that allows efficient algorithms to be developed.  For now, see :ref:`bgs` for an
