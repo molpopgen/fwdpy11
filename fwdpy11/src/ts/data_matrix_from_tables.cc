@@ -11,11 +11,11 @@ fwdpp::data_matrix
 generate_data_matrix(const fwdpp::ts::table_collection& tables,
                      const std::vector<fwdpy11::Mutation>& mutations,
                      const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                     bool record_neutral, bool record_selected, double start,
+                     bool record_neutral, bool record_selected, bool include_fixations, double start,
                      double stop)
 {
     return fwdpp::ts::generate_data_matrix(tables, samples, mutations,
-                                           record_neutral, record_selected,
+                                           record_neutral, record_selected, !include_fixations,
                                            start, stop);
 }
 
@@ -29,7 +29,7 @@ init_data_matrix_from_tables(py::module& m)
            const bool record_neutral, const bool record_selected) {
             return fwdpp::ts::generate_data_matrix(
                 pop.tables, samples, pop.mutations, record_neutral,
-                record_selected);
+                record_selected, true);
         },
         py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
         py::arg("record_selected"),
@@ -52,7 +52,8 @@ init_data_matrix_from_tables(py::module& m)
 
     m.def("data_matrix_from_tables", &generate_data_matrix, py::arg("tables"),
           py::arg("mutations"), py::arg("samples"), py::arg("record_neutral"),
-          py::arg("record_selected"), py::arg("begin") = 0.0,
+          py::arg("record_selected"),
+          py::arg("include_fixations") = false, py::arg("begin") = 0.0,
           py::arg("end") = std::numeric_limits<double>::max(),
           R"delim(
      Create a :class:`fwdpy11.sampling.DataMatrix` from a table collection.
@@ -67,14 +68,17 @@ init_data_matrix_from_tables(py::module& m)
      :type record_neutral: boolean
      :param record_selected: If True, generate data for selected variants
      :type record_selected: boolean
+     :param include_selected: (False) Whether to include variants fixed in the sample
+     :type include_selected: boolean
      :param begin: (0.0) Start of range, inclusive
      :param end: (max float) End of range, exclusive
 
      :rtype: :class:`fwdpy11.sampling.DataMatrix`
 
-     If None is passed in for begin or end, 0 and tables.genome_length are used,
-     respectively.
-
      .. versionadded:: 0.3.0
+
+     .. versionchanged:: 0.4.1
+        
+            Add begin, end options as floats
      )delim");
 }
