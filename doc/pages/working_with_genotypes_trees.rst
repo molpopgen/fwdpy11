@@ -8,7 +8,7 @@ Iterating over individual variants
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Let's get the derived mutation frequency spectrum at neutral and selected sites
-for the first fify nodes in the population generated in :ref:`introexample`.
+for the first fifty nodes in the population generated in :ref:`introexample`.
 To do so, we use :class:`fwdpy11.VariantIterator` to traverse each mutation:
 
 .. ipython:: python
