@@ -11,6 +11,7 @@ Minor release:
 
 * Added position ranges to tree traversal.  `PR 232 <https://github.com/molpopgen/fwdpy11/pull/232>`_.
 * Changed default type for range arguments for VariantIterator and data matrix generation. `PR 233 <https://github.com/molpopgen/fwdpy11/pull/233>`_.
+* Skipping fixations is now optional in :func:`fwdpy11.data_matrix_from_tables`.
 * The C++ back-end for population classes was changed to avoid deleting move constructors. `PR 231 <https://github.com/molpopgen/fwdpy11/pull/231>`_.
 * Documentation updates
 
