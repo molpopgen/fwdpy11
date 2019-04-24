@@ -302,7 +302,6 @@ of :class:`fwdpy11.VariantIterator`:
             who = np.where(g == 1)[0]
             nmuts_ts[who] += 1
         
-
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
 
 
