@@ -74,6 +74,7 @@ class VariantIterator
             });
     }
     std::vector<double> pos;
+    std::vector<std::int8_t> neutral;
 
   public:
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
@@ -86,8 +87,9 @@ class VariantIterator
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                     const double beg, const double end)
-        : pos(), mbeg(set_mbeg(tc.mutation_table.begin(),
-                               tc.mutation_table.end(), beg, mutations)),
+        : pos(), neutral(),
+          mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
+                        beg, mutations)),
           mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)),
           tv(tc, samples), genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
@@ -113,6 +115,7 @@ class VariantIterator
         for (auto& m : mutations)
             {
                 pos.push_back(m.pos);
+                neutral.push_back(m.neutral);
             }
         mbeg = advance_trees_and_mutations();
     }
