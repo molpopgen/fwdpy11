@@ -292,7 +292,9 @@ of :class:`fwdpy11.VariantIterator`:
 
     current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
     nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, current_generation, include_neutral_variants=False
+    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations,
+                                 current_generation,
+                                 include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
         r = v.record
@@ -300,7 +302,9 @@ of :class:`fwdpy11.VariantIterator`:
             who = np.where(g == 1)[0]
             nmuts_ts[who] += 1
         
+
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
+
 
 The VariantIterator makes very efficient use of the underlying data.  However, it is not *maximally*
 efficient here, as this tree sequence contains a large number of ancient samples. Thus, its tree structure is not
@@ -311,24 +315,29 @@ We can obtain a new table collection simplified with respect to the
 final generation, which gives a measurable speedup compared to iterating over the larger
 tree sequence:
 
+
 .. ipython:: python
 
     tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.mutations, current_generation)
     remapped_samples = idmap[current_generation]
     nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
-    vi = fwdpy11.VariantIterator(tables, pop.mutations, remapped_samples, include_neutral_variants=False)
+    vi = fwdpy11.VariantIterator(tables,
+                                 pop.mutations,
+                                 remapped_samples,
+                                 include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
         r = v.record
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_simplified_ts[who] += 1
-       
+
     assert np.array_equal(nmuts_ts, nmuts_simplified_ts), "Simplification error"
+
 
 .. note::
 
-   The last two blocks  are examples of speed/memory tradeoffs.  Simplification 
-   to a specific time point is very fast, but requires a bit of extra RAM, and results
-   in faster variant traversal, as the simplified tables only contain variants
-   present in the time point of interest.
+    The last two blocks  are examples of speed/memory tradeoffs.  Simplification 
+    to a specific time point is very fast, but requires a bit of extra RAM, and results
+    in faster variant traversal, as the simplified tables only contain variants
+    present in the time point of interest.
