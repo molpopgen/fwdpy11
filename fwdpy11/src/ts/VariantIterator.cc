@@ -204,10 +204,18 @@ init_variant_iterator(py::module& m)
              :type samples: list
              :param begin: (0.0) First position, inclusive.
              :param end: (max float) Last position, exclusive.
+             :param include_neutral_variants: (True) Include neutral variants during traversal
+             :type include_neutral_variants: boolean
+             :param include_selected_variants: (True) Include selected variants during traversal
+             :type include_selected_variants: boolean
 
              .. versionchanged:: 0.4.1
         
                  Add begin, end options as floats
+
+            .. versionchanged:: 0.4.2
+
+                 Add include_neutral_variants and include_selected_variants
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
                          const bool include_preserved, double begin,
@@ -229,7 +237,27 @@ init_variant_iterator(py::module& m)
              py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max(),
              py::arg("include_selected_variants") = true,
-             py::arg("include_selected_variants") = true)
+             py::arg("include_selected_variants") = true,
+             R"delim(
+             :param pop: The table collection
+             :type pop: :class:`fwdpy11.TableCollection`
+             :param include_preserved_nodes: (False) Whether to include preserved samples during traversal
+             :type include_preserved_nodes: boolean
+             :param begin: (0.0) First position, inclusive.
+             :param end: (max float) Last position, exclusive.
+             :param include_neutral_variants: (True) Include neutral variants during traversal
+             :type include_neutral_variants: boolean
+             :param include_selected_variants: (True) Include selected variants during traversal
+             :type include_selected_variants: boolean
+
+             .. versionchanged:: 0.4.1
+        
+                 Add begin, end options as floats
+
+            .. versionchanged:: 0.4.2
+
+                 Add include_neutral_variants and include_selected_variants
+            )delim")
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
