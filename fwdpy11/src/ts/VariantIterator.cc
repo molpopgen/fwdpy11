@@ -73,10 +73,10 @@ class VariantIterator
                 return v < mutations[mr.key].pos;
             });
     }
+    std::vector<double> pos;
 
   public:
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
-    std::vector<double> pos;
     fwdpp::ts::tree_visitor tv;
     std::vector<std::int8_t> genotype_data;
     py::array_t<std::int8_t> genotypes;
@@ -86,9 +86,9 @@ class VariantIterator
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                     const double beg, const double end)
-        : mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
-                        beg, mutations)),
-          mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)), pos(),
+        : pos(), mbeg(set_mbeg(tc.mutation_table.begin(),
+                               tc.mutation_table.end(), beg, mutations)),
+          mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)),
           tv(tc, samples), genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
           current_position(std::numeric_limits<double>::quiet_NaN()),
@@ -173,7 +173,8 @@ init_variant_iterator(py::module& m)
                          const std::vector<fwdpy11::Mutation>& mutations,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          double begin, double end) {
-                 return VariantIterator(tables, mutations, samples, begin, end);
+                 return VariantIterator(tables, mutations, samples, begin,
+                                        end);
              }),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              py::arg("begin") = 0.0,
@@ -207,7 +208,8 @@ init_variant_iterator(py::module& m)
                                         begin, end);
              }),
              py::arg("pop"), py::arg("include_preserved_nodes") = false,
-             py::arg("begin") = 0.0, py::arg("end") = std::numeric_limits<double>::max())
+             py::arg("begin") = 0.0,
+             py::arg("end") = std::numeric_limits<double>::max())
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
