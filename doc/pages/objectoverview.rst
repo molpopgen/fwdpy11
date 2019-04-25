@@ -12,12 +12,14 @@ by :class:`fwdpy11.DiploidPopulation`.
 
     Fig 1: The relationship between (some of) the data structures in a population.
 
-.. note::
+Figure 1 is an abstract representation of some of the more important members of :class:`fwdpy11.DiploidPopulation`,
+focusing on how we can get genotype information about diploids.  As it turns out there are two ways to accomplish 
+this:
 
-    :class:`fwdpy11.DiploidPopulation` inherits from the base class
-    :class:`fwdpy11.PopulationBase`, and thus inherits its public attributes.
-    Below, you will see attribute references to the base class. Keep
-    in mind that those attributes are inherited.
+1. From the diploid genomes themselves.
+2. From the tree sequences reflecting the history of the simulation.
+
+Regarding the genomes themselves, the relevant concepts are:
 
 * A diploid is made up of two haploid genomes, one from each parent.
 * A haploid genome is represented by :class:`fwdpy11.HaploidGenome`.
@@ -26,6 +28,15 @@ by :class:`fwdpy11.DiploidPopulation`.
   :attr:`fwdpy11.DiploidGenotype.first` and :attr:`fwdpy11.DiploidGenotype.second`
   refer to *indexes* in :attr:`fwdpy11.PopulationBase.haploid_genomes`
 * Instances of :class:`fwdpy11.DiploidGenotype` are stored in :attr:`fwdpy11.DiploidPopulation.diploids`
+
+.. note::
+   
+    The only valid interpretation of :attr:`fwdpy11.DiploidGenotype.first` and :attr:`fwdpy11.DiploidGenotype.second`
+    is that they are indexes into another container.  Identical values therefore index the same instance
+    of :class:`fwdpy11.HaploidGenome`.  However, different values may index different instances that contain  
+    the same mutations, as there no attempt to keep :attr:`fwdpy11.PopulationBase.haploid_genomes` "minimal" (containing
+    only unique genomes).  This situation can occur when the diploid genotype AB/ab recombines to generate Ab and aB
+    gametes multiple times in a generation.
 
 To go from haploid genomes to their mutations:
 
@@ -42,6 +53,12 @@ To go from haploid genomes to their mutations:
     and :attr:`fwdpy11.DiploidPopulation.diploids` mostly behave as regular Python lists.  However,
     they are actually C++ containers and some magic has been done to allow you to access their
     data very efficiently.
+
+These relationships are shown in Figure 1.  The :math:`i^{th}` diploid's members `first` and `second` are *indexes*
+to the corresponding haploid genomes (black arrows with solid lines).  Those :class:`fwdpy11.HaploidGenome` objects
+contain attributes :attr:`fwdpy11.HaploidGenome.mutations` and :attr:`fwdpy11.HaploidGenome.smutations`, which store
+*indexes* of neutral and selected mutations, respectively (solid and dashed purple lines).  The mutations are instances
+of :class:`fwdpy11.Mutation`.
 
 Let's take a look at the population simulated in :ref:`introexample`.
 
@@ -83,6 +100,9 @@ generation when the mutation arose, and the mutation's effect size.
 See :class:`fwdpy11.Mutation` for more attributes associated
 with this type.
 
+Before discussing getting genotype data using tree sequences, it is helpful to in introduce
+the metadata types associated with diploids:
+
 Diploid metadata
 ----------------------------------------------------------------
 
@@ -117,6 +137,12 @@ array:
 For many applications, access via a structured array should be preferred, as it will outperform
 the access via Python objects by an order of magnitude or so.
 
+.. note::
+   
+   The metadata are stored in the same order as the diploids themselves.  The `label` field
+   contains the index of the :class:`fwdpy11.DiploidGenotype` in :attr:`fwdpy11.DiploidPopulation.diploids`.
+   The same idea holds for ancestral sample metadata as well.
+
 Tree sequences
 ----------------------------------------------
 
@@ -131,9 +157,17 @@ and assuming that the tree sequences are simplified, the nodes corresponding to 
 :math:`[0, 2N)`.  The haploid genomes of individual 0 correspond to nodes 0 and 1, respectively, etc., and we can get
 the node labels from the metadata:
 
+.. note::
+
+   It is important to realize that the node indexes corresponding to a diploid have no relationship
+   to the values stored in instances of :class:`fwdpy11.DiploidGenotype`.
+
 .. ipython:: python
 
     print(pop.diploid_metadata[0].nodes)
+
+We can relate this output to Figure 1.  The :math:`i^{th}` metadata element contains the nodes for the :math:`i^{th}` 
+diploid.
 
 Let's use :class:`fwdpy11.VariantIterator` to determine which selected mutations are in the first diploid. We will have
 to filter on neutral-vs-selected because neutral mutations have been added to the table collection:
@@ -149,6 +183,10 @@ to filter on neutral-vs-selected because neutral mutations have been added to th
         if pop.mutations[r.key].neutral is False:
             keys.append(r.key)
     print(keys)
+
+The `r` variable is an instance of :class:`fwdpy11.MutationRecord`, which are stored in :class:`fwdpy11.MutationTable`
+instances as part of table collections.  As we see in Figure 1, these records have "keys", which are indexes back to 
+:attr:`fwdpy11.PopulationBase.mutations`, and nodes, which are indexes into :class:`fwdpy11.NodeTable` instances.
 
 The variable `keys` hold the same values that we saw above when we interated over haploid genomes.
 
