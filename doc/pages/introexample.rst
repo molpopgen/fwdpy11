@@ -285,13 +285,16 @@ from the tree sequences.
             
 
 When using the tree sequences for the calculation, note that we have to avoid neutral variants,
-as we added them in above.
+as we added them in above.  We can do so by passing `include_neutral_variants=False` to the constructor
+of :class:`fwdpy11.VariantIterator`:
 
 .. ipython:: python
 
     current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
     nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, current_generation)
+    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations,
+                                 current_generation,
+                                 include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
         r = v.record
@@ -301,35 +304,39 @@ as we added them in above.
         
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
 
-It is important to note that the first loop is much faster than the second. However, the comparison is not
-apples-to-apples.  The latter approach processes the data more efficiently.  However, it is having to work much
-harder because:
 
-1. This tree sequence contains a large number of ancient samples. Thus, its tree structure is not
-   "maximally" simplified with respect to any single time point.  Rather, it is simplified with
-   respect to the nodes from all sampled time points.
-2. This tree sequence contains our selected mutations **and** the neutral mutations that we added,
-   meaning it has a lot more work to do than the loop over haploid genomes, which separates
-   the two classes of mutations.
+The VariantIterator makes very efficient use of the underlying data.  However, it is not *maximally*
+efficient here, as this tree sequence contains a large number of ancient samples. Thus, its tree structure is not
+"maximally" simplified with respect to any single time point.  Rather, it is simplified with
+respect to the nodes from all sampled time points.
 
-To fix the first issue, we can obtain a new table collection simplified with respect to the
-final generation, which gives about a tenfold speedup compared to iterating over the larger
+We can obtain a new table collection simplified with respect to the
+final generation, which gives a measurable speedup compared to iterating over the larger
 tree sequence:
+
 
 .. ipython:: python
 
     tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.mutations, current_generation)
     remapped_samples = idmap[current_generation]
     nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
-    vi = fwdpy11.VariantIterator(tables, pop.mutations, remapped_samples)
+    vi = fwdpy11.VariantIterator(tables,
+                                 pop.mutations,
+                                 remapped_samples,
+                                 include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
         r = v.record
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_simplified_ts[who] += 1
-       
+
     assert np.array_equal(nmuts_ts, nmuts_simplified_ts), "Simplification error"
 
-Repeating the exercise without putting the neutral mutations onto the trees results in the tree-sequence-based
-approach being about 3x faster.
+
+.. note::
+
+    The last two blocks  are examples of speed/memory tradeoffs.  Simplification 
+    to a specific time point is very fast, but requires a bit of extra RAM, and results
+    in faster variant traversal, as the simplified tables only contain variants
+    present in the time point of interest.

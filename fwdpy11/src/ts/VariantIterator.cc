@@ -35,7 +35,11 @@ class VariantIterator
                         + m.preserved_leaf_counts[mbeg->node]
                     != 0)
                     {
-                        return mbeg;
+                        if ((neutral[mbeg->key] && include_neutral)
+                            || (!neutral[mbeg->key] && include_selected))
+                            {
+                                return mbeg;
+                            }
                     }
                 ++mbeg;
             }
@@ -73,10 +77,12 @@ class VariantIterator
                 return v < mutations[mr.key].pos;
             });
     }
+    std::vector<double> pos;
+    std::vector<std::int8_t> neutral;
+    const bool include_neutral, include_selected;
 
   public:
     std::vector<fwdpp::ts::mutation_record>::const_iterator mbeg, mend;
-    std::vector<double> pos;
     fwdpp::ts::tree_visitor tv;
     std::vector<std::int8_t> genotype_data;
     py::array_t<std::int8_t> genotypes;
@@ -85,10 +91,14 @@ class VariantIterator
     VariantIterator(const fwdpp::ts::table_collection& tc,
                     const std::vector<fwdpy11::Mutation>& mutations,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                    const double beg, const double end)
-        : mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
+                    const double beg, const double end,
+                    const bool include_neutral_variant,
+                    const bool include_selected_variants)
+        : pos(), neutral(), include_neutral(include_neutral_variant),
+          include_selected(include_selected_variants),
+          mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
                         beg, mutations)),
-          mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)), pos(),
+          mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)),
           tv(tc, samples), genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
           current_position(std::numeric_limits<double>::quiet_NaN()),
@@ -113,6 +123,7 @@ class VariantIterator
         for (auto& m : mutations)
             {
                 pos.push_back(m.pos);
+                neutral.push_back(m.neutral);
             }
         mbeg = advance_trees_and_mutations();
     }
@@ -172,12 +183,18 @@ init_variant_iterator(py::module& m)
         .def(py::init([](const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpy11::Mutation>& mutations,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                         double begin, double end) {
-                 return VariantIterator(tables, mutations, samples, begin, end);
+                         double begin, double end,
+                         bool include_neutral_variants,
+                         bool include_selected_variants) {
+                 return VariantIterator(tables, mutations, samples, begin, end,
+                                        include_neutral_variants,
+                                        include_selected_variants);
              }),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max(),
+             py::arg("include_neutral_variants") = true,
+             py::arg("include_selected_variants") = true,
              R"delim(
              :param tables: The table collection
              :type tables: :class:`fwdpy11.TableCollection`
@@ -187,14 +204,23 @@ init_variant_iterator(py::module& m)
              :type samples: list
              :param begin: (0.0) First position, inclusive.
              :param end: (max float) Last position, exclusive.
+             :param include_neutral_variants: (True) Include neutral variants during traversal
+             :type include_neutral_variants: boolean
+             :param include_selected_variants: (True) Include selected variants during traversal
+             :type include_selected_variants: boolean
 
              .. versionchanged:: 0.4.1
         
                  Add begin, end options as floats
+
+            .. versionchanged:: 0.4.2
+
+                 Add include_neutral_variants and include_selected_variants
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
                          const bool include_preserved, double begin,
-                         double end) {
+                         double end, bool include_neutral_variants,
+                         bool include_selected_variants) {
                  std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
                  std::iota(samples.begin(), samples.end(), 0);
                  if (include_preserved)
@@ -204,10 +230,34 @@ init_variant_iterator(py::module& m)
                                         pop.tables.preserved_nodes.end());
                      }
                  return VariantIterator(pop.tables, pop.mutations, samples,
-                                        begin, end);
+                                        begin, end, include_neutral_variants,
+                                        include_selected_variants);
              }),
              py::arg("pop"), py::arg("include_preserved_nodes") = false,
-             py::arg("begin") = 0.0, py::arg("end") = std::numeric_limits<double>::max())
+             py::arg("begin") = 0.0,
+             py::arg("end") = std::numeric_limits<double>::max(),
+             py::arg("include_selected_variants") = true,
+             py::arg("include_selected_variants") = true,
+             R"delim(
+             :param pop: The table collection
+             :type pop: :class:`fwdpy11.TableCollection`
+             :param include_preserved_nodes: (False) Whether to include preserved samples during traversal
+             :type include_preserved_nodes: boolean
+             :param begin: (0.0) First position, inclusive.
+             :param end: (max float) Last position, exclusive.
+             :param include_neutral_variants: (True) Include neutral variants during traversal
+             :type include_neutral_variants: boolean
+             :param include_selected_variants: (True) Include selected variants during traversal
+             :type include_selected_variants: boolean
+
+             .. versionchanged:: 0.4.1
+        
+                 Add begin, end options as floats
+
+            .. versionchanged:: 0.4.2
+
+                 Add include_neutral_variants and include_selected_variants
+            )delim")
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
