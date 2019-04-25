@@ -105,6 +105,11 @@ class VariantIterator
           current_record{ fwdpp::ts::TS_NULL_NODE,
                           std::numeric_limits<std::size_t>::max() }
     {
+        if (!include_selected && !include_neutral)
+            {
+                throw std::invalid_argument(
+                    "excluding neutral and selected variants is invalid");
+            }
         if (!std::isnan(beg) && !std::isnan(end))
             {
                 if (!(end > beg))
