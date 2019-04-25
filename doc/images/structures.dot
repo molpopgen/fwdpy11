@@ -28,7 +28,7 @@ digraph g {
         label = "pop.diploid_metadata|<f0>nodes: [2i, 2i+1]"
     ]
 
-    "diploids":d0 -> "metadata":f0
+    "diploids":d0 -> "metadata":f0 [color="deeppink", penwidth=2]
     "diploids":f0 -> "genomes":g0
     "diploids":f1 -> "genomes":g1
     "genomes":m0 -> "mutations":m0 [color="purple"]
