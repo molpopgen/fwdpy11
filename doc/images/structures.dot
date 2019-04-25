@@ -1,6 +1,8 @@
 digraph g {
     graph [
-     dpi = 100
+     dpi = 150;
+     fontsize = 36;
+     rankdir = LR;
     ]
     node [shape="record"]
     "diploids" [
