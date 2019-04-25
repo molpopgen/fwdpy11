@@ -3,8 +3,14 @@
 Overview of types
 =============================================
 
+
 This section is a conceptual overview of how a population of diploids is represented
 by :class:`fwdpy11.DiploidPopulation`.
+
+.. figure:: ../images/structures.png
+    :align: center
+
+    Fig 1: The relationship between (some of) the data structures in a population.
 
 .. note::
 
