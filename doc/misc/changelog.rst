@@ -4,6 +4,15 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.2
+++++++++++++++++++++++++++++++++++
+
+Minor release:
+
+* :class:`fwdpy11.VariantIterator`  may now skip neutral or selected sites during iteration. The behavior is specified
+  by parameters passed to the class upon construction.
+* Documentation updates
+
 0.4.1
 ++++++++++++++++++++++++++++++++++
 
