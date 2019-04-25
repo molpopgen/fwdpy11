@@ -1,0 +1,43 @@
+digraph g {
+    graph [
+     dpi = 100
+    ]
+    node [shape="record"]
+    "diploids" [
+        label="pop.diploids|{<d0>pop.diploids[i]\n|<f0>first|<f1>second}"
+    ];
+
+    "genomes" [ 
+        label = "pop.haploid_genomes|{<g0>pop.haploid_genomes[pop.diploids[i].first]|mutations: []|<m0>smutations:
+        [0]}|{<g1>pop.haploid_genomes[pop.diploids[i].second]|mutations: []|<m1>smutations: [0, 1]}"
+    ]
+    
+    "mutations" [
+        label = "pop.mutations|<m0>pop.mutations[0]|<m1>pop.mutations[1]"
+    ]
+
+    "mutation_table" [
+        label = "<mt>pop.tables.mutation_table|<r0>key = 0, node = k|<r1>key=1, node=2i+1"
+    ]
+
+    "node_table" [
+        label = "pop.tables.nodes|<k>k: time \< pop.generation|<n0>2i: time = pop.generation|<n1>2i+1: time = pop.generation"
+    ]
+
+    "metadata" [
+        label = "pop.diploid_metadata|<f0>nodes: [2i, 2i+1]"
+    ]
+
+    "diploids":d0 -> "metadata":f0
+    "diploids":f0 -> "genomes":g0
+    "diploids":f1 -> "genomes":g1
+    "genomes":m0 -> "mutations":m0 [color="purple"]
+    "genomes":m1 -> "mutations":m0 [color="purple", style="dashed"]
+    "genomes":m1 -> "mutations":m1 [color="purple", style="dashed"]
+    "mutation_table":r0 -> "node_table":k [style="dashed"]
+    "mutation_table":r1 -> "node_table":n1 [style="dashed"]
+    "mutation_table":r0 -> "mutations":m0 [color="blue"]
+    "mutation_table":r1 -> "mutations":m1 [color="blue"]
+    "metadata":f0 -> "node_table":n0 [color="darkseagreen3"]
+    "metadata":f0 -> "node_table":n1 [color="darkseagreen3"]
+}
