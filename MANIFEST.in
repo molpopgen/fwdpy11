@@ -1,7 +1,7 @@
 recursive-include fwdpy11 *.cc *.hpp
 recursive-include m4 *.m4
 recursive-include tests *.cpp *.pyx *.py
-recursive-include examples COPYING *.rst *.py
+recursive-include examples COPYING *.rst *.py Makefile *.cc *.R *.txt
 include COPYING
 include CMakeLists.txt
 include fwdpy11/CMakeLists.txt
@@ -13,6 +13,6 @@ include doc/conf.py.in
 include doc/fwdpy11.doxygen
 include doc/fwdpp.doxygen
 include doc/Makefile
-recursive-include doc *.rst
+recursive-include doc *.rst *.png
 include aclocal.m4
 recursive-include check_deps *

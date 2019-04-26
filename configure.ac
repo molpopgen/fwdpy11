@@ -397,7 +397,8 @@ dnl Finish #
 dnl#########
 
 dnl Define the files to be configured
-AC_CONFIG_FILES([setup.py CMakeLists.txt requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py])
+AC_CONFIG_FILES([setup.py CMakeLists.txt requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py
+                 .circleci/config.yml])
 
 dnl stuff added by KRT
 

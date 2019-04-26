@@ -22,7 +22,17 @@ import sys
 # import subprocess
 
 if (os.environ.get('READTHEDOCS') == "True") is False:
-    sys.path.insert(0, os.path.abspath('..'))
+    try:
+        sys.path.insert(0, os.path.abspath('..'))
+        import fwdpy11
+    except:
+        sys.path.pop(0)
+        try:
+            import fwdpy11
+            if fwdpy11.__version__ != "@PACKAGE_VERSION@":
+                raise RuntimeError("installed fwdpp detected, but unexpected version found")
+        except:
+            raise
 else:
     import site
     p = site.getsitepackages()[0]

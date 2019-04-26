@@ -3213,7 +3213,7 @@ pkgpyexecdir=\${pyexecdir}/$PACKAGE_NAME
 
 
 
-ac_config_files="$ac_config_files setup.py CMakeLists.txt requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py"
+ac_config_files="$ac_config_files setup.py CMakeLists.txt requirements.txt doc/fwdpy11.doxygen fwdpy11/_version.py doc/conf.py .circleci/config.yml"
 
 
 
@@ -5172,6 +5172,7 @@ do
     "doc/fwdpy11.doxygen") CONFIG_FILES="$CONFIG_FILES doc/fwdpy11.doxygen" ;;
     "fwdpy11/_version.py") CONFIG_FILES="$CONFIG_FILES fwdpy11/_version.py" ;;
     "doc/conf.py") CONFIG_FILES="$CONFIG_FILES doc/conf.py" ;;
+    ".circleci/config.yml") CONFIG_FILES="$CONFIG_FILES .circleci/config.yml" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
