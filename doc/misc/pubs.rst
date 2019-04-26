@@ -17,3 +17,6 @@ Other publications that we are aware of. (Please send us yours!)
   <http://www.pnas.org/content/114/44/11715.full>`_
 * `Schrider and Kern (bioRxiv) Soft sweeps are the dominant mode of adaptation in the human genome.
   <http://biorxiv.org/content/biorxiv/early/2017/04/27/090084.full.pdf>`_
+* `Thornton (bioRxiv) Polygenic adaptation to an environmental shift: temporal dynamics of variation under Gaussian
+  stabilizing selection and additive effects on a single trait <https://www.biorxiv.org/content/10.1101/505750v1>`_
+* `Torres et al. (bioRxiv) The temporal dynamics of background selection in non-equilibrium populations <https://www.biorxiv.org/content/biorxiv/early/2019/04/25/618389.full.pdf>`_
