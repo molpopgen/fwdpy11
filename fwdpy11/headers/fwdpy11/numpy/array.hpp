@@ -65,6 +65,18 @@ namespace fwdpy11
             c, [](void* x) { delete reinterpret_cast<std::vector<T>*>(x); });
         return pybind11::array(c->size(), c->data(), capsule);
     }
+
+    template <typename T>
+    inline pybind11::array_t<T>
+    make_2d_array_with_capsule(std::vector<T>&& v, std::size_t dim1,
+                               std::size_t dim2)
+    // Steals contents of v! Use with caution.
+    {
+        std::vector<T>* c = new std::vector<T>(std::move(v));
+        auto capsule = pybind11::capsule(
+            c, [](void* x) { delete reinterpret_cast<std::vector<T>*>(x); });
+        return pybind11::array_t<T>({ dim1, dim2 }, c->data(), capsule);
+    }
 } // namespace fwdpy11
 
 #endif

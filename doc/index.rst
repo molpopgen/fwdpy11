@@ -37,6 +37,7 @@ Welcome to fwdpy11's documentation!
     pages/objectoverview
     pages/mutation
     pages/recombination
+    pages/discrete_demography
     pages/tsoverview
     pages/tstypes
     pages/tskit_interchange

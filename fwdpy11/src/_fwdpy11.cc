@@ -31,6 +31,7 @@ void init_genetic_values(py::module &);
 void init_GSL(py::module &);
 void init_ts(py::module&);
 void init_evolution_functions(py::module&);
+void init_discrete_demography(py::module & m);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
@@ -56,4 +57,5 @@ PYBIND11_MODULE(_fwdpy11, m)
     init_GSL(m);
     init_ts(m);
     init_evolution_functions(m);
+    init_discrete_demography(m);
 }
