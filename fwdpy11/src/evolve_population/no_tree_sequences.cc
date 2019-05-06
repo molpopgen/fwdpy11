@@ -66,7 +66,7 @@ void
 evolve_without_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
-    const double mu_selected, const double recrate,
+    const double mu_selected, 
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
     fwdpy11::DiploidPopulation_temporal_sampler recorder,
@@ -91,6 +91,11 @@ evolve_without_tree_sequences(
         {
             throw std::invalid_argument(
                 "selected mutation rate must be non-negative");
+        }
+    if (mu_neutral + mu_selected > 0.0 && mmodel.weights.empty())
+        {
+            throw std::invalid_argument(
+                "nonzero mutation rate incompatible with empty regions");
         }
     const std::uint32_t num_generations
         = static_cast<std::uint32_t>(popsizes.size());

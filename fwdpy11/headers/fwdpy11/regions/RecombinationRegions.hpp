@@ -32,8 +32,17 @@ namespace fwdpy11
                 {
                     weights.push_back(reg.weight);
                 }
-            lookup.reset(
-                gsl_ran_discrete_preproc(weights.size(), weights.data()));
+            if (!weights.empty())
+                {
+                    lookup.reset(gsl_ran_discrete_preproc(weights.size(),
+                                                          weights.data()));
+                }
+            else if (rate > 0.0)
+                {
+                    throw std::invalid_argument(
+                        "recombination rate > 0 incompatible with empty "
+                        "regions");
+                }
         }
 
         std::vector<double>
