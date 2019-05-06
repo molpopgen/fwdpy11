@@ -189,3 +189,11 @@ class ModelParams(object):
             raise TypeError("gvalue cannot be None")
         if self.rates is None:
             raise TypeError("rates cannot be None")
+        if self.rates[1] > 0 and len(self.sregions) == 0:
+            raise TypeError(
+                "mutation rate to selected variants is > 0 but no Sregions are defined")
+        if self.rates[0] > 0 and len(self.nregions) == 0:
+            raise TypeError(
+                "mutation rate to neutral variants is > 0 but no Regions are defined")
+                
+

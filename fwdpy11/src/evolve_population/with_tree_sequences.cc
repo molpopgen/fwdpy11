@@ -80,6 +80,11 @@ evolve_with_tree_sequences(
             throw std::invalid_argument(
                 "selected mutation rate must be non-negative");
         }
+    if (mu_selected > 0.0 && mmodel.weights.empty())
+        {
+            throw std::invalid_argument(
+                "nonzero mutation rate incompatible with empty regions");
+        }
     const std::uint32_t num_generations
         = static_cast<std::uint32_t>(popsizes.size());
     if (!num_generations)
@@ -114,8 +119,9 @@ evolve_with_tree_sequences(
 
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
-    auto genetics = fwdpp::make_genetic_parameters(
-        std::ref(genetic_value_fxn), std::move(bound_mmodel), std::move(bound_rmodel));
+    auto genetics = fwdpp::make_genetic_parameters(std::ref(genetic_value_fxn),
+                                                   std::move(bound_mmodel),
+                                                   std::move(bound_rmodel));
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.

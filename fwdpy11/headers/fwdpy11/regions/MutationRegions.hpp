@@ -18,7 +18,9 @@ namespace fwdpy11
         MutationRegions(std::vector<std::unique_ptr<Sregion>>&& r,
                         std::vector<double>&& w)
             : regions(std::move(r)), weights(std::move(w)),
-              lookup(gsl_ran_discrete_preproc(weights.size(), weights.data()))
+              lookup(weights.empty() ? nullptr
+                                     : gsl_ran_discrete_preproc(
+                                         weights.size(), weights.data()))
         {
         }
 

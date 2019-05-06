@@ -47,7 +47,9 @@ def evolve_genomes(rng, pop, params, recorder=None):
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import evolve_without_tree_sequences
     from ._fwdpy11 import dispatch_create_GeneticMap
-    pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
+    pneutral = 0.0
+    if params.mutrate_n + params.mutrate_s > 0.0:
+        pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 

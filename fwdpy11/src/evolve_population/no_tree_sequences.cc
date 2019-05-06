@@ -92,6 +92,11 @@ evolve_without_tree_sequences(
             throw std::invalid_argument(
                 "selected mutation rate must be non-negative");
         }
+    if (mu_neutral + mu_selected > 0.0 && mmodel.weights.empty())
+        {
+            throw std::invalid_argument(
+                "nonzero mutation rate incompatible with empty regions");
+        }
     const std::uint32_t num_generations
         = static_cast<std::uint32_t>(popsizes.size());
     if (!num_generations)
