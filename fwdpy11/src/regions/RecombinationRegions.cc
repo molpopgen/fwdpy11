@@ -34,6 +34,10 @@ init_RecombinationRegions(py::module& m)
 
     m.def("dispatch_create_GeneticMap",
           [](py::object o, std::vector<fwdpy11::Region>& regions) {
+              if (regions.empty() && o.is_none())
+                  {
+                      return fwdpy11::RecombinationRegions(0.0, regions);
+                  }
               return fwdpy11::RecombinationRegions(o.cast<double>(), regions);
           });
 

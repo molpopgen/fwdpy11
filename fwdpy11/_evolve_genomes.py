@@ -59,5 +59,5 @@ def evolve_genomes(rng, pop, params, recorder=None):
 
     evolve_without_tree_sequences(rng, pop, params.demography,
                                   params.mutrate_n, params.mutrate_s,
-                                  params.recrate, mm, rm, params.gvalue,
+                                  mm, rm, params.gvalue,
                                   recorder, params.pself, params.prune_selected)
