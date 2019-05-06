@@ -4,6 +4,13 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.3
+++++++++++++++++++++++++++++++++++
+
+* Minor fixes to packaging of source distrubition.
+* Add a YCM config file to source repo
+* Allow mutation and recombination regions to be empty. `PR 239 <https://github.com/molpopgen/fwdpy11/pull/239>`_.
+
 0.4.2
 ++++++++++++++++++++++++++++++++++
 
