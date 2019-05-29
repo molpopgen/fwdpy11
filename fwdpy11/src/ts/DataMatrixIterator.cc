@@ -19,6 +19,8 @@ class DataMatrixIterator
         = std::vector<fwdpp::ts::mutation_record>::const_iterator;
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
+    std::vector<std::int8_t> genotypes, is_neutral;
+    std::vector<double> mutation_positions;
     const mut_table_itr mbeg, mend;
     mut_table_itr mcurrent;
     std::size_t current_range;
@@ -63,8 +65,7 @@ class DataMatrixIterator
     }
 
     mut_table_itr
-    set_mbeg(const fwdpp::ts::table_collection& tables,
-             const double start,
+    set_mbeg(const fwdpp::ts::table_collection& tables, const double start,
              const std::vector<fwdpy11::Mutation>& mutations)
     {
         return std::lower_bound(
@@ -75,6 +76,40 @@ class DataMatrixIterator
             });
     }
 
+    mut_table_itr
+    advance()
+    {
+        while (mcurrent < mend)
+            {
+                const auto& m = current_tree->tree();
+                while (mutation_positions[mcurrent->key] < m.left
+                       || mutation_positions[mcurrent->key] >= m.right)
+                    {
+                        auto flag = current_tree->operator()(std::true_type(),
+                                                             std::true_type());
+                        if (flag == false)
+                            {
+                                throw std::runtime_error(
+                                    "DataMatrixIterator: tree traversal "
+                                    "error");
+                            }
+                    }
+                // TODO: deal with fixations here...
+                if (m.leaf_counts[mcurrent->node] != 0)
+                    {
+                        if ((is_neutral[mcurrent->key]
+                             && include_neutral_variants)
+                            || (!is_neutral[mcurrent->key]
+                                && include_selected_variants))
+                            {
+                                return mcurrent;
+                            }
+                    }
+                ++mcurrent;
+            }
+        return mcurrent;
+    }
+
   public:
     DataMatrixIterator(const fwdpp::ts::table_collection& tables,
                        const std::vector<fwdpy11::Mutation>& mutations,
@@ -83,12 +118,18 @@ class DataMatrixIterator
                        bool neutral, bool selected, bool fixations)
         : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
+          genotypes(samples.size(), 0), is_neutral{}, mutation_positions{},
           mbeg(set_mbeg(tables, intervals[0].first, mutations)),
-          mend(tables.mutation_table.end()),
-          mcurrent(mbeg), current_range(0),
+          mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations)
     {
+        for (auto& m : mutations)
+            {
+                mutation_positions.push_back(m.pos);
+                is_neutral.push_back(m.neutral);
+            }
+        mcurrent = advance();
     }
 };
 
