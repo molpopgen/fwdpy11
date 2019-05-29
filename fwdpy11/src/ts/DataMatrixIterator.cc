@@ -399,5 +399,20 @@ class DataMatrixIterator
 void
 init_DataMatrixIterator(py::module& m)
 {
-    py::class_<DataMatrixIterator>(m, "DataMatrixIterator");
+    py::class_<DataMatrixIterator>(m, "DataMatrixIterator")
+        .def(py::init<const fwdpp::ts::table_collection&,
+                      const std::vector<fwdpy11::Mutation>&,
+                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      const std::vector<std::pair<double, double>>&, bool,
+                      bool, bool>())
+        .def_property_readonly("neutral", &DataMatrixIterator::neutral)
+        .def_property_readonly("neutral_keys",
+                               &DataMatrixIterator::neutral_keys)
+        .def_property_readonly("neutral_positions",
+                               &DataMatrixIterator::neutral_positions)
+        .def_property_readonly("selected", &DataMatrixIterator::selected)
+        .def_property_readonly("selected_keys",
+                               &DataMatrixIterator::selected_keys)
+        .def_property_readonly("selected_positions",
+                               &DataMatrixIterator::selected_positions);
 }
