@@ -66,49 +66,83 @@ class DataMatrixIterator
         return input_intervals;
     }
 
+    std::vector<std::int8_t>
+    set_neutral(const std::vector<fwdpy11::Mutation>& mutations)
+    {
+        std::vector<std::int8_t> n;
+        n.reserve(mutations.size());
+        for (auto& m : mutations)
+            {
+                n.push_back(m.neutral);
+            }
+        return n;
+    }
+
+    std::vector<double>
+    set_positions(const std::vector<fwdpy11::Mutation>& mutations)
+    {
+        std::vector<double> p;
+        p.reserve(mutations.size());
+        for (auto& m : mutations)
+            {
+                p.push_back(m.pos);
+            }
+        return p;
+    }
+
     mut_table_itr
-    set_mbeg(const fwdpp::ts::table_collection& tables, const double start,
-             const std::vector<fwdpy11::Mutation>& mutations)
+    find_first_mutation_record(mut_table_itr b, mut_table_itr e,
+                               const double start)
     {
         return std::lower_bound(
-            tables.mutation_table.begin(), tables.mutation_table.end(), start,
-            [&mutations](const fwdpp::ts::mutation_record& mr,
-                         const double v) {
-                return mutations[mr.key].pos < v;
+            b, e, start,
+            [this](const fwdpp::ts::mutation_record& mr, const double v) {
+                return mutation_positions[mr.key] < v;
             });
     }
 
     mut_table_itr
     advance_trees_and_mutations()
     {
-        while (mcurrent < mend)
+        if (next_tree != nullptr)
             {
-                const auto& m = current_tree->tree();
-                while (mutation_positions[mcurrent->key] < m.left
-                       || mutation_positions[mcurrent->key] >= m.right)
+                current_tree.swap(next_tree);
+                next_tree.reset(nullptr);
+                double left = current_tree->tree().left;
+                mcurrent = find_first_mutation_record(mbeg, mend, left);
+            }
+        else
+            {
+                while (mcurrent < mend)
                     {
-                        auto flag = current_tree->operator()(std::true_type(),
-                                                             std::true_type());
-                        if (flag == false)
+                        const auto& m = current_tree->tree();
+                        while (mutation_positions[mcurrent->key] < m.left
+                               || mutation_positions[mcurrent->key] >= m.right)
                             {
-                                throw std::runtime_error(
-                                    "DataMatrixIterator: tree traversal "
-                                    "error");
+                                auto flag = current_tree->operator()(
+                                    std::true_type(), std::true_type());
+                                if (flag == false)
+                                    {
+                                        throw std::runtime_error(
+                                            "DataMatrixIterator: tree "
+                                            "traversal "
+                                            "error");
+                                    }
                             }
-                    }
-                if (m.leaf_counts[mcurrent->node] != 0)
-                    {
-                        // Skip over mutations in this tree
-                        // that don't lead to samples
-                        if ((is_neutral[mcurrent->key]
-                             && include_neutral_variants)
-                            || (!is_neutral[mcurrent->key]
-                                && include_selected_variants))
+                        if (m.leaf_counts[mcurrent->node] != 0)
                             {
-                                return mcurrent;
+                                // Skip over mutations in this tree
+                                // that don't lead to samples
+                                if ((is_neutral[mcurrent->key]
+                                     && include_neutral_variants)
+                                    || (!is_neutral[mcurrent->key]
+                                        && include_selected_variants))
+                                    {
+                                        return mcurrent;
+                                    }
                             }
+                        ++mcurrent;
                     }
-                ++mcurrent;
             }
         return mcurrent;
     }
@@ -178,18 +212,16 @@ class DataMatrixIterator
                        bool neutral, bool selected, bool fixations)
         : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
-          genotypes(samples.size(), 0), is_neutral{}, mutation_positions{},
+          genotypes(samples.size(), 0), is_neutral(set_neutral(mutations)),
+          mutation_positions(set_positions(mutations)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
-          mbeg(set_mbeg(tables, intervals[0].first, mutations)),
+          mbeg(find_first_mutation_record(tables.mutation_table.begin(),
+                                          tables.mutation_table.end(),
+                                          intervals[0].first)),
           mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations)
     {
-        for (auto& m : mutations)
-            {
-                mutation_positions.push_back(m.pos);
-                is_neutral.push_back(m.neutral);
-            }
         mcurrent = advance_trees_and_mutations();
     }
 
@@ -197,11 +229,22 @@ class DataMatrixIterator
     next_data_matrix()
     {
         check_if_still_iterating();
+        next_tree.reset(nullptr);
 
         bool iteration_flag = true;
         do
             {
                 const auto& tree = current_tree->tree();
+                if (next_tree == nullptr
+                    && current_range + 1 < position_ranges.size())
+                    {
+                        double right = tree.right;
+                        if (right > position_ranges[current_range + 1].first)
+                            {
+                                next_tree.reset(new fwdpp::ts::tree_visitor(
+                                    *current_tree));
+                            }
+                    }
                 for (; mcurrent < mend
                        && mutation_positions[mcurrent->key] < tree.right;
                      ++mcurrent)
@@ -212,7 +255,7 @@ class DataMatrixIterator
                                                           std::true_type());
             }
         while (iteration_flag == true);
-
+        mcurrent = advance_trees_and_mutations();
         return *this;
     }
 };
