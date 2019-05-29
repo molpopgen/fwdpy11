@@ -78,7 +78,7 @@ class DataMatrixIterator
     }
 
     mut_table_itr
-    advance()
+    advance_trees_and_mutations()
     {
         while (mcurrent < mend)
             {
