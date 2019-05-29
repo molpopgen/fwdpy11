@@ -7,8 +7,9 @@
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include <fwdpp/ts/tree_visitor.hpp>
+#include <fwdpp/ts/detail/generate_data_matrix_details.hpp>
 
-    namespace py = pybind11;
+namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
@@ -21,7 +22,7 @@ class DataMatrixIterator
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes, is_neutral;
     std::vector<double> mutation_positions;
-    fwdpp::data_matrix dmatrix;
+    std::unique_ptr<fwdpp::data_matrix> dmatrix;
     const mut_table_itr mbeg, mend;
     mut_table_itr mcurrent;
     std::size_t current_range;
@@ -95,9 +96,10 @@ class DataMatrixIterator
                                     "error");
                             }
                     }
-                // TODO: deal with fixations here...
                 if (m.leaf_counts[mcurrent->node] != 0)
                     {
+                        // Skip over mutations in this tree
+                        // that don't lead to samples
                         if ((is_neutral[mcurrent->key]
                              && include_neutral_variants)
                             || (!is_neutral[mcurrent->key]
@@ -111,6 +113,63 @@ class DataMatrixIterator
         return mcurrent;
     }
 
+    void
+    release_memory()
+    {
+        current_tree.reset(nullptr);
+        next_tree.reset(nullptr);
+        dmatrix.reset(nullptr);
+    }
+
+    void
+    check_if_still_iterating()
+    {
+        if (!(mcurrent < mend) || current_range >= position_ranges.size())
+            {
+                release_memory();
+                throw py::stop_iteration();
+            }
+    }
+
+    void
+    update_data_matrix(const bool mut_is_neutral, const std::size_t key)
+    // NOTE: this is a re-implementation
+    // of fwdpp::ts::detail::update_data_matrix
+    {
+        auto& sm = (mut_is_neutral) ? dmatrix->neutral : dmatrix->selected;
+        auto& k = (mut_is_neutral) ? dmatrix->neutral_keys
+                                   : dmatrix->selected_keys;
+        k.push_back(key);
+        sm.positions.push_back(mutation_positions[key]);
+        sm.data.insert(sm.data.end(), begin(genotypes), end(genotypes));
+    }
+
+    void
+    process_current_mutation(const fwdpp::ts::marginal_tree& tree,
+                             const mut_table_itr mitr)
+    {
+        auto lc = tree.leaf_counts[mitr->node];
+        bool fixed = (lc == tree.sample_size);
+        if (lc > 0 && (!fixed || (fixed && include_fixations)))
+            {
+                bool mut_is_neutral = is_neutral[mitr->key];
+                bool tracking_n = (mut_is_neutral && include_neutral_variants);
+                bool tracking_s
+                    = (!mut_is_neutral && include_selected_variants);
+                if (tracking_n || tracking_s)
+                    {
+                        auto index = tree.left_sample[mitr->node];
+                        if (index != fwdpp::ts::TS_NULL_NODE)
+                            {
+                                fwdpp::ts::detail::process_samples(
+                                    tree, mitr->node, index, genotypes);
+                                update_data_matrix(mut_is_neutral,
+                                                   mcurrent->key);
+                            }
+                    }
+            }
+    }
+
   public:
     DataMatrixIterator(const fwdpp::ts::table_collection& tables,
                        const std::vector<fwdpy11::Mutation>& mutations,
@@ -120,7 +179,7 @@ class DataMatrixIterator
         : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
           genotypes(samples.size(), 0), is_neutral{}, mutation_positions{},
-          dmatrix(fwdpp::data_matrix(samples.size())),
+          dmatrix(new fwdpp::data_matrix(samples.size())),
           mbeg(set_mbeg(tables, intervals[0].first, mutations)),
           mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
           include_neutral_variants(neutral),
@@ -131,7 +190,30 @@ class DataMatrixIterator
                 mutation_positions.push_back(m.pos);
                 is_neutral.push_back(m.neutral);
             }
-        mcurrent = advance();
+        mcurrent = advance_trees_and_mutations();
+    }
+
+    DataMatrixIterator&
+    next_data_matrix()
+    {
+        check_if_still_iterating();
+
+        bool iteration_flag = true;
+        do
+            {
+                const auto& tree = current_tree->tree();
+                for (; mcurrent < mend
+                       && mutation_positions[mcurrent->key] < tree.right;
+                     ++mcurrent)
+                    {
+                        process_current_mutation(tree, mcurrent);
+                    }
+                iteration_flag = current_tree->operator()(std::true_type(),
+                                                          std::true_type());
+            }
+        while (iteration_flag == true);
+
+        return *this;
     }
 };
 
