@@ -1,4 +1,6 @@
 #include <memory>
+#include <cmath>
+#include <stdexcept>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -22,7 +24,32 @@ class DataMatrixIterator
     init_intervals(
         const std::vector<std::pair<double, double>>& input_intervals)
     {
-        // TODO: validate ranges, sorting, and overlaps
+        for (auto& i : input_intervals)
+            {
+                if (!std::isfinite(i.first) || !std::isfinite(i.second))
+                    {
+                        throw std::invalid_argument(
+                            "invalid interval: all values must be finite");
+                    }
+                if (i.second < 0.0 || i.first < 0.0)
+                    {
+                        throw std::invalid_argument(
+                            "invalid interval: all positions must be >= 0.0");
+                    }
+                if (!(i.second > i.first))
+                    {
+                        throw std::invalid_argument(
+                            "invalid interval: end <= beg");
+                    }
+            }
+        for (std::size_t i = 1; i < input_intervals.size(); ++i)
+            {
+                if (!(input_intervals[i].first > input_intervals[i - 1].first))
+                    {
+                        throw std::invalid_argument(
+                            "invalid interval start positions");
+                    }
+            }
         return input_intervals;
     }
 
@@ -34,8 +61,8 @@ class DataMatrixIterator
                        bool neutral, bool selected, bool fixations)
         : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
-          include_neutral_variants(neutral), include_selected_variants(selected),
-          include_fixations(fixations)
+          include_neutral_variants(neutral),
+          include_selected_variants(selected), include_fixations(fixations)
     {
     }
 };
