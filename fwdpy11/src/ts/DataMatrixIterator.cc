@@ -102,6 +102,40 @@ class DataMatrixIterator
     }
 
     mut_table_itr
+    find_first_mutation_record_after_current_max()
+    {
+        if (dmatrix == nullptr)
+            {
+                throw std::runtime_error("DataMatrix is nullptr");
+            }
+        double m = std::numeric_limits<double>::max();
+        if (!dmatrix->neutral.positions.empty())
+            {
+                m = dmatrix->neutral.positions.back();
+            }
+        if (!dmatrix->selected.positions.empty())
+            {
+                if (m == std::numeric_limits<double>::max())
+                    {
+                        m = dmatrix->selected.positions.back();
+                    }
+                else
+                    {
+                        m = std::max(m, dmatrix->selected.positions.back());
+                    }
+            }
+        if (m == std::numeric_limits<double>::max())
+            {
+                return mcurrent;
+            }
+        return std::upper_bound(
+            mcurrent, mend, m,
+            [this](double v, const fwdpp::ts::mutation_record& mr) {
+                return v < mutation_positions[mr.key];
+            });
+    }
+
+    mut_table_itr
     advance_trees_and_mutations()
     {
         if (next_tree != nullptr)
@@ -110,9 +144,12 @@ class DataMatrixIterator
                 next_tree.reset(nullptr);
                 double left = current_tree->tree().left;
                 mcurrent = find_first_mutation_record(mbeg, mend, left);
+                cleanup_matrix(left);
+                mcurrent = find_first_mutation_record_after_current_max();
             }
         else
             {
+                clear_matrix();
                 while (mcurrent < mend)
                     {
                         const auto& m = current_tree->tree();
@@ -153,6 +190,63 @@ class DataMatrixIterator
         current_tree.reset(nullptr);
         next_tree.reset(nullptr);
         dmatrix.reset(nullptr);
+    }
+
+    void
+    clear_matrix()
+    // Clear out member data of dmatrix,
+    // but keep the memory allocated for
+    // reuse
+    {
+        if (dmatrix == nullptr)
+            {
+                throw std::runtime_error("DataMatrix is nullptr");
+            }
+        dmatrix->neutral_keys.clear();
+        dmatrix->selected_keys.clear();
+        dmatrix->neutral.data.clear();
+        dmatrix->neutral.positions.clear();
+        dmatrix->selected.data.clear();
+        dmatrix->selected.positions.clear();
+    }
+
+    void
+    cleanup_matrix_details(fwdpp::state_matrix& sm,
+                           std::vector<std::size_t> keys, double p)
+    {
+        // find first key corresponding to position >= p
+        auto itr = std::lower_bound(begin(keys), end(keys), p,
+                                    [this](std::size_t k, double v) {
+                                        return mutation_positions[k] < v;
+                                    });
+        // This is the number of mutations
+        // with positions < p
+        auto d = std::distance(begin(keys), itr);
+        // Sanity check
+        auto pitr
+            = std::lower_bound(begin(sm.positions), end(sm.positions), p);
+        if (d != std::distance(begin(sm.positions), pitr))
+            {
+                throw std::runtime_error(
+                    "DataMatrix internal state inconsistent");
+            }
+        // erase all keys where position > p...
+        keys.erase(begin(keys), itr);
+
+        // ...and positions...
+        sm.positions.erase(begin(sm.positions), pitr);
+
+        // ...and genotypes.
+        sm.data.erase(begin(sm.data), begin(sm.data) + d * dmatrix->ncol);
+    }
+
+    void
+    cleanup_matrix(double p)
+    // Removes all data in dmatrix
+    // corresponding to position < p
+    {
+        cleanup_matrix_details(dmatrix->neutral, dmatrix->neutral_keys, p);
+        cleanup_matrix_details(dmatrix->selected, dmatrix->selected_keys, p);
     }
 
     void
