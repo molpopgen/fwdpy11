@@ -8,7 +8,7 @@
 #include <fwdpy11/numpy/array.hpp>
 #include <fwdpp/ts/tree_visitor.hpp>
 
-namespace py = pybind11;
+    namespace py = pybind11;
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
@@ -21,6 +21,7 @@ class DataMatrixIterator
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes, is_neutral;
     std::vector<double> mutation_positions;
+    fwdpp::data_matrix dmatrix;
     const mut_table_itr mbeg, mend;
     mut_table_itr mcurrent;
     std::size_t current_range;
@@ -119,6 +120,7 @@ class DataMatrixIterator
         : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
           genotypes(samples.size(), 0), is_neutral{}, mutation_positions{},
+          dmatrix(fwdpp::data_matrix(samples.size())),
           mbeg(set_mbeg(tables, intervals[0].first, mutations)),
           mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
           include_neutral_variants(neutral),
