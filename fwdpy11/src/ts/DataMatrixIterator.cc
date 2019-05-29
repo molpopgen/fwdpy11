@@ -353,6 +353,47 @@ class DataMatrixIterator
         mcurrent = advance_trees_and_mutations();
         return *this;
     }
+
+    // Getter functions to establish Python properties
+    py::array_t<std::int8_t>
+    neutral() const
+    {
+        return fwdpy11::make_2d_ndarray_readonly(dmatrix->neutral.data,
+                                                 dmatrix->neutral_keys.size(),
+                                                 dmatrix->ncol);
+    }
+
+    py::array_t<double>
+    neutral_positions() const
+    {
+        return fwdpy11::make_1d_ndarray_readonly(dmatrix->neutral.positions);
+    }
+
+    py::array_t<std::size_t>
+    neutral_keys() const
+    {
+        return fwdpy11::make_1d_ndarray_readonly(dmatrix->neutral_keys);
+    }
+
+    py::array_t<std::int8_t>
+    selected() const
+    {
+        return fwdpy11::make_2d_ndarray_readonly(dmatrix->selected.data,
+                                                 dmatrix->selected_keys.size(),
+                                                 dmatrix->ncol);
+    }
+
+    py::array_t<double>
+    selected_positions() const
+    {
+        return fwdpy11::make_1d_ndarray_readonly(dmatrix->selected.positions);
+    }
+
+    py::array_t<std::size_t>
+    selected_keys() const
+    {
+        return fwdpy11::make_1d_ndarray_readonly(dmatrix->selected_keys);
+    }
 };
 
 void
