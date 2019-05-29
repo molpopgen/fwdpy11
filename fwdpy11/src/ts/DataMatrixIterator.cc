@@ -405,6 +405,9 @@ init_DataMatrixIterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool,
                       bool, bool>())
+        .def("__iter__",
+             [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
+        .def("__next__", &DataMatrixIterator::next_data_matrix)
         .def_property_readonly("neutral", &DataMatrixIterator::neutral)
         .def_property_readonly("neutral_keys",
                                &DataMatrixIterator::neutral_keys)
