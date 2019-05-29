@@ -255,6 +255,7 @@ class DataMatrixIterator
                                                           std::true_type());
             }
         while (iteration_flag == true);
+        ++current_range;
         mcurrent = advance_trees_and_mutations();
         return *this;
     }
