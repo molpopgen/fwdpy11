@@ -592,7 +592,7 @@ class testDataMatrixIterator(unittest.TestCase):
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
     def test_complex_slices(self):
-        slices = [(0.1, 0.2), (0.15, 0.23),  (0.21, 0.37),
+        slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
                   (0.38, 0.5337), (0.5, 0.55)]
         dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                          self.all_samples,
