@@ -592,6 +592,5 @@ class testDataMatrixIterator(unittest.TestCase):
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
 
-
 if __name__ == "__main__":
     unittest.main()
