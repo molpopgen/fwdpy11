@@ -579,6 +579,19 @@ class testDataMatrixIterator(unittest.TestCase):
         self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
         self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
+    def test_nonoverlapping_slices(self):
+        slices = [(0.1, 0.2), (0.21, 0.37), (0.5, 0.55)]
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         slices, True, True)
+        for r, dm in zip(slices, dmi):
+            rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
+            pos_slice = self.spos[rows]
+            selected_slice = self.selected[rows, ]
+            self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
+            self.assertTrue(np.array_equal(dm.selected, selected_slice))
+
+
 
 if __name__ == "__main__":
     unittest.main()
