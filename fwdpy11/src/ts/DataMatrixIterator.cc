@@ -137,7 +137,7 @@ class DataMatrixIterator
     }
 
     mut_table_itr
-    advance_trees_and_mutations()
+    advance_mutations()
     {
         matrix_requires_clearing = false;
         if (next_tree != nullptr)
@@ -152,34 +152,10 @@ class DataMatrixIterator
         else
             {
                 matrix_requires_clearing = true;
-                while (mcurrent < mend)
+                const auto& m = current_tree->tree();
+                while (mcurrent < mend
+                       && mutation_positions[mcurrent->key] < m.left)
                     {
-                        const auto& m = current_tree->tree();
-                        while (mutation_positions[mcurrent->key] < m.left
-                               || mutation_positions[mcurrent->key] >= m.right)
-                            {
-                                auto flag = current_tree->operator()(
-                                    std::true_type(), std::true_type());
-                                if (flag == false)
-                                    {
-                                        throw std::runtime_error(
-                                            "DataMatrixIterator: tree "
-                                            "traversal "
-                                            "error");
-                                    }
-                            }
-                        if (m.leaf_counts[mcurrent->node] != 0)
-                            {
-                                // Skip over mutations in this tree
-                                // that don't lead to samples
-                                if ((is_neutral[mcurrent->key]
-                                     && include_neutral_variants)
-                                    || (!is_neutral[mcurrent->key]
-                                        && include_selected_variants))
-                                    {
-                                        return mcurrent;
-                                    }
-                            }
                         ++mcurrent;
                     }
             }
@@ -319,7 +295,9 @@ class DataMatrixIterator
           include_selected_variants(selected), include_fixations(fixations),
           matrix_requires_clearing(false)
     {
-        mcurrent = advance_trees_and_mutations();
+        pybind11::print(std::distance(begin(tables.mutation_table), mcurrent));
+        mcurrent = advance_mutations();
+        pybind11::print(std::distance(begin(tables.mutation_table), mcurrent));
     }
 
     DataMatrixIterator&
@@ -357,7 +335,7 @@ class DataMatrixIterator
             }
         while (iteration_flag == true);
         ++current_range;
-        mcurrent = advance_trees_and_mutations();
+        mcurrent = advance_mutations();
         return *this;
     }
 
