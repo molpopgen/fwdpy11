@@ -560,14 +560,24 @@ class testDataMatrixIterator(unittest.TestCase):
                                          self.all_samples,
                                          [(0, 1)], True, True)
         for dm in dmi:
-            n = np.array(dm.neutral)
-            s = np.array(dm.selected)
             for i in dm.selected_keys:
                 self.assertFalse(self.pop.mutations[i].neutral)
             self.assertTrue(np.array_equal(
                 np.array(self.dm.selected_keys), dm.selected_keys))
-            self.assertTrue(np.array_equal(n, self.neutral))
-            self.assertTrue(np.array_equal(s, self.selected))
+            self.assertTrue(np.array_equal(dm.neutral, self.neutral))
+            self.assertTrue(np.array_equal(dm.selected, self.selected))
+
+    def test_single_slice(self):
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         [(0.1, 0.2)], True, True)
+        dm = next(dmi)
+
+        rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
+        pos_slice = self.spos[rows]
+        selected_slice = self.selected[rows, ]
+        self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
+        self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
 
 if __name__ == "__main__":
