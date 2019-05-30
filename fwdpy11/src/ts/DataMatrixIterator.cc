@@ -251,7 +251,7 @@ class DataMatrixIterator
 
     void
     cleanup_matrix_details(fwdpp::state_matrix& sm,
-                           std::vector<std::size_t> keys, double p)
+                           std::vector<std::size_t> & keys, double p)
     {
         // find first key corresponding to position >= p
         auto itr = std::lower_bound(begin(keys), end(keys), p,
@@ -269,7 +269,7 @@ class DataMatrixIterator
                 throw std::runtime_error(
                     "DataMatrix internal state inconsistent");
             }
-        // erase all keys where position > p...
+        // erase all keys where position < p...
         keys.erase(begin(keys), itr);
 
         // ...and positions...
