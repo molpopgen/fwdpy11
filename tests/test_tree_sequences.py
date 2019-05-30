@@ -561,6 +561,9 @@ class testDataMatrixIterator(unittest.TestCase):
         for dm in dmi:
             n = np.array(dm.neutral)
             s = np.array(dm.selected)
+            for i in dm.selected_keys:
+                self.assertFalse(self.pop.mutations[i].neutral)
+            self.assertTrue(np.array_equal(np.array(self.dm.selected_keys), dm.selected_keys))
             self.assertTrue(np.array_equal(n, self.neutral))
             self.assertTrue(np.array_equal(s, self.selected))
 
