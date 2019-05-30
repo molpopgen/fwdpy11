@@ -519,5 +519,52 @@ class testMetaData(unittest.TestCase):
             self.assertAlmostEqual(i, j)
 
 
+class testDataMatrixIterator(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        # TODO add neutral variants
+        self.N = 1000
+        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
+        self.rho = 1.
+        self.theta = 100.
+        self.nreps = 500
+        self.mu = self.theta/(4*self.N)
+        self.r = self.rho/(4*self.N)
+
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
+        self.all_samples = [i for i in range(2*self.N)]
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        self.dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                                  self.pop.mutations,
+                                                  self.all_samples,
+                                                  True, True)
+        self.neutral = np.array(self.dm.neutral)
+        self.npos = np.array(self.dm.neutral.positions)
+        self.selected = np.array(self.dm.selected)
+        self.spos = np.array(self.dm.selected.positions)
+
+    def test_entire_matrix(self):
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations, self.all_samples,
+            [(0, 1)], True, True)
+        for dm in dmi:
+            n = np.array(dm.neutral)
+            s = np.array(dm.selected)
+            self.assertTrue(np.array_equal(n, self.neutral))
+            self.assertTrue(np.array_equal(s, self.selected))
+
+
+
 if __name__ == "__main__":
     unittest.main()
