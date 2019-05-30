@@ -201,15 +201,11 @@ class DataMatrixIterator
     advance_mutations()
     {
         matrix_requires_clearing = false;
-        // NOTE: logic here is wrong
-        // we should not be clearing data out
-        // here, as the calling env
-        // may be trying to access the data
         if (next_tree != nullptr)
             {
                 current_tree.swap(next_tree);
                 next_tree.reset(nullptr);
-                double left = current_tree->tree().left;
+                double left = position_ranges[current_range].first;
                 mcurrent = find_first_mutation_record(mbeg, mend, left);
                 cleanup_matrix(left);
                 mcurrent = find_first_mutation_record_after_current_max();
@@ -385,6 +381,8 @@ class DataMatrixIterator
     next_data_matrix()
     {
         check_if_still_iterating();
+        advance_trees();
+        mcurrent = advance_mutations();
         next_tree.reset(nullptr);
         if (matrix_requires_clearing)
             {
@@ -420,8 +418,6 @@ class DataMatrixIterator
             }
         while (iteration_flag == true && tree_in_current_range);
         ++current_range;
-        advance_trees();
-        mcurrent = advance_mutations();
         return *this;
     }
 
