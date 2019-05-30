@@ -178,6 +178,25 @@ class DataMatrixIterator
             });
     }
 
+    void
+    advance_trees()
+    {
+        if (current_range >= position_ranges.size())
+            {
+                throw std::runtime_error("DataMatrixIterator fatal error");
+            }
+        auto l = position_ranges[current_range].first;
+        while (current_tree->tree().right < l)
+            {
+                auto flag = current_tree->operator()(std::true_type(),
+                                                     std::true_type());
+                if (!flag)
+                    {
+                        break;
+                    }
+            }
+    }
+
     mut_table_itr
     advance_mutations()
     {
@@ -187,6 +206,7 @@ class DataMatrixIterator
                 current_tree.swap(next_tree);
                 next_tree.reset(nullptr);
                 double left = current_tree->tree().left;
+                // NOTE: logic here is wrong
                 mcurrent = find_first_mutation_record(mbeg, mend, left);
                 cleanup_matrix(left);
                 mcurrent = find_first_mutation_record_after_current_max();
@@ -369,6 +389,7 @@ class DataMatrixIterator
             }
 
         bool iteration_flag = true;
+        bool tree_in_current_range = true;
         do
             {
                 const auto& tree = current_tree->tree();
@@ -390,9 +411,13 @@ class DataMatrixIterator
                     }
                 iteration_flag = current_tree->operator()(std::true_type(),
                                                           std::true_type());
+                tree_in_current_range
+                    = (current_tree->tree().left
+                       < position_ranges[current_range].second);
             }
-        while (iteration_flag == true);
+        while (iteration_flag == true && tree_in_current_range);
         ++current_range;
+        advance_trees();
         mcurrent = advance_mutations();
         return *this;
     }
