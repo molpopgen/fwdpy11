@@ -292,10 +292,30 @@ class DataMatrixIterator
         sm.data.insert(sm.data.end(), begin(genotypes), end(genotypes));
     }
 
+    bool
+    mutation_in_current_range(const mut_table_itr mitr)
+    {
+        if (!(mitr < mend))
+            {
+                return false;
+            }
+        if (current_range >= position_ranges.size())
+            {
+                throw std::runtime_error("DataMatrixIterator fatal error");
+            }
+        auto pos = mutation_positions[mitr->key];
+        return pos >= position_ranges[current_range].first
+               && pos < position_ranges[current_range].second;
+    }
+
     void
     process_current_mutation(const fwdpp::ts::marginal_tree& tree,
                              const mut_table_itr mitr)
     {
+        if (!mutation_in_current_range(mitr))
+            {
+                return;
+            }
         auto lc = tree.leaf_counts[mitr->node];
         bool fixed = (lc == tree.sample_size);
         if (lc > 0 && (!fixed || (fixed && include_fixations)))
