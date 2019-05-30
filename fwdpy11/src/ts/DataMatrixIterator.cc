@@ -404,7 +404,10 @@ init_DataMatrixIterator(py::module& m)
                       const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool,
-                      bool, bool>())
+                      bool, bool>(),
+             py::arg("tables"), py::arg("mutations"), py::arg("samples"),
+             py::arg("intervals"), py::arg("neutral"), py::arg("selected"),
+             py::arg("fixations")=false)
         .def("__iter__",
              [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
         .def("__next__", &DataMatrixIterator::next_data_matrix)
