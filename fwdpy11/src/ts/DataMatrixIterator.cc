@@ -30,6 +30,21 @@ class DataMatrixIterator
         include_fixations;
     bool matrix_requires_clearing;
 
+    std::unique_ptr<fwdpp::ts::tree_visitor>
+    initialize_current_tree(const fwdpp::ts::table_collection& tables,
+                            const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+    {
+        std::unique_ptr<fwdpp::ts::tree_visitor> rv(
+            new fwdpp::ts::tree_visitor(tables, samples));
+        auto flag = rv->operator()(std::true_type(), std::true_type());
+        if (flag == false)
+            {
+                throw std::invalid_argument(
+                    "TableCollection contains no trees");
+            }
+        return rv;
+    }
+
     std::vector<std::pair<double, double>>
     init_intervals(
         const std::vector<std::pair<double, double>>& input_intervals)
@@ -48,7 +63,8 @@ class DataMatrixIterator
                 if (i.second < 0.0 || i.first < 0.0)
                     {
                         throw std::invalid_argument(
-                            "invalid interval: all positions must be >= 0.0");
+                            "invalid interval: all positions must be >= "
+                            "0.0");
                     }
                 if (!(i.second > i.first))
                     {
@@ -100,6 +116,32 @@ class DataMatrixIterator
             [this](const fwdpp::ts::mutation_record& mr, const double v) {
                 return mutation_positions[mr.key] < v;
             });
+    }
+
+    mut_table_itr
+    init_trees_and_mutations()
+    {
+        if (current_tree == nullptr || position_ranges.empty())
+            {
+                throw std::runtime_error(
+                    "DataMatrixIterator __init__ failure");
+            }
+        double first_left = position_ranges.front().first;
+        double current_right = current_tree->tree().right;
+
+        while (current_right < first_left)
+            {
+                current_tree->operator()(std::true_type(), std::true_type());
+                current_right = current_tree->tree().right;
+            }
+        double current_tree_left = current_tree->tree().left;
+        mut_table_itr firstmut = mbeg;
+        while (firstmut < mend
+               && mutation_positions[firstmut->key] < current_tree_left)
+            {
+                ++firstmut;
+            }
+        return firstmut;
     }
 
     mut_table_itr
@@ -282,22 +324,18 @@ class DataMatrixIterator
                        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                        const std::vector<std::pair<double, double>>& intervals,
                        bool neutral, bool selected, bool fixations)
-        : current_tree(new fwdpp::ts::tree_visitor(tables, samples)),
+        : current_tree(initialize_current_tree(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
           genotypes(samples.size(), 0), is_neutral(set_neutral(mutations)),
           mutation_positions(set_positions(mutations)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
-          mbeg(find_first_mutation_record(tables.mutation_table.begin(),
-                                          tables.mutation_table.end(),
-                                          intervals[0].first)),
-          mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
+          mbeg(tables.mutation_table.begin()),
+          mend(tables.mutation_table.end()),
+          mcurrent(init_trees_and_mutations()), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations),
           matrix_requires_clearing(false)
     {
-        pybind11::print(std::distance(begin(tables.mutation_table), mcurrent));
-        mcurrent = advance_mutations();
-        pybind11::print(std::distance(begin(tables.mutation_table), mcurrent));
     }
 
     DataMatrixIterator&
