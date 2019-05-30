@@ -28,6 +28,7 @@ class DataMatrixIterator
     std::size_t current_range;
     const bool include_neutral_variants, include_selected_variants,
         include_fixations;
+    bool matrix_requires_clearing;
 
     std::vector<std::pair<double, double>>
     init_intervals(
@@ -138,6 +139,7 @@ class DataMatrixIterator
     mut_table_itr
     advance_trees_and_mutations()
     {
+        matrix_requires_clearing = false;
         if (next_tree != nullptr)
             {
                 current_tree.swap(next_tree);
@@ -149,7 +151,7 @@ class DataMatrixIterator
             }
         else
             {
-                clear_matrix();
+                matrix_requires_clearing = true;
                 while (mcurrent < mend)
                     {
                         const auto& m = current_tree->tree();
@@ -314,7 +316,8 @@ class DataMatrixIterator
                                           intervals[0].first)),
           mend(tables.mutation_table.end()), mcurrent(mbeg), current_range(0),
           include_neutral_variants(neutral),
-          include_selected_variants(selected), include_fixations(fixations)
+          include_selected_variants(selected), include_fixations(fixations),
+          matrix_requires_clearing(false)
     {
         mcurrent = advance_trees_and_mutations();
     }
@@ -324,6 +327,10 @@ class DataMatrixIterator
     {
         check_if_still_iterating();
         next_tree.reset(nullptr);
+        if (matrix_requires_clearing)
+            {
+                clear_matrix();
+            }
 
         bool iteration_flag = true;
         do
@@ -358,9 +365,14 @@ class DataMatrixIterator
     py::array_t<std::int8_t>
     neutral() const
     {
-        return fwdpy11::make_2d_ndarray_readonly(dmatrix->neutral.data,
-                                                 dmatrix->neutral_keys.size(),
-                                                 dmatrix->ncol);
+        std::size_t ncol = 0;
+        if (!dmatrix->neutral_keys.empty())
+            {
+                ncol = dmatrix->neutral.data.size()
+                       / dmatrix->neutral_keys.size();
+            }
+        return fwdpy11::make_2d_ndarray_readonly(
+            dmatrix->neutral.data, dmatrix->neutral_keys.size(), ncol);
     }
 
     py::array_t<double>
@@ -378,9 +390,14 @@ class DataMatrixIterator
     py::array_t<std::int8_t>
     selected() const
     {
-        return fwdpy11::make_2d_ndarray_readonly(dmatrix->selected.data,
-                                                 dmatrix->selected_keys.size(),
-                                                 dmatrix->ncol);
+        std::size_t ncol = 0;
+        if (!dmatrix->selected_keys.empty())
+            {
+                ncol = dmatrix->selected.data.size()
+                       / dmatrix->selected_keys.size();
+            }
+        return fwdpy11::make_2d_ndarray_readonly(
+            dmatrix->selected.data, dmatrix->selected_keys.size(), ncol);
     }
 
     py::array_t<double>
@@ -407,7 +424,7 @@ init_DataMatrixIterator(py::module& m)
                       bool, bool>(),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              py::arg("intervals"), py::arg("neutral"), py::arg("selected"),
-             py::arg("fixations")=false)
+             py::arg("fixations") = false)
         .def("__iter__",
              [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
         .def("__next__", &DataMatrixIterator::next_data_matrix)
