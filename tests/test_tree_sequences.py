@@ -556,17 +556,18 @@ class testDataMatrixIterator(unittest.TestCase):
         self.spos = np.array(self.dm.selected.positions)
 
     def test_entire_matrix(self):
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations, self.all_samples,
-            [(0, 1)], True, True)
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         [(0, 1)], True, True)
         for dm in dmi:
             n = np.array(dm.neutral)
             s = np.array(dm.selected)
             for i in dm.selected_keys:
                 self.assertFalse(self.pop.mutations[i].neutral)
-            self.assertTrue(np.array_equal(np.array(self.dm.selected_keys), dm.selected_keys))
+            self.assertTrue(np.array_equal(
+                np.array(self.dm.selected_keys), dm.selected_keys))
             self.assertTrue(np.array_equal(n, self.neutral))
             self.assertTrue(np.array_equal(s, self.selected))
-
 
 
 if __name__ == "__main__":
