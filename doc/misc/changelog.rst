@@ -4,6 +4,12 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.4
++++++++++++
+
+* Add :class:`fwdpy11.DataMatrixIterator`. `PR 243 <https://github.com/molpopgen/fwdpy11/pull/243>`_.
+* Reduce time needed to execute unit tests of tree sequence functions.
+
 0.4.3
 ++++++++++++++++++++++++++++++++++
 
