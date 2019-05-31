@@ -5,7 +5,7 @@ import numpy as np
 
 class testTreeSequences(unittest.TestCase):
     @classmethod
-    def setUp(self):
+    def setUpClass(self):
         # TODO add neutral variants
         self.N = 1000
         self.demography = np.array([self.N]*self.N, dtype=np.uint32)
@@ -285,7 +285,7 @@ class testTreeSequences(unittest.TestCase):
 
 class testSamplePreservation(unittest.TestCase):
     @classmethod
-    def setUp(self):
+    def setUpClass(self):
         self.N = 1000
         self.demography = np.array([self.N]*100, dtype=np.uint32)
         self.rho = 1.
@@ -337,7 +337,7 @@ class testSamplePreservation(unittest.TestCase):
 
 class testSimplificationInterval(unittest.TestCase):
     @classmethod
-    def setUp(self):
+    def setUpClass(self):
         self.N = 1000
         self.demography = np.array([self.N]*100, dtype=np.uint32)
         self.rho = 1.
