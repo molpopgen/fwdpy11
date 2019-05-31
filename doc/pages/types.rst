@@ -202,3 +202,20 @@ Types related to tree sequence recording
 
 .. autoclass:: fwdpy11.VariantIterator
     :members:
+
+.. autoclass:: fwdpy11.DataMatrixIterator
+
+    The class constructor is:
+    
+    .. autoattribute:: __init__
+
+    The following properties are numpy arrays
+    providing read-only access to an internal
+    instance of :class:`fwdpy11.DataMatrix`:
+
+    .. autoattribute:: neutral
+    .. autoattribute:: selected
+    .. autoattribute:: neutral_keys
+    .. autoattribute:: selected_keys
+    .. autoattribute:: neutral_positions
+    .. autoattribute:: selected_positions

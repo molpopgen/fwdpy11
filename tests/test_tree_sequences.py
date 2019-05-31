@@ -519,5 +519,91 @@ class testMetaData(unittest.TestCase):
             self.assertAlmostEqual(i, j)
 
 
+class testDataMatrixIterator(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        # TODO add neutral variants
+        self.N = 1000
+        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
+        self.rho = 1.
+        self.theta = 100.
+        self.nreps = 500
+        self.mu = self.theta/(4*self.N)
+        self.r = self.rho/(4*self.N)
+
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
+        self.all_samples = [i for i in range(2*self.N)]
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        self.dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                                  self.pop.mutations,
+                                                  self.all_samples,
+                                                  True, True)
+        self.neutral = np.array(self.dm.neutral)
+        self.npos = np.array(self.dm.neutral.positions)
+        self.selected = np.array(self.dm.selected)
+        self.spos = np.array(self.dm.selected.positions)
+
+    def test_entire_matrix(self):
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         [(0, 1)], True, True)
+        for dm in dmi:
+            for i in dm.selected_keys:
+                self.assertFalse(self.pop.mutations[i].neutral)
+            self.assertTrue(np.array_equal(
+                np.array(self.dm.selected_keys), dm.selected_keys))
+            self.assertTrue(np.array_equal(dm.neutral, self.neutral))
+            self.assertTrue(np.array_equal(dm.selected, self.selected))
+
+    def test_single_slice(self):
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         [(0.1, 0.2)], True, True)
+        dm = next(dmi)
+
+        rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
+        pos_slice = self.spos[rows]
+        selected_slice = self.selected[rows, ]
+        self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
+        self.assertTrue(np.array_equal(dm.selected, selected_slice))
+
+    def test_nonoverlapping_slices(self):
+        slices = [(0.1, 0.2), (0.21, 0.37), (0.5, 0.55)]
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         slices, True, True)
+        for r, dm in zip(slices, dmi):
+            rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
+            pos_slice = self.spos[rows]
+            selected_slice = self.selected[rows, ]
+            self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
+            self.assertTrue(np.array_equal(dm.selected, selected_slice))
+
+    def test_complex_slices(self):
+        slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
+                  (0.38, 0.5337), (0.5, 0.55)]
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                         self.all_samples,
+                                         slices, True, True)
+        for r, dm in zip(slices, dmi):
+            rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
+            pos_slice = self.spos[rows]
+            selected_slice = self.selected[rows, ]
+            self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
+            self.assertTrue(np.array_equal(dm.selected, selected_slice))
+
+
 if __name__ == "__main__":
     unittest.main()

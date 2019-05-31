@@ -74,7 +74,8 @@ set(TS_SOURCES src/ts/init.cc src/ts/TreeIterator.cc src/ts/VariantIterator.cc
     src/ts/count_mutations.cc
     src/ts/simplify.cc
     src/ts/data_matrix_from_tables.cc
-    src/ts/infinite_sites.cc)
+    src/ts/infinite_sites.cc
+    src/ts/DataMatrixIterator.cc)
 
 set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/with_tree_sequences.cc

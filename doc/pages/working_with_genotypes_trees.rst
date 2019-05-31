@@ -80,6 +80,11 @@ Notes:
   values to :func:`fwdpy11.data_matrix_from_tables`.
 * We skipped neutral mutations in this example to save memory on the servers that build this manual.
 
+Accessing genotypes from multiple intervals via repeated calls to :func:`fwdpy11.data_matrix_from_tables` is an
+:math:`O(n^2)` algorithm.  The reason is that traversal through the tree sequences will start over with each new call.
+If you need to access genotypes from multiple genomic windows, you may use :class:`fwdpy11.DataMatrixIterator` instead, 
+which will be much more efficient.
+
 Tree traversal
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
