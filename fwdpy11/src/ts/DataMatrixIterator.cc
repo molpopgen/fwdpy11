@@ -357,6 +357,19 @@ class DataMatrixIterator
             }
     }
 
+    py::array_t<std::int8_t>
+    genotype_matrix_wrapper(const fwdpp::state_matrix& sm,
+                            const std::vector<std::size_t>& keys) const
+    // Implementation details behing public getter for genotype matrix
+    {
+        std::size_t ncol = 0;
+        if (!keys.empty())
+            {
+                ncol = sm.data.size() / keys.size();
+            }
+        return fwdpy11::make_2d_ndarray_readonly(sm.data, keys.size(), ncol);
+    }
+
   public:
     DataMatrixIterator(const fwdpp::ts::table_collection& tables,
                        const std::vector<fwdpy11::Mutation>& mutations,
@@ -425,14 +438,8 @@ class DataMatrixIterator
     py::array_t<std::int8_t>
     neutral() const
     {
-        std::size_t ncol = 0;
-        if (!dmatrix->neutral_keys.empty())
-            {
-                ncol = dmatrix->neutral.data.size()
-                       / dmatrix->neutral_keys.size();
-            }
-        return fwdpy11::make_2d_ndarray_readonly(
-            dmatrix->neutral.data, dmatrix->neutral_keys.size(), ncol);
+        return genotype_matrix_wrapper(dmatrix->neutral,
+                                       dmatrix->neutral_keys);
     }
 
     py::array_t<double>
@@ -450,14 +457,8 @@ class DataMatrixIterator
     py::array_t<std::int8_t>
     selected() const
     {
-        std::size_t ncol = 0;
-        if (!dmatrix->selected_keys.empty())
-            {
-                ncol = dmatrix->selected.data.size()
-                       / dmatrix->selected_keys.size();
-            }
-        return fwdpy11::make_2d_ndarray_readonly(
-            dmatrix->selected.data, dmatrix->selected_keys.size(), ncol);
+        return genotype_matrix_wrapper(dmatrix->selected,
+                                       dmatrix->selected_keys);
     }
 
     py::array_t<double>
