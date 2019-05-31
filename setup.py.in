@@ -210,6 +210,7 @@ setup(
     obsoletes=['none'],
     data_files=[('fwdpy11', ['COPYING', 'README.rst'])],
     long_description=long_desc,
+    long_description_content_type='text/x-rst',
     ext_modules=ext_modules,
     install_requires=['pybind11>=@PYBIND11@', 'numpy', 'tskit>=0.1.4'],
     cmdclass={'build_ext': CMakeBuild},
