@@ -14,6 +14,12 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 class DataMatrixIterator
+// Encapsulate fwdpp::ts::tree_visitor and fwdpp::data_matrix
+// to provide very fast interation over multiple genomic intervals.
+// We accomplish this by copying the state of the current tree_visitor
+// whenever we recognize that the current tree overlaps with the next interval.
+// The saved state can be restored in O(1) time, "snapping" us to the start of
+// next interval without having to initiate a new tree_visitor.
 {
   private:
     using mut_table_itr
@@ -146,6 +152,9 @@ class DataMatrixIterator
 
     mut_table_itr
     find_first_mutation_record_after_current_max()
+    // After a call to cleanup_matrix, we may need to reset mcurrent
+    // to the first mutation AFTER dmatrix's current data.  We do so 
+    // here.
     {
         if (dmatrix == nullptr)
             {
@@ -180,6 +189,7 @@ class DataMatrixIterator
 
     void
     advance_trees()
+    // Advance the tree visitor to the left edge of current interval.
     {
         if (current_range >= position_ranges.size())
             {
@@ -225,6 +235,11 @@ class DataMatrixIterator
 
     void
     release_memory()
+    // Called when iteration stops.
+    // Frees potentially-large data
+    // structures on the C++ side 
+    // in case the Python object isn't
+    // GC'd anytime soon.
     {
         current_tree.reset(nullptr);
         next_tree.reset(nullptr);
@@ -252,6 +267,9 @@ class DataMatrixIterator
     void
     cleanup_matrix_details(fwdpp::state_matrix& sm,
                            std::vector<std::size_t>& keys, double p)
+    // When genomic intervals overlap, they have mutations in common.
+    // This function removes all mutations from the previous window,
+    // keeping any mutations shared by both windows.
     {
         // find first key corresponding to position >= p
         auto itr = std::lower_bound(begin(keys), end(keys), p,
@@ -331,6 +349,9 @@ class DataMatrixIterator
     process_current_mutation(const fwdpp::ts::marginal_tree& tree,
                              const mut_table_itr mitr)
     {
+        // Make sure we skip mutants on the
+        // current tree but not in the current
+        // genomic interval.
         if (!mutation_in_current_range(mitr))
             {
                 return;
@@ -392,6 +413,8 @@ class DataMatrixIterator
 
     DataMatrixIterator&
     next_data_matrix()
+    // This is the back end for the Python
+    // class's __next__ function
     {
         check_if_still_iterating();
         advance_trees();
