@@ -251,7 +251,7 @@ class DataMatrixIterator
 
     void
     cleanup_matrix_details(fwdpp::state_matrix& sm,
-                           std::vector<std::size_t> & keys, double p)
+                           std::vector<std::size_t>& keys, double p)
     {
         // find first key corresponding to position >= p
         auto itr = std::lower_bound(begin(keys), end(keys), p,
@@ -476,7 +476,18 @@ class DataMatrixIterator
 void
 init_DataMatrixIterator(py::module& m)
 {
-    py::class_<DataMatrixIterator>(m, "DataMatrixIterator")
+    py::class_<DataMatrixIterator>(m, "DataMatrixIterator",
+                                   R"delim(
+        Efficient iteration over genomic windows.
+
+        This class allows efficient traversal across multiple
+        genomic intervals.  The class is iterable,
+        and encapsulates the data fields of 
+        :class:`fwdpy11.DataMatrix`, which are accessible
+        as properties.
+
+        .. versionadded:: 0.4.4
+        )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
@@ -484,18 +495,40 @@ init_DataMatrixIterator(py::module& m)
                       bool, bool>(),
              py::arg("tables"), py::arg("mutations"), py::arg("samples"),
              py::arg("intervals"), py::arg("neutral"), py::arg("selected"),
-             py::arg("fixations") = false)
+             py::arg("fixations") = false,
+             R"delim(
+        :param tables: A table collection
+        :type tables: :class:`fwdpy11.TableCollection`
+        :param mutations: The mutations from the simulation
+        :type mutations: :class:`fwdpy11.MutationVector`
+        :param samples: A list of samples
+        :type samples: List-like
+        :param intervals: The :math:`[start, stop)` positions of each interval
+        :type intervals: list of tuples
+        :param neutral: If True, include neutral variants
+        :type neutral: boolean
+        :param selected: If True, include selected variants
+        :type selected: boolean
+        :param fixations: (False) If True, include fixations in the sample
+        :type fixations: boolean
+        )delim")
         .def("__iter__",
              [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
         .def("__next__", &DataMatrixIterator::next_data_matrix)
-        .def_property_readonly("neutral", &DataMatrixIterator::neutral)
+        .def_property_readonly("neutral", &DataMatrixIterator::neutral,
+                               "Genotypes at neutral variants")
         .def_property_readonly("neutral_keys",
-                               &DataMatrixIterator::neutral_keys)
+                               &DataMatrixIterator::neutral_keys,
+                               "Indexes of the neutral variants.")
         .def_property_readonly("neutral_positions",
-                               &DataMatrixIterator::neutral_positions)
-        .def_property_readonly("selected", &DataMatrixIterator::selected)
+                               &DataMatrixIterator::neutral_positions,
+                               "Positions of neutral variants.")
+        .def_property_readonly("selected", &DataMatrixIterator::selected,
+                               "Genotypes at selected variants.")
         .def_property_readonly("selected_keys",
-                               &DataMatrixIterator::selected_keys)
+                               &DataMatrixIterator::selected_keys,
+                               "Indexes of selected variants.")
         .def_property_readonly("selected_positions",
-                               &DataMatrixIterator::selected_positions);
+                               &DataMatrixIterator::selected_positions,
+                               "Positions of selected variants.");
 }
