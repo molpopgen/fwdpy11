@@ -21,7 +21,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install libgsl0-dev libcunit1-dev libconfig-dev cmake
             pip install --user -r requirements.txt
-            pip install --user cppimport
+            pip install --user cppimport twine
             curl -L https://github.com/pybind/pybind11/archive/v2.2.4.tar.gz > pybind11-2.2.4.tar.gz
             tar xzf pybind11-2.2.4.tar.gz
             # Skip running the pybind11 unit suite--not needed...
