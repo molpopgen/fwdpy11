@@ -606,7 +606,7 @@ class testDataMatrixIterator(unittest.TestCase):
 
     def test_nested_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.19), (0.21, 0.37),
-                  (0.38, 0.5337), (0.5, 0.55)]
+                  (0.38, 0.5337), (0.39, 0.432), (0.5, 0.55)]
         dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                          self.all_samples,
                                          slices, True, True)
