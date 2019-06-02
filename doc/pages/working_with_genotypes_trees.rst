@@ -83,7 +83,21 @@ Notes:
 Accessing genotypes from multiple intervals via repeated calls to :func:`fwdpy11.data_matrix_from_tables` is an
 :math:`O(n^2)` algorithm.  The reason is that traversal through the tree sequences will start over with each new call.
 If you need to access genotypes from multiple genomic windows, you may use :class:`fwdpy11.DataMatrixIterator` instead, 
-which will be much more efficient.
+which will be much more efficient.  The following example extracts two windows corresponding to the same samples as 
+the previous example, and tests that the data are identical:
+
+.. ipython:: python
+
+    windows = [(0, 0.25), (0.75, 1.0)]
+    selected_genotypes = np.array(dm.selected)
+    p = np.array(dm.selected.positions)
+    dmi = fwdpy11.DataMatrixIterator(pop.tables, pop.mutations,
+                                    [i for i in range(50)], windows,
+                                    neutral=False, selected=True, fixations=True)
+    for i,j in zip(dmi, windows):
+        idx = np.where((p >= j[0]) & (p < j[1]))[0]
+        slice = selected_genotypes[idx,:] 
+        assert np.array_equal(i.selected, slice)
 
 Tree traversal
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
