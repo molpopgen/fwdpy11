@@ -153,7 +153,7 @@ class DataMatrixIterator
     mut_table_itr
     find_first_mutation_record_after_current_max()
     // After a call to cleanup_matrix, we may need to reset mcurrent
-    // to the first mutation AFTER dmatrix's current data.  We do so 
+    // to the first mutation AFTER dmatrix's current data.  We do so
     // here.
     {
         if (dmatrix == nullptr)
@@ -216,8 +216,9 @@ class DataMatrixIterator
                 current_tree.swap(next_tree);
                 next_tree.reset(nullptr);
                 double left = position_ranges[current_range].first;
+                double right = position_ranges[current_range].second;
                 mcurrent = find_first_mutation_record(mbeg, mend, left);
-                cleanup_matrix(left);
+                cleanup_matrix(left, right);
                 mcurrent = find_first_mutation_record_after_current_max();
             }
         else
@@ -237,7 +238,7 @@ class DataMatrixIterator
     release_memory()
     // Called when iteration stops.
     // Frees potentially-large data
-    // structures on the C++ side 
+    // structures on the C++ side
     // in case the Python object isn't
     // GC'd anytime soon.
     {
@@ -266,44 +267,70 @@ class DataMatrixIterator
 
     void
     cleanup_matrix_details(fwdpp::state_matrix& sm,
-                           std::vector<std::size_t>& keys, double p)
+                           std::vector<std::size_t>& keys, double l, double r)
     // When genomic intervals overlap, they have mutations in common.
     // This function removes all mutations from the previous window,
     // keeping any mutations shared by both windows.
     {
-        // find first key corresponding to position >= p
-        auto itr = std::lower_bound(begin(keys), end(keys), p,
+        // find first key corresponding to position >= l
+        auto itr = std::lower_bound(begin(keys), end(keys), l,
                                     [this](std::size_t k, double v) {
                                         return mutation_positions[k] < v;
                                     });
         // This is the number of mutations
-        // with positions < p
+        // with positions < l
         auto d = std::distance(begin(keys), itr);
-        // Sanity check
-        auto pitr
-            = std::lower_bound(begin(sm.positions), end(sm.positions), p);
-        if (d != std::distance(begin(sm.positions), pitr))
+        if (d > 0)
             {
-                throw std::runtime_error(
-                    "DataMatrix internal state inconsistent");
+                // Sanity check
+                auto pitr = std::lower_bound(begin(sm.positions),
+                                             end(sm.positions), l);
+                if (d != std::distance(begin(sm.positions), pitr))
+                    {
+                        throw std::runtime_error(
+                            "DataMatrix internal state inconsistent");
+                    }
+                // erase all keys where position < p...
+                keys.erase(begin(keys), itr);
+
+                // ...and positions...
+                sm.positions.erase(begin(sm.positions), pitr);
+
+                // ...and genotypes.
+                sm.data.erase(begin(sm.data),
+                              begin(sm.data) + d * dmatrix->ncol);
             }
-        // erase all keys where position < p...
-        keys.erase(begin(keys), itr);
 
-        // ...and positions...
-        sm.positions.erase(begin(sm.positions), pitr);
-
-        // ...and genotypes.
-        sm.data.erase(begin(sm.data), begin(sm.data) + d * dmatrix->ncol);
+        // Give all mutations >= r the same treatment
+        itr = std::lower_bound(begin(keys), end(keys), r,
+                               [this](std::size_t k, double v) {
+                                   return mutation_positions[k] < v;
+                               });
+        d = std::distance(itr, end(keys));
+        if (d > 0)
+            {
+                auto pitr = std::lower_bound(begin(sm.positions),
+                                             end(sm.positions), r);
+                if (d != std::distance(pitr, end(sm.positions)))
+                    {
+                        throw std::runtime_error(
+                            "DataMatrix internal state inconsistent");
+                    }
+                keys.erase(itr, end(keys));
+                sm.positions.erase(pitr, end(sm.positions));
+                sm.data.erase(end(sm.data) - (d * dmatrix->ncol),
+                              end(sm.data));
+            }
     }
 
     void
-    cleanup_matrix(double p)
+    cleanup_matrix(double l, double r)
     // Removes all data in dmatrix
     // corresponding to position < p
     {
-        cleanup_matrix_details(dmatrix->neutral, dmatrix->neutral_keys, p);
-        cleanup_matrix_details(dmatrix->selected, dmatrix->selected_keys, p);
+        cleanup_matrix_details(dmatrix->neutral, dmatrix->neutral_keys, l, r);
+        cleanup_matrix_details(dmatrix->selected, dmatrix->selected_keys, l,
+                               r);
     }
 
     void
