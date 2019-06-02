@@ -4,6 +4,12 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.4.5
++++++++++++
+
+* :class:`fwdpy11.DataMatrixIterator` now correctly handles nested window coordinates. `PR 244 <https://github.com/molpopgen/fwdpy11/pull/244>`_.
+
+
 0.4.4
 +++++++++++
 
