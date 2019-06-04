@@ -4,6 +4,20 @@ fwdpy11
 This is the README for fwdpy11_, which is a Python package for forward-time population genetic simulation.  It uses
 fwdpp_ as its C++ back-end.
 
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/license.svg
+        :target: https://anaconda.org/bioconda/fwdpy11
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/installer/conda.svg
+        :target: https://conda.anaconda.org/bioconda
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/version.svg   
+	:target: https://anaconda.org/bioconda/fwdpy11
+
+.. image:: https://anaconda.org/bioconda/fwdpy11/badges/platforms.svg   
+        :target: https://anaconda.org/bioconda/fwdpy11
+
+
 Build status
 -----------------------
 
@@ -35,6 +49,8 @@ Development branch:
 
 .. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=dev
 	:target: http://fwdpy11.readthedocs.io/en/dev/?badge=dev
+
+
 
 Features
 -----------------------
