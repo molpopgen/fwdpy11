@@ -75,11 +75,11 @@ namespace fwdpy11
         const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
         std::int32_t first_parental_index, std::int32_t next_index)
     {
-        fwdpp::debug::all_gametes_extant(pop);
+        fwdpp::debug::all_haploid_genomes_extant(pop);
 
-        genetics.gamete_recycling_bin = fwdpp::make_gamete_queue(pop.gametes);
+        genetics.haploid_genome_recycling_bin = fwdpp::make_haploid_genome_queue(pop.haploid_genomes);
 
-        fwdpp::zero_out_gametes(pop);
+        fwdpp::zero_out_haploid_genomes(pop);
 
         decltype(pop.diploids) offspring(N_next);
         decltype(pop.diploid_metadata) offspring_metadata(N_next);

@@ -47,15 +47,15 @@ handle_fixations(const bool remove_selected_fixations,
 {
     if (remove_selected_fixations)
         {
-            fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                                  pop.mcounts, 2 * N_next,
-                                                  std::true_type());
+            fwdpp::fwdpp_internal::haploid_genome_cleaner(
+                pop.haploid_genomes, pop.mutations, pop.mcounts, 2 * N_next,
+                std::true_type());
         }
     else
         {
-            fwdpp::fwdpp_internal::gamete_cleaner(pop.gametes, pop.mutations,
-                                                  pop.mcounts, 2 * N_next,
-                                                  fwdpp::remove_neutral());
+            fwdpp::fwdpp_internal::haploid_genome_cleaner(
+                pop.haploid_genomes, pop.mutations, pop.mcounts, 2 * N_next,
+                fwdpp::remove_neutral());
         }
     fwdpy11::update_mutations(pop.mutations, pop.fixations, pop.fixation_times,
                               pop.mut_lookup, pop.mcounts, pop.generation,
@@ -66,8 +66,8 @@ void
 evolve_without_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
-    const double mu_selected, 
-    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
+    const double mu_selected, const fwdpy11::MutationRegions &mmodel,
+    const fwdpy11::GeneticMap &rmodel,
     fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
     fwdpy11::DiploidPopulation_temporal_sampler recorder,
     const double selfing_rate, const bool remove_selected_fixations)

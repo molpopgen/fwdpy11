@@ -89,8 +89,8 @@ namespace fwdpy11
                                           == 0;
                         }),
                     tables.mutation_table.end());
-                fwdpp::ts::remove_fixations_from_gametes(
-                    pop.gametes, pop.mutations, pop.mcounts,
+                fwdpp::ts::remove_fixations_from_haploid_genomes(
+                    pop.haploid_genomes, pop.mutations, pop.mcounts,
                     mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
                     preserve_selected_fixations);
             }

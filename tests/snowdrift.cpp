@@ -114,7 +114,7 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
                 // fwdpy11::DiploidMetadata::label
                 phenotypes[pop.diploid_metadata[i].label]
                     = fwdpp::additive_diploid(fwdpp::trait(2.0))(
-                        pop.diploids[i], pop.gametes, pop.mutations);
+                        pop.diploids[i], pop.haploid_genomes, pop.mutations);
             }
     }
 

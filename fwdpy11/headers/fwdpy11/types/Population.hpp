@@ -12,7 +12,7 @@ namespace fwdpy11
 	// fwdpy11's Mutation type.
     using Population
         = PyPopulation<Mutation, std::vector<Mutation>,
-                       std::vector<fwdpp::gamete>, std::vector<Mutation>,
+                       std::vector<fwdpp::haploid_genome>, std::vector<Mutation>,
                        std::vector<fwdpp::uint_t>,
                        std::unordered_multimap<double,fwdpp::uint_t>>;
 }

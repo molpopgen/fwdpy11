@@ -21,29 +21,29 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::gamete>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::haploid_genome>);
 
 void init_HaploidGenomeVector(py::module & m)
 {
-    py::bind_vector<std::vector<fwdpp::gamete>>(
+    py::bind_vector<std::vector<fwdpp::haploid_genome>>(
         m, "HaploidGenomeVector", py::module_local(false),
         "C++ representations of a list of "
         ":class:`fwdpy11.HaploidGenome`.  "
         "Typically, access will be read-only.")
         .def(py::pickle(
-            [](const std::vector<fwdpp::gamete>& gametes) {
+            [](const std::vector<fwdpp::haploid_genome>& haploid_genomes) {
                 py::list rv;
-                for (auto&& g : gametes)
+                for (auto&& g : haploid_genomes)
                     {
                         rv.append(g);
                     }
                 return rv;
             },
             [](const py::list l) {
-                std::vector<fwdpp::gamete> rv;
+                std::vector<fwdpp::haploid_genome> rv;
                 for (auto&& li : l)
                     {
-                        rv.push_back(li.cast<fwdpp::gamete>());
+                        rv.push_back(li.cast<fwdpp::haploid_genome>());
                     }
                 return rv;
             }));

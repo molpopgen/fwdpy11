@@ -5,7 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <fwdpp/internal/gsl_discrete.hpp>
+#include <fwdpp/gsl_discrete.hpp>
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/rng.hpp>
 #include "Region.hpp"
@@ -23,7 +23,7 @@ namespace fwdpy11
     {
         std::vector<Region> regions;
         std::vector<double> weights;
-        fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr lookup;
+        fwdpp::gsl_ran_discrete_t_ptr lookup;
         double recrate;
         RecombinationRegions(double rate, const std::vector<Region> r)
             : regions(std::move(r)), weights{}, lookup(nullptr), recrate(rate)
