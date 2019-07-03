@@ -17,7 +17,7 @@ namespace fwdpy11
         void
         process_individual_input()
         {
-            std::vector<fwdpp::uint_t> gcounts(this->gametes.size(), 0);
+            std::vector<fwdpp::uint_t> gcounts(this->haploid_genomes.size(), 0);
             for (auto &&dip : diploids)
                 {
                     this->validate_individual_keys(dip.first);
@@ -25,14 +25,14 @@ namespace fwdpy11
                     gcounts[dip.first]++;
                     gcounts[dip.second]++;
                 }
-            this->validate_gamete_counts(gcounts);
+            this->validate_haploid_genome_counts(gcounts);
         }
 
       public:
         using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
         using popbase_t = Population;
-        using popmodel_t = fwdpp::poptypes::SINGLELOC_TAG;
+        using popmodel_t = fwdpp::poptypes::DIPLOID_TAG;
         using fitness_t
             = fwdpp::traits::fitness_fxn_t<dipvector_t,
                                            typename popbase_t::gcont_t,
@@ -60,12 +60,12 @@ namespace fwdpy11
                 }
         }
 
-        template <typename diploids_input, typename gametes_input,
+        template <typename diploids_input, typename genomes_input,
                   typename mutations_input>
-        explicit DiploidPopulation(diploids_input &&d, gametes_input &&g,
+        explicit DiploidPopulation(diploids_input &&d, genomes_input &&g,
                            mutations_input &&m)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
-                         std::forward<gametes_input>(g),
+                         std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d))
         //! Constructor for pre-determined population status
@@ -96,7 +96,7 @@ namespace fwdpy11
         virtual std::vector<std::size_t>
         add_mutations(typename fwdpp_base::mcont_t &new_mutations,
                       const std::vector<std::size_t> &individuals,
-                      const std::vector<short> &gametes)
+                      const std::vector<short> &haploid_genomes)
         {
             std::unordered_set<double> poschecker;
             for (const auto &m : new_mutations)
@@ -121,7 +121,7 @@ namespace fwdpy11
                 {
                     auto pos = i.pos;
                     // remaining preconditions get checked by fwdpp:
-                    auto idx = fwdpp::add_mutation(*this, individuals, gametes,
+                    auto idx = fwdpp::add_mutation(*this, individuals, haploid_genomes,
                                                    std::move(i));
 
                     // fwdpp's function doesn't update the lookup:

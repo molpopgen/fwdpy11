@@ -64,11 +64,11 @@ init_DiploidPopulation(py::module& m)
                       const fwdpy11::DiploidPopulation::gcont_t&,
                       const fwdpy11::DiploidPopulation::mcont_t&>(),
              R"delim(
-             Construct with tuple of (diploids, gametes, mutations).
+             Construct with tuple of (diploids, haploid_genomes, mutations).
              
              .. versionadded:: 0.1.4
              )delim",
-             py::arg("diploids"), py::arg("gametes"), py::arg("mutations"))
+             py::arg("diploids"), py::arg("haploid_genomes"), py::arg("mutations"))
         .def(py::init<const fwdpy11::DiploidPopulation&>(),
              R"delim(
                 Copy constructor
@@ -85,14 +85,14 @@ init_DiploidPopulation(py::module& m)
         .def_static(
             "create",
             [](fwdpy11::DiploidPopulation::dipvector_t& diploids,
-               fwdpy11::DiploidPopulation::gcont_t& gametes,
+               fwdpy11::DiploidPopulation::gcont_t& haploid_genomes,
                fwdpy11::DiploidPopulation::mcont_t& mutations,
                py::args args) -> fwdpy11::DiploidPopulation {
                 if (args.size() == 0)
                     {
                         return fwdpy11::create_wrapper<
                             fwdpy11::DiploidPopulation>()(
-                            std::move(diploids), std::move(gametes),
+                            std::move(diploids), std::move(haploid_genomes),
                             std::move(mutations));
                     }
                 auto& fixations
@@ -100,18 +100,18 @@ init_DiploidPopulation(py::module& m)
                 auto ftimes = args[1].cast<std::vector<fwdpp::uint_t>>();
                 auto g = args[2].cast<fwdpp::uint_t>();
                 return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
-                    std::move(diploids), std::move(gametes),
+                    std::move(diploids), std::move(haploid_genomes),
                     std::move(mutations), std::move(fixations),
                     std::move(ftimes), g);
             },
-            py::arg("diploids"), py::arg("gametes"), py::arg("mutations"),
+            py::arg("diploids"), py::arg("haploid_genomes"), py::arg("mutations"),
             R"delim(
         Create a new object from input data.
         Unlike the constructor method, this method results
         in no temporary copies of input data.
 
         :param diplods: A :class:`fwdpy11.VecDiploid`
-        :param gametes: A :class:`fwdpy11.VecGamete`
+        :param haploid_genomes: A :class:`fwdpy11.VecGamete`
         :param mutations: A :class:`fwdpy11.VecMutation`
         :param args: Fixations, fixation times, and generation
 
@@ -242,7 +242,7 @@ init_DiploidPopulation(py::module& m)
         .def("pickle_to_file",
              [](const fwdpy11::DiploidPopulation& self, py::object f) {
                  auto dump = py::module::import("pickle").attr("dump");
-                 dump(py::make_tuple(self.diploids.size(), self.gametes.size(),
+                 dump(py::make_tuple(self.diploids.size(), self.haploid_genomes.size(),
                                      self.mutations.size(),
                                      self.fixations.size(), self.generation,
                                      self.tables.genome_length()),
@@ -251,7 +251,7 @@ init_DiploidPopulation(py::module& m)
                      {
                          dump(d, f);
                      }
-                 for (auto& g : self.gametes)
+                 for (auto& g : self.haploid_genomes)
                      {
                          dump(g, f);
                      }
@@ -325,7 +325,7 @@ init_DiploidPopulation(py::module& m)
                 auto nmuts = popdata[2].cast<std::size_t>();
                 auto nfixations = popdata[3].cast<std::size_t>();
                 rv.diploids.clear();
-                rv.gametes.clear();
+                rv.haploid_genomes.clear();
                 rv.mutations.clear();
                 rv.fixations.clear();
                 rv.diploids.reserve(ndips);
@@ -334,10 +334,10 @@ init_DiploidPopulation(py::module& m)
                         rv.diploids.push_back(
                             load(f).cast<fwdpy11::DiploidGenotype>());
                     }
-                rv.gametes.reserve(ngams);
+                rv.haploid_genomes.reserve(ngams);
                 for (std::size_t i = 0; i < ngams; ++i)
                     {
-                        rv.gametes.push_back(load(f).cast<fwdpp::gamete>());
+                        rv.haploid_genomes.push_back(load(f).cast<fwdpp::haploid_genome>());
                     }
                 rv.mutations.reserve(nmuts);
                 for (std::size_t i = 0; i < nmuts; ++i)

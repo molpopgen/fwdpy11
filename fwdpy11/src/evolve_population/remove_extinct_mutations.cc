@@ -76,7 +76,7 @@ remove_extinct_mutations(fwdpy11::Population& pop)
             pop.tables.mutation_table[i].key
                 = reindex(indexes, pop.tables.mutation_table[i].key);
         }
-    for (auto& g : pop.gametes)
+    for (auto& g : pop.haploid_genomes)
         {
             if (g.n)
                 {

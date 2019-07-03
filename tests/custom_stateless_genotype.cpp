@@ -16,7 +16,7 @@
     {
         gvalues[0] = std::max(
             0.0,
-            w(pop.diploids[diploid_index], pop.gametes, pop.mutations,
+            w(pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
               [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
               [](double& g, const fwdpy11::Mutation& m) {
                   g *= (1.0 + m.h);

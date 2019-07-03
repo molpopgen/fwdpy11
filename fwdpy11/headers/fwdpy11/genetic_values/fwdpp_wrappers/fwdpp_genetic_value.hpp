@@ -57,7 +57,7 @@ namespace fwdpy11
                          const fwdpy11::DiploidPopulation& pop) const
         {
             gvalues[0]
-                = gv(pop.diploids[diploid_index], pop.gametes, pop.mutations);
+                = gv(pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations);
             return gvalues[0];
         }
 

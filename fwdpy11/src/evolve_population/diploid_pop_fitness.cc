@@ -2,7 +2,7 @@
 #include "genetic_value_common.hpp"
 
 template <typename update_genotype_matrix>
-fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr
+fwdpp::gsl_ran_discrete_t_ptr
 calculate_fitness_details(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
@@ -36,9 +36,8 @@ calculate_fitness_details(
             throw std::runtime_error("non-finite fitnesses encountered");
         }
 
-    auto rv = fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
-        gsl_ran_discrete_preproc(parental_fitnesses.size(),
-                                 parental_fitnesses.data()));
+    auto rv = fwdpp::gsl_ran_discrete_t_ptr(gsl_ran_discrete_preproc(
+        parental_fitnesses.size(), parental_fitnesses.data()));
     if (rv == nullptr)
         {
             // This is due to negative fitnesses
@@ -48,7 +47,7 @@ calculate_fitness_details(
     return rv;
 }
 
-std::function<fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr(
+std::function<fwdpp::gsl_ran_discrete_t_ptr(
     const fwdpy11::GSLrng_t &g, fwdpy11::DiploidPopulation &,
     const fwdpy11::DiploidPopulationGeneticValue &,
     std::vector<fwdpy11::DiploidMetadata> &, std::vector<double> &)>
@@ -56,8 +55,10 @@ wrap_calculate_fitness_DiploidPopulation(bool update_genotype_matrix)
 {
     if (update_genotype_matrix)
         {
-            return [](const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-                      const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+            return [](const fwdpy11::GSLrng_t &rng,
+                      fwdpy11::DiploidPopulation &pop,
+                      const fwdpy11::DiploidPopulationGeneticValue
+                          &genetic_value_fxn,
                       std::vector<fwdpy11::DiploidMetadata> &new_metadata,
                       std::vector<double> &new_diploid_gvalues) {
                 return calculate_fitness_details(

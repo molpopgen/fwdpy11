@@ -9,8 +9,8 @@ track_mutation_counts(fwdpy11::Population &pop, const bool simplified,
 {
     if (!simplified || (simplified && suppress_edge_table_indexing))
         {
-            fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
-                                                   pop.mcounts);
+            fwdpp::fwdpp_internal::process_haploid_genomes(
+                pop.haploid_genomes, pop.mutations, pop.mcounts);
         }
     for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
         {

@@ -22,7 +22,7 @@
 #include <tuple>
 #include <type_traits>
 #include <stdexcept>
-#include <fwdpp/internal/gamete_cleaner.hpp>
+#include <fwdpp/internal/haploid_genome_cleaner.hpp>
 #include <fwdpp/insertion_policies.hpp>
 #include <fwdpp/mutate_recombine.hpp>
 #include <fwdpy11/rng.hpp>
@@ -43,20 +43,20 @@ namespace fwdpy11
                       const pick1_function& pick1, const pick2_function& pick2,
                       const update_function& update)
     {
-        static_assert(
-            std::is_same<typename poptype::popmodel_t,
-                         fwdpp::poptypes::SINGLELOC_TAG>::value,
-            "Population type must be a single-locus, single-deme type.");
+        static_assert(std::is_same<typename poptype::popmodel_t,
+                                   fwdpp::poptypes::DIPLOID_TAG>::value,
+                      "Population type must be a diploid type.");
 
-        auto gamete_recycling_bin = fwdpp::make_gamete_queue(pop.gametes);
+        auto gamete_recycling_bin
+            = fwdpp::make_haploid_genome_queue(pop.haploid_genomes);
         auto mutation_recycling_bin = fwdpp::make_mut_queue(pop.mcounts);
 
         // Efficiency hit.  Unavoidable
         // in use case of a sampler looking
-        // at the gametes themselves (even tho
+        // at the haploid_genomes themselves (even tho
         // gamete.n has little bearing on anything
         // beyond recycling).  Can revisit later
-        for (auto&& g : pop.gametes)
+        for (auto&& g : pop.haploid_genomes)
             g.n = 0;
 
         decltype(pop.diploids) offspring(N_next);
@@ -82,14 +82,14 @@ namespace fwdpy11
                 // Update to fwdpp 0.5.7 API
                 // in fwdpy11 0.1.4
                 fwdpp::mutate_recombine_update(
-                    rng.get(), pop.gametes, pop.mutations,
+                    rng.get(), pop.haploid_genomes, pop.mutations,
                     std::make_tuple(p1g1, p1g2, p2g1, p2g2), recmodel, mmodel,
                     mu, gamete_recycling_bin, mutation_recycling_bin, dip,
                     pop.neutral, pop.selected);
 
 #ifndef NDEBUG
-                if (pop.gametes[dip.first].n == 0
-                    || pop.gametes[dip.second].n == 0)
+                if (pop.haploid_genomes[dip.first].n == 0
+                    || pop.haploid_genomes[dip.second].n == 0)
                     {
                         throw std::runtime_error(
                             "DEBUG: diploid has gamete with frequency zero");
@@ -100,8 +100,8 @@ namespace fwdpy11
                        pop.diploid_metadata);
             }
 
-        fwdpp::fwdpp_internal::process_gametes(pop.gametes, pop.mutations,
-                                               pop.mcounts);
+        fwdpp::fwdpp_internal::process_haploid_genomes(
+            pop.haploid_genomes, pop.mutations, pop.mcounts);
         // This is constant-time
         pop.diploids.swap(offspring);
         pop.diploid_metadata.swap(offspring_metadata);

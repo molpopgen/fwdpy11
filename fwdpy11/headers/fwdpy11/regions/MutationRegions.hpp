@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <memory>
-#include <fwdpp/internal/gsl_discrete.hpp>
+#include <fwdpp/gsl_discrete.hpp>
 #include <gsl/gsl_randist.h>
 #include "Region.hpp"
 #include "Sregion.hpp"
@@ -14,7 +14,7 @@ namespace fwdpy11
     {
         std::vector<std::unique_ptr<Sregion>> regions;
         std::vector<double> weights;
-        fwdpp::fwdpp_internal::gsl_ran_discrete_t_ptr lookup;
+        fwdpp::gsl_ran_discrete_t_ptr lookup;
         MutationRegions(std::vector<std::unique_ptr<Sregion>>&& r,
                         std::vector<double>&& w)
             : regions(std::move(r)), weights(std::move(w)),

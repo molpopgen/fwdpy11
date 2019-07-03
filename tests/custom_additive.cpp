@@ -13,12 +13,12 @@
     {
         double sum = 0;
         for (auto m :
-             pop.gametes[pop.diploids[diploid_index].first].smutations)
+             pop.haploid_genomes[pop.diploids[diploid_index].first].smutations)
             {
                 sum += pop.mutations[m].s;
             }
         for (auto m :
-             pop.gametes[pop.diploids[diploid_index].second].smutations)
+             pop.haploid_genomes[pop.diploids[diploid_index].second].smutations)
             {
                 sum += pop.mutations[m].s;
             }

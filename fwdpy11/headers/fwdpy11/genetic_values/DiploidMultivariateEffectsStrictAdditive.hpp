@@ -40,7 +40,7 @@ namespace fwdpy11
             std::fill(begin(gvalues), end(gvalues), 0.0);
 
             for (auto key :
-                 pop.gametes[pop.diploids[diploid_index].first].smutations)
+                 pop.haploid_genomes[pop.diploids[diploid_index].first].smutations)
                 {
                     const auto &mut = pop.mutations[key];
                     if (mut.esizes.size() != gvalues.size())
@@ -54,7 +54,7 @@ namespace fwdpy11
                 }
 
             for (auto key :
-                 pop.gametes[pop.diploids[diploid_index].second].smutations)
+                 pop.haploid_genomes[pop.diploids[diploid_index].second].smutations)
                 {
                     const auto &mut = pop.mutations[key];
                     if (mut.esizes.size() != gvalues.size())
