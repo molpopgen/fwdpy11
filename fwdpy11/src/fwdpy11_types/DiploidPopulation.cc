@@ -422,10 +422,6 @@ init_DiploidPopulation(py::module& m)
         an tskit TreeSequence
 
         :rtype: tskit.TreeSequence
-
-        .. todo::
-
-            Incorporate the various metadata values.
         )delim")
         .def_static("create_from_tskit",
                     [](py::object ts) {

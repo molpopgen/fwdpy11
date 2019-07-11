@@ -39,6 +39,7 @@ Welcome to fwdpy11's documentation!
     pages/recombination
     pages/tsoverview
     pages/tstypes
+    pages/tskit_interchange.rst
     pages/recorders
     pages/working_with_genotypes_trees
 
