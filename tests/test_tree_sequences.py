@@ -55,6 +55,7 @@ class testTreeSequences(unittest.TestCase):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
     def test_dump_to_tskit(self):
+        import tskit
         # TODO: test leaf counts of mutations in msprmie
         # vs fwdpy11 and cross-references with self.pop.mcounts
         dumped_ts = self.pop.dump_tables_to_tskit()
@@ -82,6 +83,56 @@ class testTreeSequences(unittest.TestCase):
         for t in dumped_ts.trees():
             tt_tskit += t.get_total_branch_length()
         self.assertEqual(tt_fwd, tt_tskit)
+
+        # Now, we make sure that the metadata can
+        # be decoded
+        md = tskit.unpack_bytes(dumped_ts.tables.individuals.metadata,
+                                dumped_ts.tables.individuals.metadata_offset)
+        for i, j in zip(self.pop.diploid_metadata, md):
+            d = eval(j)
+            self.assertEqual(i.g, d['g'])
+            self.assertEqual(i.w, d['w'])
+            self.assertEqual(i.e, d['e'])
+            self.assertEqual(i.label, d['label'])
+            self.assertEqual(i.parents, d['parents'])
+            self.assertEqual(i.sex, d['sex'])
+            self.assertEqual(i.deme, d['deme'])
+            self.assertEqual(i.geography, d['geography'])
+
+        # Test that we can go backwards from node table to individuals
+        samples = np.where(dumped_ts.tables.nodes.flags ==
+                           tskit.NODE_IS_SAMPLE)[0]
+        self.assertEqual(len(samples), 2*self.pop.N)
+        for i in samples[::2]:
+            ind = i//2
+            d = eval(md[ind])
+            fwdpy11_md = self.pop.diploid_metadata[ind]
+            self.assertEqual(fwdpy11_md.g, d['g'])
+            self.assertEqual(fwdpy11_md.w, d['w'])
+            self.assertEqual(fwdpy11_md.e, d['e'])
+            self.assertEqual(fwdpy11_md.label, d['label'])
+            self.assertEqual(fwdpy11_md.parents, d['parents'])
+            self.assertEqual(fwdpy11_md.sex, d['sex'])
+            self.assertEqual(fwdpy11_md.deme, d['deme'])
+            self.assertEqual(fwdpy11_md.geography, d['geography'])
+
+        md = tskit.unpack_bytes(dumped_ts.tables.mutations.metadata,
+                                dumped_ts.tables.mutations.metadata_offset)
+        for i, j, k in zip(self.pop.tables.mutations,
+                           dumped_ts.tables.mutations.site,
+                           md):
+            d = eval(k)
+            self.assertEqual(i.key, d['key'])
+            site = dumped_ts.tables.sites[j]
+            m = self.pop.mutations[d['key']]
+            self.assertEqual(site.position, m.pos)
+            self.assertEqual(d['s'], m.s)
+            self.assertEqual(d['h'], m.h)
+            self.assertTrue(np.array_equal(np.array(d['esizes']), m.esizes))
+            self.assertTrue(np.array_equal(
+                np.array(d['heffects']), m.heffects))
+            self.assertEqual(d['label'], m.label)
+            self.assertEqual(d['neutral'], m.neutral)
 
     def test_TreeIterator(self):
         with self.assertRaises(ValueError):

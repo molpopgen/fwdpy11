@@ -32,7 +32,8 @@ def _generate_mutation_metadata(pop):
              'label': m.label,
              'esizes': list(m.esizes),
              'heffects': list(m.heffects),
-             'neutral': m.neutral}
+             'neutral': m.neutral,
+             'key': mr.key}
         muts.append(str(d).encode('utf-8'))
     return tskit.pack_bytes(muts)
 
