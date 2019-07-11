@@ -6,9 +6,9 @@ channels:
     - bioconda
 
 dependencies:
-    - python>=3.5.2
+    - python>=3.6
     - sphinx_rtd_theme==0.1.9
-    - pybind11==2.2.3
+    - pybind11==2.3.0
     - gsl==2.4
     - msprime
     - openblas
