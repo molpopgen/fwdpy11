@@ -99,6 +99,23 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(i.deme, d['deme'])
             self.assertEqual(i.geography, d['geography'])
 
+        # Test that we can go backwards from node table to individuals
+        samples = np.where(dumped_ts.tables.nodes.flags ==
+                           tskit.NODE_IS_SAMPLE)[0]
+        self.assertEqual(len(samples), 2*self.pop.N)
+        for i in samples[::2]:
+            ind = i//2
+            d = eval(md[ind])
+            fwdpy11_md = self.pop.diploid_metadata[ind]
+            self.assertEqual(fwdpy11_md.g, d['g'])
+            self.assertEqual(fwdpy11_md.w, d['w'])
+            self.assertEqual(fwdpy11_md.e, d['e'])
+            self.assertEqual(fwdpy11_md.label, d['label'])
+            self.assertEqual(fwdpy11_md.parents, d['parents'])
+            self.assertEqual(fwdpy11_md.sex, d['sex'])
+            self.assertEqual(fwdpy11_md.deme, d['deme'])
+            self.assertEqual(fwdpy11_md.geography, d['geography'])
+
         md = tskit.unpack_bytes(dumped_ts.tables.mutations.metadata,
                                 dumped_ts.tables.mutations.metadata_offset)
         for i, j, k in zip(self.pop.tables.mutations,
