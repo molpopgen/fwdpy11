@@ -105,6 +105,7 @@ class testTreeSequences(unittest.TestCase):
                            dumped_ts.tables.mutations.site,
                            md):
             d = eval(k)
+            self.assertEqual(i.key, d['key'])
             site = dumped_ts.tables.sites[j]
             m = self.pop.mutations[d['key']]
             self.assertEqual(site.position, m.pos)
