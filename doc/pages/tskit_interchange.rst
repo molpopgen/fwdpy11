@@ -14,6 +14,12 @@ Let's take a look:
    ts = pop.dump_tables_to_tskit()
    print(type(ts))
 
+.. note::
+
+   There is no function to dump a :class:`fwdpy11.TableCollection` directly.  The reason is that, if you
+   have a new table collection that you got from simplifying within fwdpy11, you could have done the 
+   exact same operation from within tskit. 
+
 Decoding the metadata
 -----------------------------------------------
 
@@ -33,7 +39,8 @@ Decoding the metadata
    `tskit`'s IndividualTable does not distinguish "alive" from "dead" individuals.
    Thus, the metadata for :attr:`fwdpy11.DiploidPopulation.diploid_metadata` and
    :attr:`fwdpy11.DiploidPopulation.ancient_sample_metadata` are concatenated,
-   with the former coming before the latter.
+   with the former coming before the latter. For all nodes corresponding to individuals,
+   their `flag` field is set to `tskit.NODE_IS_SAMPLE` in the nodes table.
 
 The mutation metadata are trickier still, but the same general principles apply:
 
