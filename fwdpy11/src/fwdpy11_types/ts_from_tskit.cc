@@ -93,15 +93,3 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
     pop.tables.build_indexes();
     return pop;
 }
-
-PYBIND11_MODULE(ts_from_tskit, m)
-{
-    m.doc() = "Converts node and edge data from tree sequences generated in "
-              "tskit";
-
-    // Expose this for unit-testing purposes
-    m.def("_convert_tables", &convert_tables_from_tskit);
-
-    // This is the back-end for fwdpy11.DiploidPopulation.create_from_tskit
-    m.def("_create_DiploidPopulation", &create_DiploidPopulation_from_tree_sequence);
-}
