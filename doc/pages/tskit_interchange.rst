@@ -56,6 +56,13 @@ The mutation metadata are trickier still, but the same general principles apply:
    m = pop.mutations[pop.tables.mutations[0].key]
    print(f"position: {m.pos}\ns: {m.s}\nh: {m.h}\n"
          f"label: {m.label}\n"
+         f"g: {m.g}\n"
          f"neutral: {m.neutral}\n"
          f"esizes: {m.esizes}\n"
          f"heffects: {m.heffects}\n")
+
+Note that the `tskit` representation of the mutation record's the allele's *age* in generations while :attr:`fwdpy11.Mutation.g` is the generation when the mutation arose.  The reason for this discrepancy is because the two packages record time in different directions!  The conversion to and from is trivial:
+
+.. ipython:: python
+
+   print(f"Origin to age = {pop.generation - m.g + 1}")

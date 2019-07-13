@@ -21,14 +21,14 @@ import tskit
 
 
 # TODO: mutation origin times are recorded forwards in time,
-# which is likely confusing, so we omit them
+# So we convert them into mutation ages.
 def _generate_mutation_metadata(pop):
     muts = []
     for mr in pop.tables.mutations:
         m = pop.mutations[mr.key]
         d = {'s': m.s,
              'h': m.h,
-             # 'g': m.g,
+             'age': pop.generation - m.g + 1,
              'label': m.label,
              'esizes': list(m.esizes),
              'heffects': list(m.heffects),
