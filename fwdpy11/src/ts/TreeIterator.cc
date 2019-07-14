@@ -45,7 +45,9 @@ class tree_visitor_wrapper
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_sample_list, double start, double stop)
         : update_samples(update_sample_list), from(start), until(stop),
-          visitor(tables, samples), sample_list_buffer()
+          visitor(tables, samples,
+                  fwdpp::ts::update_samples_list(update_sample_list)),
+          sample_list_buffer()
     {
         validate_from_until(tables.genome_length());
     }
@@ -56,7 +58,9 @@ class tree_visitor_wrapper
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_sample_list, double start, double stop)
         : update_samples(update_sample_list), from(start), until(stop),
-          visitor(tables, samples), sample_list_buffer()
+          visitor(tables, samples,
+                  fwdpp::ts::update_samples_list(update_sample_list)),
+          sample_list_buffer()
     {
         validate_from_until(tables.genome_length());
     }
@@ -65,21 +69,10 @@ class tree_visitor_wrapper
     operator()()
     {
         bool rv = false;
-        if (update_samples)
+        rv = visitor();
+        while (visitor.tree().right < from)
             {
-                rv = visitor(std::true_type(), std::true_type());
-                while (visitor.tree().right < from)
-                    {
-                        rv = visitor(std::true_type(), std::true_type());
-                    }
-            }
-        else
-            {
-                rv = visitor(std::true_type(), std::false_type());
-                while (visitor.tree().right < from)
-                    {
-                        rv = visitor(std::true_type(), std::false_type());
-                    }
+                rv = visitor();
             }
         if (visitor.tree().left >= until)
             {
@@ -91,7 +84,7 @@ class tree_visitor_wrapper
     fwdpp::ts::TS_NODE_INT
     sample_size() const
     {
-        return visitor.tree().sample_size;
+        return visitor.tree().sample_size();
     }
 
     py::array
