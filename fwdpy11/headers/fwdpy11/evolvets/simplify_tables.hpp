@@ -47,10 +47,10 @@ namespace fwdpy11
                     const bool simulating_neutral_variants,
                     const bool suppress_edge_table_indexing)
     {
-        tables.sort_tables(pop.mutations);
+        tables.sort_tables_for_simplification();
         std::vector<std::int32_t> samples(num_samples);
         std::iota(samples.begin(), samples.end(), first_sample_node);
-        auto rv = simplifier.simplify(tables, samples, pop.mutations);
+        auto rv = simplifier.simplify(tables, samples);
 
         for (auto &s : samples)
             {

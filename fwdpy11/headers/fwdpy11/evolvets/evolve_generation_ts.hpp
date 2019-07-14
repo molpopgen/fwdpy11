@@ -77,7 +77,8 @@ namespace fwdpy11
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
 
-        genetics.haploid_genome_recycling_bin = fwdpp::make_haploid_genome_queue(pop.haploid_genomes);
+        genetics.haploid_genome_recycling_bin
+            = fwdpp::make_haploid_genome_queue(pop.haploid_genomes);
 
         fwdpp::zero_out_haploid_genomes(pop);
 
@@ -98,12 +99,16 @@ namespace fwdpy11
                     first_parental_index, p1, offspring_data.first.swapped);
                 auto p2id = fwdpp::ts::get_parent_ids(
                     first_parental_index, p2, offspring_data.second.swapped);
-                tables.add_offspring_data(
-                    next_index_local++, offspring_data.first.breakpoints,
-                    offspring_data.first.mutation_keys, p1id, 0, generation);
-                tables.add_offspring_data(
-                    next_index_local++, offspring_data.second.breakpoints,
-                    offspring_data.second.mutation_keys, p2id, 0, generation);
+                next_index_local = tables.register_diploid_offspring(
+                    offspring_data.first.breakpoints, p1id, 0, generation);
+                fwdpp::ts::record_mutations_infinite_sites(
+                    next_index_local, pop.mutations,
+                    offspring_data.first.mutation_keys, tables);
+                next_index_local = tables.register_diploid_offspring(
+                    offspring_data.second.breakpoints, p2id, 0, generation);
+                fwdpp::ts::record_mutations_infinite_sites(
+                    next_index_local, pop.mutations,
+                    offspring_data.second.mutation_keys, tables);
 
                 // Give the caller a chance to generate
                 // any metadata for the offspring that
@@ -118,7 +123,7 @@ namespace fwdpy11
                     = next_index_local - 1;
             }
         assert(next_index_local
-               == next_index + 2 * static_cast<std::int32_t>(N_next));
+               == next_index + 2 * static_cast<std::int32_t>(N_next) - 1);
         // This is constant-time
         pop.diploids.swap(offspring);
         pop.diploid_metadata.swap(offspring_metadata);
