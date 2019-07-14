@@ -23,7 +23,7 @@ class VariantIterator
                 const auto& m = tv.tree();
                 while (pos[mbeg->key] < m.left || pos[mbeg->key] >= m.right)
                     {
-                        auto flag = tv(std::true_type(), std::true_type());
+                        auto flag = tv();
                         if (flag == false)
                             {
                                 throw std::runtime_error(
@@ -99,7 +99,8 @@ class VariantIterator
           mbeg(set_mbeg(tc.mutation_table.begin(), tc.mutation_table.end(),
                         beg, mutations)),
           mend(set_mend(mbeg, tc.mutation_table.end(), end, mutations)),
-          tv(tc, samples), genotype_data(samples.size(), 0),
+          tv(tc, samples, fwdpp::ts::update_samples_list(true)),
+          genotype_data(samples.size(), 0),
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
           current_position(std::numeric_limits<double>::quiet_NaN()),
           current_record{ fwdpp::ts::TS_NULL_NODE,
@@ -119,7 +120,7 @@ class VariantIterator
                     }
             }
         // Advance to first tree
-        auto flag = tv(std::true_type(), std::true_type());
+        auto flag = tv();
         if (flag == false)
             {
                 throw std::invalid_argument(
