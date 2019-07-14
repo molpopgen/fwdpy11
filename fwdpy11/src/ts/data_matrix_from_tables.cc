@@ -9,12 +9,11 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 fwdpp::data_matrix
 generate_data_matrix(const fwdpp::ts::table_collection& tables,
-                     const std::vector<fwdpy11::Mutation>& mutations,
                      const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                      bool record_neutral, bool record_selected, bool include_fixations, double start,
                      double stop)
 {
-    return fwdpp::ts::generate_data_matrix(tables, samples, mutations,
+    return fwdpp::ts::generate_data_matrix(tables, samples,
                                            record_neutral, record_selected, !include_fixations,
                                            start, stop);
 }
@@ -28,7 +27,7 @@ init_data_matrix_from_tables(py::module& m)
            const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
            const bool record_neutral, const bool record_selected) {
             return fwdpp::ts::generate_data_matrix(
-                pop.tables, samples, pop.mutations, record_neutral,
+                pop.tables, samples, record_neutral,
                 record_selected, true);
         },
         py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),
@@ -51,7 +50,7 @@ init_data_matrix_from_tables(py::module& m)
      )delim");
 
     m.def("data_matrix_from_tables", &generate_data_matrix, py::arg("tables"),
-          py::arg("mutations"), py::arg("samples"), py::arg("record_neutral"),
+          py::arg("samples"), py::arg("record_neutral"),
           py::arg("record_selected"),
           py::arg("include_fixations") = false, py::arg("begin") = 0.0,
           py::arg("end") = std::numeric_limits<double>::max(),
@@ -60,8 +59,6 @@ init_data_matrix_from_tables(py::module& m)
      
      :param tables: A TableCollection
      :type tables: :class:`fwdpy11.ts.TableCollection`
-     :param mutations: Container of mutations
-     :type mutations: :class:`fwdpy11.VecMutation`
      :param samples: A list of sample nodes
      :type samples: list or array
      :param record_neutral: If True, generate data for neutral variants

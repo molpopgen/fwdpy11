@@ -40,7 +40,7 @@ simplify(const fwdpy11::Population& pop,
     // they must pass them in to the samples list
     t.preserved_nodes.clear();
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
-    auto rv = simplifier.simplify(t, samples, pop.mutations);
+    auto rv = simplifier.simplify(t, samples);
     t.build_indexes();
     decltype(rv.first)* idmap = new decltype(rv.first)(std::move(rv.first));
     py::capsule cap(idmap, [](void* v) {
@@ -89,30 +89,28 @@ init_simplify_functions(py::module& m)
 
             )delim");
 
-    m.def("simplify_tables",
-          [](const fwdpp::ts::table_collection& tables,
-             const std::vector<fwdpy11::Mutation>& mutations,
-             const std::vector<fwdpp::ts::TS_NODE_INT>& samples) -> py::tuple {
-              auto t(tables);
-              fwdpp::ts::table_simplifier simplifier(tables.genome_length());
-              auto rv = simplifier.simplify(t, samples, mutations);
-              t.build_indexes();
-              decltype(rv.first)* idmap
-                  = new decltype(rv.first)(std::move(rv.first));
-              py::capsule cap(idmap, [](void* v) {
-                  delete reinterpret_cast<decltype(rv.first)*>(v);
-              });
-              return py::make_tuple(
-                  std::move(t), py::array(idmap->size(), idmap->data(), cap));
-          },
-          py::arg("tables"), py::arg("mutations"), py::arg("samples"),
-          R"delim(
+    m.def(
+        "simplify_tables",
+        [](const fwdpp::ts::table_collection& tables,
+           const std::vector<fwdpp::ts::TS_NODE_INT>& samples) -> py::tuple {
+            auto t(tables);
+            fwdpp::ts::table_simplifier simplifier(tables.genome_length());
+            auto rv = simplifier.simplify(t, samples);
+            t.build_indexes();
+            decltype(rv.first)* idmap
+                = new decltype(rv.first)(std::move(rv.first));
+            py::capsule cap(idmap, [](void* v) {
+                delete reinterpret_cast<decltype(rv.first)*>(v);
+            });
+            return py::make_tuple(
+                std::move(t), py::array(idmap->size(), idmap->data(), cap));
+        },
+        py::arg("tables"), py::arg("samples"),
+        R"delim(
           Simplify a TableCollection.
           
           :param pop: A table collection.
           :type pop: :class:`fwdpy11.TableCollection`
-          :param mutations: Container of mutations
-          :type mutations: :class:`fwdpy11.MutationVector`
           :param samples: list of samples
           :type list: list-like or array-like
 
