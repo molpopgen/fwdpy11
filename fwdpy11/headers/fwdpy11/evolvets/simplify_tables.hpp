@@ -77,18 +77,19 @@ namespace fwdpy11
         // TODO: better fixation handling via accounting for number of ancient samples
         if (!preserve_selected_fixations && !simulating_neutral_variants)
             {
-                tables.mutation_table.erase(
-                    std::remove_if(
-                        tables.mutation_table.begin(),
-                        tables.mutation_table.end(),
-                        [&pop, &mcounts_from_preserved_nodes](
-                            const fwdpp::ts::mutation_record &mr) {
-                            return pop.mcounts[mr.key]
-                                       == 2 * pop.diploids.size()
-                                   && mcounts_from_preserved_nodes[mr.key]
-                                          == 0;
-                        }),
-                    tables.mutation_table.end());
+                auto itr = std::remove_if(
+                    tables.mutation_table.begin(), tables.mutation_table.end(),
+                    [&pop, &mcounts_from_preserved_nodes](
+                        const fwdpp::ts::mutation_record &mr) {
+                        return pop.mcounts[mr.key] == 2 * pop.diploids.size()
+                               && mcounts_from_preserved_nodes[mr.key] == 0;
+                    });
+                auto d = std::distance(itr, end(tables.mutation_table));
+                tables.mutation_table.erase(itr, end(tables.mutation_table));
+                if (d)
+                    {
+                        tables.rebuild_site_table();
+                    }
                 fwdpp::ts::remove_fixations_from_haploid_genomes(
                     pop.haploid_genomes, pop.mutations, pop.mcounts,
                     mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
