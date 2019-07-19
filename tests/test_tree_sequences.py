@@ -37,7 +37,7 @@ class testTreeSequences(unittest.TestCase):
 
     def test_simplify_tables(self):
         tables, idmap = fwdpy11.simplify_tables(
-            self.pop.tables, self.pop.mutations, [i for i in range(10)])
+            self.pop.tables, [i for i in range(10)])
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -49,8 +49,7 @@ class testTreeSequences(unittest.TestCase):
 
     def test_simplify_tables_numpy_array(self):
         tables, idmap = fwdpy11.simplify_tables(
-            self.pop.tables, self.pop.mutations,
-            np.array([i for i in range(10)]))
+            self.pop.tables, np.array([i for i in range(10)]))
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -245,14 +244,12 @@ class testTreeSequences(unittest.TestCase):
 
     def test_genotype_matrix_ranges(self):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
         spos = np.array(dm.selected.positions)
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
             dmi = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                  self.pop.mutations,
                                                   [i for i in range(
                                                       2*self.pop.N)],
                                                   record_neutral=False,
@@ -270,7 +267,6 @@ class testTreeSequences(unittest.TestCase):
         those in pop.mcounts
         """
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
@@ -291,7 +287,6 @@ class testTreeSequences(unittest.TestCase):
 
     def test_VariantIteratorFromPopulation(self):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
@@ -310,8 +305,10 @@ class testTreeSequences(unittest.TestCase):
 
     def test_VariantIteratorBeginEnd(self):
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
-            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
-                                         [i for i in range(2*self.pop.N)], i, i+0.1)
+            vi = fwdpy11.VariantIterator(self.pop.tables,
+                                         self.pop.mutations,
+                                         [i for i in range(2*self.pop.N)], i,
+                                         i+0.1)
             nm = len([j for j in self.pop.tables.mutations if self.pop.mutations[j.key].pos >= i and
                       self.pop.mutations[j.key].pos < i+0.1])
             nseen = 0
@@ -598,7 +595,6 @@ class testDataMatrixIterator(unittest.TestCase):
         self.all_samples = [i for i in range(2*self.N)]
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         self.dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                  self.pop.mutations,
                                                   self.all_samples,
                                                   True, True)
         self.neutral = np.array(self.dm.neutral)
@@ -619,11 +615,9 @@ class testDataMatrixIterator(unittest.TestCase):
             self.assertTrue(np.array_equal(dm.selected, self.selected))
 
     def test_single_slice(self):
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
-                                         self.all_samples,
-                                         [(0.1, 0.2)], True, True)
-        dm = next(dmi)
-
+        dm = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+                                        self.all_samples,
+                                        [(0.1, 0.2)], True, True)
         rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
         pos_slice = self.spos[rows]
         selected_slice = self.selected[rows, ]
