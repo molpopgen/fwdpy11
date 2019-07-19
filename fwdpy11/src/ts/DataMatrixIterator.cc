@@ -475,7 +475,7 @@ class DataMatrixIterator
                             }
                         fwdpp::ts::detail::process_site_range(
                             tree, scurrent, std::make_pair(mcurrent, m),
-                            include_neutral_variants, include_neutral_variants,
+                            include_neutral_variants, include_selected_variants,
                             !include_fixations, genotypes, *dmatrix);
                         mcurrent = m;
                     }
