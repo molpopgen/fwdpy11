@@ -23,6 +23,7 @@ class DataMatrixIterator
 {
   private:
     using site_table_itr = fwdpp::ts::site_vector::const_iterator;
+    using mut_table_itr = fwdpp::ts::mutation_key_vector::const_iterator;
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes, is_neutral;
@@ -30,6 +31,8 @@ class DataMatrixIterator
     std::unique_ptr<fwdpp::data_matrix> dmatrix;
     const site_table_itr sbeg, send;
     site_table_itr scurrent;
+    const mut_table_itr mbeg, mend;
+    mut_table_itr mcurrent;
     std::size_t current_range;
     const bool include_neutral_variants, include_selected_variants,
         include_fixations;
@@ -114,12 +117,21 @@ class DataMatrixIterator
     }
 
     site_table_itr
-    find_first_mutation_record(site_table_itr b, site_table_itr e,
-                               const double start)
+    find_first_site(site_table_itr b, site_table_itr e, const double start)
     {
         return std::lower_bound(
             b, e, start, [this](const fwdpp::ts::site& s, const double v) {
                 return s.position < v;
+            });
+    }
+
+    void
+    set_current_mutation_to_current_site()
+    {
+        mcurrent = std::lower_bound(
+            mbeg, mend, scurrent->position,
+            [this](const fwdpp::ts::mutation_record& mr, const double p) {
+                return (sbeg + mr.site)->position < p;
             });
     }
 
@@ -149,7 +161,7 @@ class DataMatrixIterator
     }
 
     site_table_itr
-    find_first_mutation_record_after_current_max()
+    find_first_site_after_current_max()
     // After a call to cleanup_matrix, we may need to reset scurrent
     // to the first mutation AFTER dmatrix's current data.  We do so
     // here.
@@ -204,7 +216,7 @@ class DataMatrixIterator
     }
 
     site_table_itr
-    advance_mutations()
+    advance_sites()
     {
         matrix_requires_clearing = false;
         if (next_tree != nullptr)
@@ -213,9 +225,9 @@ class DataMatrixIterator
                 next_tree.reset(nullptr);
                 double left = position_ranges[current_range].first;
                 double right = position_ranges[current_range].second;
-                scurrent = find_first_mutation_record(sbeg, send, left);
+                scurrent = find_first_site(sbeg, send, left);
                 cleanup_matrix(left, right);
-                scurrent = find_first_mutation_record_after_current_max();
+                scurrent = find_first_site_after_current_max();
             }
         else
             {
@@ -226,6 +238,7 @@ class DataMatrixIterator
                         ++scurrent;
                     }
             }
+        set_current_mutation_to_current_site();
         return scurrent;
     }
 
@@ -369,7 +382,7 @@ class DataMatrixIterator
 
     void
     process_current_site(const fwdpp::ts::marginal_tree& tree,
-                             const site_table_itr itr)
+                         const site_table_itr itr)
     {
         // Make sure we skip mutants on the
         // current tree but not in the current
@@ -405,7 +418,9 @@ class DataMatrixIterator
           mutation_positions(set_positions(mutations)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
           sbeg(begin(tables.site_table)), send(begin(tables.site_table)),
-          scurrent(init_trees_and_mutations()), current_range(0),
+          scurrent(init_trees_and_mutations()),
+          mbeg(begin(tables.mutation_table)), mend(end(tables.mutation_table)),
+          mcurrent(begin(tables.mutation_table)), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations),
           matrix_requires_clearing(false)
@@ -419,7 +434,7 @@ class DataMatrixIterator
     {
         check_if_still_iterating();
         advance_trees();
-        scurrent = advance_mutations();
+        scurrent = advance_sites();
         next_tree.reset(nullptr);
         if (matrix_requires_clearing)
             {
@@ -441,10 +456,28 @@ class DataMatrixIterator
                                     *current_tree));
                             }
                     }
-                for (; scurrent < send && scurrent->position < tree.right;
+                for (; scurrent < send && scurrent->position < tree.right
+                       && site_in_current_range(scurrent);
                      ++scurrent)
                     {
-                        process_current_site(tree, scurrent);
+                        while (mcurrent < mend
+                               && (sbeg + mcurrent->site)->position
+                                      < scurrent->position)
+                            {
+                                ++mcurrent;
+                            }
+                        auto m = mcurrent++;
+                        while (m < mend
+                               && (sbeg + m->site)->position
+                                      == scurrent->position)
+                            {
+                                ++m;
+                            }
+                        fwdpp::ts::detail::process_site_range(
+                            tree, scurrent, std::make_pair(mcurrent, m),
+                            include_neutral_variants, include_neutral_variants,
+                            !include_fixations, genotypes, *dmatrix);
+                        mcurrent = m;
                     }
                 iteration_flag = current_tree->operator()();
                 tree_in_current_range
