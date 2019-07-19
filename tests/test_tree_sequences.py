@@ -606,13 +606,16 @@ class testDataMatrixIterator(unittest.TestCase):
         dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                          self.all_samples,
                                          [(0, 1)], True, True)
+        niterations = 0
         for dm in dmi:
+            niterations += 1
             for i in dm.selected_keys:
                 self.assertFalse(self.pop.mutations[i].neutral)
             self.assertTrue(np.array_equal(
                 np.array(self.dm.selected_keys), dm.selected_keys))
             self.assertTrue(np.array_equal(dm.neutral, self.neutral))
             self.assertTrue(np.array_equal(dm.selected, self.selected))
+        self.assertEqual(niterations, 1)
 
     def test_single_slice(self):
         dm = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
@@ -629,12 +632,15 @@ class testDataMatrixIterator(unittest.TestCase):
         dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                          self.all_samples,
                                          slices, True, True)
+        niterations = 0
         for r, dm in zip(slices, dmi):
+            niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
             selected_slice = self.selected[rows, ]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
+        self.assertEqual(niterations, len(slices))
 
     def test_complex_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
@@ -642,12 +648,15 @@ class testDataMatrixIterator(unittest.TestCase):
         dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                          self.all_samples,
                                          slices, True, True)
+        niterations = 0
         for r, dm in zip(slices, dmi):
+            niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
             selected_slice = self.selected[rows, ]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
+        self.assertEqual(niterations, len(slices))
 
     def test_nested_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.19), (0.21, 0.37),
