@@ -136,7 +136,7 @@ class DataMatrixIterator
     }
 
     site_table_itr
-    init_trees_and_mutations()
+    init_trees_and_sites()
     {
         if (current_tree == nullptr || position_ranges.empty())
             {
@@ -151,9 +151,8 @@ class DataMatrixIterator
                 current_tree->operator()();
                 current_right = current_tree->tree().right;
             }
-        double current_tree_left = current_tree->tree().left;
         site_table_itr s = sbeg;
-        while (s < send && s->position < current_tree_left)
+        while (s < send && s->position < first_left)
             {
                 ++s;
             }
@@ -417,8 +416,8 @@ class DataMatrixIterator
           genotypes(samples.size(), 0), is_neutral(set_neutral(mutations)),
           mutation_positions(set_positions(mutations)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
-          sbeg(begin(tables.site_table)), send(begin(tables.site_table)),
-          scurrent(init_trees_and_mutations()),
+          sbeg(begin(tables.site_table)), send(end(tables.site_table)),
+          scurrent(init_trees_and_sites()),
           mbeg(begin(tables.mutation_table)), mend(end(tables.mutation_table)),
           mcurrent(begin(tables.mutation_table)), current_range(0),
           include_neutral_variants(neutral),
