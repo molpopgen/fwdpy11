@@ -41,8 +41,8 @@ class DataMatrixIterator
                             const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
     {
         std::unique_ptr<fwdpp::ts::tree_visitor> rv(
-            new fwdpp::ts::tree_visitor(tables, samples));
-        auto flag = rv->operator()(std::true_type(), std::true_type());
+            new fwdpp::ts::tree_visitor(tables, samples, fwdpp::ts::update_samples_list(true)));
+        auto flag = rv->operator()();
         if (flag == false)
             {
                 throw std::invalid_argument(
@@ -137,7 +137,7 @@ class DataMatrixIterator
 
         while (current_right < first_left)
             {
-                current_tree->operator()(std::true_type(), std::true_type());
+                current_tree->operator()();
                 current_right = current_tree->tree().right;
             }
         double current_tree_left = current_tree->tree().left;
@@ -198,8 +198,7 @@ class DataMatrixIterator
         auto l = position_ranges[current_range].first;
         while (current_tree->tree().right < l)
             {
-                auto flag = current_tree->operator()(std::true_type(),
-                                                     std::true_type());
+                auto flag = current_tree->operator()();
                 if (!flag)
                     {
                         break;
@@ -384,7 +383,7 @@ class DataMatrixIterator
                 return;
             }
         auto lc = tree.leaf_counts[mitr->node];
-        bool fixed = (lc == tree.sample_size);
+        std::size_t fixed = (lc == tree.sample_size());
         if (lc > 0 && (!fixed || (fixed && include_fixations)))
             {
                 bool mut_is_neutral = is_neutral[mitr->key];
@@ -473,8 +472,7 @@ class DataMatrixIterator
                     {
                         process_current_mutation(tree, mcurrent);
                     }
-                iteration_flag = current_tree->operator()(std::true_type(),
-                                                          std::true_type());
+                iteration_flag = current_tree->operator()();
                 tree_in_current_range
                     = (current_tree->tree().left
                        < position_ranges[current_range].second);
