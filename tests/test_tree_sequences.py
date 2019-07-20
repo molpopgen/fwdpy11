@@ -603,7 +603,7 @@ class testDataMatrixIterator(unittest.TestCase):
         self.spos = np.array(self.dm.selected.positions)
 
     def test_entire_matrix(self):
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          [(0, 1)], True, True)
         niterations = 0
@@ -618,7 +618,7 @@ class testDataMatrixIterator(unittest.TestCase):
         self.assertEqual(niterations, 1)
 
     def test_single_slice(self):
-        dm = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dm = fwdpy11.DataMatrixIterator(self.pop.tables,
                                         self.all_samples,
                                         [(0.1, 0.2)], True, True)
         dm = next(dm)
@@ -630,7 +630,7 @@ class testDataMatrixIterator(unittest.TestCase):
 
     def test_nonoverlapping_slices(self):
         slices = [(0.1, 0.2), (0.21, 0.37), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
         niterations = 0
@@ -646,7 +646,7 @@ class testDataMatrixIterator(unittest.TestCase):
     def test_complex_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
                   (0.38, 0.5337), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
         niterations = 0
@@ -662,7 +662,7 @@ class testDataMatrixIterator(unittest.TestCase):
     def test_nested_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.19), (0.21, 0.37),
                   (0.38, 0.5337), (0.39, 0.432), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
         for r, dm in zip(slices, dmi):

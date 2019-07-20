@@ -12,8 +12,6 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
-
 class DataMatrixIterator
 // Encapsulate fwdpp::ts::tree_visitor and fwdpp::data_matrix
 // to provide very fast interation over multiple genomic intervals.
@@ -417,7 +415,6 @@ class DataMatrixIterator
 
   public:
     DataMatrixIterator(const fwdpp::ts::table_collection& tables,
-                       const std::vector<fwdpy11::Mutation>& mutations,
                        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                        const std::vector<std::pair<double, double>>& intervals,
                        bool neutral, bool selected, bool fixations)
@@ -556,18 +553,15 @@ init_DataMatrixIterator(py::module& m)
         .. versionadded:: 0.4.4
         )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool,
                       bool, bool>(),
-             py::arg("tables"), py::arg("mutations"), py::arg("samples"),
+             py::arg("tables"), py::arg("samples"),
              py::arg("intervals"), py::arg("neutral"), py::arg("selected"),
              py::arg("fixations") = false,
              R"delim(
         :param tables: A table collection
         :type tables: :class:`fwdpy11.TableCollection`
-        :param mutations: The mutations from the simulation
-        :type mutations: :class:`fwdpy11.MutationVector`
         :param samples: A list of samples
         :type samples: List-like
         :param intervals: The :math:`[start, stop)` positions of each interval
@@ -578,6 +572,10 @@ init_DataMatrixIterator(py::module& m)
         :type selected: boolean
         :param fixations: (False) If True, include fixations in the sample
         :type fixations: boolean
+
+        .. versionchanged:: 0.5.0
+            
+            No longer requires :class:`fwdpy11.MutationVector`
         )delim")
         .def("__iter__",
              [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })

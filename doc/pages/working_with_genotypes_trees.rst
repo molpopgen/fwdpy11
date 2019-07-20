@@ -91,7 +91,7 @@ the previous example, and tests that the data are identical:
     windows = [(0, 0.25), (0.75, 1.0)]
     selected_genotypes = np.array(dm.selected)
     p = np.array(dm.selected.positions)
-    dmi = fwdpy11.DataMatrixIterator(pop.tables, pop.mutations,
+    dmi = fwdpy11.DataMatrixIterator(pop.tables,
                                     [i for i in range(50)], windows,
                                     neutral=False, selected=True, fixations=True)
     for i,j in zip(dmi, windows):
