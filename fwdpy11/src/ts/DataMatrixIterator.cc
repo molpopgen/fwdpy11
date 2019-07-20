@@ -1,6 +1,7 @@
 #include <memory>
 #include <cmath>
 #include <stdexcept>
+#include <unordered_map>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -27,7 +28,7 @@ class DataMatrixIterator
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes;
-    std::vector<double> mutation_positions;
+    std::unordered_map<std::size_t, double> mutation_positions;
     std::unique_ptr<fwdpp::data_matrix> dmatrix;
     const site_table_itr sbeg, send;
     site_table_itr scurrent;
@@ -104,16 +105,25 @@ class DataMatrixIterator
         return n;
     }
 
-    std::vector<double>
-    set_positions(const std::vector<fwdpy11::Mutation>& mutations)
+    std::unordered_map<std::size_t, double>
+    set_positions(const fwdpp::ts::table_collection& tables)
     {
-        std::vector<double> p;
-        p.reserve(mutations.size());
-        for (auto& m : mutations)
+        std::unordered_map<std::size_t, double> rv;
+        for (auto& m : tables.mutation_table)
             {
-                p.push_back(m.pos);
+                if (rv.find(m.key) != end(rv))
+                    {
+                        throw fwdpp::ts::tables_error(
+                            "mutation key present more than once in "
+                            "MutationTable");
+                    }
+                if (m.site >= tables.site_table.size())
+                    {
+                        throw fwdpp::ts::tables_error("invalid site id");
+                    }
+                rv[m.key] = tables.site_table[m.site].position;
             }
-        return p;
+        return rv;
     }
 
     site_table_itr
@@ -413,12 +423,12 @@ class DataMatrixIterator
                        bool neutral, bool selected, bool fixations)
         : current_tree(initialize_current_tree(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
-          genotypes(samples.size(), 0), 
-          mutation_positions(set_positions(mutations)),
+          genotypes(samples.size(), 0),
+          mutation_positions(set_positions(tables)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
           sbeg(begin(tables.site_table)), send(end(tables.site_table)),
-          scurrent(init_trees_and_sites()),
-          mbeg(begin(tables.mutation_table)), mend(end(tables.mutation_table)),
+          scurrent(init_trees_and_sites()), mbeg(begin(tables.mutation_table)),
+          mend(end(tables.mutation_table)),
           mcurrent(begin(tables.mutation_table)), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations),
@@ -475,8 +485,9 @@ class DataMatrixIterator
                             }
                         fwdpp::ts::detail::process_site_range(
                             tree, scurrent, std::make_pair(mcurrent, m),
-                            include_neutral_variants, include_selected_variants,
-                            !include_fixations, genotypes, *dmatrix);
+                            include_neutral_variants,
+                            include_selected_variants, !include_fixations,
+                            genotypes, *dmatrix);
                         mcurrent = m;
                     }
                 iteration_flag = current_tree->operator()();
