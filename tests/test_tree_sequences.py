@@ -621,6 +621,7 @@ class testDataMatrixIterator(unittest.TestCase):
         dm = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
                                         self.all_samples,
                                         [(0.1, 0.2)], True, True)
+        dm = next(dm)
         rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
         pos_slice = self.spos[rows]
         selected_slice = self.selected[rows, ]
