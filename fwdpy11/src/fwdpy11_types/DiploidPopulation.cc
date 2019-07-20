@@ -68,7 +68,8 @@ init_DiploidPopulation(py::module& m)
              
              .. versionadded:: 0.1.4
              )delim",
-             py::arg("diploids"), py::arg("haploid_genomes"), py::arg("mutations"))
+             py::arg("diploids"), py::arg("haploid_genomes"),
+             py::arg("mutations"))
         .def(py::init<const fwdpy11::DiploidPopulation&>(),
              R"delim(
                 Copy constructor
@@ -104,7 +105,8 @@ init_DiploidPopulation(py::module& m)
                     std::move(mutations), std::move(fixations),
                     std::move(ftimes), g);
             },
-            py::arg("diploids"), py::arg("haploid_genomes"), py::arg("mutations"),
+            py::arg("diploids"), py::arg("haploid_genomes"),
+            py::arg("mutations"),
             R"delim(
         Create a new object from input data.
         Unlike the constructor method, this method results
@@ -148,14 +150,15 @@ init_DiploidPopulation(py::module& m)
                 fwdpy11::serialization::deserialize_details()(in, pop);
                 return pop;
             }))
-        .def("sample",
-             [](const fwdpy11::DiploidPopulation& pop,
-                const std::vector<std::size_t>& individuals,
-                const bool haplotype, const bool remove_fixed) {
-                 return pop.sample_individuals(individuals, haplotype,
-                                               remove_fixed);
-             },
-             R"delim(
+        .def(
+            "sample",
+            [](const fwdpy11::DiploidPopulation& pop,
+               const std::vector<std::size_t>& individuals,
+               const bool haplotype, const bool remove_fixed) {
+                return pop.sample_individuals(individuals, haplotype,
+                                              remove_fixed);
+            },
+            R"delim(
              Return a sample from a population.
 
              :param individuals: Indexes of individuals in the sample
@@ -176,18 +179,19 @@ init_DiploidPopulation(py::module& m)
                 :class:`fwdpy11.sampling.DataMatrix` instead of 
                 the "classic libsequence" layout.
              )delim",
-             py::arg("individuals"), py::arg("haplotype") = true,
-             py::arg("remove_fixed") = true)
-        .def("sample",
-             [](const fwdpy11::DiploidPopulation& pop,
-                const fwdpy11::GSLrng_t& rng, const std::uint32_t nsam,
-                const bool haplotype, const bool remove_fixed) {
-                 return pop.sample_random_individuals(rng, nsam, haplotype,
-                                                      remove_fixed);
-             },
-             py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
-             py::arg("remove_fixed") = true,
-             R"delim(
+            py::arg("individuals"), py::arg("haplotype") = true,
+            py::arg("remove_fixed") = true)
+        .def(
+            "sample",
+            [](const fwdpy11::DiploidPopulation& pop,
+               const fwdpy11::GSLrng_t& rng, const std::uint32_t nsam,
+               const bool haplotype, const bool remove_fixed) {
+                return pop.sample_random_individuals(rng, nsam, haplotype,
+                                                     remove_fixed);
+            },
+            py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
+            py::arg("remove_fixed") = true,
+            R"delim(
              Return a sample from a population.
 
              :param rng: Random number generator
@@ -211,91 +215,98 @@ init_DiploidPopulation(py::module& m)
                 the "classic libsequence" layout.
              )delim")
         .def("add_mutations", &fwdpy11::DiploidPopulation::add_mutations)
-        .def("dump_to_file",
-             [](const fwdpy11::DiploidPopulation& pop,
-                const std::string filename) {
-                 std::ofstream out(filename.c_str(), std::ios_base::binary);
-                 if (!out)
-                     {
-                         throw std::runtime_error(
-                             "could not open file for writing");
-                     }
-                 fwdpy11::serialization::serialize_details(out, &pop);
-                 out.close();
-             },
-             "Write a population to a file in binary format.")
-        .def_static("load_from_file",
-                    [](const std::string filename) {
-                        std::ifstream in(filename.c_str(),
-                                         std::ios_base::binary);
-                        if (!in)
-                            {
-                                throw std::runtime_error(
-                                    "could not open file for reading");
-                            }
-                        fwdpy11::DiploidPopulation pop(
-                            1, std::numeric_limits<double>::max());
-                        fwdpy11::serialization::deserialize_details()(in, pop);
-                        return pop;
-                    },
-                    "Load a population from a binary file.")
-        .def("pickle_to_file",
-             [](const fwdpy11::DiploidPopulation& self, py::object f) {
-                 auto dump = py::module::import("pickle").attr("dump");
-                 dump(py::make_tuple(self.diploids.size(), self.haploid_genomes.size(),
-                                     self.mutations.size(),
-                                     self.fixations.size(), self.generation,
-                                     self.tables.genome_length()),
-                      f);
-                 for (auto& d : self.diploids)
-                     {
-                         dump(d, f);
-                     }
-                 for (auto& g : self.haploid_genomes)
-                     {
-                         dump(g, f);
-                     }
-                 for (auto& m : self.mutations)
-                     {
-                         dump(m, f);
-                     }
-                 for (auto& m : self.fixations)
-                     {
-                         dump(m, f);
-                     }
-                 dump(self.fixation_times, f);
-                 dump(self.mcounts, f);
-                 dump(self.mcounts_from_preserved_nodes, f);
-                 dump(py::make_tuple(self.diploid_metadata.size(),
-                                     self.ancient_sample_metadata.size()),
-                      f);
-                 for (auto& md : self.diploid_metadata)
-                     {
-                         dump(md, f);
-                     }
-                 for (auto& md : self.ancient_sample_metadata)
-                     {
-                         dump(md, f);
-                     }
-                 dump(py::make_tuple(self.tables.node_table.size(),
-                                     self.tables.edge_table.size(),
-                                     self.tables.mutation_table.size()),
-                      f);
-                 for (auto& n : self.tables.node_table)
-                     {
-                         dump(n, f);
-                     }
-                 for (auto& e : self.tables.edge_table)
-                     {
-                         dump(e, f);
-                     }
-                 for (auto& m : self.tables.mutation_table)
-                     {
-                         dump(m, f);
-                     }
-                 dump(self.tables.preserved_nodes, f);
-             },
-             R"delim(
+        .def(
+            "dump_to_file",
+            [](const fwdpy11::DiploidPopulation& pop,
+               const std::string filename) {
+                std::ofstream out(filename.c_str(), std::ios_base::binary);
+                if (!out)
+                    {
+                        throw std::runtime_error(
+                            "could not open file for writing");
+                    }
+                fwdpy11::serialization::serialize_details(out, &pop);
+                out.close();
+            },
+            "Write a population to a file in binary format.")
+        .def_static(
+            "load_from_file",
+            [](const std::string filename) {
+                std::ifstream in(filename.c_str(), std::ios_base::binary);
+                if (!in)
+                    {
+                        throw std::runtime_error(
+                            "could not open file for reading");
+                    }
+                fwdpy11::DiploidPopulation pop(
+                    1, std::numeric_limits<double>::max());
+                fwdpy11::serialization::deserialize_details()(in, pop);
+                return pop;
+            },
+            "Load a population from a binary file.")
+        .def(
+            "pickle_to_file",
+            [](const fwdpy11::DiploidPopulation& self, py::object f) {
+                auto dump = py::module::import("pickle").attr("dump");
+                dump(py::make_tuple(
+                         self.diploids.size(), self.haploid_genomes.size(),
+                         self.mutations.size(), self.fixations.size(),
+                         self.generation, self.tables.genome_length()),
+                     f);
+                for (auto& d : self.diploids)
+                    {
+                        dump(d, f);
+                    }
+                for (auto& g : self.haploid_genomes)
+                    {
+                        dump(g, f);
+                    }
+                for (auto& m : self.mutations)
+                    {
+                        dump(m, f);
+                    }
+                for (auto& m : self.fixations)
+                    {
+                        dump(m, f);
+                    }
+                dump(self.fixation_times, f);
+                dump(self.mcounts, f);
+                dump(self.mcounts_from_preserved_nodes, f);
+                dump(py::make_tuple(self.diploid_metadata.size(),
+                                    self.ancient_sample_metadata.size()),
+                     f);
+                for (auto& md : self.diploid_metadata)
+                    {
+                        dump(md, f);
+                    }
+                for (auto& md : self.ancient_sample_metadata)
+                    {
+                        dump(md, f);
+                    }
+                dump(py::make_tuple(self.tables.node_table.size(),
+                                    self.tables.edge_table.size(),
+                                    self.tables.mutation_table.size(),
+                                    self.tables.site_table.size()),
+                     f);
+                for (auto& n : self.tables.node_table)
+                    {
+                        dump(n, f);
+                    }
+                for (auto& e : self.tables.edge_table)
+                    {
+                        dump(e, f);
+                    }
+                for (auto& m : self.tables.mutation_table)
+                    {
+                        dump(m, f);
+                    }
+                for (auto& s : self.tables.site_table)
+                    {
+                        dump(s, f);
+                    }
+                dump(self.tables.preserved_nodes, f);
+            },
+            R"delim(
              Pickle the population to an open file.
 
              This function may be preferred over 
@@ -337,7 +348,8 @@ init_DiploidPopulation(py::module& m)
                 rv.haploid_genomes.reserve(ngams);
                 for (std::size_t i = 0; i < ngams; ++i)
                     {
-                        rv.haploid_genomes.push_back(load(f).cast<fwdpp::haploid_genome>());
+                        rv.haploid_genomes.push_back(
+                            load(f).cast<fwdpp::haploid_genome>());
                     }
                 rv.mutations.reserve(nmuts);
                 for (std::size_t i = 0; i < nmuts; ++i)
@@ -397,6 +409,14 @@ init_DiploidPopulation(py::module& m)
                         rv.tables.mutation_table.push_back(
                             load(f).cast<fwdpp::ts::mutation_record>());
                     }
+                table_len = table_data[3].cast<std::size_t>();
+                rv.tables.site_table.reserve(table_len);
+                for (std::size_t i = 0; i < table_len; ++i)
+                    {
+                        rv.tables.site_table.push_back(
+                            load(f).cast<fwdpp::ts::site>());
+                    }
+
                 rv.tables.preserved_nodes
                     = load(f).cast<decltype(rv.tables.preserved_nodes)>();
                 rv.tables.build_indexes();
@@ -411,23 +431,25 @@ init_DiploidPopulation(py::module& m)
 
             .. versionadded: 0.3.0
             )delim")
-        .def("dump_tables_to_tskit",
-             [](const fwdpy11::DiploidPopulation& self) {
-                 py::object m = py::module::import("fwdpy11._tables_to_tskit");
-                 auto dump = m.attr("dump_tables_to_tskit");
-                 return dump(self);
-             },
-             R"delim(
+        .def(
+            "dump_tables_to_tskit",
+            [](const fwdpy11::DiploidPopulation& self) {
+                py::object m = py::module::import("fwdpy11._tables_to_tskit");
+                auto dump = m.attr("dump_tables_to_tskit");
+                return dump(self);
+            },
+            R"delim(
         Dump the population's TableCollection into
         an tskit TreeSequence
 
         :rtype: tskit.TreeSequence
         )delim")
-        .def_static("create_from_tskit",
-                    [](py::object ts) {
-                        return create_DiploidPopulation_from_tree_sequence(ts);
-                    },
-                    R"delim(
+        .def_static(
+            "create_from_tskit",
+            [](py::object ts) {
+                return create_DiploidPopulation_from_tree_sequence(ts);
+            },
+            R"delim(
         Create a new object from an tskit.TreeSequence
 
         :param ts: A tree sequence from tskit
