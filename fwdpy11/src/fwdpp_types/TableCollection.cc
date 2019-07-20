@@ -32,6 +32,9 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("mutations",
                       &fwdpp::ts::table_collection::mutation_table,
                       "The :class:`fwdpy11.MutationTable`.")
+        .def_readonly("sites",
+                      &fwdpp::ts::table_collection::site_table,
+                      "The :class:`fwdpy11.SiteTable`.")
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right)
