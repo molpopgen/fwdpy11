@@ -274,7 +274,6 @@ class testTreeSequences(unittest.TestCase):
         cs = np.sum(sa, axis=1)
         i = 0
         vi = fwdpy11.VariantIterator(self.pop.tables,
-                                     self.pop.mutations,
                                      [i for i in range(2*self.pop.N)])
         for v in vi:
             c = self.pop.mcounts[self.pop.tables.mutations[i].key]
@@ -306,14 +305,13 @@ class testTreeSequences(unittest.TestCase):
     def test_VariantIteratorBeginEnd(self):
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
             vi = fwdpy11.VariantIterator(self.pop.tables,
-                                         self.pop.mutations,
                                          [i for i in range(2*self.pop.N)], i,
                                          i+0.1)
             nm = len([j for j in self.pop.tables.mutations if self.pop.mutations[j.key].pos >= i and
                       self.pop.mutations[j.key].pos < i+0.1])
             nseen = 0
             for v in vi:
-                r = v.record
+                r = v.records[0]
                 self.assertTrue(self.pop.mutations[r.key].pos >= i)
                 self.assertTrue(self.pop.mutations[r.key].pos < i+0.1)
                 nseen += 1
@@ -321,7 +319,7 @@ class testTreeSequences(unittest.TestCase):
 
         # test bad start/stop
         with self.assertRaises(ValueError):
-            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
+            vi = fwdpy11.VariantIterator(self.pop.tables,
                                          [i for i in range(2*self.pop.N)], begin=0.5, end=0.25)
 
     def test_count_mutations(self):
@@ -375,10 +373,9 @@ class testSamplePreservation(unittest.TestCase):
         at = n['time'][pn]
         for u in np.unique(at):
             n = pn[np.where(at == u)[0]]
-            vi = fwdpy11.VariantIterator(self.pop.tables,
-                                         self.pop.mutations, n)
+            vi = fwdpy11.VariantIterator(self.pop.tables, n)
             for variant in vi:
-                k = variant.record
+                k = variant.records[0]
                 self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
@@ -548,11 +545,11 @@ class testMetaData(unittest.TestCase):
             samples_at_time_u = metadata_nodes[np.where(
                 metadata_node_times == u)]
             vi = fwdpy11.VariantIterator(
-                pop.tables, pop.mutations, samples_at_time_u)
+                pop.tables, samples_at_time_u)
             sum_esizes = np.zeros(len(samples_at_time_u))
             for variant in vi:
                 g = variant.genotypes
-                r = variant.record
+                r = variant.records[0]
                 mutant = np.where(g == 1)[0]
                 sum_esizes[mutant] += pop.mutations[r.key].s
             ind = int(len(samples_at_time_u)/2)
