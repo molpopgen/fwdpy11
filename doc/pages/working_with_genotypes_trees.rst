@@ -58,7 +58,7 @@ We may obtain the genotypes for the samples all at once using the following func
 
 .. ipython:: python
 
-   dm = fwdpy11.data_matrix_from_tables(pop.tables, pop.mutations, [i for i in range(50)],
+   dm = fwdpy11.data_matrix_from_tables(pop.tables, [i for i in range(50)],
                                         record_neutral=False,
                                         record_selected=True,
                                         include_fixations=True)
