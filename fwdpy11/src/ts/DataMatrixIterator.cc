@@ -231,8 +231,8 @@ class DataMatrixIterator
         else
             {
                 matrix_requires_clearing = true;
-                const auto& m = current_tree->tree();
-                while (scurrent < send && scurrent->position < m.left)
+                double left = position_ranges[current_range].first;
+                while (scurrent < send && scurrent->position < left)
                     {
                         ++scurrent;
                     }
