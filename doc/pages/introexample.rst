@@ -254,7 +254,7 @@ optimum.
         samples_at_t = np.where(mdtimes == t)[0]
         rsamples = np.random.choice(samples_at_t, 25, replace=False)
         rsamples_nodes = all_md['nodes'][rsamples,:].flatten()
-        vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, rsamples_nodes)
+        vi = fwdpy11.VariantIterator(pop.tables, rsamples_nodes)
         ssh = 0.0
         for v in vi:
             g = v.genotypes
@@ -292,7 +292,7 @@ of :class:`fwdpy11.VariantIterator`:
 
     current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
     nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations,
+    vi = fwdpy11.VariantIterator(pop.tables,
                                  current_generation,
                                  include_neutral_variants=False)
     for v in vi:
@@ -321,7 +321,6 @@ tree sequence:
     remapped_samples = idmap[current_generation]
     nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
     vi = fwdpy11.VariantIterator(tables,
-                                 pop.mutations,
                                  remapped_samples,
                                  include_neutral_variants=False)
     for v in vi:
