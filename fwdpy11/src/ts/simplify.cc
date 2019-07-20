@@ -87,6 +87,10 @@ init_simplify_functions(py::module& m)
 
                 Ancient samples are no longer kept by default
 
+            .. versionchanged:: 0.5.0
+
+                No longer requires a :class:`MutationVector` argument.
+
             )delim");
 
     m.def(

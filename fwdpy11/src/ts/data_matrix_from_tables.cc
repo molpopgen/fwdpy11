@@ -77,5 +77,9 @@ init_data_matrix_from_tables(py::module& m)
      .. versionchanged:: 0.4.1
         
             Add begin, end options as floats
+
+     .. versionchanged:: 0.5.0
+
+            No longer requires :class:`fwdpy11.MutationVector` argument
      )delim");
 }
