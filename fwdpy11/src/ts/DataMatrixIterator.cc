@@ -26,7 +26,7 @@ class DataMatrixIterator
     using mut_table_itr = fwdpp::ts::mutation_key_vector::const_iterator;
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
-    std::vector<std::int8_t> genotypes, is_neutral;
+    std::vector<std::int8_t> genotypes;
     std::vector<double> mutation_positions;
     std::unique_ptr<fwdpp::data_matrix> dmatrix;
     const site_table_itr sbeg, send;
@@ -413,7 +413,7 @@ class DataMatrixIterator
                        bool neutral, bool selected, bool fixations)
         : current_tree(initialize_current_tree(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
-          genotypes(samples.size(), 0), is_neutral(set_neutral(mutations)),
+          genotypes(samples.size(), 0), 
           mutation_positions(set_positions(mutations)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
           sbeg(begin(tables.site_table)), send(end(tables.site_table)),
