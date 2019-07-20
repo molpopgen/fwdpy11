@@ -35,7 +35,8 @@ init_ts_MutationRecord(py::module& m)
                  std::ostringstream out;
                  out << "MutationRecord(node=" << self.node
                      << ", key=" << self.key << ", site=" << self.site
-                     << ", derived_state = " << self.derived_state
+                     << ", derived_state = "
+                     << static_cast<int>(self.derived_state)
                      << ", neutral = " << self.neutral << ')';
                  return out.str();
              })
