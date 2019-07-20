@@ -465,7 +465,8 @@ class DataMatrixIterator
                             {
                                 ++mcurrent;
                             }
-                        auto m = mcurrent++;
+                        auto m = mcurrent;
+                        m++;
                         while (m < mend
                                && (sbeg + m->site)->position
                                       == scurrent->position)
