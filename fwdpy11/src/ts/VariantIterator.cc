@@ -68,8 +68,13 @@ class VariantIterator
                                   scurrent->ancestral_state);
                         auto m = sv.get_mutations();
                         unsigned n = 0;
+                        int neutral = -1, selected = -1;
                         for (auto i = m.first; i < m.second; ++i)
                             {
+                                bool is_neutral = (i->neutral);
+                                bool is_selected = (!is_neutral);
+                                neutral += is_neutral;
+                                selected += is_selected;
                                 int ni = 0;
                                 fwdpp::ts::process_samples(
                                     sv.current_tree(), convert, i->node,
@@ -85,9 +90,18 @@ class VariantIterator
                                     }
                                 n += ni;
                             }
+                        if (neutral != -1 && selected != -1)
+                            {
+                                throw fwdpp::ts::tables_error(
+                                    "invalid mutation data");
+                            }
                         if (n)
                             {
-                                return *this;
+                                if ((neutral > -1 && include_neutral)
+                                    || include_selected)
+                                    {
+                                        return *this;
+                                    }
                             }
                     }
             }
@@ -153,6 +167,10 @@ init_variant_iterator(py::module& m)
             .. versionchanged:: 0.4.2
 
                  Add include_neutral_variants and include_selected_variants
+
+            .. versionchanged:: 0.5.0
+
+                 No longer requires a :class:`fwdpy11.MutationVector`.
             )delim")
         .def(py::init([](const fwdpy11::Population& pop,
                          const bool include_preserved, double begin,
@@ -176,8 +194,8 @@ init_variant_iterator(py::module& m)
              py::arg("include_selected_variants") = true,
              py::arg("include_selected_variants") = true,
              R"delim(
-             :param pop: The table collection
-             :type pop: :class:`fwdpy11.TableCollection`
+             :param pop: The population 
+             :type pop: :class:`fwdpy11.DiploidPopulation`
              :param include_preserved_nodes: (False) Whether to include preserved samples during traversal
              :type include_preserved_nodes: boolean
              :param begin: (0.0) First position, inclusive.
@@ -194,6 +212,7 @@ init_variant_iterator(py::module& m)
             .. versionchanged:: 0.4.2
 
                  Add include_neutral_variants and include_selected_variants
+
             )delim")
         .def("__iter__",
              [](VariantIterator& v) -> VariantIterator& { return v; })
@@ -202,7 +221,10 @@ init_variant_iterator(py::module& m)
                       "Genotype array.  Index order is same as sample input")
         .def_property_readonly("site", &VariantIterator::current_site,
                                "Current :class:`fwdpy11.Site`")
-        .def_property_readonly("records", &VariantIterator::records)
+        .def_property_readonly(
+            "records", &VariantIterator::records,
+            "Returns a copy of the :class:`fwdpy11.MutationRecord` objects "
+            "corresponding to the current site and sample")
         .def_readonly("position", &VariantIterator::current_position,
                       "Current mutation position");
 }
