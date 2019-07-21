@@ -54,7 +54,7 @@ jobs:
           name: Run example programs
           command: |
             PYTHONPATH=. python examples/bgs/bgs.py 42 1
-            PYTHONPATH=. python examples/gss/DiploidPopulationGSSmo.py --popsize 100 --mu 1e-2 --sigma 0.1 --filename test.lzma
+            PYTHONPATH=. python examples/gss/DiploidPopulationGSSmo.py --popsize 100 --mu 1e-2 --sigma 0.1 --preserve 1 --num_ind 10 --filename test.lzma
             PYTHONPATH=. python examples/gss/iterate_variants_in_tree_sequences.py test.lzma
             PYTHONPATH=. python examples/gss/plot_genetic_values_from_tree_sequences.py test.lzma
 
