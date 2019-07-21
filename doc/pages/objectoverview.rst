@@ -176,11 +176,10 @@ to filter on neutral-vs-selected because neutral mutations have been added to th
 
     keys = []
     vi = fwdpy11.VariantIterator(pop.tables,
-                                 pop.mutations,
                                  pop.diploid_metadata[0].nodes,
                                  include_neutral_variants=False)
     for v in vi:
-        r = v.record
+        r = v.records[0]
         keys.append(r.key)
     print(keys)
 
@@ -196,11 +195,10 @@ Let's create the full genotype matrix for this individual at selected variants:
 
     genotypes = np.array([], dtype=np.int8)
     vi = fwdpy11.VariantIterator(pop.tables,
-                                 pop.mutations,
                                  pop.diploid_metadata[0].nodes,
                                  include_neutral_variants=False)
     for v in vi:
-        r = v.record
+        r = v.records[0]
         genotypes = np.concatenate((genotypes, v.genotypes))
     genotypes = genotypes.reshape(len(keys), 2)
     print(genotypes)
