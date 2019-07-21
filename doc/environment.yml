@@ -7,7 +7,7 @@ channels:
 
 dependencies:
     - python>=3.6
-    - sphinx_rtd_theme==0.1.9
+    - sphinx_rtd_theme
     - pybind11==2.3.0
     - gsl==2.4
     - msprime
@@ -17,5 +17,6 @@ dependencies:
     - matplotlib
     - ipython
     - cmake
+    - pip
     - pip:
         - cppimport
