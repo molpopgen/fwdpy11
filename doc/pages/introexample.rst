@@ -258,7 +258,7 @@ optimum.
         ssh = 0.0
         for v in vi:
             g = v.genotypes
-            r = v.record
+            r = v.records[0]
             if pop.mutations[r.key].neutral is True:
                 daf = float(g.sum())
                 het = 2*daf*(len(g)-daf)/float(len(g)*(len(g)-1))
@@ -297,7 +297,7 @@ of :class:`fwdpy11.VariantIterator`:
                                  include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
-        r = v.record
+        r = v.records[0]
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_ts[who] += 1
@@ -325,7 +325,7 @@ tree sequence:
                                  include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
-        r = v.record
+        r = v.records[0]
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_simplified_ts[who] += 1

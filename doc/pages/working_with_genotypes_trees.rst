@@ -17,7 +17,7 @@ To do so, we use :class:`fwdpy11.VariantIterator` to traverse each mutation:
    selected_sfs = np.zeros(50)
    vi = fwdpy11.VariantIterator(pop.tables, [i for i in range(50)])
    for v in vi:
-       n = pop.mutations[v.record.key].neutral
+       n = pop.mutations[v.records[0].key].neutral
        g = v.genotypes
        daf = g.sum()
        if n is True:
