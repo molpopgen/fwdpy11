@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <fwdpp/ts/exceptions.hpp>
 
 namespace py = pybind11;
 
@@ -24,6 +25,9 @@ void init_FixedCrossovers(py::module &);
 void
 initialize_fwdpp_types(py::module &m)
 {
+    py::register_exception<fwdpp::ts::tables_error>(m, "TablesError");
+    py::register_exception<fwdpp::ts::samples_error>(m, "SamplesError");
+
     init_mutation_base(m);
     init_HaploidGenome(m);
     init_data_matrix(m);
