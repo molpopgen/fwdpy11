@@ -6,10 +6,10 @@
 #include <algorithm>
 #include <functional>
 #include <fwdpp/gsl_discrete.hpp>
+#include <fwdpp/genetic_map/genetic_map_unit.hpp>
 #include <gsl/gsl_randist.h>
 #include <fwdpy11/rng.hpp>
 #include "Region.hpp"
-#include "GeneticMapUnit.hpp"
 
 namespace fwdpy11
 {
@@ -68,8 +68,9 @@ namespace fwdpy11
 
     struct GeneralizedGeneticMap : public GeneticMap
     {
-        std::vector<std::unique_ptr<GeneticMapUnit>> callbacks;
-        GeneralizedGeneticMap(std::vector<std::unique_ptr<GeneticMapUnit>> c)
+        std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
+        GeneralizedGeneticMap(
+            std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> c)
             : callbacks(std::move(c))
         {
         }
@@ -80,7 +81,7 @@ namespace fwdpy11
             std::vector<double> rv;
             for (auto&& c : callbacks)
                 {
-                    c->operator()(rng, rv);
+                    c->operator()(rng.get(), rv);
                 }
             if (!rv.empty())
                 {
@@ -88,18 +89,6 @@ namespace fwdpy11
                     rv.push_back(std::numeric_limits<double>::max());
                 }
             return rv;
-        }
-    };
-
-    struct MlocusRecombinationRegions
-    {
-        //TODO: rename
-        std::vector<RecombinationRegions> regions;
-        MlocusRecombinationRegions() : regions() {}
-        inline void
-        append(RecombinationRegions& r)
-        {
-            regions.emplace_back(std::move(r));
         }
     };
 } // namespace fwdpy11
