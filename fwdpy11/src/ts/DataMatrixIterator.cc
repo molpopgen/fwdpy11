@@ -1,6 +1,7 @@
 #include <memory>
 #include <cmath>
 #include <stdexcept>
+#include <unordered_map>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -11,8 +12,6 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
-
 class DataMatrixIterator
 // Encapsulate fwdpp::ts::tree_visitor and fwdpp::data_matrix
 // to provide very fast interation over multiple genomic intervals.
@@ -22,13 +21,15 @@ class DataMatrixIterator
 // next interval without having to initiate a new tree_visitor.
 {
   private:
-    using mut_table_itr
-        = std::vector<fwdpp::ts::mutation_record>::const_iterator;
+    using site_table_itr = fwdpp::ts::site_vector::const_iterator;
+    using mut_table_itr = fwdpp::ts::mutation_key_vector::const_iterator;
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
-    std::vector<std::int8_t> genotypes, is_neutral;
-    std::vector<double> mutation_positions;
+    std::vector<std::int8_t> genotypes;
+    std::unordered_map<std::size_t, double> mutation_positions;
     std::unique_ptr<fwdpp::data_matrix> dmatrix;
+    const site_table_itr sbeg, send;
+    site_table_itr scurrent;
     const mut_table_itr mbeg, mend;
     mut_table_itr mcurrent;
     std::size_t current_range;
@@ -41,8 +42,9 @@ class DataMatrixIterator
                             const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
     {
         std::unique_ptr<fwdpp::ts::tree_visitor> rv(
-            new fwdpp::ts::tree_visitor(tables, samples));
-        auto flag = rv->operator()(std::true_type(), std::true_type());
+            new fwdpp::ts::tree_visitor(tables, samples,
+                                        fwdpp::ts::update_samples_list(true)));
+        auto flag = rv->operator()();
         if (flag == false)
             {
                 throw std::invalid_argument(
@@ -101,31 +103,48 @@ class DataMatrixIterator
         return n;
     }
 
-    std::vector<double>
-    set_positions(const std::vector<fwdpy11::Mutation>& mutations)
+    std::unordered_map<std::size_t, double>
+    set_positions(const fwdpp::ts::table_collection& tables)
     {
-        std::vector<double> p;
-        p.reserve(mutations.size());
-        for (auto& m : mutations)
+        std::unordered_map<std::size_t, double> rv;
+        for (auto& m : tables.mutation_table)
             {
-                p.push_back(m.pos);
+                if (rv.find(m.key) != end(rv))
+                    {
+                        throw fwdpp::ts::tables_error(
+                            "mutation key present more than once in "
+                            "MutationTable");
+                    }
+                if (m.site >= tables.site_table.size())
+                    {
+                        throw fwdpp::ts::tables_error("invalid site id");
+                    }
+                rv[m.key] = tables.site_table[m.site].position;
             }
-        return p;
+        return rv;
     }
 
-    mut_table_itr
-    find_first_mutation_record(mut_table_itr b, mut_table_itr e,
-                               const double start)
+    site_table_itr
+    find_first_site(site_table_itr b, site_table_itr e, const double start)
     {
         return std::lower_bound(
-            b, e, start,
-            [this](const fwdpp::ts::mutation_record& mr, const double v) {
-                return mutation_positions[mr.key] < v;
+            b, e, start, [this](const fwdpp::ts::site& s, const double v) {
+                return s.position < v;
             });
     }
 
-    mut_table_itr
-    init_trees_and_mutations()
+    void
+    set_current_mutation_to_current_site()
+    {
+        mcurrent = std::lower_bound(
+            mbeg, mend, scurrent->position,
+            [this](const fwdpp::ts::mutation_record& mr, const double p) {
+                return (sbeg + mr.site)->position < p;
+            });
+    }
+
+    site_table_itr
+    init_trees_and_sites()
     {
         if (current_tree == nullptr || position_ranges.empty())
             {
@@ -137,22 +156,20 @@ class DataMatrixIterator
 
         while (current_right < first_left)
             {
-                current_tree->operator()(std::true_type(), std::true_type());
+                current_tree->operator()();
                 current_right = current_tree->tree().right;
             }
-        double current_tree_left = current_tree->tree().left;
-        mut_table_itr firstmut = mbeg;
-        while (firstmut < mend
-               && mutation_positions[firstmut->key] < current_tree_left)
+        site_table_itr s = sbeg;
+        while (s < send && s->position < first_left)
             {
-                ++firstmut;
+                ++s;
             }
-        return firstmut;
+        return s;
     }
 
-    mut_table_itr
-    find_first_mutation_record_after_current_max()
-    // After a call to cleanup_matrix, we may need to reset mcurrent
+    site_table_itr
+    find_first_site_after_current_max()
+    // After a call to cleanup_matrix, we may need to reset scurrent
     // to the first mutation AFTER dmatrix's current data.  We do so
     // here.
     {
@@ -178,13 +195,12 @@ class DataMatrixIterator
             }
         if (m == std::numeric_limits<double>::max())
             {
-                return mcurrent;
+                return scurrent;
             }
-        return std::upper_bound(
-            mcurrent, mend, m,
-            [this](double v, const fwdpp::ts::mutation_record& mr) {
-                return v < mutation_positions[mr.key];
-            });
+        return std::upper_bound(scurrent, send, m,
+                                [this](double v, const fwdpp::ts::site& s) {
+                                    return v < s.position;
+                                });
     }
 
     void
@@ -198,8 +214,7 @@ class DataMatrixIterator
         auto l = position_ranges[current_range].first;
         while (current_tree->tree().right < l)
             {
-                auto flag = current_tree->operator()(std::true_type(),
-                                                     std::true_type());
+                auto flag = current_tree->operator()();
                 if (!flag)
                     {
                         break;
@@ -207,8 +222,8 @@ class DataMatrixIterator
             }
     }
 
-    mut_table_itr
-    advance_mutations()
+    site_table_itr
+    advance_sites()
     {
         matrix_requires_clearing = false;
         if (next_tree != nullptr)
@@ -217,21 +232,21 @@ class DataMatrixIterator
                 next_tree.reset(nullptr);
                 double left = position_ranges[current_range].first;
                 double right = position_ranges[current_range].second;
-                mcurrent = find_first_mutation_record(mbeg, mend, left);
+                scurrent = find_first_site(sbeg, send, left);
                 cleanup_matrix(left, right);
-                mcurrent = find_first_mutation_record_after_current_max();
+                scurrent = find_first_site_after_current_max();
             }
         else
             {
                 matrix_requires_clearing = true;
-                const auto& m = current_tree->tree();
-                while (mcurrent < mend
-                       && mutation_positions[mcurrent->key] < m.left)
+                double left = position_ranges[current_range].first;
+                while (scurrent < send && scurrent->position < left)
                     {
-                        ++mcurrent;
+                        ++scurrent;
                     }
             }
-        return mcurrent;
+        set_current_mutation_to_current_site();
+        return scurrent;
     }
 
     void
@@ -336,7 +351,7 @@ class DataMatrixIterator
     void
     check_if_still_iterating()
     {
-        if (!(mcurrent < mend) || current_range >= position_ranges.size())
+        if (!(scurrent < send) || current_range >= position_ranges.size())
             {
                 release_memory();
                 throw py::stop_iteration();
@@ -357,9 +372,9 @@ class DataMatrixIterator
     }
 
     bool
-    mutation_in_current_range(const mut_table_itr mitr)
+    site_in_current_range(const site_table_itr itr)
     {
-        if (!(mitr < mend))
+        if (!(itr < send))
             {
                 return false;
             }
@@ -367,41 +382,21 @@ class DataMatrixIterator
             {
                 throw std::runtime_error("DataMatrixIterator fatal error");
             }
-        auto pos = mutation_positions[mitr->key];
+        auto pos = itr->position;
         return pos >= position_ranges[current_range].first
                && pos < position_ranges[current_range].second;
     }
 
     void
-    process_current_mutation(const fwdpp::ts::marginal_tree& tree,
-                             const mut_table_itr mitr)
+    process_current_site(const fwdpp::ts::marginal_tree& tree,
+                         const site_table_itr itr)
     {
         // Make sure we skip mutants on the
         // current tree but not in the current
         // genomic interval.
-        if (!mutation_in_current_range(mitr))
+        if (!site_in_current_range(itr))
             {
                 return;
-            }
-        auto lc = tree.leaf_counts[mitr->node];
-        bool fixed = (lc == tree.sample_size);
-        if (lc > 0 && (!fixed || (fixed && include_fixations)))
-            {
-                bool mut_is_neutral = is_neutral[mitr->key];
-                bool tracking_n = (mut_is_neutral && include_neutral_variants);
-                bool tracking_s
-                    = (!mut_is_neutral && include_selected_variants);
-                if (tracking_n || tracking_s)
-                    {
-                        auto index = tree.left_sample[mitr->node];
-                        if (index != fwdpp::ts::TS_NULL_NODE)
-                            {
-                                fwdpp::ts::detail::process_samples(
-                                    tree, mitr->node, index, genotypes);
-                                update_data_matrix(mut_is_neutral,
-                                                   mcurrent->key);
-                            }
-                    }
             }
     }
 
@@ -420,18 +415,18 @@ class DataMatrixIterator
 
   public:
     DataMatrixIterator(const fwdpp::ts::table_collection& tables,
-                       const std::vector<fwdpy11::Mutation>& mutations,
                        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                        const std::vector<std::pair<double, double>>& intervals,
                        bool neutral, bool selected, bool fixations)
         : current_tree(initialize_current_tree(tables, samples)),
           next_tree(nullptr), position_ranges(init_intervals(intervals)),
-          genotypes(samples.size(), 0), is_neutral(set_neutral(mutations)),
-          mutation_positions(set_positions(mutations)),
+          genotypes(samples.size(), 0),
+          mutation_positions(set_positions(tables)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
-          mbeg(tables.mutation_table.begin()),
-          mend(tables.mutation_table.end()),
-          mcurrent(init_trees_and_mutations()), current_range(0),
+          sbeg(begin(tables.site_table)), send(end(tables.site_table)),
+          scurrent(init_trees_and_sites()), mbeg(begin(tables.mutation_table)),
+          mend(end(tables.mutation_table)),
+          mcurrent(begin(tables.mutation_table)), current_range(0),
           include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations),
           matrix_requires_clearing(false)
@@ -445,7 +440,7 @@ class DataMatrixIterator
     {
         check_if_still_iterating();
         advance_trees();
-        mcurrent = advance_mutations();
+        scurrent = advance_sites();
         next_tree.reset(nullptr);
         if (matrix_requires_clearing)
             {
@@ -467,14 +462,32 @@ class DataMatrixIterator
                                     *current_tree));
                             }
                     }
-                for (; mcurrent < mend
-                       && mutation_positions[mcurrent->key] < tree.right;
-                     ++mcurrent)
+                for (; scurrent < send && scurrent->position < tree.right
+                       && site_in_current_range(scurrent);
+                     ++scurrent)
                     {
-                        process_current_mutation(tree, mcurrent);
+                        while (mcurrent < mend
+                               && (sbeg + mcurrent->site)->position
+                                      < scurrent->position)
+                            {
+                                ++mcurrent;
+                            }
+                        auto m = mcurrent;
+                        m++;
+                        while (m < mend
+                               && (sbeg + m->site)->position
+                                      == scurrent->position)
+                            {
+                                ++m;
+                            }
+                        fwdpp::ts::detail::process_site_range(
+                            tree, scurrent, std::make_pair(mcurrent, m),
+                            include_neutral_variants,
+                            include_selected_variants, !include_fixations,
+                            genotypes, *dmatrix);
+                        mcurrent = m;
                     }
-                iteration_flag = current_tree->operator()(std::true_type(),
-                                                          std::true_type());
+                iteration_flag = current_tree->operator()();
                 tree_in_current_range
                     = (current_tree->tree().left
                        < position_ranges[current_range].second);
@@ -540,18 +553,15 @@ init_DataMatrixIterator(py::module& m)
         .. versionadded:: 0.4.4
         )delim")
         .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpy11::Mutation>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool,
                       bool, bool>(),
-             py::arg("tables"), py::arg("mutations"), py::arg("samples"),
+             py::arg("tables"), py::arg("samples"),
              py::arg("intervals"), py::arg("neutral"), py::arg("selected"),
              py::arg("fixations") = false,
              R"delim(
         :param tables: A table collection
         :type tables: :class:`fwdpy11.TableCollection`
-        :param mutations: The mutations from the simulation
-        :type mutations: :class:`fwdpy11.MutationVector`
         :param samples: A list of samples
         :type samples: List-like
         :param intervals: The :math:`[start, stop)` positions of each interval
@@ -562,6 +572,10 @@ init_DataMatrixIterator(py::module& m)
         :type selected: boolean
         :param fixations: (False) If True, include fixations in the sample
         :type fixations: boolean
+
+        .. versionchanged:: 0.5.0
+            
+            No longer requires :class:`fwdpy11.MutationVector`
         )delim")
         .def("__iter__",
              [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })

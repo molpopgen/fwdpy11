@@ -254,11 +254,11 @@ optimum.
         samples_at_t = np.where(mdtimes == t)[0]
         rsamples = np.random.choice(samples_at_t, 25, replace=False)
         rsamples_nodes = all_md['nodes'][rsamples,:].flatten()
-        vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, rsamples_nodes)
+        vi = fwdpy11.VariantIterator(pop.tables, rsamples_nodes)
         ssh = 0.0
         for v in vi:
             g = v.genotypes
-            r = v.record
+            r = v.records[0]
             if pop.mutations[r.key].neutral is True:
                 daf = float(g.sum())
                 het = 2*daf*(len(g)-daf)/float(len(g)*(len(g)-1))
@@ -292,12 +292,12 @@ of :class:`fwdpy11.VariantIterator`:
 
     current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
     nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
-    vi = fwdpy11.VariantIterator(pop.tables, pop.mutations,
+    vi = fwdpy11.VariantIterator(pop.tables,
                                  current_generation,
                                  include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
-        r = v.record
+        r = v.records[0]
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_ts[who] += 1
@@ -317,16 +317,15 @@ tree sequence:
 
 .. ipython:: python
 
-    tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.mutations, current_generation)
+    tables, idmap = fwdpy11.simplify_tables(pop.tables, current_generation)
     remapped_samples = idmap[current_generation]
     nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
     vi = fwdpy11.VariantIterator(tables,
-                                 pop.mutations,
                                  remapped_samples,
                                  include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
-        r = v.record
+        r = v.records[0]
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_simplified_ts[who] += 1

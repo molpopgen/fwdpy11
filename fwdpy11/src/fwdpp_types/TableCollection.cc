@@ -10,6 +10,7 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::site_vector);
 
 void
 init_ts_TableCollection(py::module& m)
@@ -31,6 +32,9 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("mutations",
                       &fwdpp::ts::table_collection::mutation_table,
                       "The :class:`fwdpy11.MutationTable`.")
+        .def_readonly("sites",
+                      &fwdpp::ts::table_collection::site_table,
+                      "The :class:`fwdpy11.SiteTable`.")
         .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::table_collection::output_right)
@@ -50,6 +54,7 @@ init_ts_TableCollection(py::module& m)
                     fwdpy11::vector_to_list(tables.node_table),
                     fwdpy11::vector_to_list(tables.edge_table),
                     fwdpy11::vector_to_list(tables.mutation_table),
+                    fwdpy11::vector_to_list(tables.site_table),
                     fwdpy11::vector_to_list(tables.preserved_nodes));
             },
             [](py::tuple t) {
@@ -64,9 +69,12 @@ init_ts_TableCollection(py::module& m)
                 tables.mutation_table
                     = fwdpy11::list_to_vector<fwdpp::ts::mutation_key_vector>(
                         t[3].cast<py::list>());
+                tables.site_table
+                    = fwdpy11::list_to_vector<fwdpp::ts::site_vector>(
+                        t[4].cast<py::list>());
                 tables.preserved_nodes = fwdpy11::list_to_vector<decltype(
                     fwdpp::ts::table_collection::preserved_nodes)>(
-                    t[4].cast<py::list>());
+                    t[5].cast<py::list>());
                 tables.build_indexes();
                 return tables;
             }));

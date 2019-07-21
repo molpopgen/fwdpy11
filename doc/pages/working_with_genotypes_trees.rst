@@ -15,9 +15,9 @@ To do so, we use :class:`fwdpy11.VariantIterator` to traverse each mutation:
 
    neutral_sfs = np.zeros(50)
    selected_sfs = np.zeros(50)
-   vi = fwdpy11.VariantIterator(pop.tables, pop.mutations, [i for i in range(50)])
+   vi = fwdpy11.VariantIterator(pop.tables, [i for i in range(50)])
    for v in vi:
-       n = pop.mutations[v.record.key].neutral
+       n = pop.mutations[v.records[0].key].neutral
        g = v.genotypes
        daf = g.sum()
        if n is True:
@@ -58,7 +58,7 @@ We may obtain the genotypes for the samples all at once using the following func
 
 .. ipython:: python
 
-   dm = fwdpy11.data_matrix_from_tables(pop.tables, pop.mutations, [i for i in range(50)],
+   dm = fwdpy11.data_matrix_from_tables(pop.tables, [i for i in range(50)],
                                         record_neutral=False,
                                         record_selected=True,
                                         include_fixations=True)
@@ -91,7 +91,7 @@ the previous example, and tests that the data are identical:
     windows = [(0, 0.25), (0.75, 1.0)]
     selected_genotypes = np.array(dm.selected)
     p = np.array(dm.selected.positions)
-    dmi = fwdpy11.DataMatrixIterator(pop.tables, pop.mutations,
+    dmi = fwdpy11.DataMatrixIterator(pop.tables,
                                     [i for i in range(50)], windows,
                                     neutral=False, selected=True, fixations=True)
     for i,j in zip(dmi, windows):

@@ -37,7 +37,7 @@ class testTreeSequences(unittest.TestCase):
 
     def test_simplify_tables(self):
         tables, idmap = fwdpy11.simplify_tables(
-            self.pop.tables, self.pop.mutations, [i for i in range(10)])
+            self.pop.tables, [i for i in range(10)])
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -49,8 +49,7 @@ class testTreeSequences(unittest.TestCase):
 
     def test_simplify_tables_numpy_array(self):
         tables, idmap = fwdpy11.simplify_tables(
-            self.pop.tables, self.pop.mutations,
-            np.array([i for i in range(10)]))
+            self.pop.tables, np.array([i for i in range(10)]))
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -245,14 +244,12 @@ class testTreeSequences(unittest.TestCase):
 
     def test_genotype_matrix_ranges(self):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
         spos = np.array(dm.selected.positions)
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
             dmi = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                  self.pop.mutations,
                                                   [i for i in range(
                                                       2*self.pop.N)],
                                                   record_neutral=False,
@@ -270,7 +267,6 @@ class testTreeSequences(unittest.TestCase):
         those in pop.mcounts
         """
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
@@ -278,7 +274,6 @@ class testTreeSequences(unittest.TestCase):
         cs = np.sum(sa, axis=1)
         i = 0
         vi = fwdpy11.VariantIterator(self.pop.tables,
-                                     self.pop.mutations,
                                      [i for i in range(2*self.pop.N)])
         for v in vi:
             c = self.pop.mcounts[self.pop.tables.mutations[i].key]
@@ -291,7 +286,6 @@ class testTreeSequences(unittest.TestCase):
 
     def test_VariantIteratorFromPopulation(self):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.mutations,
                                              [i for i in range(
                                                  2*self.pop.N)],
                                              False, True)
@@ -310,13 +304,14 @@ class testTreeSequences(unittest.TestCase):
 
     def test_VariantIteratorBeginEnd(self):
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
-            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
-                                         [i for i in range(2*self.pop.N)], i, i+0.1)
+            vi = fwdpy11.VariantIterator(self.pop.tables,
+                                         [i for i in range(2*self.pop.N)], i,
+                                         i+0.1)
             nm = len([j for j in self.pop.tables.mutations if self.pop.mutations[j.key].pos >= i and
                       self.pop.mutations[j.key].pos < i+0.1])
             nseen = 0
             for v in vi:
-                r = v.record
+                r = v.records[0]
                 self.assertTrue(self.pop.mutations[r.key].pos >= i)
                 self.assertTrue(self.pop.mutations[r.key].pos < i+0.1)
                 nseen += 1
@@ -324,7 +319,7 @@ class testTreeSequences(unittest.TestCase):
 
         # test bad start/stop
         with self.assertRaises(ValueError):
-            vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.mutations,
+            vi = fwdpy11.VariantIterator(self.pop.tables,
                                          [i for i in range(2*self.pop.N)], begin=0.5, end=0.25)
 
     def test_count_mutations(self):
@@ -378,10 +373,9 @@ class testSamplePreservation(unittest.TestCase):
         at = n['time'][pn]
         for u in np.unique(at):
             n = pn[np.where(at == u)[0]]
-            vi = fwdpy11.VariantIterator(self.pop.tables,
-                                         self.pop.mutations, n)
+            vi = fwdpy11.VariantIterator(self.pop.tables, n)
             for variant in vi:
-                k = variant.record
+                k = variant.records[0]
                 self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
@@ -551,11 +545,11 @@ class testMetaData(unittest.TestCase):
             samples_at_time_u = metadata_nodes[np.where(
                 metadata_node_times == u)]
             vi = fwdpy11.VariantIterator(
-                pop.tables, pop.mutations, samples_at_time_u)
+                pop.tables, samples_at_time_u)
             sum_esizes = np.zeros(len(samples_at_time_u))
             for variant in vi:
                 g = variant.genotypes
-                r = variant.record
+                r = variant.records[0]
                 mutant = np.where(g == 1)[0]
                 sum_esizes[mutant] += pop.mutations[r.key].s
             ind = int(len(samples_at_time_u)/2)
@@ -598,7 +592,6 @@ class testDataMatrixIterator(unittest.TestCase):
         self.all_samples = [i for i in range(2*self.N)]
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         self.dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                  self.pop.mutations,
                                                   self.all_samples,
                                                   True, True)
         self.neutral = np.array(self.dm.neutral)
@@ -607,23 +600,25 @@ class testDataMatrixIterator(unittest.TestCase):
         self.spos = np.array(self.dm.selected.positions)
 
     def test_entire_matrix(self):
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          [(0, 1)], True, True)
+        niterations = 0
         for dm in dmi:
+            niterations += 1
             for i in dm.selected_keys:
                 self.assertFalse(self.pop.mutations[i].neutral)
             self.assertTrue(np.array_equal(
                 np.array(self.dm.selected_keys), dm.selected_keys))
             self.assertTrue(np.array_equal(dm.neutral, self.neutral))
             self.assertTrue(np.array_equal(dm.selected, self.selected))
+        self.assertEqual(niterations, 1)
 
     def test_single_slice(self):
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
-                                         self.all_samples,
-                                         [(0.1, 0.2)], True, True)
-        dm = next(dmi)
-
+        dm = fwdpy11.DataMatrixIterator(self.pop.tables,
+                                        self.all_samples,
+                                        [(0.1, 0.2)], True, True)
+        dm = next(dm)
         rows = np.where((self.spos >= 0.1) & (self.spos < 0.2))[0]
         pos_slice = self.spos[rows]
         selected_slice = self.selected[rows, ]
@@ -632,33 +627,39 @@ class testDataMatrixIterator(unittest.TestCase):
 
     def test_nonoverlapping_slices(self):
         slices = [(0.1, 0.2), (0.21, 0.37), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
+        niterations = 0
         for r, dm in zip(slices, dmi):
+            niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
             selected_slice = self.selected[rows, ]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
+        self.assertEqual(niterations, len(slices))
 
     def test_complex_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.23), (0.21, 0.37),
                   (0.38, 0.5337), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
+        niterations = 0
         for r, dm in zip(slices, dmi):
+            niterations += 1
             rows = np.where((self.spos >= r[0]) & (self.spos < r[1]))[0]
             pos_slice = self.spos[rows]
             selected_slice = self.selected[rows, ]
             self.assertTrue(np.array_equal(dm.selected_positions, pos_slice))
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
+        self.assertEqual(niterations, len(slices))
 
     def test_nested_slices(self):
         slices = [(0.1, 0.2), (0.15, 0.19), (0.21, 0.37),
                   (0.38, 0.5337), (0.39, 0.432), (0.5, 0.55)]
-        dmi = fwdpy11.DataMatrixIterator(self.pop.tables, self.pop.mutations,
+        dmi = fwdpy11.DataMatrixIterator(self.pop.tables,
                                          self.all_samples,
                                          slices, True, True)
         for r, dm in zip(slices, dmi):
