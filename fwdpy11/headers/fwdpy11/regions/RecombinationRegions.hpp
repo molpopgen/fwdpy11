@@ -90,18 +90,6 @@ namespace fwdpy11
             return rv;
         }
     };
-
-    struct MlocusRecombinationRegions
-    {
-        //TODO: rename
-        std::vector<RecombinationRegions> regions;
-        MlocusRecombinationRegions() : regions() {}
-        inline void
-        append(RecombinationRegions& r)
-        {
-            regions.emplace_back(std::move(r));
-        }
-    };
 } // namespace fwdpy11
 
 #endif
