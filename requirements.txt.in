@@ -11,4 +11,5 @@ sphinx
 pandas
 ipython
 matplotlib
+seaborn
 msprime
