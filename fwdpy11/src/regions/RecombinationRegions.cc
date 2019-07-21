@@ -1,7 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/regions/GeneticMapUnit.hpp>
 
 namespace py = pybind11;
 
@@ -18,10 +17,10 @@ init_RecombinationRegions(py::module& m)
     py::class_<fwdpy11::GeneralizedGeneticMap, fwdpy11::GeneticMap>(
         m, "GeneralizedGeneticMap")
         .def(py::init([](py::list l) {
-            std::vector<std::unique_ptr<fwdpy11::GeneticMapUnit>> callbacks;
+            std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
             for (auto& i : l)
                 {
-                    auto& ref = i.cast<fwdpy11::GeneticMapUnit&>();
+                    auto& ref = i.cast<fwdpp::genetic_map_unit&>();
                     callbacks.emplace_back(ref.clone());
                 }
             return fwdpy11::GeneralizedGeneticMap(std::move(callbacks));
@@ -37,10 +36,10 @@ init_RecombinationRegions(py::module& m)
           });
 
     m.def("dispatch_create_GeneticMap", [](py::object, py::list l) {
-        std::vector<std::unique_ptr<fwdpy11::GeneticMapUnit>> callbacks;
+        std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
         for (auto& i : l)
             {
-                auto& ref = i.cast<fwdpy11::GeneticMapUnit&>();
+                auto& ref = i.cast<fwdpp::genetic_map_unit&>();
                 callbacks.emplace_back(ref.clone());
             }
         std::unique_ptr<fwdpy11::GeneralizedGeneticMap> rv(

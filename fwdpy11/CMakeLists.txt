@@ -12,7 +12,13 @@ set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc
     src/fwdpp_types/EdgeTable.cc
     src/fwdpp_types/MutationTable.cc
     src/fwdpp_types/SiteTable.cc
-    src/fwdpp_types/TableCollection.cc)
+    src/fwdpp_types/TableCollection.cc
+    src/fwdpp_types/GeneticMapUnit.cc 
+    src/fwdpp_types/PoissonInterval.cc 
+    src/fwdpp_types/BinomialPoint.cc
+    src/fwdpp_types/PoissonPoint.cc
+    src/fwdpp_types/FixedCrossovers.cc)
+
 
 set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
     src/fwdpp_functions/data_matrix_creation.cc)
@@ -37,11 +43,7 @@ set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
-    src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
-    src/regions/GeneticMapUnit.cc src/regions/PoissonInterval.cc 
-    src/regions/BinomialPoint.cc
-    src/regions/PoissonPoint.cc
-    src/regions/FixedCrossovers.cc)
+    src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc)
 
 set(GSL_SOURCES src/gsl/init.cc
     src/gsl/gsl_random.cc)

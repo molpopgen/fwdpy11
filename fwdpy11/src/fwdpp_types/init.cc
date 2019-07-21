@@ -15,6 +15,11 @@ void init_ts_EdgeTable(py::module &m);
 void init_ts_MutationTable(py::module &);
 void init_ts_SiteTable(py::module &);
 void init_ts_TableCollection(py::module &);
+void init_GeneticMapUnit(py::module &);
+void init_PoissonInterval(py::module &);
+void init_BinomialPoint(py::module &);
+void init_PoissonPoint(py::module &);
+void init_FixedCrossovers(py::module &);
 
 void
 initialize_fwdpp_types(py::module &m)
@@ -22,6 +27,12 @@ initialize_fwdpp_types(py::module &m)
     init_mutation_base(m);
     init_HaploidGenome(m);
     init_data_matrix(m);
+
+    init_GeneticMapUnit(m);
+    init_PoissonInterval(m);
+    init_BinomialPoint(m);
+    init_PoissonPoint(m);
+    init_FixedCrossovers(m);
 
     // Types related to tree sequenc recording
     init_NULL_NODE(m);
