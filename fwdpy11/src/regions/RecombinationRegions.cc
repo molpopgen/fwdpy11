@@ -27,11 +27,6 @@ init_RecombinationRegions(py::module& m)
             return fwdpy11::GeneralizedGeneticMap(std::move(callbacks));
         }));
 
-    py::class_<fwdpy11::MlocusRecombinationRegions>(
-        m, "MlocusRecombinationRegions")
-        .def(py::init<>())
-        .def("append", &fwdpy11::MlocusRecombinationRegions::append);
-
     m.def("dispatch_create_GeneticMap",
           [](py::object o, std::vector<fwdpy11::Region>& regions) {
               if (regions.empty() && o.is_none())
