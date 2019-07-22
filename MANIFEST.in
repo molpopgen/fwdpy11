@@ -7,6 +7,7 @@ include CMakeLists.txt
 include fwdpy11/CMakeLists.txt
 include tests/CMakeLists.txt
 include tests/v045.bin
+include tests/v045.lzma
 include configure
 include setup.py.in
 include doc/conf.py
