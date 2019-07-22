@@ -22,7 +22,7 @@ init_ts_MutationRecord(py::module& m)
                       "Node id of the mutation")
         .def_readonly("key", &fwdpp::ts::mutation_record::key,
                       "Index of the mutation in the population")
-        .def_readonly("site", &fwdpp::ts::mutation_record::key,
+        .def_readonly("site", &fwdpp::ts::mutation_record::site,
                       R"delim(Index of the mutation's site in the population.
                       
                       .. versionadded:: 0.5.0)delim")
