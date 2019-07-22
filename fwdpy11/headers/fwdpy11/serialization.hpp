@@ -114,6 +114,16 @@ namespace fwdpy11
                     buffer, pop.ancient_sample_records);
                 fwdpp::io::deserialize_population(buffer, pop);
                 pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
+                // NOTE: version 0.5.0 added in a site table that previous versions
+                // did not have.  Further, the mutation table entries differed in
+                // previous versions.
+                if (!pop.tables.mutation_table.empty()
+                    && pop.tables.site_table.empty())
+                    {
+                        fwdpp::ts::io::
+                            fix_mutation_table_repopulate_site_table(
+                                pop.tables, pop.mutations);
+                    }
                 if (!pop.tables.edge_table.empty())
                     {
                         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
