@@ -8,11 +8,15 @@ Low-level data types
 
 * :class:`fwdpy11.Node` defines nodes
 * :class:`fwdpy11.Edge` defines edges
-* :class:`fwdpy11.MutationRecord` defines mutations locations on trees and in :class:`fwdpy11.PopulationBase` objects.
+* :class:`fwdpy11.Site` defines a site (genomic location) where a mutation is present.
+* :class:`fwdpy11.MutationRecord` defines mutations associated with :class:`fwdpy11.Site` objects on trees and in :class:`fwdpy11.PopulationBase` objects.
 
 * :class:`fwdpy11.NodeTable` represents a node table
 * :class:`fwdpy11.EdgeTable` represents an edge table
 * :class:`fwdpy11.MutationTable` represents a mutation table
+* :class:`fwdpy11.SiteTable` represents a site table
+
+These types are all analogous to the corresponding tskit_ types.  Here, :class:`fwdpy11.MutationRecord` plays the role of `tskit.Mutation`, but with additional data fields that are useful for the forward-time simulations.
 
 Table collections
 ----------------------------------------------------------

@@ -22,7 +22,7 @@ The goal of TSR is to track a set of tables that contain the trees describing th
 Trees and tables
 ++++++++++++++++++++++++++++++++
 
-To start out, let us consider the follwing tree:
+To start out, let us consider the following tree:
 
 .. figure:: ../images/tree.png
 
@@ -154,7 +154,7 @@ Let's apply the simplification algorithm that:
 That's much nicer!  The simplified tree shows now the *input* node ids are remapped to *output* node ids
 in such a manner that relative ordering is preserved.
  
-Thus, the most pratical view of TSR is this: we speed up the simulations by *not* simulating neutral mutations.
+Thus, the most practical view of TSR is this: we speed up the simulations by *not* simulating neutral mutations.
 We only have to simulate the selected variants and occasionally simplify our messy trees.  The realized speedups are
 huge, and I refer you to the 2018 paper for the data on that.  But our simulations are not only faster.  They record
 much more information.  The tables of nodes, edges, etc., record the entire history of the simulation with respect to a

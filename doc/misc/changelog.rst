@@ -4,6 +4,23 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.5.0
+***********
+
+This is an intermediate release as we are still working towards supporting more general demographic models.
+
+Major changes include:
+
+* Updating the fwdpp back-end to the pre-release code for fwdpp 0.8.0.  Almost none of these changes are "user facing".
+* Add :class:`fwdpy11.SiteTable`, :class:`fwdpy11.Site` and new fields to :class:`fwdpy11.MutationRecord`. `PR 258 <https://github.com/molpopgen/fwdpy11/pull/258>`_  These changes affect the API for some function calls. See :ref:`upgrade_path` for details.
+
+Minor changes include:
+
+* Add :func:`fwdpy11.gsl_version`. :class:`fwdpy11.MutationRecord`. `PR 256 <https://github.com/molpopgen/fwdpy11/pull/256>`_
+* :attr:`fwdpy11.Mutation.g` is converted to the mutation's age when dumping table collections to tskit's format. `PR 257 <https://github.com/molpopgen/fwdpy11/pull/257>`_
+* New exception types from fwdpp registered as Python exceptions. `PR 260 <https://github.com/molpopgen/fwdpy11/pull/260>`_
+* Several updates to documentation and to continuous integration testing.
+
 0.4.5
 +++++++++++
 

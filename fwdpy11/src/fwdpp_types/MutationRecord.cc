@@ -23,13 +23,19 @@ init_ts_MutationRecord(py::module& m)
         .def_readonly("key", &fwdpp::ts::mutation_record::key,
                       "Index of the mutation in the population")
         .def_readonly("site", &fwdpp::ts::mutation_record::key,
-                      "Index of the mutation's site in the population")
+                      R"delim(Index of the mutation's site in the population.
+                      
+                      .. versionadded:: 0.5.0)delim")
         .def_readonly("derived_state",
                       &fwdpp::ts::mutation_record::derived_state,
-                      "The derived state of the mutation")
+                      R"delim(The derived state of the mutation.
+                      
+                      .. versionadded:: 0.5.0)delim")
         .def_readonly("neutral", &fwdpp::ts::mutation_record::neutral,
-                      "Boolean descriptor of whether or not the mutation "
-                      "affects fitness.")
+                      R"delim(Boolean descriptor of whether or not the mutation
+                      affects fitness.
+                      
+                      .. versionadded:: 0.5.0)delim")
         .def("__repr__",
              [](const fwdpp::ts::mutation_record& self) {
                  std::ostringstream out;
