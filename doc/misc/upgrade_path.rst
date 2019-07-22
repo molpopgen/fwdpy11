@@ -6,6 +6,17 @@ Upgrade path
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
 
+0.5.0
+-------------------------------------------------
+
+The following functions and types previously required a :class:`fwdpy11.MutationVector` argument, but no longer do:
+
+* :class:`fwdpy11.VariantIterator`
+* :class:`fwdpy11.DataMatrixIterator`
+* :func:`fwdpy11.data_matrix_from_tables`
+
+The extra argument could be eliminated due to the new attributes added to :class:`fwdpy11.MutationRecord`.
+
 0.2.0
 --------------------------------------------------
 
