@@ -197,6 +197,18 @@ Types related to tree sequence recording
 
     .. autoattribute:: node
 
+    .. autoattribute:: site
+
+    .. autoattribute:: derived_state
+
+    .. autoattribute:: neutral
+
+.. autoclass:: fwdpy11.SiteTable
+.. autoclass:: fwdpy11.Site
+
+    .. autoattribute:: position
+    .. autoattribute:: ancestral_state
+
 .. autoclass:: fwdpy11.TreeIterator
     :members:
 
