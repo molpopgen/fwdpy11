@@ -18,7 +18,7 @@ Even though this release changes some of the tree sequence data structures, we a
 
 Minor changes include:
 
-* Add :func:`fwdpy11.gsl_version`. :class:`fwdpy11.MutationRecord`. `PR 256 <https://github.com/molpopgen/fwdpy11/pull/256>`_
+* Add :func:`fwdpy11.gsl_version`. `PR 256 <https://github.com/molpopgen/fwdpy11/pull/256>`_
 * :attr:`fwdpy11.Mutation.g` is converted to the mutation's age when dumping table collections to tskit's format. `PR 257 <https://github.com/molpopgen/fwdpy11/pull/257>`_
 * New exception types from fwdpp registered as Python exceptions. `PR 260 <https://github.com/molpopgen/fwdpy11/pull/260>`_
 * Several updates to documentation and to continuous integration testing.
