@@ -274,6 +274,10 @@ init_tree_iterator(py::module& m)
             Return marginal tree roots as numpy.ndarray
             
             .. versionadded:: 0.4.0
+
+            .. versionchanged:: 0.5.1
+
+                Fixed to not return an empty array.
             )delim")
         .def("sample_list", &tree_visitor_wrapper::sample_list,
              R"delim(

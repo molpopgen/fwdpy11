@@ -13,7 +13,10 @@ init_ts_IndexedEdge(py::module& m)
     // For now, I won't even bind the C++ vector of these...
     py::class_<fwdpp::ts::indexed_edge>(
         m, "IndexedEdge",
-        "An edge keyed for efficient traversal of tree sequences.")
+        R"delim(An edge keyed for efficient traversal of tree sequences.
+        
+        .. versionadded:: 0.5.1
+        )delim")
         .def_readonly("pos", &fwdpp::ts::indexed_edge::pos)
         .def_readonly("time", &fwdpp::ts::indexed_edge::time)
         .def_readonly("parent", &fwdpp::ts::indexed_edge::parent)

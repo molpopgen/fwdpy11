@@ -4,8 +4,16 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.5.1
+++++++++++++++++
+
+This release fixes two bugs:
+
+* :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible.
+* :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned.
+
 0.5.0
-***********
++++++++++++
 
 This is an intermediate release as we are still working towards supporting more general demographic models.
 
