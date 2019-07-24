@@ -9,8 +9,8 @@ version, etc.
 
 This release fixes two bugs:
 
-* :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible.
-* :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned.
+* :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible. `PR 266 <https://github.com/molpopgen/fwdpy11/pull/266>`_
+* :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned. `PR 267 <https://github.com/molpopgen/fwdpy11/pull/267>`_
 
 0.5.0
 +++++++++++
