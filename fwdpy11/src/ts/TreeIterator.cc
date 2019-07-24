@@ -3,6 +3,7 @@
 #include <pybind11/stl.h>
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
+#include <fwdpp/ts/marginal_tree_functions/roots.hpp>
 #include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
@@ -259,7 +260,8 @@ init_tree_iterator(py::module& m)
             "roots",
             [](const tree_visitor_wrapper& self) {
                 std::vector<fwdpp::ts::TS_NODE_INT>* roots
-                    = new std::vector<fwdpp::ts::TS_NODE_INT>();
+                    = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                        fwdpp::ts::get_roots(self.visitor.tree()));
 
                 auto capsule = py::capsule(roots, [](void* x) {
                     delete reinterpret_cast<
