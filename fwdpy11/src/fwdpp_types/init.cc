@@ -8,6 +8,7 @@ void init_HaploidGenome(py::module &);
 void init_data_matrix(py::module &);
 void init_ts_Node(py::module &);
 void init_ts_Edge(py::module &);
+void init_ts_IndexedEdge(py::module &);
 void init_ts_MutationRecord(py::module &);
 void init_ts_Site(py::module &m);
 void init_NULL_NODE(py::module &);
@@ -42,6 +43,7 @@ initialize_fwdpp_types(py::module &m)
     init_NULL_NODE(m);
     init_ts_Node(m);
     init_ts_Edge(m);
+    init_ts_IndexedEdge(m);
     init_ts_MutationRecord(m);
     init_ts_Site(m);
     init_ts_NodeTable(m);
