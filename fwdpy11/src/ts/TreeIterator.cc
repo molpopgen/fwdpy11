@@ -4,6 +4,7 @@
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/marginal_tree_functions/roots.hpp>
+#include <fwdpp/ts/marginal_tree_functions/samples.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include "node_traversal.hpp"
 
@@ -115,18 +116,11 @@ class tree_visitor_wrapper
                 throw std::invalid_argument("invalid node");
             }
         sample_list_buffer.clear();
-        const auto& marginal = visitor.tree();
-        auto right = marginal.right_sample[node];
-        auto index = marginal.left_sample[node];
-        while (true)
-            {
-                sample_list_buffer.push_back(index);
-                if (index == right)
-                    {
-                        break;
-                    }
-                index = marginal.next_sample[index];
-            }
+        fwdpp::ts::process_samples(
+            visitor.tree(), fwdpp::ts::convert_sample_index_to_nodes(true),
+            node, [this](fwdpp::ts::TS_NODE_INT s) {
+                sample_list_buffer.push_back(s);
+            });
         if (sorted)
             {
                 std::sort(begin(sample_list_buffer), end(sample_list_buffer));
