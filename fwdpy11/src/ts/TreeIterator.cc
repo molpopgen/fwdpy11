@@ -206,14 +206,14 @@ init_tree_iterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"),
-             py::arg("update_samples_below") = false, py::arg("begin") = 0.0,
+             py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
-             py::arg("update_samples_below") = false, py::arg("begin") = 0.0,
+             py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
         .def("parent", &tree_visitor_wrapper::parent,
              "Return parent of a node")
