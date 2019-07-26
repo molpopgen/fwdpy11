@@ -89,6 +89,20 @@ class tree_visitor_wrapper
         return visitor.tree().sample_size();
     }
 
+    py::array_t<fwdpp::ts::TS_NODE_INT>
+    nodes()
+    {
+        std::vector<fwdpp::ts::TS_NODE_INT>* nodes
+            = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                nodes_preorder(visitor.tree()));
+
+        auto capsule = py::capsule(nodes, [](void* x) {
+            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+        });
+        return py::array_t<fwdpp::ts::TS_NODE_INT>(nodes->size(),
+                                                   nodes->data(), capsule);
+    }
+
     py::array
     sample_list(const fwdpp::ts::TS_NODE_INT node, bool sorted)
     {
@@ -280,20 +294,8 @@ init_tree_iterator(py::module& m)
 
                 Fixed to not return an empty array.
             )delim")
-        .def(
-            "nodes",
-            [](const tree_visitor_wrapper& self) {
-                std::vector<fwdpp::ts::TS_NODE_INT>* nodes
-                    = new std::vector<fwdpp::ts::TS_NODE_INT>(
-                        nodes_preorder(self.visitor.tree()));
-
-                auto capsule = py::capsule(nodes, [](void* x) {
-                    delete reinterpret_cast<
-                        std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
-                });
-                return py::array(nodes->size(), nodes->data(), capsule);
-            },
-            R"delim("Return the nodes in the current tree.
+        .def("nodes", &tree_visitor_wrapper::nodes,
+             R"delim("Return the nodes in the current tree.
              
              The return order is preorder.
              
