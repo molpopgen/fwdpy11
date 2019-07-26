@@ -105,6 +105,19 @@ class tree_visitor_wrapper
     }
 
     py::array
+    samples() const
+    {
+        std::vector<fwdpp::ts::TS_NODE_INT>* s
+            = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                visitor.tree().samples_list_begin(),
+                visitor.tree().samples_list_end());
+        auto capsule = py::capsule(s, [](void* x) {
+            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+        });
+        return py::array(s->size(), s->data(), capsule);
+    }
+
+    py::array
     samples_below(const fwdpp::ts::TS_NODE_INT node, bool sorted)
     {
         if (!update_samples)
@@ -123,13 +136,14 @@ class tree_visitor_wrapper
             });
         if (sorted)
             {
-                std::sort(begin(samples_below_buffer), end(samples_below_buffer));
+                std::sort(begin(samples_below_buffer),
+                          end(samples_below_buffer));
             }
         auto capsule = py::capsule(&samples_below_buffer, [](void* x) {
             reinterpret_cast<decltype(samples_below_buffer)*>(x)->clear();
         });
-        return py::array(samples_below_buffer.size(), samples_below_buffer.data(),
-                         capsule);
+        return py::array(samples_below_buffer.size(),
+                         samples_below_buffer.data(), capsule);
     }
 
     fwdpp::ts::TS_NODE_INT
@@ -295,6 +309,8 @@ init_tree_iterator(py::module& m)
              
              .. versionadded:: 0.5.1
              )delim")
+        .def("samples", &tree_visitor_wrapper::samples,
+             "Return the complete sample list")
         .def("samples_below", &tree_visitor_wrapper::samples_below,
              R"delim(
             Return the list of samples descending from a node.
