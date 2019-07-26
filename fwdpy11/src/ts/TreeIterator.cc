@@ -5,6 +5,7 @@
 #include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/marginal_tree_functions/roots.hpp>
 #include <fwdpy11/numpy/array.hpp>
+#include "node_traversal.hpp"
 
 namespace py = pybind11;
 
@@ -279,6 +280,25 @@ init_tree_iterator(py::module& m)
 
                 Fixed to not return an empty array.
             )delim")
+        .def(
+            "nodes",
+            [](const tree_visitor_wrapper& self) {
+                std::vector<fwdpp::ts::TS_NODE_INT>* nodes
+                    = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                        nodes_preorder(self.visitor.tree()));
+
+                auto capsule = py::capsule(nodes, [](void* x) {
+                    delete reinterpret_cast<
+                        std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+                });
+                return py::array(nodes->size(), nodes->data(), capsule);
+            },
+            R"delim("Return the nodes in the current tree.
+             
+             The return order is preorder.
+             
+             .. versionadded:: 0.5.1
+             )delim")
         .def("sample_list", &tree_visitor_wrapper::sample_list,
              R"delim(
             Return the list of samples descending from a node.
