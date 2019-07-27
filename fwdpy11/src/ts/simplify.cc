@@ -98,6 +98,7 @@ init_simplify_functions(py::module& m)
         [](const fwdpp::ts::table_collection& tables,
            const std::vector<fwdpp::ts::TS_NODE_INT>& samples) -> py::tuple {
             auto t(tables);
+            t.preserved_nodes.clear();
             fwdpp::ts::table_simplifier simplifier(tables.genome_length());
             auto rv = simplifier.simplify(t, samples);
             t.build_indexes();
