@@ -4,7 +4,9 @@
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/marginal_tree_functions/roots.hpp>
+#include <fwdpp/ts/marginal_tree_functions/samples.hpp>
 #include <fwdpy11/numpy/array.hpp>
+#include "node_traversal.hpp"
 
 namespace py = pybind11;
 
@@ -41,14 +43,14 @@ class tree_visitor_wrapper
 
   public:
     fwdpp::ts::tree_visitor visitor;
-    std::vector<fwdpp::ts::TS_NODE_INT> sample_list_buffer;
+    std::vector<fwdpp::ts::TS_NODE_INT> samples_below_buffer;
     tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-                         bool update_sample_list, double start, double stop)
-        : update_samples(update_sample_list), from(start), until(stop),
+                         bool update_samples_below, double start, double stop)
+        : update_samples(update_samples_below), from(start), until(stop),
           visitor(tables, samples,
-                  fwdpp::ts::update_samples_list(update_sample_list)),
-          sample_list_buffer()
+                  fwdpp::ts::update_samples_list(update_samples_below)),
+          samples_below_buffer()
     {
         validate_from_until(tables.genome_length());
     }
@@ -57,11 +59,11 @@ class tree_visitor_wrapper
         const fwdpp::ts::table_collection& tables,
         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
-        bool update_sample_list, double start, double stop)
-        : update_samples(update_sample_list), from(start), until(stop),
+        bool update_samples_below, double start, double stop)
+        : update_samples(update_samples_below), from(start), until(stop),
           visitor(tables, samples,
-                  fwdpp::ts::update_samples_list(update_sample_list)),
-          sample_list_buffer()
+                  fwdpp::ts::update_samples_list(update_samples_below)),
+          samples_below_buffer()
     {
         validate_from_until(tables.genome_length());
     }
@@ -88,8 +90,35 @@ class tree_visitor_wrapper
         return visitor.tree().sample_size();
     }
 
+    py::array_t<fwdpp::ts::TS_NODE_INT>
+    nodes()
+    {
+        std::vector<fwdpp::ts::TS_NODE_INT>* nodes
+            = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                nodes_preorder(visitor.tree()));
+
+        auto capsule = py::capsule(nodes, [](void* x) {
+            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+        });
+        return py::array_t<fwdpp::ts::TS_NODE_INT>(nodes->size(),
+                                                   nodes->data(), capsule);
+    }
+
     py::array
-    sample_list(const fwdpp::ts::TS_NODE_INT node, bool sorted)
+    samples() const
+    {
+        std::vector<fwdpp::ts::TS_NODE_INT>* s
+            = new std::vector<fwdpp::ts::TS_NODE_INT>(
+                visitor.tree().samples_list_begin(),
+                visitor.tree().samples_list_end());
+        auto capsule = py::capsule(s, [](void* x) {
+            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
+        });
+        return py::array(s->size(), s->data(), capsule);
+    }
+
+    py::array
+    samples_below(const fwdpp::ts::TS_NODE_INT node, bool sorted)
     {
         if (!update_samples)
             {
@@ -99,28 +128,22 @@ class tree_visitor_wrapper
             {
                 throw std::invalid_argument("invalid node");
             }
-        sample_list_buffer.clear();
-        const auto& marginal = visitor.tree();
-        auto right = marginal.right_sample[node];
-        auto index = marginal.left_sample[node];
-        while (true)
-            {
-                sample_list_buffer.push_back(index);
-                if (index == right)
-                    {
-                        break;
-                    }
-                index = marginal.next_sample[index];
-            }
+        samples_below_buffer.clear();
+        fwdpp::ts::process_samples(
+            visitor.tree(), fwdpp::ts::convert_sample_index_to_nodes(true),
+            node, [this](fwdpp::ts::TS_NODE_INT s) {
+                samples_below_buffer.push_back(s);
+            });
         if (sorted)
             {
-                std::sort(begin(sample_list_buffer), end(sample_list_buffer));
+                std::sort(begin(samples_below_buffer),
+                          end(samples_below_buffer));
             }
-        auto capsule = py::capsule(&sample_list_buffer, [](void* x) {
-            reinterpret_cast<decltype(sample_list_buffer)*>(x)->clear();
+        auto capsule = py::capsule(&samples_below_buffer, [](void* x) {
+            reinterpret_cast<decltype(samples_below_buffer)*>(x)->clear();
         });
-        return py::array(sample_list_buffer.size(), sample_list_buffer.data(),
-                         capsule);
+        return py::array(samples_below_buffer.size(),
+                         samples_below_buffer.data(), capsule);
     }
 
     fwdpp::ts::TS_NODE_INT
@@ -183,14 +206,14 @@ init_tree_iterator(py::module& m)
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"),
-             py::arg("update_sample_list") = false, py::arg("begin") = 0.0,
+             py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
-             py::arg("update_sample_list") = false, py::arg("begin") = 0.0,
+             py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
         .def("parent", &tree_visitor_wrapper::parent,
              "Return parent of a node")
@@ -279,7 +302,16 @@ init_tree_iterator(py::module& m)
 
                 Fixed to not return an empty array.
             )delim")
-        .def("sample_list", &tree_visitor_wrapper::sample_list,
+        .def("nodes", &tree_visitor_wrapper::nodes,
+             R"delim("Return the nodes in the current tree.
+             
+             The return order is preorder.
+             
+             .. versionadded:: 0.5.1
+             )delim")
+        .def("samples", &tree_visitor_wrapper::samples,
+             "Return the complete sample list")
+        .def("samples_below", &tree_visitor_wrapper::samples_below,
              R"delim(
             Return the list of samples descending from a node.
 
