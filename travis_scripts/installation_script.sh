@@ -38,7 +38,7 @@ else
     sudo apt-get update -qq
     sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake
     ./travis_scripts/gsl2.sh
-    pip install -r requirements.txt
+    pip install --upgrade -r requirements.txt
 
     # We need to get pybind11 NOT from pip
     curl -L https://github.com/pybind/pybind11/archive/v2.2.4.tar.gz > pybind11-2.2.4.tar.gz
