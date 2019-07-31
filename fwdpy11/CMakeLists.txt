@@ -106,12 +106,12 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${GSL_SOURCES}
     ${EVOLVE_POPULATION_SOURCES})
 
-# These are the main modules
-if(!ENABLE_PROFILING)
-    pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${ALL_SOURCES})
-else()
-    pybind11_add_module(_fwdpy11 MODULE NO_EXTRAS src/_fwdpy11.cc ${ALL_SOURCES})
+set(LTO_OPTIONS)
+if(ENABLE_PROFILING)
+    set(LTO_OPTIONS NO_EXTRAS)
 endif()
+# These are the main modules
+pybind11_add_module(_fwdpy11 MODULE ${LTO_OPTIONS} src/_fwdpy11.cc ${ALL_SOURCES})
 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
