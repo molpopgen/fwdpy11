@@ -158,6 +158,21 @@ We have a strict policy of putting releases on PyPi and bioconda_.  If there is 
 then that is because we identified a bug and pushed a new release before the bioconda_ build happend.  It happens.
 That's life.
 
+Enabling code profiling
+-------------------------------------------------------------------
+
+By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size. One side effect
+is that it becomes impossible to accurately profile the code.  To override these defaults:
+
+.. code-block:: bash
+
+   python setup.py build_ext -i --enable-profiling
+
+.. note::
+
+   The package should not be installed with profiling enabled. This method of building
+   is for developers who need to accurately profile the C++ back-end.  Also note that
+   only the main package is affected.  Building the unit test modules is not affected.
 
 Enabling debugging symbols in the C++ code
 ------------------------------------------------------------------
