@@ -46,7 +46,7 @@ else:
 
 if '--debug' in sys.argv:
     DEBUG_MODE = True
-    sys.argv.remove('--enable-debug')
+    sys.argv.remove('--debug')
 else:
     DEBUG_MODE = False
 
