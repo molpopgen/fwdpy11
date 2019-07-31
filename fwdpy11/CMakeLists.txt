@@ -94,8 +94,7 @@ set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/no_stopping.cc
     src/evolve_population/remove_extinct_mutations.cc)
 
-# These are the main modules
-pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
+set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
     ${FWDPY11_FUNCTIONS_SOURCES}
@@ -106,4 +105,15 @@ pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${FWDPP_TYPES_SOURCES}
     ${TS_SOURCES}
     ${GSL_SOURCES}
     ${EVOLVE_POPULATION_SOURCES})
+
+# These are the main modules
+if(!ENABLE_PROFILING)
+    pybind11_add_module(_fwdpy11 MODULE src/_fwdpy11.cc ${ALL_SOURCES})
+else()
+    pybind11_add_module(_fwdpy11 MODULE NO_EXTRAS src/_fwdpy11.cc ${ALL_SOURCES})
+endif()
+
+if (ENABLE_PROFILING)
+    set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
+endif()
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)

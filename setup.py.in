@@ -46,8 +46,15 @@ else:
 
 if '--debug' in sys.argv:
     DEBUG_MODE = True
+    sys.argv.remove('--enable-debug')
 else:
     DEBUG_MODE = False
+
+if '--enable-profiling' in sys.argv:
+    ENABLE_PROFILING = True
+    sys.argv.remove('--enable-profiling')
+else:
+    ENABLE_PROFILING = False
 
 if '--skip_tests' in sys.argv:
     SKIP_BUILDING_TESTS = True
@@ -104,6 +111,9 @@ class CMakeBuild(build_ext):
         else:
             cmake_args += ['-DCMAKE_BUILD_TYPE=' + cfg]
             build_args += ['--', '-j2']
+
+        if ENABLE_PROFILING is True:
+            cmake_args += ['-DENABLE_PROFILING=ON']
 
         env = os.environ.copy()
         env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),

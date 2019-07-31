@@ -9,6 +9,7 @@ endif()
 
 find_package(GSL REQUIRED)
 option(USE_WEFFCPP "Use -Weffc++ during compilation" ON)
+option(ENABLE_PROFILING "Compile to enable code profiling" OFF)
 option(BUILD_UNIT_TESTS "Build C++ modules for unit tests" ON)
 include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp)
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
@@ -18,8 +19,11 @@ if (USE_WEFFCPP)
     add_compile_options(-Weffc++)
 endif()
 
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
+if (ENABLE_PROFILING)
+    add_definitions(-DPYBIND11_NAMESPACE=pybind11)
+endif()
 
+set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
 add_subdirectory(fwdpy11)
 
 if(BUILD_UNIT_TESTS)
