@@ -38,34 +38,42 @@ class tree_visitor_wrapper
             }
     }
 
+    // We hold a reference to the input
+    // TableCollection, which prevents it
+    // bad things from happening in the
+    // calling environment
+    py::object tables_;
     bool update_samples;
     const double from, until;
 
   public:
     fwdpp::ts::tree_visitor visitor;
     std::vector<fwdpp::ts::TS_NODE_INT> samples_below_buffer;
-    tree_visitor_wrapper(const fwdpp::ts::table_collection& tables,
+    tree_visitor_wrapper(py::object tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_samples_below, double start, double stop)
-        : update_samples(update_samples_below), from(start), until(stop),
-          visitor(tables, samples,
+        : tables_(tables), update_samples(update_samples_below), from(start),
+          until(stop),
+          visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
     {
-        validate_from_until(tables.genome_length());
+        validate_from_until(
+            tables_.cast<fwdpp::ts::table_collection&>().genome_length());
     }
 
     tree_visitor_wrapper(
-        const fwdpp::ts::table_collection& tables,
-        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+        py::object tables, const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_samples_below, double start, double stop)
-        : update_samples(update_samples_below), from(start), until(stop),
-          visitor(tables, samples,
+        : tables_(tables), update_samples(update_samples_below), from(start),
+          until(stop),
+          visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
     {
-        validate_from_until(tables.genome_length());
+        validate_from_until(
+            tables_.cast<fwdpp::ts::table_collection&>().genome_length());
     }
 
     inline bool
@@ -187,6 +195,12 @@ class tree_visitor_wrapper
     {
         return fetch(this->visitor.tree().preserved_leaf_counts, u);
     }
+
+    py::object
+    get_tables() const
+    {
+        return tables_;
+    }
 };
 
 void
@@ -202,14 +216,12 @@ init_tree_iterator(py::module& m)
         
                 Add begin, end options as floats for initializing
             )delim")
-        .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
-                      double>(),
+        .def(py::init<py::object, const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      bool, double, double>(),
              py::arg("tables"), py::arg("samples"),
              py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
-        .def(py::init<const fwdpp::ts::table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+        .def(py::init<py::object, const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
@@ -311,6 +323,8 @@ init_tree_iterator(py::module& m)
              )delim")
         .def("samples", &tree_visitor_wrapper::samples,
              "Return the complete sample list")
+        .def_property_readonly("tables", &tree_visitor_wrapper::get_tables,
+                      "Return the TableCollection")
         .def("samples_below", &tree_visitor_wrapper::samples_below,
              R"delim(
             Return the list of samples descending from a node.

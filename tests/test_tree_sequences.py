@@ -134,6 +134,15 @@ class testTreeSequences(unittest.TestCase):
             self.assertEqual(d['neutral'], m.neutral)
 
     def test_TreeIterator(self):
+        # The first test ensures that TreeIterator
+        # simply holds a reference to the input tables,
+        # rather than a (deep) copy, which would have
+        # a different address
+        tv = fwdpy11.TreeIterator(self.pop.tables,
+                                  [i for i in range(2*self.pop.N)],
+                                  True, 0, 1)
+        self.assertTrue(tv.tables is self.pop.tables)
+
         with self.assertRaises(ValueError):
             tv = fwdpy11.TreeIterator(self.pop.tables,
                                       [i for i in range(2*self.pop.N)],
