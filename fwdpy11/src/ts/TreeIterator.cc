@@ -43,9 +43,10 @@ class tree_visitor_wrapper
     // bad things from happening in the
     // calling environment
     py::object tables_;
-    fwdpp::ts::site_vector::const_iterator first_site, end_of_sites;
+    fwdpp::ts::site_vector::const_iterator first_site, end_of_sites,
+        current_site;
     fwdpp::ts::mutation_key_vector::const_iterator first_mutation,
-        end_of_mutations;
+        end_of_mutations, current_mutation;
     bool update_samples;
     const double from, until;
 
@@ -60,10 +61,12 @@ class tree_visitor_wrapper
                          .site_table.begin()),
           end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
                            .site_table.end()),
+          current_site(first_site),
           first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
                              .mutation_table.begin()),
           end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
                                .mutation_table.end()),
+          current_mutation(first_mutation),
           update_samples(update_samples_below), from(start), until(stop),
           visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
@@ -82,10 +85,12 @@ class tree_visitor_wrapper
                          .site_table.begin()),
           end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
                            .site_table.end()),
+          current_site(first_site),
           first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
                              .mutation_table.begin()),
           end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
                                .mutation_table.end()),
+          current_mutation(first_mutation),
           update_samples(update_samples_below), from(start), until(stop),
           visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
@@ -103,6 +108,28 @@ class tree_visitor_wrapper
         while (visitor.tree().right < from)
             {
                 rv = visitor();
+            }
+        double pos = visitor.tree().left;
+        current_site
+            = std::lower_bound(current_site, end_of_sites, pos,
+                               [](const fwdpp::ts::site& s, double value) {
+                                   return s.position < value;
+                               });
+        if (current_site < end_of_sites)
+            {
+                pos = current_site->position;
+                current_mutation = std::lower_bound(
+                    current_mutation, end_of_mutations, pos,
+                    [this](const fwdpp::ts::mutation_record& mr,
+                           double value) {
+                        return (first_site + mr.site)->position < value;
+                    });
+                if (current_mutation < end_of_mutations
+                    && (first_site + current_mutation->site)->position != pos)
+                    {
+                        throw std::runtime_error(
+                            "error site and mutation iterators");
+                    }
             }
         if (visitor.tree().left >= until)
             {
