@@ -43,6 +43,9 @@ class tree_visitor_wrapper
     // bad things from happening in the
     // calling environment
     py::object tables_;
+    fwdpp::ts::site_vector::const_iterator first_site, end_of_sites;
+    fwdpp::ts::mutation_key_vector::const_iterator first_mutation,
+        end_of_mutations;
     bool update_samples;
     const double from, until;
 
@@ -52,8 +55,16 @@ class tree_visitor_wrapper
     tree_visitor_wrapper(py::object tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_samples_below, double start, double stop)
-        : tables_(tables), update_samples(update_samples_below), from(start),
-          until(stop),
+        : tables_(tables),
+          first_site(tables_.cast<const fwdpp::ts::table_collection&>()
+                         .site_table.begin()),
+          end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
+                           .site_table.end()),
+          first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
+                             .mutation_table.begin()),
+          end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
+                               .mutation_table.end()),
+          update_samples(update_samples_below), from(start), until(stop),
           visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
@@ -66,8 +77,16 @@ class tree_visitor_wrapper
         py::object tables, const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_samples_below, double start, double stop)
-        : tables_(tables), update_samples(update_samples_below), from(start),
-          until(stop),
+        : tables_(tables),
+          first_site(tables_.cast<const fwdpp::ts::table_collection&>()
+                         .site_table.begin()),
+          end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
+                           .site_table.end()),
+          first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
+                             .mutation_table.begin()),
+          end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
+                               .mutation_table.end()),
+          update_samples(update_samples_below), from(start), until(stop),
           visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
@@ -324,7 +343,7 @@ init_tree_iterator(py::module& m)
         .def("samples", &tree_visitor_wrapper::samples,
              "Return the complete sample list")
         .def_property_readonly("tables", &tree_visitor_wrapper::get_tables,
-                      "Return the TableCollection")
+                               "Return the TableCollection")
         .def("samples_below", &tree_visitor_wrapper::samples_below,
              R"delim(
             Return the list of samples descending from a node.
