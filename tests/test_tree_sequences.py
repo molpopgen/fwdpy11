@@ -183,6 +183,21 @@ class testTreeSequences(unittest.TestCase):
                 nsites_visited += 1
         self.assertEqual(len(self.pop.tables.sites), nsites_visited)
 
+        site_table = np.array(self.pop.tables.sites, copy=False)
+        for i in np.arange(0., 1., 0.1):
+            tv = fwdpy11.TreeIterator(self.pop.tables,
+                                      [i for i in range(2*self.pop.N)], False, i, i+0.1)
+            nsites_visited = 0
+            idx = np.where((site_table['position'] >= i) & (
+                site_table['position'] < i+0.1))[0]
+            nsites_in_interval = len(idx)
+            for tree in tv:
+                for s in tree.sites():
+                    self.assertTrue(s.position >= tree.left)
+                    self.assertTrue(s.position < tree.right)
+                    nsites_visited += 1
+            self.assertEqual(nsites_visited, nsites_in_interval)
+
     def test_leaf_counts_vs_mcounts(self):
         tv = fwdpy11.TreeIterator(self.pop.tables,
                                   [i for i in range(2*self.pop.N)])
