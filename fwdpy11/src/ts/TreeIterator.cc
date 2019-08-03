@@ -109,7 +109,7 @@ class tree_visitor_wrapper
             {
                 rv = visitor();
             }
-        double pos = visitor.tree().left;
+        double pos = std::max(visitor.tree().left, from);
         current_site
             = std::lower_bound(current_site, end_of_sites, pos,
                                [](const fwdpp::ts::site& s, double value) {
@@ -252,7 +252,7 @@ class tree_visitor_wrapper
               fwdpp::ts::site_vector::const_iterator>
     get_sites_on_current_tree() const
     {
-        double pos = visitor.tree().right;
+        double pos = std::min(visitor.tree().right, until);
         if (current_site < end_of_sites && current_site->position >= pos)
             {
                 // Return an empty range
