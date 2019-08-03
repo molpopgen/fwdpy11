@@ -169,6 +169,20 @@ class testTreeSequences(unittest.TestCase):
                 b = i < ti.right
                 self.assertTrue(a and b)
 
+    def test_TreeIterator_iterate_sites(self):
+        # TODO: need test of empty tree sequence
+        # and tree sequence where mutations aren't
+        # on every tree
+        tv = fwdpy11.TreeIterator(self.pop.tables,
+                                  [i for i in range(2*self.pop.N)])
+        nsites_visited = 0
+        for tree in tv:
+            for s in tree.sites():
+                self.assertTrue(s.position >= tree.left)
+                self.assertTrue(s.position < tree.right)
+                nsites_visited += 1
+        self.assertEqual(len(self.pop.tables.sites), nsites_visited)
+
     def test_leaf_counts_vs_mcounts(self):
         tv = fwdpy11.TreeIterator(self.pop.tables,
                                   [i for i in range(2*self.pop.N)])

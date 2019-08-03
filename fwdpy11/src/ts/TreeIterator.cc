@@ -247,6 +247,33 @@ class tree_visitor_wrapper
     {
         return tables_;
     }
+
+    std::pair<fwdpp::ts::site_vector::const_iterator,
+              fwdpp::ts::site_vector::const_iterator>
+    get_sites_on_current_tree() const
+    {
+        double pos = visitor.tree().right;
+        if (current_site < end_of_sites && current_site->position >= pos)
+            {
+                // Return an empty range
+                return std::make_pair(end_of_sites, end_of_sites);
+            }
+        // Find first Site > current_tree.right
+        auto end_of_range
+            = std::lower_bound(current_site, end_of_sites, pos,
+                               [](const fwdpp::ts::site& s, double value) {
+                                   return s.position < value;
+                               });
+        // NOTE: this guards against a corner case.  If the first mutation
+        // not in this tree has position == pos, then upper_bound would result
+        // in it being included in he interval, which is bad. So, we instead
+        // search using lower_bound and check:
+        if (end_of_range < end_of_sites && end_of_range->position == pos)
+            {
+                ++end_of_range;
+            }
+        return std::make_pair(current_site, end_of_range);
+    }
 };
 
 void
@@ -385,5 +412,12 @@ init_tree_iterator(py::module& m)
                 Do not store these sample lists without making a "deep"
                 copy.  The internal buffer is re-used.
             )delim",
-             py::arg("node"), py::arg("sorted") = false);
+             py::arg("node"), py::arg("sorted") = false)
+        .def(
+            "sites",
+            [](const tree_visitor_wrapper& self) {
+                auto rv = self.get_sites_on_current_tree();
+                return py::make_iterator(rv.first, rv.second);
+            },
+            py::keep_alive<0, 1>());
 }
