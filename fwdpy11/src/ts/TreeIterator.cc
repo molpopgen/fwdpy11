@@ -274,6 +274,29 @@ class tree_visitor_wrapper
             }
         return std::make_pair(current_site, end_of_range);
     }
+
+    std::pair<fwdpp::ts::mutation_key_vector::const_iterator,
+              fwdpp::ts::mutation_key_vector::const_iterator>
+    get_mutations_on_current_tree() const
+    {
+        double pos = std::min(visitor.tree().right, until);
+        if (current_site < end_of_sites && current_site->position >= pos)
+            {
+                // Return an empty range
+                return std::make_pair(end_of_mutations, end_of_mutations);
+            }
+        auto end_of_range = std::lower_bound(
+            current_mutation, end_of_mutations, pos,
+            [this](const fwdpp::ts::mutation_record& mr, double value) {
+                return (first_site + mr.site)->position < value;
+            });
+        if (end_of_range < end_of_mutations
+            && (first_site + end_of_range->site)->position == pos)
+            {
+                ++end_of_range;
+            }
+        return std::make_pair(current_mutation, end_of_range);
+    }
 };
 
 void
@@ -418,6 +441,13 @@ init_tree_iterator(py::module& m)
             [](const tree_visitor_wrapper& self) {
                 auto rv = self.get_sites_on_current_tree();
                 return py::make_iterator(rv.first, rv.second);
+            },
+            py::keep_alive<0, 1>())
+        .def(
+            "mutations",
+            [](const tree_visitor_wrapper& self) {
+                auto r = self.get_mutations_on_current_tree();
+                return py::make_iterator(r.first, r.second);
             },
             py::keep_alive<0, 1>());
 }
