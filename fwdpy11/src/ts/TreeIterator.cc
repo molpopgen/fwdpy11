@@ -442,12 +442,24 @@ init_tree_iterator(py::module& m)
                 auto rv = self.get_sites_on_current_tree();
                 return py::make_iterator(rv.first, rv.second);
             },
-            py::keep_alive<0, 1>())
+            py::keep_alive<0, 1>(),
+            R"delim(
+            Return iterator over all :class:`fwdpy11.Site` objects
+            on the current tree.
+
+            .. versionadded:: 0.5.1
+            )delim")
         .def(
             "mutations",
             [](const tree_visitor_wrapper& self) {
                 auto r = self.get_mutations_on_current_tree();
                 return py::make_iterator(r.first, r.second);
             },
-            py::keep_alive<0, 1>());
+            py::keep_alive<0, 1>(),
+            R"delim(
+            Return iterator over all :class:`fwdpy11.MutationRecord` objects
+            on the current tree.
+
+            .. versionadded:: 0.5.1
+            )delim");
 }
