@@ -26,6 +26,7 @@
 #include <functional>
 #include <cmath>
 #include <stdexcept>
+#include <array>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
 #include <fwdpy11/rng.hpp>
@@ -175,17 +176,22 @@ evolve_with_tree_sequences(
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     bool stopping_criteron_met = false;
+    std::vector<std::array<fwdpp::ts::edge_vector, 2>> temp_edges;
+    fwdpp::ts::edge_vector temp_edges2;
+    std::vector<std::pair<std::size_t, std::size_t>> offsets;
     for (std::uint32_t gen = 0;
          gen < num_generations && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
+            temp_edges.resize(pop.diploids.size());
             // TODO: can simplify function further b/c we are referring
             // to data that fwdpy11 Populations contain.
             fwdpy11::evolve_generation_ts(
-                rng, pop, genetics, N_next, pick_first_parent,
-                pick_second_parent, generate_offspring_metadata,
-                pop.generation, pop.tables, first_parental_index, next_index);
+                rng, pop, temp_edges, offsets, temp_edges2, genetics, N_next,
+                pick_first_parent, pick_second_parent,
+                generate_offspring_metadata, pop.generation, pop.tables,
+                first_parental_index, next_index);
 
             //N_next, mu_selected, pick_first_parent,
             //pick_second_parent, generate_offspring_metadata, bound_mmodel,
@@ -200,6 +206,19 @@ evolve_with_tree_sequences(
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
+                    //pop.tables.edge_table.insert(end(pop.tables.edge_table),
+                    //                             begin(temp_edges2),
+                    //                             end(temp_edges2));
+                    for (auto i = offsets.rbegin();
+                         i < offsets.rend(); ++i)
+                        {
+                            pop.tables.edge_table.insert(
+                                end(pop.tables.edge_table),
+                                begin(temp_edges2) + i->first,
+                                begin(temp_edges2) + i->second);
+                        }
+                    temp_edges2.clear();
+                    offsets.clear();
                     auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
                         simplifier, pop.tables.num_nodes() - 2 * pop.N,
@@ -290,6 +309,17 @@ evolve_with_tree_sequences(
     if (!simplified)
         {
             // TODO: update this to allow neutral mutations to be simulated
+            //pop.tables.edge_table.insert(end(pop.tables.edge_table),
+            //                             begin(temp_edges2), end(temp_edges2));
+            for (auto i = offsets.rbegin(); i != offsets.rend(); ++i)
+                {
+                    pop.tables.edge_table.insert(end(pop.tables.edge_table),
+                                                 begin(temp_edges2) + i->first,
+                                                 begin(temp_edges2)
+                                                     + i->second);
+                }
+            temp_edges2.clear();
+            offsets.clear();
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
                 pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N,
