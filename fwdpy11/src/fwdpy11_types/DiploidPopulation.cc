@@ -471,5 +471,22 @@ init_DiploidPopulation(py::module& m)
             is that your input tree sequence must have
             node times in the correct time units! (Generations,
             for example.) See :ref:`ts` for more discussion
-        )delim");
+        )delim")
+        .def(
+            "sample_timepoints",
+            [](fwdpy11::DiploidPopulation& self,
+               bool include_alive) -> py::iterable {
+                py::object m
+                    = py::module::import("fwdpy11._sample_timepoints");
+                auto f = m.attr("traverse_sample_timepoints");
+                return f(self, py::bool_(include_alive));
+            },
+            py::arg("include_alive") = true,
+            R"delim(Return an iterator over all sample time points.
+            The iterator yields time, nodes, and metadata.
+
+            :param include_alive: If True, include currently-alive individuals.
+
+            .. versionadded :: 0.5.1
+            )delim");
 }

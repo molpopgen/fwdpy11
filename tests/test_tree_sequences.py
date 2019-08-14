@@ -443,6 +443,28 @@ class testSamplePreservation(unittest.TestCase):
                 self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
+    def test_sample_traverser(self):
+        timepoints = [i for i in range(1, 101)]
+        amd = np.array(self.pop.ancient_sample_metadata, copy=False)
+        n = np.array(self.pop.tables.nodes)
+        at = n['time'][amd['nodes'][:, 0]]
+        pn = np.array(self.pop.tables.preserved_nodes)
+        self.assertEqual(2*len(amd), len(pn))
+        # j contains (time, nodes, metadata).  The metadata
+        # also contain nodes
+        for i, j in zip(timepoints, self.pop.sample_timepoints(False)):
+            self.assertEqual(i, j[0])
+            self.assertTrue(all(n['time'][j[1]] == i))
+            mdn = j[2]['nodes'].flatten()
+            self.assertTrue(np.array_equal(j[1], mdn))
+            idx = np.where(at == i)[0]
+            self.assertTrue(np.array_equal(j[2], amd[idx]))
+
+            # Extract out the nodes from preserved_nodes
+            idx = np.where(n['time'][self.pop.tables.preserved_nodes] == i)[0]
+            self.assertTrue(np.array_equal(
+                np.array(self.pop.tables.preserved_nodes)[idx], j[1]))
+
 
 class testSimplificationInterval(unittest.TestCase):
     @classmethod
