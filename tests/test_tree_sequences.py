@@ -1,6 +1,7 @@
 import unittest
 import fwdpy11
 import numpy as np
+import copy
 
 
 class testTreeSequences(unittest.TestCase):
@@ -416,9 +417,24 @@ class testSamplePreservation(unittest.TestCase):
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        self.recorder = fwdpy11.RandomAncientSamples(seed=42,
-                                                     samplesize=10,
-                                                     timepoints=[i for i in range(1, 101)])
+
+        class Recorder(object):
+            def __init__(self, seed, samplesize, timepoints):
+                np.random.seed(seed)
+                self.samplesize = samplesize
+                self.timepoints = timepoints
+                self.data = []
+
+            def __call__(self, pop, recorder):
+                if len(self.timepoints) > 0:
+                    if self.timepoints[0] == pop.generation:
+                        s = np.random.choice(pop.N, self.samplesize, replace=False)
+                        md = [copy.deepcopy(pop.diploid_metadata[i]) for i in s]
+                        self.data.append((pop.generation, md))
+                        recorder.assign(s)
+                        self.timepoints.pop(0)
+
+        self.recorder = Recorder(42, 10, [i for i in range(1, 101)])
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
 
