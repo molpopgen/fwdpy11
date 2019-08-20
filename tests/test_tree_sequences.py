@@ -1,6 +1,7 @@
 import unittest
 import fwdpy11
 import numpy as np
+import copy
 
 
 class testTreeSequences(unittest.TestCase):
@@ -416,9 +417,26 @@ class testSamplePreservation(unittest.TestCase):
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101*45*110*210)
         self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-        self.recorder = fwdpy11.RandomAncientSamples(seed=42,
-                                                     samplesize=10,
-                                                     timepoints=[i for i in range(1, 101)])
+
+        class Recorder(object):
+            def __init__(self, seed, samplesize, timepoints):
+                np.random.seed(seed)
+                self.samplesize = samplesize
+                self.timepoints = timepoints
+                self.data = []
+
+            def __call__(self, pop, recorder):
+                if len(self.timepoints) > 0:
+                    if self.timepoints[0] == pop.generation:
+                        s = np.random.choice(
+                            pop.N, self.samplesize, replace=False)
+                        md = [copy.deepcopy(pop.diploid_metadata[i])
+                              for i in s]
+                        self.data.append((pop.generation, md))
+                        recorder.assign(s)
+                        self.timepoints.pop(0)
+
+        self.recorder = Recorder(42, 10, [i for i in range(1, 101)])
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
 
@@ -452,13 +470,24 @@ class testSamplePreservation(unittest.TestCase):
         self.assertEqual(2*len(amd), len(pn))
         # j contains (time, nodes, metadata).  The metadata
         # also contain nodes
-        for i, j in zip(timepoints, self.pop.sample_timepoints(False)):
+        for i, j, d in zip(timepoints,
+                           self.pop.sample_timepoints(False), self.recorder.data):
+            self.assertEqual(i, d[0])
             self.assertEqual(i, j[0])
             self.assertTrue(all(n['time'][j[1]] == i))
             mdn = j[2]['nodes'].flatten()
             self.assertTrue(np.array_equal(j[1], mdn))
             idx = np.where(at == i)[0]
             self.assertTrue(np.array_equal(j[2], amd[idx]))
+            # Compare metadata stored in recorder
+            # to that preserved internally by the simulation
+            for k, l in zip(idx, d[1]):
+                self.assertEqual(amd['g'][k], l.g)
+                self.assertEqual(amd['w'][k], l.w)
+                self.assertEqual(amd['e'][k], l.e)
+                self.assertEqual(amd['label'][k], l.label)
+                self.assertEqual(amd['parents'][k][0], l.parents[0])
+                self.assertEqual(amd['parents'][k][1], l.parents[1])
 
             # Extract out the nodes from preserved_nodes
             idx = np.where(n['time'][self.pop.tables.preserved_nodes] == i)[0]
