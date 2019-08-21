@@ -250,10 +250,15 @@ class tree_visitor_wrapper
 
     std::pair<fwdpp::ts::site_vector::const_iterator,
               fwdpp::ts::site_vector::const_iterator>
-    get_sites_on_current_tree() const
+    get_sites_on_current_tree()
     {
         double pos = std::min(visitor.tree().right, until);
-        if (current_site < end_of_sites && current_site->position >= pos)
+        while (current_site->position < visitor.tree().left)
+            {
+                ++current_site;
+            }
+        if ((current_site == end_of_sites)
+            || (current_site < end_of_sites && current_site->position >= pos))
             {
                 // Return an empty range
                 return std::make_pair(end_of_sites, end_of_sites);
@@ -277,10 +282,24 @@ class tree_visitor_wrapper
 
     std::pair<fwdpp::ts::mutation_key_vector::const_iterator,
               fwdpp::ts::mutation_key_vector::const_iterator>
-    get_mutations_on_current_tree() const
+    get_mutations_on_current_tree()
     {
         double pos = std::min(visitor.tree().right, until);
-        if (current_site < end_of_sites && current_site->position >= pos)
+        while ((current_site < end_of_sites)
+               && (current_site->position < visitor.tree().left))
+            {
+                ++current_site;
+            }
+        while ((current_site < end_of_sites)
+               && (current_mutation < end_of_mutations)
+               && (first_site + current_mutation->site)->position
+                      != current_site->position)
+            {
+                ++current_mutation;
+            }
+        if ((current_site == end_of_sites)
+            || (current_mutation == end_of_mutations)
+            || (current_site < end_of_sites && current_site->position >= pos))
             {
                 // Return an empty range
                 return std::make_pair(end_of_mutations, end_of_mutations);
@@ -438,7 +457,7 @@ init_tree_iterator(py::module& m)
              py::arg("node"), py::arg("sorted") = false)
         .def(
             "sites",
-            [](const tree_visitor_wrapper& self) {
+            [](tree_visitor_wrapper& self) {
                 auto rv = self.get_sites_on_current_tree();
                 return py::make_iterator(rv.first, rv.second);
             },
@@ -451,7 +470,7 @@ init_tree_iterator(py::module& m)
             )delim")
         .def(
             "mutations",
-            [](const tree_visitor_wrapper& self) {
+            [](tree_visitor_wrapper& self) {
                 auto r = self.get_mutations_on_current_tree();
                 return py::make_iterator(r.first, r.second);
             },
