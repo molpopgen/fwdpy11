@@ -50,6 +50,7 @@ The metadata are stored separately for the current generation and for ancient sa
 
 .. autoattribute:: fwdpy11.DiploidPopulation.ancient_sample_metadata
 
+.. autofunction:: fwdpy11.DiploidPopulation.sample_timepoints
 
 
 Diploid Genotypes
@@ -168,6 +169,8 @@ Types related to tree sequence recording
     .. autoattribute:: nodes
     .. autoattribute:: mutations
     .. autoattribute:: genome_length
+    .. autoattribute:: input_left
+    .. autoattribute:: output_right
 
 
 .. autoclass:: fwdpy11.EdgeTable
@@ -181,6 +184,13 @@ Types related to tree sequence recording
     .. autoattribute:: left
 
     .. autoattribute:: right
+
+.. autoclass:: fwdpy11.IndexedEdge
+
+    .. autoattribute:: pos
+    .. autoattribute:: time
+    .. autoattribute:: parent
+    .. autoattribute:: child
 
 .. autoclass:: fwdpy11.NodeTable
 .. autoclass:: fwdpy11.Node
