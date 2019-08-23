@@ -11,7 +11,7 @@ update(const fwdpp::haploid_genome &genome, std::vector<fwdpp::uint_t> &counts)
 
 void
 track_ancestral_counts(fwdpy11::DiploidPopulation &pop,
-                       const std::vector<std::size_t> &individuals)
+                       const std::vector<fwdpp::uint_t> &individuals)
 {
     pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
     for (auto i : individuals)

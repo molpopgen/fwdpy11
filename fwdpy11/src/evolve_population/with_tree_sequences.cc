@@ -271,6 +271,7 @@ evolve_with_tree_sequences(
                                     static_cast<double>(pop.generation),
                                     x.first, x.second });
                         }
+                    track_ancestral_counts(pop, sr.samples);
                     // Finally, clear the input
                     sr.samples.clear();
                 }
