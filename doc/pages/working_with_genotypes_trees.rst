@@ -111,3 +111,10 @@ Tree traversal
 For each tree, you may access the parent/child/etc. elements described in :ref:`representing_trees`.  In general,
 tree access is an advanced topic that allows efficient algorithms to be developed.  For now, see :ref:`bgs` for an
 example.
+
+For each marginal tree, you have access to the following:
+
+* The list of nodes, output in a preorder traversal via :func:`fwdpy11.TreeIterator.nodes`.
+* The complete list of samples via :func:`fwdpy11.TreeIterator.samples`
+* The list of samples below any node via :func:`fwdpy11.TreeIterator.samples_below`.
+* Iterators to the sites and mutations on the current tree via :func:`fwdpy11.TreeIterator.sites` and :func:`fwdpy11.TreeIterator.mutations`, respectively.
