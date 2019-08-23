@@ -250,10 +250,14 @@ optimum.
 
     ssh_over_time = []
     np.random.seed(54321)
-    for t in np.unique(mdtimes):
-        samples_at_t = np.where(mdtimes == t)[0]
-        rsamples = np.random.choice(samples_at_t, 25, replace=False)
-        rsamples_nodes = all_md['nodes'][rsamples,:].flatten()
+    # Co-iterate over each unique time point,
+    # the sample list of nodes at that time,
+    # and the associated metadata:
+    for t, s, m in pop.sample_timepoints():
+        # Get random sample of individuals based on the metadata
+        rsamples = np.random.choice(len(m), 25, replace=False)
+        # Convert the individuals into their respective nodes
+        rsamples_nodes = m['nodes'][rsamples,:].flatten()
         vi = fwdpy11.VariantIterator(pop.tables, rsamples_nodes)
         ssh = 0.0
         for v in vi:
