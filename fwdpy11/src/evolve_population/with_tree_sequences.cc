@@ -42,6 +42,7 @@
 #include "cleanup_metadata.hpp"
 #include "track_mutation_counts.hpp"
 #include "remove_extinct_mutations.hpp"
+#include "track_ancestral_counts.hpp"
 
 namespace py = pybind11;
 
