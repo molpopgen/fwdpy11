@@ -301,9 +301,7 @@ evolve_with_tree_sequences(
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);
         }
-    index_and_count_mutations(suppress_edge_table_indexing, 2 * pop.N,
-                              pop.mutations, pop.tables, pop.mcounts,
-                              pop.mcounts_from_preserved_nodes);
+    index_and_count_mutations(suppress_edge_table_indexing, pop);
     cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
     if (remove_extinct_mutations_at_finish)
         {
