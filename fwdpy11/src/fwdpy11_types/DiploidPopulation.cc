@@ -482,7 +482,8 @@ init_DiploidPopulation(py::module& m)
                 return f(self, py::bool_(include_alive));
             },
             py::arg("include_alive") = true,
-            R"delim(Return an iterator over all sample time points.
+            R"delim(
+            Return an iterator over all sample time points.
             The iterator yields time, nodes, and metadata.
 
             :param include_alive: If True, include currently-alive individuals.

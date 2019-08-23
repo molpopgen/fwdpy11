@@ -7,10 +7,17 @@ version, etc.
 0.5.1
 ++++++++++++++++
 
-This release fixes two bugs:
+This release fixes three bugs:
 
 * :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible. `PR 266 <https://github.com/molpopgen/fwdpy11/pull/266>`_
 * :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned. `PR 267 <https://github.com/molpopgen/fwdpy11/pull/267>`_
+* Corruption of the samples list using the standalone simplify function. `PR 269 <https://github.com/molpopgen/fwdpy11/pull/269>`_
+
+The following features are new:
+
+* A streamlined API to traverse samples at different time points using :func:`fwdpy11.DiploidPopulation.sample_timepoints`. `PR 279 <https://github.com/molpopgen/fwdpy11/pull/279>`_
+* :class:`fwdpy11.TreeIterator` now allows iteration over sites and mutations in the current tree via :func:`fwdpy11.TreeIterator.sites` and :func:`fwdpy11.TreeIterator.mutations`. `PR 275 <https://github.com/molpopgen/fwdpy11/pull/275>`_
+* Preorder traversal of nodes in the current tree is possible via :func:`fwdpy11.TreeIterator.nodes`.  Added :func:`fwdpy11.TreeIterator.samples` and :func:`fwdpy11.TreeIterator.samples_below`. `PR 272 <https://github.com/molpopgen/fwdpy11/pull/272>`_
 
 0.5.0
 +++++++++++
