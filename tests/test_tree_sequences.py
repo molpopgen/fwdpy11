@@ -51,6 +51,38 @@ def set_up_quant_trait_model():
     return params, rng, pop
 
 
+def mcounts_comparison_details(pop, counts, ts):
+    for t in ts.trees():
+        for m in t.mutations():
+            pos = m.position
+            # retrieve this mutation from the fwdpy11 table
+            mr = None
+            for i in pop.tables.mutations:
+                if pop.tables.sites[i.site].position == pos:
+                    mr = i
+                    break
+            assert pop.mutations[mr.key].pos == pos
+            tskit_samples = [i for i in t.samples(m.node)]
+            if len(tskit_samples) != counts[mr.key]:
+                return False
+    return True
+
+
+def mcounts_comparison(pop, ts):
+    if len(pop.tables.preserved_nodes) > 0:
+        ts2 = ts.simplify(pop.tables.preserved_nodes)
+        c = mcounts_comparison_details(pop, pop.mcounts_ancient_samples, ts2)
+        if c is not True:
+            return c
+
+    ts2 = ts.simplify([i for i in range(2*pop.N)])
+    c = mcounts_comparison_details(pop, pop.mcounts, ts2)
+    if c is not True:
+        return c
+
+    return True
+
+
 class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -82,8 +114,6 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_dump_to_tskit(self):
         import tskit
-        # TODO: test leaf counts of mutations in msprime
-        # vs fwdpy11 and cross-references with self.pop.mcounts
         dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(len(dumped_ts.tables.nodes),
                          len(self.pop.tables.nodes))
@@ -159,6 +189,8 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
                 np.array(d['heffects']), m.heffects))
             self.assertEqual(d['label'], m.label)
             self.assertEqual(d['neutral'], m.neutral)
+
+        self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
 
     def test_TreeIterator(self):
         # The first test ensures that TreeIterator
@@ -480,10 +512,12 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
     def test_mcounts_from_ancient_samples(self):
-        vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.tables.preserved_nodes)
+        vi = fwdpy11.VariantIterator(
+            self.pop.tables, self.pop.tables.preserved_nodes)
         for v in vi:
             k = v.records[0]
-            self.assertEqual(self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
+            self.assertEqual(
+                self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
 
     def test_sample_traverser(self):
         timepoints = [i for i in range(1, 101)]
@@ -540,6 +574,10 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.assertTrue(self.pop == pop2)
         if os.path.exists(ofile):
             os.remove(ofile)
+
+    def test_dump_to_tskit(self):
+        dumped_ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
 
 
 class testSimplificationInterval(unittest.TestCase):
