@@ -431,18 +431,25 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        self.recorder = Recorder(42, 10, [i for i in range(1, 101)])
+        self.stimes = [i for i in range(1, 101)]
+        self.recorder = Recorder(42, 10, self.stimes)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
 
     def test_Simulation(self):
-        self.assertEqual(self.pop.generation, 100)
+        self.assertEqual(self.pop.generation, 1000)
 
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop,
                                      self.pop.tables.preserved_nodes)
         pmc = np.array(self.pop.mcounts_ancient_samples)
         self.assertTrue(np.array_equal(mc, pmc))
+
+    def test_ancient_sample_times(self):
+        times = []
+        for t, n, md in self.pop.sample_timepoints(False):
+            times.append(int(t))
+        self.assertEqual(times, [i for i in range(1, 101)])
 
     def test_VariantIteratorFromPreservedSamples(self):
         n = np.array(self.pop.tables.nodes)
@@ -488,6 +495,14 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
             idx = np.where(n['time'][self.pop.tables.preserved_nodes] == i)[0]
             self.assertTrue(np.array_equal(
                 np.array(self.pop.tables.preserved_nodes)[idx], j[1]))
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_with_ancient_preserve_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
 
 
 class testSimplificationInterval(unittest.TestCase):
