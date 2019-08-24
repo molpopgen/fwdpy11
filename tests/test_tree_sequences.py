@@ -2,6 +2,7 @@ import unittest
 import fwdpy11
 import numpy as np
 import copy
+import os
 
 
 class testTreeSequences(unittest.TestCase):
@@ -392,6 +393,14 @@ class testTreeSequences(unittest.TestCase):
                                      [i for i in range(2*self.pop.N)])
         pmc = np.array(self.pop.mcounts)
         self.assertTrue(np.array_equal(mc, pmc))
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_no_ancient_preserve_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
 
 
 class testSamplePreservation(unittest.TestCase):
