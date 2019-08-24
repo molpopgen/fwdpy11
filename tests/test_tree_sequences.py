@@ -51,6 +51,39 @@ def set_up_quant_trait_model():
     return params, rng, pop
 
 
+def set_up_standard_pop_gen_model():
+    """
+    For this sort of model, when mutations fix, they are
+    removed from the simulation, INCLUDING THE TREE
+    SEQUENCES. The fact of their existence gets
+    recorded in pop.fixations and pop.fixation_times
+    """
+    # TODO add neutral variants
+    N = 1000
+    demography = np.array([N]*10*N, dtype=np.uint32)
+    rho = 1.
+    # theta = 100.
+    # nreps = 500
+    # mu = theta/(4*N)
+    r = rho/(4*N)
+
+    a = fwdpy11.Multiplicative(2.0)
+    pselected = 1e-3
+    p = {'nregions': [],
+         'sregions': [fwdpy11.GammaS(0, 1, 1.-pselected, mean=-5, shape=1, scaling=2*N),
+                      fwdpy11.ConstantS(0, 1, pselected, 1000, scaling=2*N)],
+         'recregions': [fwdpy11.Region(0, 1, 1)],
+         'rates': (0.0, 0.001, r),
+         'gvalue': a,
+         'prune_selected': True,
+         'demography': demography
+         }
+    params = fwdpy11.ModelParams(**p)
+    rng = fwdpy11.GSLrng(666**2)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    return params, rng, pop
+
+
 def mcounts_comparison_details(pop, counts, ts):
     for t in ts.trees():
         for m in t.mutations():
@@ -582,6 +615,73 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     def test_dump_to_tskit(self):
         dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
+
+
+class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         100, track_mutation_counts=True)
+        assert len(
+            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_max_mcounts(self):
+        self.assertTrue(max(self.pop.mcounts) < 2*self.pop.N)
+
+    def test_mutation_table_contents(self):
+        for m in self.pop.tables.mutations:
+            self.assertTrue(m.key < len(self.pop.mutations))
+            self.assertTrue(self.pop.mcounts[m.key] < 2*self.pop.N)
+
+        for f in self.pop.fixations:
+            m = None
+            for i in self.pop.tables.mutations:
+                if self.pop.tables.sites[i.site].position == f.pos:
+                    m = i
+                    break
+            if m is not None:
+                # Then the mutation position got re-used, and
+                # so the mutations must have different origin times
+                # NOTE: this probably has not happened!
+                self.assertNotEqual(f.g, self.pop.mutations[m.key].g)
+
+    def test_dump_to_tskit(self):
+        ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, ts), True)
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_no_ancient_prune_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_no_ancient_prune_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_genotype_matrix(self):
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
+        rc = np.sum(dm.selected, axis=1)
+        index = [i for i in range(len(self.pop.mcounts))]
+        index = sorted(index, key=lambda x: self.pop.mutations[x].pos)
+        mc = [self.pop.mcounts[i] for i in index if self.pop.mcounts[i] > 0]
+        self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
 class testSimplificationInterval(unittest.TestCase):
