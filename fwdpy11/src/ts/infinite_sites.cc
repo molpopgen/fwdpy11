@@ -38,7 +38,11 @@ init_infinite_sites(py::module& m)
     m.def(
         "infinite_sites",
         [](const fwdpy11::GSLrng_t& rng, fwdpy11::Population& pop,
-           const double mu) {
+           const double mu) -> unsigned {
+            if (mu <= 0.0)
+                {
+                    return 0u;
+                }
             fwdpp::flagged_mutation_queue recycling_bin
                 = fwdpp::ts::make_mut_queue(pop.mcounts,
                                             pop.mcounts_from_preserved_nodes);
@@ -66,13 +70,10 @@ init_infinite_sites(py::module& m)
                   };
             auto nmuts = fwdpp::ts::mutate_tables(rng, apply_mutations,
                                                   pop.tables, samples, mu);
-            std::sort(pop.tables.mutation_table.begin(),
-                      pop.tables.mutation_table.end(),
-                      [&pop](const fwdpp::ts::mutation_record& a,
-                             const fwdpp::ts::mutation_record& b) {
-                          return pop.mutations[a.key].pos
-                                 < pop.mutations[b.key].pos;
-                      });
+            if (nmuts == 0)
+                {
+                    return nmuts;
+                }
             fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
                                        pop.mcounts,
                                        pop.mcounts_from_preserved_nodes);
