@@ -3,6 +3,7 @@ import fwdpy11
 import numpy as np
 import copy
 import os
+import pickle
 
 
 class Recorder(object):
@@ -426,6 +427,21 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         if os.path.exists(ofile):
             os.remove(ofile)
 
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_no_ancient_preserve_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
 
 class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
@@ -506,6 +522,21 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         ofile = "poptest_with_ancient_preserve_fixations.bin"
         self.pop.dump_to_file(ofile)
         pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_with_ancient_preserve_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
         self.assertTrue(self.pop == pop2)
         if os.path.exists(ofile):
             os.remove(ofile)
