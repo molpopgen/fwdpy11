@@ -82,7 +82,7 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_dump_to_tskit(self):
         import tskit
-        # TODO: test leaf counts of mutations in msprmie
+        # TODO: test leaf counts of mutations in msprime
         # vs fwdpy11 and cross-references with self.pop.mcounts
         dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(len(dumped_ts.tables.nodes),
