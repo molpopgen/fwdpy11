@@ -28,6 +28,7 @@
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/remove_fixations_from_gametes.hpp>
 #include <fwdpp/ts/recycling.hpp>
+#include <fwdpp/internal/sample_diploid_helpers.hpp>
 //#include "confirm_mutation_counts.hpp"
 
 namespace fwdpy11
@@ -71,8 +72,17 @@ namespace fwdpy11
                 return rv;
             }
         tables.build_indexes();
-        fwdpp::ts::count_mutations(tables, pop.mutations, samples, pop.mcounts,
-                                   mcounts_from_preserved_nodes);
+        if (pop.tables.preserved_nodes.empty())
+            {
+                fwdpp::ts::count_mutations(tables, pop.mutations, samples,
+                                           pop.mcounts,
+                                           mcounts_from_preserved_nodes);
+            }
+        else
+            {
+                fwdpp::fwdpp_internal::process_haploid_genomes(
+                    pop.haploid_genomes, pop.mutations, pop.mcounts);
+            }
         // TODO: update this to allow neutral mutations to be simulated
         // TODO: better fixation handling via accounting for number of ancient samples
         if (!preserve_selected_fixations && !simulating_neutral_variants)
