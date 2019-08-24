@@ -28,15 +28,15 @@ class Recorder(object):
 def set_up_quant_trait_model():
     # TODO add neutral variants
     N = 1000
-    demography = np.array([N]*N, dtype=np.uint32)
+    demography = np.array([N]*10*N, dtype=np.uint32)
     rho = 1.
-    theta = 100.
+    # theta = 100.
     # nreps = 500
     # mu = theta/(4*N)
     r = rho/(4*N)
 
-    GSS = fwdpy11.GSS(VS=1, opt=0)
-    a = fwdpy11.Additive(2.0, GSS)
+    GSSmo = fwdpy11.GSSmo([(0, 0, 1), (N, 1, 1)])
+    a = fwdpy11.Additive(2.0, GSSmo)
     p = {'nregions': [],
          'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
          'recregions': [fwdpy11.Region(0, 1, 1)],
@@ -88,6 +88,8 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        assert max(self.pop.mcounts) == 2 * \
+            self.pop.N, "Nothing fixed, so test case is not helpful"
 
     def test_simplify(self):
         tables, idmap = fwdpy11.simplify(self.pop, [i for i in range(10)])
@@ -340,9 +342,9 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         and compare their contents to those of tskit
         as well as to an explicit calculation of mutation counts.
         """
-        dm = fwdpy11.make_data_matrix(self.pop,
-                                      [i for i in range(2*self.pop.N)],
-                                      False, True)
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         dumped_ts = self.pop.dump_tables_to_tskit()
@@ -392,7 +394,7 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              [i for i in range(
                                                  2*self.pop.N)],
-                                             False, True)
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
@@ -411,7 +413,7 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              [i for i in range(
                                                  2*self.pop.N)],
-                                             False, True)
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
@@ -483,9 +485,11 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.recorder = Recorder(42, 10, self.stimes)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
+        assert max(self.pop.mcounts) == 2 * \
+            self.pop.N, "Nothing fixed, so test case is not helpful"
 
     def test_Simulation(self):
-        self.assertEqual(self.pop.generation, 1000)
+        self.assertEqual(self.pop.generation, 10000)
 
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop,
