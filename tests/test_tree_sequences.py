@@ -463,6 +463,12 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
+    def test_mcounts_from_ancient_samples(self):
+        vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.tables.preserved_nodes)
+        for v in vi:
+            k = v.records[0]
+            self.assertEqual(self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
+
     def test_sample_traverser(self):
         timepoints = [i for i in range(1, 101)]
         amd = np.array(self.pop.ancient_sample_metadata, copy=False)
