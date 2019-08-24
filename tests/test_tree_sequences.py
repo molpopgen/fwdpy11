@@ -5,31 +5,55 @@ import copy
 import os
 
 
-class testTreeSequences(unittest.TestCase):
+class Recorder(object):
+    def __init__(self, seed, samplesize, timepoints):
+        np.random.seed(seed)
+        self.samplesize = samplesize
+        self.timepoints = timepoints
+        self.data = []
+
+    def __call__(self, pop, recorder):
+        if len(self.timepoints) > 0:
+            if self.timepoints[0] == pop.generation:
+                s = np.random.choice(
+                    pop.N, self.samplesize, replace=False)
+                md = [copy.deepcopy(pop.diploid_metadata[i])
+                      for i in s]
+                self.data.append((pop.generation, md))
+                recorder.assign(s)
+                self.timepoints.pop(0)
+
+
+def set_up_quant_trait_model():
+    # TODO add neutral variants
+    N = 1000
+    demography = np.array([N]*N, dtype=np.uint32)
+    rho = 1.
+    theta = 100.
+    # nreps = 500
+    # mu = theta/(4*N)
+    r = rho/(4*N)
+
+    GSS = fwdpy11.GSS(VS=1, opt=0)
+    a = fwdpy11.Additive(2.0, GSS)
+    p = {'nregions': [],
+         'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+         'recregions': [fwdpy11.Region(0, 1, 1)],
+         'rates': (0.0, 0.025, r),
+         'gvalue': a,
+         'prune_selected': False,
+         'demography': demography
+         }
+    params = fwdpy11.ModelParams(**p)
+    rng = fwdpy11.GSLrng(101*45*110*210)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    return params, rng, pop
+
+
+class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        # TODO add neutral variants
-        self.N = 1000
-        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
-        self.rho = 1.
-        self.theta = 100.
-        self.nreps = 500
-        self.mu = self.theta/(4*self.N)
-        self.r = self.rho/(4*self.N)
-
-        self.GSS = fwdpy11.GSS(VS=1, opt=0)
-        a = fwdpy11.Additive(2.0, self.GSS)
-        self.p = {'nregions': [],
-                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-                  'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.025, self.r),
-                  'gvalue': a,
-                  'prune_selected': False,
-                  'demography': self.demography
-                  }
-        self.params = fwdpy11.ModelParams(**self.p)
-        self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
 
     def test_simplify(self):
@@ -403,48 +427,10 @@ class testTreeSequences(unittest.TestCase):
             os.remove(ofile)
 
 
-class testSamplePreservation(unittest.TestCase):
+class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.N = 1000
-        self.demography = np.array([self.N]*100, dtype=np.uint32)
-        self.rho = 1.
-        self.theta = 100.
-        self.nreps = 500
-        self.mu = self.theta/(4*self.N)
-        self.r = self.rho/(4*self.N)
-        self.GSS = fwdpy11.GSS(VS=1, opt=0)
-        a = fwdpy11.Additive(2.0, self.GSS)
-        self.p = {'nregions': [],
-                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-                  'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.025, self.r),
-                  'gvalue': a,
-                  'prune_selected': False,
-                  'demography': self.demography
-                  }
-        self.params = fwdpy11.ModelParams(**self.p)
-        self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-
-        class Recorder(object):
-            def __init__(self, seed, samplesize, timepoints):
-                np.random.seed(seed)
-                self.samplesize = samplesize
-                self.timepoints = timepoints
-                self.data = []
-
-            def __call__(self, pop, recorder):
-                if len(self.timepoints) > 0:
-                    if self.timepoints[0] == pop.generation:
-                        s = np.random.choice(
-                            pop.N, self.samplesize, replace=False)
-                        md = [copy.deepcopy(pop.diploid_metadata[i])
-                              for i in s]
-                        self.data.append((pop.generation, md))
-                        recorder.assign(s)
-                        self.timepoints.pop(0)
-
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
         self.recorder = Recorder(42, 10, [i for i in range(1, 101)])
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
