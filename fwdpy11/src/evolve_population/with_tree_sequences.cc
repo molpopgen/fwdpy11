@@ -302,6 +302,36 @@ evolve_with_tree_sequences(
             remap_metadata(pop.diploid_metadata, rv.first);
         }
     index_and_count_mutations(suppress_edge_table_indexing, pop);
+    if (!preserve_selected_fixations)
+        {
+            auto itr = std::remove_if(
+                pop.tables.mutation_table.begin(),
+                pop.tables.mutation_table.end(),
+                [&pop](const fwdpp::ts::mutation_record &mr) {
+                    return pop.mcounts[mr.key] == 2 * pop.diploids.size()
+                           && pop.mcounts_from_preserved_nodes[mr.key] == 0;
+                });
+            auto d = std::distance(itr, end(pop.tables.mutation_table));
+            pop.tables.mutation_table.erase(itr,
+                                            end(pop.tables.mutation_table));
+            if (d)
+                {
+                    pop.tables.rebuild_site_table();
+                }
+            fwdpp::ts::remove_fixations_from_haploid_genomes(
+                pop.haploid_genomes, pop.mutations, pop.mcounts,
+                pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                preserve_selected_fixations);
+            // NOTE: this is hacky and should be better-handled upstream
+            for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
+                {
+                    if (pop.mcounts[i] == 2 * pop.N
+                        && pop.mcounts_from_preserved_nodes[i] == 0)
+                        {
+                            pop.mcounts[i] = 0;
+                        }
+                }
+        }
     cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
     if (remove_extinct_mutations_at_finish)
         {
