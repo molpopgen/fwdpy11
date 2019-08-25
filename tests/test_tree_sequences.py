@@ -630,6 +630,8 @@ class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(max(self.pop.mcounts) < 2*self.pop.N)
 
     def test_mutation_table_contents(self):
+        self.assertEqual(len(self.pop.mcounts), len(
+            self.pop.mcounts_ancient_samples))
         for m in self.pop.tables.mutations:
             self.assertTrue(m.key < len(self.pop.mutations))
             self.assertTrue(self.pop.mcounts[m.key] < 2*self.pop.N)
@@ -665,6 +667,83 @@ class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
 
     def test_slow_pickling_to_file(self):
         ofile = "poptest_no_ancient_prune_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_genotype_matrix(self):
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
+        rc = np.sum(dm.selected, axis=1)
+        index = [i for i in range(len(self.pop.mcounts))]
+        index = sorted(index, key=lambda x: self.pop.mutations[x].pos)
+        mc = [self.pop.mcounts[i] for i in index if self.pop.mcounts[i] > 0]
+        self.assertTrue(np.array_equal(rc, np.array(mc)))
+
+
+class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
+        self.stimes = [i for i in range(1, 101)]
+        self.recorder = Recorder(42, 10, self.stimes)
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         100, self.recorder, track_mutation_counts=True)
+        assert len(
+            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_mutation_table_contents(self):
+        self.assertEqual(len(self.pop.mcounts), len(
+            self.pop.mcounts_ancient_samples))
+        for m in self.pop.tables.mutations:
+            self.assertTrue(m.key < len(self.pop.mutations))
+            if self.pop.mcounts[m.key] < 2*self.pop.N:
+                is_fixed = False
+            else:
+                is_fixed = True
+            if self.pop.mcounts_ancient_samples[m.key] != 0:
+                is_found_ancient = True
+            else:
+                is_found_ancient = False
+            self.assertTrue(is_fixed is False or (
+                is_fixed is True and is_found_ancient is True))
+
+        for f in self.pop.fixations:
+            m = None
+            for i in self.pop.tables.mutations:
+                if self.pop.tables.sites[i.site].position == f.pos:
+                    m = i
+                    break
+            if m is not None:
+                # Then the mutation position got re-used, and
+                # so the mutations must have different origin times
+                # NOTE: this probably has not happened!
+                self.assertNotEqual(f.g, self.pop.mutations[m.key].g)
+
+    def test_dump_to_tskit(self):
+        ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, ts), True)
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_with_ancient_prune_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_with_ancient_prune_fixations.pickle"
         with open(ofile, 'wb') as f:
             self.pop.pickle_to_file(f)
         with open(ofile, 'rb') as f:
