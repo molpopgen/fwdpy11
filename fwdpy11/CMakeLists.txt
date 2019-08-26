@@ -92,7 +92,8 @@ set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/index_and_count_mutations.cc
     src/evolve_population/track_mutation_counts.cc
     src/evolve_population/no_stopping.cc
-    src/evolve_population/remove_extinct_mutations.cc)
+    src/evolve_population/remove_extinct_mutations.cc
+    src/evolve_population/track_ancestral_counts.cc)
 
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}

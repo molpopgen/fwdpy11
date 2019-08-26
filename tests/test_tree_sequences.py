@@ -2,34 +2,127 @@ import unittest
 import fwdpy11
 import numpy as np
 import copy
+import os
+import pickle
 
 
-class testTreeSequences(unittest.TestCase):
+class Recorder(object):
+    def __init__(self, seed, samplesize, timepoints):
+        np.random.seed(seed)
+        self.samplesize = samplesize
+        self.timepoints = timepoints
+        self.data = []
+
+    def __call__(self, pop, recorder):
+        if len(self.timepoints) > 0:
+            if self.timepoints[0] == pop.generation:
+                s = np.random.choice(
+                    pop.N, self.samplesize, replace=False)
+                md = [copy.deepcopy(pop.diploid_metadata[i])
+                      for i in s]
+                self.data.append((pop.generation, md))
+                recorder.assign(s)
+                self.timepoints.pop(0)
+
+
+def set_up_quant_trait_model():
+    # TODO add neutral variants
+    N = 1000
+    demography = np.array([N]*10*N, dtype=np.uint32)
+    rho = 1.
+    # theta = 100.
+    # nreps = 500
+    # mu = theta/(4*N)
+    r = rho/(4*N)
+
+    GSSmo = fwdpy11.GSSmo([(0, 0, 1), (N, 1, 1)])
+    a = fwdpy11.Additive(2.0, GSSmo)
+    p = {'nregions': [],
+         'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+         'recregions': [fwdpy11.Region(0, 1, 1)],
+         'rates': (0.0, 0.025, r),
+         'gvalue': a,
+         'prune_selected': False,
+         'demography': demography
+         }
+    params = fwdpy11.ModelParams(**p)
+    rng = fwdpy11.GSLrng(101*45*110*210)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    return params, rng, pop
+
+
+def set_up_standard_pop_gen_model():
+    """
+    For this sort of model, when mutations fix, they are
+    removed from the simulation, INCLUDING THE TREE
+    SEQUENCES. The fact of their existence gets
+    recorded in pop.fixations and pop.fixation_times
+    """
+    # TODO add neutral variants
+    N = 1000
+    demography = np.array([N]*10*N, dtype=np.uint32)
+    rho = 1.
+    # theta = 100.
+    # nreps = 500
+    # mu = theta/(4*N)
+    r = rho/(4*N)
+
+    a = fwdpy11.Multiplicative(2.0)
+    pselected = 1e-3
+    p = {'nregions': [],
+         'sregions': [fwdpy11.GammaS(0, 1, 1.-pselected, mean=-5, shape=1, scaling=2*N),
+                      fwdpy11.ConstantS(0, 1, pselected, 1000, scaling=2*N)],
+         'recregions': [fwdpy11.Region(0, 1, 1)],
+         'rates': (0.0, 0.001, r),
+         'gvalue': a,
+         'prune_selected': True,
+         'demography': demography
+         }
+    params = fwdpy11.ModelParams(**p)
+    rng = fwdpy11.GSLrng(666**2)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    return params, rng, pop
+
+
+def mcounts_comparison_details(pop, counts, ts):
+    for t in ts.trees():
+        for m in t.mutations():
+            pos = m.position
+            # retrieve this mutation from the fwdpy11 table
+            mr = None
+            for i in pop.tables.mutations:
+                if pop.tables.sites[i.site].position == pos:
+                    mr = i
+                    break
+            assert pop.mutations[mr.key].pos == pos
+            tskit_samples = [i for i in t.samples(m.node)]
+            if len(tskit_samples) != counts[mr.key]:
+                return False
+    return True
+
+
+def mcounts_comparison(pop, ts):
+    if len(pop.tables.preserved_nodes) > 0:
+        ts2 = ts.simplify(pop.tables.preserved_nodes)
+        c = mcounts_comparison_details(pop, pop.mcounts_ancient_samples, ts2)
+        if c is not True:
+            return c
+
+    ts2 = ts.simplify([i for i in range(2*pop.N)])
+    c = mcounts_comparison_details(pop, pop.mcounts, ts2)
+    if c is not True:
+        return c
+
+    return True
+
+
+class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        # TODO add neutral variants
-        self.N = 1000
-        self.demography = np.array([self.N]*self.N, dtype=np.uint32)
-        self.rho = 1.
-        self.theta = 100.
-        self.nreps = 500
-        self.mu = self.theta/(4*self.N)
-        self.r = self.rho/(4*self.N)
-
-        self.GSS = fwdpy11.GSS(VS=1, opt=0)
-        a = fwdpy11.Additive(2.0, self.GSS)
-        self.p = {'nregions': [],
-                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-                  'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.025, self.r),
-                  'gvalue': a,
-                  'prune_selected': False,
-                  'demography': self.demography
-                  }
-        self.params = fwdpy11.ModelParams(**self.p)
-        self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        assert max(self.pop.mcounts) == 2 * \
+            self.pop.N, "Nothing fixed, so test case is not helpful"
 
     def test_simplify(self):
         tables, idmap = fwdpy11.simplify(self.pop, [i for i in range(10)])
@@ -56,8 +149,6 @@ class testTreeSequences(unittest.TestCase):
 
     def test_dump_to_tskit(self):
         import tskit
-        # TODO: test leaf counts of mutations in msprmie
-        # vs fwdpy11 and cross-references with self.pop.mcounts
         dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(len(dumped_ts.tables.nodes),
                          len(self.pop.tables.nodes))
@@ -133,6 +224,8 @@ class testTreeSequences(unittest.TestCase):
                 np.array(d['heffects']), m.heffects))
             self.assertEqual(d['label'], m.label)
             self.assertEqual(d['neutral'], m.neutral)
+
+        self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
 
     def test_TreeIterator(self):
         # The first test ensures that TreeIterator
@@ -282,9 +375,9 @@ class testTreeSequences(unittest.TestCase):
         and compare their contents to those of tskit
         as well as to an explicit calculation of mutation counts.
         """
-        dm = fwdpy11.make_data_matrix(self.pop,
-                                      [i for i in range(2*self.pop.N)],
-                                      False, True)
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         dumped_ts = self.pop.dump_tables_to_tskit()
@@ -334,7 +427,7 @@ class testTreeSequences(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              [i for i in range(
                                                  2*self.pop.N)],
-                                             False, True)
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
@@ -353,7 +446,7 @@ class testTreeSequences(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              [i for i in range(
                                                  2*self.pop.N)],
-                                             False, True)
+                                             False, True, True)
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
@@ -393,61 +486,55 @@ class testTreeSequences(unittest.TestCase):
         pmc = np.array(self.pop.mcounts)
         self.assertTrue(np.array_equal(mc, pmc))
 
+    def test_binary_round_trip(self):
+        ofile = "poptest_no_ancient_preserve_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
 
-class testSamplePreservation(unittest.TestCase):
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_no_ancient_preserve_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+
+class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.N = 1000
-        self.demography = np.array([self.N]*100, dtype=np.uint32)
-        self.rho = 1.
-        self.theta = 100.
-        self.nreps = 500
-        self.mu = self.theta/(4*self.N)
-        self.r = self.rho/(4*self.N)
-        self.GSS = fwdpy11.GSS(VS=1, opt=0)
-        a = fwdpy11.Additive(2.0, self.GSS)
-        self.p = {'nregions': [],
-                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
-                  'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.025, self.r),
-                  'gvalue': a,
-                  'prune_selected': False,
-                  'demography': self.demography
-                  }
-        self.params = fwdpy11.ModelParams(**self.p)
-        self.rng = fwdpy11.GSLrng(101*45*110*210)
-        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
-
-        class Recorder(object):
-            def __init__(self, seed, samplesize, timepoints):
-                np.random.seed(seed)
-                self.samplesize = samplesize
-                self.timepoints = timepoints
-                self.data = []
-
-            def __call__(self, pop, recorder):
-                if len(self.timepoints) > 0:
-                    if self.timepoints[0] == pop.generation:
-                        s = np.random.choice(
-                            pop.N, self.samplesize, replace=False)
-                        md = [copy.deepcopy(pop.diploid_metadata[i])
-                              for i in s]
-                        self.data.append((pop.generation, md))
-                        recorder.assign(s)
-                        self.timepoints.pop(0)
-
-        self.recorder = Recorder(42, 10, [i for i in range(1, 101)])
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.stimes = [i for i in range(1, 101)]
+        self.recorder = Recorder(42, 10, self.stimes)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
+        assert max(self.pop.mcounts) == 2 * \
+            self.pop.N, "Nothing fixed, so test case is not helpful"
 
     def test_Simulation(self):
-        self.assertEqual(self.pop.generation, 100)
+        self.assertEqual(self.pop.generation, 10000)
 
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop,
                                      self.pop.tables.preserved_nodes)
         pmc = np.array(self.pop.mcounts_ancient_samples)
         self.assertTrue(np.array_equal(mc, pmc))
+
+    def test_ancient_sample_times(self):
+        times = []
+        for t, n, md in self.pop.sample_timepoints(False):
+            times.append(int(t))
+        self.assertEqual(times, [i for i in range(1, 101)])
 
     def test_VariantIteratorFromPreservedSamples(self):
         n = np.array(self.pop.tables.nodes)
@@ -460,6 +547,14 @@ class testSamplePreservation(unittest.TestCase):
                 k = variant.records[0]
                 self.assertNotEqual(k.node, fwdpy11.NULL_NODE)
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
+
+    def test_mcounts_from_ancient_samples(self):
+        vi = fwdpy11.VariantIterator(
+            self.pop.tables, self.pop.tables.preserved_nodes)
+        for v in vi:
+            k = v.records[0]
+            self.assertEqual(
+                self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
 
     def test_sample_traverser(self):
         timepoints = [i for i in range(1, 101)]
@@ -493,6 +588,179 @@ class testSamplePreservation(unittest.TestCase):
             idx = np.where(n['time'][self.pop.tables.preserved_nodes] == i)[0]
             self.assertTrue(np.array_equal(
                 np.array(self.pop.tables.preserved_nodes)[idx], j[1]))
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_with_ancient_preserve_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_with_ancient_preserve_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_dump_to_tskit(self):
+        dumped_ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
+
+
+class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         100, track_mutation_counts=True)
+        assert len(
+            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_max_mcounts(self):
+        self.assertTrue(max(self.pop.mcounts) < 2*self.pop.N)
+
+    def test_mutation_table_contents(self):
+        self.assertEqual(len(self.pop.mcounts), len(
+            self.pop.mcounts_ancient_samples))
+        for m in self.pop.tables.mutations:
+            self.assertTrue(m.key < len(self.pop.mutations))
+            self.assertTrue(self.pop.mcounts[m.key] < 2*self.pop.N)
+
+        for f in self.pop.fixations:
+            m = None
+            for i in self.pop.tables.mutations:
+                if self.pop.tables.sites[i.site].position == f.pos:
+                    m = i
+                    break
+            if m is not None:
+                # Then the mutation position got re-used, and
+                # so the mutations must have different origin times
+                # NOTE: this probably has not happened!
+                self.assertNotEqual(f.g, self.pop.mutations[m.key].g)
+
+    def test_dump_to_tskit(self):
+        ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, ts), True)
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_no_ancient_prune_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_no_ancient_prune_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_genotype_matrix(self):
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
+        rc = np.sum(dm.selected, axis=1)
+        index = [i for i in range(len(self.pop.mcounts))]
+        index = sorted(index, key=lambda x: self.pop.mutations[x].pos)
+        mc = [self.pop.mcounts[i] for i in index if self.pop.mcounts[i] > 0]
+        self.assertTrue(np.array_equal(rc, np.array(mc)))
+
+
+class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
+        self.stimes = [i for i in range(1, 101)]
+        self.recorder = Recorder(42, 10, self.stimes)
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         100, self.recorder, track_mutation_counts=True)
+        assert len(
+            self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_mutation_table_contents(self):
+        self.assertEqual(len(self.pop.mcounts), len(
+            self.pop.mcounts_ancient_samples))
+        for m in self.pop.tables.mutations:
+            self.assertTrue(m.key < len(self.pop.mutations))
+            if self.pop.mcounts[m.key] < 2*self.pop.N:
+                is_fixed = False
+            else:
+                is_fixed = True
+            if self.pop.mcounts_ancient_samples[m.key] != 0:
+                is_found_ancient = True
+            else:
+                is_found_ancient = False
+            self.assertTrue(is_fixed is False or (
+                is_fixed is True and is_found_ancient is True))
+
+        for f in self.pop.fixations:
+            m = None
+            for i in self.pop.tables.mutations:
+                if self.pop.tables.sites[i.site].position == f.pos:
+                    m = i
+                    break
+            if m is not None:
+                # Then the mutation position got re-used, and
+                # so the mutations must have different origin times
+                # NOTE: this probably has not happened!
+                self.assertNotEqual(f.g, self.pop.mutations[m.key].g)
+
+    def test_dump_to_tskit(self):
+        ts = self.pop.dump_tables_to_tskit()
+        self.assertEqual(mcounts_comparison(self.pop, ts), True)
+
+    def test_binary_round_trip(self):
+        ofile = "poptest_with_ancient_prune_fixations.bin"
+        self.pop.dump_to_file(ofile)
+        pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_fast_pickling(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+
+    def test_slow_pickling_to_file(self):
+        ofile = "poptest_with_ancient_prune_fixations.pickle"
+        with open(ofile, 'wb') as f:
+            self.pop.pickle_to_file(f)
+        with open(ofile, 'rb') as f:
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == pop2)
+        if os.path.exists(ofile):
+            os.remove(ofile)
+
+    def test_genotype_matrix(self):
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             [i for i in range(2*self.pop.N)],
+                                             False, True, True)
+        rc = np.sum(dm.selected, axis=1)
+        index = [i for i in range(len(self.pop.mcounts))]
+        index = sorted(index, key=lambda x: self.pop.mutations[x].pos)
+        mc = [self.pop.mcounts[i] for i in index if self.pop.mcounts[i] > 0]
+        self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
 class testSimplificationInterval(unittest.TestCase):

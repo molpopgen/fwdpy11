@@ -24,6 +24,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <numeric>
 #include <fwdpp/forward_types_serialization.hpp>
 #include <fwdpp/io/serialize_population.hpp>
 #include <fwdpp/ts/serialization.hpp>
@@ -39,7 +40,10 @@ namespace fwdpy11
         {
             // Changed to 3 im 0.3.0
             // to handle genetic value matrices
-            return 3;
+            // Changed to 4 in 0.5.2 to explicitly
+            // handle the mutation counts, so that we can dodge tree
+            // sequence traversal.
+            return 4;
         }
 
         template <typename streamtype, typename poptype>
@@ -58,9 +62,16 @@ namespace fwdpy11
             fwdpy11::serialize_ancient_sample_records()(
                 buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
-            fwdpp::ts::io::serialize_tables(buffer, pop->tables);
-            std::size_t msize = pop->genetic_value_matrix.size();
+            //preserved mutation counts added in 0.5.2, which is format version 4
             fwdpp::io::scalar_writer w;
+            std::size_t msize = pop->mcounts_from_preserved_nodes.size();
+            w(buffer, &msize);
+            if (msize > 0)
+                {
+                    w(buffer, pop->mcounts_from_preserved_nodes.data(), msize);
+                }
+            fwdpp::ts::io::serialize_tables(buffer, pop->tables);
+            msize = pop->genetic_value_matrix.size();
             w(buffer, &msize);
             if (msize > 0)
                 {
@@ -113,6 +124,20 @@ namespace fwdpy11
                 fwdpy11::deserialize_ancient_sample_records()(
                     buffer, pop.ancient_sample_records);
                 fwdpp::io::deserialize_population(buffer, pop);
+                std::size_t msize;
+                fwdpp::io::scalar_reader r;
+                if (version >= 4) // >= version 0.5.2
+                    {
+                        r(buffer, &msize);
+                        pop.mcounts_from_preserved_nodes.resize(msize);
+                        if (msize > 0)
+                            {
+                                r(buffer,
+                                  pop.mcounts_from_preserved_nodes.data(),
+                                  msize);
+                            }
+                    }
+
                 pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
                 // NOTE: version 0.5.0 added in a site table that previous versions
                 // did not have.  Further, the mutation table entries differed in
@@ -124,7 +149,7 @@ namespace fwdpy11
                             fix_mutation_table_repopulate_site_table(
                                 pop.tables, pop.mutations);
                     }
-                if (!pop.tables.edge_table.empty())
+                if (version < 4 && !pop.tables.edge_table.empty())
                     {
                         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);
@@ -134,8 +159,6 @@ namespace fwdpy11
                     }
                 if (version > 2)
                     {
-                        std::size_t msize;
-                        fwdpp::io::scalar_reader r;
                         r(buffer, &msize);
                         if (msize > 0)
                             {
