@@ -31,7 +31,6 @@ then
     # Weird stuff is happening right now, so we force numpy and numpy base:
     # conda install -c conda-forge numpy==1.16.2 numpy-base==1.16.2
     # conda install -c conda-forge sphinx nbsphinx ipython matplotlib msprime
-    pip install cppimport
     echo `which python`
     echo `which python3`
 else

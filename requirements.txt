@@ -5,7 +5,6 @@ numpy
 
 #below are for building package,
 #dox, and running tests
-cppimport
 cython
 sphinx
 pandas
