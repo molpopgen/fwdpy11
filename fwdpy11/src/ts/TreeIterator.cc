@@ -147,28 +147,18 @@ class tree_visitor_wrapper
     py::array_t<fwdpp::ts::TS_NODE_INT>
     nodes()
     {
-        std::vector<fwdpp::ts::TS_NODE_INT>* nodes
-            = new std::vector<fwdpp::ts::TS_NODE_INT>(
-                nodes_preorder(visitor.tree()));
-
-        auto capsule = py::capsule(nodes, [](void* x) {
-            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
-        });
-        return py::array_t<fwdpp::ts::TS_NODE_INT>(nodes->size(),
-                                                   nodes->data(), capsule);
+        std::vector<fwdpp::ts::TS_NODE_INT> vnodes(
+            nodes_preorder(visitor.tree()));
+        return fwdpy11::make_1d_array_with_capsule(std::move(vnodes));
     }
 
-    py::array
+    py::array_t<fwdpp::ts::TS_NODE_INT>
     samples() const
     {
-        std::vector<fwdpp::ts::TS_NODE_INT>* s
-            = new std::vector<fwdpp::ts::TS_NODE_INT>(
-                visitor.tree().samples_list_begin(),
-                visitor.tree().samples_list_end());
-        auto capsule = py::capsule(s, [](void* x) {
-            delete reinterpret_cast<std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
-        });
-        return py::array(s->size(), s->data(), capsule);
+        std::vector<fwdpp::ts::TS_NODE_INT> s(
+            visitor.tree().samples_list_begin(),
+            visitor.tree().samples_list_end());
+        return fwdpy11::make_1d_array_with_capsule(std::move(s));
     }
 
     py::array
@@ -405,16 +395,8 @@ init_tree_iterator(py::module& m)
         .def_property_readonly(
             "roots",
             [](const tree_visitor_wrapper& self) {
-                std::vector<fwdpp::ts::TS_NODE_INT>* roots
-                    = new std::vector<fwdpp::ts::TS_NODE_INT>(
-                        fwdpp::ts::get_roots(self.visitor.tree()));
-
-                auto capsule = py::capsule(roots, [](void* x) {
-                    delete reinterpret_cast<
-                        std::vector<fwdpp::ts::TS_NODE_INT>*>(x);
-                });
-
-                return py::array(roots->size(), roots->data(), capsule);
+                auto roots = fwdpp::ts::get_roots(self.visitor.tree());
+                return fwdpy11::make_1d_array_with_capsule(std::move(roots));
             },
             R"delim(
             Return marginal tree roots as numpy.ndarray

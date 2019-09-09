@@ -1,4 +1,5 @@
 #include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/numpy/array.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
@@ -42,12 +43,8 @@ simplify(const fwdpy11::Population& pop,
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     auto rv = simplifier.simplify(t, samples);
     t.build_indexes();
-    decltype(rv.first)* idmap = new decltype(rv.first)(std::move(rv.first));
-    py::capsule cap(idmap, [](void* v) {
-        delete reinterpret_cast<decltype(rv.first)*>(v);
-    });
-    return py::make_tuple(std::move(t),
-                          py::array(idmap->size(), idmap->data(), cap));
+    return py::make_tuple(std::move(t), fwdpy11::make_1d_array_with_capsule(
+                                            std::move(rv.first)));
 }
 
 void
@@ -102,13 +99,7 @@ init_simplify_functions(py::module& m)
             fwdpp::ts::table_simplifier simplifier(tables.genome_length());
             auto rv = simplifier.simplify(t, samples);
             t.build_indexes();
-            decltype(rv.first)* idmap
-                = new decltype(rv.first)(std::move(rv.first));
-            py::capsule cap(idmap, [](void* v) {
-                delete reinterpret_cast<decltype(rv.first)*>(v);
-            });
-            return py::make_tuple(
-                std::move(t), py::array(idmap->size(), idmap->data(), cap));
+            return py::make_tuple(std::move(t),fwdpy11::make_1d_array_with_capsule(std::move(rv.first)));
         },
         py::arg("tables"), py::arg("samples"),
         R"delim(

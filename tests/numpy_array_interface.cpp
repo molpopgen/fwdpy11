@@ -42,7 +42,7 @@ PYBIND11_MODULE(numpy_array_interface, m)
                  return fwdpy11::make_1d_array_with_capsule(v);
              })
         .def("x_readwrite_via_capsule_with_steal", [](VecBackedArray& self) {
-            return fwdpy11::make_1d_array_with_capsule(self.x);
+            return fwdpy11::make_1d_array_with_capsule(std::move(self.x));
         });
 
     py::class_<VecBacked2DArray>(m, "VecBacked2DArray")
