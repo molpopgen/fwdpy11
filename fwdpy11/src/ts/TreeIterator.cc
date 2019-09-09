@@ -193,11 +193,7 @@ class tree_visitor_wrapper
                 std::sort(begin(samples_below_buffer),
                           end(samples_below_buffer));
             }
-        auto capsule = py::capsule(&samples_below_buffer, [](void* x) {
-            reinterpret_cast<decltype(samples_below_buffer)*>(x)->clear();
-        });
-        return py::array(samples_below_buffer.size(),
-                         samples_below_buffer.data(), capsule);
+        return fwdpy11::make_1d_ndarray_readonly(samples_below_buffer);
     }
 
     fwdpp::ts::TS_NODE_INT
