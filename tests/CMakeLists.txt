@@ -19,3 +19,5 @@ set_target_properties(custom_stateless_genotype PROPERTIES LIBRARY_OUTPUT_DIRECT
 pybind11_add_module(custom_additive custom_additive.cpp)
 target_link_libraries(custom_additive PRIVATE GSL::gsl GSL::gslcblas)
 set_target_properties(custom_additive PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+pybind11_add_module(numpy_array_interface numpy_array_interface.cpp)
+set_target_properties(numpy_array_interface PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
