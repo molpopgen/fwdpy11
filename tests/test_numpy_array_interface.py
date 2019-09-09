@@ -17,6 +17,18 @@ class TestNumpyArrayInterface1D(unittest.TestCase):
         self.assertEqual(a.flags.owndata, False)
         self.assertEqual(a.flags.writeable, False)
 
+    def test_readwrite_via_capsule(self):
+        a = self.v.x_readwrite_via_capsule()
+        self.assertEqual(a.flags.owndata, False)
+        self.assertEqual(a.flags.writeable, True)
+
+    def test_readwrite_via_capsule_with_steal(self):
+        a = self.v.x_readwrite_via_capsule_with_steal()
+        self.assertEqual(a.flags.owndata, False)
+        self.assertEqual(a.flags.writeable, True)
+        b = self.v.x_readwrite()
+        self.assertEqual(b.shape[0], 0)
+
 
 class TestNumpyArrayInterface2D(unittest.TestCase):
     @classmethod
