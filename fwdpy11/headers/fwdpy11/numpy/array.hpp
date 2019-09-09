@@ -73,7 +73,7 @@ namespace fwdpy11
 
     template <typename T>
     inline pybind11::array_t<T>
-    make_1d_array_with_capsule(std::vector<T>& v)
+    make_1d_array_with_capsule(std::vector<T>&& v)
     // Steals contents of v! Use with caution.
     {
         std::vector<T>* c = new std::vector<T>(std::move(v));
