@@ -1,9 +1,6 @@
 import unittest
 import fwdpy11
 import numpy as np
-import pyximport
-pyximport.install(setup_args={'include_dirs': np.get_include()})
-from mean_sel_coeff import mean_s
 
 
 class test_DiploidPopulation(unittest.TestCase):
@@ -34,10 +31,6 @@ class test_DiploidPopulation(unittest.TestCase):
             self.assertEqual(m.g, j.g)
             self.assertEqual(m.label, j.label)
             self.assertEqual(m.neutral, j.neutral)
-
-    def testCythonFunc(self):
-        ms = mean_s(self.muts['s'])
-        self.assertAlmostEqual(ms, self.muts['s'].mean())
 
     def testDiploidTraits(self):
         dips = np.array(self.pop.diploid_metadata)
