@@ -6,7 +6,7 @@ then
     echo "HERE"
     if [ "$TRAVIS_OS_NAME" == "linux" ]; 
     then 
-        wget https://repo.continuum.io/miniconda/Miniconda3-Latest-Linux-x86_64.sh -O miniconda.sh;
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
     if [ "$TRAVIS_OS_NAME" == "osx" ];
     then 
