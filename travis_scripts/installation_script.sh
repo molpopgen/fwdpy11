@@ -19,8 +19,10 @@ then
     #conda update -q conda
     # Useful for debugging any issues with conda
     conda info -a
+    conda create -q -n test-environment
+    condat activate test-environment
     if [ "$TRAVIS_OS_NAME" == "linux" ];
-    then conda install gcc;
+    then conda install gcc_linux-64 gxx_linux-64;
     fi
     if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ];
     then
