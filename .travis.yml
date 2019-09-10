@@ -10,9 +10,10 @@ matrix:
         - CXX=g++
 
     - os: linux
-      dist: bionic
+      dist: xenial
       python: 3.5
       env:
+        - XENIAL=1
         - CC=gcc
         - CXX=g++
 

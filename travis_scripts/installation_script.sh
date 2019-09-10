@@ -35,8 +35,13 @@ then
     echo `which python3`
 else
     sudo apt-get update -qq
-    sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev
-    # ./travis_scripts/gsl2.sh
+    if [ "$XENIAL" == "1" ];
+    then
+        sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake;
+        ./travis_scripts/gsl2.sh;
+    else
+        sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev;
+    fi
     pip install --upgrade -r requirements.txt
 
     # We need to get pybind11 NOT from pip
