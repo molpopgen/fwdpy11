@@ -34,14 +34,7 @@ PYBIND11_MODULE(numpy_array_interface, m)
              [](const VecBackedArray& self) {
                  return fwdpy11::make_1d_ndarray_readonly(self.x);
              })
-        .def("x_readwrite_via_capsule",
-             [](const VecBackedArray& self) {
-                 decltype(VecBackedArray::x)* v
-                     = new (decltype(VecBackedArray::x));
-                 v->assign(begin(self.x), end(self.x));
-                 return fwdpy11::make_1d_array_with_capsule(v);
-             })
-        .def("x_readwrite_via_capsule_with_steal", [](VecBackedArray& self) {
+        .def("x_readwrite_via_capsule", [](VecBackedArray& self) {
             return fwdpy11::make_1d_array_with_capsule(std::move(self.x));
         });
 

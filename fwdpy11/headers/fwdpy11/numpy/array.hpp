@@ -57,22 +57,6 @@ namespace fwdpy11
 
     template <typename T>
     inline pybind11::array_t<T>
-    make_1d_array_with_capsule(std::vector<T>* v)
-    // v must not be a pointer to a class member.
-    // Rather, it must be allocated on its own, like
-    // in a function.
-    {
-        if (v == nullptr)
-            {
-                throw std::invalid_argument("pointer to vector is nullptr");
-            }
-        auto capsule = pybind11::capsule(
-            v, [](void* x) { delete reinterpret_cast<std::vector<T>*>(x); });
-        return pybind11::array(v->size(), v->data(), capsule);
-    }
-
-    template <typename T>
-    inline pybind11::array_t<T>
     make_1d_array_with_capsule(std::vector<T>&& v)
     // Steals contents of v! Use with caution.
     {
