@@ -6,7 +6,7 @@ then
     echo "HERE"
     if [ "$TRAVIS_OS_NAME" == "linux" ]; 
     then 
-        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.21-Linux-x86_64.sh -O miniconda.sh;
+        wget https://repo.continuum.io/miniconda/Miniconda3-Latest-Linux-x86_64.sh -O miniconda.sh;
     fi
     if [ "$TRAVIS_OS_NAME" == "osx" ];
     then 
@@ -26,8 +26,8 @@ then
     then
         conda install gcc;
     fi
-    conda install cython numpy python==3.6 gsl
-    conda install -c conda-forge pybind11==2.3.0 numpy==1.16.2 msprime==0.7.0 openblas cmake
+    conda install cython numpy gsl
+    conda install -c conda-forge pybind11==2.3.0 numpy msprime openblas cmake
     # Weird stuff is happening right now, so we force numpy and numpy base:
     # conda install -c conda-forge numpy==1.16.2 numpy-base==1.16.2
     # conda install -c conda-forge sphinx nbsphinx ipython matplotlib msprime
