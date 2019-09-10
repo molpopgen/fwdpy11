@@ -66,20 +66,14 @@ namespace
     make_flattened_Mutation_array(
         const fwdpy11::Population::mcont_t& mutations)
     {
-        std::vector<flattened_Mutation>* vfm
-            = new std::vector<flattened_Mutation>();
-        vfm->reserve(mutations.size());
+        std::vector<flattened_Mutation> vfm;
+        vfm.reserve(mutations.size());
         for (auto&& m : mutations)
             {
-                vfm->push_back(flattened_Mutation{ m.pos, m.s, m.h, m.g,
-                                                   m.xtra, m.neutral });
+                vfm.push_back(flattened_Mutation{ m.pos, m.s, m.h, m.g, m.xtra,
+                                                  m.neutral });
             }
-        auto capsule = py::capsule(vfm, [](void* v) {
-            delete reinterpret_cast<std::vector<flattened_Mutation>*>(v);
-        });
-        auto rv = py::array(vfm->size(), vfm->data(), capsule);
-        rv.attr("flags").attr("writeable") = false;
-        return rv;
+        return fwdpy11::make_1d_array_with_capsule(std::move(vfm));
     }
 } // namespace
 
@@ -100,12 +94,12 @@ init_PopulationBase(py::module& m)
                       "Curent generation.")
         .def_readonly("mutations", &fwdpy11::Population::mutations,
                       MUTATIONS_DOCSTRING)
-        .def_property_readonly("mutations_ndarray",
-                               [](const fwdpy11::Population& self) {
-                                   return make_flattened_Mutation_array(
-                                       self.mutations);
-                               },
-                               R"delim(
+        .def_property_readonly(
+            "mutations_ndarray",
+            [](const fwdpy11::Population& self) {
+                return make_flattened_Mutation_array(self.mutations);
+            },
+            R"delim(
                                Return readonly numpy.ndarray of mutation data.
                                The data are returned as a copy.
 
@@ -115,12 +109,12 @@ init_PopulationBase(py::module& m)
 
                                .. versionadded:: 0.4.0
                                )delim")
-        .def_property_readonly("mcounts",
-                               [](const fwdpy11::Population& self) {
-                                   return fwdpy11::make_1d_ndarray_readonly(
-                                       self.mcounts);
-                               },
-                               MCOUNTS_DOCSTRING)
+        .def_property_readonly(
+            "mcounts",
+            [](const fwdpy11::Population& self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.mcounts);
+            },
+            MCOUNTS_DOCSTRING)
         .def_property_readonly(
             "mcounts_ancient_samples",
             [](const fwdpy11::Population& self) {
@@ -172,26 +166,24 @@ init_PopulationBase(py::module& m)
             population, the value of this property is
             None.
             )delim")
-        .def("mutation_indexes",
-             [](const fwdpy11::Population& pop,
-                const double pos) -> py::object {
-                 auto r = pop.mut_lookup.equal_range(pos);
-                 if (r.first == r.second)
-                     {
-                         return py::none();
-                     }
-                 std::vector<std::size_t>* rv = new std::vector<std::size_t>();
-                 for (auto i = r.first; i != r.second; ++i)
-                     {
-                         rv->push_back(i->second);
-                     }
-                 std::sort(begin(*rv), end(*rv));
-                 auto capsule = py::capsule(rv, [](void* v) {
-                     delete reinterpret_cast<std::vector<std::size_t>*>(v);
-                 });
-                 return py::array(rv->size(), rv->data(), capsule);
-             },
-             R"delim(
+        .def(
+            "mutation_indexes",
+            [](const fwdpy11::Population& pop,
+               const double pos) -> py::object {
+                auto r = pop.mut_lookup.equal_range(pos);
+                if (r.first == r.second)
+                    {
+                        return py::none();
+                    }
+                std::vector<std::size_t> rv;
+                for (auto i = r.first; i != r.second; ++i)
+                    {
+                        rv.push_back(i->second);
+                    }
+                std::sort(begin(rv), end(rv));
+                return fwdpy11::make_1d_array_with_capsule(std::move(rv));
+            },
+            R"delim(
              Get indexes associated with a mutation position.
              
              :param pos: A position
@@ -202,21 +194,22 @@ init_PopulationBase(py::module& m)
              Returns None if pos does not refer to an extant variant.  Otherwise, 
              returns a list.
              )delim",
-             py::arg("pos"))
+            py::arg("pos"))
         .def_readonly("haploid_genomes", &fwdpy11::Population::haploid_genomes,
                       GAMETES_DOCSTRING)
         .def_readonly("fixations", &fwdpy11::Population::fixations,
                       FIXATIONS_DOCSTRING)
         .def_readonly("fixation_times", &fwdpy11::Population::fixation_times,
                       FIXATION_TIMES_DOCSTRING)
-        .def("find_mutation_by_key",
-             [](const fwdpy11::Population& pop,
-                const std::tuple<double, double, fwdpp::uint_t>& key,
-                const std::int64_t offset) {
-                 return pop.find_mutation_by_key(key, offset);
-             },
-             py::arg("pop"), py::arg("offset") = 0,
-             R"delim(
+        .def(
+            "find_mutation_by_key",
+            [](const fwdpy11::Population& pop,
+               const std::tuple<double, double, fwdpp::uint_t>& key,
+               const std::int64_t offset) {
+                return pop.find_mutation_by_key(key, offset);
+            },
+            py::arg("pop"), py::arg("offset") = 0,
+            R"delim(
              Find a mutation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
@@ -230,14 +223,15 @@ init_PopulationBase(py::module& m)
 
              .. versionadded:: 0.2.0
              )delim")
-        .def("find_fixation_by_key",
-             [](const fwdpy11::Population& pop,
-                const std::tuple<double, double, fwdpp::uint_t>& key,
-                const std::int64_t offset) {
-                 return pop.find_fixation_by_key(key, offset);
-             },
-             py::arg("pop"), py::arg("offset") = 0,
-             R"delim(
+        .def(
+            "find_fixation_by_key",
+            [](const fwdpy11::Population& pop,
+               const std::tuple<double, double, fwdpp::uint_t>& key,
+               const std::int64_t offset) {
+                return pop.find_fixation_by_key(key, offset);
+            },
+            py::arg("pop"), py::arg("offset") = 0,
+            R"delim(
              Find a fixation by key.
              
              :param key: A mutation key. See :func:`fwdpy11.Mutation.key`.
@@ -257,14 +251,14 @@ init_PopulationBase(py::module& m)
                 Give access to the population's 
                 :class:`fwdpy11.TableCollection`
                 )delim")
-        .def_property_readonly("genetic_values",
-                               [](const fwdpy11::Population& self) {
-                                   return fwdpy11::make_2d_ndarray_readonly(
-                                       self.genetic_value_matrix, self.N,
-                                       self.genetic_value_matrix.size()
-                                           / self.N);
-                               },
-                               R"delim(
+        .def_property_readonly(
+            "genetic_values",
+            [](const fwdpy11::Population& self) {
+                return fwdpy11::make_2d_ndarray_readonly(
+                    self.genetic_value_matrix, self.N,
+                    self.genetic_value_matrix.size() / self.N);
+            },
+            R"delim(
         Return the genetic values as a readonly 2d numpy.ndarray.
         
         Rows are individuals.  Columns are genetic values.
