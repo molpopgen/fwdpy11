@@ -25,7 +25,7 @@ jobs:
             curl -L https://github.com/pybind/pybind11/archive/v2.2.4.tar.gz > pybind11-2.2.4.tar.gz
             tar xzf pybind11-2.2.4.tar.gz
             # Skip running the pybind11 unit suite--not needed...
-            cd pybind11-2.2.4 && cmake . -DPYBIND11_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION -DPYBIND11_TEST=0 && sudo make install && pip install . && cd ..
+            cd pybind11-2.2.4 && cmake . -DPYBIND11_PYTHON_VERSION=$TRAVIS_PYTHON_VERSION -DPYBIND11_TEST=0 && sudo make install && pip install . --user && cd ..
             # way to set path persistently https://circleci.com/docs/2.0/env-vars/#setting-path
             echo 'export PATH=/home/circleci/.local/bin:$PATH' >> $BASH_ENV
       - save_cache:
