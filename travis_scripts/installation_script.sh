@@ -39,8 +39,7 @@ else
     then
         sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake;
         ./travis_scripts/gsl2.sh;
-    else
-        sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev;
+    else sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev;
     fi
     pip install --upgrade -r requirements.txt
 
