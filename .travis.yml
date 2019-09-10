@@ -8,24 +8,6 @@ matrix:
         - USECONDA=1
         - CC=gcc
         - CXX=g++
-    - os: linux
-      dist: trusty
-      python: 3.5
-      addons:
-          apt_packages:
-            - pandoc
-      env:
-        - CC=gcc
-        - CXX=g++
-    - os: linux
-      dist: trusty
-      python: 3.6
-      addons:
-          apt_packages:
-            - pandoc
-      env:
-        - CC=gcc
-        - CXX=g++
 
     - os: linux
       dist: trusty
