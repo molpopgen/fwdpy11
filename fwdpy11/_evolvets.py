@@ -44,10 +44,12 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.Population.genetic_values`.
     :type record_gvalue_matrix: boolean
 
-    The recording of genetic values into :attr:`fwdpy11.Population.genetic_values` is supprssed by default.  First, it
+    The recording of genetic values into :attr:`fwdpy11.Population.genetic_values` is suppressed by default.  First, it
     is redundant with :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a single trait.
     Second, we save some memory by not tracking these matrices.  However, it is useful to track these data for some
     cases when simulating multivariate mutational effects (pleiotropy).
+
+    For a detailed description of `post_simplification_recorder`, see :ref:`tstimeseries`.
 
     .. note::
         If recorder is None,
@@ -55,6 +57,10 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
 
         If post_simplification_recorder is None, then
         :class:`fwdpy11.RecordNothing` will be used.
+
+    .. versionchanged:: 0.5.2
+
+        Added post_simplification_recorder.
 
     """
     import warnings
