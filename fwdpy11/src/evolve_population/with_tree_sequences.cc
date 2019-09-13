@@ -44,6 +44,7 @@
 #include "track_mutation_counts.hpp"
 #include "remove_extinct_mutations.hpp"
 #include "track_ancestral_counts.hpp"
+#include "reset_treeseq_to_alive_nodes.hpp"
 
 namespace py = pybind11;
 
@@ -66,7 +67,8 @@ evolve_with_tree_sequences(
     const bool track_mutation_counts_during_sim,
     const bool remove_extinct_mutations_at_finish,
     const bool reset_treeseqs_to_alive_nodes_after_simplification,
-    const fwdpy11::DiploidPopulation_temporal_sampler & post_simplification_recorder)
+    const fwdpy11::DiploidPopulation_temporal_sampler
+        &post_simplification_recorder)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -223,6 +225,16 @@ evolve_with_tree_sequences(
                     first_parental_index = 0;
                     remap_metadata(pop.ancient_sample_metadata, rv.first);
                     remap_metadata(pop.diploid_metadata, rv.first);
+                    if (reset_treeseqs_to_alive_nodes_after_simplification
+                        == true)
+                        {
+                            reset_treeseqs_to_alive_nodes(
+                                post_simplification_recorder,
+                                preserve_selected_fixations,
+                                suppress_edge_table_indexing, pop, simplifier,
+                                mutation_recycling_bin);
+                            next_index = pop.tables.num_nodes();
+                        }
                 }
             else
                 {
@@ -301,6 +313,15 @@ evolve_with_tree_sequences(
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);
+            if (reset_treeseqs_to_alive_nodes_after_simplification == true)
+                {
+                    reset_treeseqs_to_alive_nodes(post_simplification_recorder,
+                                                  preserve_selected_fixations,
+                                                  suppress_edge_table_indexing,
+                                                  pop, simplifier,
+                                                  mutation_recycling_bin);
+                    next_index = pop.tables.num_nodes();
+                }
         }
     index_and_count_mutations(suppress_edge_table_indexing, pop);
     if (!preserve_selected_fixations)
