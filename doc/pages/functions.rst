@@ -16,3 +16,5 @@ Function documentation
 .. autofunction:: fwdpy11.simplify
 
 .. autofunction:: fwdpy11.simplify_tables
+
+.. autofunction:: fwdpy11.evolvets
