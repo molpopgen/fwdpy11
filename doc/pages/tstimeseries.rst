@@ -1,4 +1,4 @@
-.. _tstimesesries:
+.. _tstimeseries:
 
 Efficient time series simulations with tree sequences.
 ====================================================================
