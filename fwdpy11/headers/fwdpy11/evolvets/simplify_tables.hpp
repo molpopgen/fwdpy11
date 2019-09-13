@@ -42,15 +42,18 @@ namespace fwdpy11
                     std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
                     fwdpp::ts::table_collection &tables,
                     fwdpp::ts::table_simplifier &simplifier,
-                    const fwdpp::ts::TS_NODE_INT first_sample_node,
-                    const std::size_t num_samples,
                     const bool preserve_selected_fixations,
                     const bool simulating_neutral_variants,
                     const bool suppress_edge_table_indexing)
     {
         tables.sort_tables_for_simplification();
-        std::vector<std::int32_t> samples(num_samples);
-        std::iota(samples.begin(), samples.end(), first_sample_node);
+        std::vector<std::int32_t> samples;
+        samples.reserve(2*pop.diploids.size());
+        for(auto & m : pop.diploid_metadata)
+        {
+            samples.push_back(m.nodes[0]);
+            samples.push_back(m.nodes[1]);
+        }
         auto rv = simplifier.simplify(tables, samples);
 
         for (auto &s : samples)

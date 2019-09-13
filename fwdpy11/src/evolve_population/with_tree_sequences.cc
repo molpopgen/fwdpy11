@@ -203,8 +203,7 @@ evolve_with_tree_sequences(
                     // TODO: update this to allow neutral mutations to be simulated
                     auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
-                        simplifier, pop.tables.num_nodes() - 2 * pop.N,
-                        2 * pop.N, preserve_selected_fixations, false,
+                        simplifier, preserve_selected_fixations, false,
                         suppress_edge_table_indexing);
                     if (suppress_edge_table_indexing == false)
                         {
@@ -294,7 +293,6 @@ evolve_with_tree_sequences(
             // TODO: update this to allow neutral mutations to be simulated
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
-                pop.tables.num_nodes() - 2 * pop.N, 2 * pop.N,
                 preserve_selected_fixations, false,
                 suppress_edge_table_indexing);
 
