@@ -19,10 +19,11 @@
 
 
 def evolvets(rng, pop, params, simplification_interval, recorder=None,
-           suppress_table_indexing=False, record_gvalue_matrix=False,
-           stopping_criterion=None,
-           track_mutation_counts=False,
-           remove_extinct_variants=True):
+             post_simplification_recorder=None,
+             suppress_table_indexing=False, record_gvalue_matrix=False,
+             stopping_criterion=None,
+             track_mutation_counts=False,
+             remove_extinct_variants=True):
     """
     Evolve a population with tree sequence recording
 
@@ -36,6 +37,8 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
     :type recorder: callable
+    :param post_simplification_recorder: (None) A temporal sampler
+    :type post_simplification_recorder: callable
     :param suppress_table_indexing: (False) Prevents edge table indexing until end of simulation
     :type suppress_table_indexing: boolean
     :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.Population.genetic_values`.
@@ -49,6 +52,9 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     .. note::
         If recorder is None,
         then :class:`fwdpy11.NoAncientSamples` will be used.
+
+        If post_simplification_recorder is None, then
+        :class:`fwdpy11.RecordNothing` will be used.
 
     """
     import warnings
@@ -69,6 +75,13 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     if recorder is None:
         from ._fwdpy11 import NoAncientSamples
         recorder = NoAncientSamples()
+
+    if post_simplification_recorder is None:
+        from ._fwdpy11 import RecordNothing
+        post_simplification_recorder = RecordNothing()
+        reset_treeseqs_after_simplify = False
+    else:
+        reset_treeseqs_after_simplify = True
 
     if stopping_criterion is None:
         from ._fwdpy11 import _no_stopping
@@ -91,4 +104,6 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
                                params.pself, params.prune_selected is False,
                                suppress_table_indexing, record_gvalue_matrix,
                                track_mutation_counts,
-                               remove_extinct_variants)
+                               remove_extinct_variants,
+                               reset_treeseqs_after_simplify,
+                               post_simplification_recorder)

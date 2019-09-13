@@ -36,6 +36,7 @@
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/samplers.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -63,7 +64,9 @@ evolve_with_tree_sequences(
     const bool preserve_selected_fixations,
     const bool suppress_edge_table_indexing, bool record_genotype_matrix,
     const bool track_mutation_counts_during_sim,
-    const bool remove_extinct_mutations_at_finish)
+    const bool remove_extinct_mutations_at_finish,
+    const bool reset_treeseqs_to_alive_nodes_after_simplification,
+    const fwdpy11::DiploidPopulation_temporal_sampler & post_simplification_recorder)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
