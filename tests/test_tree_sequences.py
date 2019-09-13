@@ -1078,9 +1078,6 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         self.N = 1000
         self.demography = np.array([self.N]*101, dtype=np.uint32)
         self.rho = 1.
-        self.theta = 100.
-        self.nreps = 500
-        self.mu = self.theta/(4*self.N)
         self.r = self.rho/(4*self.N)
 
         self.GSS = fwdpy11.GSS(VS=1, opt=0)
