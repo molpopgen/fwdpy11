@@ -1075,6 +1075,12 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                         self.sample_timepoints.append(t)
                         self.sample_sizes.append(len(n)//2)
 
+                    # simplify to each time point
+                    tables, idmap = fwdpy11.simplify_tables(pop.tables, n)
+                    for ni in n:
+                        assert idmap[ni] != fwdpy11.NULL_NODE
+                        assert tables.nodes[idmap[ni]].time == t
+
         self.N = 1000
         self.demography = np.array([self.N]*101, dtype=np.uint32)
         self.rho = 1.
