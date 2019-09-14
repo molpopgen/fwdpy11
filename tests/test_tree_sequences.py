@@ -1063,6 +1063,8 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                 self.timepoint_seen = {}
 
             def __call__(self, pop):
+                assert len(pop.tables.preserved_nodes)//2 ==  \
+                    len(pop.ancient_sample_metadata)
                 # Get the most recent ancient samples
                 # and record their number.  We do this
                 # by a "brute-force" approach
