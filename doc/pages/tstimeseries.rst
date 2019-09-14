@@ -12,9 +12,16 @@ sequences will have logarithmic complexity (see Kelleher et al, 2016, PLoS Genet
 
 When we are using ancient samples to "remember" or "preserve" large numbers of individuals during the simulation, the downstream processing is worse than logarithmic.  In the limiting case of preserving every individual ever simulated in a simulation wit ha constant population size, traversing through the trees has linear complexity.
 
-In fwdpy11 0.5.2, we introduced the ability to "temporarily remember" individuals.  In essence, you may provide a callable function that processes the population immediately after simplification. After execution of the function, all data concerning ancient samples will be cleared out and the table collection will be simplified the nodes corresponding to all individuals that are currently alive.
+In fwdpy11 0.5.2, we introduced the ability to "temporarily remember" individuals, meaning that we will "forget" them later in the simulation.
+In essence, you may provide a callable function that processes the population immediately after simplification.
+After execution of the function, all data concerning ancient samples will be cleared out and the table collection and the population object.
+This, these preserved nodes will be simplified out, or forgotten, the next time simplification occurs.
 
-Let's look at a concrete example, where we track the frequency of all selected mutations over time.  First, we define a function to process our population and record our data:
+Let's look at a concrete example, where we track the frequency of all selected mutations over time.
+First, we define a function to process our population and record our data.  We will track the unique
+`(position, origin time, effect size)` tuples that uniquely identify a mutation, along with the frequency
+associated with that tuple.  We will get these data by traversing all sample node time points, excluding
+alive individuals:
 
 .. ipython:: python
 
@@ -37,6 +44,7 @@ Let's look at a concrete example, where we track the frequency of all selected m
                 daf = tree.leaf_counts(mut.node)
                 freqs.append(MutData(p,g,s,daf/len(n)))
 
+Now, we run a simple simulation with the above function passed into :func:`fwdpy11.evolvets`:
 
 .. ipython:: python
 
@@ -62,6 +70,7 @@ Let's look at a concrete example, where we track the frequency of all selected m
                      post_simplification_recorder=track_freqs,
                      suppress_table_indexing=True)
 
+Finally, we plot our allele frequencies over time:
 
 .. ipython:: python
 
