@@ -219,6 +219,7 @@ evolve_with_tree_sequences(
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     bool stopping_criteron_met = false;
+    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     for (std::uint32_t gen = 0;
          gen < num_generations && !stopping_criteron_met; ++gen)
         {
@@ -247,18 +248,10 @@ evolve_with_tree_sequences(
                     // TODO: update this to allow neutral mutations to be simulated
                     auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
-                        simplifier, preserve_selected_fixations, false,
+                        simplifier, preserve_selected_fixations, simulating_neutral_variants,
                         suppress_edge_table_indexing);
-                    if (suppress_edge_table_indexing == false)
-                        {
-                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                pop.mcounts, pop.mcounts_from_preserved_nodes);
-                        }
-                    else
-                        {
-                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                rv.second, pop.mutations.size());
-                        }
+                    genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                        rv.second, pop.mutations.size());
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
@@ -343,7 +336,7 @@ evolve_with_tree_sequences(
             // TODO: update this to allow neutral mutations to be simulated
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
-                preserve_selected_fixations, false,
+                preserve_selected_fixations, simulating_neutral_variants,
                 suppress_edge_table_indexing);
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
