@@ -36,6 +36,7 @@
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/samplers.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -45,6 +46,21 @@
 #include "track_ancestral_counts.hpp"
 
 namespace py = pybind11;
+
+void
+apply_treseq_resetting_of_ancient_samples(
+    const fwdpy11::DiploidPopulation_temporal_sampler &recorder,
+    fwdpy11::DiploidPopulation &pop)
+{
+    recorder(pop);
+    if (!pop.tables.preserved_nodes.empty())
+        {
+            pop.tables.preserved_nodes.clear();
+            pop.ancient_sample_metadata.clear();
+            pop.ancient_sample_records.clear();
+            pop.ancient_sample_genetic_value_matrix.clear();
+        }
+}
 
 // TODO: allow for neutral mutations in the future
 void
@@ -63,7 +79,10 @@ evolve_with_tree_sequences(
     const bool preserve_selected_fixations,
     const bool suppress_edge_table_indexing, bool record_genotype_matrix,
     const bool track_mutation_counts_during_sim,
-    const bool remove_extinct_mutations_at_finish)
+    const bool remove_extinct_mutations_at_finish,
+    const bool reset_treeseqs_to_alive_nodes_after_simplification,
+    const fwdpy11::DiploidPopulation_temporal_sampler
+        &post_simplification_recorder)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -220,6 +239,12 @@ evolve_with_tree_sequences(
                     first_parental_index = 0;
                     remap_metadata(pop.ancient_sample_metadata, rv.first);
                     remap_metadata(pop.diploid_metadata, rv.first);
+                    if (reset_treeseqs_to_alive_nodes_after_simplification
+                        == true)
+                        {
+                            apply_treseq_resetting_of_ancient_samples(
+                                post_simplification_recorder, pop);
+                        }
                 }
             else
                 {
@@ -298,6 +323,11 @@ evolve_with_tree_sequences(
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);
+            if (reset_treeseqs_to_alive_nodes_after_simplification == true)
+                {
+                    apply_treseq_resetting_of_ancient_samples(
+                        post_simplification_recorder, pop);
+                }
         }
     index_and_count_mutations(suppress_edge_table_indexing, pop);
     if (!preserve_selected_fixations)

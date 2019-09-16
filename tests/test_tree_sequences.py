@@ -1053,5 +1053,82 @@ class testDataMatrixIterator(unittest.TestCase):
             self.assertTrue(np.array_equal(dm.selected, selected_slice))
 
 
+class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        class CountSamplesPerTimePoint(object):
+            def __init__(self):
+                self.sample_timepoints = []
+                self.sample_sizes = []
+                self.timepoint_seen = {}
+
+            def __call__(self, pop):
+                assert len(pop.tables.preserved_nodes)//2 ==  \
+                    len(pop.ancient_sample_metadata)
+                # Get the most recent ancient samples
+                # and record their number.  We do this
+                # by a "brute-force" approach
+                for t, n, m in pop.sample_timepoints(False):
+                    if t not in self.timepoint_seen:
+                        self.timepoint_seen[t] = 1
+                    else:
+                        self.timepoint_seen[t] += 1
+                    if t not in self.sample_timepoints:
+                        self.sample_timepoints.append(t)
+                        self.sample_sizes.append(len(n)//2)
+
+                    # simplify to each time point
+                    tables, idmap = fwdpy11.simplify_tables(pop.tables, n)
+                    for ni in n:
+                        assert idmap[ni] != fwdpy11.NULL_NODE
+                        assert tables.nodes[idmap[ni]].time == t
+
+        self.N = 1000
+        self.demography = np.array([self.N]*101, dtype=np.uint32)
+        self.rho = 1.
+        self.r = self.rho/(4*self.N)
+
+        self.GSS = fwdpy11.GSS(VS=1, opt=0)
+        a = fwdpy11.Additive(2.0, self.GSS)
+        self.p = {'nregions': [],
+                  'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
+                  'recregions': [fwdpy11.Region(0, 1, 1)],
+                  'rates': (0.0, 0.025, self.r),
+                  'gvalue': a,
+                  'prune_selected': False,
+                  'demography': self.demography
+                  }
+        self.params = fwdpy11.ModelParams(**self.p)
+        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.pop = fwdpy11.DiploidPopulation(self.N, 1.0)
+        self.all_samples = [i for i in range(2*self.N)]
+        self.ancient_sample_recorder = \
+            fwdpy11.RandomAncientSamples(seed=42,
+                                         samplesize=10,
+                                         timepoints=[i for i in range(1, 101)])
+        self.resetter = CountSamplesPerTimePoint()
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 5,
+                         recorder=self.ancient_sample_recorder,
+                         post_simplification_recorder=self.resetter)
+
+    def test_no_preserved_nodes(self):
+        self.assertEqual(len(self.pop.tables.preserved_nodes), 0)
+
+    def test_no_ancient_sample_metadata(self):
+        self.assertEqual(len(self.pop.ancient_sample_metadata), 0)
+
+    def test_all_timepoints_seen_exactly_once(self):
+        for i, j in self.resetter.timepoint_seen.items():
+            self.assertEqual(j, 1)
+
+    def test_all_expected_timepoints_are_present(self):
+        self.assertEqual(self.resetter.sample_timepoints,
+                         [i for i in range(1, 101)])
+
+    def test_all_sample_sizes_are_correct(self):
+        self.assertTrue(
+            all([i == 10 for i in self.resetter.sample_sizes]) is True)
+
+
 if __name__ == "__main__":
     unittest.main()
