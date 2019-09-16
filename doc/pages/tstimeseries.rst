@@ -44,6 +44,11 @@ alive individuals:
                 daf = tree.leaf_counts(mut.node)
                 freqs.append(MutData(p,g,s,daf/len(n)))
 
+The use of :func:`fwdpy11.DiploidPopulation.sample_timepoints` deserves some comment.  We pass `False`
+to this function, telling it not to process the currently-alive individuals.  If we passed in `True` instead,
+then we risk analyzing the nodes corresponding to those individuals twice, in the event that they get preserved
+at some point in the future.
+
 Now, we run a simple simulation with the above function passed into :func:`fwdpy11.evolvets`:
 
 .. ipython:: python
