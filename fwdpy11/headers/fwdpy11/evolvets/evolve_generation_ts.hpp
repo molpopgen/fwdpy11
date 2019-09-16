@@ -42,11 +42,19 @@ namespace fwdpy11
               fwdpp::ts::mut_rec_intermediates>
     generate_offspring(
         const rng_t& rng,
-        const std::pair<std::size_t, std::size_t> parent_indexes, poptype& pop,
+        const std::pair<std::size_t, std::size_t> parent_indexes,
+        const bool put_neutral_mutations_in_genomes, poptype& pop,
         typename poptype::diploid_t& offspring, genetic_param_holder& genetics)
     {
+        if (put_neutral_mutations_in_genomes == false)
+            {
+                return fwdpp::ts::generate_offspring(
+                    rng.get(), parent_indexes,
+                    fwdpp::ts::selected_variants_only(), pop, genetics,
+                    offspring);
+            }
         auto offspring_data = fwdpp::ts::generate_offspring(
-            rng.get(), parent_indexes, fwdpp::ts::selected_variants_only(),
+            rng.get(), parent_indexes, fwdpp::ts::all_mutations(),
             pop, genetics, offspring);
 #ifndef NDEBUG
         for (auto& m : offspring_data.first.mutation_keys)
@@ -73,7 +81,8 @@ namespace fwdpy11
         const pick_parent2_fxn& pick2,
         const offspring_metadata_fxn& update_offspring,
         const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
-        std::int32_t first_parental_index, std::int32_t next_index)
+        std::int32_t first_parental_index, std::int32_t next_index,
+        const bool put_neutral_mutations_in_genomes)
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -94,7 +103,7 @@ namespace fwdpy11
                 auto p2 = pick2(p1);
                 auto& dip = offspring[next_offspring];
                 auto offspring_data = generate_offspring(
-                    rng, std::make_pair(p1, p2), pop, dip, genetics);
+                    rng, std::make_pair(p1, p2), put_neutral_mutations_in_genomes, pop, dip, genetics);
                 auto p1id = fwdpp::ts::get_parent_ids(
                     first_parental_index, p1, offspring_data.first.swapped);
                 auto p2id = fwdpp::ts::get_parent_ids(
@@ -119,8 +128,7 @@ namespace fwdpy11
                 // Update nodes of for offspring
                 offspring_metadata[next_offspring].nodes[0]
                     = next_index_local - 1;
-                offspring_metadata[next_offspring].nodes[1]
-                    = next_index_local;
+                offspring_metadata[next_offspring].nodes[1] = next_index_local;
             }
         assert(next_index_local
                == next_index + 2 * static_cast<std::int32_t>(N_next) - 1);

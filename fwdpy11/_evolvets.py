@@ -23,7 +23,8 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
              suppress_table_indexing=False, record_gvalue_matrix=False,
              stopping_criterion=None,
              track_mutation_counts=False,
-             remove_extinct_variants=True):
+             remove_extinct_variants=True,
+             put_neutral_variants_in_genomes=False):
     """
     Evolve a population with tree sequence recording
 
@@ -104,4 +105,5 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
                                track_mutation_counts,
                                remove_extinct_variants,
                                reset_treeseqs_after_simplify,
-                               post_simplification_recorder)
+                               post_simplification_recorder,
+                               put_neutral_variants_in_genomes)

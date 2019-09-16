@@ -83,7 +83,8 @@ evolve_with_tree_sequences(
     const bool remove_extinct_mutations_at_finish,
     const bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler
-        &post_simplification_recorder)
+        &post_simplification_recorder,
+    const bool put_neutral_mutations_in_genomes)
 {
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
@@ -228,7 +229,8 @@ evolve_with_tree_sequences(
             fwdpy11::evolve_generation_ts(
                 rng, pop, genetics, N_next, pick_first_parent,
                 pick_second_parent, generate_offspring_metadata,
-                pop.generation, pop.tables, first_parental_index, next_index);
+                pop.generation, pop.tables, first_parental_index, next_index,
+                put_neutral_mutations_in_genomes);
 
             //N_next, mu_selected, pick_first_parent,
             //pick_second_parent, generate_offspring_metadata, bound_mmodel,
