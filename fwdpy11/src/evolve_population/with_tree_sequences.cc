@@ -101,7 +101,16 @@ evolve_with_tree_sequences(
             throw std::invalid_argument(
                 "selected mutation rate must be non-negative");
         }
-    if (mu_selected > 0.0 && mmodel.weights.empty())
+    if (!std::isfinite(mu_neutral))
+        {
+            throw std::invalid_argument("neutral mutation rate is not finite");
+        }
+    if (mu_neutral < 0.0)
+        {
+            throw std::invalid_argument(
+                "neutral mutation rate must be non-negative");
+        }
+    if (mu_selected + mu_neutral > 0.0 && mmodel.weights.empty())
         {
             throw std::invalid_argument(
                 "nonzero mutation rate incompatible with empty regions");
