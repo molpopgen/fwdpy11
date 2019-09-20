@@ -32,15 +32,14 @@ namespace fwdpy11
     {
         std::vector<std::uint32_t> timepoints;
         std::vector<double> optima;
-        gsl_vector_view current_optimum;
-        std::size_t current_timepoint, ndim;
+        std::size_t current_timepoint, ndim, optima_offset;
         double VS;
 
         MultivariateGSSmo(std::vector<std::uint32_t> input_timepoints,
                           std::vector<double> input_optima, double VS_)
             : timepoints(std::move(input_timepoints)),
-              optima(std::move(input_optima)), current_optimum{},
-              current_timepoint(1), ndim(0), VS(VS_)
+              optima(std::move(input_optima)), current_timepoint(1), ndim(0), optima_offset(0),
+              VS(VS_)
         {
             if (timepoints.empty())
                 {
@@ -60,8 +59,15 @@ namespace fwdpy11
                     throw std::invalid_argument(
                         "incorrect number of optima or time points");
                 }
+            if (!std::isfinite(VS))
+                {
+                    throw std::invalid_argument("VS must be finite");
+                }
+            if (VS <= 0.0)
+                {
+                    throw std::invalid_argument("VS must be >= 0");
+                }
             ndim = optima.size() / timepoints.size();
-            current_optimum = gsl_vector_view_array(optima.data(), ndim);
         }
 
         virtual double
@@ -76,8 +82,7 @@ namespace fwdpy11
             for (std::size_t i = 0; i < values.size(); ++i)
                 {
                     sqdiff += gsl_pow_2(
-                        values[i]
-                        - gsl_vector_get(&current_optimum.vector, i));
+                        values[i] - optima[optima_offset + i]);
                 }
             return std::exp(-sqdiff / (2.0 * VS));
         }
@@ -112,8 +117,7 @@ namespace fwdpy11
             if (current_timepoint < timepoints.size()
                 && pop.generation >= timepoints[current_timepoint])
                 {
-                    current_optimum = gsl_vector_view_array(
-                        optima.data() + current_timepoint * ndim, ndim);
+                    optima_offset += ndim;
                     ++current_timepoint;
                 }
         }
