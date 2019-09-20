@@ -18,9 +18,15 @@ namespace fwdpy11
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
             const MultivariateGeneticValueToFitnessMap &gv2w_)
-            : DiploidPopulationMultivariateGeneticValueWithMapping(ndim, gv2w_),
+            : DiploidPopulationMultivariateGeneticValueWithMapping(ndim,
+                                                                   gv2w_),
               focal_trait_index(focal_trait)
         {
+            if (focal_trait_index >= ndim)
+                {
+                    throw std::invalid_argument(
+                        "focal trait index must by < number of traits");
+                }
         }
 
         DiploidMultivariateEffectsStrictAdditive(
@@ -28,9 +34,14 @@ namespace fwdpy11
             const MultivariateGeneticValueToFitnessMap &gv2w_,
             const GeneticValueNoise &noise_)
             : DiploidPopulationMultivariateGeneticValueWithMapping(ndim, gv2w_,
-                                                           noise_),
+                                                                   noise_),
               focal_trait_index(focal_trait)
         {
+            if (focal_trait_index >= ndim)
+                {
+                    throw std::invalid_argument(
+                        "focal trait index must by < number of traits");
+                }
         }
 
         double
@@ -40,7 +51,8 @@ namespace fwdpy11
             std::fill(begin(gvalues), end(gvalues), 0.0);
 
             for (auto key :
-                 pop.haploid_genomes[pop.diploids[diploid_index].first].smutations)
+                 pop.haploid_genomes[pop.diploids[diploid_index].first]
+                     .smutations)
                 {
                     const auto &mut = pop.mutations[key];
                     if (mut.esizes.size() != gvalues.size())
@@ -54,7 +66,8 @@ namespace fwdpy11
                 }
 
             for (auto key :
-                 pop.haploid_genomes[pop.diploids[diploid_index].second].smutations)
+                 pop.haploid_genomes[pop.diploids[diploid_index].second]
+                     .smutations)
                 {
                     const auto &mut = pop.mutations[key];
                     if (mut.esizes.size() != gvalues.size())
