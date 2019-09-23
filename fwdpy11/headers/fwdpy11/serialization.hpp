@@ -62,9 +62,15 @@ namespace fwdpy11
             fwdpy11::serialize_ancient_sample_records()(
                 buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
-            //preserved mutation counts added in 0.5.2, which is format version 4
+            //mcounts and preserved mutation counts added in 0.5.2, which is format version 4
             fwdpp::io::scalar_writer w;
-            std::size_t msize = pop->mcounts_from_preserved_nodes.size();
+            std::size_t msize = pop->mcounts.size();
+            w(buffer, &msize);
+            if (msize > 0)
+                {
+                    w(buffer, pop->mcounts.data(), msize);
+                }
+            msize = pop->mcounts_from_preserved_nodes.size();
             w(buffer, &msize);
             if (msize > 0)
                 {
@@ -128,6 +134,12 @@ namespace fwdpy11
                 fwdpp::io::scalar_reader r;
                 if (version >= 4) // >= version 0.5.2
                     {
+                        r(buffer, &msize);
+                        pop.mcounts.resize(msize);
+                        if (msize > 0)
+                            {
+                                r(buffer, pop.mcounts.data(), msize);
+                            }
                         r(buffer, &msize);
                         pop.mcounts_from_preserved_nodes.resize(msize);
                         if (msize > 0)
