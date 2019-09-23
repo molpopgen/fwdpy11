@@ -127,11 +127,13 @@ evolve_with_tree_sequences(
             throw std::invalid_argument("node table is not initialized");
         }
 
-    const auto bound_mmodel = [&rng, &mmodel, &pop, mu_selected](
+    const double ttl_mutation_rate = mu_neutral + mu_selected;
+
+    const auto bound_mmodel = [&rng, &mmodel, &pop, ttl_mutation_rate](
                                   fwdpp::flagged_mutation_queue &recycling_bin,
                                   std::vector<fwdpy11::Mutation> &mutations) {
         std::vector<fwdpp::uint_t> rv;
-        unsigned nmuts = gsl_ran_poisson(rng.get(), mu_selected);
+        unsigned nmuts = gsl_ran_poisson(rng.get(), ttl_mutation_rate);
         for (unsigned i = 0; i < nmuts; ++i)
             {
                 std::size_t x
