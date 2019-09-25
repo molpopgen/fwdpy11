@@ -22,8 +22,8 @@ def traverse_sample_timepoints(pop, include_alive):
         yield uti, sample_nodes, mdslice
 
     if include_alive is True:
-        nodes = np.array([i for i in range(2*pop.N)], dtype=np.int32)
         md = np.array(pop.diploid_metadata, copy=False)
+        nodes = md['nodes'].flatten()
         md.flags.writeable = False
         nodes.flags.writeable = False
         yield pop.generation, nodes, md
