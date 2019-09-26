@@ -3,26 +3,22 @@
 #include <algorithm>
 #include <functional>
 #include <limits>
+#include <stdexcept>
 #include <fwdpy11/types/Population.hpp>
 
 namespace
 {
-    std::size_t
-    reindex(const std::vector<std::size_t>& indexes,
-            const std::size_t input_index)
-    {
-        auto f = std::find(begin(indexes), end(indexes), input_index);
-        auto d = std::distance(begin(indexes), f);
-        return d;
-    }
-
     void
-    reindex_container(const std::vector<std::size_t>& indexes,
+    reindex_container(const std::vector<fwdpp::uint_t>& indexes,
                       std::vector<fwdpp::uint_t>& keys)
     {
         for (auto& k : keys)
             {
-                k = reindex(indexes, k);
+                if (indexes[k] == std::numeric_limits<fwdpp::uint_t>::max())
+                    {
+                        throw std::runtime_error("bad mutation key remapping");
+                    }
+                k = indexes[k];
             }
     }
 } // namespace
@@ -34,18 +30,25 @@ remove_extinct_mutations(fwdpy11::Population& pop)
     std::transform(begin(pop.mcounts_from_preserved_nodes),
                    end(pop.mcounts_from_preserved_nodes), begin(summed_counts),
                    begin(summed_counts), std::plus<fwdpp::uint_t>());
-    std::vector<std::size_t> indexes(pop.mutations.size());
-    std::iota(begin(indexes), end(indexes), 0);
+    std::vector<fwdpp::uint_t> new_mutation_indexes(
+        pop.mutations.size(), std::numeric_limits<fwdpp::uint_t>::max());
+    decltype(pop.mcounts) new_mcounts;
+    decltype(pop.mcounts) new_preserved_mcounts;
 
     //Remove extinct mutations
-    for (auto i : indexes)
+    fwdpp::uint_t next_mutation_index = 0;
+    for (fwdpp::uint_t i = 0; i < pop.mutations.size(); ++i)
         {
-            if (summed_counts[i] == 0)
+            if (summed_counts[i] != 0)
+                {
+                    new_mutation_indexes[i] = next_mutation_index++;
+                    new_mcounts.push_back(pop.mcounts[i]);
+                    new_preserved_mcounts.push_back(
+                        pop.mcounts_from_preserved_nodes[i]);
+                }
+            else
                 {
                     pop.mutations[i].pos = std::numeric_limits<double>::max();
-                    pop.mcounts[i] = std::numeric_limits<fwdpp::uint_t>::max();
-                    pop.mcounts_from_preserved_nodes[i]
-                        = std::numeric_limits<fwdpp::uint_t>::max();
                 }
         }
     pop.mutations.erase(
@@ -54,34 +57,25 @@ remove_extinct_mutations(fwdpy11::Population& pop)
                            return m.pos == std::numeric_limits<double>::max();
                        }),
         end(pop.mutations));
-    pop.mcounts.erase(std::remove(begin(pop.mcounts), end(pop.mcounts),
-                                  std::numeric_limits<fwdpp::uint_t>::max()),
-                      end(pop.mcounts));
-    pop.mcounts_from_preserved_nodes.erase(
-        std::remove(begin(pop.mcounts_from_preserved_nodes),
-                    end(pop.mcounts_from_preserved_nodes),
-                    std::numeric_limits<fwdpp::uint_t>::max()),
-        end(pop.mcounts_from_preserved_nodes));
-
-    // Erase indexes associated w/extinct mutations
-    indexes.erase(std::remove_if(begin(indexes), end(indexes),
-                                 [&summed_counts](const std::size_t i) {
-                                     return summed_counts[i] == 0;
-                                 }),
-                  end(indexes));
+    pop.mcounts.swap(new_mcounts);
+    pop.mcounts_from_preserved_nodes.swap(new_preserved_mcounts);
 
     // Reindex the containers
     for (std::size_t i = 0; i < pop.tables.mutation_table.size(); ++i)
         {
-            pop.tables.mutation_table[i].key
-                = reindex(indexes, pop.tables.mutation_table[i].key);
+            auto k = new_mutation_indexes[pop.tables.mutation_table[i].key];
+            if (k == std::numeric_limits<fwdpp::uint_t>::max())
+                {
+                    throw std::runtime_error("bad mutation key remapping");
+                }
+            pop.tables.mutation_table[i].key = k;
         }
     for (auto& g : pop.haploid_genomes)
         {
             if (g.n)
                 {
-                    reindex_container(indexes, g.mutations);
-                    reindex_container(indexes, g.smutations);
+                    reindex_container(new_mutation_indexes, g.mutations);
+                    reindex_container(new_mutation_indexes, g.smutations);
                 }
         }
 
