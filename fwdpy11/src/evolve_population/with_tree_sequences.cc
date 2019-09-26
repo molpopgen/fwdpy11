@@ -180,13 +180,11 @@ evolve_with_tree_sequences(
               offspring_metadata.parents[0] = p1;
               offspring_metadata.parents[1] = p2;
           };
-    fwdpp::flagged_mutation_queue mutation_recycling_bin
-        = fwdpp::empty_mutation_queue();
     if (!pop.mutations.empty())
         {
             // Then we assume pop exists in an "already simulated"
             // state and is properly-book-kept
-            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
                 pop.mcounts, pop.mcounts_from_preserved_nodes);
         }
 
@@ -226,12 +224,12 @@ evolve_with_tree_sequences(
                         suppress_edge_table_indexing);
                     if (suppress_edge_table_indexing == false)
                         {
-                            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
                                 pop.mcounts, pop.mcounts_from_preserved_nodes);
                         }
                     else
                         {
-                            mutation_recycling_bin = fwdpp::ts::make_mut_queue(
+                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
                                 rv.second, pop.mutations.size());
                         }
                     simplified = true;
