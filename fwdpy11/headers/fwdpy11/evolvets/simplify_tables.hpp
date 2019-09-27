@@ -88,7 +88,8 @@ namespace fwdpy11
             }
         // TODO: update this to allow neutral mutations to be simulated
         // TODO: better fixation handling via accounting for number of ancient samples
-        if (!preserve_selected_fixations && !simulating_neutral_variants)
+        // NOTE: not checking re: simulating_neutral_variants may be dangerous! Need test!
+        if (!preserve_selected_fixations) // && !simulating_neutral_variants)
             {
                 auto itr = std::remove_if(
                     tables.mutation_table.begin(), tables.mutation_table.end(),
@@ -111,13 +112,14 @@ namespace fwdpy11
 
         // TODO: the blocks below should be abstracted out into a closure
         // that removes these if statements
-        if (!preserve_selected_fixations && !simulating_neutral_variants)
+        // NOTE: not checking re: simulating_neutral_variants may be dangerous! Need test!
+        if (!preserve_selected_fixations) // && !simulating_neutral_variants)
             {
                 fwdpp::ts::flag_mutations_for_recycling(
                     pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
                     pop.generation, std::false_type(), std::false_type());
             }
-        else if (preserve_selected_fixations && !simulating_neutral_variants)
+        else if (preserve_selected_fixations) // && !simulating_neutral_variants)
             {
                 fwdpp::ts::flag_mutations_for_recycling(
                     pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
