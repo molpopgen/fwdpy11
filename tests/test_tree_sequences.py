@@ -637,6 +637,28 @@ class TestMutationCounts(unittest.TestCase):
         self.assertTrue(
             all([i == j for i, j in zip(self.pop.mcounts, mc)]) is True)
 
+    def test_mutation_counts_from_genomes(self):
+        """
+        Removing extinct genomes happens after
+        the final mutation count, so let's
+        make sure we can reconstruct the counts
+        from the remapped genomes
+        """
+        mc = [0] * len(self.pop.mutations)
+        mc2 = [0] * len(self.pop2.mutations)
+        for g in self.pop.haploid_genomes:
+            if g.n > 0:
+                for k in g.smutations:
+                    mc[k] += g.n
+        for g in self.pop2.haploid_genomes:
+            if g.n > 0:
+                for k in g.smutations:
+                    mc2[k] += g.n
+        self.assertTrue(
+            all([i == j for i, j in zip(mc, self.pop.mcounts)]) is True)
+        self.assertTrue(
+            all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
+
 
 class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod

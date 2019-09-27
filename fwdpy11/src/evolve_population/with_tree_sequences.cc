@@ -44,6 +44,7 @@
 #include "track_mutation_counts.hpp"
 #include "remove_extinct_mutations.hpp"
 #include "track_ancestral_counts.hpp"
+#include "remove_extinct_genomes.hpp"
 
 namespace py = pybind11;
 
@@ -363,6 +364,7 @@ evolve_with_tree_sequences(
         {
             remove_extinct_mutations(pop);
         }
+    remove_extinct_genomes(pop);
 }
 
 void
