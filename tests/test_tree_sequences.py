@@ -617,6 +617,27 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
 
 
+class TestMutationCounts(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.params.demography = np.array([self.pop.N]*200, dtype=np.uint32)
+        self.pop2 = copy.deepcopy(self.pop)
+        self.rng2 = fwdpy11.GSLrng(101*45*110*210)
+        params2 = copy.deepcopy(self.params)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+        fwdpy11.evolvets(self.rng2, self.pop2, params2,
+                         100, remove_extinct_variants=False)
+
+    def test_mutation_counts(self):
+        self.assertEqual(sum(self.pop.mcounts), sum(self.pop2.mcounts))
+
+    def test_mutation_counts_details(self):
+        mc = [i for i in self.pop2.mcounts if i > 0]
+        self.assertTrue(
+            all([i == j for i, j in zip(self.pop.mcounts, mc)]) is True)
+
+
 class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
