@@ -22,6 +22,8 @@ void init_PoissonInterval(py::module &);
 void init_BinomialPoint(py::module &);
 void init_PoissonPoint(py::module &);
 void init_FixedCrossovers(py::module &);
+void init_BinomialInterval(py::module &);
+
 
 void
 initialize_fwdpp_types(py::module &m)
@@ -38,6 +40,7 @@ initialize_fwdpp_types(py::module &m)
     init_BinomialPoint(m);
     init_PoissonPoint(m);
     init_FixedCrossovers(m);
+    init_BinomialInterval(m);
 
     // Types related to tree sequenc recording
     init_NULL_NODE(m);

@@ -17,7 +17,8 @@ set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc
     src/fwdpp_types/PoissonInterval.cc 
     src/fwdpp_types/BinomialPoint.cc
     src/fwdpp_types/PoissonPoint.cc
-    src/fwdpp_types/FixedCrossovers.cc)
+    src/fwdpp_types/FixedCrossovers.cc
+    src/fwdpp_types/BinomialInterval.cc)
 
 
 set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
