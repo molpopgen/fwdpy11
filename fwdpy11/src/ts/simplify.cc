@@ -54,7 +54,7 @@ init_simplify_functions(py::module& m)
           R"delim(
             Simplify a TableCollection stored in a Population.
 
-            :param pop: A :class:`fwdpy11.Population`
+            :param pop: A :class:`fwdpy11.PopulationBase`
             :param samples: A list of samples (node indexes).
                 
             :return: The simplified tables and array mapping input sample IDs to output IDS

@@ -41,10 +41,10 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     :type post_simplification_recorder: callable
     :param suppress_table_indexing: (False) Prevents edge table indexing until end of simulation
     :type suppress_table_indexing: boolean
-    :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.Population.genetic_values`.
+    :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.PopulationBase.genetic_values`.
     :type record_gvalue_matrix: boolean
 
-    The recording of genetic values into :attr:`fwdpy11.Population.genetic_values` is suppressed by default.  First, it
+    The recording of genetic values into :attr:`fwdpy11.PopulationBase.genetic_values` is suppressed by default.  First, it
     is redundant with :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a single trait.
     Second, we save some memory by not tracking these matrices.  However, it is useful to track these data for some
     cases when simulating multivariate mutational effects (pleiotropy).

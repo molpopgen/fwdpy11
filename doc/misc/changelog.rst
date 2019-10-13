@@ -4,6 +4,29 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.5.2
+++++++++++++++++
+
+The following bugs are fixed:
+
+* Mutations were not being recycled properly during simulations with tree sequences, resulting in excessive memory consumption. `PR317 <https://github.com/molpopgen/fwdpy11/pull/317>_`
+* Several interface issues with :class:`fwdpy11.MultivariateGSSmo` are fixed. `PR313 https://github.com/molpopgen/fwdpy11/pull/313>_`
+* Fix a bug that could lead to fixations with tree sequences not "pruning" selected fixations when that behavior is desired. `Issue287 <https://github.com/molpopgen/fwdpy11/issues/287>_`, fixed in `PR289 <https://github.com/molpopgen/fwdpy11/pull/289>_`
+* A memory safety issue was fixed in the implementation of :attr:`fwdpy11.TreeIterator.samples_below`. `PR300 <https://github.com/molpopgen/fwdpy11/pull/300>_`.  `Issue299 <https://github.com/molpopgen/fwdpy11/issues/299>_`
+
+The following new features are added:
+
+* :class:`fwdpy11.BinomialInterval` `PR322 <https://github.com/molpopgen/fwdpy11/pull/322>_`.
+* Allow for preserved samples to be "forgotten" during tree sequence simulations. `PR306 <https://github.com/molpopgen/fwdpy11/pull/306>_`. See :ref:`tstimeseries`
+
+Several performance fixes:
+
+* Extinct genomes are purged at the end of simulations with tree sequences. `PR319 <https://github.com/molpopgen/fwdpy11/pull/319>_`.
+* Improve algorithm to purge extinct variants at the end of a simulation with tree sequences. `PR318 <https://github.com/molpopgen/fwdpy11/pull/318>_`.
+* :func:`fwdpy11.infinite_sites` now returns earlier if possible `Issue293 <https://github.com/molpopgen/fwdpy11/issues/293>_`.
+* Improve performance of mutation counting with ancient samples `PR289 <https://github.com/molpopgen/fwdpy11/pull/289>_`.
+
+
 0.5.1
 ++++++++++++++++
 
@@ -407,3 +430,4 @@ Alternately:
     from fwdpy11 import SlocusPop as Spop
 
 .. _pybind11: https://github.com/pybind/pybind11
+

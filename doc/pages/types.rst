@@ -3,6 +3,14 @@
 Data types related to simulated populations
 ======================================================================
 
+Random number generator
+-----------------------------------------------------------
+
+.. autoclass:: fwdpy11.GSLrng
+
+    .. autoattribute:: __init__
+
+
 Base class for populations
 ----------------------------------------------------------
 
@@ -30,6 +38,10 @@ Base class for populations
 .. autoattribute:: fwdpy11.PopulationBase.mcounts
 
 .. autoattribute:: fwdpy11.PopulationBase.tables
+
+.. autoattribute:: fwdpy11.PopulationBase.genetic_values
+
+.. autoattribute:: fwdpy11.PopulationBase.ancient_sample_genetic_values
 
 Populations of diploids
 ----------------------------------------------------------
@@ -241,3 +253,16 @@ Types related to tree sequence recording
     .. autoattribute:: selected_keys
     .. autoattribute:: neutral_positions
     .. autoattribute:: selected_positions
+
+.. autoclass:: fwdpy11.NoAncientSamples
+
+    .. autoattribute:: __init__
+
+Miscellaneous types
+=======================================================
+
+.. autoclass:: fwdpy11.RecordNothing
+
+    .. autoattribute:: __init__
+
+

@@ -14,7 +14,7 @@ When we are using ancient samples to "remember" or "preserve" large numbers of i
 
 In fwdpy11 0.5.2, we introduced the ability to "temporarily remember" individuals, meaning that we will "forget" them later in the simulation.
 In essence, you may provide a callable function that processes the population immediately after simplification.
-After execution of the function, all data concerning ancient samples will be cleared out and the table collection and the population object.
+After execution of the function, all data concerning ancient samples will be cleared out from the table collection and from the population object.
 This, these preserved nodes will be simplified out, or forgotten, the next time simplification occurs.
 
 Let's look at a concrete example, where we track the frequency of all selected mutations over time.

@@ -46,7 +46,7 @@ init_data_matrix_from_tables(py::module& m)
 
      .. deprecated:: 0.3.0
 
-        Prefer :func:`fwdpy11.ts.data_matrix_from_tables`.
+        Prefer :func:`fwdpy11.data_matrix_from_tables`.
      )delim");
 
     m.def("data_matrix_from_tables", &generate_data_matrix, py::arg("tables"),
@@ -58,7 +58,7 @@ init_data_matrix_from_tables(py::module& m)
      Create a :class:`fwdpy11.DataMatrix` from a table collection.
      
      :param tables: A TableCollection
-     :type tables: :class:`fwdpy11.ts.TableCollection`
+     :type tables: :class:`fwdpy11.TableCollection`
      :param samples: A list of sample nodes
      :type samples: list or array
      :param record_neutral: If True, generate data for neutral variants
@@ -70,7 +70,7 @@ init_data_matrix_from_tables(py::module& m)
      :param begin: (0.0) Start of range, inclusive
      :param end: (max float) End of range, exclusive
 
-     :rtype: :class:`fwdpy11.sampling.DataMatrix`
+     :rtype: :class:`fwdpy11.DataMatrix`
 
      .. versionadded:: 0.3.0
 

@@ -57,3 +57,9 @@ Setting up genomic intervals
     This class inherits from :class:`fwdpy11.GeneticMapUnit`
 
     .. automethod:: __init__
+
+.. autoclass:: fwdpy11.BinomialInterval
+
+    This class inherits from :class:`fwdpy11.GeneticMapUnit`
+
+    .. automethod:: __init__
