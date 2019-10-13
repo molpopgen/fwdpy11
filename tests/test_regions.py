@@ -292,6 +292,19 @@ class testPoissonInterval(unittest.TestCase):
         self.assertEqual(up.mean, self.pi.mean)
 
 
+class testBinomialInterval(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.bi = fwdpy11.BinomialInterval(0, 1, 1e-3)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.bi)
+        up = pickle.loads(p)
+        self.assertEqual(up.beg, self.bi.beg)
+        self.assertEqual(up.end, self.bi.end)
+        self.assertEqual(up.probability, self.bi.probability)
+
+
 class testFixedCrossovers(unittest.TestCase):
     @classmethod
     def setUp(self):
