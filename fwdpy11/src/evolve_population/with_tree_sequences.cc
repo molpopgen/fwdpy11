@@ -192,10 +192,39 @@ evolve_with_tree_sequences(
           };
     if (!pop.mutations.empty())
         {
-            // Then we assume pop exists in an "already simulated"
-            // state and is properly-book-kept
-            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                pop.mcounts, pop.mcounts_from_preserved_nodes);
+            // It is possible that pop already has a tree sequence
+            // containing neutral variants not in haploid_genome objects.
+            // To correctly handle this case, we build the recycling bin
+            // from any elements in pop.mutations not in the mutation table.
+            if (!pop.tables.node_table.empty())
+                {
+                    std::vector<std::size_t> indexes(pop.mutations.size());
+                    std::iota(begin(indexes), end(indexes), 0);
+                    for (auto &m : pop.tables.mutation_table)
+                        {
+                            indexes[m.key]
+                                = std::numeric_limits<std::size_t>::max();
+                        }
+                    std::queue<std::size_t> can_recycle;
+                    for (auto i : indexes)
+                        {
+                            if (i != std::numeric_limits<std::size_t>::max())
+                                {
+                                    can_recycle.push(i);
+                                }
+                        }
+                    genetics.mutation_recycling_bin
+                        = fwdpp::flagged_mutation_queue(
+                            std::move(can_recycle));
+                }
+            else // Assume there are no tree sequence data
+                {
+                    // Then we assume pop exists in an "already simulated"
+                    // state and is properly-book-kept
+                    genetics.mutation_recycling_bin
+                        = fwdpp::ts::make_mut_queue(
+                            pop.mcounts, pop.mcounts_from_preserved_nodes);
+                }
         }
 
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
@@ -231,7 +260,8 @@ evolve_with_tree_sequences(
                     // TODO: update this to allow neutral mutations to be simulated
                     auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
-                        simplifier, preserve_selected_fixations, simulating_neutral_variants,
+                        simplifier, preserve_selected_fixations,
+                        simulating_neutral_variants,
                         suppress_edge_table_indexing);
                     if (suppress_edge_table_indexing == false)
                         {
