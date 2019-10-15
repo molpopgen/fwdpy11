@@ -43,7 +43,11 @@ namespace fwdpy11
             // Changed to 4 in 0.5.2 to explicitly
             // handle the mutation counts, so that we can dodge tree
             // sequence traversal.
-            return 4;
+            // Changed to 5 in 0.5.3 to handle pop.mcounts explicitly.
+            // The reason is that the fwdpp back-end regenerates
+            // them by traversing genomes, but we may have neutral
+            // mutations not in the genomes.
+            return 5;
         }
 
         template <typename streamtype, typename poptype>
@@ -69,6 +73,13 @@ namespace fwdpy11
             if (msize > 0)
                 {
                     w(buffer, pop->mcounts_from_preserved_nodes.data(), msize);
+                }
+            // Added in 0.5.3/file version 5:
+            msize = pop->mcounts.size();
+            w(buffer, &msize);
+            if (msize > 0)
+                {
+                    w(buffer, pop->mcounts.data(), msize);
                 }
             fwdpp::ts::io::serialize_tables(buffer, pop->tables);
             msize = pop->genetic_value_matrix.size();
@@ -135,6 +146,15 @@ namespace fwdpy11
                                 r(buffer,
                                   pop.mcounts_from_preserved_nodes.data(),
                                   msize);
+                            }
+                    }
+                if (version >= 5) // 0.5.3
+                    {
+                        r(buffer, &msize);
+                        pop.mcounts.resize(msize);
+                        if (msize > 0)
+                            {
+                                r(buffer, pop.mcounts.data(), msize);
                             }
                     }
 
