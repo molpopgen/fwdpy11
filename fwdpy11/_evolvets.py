@@ -65,6 +65,13 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     """
     import warnings
 
+    # Currently, we do not support simulating neutral mutations
+    # during tree sequence simulations, so we make sure that there
+    # are no neutral regions/rates:
+    if len(params.nregions) != 0:
+        raise ValueError(
+            "Simulation of neutral mutations on tree sequences not supported (yet).")
+
     # Test parameters while suppressing warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -89,14 +96,15 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import dispatch_create_GeneticMap
     from ._fwdpy11 import evolve_with_tree_sequences
-    pneutral = params.mutrate_n/(params.mutrate_n + params.mutrate_s)
+    # TODO: update to allow neutral mutations
+    pneutral = 0
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     from ._fwdpy11 import SampleRecorder
     sr = SampleRecorder()
     evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
-                               params.demography, params.mutrate_n, params.mutrate_s,
+                               params.demography, params.mutrate_s,
                                mm, rm, params.gvalue,
                                recorder, stopping_criterion,
                                params.pself, params.prune_selected is False,
