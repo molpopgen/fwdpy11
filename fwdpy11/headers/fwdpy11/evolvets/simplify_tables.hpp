@@ -27,7 +27,6 @@
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/remove_fixations_from_gametes.hpp>
-#include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
 //#include "confirm_mutation_counts.hpp"
 

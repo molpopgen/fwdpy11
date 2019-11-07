@@ -37,6 +37,7 @@
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/samplers.hpp>
+#include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
