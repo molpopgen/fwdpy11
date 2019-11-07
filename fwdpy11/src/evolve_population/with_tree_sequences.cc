@@ -37,6 +37,7 @@
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/samplers.hpp>
+#include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -63,12 +64,11 @@ apply_treseq_resetting_of_ancient_samples(
         }
 }
 
-// TODO: allow for neutral mutations in the future
 void
 evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    py::array_t<std::uint32_t> popsizes, //const double mu_neutral,
+    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const fwdpy11::MutationRegions &mmodel,
     const fwdpy11::GeneticMap &rmodel,
     fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
@@ -101,7 +101,16 @@ evolve_with_tree_sequences(
             throw std::invalid_argument(
                 "selected mutation rate must be non-negative");
         }
-    if (mu_selected > 0.0 && mmodel.weights.empty())
+    if (!std::isfinite(mu_neutral))
+        {
+            throw std::invalid_argument("neutral mutation rate is not finite");
+        }
+    if (mu_neutral < 0.0)
+        {
+            throw std::invalid_argument(
+                "neutral mutation rate must be non-negative");
+        }
+    if (mu_neutral + mu_selected > 0.0 && mmodel.weights.empty())
         {
             throw std::invalid_argument(
                 "nonzero mutation rate incompatible with empty regions");
@@ -117,11 +126,12 @@ evolve_with_tree_sequences(
             throw std::invalid_argument("node table is not initialized");
         }
 
-    const auto bound_mmodel = [&rng, &mmodel, &pop, mu_selected](
+    double total_mutation_rate = mu_neutral + mu_selected;
+    const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
                                   fwdpp::flagged_mutation_queue &recycling_bin,
                                   std::vector<fwdpy11::Mutation> &mutations) {
         std::vector<fwdpp::uint_t> rv;
-        unsigned nmuts = gsl_ran_poisson(rng.get(), mu_selected);
+        unsigned nmuts = gsl_ran_poisson(rng.get(), total_mutation_rate);
         for (unsigned i = 0; i < nmuts; ++i)
             {
                 std::size_t x
@@ -183,10 +193,39 @@ evolve_with_tree_sequences(
           };
     if (!pop.mutations.empty())
         {
-            // Then we assume pop exists in an "already simulated"
-            // state and is properly-book-kept
-            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                pop.mcounts, pop.mcounts_from_preserved_nodes);
+            // It is possible that pop already has a tree sequence
+            // containing neutral variants not in haploid_genome objects.
+            // To correctly handle this case, we build the recycling bin
+            // from any elements in pop.mutations not in the mutation table.
+            if (!pop.tables.node_table.empty())
+                {
+                    std::vector<std::size_t> indexes(pop.mutations.size());
+                    std::iota(begin(indexes), end(indexes), 0);
+                    for (auto &m : pop.tables.mutation_table)
+                        {
+                            indexes[m.key]
+                                = std::numeric_limits<std::size_t>::max();
+                        }
+                    std::queue<std::size_t> can_recycle;
+                    for (auto i : indexes)
+                        {
+                            if (i != std::numeric_limits<std::size_t>::max())
+                                {
+                                    can_recycle.push(i);
+                                }
+                        }
+                    genetics.mutation_recycling_bin
+                        = fwdpp::flagged_mutation_queue(
+                            std::move(can_recycle));
+                }
+            else // Assume there are no tree sequence data
+                {
+                    // Then we assume pop exists in an "already simulated"
+                    // state and is properly-book-kept
+                    genetics.mutation_recycling_bin
+                        = fwdpp::ts::make_mut_queue(
+                            pop.mcounts, pop.mcounts_from_preserved_nodes);
+                }
         }
 
     fwdpp::ts::TS_NODE_INT first_parental_index = 0,
@@ -194,6 +233,7 @@ evolve_with_tree_sequences(
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     bool stopping_criteron_met = false;
+    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     for (std::uint32_t gen = 0;
          gen < num_generations && !stopping_criteron_met; ++gen)
         {
@@ -221,17 +261,21 @@ evolve_with_tree_sequences(
                     // TODO: update this to allow neutral mutations to be simulated
                     auto rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
-                        simplifier, preserve_selected_fixations, false,
+                        simplifier, preserve_selected_fixations,
+                        simulating_neutral_variants,
                         suppress_edge_table_indexing);
                     if (suppress_edge_table_indexing == false)
                         {
-                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                pop.mcounts, pop.mcounts_from_preserved_nodes);
+                            genetics.mutation_recycling_bin
+                                = fwdpp::ts::make_mut_queue(
+                                    pop.mcounts,
+                                    pop.mcounts_from_preserved_nodes);
                         }
                     else
                         {
-                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                rv.second, pop.mutations.size());
+                            genetics.mutation_recycling_bin
+                                = fwdpp::ts::make_mut_queue(
+                                    rv.second, pop.mutations.size());
                         }
                     simplified = true;
                     next_index = pop.tables.num_nodes();
@@ -317,7 +361,7 @@ evolve_with_tree_sequences(
             // TODO: update this to allow neutral mutations to be simulated
             auto rv = fwdpy11::simplify_tables(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
-                preserve_selected_fixations, false,
+                preserve_selected_fixations, simulating_neutral_variants,
                 suppress_edge_table_indexing);
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
