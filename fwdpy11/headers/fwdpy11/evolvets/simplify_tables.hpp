@@ -27,7 +27,6 @@
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/remove_fixations_from_gametes.hpp>
-#include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
 //#include "confirm_mutation_counts.hpp"
 
@@ -48,12 +47,12 @@ namespace fwdpy11
     {
         tables.sort_tables_for_simplification();
         std::vector<std::int32_t> samples;
-        samples.reserve(2*pop.diploids.size());
-        for(auto & m : pop.diploid_metadata)
-        {
-            samples.push_back(m.nodes[0]);
-            samples.push_back(m.nodes[1]);
-        }
+        samples.reserve(2 * pop.diploids.size());
+        for (auto &m : pop.diploid_metadata)
+            {
+                samples.push_back(m.nodes[0]);
+                samples.push_back(m.nodes[1]);
+            }
         auto rv = simplifier.simplify(tables, samples);
 
         for (auto &s : samples)
@@ -86,45 +85,72 @@ namespace fwdpy11
                 fwdpp::fwdpp_internal::process_haploid_genomes(
                     pop.haploid_genomes, pop.mutations, pop.mcounts);
             }
-        // TODO: update this to allow neutral mutations to be simulated
-        // TODO: better fixation handling via accounting for number of ancient samples
-        if (!preserve_selected_fixations && !simulating_neutral_variants)
-            {
-                auto itr = std::remove_if(
-                    tables.mutation_table.begin(), tables.mutation_table.end(),
-                    [&pop, &mcounts_from_preserved_nodes](
-                        const fwdpp::ts::mutation_record &mr) {
-                        return pop.mcounts[mr.key] == 2 * pop.diploids.size()
-                               && mcounts_from_preserved_nodes[mr.key] == 0;
-                    });
-                auto d = std::distance(itr, end(tables.mutation_table));
-                tables.mutation_table.erase(itr, end(tables.mutation_table));
-                if (d)
+
+        // If we are here, then the tables are indexed and mutations are counted.
+        // If there are ancient samples and we are simulating neutral variants,
+        // then we do not know their frequencies.  Thus, neutral
+        // fixations will not be removed until the end of the simulation.
+        // To change this behavior, the logic above would need to allow
+        // for mutation counting from tree seqs w/ancient samples or to
+        // force a tree traversal here if there are ancient samples.
+        // Such a traversal would allow for the purging of "global" fixations,
+        // e.g., mutations on root nodes in trees w/only 1 root.
+        // NOTE: if we use tree sequences to globablly purge fixations,
+        // then we cannot test that genetic values of ancient sample metadata
+        // equal genetic values calculated from tree sequences.
+        // Behavior change in 0.5.3: check for fixations
+        // no matter what.
+
+        auto itr = std::remove_if(
+            tables.mutation_table.begin(), tables.mutation_table.end(),
+            [&pop, &mcounts_from_preserved_nodes, preserve_selected_fixations](
+                const fwdpp::ts::mutation_record &mr) {
+                if (pop.mutations[mr.key].neutral == false
+                    && preserve_selected_fixations)
                     {
-                        tables.rebuild_site_table();
+                        return false;
                     }
+                return pop.mcounts[mr.key] == 2 * pop.diploids.size()
+                       && mcounts_from_preserved_nodes[mr.key] == 0;
+            });
+        auto d = std::distance(itr, end(tables.mutation_table));
+        tables.mutation_table.erase(itr, end(tables.mutation_table));
+        if (d)
+            {
+                tables.rebuild_site_table();
+            }
+        if (preserve_selected_fixations == false)
+            {
+                // b/c neutral mutations not in genomes!
                 fwdpp::ts::remove_fixations_from_haploid_genomes(
                     pop.haploid_genomes, pop.mutations, pop.mcounts,
                     mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
                     preserve_selected_fixations);
             }
 
-        // TODO: the blocks below should be abstracted out into a closure
-        // that removes these if statements
-        if (!preserve_selected_fixations && !simulating_neutral_variants)
+        // Behavior change in 0.5.3: set all fixation counts to 0
+        // to flag for recycling if possible.
+        // NOTE: this may slow things down a touch?
+        for (auto &i : rv.second)
             {
-                fwdpp::ts::flag_mutations_for_recycling(
-                    pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-                    pop.generation, std::false_type(), std::false_type());
+                if (pop.mcounts[i] == 2 * pop.diploids.size()
+                    && mcounts_from_preserved_nodes[i] == 0)
+                    {
+                        if (pop.mutations[i].neutral
+                            || !preserve_selected_fixations)
+                            {
+                                // flag variant for recycling
+                                pop.mcounts[i] = 0;
+                                // flag item for removal from return value,
+                                // as mutation is no longer considered "preserved"
+                                i = std::numeric_limits<std::size_t>::max();
+                            }
+                    }
             }
-        else if (preserve_selected_fixations && !simulating_neutral_variants)
-            {
-                fwdpp::ts::flag_mutations_for_recycling(
-                    pop, mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-                    pop.generation, std::true_type(), std::false_type());
-            }
-        //confirm_mutation_counts(pop, tables);
+        rv.second.erase(std::remove(begin(rv.second), end(rv.second),
+                                    std::numeric_limits<std::size_t>::max()),
+                        end(rv.second));
         return rv;
-    }
+    } // namespace fwdpy11
 } // namespace fwdpy11
 #endif
