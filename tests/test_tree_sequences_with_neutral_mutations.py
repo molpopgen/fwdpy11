@@ -82,6 +82,10 @@ class TestPruneFixations(unittest.TestCase):
         self.params.rates = (1e-3, self.params.rates[1], self.params.rates[2])
         self.params.nregions = [fwdpy11.Region(0, 1, 1)]
 
+    def test_no_mutations(self):
+        self.params.rates = (0, 0, 0)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+
     def test_mutation_counts_with_indexing(self):
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         mc = _count_mutations_from_diploids(self.pop)
