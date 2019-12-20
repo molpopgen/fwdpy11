@@ -174,6 +174,21 @@ is that it becomes impossible to accurately profile the code.  To override these
    is for developers who need to accurately profile the C++ back-end.  Also note that
    only the main package is affected.  Building the unit test modules is not affected.
 
+Disabling link-time optimization (LTO)
+------------------------------------------------------------------
+
+LTO is enabled by default and reduced the final library size substantially. However, it takes a
+long time and is therefore a drag during development.  To disable it:
+
+.. chode-block:: bask
+
+   python setup.py build_ext -i --disable_lto
+
+.. note::
+
+   This option only affects the main package and not the unit tests.
+
+
 Enabling debugging symbols in the C++ code
 ------------------------------------------------------------------
 
