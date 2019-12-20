@@ -4,6 +4,18 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.5.3
+++++++++++++++++
+
+New features:
+
+* Allow neutral mutations *during* simulations with tree sequences. `PR328 <https://github.com/molpopgen/fwdpy11/pull/328>_`
+* Add C++ back end and Python classes for discrete demographic events. `PR237 <https://github.com/molpopgen/fwdpy11/pull/237>_` 
+
+Miscellaneous changes:
+
+* Links in the manual are now validated via CI. `PR331 <https://github.com/molpopgen/fwdpy11/pull/331>_` 
+
 0.5.2
 ++++++++++++++++
 
