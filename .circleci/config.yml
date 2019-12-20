@@ -65,11 +65,6 @@ jobs:
             make doctest -C doc
 
       - run:
-          name: Validate URL in the manual.
-          command: |
-              make linkcheck -C doc
-
-      - run:
           name: Make sure we can build a distribution tarball.
           command: |
             python setup.py sdist
@@ -81,5 +76,5 @@ jobs:
             python -m venv venv
             source venv/bin/activate 
             pip install --upgrade setuptools pip pybind11
-            pip install dist/fwdpy11-0.5.2.tar.gz 
+            pip install dist/fwdpy11-0.5.3.tar.gz 
 
