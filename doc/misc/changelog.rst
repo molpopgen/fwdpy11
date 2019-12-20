@@ -34,7 +34,7 @@ This release fixes three bugs:
 
 * :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible. `PR 266 <https://github.com/molpopgen/fwdpy11/pull/266>`_
 * :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned. `PR 267 <https://github.com/molpopgen/fwdpy11/pull/267>`_
-* Corruption of the samples list using the standalone simplify function. `PR 269 <https://github.com/molpopgen/fwdpy11/pull/269>`_
+* Corruption of the samples list using the standalone simplify function. `PR 270 <https://github.com/molpopgen/fwdpy11/pull/270>`_
 
 The following features are new:
 
@@ -251,7 +251,7 @@ API changes/new features:
 * Populations may now be dumped/loaded to/from files. See :func:`fwdpy11.SlocusPop.dump_to_file` and
   :func:`fwdpy11.SlocusPop.load_from_file`.  Analagous functions exist for MlocusPop. `PR #148 <https://github.com/molpopgen/fwdpy11/pull/148>`_
 * :func:`fwdpy11.SlocusPop.sample` and :func:`fwdpy11.MlocusPop.sample` now return a :class:`fwdpy11.sampling.DataMatrix`.
-  `PR #117 <https://github.com/molpopgen/fwdpy11/pull/117>`_
+  `PR #118 <https://github.com/molpopgen/fwdpy11/pull/118>`_
 * :class:`fwdpy11.sampling.DataMatrix` is refactored to match updates to fwdpp.  `PR #139 <https://github.com/molpopgen/fwdpy11/pull/139>`_
 * :func:`fwdpy11.sampling.matrix_to_sample` now return a tuple with the neutral and selected data, respectively, as the
   two elements.  `PR #128 <https://github.com/molpopgen/fwdpy11/pull/128>`_
@@ -400,7 +400,7 @@ Bug fixes:
 
 API and back-end changes:
 ------------------------------------------
-* Added :func:`fwdpy11.sampling.matrix_to_sample` and :func:`fwdpy11.sampling.separate_samples_by_loci`. [`commit <https://github.com/molpopgen/fwdpy11/commit/i639c8de999679140fad6a976ff6c1996b25444aa>`_]
+* Added :func:`fwdpy11.sampling.matrix_to_sample` and :func:`fwdpy11.sampling.separate_samples_by_loci`. [`commit <https://github.com/molpopgen/fwdpy11/commit/639c8de999679140fad6a976ff6c1996b25444aa>`_]
 * Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code. See
   :ref:`customgvalues`. [`commit
   <https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667>`_]
