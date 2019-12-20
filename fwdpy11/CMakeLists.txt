@@ -97,6 +97,16 @@ set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/track_ancestral_counts.cc
     src/evolve_population/remove_extinct_genomes.cc)
 
+set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
+    src/discrete_demography/MigrationMatrix.cc
+    src/discrete_demography/MassMigration.cc
+    src/discrete_demography/SetDemeSize.cc
+    src/discrete_demography/SetExponentialGrowth.cc
+    src/discrete_demography/SetSelfingRate.cc
+    src/discrete_demography/SetMigrationRates.cc
+    src/discrete_demography/DiscreteDemography.cc
+    src/discrete_demography/exceptions.cc)
+
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
@@ -107,7 +117,8 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${GENETIC_VALUE_SOURCES}
     ${TS_SOURCES}
     ${GSL_SOURCES}
-    ${EVOLVE_POPULATION_SOURCES})
+    ${EVOLVE_POPULATION_SOURCES}
+    ${DISCRETE_DEMOGRAPHY_SOURCES})
 
 set(LTO_OPTIONS)
 if(ENABLE_PROFILING)
