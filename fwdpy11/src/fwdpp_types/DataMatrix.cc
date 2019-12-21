@@ -1,8 +1,5 @@
-#include <fwdpp/forward_types.hpp>
 #include <fwdpp/data_matrix.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
-#include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
