@@ -10,10 +10,11 @@
 
 namespace py = pybind11;
 
-void init_data_matrix(py::module & m)
+void
+init_data_matrix(py::module &m)
 {
     py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
-            R"delim(
+                                    R"delim(
             Simple matrix representation of variation data.
 
             These are not constructed directly.  Rather,
@@ -29,7 +30,7 @@ void init_data_matrix(py::module & m)
             [](const fwdpp::state_matrix &sm) {
                 if (sm.positions.empty())
                     {
-                        return py::make_tuple(0, 0);
+                        return py::make_tuple(std::size_t(0), std::size_t(0));
                     }
                 if (sm.data.empty())
                     {
@@ -37,7 +38,8 @@ void init_data_matrix(py::module & m)
                     }
                 return py::make_tuple(sm.positions.size(),
                                       sm.data.size() / sm.positions.size());
-            },"Shape of the matrix.")
+            },
+            "Shape of the matrix.")
         .def_readonly("positions", &fwdpp::state_matrix::positions,
                       "The mutation positions")
         .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
