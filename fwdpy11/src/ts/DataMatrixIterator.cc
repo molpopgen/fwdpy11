@@ -128,7 +128,7 @@ class DataMatrixIterator
     find_first_site(site_table_itr b, site_table_itr e, const double start)
     {
         return std::lower_bound(
-            b, e, start, [this](const fwdpp::ts::site& s, const double v) {
+            b, e, start, [](const fwdpp::ts::site& s, const double v) {
                 return s.position < v;
             });
     }
@@ -198,7 +198,7 @@ class DataMatrixIterator
                 return scurrent;
             }
         return std::upper_bound(scurrent, send, m,
-                                [this](double v, const fwdpp::ts::site& s) {
+                                [](double v, const fwdpp::ts::site& s) {
                                     return v < s.position;
                                 });
     }
