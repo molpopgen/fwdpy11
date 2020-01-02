@@ -180,7 +180,7 @@ Disabling link-time optimization (LTO)
 LTO is enabled by default and reduced the final library size substantially. However, it takes a
 long time and is therefore a drag during development.  To disable it:
 
-.. chode-block:: bask
+.. code-block:: bash
 
    python setup.py build_ext -i --disable_lto
 
