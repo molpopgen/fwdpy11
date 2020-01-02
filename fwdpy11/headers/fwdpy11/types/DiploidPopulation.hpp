@@ -5,6 +5,7 @@
 #include "Diploid.hpp"
 #include "create_pops.hpp"
 #include <stdexcept>
+#include <limits>
 #include <unordered_set>
 #include <fwdpp/poptypes/tags.hpp>
 #include <fwdpp/sugar/add_mutation.hpp>
@@ -17,7 +18,8 @@ namespace fwdpy11
         void
         process_individual_input()
         {
-            std::vector<fwdpp::uint_t> gcounts(this->haploid_genomes.size(), 0);
+            std::vector<fwdpp::uint_t> gcounts(this->haploid_genomes.size(),
+                                               0);
             for (auto &&dip : diploids)
                 {
                     this->validate_individual_keys(dip.first);
@@ -57,13 +59,29 @@ namespace fwdpy11
                         {
                             d.nodes[0] = d.nodes[1] = -1;
                         }
+                    else // Fix GitHub issue 332
+                        {
+                            d.nodes[0] = 2 * d.label;
+                            d.nodes[1] = 2 * d.label + 1;
+                        }
+                }
+            if (length != std::numeric_limits<double>::max())
+                {
+                    using itype = decltype(this->diploid_metadata[0].nodes[0]);
+                    using ntype = std::remove_reference<itype>::type;
+                    if (label >= std::numeric_limits<ntype>::max())
+                        {
+                            throw std::invalid_argument(
+                                "population size too large for node "
+                                "type");
+                        }
                 }
         }
 
         template <typename diploids_input, typename genomes_input,
                   typename mutations_input>
         explicit DiploidPopulation(diploids_input &&d, genomes_input &&g,
-                           mutations_input &&m)
+                                   mutations_input &&m)
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
@@ -74,10 +92,10 @@ namespace fwdpy11
         }
 
         ~DiploidPopulation() = default;
-        DiploidPopulation(DiploidPopulation&&)=default;
-        DiploidPopulation(const DiploidPopulation&)=default;
-        DiploidPopulation&operator=(const DiploidPopulation&)=default;
-        DiploidPopulation&operator=(DiploidPopulation&&)=default;
+        DiploidPopulation(DiploidPopulation &&) = default;
+        DiploidPopulation(const DiploidPopulation &) = default;
+        DiploidPopulation &operator=(const DiploidPopulation &) = default;
+        DiploidPopulation &operator=(DiploidPopulation &&) = default;
 
         bool
         operator==(const DiploidPopulation &rhs) const
@@ -121,8 +139,8 @@ namespace fwdpy11
                 {
                     auto pos = i.pos;
                     // remaining preconditions get checked by fwdpp:
-                    auto idx = fwdpp::add_mutation(*this, individuals, haploid_genomes,
-                                                   std::move(i));
+                    auto idx = fwdpp::add_mutation(
+                        *this, individuals, haploid_genomes, std::move(i));
 
                     // fwdpp's function doesn't update the lookup:
                     this->mut_lookup.emplace(pos, idx);
