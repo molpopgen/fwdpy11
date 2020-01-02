@@ -24,7 +24,7 @@ class testConversion(unittest.TestCase):
         md = np.array(pop.diploid_metadata, copy=False)
         n = md['nodes'].flatten()
         self.assertTrue(np.array_equal(
-            n, np.arange(2*pop.N - 1, dtype=n.dtype)))
+            n, np.arange(2*pop.N, dtype=n.dtype)))
 
 
 if __name__ == "__main__":
