@@ -28,3 +28,8 @@ from ._dev import * # NOQA
 from ._model_params import * # NOQA
 from ._evolve_genomes import * # NOQA
 from ._evolvets import * # NOQA
+from ._monkeypatch import _diploid_population # NOQA
+
+# NOTE: some operations that can be implemented efficiently
+# in Python are supplied as monkey-patches to the pybind11 classes
+_monkeypatch._diploid_population._patch_diploid_population(DiploidPopulation) # NOQA

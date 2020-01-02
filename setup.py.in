@@ -156,7 +156,8 @@ class get_pybind_include(object):
         return pybind11.get_include(self.user)
 
 
-PKGS = ['fwdpy11']
+PKGS = ['fwdpy11',
+        'fwdpy11._monkeypatch']
 
 INCLUDES = [
     'fwdpy11/headers',
