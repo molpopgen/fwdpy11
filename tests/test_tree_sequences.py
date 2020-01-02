@@ -1173,5 +1173,13 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
             all([i == 10 for i in self.resetter.sample_sizes]) is True)
 
 
+class TestDiploidPopulationInitialization(unittest.TestCase):
+    def test_initial_nodes(self):
+        pop = fwdpy11.DiploidPopulation(100, 1.)
+        md = np.array(pop.diploid_metadata, copy=False)
+        n = md['nodes'].flatten()
+        self.assertTrue(np.array_equal(n, np.arange(2*pop.N, dtype=n.dtype)))
+
+
 if __name__ == "__main__":
     unittest.main()

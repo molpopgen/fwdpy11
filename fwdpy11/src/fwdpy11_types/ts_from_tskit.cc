@@ -85,11 +85,20 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
     fwdpy11::DiploidPopulation pop(twoN / 2, l);
     pop.tables.node_table.swap(nodes);
     pop.tables.edge_table.swap(edges);
+    // NOTE: this may be an issue when we allow variable survival probabilitites!
     pop.tables.update_offset();
     if (!pop.tables.edges_are_sorted())
         {
             throw std::runtime_error("edge table is not sorted");
         }
     pop.tables.build_indexes();
+
+    // Fixed in 0.5.3: metadata nodes now correct
+    // This was GitHub issue 333
+    for (std::uint32_t i = 0; i < pop.N; ++i)
+        {
+            pop.diploid_metadata[i].nodes[0] = 2 * i;
+            pop.diploid_metadata[i].nodes[1] = 2 * i + 1;
+        }
     return pop;
 }
