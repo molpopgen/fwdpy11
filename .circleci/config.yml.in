@@ -65,6 +65,11 @@ jobs:
             make doctest -C doc
 
       - run:
+          name: Validate URL in the manual.
+          command: |
+              make linkcheck -C doc
+
+      - run:
           name: Make sure we can build a distribution tarball.
           command: |
             python setup.py sdist
