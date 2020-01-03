@@ -234,6 +234,8 @@ evolve_with_tree_sequences(
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
+    std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
+        simplification_rv;
     for (std::uint32_t gen = 0;
          gen < num_generations && !stopping_criteron_met; ++gen)
         {
@@ -259,29 +261,18 @@ evolve_with_tree_sequences(
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
-                    auto rv = fwdpy11::simplify_tables(
+                    simplification_rv = fwdpy11::simplify_tables(
                         pop, pop.mcounts_from_preserved_nodes, pop.tables,
                         simplifier, preserve_selected_fixations,
                         simulating_neutral_variants,
                         suppress_edge_table_indexing);
-                    if (suppress_edge_table_indexing == false)
-                        {
-                            genetics.mutation_recycling_bin
-                                = fwdpp::ts::make_mut_queue(
-                                    pop.mcounts,
-                                    pop.mcounts_from_preserved_nodes);
-                        }
-                    else
-                        {
-                            genetics.mutation_recycling_bin
-                                = fwdpp::ts::make_mut_queue(
-                                    rv.second, pop.mutations.size());
-                        }
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
-                    remap_metadata(pop.ancient_sample_metadata, rv.first);
-                    remap_metadata(pop.diploid_metadata, rv.first);
+                    remap_metadata(pop.ancient_sample_metadata,
+                                   simplification_rv.first);
+                    remap_metadata(pop.diploid_metadata,
+                                   simplification_rv.first);
                     if (reset_treeseqs_to_alive_nodes_after_simplification
                         == true)
                         {
@@ -302,6 +293,63 @@ evolve_with_tree_sequences(
                 }
             // The user may now analyze the pop'n and record ancient samples
             recorder(pop, sr);
+            if (simplified)
+                {
+                    if (suppress_edge_table_indexing == false)
+                        {
+                            // Behavior change in 0.5.3: set all fixation counts to 0
+                            // to flag for recycling if possible.
+                            // NOTE: this may slow things down a touch?
+                            if (preserve_selected_fixations == false)
+                                {
+                                    // b/c neutral mutations not in genomes!
+                                    fwdpp::ts::
+                                        remove_fixations_from_haploid_genomes(
+                                            pop.haploid_genomes, pop.mutations,
+                                            pop.mcounts,
+                                            pop.mcounts_from_preserved_nodes,
+                                            2 * pop.diploids.size(),
+                                            preserve_selected_fixations);
+                                }
+                            for (auto &i : simplification_rv.second)
+                                {
+                                    if (pop.mcounts[i]
+                                            == 2 * pop.diploids.size()
+                                        && pop.mcounts_from_preserved_nodes[i]
+                                               == 0)
+                                        {
+                                            if (pop.mutations[i].neutral
+                                                || !preserve_selected_fixations)
+                                                {
+                                                    // flag variant for recycling
+                                                    pop.mcounts[i] = 0;
+                                                    // flag item for removal from return value,
+                                                    // as mutation is no longer considered "preserved"
+                                                    i = std::numeric_limits<
+                                                        std::size_t>::max();
+                                                }
+                                        }
+                                }
+                            simplification_rv.second.erase(
+                                std::remove(
+                                    begin(simplification_rv.second),
+                                    end(simplification_rv.second),
+                                    std::numeric_limits<std::size_t>::max()),
+                                end(simplification_rv.second));
+                            genetics.mutation_recycling_bin
+                                = fwdpp::ts::make_mut_queue(
+                                    pop.mcounts,
+                                    pop.mcounts_from_preserved_nodes);
+                        }
+                    else
+                        {
+                            genetics.mutation_recycling_bin
+                                = fwdpp::ts::make_mut_queue(
+                                    simplification_rv.second,
+                                    pop.mutations.size());
+                        }
+                }
+
             // TODO: deal with the result of the recorder populating sr
             if (!sr.samples.empty())
                 {
