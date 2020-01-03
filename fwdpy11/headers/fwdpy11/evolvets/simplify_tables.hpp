@@ -119,37 +119,6 @@ namespace fwdpy11
             {
                 tables.rebuild_site_table();
             }
-        if (preserve_selected_fixations == false)
-            {
-                // b/c neutral mutations not in genomes!
-                fwdpp::ts::remove_fixations_from_haploid_genomes(
-                    pop.haploid_genomes, pop.mutations, pop.mcounts,
-                    mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-                    preserve_selected_fixations);
-            }
-
-        // Behavior change in 0.5.3: set all fixation counts to 0
-        // to flag for recycling if possible.
-        // NOTE: this may slow things down a touch?
-        for (auto &i : rv.second)
-            {
-                if (pop.mcounts[i] == 2 * pop.diploids.size()
-                    && mcounts_from_preserved_nodes[i] == 0)
-                    {
-                        if (pop.mutations[i].neutral
-                            || !preserve_selected_fixations)
-                            {
-                                // flag variant for recycling
-                                pop.mcounts[i] = 0;
-                                // flag item for removal from return value,
-                                // as mutation is no longer considered "preserved"
-                                i = std::numeric_limits<std::size_t>::max();
-                            }
-                    }
-            }
-        rv.second.erase(std::remove(begin(rv.second), end(rv.second),
-                                    std::numeric_limits<std::size_t>::max()),
-                        end(rv.second));
         return rv;
     } // namespace fwdpy11
 } // namespace fwdpy11
