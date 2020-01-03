@@ -1181,5 +1181,55 @@ class TestDiploidPopulationInitialization(unittest.TestCase):
         self.assertTrue(np.array_equal(n, np.arange(2*pop.N, dtype=n.dtype)))
 
 
+class TestTrackMutationCounts(unittest.TestCase):
+    """
+    Test for GitHub issue 326.
+
+    Simplifying every generation w/strong positive selection is
+    key to triggering the bug.
+    """
+    @classmethod
+    def setUp(self):
+        class FreqTracker(object):
+            def __init__(self):
+                self.freqs = dict()
+
+            def __call__(self, pop, recorder):
+                for i, j in enumerate(pop.mcounts):
+                    if j == 2*pop.N:
+                        k = pop.mutations[i].key
+                        if k in self.freqs:
+                            if self.freqs[k][-1][1] < 2*pop.N:
+                                self.freqs[k].append((pop.generation, j))
+                        else:
+                            self.freqs[k] = [(pop.generation, j)]
+
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
+        self.ft = FreqTracker()
+
+    def test_without_table_indexing(self):
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         1, self.ft, track_mutation_counts=True,
+                         suppress_table_indexing=True)
+        assert len(
+            self.pop.fixations) > 0, \
+            "Nothing fixed, so test case is not helpful"
+
+        for i, j in zip(self.pop.fixations, self.pop.fixation_times):
+            self.assertTrue(i.key in self.ft.freqs)
+            self.assertEqual(self.ft.freqs[i.key][-1][0], j)
+
+    def test_with_table_indexing(self):
+        fwdpy11.evolvets(self.rng, self.pop, self.params,
+                         1, self.ft, track_mutation_counts=True)
+        assert len(
+            self.pop.fixations) > 0, \
+            "Nothing fixed, so test case is not helpful"
+
+        for i, j in zip(self.pop.fixations, self.pop.fixation_times):
+            self.assertTrue(i.key in self.ft.freqs)
+            self.assertEqual(self.ft.freqs[i.key][-1][0], j)
+
+
 if __name__ == "__main__":
     unittest.main()
