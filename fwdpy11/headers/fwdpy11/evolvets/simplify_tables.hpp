@@ -46,16 +46,10 @@ namespace fwdpy11
                     const bool suppress_edge_table_indexing)
     {
         tables.sort_tables_for_simplification();
-        std::vector<std::int32_t> samples;
-        samples.reserve(2 * pop.diploids.size());
-        for (auto &m : pop.diploid_metadata)
-            {
-                samples.push_back(m.nodes[0]);
-                samples.push_back(m.nodes[1]);
-            }
-        auto rv = simplifier.simplify(tables, samples);
+        pop.fill_alive_nodes();
+        auto rv = simplifier.simplify(tables, pop.alive_nodes);
 
-        for (auto &s : samples)
+        for (auto &s : pop.alive_nodes)
             {
                 s = rv.first[s];
             }
@@ -76,8 +70,8 @@ namespace fwdpy11
         tables.build_indexes();
         if (pop.tables.preserved_nodes.empty())
             {
-                fwdpp::ts::count_mutations(tables, pop.mutations, samples,
-                                           pop.mcounts,
+                fwdpp::ts::count_mutations(tables, pop.mutations,
+                                           pop.alive_nodes, pop.mcounts,
                                            mcounts_from_preserved_nodes);
             }
         else
