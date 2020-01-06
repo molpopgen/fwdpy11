@@ -223,5 +223,7 @@ class ModelParams(object):
         if self.rates[0] > 0 and len(self.nregions) == 0:
             raise ValueError(
                 "mutation rate to neutral variants is > 0 but no Regions are defined")
+        if self.simlen is None or self.simlen < 0:
+            raise ValueError("simlen cannot be none or < 0")
         # if self.rates[2] > 0 and len(self.recregions) == 0:
         #     raise ValueError("recombination rate is > 0 but no Regions are defined")
