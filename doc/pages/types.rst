@@ -206,9 +206,12 @@ Types related to tree sequence recording
 
 .. autoclass:: fwdpy11.NodeTable
 .. autoclass:: fwdpy11.Node
-    
-    .. autoattribute:: population
 
+    .. versionchanged:: 0.6.0
+
+         The `population` field is renamed `deme`
+    
+    .. autoattribute:: deme
     .. autoattribute:: time
 
     
