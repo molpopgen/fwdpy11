@@ -8,7 +8,7 @@ namespace py = pybind11;
 void
 init_ts_Node(py::module& m)
 {
-    PYBIND11_NUMPY_DTYPE(fwdpp::ts::node, population, time);
+    PYBIND11_NUMPY_DTYPE(fwdpp::ts::node, deme, time);
 
     // The low level types are also Python classes
     py::class_<fwdpp::ts::node>(m, "Node",
@@ -17,10 +17,10 @@ init_ts_Node(py::module& m)
 
             .. versionadded:: 0.2.0
             )delim")
-        .def_readonly("population", &fwdpp::ts::node::population,
+        .def_readonly("deme", &fwdpp::ts::node::deme,
                       R"delim(
             For models of discrete population structure,
-            this field is the population of the node.
+            this field is the deme of the node.
             )delim")
         .def_readonly("time", &fwdpp::ts::node::time,
                       "Birth time of the node, recorded forwards in time.")
@@ -29,16 +29,16 @@ init_ts_Node(py::module& m)
                  std::ostringstream out;
                  out.precision(4);
                  out << "Node(time=" << self.time
-                     << ", population=" << self.population << ")";
+                     << ", deme=" << self.deme << ")";
                  return out.str();
              })
         .def(py::pickle(
             [](const fwdpp::ts::node& n) {
-                return py::make_tuple(n.population, n.time);
+                return py::make_tuple(n.deme, n.time);
             },
             [](py::tuple t) {
                 return fwdpp::ts::node{
-                    t[0].cast<decltype(fwdpp::ts::node::population)>(),
+                    t[0].cast<decltype(fwdpp::ts::node::deme)>(),
                     t[1].cast<double>()
                 };
             }));
