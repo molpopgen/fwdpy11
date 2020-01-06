@@ -25,7 +25,7 @@ if sys.version_info[0] < 3:
 from fwdpy11._version import __version__ # NOQA
 from ._fwdpy11 import * # NOQA
 from ._dev import * # NOQA
-from ._model_params import * # NOQA
+from ._types.model_params import * # NOQA
 from ._evolve_genomes import * # NOQA
 from ._evolvets import * # NOQA
 from ._monkeypatch import _diploid_population # NOQA
