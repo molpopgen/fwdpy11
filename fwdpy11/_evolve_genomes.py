@@ -57,7 +57,9 @@ def evolve_genomes(rng, pop, params, recorder=None):
         from ._fwdpy11 import RecordNothing
         recorder = RecordNothing()
 
-    evolve_without_tree_sequences(rng, pop, params.demography,
+    # FIXME: passing params.popsizes is a hack introduced in 0.6.0
+    # top maintain API compatibility
+    evolve_without_tree_sequences(rng, pop, params.popsizes,
                                   params.mutrate_n, params.mutrate_s,
                                   mm, rm, params.gvalue,
                                   recorder, params.pself, params.prune_selected)

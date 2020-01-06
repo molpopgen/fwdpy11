@@ -62,7 +62,7 @@ Now, we run a simple simulation with the above function passed into :func:`fwdpy
               'sregions': [fwdpy11.GammaS(0,1,1,2.0,1,scaling=200)],
               'recregions': [fwdpy11.PoissonInterval(0,1,0.1)],
               'rates': (0, 1e-2, None),
-              'demography': np.array([100]*100, dtype=np.int32)
+              'demography': np.array([100]*100, dtype=np.uint32)
               }
     params = fwdpy11.ModelParams(**pdict)
 
