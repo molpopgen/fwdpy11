@@ -20,7 +20,6 @@
 //
 
 #include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
 #include <functional>
@@ -36,6 +35,7 @@
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
@@ -68,9 +68,9 @@ void
 evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    py::array_t<std::uint32_t> popsizes, const double mu_neutral,
-    const double mu_selected, const fwdpy11::MutationRegions &mmodel,
-    const fwdpy11::GeneticMap &rmodel,
+    fwdpy11::discrete_demography::DiscreteDemography &demography, const std::uint32_t simlen,
+    const double mu_neutral, const double mu_selected,
+    const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
@@ -115,11 +115,9 @@ evolve_with_tree_sequences(
             throw std::invalid_argument(
                 "nonzero mutation rate incompatible with empty regions");
         }
-    const std::uint32_t num_generations
-        = static_cast<std::uint32_t>(popsizes.size());
-    if (!num_generations)
+    if (!simlen)
         {
-            throw std::invalid_argument("empty list of population sizes");
+            throw std::invalid_argument("simulation length must be > 0");
         }
     if (pop.tables.node_table.empty())
         {
@@ -236,10 +234,10 @@ evolve_with_tree_sequences(
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
         simplification_rv;
     for (std::uint32_t gen = 0;
-         gen < num_generations && !stopping_criteron_met; ++gen)
+         gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
-            const auto N_next = popsizes.at(gen);
+            const auto N_next = pop.N; // FIXME
             fwdpy11::evolve_generation_ts(
                 rng, pop, genetics, N_next, pick_first_parent,
                 pick_second_parent, generate_offspring_metadata,

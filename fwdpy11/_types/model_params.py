@@ -28,6 +28,10 @@ class ModelParams(object):
         Changed this from a horrible class hierarchy
         into a much simpler, single class.
 
+    .. versionchanged:: 0.6.0
+
+        Updated to support :class:`fwdpy11.DiscreteDemography`
+
     """
 
     def __init__(self, **kwargs):
@@ -39,11 +43,24 @@ class ModelParams(object):
         self.__rates = None
         self.__gvalue = None
         self.__pself = 0.0
+        self.__simlen = None
+        self.__popsizes = None  # FIXME: this is a hack in 0.6.0
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
                 setattr(self, key, value)
             elif key not in dir(self):
                 raise ValueError(key, " not a valid parameter for this class.")
+
+    def _set_demography(self, value):
+        from fwdpy11 import DiscreteDemography
+        if isinstance(value, DiscreteDemography):
+            return value
+
+        # Assume value is a numpy array of pop
+        # sizes over time
+        self.simlen = len(value)
+        self.__popsizes = value  # FIXME: this is a hack in 0.6.0
+        return DiscreteDemography(value)
 
     @property
     def nregions(self):
@@ -109,7 +126,20 @@ class ModelParams(object):
 
     @demography.setter
     def demography(self, value):
-        self.__demography = value
+        self.__demography = self._set_demography(value)
+
+    @property
+    def simlen(self):
+        """
+        Get or set the length of the simulation.
+
+        .. versionadded:: 0.6.0
+        """
+        return self.__simlen
+
+    @simlen.setter
+    def simlen(self, value):
+        self.__simlen = value
 
     @property
     def gvalue(self):
@@ -168,6 +198,16 @@ class ModelParams(object):
     def pself(self, pself_):
         self.__pself = pself_
 
+    @property
+    def popsizes(self):
+        """
+        This is a hack in 0.6.0 so that
+        simulations w/o tree sequences use the
+        same API as previous versions.
+        """
+        # FIXME: hack introduced in 0.6.0
+        return self.__popsizes
+
     def validate(self):
         """
         Error check model params.
@@ -195,5 +235,7 @@ class ModelParams(object):
         if self.rates[0] > 0 and len(self.nregions) == 0:
             raise ValueError(
                 "mutation rate to neutral variants is > 0 but no Regions are defined")
+        if self.simlen is None or self.simlen < 0:
+            raise ValueError("simlen cannot be none or < 0")
         # if self.rates[2] > 0 and len(self.recregions) == 0:
         #     raise ValueError("recombination rate is > 0 but no Regions are defined")

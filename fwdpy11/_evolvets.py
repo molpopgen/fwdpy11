@@ -98,7 +98,8 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
     from ._fwdpy11 import SampleRecorder
     sr = SampleRecorder()
     evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
-                               params.demography, params.mutrate_n, params.mutrate_s,
+                               params.demography, params.simlen,
+                               params.mutrate_n, params.mutrate_s,
                                mm, rm, params.gvalue,
                                recorder, stopping_criterion,
                                params.pself, params.prune_selected is False,
