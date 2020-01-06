@@ -30,6 +30,19 @@ namespace fwdpy11
             this->validate_haploid_genome_counts(gcounts);
         }
 
+        void
+        fill_sample_nodes_from_metadata(
+            std::vector<fwdpp::ts::TS_NODE_INT> &n,
+            const std::vector<fwdpy11::DiploidMetadata> &metadata)
+        {
+            n.clear();
+            for (auto &md : metadata)
+                {
+                    n.push_back(md.nodes[0]);
+                    n.push_back(md.nodes[1]);
+                }
+        }
+
       public:
         using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
@@ -41,10 +54,13 @@ namespace fwdpy11
                                            typename popbase_t::mcont_t>;
 
         dipvector_t diploids;
+        std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes,
+            preserved_sample_nodes;
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
-            : Population{ N, length }, diploids(N, { 0, 0 })
+            : Population{ N, length },
+              diploids(N, { 0, 0 }), alive_nodes{}, preserved_sample_nodes{}
         {
             if (!N)
                 {
@@ -85,7 +101,8 @@ namespace fwdpy11
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d))
+              diploids(std::forward<diploids_input>(d)), alive_nodes{},
+              preserved_sample_nodes{}
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();
@@ -165,6 +182,19 @@ namespace fwdpy11
         {
             return sample_random_individuals_details(*this, rng, nsam,
                                                      haplotype, remove_fixed);
+        }
+
+        void
+        fill_alive_nodes()
+        {
+            fill_sample_nodes_from_metadata(alive_nodes, diploid_metadata);
+        }
+
+        void
+        fill_preserved_nodes()
+        {
+            fill_sample_nodes_from_metadata(preserved_sample_nodes,
+                                            ancient_sample_metadata);
         }
     };
 } // namespace fwdpy11
