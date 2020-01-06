@@ -93,7 +93,7 @@ def _generate_mutation_metadata(self):
 
 def _initializePopulationTable(node_view, tc):
     population_metadata = []
-    for i in sorted(np.unique(node_view['population'])):
+    for i in sorted(np.unique(node_view['deme'])):
         md = "deme"+str(i)
         population_metadata.append(md.encode("utf-8"))
 
@@ -176,7 +176,7 @@ def _dump_tables_to_tskit(self):
     for i in self.tables.preserved_nodes:
         flags[i] = 1
     tc.nodes.set_columns(flags=flags, time=node_view['time'],
-                         population=node_view['population'],
+                         population=node_view['deme'],
                          individual=individual)
     tc.edges.set_columns(left=edge_view['left'],
                          right=edge_view['right'],
