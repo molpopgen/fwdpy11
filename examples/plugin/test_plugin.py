@@ -4,7 +4,7 @@ import gvalue_recorder
 
 N = 1000
 
-pdict = {'demography': np.array([N]*100),
+pdict = {'demography': np.array([N]*100, dtype=np.uint32),
          'nregions': [],
          'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.25)],
          'recregions': [fwdpy11.Region(0, 1, 1)],

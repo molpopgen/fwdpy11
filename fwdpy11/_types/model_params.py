@@ -44,6 +44,7 @@ class ModelParams(object):
         self.__gvalue = None
         self.__pself = 0.0
         self.__simlen = None
+        self.__popsizes = None  # FIXME: this is a hack in 0.6.0
         for key, value in kwargs.items():
             if key in dir(self) and key[:1] != "_":
                 setattr(self, key, value)
@@ -58,6 +59,7 @@ class ModelParams(object):
         # Assume value is a numpy array of pop
         # sizes over time
         self.simlen = len(value)
+        self.__popsizes = value  # FIXME: this is a hack in 0.6.0
         return DiscreteDemography(value)
 
     @property
@@ -195,6 +197,16 @@ class ModelParams(object):
     @pself.setter
     def pself(self, pself_):
         self.__pself = pself_
+
+    @property
+    def popsizes(self):
+        """
+        This is a hack in 0.6.0 so that
+        simulations w/o tree sequences use the
+        same API as previous versions.
+        """
+        # FIXME: hack introduced in 0.6.0
+        return self.__popsizes
 
     def validate(self):
         """

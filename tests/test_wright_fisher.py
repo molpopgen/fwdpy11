@@ -32,7 +32,7 @@ class testWFevolve(unittest.TestCase):
         evolve(self.rng, self.pop, self.p, self.recorder)
         self.assertEqual(self.recorder.generations,
                          [i + 1 for i in range(100)])
-        self.p.demography = np.array([self.pop.N] * 24)
+        self.p.demography = np.array([self.pop.N] * 24, dtype=np.uint32)
         evolve(self.rng, self.pop, self.p, self.recorder)
         self.assertEqual(self.recorder.generations,
                          [i + 1 for i in range(124)])
