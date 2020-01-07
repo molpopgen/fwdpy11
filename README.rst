@@ -132,6 +132,14 @@ with Xcode.   However, you do need to add the following flag when building the p
 
 Do the same for a `pip install` from the source directory.
 
+Windows
+========================================
+
+We have heard positive reports of using fwdpy11 on Windows 10 with the Ubuntu subsystem installed.  For such
+a system, you may use a Linux conda installer and then install fwdpy11 via bioconda_.
+
+The developers do not have access to this platform, but we are keen to hear of any issues.
+
 Caution
 ==================================
 
