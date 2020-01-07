@@ -30,7 +30,6 @@
 #include <fwdpp/util.hpp>
 #include <fwdpp/mutate_recombine.hpp>
 #include <fwdpp/ts/generate_offspring.hpp>
-#include <fwdpp/ts/get_parent_ids.hpp>
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 
@@ -63,17 +62,33 @@ namespace fwdpy11
         return offspring_data;
     }
 
+    inline std::pair<fwdpp::ts::TS_NODE_INT, fwdpp::ts::TS_NODE_INT>
+    parent_nodes_from_metadata(
+        const std::size_t i,
+        const std::vector<fwdpy11::DiploidMetadata>& metadata,
+        const bool swapped)
+    {
+        auto rv = std::make_pair(metadata[i].nodes[0], metadata[i].nodes[1]);
+        if (swapped)
+            {
+                std::swap(rv.first, rv.second);
+            }
+        return rv;
+    }
+
     template <typename rng_t, typename poptype, typename pick_parent1_fxn,
               typename pick_parent2_fxn, typename offspring_metadata_fxn,
               typename genetic_param_holder>
     void
-    evolve_generation_ts(
-        const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
-        const fwdpp::uint_t N_next, const pick_parent1_fxn& pick1,
-        const pick_parent2_fxn& pick2,
-        const offspring_metadata_fxn& update_offspring,
-        const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
-        std::int32_t first_parental_index, std::int32_t next_index)
+    evolve_generation_ts(const rng_t& rng, poptype& pop,
+                         genetic_param_holder& genetics,
+                         const fwdpp::uint_t N_next,
+                         const pick_parent1_fxn& pick1,
+                         const pick_parent2_fxn& pick2,
+                         const offspring_metadata_fxn& update_offspring,
+                         const fwdpp::uint_t generation,
+                         fwdpp::ts::table_collection& tables,
+                         std::int32_t next_index)
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -95,10 +110,10 @@ namespace fwdpy11
                 auto& dip = offspring[next_offspring];
                 auto offspring_data = generate_offspring(
                     rng, std::make_pair(p1, p2), pop, dip, genetics);
-                auto p1id = fwdpp::ts::get_parent_ids(
-                    first_parental_index, p1, offspring_data.first.swapped);
-                auto p2id = fwdpp::ts::get_parent_ids(
-                    first_parental_index, p2, offspring_data.second.swapped);
+                auto p1id = parent_nodes_from_metadata(
+                    p1, pop.diploid_metadata, offspring_data.first.swapped);
+                auto p2id = parent_nodes_from_metadata(
+                    p2, pop.diploid_metadata, offspring_data.second.swapped);
                 next_index_local = tables.register_diploid_offspring(
                     offspring_data.first.breakpoints, p1id, 0, generation);
                 fwdpp::ts::record_mutations_infinite_sites(
@@ -119,11 +134,9 @@ namespace fwdpy11
                 // Update nodes of for offspring
                 offspring_metadata[next_offspring].nodes[0]
                     = next_index_local - 1;
-                offspring_metadata[next_offspring].nodes[1]
-                    = next_index_local;
+                offspring_metadata[next_offspring].nodes[1] = next_index_local;
             }
-        assert(next_index_local
-               == next_index + 2 * static_cast<std::int32_t>(N_next) - 1);
+        assert(next_index_local == pop.tables.num_nodes() - 1);
         // This is constant-time
         pop.diploids.swap(offspring);
         pop.diploid_metadata.swap(offspring_metadata);
