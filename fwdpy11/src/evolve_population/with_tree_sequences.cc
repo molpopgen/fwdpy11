@@ -228,8 +228,7 @@ evolve_with_tree_sequences(
                 }
         }
 
-    fwdpp::ts::TS_NODE_INT first_parental_index = 0,
-                           next_index = pop.tables.node_table.size();
+    fwdpp::ts::TS_NODE_INT next_index = pop.tables.node_table.size();
     bool simplified = false;
     fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
     bool stopping_criteron_met = false;
@@ -241,17 +240,10 @@ evolve_with_tree_sequences(
         {
             ++pop.generation;
             const auto N_next = popsizes.at(gen);
-            // TODO: can simplify function further b/c we are referring
-            // to data that fwdpy11 Populations contain.
             fwdpy11::evolve_generation_ts(
                 rng, pop, genetics, N_next, pick_first_parent,
                 pick_second_parent, generate_offspring_metadata,
-                pop.generation, pop.tables, first_parental_index, next_index);
-
-            //N_next, mu_selected, pick_first_parent,
-            //pick_second_parent, generate_offspring_metadata, bound_mmodel,
-            //mutation_recycling_bin, bound_rmodel, pop.generation,
-            //first_parental_index, next_index);
+                pop.generation, pop.tables, next_index);
 
             pop.N = N_next;
             // TODO: deal with random effects
@@ -267,8 +259,6 @@ evolve_with_tree_sequences(
                         simulating_neutral_variants,
                         suppress_edge_table_indexing);
                     simplified = true;
-                    next_index = pop.tables.num_nodes();
-                    first_parental_index = 0;
                     remap_metadata(pop.ancient_sample_metadata,
                                    simplification_rv.first);
                     remap_metadata(pop.diploid_metadata,
@@ -283,9 +273,13 @@ evolve_with_tree_sequences(
             else
                 {
                     simplified = false;
-                    first_parental_index = next_index;
-                    next_index += 2 * pop.N;
                 }
+            if (pop.tables.num_nodes()
+                >= std::numeric_limits<fwdpp::ts::TS_NODE_INT>::max() - 1)
+                {
+                    throw std::runtime_error("range error for node labels");
+                }
+            next_index = pop.tables.num_nodes();
             if (track_mutation_counts_during_sim)
                 {
                     track_mutation_counts(pop, simplified,
@@ -362,8 +356,10 @@ evolve_with_tree_sequences(
                                         "current population size");
                                 }
                             // Get the nodes
-                            auto x = fwdpp::ts::get_parent_ids(
-                                first_parental_index, i, 0);
+                            //auto x = fwdpp::ts::get_parent_ids(
+                            //    first_parental_index, i, 0);
+                            auto x = fwdpy11::parent_nodes_from_metadata(
+                                i, pop.diploid_metadata, 0);
                             pop.tables.preserved_nodes.push_back(x.first);
                             pop.tables.preserved_nodes.push_back(x.second);
 
