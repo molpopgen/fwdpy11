@@ -23,6 +23,7 @@
 #include <memory>
 #include <cstdint>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/rng.hpp>
 #include "get_max_number_of_demes.hpp"
 #include "multideme_fitness_lookups.hpp"
 #include "migration_lookup.hpp"
@@ -36,8 +37,6 @@ namespace fwdpy11
         class discrete_demography_manager
         /// Added in 0.6.0 to hold and manage
         /// the relevant data structures.
-        /// A current limitation is that only 
-        /// DiploidPopulation is supported.
         {
           private:
             std::unique_ptr<MigrationMatrix>
@@ -61,17 +60,43 @@ namespace fwdpy11
 
             // NOTE: demography.update_event_times() needs to have been
             // called first!
-            discrete_demography_manager(const fwdpy11::DiploidPopulation &pop,
-                                        DiscreteDemography &demography)
-                : maxdemes(get_max_number_of_demes()(pop.diploid_metadata,
-                                                     demography)),
-                  fitnesses(maxdemes),
-                  sizes_rates(maxdemes, pop.diploid_metadata),
+            template <typename METADATATYPE>
+            discrete_demography_manager(
+                const std::vector<METADATATYPE> &metadata,
+                DiscreteDemography &demography)
+                : maxdemes(get_max_number_of_demes()(metadata, demography)),
+                  fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
                   M(init_migmatrix(demography.migmatrix)),
                   miglookup(maxdemes, M == nullptr)
             {
             }
         };
+
+        template <typename METADATATYPE>
+        inline void
+        update_demography_manager(const GSLrng_t &rng,
+                                  const std::uint32_t generation,
+                                  std::vector<METADATATYPE> &metadata,
+                                  DiscreteDemography &demography,
+                                  discrete_demography_manager &ddemog_manager)
+        {
+            mass_migration(rng, generation, demography.mass_migration_tracker,
+                           ddemog_manager.sizes_rates.growth_rates,
+                           ddemog_manager.sizes_rates.growth_rate_onset_times,
+                           ddemog_manager.sizes_rates.growth_initial_sizes,
+                           metadata);
+            get_current_deme_sizes(
+                metadata, ddemog_manager.sizes_rates.current_deme_sizes);
+            ddemog_manager.fitnesses.update(
+                ddemog_manager.sizes_rates.current_deme_sizes, metadata);
+            apply_demographic_events(generation, demography, ddemog_manager.M,
+                                     ddemog_manager.sizes_rates);
+            build_migration_lookup(
+                ddemog_manager.M,
+                ddemog_manager.sizes_rates.current_deme_sizes,
+                ddemog_manager.sizes_rates.selfing_rates,
+                ddemog_manager.miglookup);
+        }
     } // namespace discrete_demography
 } // namespace fwdpy11
 
