@@ -127,7 +127,8 @@ evolve_with_tree_sequences(
 
     // Set up discrete demography types. New in 0.6.0
     demography.update_event_times(pop.generation);
-    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata, demography);
+    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
+                                                       demography);
 
     double total_mutation_rate = mu_neutral + mu_selected;
     const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
@@ -167,33 +168,6 @@ evolve_with_tree_sequences(
     auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
                                     new_diploid_gvalues);
 
-    // Generate our fxns for picking parents
-
-    // Because lambdas that capture by reference do a "late" binding of
-    // params, this is safe w.r.to updating lookup after each generation.
-    const auto pick_first_parent = [&rng, &lookup]() {
-        return gsl_ran_discrete(rng.get(), lookup.get());
-    };
-
-    const auto pick_second_parent
-        = [&rng, &lookup, selfing_rate](const std::size_t p1) {
-              if (selfing_rate == 1.0
-                  || (selfing_rate > 0.0
-                      && gsl_rng_uniform(rng.get()) < selfing_rate))
-                  {
-                      return p1;
-                  }
-              return gsl_ran_discrete(rng.get(), lookup.get());
-          };
-    const auto generate_offspring_metadata
-        = [](fwdpy11::DiploidMetadata &offspring_metadata,
-             const std::size_t p1, const std::size_t p2,
-             const std::vector<fwdpy11::DiploidMetadata>
-                 & /*parental_metadata*/) {
-              offspring_metadata.deme = 0;
-              offspring_metadata.parents[0] = p1;
-              offspring_metadata.parents[1] = p2;
-          };
     if (!pop.mutations.empty())
         {
             // It is possible that pop already has a tree sequence
@@ -241,13 +215,12 @@ evolve_with_tree_sequences(
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
-            const auto N_next = pop.N; // FIXME
-            fwdpy11::evolve_generation_ts(
-                rng, pop, genetics, N_next, pick_first_parent,
-                pick_second_parent, generate_offspring_metadata,
-                pop.generation, pop.tables, next_index);
-
-            pop.N = N_next;
+            ddemog::update_demography_manager(rng, pop.generation,
+                                              pop.diploid_metadata, demography,
+                                              ddemog_manager);
+            fwdpy11::evolve_generation_ts(rng, pop, genetics, ddemog_manager,
+                                          pop.generation, pop.tables,
+                                          next_index);
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
             lookup = calculate_fitness(rng, pop, genetic_value_fxn,
