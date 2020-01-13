@@ -32,6 +32,7 @@
 #include <fwdpp/ts/generate_offspring.hpp>
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
+#include <fwdpy11/discrete_demography/simulation.hpp>
 
 namespace fwdpy11
 {
