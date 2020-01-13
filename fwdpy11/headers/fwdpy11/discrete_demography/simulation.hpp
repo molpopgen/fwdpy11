@@ -28,5 +28,6 @@
 #include "simulation/migration_lookup.hpp"
 #include "simulation/functions.hpp"
 #include "simulation/pick_parents.hpp"
+#include "simulation/discrete_demography_manager.hpp"
 
 #endif
