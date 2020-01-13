@@ -214,10 +214,13 @@ evolve_with_tree_sequences(
         simplification_rv;
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
-            ++pop.generation;
+            // NOTE: demographic changes are applied with respect
+            // to a PARENTAL generation, so we call this...
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
+            // ...before updating this:
+            ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, ddemog_manager,
                                           pop.generation, pop.tables,
                                           next_index);
