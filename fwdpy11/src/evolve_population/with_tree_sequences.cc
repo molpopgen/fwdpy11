@@ -50,38 +50,6 @@
 namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
 
-namespace
-{
-    void
-    apply_discrete_demography(
-        const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-        ddemog::DiscreteDemography &demography,
-        ddemog::discrete_demography_manager &ddemog_manager)
-    // NOTE: this could/should be moved into headers and 
-    // incorporated into the test suite.
-    {
-        ddemog::mass_migration(
-            rng, pop.generation, demography.mass_migration_tracker,
-            ddemog_manager.sizes_rates.growth_rates,
-            ddemog_manager.sizes_rates.growth_rate_onset_times,
-            ddemog_manager.sizes_rates.growth_initial_sizes,
-            pop.diploid_metadata);
-        ddemog::get_current_deme_sizes(
-            pop.diploid_metadata,
-            ddemog_manager.sizes_rates.current_deme_sizes);
-        ddemog_manager.fitnesses.update(
-            ddemog_manager.sizes_rates.current_deme_sizes,
-            pop.diploid_metadata);
-        ddemog::apply_demographic_events(pop.generation, demography,
-                                         ddemog_manager.M,
-                                         ddemog_manager.sizes_rates);
-        ddemog::build_migration_lookup(
-            ddemog_manager.M, ddemog_manager.sizes_rates.current_deme_sizes,
-            ddemog_manager.sizes_rates.selfing_rates,
-            ddemog_manager.miglookup);
-    }
-} // namespace
-
 void
 apply_treseq_resetting_of_ancient_samples(
     const fwdpy11::DiploidPopulation_temporal_sampler &recorder,
@@ -159,7 +127,7 @@ evolve_with_tree_sequences(
 
     // Set up discrete demography types. New in 0.6.0
     demography.update_event_times(pop.generation);
-    ddemog::discrete_demography_manager ddemog_manager(pop, demography);
+    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata, demography);
 
     double total_mutation_rate = mu_neutral + mu_selected;
     const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
