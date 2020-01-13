@@ -48,6 +48,39 @@
 #include "remove_extinct_genomes.hpp"
 
 namespace py = pybind11;
+namespace ddemog = fwdpy11::discrete_demography;
+
+namespace
+{
+    void
+    apply_discrete_demography(
+        const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+        ddemog::DiscreteDemography &demography,
+        ddemog::discrete_demography_manager &ddemog_manager)
+    // NOTE: this could/should be moved into headers and 
+    // incorporated into the test suite.
+    {
+        ddemog::mass_migration(
+            rng, pop.generation, demography.mass_migration_tracker,
+            ddemog_manager.sizes_rates.growth_rates,
+            ddemog_manager.sizes_rates.growth_rate_onset_times,
+            ddemog_manager.sizes_rates.growth_initial_sizes,
+            pop.diploid_metadata);
+        ddemog::get_current_deme_sizes(
+            pop.diploid_metadata,
+            ddemog_manager.sizes_rates.current_deme_sizes);
+        ddemog_manager.fitnesses.update(
+            ddemog_manager.sizes_rates.current_deme_sizes,
+            pop.diploid_metadata);
+        ddemog::apply_demographic_events(pop.generation, demography,
+                                         ddemog_manager.M,
+                                         ddemog_manager.sizes_rates);
+        ddemog::build_migration_lookup(
+            ddemog_manager.M, ddemog_manager.sizes_rates.current_deme_sizes,
+            ddemog_manager.sizes_rates.selfing_rates,
+            ddemog_manager.miglookup);
+    }
+} // namespace
 
 void
 apply_treseq_resetting_of_ancient_samples(
@@ -68,7 +101,7 @@ void
 evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     fwdpy11::SampleRecorder &sr, const unsigned simplification_interval,
-    fwdpy11::discrete_demography::DiscreteDemography &demography, const std::uint32_t simlen,
+    ddemog::DiscreteDemography &demography, const std::uint32_t simlen,
     const double mu_neutral, const double mu_selected,
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
     fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
@@ -123,6 +156,10 @@ evolve_with_tree_sequences(
         {
             throw std::invalid_argument("node table is not initialized");
         }
+
+    // Set up discrete demography types. New in 0.6.0
+    demography.update_event_times(pop.generation);
+    ddemog::discrete_demography_manager ddemog_manager(pop, demography);
 
     double total_mutation_rate = mu_neutral + mu_selected;
     const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
@@ -233,8 +270,7 @@ evolve_with_tree_sequences(
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
         simplification_rv;
-    for (std::uint32_t gen = 0;
-         gen < simlen && !stopping_criteron_met; ++gen)
+    for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
             const auto N_next = pop.N; // FIXME
