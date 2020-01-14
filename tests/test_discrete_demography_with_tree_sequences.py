@@ -21,6 +21,15 @@ import fwdpy11
 import numpy as np
 
 
+def validate_alive_node_metadata(pop):
+    nodes = np.array(pop.tables.nodes, copy=False)
+    for md in pop.diploid_metadata:
+        for i in [0, 1]:
+            if md.deme != nodes['deme'][md.nodes[i]]:
+                return False
+    return True
+
+
 class TestSimpleMovesAndCopies(unittest.TestCase):
     """
     Basically doing the same tests
@@ -50,6 +59,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), 2)
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], 50)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_copies_from_single_deme(self):
         d = fwdpy11.DiscreteDemography(
@@ -63,6 +73,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), len(expected))
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_back_and_forth_move(self):
         d = fwdpy11.DiscreteDemography(
@@ -78,6 +89,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), 1)
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], self.pop.N)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_back_and_forth_copy(self):
         d = fwdpy11.DiscreteDemography(
@@ -94,6 +106,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), len(expected))
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_moves_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
@@ -114,6 +127,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         expected = {0: 50, 1: 25, 2: 25}
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_copies_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
@@ -134,6 +148,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), len(expected))
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_single_deme_growth(self):
         N1 = 3412
@@ -147,6 +162,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.N, N1)
         self.assertEqual(len(self.pop.diploid_metadata), N1)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_two_deme_growth(self):
         N0 = [90, 10]
@@ -173,6 +189,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         deme_sizes = np.unique(md['deme'], return_counts=True)
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_two_deme_growth_with_hard_reset(self):
         N0 = [90, 10]
@@ -203,6 +220,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_two_deme_growth_without_hard_reset(self):
         N0 = [90, 10]
@@ -234,6 +252,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_two_moves_in_same_generation(self):
         """
@@ -255,6 +274,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         dc = np.unique(md['deme'], return_counts=True)
         for i, j in zip(dc[0], dc[1]):
             self.assertEqual(expected[i], j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_copies_happen_before_moves(self):
         """
@@ -281,6 +301,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         dc = np.unique(md['deme'], return_counts=True)
         for i, j in zip(dc[0], dc[1]):
             self.assertEqual(expected[i], j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_mass_move_with_growth(self):
         """
@@ -305,6 +326,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         N_after_mass_mig = [N5//2, N5-N5//2]
         for i, j in zip(deme_counts[1], N_after_mass_mig):
             self.assertEqual(i, j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_mass_move_with_growth_no_reset(self):
         """
@@ -325,6 +347,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         N = [N_after_mass_mig_0, N5 - N5//2]
         for i, j in zip(N, deme_counts[1]):
             self.assertEqual(i, j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
 
 
 if __name__ == "__main__":
