@@ -350,5 +350,137 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
 
+class TestSimpleMigrationModels(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.rng = fwdpy11.GSLrng(42)
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.pdict = {'nregions': [],
+                      'sregions': [],
+                      'recregions': [],
+                      'rates': (0, 0, 0),
+                      'demography': None,
+                      'simlen': 1,
+                      'gvalue': fwdpy11.Additive(2.)
+                      }
+
+    def test_simple_two_deme_migration(self):
+        mm = np.array([0.5]*4).reshape(2, 2)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        md['deme'][len(md)//2:] = 1
+        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        N = self.pop.N
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertEqual(N, self.pop.N)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_sizes = np.unique(md['deme'], return_counts=True)
+        for i in deme_sizes[1]:
+            self.assertEqual(i, self.pop.N//2)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+    def test_change_migration_rates_simple_two_deme_migration(self):
+        """
+        For a 2-deme model, the mig matrix is
+        [[0, 1]
+         [1, 0]]
+        so that all offspring have both parents from the other deme.
+
+        After 3 generations, we reset the migration rates to be
+        [[0.5, 0.5],
+         [[0, 0]]
+        so that all parents are from deme zero.
+        """
+        mm = np.array([0, 1, 1, 0]).reshape(2, 2)
+        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        smr = [fwdpy11.SetMigrationRates(
+            3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+                                       set_migration_rates=smr)
+        N = self.pop.N
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertEqual(N, self.pop.N)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_sizes = np.unique(md['deme'], return_counts=True)
+        for i in deme_sizes[1]:
+            self.assertEqual(i, self.pop.N//2)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+    def test_change_migration_rates_simple_two_deme_migration_bad_matrix(self):
+        """
+        For a 2-deme model, the mig matrix is
+        [0, 1
+         1, 0]
+        so that all offspring have both parents from the other deme.
+
+        After 3 generations, we reset the migration rates to be
+        [[1,0],
+         [1,0]],
+        which leads to there being no parents for deme 1, raising a
+        MigrationError exception.
+        """
+        mm = np.array([0, 1, 1, 0]).reshape(2, 2)
+        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        smr = [fwdpy11.SetMigrationRates(
+            3, np.array([1, 0, 1, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+                                       set_migration_rates=smr)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.MigrationError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+    def test_migrration_rates_larger_than_one(self):
+        """
+        Same as a previous tests, but rates are "weights"
+        rather than "probabilities"
+
+        """
+        mm = np.array([0, 2, 2, 0]).reshape(2, 2)
+        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        smr = [fwdpy11.SetMigrationRates(
+            3, np.array([1.5, 1.5, 0, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+                                       set_migration_rates=smr)
+        N = self.pop.N
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertEqual(N, self.pop.N)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_sizes = np.unique(md['deme'], return_counts=True)
+        for i in deme_sizes[1]:
+            self.assertEqual(i, self.pop.N//2)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+    def test_selfing_vs_migration(self):
+        """
+        Parents of deme 0 are all migrants from deme 1.
+        Parents of deme 1 are all migrants from deme 0.
+        Deme 0 never selfs.  Deme 1 always selfs.
+
+        NOTE: currently doesn't test anything.
+        """
+        mm = np.array([0, 1, 1, 0]).reshape(2, 2)
+        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        s = [fwdpy11.SetSelfingRate(0, 1, 1.0)]
+        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=mmigs, migmatrix=mm, set_selfing_rates=s)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+
 if __name__ == "__main__":
     unittest.main()
