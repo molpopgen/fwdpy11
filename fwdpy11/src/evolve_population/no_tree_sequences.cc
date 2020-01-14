@@ -124,10 +124,8 @@ evolve_without_tree_sequences(
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
-    std::vector<double> new_diploid_gvalues;
-    auto calculate_fitness = wrap_calculate_fitness_DiploidPopulation(false);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
-                                    new_diploid_gvalues);
+    auto lookup = calculate_diploid_fitness_genomes(
+        rng, pop, genetic_value_fxn, new_metadata);
 
     // Generate our fxns for picking parents
 
@@ -172,8 +170,8 @@ evolve_without_tree_sequences(
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup = calculate_fitness(rng, pop, genetic_value_fxn,
-                                       new_metadata, new_diploid_gvalues);
+            lookup = calculate_diploid_fitness_genomes(
+                rng, pop, genetic_value_fxn, new_metadata);
             recorder(pop); // The user may now analyze the pop'n
         }
 }

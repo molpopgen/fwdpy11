@@ -32,6 +32,7 @@
 #include <fwdpp/ts/generate_offspring.hpp>
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
+#include <fwdpy11/discrete_demography/simulation.hpp>
 
 namespace fwdpy11
 {
@@ -76,19 +77,15 @@ namespace fwdpy11
         return rv;
     }
 
-    template <typename rng_t, typename poptype, typename pick_parent1_fxn,
-              typename pick_parent2_fxn, typename offspring_metadata_fxn,
-              typename genetic_param_holder>
+    template <typename rng_t, typename poptype, typename genetic_param_holder>
     void
-    evolve_generation_ts(const rng_t& rng, poptype& pop,
-                         genetic_param_holder& genetics,
-                         const fwdpp::uint_t N_next,
-                         const pick_parent1_fxn& pick1,
-                         const pick_parent2_fxn& pick2,
-                         const offspring_metadata_fxn& update_offspring,
-                         const fwdpp::uint_t generation,
-                         fwdpp::ts::table_collection& tables,
-                         std::int32_t next_index)
+    evolve_generation_ts(
+        const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
+        // NOTE: could the manager? be const?
+        fwdpy11::discrete_demography::discrete_demography_manager&
+            ddemog_manager,
+        const fwdpp::uint_t generation,
+        fwdpp::ts::table_collection& tables, std::int32_t next_index)
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -97,49 +94,87 @@ namespace fwdpy11
 
         fwdpp::zero_out_haploid_genomes(pop);
 
-        decltype(pop.diploids) offspring(N_next);
-        decltype(pop.diploid_metadata) offspring_metadata(N_next);
+        decltype(pop.diploids) offspring;
+        decltype(pop.diploid_metadata) offspring_metadata;
+        offspring.reserve(pop.N);
+        offspring_metadata.reserve(pop.N);
 
         // Generate the offspring
         auto next_index_local = next_index;
-        for (std::size_t next_offspring = 0; next_offspring < offspring.size();
-             ++next_offspring)
+        using maxdeme_type = typename std::remove_const<decltype(
+            ddemog_manager.maxdemes)>::type;
+        for (maxdeme_type deme = 0; deme < ddemog_manager.maxdemes; ++deme)
             {
-                auto p1 = pick1();
-                auto p2 = pick2(p1);
-                auto& dip = offspring[next_offspring];
-                auto offspring_data = generate_offspring(
-                    rng, std::make_pair(p1, p2), pop, dip, genetics);
-                auto p1id = parent_nodes_from_metadata(
-                    p1, pop.diploid_metadata, offspring_data.first.swapped);
-                auto p2id = parent_nodes_from_metadata(
-                    p2, pop.diploid_metadata, offspring_data.second.swapped);
-                next_index_local = tables.register_diploid_offspring(
-                    offspring_data.first.breakpoints, p1id, 0, generation);
-                fwdpp::ts::record_mutations_infinite_sites(
-                    next_index_local, pop.mutations,
-                    offspring_data.first.mutation_keys, tables);
-                next_index_local = tables.register_diploid_offspring(
-                    offspring_data.second.breakpoints, p2id, 0, generation);
-                fwdpp::ts::record_mutations_infinite_sites(
-                    next_index_local, pop.mutations,
-                    offspring_data.second.mutation_keys, tables);
+                auto next_N_deme
+                    = ddemog_manager.sizes_rates.next_deme_sizes.get()[deme];
+                for (decltype(next_N_deme) ind = 0; ind < next_N_deme; ++ind)
+                    {
+                        // Get the parents
+                        auto pdata
+                            = fwdpy11::discrete_demography::pick_parents(
+                                rng, deme, ddemog_manager.miglookup,
+                                ddemog_manager.sizes_rates.current_deme_sizes,
+                                ddemog_manager.sizes_rates.selfing_rates,
+                                ddemog_manager.fitnesses);
+                        // Add a new diploid
+                        offspring.emplace_back(fwdpy11::DiploidGenotype{
+                            std::numeric_limits<std::size_t>::max(),
+                            std::numeric_limits<std::size_t>::max() });
+                        auto& dip = offspring.back();
+                        //auto p1 = pick1();
+                        //auto p2 = pick2(p1);
+                        auto offspring_data = generate_offspring(
+                            rng, std::make_pair(pdata.parent1, pdata.parent2),
+                            pop, dip, genetics);
+                        auto p1id = parent_nodes_from_metadata(
+                            pdata.parent1, pop.diploid_metadata,
+                            offspring_data.first.swapped);
+                        auto p2id = parent_nodes_from_metadata(
+                            pdata.parent2, pop.diploid_metadata,
+                            offspring_data.second.swapped);
+                        fwdpp::ts::TS_NODE_INT offspring_node_1
+                            = tables.register_diploid_offspring(
+                                offspring_data.first.breakpoints, p1id, deme,
+                                generation);
+                        fwdpp::ts::record_mutations_infinite_sites(
+                            offspring_node_1, pop.mutations,
+                            offspring_data.first.mutation_keys, tables);
+                        fwdpp::ts::TS_NODE_INT offspring_node_2
+                            = tables.register_diploid_offspring(
+                                offspring_data.second.breakpoints, p2id, deme,
+                                generation);
+                        fwdpp::ts::record_mutations_infinite_sites(
+                            offspring_node_2, pop.mutations,
+                            offspring_data.second.mutation_keys, tables);
 
-                // Give the caller a chance to generate
-                // any metadata for the offspring that
-                // may depend on the parents
-                offspring_metadata[next_offspring].label = next_offspring;
-                update_offspring(offspring_metadata[next_offspring], p1, p2,
-                                 pop.diploid_metadata);
-                // Update nodes of for offspring
-                offspring_metadata[next_offspring].nodes[0]
-                    = next_index_local - 1;
-                offspring_metadata[next_offspring].nodes[1] = next_index_local;
+                        // Add metadata for the offspring
+                        offspring_metadata.emplace_back(
+                            fwdpy11::DiploidMetadata{
+                                0.0,
+                                0.0,
+                                1.,
+                                { 0, 0, 0 },
+                                offspring_metadata.size(),
+                                { pdata.parent1, pdata.parent2 },
+                                deme,
+                                -1,
+                                { offspring_node_1, offspring_node_2 } });
+
+                        next_index_local = offspring_node_2;
+                    }
             }
         assert(next_index_local == pop.tables.num_nodes() - 1);
+        if (next_index_local
+            != static_cast<decltype(next_index_local)>(pop.tables.num_nodes()
+                                                       - 1))
+            {
+                throw std::runtime_error(
+                    "error in book-keeping offspring nodes");
+            }
         // This is constant-time
         pop.diploids.swap(offspring);
         pop.diploid_metadata.swap(offspring_metadata);
+        pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
     }
 } // namespace fwdpy11
 #endif

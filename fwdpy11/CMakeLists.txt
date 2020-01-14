@@ -88,7 +88,6 @@ set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/no_tree_sequences.cc
     src/evolve_population/util.cc
     src/evolve_population/cleanup_metadata.cc
-    src/evolve_population/genetic_value_common.cc
     src/evolve_population/diploid_pop_fitness.cc
     src/evolve_population/index_and_count_mutations.cc
     src/evolve_population/track_mutation_counts.cc

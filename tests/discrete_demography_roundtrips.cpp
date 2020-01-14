@@ -49,48 +49,31 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
 // Assumptions:
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
 {
-    auto maxdemes
-        = ddemog::get_max_number_of_demes()(pop.diploid_metadata, demography);
     demography.update_event_times(pop.generation);
+    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
+                                                       demography);
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
-    ddemog::multideme_fitness_lookups<std::uint32_t> fitnesses(maxdemes);
-    ddemog::deme_properties sizes_rates(maxdemes, pop.diploid_metadata);
-    // We need to copy the input migration matrix b/c the input is const
-    // due to our policy that the input should be reusable.
-    std::unique_ptr<ddemog::MigrationMatrix> M(nullptr);
-    if (demography.migmatrix != nullptr)
-        {
-            M.reset(new ddemog::MigrationMatrix(*demography.migmatrix));
-        }
-    ddemog::migration_lookup miglookup(maxdemes, M == nullptr);
     roundtrip_rv_type rv;
     for (std::uint32_t gen = 0; gen < ngens; ++gen, ++pop.generation)
         {
-            ddemog::mass_migration(
-                rng, pop.generation, demography.mass_migration_tracker,
-                sizes_rates.growth_rates, sizes_rates.growth_rate_onset_times,
-                sizes_rates.growth_initial_sizes, pop.diploid_metadata);
-            ddemog::get_current_deme_sizes(pop.diploid_metadata,
-                                           sizes_rates.current_deme_sizes);
-            fitnesses.update(sizes_rates.current_deme_sizes,
-                             pop.diploid_metadata);
-            ddemog::apply_demographic_events(pop.generation, demography, M,
-                                             sizes_rates);
-            ddemog::build_migration_lookup(M, sizes_rates.current_deme_sizes,
-                                           sizes_rates.selfing_rates,
-                                           miglookup);
+            ddemog::update_demography_manager(rng, pop.generation,
+                                              pop.diploid_metadata, demography,
+                                              ddemog_manager);
 
             // Generate the offspring
-            for (decltype(maxdemes) deme = 0; deme < maxdemes; ++deme)
+            for (std::int32_t deme = 0; deme < ddemog_manager.maxdemes; ++deme)
                 {
                     for (unsigned ind = 0;
-                         ind < sizes_rates.next_deme_sizes.get()[deme]; ++ind)
+                         ind < ddemog_manager.sizes_rates.next_deme_sizes
+                                   .get()[deme];
+                         ++ind)
                         {
                             auto pdata = ddemog::pick_parents(
-                                rng, deme, miglookup,
-                                sizes_rates.current_deme_sizes,
-                                sizes_rates.selfing_rates, fitnesses);
+                                rng, deme, ddemog_manager.miglookup,
+                                ddemog_manager.sizes_rates.current_deme_sizes,
+                                ddemog_manager.sizes_rates.selfing_rates,
+                                ddemog_manager.fitnesses);
                             if (pdata.deme1 != deme)
                                 {
                                     rv.emplace_back(pop.generation + 1,
