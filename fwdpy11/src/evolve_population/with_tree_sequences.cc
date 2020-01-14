@@ -163,10 +163,8 @@ evolve_with_tree_sequences(
     genetic_value_fxn.update(pop);
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
     std::vector<double> new_diploid_gvalues;
-    auto calculate_fitness
-        = wrap_calculate_fitness_DiploidPopulation(record_genotype_matrix);
-    auto lookup = calculate_fitness(rng, pop, genetic_value_fxn, new_metadata,
-                                    new_diploid_gvalues);
+    calculate_diploid_fitness(rng, pop, genetic_value_fxn, new_metadata,
+                              new_diploid_gvalues, record_genotype_matrix);
 
     if (!pop.mutations.empty())
         {
@@ -226,8 +224,9 @@ evolve_with_tree_sequences(
                                           next_index);
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
-            lookup = calculate_fitness(rng, pop, genetic_value_fxn,
-                                       new_metadata, new_diploid_gvalues);
+            calculate_diploid_fitness(rng, pop, genetic_value_fxn,
+                                      new_metadata, new_diploid_gvalues,
+                                      record_genotype_matrix);
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
