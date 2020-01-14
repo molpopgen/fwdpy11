@@ -5,10 +5,21 @@
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 
-std::function<fwdpp::gsl_ran_discrete_t_ptr(
-    const fwdpy11::GSLrng_t &g, fwdpy11::DiploidPopulation &,
-    const fwdpy11::DiploidPopulationGeneticValue &,
-    std::vector<fwdpy11::DiploidMetadata> &, std::vector<double> &)>
-wrap_calculate_fitness_DiploidPopulation(bool update_genotype_matrix);
+// Changed in 0.6.0 to return void, as sims w/tree
+// sequences generate fitness lookups via DiscreteDemography
+void calculate_diploid_fitness(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+    std::vector<double> &new_diploid_gvalues,
+    const bool update_genotype_matrix);
+
+// This overload was added in 0.6.0 as a temporary
+// hack b/c sims with tree sequences generate fitness
+// lookups via DiscreteDemography
+fwdpp::gsl_ran_discrete_t_ptr calculate_diploid_fitness_genomes(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    std::vector<fwdpy11::DiploidMetadata> &new_metadata);
 
 #endif

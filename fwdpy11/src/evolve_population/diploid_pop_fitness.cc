@@ -1,32 +1,63 @@
 #include "diploid_pop_fitness.hpp"
-#include "genetic_value_common.hpp"
 
-template <typename update_genotype_matrix>
-fwdpp::gsl_ran_discrete_t_ptr
-calculate_fitness_details(
+void
+calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
     std::vector<fwdpy11::DiploidMetadata> &new_metadata,
-    std::vector<double> &new_diploid_gvalues, const update_genotype_matrix um)
+    std::vector<double> &new_diploid_gvalues,
+    const bool update_genotype_matrix)
 {
     // Calculate parental fitnesses
-    std::vector<double> parental_fitnesses(pop.diploids.size());
     double sum_parental_fitnesses = 0.0;
     new_metadata.resize(pop.N);
-    resize_genotype_matrix(new_diploid_gvalues,
-                           pop.N * genetic_value_fxn.total_dim, um);
+    if (update_genotype_matrix == true)
+        {
+            new_diploid_gvalues.resize(pop.N * genetic_value_fxn.total_dim);
+        }
     auto gvoffset = new_diploid_gvalues.data();
     for (std::size_t i = 0; i < pop.diploids.size();
          ++i, gvoffset += genetic_value_fxn.total_dim)
         {
             new_metadata[i] = pop.diploid_metadata[i];
             genetic_value_fxn(rng, i, pop, new_metadata[i]);
-            copy_genetic_values(gvoffset, genetic_value_fxn.gvalues, um);
+            if (update_genotype_matrix == true)
+                {
+                    std::copy(begin(new_diploid_gvalues),
+                              end(new_diploid_gvalues), gvoffset);
+                }
+            sum_parental_fitnesses += new_metadata[i].w;
+        }
+    pop.diploid_metadata.swap(new_metadata);
+    pop.genetic_value_matrix.swap(new_diploid_gvalues);
+    // If the sum of parental fitnesses is not finite,
+    // then the genetic value calculator returned a non-finite value/
+    // Unfortunately, gsl_ran_discrete_preproc allows such values through
+    // without raising an error, so we have to check things here.
+    if (!std::isfinite(sum_parental_fitnesses))
+        {
+            throw std::runtime_error("non-finite fitnesses encountered");
+        }
+}
+
+fwdpp::gsl_ran_discrete_t_ptr
+calculate_diploid_fitness_genomes(
+    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
+    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    std::vector<fwdpy11::DiploidMetadata> &new_metadata)
+{
+    // Calculate parental fitnesses
+    std::vector<double> parental_fitnesses(pop.diploids.size());
+    double sum_parental_fitnesses = 0.0;
+    new_metadata.resize(pop.N);
+    for (std::size_t i = 0; i < pop.diploids.size(); ++i)
+        {
+            new_metadata[i] = pop.diploid_metadata[i];
+            genetic_value_fxn(rng, i, pop, new_metadata[i]);
             parental_fitnesses[i] = new_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }
     pop.diploid_metadata.swap(new_metadata);
-    pop.genetic_value_matrix.swap(new_diploid_gvalues);
     // If the sum of parental fitnesses is not finite,
     // then the genetic value calculator returned a non-finite value/
     // Unfortunately, gsl_ran_discrete_preproc allows such values through
@@ -46,33 +77,3 @@ calculate_fitness_details(
         }
     return rv;
 }
-
-std::function<fwdpp::gsl_ran_discrete_t_ptr(
-    const fwdpy11::GSLrng_t &g, fwdpy11::DiploidPopulation &,
-    const fwdpy11::DiploidPopulationGeneticValue &,
-    std::vector<fwdpy11::DiploidMetadata> &, std::vector<double> &)>
-wrap_calculate_fitness_DiploidPopulation(bool update_genotype_matrix)
-{
-    if (update_genotype_matrix)
-        {
-            return [](const fwdpy11::GSLrng_t &rng,
-                      fwdpy11::DiploidPopulation &pop,
-                      const fwdpy11::DiploidPopulationGeneticValue
-                          &genetic_value_fxn,
-                      std::vector<fwdpy11::DiploidMetadata> &new_metadata,
-                      std::vector<double> &new_diploid_gvalues) {
-                return calculate_fitness_details(
-                    rng, pop, genetic_value_fxn, new_metadata,
-                    new_diploid_gvalues, std::true_type());
-            };
-        }
-    return [](const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-              const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
-              std::vector<fwdpy11::DiploidMetadata> &new_metadata,
-              std::vector<double> &new_diploid_gvalues) {
-        return calculate_fitness_details(rng, pop, genetic_value_fxn,
-                                         new_metadata, new_diploid_gvalues,
-                                         std::false_type());
-    };
-}
-
