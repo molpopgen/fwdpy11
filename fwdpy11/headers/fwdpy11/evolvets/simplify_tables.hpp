@@ -71,6 +71,8 @@ namespace fwdpy11
 #endif
         if (suppress_edge_table_indexing == true)
             {
+                pop.mcounts.resize(pop.mutations.size(), 0);
+                pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
                 return rv;
             }
         tables.build_indexes();
@@ -84,6 +86,7 @@ namespace fwdpy11
             {
                 fwdpp::fwdpp_internal::process_haploid_genomes(
                     pop.haploid_genomes, pop.mutations, pop.mcounts);
+                pop.mcounts_from_preserved_nodes.resize(pop.mcounts.size(), 0);
             }
 
         // If we are here, then the tables are indexed and mutations are counted.

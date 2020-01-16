@@ -266,6 +266,13 @@ evolve_with_tree_sequences(
                         simplifier, preserve_selected_fixations,
                         simulating_neutral_variants,
                         suppress_edge_table_indexing);
+                    if (pop.mcounts.size()
+                        != pop.mcounts_from_preserved_nodes.size())
+                        {
+                            throw std::runtime_error(
+                                "evolvets: count vector size mismatch after "
+                                "simplification");
+                        }
                     simplified = true;
                     next_index = pop.tables.num_nodes();
                     first_parental_index = 0;
@@ -411,6 +418,11 @@ evolve_with_tree_sequences(
                 pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
                 preserve_selected_fixations, simulating_neutral_variants,
                 suppress_edge_table_indexing);
+            if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
+                {
+                    throw std::runtime_error("evolvets: count vector size "
+                                             "mismatch after final simplification");
+                }
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
             remap_metadata(pop.diploid_metadata, rv.first);

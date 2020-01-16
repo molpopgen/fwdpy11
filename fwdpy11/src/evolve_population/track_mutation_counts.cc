@@ -2,16 +2,24 @@
 #include <algorithm>
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
+#include "util.hpp"
 
 void
 track_mutation_counts(fwdpy11::Population &pop, const bool simplified,
                       const bool suppress_edge_table_indexing)
 {
+    if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
+        {
+            throw std::runtime_error(
+                "track_mutation_counts: count vector size mismatch");
+        }
     if (!simplified || (simplified && suppress_edge_table_indexing))
         {
             fwdpp::fwdpp_internal::process_haploid_genomes(
                 pop.haploid_genomes, pop.mutations, pop.mcounts);
         }
+    coordinate_count_vector_sizes(pop.mutations.size(), pop.mcounts,
+                                  pop.mcounts_from_preserved_nodes);
     for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
         {
             if (pop.mcounts[i] == 2 * pop.N)
