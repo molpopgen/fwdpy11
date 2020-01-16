@@ -54,9 +54,14 @@ namespace fwdpy11
             std::vector<std::unique_ptr<Sregion>> combined(
                 std::make_move_iterator(begin(nregions)),
                 std::make_move_iterator(end(nregions)));
-            combined.insert(end(combined),
-                            std::make_move_iterator(begin(sregions)),
-                            std::make_move_iterator(end(sregions)));
+            // Refactored Jan 16, 2020 to use the 
+            // range-based for instead of insert.
+            // The previous didn't compile in
+            // "extreme" debugging mode on GCC.
+            for (auto& sr : sregions)
+                {
+                    combined.emplace_back(std::move(sr));
+                }
             return MutationRegions(std::move(combined), std::move(weights));
         }
     };

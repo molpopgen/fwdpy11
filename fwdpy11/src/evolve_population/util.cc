@@ -22,3 +22,11 @@ remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
         }
 }
 
+void
+coordinate_count_vector_sizes(
+    std::size_t nmutations, std::vector<std::uint32_t> &mcounts,
+    std::vector<std::uint32_t> &mcounts_from_preserved_nodes)
+{
+    mcounts.resize(nmutations, 0);
+    mcounts_from_preserved_nodes.resize(nmutations, 0);
+}

@@ -16,7 +16,7 @@ namespace
             {
                 if (indexes[k] == std::numeric_limits<fwdpp::uint_t>::max())
                     {
-                        throw std::runtime_error("bad mutation key remapping");
+                        throw std::runtime_error("bad mutation key remapping in haploid genome");
                     }
                 k = indexes[k];
             }
@@ -66,7 +66,7 @@ remove_extinct_mutations(fwdpy11::Population& pop)
             auto k = new_mutation_indexes[pop.tables.mutation_table[i].key];
             if (k == std::numeric_limits<fwdpp::uint_t>::max())
                 {
-                    throw std::runtime_error("bad mutation key remapping");
+                    throw std::runtime_error("bad mutation key remapping in mutation table");
                 }
             pop.tables.mutation_table[i].key = k;
         }
