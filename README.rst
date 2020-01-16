@@ -217,6 +217,15 @@ When compiling this way, fwdpy11 makes some extra checks that will throw `Runtim
 end also makes extra checks.  If those fail, `abort` will be called, which will crash the Python interpreter.  Thus,
 compiling with this option is a "serious debugging mode only" option.
 
+Enabling aggressive debugging of C++ STL templates using GCC
+------------------------------------------------------------------------------------------------------------------------------------
+
+Use the following flags to enable an "extreme" debugging mode of the C++ standard template library:
+
+.. code-block:: bash
+
+   CXXFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
+      CPPFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" python3 setup.py build_ext -i
 
 Bioconda
 =================================
