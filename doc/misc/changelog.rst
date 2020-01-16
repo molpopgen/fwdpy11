@@ -4,6 +4,13 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.5.4
+++++++++++++++++
+
+Bug fix release.
+
+* Fixes  `PR350 <https://github.com/molpopgen/fwdpy11/issue/350>_`
+
 0.5.3
 ++++++++++++++++
 
