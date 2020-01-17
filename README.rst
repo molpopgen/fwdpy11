@@ -100,7 +100,7 @@ Building from the git repository:
     python setup.py build_ext -i
     python -m unittest discover tests
 
-Using pip on OS X and Linux (or pip3 as appropriate for your system):
+Using pip on macOS and Linux (or pip3 as appropriate for your system):
 
 .. code-block:: bash
 
@@ -114,14 +114,14 @@ newer version in the environment.  To "fix" this, give it a hint:
 
     GSL_ROOT_DIR=/path/to/gsl python3 setup.py build_ext -i
 
-OS X
+macOS
 ==================================
 
-On Apple's OS X, we strongly encourage that you use conda with the clang-4.0 compiler packages:
+On Apple's macOS, we strongly encourage that you use conda with their compiler packages:
 
 .. code-block:: bash
 
-    conda install clang_osx_64 clangxx_osx-64
+    conda install clang_osx-64 clangxx_osx-64
 
 Installing these packages will mean that you can get away from the relatively old versions of these compilers that ship
 with Xcode.   However, you do need to add the following flag when building the package:
@@ -230,7 +230,7 @@ Use the following flags to enable an "extreme" debugging mode of the C++ standar
 Bioconda
 =================================
 
-fwdpy11 is available through bioconda_ for Linux and for OS X:
+fwdpy11 is available through bioconda_ for Linux and for macOS:
 
 .. code-block:: bash
 
