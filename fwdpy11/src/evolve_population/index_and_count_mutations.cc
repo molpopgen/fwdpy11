@@ -16,10 +16,9 @@ index_and_count_mutations(const bool suppress_edge_table_indexing,
     if (pop.tables.preserved_nodes.empty())
         {
             pop.tables.build_indexes();
-            std::vector<std::int32_t> samples(2 * pop.diploids.size());
-            std::iota(samples.begin(), samples.end(), 0);
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
-                                       pop.mcounts);
+            pop.fill_alive_nodes();
+            fwdpp::ts::count_mutations(pop.tables, pop.mutations,
+                                       pop.alive_nodes, pop.mcounts);
         }
     else
         {
