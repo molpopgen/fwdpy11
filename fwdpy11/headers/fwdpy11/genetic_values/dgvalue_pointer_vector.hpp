@@ -21,6 +21,7 @@
 #define FWDPY11_GENETIC_VALUES_DGVALUE_POINTER_VECTOR
 
 #include <vector>
+#include <stdexcept>
 #include <pybind11/pybind11.h>
 #include "DiploidPopulationGeneticValue.hpp"
 
@@ -43,12 +44,27 @@ namespace fwdpy11
         std::vector<fwdpy11::DiploidPopulationGeneticValue *>
         init_from_list(pybind11::list l)
         {
+            if (l.empty())
+                {
+                    throw std::invalid_argument(
+                        "list of genetic values cannot be empty");
+                }
             std::vector<fwdpy11::DiploidPopulationGeneticValue *> rv;
             for (auto i : l)
                 {
                     auto *ref
                         = i.cast<fwdpy11::DiploidPopulationGeneticValue *>();
                     rv.push_back(ref);
+                }
+            for (std::size_t i = 1; i < rv.size(); ++i)
+                {
+                    if (rv[i - 1]->total_dim != rv[i]->total_dim)
+                        {
+                            rv.clear();
+                            throw std::invalid_argument(
+                                "genetic value objects must all have same "
+                                "value for total_dim");
+                        }
                 }
             return rv;
         }
