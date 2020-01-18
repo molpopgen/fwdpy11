@@ -161,6 +161,7 @@ def runsim(args):
     """
     pop = fwdpy11.DiploidPopulation(args.popsize, GENOME_LENGTH)
 
+    np.random.seed(args.seed)
     rng = fwdpy11.GSLrng(args.seed)
 
     GSSmo = fwdpy11.GSSmo(
