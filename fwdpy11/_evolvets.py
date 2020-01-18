@@ -97,10 +97,12 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
 
     from ._fwdpy11 import SampleRecorder
     sr = SampleRecorder()
+    from ._fwdpy11 import _dgvalue_pointer_vector
+    gvpointers = _dgvalue_pointer_vector(params.gvalue)
     evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
                                params.demography, params.simlen,
                                params.mutrate_n, params.mutrate_s,
-                               mm, rm, params.gvalue,
+                               mm, rm, gvpointers,
                                recorder, stopping_criterion,
                                params.pself, params.prune_selected is False,
                                suppress_table_indexing, record_gvalue_matrix,

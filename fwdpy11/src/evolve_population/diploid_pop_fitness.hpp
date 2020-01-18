@@ -9,7 +9,9 @@
 // sequences generate fitness lookups via DiscreteDemography
 void calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
+        &gvalue_pointers,
+    const std::vector<std::size_t> &deme_to_gvalue_map,
     std::vector<fwdpy11::DiploidMetadata> &new_metadata,
     std::vector<double> &new_diploid_gvalues,
     const bool update_genotype_matrix);

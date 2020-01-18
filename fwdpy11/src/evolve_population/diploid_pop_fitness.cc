@@ -3,7 +3,9 @@
 void
 calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
+        &gvalue_pointers,
+    const std::vector<std::size_t> &deme_to_gvalue_map,
     std::vector<fwdpy11::DiploidMetadata> &new_metadata,
     std::vector<double> &new_diploid_gvalues,
     const bool update_genotype_matrix)
@@ -13,14 +15,15 @@ calculate_diploid_fitness(
     new_metadata.resize(pop.N);
     if (update_genotype_matrix == true)
         {
-            new_diploid_gvalues.resize(pop.N * genetic_value_fxn.total_dim);
+            new_diploid_gvalues.resize(pop.N * gvalue_pointers[0]->total_dim);
         }
     auto gvoffset = new_diploid_gvalues.data();
     for (std::size_t i = 0; i < pop.diploids.size();
-         ++i, gvoffset += genetic_value_fxn.total_dim)
+         ++i, gvoffset += gvalue_pointers[0]->total_dim)
         {
             new_metadata[i] = pop.diploid_metadata[i];
-            genetic_value_fxn(rng, i, pop, new_metadata[i]);
+            auto idx = deme_to_gvalue_map[new_metadata[i].deme];
+            gvalue_pointers[idx]->operator()(rng, i, pop, new_metadata[i]);
             if (update_genotype_matrix == true)
                 {
                     std::copy(begin(new_diploid_gvalues),
