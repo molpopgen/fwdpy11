@@ -89,6 +89,10 @@ evolve_with_tree_sequences(
     const fwdpy11::DiploidPopulation_temporal_sampler
         &post_simplification_recorder)
 {
+    if (gvalue_pointers.genetic_values.empty())
+        {
+            throw std::invalid_argument("empty list of genetic values");
+        }
     //validate the input params
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
         {
@@ -132,6 +136,19 @@ evolve_with_tree_sequences(
     demography.update_event_times(pop.generation);
     ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
                                                        demography);
+    if (gvalue_pointers.genetic_values.size()
+        > static_cast<std::size_t>(ddemog_manager.maxdemes))
+        {
+            throw std::invalid_argument(
+                "list of genetic values is longer than maxdemes");
+        }
+    if (static_cast<std::size_t>(ddemog_manager.maxdemes) > 1
+        && gvalue_pointers.genetic_values.size() > 1
+        &&gvalue_pointers.genetic_values.size()
+               < static_cast<std::size_t>(ddemog_manager.maxdemes))
+        {
+            throw std::invalid_argument("too few genetic value objects");
+        }
 
     double total_mutation_rate = mu_neutral + mu_selected;
     const auto bound_mmodel = [&rng, &mmodel, &pop, total_mutation_rate](
@@ -157,9 +174,9 @@ evolve_with_tree_sequences(
 
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
-    auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
-                                                   std::move(bound_mmodel),
-                                                   std::move(bound_rmodel));
+    auto genetics = fwdpp::make_genetic_parameters(
+        gvalue_pointers.genetic_values, std::move(bound_mmodel),
+        std::move(bound_rmodel));
     std::vector<std::size_t> deme_to_gvalue_map(ddemog_manager.maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
