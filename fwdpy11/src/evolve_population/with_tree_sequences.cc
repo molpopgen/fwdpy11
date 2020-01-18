@@ -29,7 +29,7 @@
 #include <fwdpp/simparams.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
 #include <fwdpy11/evolvets/sample_recorder_types.hpp>
@@ -72,7 +72,10 @@ evolve_with_tree_sequences(
     ddemog::DiscreteDemography &demography, const std::uint32_t simlen,
     const double mu_neutral, const double mu_selected,
     const fwdpy11::MutationRegions &mmodel, const fwdpy11::GeneticMap &rmodel,
-    fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    // NOTE: gvalue_pointers is a change in 0.6.0,
+    // and the object holds non-const bare pointers
+    // to objects owned by Python.
+    const fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,
@@ -154,17 +157,26 @@ evolve_with_tree_sequences(
 
     const auto bound_rmodel = [&rng, &rmodel]() { return rmodel(rng); };
 
-    auto genetics = fwdpp::make_genetic_parameters(std::ref(genetic_value_fxn),
+    auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
                                                    std::move(bound_mmodel),
                                                    std::move(bound_rmodel));
+    std::vector<std::size_t> deme_to_gvalue_map(ddemog_manager.maxdemes, 0);
+    if (genetics.gvalue.size() > 1)
+        {
+            std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
+        }
     // A stateful fitness model will need its data up-to-date,
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.
-    genetic_value_fxn.update(pop);
+    for (auto &i : genetics.gvalue)
+        {
+            i->update(pop);
+        }
     std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
     std::vector<double> new_diploid_gvalues;
-    calculate_diploid_fitness(rng, pop, genetic_value_fxn, new_metadata,
-                              new_diploid_gvalues, record_genotype_matrix);
+    calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
+                              new_metadata, new_diploid_gvalues,
+                              record_genotype_matrix);
 
     if (!pop.mutations.empty())
         {
@@ -223,10 +235,13 @@ evolve_with_tree_sequences(
                                           pop.generation, pop.tables,
                                           next_index);
             // TODO: deal with random effects
-            genetic_value_fxn.update(pop);
-            calculate_diploid_fitness(rng, pop, genetic_value_fxn,
-                                      new_metadata, new_diploid_gvalues,
-                                      record_genotype_matrix);
+            for (auto &i : genetics.gvalue)
+                {
+                    i->update(pop);
+                }
+            calculate_diploid_fitness(
+                rng, pop, genetics.gvalue, deme_to_gvalue_map, new_metadata,
+                new_diploid_gvalues, record_genotype_matrix);
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     // TODO: update this to allow neutral mutations to be simulated
@@ -358,7 +373,7 @@ evolve_with_tree_sequences(
                                         end(pop.ancient_sample_genetic_value_matrix),
                                         begin(pop.genetic_value_matrix) + i,
                                         begin(pop.genetic_value_matrix) + i
-                                            + genetic_value_fxn.total_dim);
+                                            + genetics.gvalue[0]->total_dim);
                                 }
                             // Record the time and nodes for this individual
                             pop.ancient_sample_records.emplace_back(
@@ -393,8 +408,9 @@ evolve_with_tree_sequences(
                 suppress_edge_table_indexing);
             if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
                 {
-                    throw std::runtime_error("evolvets: count vector size "
-                                             "mismatch after final simplification");
+                    throw std::runtime_error(
+                        "evolvets: count vector size "
+                        "mismatch after final simplification");
                 }
 
             remap_metadata(pop.ancient_sample_metadata, rv.first);
