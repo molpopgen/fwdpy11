@@ -84,8 +84,8 @@ namespace fwdpy11
         // NOTE: could the manager? be const?
         fwdpy11::discrete_demography::discrete_demography_manager&
             ddemog_manager,
-        const fwdpp::uint_t generation,
-        fwdpp::ts::table_collection& tables, std::int32_t next_index)
+        const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
+        std::int32_t next_index)
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
 
@@ -157,7 +157,7 @@ namespace fwdpy11
                                 offspring_metadata.size(),
                                 { pdata.parent1, pdata.parent2 },
                                 deme,
-                                -1,
+                                0,
                                 { offspring_node_1, offspring_node_2 } });
 
                         next_index_local = offspring_node_2;
