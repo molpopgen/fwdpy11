@@ -482,5 +482,53 @@ class TestSimpleMigrationModels(unittest.TestCase):
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
 
+class TestGeneticValueLists(unittest.TestCase):
+    """
+    Added in 0.6.0 to test exceptions raised
+    when the number of genetic value objects
+    are out of whack vis-a-vis the demography.
+    """
+    @classmethod
+    def setUp(self):
+        self.rng = fwdpy11.GSLrng(42)
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.pdict = {'nregions': [],
+                      'sregions': [],
+                      'recregions': [],
+                      'rates': (0, 0, 0),
+                      'demography': None,
+                      'simlen': 1,
+                      'gvalue': fwdpy11.Additive(2.)
+                      }
+
+    def test_too_many(self):
+        self.pdict['demography'] = np.array([self.pop.N]*10, dtype=np.uint32)
+        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(ValueError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+    def test_too_few(self):
+        mmigs = [fwdpy11.move_individuals(
+            0, 0, 1, 1./3.), fwdpy11.move_individuals(0, 0, 2, 1./3.)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 5
+        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2  # This is the error
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(ValueError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+    def test_too_few_alt_method(self):
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        md['deme'][self.pop.N//3:] += 1
+        md['deme'][2*self.pop.N//3:] += 1
+        self.pdict['demography'] = np.array([self.pop.N]*100, dtype=np.uint32)
+        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2  # This is the error
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(ValueError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+
 if __name__ == "__main__":
     unittest.main()
