@@ -212,7 +212,10 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
 
     def test_move_or_copy(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        fwdpy11.DiscreteDemography(m)
+        dd = fwdpy11.DiscreteDemography(m)
+        self.assertTrue(dd.migmatrix is None)
+        with self.assertRaises(AttributeError):
+            del self.migmatrix
 
     def test_setting_growth(self):
         g = [fwdpy11.SetExponentialGrowth(0, 1, 0.3)]
@@ -296,6 +299,8 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
         p = pickle.dumps(d, -1)
         up = pickle.loads(p)
         self.assertTrue(np.array_equal(up.migmatrix.M, np.identity(2)))
+        with self.assertRaises(AttributeError):
+            del d.migmatrix
 
 
 class TestDiscreteDemography(unittest.TestCase):
