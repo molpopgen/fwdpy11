@@ -198,14 +198,15 @@ class TestSetMigrationRates(unittest.TestCase):
 
 class TestDiscreteDemographyInitialization(unittest.TestCase):
     def test_init_migmatrix_with_tuple(self):
+        mm = np.array([0.3, 0.7, 0.7, 0.3]).reshape(2, 2)
         try:
-            d = fwdpy11.DiscreteDemography(migmatrix=((np.identity(10), True)))
+            d = fwdpy11.DiscreteDemography(migmatrix=((mm, True)))
             self.assertEqual(d.migmatrix.scaled, True)
         except:  # NOQA
             self.fail("unexpected exception")
         try:
             d = fwdpy11.DiscreteDemography(
-                migmatrix=((np.identity(10), False)))
+                migmatrix=((mm, False)))
             self.assertEqual(d.migmatrix.scaled, False)
         except:  # NOQA
             self.fail("unexpected exception")
@@ -295,12 +296,31 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
             fwdpy11.DiscreteDemography(m)
 
     def test_with_migration_matrix(self):
-        d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
+        mm = np.array([0.72, 0.28, 0.3, 0.7]).reshape(2, 2)
+        d = fwdpy11.DiscreteDemography(migmatrix=mm)
         p = pickle.dumps(d, -1)
         up = pickle.loads(p)
-        self.assertTrue(np.array_equal(up.migmatrix.M, np.identity(2)))
+        self.assertTrue(np.array_equal(up.migmatrix.M, mm))
         with self.assertRaises(AttributeError):
             del d.migmatrix
+
+    def test_identity_matrix_conversion_to_None(self):
+        mm = np.identity(5)
+        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        self.assertTrue(d.migmatrix is None)
+
+    def test_weight_matrix_diagonal_only_conversion_to_None(self):
+        mm = np.identity(5)
+        np.fill_diagonal(mm, 0.1)
+        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        self.assertTrue(d.migmatrix is None)
+
+    def test_identity_matrix_with_migrate_changes(self):
+        mm = np.identity(5)
+        cm = [fwdpy11.SetMigrationRates(0, 3, [0.2]*5)]
+        d = fwdpy11.DiscreteDemography(migmatrix=mm,
+                                       set_migration_rates=cm)
+        self.assertTrue(d.migmatrix is not None)
 
 
 class TestDiscreteDemography(unittest.TestCase):
