@@ -195,8 +195,9 @@ init_DiscreteDemography(py::module& m)
         .def_readonly("set_selfing_rates",
                       &ddemog::DiscreteDemography::set_selfing_rates)
         .def_property_readonly("migmatrix",
-                               [](const ddemog::DiscreteDemography& self) {
-                                   return *self.migmatrix;
+                               [](const ddemog::DiscreteDemography& self) -> const ddemog::MigrationMatrix*  {
+                                   if(self.migmatrix == nullptr) { return nullptr; }
+                                   return self.migmatrix.get();
                                })
         .def_readonly("set_migration_rates",
                       &ddemog::DiscreteDemography::set_migration_rates)
