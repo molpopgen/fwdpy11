@@ -24,6 +24,7 @@
 #include <memory>
 #include <tuple>
 #include <vector>
+#include <gsl/gsl_matrix.h>
 #include <fwdpp/named_type.hpp>
 
 #include "MassMigration.hpp"
@@ -196,6 +197,47 @@ namespace fwdpy11
                        std::uint32_t t) { return v.when < t; });
             }
 
+            void
+            check_if_no_migration()
+            // If there are no nonzero off-diagonal elements,
+            // and no migration rate changes during a sim,
+            // then there is no migration. Thus, reset
+            // migmatrix to nullptr.
+            {
+                if (migmatrix == nullptr)
+                    {
+                        return;
+                    }
+                if (!set_migration_rates.empty())
+                    {
+                        return;
+                    }
+                gsl_matrix_const_view v = gsl_matrix_const_view_array(
+                    migmatrix->M.data(), migmatrix->npops, migmatrix->npops);
+                gsl_vector_const_view diag
+                    = gsl_matrix_const_diagonal(&v.matrix);
+                bool allequal = true;
+                for (std::size_t i = 0;
+                     allequal == true && i < migmatrix->npops; ++i)
+                    {
+                        gsl_vector_const_view rv
+                            = gsl_matrix_const_row(&v.matrix, i);
+                        double rsum = 0.0;
+                        for (std::size_t j = 0; j < migmatrix->npops; ++j)
+                            {
+                                rsum += gsl_vector_get(&rv.vector, j);
+                            }
+                        if (rsum != gsl_vector_get(&diag.vector, i))
+                            {
+                                allequal = false;
+                            }
+                    }
+                if (allequal)
+                    {
+                        migmatrix.reset(nullptr);
+                    }
+            }
+
           public:
             using mass_migration_vector = std::vector<MassMigration>;
             using set_growth_rates_vector = std::vector<SetExponentialGrowth>;
@@ -235,6 +277,7 @@ namespace fwdpy11
                   selfing_rate_change_tracker(set_range(set_selfing_rates)),
                   migration_rate_change_tracker(set_range(set_migration_rates))
             {
+                check_if_no_migration();
             }
 
             void
