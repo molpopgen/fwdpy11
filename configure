@@ -3217,7 +3217,7 @@ ac_config_files="$ac_config_files setup.py CMakeLists.txt requirements.txt doc/f
 
 
 
-MINPYBIND11="2.2.3"
+MINPYBIND11="2.4.3"
 PYBIND11=$MINPYBIND11
 
 

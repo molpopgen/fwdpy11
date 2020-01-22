@@ -20,8 +20,8 @@ __version__ = '0.5.4'
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
 
-if pybind11.__version__ < '2.2.3':
-    raise RuntimeError("pybind11 >= " + '2.2.3' + " required")
+if pybind11.__version__ < '2.4.3':
+    raise RuntimeError("pybind11 >= " + '2.4.3' + " required")
 
 if sys.version_info >= (3, 7):
     if pybind11.__version__ < '2.3.0':
@@ -234,7 +234,7 @@ setup(
     long_description=long_desc,
     long_description_content_type='text/x-rst',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2.3', 'numpy', 'tskit>=0.1.4'],
+    install_requires=['pybind11>=2.4.3', 'numpy', 'tskit>=0.1.4'],
     cmdclass={'build_ext': CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
