@@ -66,3 +66,5 @@ Welcome to fwdpy11's documentation!
     examples/gss
     examples/snowdrift
     examples/recorder
+    examples/migtest
+    examples/localadaptation
