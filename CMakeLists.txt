@@ -8,7 +8,7 @@ if(${pybind11_VERSION} VERSION_LESS '2.2.3')
 endif()
 
 find_package(GSL REQUIRED)
-option(USE_WEFFCPP "Use -Weffc++ during compilation" ON)
+option(USE_WEFFCPP "Use -Weffc++ during compilation" OFF)
 option(ENABLE_PROFILING "Compile to enable code profiling" OFF)
 option(BUILD_UNIT_TESTS "Build C++ modules for unit tests" ON)
 option(DISABLE_LTO "Disable link-time optimization (LTO)" OFF)
