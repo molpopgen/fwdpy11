@@ -716,5 +716,27 @@ class TestDiscreteDemography(unittest.TestCase):
                 self.fail("invalid parental deme type")
 
 
+class TestGhostPopulations(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.rng = fwdpy11.GSLrng(4321987)
+
+    def test_simple_ghost_pop_example(self):
+        mmigs = [fwdpy11.copy_individuals(5, 0, 1, 1.0),
+                 fwdpy11.copy_individuals(10, 1, 0, 0.10)]
+        size_changes = [fwdpy11.SetDemeSize(10, 1, 0),
+                        fwdpy11.SetDemeSize(10, 0, 100)]
+        dd = fwdpy11.DiscreteDemography(mass_migrations=mmigs,
+                                        set_deme_sizes=size_changes)
+        ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+        self.assertEqual(self.pop.N, 100)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_counts = np.unique(md['deme'], return_counts=True)
+        self.assertEqual(len(deme_counts[0]), 1)
+        self.assertEqual(deme_counts[0][0], 0)
+        self.assertEqual(deme_counts[1][0], 100)
+
+
 if __name__ == "__main__":
     unittest.main()
