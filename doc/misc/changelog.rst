@@ -4,6 +4,46 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.0rc0
+++++++++++++++++
+
+Support for demographic events involving discrete demes.   This is a release 
+candidate with minimal documentation beyond the examples (see below).
+
+API changes:
+
+* ``fwdpy11.Node.population`` renamed :attr:`fwdpy11.Node.deme` `PR340 <https://github.com/molpopgen/fwdpy11/pull/340>`_
+
+This API change won't affect anyone because previous versions didn't support individuals
+in different demes.
+
+New features:
+
+* Support for :class:`fwdpy11.DiscreteDemography` in simulations with tree sequences.
+  `PR342 <https://github.com/molpopgen/fwdpy11/pull/342>`_ 
+  `PR346 <https://github.com/molpopgen/fwdpy11/pull/346>`_ 
+  `PR358 <https://github.com/molpopgen/fwdpy11/pull/358>`_ 
+
+* Support for different genetic value functions in different demes. 
+  `PR357 <https://github.com/molpopgen/fwdpy11/pull/357>`_ 
+
+Miscellaneous changes:
+
+* Improve how tree sequence nodes are retrieved for "alive" individuals during simulation.
+  `PR344 <https://github.com/molpopgen/fwdpy11/pull/344>`_ 
+   
+New documentation
+
+* Examples of simulations using the :class:`fwdpy11.DiscreteDemography` classes.
+  `PR359 <https://github.com/molpopgen/fwdpy11/pull/359>`_ 
+  See :ref:`localadaptation` and :ref:`migtest`.
+
+Changes to the build system and dependencies:
+
+* Minimum pybind11 version is 2.4.3
+* The ``-Weffc++`` flag is now optional during compilation.
+
+
 0.5.4
 ++++++++++++++++
 
