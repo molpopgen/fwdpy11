@@ -58,7 +58,8 @@ Features
 * Picklable population objects
 * Parallel computation via multiprocessing_ or concurrent.futures_.
 * Custom temporal samplers to analyze populations *during* a simulation may be written in pure Python.
-  
+* Flexible interface for simulating models with multiple populations.
+
 Dependencies
 -----------------------
 
