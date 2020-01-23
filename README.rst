@@ -126,9 +126,13 @@ On Apple's macOS, we strongly encourage that you use conda with their compiler p
 Installing these packages will mean that you can get away from the relatively old versions of these compilers that ship
 with Xcode.   However, you do need to add the following flag when building the package:
 
+On macOS versions prior to "Mojave":
+
 .. code-block:: bash
 
     CONDA_BUILD_SYSROOT=/ python3 setup.py build_ext -i
+
+For later versions, you may omit the environment variable prefix.
 
 Do the same for a `pip install` from the source directory.
 
