@@ -29,21 +29,21 @@ Welcome to fwdpy11's documentation!
 .. toctree::
     :caption: Introduction by way of example
 
-    pages/introexample.rst
+    pages/0000a_anintroexample.rst
 
 .. toctree::
     :caption: Objects and concepts
 
-    pages/objectoverview
+    pages/0000a_objectoverview.rst
     pages/mutation
     pages/recombination
     pages/softselection
     pages/tsoverview
     pages/tstypes
-    pages/tskit_interchange
+    pages/0000a_tskit_interchange
     pages/recorders
     pages/tstimeseries
-    pages/working_with_genotypes_trees
+    pages/0000a_working_with_genotypes_trees.rst
 
 
 .. toctree::
