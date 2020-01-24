@@ -261,6 +261,135 @@ Types related to tree sequence recording
 
     .. autoattribute:: __init__
 
+Types related to discrete demographic events
+=======================================================
+
+.. autoclass:: fwdpy11.DiscreteDemography
+
+   Representation of demographic events acting on 
+   discrete demes (sub-populations).
+   
+   .. versionadded:: 0.5.3
+
+   The constructor methods for this class are overloaded:
+
+    .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+    .. autoattribute:: mass_migrations   
+    .. autoattribute:: set_growth_rates   
+    .. autoattribute:: set_deme_sizes   
+    .. autoattribute:: set_selfing_rates
+    .. autoattribute:: migmatrix   
+    .. autoattribute:: set_migration_rates   
+
+.. data:: fwdpy11.NOGROWTH
+
+   The author of this software has a bad habit of using the 
+   value of 0.0 to represent "no exponential growth".  This is,
+   of course, wrong, and so a constant is provided to help
+   other people with similar problems:
+
+.. ipython:: python
+
+   print(fwdpy11.NOGROWTH)
+
+.. autoclass:: fwdpy11.SetExponentialGrowth
+
+   .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: when
+   .. autoattribute:: deme
+   .. autoattribute:: G
+
+.. autoclass:: fwdpy11.SetDemeSize
+
+   .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: when
+   .. autoattribute:: deme
+   .. autoattribute:: new_size
+   .. autoattribute:: resets_growth_rate
+
+.. autoclass:: fwdpy11.SetSelfingRate
+
+   .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: when
+   .. autoattribute:: deme
+   .. autoattribute:: S
+
+.. autoclass:: fwdpy11.MassMigration
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: when
+      
+      When the event happens
+
+   .. autoattribute:: source
+
+      ID of the source deme
+
+   .. autoattribute:: destination
+
+      ID of the destination deme
+
+   .. autoattribute:: fraction
+
+      The fraction (proportion) of individuals migrating from `source`
+      to `destination`.
+
+   .. autoattribute:: move_individuals
+
+      A boolean.  If `True`, then individuals are *moved* from `source`
+      to destination.  If `False`, then they are copied.
+
+   .. autoattribute:: resets_growth_rate
+
+      A boolean.  If `True`, then the event resets the growth rate
+      of *both* `source` and `destination` to :data:`fwdpy11.NOGROWTH`.
+
+
+.. autofunction:: fwdpy11.move_individuals
+
+.. autofunction:: fwdpy11.copy_individuals
+
+.. autoclass:: fwdpy11.MigrationMatrix
+
+   .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: shape
+
+      The shape of the migration matrix
+
+   .. autoattribute:: M
+
+      Returns a copy of the rate matrix
+
+   .. autoattribute scaled
+
+      `True` if rates are multiplied by deme sizes during a simulation.
+
+.. autoclass:: fwdpy11.SetMigrationRates
+
+   .. automethod:: __init__
+
+   The following attributes give read-only access to instance data:
+
+   .. autoattribute:: when
+   .. autoattribute:: deme
+   .. autoattribute:: migrates
+
 Miscellaneous types
 =======================================================
 
