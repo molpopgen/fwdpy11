@@ -22,17 +22,20 @@ Overview
 ------------------------------------------------
 
 The model
-+++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The model here is one of soft selection [Levene1953]_, meaning that the number of 
-breeding individuals ("adults") in each deme is fixed at a certain value.  A nice overview of this model and how it compares to others in [Felsenstein1976]_.  You
-may also find [Christiansen1974]_ and [Christiansen1975]_ useful.
+breeding individuals ("adults") in each deme is fixed at a certain value.
+A nice overview of this model and how it compares to others in [Felsenstein1976]_.
+You may also find [Christiansen1974]_ and [Christiansen1975]_ useful.
 
 Each generation, offspring ("juveniles") are generated in each deme.  Parents are drawn
-from demes according to a migration matrix, if one is provided, else they are drawn from the offspring deme.  Within a parental deme, a specific parent is chosen proportionally to relative fitness within the deme.
+from demes according to a migration matrix, if one is provided, else they are drawn from
+the offspring deme.  Within a parental deme, a specific parent is chosen proportionally
+to relative fitness within the deme.
 
 The timings of events
-++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Below, we discuss various events that may happen.  These event types
 include things like deme size changes, "mass migration" events, etc..
@@ -43,6 +46,8 @@ the parents*.  For example, if half of deme zero moves and colonizes
 a new deme (deme 1), then that means that half of the current alive individuals
 (possible parents) have their ``deme`` field changed from zero to one
 prior to generating any offspring.
+
+.. _soft_sel_deme_setup:
 
 Setting the initial demes in a simulation
 ------------------------------------------------
@@ -61,6 +66,50 @@ For example, to initialize a population with 25 individuals in demes ``0`` and `
        for n in m.nodes:
             assert m.deme == pop.tables.nodes[n].deme
 
+Another method involves mass migration events at the beginning of a simulation.
+See :ref:`massmigrations`.
+
+The DiscreteDemography class
+------------------------------------------------
+
+The demographic events are stored in instances of :class:`fwdpy11.DiscreteDemography`.
+These events, whose interface is described below, are passed in ``list`` objects
+when created a :class:`fwdpy11.DiscreteDemography` instance.
+
+These instances may be used to parameterize the ``demography`` field of a 
+:class:``fwdpy11.ModelParams`` instance.  To illustrate this, here is a 
+function that we'll use repeatedly below:
+
+
+.. ipython:: python
+
+    def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
+        pdict = {'nregions': [],
+                'sregions': [],
+                'recregions': [],
+                'rates': (0, 0, 0,),
+                'gvalue': fwdpy11.Multiplicative(2.),
+                'demography': ddemog,
+                'simlen': simlen
+               }
+        params = fwdpy11.ModelParams(**pdict)
+        rng = fwdpy11.GSLrng(654321)
+        fwdpy11.evolvets(rng, pop, params, 100, recorder)
+
+
+We will also define a simple class to record all deme sizes over time:
+
+
+.. ipython:: python
+
+    class SizeTracker(object):
+        def __init__(self):
+            self.data = []
+        def __call__(self, pop, sampler):
+            md = np.array(pop.diploid_metadata, copy=False)
+            self.data.append((pop.generation, pop.N,
+                             np.unique(md['deme'], return_counts=True)))
+
 
 Event types
 ------------------------------------------------
@@ -68,31 +117,193 @@ Event types
 The following sub-sections describe the various types of demographic
 events allowed during a simulation.
 
+.. _massmigrations:
+
 Mass migrations
-++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Mass migration events represent the "bulk" movement of individuals
+in a single generation.  Such events allow you to model population
+splits, merges, etc..
+
+These events are represented by instances
+of :class:`fwdpy11.MassMigration`.  Currently, you create instances
+of this type using one of the following two functions:
+
+* :func:`fwdpy11.copy_individuals`
+* :func:`fwdpy11.move_individuals`
+
+As the name implies, the first function creates an event that *copies*
+individuals from a source deme to a destination.  The latter *moves*
+them.
+
+Both functions take five arguments, which may be used either named
+or unnamed.  In order, they are:
+
+* ``when``: the time (generation) when the event will occur
+* ``source``: the ID of the source deme
+* ``destination``: the ID of the destination deme
+* ``fraction``: the fraction (proportion) of ``source`` moved/copied to ``dest``.
+* ``resets_growth_rate``: If ``True``, the event resets the growth rate to :attr:`fwdpy11.NOGROWTH`
+  in **both** ``source`` and ``dest``. If ``False``, growth rates remain unchanged.
+  The default is ``False``.
+
+These operations act on proportions of populations rather than on numbers
+of individuals. Multiple events in a single generation are allowed, see
+:ref:`multiple_mass_migrations`.
+
+Setting the initial state of a simulation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Let's look at an example where we use mass migration events to set up
+"who is where" at the start of a simulation.  Since events happen in
+the *parental* generation, we can use mass migrations to set up 
+what demes individuals are in by applying events at generation 0.
+
+The main difference between this method and that shown in
+:ref:`soft_sel_deme_setup` is that these events move or copy *random*
+individuals to new demes whereas using the  ``__init__`` approach 
+builds the individuals in each deme sequentially.
+
+For example, if we wish to start a simulation with 50 individuals in 
+demes 0 and 50 in deme 1, we have two options:
+
+1. Start with 50 individuals and *copy* them to deme 1 in generation 0
+2. Start with 100 individuals and *move half of* them to deme 1 in generation 0
+
+Here is the version implemented via a  copy:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(50, 1.)
+    copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
+    ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
+    setup_and_run_model(pop, ddemog, 1)
+    md = np.array(pop.diploid_metadata, copy=False)
+    np.unique(md['deme'], return_counts=True)
 
 
-* Move vs copy
-* Proportions of demes
-* Whether or not they change growth rates
-* Merges and splits: examples
-* This is how new demes are created
-* Ghost population example
+Here is what our object looks like:
+
+.. ipython:: python
+
+    print(copy[0])
+
+
+Here is the version using a move:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(100, 1.)
+    move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+    ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
+    setup_and_run_model(pop, ddemog, 1)
+    md = np.array(pop.diploid_metadata, copy=False)
+    np.unique(md['deme'], return_counts=True)
+
+
+For comparison, here is the object specifying the move:
+
+.. ipython:: python
+
+    print(move[0])
+
+.. _multiple_mass_migrations:
+
+Multiple mass migrations 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+To specify multiple events, simply add more events to your list.
+The events to not have to be sorted in any specific way.  Any sorting 
+requirements get handled internally.
+
+Multiple events involving the same source population in the same generation
+need some explaining.   If the events are copies, things will tend to "just
+work":
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(50, 1.)
+    copy = [fwdpy11.copy_individuals(0, 0, 1, 1.0),
+            fwdpy11.copy_individuals(0, 0, 2, 1.0)]
+    ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
+    setup_and_run_model(pop, ddemog, 1)
+    md = np.array(pop.diploid_metadata, copy=False)
+    np.unique(md['deme'], return_counts=True)
+    
+
+When the events are moves, it is not possible to move more than 100% 
+of the individuals.  Attempting to do so will raise a ``ValueError``
+exception:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(50, 1.)
+    # Move all of deme 0 into demes 1 and 2,
+    # which means we're trying to move 200% 
+    # of deme 0...
+    move = [fwdpy11.move_individuals(0, 0, 1, 1.0),
+            fwdpy11.move_individuals(0, 0, 2, 1.0)]
+    # ... which is not allowed
+    try:
+       ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
+    except ValueError as e:
+       print(e)
+
+The rate of drift
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Moving versus copying individuals is an important modeling choice.
+When you move individuals from one deme to another, the rate of drift
+changes in the source deme (as its size is reduced).  This reduction
+in size is also a sudden bottleneck.
+
+Copying, on the other hand, does not change the rate of drift in the source
+deme.  However, it does seem to imply some sudden increase in fecundity that
+both came from nowhere and was short-lived.
+
+The distinction between the two choices matters when trying to implement
+models whose parameters have been inferred via approaches based on the
+coalescent or on diffusion approximations. Such approaches usually assume
+that population splits are copy events.
 
 Instantaneous deme size changes
-++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* How to determine if growth rate changes
+Instantaneous changes in deme size are managed by instances of 
+:class:`fwdpy11.SetDemeSize`.
+
+This class is relatively straightforward to use, so let's dive right in:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation([20, 20], 1.)
+    dd = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(when=5,deme=1,new_size=100)])
+    st = SizeTracker()
+    setup_and_run_model(pop, dd, 10, st)
+    for i in st.data:
+        print(i)
+
+You may also kill off demes by setting their size to zero:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation([20, 20, 20], 1.)
+    dd = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(when=5,deme=1,new_size=0)])
+    st = SizeTracker()
+    setup_and_run_model(pop, dd, 6, st)
+    for i in st.data:
+        print(i)
 
 Changing growth rates
-++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-* Pretty straightforward, but concrete examples will help a lot
-
+Instances of :class:`fwdpy11.SetExponentialGrowth` manage the exponential growth rates per deme.
+Growth rates less than one indicate population decline, greater than one means growth
+and :attr:`fwdpy11.NOGROWTH` is equal to 1.0 to indicate no growth.
 
 Changing the selfing rate
-++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 * Straightforward.  Main thing to point out is that selfing competes with migration.  Still
@@ -129,7 +340,7 @@ each source deme.
 .. _migration:
 
 Migration
-++++++++++++++++++++++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 * The MigrationMatrix class
