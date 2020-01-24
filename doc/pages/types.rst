@@ -47,24 +47,8 @@ Populations of diploids
 ----------------------------------------------------------
 
 .. autoclass:: fwdpy11.DiploidPopulation
+   :members:
     
-    This class inherits from :class:`fwdpy11.PopulationBase`.
-
-.. autoattribute:: fwdpy11.DiploidPopulation.diploids
-
-    This field is a C++ container containing instances
-    of :class:`fwdpy11.DiploidGenotype`.
-
-Individuals are associated with metadata, which is represented by :class:`fwdpy11.DiploidMetadata`.
-The metadata are stored separately for the current generation and for ancient samples:
-
-.. autoattribute:: fwdpy11.DiploidPopulation.diploid_metadata
-
-.. autoattribute:: fwdpy11.DiploidPopulation.ancient_sample_metadata
-
-.. autofunction:: fwdpy11.DiploidPopulation.sample_timepoints
-
-
 Diploid Genotypes
 ----------------------------------------
 

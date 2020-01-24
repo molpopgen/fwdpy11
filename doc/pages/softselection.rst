@@ -4,6 +4,7 @@
    :suppress:
 
    import fwdpy11
+   import numpy as np
 
 Soft selection with discrete demes
 ======================================================================
@@ -43,8 +44,29 @@ a new deme (deme 1), then that means that half of the current alive individuals
 (possible parents) have their ``deme`` field changed from zero to one
 prior to generating any offspring.
 
+Setting the initial demes in a simulation
+------------------------------------------------
+
+At the start of a simulation, you may assign diploids to demes 
+when constructing an instance of :class:`fwdpy11.DiploidPopulation`.
+For example, to initialize a population with 25 individuals in demes ``0`` and ``1``:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation([25, 25], 1.0)
+    md = np.array(pop.diploid_metadata, copy=False)
+    np.unique(md['deme'], return_counts=True)
+    print(np.unique([i.deme for i in pop.tables.nodes], return_counts=True))
+    for m in pop.diploid_metadata:
+       for n in m.nodes:
+            assert m.deme == pop.tables.nodes[n].deme
+
+
 Event types
 ------------------------------------------------
+
+The following sub-sections describe the various types of demographic
+events allowed during a simulation.
 
 Mass migrations
 ++++++++++++++++++++++++++++++++++++++++++++++++
