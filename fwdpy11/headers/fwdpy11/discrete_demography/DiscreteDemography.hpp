@@ -156,7 +156,7 @@ namespace fwdpy11
                                         std::ostringstream o;
                                         o << "DiscreteDemography: at time "
                                           << i->when << ", attempting to move "
-                                          << sum << " of deme " << i->source
+                                          << sum*100.0 << "% of deme " << i->source
                                           << " is invalid";
                                         throw std::invalid_argument(o.str());
                                     }
