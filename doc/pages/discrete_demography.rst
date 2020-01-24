@@ -8,6 +8,18 @@
 Discrete demography
 ======================================================================
 
+This page describes implementing models of demographic event affecting
+multiple demes.  This functionality was first released in version 0.6.0
+and makes use of low-level types added in 0.5.3.
+
+Overview
+------------------------------------------------
+
+Levene [Levene1953]_
+
+Event types.
+------------------------------------------------
+
 .. autoclass:: fwdpy11.DiscreteDemography
 
    Representation of demographic events acting on 
@@ -31,7 +43,7 @@ Discrete demography
 All of the sections below should bring in the docstrings.
 
 Changing growth rates
-------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. data:: fwdpy11.NOGROWTH
 
@@ -57,7 +69,7 @@ Changing growth rates
 * Pretty straightforward, but concrete examples will help a lot
 
 Instantaneous deme size changes
-------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: fwdpy11.SetDemeSize
 
@@ -73,7 +85,7 @@ Instantaneous deme size changes
 * How to determine if growth rate changes
 
 Changing the selfing rate
-------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: fwdpy11.SetSelfingRate
 
@@ -117,7 +129,7 @@ lookup table where the "raw" migration weights are all weighted by the current :
 each source deme.
 
 Mass migrations
-------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: fwdpy11.MassMigration
 
@@ -168,7 +180,7 @@ Mass migrations
 .. _migration:
 
 Migration
-------------------------------------------------
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. autoclass:: fwdpy11.MigrationMatrix
 
@@ -212,3 +224,4 @@ Debugging Demographic models
 -------------------------------------------------
 
 TBD -- probably a later PR
+

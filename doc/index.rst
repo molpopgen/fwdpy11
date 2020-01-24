@@ -60,6 +60,12 @@ Welcome to fwdpy11's documentation!
     pages/functions
 
 .. toctree::
+    :caption: References
+    :maxdepth: 1
+
+    misc/references
+
+.. toctree::
     :caption: Examples
 
     examples/bgs
