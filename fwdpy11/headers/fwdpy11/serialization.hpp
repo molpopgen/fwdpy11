@@ -197,6 +197,7 @@ namespace fwdpy11
                                   msize);
                             }
                     }
+                pop.rebuild_mutation_lookup(false);
                 return buffer;
             }
         };

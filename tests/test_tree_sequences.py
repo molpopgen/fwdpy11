@@ -545,6 +545,21 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
+    def test_serialization_via_file_round_trip(self):
+        with open("test_ts_serialization_via_file.pickle", "wb") as f:
+            self.pop.pickle_to_file(f)
+
+        with open("test_ts_serialization_via_file.pickle", "rb") as f:
+            up = fwdpy11.DiploidPopulation.load_from_pickle_file(f)
+        self.assertTrue(self.pop == up)
+        self.assertTrue(self.pop.mut_lookup == up.mut_lookup)
+
+    def test_pickling_round_trip(self):
+        p = pickle.dumps(self.pop, -1)
+        up = pickle.loads(p)
+        self.assertTrue(self.pop == up)
+        self.assertTrue(self.pop.mut_lookup == up.mut_lookup)
+
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop,
                                      self.pop.tables.preserved_nodes)
@@ -615,6 +630,7 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.pop.dump_to_file(ofile)
         pop2 = fwdpy11.DiploidPopulation.load_from_file(ofile)
         self.assertTrue(self.pop == pop2)
+        self.assertTrue(self.pop.mut_lookup == pop2.mut_lookup)
         if os.path.exists(ofile):
             os.remove(ofile)
 

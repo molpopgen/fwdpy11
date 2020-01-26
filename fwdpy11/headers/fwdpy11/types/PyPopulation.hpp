@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <algorithm>
+#include <stdexcept>
 #include <gsl/gsl_randist.h>
 #include <fwdpp/forward_types.hpp>
 #include <fwdpp/poptypes/popbase.hpp>
@@ -58,7 +59,6 @@ namespace fwdpy11
         std::vector<double> genetic_value_matrix,
             ancient_sample_genetic_value_matrix;
 
-
         PyPopulation(fwdpp::uint_t N_, const double L)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 }, diploid_metadata(N),
               ancient_sample_metadata{}, ancient_sample_records{},
@@ -68,10 +68,10 @@ namespace fwdpy11
         }
 
         template <typename gametes_input, typename mutations_input>
-        explicit PyPopulation(
-            const fwdpp::uint_t N_, gametes_input &&g, mutations_input &&m,
-            typename fwdpp_base::haploid_genome_t::mutation_container::size_type
-                reserve_size)
+        explicit PyPopulation(const fwdpp::uint_t N_, gametes_input &&g,
+                              mutations_input &&m,
+                              typename fwdpp_base::haploid_genome_t::
+                                  mutation_container::size_type reserve_size)
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
               N{ N_ }, generation{ 0 }, diploid_metadata(N),
@@ -82,10 +82,10 @@ namespace fwdpy11
         }
 
         virtual ~PyPopulation() = default;
-        PyPopulation(PyPopulation&&) = default;
-        PyPopulation(const PyPopulation&) = default;
-        PyPopulation&operator=(const PyPopulation&) = default;
-        PyPopulation&operator=(PyPopulation&&) = default;
+        PyPopulation(PyPopulation &&) = default;
+        PyPopulation(const PyPopulation &) = default;
+        PyPopulation &operator=(const PyPopulation &) = default;
+        PyPopulation &operator=(PyPopulation &&) = default;
 
         virtual std::vector<std::size_t>
         add_mutations(typename fwdpp_base::mcont_t &mutations,
@@ -196,6 +196,50 @@ namespace fwdpy11
         {
             // This is correct/validated as of fwdpp 0.7.2
             return tables == rhs.tables;
+        }
+
+        void
+        rebuild_mutation_lookup(bool from_tables)
+        {
+            this->mut_lookup.clear();
+            if (from_tables)
+                {
+                    for (const auto &mr : this->tables.mutation_table)
+                        {
+                            if (mr.key >= this->mutations.size())
+                                {
+                                    throw std::runtime_error(
+                                        "rebuild_mutation_lookup: mutation "
+                                        "table key out of range");
+                                }
+                            this->mut_lookup.emplace(
+                                this->tables.site_table[mr.site].position,
+                                mr.key);
+                        }
+                }
+            else
+                {
+                    if (this->mutations.size() != this->mcounts.size()
+                        || (!this->mcounts_from_preserved_nodes.empty()
+                            && (this->mutations.size()
+                                != this->mcounts_from_preserved_nodes.size())))
+                        {
+                            throw std::runtime_error(
+                                "rebuild_mutation_lookup: container size "
+                                "mismatch");
+                        }
+                    for (std::size_t i = 0; i < this->mutations.size(); ++i)
+                        {
+                            if (this->mcounts[i] > 0
+                                || (!this->mcounts_from_preserved_nodes.empty()
+                                    && this->mcounts_from_preserved_nodes[i]
+                                           > 0))
+                                {
+                                    this->mut_lookup.emplace(
+                                        this->mutations[i].pos, i);
+                                }
+                        }
+                }
         }
     };
 } // namespace fwdpy11

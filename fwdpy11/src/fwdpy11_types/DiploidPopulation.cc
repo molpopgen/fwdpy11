@@ -420,6 +420,7 @@ init_DiploidPopulation(py::module& m)
                 rv.tables.preserved_nodes
                     = load(f).cast<decltype(rv.tables.preserved_nodes)>();
                 rv.tables.build_indexes();
+                rv.rebuild_mutation_lookup(false);
                 return rv;
             },
             R"delim(
