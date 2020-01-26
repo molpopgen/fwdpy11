@@ -134,7 +134,9 @@ init_PopulationBase(py::module& m)
                 py::dict rv;
                 for (std::size_t i = 0; i < pop.mutations.size(); ++i)
                     {
-                        if (pop.mcounts[i])
+                        if (pop.mcounts[i] > 0
+                            || (!pop.mcounts_from_preserved_nodes.empty()
+                                 && pop.mcounts_from_preserved_nodes[i] > 0))
                             {
                                 auto pos_handle
                                     = py::cast(pop.mutations[i].pos);

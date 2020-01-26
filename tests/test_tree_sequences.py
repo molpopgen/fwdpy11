@@ -116,6 +116,21 @@ def mcounts_comparison(pop, ts):
     return True
 
 
+def validate_mut_lookup_content(pop):
+    ml = pop.mut_lookup
+    ml_contents = []
+    for i in ml:
+        for j in ml[i]:
+            ml_contents.append((i, j))
+    ml_contents = sorted(ml_contents)
+
+    mt_contents = []
+    for mr in pop.tables.mutations:
+        mt_contents.append((pop.tables.sites[mr.site].position, mr.key))
+    mt_contents = sorted(mt_contents)
+    return ml_contents == mt_contents
+
+
 class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -523,6 +538,12 @@ class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_Simulation(self):
         self.assertEqual(self.pop.generation, 10000)
+
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
 
     def test_count_mutations_preserved_samples(self):
         mc = fwdpy11.count_mutations(self.pop,
