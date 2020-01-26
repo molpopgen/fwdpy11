@@ -45,7 +45,7 @@ dnl 2) package version (i.e. 1.2)
 dnl 3) bug/info/project email address (i.e. bug-foo@gnu.org)
 dnl----
 dnl
-AC_INIT([fwdpy11], [0.5.4], [krthornt@uci.edu])
+AC_INIT([fwdpy11], [0.5.5], [krthornt@uci.edu])
 
 dnl----
 dnl If you plan to use Automake, initialize it hre
