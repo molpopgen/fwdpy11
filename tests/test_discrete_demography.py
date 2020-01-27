@@ -721,21 +721,6 @@ class TestMigrationModels(unittest.TestCase):
     def setUpClass(self):
         self.rng = fwdpy11.GSLrng(12352531)
 
-    def test_empty_deme(self):
-        """
-        deme 0 is initalized as empty.
-        There is migration into that deme,
-        but there are no offspring ever made
-        """
-        pop = fwdpy11.DiploidPopulation([20, 0, 20], 1.)
-        mm = np.identity(3)
-        mm[:] = 0.25
-        np.fill_diagonal(mm, 1-np.sum(mm, 1))
-        M = fwdpy11.MigrationMatrix(mm)
-        d = fwdpy11.DiscreteDemography(migmatrix=M)
-        with self.assertRaises(fwdpy11.DemographyError):
-            ddr.DiscreteDemography_roundtrip(self.rng, pop, d, 5)
-
     def test_migration_matrix_too_large(self):
         """
         Two demes and a 3x3 matrix
@@ -822,6 +807,27 @@ class TestDemographyError(unittest.TestCase):
                                         set_deme_sizes=d)
         with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_migration_into_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
+        mm = np.identity(3)
+        mm[:] = 0.25
+        mm[1, :] = 0.0
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+
+    def test_migration_from_an_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
+        mm = np.identity(3)
+        mm[:] = 0.25
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
 
 if __name__ == "__main__":
