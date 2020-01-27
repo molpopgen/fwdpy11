@@ -170,7 +170,7 @@ namespace fwdpy11
                 auto& onset = sizes_rates.growth_rate_onset_times.get();
                 for (std::size_t deme = 0; deme < Nnext.size(); ++deme)
                     {
-                        if (G[deme] != 1.)
+                        if (G[deme] != NOGROWTH)
                             {
                                 double next_size = std::round(
                                     static_cast<double>(N0[deme])
