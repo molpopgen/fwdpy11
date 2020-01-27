@@ -79,11 +79,23 @@ namespace fwdpy11
                                         }
                                     double rate_in
                                         = M->M[source * npops + dest];
-                                    if (rate_in > 0. && ref[source] == 0)
+                                    if (rate_in > 0.)
                                         {
-                                            throw DemographyError(
-                                                "non-zero migration rate from "
-                                                "empty parental deme");
+                                            if (ref[source] == 0)
+                                                {
+                                                    throw DemographyError(
+                                                        "non-zero migration "
+                                                        "rate from "
+                                                        "empty parental deme");
+                                                }
+                                            if (ref[dest] == 0)
+                                                {
+                                                    throw DemographyError(
+                                                        "non-zero migration "
+                                                        "rate into "
+                                                        "empty destination "
+                                                        "deme");
+                                                }
                                         }
                                     temp.push_back(scaling_factor * rate_in);
                                 }
