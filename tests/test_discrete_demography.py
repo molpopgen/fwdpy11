@@ -721,21 +721,6 @@ class TestMigrationModels(unittest.TestCase):
     def setUpClass(self):
         self.rng = fwdpy11.GSLrng(12352531)
 
-    def test_empty_deme(self):
-        """
-        deme 0 is initalized as empty.
-        There is migration into that deme,
-        but there are no offspring ever made
-        """
-        pop = fwdpy11.DiploidPopulation([20, 0, 20], 1.)
-        mm = np.identity(3)
-        mm[:] = 0.25
-        np.fill_diagonal(mm, 1-np.sum(mm, 1))
-        M = fwdpy11.MigrationMatrix(mm)
-        d = fwdpy11.DiscreteDemography(migmatrix=M)
-        with self.assertRaises(ValueError):
-            ddr.DiscreteDemography_roundtrip(self.rng, pop, d, 5)
-
     def test_migration_matrix_too_large(self):
         """
         Two demes and a 3x3 matrix
@@ -783,6 +768,66 @@ class TestExponentialDecline(unittest.TestCase):
         dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
         with self.assertRaises(fwdpy11.GlobalExtinction):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+
+class TestDemographyError(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.rng = fwdpy11.GSLrng(3321986)
+
+    def test_growth_in_deme_that_doesnt_exist(self):
+        g = [fwdpy11.SetExponentialGrowth(0, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_growth_in_deme_that_went_extinct(self):
+        mm = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = [fwdpy11.SetDemeSize(5, 1, 0)]
+        g = [fwdpy11.SetExponentialGrowth(6, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_growth_rates=g,
+                                        mass_migrations=mm,
+                                        set_deme_sizes=d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_set_selfing_in_deme_that_doesnt_exist(self):
+        g = [fwdpy11.SetSelfingRate(0, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_selfing_rates=g)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_set_selfing_in_deme_that_went_extinct(self):
+        mm = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = [fwdpy11.SetDemeSize(5, 1, 0)]
+        g = [fwdpy11.SetSelfingRate(6, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_selfing_rates=g,
+                                        mass_migrations=mm,
+                                        set_deme_sizes=d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_migration_into_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
+        mm = np.identity(3)
+        mm[:] = 0.25
+        mm[1, :] = 0.0
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+
+    def test_migration_from_an_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
+        mm = np.identity(3)
+        mm[:] = 0.25
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
 
 if __name__ == "__main__":

@@ -61,6 +61,23 @@ namespace fwdpy11
             }
         };
 
+        struct DemographyError : public std::exception
+        {
+          private:
+            std::string message_;
+
+          public:
+            explicit DemographyError(std::string message)
+                : message_(std::move(message))
+            {
+            }
+            virtual const char*
+            what() const noexcept
+            {
+                return message_.c_str();
+            }
+        };
+
         struct GlobalExtinction : public std::exception
         {
           private:

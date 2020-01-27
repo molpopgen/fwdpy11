@@ -111,10 +111,17 @@ namespace fwdpy11
                 auto& current_deme_sizes
                     = sizes_rates.current_deme_sizes.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
+                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
                         auto deme = range.first->deme;
+                        if (range.first->G != NOGROWTH && Ncurr[deme] == 0)
+                            {
+                                throw DemographyError(
+                                    "attempt to change growth rate in extinct "
+                                    "deme");
+                            }
                         rates[deme] = range.first->G;
                         onsets[deme] = t;
                         N0[deme] = current_deme_sizes[deme];
@@ -133,9 +140,15 @@ namespace fwdpy11
                         return;
                     }
                 auto& rates = sizes_rates.selfing_rates.get();
+                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
+                        if (Ncurr[range.first->deme] == 0)
+                            {
+                                throw DemographyError("attempt to set selfing "
+                                                      "rate in extinct deme");
+                            }
                         rates[range.first->deme] = range.first->S;
                     }
             }
@@ -164,14 +177,21 @@ namespace fwdpy11
             apply_growth_rates(const std::uint32_t t,
                                deme_properties& sizes_rates)
             {
+                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 auto& Nnext = sizes_rates.next_deme_sizes.get();
                 auto& G = sizes_rates.growth_rates.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
                 auto& onset = sizes_rates.growth_rate_onset_times.get();
                 for (std::size_t deme = 0; deme < Nnext.size(); ++deme)
                     {
-                        if (G[deme] != 1.)
+                        if (G[deme] != NOGROWTH)
                             {
+                                if (Ncurr[deme] == 0)
+                                    {
+                                        throw DemographyError(
+                                            "growth is happening in an "
+                                            "extinct deme");
+                                    }
                                 double next_size = std::round(
                                     static_cast<double>(N0[deme])
                                     * std::pow(G[deme],
