@@ -772,5 +772,18 @@ class TestGhostPopulations(unittest.TestCase):
         self.assertEqual(deme_counts[1][0], 100)
 
 
+class TestExponentialDecline(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.rng = fwdpy11.GSLrng(3321986)
+
+    def test_global_extinction_single_deme(self):
+        g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
+        with self.assertRaises(fwdpy11.GlobalExtinction):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+
 if __name__ == "__main__":
     unittest.main()

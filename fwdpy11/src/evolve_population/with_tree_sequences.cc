@@ -144,7 +144,7 @@ evolve_with_tree_sequences(
         }
     if (static_cast<std::size_t>(ddemog_manager.maxdemes) > 1
         && gvalue_pointers.genetic_values.size() > 1
-        &&gvalue_pointers.genetic_values.size()
+        && gvalue_pointers.genetic_values.size()
                < static_cast<std::size_t>(ddemog_manager.maxdemes))
         {
             throw std::invalid_argument("too few genetic value objects");
@@ -246,6 +246,12 @@ evolve_with_tree_sequences(
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
+            if (pop.N == 0)
+                {
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
             // ...before updating this:
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, ddemog_manager,
