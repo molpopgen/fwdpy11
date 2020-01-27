@@ -42,6 +42,10 @@ namespace fwdpy11
                             "SetExponentialGrowth: growth rate must be "
                             "finite");
                     }
+                if (G <= 0)
+                    {
+                        throw std::invalid_argument("growth rate must be > 0");
+                    }
                 if (d < 0)
                     {
                         throw std::invalid_argument(
