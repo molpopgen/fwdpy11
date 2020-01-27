@@ -111,10 +111,17 @@ namespace fwdpy11
                 auto& current_deme_sizes
                     = sizes_rates.current_deme_sizes.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
+                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
                         auto deme = range.first->deme;
+                        if (range.first->G != NOGROWTH && Ncurr[deme] == 0)
+                            {
+                                throw DemographyError(
+                                    "attempt to change growth rate in extinct "
+                                    "deme");
+                            }
                         rates[deme] = range.first->G;
                         onsets[deme] = t;
                         N0[deme] = current_deme_sizes[deme];
@@ -211,8 +218,8 @@ namespace fwdpy11
                 t, demography.deme_size_change_tracker, sizes_rates);
 
             // Step 2: set new growth rates
-            detail::update_growth_rates(
-                t, demography.growth_rate_change_tracker, sizes_rates);
+            detail::update_growth_rates(t, demography.growth_rate_change_tracker,
+                                        sizes_rates);
             // Step 3: update selfing rates
             detail::update_selfing_rates(
                 t, demography.selfing_rate_change_tracker, sizes_rates);
