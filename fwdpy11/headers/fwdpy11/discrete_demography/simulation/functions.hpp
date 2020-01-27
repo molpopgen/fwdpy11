@@ -140,9 +140,15 @@ namespace fwdpy11
                         return;
                     }
                 auto& rates = sizes_rates.selfing_rates.get();
+                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
+                        if (Ncurr[range.first->deme] == 0)
+                            {
+                                throw DemographyError("attempt to set selfing "
+                                                      "rate in extinct deme");
+                            }
                         rates[range.first->deme] = range.first->S;
                     }
             }
@@ -218,8 +224,8 @@ namespace fwdpy11
                 t, demography.deme_size_change_tracker, sizes_rates);
 
             // Step 2: set new growth rates
-            detail::update_growth_rates(t, demography.growth_rate_change_tracker,
-                                        sizes_rates);
+            detail::update_growth_rates(
+                t, demography.growth_rate_change_tracker, sizes_rates);
             // Step 3: update selfing rates
             detail::update_selfing_rates(
                 t, demography.selfing_rate_change_tracker, sizes_rates);

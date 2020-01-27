@@ -797,6 +797,12 @@ class TestDemographyError(unittest.TestCase):
         with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
 
+    def test_set_selfing_in_deme_that_doesnt_exist(self):
+        g = [fwdpy11.SetSelfingRate(0, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_selfing_rates=g)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
 
 if __name__ == "__main__":
     unittest.main()
