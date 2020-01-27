@@ -48,6 +48,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
                              std::uint32_t ngens)
 // Assumptions:
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
+//
 {
     demography.update_event_times(pop.generation);
     ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
@@ -60,6 +61,12 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
+            if(pop.N == 0)
+            {
+                std::ostringstream o;
+                o << "extinction at time " << pop.generation;
+                throw ddemog::GlobalExtinction(o.str());
+            }
 
             // Generate the offspring
             for (std::int32_t deme = 0; deme < ddemog_manager.maxdemes; ++deme)

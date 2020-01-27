@@ -716,6 +716,40 @@ class TestDiscreteDemography(unittest.TestCase):
                 self.fail("invalid parental deme type")
 
 
+class TestMigrationModels(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.rng = fwdpy11.GSLrng(12352531)
+
+    def test_empty_deme(self):
+        """
+        deme 0 is initalized as empty.
+        There is migration into that deme,
+        but there are no offspring ever made
+        """
+        pop = fwdpy11.DiploidPopulation([20, 0, 20], 1.)
+        mm = np.identity(3)
+        mm[:] = 0.25
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M)
+        with self.assertRaises(ValueError):
+            ddr.DiscreteDemography_roundtrip(self.rng, pop, d, 5)
+
+    def test_migration_matrix_too_large(self):
+        """
+        Two demes and a 3x3 matrix
+        """
+        pop = fwdpy11.DiploidPopulation([20, 20], 1.)
+        mm = np.identity(3)
+        mm[:] = 0.25
+        np.fill_diagonal(mm, 1-np.sum(mm, 1))
+        M = fwdpy11.MigrationMatrix(mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=M)
+        with self.assertRaises(ValueError):
+            ddr.DiscreteDemography_roundtrip(self.rng, pop, d, 5)
+
+
 class TestGhostPopulations(unittest.TestCase):
     @classmethod
     def setUp(self):
@@ -736,6 +770,19 @@ class TestGhostPopulations(unittest.TestCase):
         self.assertEqual(len(deme_counts[0]), 1)
         self.assertEqual(deme_counts[0][0], 0)
         self.assertEqual(deme_counts[1][0], 100)
+
+
+class TestExponentialDecline(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.rng = fwdpy11.GSLrng(3321986)
+
+    def test_global_extinction_single_deme(self):
+        g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
+        with self.assertRaises(fwdpy11.GlobalExtinction):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
 
 
 if __name__ == "__main__":

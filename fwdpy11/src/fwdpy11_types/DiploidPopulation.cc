@@ -40,6 +40,29 @@ namespace
    A :class:`fwdpy11.DiploidVector`.
    )delim";
 
+    static const auto INIT_DOCSTRING =
+        R"delim(
+    Construct with an unsigned integer representing the initial
+    population size.
+
+    :param N: Population size
+    :type N: int
+    :param length: Genome length
+    :type length: float
+    )delim";
+
+    static const auto INIT_DOCSTRING_DEMESIZES =
+        R"delim(
+    Construct a population with multiple demes.
+
+    :param demesizes: Sizes of each deme
+    :type demesizes: list
+    :param length: Genome length
+    :type length: float
+
+    .. versionadded:: 0.6.0
+    )delim";
+
 } // namespace
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
@@ -54,12 +77,11 @@ init_DiploidPopulation(py::module& m)
 {
     py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
         m, "DiploidPopulation", "Representation of a diploid population")
-        .def(py::init<fwdpp::uint_t, double>(),
-             "Construct with an unsigned integer "
-             "representing the initial "
-             "population size.",
-             py::arg("N"),
-             py::arg("length") = std::numeric_limits<double>::max())
+        .def(py::init<fwdpp::uint_t, double>(), py::arg("N"),
+             py::arg("length") = std::numeric_limits<double>::max(),
+             INIT_DOCSTRING)
+        .def(py::init<const std::vector<std::uint32_t>&, double>(),
+             py::arg("demesizes"), py::arg("length"), INIT_DOCSTRING_DEMESIZES)
         .def(py::init<const fwdpy11::DiploidPopulation::dipvector_t&,
                       const fwdpy11::DiploidPopulation::gcont_t&,
                       const fwdpy11::DiploidPopulation::mcont_t&>(),

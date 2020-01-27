@@ -77,9 +77,15 @@ namespace fwdpy11
                                         {
                                             scaling_factor = 0.0;
                                         }
-                                    temp.push_back(
-                                        scaling_factor
-                                        * M->M[source * npops + dest]);
+                                    double rate_in
+                                        = M->M[source * npops + dest];
+                                    if (rate_in > 0. && ref[source] == 0)
+                                        {
+                                            throw std::invalid_argument(
+                                                "non-zero migration rate from "
+                                                "empty parental deme");
+                                        }
+                                    temp.push_back(scaling_factor * rate_in);
                                 }
                             if (std::find_if(begin(temp), end(temp),
                                              [](double d) { return d != 0.; })

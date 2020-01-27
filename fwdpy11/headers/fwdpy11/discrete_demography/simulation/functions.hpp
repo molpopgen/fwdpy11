@@ -172,11 +172,18 @@ namespace fwdpy11
                     {
                         if (G[deme] != 1.)
                             {
-                                Nnext[deme] = std::round(
+                                double next_size = std::round(
                                     static_cast<double>(N0[deme])
                                     * std::pow(G[deme],
                                                static_cast<double>(
                                                    t - onset[deme] + 1)));
+                                if (next_size <= 0.0)
+                                    {
+                                        next_size = 0.0;
+                                        G[deme] = NOGROWTH;
+                                        N0[deme] = t;
+                                    }
+                                Nnext[deme] = next_size;
                             }
                     }
             }

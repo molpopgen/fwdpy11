@@ -43,6 +43,58 @@ namespace fwdpy11
                 }
         }
 
+        void
+        finish_construction(const std::vector<std::uint32_t> &deme_sizes)
+        {
+            if (!this->N)
+                {
+                    throw std::invalid_argument("population size must be > 0");
+                }
+            std::size_t label = 0;
+            for (auto &&d : this->diploid_metadata)
+                {
+                    d.label = label++;
+                    d.w = 1.0;
+                    if (this->tables.genome_length()
+                        == std::numeric_limits<double>::max())
+                        {
+                            d.nodes[0] = d.nodes[1] = -1;
+                        }
+                    else // Fix GitHub issue 332
+                        {
+                            d.nodes[0] = 2 * d.label;
+                            d.nodes[1] = 2 * d.label + 1;
+                        }
+                }
+            if (this->tables.genome_length()
+                != std::numeric_limits<double>::max())
+                {
+                    using itype = decltype(this->diploid_metadata[0].nodes[0]);
+                    using ntype = std::remove_reference<itype>::type;
+                    if (label >= std::numeric_limits<ntype>::max())
+                        {
+                            throw std::invalid_argument(
+                                "population size too large for node "
+                                "type");
+                        }
+                    std::int32_t deme_label = 0;
+                    std::size_t i = 0;
+                    for (auto ds : deme_sizes)
+                        {
+                            for (std::uint32_t j = 0; j < ds; ++j, ++i)
+                                {
+                                    auto &md = diploid_metadata[i];
+                                    md.deme = deme_label;
+                                    tables.node_table[md.nodes[0]].deme
+                                        = deme_label;
+                                    tables.node_table[md.nodes[1]].deme
+                                        = deme_label;
+                                }
+                            ++deme_label;
+                        }
+                }
+        }
+
       public:
         using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
@@ -62,38 +114,20 @@ namespace fwdpy11
             : Population{ N, length },
               diploids(N, { 0, 0 }), alive_nodes{}, preserved_sample_nodes{}
         {
-            if (!N)
-                {
-                    throw std::invalid_argument("population size must be > 0");
-                }
-            std::size_t label = 0;
-            for (auto &&d : this->diploid_metadata)
-                {
-                    d.label = label++;
-                    d.w = 1.0;
-                    if (length == std::numeric_limits<double>::max())
-                        {
-                            d.nodes[0] = d.nodes[1] = -1;
-                        }
-                    else // Fix GitHub issue 332
-                        {
-                            d.nodes[0] = 2 * d.label;
-                            d.nodes[1] = 2 * d.label + 1;
-                        }
-                }
-            if (length != std::numeric_limits<double>::max())
-                {
-                    using itype = decltype(this->diploid_metadata[0].nodes[0]);
-                    using ntype = std::remove_reference<itype>::type;
-                    if (label >= std::numeric_limits<ntype>::max())
-                        {
-                            throw std::invalid_argument(
-                                "population size too large for node "
-                                "type");
-                        }
-                }
+            finish_construction({ N });
         }
 
+        DiploidPopulation(const std::vector<std::uint32_t> &deme_sizes,
+                          const double length)
+            : Population{ std::accumulate(begin(deme_sizes), end(deme_sizes),
+                                          0u),
+                          length },
+              diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
+                       { 0, 0 }),
+              alive_nodes{}, preserved_sample_nodes{}
+        {
+            finish_construction(deme_sizes);
+        }
         template <typename diploids_input, typename genomes_input,
                   typename mutations_input>
         explicit DiploidPopulation(diploids_input &&d, genomes_input &&g,

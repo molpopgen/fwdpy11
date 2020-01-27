@@ -21,6 +21,7 @@
 #define FWDPY11_GET_MAX_NUMBER_OF_DEMES_HPP
 
 #include "../DiscreteDemography.hpp"
+#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
@@ -84,13 +85,17 @@ namespace fwdpy11
                         // There is no migration, so we are done
                         return temp;
                     }
-                // NOTE: need to check >= 0 b/c we init everything to -1
-                if (maxdeme_from_demography >= 0
-                    && static_cast<std::size_t>(temp)
-                           > demography.migmatrix->npops)
+                if (static_cast<std::size_t>(temp)
+                    > demography.migmatrix->npops)
                     {
                         throw std::invalid_argument(
                             "MigrationMatrix contains too few demes");
+                    }
+                if (static_cast<std::size_t>(temp)
+                    < demography.migmatrix->npops)
+                    {
+                        throw std::invalid_argument(
+                            "MigrationMatrix contains too many demes");
                     }
                 return std::max(temp, static_cast<std::int32_t>(
                                           demography.migmatrix->npops));
