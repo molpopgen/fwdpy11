@@ -797,9 +797,29 @@ class TestDemographyError(unittest.TestCase):
         with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
 
+    def test_growth_in_deme_that_went_extinct(self):
+        mm = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = [fwdpy11.SetDemeSize(5, 1, 0)]
+        g = [fwdpy11.SetExponentialGrowth(6, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_growth_rates=g,
+                                        mass_migrations=mm,
+                                        set_deme_sizes=d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
     def test_set_selfing_in_deme_that_doesnt_exist(self):
         g = [fwdpy11.SetSelfingRate(0, 1, 0.5)]
         dd = fwdpy11.DiscreteDemography(set_selfing_rates=g)
+        with self.assertRaises(fwdpy11.DemographyError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
+
+    def test_set_selfing_in_deme_that_went_extinct(self):
+        mm = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = [fwdpy11.SetDemeSize(5, 1, 0)]
+        g = [fwdpy11.SetSelfingRate(6, 1, 0.5)]
+        dd = fwdpy11.DiscreteDemography(set_selfing_rates=g,
+                                        mass_migrations=mm,
+                                        set_deme_sizes=d)
         with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
 
