@@ -81,7 +81,7 @@ namespace fwdpy11
                                         = M->M[source * npops + dest];
                                     if (rate_in > 0. && ref[source] == 0)
                                         {
-                                            throw std::invalid_argument(
+                                            throw DemographyError(
                                                 "non-zero migration rate from "
                                                 "empty parental deme");
                                         }

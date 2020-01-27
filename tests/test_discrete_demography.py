@@ -733,7 +733,7 @@ class TestMigrationModels(unittest.TestCase):
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, pop, d, 5)
 
     def test_migration_matrix_too_large(self):
