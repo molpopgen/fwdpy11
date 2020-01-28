@@ -375,6 +375,8 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
 
         self.assertEqual(self.pop.N, 100)
         self.assertEqual(self.pop.generation, 4)
+        nodes = np.array(self.pop.tables.nodes)
+        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 4))
 
 
 class TestSimpleMigrationModels(unittest.TestCase):
@@ -536,6 +538,9 @@ class TestGrowthModels(unittest.TestCase):
         with self.assertRaises(fwdpy11.GlobalExtinction):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.generation, 7)
+
+        nodes = np.array(self.pop.tables.nodes)
+        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 7))
 
 
 class TestGeneticValueLists(unittest.TestCase):
