@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <numeric>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/rng.hpp>
 #include "get_max_number_of_demes.hpp"
@@ -69,6 +70,19 @@ namespace fwdpy11
                   M(init_migmatrix(demography.migmatrix)),
                   miglookup(maxdemes, M == nullptr)
             {
+            }
+
+            std::uint32_t
+            ttlN_next() const
+            {
+                const auto&ref=sizes_rates.next_deme_sizes.get();
+                return std::accumulate(begin(ref),end(ref), 0u);
+            }
+
+            bool
+            will_go_globally_extinct() const
+            {
+                return ttlN_next()==0;
             }
         };
 
