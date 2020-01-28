@@ -173,15 +173,16 @@ namespace fwdpy11
                     }
             }
 
-            void
-            apply_growth_rates(const std::uint32_t t,
-                               deme_properties& sizes_rates)
+            std::uint32_t
+            apply_growth_rates_get_next_global_N(const std::uint32_t t,
+                                                 deme_properties& sizes_rates)
             {
                 auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 auto& Nnext = sizes_rates.next_deme_sizes.get();
                 auto& G = sizes_rates.growth_rates.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
                 auto& onset = sizes_rates.growth_rate_onset_times.get();
+                std::uint32_t next_global_N = 0;
                 for (std::size_t deme = 0; deme < Nnext.size(); ++deme)
                     {
                         if (G[deme] != NOGROWTH)
@@ -205,11 +206,13 @@ namespace fwdpy11
                                     }
                                 Nnext[deme] = next_size;
                             }
+                        next_global_N += Nnext[deme];
                     }
+                return next_global_N;
             }
         } // namespace detail
 
-        void
+        std::uint32_t
         apply_demographic_events(std::uint32_t t,
                                  DiscreteDemography& demography,
                                  std::unique_ptr<MigrationMatrix>& M,
@@ -235,7 +238,9 @@ namespace fwdpy11
             std::copy(begin(sizes_rates.current_deme_sizes.get()),
                       end(sizes_rates.current_deme_sizes.get()),
                       begin(sizes_rates.next_deme_sizes.get()));
-            detail::apply_growth_rates(t, sizes_rates);
+            auto next_global_N
+                = detail::apply_growth_rates_get_next_global_N(t, sizes_rates);
+            return next_global_N;
         }
 
         template <typename METADATATYPE>

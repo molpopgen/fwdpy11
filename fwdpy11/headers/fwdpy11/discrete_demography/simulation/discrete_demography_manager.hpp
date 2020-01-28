@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <cstdint>
-#include <numeric>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/rng.hpp>
 #include "get_max_number_of_demes.hpp"
@@ -52,6 +51,8 @@ namespace fwdpy11
                     new MigrationMatrix(*Minput));
             }
 
+            std::uint32_t next_global_N;
+
           public:
             const std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
@@ -65,24 +66,30 @@ namespace fwdpy11
             discrete_demography_manager(
                 const std::vector<METADATATYPE> &metadata,
                 DiscreteDemography &demography)
-                : maxdemes(get_max_number_of_demes()(metadata, demography)),
+                : next_global_N(0),
+                  maxdemes(get_max_number_of_demes()(metadata, demography)),
                   fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
                   M(init_migmatrix(demography.migmatrix)),
                   miglookup(maxdemes, M == nullptr)
             {
             }
 
+            void
+            set_next_global_N(std::uint32_t N)
+            {
+                next_global_N = N;
+            }
+
             std::uint32_t
             ttlN_next() const
             {
-                const auto&ref=sizes_rates.next_deme_sizes.get();
-                return std::accumulate(begin(ref),end(ref), 0u);
+                return next_global_N;
             }
 
             bool
             will_go_globally_extinct() const
             {
-                return ttlN_next()==0;
+                return ttlN_next() == 0;
             }
         };
 
@@ -103,8 +110,10 @@ namespace fwdpy11
                 metadata, ddemog_manager.sizes_rates.current_deme_sizes);
             ddemog_manager.fitnesses.update(
                 ddemog_manager.sizes_rates.current_deme_sizes, metadata);
-            apply_demographic_events(generation, demography, ddemog_manager.M,
-                                     ddemog_manager.sizes_rates);
+            auto next_global_N = apply_demographic_events(
+                generation, demography, ddemog_manager.M,
+                ddemog_manager.sizes_rates);
+            ddemog_manager.set_next_global_N(next_global_N);
             build_migration_lookup(
                 ddemog_manager.M,
                 ddemog_manager.sizes_rates.current_deme_sizes,
