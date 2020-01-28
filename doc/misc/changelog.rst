@@ -4,6 +4,13 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.0rc1
+++++++++++++++++
+
+This is the same as 0.6.0rc0 except that it is based on a master
+branch that's been rebased to have the bug fixes from 0.5.5 included.
+
+
 0.6.0rc0
 ++++++++++++++++
 
@@ -43,6 +50,21 @@ Changes to the build system and dependencies:
 * Minimum pybind11 version is 2.4.3
 * The ``-Weffc++`` flag is now optional during compilation.
 
+0.5.5
+++++++++++++++++
+
+This release fixes a rather serious bug.
+
+* Fixes  `PR362 <https://github.com/molpopgen/fwdpy11/issues/362>`_
+* Fixes  `PR363 <https://github.com/molpopgen/fwdpy11/issues/363>`_
+
+The latter is the bad one.  For workflows involving simulate, write
+to file, read in and add neutral mutations, that results may now differ.
+In practice, we've seen few cases where that has happened (1 in about 10,0000
+simulations), but the bug was due to not properly populating a lookup table
+of mutation positions after reading the simulation back in from disk.  Thus,
+there is the chance that the procedure of putting down neutral mutations
+now differs.
 
 0.5.4
 ++++++++++++++++
