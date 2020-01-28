@@ -350,6 +350,35 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
 
+class TestSimpleDemeSizeChanges(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.rng = fwdpy11.GSLrng(42)
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.pdict = {'nregions': [],
+                      'sregions': [],
+                      'recregions': [],
+                      'rates': (0, 0, 0),
+                      'demography': None,
+                      'simlen': 1,
+                      'gvalue': fwdpy11.Additive(2.)
+                      }
+
+    def test_global_extinction_single_deme(self):
+        ds = [fwdpy11.SetDemeSize(4, 0, 0)]
+        d = fwdpy11.DiscreteDemography(set_deme_sizes=ds)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 10
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.GlobalExtinction):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+        self.assertEqual(self.pop.N, 100)
+        self.assertEqual(self.pop.generation, 4)
+        nodes = np.array(self.pop.tables.nodes)
+        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 4))
+
+
 class TestSimpleMigrationModels(unittest.TestCase):
     @classmethod
     def setUp(self):
@@ -480,6 +509,38 @@ class TestSimpleMigrationModels(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertTrue(validate_alive_node_metadata(self.pop))
+
+
+class TestGrowthModels(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.rng = fwdpy11.GSLrng(42)
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+        self.pdict = {'nregions': [],
+                      'sregions': [],
+                      'recregions': [],
+                      'rates': (0, 0, 0),
+                      'demography': None,
+                      'simlen': 1,
+                      'gvalue': fwdpy11.Additive(2.)
+                      }
+
+    def test_global_extinction_single_deme(self):
+        """
+        Pop would go exctinct in generation 8, 
+        which triggers exception in generation 7
+        """
+        g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
+        d = fwdpy11.DiscreteDemography(set_growth_rates=g)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 20
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.GlobalExtinction):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        self.assertEqual(self.pop.generation, 7)
+
+        nodes = np.array(self.pop.tables.nodes)
+        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 7))
 
 
 class TestGeneticValueLists(unittest.TestCase):

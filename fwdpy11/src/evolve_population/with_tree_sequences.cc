@@ -65,6 +65,81 @@ apply_treseq_resetting_of_ancient_samples(
         }
 }
 
+std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
+simplification(bool preserve_selected_fixations,
+               bool simulating_neutral_variants,
+               bool suppress_edge_table_indexing,
+               bool reset_treeseqs_to_alive_nodes_after_simplification,
+               const fwdpy11::DiploidPopulation_temporal_sampler
+                   &post_simplification_recorder,
+               fwdpp::ts::table_simplifier &simplifier,
+               fwdpy11::DiploidPopulation &pop)
+{
+    auto simplification_rv = fwdpy11::simplify_tables(
+        pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
+        preserve_selected_fixations, simulating_neutral_variants,
+        suppress_edge_table_indexing);
+    if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
+        {
+            throw std::runtime_error(
+                "evolvets: count vector size mismatch after "
+                "simplification");
+        }
+    remap_metadata(pop.ancient_sample_metadata, simplification_rv.first);
+    remap_metadata(pop.diploid_metadata, simplification_rv.first);
+    if (reset_treeseqs_to_alive_nodes_after_simplification == true)
+        {
+            apply_treseq_resetting_of_ancient_samples(
+                post_simplification_recorder, pop);
+        }
+    return simplification_rv;
+}
+
+void
+final_population_cleanup(bool suppress_edge_table_indexing,
+                         bool preserve_selected_fixations,
+                         bool remove_extinct_mutations_at_finish,
+                         fwdpy11::DiploidPopulation &pop)
+{
+    index_and_count_mutations(suppress_edge_table_indexing, pop);
+    if (!preserve_selected_fixations)
+        {
+            auto itr = std::remove_if(
+                pop.tables.mutation_table.begin(),
+                pop.tables.mutation_table.end(),
+                [&pop](const fwdpp::ts::mutation_record &mr) {
+                    return pop.mcounts[mr.key] == 2 * pop.diploids.size()
+                           && pop.mcounts_from_preserved_nodes[mr.key] == 0;
+                });
+            auto d = std::distance(itr, end(pop.tables.mutation_table));
+            pop.tables.mutation_table.erase(itr,
+                                            end(pop.tables.mutation_table));
+            if (d)
+                {
+                    pop.tables.rebuild_site_table();
+                }
+            fwdpp::ts::remove_fixations_from_haploid_genomes(
+                pop.haploid_genomes, pop.mutations, pop.mcounts,
+                pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                preserve_selected_fixations);
+            // NOTE: this is hacky and should be better-handled upstream
+            for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
+                {
+                    if (pop.mcounts[i] == 2 * pop.N
+                        && pop.mcounts_from_preserved_nodes[i] == 0)
+                        {
+                            pop.mcounts[i] = 0;
+                        }
+                }
+        }
+    cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
+    if (remove_extinct_mutations_at_finish)
+        {
+            remove_extinct_mutations(pop);
+        }
+    remove_extinct_genomes(pop);
+}
+
 void
 evolve_with_tree_sequences(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
@@ -246,8 +321,19 @@ evolve_with_tree_sequences(
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
-            if (pop.N == 0)
+
+            if (ddemog_manager.will_go_globally_extinct() == true)
                 {
+                    simplification_rv = simplification(
+                        preserve_selected_fixations,
+                        simulating_neutral_variants,
+                        suppress_edge_table_indexing,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, simplifier, pop);
+                    final_population_cleanup(
+                        suppress_edge_table_indexing,
+                        preserve_selected_fixations,
+                        remove_extinct_mutations_at_finish, pop);
                     std::ostringstream o;
                     o << "extinction at time " << pop.generation;
                     throw ddemog::GlobalExtinction(o.str());
@@ -267,30 +353,13 @@ evolve_with_tree_sequences(
                 new_diploid_gvalues, record_genotype_matrix);
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
-                    // TODO: update this to allow neutral mutations to be simulated
-                    simplification_rv = fwdpy11::simplify_tables(
-                        pop, pop.mcounts_from_preserved_nodes, pop.tables,
-                        simplifier, preserve_selected_fixations,
+                    simplification_rv = simplification(
+                        preserve_selected_fixations,
                         simulating_neutral_variants,
-                        suppress_edge_table_indexing);
-                    if (pop.mcounts.size()
-                        != pop.mcounts_from_preserved_nodes.size())
-                        {
-                            throw std::runtime_error(
-                                "evolvets: count vector size mismatch after "
-                                "simplification");
-                        }
+                        suppress_edge_table_indexing,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, simplifier, pop);
                     simplified = true;
-                    remap_metadata(pop.ancient_sample_metadata,
-                                   simplification_rv.first);
-                    remap_metadata(pop.diploid_metadata,
-                                   simplification_rv.first);
-                    if (reset_treeseqs_to_alive_nodes_after_simplification
-                        == true)
-                        {
-                            apply_treseq_resetting_of_ancient_samples(
-                                post_simplification_recorder, pop);
-                        }
                 }
             else
                 {
@@ -424,63 +493,15 @@ evolve_with_tree_sequences(
 
     if (!simplified)
         {
-            // TODO: update this to allow neutral mutations to be simulated
-            auto rv = fwdpy11::simplify_tables(
-                pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
+            simplification_rv = simplification(
                 preserve_selected_fixations, simulating_neutral_variants,
-                suppress_edge_table_indexing);
-            if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
-                {
-                    throw std::runtime_error(
-                        "evolvets: count vector size "
-                        "mismatch after final simplification");
-                }
-
-            remap_metadata(pop.ancient_sample_metadata, rv.first);
-            remap_metadata(pop.diploid_metadata, rv.first);
-            if (reset_treeseqs_to_alive_nodes_after_simplification == true)
-                {
-                    apply_treseq_resetting_of_ancient_samples(
-                        post_simplification_recorder, pop);
-                }
+                suppress_edge_table_indexing,
+                reset_treeseqs_to_alive_nodes_after_simplification,
+                post_simplification_recorder, simplifier, pop);
         }
-    index_and_count_mutations(suppress_edge_table_indexing, pop);
-    if (!preserve_selected_fixations)
-        {
-            auto itr = std::remove_if(
-                pop.tables.mutation_table.begin(),
-                pop.tables.mutation_table.end(),
-                [&pop](const fwdpp::ts::mutation_record &mr) {
-                    return pop.mcounts[mr.key] == 2 * pop.diploids.size()
-                           && pop.mcounts_from_preserved_nodes[mr.key] == 0;
-                });
-            auto d = std::distance(itr, end(pop.tables.mutation_table));
-            pop.tables.mutation_table.erase(itr,
-                                            end(pop.tables.mutation_table));
-            if (d)
-                {
-                    pop.tables.rebuild_site_table();
-                }
-            fwdpp::ts::remove_fixations_from_haploid_genomes(
-                pop.haploid_genomes, pop.mutations, pop.mcounts,
-                pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
-                preserve_selected_fixations);
-            // NOTE: this is hacky and should be better-handled upstream
-            for (std::size_t i = 0; i < pop.mcounts.size(); ++i)
-                {
-                    if (pop.mcounts[i] == 2 * pop.N
-                        && pop.mcounts_from_preserved_nodes[i] == 0)
-                        {
-                            pop.mcounts[i] = 0;
-                        }
-                }
-        }
-    cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
-    if (remove_extinct_mutations_at_finish)
-        {
-            remove_extinct_mutations(pop);
-        }
-    remove_extinct_genomes(pop);
+    final_population_cleanup(suppress_edge_table_indexing,
+                             preserve_selected_fixations,
+                             remove_extinct_mutations_at_finish, pop);
 }
 
 void
