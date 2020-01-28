@@ -302,14 +302,165 @@ Instances of :class:`fwdpy11.SetExponentialGrowth` manage the exponential growth
 Growth rates less than one indicate population decline, greater than one means growth
 and :attr:`fwdpy11.NOGROWTH` is equal to 1.0 to indicate no growth.
 
+Let's look at an example:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation([50], 1.)
+    g = [fwdpy11.SetExponentialGrowth(when=0,deme=0,G=1.1)]
+    dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
+    st = SizeTracker()
+    setup_and_run_model(pop, dd, 6, st)
+    for i in st.data:
+        print(i)
+
+The deme sizes each generation must be integer values.  The simulation uses C/C++ rules for
+rounding double-precision values to integer values. The function ``numpy.rint`` uses the same
+rules:
+
+.. ipython:: python
+
+   N0 = np.float(50.0)
+   for i in range(6):
+       Ni = N0*np.power(1.1,i+1)
+       print(i+1, Ni, np.rint(Ni))
+
+You may need to keep the rounding policy in mind when trying to predict final deme sizes when testing
+or when trying to convert a model from continuous time into discrete time.
+
 Changing the selfing rate
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Instances of :class:`fwdpy11.SetSelfingRate` affect the rate of selfing-versus-outcrossing in different
+demes, or to change the rate within a deme over time. The default is that individuals don't self
+unless they are picked twice as a parent by chance.
 
-* Straightforward.  Main thing to point out is that selfing competes with migration.  Still
-  working out the mechanics here.
+Using this type is straightforward.  Before we dive in, we will create a new recorder
+type to track parents each generation:
 
-Current thoughts for how to deal w/selfing follow.
+.. ipython:: python
+
+    class ParentTracker(object):
+        def __init__(self):
+            self.data = []
+        def __call__(self, pop, sampler):
+            for i in pop.diploid_metadata:
+                 self.data.append((i.label, i.deme, i.parents))
+
+Let's run a simulation for a couple of generations:
+   
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation([5, 5], 1.)
+    sr = [fwdpy11.SetSelfingRate(when=0, deme=1, S=1.0)] # Deme 1 always selfs
+    dd = fwdpy11.DiscreteDemography(set_selfing_rates=sr)
+    pt = ParentTracker()
+    setup_and_run_model(pop, dd, 2, pt)
+
+In our output, the deme label is the second value in each tuple, and any indvididual
+in deme 1 has the same parent listed twice because they were the product of a selfing event:
+
+.. ipython:: python
+
+    for i in pt.data:
+        print(i)
+
+(In the above output, the parent IDs are the indexes of the parental individuals from their
+generation.)
+
+.. _migration:
+
+Migration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For models with multiple demes, migration between then is managed by an
+instance of :class:`fwdpy11.MigrationMatrix`.
+
+For ``m`` demes, the ``m``-by-``m`` migration matrix represents the probability
+that an offspring in column ``c`` has a parent from row ``r``,
+and the matrix is consulted for each parent (barring selfing, see :ref:`migration_and_selfing`).
+Thus, rows are source demes, and columns are destination demes.
+
+(I think we can say that this is the same forward
+migration matrix as in Christiansen and others, 1970s, but will have to check.)
+
+Let's construct a simple (and uninteresting) migration matrix object:
+
+.. ipython:: python
+
+    mm = fwdpy11.MigrationMatrix(np.identity(2))
+    print(mm.M)
+    print(mm.scaled)
+
+We just learned that :class:`fwdpy11.MigrationMatrix` instances may be created from
+square ``numpy`` matrices.  Further, this class has a property called ``scaled``.
+When ``scaled is True``, values in the migration matrix are treated as per-individual
+probabilities.  Internally, these probabilities are multiplied by the current source
+deme sizes in order to create a set of weights representing migration rates weighted
+by current deme sizes.  This behavior can be changed, which means that the migration
+matrix entries are interpreted as weights with no consideration of current deme sizes:
+
+.. ipython:: python
+
+    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
+    print(mm.M)
+    print(mm.scaled)
+
+The previous examples are uninteresting because the identity matrix means no migration.
+By default, there is no migration, which is represented by the value ``None``:
+
+.. ipython:: python
+
+    d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
+    print(d.migmatrix)
+
+The only reason to use the identity matrix is to start a simulation with no migration
+and then change the rates later.  To see this in action, we'll first generate a
+new type to track if parents are migrants or not:
+
+.. ipython:: python
+
+    class MigrationTracker(object):
+        def __init__(self, N0):
+            self.N0 = N0
+            self.data = []
+        def __call__(self, pop, sampler):
+            for i in pop.diploid_metadata:
+                if i.deme == 1:
+                    p = []
+                    for j in i.parents:
+                        if j < self.N0:
+                            p.append((j, True))
+                        else:
+                            p.append((j, False))
+                    self.data.append((pop.generation, i.label, i.deme, p))
+
+.. ipython:: python
+
+    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
+    cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
+    # cm = [fwdpy11.SetMigrationRates(3, np.array([1.0,0.,0.5,0.5]).reshape(2,2))]
+    dd = fwdpy11.DiscreteDemography(migmatrix=mm, set_migration_rates=cm)
+    pop = fwdpy11.DiploidPopulation([10, 10], 1.0)
+    mt = MigrationTracker(10)
+    setup_and_run_model(pop, dd, 4, mt)
+
+    for i in mt.data:
+        nmig = 0
+        if i[1] > 10:
+            if i[3][0][1] is True:
+                nmig+=1
+            if i[3][1][1] is True:
+                nmig+=1
+        mstring = ""
+        if nmig > 0:
+            mstring="<- {} migrant parents".format(nmig)
+        print(i, mstring)
+
+.. _migration_and_selfing:
+
+Migration and selfing
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Within each deme, the selfing rate :math:`S` is the probability that an individual selfs,
 and :math:`1-S` is the probability that an individual outcrosses with another.
@@ -318,7 +469,7 @@ For a single deme, everything is very straightforward.  Likewise for many demes 
 migration.  The challenge arises when we have multiple demes, nonzero selfing rates in
 one or more of them, and nonzero migration.
 
-The challenge is due to the fact that, right now, we consider the migration matrix elements
+The challenge is due to the fact that  we consider the migration matrix elements
 to be the probability of migration from deme `r` into deme `c`, multiplied by the current
 size of deme `r`. Here, `r` and `c` mean `row` and `column`.
 
@@ -337,21 +488,8 @@ an outcrossing event* being a parent in our offspring deme.  Thus, it seems we n
 lookup table where the "raw" migration weights are all weighted by the current :math:`1-S` for
 each source deme.
 
-.. _migration:
-
-Migration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-* The MigrationMatrix class
-* The m-by-m migration matrix represents the probability that an offspring in column c has a parent from
-  row r, and the matrix is consulted for each parent (barring selfing, see above).  Thus, rows are
-  source demes, and columns are destination demes.  I think we can say that this is the same forward
-  migration matrix as in Christiansen and others, 1970s, but will have to check.
-* scaled vs "un-scaled"
-* In general, the various ways the values can be interpreted: probabilities, rates, scaled or not
-* Show the various ways to construct things/initiate via the DiscreteDemography class. None 
-  means no migration.
+Run-time checking
+-------------------------------------------------
 
 Debugging Demographic models
 -------------------------------------------------
