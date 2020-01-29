@@ -461,7 +461,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
             fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
 
-    def test_migrration_rates_larger_than_one(self):
+    def test_migration_rates_larger_than_one(self):
         """
         Same as a previous tests, but rates are "weights"
         rather than "probabilities"
