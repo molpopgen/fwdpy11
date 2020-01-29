@@ -50,9 +50,6 @@ namespace fwdpy11
             const std::unique_ptr<MigrationMatrix>& M,
             const current_deme_sizes_vector& current_deme_sizes,
             const selfing_rates_vector& selfing_rates, migration_lookup& ml)
-        // The lookup data is the transpose of a migration matrix multiplied
-        // by the source population sizes, element-wise per row.
-        // NOTE: the migration matrix entered into a simulation could be transposed immediately, right?
         {
             if (M != nullptr)
                 {
@@ -78,7 +75,7 @@ namespace fwdpy11
                                             scaling_factor = 0.0;
                                         }
                                     double rate_in
-                                        = M->M[source * npops + dest];
+                                        = M->M[dest * npops + source];
                                     if (rate_in > 0.)
                                         {
                                             if (ref[source] == 0)
