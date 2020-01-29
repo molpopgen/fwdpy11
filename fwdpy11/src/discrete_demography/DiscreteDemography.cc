@@ -66,34 +66,39 @@ namespace
             return M;
         };
 
+        bool isarray = true;
+
         try
             {
                 py::array_t<double> m = o.cast<py::array_t<double>>();
-                auto M = a2v(m);
-                return ddemog::MigrationMatrix(std::move(M), m.shape(0),
-                                                true);
             }
         catch (...)
             {
-                try
+                isarray = false;
+            }
+        if (isarray)
+            {
+                py::array_t<double> m = o.cast<py::array_t<double>>();
+                auto M = a2v(m);
+                return ddemog::MigrationMatrix(std::move(M), m.shape(0), true);
+            }
+        try
+            {
+                py::tuple t = o.cast<py::tuple>();
+                if (t.size() != 2)
                     {
-                        py::tuple t = o.cast<py::tuple>();
-                        if (t.size() != 2)
-                            {
-                                throw std::invalid_argument(
-                                    "MigrationMatrix: tuple contain two "
-                                    "elements");
-                            }
-                        py::array_t<double> m
-                            = t[0].cast<py::array_t<double>>();
-                        auto M = a2v(m);
-                        bool scaled = t[1].cast<bool>();
-                        return ddemog::MigrationMatrix(std::move(M),
-                                                        m.shape(0), scaled);
+                        throw std::invalid_argument(
+                            "MigrationMatrix: tuple contain two "
+                            "elements");
                     }
-                catch (...)
-                    {
-                    }
+                py::array_t<double> m = t[0].cast<py::array_t<double>>();
+                auto M = a2v(m);
+                bool scaled = t[1].cast<bool>();
+                return ddemog::MigrationMatrix(std::move(M), m.shape(0),
+                                               scaled);
+            }
+        catch (...)
+            {
             }
         ddemog::MigrationMatrix M = o.cast<ddemog::MigrationMatrix>();
         return M;
@@ -137,8 +142,7 @@ init_DiscreteDemography(py::module& m)
                         py::object set_migration_rates) {
                 ddemog::DiscreteDemography::mass_migration_vector morc;
                 ddemog::DiscreteDemography::set_growth_rates_vector growth;
-                ddemog::DiscreteDemography::set_deme_sizes_vector
-                    change_sizes;
+                ddemog::DiscreteDemography::set_deme_sizes_vector change_sizes;
                 ddemog::DiscreteDemography::set_selfing_rates_vector selfing;
                 ddemog::DiscreteDemography::set_migration_rates_vector
                     migrates;
@@ -195,8 +199,12 @@ init_DiscreteDemography(py::module& m)
         .def_readonly("set_selfing_rates",
                       &ddemog::DiscreteDemography::set_selfing_rates)
         .def_property_readonly("migmatrix",
-                               [](const ddemog::DiscreteDemography& self) -> const ddemog::MigrationMatrix*  {
-                                   if(self.migmatrix == nullptr) { return nullptr; }
+                               [](const ddemog::DiscreteDemography& self)
+                                   -> const ddemog::MigrationMatrix* {
+                                   if (self.migmatrix == nullptr)
+                                       {
+                                           return nullptr;
+                                       }
                                    return self.migmatrix.get();
                                })
         .def_readonly("set_migration_rates",
@@ -226,8 +234,8 @@ init_DiscreteDemography(py::module& m)
                 return ddemog::DiscreteDemography(
                     t[0].cast<
                         ddemog::DiscreteDemography::mass_migration_vector>(),
-                    t[1].cast<ddemog::DiscreteDemography::
-                                  set_growth_rates_vector>(),
+                    t[1].cast<
+                        ddemog::DiscreteDemography::set_growth_rates_vector>(),
                     t[2].cast<
                         ddemog::DiscreteDemography::set_deme_sizes_vector>(),
                     t[3].cast<ddemog::DiscreteDemography::

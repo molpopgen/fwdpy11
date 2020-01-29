@@ -165,7 +165,7 @@ class TestMigrationMatrix(unittest.TestCase):
 
     def test_weights_greater_than_one(self):
         try:
-            fwdpy11.MigrationMatrix(np.array([2.]*4).reshape(2, 2))
+            fwdpy11.MigrationMatrix(np.array([2.]*4).reshape(2, 2), False)
         except:  # NOQA
             self.fail("unexpected exception")
 
@@ -312,7 +312,7 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
     def test_weight_matrix_diagonal_only_conversion_to_None(self):
         mm = np.identity(5)
         np.fill_diagonal(mm, 0.1)
-        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
         self.assertTrue(d.migmatrix is None)
 
     def test_identity_matrix_with_migrate_changes(self):
@@ -681,7 +681,7 @@ class TestDiscreteDemography(unittest.TestCase):
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
             3, np.array([1.5, 1.5, 0, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=(mm, False),
                                        set_migration_rates=smr)
         N = self.pop.N
         migevents = ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
@@ -728,6 +728,7 @@ class TestMigrationModels(unittest.TestCase):
         pop = fwdpy11.DiploidPopulation([20, 20], 1.)
         mm = np.identity(3)
         mm[:] = 0.25
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M)
@@ -813,6 +814,7 @@ class TestDemographyError(unittest.TestCase):
         mm = np.identity(3)
         mm[:] = 0.25
         mm[1, :] = 0.0
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
@@ -823,6 +825,7 @@ class TestDemographyError(unittest.TestCase):
         mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
         mm = np.identity(3)
         mm[:] = 0.25
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)

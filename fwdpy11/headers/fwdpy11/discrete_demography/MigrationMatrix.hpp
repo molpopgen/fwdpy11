@@ -43,6 +43,7 @@ namespace fwdpy11
                         throw std::invalid_argument(
                             "MigrationMatrix: row index out of range");
                     }
+                double rsum = 0.;
                 for (std::size_t j = i * npops; j < i * npops + npops; ++j)
                     {
                         auto v = M[j];
@@ -56,6 +57,12 @@ namespace fwdpy11
                                 throw std::invalid_argument(
                                     "migration rates must be finite");
                             }
+                        rsum += v;
+                    }
+                if (scaled && rsum != 1.0)
+                    {
+                        throw std::invalid_argument(
+                            "migration rates must sum to 1 in a row.");
                     }
             }
 

@@ -476,7 +476,8 @@ class TestSimpleMigrationModels(unittest.TestCase):
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
             3, np.array([1.5, 1.5, 0, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs,
+                                       migmatrix=(mm, False),
                                        set_migration_rates=smr)
         N = self.pop.N
         self.pdict['demography'] = d
