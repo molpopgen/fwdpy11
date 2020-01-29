@@ -448,23 +448,18 @@ class TestSimpleMigrationModels(unittest.TestCase):
         so that all offspring have both parents from the other deme.
 
         After 3 generations, we reset the migration rates to be
-        [[1,0],
-         [1,0]],
+        [[0.5, 0.5],
+         [0, 0]],
         which leads to there being no parents for deme 1, raising a
-        MigrationError exception.
+        ValueError exception.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1, 0, 1, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+            3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
+        with self.assertRaises(ValueError):
+            fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
-        params = fwdpy11.ModelParams(**self.pdict)
-        with self.assertRaises(fwdpy11.MigrationError):
-            fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_migrration_rates_larger_than_one(self):
         """
@@ -475,7 +470,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
         mm = np.array([0, 2, 2, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1.5, 1.5, 0, 0]).reshape(2, 2))]
+            3, np.array([1.5, 0, 1.5, 0]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(mass_migrations=mmigs,
                                        migmatrix=(mm, False),
                                        set_migration_rates=smr)
