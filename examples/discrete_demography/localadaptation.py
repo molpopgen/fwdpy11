@@ -67,7 +67,7 @@ def make_parser():
     optional.add_argument("--opt", type=float, default=1.0,
                           help="Value of new phenotypic optimum")
     optional.add_argument("--migrates", type=float, nargs=2, default=None,
-                          help="Migration rates")
+                          help="Migration rates from 0 to 1 and 1 to 0, respectively.")
     optional.add_argument("--time", type=float, default=0.1,
                           help="Amount of time to simulate past"
                           "optimum shift, in units of N")
@@ -108,8 +108,8 @@ def make_migmatrix(migrates):
     if migrates is None:
         return None
     mm = np.zeros(4).reshape(2, 2)
-    mm[0, 1] = migrates[0]
-    mm[1, 0] = migrates[1]
+    mm[0, 1] = migrates[1]
+    mm[1, 0] = migrates[0]
     rs = np.sum(mm, axis=1)
     np.fill_diagonal(mm, 1.0 - rs)
     return fwdpy11.MigrationMatrix(mm)
