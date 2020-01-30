@@ -156,8 +156,8 @@ namespace fwdpy11
                                         std::ostringstream o;
                                         o << "DiscreteDemography: at time "
                                           << i->when << ", attempting to move "
-                                          << sum*100.0 << "% of deme " << i->source
-                                          << " is invalid";
+                                          << sum * 100.0 << "% of deme "
+                                          << i->source << " is invalid";
                                         throw std::invalid_argument(o.str());
                                     }
                                 i = j;
@@ -238,6 +238,46 @@ namespace fwdpy11
                     }
             }
 
+            void
+            validate_change_migration_events()
+            {
+                if (migmatrix == nullptr)
+                    {
+                        if (!set_migration_rates.empty())
+                            {
+                                throw std::invalid_argument(
+                                    "migration matrix is None but "
+                                    "SetMigrationRates events are registered");
+                            }
+                        return;
+                    }
+                for (auto& event : set_migration_rates)
+                    {
+                        if (event.migrates.size() == migmatrix->npops)
+                            {
+                                if (migmatrix->scaled == true)
+                                    {
+                                        auto sum = std::accumulate(
+                                            begin(event.migrates),
+                                            end(event.migrates), 0.);
+                                        if (sum != 0.0 && sum != 1.)
+                                            {
+                                                throw std::invalid_argument(
+                                                    "new migration rates must "
+                                                    "sum to "
+                                                    "1.0");
+                                            }
+                                    }
+                            }
+                        else if (event.migrates.size()
+                                 != migmatrix->npops * migmatrix->npops)
+                        {
+                                throw std::invalid_argument(
+                                    "invalid matrix size");
+                        }
+                    }
+            }
+
           public:
             using mass_migration_vector = std::vector<MassMigration>;
             using set_growth_rates_vector = std::vector<SetExponentialGrowth>;
@@ -278,6 +318,7 @@ namespace fwdpy11
                   migration_rate_change_tracker(set_range(set_migration_rates))
             {
                 check_if_no_migration();
+                validate_change_migration_events();
             }
 
             void

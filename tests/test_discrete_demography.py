@@ -165,7 +165,7 @@ class TestMigrationMatrix(unittest.TestCase):
 
     def test_weights_greater_than_one(self):
         try:
-            fwdpy11.MigrationMatrix(np.array([2.]*4).reshape(2, 2))
+            fwdpy11.MigrationMatrix(np.array([2.]*4).reshape(2, 2), False)
         except:  # NOQA
             self.fail("unexpected exception")
 
@@ -312,7 +312,7 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
     def test_weight_matrix_diagonal_only_conversion_to_None(self):
         mm = np.identity(5)
         np.fill_diagonal(mm, 0.1)
-        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
         self.assertTrue(d.migmatrix is None)
 
     def test_identity_matrix_with_migrate_changes(self):
@@ -628,14 +628,14 @@ class TestDiscreteDemography(unittest.TestCase):
         will be recorded by the test simulation.
 
         After 3 generations, we reset the migration rates to be
-        [[0.5, 0.5],
-         [[0, 0]]
+        [[1, 0],
+         [1, 0]]
         so that all parents are from deme zero.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
-            3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
+            3, np.array([1, 0, 1, 0]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
         N = self.pop.N
@@ -657,21 +657,21 @@ class TestDiscreteDemography(unittest.TestCase):
         will be recorded by the test simulation.
 
         After 3 generations, we reset the migration rates to be
-        [[1,0],
-         [1,0]],
+        [[0.5, 0.5],
+         [0, 0]],
         which leads to there being no parents for deme 1, raising a
-        MigrationError exception.
+        fwdpy11.DemographyError exception.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1, 0, 1, 0]).reshape(2, 2))]
+            3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
-        with self.assertRaises(fwdpy11.MigrationError):
+        with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
-    def test_migrration_rates_larger_than_one(self):
+    def test_migration_rates_larger_than_one(self):
         """
         Same as a previous tests, but rates are "weights"
         rather than "probabilities"
@@ -680,8 +680,8 @@ class TestDiscreteDemography(unittest.TestCase):
         mm = np.array([0, 2, 2, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1.5, 1.5, 0, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+            3, np.array([1.5, 0, 1.5, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=(mm, False),
                                        set_migration_rates=smr)
         N = self.pop.N
         migevents = ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
@@ -728,6 +728,7 @@ class TestMigrationModels(unittest.TestCase):
         pop = fwdpy11.DiploidPopulation([20, 20], 1.)
         mm = np.identity(3)
         mm[:] = 0.25
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M)
@@ -810,24 +811,50 @@ class TestDemographyError(unittest.TestCase):
 
     def test_migration_into_empty_deme(self):
         mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
-        mm = np.identity(3)
-        mm[:] = 0.25
-        mm[1, :] = 0.0
+        mm = np.zeros(9).reshape(3, 3)
+        mm[:, 2] = 1.
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
-        with self.assertRaises(fwdpy11.DemographyError):
+        assert_raised = False
+        try:
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("rate into empty destination deme" in str(e))
+            self.assertTrue("from empty parental deme" not in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
 
     def test_migration_from_an_empty_deme(self):
         mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
         mm = np.identity(3)
         mm[:] = 0.25
+        np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
-        with self.assertRaises(fwdpy11.DemographyError):
+        assert_raised = False
+        try:
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("from empty parental deme" in str(e))
+            self.assertTrue("into empty destination" not in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
+
+    def test_migration_from_an_empty_deme_into_an_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 1.0)]
+        mm = np.array([0., 1., 0., 0., 0., 0., 0., 0., 1.]).reshape(3, 3)
+        d = fwdpy11.DiscreteDemography(migmatrix=mm, mass_migrations=mass_mig)
+        assert_raised = False
+        try:
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("from empty parental deme" in str(e))
+            self.assertTrue("into empty destination" in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
 
 
 if __name__ == "__main__":
