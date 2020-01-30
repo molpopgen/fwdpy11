@@ -564,8 +564,8 @@ migration.  The challenge arises when we have multiple demes, nonzero selfing ra
 one or more of them, and nonzero migration.
 
 The challenge is due to the fact that  we consider the migration matrix elements
-to be the probability of migration from deme `r` into deme `c`, multiplied by the current
-size of deme `r`. Here, `r` and `c` mean `row` and `column`.
+to be the probability of migration from deme `c` into deme `r`, multiplied by the current
+size of deme `c`. Here, `r` and `c` mean `row` and `column`.
 
 If we focus on an offspring deme and pull a migrant parent from the migration matrix, one 
 of two things may happen:
