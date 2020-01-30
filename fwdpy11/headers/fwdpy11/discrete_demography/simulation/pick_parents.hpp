@@ -76,7 +76,7 @@ namespace fwdpy11
                 }
             if (miglookup.lookups[offspring_deme] == nullptr)
                 {
-                    throw MigrationError("parental deme lookup is NULL");
+                    throw DemographyError("parental deme lookup is NULL");
                 }
             std::int32_t pdeme1 = static_cast<std::int32_t>(gsl_ran_discrete(
                 rng.get(), miglookup.lookups[offspring_deme].get()));

@@ -451,7 +451,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
         [[0.5, 0.5],
          [0, 0]],
         which leads to there being no parents for deme 1, raising a
-        fwdpy11.MigrationError exception.
+        fwdpy11.DemographyError exception.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
@@ -462,7 +462,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
         self.pdict['demography'] = d
         self.pdict['simlen'] = 5
         params = fwdpy11.ModelParams(**self.pdict)
-        with self.assertRaises(fwdpy11.MigrationError):
+        with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
     def test_migration_rates_larger_than_one(self):

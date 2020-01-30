@@ -660,7 +660,7 @@ class TestDiscreteDemography(unittest.TestCase):
         [[0.5, 0.5],
          [0, 0]],
         which leads to there being no parents for deme 1, raising a
-        fwdpy11.MigrationError exception.
+        fwdpy11.DemographyError exception.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
@@ -668,7 +668,7 @@ class TestDiscreteDemography(unittest.TestCase):
             3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
-        with self.assertRaises(fwdpy11.MigrationError):
+        with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
     def test_migration_rates_larger_than_one(self):

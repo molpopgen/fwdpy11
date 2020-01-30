@@ -44,23 +44,6 @@ namespace fwdpy11
             }
         };
 
-        struct MigrationError : public std::exception
-        {
-          private:
-            std::string message_;
-
-          public:
-            explicit MigrationError(std::string message)
-                : message_(std::move(message))
-            {
-            }
-            virtual const char*
-            what() const noexcept
-            {
-                return message_.c_str();
-            }
-        };
-
         struct DemographyError : public std::exception
         {
           private:
