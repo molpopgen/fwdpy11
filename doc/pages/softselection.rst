@@ -377,14 +377,22 @@ For models with multiple demes, migration between then is managed by an
 instance of :class:`fwdpy11.MigrationMatrix`.
 
 For ``m`` demes, the ``m``-by-``m`` migration matrix represents the probability
-that an offspring in column ``c`` has a parent from row ``r``,
+that an offspring in row ``r`` has a parent from column ``c``
 and the matrix is consulted for each parent (barring selfing, see :ref:`migration_and_selfing`).
-Thus, rows are source demes, and columns are destination demes.
+Thus, rows are destination demes, and columns are source demes.
 
 (I think we can say that this is the same forward
 migration matrix as in Christiansen and others, 1970s, but will have to check.)
 
-Let's construct a simple (and uninteresting) migration matrix object:
+By default, there is no migration, which is represented by the value ``None``:
+
+.. ipython:: python
+
+    # Define demographic events w/o any migration stuff
+    d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
+    print(d.migmatrix)
+
+Let's construct a simple migration matrix object:
 
 .. ipython:: python
 
@@ -406,13 +414,11 @@ matrix entries are interpreted as weights with no consideration of current deme 
     print(mm.M)
     print(mm.scaled)
 
-The previous examples are uninteresting because the identity matrix means no migration.
-By default, there is no migration, which is represented by the value ``None``:
-
-.. ipython:: python
-
-    d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
-    print(d.migmatrix)
+This is example is uninteresting because the identity matrix means no migration,
+as the probability that an offspring in deme ``i`` picks a parent from deme ``i``
+is 1.0 and the probability of a parent from any other deme is 0.0.  The absence
+of migration is true whether or not we scale these rates by deme sizes during the
+simulation.
 
 The only reason to use the identity matrix is to start a simulation with no migration
 and then change the rates later.  To see this in action, we'll first generate a
@@ -438,8 +444,8 @@ new type to track if parents are migrants or not:
 .. ipython:: python
 
     mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
-    cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
-    # cm = [fwdpy11.SetMigrationRates(3, np.array([1.0,0.,0.5,0.5]).reshape(2,2))]
+    # cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
+    cm = [fwdpy11.SetMigrationRates(3, np.array([1.0,0.,0.5,0.5]).reshape(2,2))]
     dd = fwdpy11.DiscreteDemography(migmatrix=mm, set_migration_rates=cm)
     pop = fwdpy11.DiploidPopulation([10, 10], 1.0)
     mt = MigrationTracker(10)
