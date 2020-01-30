@@ -422,7 +422,7 @@ simulation.
 
 The only reason to use the identity matrix is to start a simulation with no migration
 and then change the rates later.  To see this in action, we'll first generate a
-new type to track if parents are migrants or not:
+new type to track if parents of offspring in deme 1 are migrants or not:
 
 .. ipython:: python
 
@@ -443,9 +443,11 @@ new type to track if parents are migrants or not:
 
 .. ipython:: python
 
+    # No migration at first
     mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
-    # cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
-    cm = [fwdpy11.SetMigrationRates(3, np.array([1.0,0.,0.5,0.5]).reshape(2,2))]
+    # In generation 3, reset migration rates for deme 1 such
+    # that parents are equally likey from both demes.
+    cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
     dd = fwdpy11.DiscreteDemography(migmatrix=mm, set_migration_rates=cm)
     pop = fwdpy11.DiploidPopulation([10, 10], 1.0)
     mt = MigrationTracker(10)
@@ -460,7 +462,9 @@ new type to track if parents are migrants or not:
                 nmig+=1
         mstring = ""
         if nmig > 0:
-            mstring="<- {} migrant parents".format(nmig)
+            mstring="<- {} migrant parent".format(nmig)
+        if nmig > 1:
+            mstring += 's'
         print(i, mstring)
 
 .. _migration_and_selfing:
