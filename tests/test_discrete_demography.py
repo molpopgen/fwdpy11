@@ -660,15 +660,16 @@ class TestDiscreteDemography(unittest.TestCase):
         [[0.5, 0.5],
          [0, 0]],
         which leads to there being no parents for deme 1, raising a
-        ValueError exception.
+        fwdpy11.MigrationError exception.
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         smr = [fwdpy11.SetMigrationRates(
             3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
-        with self.assertRaises(ValueError):
-            fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
+        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
                                        set_migration_rates=smr)
+        with self.assertRaises(fwdpy11.MigrationError):
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
     def test_migration_rates_larger_than_one(self):
         """
@@ -810,15 +811,20 @@ class TestDemographyError(unittest.TestCase):
 
     def test_migration_into_empty_deme(self):
         mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
-        mm = np.identity(3)
-        mm[:] = 0.25
-        mm[1, :] = 0.0
+        mm = np.zeros(9).reshape(3, 3)
+        mm[:, 2] = 1.
         np.fill_diagonal(mm, 0)
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
-        with self.assertRaises(fwdpy11.DemographyError):
+        assert_raised = False
+        try:
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("rate into empty destination deme" in str(e))
+            self.assertTrue("from empty parental deme" not in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
 
     def test_migration_from_an_empty_deme(self):
         mass_mig = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
@@ -828,8 +834,27 @@ class TestDemographyError(unittest.TestCase):
         np.fill_diagonal(mm, 1-np.sum(mm, 1))
         M = fwdpy11.MigrationMatrix(mm)
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mass_mig)
-        with self.assertRaises(fwdpy11.DemographyError):
+        assert_raised = False
+        try:
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("from empty parental deme" in str(e))
+            self.assertTrue("into empty destination" not in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
+
+    def test_migration_from_an_empty_deme_into_an_empty_deme(self):
+        mass_mig = [fwdpy11.move_individuals(0, 0, 2, 1.0)]
+        mm = np.array([0., 1., 0., 0., 0., 0., 0., 0., 1.]).reshape(3, 3)
+        d = fwdpy11.DiscreteDemography(migmatrix=mm, mass_migrations=mass_mig)
+        assert_raised = False
+        try:
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError as e:
+            self.assertTrue("from empty parental deme" in str(e))
+            self.assertTrue("into empty destination" in str(e))
+            assert_raised = True
+        self.assertTrue(assert_raised)
 
 
 if __name__ == "__main__":

@@ -76,22 +76,32 @@ namespace fwdpy11
                                         }
                                     double rate_in
                                         = M->M[dest * npops + source];
-                                    if (rate_in > 0.)
+                                    if (rate_in > 0.
+                                        && (ref[source] == 0
+                                            || ref[dest] == 0))
                                         {
-                                            if (ref[source] == 0)
+                                            if (ref[dest] != 0)
                                                 {
                                                     throw DemographyError(
                                                         "non-zero migration "
                                                         "rate from "
                                                         "empty parental deme");
                                                 }
-                                            if (ref[dest] == 0)
+                                            if (ref[source] != 0)
                                                 {
                                                     throw DemographyError(
                                                         "non-zero migration "
                                                         "rate into "
                                                         "empty destination "
                                                         "deme");
+                                                }
+                                            else // both are zero
+                                                {
+                                                    throw DemographyError(
+                                                        "non-zero migration "
+                                                        "from empty parental "
+                                                        "deme into empty "
+                                                        "destination deme");
                                                 }
                                         }
                                     temp.push_back(scaling_factor * rate_in);

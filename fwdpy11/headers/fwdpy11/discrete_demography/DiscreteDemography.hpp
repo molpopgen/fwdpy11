@@ -255,40 +255,12 @@ namespace fwdpy11
                     {
                         if (event.migrates.size() == migmatrix->npops)
                             {
-                                if (migmatrix->scaled == true
-                                    && std::accumulate(begin(event.migrates),
-                                                       end(event.migrates), 0.)
-                                           != 1.0)
+                                if (migmatrix->scaled == true)
                                     {
-                                        throw std::invalid_argument(
-                                            "new migration rates must sum to "
-                                            "1.0");
-                                    }
-                            }
-                        else if (event.migrates.size()
-                                 == migmatrix->npops * migmatrix->npops)
-                            {
-                                if (!migmatrix->scaled)
-                                    {
-                                        break;
-                                    }
-                                gsl_matrix_const_view v
-                                    = gsl_matrix_const_view_array(
-                                        event.migrates.data(),
-                                        migmatrix->npops, migmatrix->npops);
-                                for (std::size_t i = 0; i < v.matrix.size1;
-                                     ++i)
-                                    {
-                                        auto row = gsl_matrix_const_row(
-                                            &v.matrix, i);
-                                        double rsum = 0.0;
-                                        for (std::size_t j = 0;
-                                             j < row.vector.size; ++j)
-                                            {
-                                                rsum += gsl_vector_get(
-                                                    &row.vector, j);
-                                            }
-                                        if (rsum != 1.0)
+                                        auto sum = std::accumulate(
+                                            begin(event.migrates),
+                                            end(event.migrates), 0.);
+                                        if (sum != 0.0 && sum != 1.)
                                             {
                                                 throw std::invalid_argument(
                                                     "new migration rates must "
@@ -297,11 +269,12 @@ namespace fwdpy11
                                             }
                                     }
                             }
-                        else
-                            {
+                        else if (event.migrates.size()
+                                 != migmatrix->npops * migmatrix->npops)
+                        {
                                 throw std::invalid_argument(
-                                    "invalid input to SetMigrationRates");
-                            }
+                                    "invalid matrix size");
+                        }
                     }
             }
 

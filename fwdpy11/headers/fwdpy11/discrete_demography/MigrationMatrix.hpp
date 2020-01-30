@@ -59,10 +59,10 @@ namespace fwdpy11
                             }
                         rsum += v;
                     }
-                if (scaled && rsum != 1.0)
+                if (scaled && (rsum != 0. && rsum != 1.0))
                     {
                         throw std::invalid_argument(
-                            "migration rates must sum to 1 in a row.");
+                            "migration rates must sum to 0. or 1. in a row.");
                     }
             }
 
