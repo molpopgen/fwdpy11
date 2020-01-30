@@ -111,6 +111,43 @@ We will also define a simple class to record all deme sizes over time:
                              np.unique(md['deme'], return_counts=True)))
 
 
+Compatibility with previous versions of fwdpy11
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Previous versions only supported size changes within a single deme.  These size changes were
+parameterized via a ``numpy`` array specifying the size at each time point.  It is still possible
+to specify the demography using that approach:
+
+.. ipython:: python
+
+       N = np.array([10]*10 + [5]*5 + [10]*10, dtype=np.uint32)
+       pdict = {'nregions': [],
+               'sregions': [],
+               'recregions': [],
+               'rates': (0, 0, 0,),
+               'gvalue': fwdpy11.Multiplicative(2.),
+               'demography': N
+              }
+       params = fwdpy11.ModelParams(**pdict)
+       rng = fwdpy11.GSLrng(654321)
+       pop = fwdpy11.DiploidPopulation(10, 1.0)
+       fwdpy11.evolvets(rng, pop, params, 100)
+
+Internally, the ``numpy`` array gets converted to instances of :class:`fwdpy11.SetDemeSize`, which is described
+below (:ref:`set_deme_sizes`).  These instances are stored in a :class:`fwdpy11.DiscreteDemography` object:
+
+.. ipython:: python
+
+    print(params.demography)
+    for i in params.demography.set_deme_sizes:
+        print(i)
+
+The simulation length is inferred from the ``numpy`` array, too:
+
+.. ipython:: python
+
+    print(params.simlen, len(N))
+
 Event types
 ------------------------------------------------
 
@@ -266,6 +303,8 @@ The distinction between the two choices matters when trying to implement
 models whose parameters have been inferred via approaches based on the
 coalescent or on diffusion approximations. Such approaches usually assume
 that population splits are copy events.
+
+.. _set_deme_sizes:
 
 Instantaneous deme size changes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -466,6 +505,51 @@ new type to track if parents of offspring in deme 1 are migrants or not:
         if nmig > 1:
             mstring += 's'
         print(i, mstring)
+
+
+A simpler syntax
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+You may pass a ``numpy`` array directly when creating an instance of 
+:class:`fwdpy11.DiscreteDemography`, which by default means that
+rates are scaled by deme size:
+
+.. ipython:: python
+
+    mm = np.identity(3)
+    mm[:] = 1./3.
+    d = fwdpy11.DiscreteDemography(migmatrix=mm)
+    print(d.migmatrix.scaled)
+
+To input a ``numpy`` matrix without scaling by deme size:
+
+.. ipython:: python
+
+    d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
+    print(d.migmatrix.scaled)
+
+
+Identity matrices with no changes in migration rates.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Recall that an identity matrix means no migration.  If such a matrix is input
+with no changes to the migration rates, then the matrix is ignored:
+
+.. ipython:: python
+
+    mm = np.identity(2)
+    d = fwdpy11.DiscreteDemography(migmatrix=mm)
+    print(d.migmatrix)
+
+    d = fwdpy11.DiscreteDemography(migmatrix=mm,
+                                   set_migration_rates=[
+                                   fwdpy11.SetMigrationRates(100, 1, [0.9, 0.1])])
+    print(d.migmatrix)
+
+
+The reason why the matrix is ignored in the first case is efficiency--it makes no sense
+to generate and interact with lookup tables when we know the answer.
+
 
 .. _migration_and_selfing:
 
