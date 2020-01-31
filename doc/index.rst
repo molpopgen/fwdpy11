@@ -38,6 +38,7 @@ Welcome to fwdpy11's documentation!
     pages/mutation
     pages/recombination
     pages/softselection
+    pages/demographydebugger
     pages/tsoverview
     pages/tstypes
     pages/0000a_tskit_interchange

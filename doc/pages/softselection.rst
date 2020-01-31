@@ -585,8 +585,13 @@ each source deme.
 Run-time checking
 -------------------------------------------------
 
-Debugging Demographic models
--------------------------------------------------
+The parameters of a demographic model are checked at run time at two different places:
 
-TBD -- probably a later PR
+* Upon object construction.  The various event objects try to make sure that the parameter inputs are valid.
+* During a simulation. If invalid events occur during a simulation, the simulation raises a 
+  ``fwdpy11.DemographyError`` exception.
+
+It is clearly preferable for a simulation to detect errors as early as possible.  While bad inputs can be
+detected almost immediately, more subtle errors are only detected during simulation, which may take a while.
+A more efficient approach to checking your models is described in :ref:`demographydebugger`.
 
