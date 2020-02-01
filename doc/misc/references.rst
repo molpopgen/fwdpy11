@@ -7,5 +7,7 @@ References
 
 .. [Felsenstein1976] Felsenstein, J. 1976. “The Theoretical Population Genetics of Variable Selection and Migration.” Annual Review of Genetics 10: 253–80.
 
+.. [Jouganous2017] Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017. “Inferring the Joint Demographic History of Multiple Populations: Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.
+
 .. [Levene1953] Levene, Howard. 1953. “Genetic Equilibrium When More Than One Ecological Niche Is Available.” The American Naturalist 87 (836): 331–33.
 
