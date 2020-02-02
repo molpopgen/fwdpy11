@@ -24,6 +24,7 @@
 #include <fwdpy11/discrete_demography/SetMigrationRates.hpp>
 
 namespace py = pybind11;
+using namespace py::literals;
 namespace ddemog = fwdpy11::discrete_demography;
 
 using SMR = ddemog::SetMigrationRates;
@@ -78,6 +79,11 @@ init_SetMigrationRate(py::module& m)
                             self.migrates);
                     }
             })
+        .def("__repr__",
+             [](const SMR& self) {
+                 return "SetMigrationRates(when={}, deme={}, migrates={})"_s
+                     .format(self.when, self.deme, self.migrates);
+             })
         .def(py::pickle(
             [](const SMR& self) {
                 return py::make_tuple(self.when, self.deme, self.migrates);
