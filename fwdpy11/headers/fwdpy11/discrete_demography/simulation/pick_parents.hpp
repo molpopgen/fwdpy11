@@ -93,7 +93,7 @@ namespace fwdpy11
                 }
             std::int32_t pdeme2 = static_cast<std::int32_t>(gsl_ran_discrete(
                 rng.get(), miglookup.olookups[offspring_deme].get()));
-            auto p2 = wlookups.get_parent(rng, current_deme_sizes, pdeme1);
+            auto p2 = wlookups.get_parent(rng, current_deme_sizes, pdeme2);
             return { p1, p2, pdeme1, pdeme2, mating_event_type::outcrossing };
         }
     } // namespace discrete_demography
