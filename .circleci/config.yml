@@ -83,5 +83,5 @@ jobs:
             python -m venv venv
             source venv/bin/activate 
             pip install --upgrade setuptools pip pybind11
-            pip install dist/fwdpy11-0.6.0rc1.tar.gz 
+            pip install dist/fwdpy11-0.6.0rc2.tar.gz 
 
