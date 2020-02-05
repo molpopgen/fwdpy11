@@ -70,9 +70,9 @@ namespace fwdpy11
                                     // But if the deme size is zero, we make
                                     // sure it is removed as a possible source
                                     // of a parent.
-                                    if (M->scaled == false && ref[source] == 0)
+                                    if (M->scaled == false && ref[source] != 0)
                                         {
-                                            scaling_factor = 0.0;
+                                            scaling_factor = 1.0;
                                         }
                                     double rate_in
                                         = M->M[dest * npops + source];
