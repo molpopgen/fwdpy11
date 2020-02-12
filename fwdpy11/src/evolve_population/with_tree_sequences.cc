@@ -264,11 +264,14 @@ evolve_with_tree_sequences(
         {
             i->update(pop);
         }
-    std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
+    std::vector<fwdpy11::DiploidMetadata> offspring_metadata(
+        pop.diploid_metadata);
+    std::vector<fwdpy11::DiploidGenotype> offspring;
     std::vector<double> new_diploid_gvalues;
     calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
-                              new_metadata, new_diploid_gvalues,
+                              offspring_metadata, new_diploid_gvalues,
                               record_genotype_matrix);
+    pop.diploid_metadata.swap(offspring_metadata);
 
     if (!pop.mutations.empty())
         {
@@ -340,17 +343,29 @@ evolve_with_tree_sequences(
                 }
             // ...before updating this:
             ++pop.generation;
-            fwdpy11::evolve_generation_ts(rng, pop, genetics, ddemog_manager,
-                                          pop.generation, pop.tables,
-                                          next_index);
+            fwdpy11::evolve_generation_ts(
+                rng, pop, genetics, ddemog_manager, pop.generation, pop.tables,
+                offspring, offspring_metadata, next_index);
+            // TODO: abstract out these steps into a "cleanup_pop" function
+            // TODO: this needs cleanup in 0.7.0, so that parental genotypes
+            // can affect things.  Right now, we are requiring the offspring
+            // genotypes to be in pop.diploids in the gvalue calculations.
+            pop.diploids.swap(offspring);
+            calculate_diploid_fitness(rng, pop, genetics.gvalue,
+                                      deme_to_gvalue_map, offspring_metadata,
+                                      new_diploid_gvalues,
+                                      record_genotype_matrix);
+            // TODO: abstract out these steps into a "cleanup_pop" function
+            pop.diploid_metadata.swap(offspring_metadata);
+            pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
             // TODO: deal with random effects
+            // NOTE: this was moved from BEFORE to AFTER
+            // calling calculate_diploid_fitness on Feb 12, 2020.
             for (auto &i : genetics.gvalue)
                 {
                     i->update(pop);
                 }
-            calculate_diploid_fitness(
-                rng, pop, genetics.gvalue, deme_to_gvalue_map, new_metadata,
-                new_diploid_gvalues, record_genotype_matrix);
+
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
                     simplification_rv = simplification(

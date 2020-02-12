@@ -85,6 +85,8 @@ namespace fwdpy11
         fwdpy11::discrete_demography::discrete_demography_manager&
             ddemog_manager,
         const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
+        std::vector<fwdpy11::DiploidGenotype>& offspring,
+        std::vector<fwdpy11::DiploidMetadata>& offspring_metadata,
         std::int32_t next_index)
     {
         fwdpp::debug::all_haploid_genomes_extant(pop);
@@ -94,10 +96,8 @@ namespace fwdpy11
 
         fwdpp::zero_out_haploid_genomes(pop);
 
-        decltype(pop.diploids) offspring;
-        decltype(pop.diploid_metadata) offspring_metadata;
-        offspring.reserve(pop.N);
-        offspring_metadata.reserve(pop.N);
+        offspring.clear();
+        offspring_metadata.clear();
 
         // Generate the offspring
         auto next_index_local = next_index;
@@ -116,11 +116,10 @@ namespace fwdpy11
                                 ddemog_manager.sizes_rates.current_deme_sizes,
                                 ddemog_manager.sizes_rates.selfing_rates,
                                 ddemog_manager.fitnesses);
-                        // Add a new diploid
-                        offspring.emplace_back(fwdpy11::DiploidGenotype{
+                        fwdpy11::DiploidGenotype dip{
                             std::numeric_limits<std::size_t>::max(),
-                            std::numeric_limits<std::size_t>::max() });
-                        auto& dip = offspring.back();
+                            std::numeric_limits<std::size_t>::max()
+                        };
                         //auto p1 = pick1();
                         //auto p2 = pick2(p1);
                         auto offspring_data = generate_offspring(
@@ -159,6 +158,7 @@ namespace fwdpy11
                                 deme,
                                 0,
                                 { offspring_node_1, offspring_node_2 } });
+                        offspring.emplace_back(std::move(dip));
 
                         next_index_local = offspring_node_2;
                     }
@@ -171,10 +171,6 @@ namespace fwdpy11
                 throw std::runtime_error(
                     "error in book-keeping offspring nodes");
             }
-        // This is constant-time
-        pop.diploids.swap(offspring);
-        pop.diploid_metadata.swap(offspring_metadata);
-        pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
     }
 } // namespace fwdpy11
 #endif
