@@ -123,9 +123,11 @@ evolve_without_tree_sequences(
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
-    std::vector<fwdpy11::DiploidMetadata> new_metadata(pop.N);
+    std::vector<fwdpy11::DiploidMetadata> offspring_metadata(
+        pop.diploid_metadata);
     auto lookup = calculate_diploid_fitness_genomes(
-        rng, pop, genetic_value_fxn, new_metadata);
+        rng, pop, genetic_value_fxn, offspring_metadata);
+    pop.diploid_metadata.swap(offspring_metadata);
 
     // Generate our fxns for picking parents
 
@@ -156,6 +158,7 @@ evolve_without_tree_sequences(
               offspring_metadata.parents[1] = p2;
               offspring_metadata.nodes[0] = offspring_metadata.nodes[1] = -1;
           };
+    std::vector<fwdpy11::DiploidGenotype> offspring;
 
     for (std::uint32_t gen = 0; gen < num_generations; ++gen)
         {
@@ -164,14 +167,16 @@ evolve_without_tree_sequences(
             fwdpy11::evolve_generation(
                 rng, pop, N_next, mu_neutral + mu_selected, bound_mmodel,
                 bound_rmodel, pick_first_parent, pick_second_parent,
-                generate_offspring_metadata);
+                generate_offspring_metadata, offspring, offspring_metadata);
             handle_fixations(remove_selected_fixations, N_next, pop);
 
             pop.N = N_next;
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
+            pop.diploids.swap(offspring);
             lookup = calculate_diploid_fitness_genomes(
-                rng, pop, genetic_value_fxn, new_metadata);
+                rng, pop, genetic_value_fxn, offspring_metadata);
+            pop.diploid_metadata.swap(offspring_metadata);
             recorder(pop); // The user may now analyze the pop'n
         }
 }

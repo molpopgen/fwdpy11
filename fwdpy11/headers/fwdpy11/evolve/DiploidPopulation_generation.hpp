@@ -36,12 +36,13 @@ namespace fwdpy11
               typename pick2_function, typename update_function,
               typename mutation_model, typename recombination_model>
     void
-    evolve_generation(const GSLrng_t& rng, poptype& pop,
-                      const fwdpp::uint_t N_next, const double mu,
-                      const mutation_model& mmodel,
-                      const recombination_model& recmodel,
-                      const pick1_function& pick1, const pick2_function& pick2,
-                      const update_function& update)
+    evolve_generation(
+        const GSLrng_t& rng, poptype& pop, const fwdpp::uint_t N_next,
+        const double mu, const mutation_model& mmodel,
+        const recombination_model& recmodel, const pick1_function& pick1,
+        const pick2_function& pick2, const update_function& update,
+        std::vector<fwdpy11::DiploidGenotype>& offspring,
+        std::vector<fwdpy11::DiploidMetadata>& offspring_metadata)
     {
         static_assert(std::is_same<typename poptype::popmodel_t,
                                    fwdpp::poptypes::DIPLOID_TAG>::value,
@@ -59,12 +60,16 @@ namespace fwdpy11
         for (auto&& g : pop.haploid_genomes)
             g.n = 0;
 
-        decltype(pop.diploids) offspring(N_next);
-        decltype(pop.diploid_metadata) offspring_metadata(N_next);
+        offspring.clear();
+        offspring_metadata.clear();
         // Generate the offspring
-        std::size_t label = 0;
-        for (auto& dip : offspring)
+        for (fwdpp::uint_t offspring_i = 0; offspring_i < N_next;
+             ++offspring_i)
             {
+                fwdpy11::DiploidGenotype dip{
+                    std::numeric_limits<std::size_t>::max(),
+                    std::numeric_limits<std::size_t>::max()
+                };
                 auto p1 = pick1();
                 auto p2 = pick2(p1);
 
@@ -86,6 +91,7 @@ namespace fwdpy11
                     std::make_tuple(p1g1, p1g2, p2g1, p2g2), recmodel, mmodel,
                     mu, gamete_recycling_bin, mutation_recycling_bin, dip,
                     pop.neutral, pop.selected);
+                offspring.emplace_back(std::move(dip));
 
 #ifndef NDEBUG
                 if (pop.haploid_genomes[dip.first].n == 0
@@ -95,16 +101,24 @@ namespace fwdpy11
                             "DEBUG: diploid has gamete with frequency zero");
                     }
 #endif
-                offspring_metadata[label].label = label;
-                update(offspring_metadata[label++], p1, p2,
+                // Add metadata for the offspring
+                offspring_metadata.emplace_back(
+                    fwdpy11::DiploidMetadata{ 0.0,
+                                              0.0,
+                                              1.,
+                                              { 0, 0, 0 },
+                                              offspring_metadata.size(),
+                                              { p1, p2 },
+                                              0,
+                                              0,
+                                              { -1, -1 } });
+
+                update(offspring_metadata.back(), p1, p2,
                        pop.diploid_metadata);
             }
 
         fwdpp::fwdpp_internal::process_haploid_genomes(
             pop.haploid_genomes, pop.mutations, pop.mcounts);
-        // This is constant-time
-        pop.diploids.swap(offspring);
-        pop.diploid_metadata.swap(offspring_metadata);
     }
 } // namespace fwdpy11
 

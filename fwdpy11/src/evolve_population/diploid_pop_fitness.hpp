@@ -22,6 +22,6 @@ void calculate_diploid_fitness(
 fwdpp::gsl_ran_discrete_t_ptr calculate_diploid_fitness_genomes(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
-    std::vector<fwdpy11::DiploidMetadata> &new_metadata);
+    std::vector<fwdpy11::DiploidMetadata> &offspring_metadata);
 
 #endif
