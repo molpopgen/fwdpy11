@@ -19,6 +19,7 @@
 import unittest
 import fwdpy11
 import numpy as np
+from collections import namedtuple
 
 
 def validate_alive_node_metadata(pop):
@@ -30,6 +31,21 @@ def validate_alive_node_metadata(pop):
     return True
 
 
+IndividualLocation = namedtuple(
+    "IndividualLocation", ['generation', 'label', 'deme'])
+
+
+class WhoWhereWhen(object):
+    def __init__(self):
+        self.data = []
+
+    def __call__(self, pop, sampler):
+        for i, j in enumerate(pop.diploid_metadata):
+            if i != j.label:
+                raise RuntimeError("index does not equal metadata label value")
+            self.data.append(IndividualLocation(pop.generation, i, j.deme))
+
+
 class TestSimpleMovesAndCopies(unittest.TestCase):
     """
     Basically doing the same tests
@@ -37,7 +53,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
     """
     @classmethod
     def setUp(self):
-        self.rng = fwdpy11.GSLrng(42)
+        self.rng = fwdpy11.GSLrng(644611)
         self.pop = fwdpy11.DiploidPopulation(100, 1.)
         self.pdict = {'nregions': [],
                       'sregions': [],
@@ -50,10 +66,12 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_moves_from_single_deme(self):
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.move_individuals(0, 0, 1, 0.5)])
+            [fwdpy11.move_individuals(1, 0, 1, 0.5)])
         self.pdict['demography'] = d
+        self.pdict['simlen'] = 2
         params = fwdpy11.ModelParams(**self.pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        w = WhoWhereWhen()
+        fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
         md = np.array(self.pop.diploid_metadata, copy=False)
         deme_counts = np.unique(md['deme'], return_counts=True)
         self.assertEqual(len(deme_counts[0]), 2)
@@ -61,12 +79,31 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
             self.assertEqual(deme_counts[1][i], 50)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
+        # Validate the parents (inefficiently...)
+        pdata = [i for i in w.data if i.generation == self.pop.generation-1]
+        self.assertEqual(len(set(pdata)), self.pop.N)
+        parents_deme_0 = set()
+        parents_deme_1 = set()
+
+        for md in self.pop.diploid_metadata:
+            for p in md.parents:
+                pd = [i.label for i in pdata if i.label == p]
+                self.assertEqual(len(pd), 1)
+                if md.deme == 0 and pd[0] not in parents_deme_0:
+                    parents_deme_0.add(pd[0])
+                elif md.deme == 1 and pd[0] not in parents_deme_1:
+                    parents_deme_1.add(pd[0])
+        self.assertEqual(len(parents_deme_0.intersection(parents_deme_1)), 0)
+        self.assertEqual(len(parents_deme_1.intersection(parents_deme_0)), 0)
+
     def test_simple_copies_from_single_deme(self):
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.copy_individuals(0, 0, 1, 0.5)])
+            [fwdpy11.copy_individuals(1, 0, 1, 0.5)])
+        self.pdict['simlen'] = 2
         self.pdict['demography'] = d
         params = fwdpy11.ModelParams(**self.pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        w = WhoWhereWhen()
+        fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
         md = np.array(self.pop.diploid_metadata, copy=False)
         deme_counts = np.unique(md['deme'], return_counts=True)
         expected = {0: 100, 1: 50}
@@ -74,6 +111,23 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         for i in range(len(deme_counts[0])):
             self.assertEqual(deme_counts[1][i], expected[i])
         self.assertTrue(validate_alive_node_metadata(self.pop))
+
+        # Validate the parents (inefficiently...)
+        pdata = [i for i in w.data if i.generation == self.pop.generation-1]
+        self.assertEqual(len(set([i.label for i in pdata])), 100)
+        parents_deme_0 = set()
+        parents_deme_1 = set()
+
+        for md in self.pop.diploid_metadata:
+            for p in md.parents:
+                pd = [i.label for i in pdata if i.label == p]
+                self.assertEqual(len(pd), 1)
+                if md.deme == 0 and pd[0] not in parents_deme_0:
+                    parents_deme_0.add(pd[0])
+                elif md.deme == 1 and pd[0] not in parents_deme_1:
+                    parents_deme_1.add(pd[0])
+        self.assertGreater(len(parents_deme_0.intersection(parents_deme_1)), 0)
+        self.assertGreater(len(parents_deme_1.intersection(parents_deme_0)), 0)
 
     def test_simple_back_and_forth_move(self):
         d = fwdpy11.DiscreteDemography(
@@ -527,7 +581,7 @@ class TestGrowthModels(unittest.TestCase):
 
     def test_global_extinction_single_deme(self):
         """
-        Pop would go exctinct in generation 8, 
+        Pop would go exctinct in generation 8,
         which triggers exception in generation 7
         """
         g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
