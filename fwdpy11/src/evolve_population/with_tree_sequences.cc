@@ -499,6 +499,8 @@ evolve_with_tree_sequences(
     // then simplification throws an error. But, since it is annoying
     // for a user to have to remember not to do that, we filter the list
     // here
+    // TODO: this is not compatible w/overlapping generations.  More generally,
+    // we should check for overlap w/any currently-alive nodes.
     auto itr = std::remove_if(
         begin(pop.tables.preserved_nodes), end(pop.tables.preserved_nodes),
         [&pop](const fwdpp::ts::TS_NODE_INT l) {
