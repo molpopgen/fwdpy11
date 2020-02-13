@@ -80,7 +80,7 @@ namespace
             {
                 py::array_t<double> m = o.cast<py::array_t<double>>();
                 auto M = a2v(m);
-                return ddemog::MigrationMatrix(std::move(M), m.shape(0), true);
+                return ddemog::MigrationMatrix(std::move(M), m.shape(0), false);
             }
         try
             {
