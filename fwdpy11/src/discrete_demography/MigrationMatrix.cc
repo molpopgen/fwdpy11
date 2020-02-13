@@ -53,7 +53,7 @@ init_MigrationMatrix(py::module &m)
                  return ddemog::MigrationMatrix(std::move(M), r.shape(0),
                                                  scaled);
              }),
-             py::arg("migmatrix"), py::arg("scale_during_simulation") = true,
+             py::arg("migmatrix"), py::arg("scale_during_simulation") = false,
              INIT_DOCSTRING)
         .def_property_readonly("shape",
                                [](ddemog::MigrationMatrix &self) {

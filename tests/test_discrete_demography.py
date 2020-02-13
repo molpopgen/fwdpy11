@@ -200,6 +200,11 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
     def test_init_migmatrix_with_tuple(self):
         mm = np.array([0.3, 0.7, 0.7, 0.3]).reshape(2, 2)
         try:
+            d = fwdpy11.DiscreteDemography(migmatrix=mm)
+            self.assertEqual(d.migmatrix.scaled, False)
+        except:  # NOQA
+            self.fail("unexpected exception")
+        try:
             d = fwdpy11.DiscreteDemography(migmatrix=((mm, True)))
             self.assertEqual(d.migmatrix.scaled, True)
         except:  # NOQA
