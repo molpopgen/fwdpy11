@@ -12,7 +12,7 @@ void calculate_diploid_fitness(
     const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
         &gvalue_pointers,
     const std::vector<std::size_t> &deme_to_gvalue_map,
-    std::vector<fwdpy11::DiploidMetadata> &new_metadata,
+    std::vector<fwdpy11::DiploidMetadata> &offspring_metadata,
     std::vector<double> &new_diploid_gvalues,
     const bool update_genotype_matrix);
 
@@ -22,6 +22,6 @@ void calculate_diploid_fitness(
 fwdpp::gsl_ran_discrete_t_ptr calculate_diploid_fitness_genomes(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
     const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
-    std::vector<fwdpy11::DiploidMetadata> &new_metadata);
+    std::vector<fwdpy11::DiploidMetadata> &offspring_metadata);
 
 #endif
