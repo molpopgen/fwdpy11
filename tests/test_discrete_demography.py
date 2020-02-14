@@ -335,23 +335,21 @@ class TestDiscreteDemography(unittest.TestCase):
             [fwdpy11.move_individuals(0, 0, 1, 0.5)])
         ddr.DiscreteDemography_roundtrip(self.rng,
                                          self.pop, d, 1)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 2)
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], 50)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 2)
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], 50)
 
     def test_simple_copies_from_single_deme(self):
         d = fwdpy11.DiscreteDemography(
             [fwdpy11.copy_individuals(0, 0, 1, 0.5)])
         ddr.DiscreteDemography_roundtrip(self.rng,
                                          self.pop, d, 1)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         expected = {0: 100, 1: 50}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(len(deme_sizes[0]), len(expected))
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], expected[i])
 
     def test_simple_back_and_forth_move(self):
         d = fwdpy11.DiscreteDemography(
@@ -360,11 +358,10 @@ class TestDiscreteDemography(unittest.TestCase):
 
         ddr.DiscreteDemography_roundtrip(self.rng,
                                          self.pop, d, 3)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 1)
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], self.pop.N)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 1)
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], self.pop.N)
 
     def test_simple_back_and_forth_copy(self):
         d = fwdpy11.DiscreteDemography(
@@ -373,12 +370,9 @@ class TestDiscreteDemography(unittest.TestCase):
 
         ddr.DiscreteDemography_roundtrip(self.rng,
                                          self.pop, d, 3)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
         expected = {0: 150, 1: 50}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(expected,
+                         self.pop.deme_sizes(as_dict=True))
 
     def test_simple_moves_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
@@ -393,12 +387,8 @@ class TestDiscreteDemography(unittest.TestCase):
                                          self.pop, d, 1)
         # We now expect 50, 25, and 25 individuals in
         # demes 0, 1, and 2
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 3)
         expected = {0: 50, 1: 25, 2: 25}
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(expected, self.pop.deme_sizes(as_dict=True))
 
     def test_simple_copies_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
@@ -413,12 +403,8 @@ class TestDiscreteDemography(unittest.TestCase):
                                          self.pop, d, 1)
         # We now expect 50, 50, and 25 individuals in
         # demes 0, 1, and 2
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
         expected = {0: 50, 1: 50, 2: 25}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(expected, self.pop.deme_sizes(as_dict=True))
 
     def test_single_deme_growth(self):
         N1 = 3412
@@ -449,9 +435,8 @@ class TestDiscreteDemography(unittest.TestCase):
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
-        md = np.array(self.pop.diploid_metadata, copy=False)
         self.assertEqual(self.pop.N, sum(N1))
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
 
@@ -476,8 +461,7 @@ class TestDiscreteDemography(unittest.TestCase):
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N1 = [100, N1[1]]
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
@@ -505,8 +489,7 @@ class TestDiscreteDemography(unittest.TestCase):
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N1[0] = np.round(100.*np.power(G0, 7 + t[0] - 11))
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
@@ -525,11 +508,8 @@ class TestDiscreteDemography(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(m)
         N0 = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 1)
-        md = np.array(self.pop.diploid_metadata)
-        expected = {0: 0, 1: N0//2, 2: N0//2}
-        dc = np.unique(md['deme'], return_counts=True)
-        for i, j in zip(dc[0], dc[1]):
-            self.assertEqual(expected[i], j)
+        expected = {1: N0//2, 2: N0//2}
+        self.assertEqual(expected, self.pop.deme_sizes(as_dict=True))
 
     def test_copies_happen_before_moves(self):
         """
@@ -549,11 +529,8 @@ class TestDiscreteDemography(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(m)
         N0 = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 1)
-        md = np.array(self.pop.diploid_metadata)
-        expected = {0: 0, 1: N0, 2: N0//2, 3: N0//2}
-        dc = np.unique(md['deme'], return_counts=True)
-        for i, j in zip(dc[0], dc[1]):
-            self.assertEqual(expected[i], j)
+        expected = {1: N0, 2: N0//2, 3: N0//2}
+        self.assertEqual(expected, self.pop.deme_sizes(as_dict=True))
 
     def test_mass_move_with_growth(self):
         """
@@ -569,11 +546,10 @@ class TestDiscreteDemography(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_growth_rates=g)
         N0 = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 10)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N5 = np.round(N0*np.power(g[0].G, 5))
         N_after_mass_mig = [N5//2, N5-N5//2]
-        for i, j in zip(deme_counts[1], N_after_mass_mig):
+        for i, j in zip(deme_sizes[1], N_after_mass_mig):
             self.assertEqual(i, j)
 
     def test_mass_move_with_growth_no_reset(self):
@@ -585,12 +561,11 @@ class TestDiscreteDemography(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_growth_rates=g)
         N0 = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 10)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N5 = np.round(N0*np.power(g[0].G, 5))
         N_after_mass_mig_0 = np.round((N5//2)*np.power(g[0].G, 5))
         N = [N_after_mass_mig_0, N5 - N5//2]
-        for i, j in zip(N, deme_counts[1]):
+        for i, j in zip(N, deme_sizes[1]):
             self.assertEqual(i, j)
 
     def test_migration_matrix_too_small(self):
@@ -614,8 +589,7 @@ class TestDiscreteDemography(unittest.TestCase):
         N = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
         self.assertEqual(N, self.pop.N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
             self.assertEqual(i, self.pop.N//2)
 
@@ -643,8 +617,7 @@ class TestDiscreteDemography(unittest.TestCase):
         migevents = ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
         self.assertEqual(N, self.pop.N)
         self.assertEqual(len(migevents), 2*N*3 + 2*N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
             self.assertEqual(i, self.pop.N//2)
 
@@ -731,11 +704,10 @@ class TestGhostPopulations(unittest.TestCase):
                                         set_deme_sizes=size_changes)
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, dd, 20)
         self.assertEqual(self.pop.N, 100)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 1)
-        self.assertEqual(deme_counts[0][0], 0)
-        self.assertEqual(deme_counts[1][0], 100)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 1)
+        self.assertEqual(deme_sizes[0][0], 0)
+        self.assertEqual(deme_sizes[1][0], 100)
 
 
 class TestExponentialDecline(unittest.TestCase):

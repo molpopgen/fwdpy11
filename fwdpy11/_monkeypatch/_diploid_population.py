@@ -201,7 +201,31 @@ def _dump_tables_to_tskit(self):
     return tc.tree_sequence()
 
 
+def _deme_sizes(self, as_dict=False):
+    """
+    Return the number of individuals in each deme.
+
+    :param as_dict: If True, return results as a dict.
+                    If False, numpy arrays are returned
+
+    The default behavior of this function is equivalent to:
+
+    .. code-block:: python
+
+        md = numpy.array(self.diploid_metadata, copy=False)
+        return numpy.unique(md['deme'], return_counts=True)
+
+    .. versionadded:: 0.6.0
+    """
+    md = np.array(self.diploid_metadata, copy=False)
+    deme_sizes = np.unique(md['deme'], return_counts=True)
+    if as_dict is False:
+        return deme_sizes
+    return {i: j for i, j in zip(deme_sizes[0], deme_sizes[1])}
+
+
 def _patch_diploid_population(d):
     d.alive_nodes = property(_alive_nodes)
     d.sample_timepoints = _traverse_sample_timepoints
     d.dump_tables_to_tskit = _dump_tables_to_tskit
+    d.deme_sizes = _deme_sizes
