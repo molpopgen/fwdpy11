@@ -518,6 +518,53 @@ offspring in deme 1 are migrants or not:
             mstring += 's'
         print(i, mstring)
 
+An alternative model of migration
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+The description of migration rates above implies that migration events are 
+independent of of source deme sizes.  To revisit our earlier example:
+
+.. ipython:: python
+
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   # The is the expected number of parents from demes 0 and 1
+   # to offspring born in deme 0:
+   m[0,] * 1000
+
+``fwdpy11`` allows for a different migration scheme where the size of the source deme
+matters.  For this model, ``M[i ,j]`` is the probability that an individual from deme ``j``
+is a parent in deme ``i``.  Internally, the migration matrix entries ``M[i, j]`` are multiplied by the size
+of the *source* demes, which means that larger demes with nonzero migration rates to other demes have a larger
+chance of being parents.  For example:
+
+.. ipython:: python
+
+   deme_sizes = np.array([1000, 2000])
+   m
+   md = m*deme_sizes
+   # The following line divides each
+   # row by its sum
+   md/np.sum(md, axis=1)[:, None]
+
+The first matrix is the same as in the preceding section--90% of the parents of deme ``0`` will be
+from deme ``0``.  In the second matrix, that fraction is reduced to about 82% because deme ``1`` is 
+twice as large as deme ``0``.
+
+To enable this migration model, the following methods are equivalent:
+
+.. ipython:: python
+   
+   # Method 1: pass a tuple with your numpy array and True
+   # to indicate scaling M[i, j] by source deme sizes:
+   d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
+
+   # Method 2: construct an instance of fwdpy11.MigrationMatrix,
+   # passing True as the second argument to indicate the scaling
+   # by source deme size.
+   M = fwdpy11.MigrationMatrix(m, True)
+   d = fwdpy11.DiscreteDemography(migmatrix=M)
+
+
 .. _migration_and_selfing:
 
 Migration and selfing
