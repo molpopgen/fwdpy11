@@ -164,31 +164,33 @@ class TestMigrationMatrix(unittest.TestCase):
                 np.array([i for i in range(6)]).reshape(2, 3))
 
     def test_weights_greater_than_one(self):
-        try:
+        with self.assertRaises(ValueError):
             fwdpy11.MigrationMatrix(np.array([2.]*4).reshape(2, 2), False)
-        except:  # NOQA
-            self.fail("unexpected exception")
 
 
 class TestSetMigrationRates(unittest.TestCase):
     def test_init_from_list(self):
-        m = fwdpy11.SetMigrationRates(0, 0, [0, 1, 2])
+        m = fwdpy11.SetMigrationRates(0, 0, [0, 1, 0])
         self.assertEqual(m.when, 0)
         self.assertEqual(m.deme, 0)
-        self.assertTrue(np.array_equal(m.migrates, np.array([0, 1, 2])))
+        self.assertTrue(np.array_equal(m.migrates, np.array([0, 1, 0])))
 
     def test_init_from_numpy(self):
-        m = fwdpy11.SetMigrationRates(0, 0, np.array([0, 1, 2]))
+        m = fwdpy11.SetMigrationRates(0, 0, np.array([0, 1, 0]))
         self.assertEqual(m.when, 0)
         self.assertEqual(m.deme, 0)
-        self.assertTrue(np.array_equal(m.migrates, np.array([0, 1, 2])))
+        self.assertTrue(np.array_equal(m.migrates, np.array([0, 1, 0])))
 
     def test_reset_entire_matrix(self):
         m = fwdpy11.SetMigrationRates(3, np.identity(3))
         self.assertTrue(np.array_equal(m.migrates, np.identity(3)))
 
+    def test_reset_entire_matrix_bad_inputs(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.SetMigrationRates(3, np.arange(4).reshape(2, 2))
+
     def test_pickle(self):
-        m = fwdpy11.SetMigrationRates(0, 0, np.array([0, 1, 2]))
+        m = fwdpy11.SetMigrationRates(0, 0, np.array([0, 1, 0]))
         p = pickle.dumps(m, -1)
         up = pickle.loads(p)
         self.assertEqual(m.when, up.when)
@@ -312,12 +314,6 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
     def test_identity_matrix_conversion_to_None(self):
         mm = np.identity(5)
         d = fwdpy11.DiscreteDemography(migmatrix=mm)
-        self.assertTrue(d.migmatrix is None)
-
-    def test_weight_matrix_diagonal_only_conversion_to_None(self):
-        mm = np.identity(5)
-        np.fill_diagonal(mm, 0.1)
-        d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
         self.assertTrue(d.migmatrix is None)
 
     def test_identity_matrix_with_migrate_changes(self):
@@ -675,27 +671,6 @@ class TestDiscreteDemography(unittest.TestCase):
                                        set_migration_rates=smr)
         with self.assertRaises(fwdpy11.DemographyError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
-
-    def test_migration_rates_larger_than_one(self):
-        """
-        Same as a previous tests, but rates are "weights"
-        rather than "probabilities"
-
-        """
-        mm = np.array([0, 2, 2, 0]).reshape(2, 2)
-        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1.5, 0, 1.5, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=(mm, False),
-                                       set_migration_rates=smr)
-        N = self.pop.N
-        migevents = ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
-        self.assertEqual(N, self.pop.N)
-        self.assertEqual(len(migevents), 2*N*3 + 2*N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
-        for i in deme_sizes[1]:
-            self.assertEqual(i, self.pop.N//2)
 
     def test_selfing_vs_migration(self):
         """

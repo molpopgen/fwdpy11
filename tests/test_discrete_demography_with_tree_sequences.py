@@ -519,31 +519,6 @@ class TestSimpleMigrationModels(unittest.TestCase):
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
-    def test_migration_rates_larger_than_one(self):
-        """
-        Same as a previous tests, but rates are "weights"
-        rather than "probabilities"
-
-        """
-        mm = np.array([0, 2, 2, 0]).reshape(2, 2)
-        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1.5, 0, 1.5, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs,
-                                       migmatrix=(mm, False),
-                                       set_migration_rates=smr)
-        N = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
-        params = fwdpy11.ModelParams(**self.pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        self.assertEqual(N, self.pop.N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
-        for i in deme_sizes[1]:
-            self.assertEqual(i, self.pop.N//2)
-        self.assertTrue(validate_alive_node_metadata(self.pop))
-
     def test_selfing_vs_migration(self):
         """
         Parents of deme 0 are all migrants from deme 1.
