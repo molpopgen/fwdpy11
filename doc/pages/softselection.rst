@@ -299,11 +299,6 @@ Copying, on the other hand, does not change the rate of drift in the source
 deme.  However, it does seem to imply some sudden increase in fecundity that
 both came from nowhere and was short-lived.
 
-The distinction between the two choices matters when trying to implement
-models whose parameters have been inferred via approaches based on the
-coalescent or on diffusion approximations. Such approaches usually assume
-that population splits are copy events.
-
 .. _set_deme_sizes:
 
 Instantaneous deme size changes
@@ -415,15 +410,51 @@ Migration
 For models with multiple demes, migration between then is managed by an
 instance of :class:`fwdpy11.MigrationMatrix`.
 
-For ``m`` demes, the ``m``-by-``m`` migration matrix represents the probability
-that an offspring in row ``r`` has a parent from column ``c``
-and the matrix is consulted for each parent (barring selfing, see :ref:`migration_and_selfing`).
-Thus, rows are destination demes, and columns are source demes.
+For a migration matrix ``M``, the default interpretation of ``M[i, j]`` is the
+fraction of deme ``i`` that will be replaced by migrations from deme ``j``. The 
+entry ``M[i, i]`` represents the non-migrant fraction of deme ``i``'s ancestry.
+The matrix is "row-major" meaning that rows refer to migration into source demes.
+This definition of the migration matrix corresponds to that found in several
+different sources ([Christiansen1974]_, [Christiansen1975]_).
 
-(I think we can say that this is the same forward
-migration matrix as in Christiansen and others, 1970s, but will have to check.)
+For example, consider the following matrix:
 
-By default, there is no migration, which is represented by the value ``None``:
+.. ipython:: python
+
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   m
+
+The first row corresponds to the ancestry of deme ``0``, such that 90% of parents will be
+non-migrants and 10% will be migrants from deme ``1``:
+
+.. ipython:: python
+
+   m[0,]
+
+To be concrete, if the size of deme ``0`` in the next generation is 1,000, then the expected
+number of migrant and non-migrant parents of offspring in deme ``0`` is:
+
+.. ipython:: python
+
+   m[0,] * 1e3
+
+The second row implies that half the ancestry of deme ``1`` is due to migrants and half
+due to non-migrants:
+
+.. ipython:: python
+
+   m[1,]
+
+The ``numpy`` array is sufficient to construct our demographic model:
+
+.. ipython:: python
+
+    d = fwdpy11.DiscreteDemography(migmatrix=m)
+    print(d.migmatrix)
+    print(d.migmatrix.M)
+
+By default, there is no migration, which is represented by the value ``None``.  For example,
+the following model has no migration events:
 
 .. ipython:: python
 
@@ -431,37 +462,18 @@ By default, there is no migration, which is represented by the value ``None``:
     d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
     print(d.migmatrix)
 
-Let's construct a simple migration matrix object:
+Likewise, if an identity matrix is provided an migration rates are never changed later,
+then the input matrix is ignored:
 
 .. ipython:: python
 
-    mm = fwdpy11.MigrationMatrix(np.identity(2))
-    print(mm.M)
-    print(mm.scaled)
-
-We just learned that :class:`fwdpy11.MigrationMatrix` instances may be created from
-square ``numpy`` matrices.  Further, this class has a property called ``scaled``.
-When ``scaled is True``, values in the migration matrix are treated as per-individual
-probabilities.  Internally, these probabilities are multiplied by the current source
-deme sizes in order to create a set of weights representing migration rates weighted
-by current deme sizes.  This behavior can be changed, which means that the migration
-matrix entries are interpreted as weights with no consideration of current deme sizes:
-
-.. ipython:: python
-
-    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
-    print(mm.M)
-    print(mm.scaled)
-
-This is example is uninteresting because the identity matrix means no migration,
-as the probability that an offspring in deme ``i`` picks a parent from deme ``i``
-is 1.0 and the probability of a parent from any other deme is 0.0.  The absence
-of migration is true whether or not we scale these rates by deme sizes during the
-simulation.
+    d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
+    print(d.migmatrix)
 
 The only reason to use the identity matrix is to start a simulation with no migration
-and then change the rates later.  To see this in action, we'll first generate a
-new type to track if parents of offspring in deme 1 are migrants or not:
+and then change the rates later via instances of :class:`fwdpy11.SetMigrationRates`.
+To see this in action, we'll first generate a new type to track if parents of
+offspring in deme 1 are migrants or not:
 
 .. ipython:: python
 
@@ -483,7 +495,7 @@ new type to track if parents of offspring in deme 1 are migrants or not:
 .. ipython:: python
 
     # No migration at first
-    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
+    mm = np.identity(2)
     # In generation 3, reset migration rates for deme 1 such
     # that parents are equally likey from both demes.
     cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
@@ -505,51 +517,6 @@ new type to track if parents of offspring in deme 1 are migrants or not:
         if nmig > 1:
             mstring += 's'
         print(i, mstring)
-
-
-A simpler syntax
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-You may pass a ``numpy`` array directly when creating an instance of 
-:class:`fwdpy11.DiscreteDemography`, which by default means that
-rates are scaled by deme size:
-
-.. ipython:: python
-
-    mm = np.identity(3)
-    mm[:] = 1./3.
-    d = fwdpy11.DiscreteDemography(migmatrix=mm)
-    print(d.migmatrix.scaled)
-
-To input a ``numpy`` matrix without scaling by deme size:
-
-.. ipython:: python
-
-    d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
-    print(d.migmatrix.scaled)
-
-
-Identity matrices with no changes in migration rates.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Recall that an identity matrix means no migration.  If such a matrix is input
-with no changes to the migration rates, then the matrix is ignored:
-
-.. ipython:: python
-
-    mm = np.identity(2)
-    d = fwdpy11.DiscreteDemography(migmatrix=mm)
-    print(d.migmatrix)
-
-    d = fwdpy11.DiscreteDemography(migmatrix=mm,
-                                   set_migration_rates=[
-                                   fwdpy11.SetMigrationRates(100, 1, [0.9, 0.1])])
-    print(d.migmatrix)
-
-
-The reason why the matrix is ignored in the first case is efficiency--it makes no sense
-to generate and interact with lookup tables when we know the answer.
-
 
 .. _migration_and_selfing:
 
