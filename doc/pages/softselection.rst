@@ -531,8 +531,7 @@ migration.  The challenge arises when we have multiple demes, nonzero selfing ra
 one or more of them, and nonzero migration.
 
 The challenge is due to the fact that  we consider the migration matrix elements
-to be the probability of migration from deme `c` into deme `r`, multiplied by the current
-size of deme `c`. Here, `r` and `c` mean `row` and `column`.
+to be the probability of migration from deme ``j`` into deme ``i``.
 
 If we focus on an offspring deme and pull a migrant parent from the migration matrix, one 
 of two things may happen:
@@ -540,14 +539,9 @@ of two things may happen:
 1. The migrant parent selfs, which occurs with probability :math:`S` for that migrant's deme.
 2. The migrant parent outcrosses
 
-In the first case, we are done and we use the migrant parent "twice" to generate the offspring.
-
-In the second case, we have to go back to our migration matrix, and now we have our problem.
-With respect to our offspring deme, the relevant column in the migration matrix is the weighted rates
-of migration from all demes into the offspring deme.  What we really need is the *probability of
-an outcrossing event* being a parent in our offspring deme.  Thus, it seems we need a **second**
-lookup table where the "raw" migration weights are all weighted by the current :math:`1-S` for
-each source deme.
+In the second case, we have to go back to our migration matrix to choose another parent. Internally,
+a second lookup table is used where each entry in row :math:`M_{i,-}` is multiplied by :math:`1 - S_j`,
+where :math:`S_j` is the selfing probability in source deme :math:`j`.
 
 Run-time checking
 -------------------------------------------------
