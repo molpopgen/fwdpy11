@@ -22,14 +22,7 @@
 
 #include <cstdint>
 #include <vector>
-#include <algorithm>
-#include <functional>
-#include <memory>
 #include <fwdpp/gsl_discrete.hpp>
-#include "../../rng.hpp"
-#include "deme_property_types.hpp"
-#include "../MigrationMatrix.hpp"
-#include "../exceptions.hpp"
 
 namespace fwdpy11
 {
@@ -44,108 +37,7 @@ namespace fwdpy11
             {
             }
         };
-
-        void
-        build_migration_lookup(
-            const std::unique_ptr<MigrationMatrix>& M,
-            const current_deme_sizes_vector& current_deme_sizes,
-            const selfing_rates_vector& selfing_rates, migration_lookup& ml)
-        {
-            if (M != nullptr)
-                {
-                    std::vector<double> temp;
-                    std::size_t npops = ml.lookups.size();
-                    temp.reserve(npops);
-                    const auto& ref = current_deme_sizes.get();
-                    for (std::size_t dest = 0; dest < npops; ++dest)
-                        {
-                            for (std::size_t source = 0; source < npops;
-                                 ++source)
-                                {
-                                    // By default, input migration rates are
-                                    // weighted by the current deme size...
-                                    double scaling_factor
-                                        = static_cast<double>(ref[source]);
-                                    // ...unless we are told not to do that.
-                                    // But if the deme size is zero, we make
-                                    // sure it is removed as a possible source
-                                    // of a parent.
-                                    if (M->scaled == false && ref[source] != 0)
-                                        {
-                                            scaling_factor = 1.0;
-                                        }
-                                    double rate_in
-                                        = M->M[dest * npops + source];
-                                    if (rate_in > 0.
-                                        && (ref[source] == 0
-                                            || ref[dest] == 0))
-                                        {
-                                            if (ref[dest] != 0)
-                                                {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "rate from "
-                                                        "empty parental deme");
-                                                }
-                                            if (ref[source] != 0)
-                                                {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "rate into "
-                                                        "empty destination "
-                                                        "deme");
-                                                }
-                                            else // both are zero
-                                                {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "from empty parental "
-                                                        "deme into empty "
-                                                        "destination deme");
-                                                }
-                                        }
-                                    temp.push_back(scaling_factor * rate_in);
-                                }
-                            if (std::find_if(begin(temp), end(temp),
-                                             [](double d) { return d != 0.; })
-                                != end(temp))
-                                {
-                                    ml.lookups[dest].reset(
-                                        gsl_ran_discrete_preproc(temp.size(),
-                                                                 temp.data()));
-                                    bool nonzero = false;
-                                    for (std::size_t source = 0;
-                                         source < npops; ++source)
-                                        {
-                                            double p = 1.0
-                                                       - selfing_rates
-                                                             .get()[source];
-                                            temp[source] *= p;
-                                            if (p > 0.)
-                                                {
-                                                    nonzero = true;
-                                                }
-                                        }
-                                    if (nonzero)
-                                        {
-                                            ml.olookups[dest].reset(
-                                                gsl_ran_discrete_preproc(
-                                                    temp.size(), temp.data()));
-                                        }
-                                    else
-                                        {
-                                            ml.olookups[dest].reset(nullptr);
-                                        }
-                                }
-                            else // There is no possible migration into this deme
-                                {
-                                    ml.lookups[dest].reset(nullptr);
-                                }
-                            temp.clear();
-                        }
-                }
-        }
-    } // namespace discrete_demography
+        } // namespace discrete_demography
 } // namespace fwdpy11
 
 #endif

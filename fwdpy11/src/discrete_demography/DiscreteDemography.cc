@@ -21,6 +21,7 @@
 #include <pybind11/stl.h>
 
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
+#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 
 namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
