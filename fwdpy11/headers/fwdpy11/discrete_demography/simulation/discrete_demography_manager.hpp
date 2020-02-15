@@ -23,7 +23,6 @@
 #include <memory>
 #include <cstdint>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/rng.hpp>
 #include "get_max_number_of_demes.hpp"
 #include "multideme_fitness_lookups.hpp"
 #include "migration_lookup.hpp"
@@ -92,34 +91,6 @@ namespace fwdpy11
                 return ttlN_next() == 0;
             }
         };
-
-        template <typename METADATATYPE>
-        inline void
-        update_demography_manager(const GSLrng_t &rng,
-                                  const std::uint32_t generation,
-                                  std::vector<METADATATYPE> &metadata,
-                                  DiscreteDemography &demography,
-                                  discrete_demography_manager &ddemog_manager)
-        {
-            mass_migration(rng, generation, demography.mass_migration_tracker,
-                           ddemog_manager.sizes_rates.growth_rates,
-                           ddemog_manager.sizes_rates.growth_rate_onset_times,
-                           ddemog_manager.sizes_rates.growth_initial_sizes,
-                           metadata);
-            get_current_deme_sizes(
-                metadata, ddemog_manager.sizes_rates.current_deme_sizes);
-            ddemog_manager.fitnesses.update(
-                ddemog_manager.sizes_rates.current_deme_sizes, metadata);
-            auto next_global_N = apply_demographic_events(
-                generation, demography, ddemog_manager.M,
-                ddemog_manager.sizes_rates);
-            ddemog_manager.set_next_global_N(next_global_N);
-            build_migration_lookup(
-                ddemog_manager.M,
-                ddemog_manager.sizes_rates.current_deme_sizes,
-                ddemog_manager.sizes_rates.selfing_rates,
-                ddemog_manager.miglookup);
-        }
     } // namespace discrete_demography
 } // namespace fwdpy11
 

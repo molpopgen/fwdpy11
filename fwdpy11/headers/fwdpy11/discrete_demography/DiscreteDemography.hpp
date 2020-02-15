@@ -61,6 +61,8 @@ namespace fwdpy11
                       const std::vector<SetMigrationRates>::const_iterator>,
             detail::migration_rate_change_range_t>;
 
+        class discrete_demography_manager;
+
         class DiscreteDemography
         {
           private:
@@ -271,12 +273,14 @@ namespace fwdpy11
                             }
                         else if (event.migrates.size()
                                  != migmatrix->npops * migmatrix->npops)
-                        {
+                            {
                                 throw std::invalid_argument(
                                     "invalid matrix size");
-                        }
+                            }
                     }
             }
+
+            std::unique_ptr<discrete_demography_manager> model_state;
 
           public:
             using mass_migration_vector = std::vector<MassMigration>;
@@ -305,7 +309,8 @@ namespace fwdpy11
                                set_selfing_rates_vector ssr,
                                std::unique_ptr<MigrationMatrix> m,
                                set_migration_rates_vector smr)
-                : mass_migrations(init_events_vector(std::move(mmig))),
+                : model_state(nullptr),
+                  mass_migrations(init_events_vector(std::move(mmig))),
                   set_growth_rates(init_events_vector(std::move(sg))),
                   set_deme_sizes(init_events_vector(std::move(size_changes))),
                   set_selfing_rates(init_events_vector(std::move(ssr))),
@@ -338,6 +343,23 @@ namespace fwdpy11
                                    selfing_rate_change_tracker);
                 update_event_times(current_pop_generation,
                                    migration_rate_change_tracker);
+            }
+
+            std::unique_ptr<discrete_demography_manager>
+            get_model_state()
+            // Not visible to Python
+            {
+                std::unique_ptr<discrete_demography_manager> rv(
+                    std::move(model_state));
+                return rv;
+            }
+
+            void
+            set_model_state(
+                std::unique_ptr<discrete_demography_manager>& state)
+            // Not visible to Python
+            {
+                model_state = std::move(state);
             }
         };
     } // namespace discrete_demography

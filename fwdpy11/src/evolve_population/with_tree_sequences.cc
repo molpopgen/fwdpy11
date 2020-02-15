@@ -208,19 +208,21 @@ evolve_with_tree_sequences(
         }
 
     // Set up discrete demography types. New in 0.6.0
-    demography.update_event_times(pop.generation);
-    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
-                                                       demography);
+    //demography.update_event_times(pop.generation);
+    //ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
+    //                                                   demography);
+    auto ddemog_manager = ddemog::initialize_model_state(
+        pop.generation, pop.diploid_metadata, demography);
     if (gvalue_pointers.genetic_values.size()
-        > static_cast<std::size_t>(ddemog_manager.maxdemes))
+        > static_cast<std::size_t>(ddemog_manager->maxdemes))
         {
             throw std::invalid_argument(
                 "list of genetic values is longer than maxdemes");
         }
-    if (static_cast<std::size_t>(ddemog_manager.maxdemes) > 1
+    if (static_cast<std::size_t>(ddemog_manager->maxdemes) > 1
         && gvalue_pointers.genetic_values.size() > 1
         && gvalue_pointers.genetic_values.size()
-               < static_cast<std::size_t>(ddemog_manager.maxdemes))
+               < static_cast<std::size_t>(ddemog_manager->maxdemes))
         {
             throw std::invalid_argument("too few genetic value objects");
         }
@@ -252,7 +254,7 @@ evolve_with_tree_sequences(
     auto genetics = fwdpp::make_genetic_parameters(
         gvalue_pointers.genetic_values, std::move(bound_mmodel),
         std::move(bound_rmodel));
-    std::vector<std::size_t> deme_to_gvalue_map(ddemog_manager.maxdemes, 0);
+    std::vector<std::size_t> deme_to_gvalue_map(ddemog_manager->maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
             std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
@@ -325,7 +327,7 @@ evolve_with_tree_sequences(
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
 
-            if (ddemog_manager.will_go_globally_extinct() == true)
+            if (ddemog_manager->will_go_globally_extinct() == true)
                 {
                     simplification_rv = simplification(
                         preserve_selected_fixations,
@@ -519,6 +521,7 @@ evolve_with_tree_sequences(
     final_population_cleanup(suppress_edge_table_indexing,
                              preserve_selected_fixations,
                              remove_extinct_mutations_at_finish, pop);
+    ddemog::save_model_state(ddemog_manager, demography);
 }
 
 void

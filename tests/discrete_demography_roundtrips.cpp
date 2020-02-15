@@ -50,9 +50,11 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
 //
 {
-    demography.update_event_times(pop.generation);
-    ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
-                                                       demography);
+    //demography.update_event_times(pop.generation);
+    //ddemog::discrete_demography_manager ddemog_manager(pop.diploid_metadata,
+    //                                                   demography);
+    auto ddemog_manager = ddemog::initialize_model_state(
+        pop.generation, pop.diploid_metadata, demography);
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
     roundtrip_rv_type rv;
@@ -61,26 +63,27 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
                                               ddemog_manager);
-            if(pop.N == 0)
-            {
-                std::ostringstream o;
-                o << "extinction at time " << pop.generation;
-                throw ddemog::GlobalExtinction(o.str());
-            }
+            if (pop.N == 0)
+                {
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
 
             // Generate the offspring
-            for (std::int32_t deme = 0; deme < ddemog_manager.maxdemes; ++deme)
+            for (std::int32_t deme = 0; deme < ddemog_manager->maxdemes;
+                 ++deme)
                 {
                     for (unsigned ind = 0;
-                         ind < ddemog_manager.sizes_rates.next_deme_sizes
+                         ind < ddemog_manager->sizes_rates.next_deme_sizes
                                    .get()[deme];
                          ++ind)
                         {
                             auto pdata = ddemog::pick_parents(
-                                rng, deme, ddemog_manager.miglookup,
-                                ddemog_manager.sizes_rates.current_deme_sizes,
-                                ddemog_manager.sizes_rates.selfing_rates,
-                                ddemog_manager.fitnesses);
+                                rng, deme, ddemog_manager->miglookup,
+                                ddemog_manager->sizes_rates.current_deme_sizes,
+                                ddemog_manager->sizes_rates.selfing_rates,
+                                ddemog_manager->fitnesses);
                             if (pdata.deme1 != deme)
                                 {
                                     rv.emplace_back(pop.generation + 1,
@@ -111,6 +114,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
 
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
         }
+    ddemog::save_model_state(ddemog_manager, demography);
     return rv;
 }
 

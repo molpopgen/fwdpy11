@@ -26,8 +26,11 @@
 #include "simulation/deme_properties.hpp"
 #include "simulation/multideme_fitness_lookups.hpp"
 #include "simulation/migration_lookup.hpp"
+#include "simulation/build_migration_lookup.hpp"
 #include "simulation/functions.hpp"
 #include "simulation/pick_parents.hpp"
 #include "simulation/discrete_demography_manager.hpp"
+#include "simulation/update_demography_manager.hpp"
+#include "simulation/set_model_state.hpp"
 
 #endif
