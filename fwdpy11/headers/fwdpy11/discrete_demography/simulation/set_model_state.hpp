@@ -22,7 +22,7 @@
 #include <vector>
 #include <memory>
 #include "../DiscreteDemography.hpp"
-#include "discrete_demography_manager.hpp"
+#include "demographic_model_state.hpp"
 
 namespace fwdpy11
 {
@@ -30,7 +30,7 @@ namespace fwdpy11
     {
 
         template <typename METADATATYPE>
-        inline std::unique_ptr<discrete_demography_manager>
+        inline demographic_model_state_pointer
         initialize_model_state(std::uint32_t generation,
                                const std::vector<METADATATYPE>& metadata,
                                DiscreteDemography& demography)
@@ -47,13 +47,13 @@ namespace fwdpy11
                 {
                     demography.update_event_times(generation);
                     rv.reset(
-                        new discrete_demography_manager(metadata, demography));
+                        new demographic_model_state(metadata, demography));
                 }
             return rv;
         }
 
         inline void
-        save_model_state(std::unique_ptr<discrete_demography_manager>& state,
+        save_model_state(demographic_model_state_pointer& state,
                          DiscreteDemography& demography)
         {
             demography.set_model_state(state);
@@ -67,7 +67,7 @@ namespace fwdpy11
 #include <vector>
 #include <memory>
 #include "../DiscreteDemography.hpp"
-#include "discrete_demography_manager.hpp"
+#include "demographic_model_state.hpp"
 
 namespace fwdpy11
 {
@@ -75,7 +75,7 @@ namespace fwdpy11
     {
 
         template <typename METADATATYPE>
-        inline std::unique_ptr<discrete_demography_manager>
+        inline demographic_model_state_pointer
         initialize_model_state(std::uint32_t generation,
                                const std::vector<METADATATYPE>& metadata,
                                DiscreteDemography& demography)
@@ -92,13 +92,13 @@ namespace fwdpy11
                 {
                     demography.update_event_times(generation);
                     rv.reset(
-                        new discrete_demography_manager(metadata, demography));
+                        new demographic_model_state(metadata, demography));
                 }
             return rv;
         }
 
         inline void
-        save_model_state(std::unique_ptr<discrete_demography_manager>& state,
+        save_model_state(demographic_model_state_pointer& state,
                          DiscreteDemography& demography)
         {
             demography.set_model_state(state);

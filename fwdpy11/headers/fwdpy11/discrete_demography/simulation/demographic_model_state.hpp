@@ -33,7 +33,7 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        class discrete_demography_manager
+        class demographic_model_state
         /// Added in 0.6.0 to hold and manage
         /// the relevant data structures.
         {
@@ -62,9 +62,8 @@ namespace fwdpy11
             // NOTE: demography.update_event_times() needs to have been
             // called first!
             template <typename METADATATYPE>
-            discrete_demography_manager(
-                const std::vector<METADATATYPE> &metadata,
-                DiscreteDemography &demography)
+            demographic_model_state(const std::vector<METADATATYPE> &metadata,
+                                    DiscreteDemography &demography)
                 : next_global_N(0),
                   maxdemes(get_max_number_of_demes()(metadata, demography)),
                   fitnesses(maxdemes), sizes_rates(maxdemes, metadata),

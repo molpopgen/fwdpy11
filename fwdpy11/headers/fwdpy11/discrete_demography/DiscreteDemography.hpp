@@ -61,7 +61,10 @@ namespace fwdpy11
                       const std::vector<SetMigrationRates>::const_iterator>,
             detail::migration_rate_change_range_t>;
 
-        class discrete_demography_manager;
+        class demographic_model_state;
+
+        using demographic_model_state_pointer
+            = std::unique_ptr<demographic_model_state>;
 
         class DiscreteDemography
         {
@@ -280,7 +283,7 @@ namespace fwdpy11
                     }
             }
 
-            std::unique_ptr<discrete_demography_manager> model_state;
+            demographic_model_state_pointer model_state;
 
           public:
             using mass_migration_vector = std::vector<MassMigration>;
@@ -345,18 +348,16 @@ namespace fwdpy11
                                    migration_rate_change_tracker);
             }
 
-            std::unique_ptr<discrete_demography_manager>
+            demographic_model_state_pointer
             get_model_state()
             // Not visible to Python
             {
-                std::unique_ptr<discrete_demography_manager> rv(
-                    std::move(model_state));
+                demographic_model_state_pointer rv(std::move(model_state));
                 return rv;
             }
 
             void
-            set_model_state(
-                std::unique_ptr<discrete_demography_manager>& state)
+            set_model_state(demographic_model_state_pointer& state)
             // Not visible to Python
             {
                 model_state = std::move(state);

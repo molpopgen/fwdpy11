@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <fwdpy11/rng.hpp>
-#include "discrete_demography_manager.hpp"
+#include "demographic_model_state.hpp"
 #include "functions.hpp"
 
 namespace fwdpy11
@@ -34,26 +34,26 @@ namespace fwdpy11
             const GSLrng_t &rng, const std::uint32_t generation,
             std::vector<METADATATYPE> &metadata,
             DiscreteDemography &demography,
-            std::unique_ptr<discrete_demography_manager> &ddemog_manager)
+            demographic_model_state_pointer &current_demographic_state)
         {
             mass_migration(rng, generation, demography.mass_migration_tracker,
-                           ddemog_manager->sizes_rates.growth_rates,
-                           ddemog_manager->sizes_rates.growth_rate_onset_times,
-                           ddemog_manager->sizes_rates.growth_initial_sizes,
+                           current_demographic_state->sizes_rates.growth_rates,
+                           current_demographic_state->sizes_rates.growth_rate_onset_times,
+                           current_demographic_state->sizes_rates.growth_initial_sizes,
                            metadata);
             get_current_deme_sizes(
-                metadata, ddemog_manager->sizes_rates.current_deme_sizes);
-            ddemog_manager->fitnesses.update(
-                ddemog_manager->sizes_rates.current_deme_sizes, metadata);
+                metadata, current_demographic_state->sizes_rates.current_deme_sizes);
+            current_demographic_state->fitnesses.update(
+                current_demographic_state->sizes_rates.current_deme_sizes, metadata);
             auto next_global_N = apply_demographic_events(
-                generation, demography, ddemog_manager->M,
-                ddemog_manager->sizes_rates);
-            ddemog_manager->set_next_global_N(next_global_N);
+                generation, demography, current_demographic_state->M,
+                current_demographic_state->sizes_rates);
+            current_demographic_state->set_next_global_N(next_global_N);
             build_migration_lookup(
-                ddemog_manager->M,
-                ddemog_manager->sizes_rates.current_deme_sizes,
-                ddemog_manager->sizes_rates.selfing_rates,
-                ddemog_manager->miglookup);
+                current_demographic_state->M,
+                current_demographic_state->sizes_rates.current_deme_sizes,
+                current_demographic_state->sizes_rates.selfing_rates,
+                current_demographic_state->miglookup);
         }
     } // namespace discrete_demography
 } // namespace fwdpy11
