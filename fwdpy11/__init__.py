@@ -29,6 +29,7 @@ from ._types.model_params import * # NOQA
 from ._evolve_genomes import * # NOQA
 from ._evolvets import * # NOQA
 from ._monkeypatch import _diploid_population # NOQA
+from ._demography import * # NOQA
 
 # NOTE: some operations that can be implemented efficiently
 # in Python are supplied as monkey-patches to the pybind11 classes
