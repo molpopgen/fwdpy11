@@ -202,6 +202,13 @@ namespace fwdpy11
                        std::uint32_t t) { return v.when < t; });
             }
 
+            template <typename T1, typename T2>
+            void
+            reset_range(T1& range, T2& events)
+            {
+                range.get().first = events.cbegin();
+            }
+
             void
             check_if_no_migration()
             // If there are no nonzero off-diagonal elements,
@@ -336,14 +343,20 @@ namespace fwdpy11
             // and we may need to update the iterators accordingly.
             // NOTE: needs test.
             {
+                reset_range(mass_migration_tracker, mass_migrations);
                 update_event_times(current_pop_generation,
                                    mass_migration_tracker);
+                reset_range(growth_rate_change_tracker, set_growth_rates);
                 update_event_times(current_pop_generation,
                                    growth_rate_change_tracker);
+                reset_range(deme_size_change_tracker, set_deme_sizes);
                 update_event_times(current_pop_generation,
                                    deme_size_change_tracker);
+                reset_range(selfing_rate_change_tracker, set_selfing_rates);
                 update_event_times(current_pop_generation,
                                    selfing_rate_change_tracker);
+                reset_range(migration_rate_change_tracker,
+                            set_migration_rates);
                 update_event_times(current_pop_generation,
                                    migration_rate_change_tracker);
             }

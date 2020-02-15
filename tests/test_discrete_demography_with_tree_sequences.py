@@ -750,6 +750,30 @@ class TestIMModel(unittest.TestCase):
         self.assertEqual(deme_counts[1][0], self.N0t)
         self.assertEqual(deme_counts[1][1], self.N1t)
 
+    def test_reuse_of_the_demographic_model(self):
+        """
+        Since DiscreteDemography "remembers" the state
+        of the model, we have to test that the model gets
+        properly reset when confronted with a "fresh"
+        population.
+        """
+        self.pdict['simlen'] = self.Tsplit + self.gens_post_split
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 5)
+        self.assertEqual(self.pop.generation, params.simlen)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_counts = np.unique(md['deme'], return_counts=True)
+        self.assertEqual(deme_counts[1][0], self.N0t)
+        self.assertEqual(deme_counts[1][1], self.N1t)
+
+        npop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
+        fwdpy11.evolvets(self.rng, npop, params, 5)
+        self.assertEqual(npop.generation, params.simlen)
+        md = np.array(npop.diploid_metadata, copy=False)
+        deme_counts = np.unique(md['deme'], return_counts=True)
+        self.assertEqual(deme_counts[1][0], self.N0t)
+        self.assertEqual(deme_counts[1][1], self.N1t)
+
 
 if __name__ == "__main__":
     unittest.main()
