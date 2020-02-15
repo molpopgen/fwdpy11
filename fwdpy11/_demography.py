@@ -26,6 +26,8 @@ def migration_matrix_single_extant_deme(ndemes, focal_deme):
     :param ndemes: The number of demes that will eventually exist.
     :param focal_deme: The index of the initial extant deme.
     :rtype: numpy.ndarray
+
+    .. versionadded:: 0.6.0
     """
     import numpy as np
     m = np.zeros(ndemes*ndemes).reshape(ndemes, ndemes)
