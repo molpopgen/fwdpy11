@@ -590,14 +590,113 @@ In the second case, we have to go back to our migration matrix to choose another
 a second lookup table is used where each entry in row :math:`M_{i,-}` is multiplied by :math:`1 - S_j`,
 where :math:`S_j` is the selfing probability in source deme :math:`j`.
 
+Examples of models
+-------------------------------------------------
+
+Isolation with migration, or "IM"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Consider two demes that split apart ``T`` time units ago and then grow to different
+sizes in the present.  After the split, migration occurs between the two demes. The
+demographic model has the following parameters:
+
+* ``Nanc``, the ancestral population size.
+* ``T``, the time of the split, which is in units of ``Nanc``.
+* ``psplit``, the proportion of the ancestral population that splits off to found deme ``1``.
+* ``N0``, the final size of deme ``0``, relative to ``Nanc``.
+* ``N1``, the final size of deme ``1``, relative to ``Nanc``.
+* ``m01``, the migration rate from deme ``0`` to deme ``1``.
+* ``m10``, the migration rate from deme ``1`` to deme ``0``.
+
+Here is the model in its entirety, with no mutation and no recombination.
+First, we will set up the demographic events.  The population with evolve
+for ``Nanc`` generations before the split.
+
+.. ipython:: python
+
+    Nanc = 100
+    T = 0.2
+    psplit = 0.33
+    N0, N1 = 2, 3
+    m01, m10 = 0.01, 0.0267
+
+    # The split event
+    split = [fwdpy11.move_individuals(when=Nanc, source=0,
+                                      destination=1,
+                                      fraction=psplit)] 
+    # Get growth rates and set growth rate changes,
+    # taking care to handle our rounding!
+    gens_post_split = np.rint(Nanc*T).astype(int)
+    N0split = np.rint(Nanc*(1.-psplit))
+    N0final = np.rint(N0*Nanc)
+    N1split = np.rint(Nanc*psplit)
+    N1final = np.rint(N1*Nanc)
+    G0 = fwdpy11.exponential_growth_rate(N0split, N0final,
+                                         gens_post_split)
+    G1 = fwdpy11.exponential_growth_rate(N1split, N1final,
+                                         gens_post_split)
+    growth = [fwdpy11.SetExponentialGrowth(Nanc, 0, G0),
+              fwdpy11.SetExponentialGrowth(Nanc, 1, G1)]
+
+    # Set up the migration matrix for two demes, but only 
+    # deme zero exists.
+    m = fwdpy11.migration_matrix_single_extant_deme(2, 0)
+    # The rows of the matrix change at the split:
+    cm = [fwdpy11.SetMigrationRates(Nanc, 0, [1.-m10, m10]),
+          fwdpy11.SetMigrationRates(Nanc, 1, [m01, 1.-m01])]
+    d = fwdpy11.DiscreteDemography(mass_migrations=split,
+                                   set_growth_rates=growth,
+                                   set_migration_rates=cm,
+                                   migmatrix=m)
+
+The above code made use of two helper functions:
+
+* :func:`fwdpy11.exponential_growth_rate`
+* :func:`fwdpy11.migration_matrix_single_extant_deme`
+
+Now we can set up the genetics:
+
+.. ipython:: python
+
+    nregions = []
+    sregions = []
+    recregions = []
+
+    pdict = {'nregions': nregions,
+             'sregions': sregions,
+             'recregions': recregions,
+             'rates': (0, 0, 0),
+             'gvalue': fwdpy11.Multiplicative(2.),
+             'demography': d,
+             'simlen': Nanc + gens_post_split,
+             'prune_selected': True
+             }
+
+Finally, we can run it:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
+    params = fwdpy11.ModelParams(**pdict)
+    fwdpy11.evolvets(rng, pop, params, 100)
+
+Now we check the final population sizes and make sure they are correct:
+
+.. ipython:: python
+
+    ds = pop.deme_sizes()
+    assert ds[1][0] == N0final
+    assert ds[1][1] == N1final
+
+        
+
 Run-time checking
 -------------------------------------------------
 
 The parameters of a demographic model are checked at run time at two different places:
 
 * Upon object construction.  The various event objects try to make sure that the parameter inputs are valid.
-* During a simulation. If invalid events occur during a simulation, the simulation raises a 
-  ``fwdpy11.DemographyError`` exception.
+* During a simulation. If invalid events occur during a simulation, the simulation raises a ``fwdpy11.DemographyError`` exception.
 
 It is clearly preferable for a simulation to detect errors as early as possible.  While bad inputs can be
 detected almost immediately, more subtle errors are only detected during simulation, which may take a while.
