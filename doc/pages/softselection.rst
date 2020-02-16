@@ -416,6 +416,8 @@ entry ``M[i, i]`` represents the non-migrant fraction of deme ``i``'s ancestry.
 The matrix is "row-major" meaning that rows refer to migration into source demes.
 This definition of the migration matrix corresponds to that found in several
 different sources ([Christiansen1974]_, [Christiansen1975]_).
+This definition of migration is also what diffusion models assume (*e.g.* [Jouganous2017]_)
+as well as coalescent simulations like *msprime* [Kelleher2016]_.
 
 For example, consider the following matrix:
 
@@ -532,10 +534,13 @@ independent of of source deme sizes.  To revisit our earlier example:
    m[0,] * 1000
 
 ``fwdpy11`` allows for a different migration scheme where the size of the source deme
-matters.  For this model, ``M[i ,j]`` is the probability that an individual from deme ``j``
-is a parent in deme ``i``.  Internally, the migration matrix entries ``M[i, j]`` are multiplied by the size
-of the *source* demes, which means that larger demes with nonzero migration rates to other demes have a larger
-chance of being parents.  For example:
+matters.  For this model, ``M[i ,j]`` is the probability that an individual from
+deme ``j`` is a parent in deme ``i``.  Internally, the migration matrix entries
+``M[i, j]`` are multiplied by the size of the *source* demes, which means that
+larger demes with nonzero migration rates to other demes have a larger chance
+of being parents.
+
+For example:
 
 .. ipython:: python
 
@@ -546,9 +551,9 @@ chance of being parents.  For example:
    # row by its sum
    md/np.sum(md, axis=1)[:, None]
 
-The first matrix is the same as in the preceding section--90% of the parents of deme ``0`` will be
-from deme ``0``.  In the second matrix, that fraction is reduced to about 82% because deme ``1`` is 
-twice as large as deme ``0``.
+The first matrix is the same as in the preceding section--90% of the parents of deme
+``0`` will be from deme ``0``.  In the second matrix, that fraction is reduced to
+about 82% because deme ``1`` is twice as large as deme ``0``.
 
 To enable this migration model, the following methods are equivalent:
 
@@ -564,14 +569,20 @@ To enable this migration model, the following methods are equivalent:
    M = fwdpy11.MigrationMatrix(m, True)
    d = fwdpy11.DiscreteDemography(migmatrix=M)
 
+.. note::
+
+   This model of migration will typically give *different* results
+   from diffusion models and coalescent simulations!
+
 
 .. _migration_and_selfing:
 
 Migration and selfing
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Within each deme, the selfing rate :math:`S` is the probability that an individual selfs,
-and :math:`1-S` is the probability that an individual outcrosses with another.
+Within each deme, the selfing rate :math:`S` is the probability that an
+individual selfs, and :math:`1-S` is the probability that an individual
+outcrosses with another.
 
 For a single deme, everything is very straightforward.  Likewise for many demes with no
 migration.  The challenge arises when we have multiple demes, nonzero selfing rates in
@@ -699,4 +710,3 @@ The parameters of a demographic model are checked at run time at two different p
 It is clearly preferable for a simulation to detect errors as early as possible.  While bad inputs can be
 detected almost immediately, more subtle errors are only detected during simulation, which may take a while.
 A more efficient approach to checking your models is described in :ref:`demographydebugger`.
-
