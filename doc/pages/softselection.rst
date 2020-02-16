@@ -66,8 +66,7 @@ For example, to initialize a population with 25 individuals in demes ``0`` and `
 
     pop = fwdpy11.DiploidPopulation([25, 25], 1.0)
     md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
-    print(np.unique([i.deme for i in pop.tables.nodes], return_counts=True))
+    pop.deme_sizes()
     for m in pop.diploid_metadata:
        for n in m.nodes:
             assert m.deme == pop.tables.nodes[n].deme
@@ -112,9 +111,8 @@ We will also define a simple class to record all deme sizes over time:
         def __init__(self):
             self.data = []
         def __call__(self, pop, sampler):
-            md = np.array(pop.diploid_metadata, copy=False)
             self.data.append((pop.generation, pop.N,
-                             np.unique(md['deme'], return_counts=True)))
+                             pop.deme_sizes()))
 
 
 Compatibility with previous versions of fwdpy11
@@ -222,8 +220,7 @@ Here is the version implemented via a  copy:
     copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
 
 
 Here is what our object looks like:
@@ -241,8 +238,7 @@ Here is the version using a move:
     move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
 
 
 For comparison, here is the object specifying the move:
@@ -271,8 +267,7 @@ work":
             fwdpy11.copy_individuals(0, 0, 2, 1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
     
 
 When the events are moves, it is not possible to move more than 100% 
