@@ -1,3 +1,9 @@
+"""
+This module provides functions to generate demographic events for
+"isolation-with-migration", or IM, models.
+"""
+
+
 def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     """
     Isolation-with-migration (IM) model for two demes.
