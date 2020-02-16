@@ -4,7 +4,8 @@ This module provides functions to generate demographic events for
 """
 
 
-def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
+def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0,
+                as_dict=False):
     """
     Isolation-with-migration (IM) model for two demes.
 
@@ -31,8 +32,14 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     :type migrates: float
     :param burnin: Time to simulate before the split, in units of Nanc
     :type burnin: float
+    :param as_dict: If False, return an instance of
+                    :class:`fwdpy11.DiscreteDemography`.
+                    Otherwise, return a dict that can be
+                    used to construct a ``DiscreteDemography``
+                    instance.
+    :type as_dict: boolean
     :rtype: tuple
-    :returns: :class:`fwdpy11.DiscreteDemography`, the split time, and
+    :returns: the model events, the split time, and
               the time to simulate post-split.
 
     .. versionadded:: 0.6.0
@@ -71,8 +78,13 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     # The rows of the matrix change at the split:
     cm = [fwdpy11.SetMigrationRates(split_time, 0, [1.-m10, m10]),
           fwdpy11.SetMigrationRates(split_time, 1, [m01, 1.-m01])]
-    d = fwdpy11.DiscreteDemography(mass_migrations=split,
-                                   set_growth_rates=growth,
-                                   set_migration_rates=cm,
-                                   migmatrix=m)
-    return d, split_time, gens_post_split
+
+    mdict = {'mass_migrations': split,
+             'set_growth_rates': growth,
+             'set_migration_rates': cm,
+             'migmatrix': m
+             }
+    if as_dict is False:
+        return fwdpy11.DiscreteDemography(**mdict), split_time, gens_post_split
+
+    return mdict, split_time, gens_post_split

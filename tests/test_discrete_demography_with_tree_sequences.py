@@ -46,6 +46,26 @@ class WhoWhereWhen(object):
             self.data.append(IndividualLocation(pop.generation, i, j.deme))
 
 
+class TestConstantPopulationSize(unittest.TestCase):
+    """
+    This tests the absence of demographic events.
+    """
+    @classmethod
+    def setUp(self):
+        from test_demographic_models import setup_pop_rng
+        from test_demographic_models import setup_pdict
+        d = fwdpy11.DiscreteDemography()
+        self.pop, self.rng = setup_pop_rng()
+        self.pdict = setup_pdict(d, 10)
+        self.params = fwdpy11.ModelParams(**self.pdict)
+
+    def test_run_sim(self):
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 10)
+        N = self.pop.N
+        self.assertEqual(self.pop.generation, self.params.simlen)
+        self.assertEqual(N, self.pop.N)
+
+
 class TestSimpleMovesAndCopies(unittest.TestCase):
     """
     Basically doing the same tests
