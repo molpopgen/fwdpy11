@@ -688,7 +688,26 @@ Now we check the final population sizes and make sure they are correct:
     assert ds[1][0] == N0final
     assert ds[1][1] == N1final
 
-        
+This model is common enough that you shouldn't have to implement it from 
+scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
+
+.. ipython:: python
+
+    import fwdpy11.demographic_models.IM
+    d, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(Nanc, T,
+                                                                       psplit,
+                                                                       (N0, N1),
+                                                                       (m01, m10),
+                                                                       burnin=1.0)
+    params.demography = d
+    params.simlen = tsplit + tafter_split
+    pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
+    fwdpy11.evolvets(rng, pop2, params, 100)
+    assert pop.generation == pop2.generation
+    assert pop2.generation == tsplit + tafter_split
+    ds2 = pop2.deme_sizes()
+    assert np.array_equal(ds[0], ds2[0])
+    assert np.array_equal(ds[1], ds2[1])
 
 Run-time checking
 -------------------------------------------------

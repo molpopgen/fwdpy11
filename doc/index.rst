@@ -59,6 +59,7 @@ Welcome to fwdpy11's documentation!
     pages/datamatrix
     pages/model_params
     pages/functions
+    pages/demographic_models
 
 .. toctree::
     :caption: References

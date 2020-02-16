@@ -1,0 +1,57 @@
+def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
+    """
+    Isolation-with-migration (IM) model for two demes.
+
+    :param Nanc: The ancestral population size.
+    :type Nanc: int
+    :param T: The time of the split, in units of Nanc generations
+    :type T: float
+    :param psplit: The proportion of the ancestral population that splits
+                   off to found deme 1
+    :type psplit: float
+    :param Ns: The final sizes of demes 0 and 1, relative to Nanc
+    :type Ns: tuple
+    :param migrates: The migration rates from 0 to 1 and from 1 to 0,
+                     respectively.
+    :type migrates: float
+    :param burnin: Time to simulate before the split, in units of Nanc
+    :type burning: float
+    :rtype: tuple
+    :returns: :class:`fwdpy11.DiscreteDemography`, the split time, and
+              the time to simulate post-split.
+    """
+    import fwdpy11
+    import numpy as np
+    N0, N1 = Ns
+    m01, m10 = migrates
+
+    split_time = np.rint(Nanc*burnin).astype(int)
+    # The split event
+    split = [fwdpy11.move_individuals(when=split_time, source=0,
+                                      destination=1,
+                                      fraction=psplit)]
+    # Get growth rates and set growth rate changes,
+    # taking care to handle our rounding!
+    gens_post_split = np.rint(Nanc*T).astype(int)
+    N0split = np.rint(Nanc*(1.-psplit))
+    N0final = np.rint(N0*Nanc)
+    N1split = np.rint(Nanc*psplit)
+    N1final = np.rint(N1*Nanc)
+    G0 = fwdpy11.exponential_growth_rate(N0split, N0final,
+                                         gens_post_split)
+    G1 = fwdpy11.exponential_growth_rate(N1split, N1final,
+                                         gens_post_split)
+    growth = [fwdpy11.SetExponentialGrowth(split_time, 0, G0),
+              fwdpy11.SetExponentialGrowth(split_time, 1, G1)]
+
+    # Set up the migration matrix for two demes, but only
+    # deme zero exists.
+    m = fwdpy11.migration_matrix_single_extant_deme(2, 0)
+    # The rows of the matrix change at the split:
+    cm = [fwdpy11.SetMigrationRates(split_time, 0, [1.-m10, m10]),
+          fwdpy11.SetMigrationRates(split_time, 1, [m01, 1.-m01])]
+    d = fwdpy11.DiscreteDemography(mass_migrations=split,
+                                   set_growth_rates=growth,
+                                   set_migration_rates=cm,
+                                   migmatrix=m)
+    return d, split_time, gens_post_split
