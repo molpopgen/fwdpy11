@@ -74,7 +74,7 @@ The DiscreteDemography class
 
 The demographic events are stored in instances of :class:`fwdpy11.DiscreteDemography`.
 These events, whose interface is described below, are passed in ``list`` objects
-when created a :class:`fwdpy11.DiscreteDemography` instance.
+when creating a :class:`fwdpy11.DiscreteDemography` instance.
 
 These instances may be used to parameterize the ``demography`` field of a 
 :class:``fwdpy11.ModelParams`` instance.  To illustrate this, here is a 
@@ -391,7 +391,7 @@ Let's run a simulation for a couple of generations:
     pt = ParentTracker()
     setup_and_run_model(pop, dd, 2, pt)
 
-In our output, the deme label is the second value in each tuple, and any indvididual
+In our output, the deme label is the second value in each tuple, and any individual
 in deme 1 has the same parent listed twice because they were the product of a selfing event:
 
 .. ipython:: python
@@ -654,31 +654,12 @@ The above code made use of two helper functions:
 * :func:`fwdpy11.exponential_growth_rate`
 * :func:`fwdpy11.migration_matrix_single_extant_deme`
 
-Now we can set up the genetics:
-
-.. ipython:: python
-
-    nregions = []
-    sregions = []
-    recregions = []
-
-    pdict = {'nregions': nregions,
-             'sregions': sregions,
-             'recregions': recregions,
-             'rates': (0, 0, 0),
-             'gvalue': fwdpy11.Multiplicative(2.),
-             'demography': d,
-             'simlen': Nanc + gens_post_split,
-             'prune_selected': True
-             }
-
 Finally, we can run it:
 
 .. ipython:: python
 
     pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
-    params = fwdpy11.ModelParams(**pdict)
-    fwdpy11.evolvets(rng, pop, params, 100)
+    setup_and_run_model(pop, d, Nanc+gens_post_split)
 
 Now we check the final population sizes and make sure they are correct:
 
@@ -694,15 +675,13 @@ scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic
 .. ipython:: python
 
     import fwdpy11.demographic_models.IM
-    d, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(Nanc, T,
+    d2, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(Nanc, T,
                                                                        psplit,
                                                                        (N0, N1),
                                                                        (m01, m10),
                                                                        burnin=1.0)
-    params.demography = d
-    params.simlen = tsplit + tafter_split
     pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
-    fwdpy11.evolvets(rng, pop2, params, 100)
+    setup_and_run_model(pop2, d2, Nanc+gens_post_split)
     assert pop.generation == pop2.generation
     assert pop2.generation == tsplit + tafter_split
     ds2 = pop2.deme_sizes()
