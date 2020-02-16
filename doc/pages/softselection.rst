@@ -700,6 +700,9 @@ scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic
     assert np.array_equal(ds[0], ds2[0])
     assert np.array_equal(ds[1], ds2[1])
 
+See :ref:`IMexample` for an example of using this function to compare to results
+from diffusion models.
+
 Run-time checking
 -------------------------------------------------
 

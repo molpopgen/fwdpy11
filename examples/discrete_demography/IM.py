@@ -35,7 +35,7 @@ def make_parser():
                         help="Fraction that splits into deme 0")
     parser.add_argument('--tsplit', '-T', type=float,
                         help="Time since population split,"
-                        " in units of Nref generations")
+                        " in units of 2*Nref generations")
     parser.add_argument('--seed', type=int, help="Random number seed")
 
     optional = parser.add_argument_group("Optional")
@@ -52,7 +52,7 @@ def make_parser():
                           help="Number of forward simulation replicates")
     optional.add_argument('--migrates', '-M', type=float,
                           nargs=2, default=[0., 0.],
-                          help="Migration rates")
+                          help="Migration rates, scaled by 2*Nref.")
     optional.add_argument('--nsam', type=int, default=15,
                           help="Number of diploids to sample from each deme")
     optional.add_argument('--theta', type=float, default=1.0,
