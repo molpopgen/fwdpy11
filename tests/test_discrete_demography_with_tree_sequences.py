@@ -72,11 +72,10 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         w = WhoWhereWhen()
         fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 2)
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], 50)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 2)
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], 50)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
         # Validate the parents (inefficiently...)
@@ -104,12 +103,9 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         w = WhoWhereWhen()
         fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes(as_dict=True)
         expected = {0: 100, 1: 50}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(deme_sizes, expected)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
         # Validate the parents (inefficiently...)
@@ -138,11 +134,10 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['simlen'] = 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 1)
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], self.pop.N)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 1)
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], self.pop.N)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_back_and_forth_copy(self):
@@ -154,12 +149,9 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['simlen'] = 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes(as_dict=True)
         expected = {0: 150, 1: 50}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(deme_sizes, expected)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_moves_from_multiple_demes(self):
@@ -175,12 +167,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         # We now expect 50, 25, and 25 individuals in
         # demes 0, 1, and 2
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 3)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 3)
         expected = {0: 50, 1: 25, 2: 25}
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], expected[i])
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_simple_copies_from_multiple_demes(self):
@@ -196,12 +187,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         # We now expect 50, 50, and 25 individuals in
         # demes 0, 1, and 2
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         expected = {0: 50, 1: 50, 2: 25}
-        self.assertEqual(len(deme_counts[0]), len(expected))
-        for i in range(len(deme_counts[0])):
-            self.assertEqual(deme_counts[1][i], expected[i])
+        self.assertEqual(len(deme_sizes[0]), len(expected))
+        for i in range(len(deme_sizes[0])):
+            self.assertEqual(deme_sizes[1][i], expected[i])
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_single_deme_growth(self):
@@ -240,7 +230,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
         md = np.array(self.pop.diploid_metadata, copy=False)
         self.assertEqual(self.pop.N, sum(N1))
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -268,8 +258,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N1 = [100, N1[1]]
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
@@ -301,7 +290,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
         md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N1[0] = np.round(100.*np.power(G0, 7 + t[0] - 11))
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
@@ -323,10 +312,9 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['demography'] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata, copy=False)
         expected = {0: 0, 1: N0//2, 2: N0//2}
-        dc = np.unique(md['deme'], return_counts=True)
-        for i, j in zip(dc[0], dc[1]):
+        deme_sizes = self.pop.deme_sizes()
+        for i, j in zip(deme_sizes[0], deme_sizes[1]):
             self.assertEqual(expected[i], j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
@@ -350,10 +338,9 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['demography'] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata, copy=False)
         expected = {0: 0, 1: N0, 2: N0//2, 3: N0//2}
-        dc = np.unique(md['deme'], return_counts=True)
-        for i, j in zip(dc[0], dc[1]):
+        deme_sizes = self.pop.deme_sizes()
+        for i, j in zip(deme_sizes[0], deme_sizes[1]):
             self.assertEqual(expected[i], j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
@@ -374,11 +361,10 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['simlen'] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N5 = np.round(N0*np.power(g[0].G, 5))
         N_after_mass_mig = [N5//2, N5-N5//2]
-        for i, j in zip(deme_counts[1], N_after_mass_mig):
+        for i, j in zip(deme_sizes[1], N_after_mass_mig):
             self.assertEqual(i, j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
@@ -394,12 +380,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.pdict['simlen'] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        md = np.array(self.pop.diploid_metadata)
-        deme_counts = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         N5 = np.round(N0*np.power(g[0].G, 5))
         N_after_mass_mig_0 = np.round((N5//2)*np.power(g[0].G, 5))
         N = [N_after_mass_mig_0, N5 - N5//2]
-        for i, j in zip(N, deme_counts[1]):
+        for i, j in zip(N, deme_sizes[1]):
             self.assertEqual(i, j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
@@ -458,8 +443,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(N, self.pop.N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
             self.assertEqual(i, self.pop.N//2)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -488,8 +472,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(N, self.pop.N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
+        deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
             self.assertEqual(i, self.pop.N//2)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -518,31 +501,6 @@ class TestSimpleMigrationModels(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
-
-    def test_migration_rates_larger_than_one(self):
-        """
-        Same as a previous tests, but rates are "weights"
-        rather than "probabilities"
-
-        """
-        mm = np.array([0, 2, 2, 0]).reshape(2, 2)
-        mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1.5, 0, 1.5, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs,
-                                       migmatrix=(mm, False),
-                                       set_migration_rates=smr)
-        N = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
-        params = fwdpy11.ModelParams(**self.pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        self.assertEqual(N, self.pop.N)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_sizes = np.unique(md['deme'], return_counts=True)
-        for i in deme_sizes[1]:
-            self.assertEqual(i, self.pop.N//2)
-        self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_selfing_vs_migration(self):
         """
@@ -702,30 +660,27 @@ class TestIMModel(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, params.simlen)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(deme_counts[1][0], self.N0t)
-        self.assertEqual(deme_counts[1][1], self.N1t)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
 
     def test_evolve_in_two_steps(self):
         self.pdict['simlen'] = self.Tsplit
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(len(deme_counts[0]), 1)  # Split hasn't happened
-        self.assertEqual(deme_counts[1][0], self.Nref)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(len(deme_sizes[0]), 1)  # Split hasn't happened
+        self.assertEqual(deme_sizes[1][0], self.Nref)
 
         self.pdict['simlen'] = self.gens_post_split
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 2)  # Simplify more often
         self.assertEqual(self.pop.generation,
                          self.Tsplit + self.gens_post_split)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(deme_counts[1][0], self.N0t)
-        self.assertEqual(deme_counts[1][1], self.N1t)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
 
     def test_evolve_in_two_steps_restart_with_two_demes(self):
         """
@@ -736,19 +691,17 @@ class TestIMModel(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit + 3)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertTrue(all([i > 0 for i in deme_counts[1].tolist()]))
+        deme_sizes = self.pop.deme_sizes()
+        self.assertTrue(all([i > 0 for i in deme_sizes[1].tolist()]))
 
         self.pdict['simlen'] = self.gens_post_split - 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 2)  # Simplify more often
         self.assertEqual(self.pop.generation,
                          self.Tsplit + self.gens_post_split)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(deme_counts[1][0], self.N0t)
-        self.assertEqual(deme_counts[1][1], self.N1t)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
 
     def test_reuse_of_the_demographic_model(self):
         """
@@ -761,18 +714,16 @@ class TestIMModel(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, params.simlen)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(deme_counts[1][0], self.N0t)
-        self.assertEqual(deme_counts[1][1], self.N1t)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
 
         npop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
         fwdpy11.evolvets(self.rng, npop, params, 5)
         self.assertEqual(npop.generation, params.simlen)
-        md = np.array(npop.diploid_metadata, copy=False)
-        deme_counts = np.unique(md['deme'], return_counts=True)
-        self.assertEqual(deme_counts[1][0], self.N0t)
-        self.assertEqual(deme_counts[1][1], self.N1t)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
 
 
 if __name__ == "__main__":

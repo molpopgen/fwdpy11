@@ -9,5 +9,9 @@ References
 
 .. [Jouganous2017] Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017. “Inferring the Joint Demographic History of Multiple Populations: Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.
 
+.. [Kelleher2016] Kelleher, Jerome, Alison M. Etheridge, and Gilean McVean. 2016. “Efficient Coalescent Simulation and Genealogical Analysis for Large Sample Sizes.” PLoS Computational Biology 12 (5): e1004842.
+
+.. [Kelleher2018] Kelleher, Jerome, Kevin R. Thornton, Jaime Ashander, and Peter L. Ralph. 2018. “Efficient Pedigree Recording for Fast Population Genetics Simulation.” PLoS Computational Biology 14 (11): e1006581.
+
 .. [Levene1953] Levene, Howard. 1953. “Genetic Equilibrium When More Than One Ecological Niche Is Available.” The American Naturalist 87 (836): 331–33.
 

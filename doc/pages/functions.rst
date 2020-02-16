@@ -18,3 +18,7 @@ Function documentation
 .. autofunction:: fwdpy11.simplify_tables
 
 .. autofunction:: fwdpy11.evolvets
+
+.. autofunction:: fwdpy11.exponential_growth_rate
+
+.. autofunction:: fwdpy11.migration_matrix_single_extant_deme

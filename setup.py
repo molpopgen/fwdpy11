@@ -157,6 +157,7 @@ class get_pybind_include(object):
 
 
 PKGS = ['fwdpy11',
+        'fwdpy11.demographic_models',
         'fwdpy11._types',
         'fwdpy11._monkeypatch']
 

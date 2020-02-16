@@ -20,10 +20,12 @@
 #ifndef FWDPY11_SET_MIGRATION_RATES_HPP
 #define FWDPY11_SET_MIGRATION_RATES_HPP
 
+#include <gsl/gsl_matrix.h>
 #include <stdexcept>
 #include <cmath>
 #include <cstdint>
 #include <vector>
+#include <numeric>
 #include <tuple>
 #include <limits>
 #include <pybind11/numpy.h>
@@ -53,6 +55,14 @@ namespace fwdpy11
                         throw std::invalid_argument(
                             "SetMigrationRates: empty list of rates");
                     }
+                auto sum
+                    = std::accumulate(begin(migrates), end(migrates), 0.0);
+                if (sum != 0. && sum != 1.0)
+                    {
+                        throw std::invalid_argument(
+                            "migration rates must sum to 0. or 1. in "
+                            "a row.");
+                    }
                 for (auto r : migrates)
                     {
                         if (r < 0.0)
@@ -68,6 +78,7 @@ namespace fwdpy11
                             }
                     }
             }
+
             SetMigrationRates(std::uint32_t w, pybind11::array_t<double> m)
                 : when(w), deme(NULLDEME), migrates()
             {
@@ -94,6 +105,25 @@ namespace fwdpy11
                                             "finite");
                                     }
                                 migrates.push_back(r(i, j));
+                            }
+                    }
+                std::size_t npops = r.shape(0);
+                gsl_matrix_const_view v = gsl_matrix_const_view_array(
+                    migrates.data(), npops, npops);
+                for (std::size_t i = 0; i < npops; ++i)
+                    {
+                        gsl_vector_const_view r
+                            = gsl_matrix_const_row(&v.matrix, i);
+                        double sum = 0.0;
+                        for (std::size_t j = 0; j < npops; ++j)
+                            {
+                                sum += gsl_vector_get(&r.vector, j);
+                            }
+                        if (sum != 0. && sum != 1.0)
+                            {
+                                throw std::invalid_argument(
+                                    "migration rates must sum to 0. or 1. in "
+                                    "a row.");
                             }
                     }
             }

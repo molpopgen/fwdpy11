@@ -21,6 +21,12 @@ and makes use of low-level types added in 0.5.3.
 Overview
 ------------------------------------------------
 
+This chapter describes how to generate detailed demographic models of individuals
+evolving withing discrete sub-populations, or demes.
+
+If you want to skip the details and see basic models provided by ``fwdpy11``, then
+see :ref:`demographic_models`.
+
 The model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -60,8 +66,7 @@ For example, to initialize a population with 25 individuals in demes ``0`` and `
 
     pop = fwdpy11.DiploidPopulation([25, 25], 1.0)
     md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
-    print(np.unique([i.deme for i in pop.tables.nodes], return_counts=True))
+    pop.deme_sizes()
     for m in pop.diploid_metadata:
        for n in m.nodes:
             assert m.deme == pop.tables.nodes[n].deme
@@ -74,7 +79,7 @@ The DiscreteDemography class
 
 The demographic events are stored in instances of :class:`fwdpy11.DiscreteDemography`.
 These events, whose interface is described below, are passed in ``list`` objects
-when created a :class:`fwdpy11.DiscreteDemography` instance.
+when creating a :class:`fwdpy11.DiscreteDemography` instance.
 
 These instances may be used to parameterize the ``demography`` field of a 
 :class:``fwdpy11.ModelParams`` instance.  To illustrate this, here is a 
@@ -106,9 +111,8 @@ We will also define a simple class to record all deme sizes over time:
         def __init__(self):
             self.data = []
         def __call__(self, pop, sampler):
-            md = np.array(pop.diploid_metadata, copy=False)
             self.data.append((pop.generation, pop.N,
-                             np.unique(md['deme'], return_counts=True)))
+                             pop.deme_sizes()))
 
 
 Compatibility with previous versions of fwdpy11
@@ -216,8 +220,7 @@ Here is the version implemented via a  copy:
     copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
 
 
 Here is what our object looks like:
@@ -235,8 +238,7 @@ Here is the version using a move:
     move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
 
 
 For comparison, here is the object specifying the move:
@@ -265,8 +267,7 @@ work":
             fwdpy11.copy_individuals(0, 0, 2, 1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
-    md = np.array(pop.diploid_metadata, copy=False)
-    np.unique(md['deme'], return_counts=True)
+    pop.deme_sizes()
     
 
 When the events are moves, it is not possible to move more than 100% 
@@ -298,11 +299,6 @@ in size is also a sudden bottleneck.
 Copying, on the other hand, does not change the rate of drift in the source
 deme.  However, it does seem to imply some sudden increase in fecundity that
 both came from nowhere and was short-lived.
-
-The distinction between the two choices matters when trying to implement
-models whose parameters have been inferred via approaches based on the
-coalescent or on diffusion approximations. Such approaches usually assume
-that population splits are copy events.
 
 .. _set_deme_sizes:
 
@@ -396,7 +392,7 @@ Let's run a simulation for a couple of generations:
     pt = ParentTracker()
     setup_and_run_model(pop, dd, 2, pt)
 
-In our output, the deme label is the second value in each tuple, and any indvididual
+In our output, the deme label is the second value in each tuple, and any individual
 in deme 1 has the same parent listed twice because they were the product of a selfing event:
 
 .. ipython:: python
@@ -415,15 +411,53 @@ Migration
 For models with multiple demes, migration between then is managed by an
 instance of :class:`fwdpy11.MigrationMatrix`.
 
-For ``m`` demes, the ``m``-by-``m`` migration matrix represents the probability
-that an offspring in row ``r`` has a parent from column ``c``
-and the matrix is consulted for each parent (barring selfing, see :ref:`migration_and_selfing`).
-Thus, rows are destination demes, and columns are source demes.
+For a migration matrix ``M``, the default interpretation of ``M[i, j]`` is the
+fraction of deme ``i`` that will be replaced by migrations from deme ``j``. The 
+entry ``M[i, i]`` represents the non-migrant fraction of deme ``i``'s ancestry.
+The matrix is "row-major" meaning that rows refer to migration into source demes.
+This definition of the migration matrix corresponds to that found in several
+different sources ([Christiansen1974]_, [Christiansen1975]_).
+This definition of migration is also what diffusion models assume (*e.g.* [Jouganous2017]_)
+as well as coalescent simulations like *msprime* [Kelleher2016]_.
 
-(I think we can say that this is the same forward
-migration matrix as in Christiansen and others, 1970s, but will have to check.)
+For example, consider the following matrix:
 
-By default, there is no migration, which is represented by the value ``None``:
+.. ipython:: python
+
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   m
+
+The first row corresponds to the ancestry of deme ``0``, such that 90% of parents will be
+non-migrants and 10% will be migrants from deme ``1``:
+
+.. ipython:: python
+
+   m[0,]
+
+To be concrete, if the size of deme ``0`` in the next generation is 1,000, then the expected
+number of migrant and non-migrant parents of offspring in deme ``0`` is:
+
+.. ipython:: python
+
+   m[0,] * 1e3
+
+The second row implies that half the ancestry of deme ``1`` is due to migrants and half
+due to non-migrants:
+
+.. ipython:: python
+
+   m[1,]
+
+The ``numpy`` array is sufficient to construct our demographic model:
+
+.. ipython:: python
+
+    d = fwdpy11.DiscreteDemography(migmatrix=m)
+    print(d.migmatrix)
+    print(d.migmatrix.M)
+
+By default, there is no migration, which is represented by the value ``None``.  For example,
+the following model has no migration events:
 
 .. ipython:: python
 
@@ -431,37 +465,18 @@ By default, there is no migration, which is represented by the value ``None``:
     d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
     print(d.migmatrix)
 
-Let's construct a simple migration matrix object:
+Likewise, if an identity matrix is provided an migration rates are never changed later,
+then the input matrix is ignored:
 
 .. ipython:: python
 
-    mm = fwdpy11.MigrationMatrix(np.identity(2))
-    print(mm.M)
-    print(mm.scaled)
-
-We just learned that :class:`fwdpy11.MigrationMatrix` instances may be created from
-square ``numpy`` matrices.  Further, this class has a property called ``scaled``.
-When ``scaled is True``, values in the migration matrix are treated as per-individual
-probabilities.  Internally, these probabilities are multiplied by the current source
-deme sizes in order to create a set of weights representing migration rates weighted
-by current deme sizes.  This behavior can be changed, which means that the migration
-matrix entries are interpreted as weights with no consideration of current deme sizes:
-
-.. ipython:: python
-
-    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
-    print(mm.M)
-    print(mm.scaled)
-
-This is example is uninteresting because the identity matrix means no migration,
-as the probability that an offspring in deme ``i`` picks a parent from deme ``i``
-is 1.0 and the probability of a parent from any other deme is 0.0.  The absence
-of migration is true whether or not we scale these rates by deme sizes during the
-simulation.
+    d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
+    print(d.migmatrix)
 
 The only reason to use the identity matrix is to start a simulation with no migration
-and then change the rates later.  To see this in action, we'll first generate a
-new type to track if parents of offspring in deme 1 are migrants or not:
+and then change the rates later via instances of :class:`fwdpy11.SetMigrationRates`.
+To see this in action, we'll first generate a new type to track if parents of
+offspring in deme 1 are migrants or not:
 
 .. ipython:: python
 
@@ -483,7 +498,7 @@ new type to track if parents of offspring in deme 1 are migrants or not:
 .. ipython:: python
 
     # No migration at first
-    mm = fwdpy11.MigrationMatrix(np.identity(2), scale_during_simulation=False)
+    mm = np.identity(2)
     # In generation 3, reset migration rates for deme 1 such
     # that parents are equally likey from both demes.
     cm = [fwdpy11.SetMigrationRates(3, 1, [0.5, 0.5])]
@@ -506,49 +521,59 @@ new type to track if parents of offspring in deme 1 are migrants or not:
             mstring += 's'
         print(i, mstring)
 
-
-A simpler syntax
+An alternative model of migration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-You may pass a ``numpy`` array directly when creating an instance of 
-:class:`fwdpy11.DiscreteDemography`, which by default means that
-rates are scaled by deme size:
+The description of migration rates above implies that migration events are 
+independent of of source deme sizes.  To revisit our earlier example:
 
 .. ipython:: python
 
-    mm = np.identity(3)
-    mm[:] = 1./3.
-    d = fwdpy11.DiscreteDemography(migmatrix=mm)
-    print(d.migmatrix.scaled)
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   # The is the expected number of parents from demes 0 and 1
+   # to offspring born in deme 0:
+   m[0,] * 1000
 
-To input a ``numpy`` matrix without scaling by deme size:
+``fwdpy11`` allows for a different migration scheme where the size of the source deme
+matters.  For this model, ``M[i ,j]`` is the probability that an individual from
+deme ``j`` is a parent in deme ``i``.  Internally, the migration matrix entries
+``M[i, j]`` are multiplied by the size of the *source* demes, which means that
+larger demes with nonzero migration rates to other demes have a larger chance
+of being parents.
 
-.. ipython:: python
-
-    d = fwdpy11.DiscreteDemography(migmatrix=(mm, False))
-    print(d.migmatrix.scaled)
-
-
-Identity matrices with no changes in migration rates.
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Recall that an identity matrix means no migration.  If such a matrix is input
-with no changes to the migration rates, then the matrix is ignored:
+For example:
 
 .. ipython:: python
 
-    mm = np.identity(2)
-    d = fwdpy11.DiscreteDemography(migmatrix=mm)
-    print(d.migmatrix)
+   deme_sizes = np.array([1000, 2000])
+   m
+   md = m*deme_sizes
+   # The following line divides each
+   # row by its sum
+   md/np.sum(md, axis=1)[:, None]
 
-    d = fwdpy11.DiscreteDemography(migmatrix=mm,
-                                   set_migration_rates=[
-                                   fwdpy11.SetMigrationRates(100, 1, [0.9, 0.1])])
-    print(d.migmatrix)
+The first matrix is the same as in the preceding section--90% of the parents of deme
+``0`` will be from deme ``0``.  In the second matrix, that fraction is reduced to
+about 82% because deme ``1`` is twice as large as deme ``0``.
 
+To enable this migration model, the following methods are equivalent:
 
-The reason why the matrix is ignored in the first case is efficiency--it makes no sense
-to generate and interact with lookup tables when we know the answer.
+.. ipython:: python
+   
+   # Method 1: pass a tuple with your numpy array and True
+   # to indicate scaling M[i, j] by source deme sizes:
+   d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
+
+   # Method 2: construct an instance of fwdpy11.MigrationMatrix,
+   # passing True as the second argument to indicate the scaling
+   # by source deme size.
+   M = fwdpy11.MigrationMatrix(m, True)
+   d = fwdpy11.DiscreteDemography(migmatrix=M)
+
+.. note::
+
+   This model of migration will typically give *different* results
+   from diffusion models and coalescent simulations!
 
 
 .. _migration_and_selfing:
@@ -556,16 +581,16 @@ to generate and interact with lookup tables when we know the answer.
 Migration and selfing
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Within each deme, the selfing rate :math:`S` is the probability that an individual selfs,
-and :math:`1-S` is the probability that an individual outcrosses with another.
+Within each deme, the selfing rate :math:`S` is the probability that an
+individual selfs, and :math:`1-S` is the probability that an individual
+outcrosses with another.
 
 For a single deme, everything is very straightforward.  Likewise for many demes with no
 migration.  The challenge arises when we have multiple demes, nonzero selfing rates in
 one or more of them, and nonzero migration.
 
 The challenge is due to the fact that  we consider the migration matrix elements
-to be the probability of migration from deme `c` into deme `r`, multiplied by the current
-size of deme `c`. Here, `r` and `c` mean `row` and `column`.
+to be the probability of migration from deme ``j`` into deme ``i``.
 
 If we focus on an offspring deme and pull a migrant parent from the migration matrix, one 
 of two things may happen:
@@ -573,14 +598,107 @@ of two things may happen:
 1. The migrant parent selfs, which occurs with probability :math:`S` for that migrant's deme.
 2. The migrant parent outcrosses
 
-In the first case, we are done and we use the migrant parent "twice" to generate the offspring.
+In the second case, we have to go back to our migration matrix to choose another parent. Internally,
+a second lookup table is used where each entry in row :math:`M_{i,-}` is multiplied by :math:`1 - S_j`,
+where :math:`S_j` is the selfing probability in source deme :math:`j`.
 
-In the second case, we have to go back to our migration matrix, and now we have our problem.
-With respect to our offspring deme, the relevant column in the migration matrix is the weighted rates
-of migration from all demes into the offspring deme.  What we really need is the *probability of
-an outcrossing event* being a parent in our offspring deme.  Thus, it seems we need a **second**
-lookup table where the "raw" migration weights are all weighted by the current :math:`1-S` for
-each source deme.
+Examples of models
+-------------------------------------------------
+
+Isolation with migration, or "IM"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Consider two demes that split apart ``T`` time units ago and then grow to different
+sizes in the present.  After the split, migration occurs between the two demes. The
+demographic model has the following parameters:
+
+* ``Nanc``, the ancestral population size.
+* ``T``, the time of the split, which is in units of ``Nanc``.
+* ``psplit``, the proportion of the ancestral population that splits off to found deme ``1``.
+* ``N0``, the final size of deme ``0``, relative to ``Nanc``.
+* ``N1``, the final size of deme ``1``, relative to ``Nanc``.
+* ``m01``, the migration rate from deme ``0`` to deme ``1``.
+* ``m10``, the migration rate from deme ``1`` to deme ``0``.
+
+Here is the model in its entirety, with no mutation and no recombination.
+First, we will set up the demographic events.  The population with evolve
+for ``Nanc`` generations before the split.
+
+.. ipython:: python
+
+    Nanc = 100
+    T = 0.2
+    psplit = 0.33
+    N0, N1 = 2, 3
+    m01, m10 = 0.01, 0.0267
+
+    # The split event
+    split = [fwdpy11.move_individuals(when=Nanc, source=0,
+                                      destination=1,
+                                      fraction=psplit)] 
+    # Get growth rates and set growth rate changes,
+    # taking care to handle our rounding!
+    gens_post_split = np.rint(Nanc*T).astype(int)
+    N0split = np.rint(Nanc*(1.-psplit))
+    N0final = np.rint(N0*Nanc)
+    N1split = np.rint(Nanc*psplit)
+    N1final = np.rint(N1*Nanc)
+    G0 = fwdpy11.exponential_growth_rate(N0split, N0final,
+                                         gens_post_split)
+    G1 = fwdpy11.exponential_growth_rate(N1split, N1final,
+                                         gens_post_split)
+    growth = [fwdpy11.SetExponentialGrowth(Nanc, 0, G0),
+              fwdpy11.SetExponentialGrowth(Nanc, 1, G1)]
+
+    # Set up the migration matrix for two demes, but only 
+    # deme zero exists.
+    m = fwdpy11.migration_matrix_single_extant_deme(2, 0)
+    # The rows of the matrix change at the split:
+    cm = [fwdpy11.SetMigrationRates(Nanc, 0, [1.-m10, m10]),
+          fwdpy11.SetMigrationRates(Nanc, 1, [m01, 1.-m01])]
+    d = fwdpy11.DiscreteDemography(mass_migrations=split,
+                                   set_growth_rates=growth,
+                                   set_migration_rates=cm,
+                                   migmatrix=m)
+
+The above code made use of two helper functions:
+
+* :func:`fwdpy11.exponential_growth_rate`
+* :func:`fwdpy11.migration_matrix_single_extant_deme`
+
+Finally, we can run it:
+
+.. ipython:: python
+
+    pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
+    setup_and_run_model(pop, d, Nanc+gens_post_split)
+
+Now we check the final population sizes and make sure they are correct:
+
+.. ipython:: python
+
+    ds = pop.deme_sizes()
+    assert ds[1][0] == N0final
+    assert ds[1][1] == N1final
+
+This model is common enough that you shouldn't have to implement it from 
+scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
+
+.. ipython:: python
+
+    import fwdpy11.demographic_models.IM
+    d2, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(Nanc, T,
+                                                                       psplit,
+                                                                       (N0, N1),
+                                                                       (m01, m10),
+                                                                       burnin=1.0)
+    pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
+    setup_and_run_model(pop2, d2, Nanc+gens_post_split)
+    assert pop.generation == pop2.generation
+    assert pop2.generation == tsplit + tafter_split
+    ds2 = pop2.deme_sizes()
+    assert np.array_equal(ds[0], ds2[0])
+    assert np.array_equal(ds[1], ds2[1])
 
 Run-time checking
 -------------------------------------------------
@@ -588,10 +706,8 @@ Run-time checking
 The parameters of a demographic model are checked at run time at two different places:
 
 * Upon object construction.  The various event objects try to make sure that the parameter inputs are valid.
-* During a simulation. If invalid events occur during a simulation, the simulation raises a 
-  ``fwdpy11.DemographyError`` exception.
+* During a simulation. If invalid events occur during a simulation, the simulation raises a ``fwdpy11.DemographyError`` exception.
 
 It is clearly preferable for a simulation to detect errors as early as possible.  While bad inputs can be
 detected almost immediately, more subtle errors are only detected during simulation, which may take a while.
 A more efficient approach to checking your models is described in :ref:`demographydebugger`.
-
