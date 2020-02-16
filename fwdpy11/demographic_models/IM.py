@@ -2,9 +2,16 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     """
     Isolation-with-migration (IM) model for two demes.
 
+    An ancestral population splits into two daughter demes.
+    At the time of the split, ``psplit`` of the ancestral
+    population moves into deme 1.  The two daughter populations
+    begin exponential growth until the present time and migration
+    may occur between them.
+
     :param Nanc: The ancestral population size.
     :type Nanc: int
     :param T: The time of the split, in units of Nanc generations
+              into the past.
     :type T: float
     :param psplit: The proportion of the ancestral population that splits
                    off to found deme 1
@@ -34,8 +41,12 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     # taking care to handle our rounding!
     gens_post_split = np.rint(Nanc*T).astype(int)
     N0split = np.rint(Nanc*(1.-psplit))
+    if N0split == 0 or N0split == Nanc:
+        raise ValueError("invalid value for psplit: {}".format(psplit))
     N0final = np.rint(N0*Nanc)
     N1split = np.rint(Nanc*psplit)
+    if N1split == 0 or N1split == Nanc:
+        raise ValueError("invalid value for psplit: {}".format(psplit))
     N1final = np.rint(N1*Nanc)
     G0 = fwdpy11.exponential_growth_rate(N0split, N0final,
                                          gens_post_split)
