@@ -19,7 +19,9 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     :param Ns: The final sizes of demes 0 and 1, relative to Nanc
     :type Ns: tuple
     :param migrates: The migration rates from 0 to 1 and from 1 to 0,
-                     respectively.
+                     respectively. Migration rates are the fraction
+                     of the destination deme replaced by the source
+                     deme.
     :type migrates: float
     :param burnin: Time to simulate before the split, in units of Nanc
     :type burning: float
