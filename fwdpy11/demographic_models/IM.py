@@ -26,6 +26,8 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     :rtype: tuple
     :returns: :class:`fwdpy11.DiscreteDemography`, the split time, and
               the time to simulate post-split.
+
+    .. versionadded:: 0.6.0
     """
     import fwdpy11
     import numpy as np
