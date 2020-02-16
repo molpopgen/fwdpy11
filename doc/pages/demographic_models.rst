@@ -1,3 +1,5 @@
+.. _demographic_models:
+
 Pre-computed demographic models
 ======================================================================
 

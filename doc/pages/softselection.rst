@@ -21,6 +21,12 @@ and makes use of low-level types added in 0.5.3.
 Overview
 ------------------------------------------------
 
+This chapter describes how to generate detailed demographic models of individuals
+evolving withing discrete sub-populations, or demes.
+
+If you want to skip the details and see basic models provided by ``fwdpy11``, then
+see :ref:`demographic_models`.
+
 The model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
