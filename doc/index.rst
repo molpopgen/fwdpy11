@@ -76,3 +76,4 @@ Welcome to fwdpy11's documentation!
     examples/recorder
     examples/migtest
     examples/localadaptation
+    examples/IM
