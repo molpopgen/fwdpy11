@@ -24,7 +24,7 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
                      deme.
     :type migrates: float
     :param burnin: Time to simulate before the split, in units of Nanc
-    :type burning: float
+    :type burnin: float
     :rtype: tuple
     :returns: :class:`fwdpy11.DiscreteDemography`, the split time, and
               the time to simulate post-split.
