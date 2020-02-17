@@ -59,6 +59,7 @@ jobs:
             PYTHONPATH=. python examples/gss/plot_genetic_values_from_tree_sequences.py test.lzma
             PYTHONPATH=. python examples/discrete_demography/migtest.py --nreps 1 --seed 42 --quickrun
             PYTHONPATH=. python examples/discrete_demography/localadaptation.py -N 500 --rho 100 --mu 2.5e-4 --sigma 0.1
+            PYTHONPATH=. python examples/discrete_demography/IM.py --Nref 100 --N0 2 -T 0.1 --split 0.2 --N1 1.5 --rho 10.0 --nreps 1 --seed 666
 
       - run:
           name: Build the manual and run doctests
