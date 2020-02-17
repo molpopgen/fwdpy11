@@ -39,6 +39,22 @@ get the expected frequency spectra.
 
    python3 IM.py --Nref 1000 --N0 2 --N1 3 --split 0.5 -T 0.3 --migrate 2.0 0.5  --seed $RANDOM --nreps 64 --theta 100
 
+.. figure:: ../images/moments_IM_gamma_minus_5.png
+
+   An example with selection, run using the command line shown below.
+   In this example, the scaled strength of selection is :math:`\gamma=2N_{ref}s=-5`
+   for all new mutations.  In order to match diffusion results, ``4Nu``
+   must be low, else we risk seeing bizarre dynamics due to the 
+   interplay of a high mutation rate to mutations affecting fitness
+   and insufficient recombination.  Due to the low mutation rate,
+   we must run more replicates.  The "projected" ``FS`` look great,
+   but there's still some noise in the "real" ``FS`` because the sample
+   size is rather small (15 diploids per deme).
+
+.. code-block:: bash
+
+   python3 IM.py --Nref 1000 --N0 2 --N1 3 --split 0.5 -T 0.3 --migrate 2.0 0.5  --seed $RANDOM --nreps 512 --theta 1 --gamma -5
+
 .. literalinclude:: ../../examples/discrete_demography/IM.py
 
 .. _moments: https://bitbucket.org/simongravel/moments
