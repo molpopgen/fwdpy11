@@ -20,12 +20,17 @@
 import fwdpy11
 import fwdpy11.demographic_models.IM
 import argparse
-import moments
 import sys
 import numpy as np
 import concurrent.futures
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
+HAVE_MOMENTS = False
+try:
+    import moments
+    HAVE_MOMENTS = True
+except ImportError:
+    pass
 
 
 def make_parser():
@@ -294,14 +299,15 @@ if __name__ == "__main__":
     parser = make_parser()
     args = parser.parse_args(sys.argv[1:])
 
-    moments_params = (args.split, args.N0, args.N1, args.tsplit,
-                      args.migrates[1], args.migrates[0])
-    moments_nsam = (2*args.nsam, 2*args.nsam)
-    mgamma = args.gamma
-    if mgamma is None:
-        mgamma = 0.0
-    moments_fs = IM_moments(moments_params, moments_nsam,
-                            mgamma, args.H/2.0)
+    if HAVE_MOMENTS is True:
+        moments_params = (args.split, args.N0, args.N1, args.tsplit,
+                          args.migrates[1], args.migrates[0])
+        moments_nsam = (2*args.nsam, 2*args.nsam)
+        mgamma = args.gamma
+        if mgamma is None:
+            mgamma = 0.0
+        moments_fs = IM_moments(moments_params, moments_nsam,
+                                mgamma, args.H/2.0)
 
     # Fail early if input params are bad
     pdict, finalNs = build_parameters_dict(args)
@@ -325,6 +331,6 @@ if __name__ == "__main__":
     sum_sfs1 /= args.nreps
     sum_samples_sfs0 /= args.nreps
     sum_samples_sfs1 /= args.nreps
-
-    plot_sfs(args, moments_fs, (sum_sfs0, sum_sfs1),
-             (sum_samples_sfs0, sum_samples_sfs1))
+    if HAVE_MOMENTS is True:
+        plot_sfs(args, moments_fs, (sum_sfs0, sum_sfs1),
+                 (sum_samples_sfs0, sum_samples_sfs1))
