@@ -30,6 +30,8 @@ try:
     import moments
     HAVE_MOMENTS = True
 except ImportError:
+    import warnings
+    warnings.warn("Couldn't import moments, so we won't be making any plots!")
     pass
 
 
