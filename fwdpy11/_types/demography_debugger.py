@@ -9,6 +9,8 @@ class DemographyDebugger(object):
 
     def __init__(self, pop, events):
         """
+        :param pop: A population
+        :type pop: :class:`fwdpy11.DiploidPopulation`
         :param events: The demographic events
         :type events: :class:`fwdpy11.DiscreteDemography`
         """
