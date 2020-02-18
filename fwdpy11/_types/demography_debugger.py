@@ -32,9 +32,7 @@ class DemographyDebugger(object):
         self.growth_rates = np.array([fwdpy11.NOGROWTH]*self.maxdemes)
         self.growth_onset_times = np.zeros(self.maxdemes, dtype=np.uint32)
         self.selfing_rates = np.zeros(self.maxdemes)
-        # FIXME: the following is almost certainly initialized
-        # incorrectly
-        self.growth_initial_sizes = np.zeros(self.maxdemes, dtype=np.uint32)
+        self.growth_initial_sizes = np.copy(self.current_deme_sizes)
 
         # The real work
         self.report = self._process_demographic_model(events)
