@@ -574,6 +574,19 @@ class TestGrowthModels(unittest.TestCase):
         nodes = np.array(self.pop.tables.nodes)
         self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 7))
 
+    def test_shrink_to_zero_then_recolonize(self):
+        m = [fwdpy11.copy_individuals(0, 0, 1, 1.0),
+             fwdpy11.copy_individuals(10, 1, 0, 1.0)]
+        g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_growth_rates=g)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 20
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        deme_sizes = self.pop.deme_sizes(as_dict=True)
+        self.assertEqual(deme_sizes, {0: 100, 1: 100})
+
 
 class TestGeneticValueLists(unittest.TestCase):
     """
