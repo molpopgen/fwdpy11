@@ -149,8 +149,14 @@ class DemographyDebugger(object):
             if e.resets_growth_rate is True:
                 self.growth_rates[e.source] = fwdpy11.NOGROWTH
                 self.growth_rates[e.destination] = fwdpy11.NOGROWTH
-                self.growth_onset_times[e.source] = t
-                self.growth_onset_times[e.destination] = t
+            # Even if growth rates are not reset,
+            # the onset times and initial sizes are affected
+            self.growth_onset_times[e.source] = t
+            self.growth_onset_times[e.destination] = t
+            self.growth_initial_sizes[e.source] = \
+                self.current_deme_sizes[e.source]
+            self.growth_initial_sizes[e.destination] = \
+                self.current_deme_sizes[e.destination]
 
     def _update_current_deme_sizes(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_deme_sizes'):
