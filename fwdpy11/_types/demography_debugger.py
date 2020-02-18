@@ -218,14 +218,16 @@ class DemographyDebugger(object):
         t = 0  # NOQA
         report = []
         t = self._get_next_event_time(event_queues)
-        while t is not None:
+        global_extinction = False
+        while t is not None and global_extinction is False:
             self._apply_mass_migrations(t, event_queues)
-            # next_deme_sizes = np.copy(self.current_deme_sizes)
             self._update_current_deme_sizes(t, event_queues)
             self._update_growth_rates(t, event_queues)
             self._update_selfing_rates(t, event_queues)
             self._update_migration_matrix(t, event_queues)
             next_deme_sizes = self._apply_growth_rates(t, event_queues)
+            if next_deme_sizes.sum() == 0:
+                global_extinction = True
             t = self._get_next_event_time(event_queues)
         return report
 
