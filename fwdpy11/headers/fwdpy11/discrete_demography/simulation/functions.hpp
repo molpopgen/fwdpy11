@@ -202,7 +202,10 @@ namespace fwdpy11
                                     {
                                         next_size = 0.0;
                                         G[deme] = NOGROWTH;
-                                        N0[deme] = t;
+                                        onset[deme] = t;
+                                        // If the deme is recolonized,
+                                        // this will be reset
+                                        N0[deme] = 0;
                                     }
                                 Nnext[deme] = next_size;
                             }
