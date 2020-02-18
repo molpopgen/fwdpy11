@@ -16,11 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#include <sstream>
 #include <pybind11/pybind11.h>
 #include <fwdpy11/discrete_demography/MassMigration.hpp>
 
 namespace py = pybind11;
+using namespace py::literals;
 namespace ddemog = fwdpy11::discrete_demography;
 
 ddemog::MassMigration
@@ -29,7 +29,7 @@ move_individuals(std::uint32_t when, std::int32_t source,
                  bool resets_growth_rate)
 {
     return ddemog::MassMigration(source, destination, when, 0, -1, fraction,
-                                  true, false, resets_growth_rate);
+                                 true, false, resets_growth_rate);
 }
 
 ddemog::MassMigration
@@ -38,7 +38,7 @@ copy_individuals(std::uint32_t when, std::int32_t source,
                  bool resets_growth_rate)
 {
     return ddemog::MassMigration(source, destination, when, 0, -1, fraction,
-                                  false, false, resets_growth_rate);
+                                 false, false, resets_growth_rate);
 }
 
 static const auto MOVE_INDIVIDUALS_DOCSTRING = R"delim(
@@ -73,15 +73,12 @@ static const auto COPY_INDIVIDUALS_DOCSTRING = R"delim(
 
 namespace
 {
-    std::string
+    py::str
     repr(const ddemog::MassMigration& self)
     {
-        std::ostringstream o;
-        o << "MassMigration(when=" << self.when << ", source=" << self.source
-          << ", destination=" << self.destination
-          << ", fraction=" << self.fraction
-          << ", move_individuals=" << self.move_individuals << ')';
-        return o.str();
+        return "MassMigration(when={}, source={}, destination={}, fraction={}, move_individuals={}, resets_growth_rate={})"_s
+            .format(self.when, self.source, self.destination, self.fraction,
+                    self.move_individuals, self.resets_growth_rate);
     }
 } // namespace
 
@@ -89,7 +86,7 @@ void
 init_MassMigration(py::module& m)
 {
     py::class_<ddemog::MassMigration>(m, "MassMigration",
-                                       R"delim(
+                                      R"delim(
         Mass migration events.
 
         .. versionadded:: 0.5.3
