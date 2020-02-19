@@ -1,4 +1,5 @@
 import fwdpy11
+import warnings
 import numpy as np
 
 
@@ -216,6 +217,17 @@ class DemographyDebugger(object):
 
         return next_deme_sizes
 
+    def _validate_migraton_rates(self, t, next_deme_sizes):
+        if self.M is None:
+            return
+        for i, j in enumerate(next_deme_sizes):
+            if j == 0:
+                if self.M[i, ].sum() != 0:
+                    raise ValueError("there is migration "
+                                     "into empty deme {} "
+                                     "at time {}, "
+                                     "migrates={}".format(i, t, self.M[i, ]))
+
     def _generate_report(self, event_queues):
         """
         Apply events in the same way as the C++
@@ -234,6 +246,8 @@ class DemographyDebugger(object):
             next_deme_sizes = self._apply_growth_rates(t, event_queues)
             if next_deme_sizes.sum() == 0:
                 global_extinction = True
+                warnings.warn("Global extinction occurs at time {}".format(t))
+            self._validate_migraton_rates(t, next_deme_sizes)
             t = self._get_next_event_time(event_queues)
         return report
 
