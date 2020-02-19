@@ -128,7 +128,7 @@ class DemographyDebugger(object):
             event_queues[event].popleft()
         return elist
 
-    def _apply_mass_migrations(self, t, event_queues):
+    def _apply_MassMigration(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'mass_migrations'):
             if self.current_deme_sizes[e.source] == 0:
                 raise ValueError(
@@ -159,7 +159,7 @@ class DemographyDebugger(object):
             self.growth_initial_sizes[e.destination] = \
                 self.current_deme_sizes[e.destination]
 
-    def _update_current_deme_sizes(self, t, event_queues):
+    def _apply_SetDemeSize(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_deme_sizes'):
             self.current_deme_sizes[e.deme] = e.new_size
             if e.resets_growth_rate is True:
@@ -170,7 +170,7 @@ class DemographyDebugger(object):
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
 
-    def _update_selfing_rates(self, t, event_queues):
+    def _apply_SetSelfingRate(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_selfing_rates'):
             if self.current_deme_sizes[e.deme] == 0:
                 raise ValueError("Setting selfing rate in "
@@ -178,7 +178,7 @@ class DemographyDebugger(object):
                                  "time {}".format(e.deme, e.when))
             self.selfing_rates[e.deme] = e.S
 
-    def _update_growth_rates(self, t, event_queues):
+    def _apply_SetExponentialGrowth(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_growth_rates'):
             if self.current_deme_sizes[e.deme] == 0:
                 raise ValueError(
@@ -189,7 +189,7 @@ class DemographyDebugger(object):
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
 
-    def _update_migration_matrix(self, t, event_queues):
+    def _apply_SetMigrationRates(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_migration_rates'):
             if e.deme >= 0:
                 self.M[e.deme, :] = e.migrates
@@ -238,11 +238,11 @@ class DemographyDebugger(object):
         t = self._get_next_event_time(event_queues)
         global_extinction = False
         while t is not None and global_extinction is False:
-            self._apply_mass_migrations(t, event_queues)
-            self._update_current_deme_sizes(t, event_queues)
-            self._update_growth_rates(t, event_queues)
-            self._update_selfing_rates(t, event_queues)
-            self._update_migration_matrix(t, event_queues)
+            self._apply_MassMigration(t, event_queues)
+            self._apply_SetDemeSize(t, event_queues)
+            self._apply_SetExponentialGrowth(t, event_queues)
+            self._apply_SetSelfingRate(t, event_queues)
+            self._apply_SetMigrationRates(t, event_queues)
             next_deme_sizes = self._apply_growth_rates(t, event_queues)
             if next_deme_sizes.sum() == 0:
                 global_extinction = True
