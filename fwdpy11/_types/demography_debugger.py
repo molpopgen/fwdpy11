@@ -18,6 +18,7 @@
 #
 import fwdpy11
 import warnings
+import collections
 import numpy as np
 
 
@@ -173,10 +174,10 @@ class DemographyDebugger(object):
         return self.deme_labels[d]
 
     def _format_deme_sizes(self, sizes):
-        rv = {}
+        rv = collections.OrderedDict()
         for i, j in enumerate(sizes):
             rv[self._label_deme(i)] = j
-        return rv
+        return [(i, j) for i, j in rv.items()]
 
     def _apply_MassMigration(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'mass_migrations'):
