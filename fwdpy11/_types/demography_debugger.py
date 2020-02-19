@@ -224,8 +224,8 @@ class DemographyDebugger(object):
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
             temp = (e.deme, e.G)
-            self.report.append("\tGrowth rate set "
-                               "to {} in deme {}\n".format(*temp))
+            self.report.append("\tGrowth rate "
+                               "in deme {} seet to {}\n".format(*temp))
 
     def _apply_SetMigrationRates(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_migration_rates'):
