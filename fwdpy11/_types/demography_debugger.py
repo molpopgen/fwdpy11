@@ -37,12 +37,15 @@ class DemographyDebugger(object):
     .. versionadded:: 0.6.0
     """
 
-    def __init__(self, pop, events):
+    def __init__(self, pop, events, simlen=None, deme_labels=None):
         """
         :param pop: A population
         :type pop: :class:`fwdpy11.DiploidPopulation`
         :param events: The demographic events
         :type events: :class:`fwdpy11.DiscreteDemography`
+        :deme labels: A map from deme index to some other
+                      kind of printable name
+        :type labels: dict
         """
         # The setup
         self.M = None
@@ -67,10 +70,11 @@ class DemographyDebugger(object):
         self.went_extinct = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata[(self.current_deme_sizes > 0)] = 1
+        self.deme_labels = deme_labels
 
         # The real work
         self._report = None
-        self._process_demographic_model(events)
+        self._process_demographic_model(events, simlen)
 
     def _get_maxdemes(self, pop, events):
         """
@@ -161,29 +165,44 @@ class DemographyDebugger(object):
             event_queues[event].popleft()
         return elist
 
+    def _label_deme(self, d):
+        if self.deme_labels is None:
+            return d
+        if d not in self.deme_labels:
+            return d
+        return self.deme_labels[d]
+
+    def _format_deme_sizes(self, sizes):
+        rv = {}
+        for i, j in enumerate(sizes):
+            rv[self._label_deme(i)] = j
+        return rv
+
     def _apply_MassMigration(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'mass_migrations'):
             if self.current_deme_sizes[e.source] == 0:
+                temp = (e, self._label_deme(e.source))
                 raise ValueError(
                     "mass migration at time {} involves "
-                    "empty source deme {}".format(t, e.source))
+                    "empty source deme {}".format(*temp))
             # NOTE: what is the C++ back-end doing if n_from_source < 1?
             # Answer: currently, that passes silently--is that okay?
             n_from_source = np.rint(
                 self.current_deme_sizes[e.source]*e.fraction).astype(int)
             if n_from_source > self.current_deme_sizes[e.source] and \
                     e.move_individuals is True:
+                temp = (t, n_from_source, self._label_deme(e.source))
                 raise ValueError("mass migration at time {} "
                                  "moves {} individuals from "
-                                 "source deme {}".format(t, n_from_source,
-                                                         e.source))
+                                 "source deme {}".format(*temp))
             if e.move_individuals is True:
                 self.current_deme_sizes[e.source] -= n_from_source
                 self.current_deme_sizes[e.destination] += n_from_source
+                temp = (n_from_source,
+                        self._label_deme(e.source),
+                        self._label_deme(e.destination))
                 self._report.append("\tMass movement of {} "
-                                    "from {} to {}\n".format(n_from_source,
-                                                             e.source,
-                                                             e.destination))
+                                    "from {} to {}\n".format(*temp))
                 if n_from_source > 0:
                     self.has_metadata[e.destination] = 1
                 if e.fraction == 1.0:
@@ -193,17 +212,19 @@ class DemographyDebugger(object):
                 if n_from_source > 0:
                     self.has_metadata[e.destination] = 1
                 self.current_deme_sizes[e.destination] += n_from_source
+                temp = (n_from_source,
+                        self._label_deme(e.source),
+                        self._label_deme(e.destination))
                 self._report.append("\tMass copy of {} "
-                                    "from {} to {}\n".format(n_from_source,
-                                                             e.source,
-                                                             e.destination))
+                                    "from {} to {}\n".format(*temp))
             if e.resets_growth_rate is True:
                 self.growth_rates[e.source] = fwdpy11.NOGROWTH
                 self.growth_rates[e.destination] = fwdpy11.NOGROWTH
                 s = "\t\tGrowth rates reset to {} in {} and {}\n"
-                self._report.append(s.format(fwdpy11.NOGROWTH,
-                                             e.source,
-                                             e.destination))
+                temp = (fwdpy11.NOGROWTH,
+                        self._label_deme(e.source),
+                        self._label_deme(e.destination))
+                self._report.append(s.format(*temp))
             # Even if growth rates are not reset,
             # the onset times and initial sizes are affected
             self.growth_onset_times[e.source] = t
@@ -213,14 +234,16 @@ class DemographyDebugger(object):
             self.growth_initial_sizes[e.destination] = \
                 self.current_deme_sizes[e.destination]
             self._report.append("\t\tGrowth onset times changed:\n")
-            temp = (t, e.source)
+            temp = (t, self._label_deme(e.source))
             self._report.append("\t\t\t{} in deme {}\n".format(*temp))
-            temp = (t, e.destination)
+            temp = (t, self._label_deme(e.destination))
             self._report.append("\t\t\t{} in deme {}\n".format(*temp))
             self._report.append("\t\tGrowth initial sizes changed:\n")
-            temp = (self.growth_initial_sizes[e.source], e.source)
+            temp = (self.growth_initial_sizes[e.source],
+                    self._label_deme(e.source))
             self._report.append("\t\t\t{} in deme {}\n".format(*temp))
-            temp = (self.growth_initial_sizes[e.destination], e.destination)
+            temp = (self.growth_initial_sizes[e.destination],
+                    self._label_deme(e.destination))
             self._report.append("\t\t\t{} in deme {}\n".format(*temp))
 
     def _apply_SetDemeSize(self, t, event_queues):
@@ -228,54 +251,60 @@ class DemographyDebugger(object):
             self.current_deme_sizes[e.deme] = e.new_size
             if e.new_size == 0:
                 self.went_extinct[e.deme] = 1
-            temp = (e.new_size, e.deme)
+            temp = (e.new_size, self._label_deme(e.deme))
             self._report.append("\tDeme size set to {} "
                                 "in deme {}\n".format(*temp))
             if e.resets_growth_rate is True:
                 self.growth_rates[e.deme] = fwdpy11.NOGROWTH
-                temp = (e.deme, fwdpy11.NOGROWTH)
+                temp = (fwdpy11.NOGROWTH,)
                 self._report.append("\t\tGrowth rate set to "
-                                    "{} in deme {}\n".format(*temp))
+                                    "{}\n".format(*temp))
 
             # Deme size has change.  So, no matter what,
             # there is a new onsite time for growth!
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
-            self._report.append("\t\tGrowth initial sizes changed:\n")
-            temp = (self.growth_initial_sizes[e.deme], e.deme)
-            self._report.append("\t\t\t{} in deme {}\n".format(*temp))
+            temp = self.growth_initial_sizes[e.deme]
+            self._report.append("\t\tGrowth initial size "
+                                "set to {}\n".format(temp))
 
     def _apply_SetSelfingRate(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_selfing_rates'):
             if self.current_deme_sizes[e.deme] == 0:
+                temp = (self._label_deme(e.deme), e.when)
                 raise ValueError("Setting selfing rate in "
                                  "extinct deme {} at "
-                                 "time {}".format(e.deme, e.when))
+                                 "time {}".format(*temp))
             self.selfing_rates[e.deme] = e.S
+            temp = (e.S, self._label_deme(e.deme))
             self._report.append("\tSelfing probability "
-                                "set to {} in deme {}\n".format(e.S, e.deme))
+                                "set to {} in deme {}\n".format(*temp))
 
     def _apply_SetExponentialGrowth(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_growth_rates'):
             if self.current_deme_sizes[e.deme] == 0:
+                temp = (self._label_deme(e.deme), e.when)
                 raise ValueError(
                     "attempt to change growth "
                     "rate in extinct deme {} "
-                    "at time {}".format(e.deme, e.when))
+                    "at time {}".format(*temp))
             self.growth_rates[e.deme] = e.G
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
-            temp = (e.deme, e.G)
+            temp = (self._label_deme(e.deme), e.G)
             self._report.append("\tGrowth rate "
                                 "in deme {} set to {}\n".format(*temp))
+            self._report.append("\t\tOnset time: {}\n".format(t))
+            N = self.growth_initial_sizes[e.deme]
+            self._report.append("\t\tOnset size: {}\n".format(N))
 
     def _apply_SetMigrationRates(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_migration_rates'):
             if e.deme >= 0:
                 self.M[e.deme, :] = e.migrates
+                temp = (self._label_deme(e.deme), e.migrates)
                 self._report.append("\tMigration rates into "
-                                    "deme {} set to {}\n".format(e.deme,
-                                                                 e.migrates))
+                                    "deme {} set to {}\n".format(*temp))
             else:
                 self.M[:] = e.migrates.reshape(self.M.shape)
                 self._report.append("\tMigration matrix "
@@ -286,9 +315,10 @@ class DemographyDebugger(object):
         for i, j in enumerate(self.growth_rates):
             if j != fwdpy11.NOGROWTH:
                 if self.current_deme_sizes[i] == 0:
+                    temp = (t, self._label_deme(i))
                     raise ValueError("growth is happening "
                                      "at time {} in extinct "
-                                     "deme {}".format(t, i))
+                                     "deme {}".format(*temp))
                 onset = self.growth_onset_times[i]
                 G = self.growth_rates[i]
                 Nonset = self.growth_initial_sizes[i]
@@ -309,10 +339,12 @@ class DemographyDebugger(object):
         for i, j in enumerate(next_deme_sizes):
             if j == 0:
                 if self.M[i, ].sum() != 0:
+                    temp = (self._label_deme(i),
+                            t, self.M[i, j])
                     raise ValueError("there is migration "
                                      "into empty deme {} "
                                      "at time {}, "
-                                     "migrates={}".format(i, t, self.M[i, ]))
+                                     "migrates={}".format(*temp))
 
     def _check_for_valid_parents(self, t):
         for i, j in enumerate(self.has_metadata):
@@ -321,28 +353,34 @@ class DemographyDebugger(object):
                 if self.M is None:
                     s = "deme {} has size {} at time {} " + \
                         "but has no valid parents"
-                    raise ValueError(s.format(i, N, t))
+                    temp = (self._label_deme(i), N, t)
+                    raise ValueError(s.format(*temp))
                 # FIXME: if M[i, i] == 0 and M[i, ].sum() > 0,
                 # then deme i will have metadata.
                 elif self.M[i, i] != 0.0:
                     s = "deme {} at time {} " + \
                         "has no valid parents in that deme " + \
                         "but M[i, i] != 0"
-                    raise ValueError(s.format(i, N, t))
+                    temp = (self._label_deme(i), N, t)
+                    raise ValueError(s.format(*temp))
 
-    def _generate_report(self, event_queues):
+    def _generate_report(self, event_queues, simlen):
         """
         Apply events in the same way as the C++
         back-end.
         """
+        temp = self._format_deme_sizes(self.current_deme_sizes)
         self._report = [
-            "Deme sizes at time {}: {}\n".format(0, self.current_deme_sizes)
+            "Deme sizes at time {}: {}\n".format(0, temp)
         ]
         t = self._get_next_event_time(event_queues)
         global_extinction = False
+        last_t = None
         while t is not None and global_extinction is False:
             self.has_metadata[(self.went_extinct == 1)] = 0
             self.went_extinct[:] = 0
+            self.current_deme_sizes[:] = self._apply_growth_rates(
+                t-1, event_queues)
             self._report.append("Events at time {}:\n".format(t))
             self._apply_MassMigration(t, event_queues)
             self._apply_SetDemeSize(t, event_queues)
@@ -351,7 +389,8 @@ class DemographyDebugger(object):
             self._apply_SetMigrationRates(t, event_queues)
             next_deme_sizes = self._apply_growth_rates(t, event_queues)
             self._check_for_valid_parents(t)
-            sizes = "\tDeme sizes after growth: {}\n".format(next_deme_sizes)
+            temp = self._format_deme_sizes(next_deme_sizes)
+            sizes = "\tDeme sizes after growth: {}\n".format(temp)
             self._report.append(sizes)
             extinct = "\tThe following demes went extinct: {}\n"
             e = np.where(self.went_extinct == 1)[0]
@@ -368,11 +407,27 @@ class DemographyDebugger(object):
                 self._report.append(temp + '\n')
             self._validate_migraton_rates(t, next_deme_sizes)
             self.current_deme_sizes = next_deme_sizes
+            last_t = t
             t = self._get_next_event_time(event_queues)
 
-    def _process_demographic_model(self, events):
+        if simlen is not None and simlen > last_t:
+            deme_sizes = np.copy(self.current_deme_sizes)
+            for i, j in enumerate(deme_sizes):
+                if j > 0:
+                    G = self.growth_rates[i]
+                    if G != fwdpy11.NOGROWTH:
+                        N0 = self.growth_initial_sizes[i]
+                        t0 = self.growth_onset_times[i]
+                        N = np.rint(
+                            N0*np.power(G, simlen-t0)).astype(int)
+                        deme_sizes[i] = N
+            temp = "Final deme sizes at time {}: {}"
+            deme_sizes = self._format_deme_sizes(deme_sizes)
+            self._report.append(temp.format(simlen, deme_sizes))
+
+    def _process_demographic_model(self, events, simlen):
         event_queues = self._make_event_queues(events)
-        self._generate_report(event_queues)
+        self._generate_report(event_queues, simlen)
 
     @property
     def report(self):
