@@ -51,6 +51,17 @@ class TestBadMassMigrations(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(RuntimeError):
+            setup_and_run_model(self.pop, d, 5)
+
+    def test_copy_from_empty_deme(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1),
+             fwdpy11.copy_individuals(1, 0, 1, 1)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(RuntimeError):
+            setup_and_run_model(self.pop, d, 5)
 
 
 if __name__ == "__main__":
