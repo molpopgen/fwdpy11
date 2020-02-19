@@ -217,22 +217,21 @@ class DemographyDebugger(object):
         for e in self._current_events(t, event_queues, 'set_deme_sizes'):
             self.current_deme_sizes[e.deme] = e.new_size
             temp = (e.new_size, e.deme)
-            self._report.append("Deme size set to {} in deme {}".format(*temp))
+            self._report.append("\tDeme size set to {} "
+                                "in deme {}\n".format(*temp))
             if e.resets_growth_rate is True:
                 self.growth_rates[e.deme] = fwdpy11.NOGROWTH
                 temp = (e.deme, fwdpy11.NOGROWTH)
-                self._report.append("\tGrowth rate set to "
-                                    "{} in deme {}".format(*temp))
+                self._report.append("\t\tGrowth rate set to "
+                                    "{} in deme {}\n".format(*temp))
 
             # Deme size has change.  So, no matter what,
             # there is a new onsite time for growth!
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
-            self._report.append("\tGrowth initial sizes changed:\n")
+            self._report.append("\t\tGrowth initial sizes changed:\n")
             temp = (self.growth_initial_sizes[e.deme], e.deme)
-            self._report.append("\t\t{} in deme {}\n".format(*temp))
-            temp = (self.growth_initial_sizes[e.deme], e.deme)
-            self._report.append("\t\t{} in deme {}\n".format(*temp))
+            self._report.append("\t\t\t{} in deme {}\n".format(*temp))
 
     def _apply_SetSelfingRate(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_selfing_rates'):
