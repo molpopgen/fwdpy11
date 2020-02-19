@@ -24,6 +24,7 @@
 #include <stdexcept>
 #include <stack>
 #include <unordered_map>
+#include <sstream>
 #include <gsl/gsl_randist.h>
 #include "../../rng.hpp"
 #include "../MassMigration.hpp"
@@ -113,14 +114,17 @@ namespace fwdpy11
             void
             apply_copies(const GSLrng_t& rng, const MassMigration& mm,
                          const deme_map_t& deme_map,
+                         uint32_t t,
                          std::vector<std::size_t>& buffer,
                          std::vector<METADATATYPE>& metadata)
             {
                 auto deme_itr = deme_map.find(mm.source);
                 if (deme_itr == end(deme_map))
                     {
-                        throw std::runtime_error(
-                            "MassMigration error: deme not found in deme map");
+                        std::ostringstream o;
+                        o << "copies from empty deme " << mm.source
+                          << " at time " << t << " attempted";
+                        throw std::runtime_error(o.str());
                     }
                 if (mm.fraction < 1.)
                     {
@@ -172,15 +176,16 @@ namespace fwdpy11
 
             void
             apply_moves(const GSLrng_t& rng, const MassMigration& mm,
-                        std::vector<std::int32_t>& moves,
+                        std::uint32_t t, std::vector<std::int32_t>& moves,
                         move_map_t& move_source)
             {
                 auto deme_itr = move_source.find(mm.source);
                 if (deme_itr == end(move_source))
                     {
-                        throw std::runtime_error(
-                            "MassMigration error: deme not "
-                            "found in move source map");
+                        std::ostringstream o;
+                        o << "moves from empty deme " << mm.source
+                          << " at time " << t << " attempted";
+                        throw std::runtime_error(o.str());
                     }
                 if (mm.fraction < 1.0)
                     {
@@ -352,7 +357,7 @@ namespace fwdpy11
                                         "MassMigration error: copies after "
                                         "moves");
                                 }
-                            detail::apply_copies(rng, *i, deme_map, buffer,
+                            detail::apply_copies(rng, *i, deme_map, t, buffer,
                                                  metadata);
                             detail::update_changed_and_reset(
                                 *i, changed_and_reset);
@@ -366,7 +371,8 @@ namespace fwdpy11
                                         rng, deme_map);
                                     initialized_moves = true;
                                 }
-                            detail::apply_moves(rng, *i, moves, move_source);
+                            detail::apply_moves(rng, *i, t, moves,
+                                                move_source);
                             detail::update_changed_and_reset(
                                 *i, changed_and_reset);
                         }
