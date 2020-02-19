@@ -477,7 +477,7 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
         try:
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
         except Exception:
-            self.assertFail("unexpected exception")
+            self.fail("unexpected exception")
 
 
 class TestSimpleMigrationModels(unittest.TestCase):
