@@ -297,6 +297,7 @@ class DemographyDebugger(object):
                 warnings.warn(temp)
                 self.report.append(temp + '\n')
             self._validate_migraton_rates(t, next_deme_sizes)
+            self.current_deme_sizes = next_deme_sizes
             t = self._get_next_event_time(event_queues)
 
     def _process_demographic_model(self, events):
