@@ -190,6 +190,14 @@ class DemographyDebugger(object):
             # Answer: currently, that passes silently--is that okay?
             n_from_source = np.rint(
                 self.current_deme_sizes[e.source]*e.fraction).astype(int)
+            if n_from_source == 0:
+                # Assume that this occurs from rounding issues,
+                # so we treat it as a warning rather than an error
+                temp = (t, self._label_deme(e.source),
+                        self._label_deme(e.destination))
+                message = "mass migration at time {} from {} " + \
+                          "to {} moves no individuals"
+                warnings.warn(message.format(*temp))
             if n_from_source > self.current_deme_sizes[e.source] and \
                     e.move_individuals is True:
                 temp = (t, n_from_source, self._label_deme(e.source))
