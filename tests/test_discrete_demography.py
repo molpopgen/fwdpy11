@@ -808,6 +808,18 @@ class TestDemographyError(unittest.TestCase):
             assert_raised = True
         self.assertTrue(assert_raised)
 
+    def test_no_valid_parents(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s)
+        assert_raised = False
+        try:
+            ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
+        except fwdpy11.DemographyError:
+            assert_raised = True
+        self.assertTrue(assert_raised)
+
 
 if __name__ == "__main__":
     unittest.main()

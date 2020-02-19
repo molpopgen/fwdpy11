@@ -80,6 +80,10 @@ namespace fwdpy11
                                     stops[i] - starts[i],
                                     fitnesses.data() + starts[i]));
                             }
+                        else
+                            {
+                                lookups[i].reset(nullptr);
+                            }
                     }
             }
 

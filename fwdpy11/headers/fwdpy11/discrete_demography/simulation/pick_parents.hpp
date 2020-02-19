@@ -21,6 +21,7 @@
 #define FWDPY11_DISCRETE_DEMOGRAPY_PICK_PARENTS_HPP
 
 #include <cstdint>
+#include <sstream>
 #include "../../rng.hpp"
 #include "../MigrationMatrix.hpp"
 #include "migration_lookup.hpp"
@@ -60,6 +61,14 @@ namespace fwdpy11
         {
             if (miglookup.null_migmatrix) // Model has no migration
                 {
+                    if (wlookups.lookups[offspring_deme] == nullptr)
+                        {
+                            std::ostringstream o;
+                            o << "fitness lookup table for deme "
+                              << offspring_deme << " is empty";
+                            throw DemographyError(o.str());
+                        }
+
                     auto p1 = wlookups.get_parent(rng, current_deme_sizes,
                                                   offspring_deme);
                     if (selfing_rates.get()[offspring_deme] > 0.
@@ -80,6 +89,13 @@ namespace fwdpy11
                 }
             std::int32_t pdeme1 = static_cast<std::int32_t>(gsl_ran_discrete(
                 rng.get(), miglookup.lookups[offspring_deme].get()));
+            if (wlookups.lookups[pdeme1] == nullptr)
+                {
+                    std::ostringstream o;
+                    o << "fitness lookup table for deme " << pdeme1
+                      << " is empty";
+                    throw DemographyError(o.str());
+                }
             auto p1 = wlookups.get_parent(rng, current_deme_sizes, pdeme1);
             if (selfing_rates.get()[pdeme1] > 0.
                 && gsl_rng_uniform(rng.get()) <= selfing_rates.get()[pdeme1])
@@ -91,8 +107,17 @@ namespace fwdpy11
                 {
                     throw std::runtime_error("olookups is nullptr");
                 }
+
             std::int32_t pdeme2 = static_cast<std::int32_t>(gsl_ran_discrete(
                 rng.get(), miglookup.olookups[offspring_deme].get()));
+
+            if (wlookups.lookups[pdeme2] == nullptr)
+                {
+                    std::ostringstream o;
+                    o << "fitness lookup table for deme " << pdeme2
+                      << " is empty";
+                    throw DemographyError(o.str());
+                }
             auto p2 = wlookups.get_parent(rng, current_deme_sizes, pdeme2);
             return { p1, p2, pdeme1, pdeme2, mating_event_type::outcrossing };
         }

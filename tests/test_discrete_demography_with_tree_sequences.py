@@ -437,6 +437,48 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
         nodes = np.array(self.pop.tables.nodes)
         self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 4))
 
+    def test_no_valid_parents(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 10
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+    def test_no_valid_parents_with_migration(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       migmatrix=M)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 10
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
+    def test_no_valid_parents_with_migration_2(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        cM = [fwdpy11.SetMigrationRates(
+            0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       set_migration_rates=cM,
+                                       migmatrix=M)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 10
+        params = fwdpy11.ModelParams(**self.pdict)
+        try:
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        except Exception:
+            self.assertFail("unexpected exception")
+
 
 class TestSimpleMigrationModels(unittest.TestCase):
     @classmethod
