@@ -85,6 +85,7 @@ class DemographyDebugger(object):
                     m = max(m, i.deme)
                 except AttributeError:
                     m = max(m, i.source)
+                    m = max(m, i.destination)
             return m
 
         for i in [events.mass_migrations, events.set_growth_rates,
