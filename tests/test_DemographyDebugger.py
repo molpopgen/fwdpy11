@@ -120,6 +120,18 @@ class TestDetectingExtinctions(unittest.TestCase):
         except Exception:
             self.fail("unexpected exception")
 
+    def test_no_valid_parents_with_migration_V3(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       migmatrix=(M, True))
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 5)
+
 
 if __name__ == "__main__":
     unittest.main()

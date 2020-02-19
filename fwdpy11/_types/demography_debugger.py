@@ -322,8 +322,6 @@ class DemographyDebugger(object):
                     s = "deme {} has size {} at time {} " + \
                         "but has no valid parents"
                     raise ValueError(s.format(i, N, t))
-                # FIXME: doesn't account for "scaled"
-                # migration matrices
                 # FIXME: if M[i, i] == 0 and M[i, ].sum() > 0,
                 # then deme i will have metadata.
                 elif self.M[i, i] != 0.0:
