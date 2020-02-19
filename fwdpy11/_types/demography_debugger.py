@@ -276,9 +276,8 @@ class DemographyDebugger(object):
         Apply events in the same way as the C++
         back-end.
         """
-        t = 0  # NOQA
         self.report = [
-            "Deme sizes at time {}: {}\n".format(t, self.current_deme_sizes)
+            "Deme sizes at time {}: {}\n".format(0, self.current_deme_sizes)
         ]
         t = self._get_next_event_time(event_queues)
         global_extinction = False
