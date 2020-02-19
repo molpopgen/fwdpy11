@@ -294,7 +294,9 @@ class DemographyDebugger(object):
             self.report.append(sizes)
             if next_deme_sizes.sum() == 0:
                 global_extinction = True
-                warnings.warn("Global extinction occurs at time {}".format(t))
+                temp = "Global extinction occurs at time {}".format(t)
+                warnings.warn(temp)
+                self.report.append(temp + '\n')
             self._validate_migraton_rates(t, next_deme_sizes)
             t = self._get_next_event_time(event_queues)
 
