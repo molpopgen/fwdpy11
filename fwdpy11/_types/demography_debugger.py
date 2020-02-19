@@ -32,8 +32,7 @@ class DemographyDebugger(object):
 
     If model errors are found, a ``ValueError`` exception
     is raised. The types of errors are the same as would
-    result in a ``fwdpy11.DemographyError`` exception during
-    a simulation.
+    result in an exception during a simulation.
 
     .. versionadded:: 0.6.0
     """
@@ -49,7 +48,6 @@ class DemographyDebugger(object):
         self.M = None
         if events.migmatrix is not None:
             self.M = np.copy(events.migmatrix.M)
-
         self._validate_migration_rate_change_lengths(events)
 
         self.maxdemes = self._get_maxdemes(pop, events)
@@ -66,6 +64,9 @@ class DemographyDebugger(object):
         self.growth_onset_times = np.zeros(self.maxdemes, dtype=np.uint32)
         self.selfing_rates = np.zeros(self.maxdemes)
         self.growth_initial_sizes = np.copy(self.current_deme_sizes)
+        self.went_extinct = np.zeros(self.maxdemes, dtype=np.int32)
+        self.has_metadata = np.zeros(self.maxdemes, dtype=np.int32)
+        self.has_metadata[(self.current_deme_sizes > 0)] = 1
 
         # The real work
         self._report = None
@@ -117,7 +118,7 @@ class DemographyDebugger(object):
                 if len(i.migrates) != self.M.shape[0]:
                     raise ValueError("Migration rates mismatch")
             else:  # Are replacing the entire matrix
-                if len(i.migrates) != len(self.M.flatten()):
+                if len(i.migrates.flatten()) != len(self.M.flatten()):
                     raise ValueError("Migration rates mismatch")
 
     def _get_event_names(self, events):
@@ -166,6 +167,8 @@ class DemographyDebugger(object):
                 raise ValueError(
                     "mass migration at time {} involves "
                     "empty source deme {}".format(t, e.source))
+            # NOTE: what is the C++ back-end doing if n_from_source < 1?
+            # Answer: currently, that passes silently--is that okay?
             n_from_source = np.rint(
                 self.current_deme_sizes[e.source]*e.fraction).astype(int)
             if n_from_source > self.current_deme_sizes[e.source] and \
@@ -181,7 +184,14 @@ class DemographyDebugger(object):
                                     "from {} to {}\n".format(n_from_source,
                                                              e.source,
                                                              e.destination))
+                if n_from_source > 0:
+                    self.has_metadata[e.destination] = 1
+                if e.fraction == 1.0:
+                    self.went_extinct[e.source] = 1
+                    self.has_metadata[e.source] = 0
             else:  # A copy
+                if n_from_source > 0:
+                    self.has_metadata[e.destination] = 1
                 self.current_deme_sizes[e.destination] += n_from_source
                 self._report.append("\tMass copy of {} "
                                     "from {} to {}\n".format(n_from_source,
@@ -216,6 +226,8 @@ class DemographyDebugger(object):
     def _apply_SetDemeSize(self, t, event_queues):
         for e in self._current_events(t, event_queues, 'set_deme_sizes'):
             self.current_deme_sizes[e.deme] = e.new_size
+            if e.new_size == 0:
+                self.went_extinct[e.deme] = 1
             temp = (e.new_size, e.deme)
             self._report.append("\tDeme size set to {} "
                                 "in deme {}\n".format(*temp))
@@ -286,6 +298,7 @@ class DemographyDebugger(object):
                     self.growth_rates[i] = fwdpy11.NOGROWTH
                     self.growth_initial_sizes[i] = 0
                     self.growth_onset_times[i] = t
+                    self.went_extinct[i] = 1
                 next_deme_sizes[i] = nextN
 
         return next_deme_sizes
@@ -301,6 +314,24 @@ class DemographyDebugger(object):
                                      "at time {}, "
                                      "migrates={}".format(i, t, self.M[i, ]))
 
+    def _check_for_valid_parents(self, t):
+        for i, j in enumerate(self.has_metadata):
+            if j == 0 and self.current_deme_sizes[i] > 0:
+                N = self.current_deme_sizes[i]
+                if self.M is None:
+                    s = "deme {} has size {} at time {} " + \
+                        "but has no valid parents"
+                    raise ValueError(s.format(i, N, t))
+                # FIXME: doesn't account for "scaled"
+                # migration matrices
+                # FIXME: if M[i, i] == 0 and M[i, ].sum() > 0,
+                # then deme i will have metadata.
+                elif self.M[i, i] != 0.0:
+                    s = "deme {} at time {} " + \
+                        "has no valid parents in that deme " + \
+                        "but M[i, i] != 0"
+                    raise ValueError(s.format(i, N, t))
+
     def _generate_report(self, event_queues):
         """
         Apply events in the same way as the C++
@@ -312,6 +343,8 @@ class DemographyDebugger(object):
         t = self._get_next_event_time(event_queues)
         global_extinction = False
         while t is not None and global_extinction is False:
+            self.has_metadata[(self.went_extinct == 1)] = 0
+            self.went_extinct[:] = 0
             self._report.append("Events at time {}:\n".format(t))
             self._apply_MassMigration(t, event_queues)
             self._apply_SetDemeSize(t, event_queues)
@@ -319,8 +352,17 @@ class DemographyDebugger(object):
             self._apply_SetSelfingRate(t, event_queues)
             self._apply_SetMigrationRates(t, event_queues)
             next_deme_sizes = self._apply_growth_rates(t, event_queues)
+            self._check_for_valid_parents(t)
             sizes = "\tDeme sizes after growth: {}\n".format(next_deme_sizes)
             self._report.append(sizes)
+            extinct = "\tThe following demes went extinct: {}\n"
+            e = np.where(self.went_extinct == 1)[0]
+            if len(e) > 0:
+                self._report.append(extinct.format(e))
+            extinct = "\tThe following demes are extinct: {}\n"
+            e = np.where(self.has_metadata == 0)[0]
+            if len(e) > 0:
+                self._report.append(extinct.format(e))
             if next_deme_sizes.sum() == 0:
                 global_extinction = True
                 temp = "Global extinction occurs at time {}".format(t)

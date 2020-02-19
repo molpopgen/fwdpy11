@@ -448,6 +448,16 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
+    def test_no_valid_parents_alternate_method(self):
+        m = [fwdpy11.copy_individuals(0, 0, 1, 1.0)]
+        s = [fwdpy11.SetDemeSize(0, 0, 0), fwdpy11.SetDemeSize(2, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
+        self.pdict['demography'] = d
+        self.pdict['simlen'] = 10
+        params = fwdpy11.ModelParams(**self.pdict)
+        with self.assertRaises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(self.rng, self.pop, params, 100)
+
     def test_no_valid_parents_with_migration(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]

@@ -23,6 +23,7 @@ This is basically a test of bad models.
 
 import fwdpy11
 import unittest
+import numpy as np
 
 
 def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
@@ -62,6 +63,62 @@ class TestBadMassMigrations(unittest.TestCase):
             fwdpy11.DemographyDebugger(self.pop, d)
         with self.assertRaises(RuntimeError):
             setup_and_run_model(self.pop, d, 5)
+
+
+class TestDetectingExtinctions(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.)
+
+    def test_no_valid_parents_V1(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+
+    def test_no_valid_parents_V2(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(1, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+
+    def test_no_valid_parents_V3(self):
+        m = [fwdpy11.copy_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 0),
+             fwdpy11.SetDemeSize(11, 0, 100)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+
+    def test_no_valid_parents_with_migration(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       migmatrix=M)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+
+    def test_no_valid_parents_with_migration_V2(self):
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        cM = [fwdpy11.SetMigrationRates(
+            0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       set_migration_rates=cM,
+                                       migmatrix=M)
+        try:
+            fwdpy11.DemographyDebugger(self.pop, d)
+        except Exception:
+            self.fail("unexpected exception")
 
 
 if __name__ == "__main__":
