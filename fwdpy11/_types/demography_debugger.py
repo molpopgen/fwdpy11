@@ -229,9 +229,9 @@ class DemographyDebugger(object):
             self.growth_onset_times[e.deme] = t
             self.growth_initial_sizes[e.deme] = self.current_deme_sizes[e.deme]
             self._report.append("\tGrowth initial sizes changed:\n")
-            temp = (self.growth_initial_sizes[e.source], e.source)
+            temp = (self.growth_initial_sizes[e.deme], e.deme)
             self._report.append("\t\t{} in deme {}\n".format(*temp))
-            temp = (self.growth_initial_sizes[e.destination], e.destination)
+            temp = (self.growth_initial_sizes[e.deme], e.deme)
             self._report.append("\t\t{} in deme {}\n".format(*temp))
 
     def _apply_SetSelfingRate(self, t, event_queues):
