@@ -98,7 +98,7 @@ function that we'll use repeatedly below:
                 'simlen': simlen
                }
         params = fwdpy11.ModelParams(**pdict)
-        rng = fwdpy11.GSLrng(654321)
+        rng = fwdpy11.GSLrng(seed)
         fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
 

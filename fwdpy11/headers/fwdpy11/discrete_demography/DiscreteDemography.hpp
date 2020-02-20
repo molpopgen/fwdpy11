@@ -148,6 +148,7 @@ namespace fwdpy11
                                 auto j = i + 1;
                                 double sum = i->fraction;
                                 for (; j < end(v) && j->source == i->source
+                                       && i->when == j->when
                                        && j->move_individuals;
                                      ++j)
                                     {
