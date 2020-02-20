@@ -7,7 +7,7 @@ version, etc.
 0.6.0rc2 
 ++++++++++++++++
 
-Second release candidate of version 0.6.0!
+Third release candidate of version 0.6.0!
 
 Kind of a big release:
 
