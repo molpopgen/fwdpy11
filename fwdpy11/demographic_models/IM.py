@@ -42,6 +42,11 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0,
     :returns: the model events, the split time, and
               the time to simulate post-split.
 
+    .. note::
+
+        The events returned by this model assume/require that you will
+        construct a population with intitial size ``Nanc``.
+
     .. versionadded:: 0.6.0
     """
     import fwdpy11
