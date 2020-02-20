@@ -4,12 +4,39 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.0rc2 
+++++++++++++++++
+
+Second release candidate of version 0.6.0!
+
+Kind of a big release:
+
+* Fixes a bug in the mechanics of generating offspring metadata.  The bug doesn't
+  affect anyone not using custom "genetic value" calculations.  `PR371 <https://github.com/molpopgen/fwdpy11/issues/371>`_
+* Big reductions in memory requirements for simulations with tree sequence recording.
+  `PR383 <https://github.com/molpopgen/fwdpy11/pull/383>`_ 
+* Better defaults for models with migration.
+  `PR376 <https://github.com/molpopgen/fwdpy11/pull/376>`_ 
+  `PR375 <https://github.com/molpopgen/fwdpy11/pull/375>`_ 
+  `PR370 <https://github.com/molpopgen/fwdpy11/pull/370>`_ 
+* Improvements to the C++ back-end of demographic models
+  `PR379 <https://github.com/molpopgen/fwdpy11/pull/379>`_ 
+  `PR368 <https://github.com/molpopgen/fwdpy11/pull/368>`_ 
+  `PR367 <https://github.com/molpopgen/fwdpy11/pull/367>`_ 
+  `PR366 <https://github.com/molpopgen/fwdpy11/pull/366>`_ 
+* Add :class:`fwdpy11.DemographyDebugger`
+  `PR384 <https://github.com/molpopgen/fwdpy11/pull/384>`_ 
+* Add some pre-computed demographic models, see :ref:`demographic_models`.
+* New examples added:
+  :ref:`IMexample`
+* Many improvements/additions to the test suite and the manual.
+  
+  
 0.6.0rc1
 ++++++++++++++++
 
 This is the same as 0.6.0rc0 except that it is based on a master
 branch that's been rebased to have the bug fixes from 0.5.5 included.
-
 
 0.6.0rc0
 ++++++++++++++++
