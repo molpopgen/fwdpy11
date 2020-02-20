@@ -109,8 +109,9 @@ class TestDetectingExtinctions(unittest.TestCase):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
         M = np.array([0.5]*4).reshape(2, 2)
-        cM = [fwdpy11.SetMigrationRates(
-            0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        cM = [
+            fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2))
+        ]
         d = fwdpy11.DiscreteDemography(mass_migrations=m,
                                        set_deme_sizes=s,
                                        set_migration_rates=cM,
@@ -119,6 +120,33 @@ class TestDetectingExtinctions(unittest.TestCase):
             fwdpy11.DemographyDebugger(self.pop, d)
         except Exception:
             self.fail("unexpected exception")
+        setup_and_run_model(self.pop, d, 5)
+
+    def test_no_valid_parents_with_migration_V2_migration_rescue(self):
+        """
+        This is a convoluted model:
+        0 moves 100% to 1. Thus, there are no parents anymore for 0.
+        But, this is okay because the new deme 1 will provide parents
+        back into 0, thus "un-extincting" 0.  Then, in the next
+        generation, each deme gets 50/50 of its ancestry from each
+        deme.
+        """
+        m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        M = np.array([0.5]*4).reshape(2, 2)
+        cM = [
+            fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2)),
+            fwdpy11.SetMigrationRates(1, np.array([0.5]*4).reshape(2, 2)),
+        ]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m,
+                                       set_deme_sizes=s,
+                                       set_migration_rates=cM,
+                                       migmatrix=M)
+        try:
+            fwdpy11.DemographyDebugger(self.pop, d)
+        except Exception:
+            self.fail("unexpected exception")
+        setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_with_migration_V3(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]

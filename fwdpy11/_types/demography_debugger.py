@@ -68,6 +68,8 @@ class DemographyDebugger(object):
         self.growth_onset_times = np.zeros(self.maxdemes, dtype=np.uint32)
         self.selfing_rates = np.zeros(self.maxdemes)
         self.growth_initial_sizes = np.copy(self.current_deme_sizes)
+        # NOTE/FIXME: some of the logic re: went_extinct and has_metadata
+        # is redundant, convoluted, or both.
         self.went_extinct = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata[(self.current_deme_sizes > 0)] = 1
@@ -372,6 +374,9 @@ class DemographyDebugger(object):
                         "but M[i, i] != 0"
                     temp = (self._label_deme(i), N, t)
                     raise ValueError(s.format(*temp))
+                elif self.M[i, ].sum() > 0:
+                    self.has_metadata[i] = 1
+                    self.went_extinct[i] = 0
 
     def _generate_report(self, event_queues, simlen):
         """
