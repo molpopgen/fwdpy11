@@ -30,15 +30,15 @@ see :ref:`demographic_models`.
 The model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The model here is one of soft selection [Levene1953]_, meaning that the number of 
+The model here is soft selection [Levene1953]_, meaning that the number of 
 breeding individuals ("adults") in each deme is fixed at a certain value.
 A nice overview of this model and how it compares to others in [Felsenstein1976]_.
 You may also find [Christiansen1974]_ and [Christiansen1975]_ useful.
 
 Each generation, offspring ("juveniles") are generated in each deme.  Parents are drawn
 from demes according to a migration matrix, if one is provided, else they are drawn from
-the offspring deme.  Within a parental deme, a specific parent is chosen proportionally
-to relative fitness within the deme.
+the parents in the offspring deme.  Within a parental deme, a specific parent is
+chosen proportionally to relative fitness within the deme.
 
 The timings of events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
