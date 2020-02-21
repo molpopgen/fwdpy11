@@ -3,13 +3,13 @@
 Overview of fwdpy11
 ======================================================================
 
-All of fwdpy11 is contained in a single import:
+All of ``fwdpy11`` is contained in a single import:
 
 .. ipython:: python
 
     import fwdpy11
 
-Many of the fwdpy11 data structures are best manipulated as numpy arrays, so we'll usually 
+Many of the ``fwdpy11`` data structures are best manipulated as numpy arrays, so we'll usually 
 import that as well.
 
 .. ipython:: python
@@ -97,7 +97,7 @@ We also need a random number generator, which takes a 32-bit unsigned integer as
 
     rng = fwdpy11.GSLrng(42)
 
-fwdpy11 allows you to define arbitrary callables that process the population during simulation.
+``fwdpy11`` allows you to define arbitrary callables that process the population during simulation.
 When recording tree sequences, a major use case for this processing is to define nodes to "preserve"
 as "ancient samples".  What this means is that, at the end of the simulation, the nodes corresponding to 
 these individuals will be retained in the tree sequences.  Their metadata will be preserved, too.
@@ -135,7 +135,7 @@ At this point, it may be helpful to read :ref:`typeoverview` before proceeding.
 We can use the metadata to analyze our population. The metadata are represnted by 
 the Python class :class:`fwdpy11.DiploidMetadata`, and :attr:`fwdpy11.DiploidPopulation.diploid_metadata`
 can be iterated over as if it were a Python `list`.  Let's get some summaries of trait values and fitness
-using standard iteration plus numpy methods for the numeric operations:
+using standard iteration plus ``numpy`` methods for the numeric operations:
 
 .. ipython:: python
 
@@ -154,14 +154,14 @@ copy of the underlying data:
 
     alive_metadata = np.array(pop.diploid_metadata, copy=False)
 
-The dtype names are the same as the :class:`fwdpy11.DiploidMetadata`
+The ``dtype`` names are the same as the :class:`fwdpy11.DiploidMetadata`
 class attributes:
 
 .. ipython:: python
 
     print(alive_metadata.dtype)
 
-Inspecting the flags shows that the structured aray object does not own its data.
+Inspecting the flags shows that the structured array object does not own its data.
 
 .. ipython:: python
 
@@ -190,8 +190,8 @@ object owns its data:
 
     print(all_md.flags)
 
-The access to fwdpy11 object data via numpy means that we can use the entire Python data stack.
-Here, we will use `pandas` to get the mean trait value over time.  To do this, we first need 
+The access to ``fwdpy11`` object data via ``numpy`` means that we can use the entire Python data stack.
+Here, we will use ``pandas`` to get the mean trait value over time.  To do this, we first need 
 the node times associated with our metadata nodes.  We will get these times by converting the population's
 :class:`fwdpy11.NodeTable` into a structured array:
 
@@ -309,7 +309,7 @@ of :class:`fwdpy11.VariantIterator`:
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
 
 
-The VariantIterator makes very efficient use of the underlying data.  However, it is not *maximally*
+The ``VariantIterator`` makes very efficient use of the underlying data.  However, it is not *maximally*
 efficient here, as this tree sequence contains a large number of ancient samples. Thus, its tree structure is not
 "maximally" simplified with respect to any single time point.  Rather, it is simplified with
 respect to the nodes from all sampled time points.
