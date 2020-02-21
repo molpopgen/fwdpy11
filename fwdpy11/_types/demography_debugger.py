@@ -44,9 +44,15 @@ class DemographyDebugger(object):
         :type pop: :class:`fwdpy11.DiploidPopulation`
         :param events: The demographic events
         :type events: :class:`fwdpy11.DiscreteDemography`
+        :param simlen: The total length of the simulation
+        :type simlen: int
         :deme labels: A map from deme index to some other
                       kind of printable name
         :type labels: dict
+
+        If ``simlen`` is provided, and it is greater than the time
+        of the last event, then the final deme sizes will be calculated
+        and reported.
         """
         # The setup
         self.M = None
