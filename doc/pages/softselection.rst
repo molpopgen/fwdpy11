@@ -1,4 +1,4 @@
-.. softselection:
+.. _softselection:
 
 .. ipython:: python
    :suppress:
@@ -30,15 +30,15 @@ see :ref:`demographic_models`.
 The model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The model here is one of soft selection [Levene1953]_, meaning that the number of 
+The model here is soft selection [Levene1953]_, meaning that the number of 
 breeding individuals ("adults") in each deme is fixed at a certain value.
 A nice overview of this model and how it compares to others in [Felsenstein1976]_.
 You may also find [Christiansen1974]_ and [Christiansen1975]_ useful.
 
 Each generation, offspring ("juveniles") are generated in each deme.  Parents are drawn
 from demes according to a migration matrix, if one is provided, else they are drawn from
-the offspring deme.  Within a parental deme, a specific parent is chosen proportionally
-to relative fitness within the deme.
+the parents in the offspring deme.  Within a parental deme, a specific parent is
+chosen proportionally to relative fitness within the deme.
 
 The timings of events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -82,7 +82,7 @@ These events, whose interface is described below, are passed in ``list`` objects
 when creating a :class:`fwdpy11.DiscreteDemography` instance.
 
 These instances may be used to parameterize the ``demography`` field of a 
-:class:``fwdpy11.ModelParams`` instance.  To illustrate this, here is a 
+:class:`fwdpy11.ModelParams` instance.  To illustrate this, here is a 
 function that we'll use repeatedly below:
 
 
@@ -150,7 +150,7 @@ The simulation length is inferred from the ``numpy`` array, too:
 
 .. ipython:: python
 
-    print(params.simlen, len(N))
+    params.simlen, len(N)
 
 Event types
 ------------------------------------------------
@@ -188,6 +188,12 @@ or unnamed.  In order, they are:
 * ``resets_growth_rate``: If ``True``, the event resets the growth rate to :attr:`fwdpy11.NOGROWTH`
   in **both** ``source`` and ``dest``. If ``False``, growth rates remain unchanged.
   The default is ``False``.
+
+.. note::
+
+   When a mass migration event *copies* individuals from deme, 
+   the individuals copied are sampled *without replacement*.  Thus,
+   if the fraction copied is 1.0, then every individual is copied.
 
 These operations act on proportions of populations rather than on numbers
 of individuals. Multiple events in a single generation are allowed, see
@@ -227,7 +233,7 @@ Here is what our object looks like:
 
 .. ipython:: python
 
-    print(copy[0])
+    copy[0]
 
 
 Here is the version using a move:
@@ -245,7 +251,7 @@ For comparison, here is the object specifying the move:
 
 .. ipython:: python
 
-    print(move[0])
+    move[0]
 
 .. _multiple_mass_migrations:
 
@@ -453,8 +459,8 @@ The ``numpy`` array is sufficient to construct our demographic model:
 .. ipython:: python
 
     d = fwdpy11.DiscreteDemography(migmatrix=m)
-    print(d.migmatrix)
-    print(d.migmatrix.M)
+    d.migmatrix
+    d.migmatrix.M
 
 By default, there is no migration, which is represented by the value ``None``.  For example,
 the following model has no migration events:
@@ -463,7 +469,7 @@ the following model has no migration events:
 
     # Define demographic events w/o any migration stuff
     d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
-    print(d.migmatrix)
+    d.migmatrix is None
 
 Likewise, if an identity matrix is provided an migration rates are never changed later,
 then the input matrix is ignored:
@@ -471,7 +477,7 @@ then the input matrix is ignored:
 .. ipython:: python
 
     d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
-    print(d.migmatrix)
+    d.migmatrix is None
 
 The only reason to use the identity matrix is to start a simulation with no migration
 and then change the rates later via instances of :class:`fwdpy11.SetMigrationRates`.
