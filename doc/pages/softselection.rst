@@ -1,4 +1,4 @@
-.. softselection:
+.. _softselection:
 
 .. ipython:: python
    :suppress:
