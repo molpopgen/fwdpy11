@@ -189,6 +189,12 @@ or unnamed.  In order, they are:
   in **both** ``source`` and ``dest``. If ``False``, growth rates remain unchanged.
   The default is ``False``.
 
+.. note::
+
+   When a mass migration event *copies* individuals from deme, 
+   the individuals copied are sampled *without replacement*.  Thus,
+   if the fraction copied is 1.0, then every individual is copied.
+
 These operations act on proportions of populations rather than on numbers
 of individuals. Multiple events in a single generation are allowed, see
 :ref:`multiple_mass_migrations`.

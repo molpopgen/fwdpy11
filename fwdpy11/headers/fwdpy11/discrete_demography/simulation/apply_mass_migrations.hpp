@@ -134,7 +134,6 @@ namespace fwdpy11
                         buffer.resize(destination_size);
                         // Cannot choose an individual 2x to copy to
                         // the same destination.
-                        // NOTE: must document!
                         int rv = gsl_ran_choose(
                             rng.get(), buffer.data(), destination_size,
                             const_cast<std::size_t*>(deme_itr->second.data()),
