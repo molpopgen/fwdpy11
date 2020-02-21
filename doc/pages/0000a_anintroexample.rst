@@ -21,7 +21,7 @@ Let's set up some global variables for our simulation.  These are fairly standar
 .. ipython:: python
 
     N = 1000
-    THETA, RHO = 1000.0, 1000.0
+    THETA, RHO = 100.0, 1000.0
     MU = 1e-3
 
 For simulations with tree sequences, we need to know the total length of the genome.  We'll follow the tradition of 
@@ -79,11 +79,14 @@ preferred method for construction is to "explode" a `dict` containing our parame
             'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.15, 1)],
             'recregions': [fwdpy11.Region(0,1,1)],
             'rates': (0.0, MU, RHO/(4*N)),
-            'demography': np.array([N]*(10*N + 100), dtype=np.uint32),
+            'demography': fwdpy11.DiscreteDemography(),  # No special demographic events
+            'simlen': 10*N + 100,
             'prune_selected': False
             }
     params = fwdpy11.ModelParams(**pdict)
 
+
+See :ref:`softselection` for more details on :class:`fwdpy11.DiscreteDemography`.
 
 Our population is an instance of :class:`fwdpy11.DiploidPopulation`:
 
