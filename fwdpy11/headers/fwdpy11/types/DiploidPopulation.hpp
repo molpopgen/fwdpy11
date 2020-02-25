@@ -148,11 +148,10 @@ namespace fwdpy11
         DiploidPopulation &operator=(const DiploidPopulation &) = default;
         DiploidPopulation &operator=(DiploidPopulation &&) = default;
 
-        bool
+        virtual bool
         operator==(const DiploidPopulation &rhs) const
         {
-            return this->diploids == rhs.diploids && popbase_t::is_equal(rhs)
-                   && popbase_t::tables_equal(rhs);
+            return this->diploids == rhs.diploids && popbase_t::test_equality(rhs);
         };
 
         void

@@ -241,6 +241,15 @@ namespace fwdpy11
                         }
                 }
         }
+
+        bool
+        test_equality(const PyPopulation &rhs) const
+        {
+            return this->is_equal(rhs) && tables_equal(rhs)
+                   && this->genetic_value_matrix == rhs.genetic_value_matrix
+                   && this->ancient_sample_genetic_value_matrix
+                          == rhs.ancient_sample_genetic_value_matrix;
+        }
     };
 } // namespace fwdpy11
 
