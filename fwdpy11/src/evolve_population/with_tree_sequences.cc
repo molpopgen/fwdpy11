@@ -354,6 +354,8 @@ evolve_with_tree_sequences(
                                       deme_to_gvalue_map, offspring_metadata,
                                       new_diploid_gvalues,
                                       record_genotype_matrix);
+            // NOTE: this may need revisiting in 0.7.0
+            pop.genetic_value_matrix.swap(new_diploid_gvalues);
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
@@ -475,10 +477,11 @@ evolve_with_tree_sequences(
                             // the new ancient samples
                             if (!pop.genetic_value_matrix.empty())
                                 {
+                                    auto offset = i*genetics.gvalue[0]->total_dim; 
                                     pop.ancient_sample_genetic_value_matrix.insert(
                                         end(pop.ancient_sample_genetic_value_matrix),
-                                        begin(pop.genetic_value_matrix) + i,
-                                        begin(pop.genetic_value_matrix) + i
+                                        begin(pop.genetic_value_matrix) + offset,
+                                        begin(pop.genetic_value_matrix) + offset
                                             + genetics.gvalue[0]->total_dim);
                                 }
                             // Record the time and nodes for this individual

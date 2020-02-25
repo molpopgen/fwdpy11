@@ -26,12 +26,11 @@ calculate_diploid_fitness(
                                              offspring_metadata[i]);
             if (update_genotype_matrix == true)
                 {
-                    std::copy(begin(new_diploid_gvalues),
-                              end(new_diploid_gvalues), gvoffset);
+                    std::copy(begin(gvalue_pointers[idx]->gvalues),
+                              end(gvalue_pointers[idx]->gvalues), gvoffset);
                 }
             sum_parental_fitnesses += offspring_metadata[i].w;
         }
-    pop.genetic_value_matrix.swap(new_diploid_gvalues);
     // If the sum of parental fitnesses is not finite,
     // then the genetic value calculator returned a non-finite value/
     // Unfortunately, gsl_ran_discrete_preproc allows such values through
