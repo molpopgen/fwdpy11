@@ -38,6 +38,13 @@ namespace fwdpy11
             return fwdpp::ts::table_collection(2 * N, 0, 0, L);
         }
 
+        bool
+        tables_equal(const PyPopulation &rhs) const
+        {
+            // This is correct/validated as of fwdpp 0.7.2
+            return tables == rhs.tables;
+        }
+
       public:
         using fwdpp_base
             = fwdpp::poptypes::popbase<mutation_type, mcont, gcont, mvector,
@@ -189,13 +196,6 @@ namespace fwdpy11
                            sizeof(std::size_t));
             return sample_individuals_details(pop, individuals, haplotype,
                                               remove_fixed);
-        }
-
-        bool
-        tables_equal(const PyPopulation &rhs) const
-        {
-            // This is correct/validated as of fwdpp 0.7.2
-            return tables == rhs.tables;
         }
 
         void
