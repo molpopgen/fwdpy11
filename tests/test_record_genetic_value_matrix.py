@@ -25,7 +25,9 @@ Test written while addressing the following GitHub issues:
 """
 
 import fwdpy11
+import pickle
 import unittest
+import tempfile
 import numpy as np
 
 
@@ -142,6 +144,28 @@ class TestNoPleiotropy(unittest.TestCase):
             gv = np.sum(gv, axis=1)
             self.assertTrue(np.allclose(gv, gvslice))
 
+    def test_pickling(self):
+        pp = pickle.dumps(self.pop, -1)
+        up = pickle.loads(pp)
+        gv = self.pop.genetic_values
+        upgv = up.genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+        gv = self.pop.ancient_sample_genetic_values
+        upgv = up.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+
+    def test_pickle_to_file(self):
+        with tempfile.NamedTemporaryFile(delete=False) as tfile:
+            self.pop.pickle_to_file(tfile)
+            tfile.seek(0)
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(tfile)
+        gv = self.pop.genetic_values
+        gv2 = pop2.genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
+        gv = self.pop.ancient_sample_genetic_values
+        gv2 = pop2.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
+
 
 class TestTwoTraitsIsotropy(unittest.TestCase):
     @classmethod
@@ -231,6 +255,28 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
                 d0 = np.power(i - self.zopt, 2.0)
                 d1 = np.power(j - 0.0, 2.0)
                 self.assertTrue(np.isclose(np.exp(-(d0+d1)/(2.*self.VS)), w))
+
+    def test_pickling(self):
+        pp = pickle.dumps(self.pop, -1)
+        up = pickle.loads(pp)
+        gv = self.pop.genetic_values
+        upgv = up.genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+        gv = self.pop.ancient_sample_genetic_values
+        upgv = up.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+
+    def test_pickle_to_file(self):
+        with tempfile.NamedTemporaryFile(delete=False) as tfile:
+            self.pop.pickle_to_file(tfile)
+            tfile.seek(0)
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(tfile)
+        gv = self.pop.genetic_values
+        gv2 = pop2.genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
+        gv = self.pop.ancient_sample_genetic_values
+        gv2 = pop2.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
 
 
 if __name__ == "__main__":
