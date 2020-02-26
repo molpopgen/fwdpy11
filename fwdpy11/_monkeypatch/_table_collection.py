@@ -24,19 +24,73 @@ import numpy as np
 
 # Functions related to FS calculation
 
+NOT_A_SAMPLE = np.iinfo(np.int32).min
 
-def _1dfs(self, samples):
+
+def _include_both(m):
+    return True
+
+
+def _include_neutral(m):
+    return m.neutral is True
+
+
+def _include_selected(m):
+    return m.selected is True
+
+
+def _validate_windows(windows, genome_length):
+    if windows != sorted(windows, key=lambda x: x[0]):
+        raise ValueError("windows must be sorted in increasing order")
+    for w in windows:
+        if w[0] >= w[1]:
+            raise ValueError("windows must be [a, b) and a < b")
+        for i in w:
+            if i < 0 or i > genome_length:
+                raise ValueError(
+                    "window coordinates must be [0, genome_length)")
+    for i in range(1, len(windows), 2):
+        pass
+
+
+def _tree_in_window(tree, window):
+    c0 = False
+    if window[0] >= tree.left and window[0] < tree.right:
+        c0 = True
+    c0 = False
+    if window[0] >= tree.left and window[0] < tree.right:
+        c1 = True
+    return c0 or c1
+
+
+def _mutation_in_window(m, sites, window):
+    pos = sites[m.site].position
+    return pos >= window[0] and pos < window[1]
+
+
+def _simplify(tables, samples, simplify):
+    if simplify is False:
+        return tables, samples
+
+    t, i = fwdpy11.simplify_tables(tables, samples)
+    return t, i[samples]
+
+
+def _1dfs(self, samples, windows, include_function, simplify):
     """
     Returns an array with the zero and fixed
     bins masked out.  The masking is for
     consistency w/ndfs output.
     """
-    fs = np.ma.zeros(len(samples)+1, dtype=np.int32)
-    ti = fwdpy11.TreeIterator(self, samples)
+    t, s = _simplify(self, samples, simplify)
+    fs = np.ma.zeros(len(s)+1, dtype=np.int32)
+    ti = fwdpy11.TreeIterator(t, s)
     for tree in ti:
         for m in tree.mutations():
-            c = tree.leaf_counts(m.node)
-            fs[c] += 1
+            if include_function(m) and \
+                    _mutation_in_window(m, t.sites, windows[0]):
+                c = tree.leaf_counts(m.node)
+                fs[c] += 1
 
     fs[0] = np.ma.masked
     fs[-1] = np.ma.masked
@@ -44,7 +98,8 @@ def _1dfs(self, samples):
     return fs
 
 
-def _ndfs(self, samples, sample_groups, num_sample_groups):
+def _ndfs(self, samples, sample_groups, num_sample_groups,
+          windows, include_function, simplify):
     """
     For more than one sample, always work with the joint FS
     at first. When the marginals are wanted, we extract them
@@ -58,21 +113,25 @@ def _ndfs(self, samples, sample_groups, num_sample_groups):
         dok_JFS = sparse.DOK(shapes, dtype=np.int32)
         coo_JFS_type = sparse.COO
 
-    sample_list = np.where(sample_groups != -1)[0]
-    ti = fwdpy11.TreeIterator(self, sample_list, update_samples=True)
+    sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
+    t, s = _simplify(self, sample_list, simplify)
+    ti = fwdpy11.TreeIterator(t, s, update_samples=True)
     counts = np.zeros(len(samples), dtype=np.int32)
     for tree in ti:
         for m in tree.mutations():
-            counts[:] = 0
-            d = tree.samples_below(m.node)
-            if len(d) > 0:
-                for i in d:
-                    counts[sample_groups[i]] += 1
-                dok_JFS[tuple((i) for i in counts)] += 1
+            if include_function(m) and \
+                    _mutation_in_window(m, t.sites, windows[0]):
+                counts[:] = 0
+                d = tree.samples_below(m.node)
+                if len(d) > 0:
+                    for i in d:
+                        counts[sample_groups[i]] += 1
+                    dok_JFS[tuple((i) for i in counts)] += 1
     return coo_JFS_type(dok_JFS)
 
 
-def _fs_implementation(self, samples):
+def _fs_implementation(self, samples, windows,
+                       include_function, simplify):
     """
     self is a fwdpy11.TableCollection
     samples is a list of 1d numpy.ndarray
@@ -83,17 +142,19 @@ def _fs_implementation(self, samples):
     # Don't figure out sample groups when
     # there is only 1
     if len(samples) == 1:
-        return _1dfs(self, samples[0])
+        return _1dfs(self, samples[0], windows,
+                     include_function, simplify)
 
-    sample_groups = np.array([-1]*len(self.nodes), dtype=np.int32)
+    sample_groups = np.array([NOT_A_SAMPLE]*len(self.nodes), dtype=np.int32)
     for i, j in enumerate(samples):
-        if np.any(sample_groups[j] != -1):
+        if np.any(sample_groups[j] != NOT_A_SAMPLE):
             raise ValueError(
                 "sample nodes cannot be part of multiple sample groups")
         sample_groups[j] = i
 
     num_sample_groups = i + 1
-    return _ndfs(self, samples, sample_groups, num_sample_groups)
+    return _ndfs(self, samples, sample_groups, num_sample_groups,
+                 windows, include_function, simplify)
 
 
 def _fs(self, samples=None, sample_sizes=None,
@@ -116,10 +177,28 @@ def _fs(self, samples=None, sample_sizes=None,
                     the ``FS`` is calculated.
     :param separate_windows: If ``True``, return ``FS`` separately for
                              each interval in ``windows``.
-    :param include_neutral: Include neutral mutations
-    :param include_selected: Include neutral mutations
+    :param include_neutral: Include neutral mutations?
+    :param include_selected: Include selected mutations?
     """
-    return _fs_implementation(self, samples)
+
+    if windows is None:
+        windows = [(0, self.genome_length)]
+
+    _validate_windows(windows, self.genome_length)
+
+    if include_neutral is False and include_selected is False:
+        raise ValueError("One or both of include_neutral "
+                         "and include_selected must be True")
+
+    include_function = _include_both
+    if include_neutral is False:
+        include_function = _include_selected
+    elif include_selected is False:
+        include_function = _include_neutral
+
+    fs = _fs_implementation(self, samples, windows,
+                            include_function, simplify)
+    return fs
 
 
 def _patch_table_collection(t):
