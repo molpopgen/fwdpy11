@@ -48,6 +48,22 @@ namespace fwdpy11
         std::int32_t nodes[2]; // Nodes in TreeSequence
     };
 
+    inline bool
+    operator==(const DiploidMetadata& lhs, const DiploidMetadata& rhs)
+    {
+        return std::tie(lhs.g, lhs.e, lhs.w) == std::tie(rhs.g, rhs.e, rhs.w)
+               && std::tie(lhs.label, lhs.deme, lhs.sex)
+                      == std::tie(rhs.label, rhs.deme, rhs.sex)
+               && std::tie(lhs.nodes[0], lhs.nodes[1])
+                      == std::tie(rhs.nodes[0], rhs.nodes[1])
+               && std::tie(lhs.parents[0], lhs.parents[1])
+                      == std::tie(rhs.parents[0], rhs.parents[1])
+               && std::tie(lhs.geography[0], lhs.geography[1],
+                           lhs.geography[2])
+                      == std::tie(rhs.geography[0], rhs.geography[1],
+                                  rhs.geography[2]);
+    }
+
     struct ancient_sample_record
     /*! When tracking ancient samples, 
      * We want to be able to provide access to

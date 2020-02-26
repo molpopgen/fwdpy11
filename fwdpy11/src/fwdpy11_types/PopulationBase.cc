@@ -79,7 +79,6 @@ namespace
 
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
 PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
 
 void
 init_PopulationBase(py::module& m)
@@ -122,12 +121,6 @@ init_PopulationBase(py::module& m)
                     self.mcounts_from_preserved_nodes);
             },
             "The contribution that ancient samples make to mutation counts")
-        .def_readwrite("diploid_metadata",
-                       &fwdpy11::Population::diploid_metadata,
-                       "Container of diploid metadata.")
-        .def_readwrite("ancient_sample_metadata",
-                       &fwdpy11::Population::ancient_sample_metadata,
-                       "Container of metadata for ancient samples.")
         .def_property_readonly(
             "mut_lookup",
             [](const fwdpy11::Population& pop) -> py::object {
@@ -136,7 +129,7 @@ init_PopulationBase(py::module& m)
                     {
                         if (pop.mcounts[i] > 0
                             || (!pop.mcounts_from_preserved_nodes.empty()
-                                 && pop.mcounts_from_preserved_nodes[i] > 0))
+                                && pop.mcounts_from_preserved_nodes[i] > 0))
                             {
                                 auto pos_handle
                                     = py::cast(pop.mutations[i].pos);
@@ -270,11 +263,17 @@ init_PopulationBase(py::module& m)
         .def_property_readonly(
             "ancient_sample_genetic_values",
             [](const fwdpy11::Population& self) {
+                if (self.ancient_sample_metadata_size() == 0
+                    || self.ancient_sample_genetic_value_matrix.empty())
+                    {
+                        return fwdpy11::make_1d_ndarray_readonly(
+                            self.ancient_sample_genetic_value_matrix);
+                    }
                 return fwdpy11::make_2d_ndarray_readonly(
                     self.ancient_sample_genetic_value_matrix,
-                    self.ancient_sample_metadata.size(),
+                    self.ancient_sample_metadata_size(),
                     self.ancient_sample_genetic_value_matrix.size()
-                        / self.ancient_sample_metadata.size());
+                        / self.ancient_sample_metadata_size());
             },
             R"delim(
         Return the genetic values for ancient samples as a readonly 2d 

@@ -108,11 +108,18 @@ namespace fwdpy11
         dipvector_t diploids;
         std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes,
             preserved_sample_nodes;
+        //TODO: initalized ancient_sample_metadata and tables,
+        //TODO figure out what to do with class constructor??
+        //TODO Introduce types for ancient sample individual and node tracking
+        std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
+        std::vector<ancient_sample_record> ancient_sample_records;
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
             : Population{ N, length },
-              diploids(N, { 0, 0 }), alive_nodes{}, preserved_sample_nodes{}
+              diploids(N, { 0, 0 }), alive_nodes{}, preserved_sample_nodes{},
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}
         {
             finish_construction({ N });
         }
@@ -124,10 +131,13 @@ namespace fwdpy11
                           length },
               diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
                        { 0, 0 }),
-              alive_nodes{}, preserved_sample_nodes{}
+              alive_nodes{}, preserved_sample_nodes{}, diploid_metadata(N),
+              ancient_sample_metadata{}, ancient_sample_records{}
+
         {
             finish_construction(deme_sizes);
         }
+
         template <typename diploids_input, typename genomes_input,
                   typename mutations_input>
         explicit DiploidPopulation(diploids_input &&d, genomes_input &&g,
@@ -136,7 +146,8 @@ namespace fwdpy11
                          std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d)), alive_nodes{},
-              preserved_sample_nodes{}
+              preserved_sample_nodes{}, diploid_metadata(N),
+              ancient_sample_metadata{}, ancient_sample_records{}
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();
@@ -151,7 +162,11 @@ namespace fwdpy11
         virtual bool
         operator==(const DiploidPopulation &rhs) const
         {
-            return this->diploids == rhs.diploids && popbase_t::test_equality(rhs);
+            return this->diploids == rhs.diploids
+                   && this->diploid_metadata == rhs.diploid_metadata
+                   && this->ancient_sample_metadata
+                          == rhs.ancient_sample_metadata
+                   && popbase_t::test_equality(rhs);
         };
 
         void
@@ -228,6 +243,11 @@ namespace fwdpy11
         {
             fill_sample_nodes_from_metadata(preserved_sample_nodes,
                                             ancient_sample_metadata);
+        }
+
+        virtual std::size_t ancient_sample_metadata_size() const override
+        {
+            return ancient_sample_metadata.size();
         }
     };
 } // namespace fwdpy11
