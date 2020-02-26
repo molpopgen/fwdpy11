@@ -327,6 +327,8 @@ init_DiploidPopulation(py::module& m)
                         dump(s, f);
                     }
                 dump(self.tables.preserved_nodes, f);
+                dump(self.genetic_value_matrix, f);
+                dump(self.ancient_sample_genetic_value_matrix, f);
             },
             R"delim(
              Pickle the population to an open file.
@@ -443,6 +445,12 @@ init_DiploidPopulation(py::module& m)
                     = load(f).cast<decltype(rv.tables.preserved_nodes)>();
                 rv.tables.build_indexes();
                 rv.rebuild_mutation_lookup(false);
+                rv.genetic_value_matrix
+                    = load(f).cast<decltype(rv.genetic_value_matrix)>();
+                rv.ancient_sample_genetic_value_matrix
+                    = load(f)
+                          .cast<decltype(
+                              rv.ancient_sample_genetic_value_matrix)>();
                 return rv;
             },
             R"delim(

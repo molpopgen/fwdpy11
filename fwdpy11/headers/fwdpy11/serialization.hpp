@@ -92,7 +92,7 @@ namespace fwdpy11
             w(buffer, &msize);
             if (msize > 0)
                 {
-                    w(buffer, pop->genetic_value_matrix.data(), msize);
+                    w(buffer, pop->ancient_sample_genetic_value_matrix.data(), msize);
                 }
 
             return buffer;

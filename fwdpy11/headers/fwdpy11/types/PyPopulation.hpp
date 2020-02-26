@@ -38,6 +38,13 @@ namespace fwdpy11
             return fwdpp::ts::table_collection(2 * N, 0, 0, L);
         }
 
+        bool
+        tables_equal(const PyPopulation &rhs) const
+        {
+            // This is correct/validated as of fwdpp 0.7.2
+            return tables == rhs.tables;
+        }
+
       public:
         using fwdpp_base
             = fwdpp::poptypes::popbase<mutation_type, mcont, gcont, mvector,
@@ -191,13 +198,6 @@ namespace fwdpy11
                                               remove_fixed);
         }
 
-        bool
-        tables_equal(const PyPopulation &rhs) const
-        {
-            // This is correct/validated as of fwdpp 0.7.2
-            return tables == rhs.tables;
-        }
-
         void
         rebuild_mutation_lookup(bool from_tables)
         {
@@ -240,6 +240,15 @@ namespace fwdpy11
                                 }
                         }
                 }
+        }
+
+        bool
+        test_equality(const PyPopulation &rhs) const
+        {
+            return this->is_equal(rhs) && tables_equal(rhs)
+                   && this->genetic_value_matrix == rhs.genetic_value_matrix
+                   && this->ancient_sample_genetic_value_matrix
+                          == rhs.ancient_sample_genetic_value_matrix;
         }
     };
 } // namespace fwdpy11
