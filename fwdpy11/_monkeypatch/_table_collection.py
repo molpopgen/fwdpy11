@@ -22,6 +22,8 @@ import sparse
 import scipy.sparse
 import numpy as np
 
+# Functions related to FS calculation
+
 
 def _1dfs(self, samples):
     """
@@ -94,7 +96,29 @@ def _fs_implementation(self, samples):
     return _ndfs(self, samples, sample_groups, num_sample_groups)
 
 
-def _fs(self, samples):
+def _fs(self, samples=None, sample_sizes=None,
+        by_deme=True, marginalize=False,
+        simplify=False, windows=None,
+        separate_windows=False,
+        include_neutral=True,
+        include_selected=True):
+    """
+    :param samples: lists of numpy arrays of sample nodes
+    :param sample_sizes: Number of nodes of each sample
+    :param by_deme: If ``samples and ``sample_sizes`` are both
+                    ``None``, obtain ``FS`` separately
+                    for each entire deme.
+    :param marginalize: For ``FS`` involving multiple samples,
+                        extract out the marginal ``FS`` per sample.
+    :param simplify: If ``True``, simplify with respect to the sample
+                     set prior to calculating the ``FS``.
+    :param windows: A list of non-overlapping intervals from which
+                    the ``FS`` is calculated.
+    :param separate_windows: If ``True``, return ``FS`` separately for
+                             each interval in ``windows``.
+    :param include_neutral: Include neutral mutations
+    :param include_selected: Include neutral mutations
+    """
     return _fs_implementation(self, samples)
 
 
