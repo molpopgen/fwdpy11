@@ -57,6 +57,11 @@ class TestSingleDemeCase(unittest.TestCase):
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes[A:B]])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
 
+    def test_skipping_neutral_variants(self):
+        tc_fs = self.pop.tables.fs(
+            [self.pop.alive_nodes], include_neutral=False)
+        self.assertEqual(tc_fs.sum(), 0)
+
 
 if __name__ == "__main__":
     unittest.main()
