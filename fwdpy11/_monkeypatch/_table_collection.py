@@ -36,7 +36,7 @@ def _include_neutral(m):
 
 
 def _include_selected(m):
-    return m.selected is True
+    return m.neutral is False
 
 
 def _validate_windows(windows, genome_length):
