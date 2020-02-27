@@ -114,27 +114,34 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     """
     shapes = tuple(len(i)+1 for i in samples)
     if num_sample_groups == 2:
-        dok_JFS = scipy.sparse.dok_matrix(shapes, dtype=np.int32)
+        dok_JFS = [scipy.sparse.dok_matrix(
+            shapes, dtype=np.int32) for i in windows]
         coo_JFS_type = scipy.sparse.coo_matrix
     else:
-        dok_JFS = sparse.DOK(shapes, dtype=np.int32)
+        dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
         coo_JFS_type = sparse.COO
 
     sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
     t, s = _simplify(self, sample_list, simplify)
     ti = fwdpy11.TreeIterator(t, s, update_samples=True)
     counts = np.zeros(len(samples), dtype=np.int32)
+    windex = 0
     for tree in ti:
         for m in tree.mutations():
-            if include_function(m) and \
-                    _mutation_in_window(m, t.sites, windows[0]):
-                counts[:] = 0
-                d = tree.samples_below(m.node)
-                if len(d) > 0:
-                    for i in d:
-                        counts[sample_groups[i]] += 1
-                    dok_JFS[tuple((i) for i in counts)] += 1
-    return coo_JFS_type(dok_JFS)
+            if include_function(m):
+                pos = t.sites[m.site].position
+                while windex < len(windows) and windows[windex][1] < pos:
+                    windex += 1
+                if windex >= len(windows):
+                    break
+                if _mutation_in_window(m, pos, windows[windex]):
+                    counts[:] = 0
+                    d = tree.samples_below(m.node)
+                    if len(d) > 0:
+                        for i in d:
+                            counts[sample_groups[i]] += 1
+                        dok_JFS[windex][tuple((i) for i in counts)] += 1
+    return [coo_JFS_type(i) for i in dok_JFS]
 
 
 def _fs_implementation(self, samples, windows,
