@@ -95,10 +95,21 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
 
     // Fixed in 0.5.3: metadata nodes now correct
     // This was GitHub issue 333
+    // Fixed in 0.6.0 to update the deme field from
+    // the node data.
     for (std::uint32_t i = 0; i < pop.N; ++i)
         {
             pop.diploid_metadata[i].nodes[0] = 2 * i;
             pop.diploid_metadata[i].nodes[1] = 2 * i + 1;
+            if (pop.tables.node_table[2*i].deme 
+                != pop.tables.node_table[2*i+1].deme)
+                {
+                    throw std::invalid_argument(
+                        "inconsistent deme fields for nodes in the same "
+                        "individual");
+                }
+            pop.diploid_metadata[i].deme
+                = pop.tables.node_table[2*i].deme;
         }
     return pop;
 }
