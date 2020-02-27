@@ -50,21 +50,21 @@ def _validate_windows(windows, genome_length):
                 raise ValueError(
                     "window coordinates must be [0, genome_length)")
     for i in range(1, len(windows), 2):
-        pass
+        if windows[i-1][0] < windows[i][1] and windows[i][0] < windows[i-1][1]:
+            raise ValueError("windows cannot overlap")
+
+
+def _update_window(windex, tree, windows):
+    while windex < len(windows) and tree.right > windows[windex][1]:
+        windex += 1
+    return windex
 
 
 def _tree_in_window(tree, window):
-    c0 = False
-    if window[0] >= tree.left and window[0] < tree.right:
-        c0 = True
-    c0 = False
-    if window[0] >= tree.left and window[0] < tree.right:
-        c1 = True
-    return c0 or c1
+    return tree.left < window[1] and window[0] < tree.right
 
 
-def _mutation_in_window(m, sites, window):
-    pos = sites[m.site].position
+def _mutation_in_window(m, pos, window):
     return pos >= window[0] and pos < window[1]
 
 
@@ -83,17 +83,24 @@ def _1dfs(self, samples, windows, include_function, simplify):
     consistency w/ndfs output.
     """
     t, s = _simplify(self, samples, simplify)
-    fs = np.ma.zeros(len(s)+1, dtype=np.int32)
+    fs = [np.ma.zeros(len(s)+1, dtype=np.int32) for i in windows]
     ti = fwdpy11.TreeIterator(t, s)
+    windex = 0
     for tree in ti:
         for m in tree.mutations():
-            if include_function(m) and \
-                    _mutation_in_window(m, t.sites, windows[0]):
-                c = tree.leaf_counts(m.node)
-                fs[c] += 1
+            if include_function(m):
+                pos = t.sites[m.site].position
+                while windex < len(windows) and windows[windex][1] < pos:
+                    windex += 1
+                if windex >= len(windows):
+                    break
+                if _mutation_in_window(m, pos, windows[windex]):
+                    c = tree.leaf_counts(m.node)
+                    fs[windex][c] += 1
 
-    fs[0] = np.ma.masked
-    fs[-1] = np.ma.masked
+    for i in fs:
+        i[0] = np.ma.masked
+        i[-1] = np.ma.masked
 
     return fs
 
@@ -198,8 +205,13 @@ def _fs(self, samples, marginalize=False,
     elif include_selected is False:
         include_function = _include_neutral
 
-    fs = _fs_implementation(self, samples, windows,
-                            include_function, simplify)
+    lfs = _fs_implementation(self, samples, windows,
+                             include_function, simplify)
+    if separate_windows is True:
+        return lfs
+    fs = lfs[0]
+    for i in lfs[1:]:
+        fs += i
     return fs
 
 

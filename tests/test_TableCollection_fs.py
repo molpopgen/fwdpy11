@@ -28,7 +28,8 @@ class TestSingleDemeCase(unittest.TestCase):
         import msprime
         Ne = 1000
         Nr = 100.0
-        ts = msprime.simulate(2*Ne, Ne=Ne, recombination_rate=Nr/Ne)
+        ts = msprime.simulate(2*Ne, Ne=Ne, recombination_rate=Nr/Ne,
+                              random_seed=666)
         self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
         rng = fwdpy11.GSLrng(12343)
         fwdpy11.infinite_sites(rng, self.pop, Nr/Ne)
@@ -70,6 +71,45 @@ class TestSingleDemeCase(unittest.TestCase):
         with self.assertRaises(ValueError):
             samples = np.array([len(self.pop.tables.nodes)], dtype=np.int32)
             self.pop.tables.fs([samples])
+
+    def test_two_overlapping_windows(self):
+        tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
+        wfs = self.pop.tables.fs([self.pop.alive_nodes],
+                                 windows=[(0, 1./3.), (1./3., 1.0)])
+        self.assertTrue(np.array_equal(wfs, tc_fs))
+
+    def test_three_overlapping_windows(self):
+        tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
+        wfs = self.pop.tables.fs([self.pop.alive_nodes],
+                                 windows=[(0, 1./3.), (1./3., 2./3.),
+                                          (2./3., 1)])
+        self.assertTrue(np.array_equal(wfs, tc_fs))
+
+    def test_random_number_of_windows(self):
+        nw = np.random.randint(100, 300)
+        lefts = np.arange(nw)/(nw-1)
+        windows = [(lefts[i], lefts[i+1]) for i in range(len(lefts)-1)]
+        tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
+        wfs = self.pop.tables.fs([self.pop.alive_nodes],
+                                 windows=windows)
+        self.assertTrue(np.array_equal(wfs, tc_fs))
+
+    def test_separated_windows(self):
+        windows = [(0, 0.25), (0.66, 0.9)]
+        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                             self.pop.alive_nodes,
+                                             True, False)
+        gm = np.array(dm.neutral)
+        gm_pos = np.array([self.pop.mutations[k].pos for k in dm.neutral_keys])
+        gm_pos_in_windows = np.where((gm_pos < 0.25) |
+                                     ((gm_pos >= 0.66) & (gm_pos < 0.9)))[0]
+        gm = gm[gm_pos_in_windows, :]
+        gm_rc = np.sum(gm, axis=1)
+        gm_uc = np.unique(gm_rc, return_counts=True)
+        gm_fs = np.zeros(2*self.pop.N+1, dtype=np.int32)
+        gm_fs[gm_uc[0]] = gm_uc[1]
+        tc_fs = self.pop.tables.fs([self.pop.alive_nodes], windows=windows)
+        self.assertTrue(np.array_equal(gm_fs, tc_fs))
 
 
 if __name__ == "__main__":
