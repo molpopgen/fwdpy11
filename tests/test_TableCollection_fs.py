@@ -62,6 +62,15 @@ class TestSingleDemeCase(unittest.TestCase):
             [self.pop.alive_nodes], include_neutral=False)
         self.assertEqual(tc_fs.sum(), 0)
 
+    def test_empty_samples_list(self):
+        with self.assertRaises(ValueError):
+            self.pop.tables.fs([])
+
+    def test_nodes_out_of_range(self):
+        with self.assertRaises(ValueError):
+            samples = np.array([len(self.pop.tables.nodes)], dtype=np.int32)
+            self.pop.tables.fs([samples])
+
 
 if __name__ == "__main__":
     unittest.main()

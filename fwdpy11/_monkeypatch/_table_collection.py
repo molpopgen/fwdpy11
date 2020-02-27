@@ -175,6 +175,13 @@ def _fs(self, samples, marginalize=False,
     :param include_neutral: Include neutral mutations?
     :param include_selected: Include selected mutations?
     """
+    for s in samples:
+        if len(s) == 0:
+            raise ValueError("samples lists cannot be empty")
+        if len(s) < 2:
+            raise ValueError("samples lists must have at least two nodes")
+        if np.any(s >= len(self.nodes)):
+            raise ValueError("invalid samples")
 
     if windows is None:
         windows = [(0, self.genome_length)]
