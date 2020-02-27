@@ -157,18 +157,13 @@ def _fs_implementation(self, samples, windows,
                  windows, include_function, simplify)
 
 
-def _fs(self, samples=None, sample_sizes=None,
-        by_deme=True, marginalize=False,
+def _fs(self, samples, marginalize=False,
         simplify=False, windows=None,
         separate_windows=False,
         include_neutral=True,
         include_selected=True):
     """
     :param samples: lists of numpy arrays of sample nodes
-    :param sample_sizes: Number of nodes of each sample
-    :param by_deme: If ``samples and ``sample_sizes`` are both
-                    ``None``, obtain ``FS`` separately
-                    for each entire deme.
     :param marginalize: For ``FS`` involving multiple samples,
                         extract out the marginal ``FS`` per sample.
     :param simplify: If ``True``, simplify with respect to the sample
