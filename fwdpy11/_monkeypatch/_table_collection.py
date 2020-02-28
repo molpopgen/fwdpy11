@@ -85,16 +85,18 @@ def _1dfs(self, samples, windows, include_function, simplify):
     fs = [np.ma.zeros(len(s)+1, dtype=np.int32) for i in windows]
     ti = fwdpy11.TreeIterator(t, s)
     windex = 0
+    sites = np.array(t.sites, copy=False)
+    positions = sites['position'][:]
     for tree in ti:
         for m in tree.mutations():
             if include_function(m):
-                pos = t.sites[m.site].position
+                pos = positions[m.site]
                 while windex < len(windows) and windows[windex][1] < pos:
                     windex += 1
                 if windex >= len(windows):
                     break
                 if _mutation_in_window(m, pos, windows[windex]):
-                    c = tree.leaf_counts(m.node)
+                    c = np.uint32(tree.leaf_counts(m.node))
                     fs[windex][c] += 1
 
     for i in fs:
@@ -119,10 +121,12 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     ti = fwdpy11.TreeIterator(t, s, update_samples=True)
     counts = np.zeros(len(samples), dtype=np.int32)
     windex = 0
+    sites = np.array(t.sites, copy=False)
+    positions = sites['position'][:]
     for tree in ti:
         for m in tree.mutations():
             if include_function(m):
-                pos = t.sites[m.site].position
+                pos = positions[m.site]
                 while windex < len(windows) and windows[windex][1] < pos:
                     windex += 1
                 if windex >= len(windows):
