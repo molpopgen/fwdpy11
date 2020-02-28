@@ -95,12 +95,13 @@ def _1dfs(self, samples, windows, include_function, simplify):
                     c = np.uint32(tree.leaf_counts(m.node))
                     fs[windex][c] += 1
 
+    rv = []
     for i in fs:
         i = np.ma.array(i)
         i[0] = np.ma.masked
         i[-1] = np.ma.masked
-
-    return fs
+        rv.append(i)
+    return rv
 
 
 def _ndfs(self, samples, sample_groups, num_sample_groups,
@@ -141,13 +142,12 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
 def _handle_fs_marginalizing(fs, marginalize, num_sample_groups):
     if marginalize is False or num_sample_groups == 1:
         return fs
-    rv = []
-    for f in fs:
-        temp = {}
-        for i in range(num_sample_groups):
-            axes = (j for j in range(num_sample_groups) if j != i)
-            temp[i] = fs[i].sum(axis=axes).todense()
-        rv.append(temp)
+    temp = {}
+    for i in range(num_sample_groups):
+        axes = tuple(j for j in range(num_sample_groups) if j != i)
+        temp[i] = np.ma.array(fs.sum(axis=axes).todense())
+        temp[i][0] = np.ma.masked
+        temp[i][-1] = np.ma.masked
     return temp
 
 
