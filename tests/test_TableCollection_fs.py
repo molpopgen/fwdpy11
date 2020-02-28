@@ -21,6 +21,13 @@ import fwdpy11
 import unittest
 import numpy as np
 
+# NOTE: these tests can all be improved in the future
+# by having a conversion from msprime/tskit that lifts
+# over mutations assuming that they are neutral.
+# With that in place, we can compare to the msprime/tskit
+# genotype matrix, which makes for a more independent test
+# of correctness.
+
 
 def fs_from_ndarray(gm):
     gm_rc = np.sum(gm, axis=1)
