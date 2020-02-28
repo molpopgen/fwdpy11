@@ -52,7 +52,7 @@ class TestSingleDemeCase(unittest.TestCase):
     def test_comparison_to_genotype_matrix(self):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              self.pop.alive_nodes, True, False)
-        gm = np.array(dm.neutral)
+        gm = np.array(dm.neutral, copy=False)
         gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
@@ -63,7 +63,7 @@ class TestSingleDemeCase(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              self.pop.alive_nodes[A:B],
                                              True, False)
-        gm = np.array(dm.neutral)
+        gm = np.array(dm.neutral, copy=False)
         gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes[A:B]])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
@@ -109,7 +109,7 @@ class TestSingleDemeCase(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              self.pop.alive_nodes,
                                              True, False)
-        gm = np.array(dm.neutral)
+        gm = np.array(dm.neutral, copy=False)
         gm_pos = np.array([self.pop.mutations[k].pos for k in dm.neutral_keys])
         gm_pos_in_windows = np.where((gm_pos < 0.25) |
                                      ((gm_pos >= 0.66) & (gm_pos < 0.9)))[0]
@@ -148,7 +148,7 @@ class TestTwoDemeCase(unittest.TestCase):
             tc_fs = self.pop.tables.fs([samples])
             dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                                  samples, True, True)
-            gm = np.array(dm.neutral)
+            gm = np.array(dm.neutral, copy=False)
             gm_fs = fs_from_ndarray(gm)
             self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
 
@@ -164,7 +164,7 @@ class TestTwoDemeCase(unittest.TestCase):
         for i, j in zip((tc_fs0, tc_fs1), (d0, d1)):
             dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                                  j, True, True)
-            gm = np.array(dm.neutral)
+            gm = np.array(dm.neutral, copy=False)
             gm_fs = fs_from_ndarray(gm)
             self.assertTrue(np.array_equal(gm_fs[1:-1], i.data[1:-1]))
 
