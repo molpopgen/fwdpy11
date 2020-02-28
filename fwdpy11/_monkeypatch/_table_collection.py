@@ -82,7 +82,7 @@ def _1dfs(self, samples, windows, include_function, simplify):
     consistency w/ndfs output.
     """
     t, s = _simplify(self, samples, simplify)
-    fs = [np.ma.zeros(len(s)+1, dtype=np.int32) for i in windows]
+    fs = [np.zeros(len(s)+1, dtype=np.int32) for i in windows]
     ti = fwdpy11.TreeIterator(t, s)
     windex = 0
     sites = np.array(t.sites, copy=False)
@@ -100,6 +100,7 @@ def _1dfs(self, samples, windows, include_function, simplify):
                     fs[windex][c] += 1
 
     for i in fs:
+        i = np.ma.array(i)
         i[0] = np.ma.masked
         i[-1] = np.ma.masked
 
