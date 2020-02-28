@@ -59,11 +59,7 @@ def _update_window(windex, tree, windows):
     return windex
 
 
-def _tree_in_window(tree, window):
-    return tree.left < window[1] and window[0] < tree.right
-
-
-def _mutation_in_window(m, pos, window):
+def _position_in_window(pos, window):
     return pos >= window[0] and pos < window[1]
 
 
@@ -95,7 +91,7 @@ def _1dfs(self, samples, windows, include_function, simplify):
                     windex += 1
                 if windex >= len(windows):
                     break
-                if _mutation_in_window(m, pos, windows[windex]):
+                if _position_in_window(pos, windows[windex]):
                     c = np.uint32(tree.leaf_counts(m.node))
                     fs[windex][c] += 1
 
@@ -132,7 +128,7 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
                     windex += 1
                 if windex >= len(windows):
                     break
-                if _mutation_in_window(m, pos, windows[windex]):
+                if _position_in_window(pos, windows[windex]):
                     counts[:] = 0
                     d = tree.samples_below(m.node)
                     if len(d) > 0:
