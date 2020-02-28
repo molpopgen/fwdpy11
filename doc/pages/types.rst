@@ -160,14 +160,7 @@ Types related to tree sequence recording
 ==========================================================
 
 .. autoclass:: fwdpy11.TableCollection
-
-    .. autoattribute:: edges
-    .. autoattribute:: nodes
-    .. autoattribute:: mutations
-    .. autoattribute:: genome_length
-    .. autoattribute:: input_left
-    .. autoattribute:: output_right
-
+    :members:
 
 .. autoclass:: fwdpy11.EdgeTable
 

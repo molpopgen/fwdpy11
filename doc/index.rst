@@ -41,6 +41,7 @@ Welcome to fwdpy11's documentation!
     pages/demographydebugger
     pages/tsoverview
     pages/tstypes
+    pages/tablefs.rst
     pages/0000a_tskit_interchange
     pages/recorders
     pages/tstimeseries

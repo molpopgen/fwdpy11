@@ -207,6 +207,31 @@ def _fs(self, samples, marginalize=False,
                              each interval in ``windows``.
     :param include_neutral: Include neutral mutations?
     :param include_selected: Include selected mutations?
+
+    :returns: The mutation frequency spectrum
+    :rtype: object
+
+    The details of the return value depend heavily on the options.
+
+    * If a single sample list is provided, the return value is a
+      1-d ndarray with the first and last bins masked.  The unmasked
+      bins correspond to frequencies 1 to n-1, where n is the number
+      of sample nodes.
+    * If multiple sample lists are provided, the return value is a
+      ``sparse.COO`` matrix.  For each dimension, the 0 and n bins
+      are included.
+    * If ``marginalize == True`` and more than one sample bin is provided,
+      the ``sparse.COO`` matrix is converted into a dict where the key
+      is the index of the sample list and the value is a dense 1-d array,
+      masked as described above.
+    * If multiple windows are provided and ``separate_windows == False``,
+      then the return value is a single frequency spectrum summed over windows.
+      If ``separate_windows == True``, then a list of frequency spectra is
+      returned, indexed in the same order as the input windows.
+
+    .. versionadded:: 0.6.0
+
+        Python implementation added
     """
     for s in samples:
         if len(s) == 0:
