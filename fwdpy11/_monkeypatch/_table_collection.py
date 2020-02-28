@@ -138,6 +138,19 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     return [sparse.COO(i) for i in dok_JFS]
 
 
+def _handle_fs_marginalizing(fs, marginalize, num_sample_groups):
+    if marginalize is False or num_sample_groups == 1:
+        return fs
+    rv = []
+    for f in fs:
+        temp = {}
+        for i in range(num_sample_groups):
+            axes = (j for j in range(num_sample_groups) if j != i)
+            temp[i] = fs[i].sum(axis=axes).todense()
+        rv.append(temp)
+    return temp
+
+
 def _fs_implementation(self, samples, windows,
                        include_function, simplify):
     """
@@ -209,10 +222,12 @@ def _fs(self, samples, marginalize=False,
     lfs = _fs_implementation(self, samples, windows,
                              include_function, simplify)
     if separate_windows is True:
+        lfs = _handle_fs_marginalizing(lfs, marginalize, len(samples))
         return lfs
     fs = lfs[0]
     for i in lfs[1:]:
         fs += i
+    fs = _handle_fs_marginalizing(fs, marginalize, len(samples))
     return fs
 
 
