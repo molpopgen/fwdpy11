@@ -22,6 +22,14 @@ import unittest
 import numpy as np
 
 
+def fs_from_ndarray(gm):
+    gm_rc = np.sum(gm, axis=1)
+    gm_uc = np.unique(gm_rc, return_counts=True)
+    gm_fs = np.zeros(gm.shape[1]+1, dtype=np.int32)
+    gm_fs[gm_uc[0]] += gm_uc[1]
+    return gm_fs
+
+
 class TestSingleDemeCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -38,12 +46,10 @@ class TestSingleDemeCase(unittest.TestCase):
         dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
                                              self.pop.alive_nodes, True, False)
         gm = np.array(dm.neutral)
-        gm_rc = np.sum(gm, axis=1)
-        gm_uc = np.unique(gm_rc, return_counts=True)
-        gm_fs = np.zeros(2*self.pop.N+1, dtype=np.int32)
-        gm_fs[gm_uc[0]] = gm_uc[1]
+        gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
+        self.assertTrue(np.array_equal(gm_fs, tc_fs.data))
 
     def test_comparison_to_genotype_matrix_for_sample(self):
         A, B = 103, 210
@@ -51,10 +57,7 @@ class TestSingleDemeCase(unittest.TestCase):
                                              self.pop.alive_nodes[A:B],
                                              True, False)
         gm = np.array(dm.neutral)
-        gm_rc = np.sum(gm, axis=1)
-        gm_uc = np.unique(gm_rc, return_counts=True)
-        gm_fs = np.zeros(B-A+1, dtype=np.int32)
-        gm_fs[gm_uc[0]] = gm_uc[1]
+        gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes[A:B]])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
 
@@ -104,12 +107,59 @@ class TestSingleDemeCase(unittest.TestCase):
         gm_pos_in_windows = np.where((gm_pos < 0.25) |
                                      ((gm_pos >= 0.66) & (gm_pos < 0.9)))[0]
         gm = gm[gm_pos_in_windows, :]
-        gm_rc = np.sum(gm, axis=1)
-        gm_uc = np.unique(gm_rc, return_counts=True)
-        gm_fs = np.zeros(2*self.pop.N+1, dtype=np.int32)
-        gm_fs[gm_uc[0]] = gm_uc[1]
+        gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes], windows=windows)
         self.assertTrue(np.array_equal(gm_fs, tc_fs))
+
+
+class TestTwoDemeCase(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        import msprime
+        Ne = 1000
+        Nr = 100.0
+        nodes_per_deme = 1000
+        config = [msprime.PopulationConfiguration(nodes_per_deme),
+                  msprime.PopulationConfiguration(nodes_per_deme)]
+
+        events = [msprime.MassMigration(1*Ne, 1, 0, 1.0)]
+        ts = msprime.simulate(population_configurations=config,
+                              demographic_events=events,
+                              Ne=Ne, recombination_rate=Nr/Ne,
+                              random_seed=666)
+        self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+        rng = fwdpy11.GSLrng(12343)
+        fwdpy11.infinite_sites(rng, self.pop, Nr/Ne)
+
+    def test_marginal_deme_fs(self):
+        a = self.pop.alive_nodes
+        nodes = np.array(self.pop.tables.nodes, copy=False)
+        d0 = a[np.where(nodes['deme'][a] == 0)[0]]
+        d1 = a[np.where(nodes['deme'][a] == 1)[0]]
+
+        for samples in (d0, d1):
+            tc_fs = self.pop.tables.fs([samples])
+            dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                                 samples, True, True)
+            gm = np.array(dm.neutral)
+            gm_fs = fs_from_ndarray(gm)
+            self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
+
+    def test_joint_deme_fs(self):
+        a = self.pop.alive_nodes
+        nodes = np.array(self.pop.tables.nodes, copy=False)
+        d0 = a[np.where(nodes['deme'][a] == 0)[0]]
+        d1 = a[np.where(nodes['deme'][a] == 1)[0]]
+
+        tc_fs = self.pop.tables.fs([d0, d1])
+        tc_fs0 = tc_fs.sum(axis=1).todense()
+        tc_fs1 = tc_fs.sum(axis=0).todense()
+        for i, j in zip((tc_fs0, tc_fs1), (d0, d1)):
+            dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
+                                                 j, True, True)
+            gm = np.array(dm.neutral)
+            gm_fs = fs_from_ndarray(gm)
+            self.assertTrue(np.array_equal(gm_fs[1:-1], i.data[1:-1]))
 
 
 if __name__ == "__main__":
