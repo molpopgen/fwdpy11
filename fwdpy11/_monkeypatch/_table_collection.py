@@ -139,16 +139,28 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     return [sparse.COO(i) for i in dok_JFS]
 
 
-def _handle_fs_marginalizing(fs, marginalize, num_sample_groups):
+def _handle_fs_marginalizing(fs, marginalize, nwindows, num_sample_groups):
     if marginalize is False or num_sample_groups == 1:
         return fs
-    temp = {}
-    for i in range(num_sample_groups):
-        axes = tuple(j for j in range(num_sample_groups) if j != i)
-        temp[i] = np.ma.array(fs.sum(axis=axes).todense())
-        temp[i][0] = np.ma.masked
-        temp[i][-1] = np.ma.masked
-    return temp
+    if nwindows == 1:
+        temp = {}
+        for i in range(num_sample_groups):
+            axes = tuple(j for j in range(num_sample_groups) if j != i)
+            temp[i] = np.ma.array(fs.sum(axis=axes).todense())
+            temp[i][0] = np.ma.masked
+            temp[i][-1] = np.ma.masked
+        return temp
+
+    rv = []
+    for f in fs:
+        temp = {}
+        for i in range(num_sample_groups):
+            axes = tuple(j for j in range(num_sample_groups) if j != i)
+            temp[i] = np.ma.array(f.sum(axis=axes).todense())
+            temp[i][0] = np.ma.masked
+            temp[i][-1] = np.ma.masked
+        rv.append(temp)
+    return rv
 
 
 def _fs_implementation(self, samples, windows,
@@ -222,12 +234,13 @@ def _fs(self, samples, marginalize=False,
     lfs = _fs_implementation(self, samples, windows,
                              include_function, simplify)
     if separate_windows is True:
-        lfs = _handle_fs_marginalizing(lfs, marginalize, len(samples))
+        lfs = _handle_fs_marginalizing(lfs, marginalize,
+                                       len(windows), len(samples))
         return lfs
     fs = lfs[0]
     for i in lfs[1:]:
         fs += i
-    fs = _handle_fs_marginalizing(fs, marginalize, len(samples))
+    fs = _handle_fs_marginalizing(fs, marginalize, len(windows), len(samples))
     return fs
 
 

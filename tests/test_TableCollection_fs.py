@@ -193,6 +193,25 @@ class TestTwoDemeCase(unittest.TestCase):
         for i, j in zip(range(3), [fs1, fs2, fs3]):
             self.assertTrue(np.ma.allequal(mfs[i], j))
 
+    def test_marginalizing_to_three_samples_in_separate_windows(self):
+        a = self.pop.alive_nodes
+        sample_lists = [a[:10], a[20:30], a[200:210]]
+        windows = [(0.1, 0.23), (0.723, 0.85)]
+        fs1 = self.pop.tables.fs(
+            [sample_lists[0]], windows=windows, separate_windows=True)
+        fs2 = self.pop.tables.fs(
+            [sample_lists[1]], windows=windows, separate_windows=True)
+        fs3 = self.pop.tables.fs(
+            [sample_lists[2]], windows=windows, separate_windows=True)
+
+        mfs = self.pop.tables.fs(sample_lists, marginalize=True,
+                                 windows=windows, separate_windows=True)
+
+        for i, j in zip(mfs, range(len(windows))):
+            self.assertTrue(np.ma.allequal(i[0], fs1[j]))
+            self.assertTrue(np.ma.allequal(i[1], fs2[j]))
+            self.assertTrue(np.ma.allequal(i[2], fs3[j]))
+
 
 if __name__ == "__main__":
     unittest.main()
