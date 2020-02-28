@@ -19,7 +19,6 @@
 
 import fwdpy11
 import sparse
-import scipy.sparse
 import numpy as np
 
 # Functions related to FS calculation
@@ -113,13 +112,7 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     later.
     """
     shapes = tuple(len(i)+1 for i in samples)
-    if num_sample_groups == 2:
-        dok_JFS = [scipy.sparse.dok_matrix(
-            shapes, dtype=np.int32) for i in windows]
-        coo_JFS_type = scipy.sparse.coo_matrix
-    else:
-        dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
-        coo_JFS_type = sparse.COO
+    dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
 
     sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
     t, s = _simplify(self, sample_list, simplify)
@@ -141,7 +134,7 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
                         for i in d:
                             counts[sample_groups[i]] += 1
                         dok_JFS[windex][tuple((i) for i in counts)] += 1
-    return [coo_JFS_type(i) for i in dok_JFS]
+    return [sparse.COO(i) for i in dok_JFS]
 
 
 def _fs_implementation(self, samples, windows,
