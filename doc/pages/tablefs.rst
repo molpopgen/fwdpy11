@@ -1,4 +1,4 @@
-.. tablefs:
+.. _tablefs:
 
 Calculating frequency spectra from tree sequences
 ====================================================================

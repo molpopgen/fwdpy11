@@ -181,39 +181,23 @@ def build_parameters_dict(args):
     return pdict, finalNs
 
 
-def per_deme_sfs(pop):
+def per_deme_fs(pop):
     """
     Get the marginal SFS per deme.
     """
-    samples = pop.alive_nodes
     nt = np.array(pop.tables.nodes, copy=False)
     for i in pop.diploid_metadata:
         assert i.deme == nt['deme'][i.nodes[0]]
         assert i.deme == nt['deme'][i.nodes[1]]
+    an = pop.alive_nodes
+    deme0 = an[np.where(nt['deme'][an] == 0)[0]]
+    deme1 = an[np.where(nt['deme'][an] == 1)[0]]
 
-    deme_sizes = pop.deme_sizes()
-    assert np.sum(deme_sizes[1]) == pop.N
-    deme_sfs = {}
-    for i, j in zip(deme_sizes[0], deme_sizes[1]):
-        deme_sfs[i] = np.zeros(2*j + 1)
-
-    ti = fwdpy11.TreeIterator(pop.tables, samples, update_samples=True)
-    nt = np.array(pop.tables.nodes, copy=False)
-    nmuts = 0
-    for tree in ti:
-        for mut in tree.mutations():
-            sb = tree.samples_below(mut.node)
-            assert all([i in samples for i in sb]) is True
-            dc = np.unique(nt['deme'][sb], return_counts=True)
-            assert dc[1].sum() == len(sb), f"{dc[1].sum} {len(sb)}"
-            nmuts += 1
-            for deme, daf in zip(dc[0], dc[1]):
-                deme_sfs[deme][daf] += 1
-    assert nmuts == len(pop.tables.mutations)
-    return deme_sfs[0], deme_sfs[1]
+    fs = pop.tables.fs([deme0, deme1], marginalize=True)
+    return fs[0], fs[1]
 
 
-def subsample_sfs(pop, args):
+def subsample_fs(pop, args):
     md = np.array(pop.diploid_metadata, copy=False)
     nodes0 = md['nodes'][np.where(md['deme'] == 0)[0]].flatten()
     nodes1 = md['nodes'][np.where(md['deme'] == 1)[0]].flatten()
@@ -221,26 +205,11 @@ def subsample_sfs(pop, args):
     s0 = np.random.choice(nodes0, 2*args.nsam, replace=False)
     s1 = np.random.choice(nodes1, 2*args.nsam, replace=False)
 
-    samples = np.array(s0.tolist() + s1.tolist())
-    sfs = {0: np.zeros(len(s0)-1), 1: np.zeros(len(s1)-1)}
-    ti = fwdpy11.TreeIterator(pop.tables, samples, update_samples=True)
-    nt = np.array(pop.tables.nodes, copy=False)
-    nmuts = 0
-    for tree in ti:
-        for mut in tree.mutations():
-            sb = tree.samples_below(mut.node)
-            assert all([i in samples for i in sb]) is True
-            dc = np.unique(nt['deme'][sb], return_counts=True)
-            assert dc[1].sum() == len(sb), f"{dc[1].sum} {len(sb)}"
-            nmuts += 1
-            for deme, daf in zip(dc[0], dc[1]):
-                if daf < 2*args.nsam:
-                    sfs[deme][daf-1] += 1
-    assert nmuts == len(pop.tables.mutations)
-    return sfs[0], sfs[1]
+    fs = pop.tables.fs([s0, s1], marginalize=True)
+    return fs[0][1:-1], fs[1][1:-1]
 
 
-def project_sfs(sfs, n):
+def project_fs(sfs, n):
     fs = moments.Spectrum(sfs)
     psfs = fs.project([n])
     return psfs.data[1:-1]
@@ -255,14 +224,14 @@ def runsim(args, pdict, seed):
     fwdpy11.evolvets(rng, pop, params, 100)
     if args.gamma is None:
         fwdpy11.infinite_sites(rng, pop, args.theta/float(4.*args.Nref))
-    sfs0, sfs1 = per_deme_sfs(pop)
-    sfs0_rs, sfs1_rs = subsample_sfs(pop, args)
+    sfs0, sfs1 = per_deme_fs(pop)
+    sfs0_rs, sfs1_rs = subsample_fs(pop, args)
     return sfs0, sfs1, sfs0_rs, sfs1_rs
 
 
-def plot_sfs(args, moments_fs, fwdpy11_fs, fwdpy11_sample_sfs):
-    fwdpy11_fs0 = project_sfs(fwdpy11_fs[0], 2*args.nsam)
-    fwdpy11_fs1 = project_sfs(fwdpy11_fs[1], 2*args.nsam)
+def plot_fs(args, moments_fs, fwdpy11_fs, fwdpy11_sample_fs):
+    fwdpy11_fs0 = project_fs(fwdpy11_fs[0], 2*args.nsam)
+    fwdpy11_fs1 = project_fs(fwdpy11_fs[1], 2*args.nsam)
     moments_fs0 = moments_fs.marginalize([1])
     moments_fs1 = moments_fs.marginalize([0])
 
@@ -273,7 +242,7 @@ def plot_sfs(args, moments_fs, fwdpy11_fs, fwdpy11_sample_sfs):
     x = [i for i in range(2*args.nsam-1)]
     deme0.plot(x, fwdpy11_fs0, 'bo',
                label="fwdpy11 projected", alpha=0.2, zorder=2)
-    deme0.plot(x, fwdpy11_sample_sfs[0], 'go',
+    deme0.plot(x, fwdpy11_sample_fs[0], 'go',
                label="fwdpy11 sample", alpha=0.2, zorder=3)
     deme0.plot(x, args.theta*moments_fs0.data[1:-1],
                'r-', alpha=0.2, label="moments", zorder=1)
@@ -281,7 +250,7 @@ def plot_sfs(args, moments_fs, fwdpy11_fs, fwdpy11_sample_sfs):
 
     deme1.plot(x, fwdpy11_fs1, 'bo',
                label="fwdpy11 projected", alpha=0.2, zorder=2)
-    deme1.plot(x, fwdpy11_sample_sfs[1], 'go',
+    deme1.plot(x, fwdpy11_sample_fs[1], 'go',
                label="fwdpy11 sample", alpha=0.2,  zorder=3)
     deme1.plot(x, args.theta*moments_fs1.data[1:-1],
                'r-', alpha=0.2, label="moments", zorder=1)
@@ -316,23 +285,23 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     seeds = np.random.randint(0, np.iinfo(np.uint32).max, args.nreps)
 
-    sum_sfs0 = np.zeros(2*finalNs[0]+1)
-    sum_sfs1 = np.zeros(2*finalNs[1]+1)
-    sum_samples_sfs0 = np.zeros(2*args.nsam-1)
-    sum_samples_sfs1 = np.zeros(2*args.nsam-1)
+    sum_fs0 = np.zeros(2*finalNs[0]+1)
+    sum_fs1 = np.zeros(2*finalNs[1]+1)
+    sum_samples_fs0 = np.zeros(2*args.nsam-1)
+    sum_samples_fs1 = np.zeros(2*args.nsam-1)
     with concurrent.futures.ProcessPoolExecutor() as e:
         futures = {e.submit(runsim, args, pdict, i) for i in seeds}
         for fut in concurrent.futures.as_completed(futures):
             sfs0, sfs1, sfs0_rs, sfs1_rs = fut.result()
-            sum_sfs0 += sfs0
-            sum_sfs1 += sfs1
-            sum_samples_sfs0 += sfs0_rs
-            sum_samples_sfs1 += sfs1_rs
+            sum_fs0 += sfs0
+            sum_fs1 += sfs1
+            sum_samples_fs0 += sfs0_rs
+            sum_samples_fs1 += sfs1_rs
 
-    sum_sfs0 /= args.nreps
-    sum_sfs1 /= args.nreps
-    sum_samples_sfs0 /= args.nreps
-    sum_samples_sfs1 /= args.nreps
+    sum_fs0 /= args.nreps
+    sum_fs1 /= args.nreps
+    sum_samples_fs0 /= args.nreps
+    sum_samples_fs1 /= args.nreps
     if HAVE_MOMENTS is True:
-        plot_sfs(args, moments_fs, (sum_sfs0, sum_sfs1),
-                 (sum_samples_sfs0, sum_samples_sfs1))
+        plot_fs(args, moments_fs, (sum_fs0, sum_fs1),
+                (sum_samples_fs0, sum_samples_fs1))
