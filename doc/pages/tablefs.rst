@@ -3,3 +3,41 @@
 Calculating frequency spectra from tree sequences
 ====================================================================
 
+.. ipython:: python
+
+    import fwdpy11
+    import msprime
+    import numpy as np
+
+    rng = fwdpy11.GSLrng(4321678)
+    config = [msprime.PopulationConfiguration(500),msprime.PopulationConfiguration(500)]
+    ts = msprime.simulate(population_configurations=config, Ne=500., random_seed=777,
+                          migration_matrix=np.array([0,0.1,0.1,0]).reshape(2,2),
+                          recombination_rate=0.25)
+
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    md = np.array(pop.diploid_metadata, copy=False)
+    np.unique(md['deme'], return_counts=True)
+
+    nmuts = fwdpy11.infinite_sites(rng, pop, 0.1)
+    nmuts
+
+.. ipython:: python
+
+    nodes = np.array(pop.tables.nodes, copy=False)
+    alive_nodes = pop.alive_nodes
+    deme0_nodes = alive_nodes[np.where(nodes['deme'][alive_nodes] == 0)[0]]
+    deme1_nodes = alive_nodes[np.where(nodes['deme'][alive_nodes] == 1)[0]]
+    fs = pop.tables.fs([deme0_nodes[:10]])
+    fs
+    fs = pop.tables.fs([deme0_nodes[:10], deme1_nodes[50:55]])
+    fs
+    fs.todense()
+    fs.sum(axis=1).todense()
+    fs.sum(axis=0).todense()
+    fs = pop.tables.fs([deme0_nodes[:10],deme1_nodes[50:55]],marginalize=True)
+    for key, value in fs.items():
+        print(key)
+        print(value)
+        print(value.data)
+
