@@ -59,9 +59,19 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
               'sphinx.ext.mathjax',
+              'sphinx.ext.intersphinx',
               'IPython.sphinxext.ipython_console_highlighting',
               'IPython.sphinxext.ipython_directive',
               ]
+
+intersphinx_mapping = {
+    'https://docs.python.org/3/': None,
+    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+    'sparse': ('https://sparse.pydata.org/en/latest/', None),
+    'tskit': ('https://tskit.readthedocs.io/en/stable', None),
+    'msprime': ('https://msprime.readthedocs.io/en/stable', None),
+}
+
 # 'breathe']
 
 # if (os.environ.get('READTHEDOCS')=="True") is False:

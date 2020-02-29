@@ -2,6 +2,8 @@
 # must not be installed via pip
 # pybind11==@PYBIND11@
 numpy
+sparse
+scipy
 
 #below are for building package,
 #dox, and running tests
