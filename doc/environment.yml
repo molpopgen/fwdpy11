@@ -13,6 +13,7 @@ dependencies:
     - msprime
     - openblas
     - numpy
+    - sparse
     - pandas
     - matplotlib
     - ipython
