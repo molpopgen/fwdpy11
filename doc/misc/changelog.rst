@@ -4,6 +4,33 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.0
+++++++++++++++++++++++++++++++++++++++++
+
+This is a major feature release.  The changes include all those listed for the various 
+release candidates (see below) plus the following:
+
+* Several back-end issues are fixed: 
+  `Issue 388 <https://github.com/molpopgen/fwdpy11/issues/388>`_
+  `Issue 389 <https://github.com/molpopgen/fwdpy11/issues/389>`_
+  `Issue 390 <https://github.com/molpopgen/fwdpy11/issues/390>`_
+  `Issue 392 <https://github.com/molpopgen/fwdpy11/issues/392>`_
+* :func:`fwdpy11.TableCollection.fs` added.  See :ref:`tablefs`.
+  `PR387 <https://github.com/molpopgen/fwdpy11/pull/387>`_ 
+* Creating populations from :mod:`msprime` input improved.
+  `PR395 <https://github.com/molpopgen/fwdpy11/pull/395>`_ 
+* Added :class:`PendingDeprecationWarning` to :func:`fwdpy11.evolve_genomes`.
+  `PR396 <https://github.com/molpopgen/fwdpy11/pull/396>`_ 
+
+.. note::
+
+    This is the first stable release with support for flexible demographic modeling.
+    See :ref:`softselection` for details as well as :ref:`IMexample`.  Currently,
+    support for different fitness effects in different demes is limited, which
+    will be addressed in 0.7.0.  However, this version does support adaptation
+    of quantitative traits to different optima.  See :ref:`localadaptation`.
+
+
 0.6.0rc2 
 ++++++++++++++++
 
@@ -12,7 +39,7 @@ Third release candidate of version 0.6.0!
 Kind of a big release:
 
 * Fixes a bug in the mechanics of generating offspring metadata.  The bug doesn't
-  affect anyone not using custom "genetic value" calculations.  `PR371 <https://github.com/molpopgen/fwdpy11/issues/371>`_
+  affect anyone not using custom "genetic value" calculations.  `Issue 371 <https://github.com/molpopgen/fwdpy11/issues/371>`_
 * Big reductions in memory requirements for simulations with tree sequence recording.
   `PR383 <https://github.com/molpopgen/fwdpy11/pull/383>`_ 
 * Better defaults for models with migration.
@@ -82,8 +109,8 @@ Changes to the build system and dependencies:
 
 This release fixes a rather serious bug.
 
-* Fixes  `PR362 <https://github.com/molpopgen/fwdpy11/issues/362>`_
-* Fixes  `PR363 <https://github.com/molpopgen/fwdpy11/issues/363>`_
+* Fixes  `Issue 362 <https://github.com/molpopgen/fwdpy11/issues/362>`_
+* Fixes  `Issue 363 <https://github.com/molpopgen/fwdpy11/issues/363>`_
 
 The latter is the bad one.  For workflows involving simulate, write
 to file, read in and add neutral mutations, that results may now differ.
@@ -98,7 +125,7 @@ now differs.
 
 Bug fix release.
 
-* Fixes  `PR350 <https://github.com/molpopgen/fwdpy11/issues/350>`_
+* Fixes  `Issue 350 <https://github.com/molpopgen/fwdpy11/issues/350>`_
 
 0.5.3
 ++++++++++++++++
