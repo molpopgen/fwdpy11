@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Run test suite
           command: |
-            python -m unittest discover tests
+            python -W ignore -m unittest discover tests
 
       - run:
           name: Test building and running the plugin

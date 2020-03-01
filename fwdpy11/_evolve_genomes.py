@@ -38,6 +38,11 @@ def evolve_genomes(rng, pop, params, recorder=None):
 
     """
     import warnings
+    # warnings.simplefilter("default")
+    warnings.warn(
+        "Simulation without tree sequences is being considered for deprecation!",
+        PendingDeprecationWarning
+    )
     # Test parameters while suppressing warnings
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
