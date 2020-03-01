@@ -24,7 +24,7 @@ then
     then
         exit 1
     fi
-    CC=$CC CXX=$CXX python -m unittest discover -v tests
+    CC=$CC CXX=$CXX python -W ignore -m unittest discover -v tests
     if [ "$?" != "0" ];
     then
         exit 1
@@ -38,7 +38,7 @@ else
     then
         exit 1
     fi
-    CC=$CC CXX=$CXX python -m unittest discover -v tests
+    CC=$CC CXX=$CXX python -W ignore -m unittest discover -v tests
     if [ "$?" != "0" ];
     then
         exit 1
