@@ -133,7 +133,7 @@ def validate_mut_lookup_content(pop):
     return ml_contents == mt_contents
 
 
-class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
+class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
@@ -527,7 +527,7 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             os.remove(ofile)
 
 
-class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
+class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
@@ -696,7 +696,7 @@ class TestMutationCounts(unittest.TestCase):
             all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
 
 
-class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
+class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
@@ -765,7 +765,7 @@ class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
-class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
+class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
@@ -842,7 +842,7 @@ class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
-class testSimplificationInterval(unittest.TestCase):
+class TestSimplificationInterval(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.N = 1000
@@ -878,7 +878,7 @@ class testSimplificationInterval(unittest.TestCase):
         vi = fwdpy11.TreeIterator(self.pop.tables, samples)
 
 
-class testFixationPreservation(unittest.TestCase):
+class TestFixationPreservation(unittest.TestCase):
     def testQtraitSim(self):
         N = 1000
         demography = np.array([N]*10*N, dtype=np.uint32)
@@ -953,7 +953,7 @@ class testFixationPreservation(unittest.TestCase):
         self.assertTrue(np.array_equal(brute_force, pop.mcounts))
 
 
-class testMetaData(unittest.TestCase):
+class TestMetaData(unittest.TestCase):
     """
     Integration test.
 
@@ -1026,7 +1026,7 @@ class testMetaData(unittest.TestCase):
             self.assertAlmostEqual(i, j)
 
 
-class testDataMatrixIterator(unittest.TestCase):
+class TestDataMatrixIterator(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         # TODO add neutral variants
