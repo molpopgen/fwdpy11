@@ -31,9 +31,11 @@ from ._evolve_genomes import * # NOQA
 from ._evolvets import * # NOQA
 from ._monkeypatch import _diploid_population # NOQA
 from ._monkeypatch import _table_collection # NOQA
+from ._monkeypatch import _data_matrix # NOQA
 from ._demography import * # NOQA
 
 # NOTE: some operations that can be implemented efficiently
 # in Python are supplied as monkey-patches to the pybind11 classes
 _monkeypatch._diploid_population._patch_diploid_population(DiploidPopulation) # NOQA
 _monkeypatch._table_collection._patch_table_collection(TableCollection) # NOQA
+_monkeypatch._data_matrix._patch_data_matrix(DataMatrix) # NOQA
