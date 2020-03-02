@@ -17,6 +17,7 @@ release candidates (see below) plus the following:
   `Issue 392 <https://github.com/molpopgen/fwdpy11/issues/392>`_
 * :func:`fwdpy11.TableCollection.fs` added.  See :ref:`tablefs`.
   `PR387 <https://github.com/molpopgen/fwdpy11/pull/387>`_ 
+  `PR399 <https://github.com/molpopgen/fwdpy11/pull/399>`_ 
 * Creating populations from :mod:`msprime` input improved.
   `PR395 <https://github.com/molpopgen/fwdpy11/pull/395>`_ 
 * Added :class:`PendingDeprecationWarning` to :func:`fwdpy11.evolve_genomes`.
