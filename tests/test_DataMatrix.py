@@ -4,7 +4,7 @@ import numpy as np
 from quick_pops import quick_nonneutral_slocus
 
 
-class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
+class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
     """
     Much of this is already tested in fwdpp's unit tests,
     but the purpose here is to make sure that the wrappers
@@ -105,6 +105,21 @@ class test_DataMatrixFromDiploidPopulation(unittest.TestCase):
             num_ones = ni[1].count('1')
             self.assertEqual(num_ones, rowSums[i])
             i += 1
+
+    def test_merge(self):
+        m, keys = self.gm.merge()
+        s = (self.gm_neutral.shape[0] + self.gm_selected.shape[0],
+             self.gm_neutral.shape[1])
+
+        self.assertEqual(m.shape, s)
+
+        neutral = np.array(
+            [self.pop.mutations[k].neutral for k in keys], dtype=np.int32)
+        w = np.where(neutral == 1)[0]
+        npos = self.gm.neutral.positions
+        npos_idx = np.argsort(npos)
+        self.assertTrue(np.array_equal(m[w, :], self.gm_neutral[npos_idx, :]))
+        self.assertTrue(np.array_equal(self.gm.sorted_neutral[0], m[w, :]))
 
 
 if __name__ == "__main__":
