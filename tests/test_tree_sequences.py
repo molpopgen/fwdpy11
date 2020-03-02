@@ -1,9 +1,29 @@
+#
+# Copyright (C) 2020 Kevin Thornton <krthornt@uci.edu>
+#
+# This file is part of fwdpy11.
+#
+# fwdpy11 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# fwdpy11 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import unittest
 import fwdpy11
 import numpy as np
 import copy
 import os
 import pickle
+from collections import namedtuple
 
 
 class Recorder(object):
@@ -25,10 +45,10 @@ class Recorder(object):
                 self.timepoints.pop(0)
 
 
-def set_up_quant_trait_model():
+def set_up_quant_trait_model(simlen=1.0):
     # TODO add neutral variants
     N = 1000
-    demography = np.array([N]*10*N, dtype=np.uint32)
+    demography = fwdpy11.DiscreteDemography()
     rho = 1.
     # theta = 100.
     # nreps = 500
@@ -43,7 +63,8 @@ def set_up_quant_trait_model():
          'rates': (0.0, 0.025, r),
          'gvalue': a,
          'prune_selected': False,
-         'demography': demography
+         'demography': demography,
+         'simlen': np.rint(simlen*N).astype(int)
          }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101*45*110*210)
@@ -51,7 +72,7 @@ def set_up_quant_trait_model():
     return params, rng, pop
 
 
-def set_up_standard_pop_gen_model():
+def set_up_standard_pop_gen_model(simlen=1.0):
     """
     For this sort of model, when mutations fix, they are
     removed from the simulation, INCLUDING THE TREE
@@ -60,7 +81,7 @@ def set_up_standard_pop_gen_model():
     """
     # TODO add neutral variants
     N = 1000
-    demography = np.array([N]*10*N, dtype=np.uint32)
+    demography = fwdpy11.DiscreteDemography()
     rho = 1.
     # theta = 100.
     # nreps = 500
@@ -76,7 +97,8 @@ def set_up_standard_pop_gen_model():
          'rates': (0.0, 0.001, r),
          'gvalue': a,
          'prune_selected': True,
-         'demography': demography
+         'demography': demography,
+         'simlen': np.rint(simlen*N).astype(int)
          }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(666**2)
@@ -131,10 +153,10 @@ def validate_mut_lookup_content(pop):
     return ml_contents == mt_contents
 
 
-class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
+class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         assert max(self.pop.mcounts) == 2 * \
             self.pop.N, "Nothing fixed, so test case is not helpful"
@@ -525,19 +547,16 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             os.remove(ofile)
 
 
-class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
+class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
         self.stimes = [i for i in range(1, 101)]
         self.recorder = Recorder(42, 10, self.stimes)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
         assert max(self.pop.mcounts) == 2 * \
             self.pop.N, "Nothing fixed, so test case is not helpful"
-
-    def test_Simulation(self):
-        self.assertEqual(self.pop.generation, 10000)
 
     def test_mut_lookup(self):
         self.assertEqual(len(self.pop.mut_lookup),
@@ -697,7 +716,7 @@ class TestMutationCounts(unittest.TestCase):
             all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
 
 
-class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
+class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
@@ -766,7 +785,7 @@ class testTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
-class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
+class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
@@ -843,7 +862,7 @@ class testTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
         self.assertTrue(np.array_equal(rc, np.array(mc)))
 
 
-class testSimplificationInterval(unittest.TestCase):
+class TestSimplificationInterval(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.N = 1000
@@ -879,10 +898,10 @@ class testSimplificationInterval(unittest.TestCase):
         vi = fwdpy11.TreeIterator(self.pop.tables, samples)
 
 
-class testFixationPreservation(unittest.TestCase):
+class TestFixationPreservation(unittest.TestCase):
     def testQtraitSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
+        demography = np.array([N]*3*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
@@ -919,7 +938,7 @@ class testFixationPreservation(unittest.TestCase):
 
     def testPopGenSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
+        demography = np.array([N]*2*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
@@ -954,7 +973,7 @@ class testFixationPreservation(unittest.TestCase):
         self.assertTrue(np.array_equal(brute_force, pop.mcounts))
 
 
-class testMetaData(unittest.TestCase):
+class TestMetaData(unittest.TestCase):
     """
     Integration test.
 
@@ -964,7 +983,6 @@ class testMetaData(unittest.TestCase):
 
     def testQtraitSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
@@ -976,21 +994,35 @@ class testMetaData(unittest.TestCase):
              'rates': (0.0, 0.005, None),
              'gvalue': a,
              'prune_selected': False,
-             'demography': demography
+             'demography': fwdpy11.DiscreteDemography(),
+             'simlen': N
              }
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
 
+        # NOTE: we are trying to track the fate of C++
+        # types based on their Python instances. We can
+        # run into trouble as the underlying data are
+        # over-written.  Thus, we store some of it
+        # in a new class for testing.
+        MD = namedtuple("MD", ['g', 'e', 'w', 'label'])
+
         class Recorder(object):
             """ Records entire pop every 100 generations """
 
+            def __init__(self):
+                self.data = []
+
             def __call__(self, pop, recorder):
                 if pop.generation % 100 == 0.0:
+                    for i in pop.diploid_metadata:
+                        self.data.append(
+                            (pop.generation, MD(i.g, i.e, i.w, i.label)))
                     recorder.assign(np.arange(pop.N, dtype=np.int32))
 
-        r = Recorder()
-        fwdpy11.evolvets(rng, pop, params, 100, r)
+        recorder = Recorder()
+        fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
         ancient_sample_metadata = np.array(
             pop.ancient_sample_metadata, copy=False)
@@ -1026,8 +1058,16 @@ class testMetaData(unittest.TestCase):
         for i, j in zip(genetic_trait_values_from_sim, genetic_values_from_ts):
             self.assertAlmostEqual(i, j)
 
+        # This is a second test that we correctly stored metadata
+        # in the correct order
+        for i, j in zip(pop.ancient_sample_metadata, recorder.data):
+            self.assertEqual(i.g, j[1].g)
+            self.assertEqual(i.e, j[1].e)
+            self.assertEqual(i.w, j[1].w)
+            self.assertEqual(i.label, j[1].label)
 
-class testDataMatrixIterator(unittest.TestCase):
+
+class TestDataMatrixIterator(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         # TODO add neutral variants
