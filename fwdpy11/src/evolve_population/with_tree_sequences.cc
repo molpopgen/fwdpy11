@@ -462,9 +462,6 @@ evolve_with_tree_sequences(
                                         "ancient sample index greater than "
                                         "current population size");
                                 }
-                            // Get the nodes
-                            //auto x = fwdpp::ts::get_parent_ids(
-                            //    first_parental_index, i, 0);
                             auto x = fwdpy11::parent_nodes_from_metadata(
                                 i, pop.diploid_metadata, 0);
                             pop.tables.preserved_nodes.push_back(x.first);
