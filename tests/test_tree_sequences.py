@@ -25,10 +25,10 @@ class Recorder(object):
                 self.timepoints.pop(0)
 
 
-def set_up_quant_trait_model():
+def set_up_quant_trait_model(simlen=1.0):
     # TODO add neutral variants
     N = 1000
-    demography = np.array([N]*10*N, dtype=np.uint32)
+    demography = fwdpy11.DiscreteDemography()
     rho = 1.
     # theta = 100.
     # nreps = 500
@@ -43,7 +43,8 @@ def set_up_quant_trait_model():
          'rates': (0.0, 0.025, r),
          'gvalue': a,
          'prune_selected': False,
-         'demography': demography
+         'demography': demography,
+         'simlen': np.rint(simlen*N).astype(int)
          }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101*45*110*210)
@@ -51,7 +52,7 @@ def set_up_quant_trait_model():
     return params, rng, pop
 
 
-def set_up_standard_pop_gen_model():
+def set_up_standard_pop_gen_model(simlen=1.0):
     """
     For this sort of model, when mutations fix, they are
     removed from the simulation, INCLUDING THE TREE
@@ -60,7 +61,7 @@ def set_up_standard_pop_gen_model():
     """
     # TODO add neutral variants
     N = 1000
-    demography = np.array([N]*10*N, dtype=np.uint32)
+    demography = fwdpy11.DiscreteDemography()
     rho = 1.
     # theta = 100.
     # nreps = 500
@@ -76,7 +77,8 @@ def set_up_standard_pop_gen_model():
          'rates': (0.0, 0.001, r),
          'gvalue': a,
          'prune_selected': True,
-         'demography': demography
+         'demography': demography,
+         'simlen': np.rint(simlen*N).astype(int)
          }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(666**2)
@@ -134,7 +136,7 @@ def validate_mut_lookup_content(pop):
 class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         assert max(self.pop.mcounts) == 2 * \
             self.pop.N, "Nothing fixed, so test case is not helpful"
@@ -528,16 +530,13 @@ class testTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 class testTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
         self.stimes = [i for i in range(1, 101)]
         self.recorder = Recorder(42, 10, self.stimes)
         fwdpy11.evolvets(
             self.rng, self.pop, self.params, 100, self.recorder)
         assert max(self.pop.mcounts) == 2 * \
             self.pop.N, "Nothing fixed, so test case is not helpful"
-
-    def test_Simulation(self):
-        self.assertEqual(self.pop.generation, 10000)
 
     def test_mut_lookup(self):
         self.assertEqual(len(self.pop.mut_lookup),
