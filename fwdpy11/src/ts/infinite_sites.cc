@@ -46,21 +46,6 @@ init_infinite_sites(py::module& m)
             fwdpp::flagged_mutation_queue recycling_bin
                 = fwdpp::ts::make_mut_queue(pop.mcounts,
                                             pop.mcounts_from_preserved_nodes);
-
-            std::vector<fwdpp::ts::TS_NODE_INT> samples;
-            samples.reserve(pop.N);
-            // Assume the pop is simplified
-            auto nb = pop.tables.node_table.cbegin();
-            auto past_sample = std::find_if(
-                nb, pop.tables.node_table.cend(),
-                [&pop](const fwdpp::ts::node& n) {
-                    return n.time != static_cast<double>(pop.generation);
-                });
-            for (auto i = nb; i < past_sample; ++i)
-                {
-                    samples.push_back(std::distance(nb, i));
-                }
-
             const auto apply_mutations
                 = [&recycling_bin, &rng,
                    &pop](const double left, const double right,
@@ -68,14 +53,15 @@ init_infinite_sites(py::module& m)
                       return generate_neutral_variants(
                           recycling_bin, pop, rng, left, right, generation);
                   };
-            auto nmuts = fwdpp::ts::mutate_tables(rng, apply_mutations,
-                                                  pop.tables, samples, mu);
+            pop.fill_alive_nodes();
+            auto nmuts = fwdpp::ts::mutate_tables(
+                rng, apply_mutations, pop.tables, pop.alive_nodes, mu);
             if (nmuts == 0)
                 {
                     return nmuts;
                 }
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
-                                       pop.mcounts,
+            fwdpp::ts::count_mutations(pop.tables, pop.mutations,
+                                       pop.alive_nodes, pop.mcounts,
                                        pop.mcounts_from_preserved_nodes);
             return nmuts;
         },
