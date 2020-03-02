@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import os
 import pickle
+from collections import namedtuple
 
 
 class Recorder(object):
@@ -963,7 +964,6 @@ class TestMetaData(unittest.TestCase):
 
     def testQtraitSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
@@ -975,21 +975,35 @@ class TestMetaData(unittest.TestCase):
              'rates': (0.0, 0.005, None),
              'gvalue': a,
              'prune_selected': False,
-             'demography': demography
+             'demography': fwdpy11.DiscreteDemography(),
+             'simlen': N
              }
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101*45*110*210)
         pop = fwdpy11.DiploidPopulation(N, 1.0)
 
+        # NOTE: we are trying to track the fate of C++
+        # types based on their Python instances. We can
+        # run into trouble as the underlying data are
+        # over-written.  Thus, we store some of it
+        # in a new class for testing.
+        MD = namedtuple("MD", ['g', 'e', 'w', 'label'])
+
         class Recorder(object):
             """ Records entire pop every 100 generations """
 
+            def __init__(self):
+                self.data = []
+
             def __call__(self, pop, recorder):
                 if pop.generation % 100 == 0.0:
+                    for i in pop.diploid_metadata:
+                        self.data.append(
+                            (pop.generation, MD(i.g, i.e, i.w, i.label)))
                     recorder.assign(np.arange(pop.N, dtype=np.int32))
 
-        r = Recorder()
-        fwdpy11.evolvets(rng, pop, params, 100, r)
+        recorder = Recorder()
+        fwdpy11.evolvets(rng, pop, params, 100, recorder)
 
         ancient_sample_metadata = np.array(
             pop.ancient_sample_metadata, copy=False)
@@ -1024,6 +1038,14 @@ class TestMetaData(unittest.TestCase):
 
         for i, j in zip(genetic_trait_values_from_sim, genetic_values_from_ts):
             self.assertAlmostEqual(i, j)
+
+        # This is a second test that we correctly stored metadata
+        # in the correct order
+        for i, j in zip(pop.ancient_sample_metadata, recorder.data):
+            self.assertEqual(i.g, j[1].g)
+            self.assertEqual(i.e, j[1].e)
+            self.assertEqual(i.w, j[1].w)
+            self.assertEqual(i.label, j[1].label)
 
 
 class TestDataMatrixIterator(unittest.TestCase):
