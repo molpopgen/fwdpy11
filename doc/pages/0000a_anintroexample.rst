@@ -240,12 +240,20 @@ individual variants with respect to arbitrary sets of nodes.  Such iteration is 
 .. note::
 
    For more on how to access genotype data and the individual "marginal" trees, see
-   :ref:`genotypes_trees`.
+   :ref:`genotypes_trees` and :ref:`tablefs`.
 
 For the next example, we will add neutral mutations to our tree sequence via :func:`fwdpy11.infinite_sites`
 and then calculate :math:`\pi` (the sum of heterozygosity at each site) in a random sample of 25 diploids from each time point.
 The end result will allow us to plot how genetic diversity in a sample changes over time during adaptation to the new
 optimum.
+
+Some efficiency tips include:
+
+* Simplifying to each time point before traversing trees.  Here, there are a large
+  number of ancient samples, meaning a large number of trees irrelevant to
+  many of the sample time points.  Simplification gets rid of them.
+* Use :func:`fwdpy11.DiploidPopulation.alive_nodes` to get the list of nodes
+  corresponding to all currently alive individuals.
 
 .. ipython:: python
 
@@ -261,7 +269,11 @@ optimum.
         rsamples = np.random.choice(len(m), 25, replace=False)
         # Convert the individuals into their respective nodes
         rsamples_nodes = m['nodes'][rsamples,:].flatten()
-        vi = fwdpy11.VariantIterator(pop.tables, rsamples_nodes)
+        # Simplify down to the current time point, which
+        # we do for efficiency, as it removes information
+        # about trees irrelevant to this time point
+        tables, idmap = fwdpy11.simplify_tables(pop.tables, rsamples_nodes)
+        vi = fwdpy11.VariantIterator(tables, idmap[rsamples_nodes])
         ssh = 0.0
         for v in vi:
             g = v.genotypes
@@ -276,6 +288,11 @@ optimum.
     plt.ylabel(r'$\pi$');
     @savefig pi_over_time.png width=6in
     plt.xlabel("Generation");
+
+.. note::
+
+    Another way to do this analysis would be to get the frequency spectrum for
+    each time point.  See :ref:`tablefs`.
 
 We may also analyze our current generation by using the various containers present in a population.  In this example, we
 will obtain the number of mutations on each haploid genome of each diploid.  We will compare the result to that obtained 
@@ -293,14 +310,16 @@ from the tree sequences.
 
 When using the tree sequences for the calculation, note that we have to avoid neutral variants,
 as we added them in above.  We can do so by passing `include_neutral_variants=False` to the constructor
-of :class:`fwdpy11.VariantIterator`:
+of :class:`fwdpy11.VariantIterator`.  In the interest of efficiency, we again simplify the tables
+to the time point of interest, which includes all currently alive nodes:
 
 .. ipython:: python
 
-    current_generation = np.array([i for i in range(2*pop.N)], dtype=np.int32)
+    tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.alive_nodes)
+    remapped_samples = idmap[pop.alive_nodes]
     nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
     vi = fwdpy11.VariantIterator(pop.tables,
-                                 current_generation,
+                                 remapped_samples,
                                  include_neutral_variants=False)
     for v in vi:
         g = v.genotypes
@@ -310,39 +329,3 @@ of :class:`fwdpy11.VariantIterator`:
             nmuts_ts[who] += 1
         
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"
-
-
-The ``VariantIterator`` makes very efficient use of the underlying data.  However, it is not *maximally*
-efficient here, as this tree sequence contains a large number of ancient samples. Thus, its tree structure is not
-"maximally" simplified with respect to any single time point.  Rather, it is simplified with
-respect to the nodes from all sampled time points.
-
-We can obtain a new table collection simplified with respect to the
-final generation, which gives a measurable speedup compared to iterating over the larger
-tree sequence:
-
-
-.. ipython:: python
-
-    tables, idmap = fwdpy11.simplify_tables(pop.tables, current_generation)
-    remapped_samples = idmap[current_generation]
-    nmuts_simplified_ts = np.zeros(len(remapped_samples), dtype=np.int32)
-    vi = fwdpy11.VariantIterator(tables,
-                                 remapped_samples,
-                                 include_neutral_variants=False)
-    for v in vi:
-        g = v.genotypes
-        r = v.records[0]
-        if pop.mutations[r.key].neutral is False:
-            who = np.where(g == 1)[0]
-            nmuts_simplified_ts[who] += 1
-
-    assert np.array_equal(nmuts_ts, nmuts_simplified_ts), "Simplification error"
-
-
-.. note::
-
-    The last two blocks  are examples of speed/memory tradeoffs.  Simplification 
-    to a specific time point is very fast, but requires a bit of extra RAM, and results
-    in faster variant traversal, as the simplified tables only contain variants
-    present in the time point of interest.
