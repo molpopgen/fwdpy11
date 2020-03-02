@@ -106,8 +106,6 @@ namespace fwdpy11
                                            typename popbase_t::mcont_t>;
 
         dipvector_t diploids;
-        std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes,
-            preserved_sample_nodes;
         //TODO: initalized ancient_sample_metadata and tables,
         //TODO figure out what to do with class constructor??
         //TODO Introduce types for ancient sample individual and node tracking
@@ -116,8 +114,7 @@ namespace fwdpy11
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
-            : Population{ N, length },
-              diploids(N, { 0, 0 }), alive_nodes{}, preserved_sample_nodes{},
+            : Population{ N, length }, diploids(N, { 0, 0 }),
               diploid_metadata(N), ancient_sample_metadata{},
               ancient_sample_records{}
         {
@@ -131,8 +128,8 @@ namespace fwdpy11
                           length },
               diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
                        { 0, 0 }),
-              alive_nodes{}, preserved_sample_nodes{}, diploid_metadata(N),
-              ancient_sample_metadata{}, ancient_sample_records{}
+              diploid_metadata(N), ancient_sample_metadata{},
+              ancient_sample_records{}
 
         {
             finish_construction(deme_sizes);
@@ -145,8 +142,7 @@ namespace fwdpy11
             : Population(static_cast<fwdpp::uint_t>(d.size()),
                          std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d)), alive_nodes{},
-              preserved_sample_nodes{}, diploid_metadata(N),
+              diploids(std::forward<diploids_input>(d)), diploid_metadata(N),
               ancient_sample_metadata{}, ancient_sample_records{}
         //! Constructor for pre-determined population status
         {
@@ -233,7 +229,7 @@ namespace fwdpy11
         }
 
         void
-        fill_alive_nodes()
+        fill_alive_nodes() override
         {
             fill_sample_nodes_from_metadata(alive_nodes, diploid_metadata);
         }
@@ -245,7 +241,8 @@ namespace fwdpy11
                                             ancient_sample_metadata);
         }
 
-        virtual std::size_t ancient_sample_metadata_size() const override
+        virtual std::size_t
+        ancient_sample_metadata_size() const override
         {
             return ancient_sample_metadata.size();
         }

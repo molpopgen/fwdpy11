@@ -251,7 +251,8 @@ evolve_with_tree_sequences(
     auto genetics = fwdpp::make_genetic_parameters(
         gvalue_pointers.genetic_values, std::move(bound_mmodel),
         std::move(bound_rmodel));
-    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state->maxdemes, 0);
+    std::vector<std::size_t> deme_to_gvalue_map(
+        current_demographic_state->maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
             std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
@@ -343,8 +344,8 @@ evolve_with_tree_sequences(
             // ...before updating this:
             ++pop.generation;
             fwdpy11::evolve_generation_ts(
-                rng, pop, genetics, current_demographic_state, pop.generation, pop.tables,
-                offspring, offspring_metadata, next_index);
+                rng, pop, genetics, current_demographic_state, pop.generation,
+                pop.tables, offspring, offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // TODO: this needs cleanup in 0.7.0, so that parental genotypes
             // can affect things.  Right now, we are requiring the offspring
@@ -474,11 +475,14 @@ evolve_with_tree_sequences(
                             // the new ancient samples
                             if (!pop.genetic_value_matrix.empty())
                                 {
-                                    auto offset = i*genetics.gvalue[0]->total_dim; 
+                                    auto offset
+                                        = i * genetics.gvalue[0]->total_dim;
                                     pop.ancient_sample_genetic_value_matrix.insert(
                                         end(pop.ancient_sample_genetic_value_matrix),
-                                        begin(pop.genetic_value_matrix) + offset,
-                                        begin(pop.genetic_value_matrix) + offset
+                                        begin(pop.genetic_value_matrix)
+                                            + offset,
+                                        begin(pop.genetic_value_matrix)
+                                            + offset
                                             + genetics.gvalue[0]->total_dim);
                                 }
                             // Record the time and nodes for this individual
@@ -498,14 +502,15 @@ evolve_with_tree_sequences(
     // then simplification throws an error. But, since it is annoying
     // for a user to have to remember not to do that, we filter the list
     // here
-    // TODO: this is not compatible w/overlapping generations.  More generally,
-    // we should check for overlap w/any currently-alive nodes.
+    pop.fill_alive_nodes();
+    std::sort(begin(pop.alive_nodes), end(pop.alive_nodes));
     auto itr = std::remove_if(
         begin(pop.tables.preserved_nodes), end(pop.tables.preserved_nodes),
         [&pop](const fwdpp::ts::TS_NODE_INT l) {
-            return pop.tables.node_table[l].time == pop.generation;
+            return std::binary_search(begin(pop.alive_nodes), end(pop.alive_nodes), l);
         });
     pop.tables.preserved_nodes.erase(itr, end(pop.tables.preserved_nodes));
+    pop.alive_nodes.clear();
 
     if (!simplified)
         {
