@@ -375,32 +375,31 @@ class TestDiscreteDemography(unittest.TestCase):
                          self.pop.deme_sizes(as_dict=True))
 
     def test_simple_moves_from_multiple_demes(self):
-        # Set 1/2 the population to start in deme 1:
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][self.pop.N//2:] = 1
-        # In generation 0, we move 1/2 of deme 1 to
+        # In generation 0, create deme 1 from 0.
+        # In generation 1, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.move_individuals(0, 1, 2, 0.5)])
-        # Evolve for one generation:
+            [fwdpy11.move_individuals(0, 0, 1, 0.5),
+             fwdpy11.move_individuals(1, 1, 2, 0.5)])
+
+        # Evolve for two generations:
         ddr.DiscreteDemography_roundtrip(self.rng,
-                                         self.pop, d, 1)
+                                         self.pop, d, 2)
         # We now expect 50, 25, and 25 individuals in
         # demes 0, 1, and 2
         expected = {0: 50, 1: 25, 2: 25}
         self.assertEqual(expected, self.pop.deme_sizes(as_dict=True))
 
     def test_simple_copies_from_multiple_demes(self):
-        # Set 1/2 the population to start in deme 1:
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][self.pop.N//2:] = 1
+        # Set 1/2 the population to start in deme 1.
         # In generation 0, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.copy_individuals(0, 1, 2, 0.5)])
+            [fwdpy11.move_individuals(0, 0, 1, 0.5),
+             fwdpy11.copy_individuals(1, 1, 2, 0.5)])
         # Evolve for one generation:
         ddr.DiscreteDemography_roundtrip(self.rng,
-                                         self.pop, d, 1)
+                                         self.pop, d, 2)
         # We now expect 50, 50, and 25 individuals in
         # demes 0, 1, and 2
         expected = {0: 50, 1: 50, 2: 25}
@@ -419,8 +418,6 @@ class TestDiscreteDemography(unittest.TestCase):
 
     def test_two_deme_growth(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -431,7 +428,9 @@ class TestDiscreteDemography(unittest.TestCase):
         g.append(fwdpy11.SetExponentialGrowth(7+t[0], 0, fwdpy11.NOGROWTH))
         g.append(fwdpy11.SetExponentialGrowth(33, 1, G1))
         g.append(fwdpy11.SetExponentialGrowth(33+t[1], 1, fwdpy11.NOGROWTH))
-        d = fwdpy11.DiscreteDemography(set_growth_rates=g)
+        moves = [fwdpy11.move_individuals(0, 0, 1, 0.1)]
+        d = fwdpy11.DiscreteDemography(set_growth_rates=g,
+                                       mass_migrations=moves)
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
@@ -442,8 +441,6 @@ class TestDiscreteDemography(unittest.TestCase):
 
     def test_two_deme_growth_with_hard_reset(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -456,8 +453,10 @@ class TestDiscreteDemography(unittest.TestCase):
         # Cut off the growth in deme 0 after a few generations,
         # and manually set the new deme size to 100 w/no growth
         p = [fwdpy11.SetDemeSize(11, 0, 100)]
+        moves = [fwdpy11.move_individuals(0, 0, 1, 0.1)]
         d = fwdpy11.DiscreteDemography(set_deme_sizes=p,
-                                       set_growth_rates=g)
+                                       set_growth_rates=g,
+                                       mass_migrations=moves)
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
@@ -469,8 +468,6 @@ class TestDiscreteDemography(unittest.TestCase):
 
     def test_two_deme_growth_without_hard_reset(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -484,8 +481,10 @@ class TestDiscreteDemography(unittest.TestCase):
         # after X generations of growth, N[0] changes to 100
         # and the growth rate is not reset.
         p = [fwdpy11.SetDemeSize(11, 0, 100, False)]
+        moves = [fwdpy11.move_individuals(0, 0, 1, 0.1)]
         d = fwdpy11.DiscreteDemography(set_growth_rates=g,
-                                       set_deme_sizes=p)
+                                       set_deme_sizes=p,
+                                       mass_migrations=moves)
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop,
                                          d, 100)
 
@@ -574,18 +573,16 @@ class TestDiscreteDemography(unittest.TestCase):
         tries to create a 3rd deme, which triggers an exception
         """
         mm = np.array([0.5]*4).reshape(2, 2)
-        m = [fwdpy11.move_individuals(0, 0, 2, 0.5)]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][len(md)//2:] = 1
+        m = [fwdpy11.move_individuals(0, 0, 1, 0.5),
+             fwdpy11.move_individuals(0, 0, 2, 0.5)]
         d = fwdpy11.DiscreteDemography(mass_migrations=m, migmatrix=mm)
         with self.assertRaises(ValueError):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
 
     def test_simple_two_deme_migration(self):
         mm = np.array([0.5]*4).reshape(2, 2)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][len(md)//2:] = 1
-        d = fwdpy11.DiscreteDemography(migmatrix=mm)
+        m = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        d = fwdpy11.DiscreteDemography(migmatrix=mm, mass_migrations=m)
         N = self.pop.N
         ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
         self.assertEqual(N, self.pop.N)
