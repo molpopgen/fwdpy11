@@ -176,12 +176,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_moves_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][self.pop.N//2:] = 1
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
         # In generation 0, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.move_individuals(0, 1, 2, 0.5)])
+            mass_migrations=[fwdpy11.move_individuals(0, 1, 2, 0.5)])
         self.pdict['demography'] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -196,8 +195,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_copies_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][self.pop.N//2:] = 1
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
         # In generation 0, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
         d = fwdpy11.DiscreteDemography(
@@ -230,8 +228,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -257,8 +254,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth_with_hard_reset(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -287,8 +283,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth_without_hard_reset(self):
         N0 = [90, 10]
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][N0[0]:] = 1
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
         G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
@@ -506,8 +501,7 @@ class TestSimpleMigrationModels(unittest.TestCase):
 
     def test_simple_two_deme_migration(self):
         mm = np.array([0.5]*4).reshape(2, 2)
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][len(md)//2:] = 1
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
         d = fwdpy11.DiscreteDemography(migmatrix=mm)
         N = self.pop.N
         self.pdict['demography'] = d
@@ -678,9 +672,8 @@ class TestGeneticValueLists(unittest.TestCase):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
     def test_too_few_alt_method(self):
-        md = np.array(self.pop.diploid_metadata, copy=False)
-        md['deme'][self.pop.N//3:] += 1
-        md['deme'][2*self.pop.N//3:] += 1
+        self.pop = fwdpy11.DiploidPopulation(
+            [0, self.pop.N//3, 2*self.pop.N//3], 1)
         self.pdict['demography'] = np.array([self.pop.N]*100, dtype=np.uint32)
         self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2  # This is the error
         params = fwdpy11.ModelParams(**self.pdict)
