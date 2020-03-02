@@ -52,6 +52,8 @@ namespace fwdpy11
         fwdpp::uint_t generation;
 
         fwdpp::ts::table_collection tables;
+        std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes,
+            preserved_sample_nodes;
 
         // These track genetic values for the individuals differently
         // from what diploid_metadata/ancient_sample_metadata do.
@@ -62,7 +64,8 @@ namespace fwdpy11
 
         PyPopulation(fwdpp::uint_t N_, const double L)
             : fwdpp_base{ N_ }, N{ N_ }, generation{ 0 },
-              tables(init_tables(N_, L)), genetic_value_matrix{},
+              tables(init_tables(N_, L)), alive_nodes{},
+              preserved_sample_nodes{}, genetic_value_matrix{},
               ancient_sample_genetic_value_matrix{}
         {
         }
@@ -75,8 +78,9 @@ namespace fwdpy11
             : fwdpp_base{ std::forward<gametes_input>(g),
                           std::forward<mutations_input>(m), reserve_size },
               N{ N_ }, generation{ 0 },
-              tables(std::numeric_limits<double>::max()),
-              genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
+              tables(std::numeric_limits<double>::max()), alive_nodes{},
+              preserved_sample_nodes{}, genetic_value_matrix{},
+              ancient_sample_genetic_value_matrix{}
         {
         }
 
@@ -244,6 +248,7 @@ namespace fwdpy11
         }
 
         virtual std::size_t ancient_sample_metadata_size() const = 0;
+        virtual void fill_alive_nodes() = 0;
     };
 } // namespace fwdpy11
 
