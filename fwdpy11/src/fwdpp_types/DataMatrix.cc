@@ -1,5 +1,6 @@
 #include <fwdpp/data_matrix.hpp>
 #include <fwdpp/io/scalar_serialization.hpp>
+#include <fwdpy11/numpy/array.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
@@ -37,8 +38,18 @@ init_data_matrix(py::module &m)
                                       sm.data.size() / sm.positions.size());
             },
             "Shape of the matrix.")
-        .def_readonly("positions", &fwdpp::state_matrix::positions,
-                      "The mutation positions")
+        .def_property_readonly(
+            "positions",
+            [](const fwdpp::state_matrix &self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.positions);
+            },
+            R"delim(
+            The mutation positions.
+            
+            .. versionchanged:: 0.6.1
+            
+                Type changed to :class:`numpy.ndarray`
+            )delim")
         .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
             using value_type = std::int8_t;
             auto nrow = sm.positions.size();
@@ -102,10 +113,30 @@ init_data_matrix(py::module &m)
                 )delim")
         .def_readonly("ncol", &fwdpp::data_matrix::ncol,
                       "Sample size of the matrix")
-        .def_readonly("neutral_keys", &fwdpp::data_matrix::neutral_keys,
-                      "Keys for neutral mutations used to generate matrix")
-        .def_readonly("selected_keys", &fwdpp::data_matrix::selected_keys,
-                      "Keys for selected mutations used to generate matrix")
+        .def_property_readonly(
+            "neutral_keys",
+            [](const fwdpp::data_matrix &self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.neutral_keys);
+            },
+            R"delim(
+            Keys for neutral mutations used to generate matrix
+            
+            .. versionchanged:: 0.6.1
+            
+                Type changed to :class:`numpy.ndarray`
+            )delim")
+        .def_property_readonly(
+            "selected_keys",
+            [](const fwdpp::data_matrix &self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.selected_keys);
+            },
+            R"delim(
+            Keys for selected mutations used to generate matrix
+            
+            .. versionchanged:: 0.6.1
+            
+                Type changed to :class:`numpy.ndarray`
+            )delim")
         .def(py::pickle(
             [](const fwdpp::data_matrix &d) {
                 std::ostringstream o;
@@ -124,12 +155,12 @@ init_data_matrix(py::module &m)
                 dsize = d.selected.data.size();
                 w(o, &nsites, 1);
                 w(o, &dsize, 1);
-                if (nsites)
-                    {
-                        w(o, d.selected.data.data(), d.selected.data.size());
-                        w(o, d.selected.positions.data(), nsites);
-                        w(o, d.selected_keys.data(), nsites);
-                    }
+
+                {
+                    w(o, d.selected.data.data(), d.selected.data.size());
+                    w(o, d.selected.positions.data(), nsites);
+                    w(o, d.selected_keys.data(), nsites);
+                }
                 return py::bytes(o.str());
             },
             [](py::bytes b) {
