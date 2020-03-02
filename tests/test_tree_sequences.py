@@ -882,7 +882,7 @@ class TestSimplificationInterval(unittest.TestCase):
 class TestFixationPreservation(unittest.TestCase):
     def testQtraitSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
+        demography = np.array([N]*3*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
@@ -919,7 +919,7 @@ class TestFixationPreservation(unittest.TestCase):
 
     def testPopGenSim(self):
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
+        demography = np.array([N]*2*N, dtype=np.uint32)
         rho = 1.
         r = rho/(4*N)
 
