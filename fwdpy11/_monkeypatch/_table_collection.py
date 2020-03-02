@@ -133,8 +133,8 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
                     counts[:] = 0
                     d = tree.samples_below(m.node)
                     if len(d) > 0:
-                        for i in d:
-                            counts[sample_groups[i]] += 1
+                        c = np.unique(sample_groups[d], return_counts=True)
+                        counts[c[0]] += c[1]
                         dok_JFS[windex][tuple((i) for i in counts)] += 1
     return [sparse.COO(i) for i in dok_JFS]
 
