@@ -21,7 +21,7 @@
 
 #include <memory>
 #include "DiploidPopulationGeneticValue.hpp"
-#include "MultivariateGeneticValueToFitnessMap.hpp"
+#include <fwdpy11/genetic_value_to_fitness/MultivariateGeneticValueToFitnessMap.hpp>
 #include "noise.hpp"
 
 namespace fwdpy11
