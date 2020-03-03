@@ -4,7 +4,7 @@
 namespace py = pybind11;
 
 void
-init_GeneticValue(py::module& m)
+init_DiploidGeneticValue(py::module& m)
 {
     py::class_<fwdpy11::DiploidGeneticValue>(
         m, "DiploidGeneticValue",
@@ -53,8 +53,7 @@ init_GeneticValue(py::module& m)
 
                                .. versionadded:: 0.3.0
                                )delim")
-        .def_readonly("genetic_values",
-                      &fwdpy11::DiploidGeneticValue::gvalues,
+        .def_readonly("genetic_values", &fwdpy11::DiploidGeneticValue::gvalues,
                       R"delim(
                       Return the list of genetic values.
 
