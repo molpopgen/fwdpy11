@@ -23,8 +23,8 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         explicit fwdpp_genetic_value(forwarded_fwdppT&& gv_)
-            : DiploidGeneticValue{ 1, GeneticValueIsFitness(1), NoNoise() },
-              gv{ std::forward<forwarded_fwdppT>(gv_) },
+            : DiploidGeneticValue{ 1 }, gv{ std::forward<forwarded_fwdppT>(
+                                            gv_) },
               pickle_fxn(pickleFunction{})
         {
         }
@@ -32,7 +32,7 @@ namespace fwdpy11
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_)
-            : DiploidGeneticValue{ 1, gv2w_, NoNoise() },
+            : DiploidGeneticValue{ 1, gv2w_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
         {
