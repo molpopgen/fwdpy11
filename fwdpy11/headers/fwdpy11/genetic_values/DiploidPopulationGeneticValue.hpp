@@ -40,7 +40,7 @@ namespace fwdpy11
     /// In a simulation, we want the following operations:
     /// pop.diploid_metadata[i].g = gv(i,pop);
     /// pop.diploid_metadata[i].e = gv.noise(rng, pop.diploid_medatadata[i],p1,p2,pop);
-    /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i]);
+    /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i], gv.gvalues);
     /// These operations are handled by operator()
     /// At the end of a generation, update may be called.
     ///
@@ -58,12 +58,14 @@ namespace fwdpy11
         virtual ~DiploidPopulationGeneticValue() = default;
 
         // Callable from Python
-        virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
-                                        const DiploidPopulation& /*pop*/) const = 0;
+        virtual double
+        calculate_gvalue(const std::size_t /*diploid_index*/,
+                         const DiploidPopulation& /*pop*/) const = 0;
         // To be called from w/in a simulation
         virtual void
         operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const DiploidPopulation& pop, DiploidMetadata& metadata) const
+                   const DiploidPopulation& pop,
+                   DiploidMetadata& metadata) const
         {
             metadata.g = calculate_gvalue(diploid_index, pop);
             metadata.e = noise(rng, metadata, metadata.parents[0],
@@ -73,6 +75,7 @@ namespace fwdpy11
 
         virtual double genetic_value_to_fitness(
             const DiploidMetadata& /*metadata*/) const = 0;
+
         virtual double noise(const GSLrng_t& /*rng*/,
                              const DiploidMetadata& /*offspring_metadata*/,
                              const std::size_t /*parent1*/,
