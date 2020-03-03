@@ -62,17 +62,18 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     {
     }
 
-    inline double
+    double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidPopulation & /*pop*/) const
+                     const fwdpy11::DiploidPopulation & /*pop*/) const override
     // The call operator must return the genetic value of an individual
     {
         gvalues[0] = phenotypes[diploid_index];
         return gvalues[0];
     }
 
-    inline double
-    genetic_value_to_fitness(const fwdpy11::DiploidMetadata &metadata) const
+    double
+    genetic_value_to_fitness(
+        const fwdpy11::DiploidMetadata &metadata) const override
     // This function converts genetic value to fitness.
     {
         double fitness = 0.0;
@@ -94,19 +95,8 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
         return fitness / double(N - 1);
     }
 
-    inline double
-    noise(const fwdpy11::GSLrng_t & /*rng*/,
-          const fwdpy11::DiploidMetadata & /*offspring_metadata*/,
-          const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::DiploidPopulation & /*pop*/) const
-    // This function may be used to model random effects...
-    {
-        //...but there are no random effects here.
-        return 0.0;
-    }
-
-    inline void
-    update(const fwdpy11::DiploidPopulation &pop)
+    void
+    update(const fwdpy11::DiploidPopulation &pop) override
     // A stateful fitness model needs updating.
     {
         phenotypes.resize(pop.N);
@@ -118,6 +108,10 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
                     = fwdpp::additive_diploid(fwdpp::trait(2.0))(
                         pop.diploids[i], pop.haploid_genomes, pop.mutations);
             }
+        // This is strictly not necessary in this specific
+        // case, but it is required in general, so we 
+        // do it here by way of example.
+        noise_fxn->update(pop);
     }
 
     // In order to support pickling, the ABC requries
@@ -126,15 +120,9 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     // as a Python object.  pybind11 makes this easy (for most
     // cases, most of the time).
     py::object
-    pickle() const
+    pickle() const override
     {
         return py::make_tuple(b1, b2, c1, c2, phenotypes);
-    }
-
-    py::tuple
-    shape() const
-    {
-        return py::make_tuple(1);
     }
 };
 
