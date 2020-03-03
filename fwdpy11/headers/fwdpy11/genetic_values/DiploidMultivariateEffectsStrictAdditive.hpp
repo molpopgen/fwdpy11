@@ -18,8 +18,7 @@ namespace fwdpy11
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
             const GeneticValueIsTrait &gv2w_)
-            : DiploidGeneticValue(ndim, gv2w_, NoNoise()),
-              focal_trait_index(focal_trait)
+            : DiploidGeneticValue(ndim, gv2w_), focal_trait_index(focal_trait)
         {
             if (focal_trait_index >= ndim)
                 {
