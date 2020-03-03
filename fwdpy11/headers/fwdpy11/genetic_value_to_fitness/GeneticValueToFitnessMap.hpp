@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_GENETIC_VALUE_TO_FITNESS_HPP__
-#define FWDPY11_GENETIC_VALUE_TO_FITNESS_HPP__
+#ifndef FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__
+#define FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__
 
 #include <cmath>
 #include <memory>
