@@ -75,6 +75,7 @@ namespace fwdpy11
         virtual double
         calculate_gvalue(const std::size_t /*diploid_index*/,
                          const DiploidPopulation& /*pop*/) const = 0;
+        virtual pybind11::object pickle() const = 0;
 
         virtual void
         update(const DiploidPopulation& pop)
@@ -83,7 +84,6 @@ namespace fwdpy11
             noise_fxn->update(pop);
         }
 
-        virtual pybind11::object pickle() const = 0;
 
         // To be called from w/in a simulation
         virtual void
