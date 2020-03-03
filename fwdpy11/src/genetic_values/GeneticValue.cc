@@ -1,4 +1,4 @@
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

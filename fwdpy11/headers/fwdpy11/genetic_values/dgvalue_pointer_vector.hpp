@@ -23,7 +23,7 @@
 #include <vector>
 #include <stdexcept>
 #include <pybind11/pybind11.h>
-#include "DiploidPopulationGeneticValue.hpp"
+#include "DiploidGeneticValue.hpp"
 
 namespace fwdpy11
 {

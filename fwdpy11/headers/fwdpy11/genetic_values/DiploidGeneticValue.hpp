@@ -16,8 +16,8 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_POP_GENETIC_VALUE_HPP__
-#define FWDPY11_POP_GENETIC_VALUE_HPP__
+#ifndef FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
+#define FWDPY11_DIPLOID_GENETIC_VALUE_HPP__
 
 #include <cstdint>
 #include <vector>
@@ -31,7 +31,7 @@ namespace fwdpy11
 {
     struct DiploidGeneticValue
     /// API class
-    /// For a single-locus simulation, we need the following concepts:
+    /// For a diploid simulation, we need the following concepts:
     /// 1. Calculate the genetic value of a diploid, g.  This is calculate_gvalue()
     /// 2. Calculate any random effects, or "noise", e.  This is noise(...)
     /// 3. Calculate the final fitness, w = f(g,e). This is genetic_value_to_fitness()

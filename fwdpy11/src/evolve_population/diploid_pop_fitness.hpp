@@ -3,7 +3,7 @@
 
 #include <fwdpp/gsl_discrete.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 
 // Changed in 0.6.0 to return void, as sims w/tree
 // sequences generate fitness lookups via DiscreteDemography
