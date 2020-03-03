@@ -36,6 +36,10 @@ namespace fwdpy11
 {
     struct GeneticValueToFitnessMap
     {
+        std::size_t total_dim;
+        explicit GeneticValueToFitnessMap(std::size_t ndim) : total_dim{ ndim }
+        {
+        }
         virtual ~GeneticValueToFitnessMap() = default;
         virtual double
         operator()(const DiploidMetadata & /*metadata*/,
@@ -47,6 +51,7 @@ namespace fwdpy11
 
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
+        GeneticValueIsFitness() : GeneticValueToFitnessMap(1) {}
         inline double
         operator()(const DiploidMetadata &metadata,
                    const std::vector<double> & /*genetic_values*/) const
@@ -73,12 +78,16 @@ namespace fwdpy11
     struct GeneticValueIsTrait : public GeneticValueToFitnessMap
     /// Another ABC.  Effectively a type trait
     {
+        GeneticValueIsTrait(std::size_t ndim) : GeneticValueToFitnessMap(ndim)
+        {
+        }
     };
 
     struct GSS : public GeneticValueIsTrait
     {
         const double opt, VS;
-        GSS(const double opt_, const double VS_) : opt{ opt_ }, VS{ VS_ }
+        GSS(const double opt_, const double VS_)
+            : GeneticValueIsTrait{ 1 }, opt{ opt_ }, VS{ VS_ }
         {
             if (VS <= 0.0)
                 {
@@ -122,7 +131,8 @@ namespace fwdpy11
         std::vector<std::tuple<std::uint32_t, double, double>> optima;
 
         GSSmo(std::vector<std::tuple<std::uint32_t, double, double>> optima_)
-            : VS{ std::numeric_limits<double>::quiet_NaN() },
+            : GeneticValueIsTrait{ 1 },
+              VS{ std::numeric_limits<double>::quiet_NaN() },
               opt{ std::numeric_limits<double>::quiet_NaN() },
               current_optimum(1), optima(std::move(optima_))
         {
