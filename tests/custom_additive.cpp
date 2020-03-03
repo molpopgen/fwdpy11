@@ -5,11 +5,7 @@
 
 struct additive : public fwdpy11::DiploidGeneticValue
 {
-    additive()
-        : fwdpy11::DiploidGeneticValue(1, fwdpy11::GeneticValueIsFitness{ 1 },
-                                       fwdpy11::NoNoise())
-    {
-    }
+    additive() : fwdpy11::DiploidGeneticValue(1) {}
 
     double
     calculate_gvalue(const std::size_t diploid_index,
