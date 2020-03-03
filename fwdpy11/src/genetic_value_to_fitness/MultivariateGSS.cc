@@ -9,7 +9,7 @@ void
 init_MultivariateGSS(py::module& m)
 {
     py::class_<fwdpy11::MultivariateGSS,
-               fwdpy11::MultivariateGeneticValueToFitnessMap>(
+               fwdpy11::GeneticValueIsTrait>(
         m, "MultivariateGSS",
         R"delim(
         Multivariate gaussian stablizing selection.

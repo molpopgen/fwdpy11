@@ -66,7 +66,6 @@ set(GENETIC_VALUE_TO_FITNESS_SOURCES
     src/genetic_value_to_fitness/GeneticValueIsTrait.cc
     src/genetic_value_to_fitness/GSS.cc
     src/genetic_value_to_fitness/GSSmo.cc
-    src/genetic_value_to_fitness/MultivariateGeneticValueToFitnessMap.cc
     src/genetic_value_to_fitness/MultivariateGSS.cc
     src/genetic_value_to_fitness/MultivariateGSSmo.cc)
 
