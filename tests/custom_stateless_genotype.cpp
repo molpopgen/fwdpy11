@@ -4,23 +4,31 @@
 #include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
-    struct GeneralW : public fwdpy11::DiploidPopulationGeneticValue
+struct GeneralW : public fwdpy11::DiploidGeneticValue
 {
     fwdpp::site_dependent_genetic_value w;
 
-    GeneralW() : fwdpy11::DiploidPopulationGeneticValue{1}, w{} {}
+    GeneralW()
+        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
+                                        fwdpy11::NoNoise() },
+          w{}
+    {
+    }
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
                      const fwdpy11::DiploidPopulation& pop) const
     {
-        gvalues[0] = std::max(
-            0.0,
-            w(pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
-              [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
-              [](double& g, const fwdpy11::Mutation& m) {
-                  g *= (1.0 + m.h);
-              }));
+        gvalues[0]
+            = std::max(0.0, w(
+                                pop.diploids[diploid_index],
+                                pop.haploid_genomes, pop.mutations,
+                                [](double& g, const fwdpy11::Mutation& m) {
+                                    g *= (1.0 + m.s);
+                                },
+                                [](double& g, const fwdpy11::Mutation& m) {
+                                    g *= (1.0 + m.h);
+                                }));
         return gvalues[0];
     }
 
@@ -58,9 +66,8 @@
 PYBIND11_MODULE(custom_stateless_genotype, m)
 {
     pybind11::object imported_custom_stateless_genotype_base_class_type
-        = pybind11::module::import("fwdpy11")
-              .attr("GeneticValue");
-    pybind11::class_<GeneralW, fwdpy11::DiploidPopulationGeneticValue>(m, "GeneralW")
+        = pybind11::module::import("fwdpy11").attr("DiploidGeneticValue");
+    pybind11::class_<GeneralW, fwdpy11::DiploidGeneticValue>(m, "GeneralW")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const GeneralW& g) { return g.pickle(); },
                               [](pybind11::object o) {

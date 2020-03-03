@@ -29,7 +29,7 @@
 
 namespace fwdpy11
 {
-    struct DiploidPopulationGeneticValue
+    struct DiploidGeneticValue
     /// API class
     /// For a single-locus simulation, we need the following concepts:
     /// 1. Calculate the genetic value of a diploid, g.  This is calculate_gvalue()
@@ -49,18 +49,35 @@ namespace fwdpy11
     {
         std::size_t total_dim;
         mutable std::vector<double> gvalues;
+        /// Classes deriving from this must call gv2w->update
+        /// from their own update functions.
+        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
+        /// This must be updated, too:
+        std::unique_ptr<GeneticValueNoise> noise_fxn;
 
-        explicit DiploidPopulationGeneticValue(std::size_t dimensonality)
-            : total_dim(dimensonality), gvalues(total_dim, 0.0)
+        explicit DiploidGeneticValue(std::size_t dimensonality,
+                                     const GeneticValueToFitnessMap& gv2w_,
+                                     const GeneticValueNoise& noise_)
+            : total_dim(dimensonality),
+              gvalues(total_dim, 0.0), gv2w{ gv2w_.clone() }, noise_fxn{
+                  noise_.clone()
+              }
         {
         }
 
-        virtual ~DiploidPopulationGeneticValue() = default;
+        virtual ~DiploidGeneticValue() = default;
+
+        DiploidGeneticValue(const DiploidGeneticValue&)=delete;
+        DiploidGeneticValue(DiploidGeneticValue&&)=default;
+        DiploidGeneticValue&operator=(const DiploidGeneticValue&)=delete;
 
         // Callable from Python
         virtual double
         calculate_gvalue(const std::size_t /*diploid_index*/,
                          const DiploidPopulation& /*pop*/) const = 0;
+        virtual void update(const DiploidPopulation& /*pop*/) = 0;
+        virtual pybind11::object pickle() const = 0;
+
         // To be called from w/in a simulation
         virtual void
         operator()(const GSLrng_t& rng, std::size_t diploid_index,
@@ -73,18 +90,30 @@ namespace fwdpy11
             metadata.w = genetic_value_to_fitness(metadata);
         }
 
-        virtual double genetic_value_to_fitness(
-            const DiploidMetadata& /*metadata*/) const = 0;
+        virtual double
+        genetic_value_to_fitness(const DiploidMetadata& metadata) const
+        {
+            return gv2w->operator()(metadata, gvalues);
+        }
 
-        virtual double noise(const GSLrng_t& /*rng*/,
-                             const DiploidMetadata& /*offspring_metadata*/,
-                             const std::size_t /*parent1*/,
-                             const std::size_t /*parent2*/,
-                             const DiploidPopulation& /*pop*/) const = 0;
-        virtual void update(const DiploidPopulation& /*pop*/) = 0;
-        virtual pybind11::object pickle() const = 0;
+        virtual double
+        noise(const GSLrng_t& rng, const DiploidMetadata& offspring_metadata,
+              const std::size_t parent1, const std::size_t parent2,
+              const DiploidPopulation& pop) const
+        {
+            return noise_fxn->operator()(rng, offspring_metadata, parent1,
+                                         parent2, pop);
+        }
 
-        virtual pybind11::tuple shape() const = 0;
+        virtual pybind11::tuple
+        shape() const
+        {
+            if (total_dim != 1 || total_dim != gvalues.size())
+                {
+                    throw std::runtime_error("dimensionality mismatch");
+                }
+            return pybind11::make_tuple(total_dim);
+        }
 
         std::vector<double>
         genetic_values() const
