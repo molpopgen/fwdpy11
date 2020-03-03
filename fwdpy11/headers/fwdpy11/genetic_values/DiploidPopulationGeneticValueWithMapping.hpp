@@ -35,26 +35,26 @@ namespace fwdpy11
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         DiploidPopulationGeneticValueWithMapping(
-            const GeneticValueToFitnessMap& gv2w_)
-            : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() },
+            std::size_t ndim, const GeneticValueToFitnessMap& gv2w_)
+            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() },
               noise_fxn{ new NoNoise() }
         {
-            if(this->total_dim != gv2w->total_dim)
-            {
-                throw std::invalid_argument("dimension mismatch");
-            }
+            if (this->total_dim != gv2w->total_dim)
+                {
+                    throw std::invalid_argument("dimension mismatch");
+                }
         }
 
         DiploidPopulationGeneticValueWithMapping(
-            const GeneticValueToFitnessMap& gv2w_,
+            std::size_t ndim, const GeneticValueToFitnessMap& gv2w_,
             const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() },
+            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() },
               noise_fxn{ noise_.clone() }
         {
-            if(this->total_dim != gv2w->total_dim)
-            {
-                throw std::invalid_argument("dimension mismatch");
-            }
+            if (this->total_dim != gv2w->total_dim)
+                {
+                    throw std::invalid_argument("dimension mismatch");
+                }
         }
 
         virtual double
