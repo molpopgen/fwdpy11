@@ -17,7 +17,7 @@ namespace fwdpy11
 
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
-            const MultivariateGeneticValueToFitnessMap &gv2w_)
+            const GeneticValueIsTrait &gv2w_)
             : DiploidPopulationMultivariateGeneticValueWithMapping(ndim,
                                                                    gv2w_),
               focal_trait_index(focal_trait)
@@ -31,7 +31,7 @@ namespace fwdpy11
 
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
-            const MultivariateGeneticValueToFitnessMap &gv2w_,
+            const GeneticValueIsTrait &gv2w_,
             const GeneticValueNoise &noise_)
             : DiploidPopulationMultivariateGeneticValueWithMapping(ndim, gv2w_,
                                                                    noise_),
