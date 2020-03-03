@@ -5,22 +5,20 @@
 #include <stdexcept>
 #include <algorithm>
 #include <functional>
-#include "DiploidPopulationMultivariateGeneticValueWithMapping.hpp"
+#include "DiploidGeneticValue.hpp"
 #include "default_update.hpp"
 
 namespace fwdpy11
 {
     struct DiploidMultivariateEffectsStrictAdditive
-        : public DiploidPopulationMultivariateGeneticValueWithMapping
+        : public DiploidGeneticValue
     {
         std::size_t focal_trait_index;
 
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
             const GeneticValueIsTrait &gv2w_)
-            : DiploidPopulationMultivariateGeneticValueWithMapping(ndim,
-                                                                   gv2w_),
-              focal_trait_index(focal_trait)
+            : DiploidGeneticValue(ndim, gv2w_), focal_trait_index(focal_trait)
         {
             if (focal_trait_index >= ndim)
                 {
@@ -31,10 +29,8 @@ namespace fwdpy11
 
         DiploidMultivariateEffectsStrictAdditive(
             std::size_t ndim, std::size_t focal_trait,
-            const GeneticValueIsTrait &gv2w_,
-            const GeneticValueNoise &noise_)
-            : DiploidPopulationMultivariateGeneticValueWithMapping(ndim, gv2w_,
-                                                                   noise_),
+            const GeneticValueIsTrait &gv2w_, const GeneticValueNoise &noise_)
+            : DiploidGeneticValue(ndim, gv2w_, noise_),
               focal_trait_index(focal_trait)
         {
             if (focal_trait_index >= ndim)

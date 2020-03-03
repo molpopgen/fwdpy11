@@ -3,13 +3,13 @@
 
 #include <fwdpp/gsl_discrete.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 
 // Changed in 0.6.0 to return void, as sims w/tree
 // sequences generate fitness lookups via DiscreteDemography
 void calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
+    const std::vector<fwdpy11::DiploidGeneticValue *>
         &gvalue_pointers,
     const std::vector<std::size_t> &deme_to_gvalue_map,
     std::vector<fwdpy11::DiploidMetadata> &offspring_metadata,
@@ -21,7 +21,7 @@ void calculate_diploid_fitness(
 // lookups via DiscreteDemography
 fwdpp::gsl_ran_discrete_t_ptr calculate_diploid_fitness_genomes(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    const fwdpy11::DiploidGeneticValue &genetic_value_fxn,
     std::vector<fwdpy11::DiploidMetadata> &offspring_metadata);
 
 #endif

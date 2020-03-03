@@ -32,7 +32,7 @@
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/sim_functions.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <fwdpy11/evolve/DiploidPopulation_generation.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
@@ -68,7 +68,7 @@ evolve_without_tree_sequences(
     py::array_t<std::uint32_t> popsizes, const double mu_neutral,
     const double mu_selected, const fwdpy11::MutationRegions &mmodel,
     const fwdpy11::GeneticMap &rmodel,
-    fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    fwdpy11::DiploidGeneticValue &genetic_value_fxn,
     fwdpy11::DiploidPopulation_temporal_sampler recorder,
     const double selfing_rate, const bool remove_selected_fixations)
 {

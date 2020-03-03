@@ -12,20 +12,20 @@
 #include <pybind11/stl.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 
 namespace py = pybind11;
 
-struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
+struct snowdrift : public fwdpy11::DiploidGeneticValue
 /* This is our stateful fitness object.
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
- * Here, we publicly inherit from fwdpy11::DiploidPopulationGeneticValue,
+ * Here, we publicly inherit from fwdpy11::DiploidGeneticValue,
  * which is defined in the header included above.  It is
  * an abstract class in C++ terms, and is reflected
  * as a Python Abstract Base Class (ABC) called
- * fwdpy11.genetic_values.DiploidPopulationGeneticValue.
+ * fwdpy11.DiploidGeneticValue.
  *
  * The phenotypes get updated each generation during
  * the simulation.
@@ -43,8 +43,8 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::DiploidPopulationGeneticValue{ 1 }, b1(b1_), b2(b2_),
-          c1(c1_), c2(c2_), phenotypes()
+        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), phenotypes()
     {
     }
 
@@ -55,22 +55,23 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::DiploidPopulationGeneticValue{ 1 }, b1(b1_), b2(b2_),
-          c1(c1_), c2(c2_), phenotypes(std::forward<T>(p))
+        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), phenotypes(std::forward<T>(p))
     {
     }
 
-    inline double
+    double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidPopulation & /*pop*/) const
+                     const fwdpy11::DiploidPopulation & /*pop*/) const override
     // The call operator must return the genetic value of an individual
     {
         gvalues[0] = phenotypes[diploid_index];
         return gvalues[0];
     }
 
-    inline double
-    genetic_value_to_fitness(const fwdpy11::DiploidMetadata &metadata) const
+    double
+    genetic_value_to_fitness(
+        const fwdpy11::DiploidMetadata &metadata) const override
     // This function converts genetic value to fitness.
     {
         double fitness = 0.0;
@@ -92,19 +93,8 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
         return fitness / double(N - 1);
     }
 
-    inline double
-    noise(const fwdpy11::GSLrng_t & /*rng*/,
-          const fwdpy11::DiploidMetadata & /*offspring_metadata*/,
-          const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::DiploidPopulation & /*pop*/) const
-    // This function may be used to model random effects...
-    {
-        //...but there are no random effects here.
-        return 0.0;
-    }
-
-    inline void
-    update(const fwdpy11::DiploidPopulation &pop)
+    void
+    update(const fwdpy11::DiploidPopulation &pop) override
     // A stateful fitness model needs updating.
     {
         phenotypes.resize(pop.N);
@@ -116,6 +106,10 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
                     = fwdpp::additive_diploid(fwdpp::trait(2.0))(
                         pop.diploids[i], pop.haploid_genomes, pop.mutations);
             }
+        // This is strictly not necessary in this specific
+        // case, but it is required in general, so we
+        // do it here by way of example.
+        noise_fxn->update(pop);
     }
 
     // In order to support pickling, the ABC requries
@@ -124,15 +118,9 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
     // as a Python object.  pybind11 makes this easy (for most
     // cases, most of the time).
     py::object
-    pickle() const
+    pickle() const override
     {
         return py::make_tuple(b1, b2, c1, c2, phenotypes);
-    }
-
-    py::tuple
-    shape() const
-    {
-        return py::make_tuple(1);
     }
 };
 
@@ -142,11 +130,10 @@ PYBIND11_MODULE(snowdrift, m)
 
     // We need to import the Python version of our base class:
     pybind11::object imported_snowdrift_base_class_type
-        = pybind11::module::import("fwdpy11").attr("GeneticValue");
+        = pybind11::module::import("fwdpy11").attr("DiploidGeneticValue");
 
     // Create a Python class based on our new type
-    py::class_<snowdrift, fwdpy11::DiploidPopulationGeneticValue>(
-        m, "DiploidSnowdrift")
+    py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "DiploidSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
         .def_readonly("b1", &snowdrift::b1)

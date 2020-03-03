@@ -26,6 +26,6 @@ void
 init_dgvalue_pointer_vector(py::module &m)
 {
     py::class_<fwdpy11::dgvalue_pointer_vector_>(m, "_dgvalue_pointer_vector")
-        .def(py::init<fwdpy11::DiploidPopulationGeneticValue &>())
+        .def(py::init<fwdpy11::DiploidGeneticValue &>())
         .def(py::init<py::list>());
 }
