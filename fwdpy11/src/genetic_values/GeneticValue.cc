@@ -1,11 +1,10 @@
-#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 void
-init_DiploidGeneticValue(py::module& m)
+init_GeneticValue(py::module& m)
 {
     py::class_<fwdpy11::DiploidGeneticValue>(
         m, "DiploidGeneticValue",
@@ -16,8 +15,7 @@ init_DiploidGeneticValue(py::module& m)
             [](const fwdpy11::DiploidGeneticValue& gv,
                const std::size_t diploid_index,
                const fwdpy11::DiploidPopulation& pop) {
-                return gv.calculate_gvalue(pop.diploid_metadata[diploid_index].label,
-                                           pop.diploid_metadata[diploid_index], pop);
+                return gv.calculate_gvalue(diploid_index, pop);
             },
             R"delim(
              :param diploid_index: The index of the individual to calculate.
@@ -55,7 +53,8 @@ init_DiploidGeneticValue(py::module& m)
 
                                .. versionadded:: 0.3.0
                                )delim")
-        .def_readonly("genetic_values", &fwdpy11::DiploidGeneticValue::gvalues,
+        .def_readonly("genetic_values",
+                      &fwdpy11::DiploidGeneticValue::gvalues,
                       R"delim(
                       Return the list of genetic values.
 

@@ -9,6 +9,7 @@ struct additive : public fwdpy11::DiploidGeneticValue
 
     double
     calculate_gvalue(const std::size_t diploid_index,
+                     const fwdpy11::DiploidMetadata& /*metadata*/,
                      const fwdpy11::DiploidPopulation& pop) const override
     {
         double sum = 0;

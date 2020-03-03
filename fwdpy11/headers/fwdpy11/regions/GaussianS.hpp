@@ -14,7 +14,7 @@ namespace fwdpy11
         double sd, dominance;
 
         GaussianS(const Region& r, double sc, double sd_, double h)
-            : Sregion(r, sc), sd(sd_), dominance(h)
+            : Sregion(r, sc, 1), sd(sd_), dominance(h)
         {
             if (!std::isfinite(sd))
                 {
@@ -62,6 +62,18 @@ namespace fwdpy11
                     return gsl_ran_gaussian_ziggurat(rng.get(), sd) / scaling;
                 },
                 [this]() { return dominance; }, this->label());
+        }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double P) const override
+        {
+            return gsl_cdf_gaussian_Pinv(P, sd) / scaling;
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return { dominance };
         }
 
         pybind11::tuple

@@ -36,7 +36,7 @@ namespace fwdpy11
                                     // NOTE: matrix_is_covariance is
                                     // NOT exposed to Python
                                     double h, bool matrix_is_covariance)
-            : Sregion(r, sc), effect_sizes(input_matrix.size1),
+            : Sregion(r, sc, input_matrix.size1), effect_sizes(input_matrix.size1),
               dominance_values(input_matrix.size1, h),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
@@ -120,7 +120,7 @@ namespace fwdpy11
             out << "MultivariateGaussianEffects(";
             this->region.region_repr(out);
             out << ", s=" << this->fixed_effect << ", h=" << this->dominance
-            << ", matrix at " << matrix.get() << ')';
+                << ", matrix at " << matrix.get() << ')';
             return out.str();
         }
 
@@ -145,6 +145,20 @@ namespace fwdpy11
                 [this]() { return dominance; },
                 [this]() { return effect_sizes; },
                 [this]() { return dominance_values; }, this->label());
+        }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double /*P*/) const override
+        {
+            throw std::invalid_argument(
+                "MultivariateGaussianEffects is not allowed to be part of "
+                "multivariate DES");
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return dominance_values;
         }
 
         pybind11::tuple

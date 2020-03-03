@@ -47,7 +47,7 @@ init_GammaS(py::module& m)
             gdist = fwdpy11.GammaS(0,1,1,-0.1,0.35)
         )delim")
         .def_readonly("mean", &fwdpy11::GammaS::mean)
-        .def_readonly("shape", &fwdpy11::GammaS::shape)
+        .def_readonly("shape_parameter", &fwdpy11::GammaS::shape_parameter)
         .def_readonly("h", &fwdpy11::GammaS::dominance)
         .def("__repr__",&fwdpy11::GammaS::repr)
         .def(py::pickle(

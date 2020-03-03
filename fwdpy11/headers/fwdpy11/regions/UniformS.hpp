@@ -14,7 +14,7 @@ namespace fwdpy11
         double lo, hi, dominance;
 
         UniformS(const Region& r, double sc, double lo_, double hi_, double h)
-            : Sregion(r, sc), lo(lo_), hi(hi_), dominance(h)
+            : Sregion(r, sc, 1), lo(lo_), hi(hi_), dominance(h)
         {
             if (!std::isfinite(lo))
                 {
@@ -68,6 +68,19 @@ namespace fwdpy11
                 },
                 [this]() { return dominance; }, this->label());
         }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double P) const override
+        {
+            return gsl_cdf_flat_Pinv(P, lo, hi) / scaling;
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return { dominance };
+        }
+
         pybind11::tuple
         pickle() const
         {

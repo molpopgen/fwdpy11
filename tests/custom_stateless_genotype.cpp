@@ -12,6 +12,7 @@ struct GeneralW : public fwdpy11::DiploidGeneticValue
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,
+                     const fwdpy11::DiploidMetadata& /*metadata*/,
                      const fwdpy11::DiploidPopulation& pop) const override
     {
         gvalues[0]
