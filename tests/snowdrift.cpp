@@ -25,7 +25,7 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
  * which is defined in the header included above.  It is
  * an abstract class in C++ terms, and is reflected
  * as a Python Abstract Base Class (ABC) called
- * fwdpy11.genetic_values.DiploidGeneticValue.
+ * fwdpy11.DiploidGeneticValue.
  *
  * The phenotypes get updated each generation during
  * the simulation.
