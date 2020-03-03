@@ -4,48 +4,118 @@
 #include <type_traits>
 #include <functional>
 #include "../DiploidGeneticValue.hpp"
+#include <fwdpp/fitness_models.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 
 namespace fwdpy11
 {
-    template <typename fwdppT, typename pickleFunction>
-    struct fwdpp_genetic_value : public fwdpy11::DiploidGeneticValue
+    template <typename single_deme_het_fxn, typename single_deme_hom_fxn,
+              typename multi_deme_het_fxn, typename multi_deme_hom_fxn,
+              typename pickle_fxn, int starting_value>
+    class stateless_site_dependent_genetic_value_wrapper : public DiploidGeneticValue
     {
-        using gvalue_map_ptr
-            = std::unique_ptr<fwdpy11::GeneticValueToFitnessMap>;
-        const fwdppT gv;
-        const pickleFunction pickle_fxn;
-        static_assert(
-            std::is_convertible<pickleFunction, std::function<pybind11::object(
-                                                    const fwdppT&)>>::value,
-            "pickling function must be convertible to "
-            "std::function<pybind11::object(const fwdppT*)>");
+      private:
+        struct single_deme_callback
+        {
+            double
+            operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
+                       const std::size_t diploid_index,
+                       const fwdpy11::DiploidPopulation& pop) const
+            {
+                outer_this->gvalues[0] = outer_this->make_return_value(
+                    outer_this->gv(pop.diploids[diploid_index], pop.haploid_genomes,
+                                   pop.mutations, outer_this->single_deme_aa,
+                                   outer_this->single_deme_Aa, starting_value));
+                return outer_this->gvalues[0];
+            }
+        };
 
-        template <typename forwarded_fwdppT>
-        explicit fwdpp_genetic_value(forwarded_fwdppT&& gv_)
-            : DiploidGeneticValue{ 1 }, gv{ std::forward<forwarded_fwdppT>(
-                                            gv_) },
-              pickle_fxn(pickleFunction{})
+        struct multi_deme_callback
+        {
+            double
+            operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
+                       const std::size_t diploid_index,
+                       const fwdpy11::DiploidPopulation& pop) const
+            {
+                std::size_t deme = pop.diploid_metadata[diploid_index].deme;
+                outer_this->gvalues[0] = outer_this->make_return_value(outer_this->gv(
+                    pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
+                    [deme, outer_this](double& d, const fwdpy11::Mutation& mut) {
+                        return outer_this->multi_deme_aa(deme, d, mut);
+                    },
+                    [deme, outer_this](double& d, const fwdpy11::Mutation& mut) {
+                        return outer_this->multi_deme_Aa(deme, d, mut);
+                    }));
+                return outer_this->gvalues[0];
+            }
+        };
+
+        using callback_type = std::function<double(
+            const stateless_site_dependent_genetic_value_wrapper*, const std::size_t,
+            const fwdpy11::DiploidPopulation&)>;
+
+        callback_type
+        init_callback(std::size_t n)
+        {
+            if (n == 1)
+                {
+                    return single_deme_callback();
+                }
+            return multi_deme_callback();
+        }
+
+        fwdpp::site_dependent_genetic_value gv;
+        double aa_scaling;
+        decltype(single_deme_het_fxn()) single_deme_Aa;
+        decltype(single_deme_hom_fxn(aa_scaling)) single_deme_aa;
+        decltype(multi_deme_het_fxn()) multi_deme_Aa;
+        decltype(multi_deme_hom_fxn(aa_scaling)) multi_deme_aa;
+        std::function<double(double)> make_return_value;
+        callback_type callback;
+        bool isfitness;
+
+      public:
+        template <typename make_return_value_fxn>
+        stateless_site_dependent_genetic_value_wrapper(std::size_t ndim, double scaling,
+                                                       make_return_value_fxn&& mrv)
+            : DiploidGeneticValue{ndim}, gv{}, aa_scaling(scaling),
+              single_deme_Aa(single_deme_het_fxn()),
+              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
+              multi_deme_Aa(multi_deme_het_fxn()),
+              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
+              make_return_value(std::forward<make_return_value_fxn>(mrv)),
+              callback(init_callback(ndim)), isfitness(true)
         {
         }
 
-        template <typename forwarded_fwdppT>
-        fwdpp_genetic_value(forwarded_fwdppT&& gv_,
-                            const GeneticValueToFitnessMap& gv2w_)
-            : DiploidGeneticValue{ 1, gv2w_ },
-              gv{ std::forward<forwarded_fwdppT>(gv_) },
-              pickle_fxn(pickleFunction())
+        // NOTE: the following two constructors ASSUME
+        // that isfitness == false!!!
+
+        template <typename make_return_value_fxn>
+        stateless_site_dependent_genetic_value_wrapper(
+            std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
+            const GeneticValueToFitnessMap& gv2w_)
+            : DiploidGeneticValue{ndim, gv2w_}, gv{}, aa_scaling(scaling),
+              single_deme_Aa(single_deme_het_fxn()),
+              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
+              multi_deme_Aa(multi_deme_het_fxn()),
+              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
+              make_return_value(std::forward<make_return_value_fxn>(mrv)),
+              callback(init_callback(ndim)), isfitness(false)
         {
         }
 
-        template <typename forwarded_fwdppT>
-        fwdpp_genetic_value(forwarded_fwdppT&& gv_,
-                            const GeneticValueToFitnessMap& gv2w_,
-                            const GeneticValueNoise& noise_)
-            : DiploidGeneticValue{ 1, gv2w_, noise_ },
-              gv{ std::forward<forwarded_fwdppT>(gv_) },
-              pickle_fxn(pickleFunction())
-
+        template <typename make_return_value_fxn>
+        stateless_site_dependent_genetic_value_wrapper(
+            std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
+            const GeneticValueToFitnessMap& gv2w_, const GeneticValueNoise& noise_)
+            : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{}, aa_scaling(scaling),
+              single_deme_Aa(single_deme_het_fxn()),
+              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
+              multi_deme_Aa(multi_deme_het_fxn()),
+              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
+              make_return_value(std::forward<make_return_value_fxn>(mrv)),
+              callback(init_callback(ndim)), isfitness(false)
         {
         }
 
@@ -53,16 +123,27 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t diploid_index,
                          const fwdpy11::DiploidPopulation& pop) const override
         {
-            gvalues[0] = gv(pop.diploids[diploid_index], pop.haploid_genomes,
-                            pop.mutations);
-            return gvalues[0];
+            return callback(this, diploid_index, pop);
         }
 
         pybind11::object
         pickle() const override
         {
-            return pickle_fxn(gv);
+            return pickle_fxn()(*this);
+        }
+
+        double
+        scaling() const
+        {
+            return aa_scaling;
+        }
+
+        bool
+        is_fitness() const
+        {
+            return isfitness;
         }
     };
 } // namespace fwdpy11
 #endif
+
