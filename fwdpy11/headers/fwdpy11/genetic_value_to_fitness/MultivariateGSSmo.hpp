@@ -24,11 +24,11 @@
 #include <cmath>
 #include <vector>
 #include <stdexcept>
-#include "MultivariateGeneticValueToFitnessMap.hpp"
+#include "GeneticValueToFitnessMap.hpp"
 
 namespace fwdpy11
 {
-    struct MultivariateGSSmo : public MultivariateGeneticValueToFitnessMap
+    struct MultivariateGSSmo : public GeneticValueIsTrait
     {
         std::vector<std::uint32_t> timepoints;
         std::vector<double> optima;
@@ -37,9 +37,13 @@ namespace fwdpy11
 
         MultivariateGSSmo(std::vector<std::uint32_t> input_timepoints,
                           std::vector<double> input_optima, double VS_)
-            : timepoints(std::move(input_timepoints)),
-              optima(std::move(input_optima)), current_timepoint(1), ndim(0), optima_offset(0),
-              VS(VS_)
+            : GeneticValueIsTrait{ input_timepoints.empty()
+                                            ? 0
+                                            : input_optima.size()
+                                                  / input_timepoints.size() },
+              timepoints(std::move(input_timepoints)),
+              optima(std::move(input_optima)), current_timepoint(1), ndim(0),
+              optima_offset(0), VS(VS_)
         {
             if (timepoints.empty())
                 {
@@ -81,13 +85,12 @@ namespace fwdpy11
             double sqdiff = 0.0;
             for (std::size_t i = 0; i < values.size(); ++i)
                 {
-                    sqdiff += gsl_pow_2(
-                        values[i] - optima[optima_offset + i]);
+                    sqdiff += gsl_pow_2(values[i] - optima[optima_offset + i]);
                 }
             return std::exp(-sqdiff / (2.0 * VS));
         }
 
-        std::unique_ptr<MultivariateGeneticValueToFitnessMap>
+        std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
             return std::unique_ptr<MultivariateGSSmo>(

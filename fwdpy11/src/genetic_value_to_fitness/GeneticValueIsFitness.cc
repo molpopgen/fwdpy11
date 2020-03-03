@@ -1,4 +1,4 @@
-#include <fwdpy11/genetic_values/GeneticValueToFitness.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;
@@ -10,15 +10,12 @@ init_GeneticValueIsFitness(py::module& m)
                fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueIsFitness",
         "Type implying the the genetic value is fitness.")
-        .def(py::init<>())
+        .def(py::init<std::size_t>())
         .def(py::pickle(
             [](const fwdpy11::GeneticValueIsFitness& g) { return g.pickle(); },
             [](py::object o) {
-                std::string s = o.cast<std::string>();
-                if (s.find("GeneticValueIsFitness") == std::string::npos)
-                    {
-                        throw std::runtime_error("invalid object state");
-                    }
-                return fwdpy11::GeneticValueIsFitness();
+                auto t = o.cast<py::tuple>();
+                std::size_t ndim =  t[0].cast<std::size_t>();
+                return fwdpy11::GeneticValueIsFitness(ndim);
             }));
 }

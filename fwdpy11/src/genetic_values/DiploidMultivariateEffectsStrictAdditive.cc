@@ -22,7 +22,7 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
         genetic value corresponding to a "focal" trait specified upon object construction.
         )delim")
         .def(py::init<std::size_t, std::size_t,
-                      const fwdpy11::MultivariateGeneticValueToFitnessMap&>(),
+                      const fwdpy11::GeneticValueIsTrait&>(),
              py::arg("ndimensions"), py::arg("focal_trait"), py::arg("gv2w"),
              R"delim(
 :param ndim: Number of trait dimensions
@@ -33,7 +33,7 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
 :type gv2w: :class:`fwdpy11.MultivariateGeneticValueToFitnessMap`
             )delim")
         .def(py::init<std::size_t, std::size_t,
-                      const fwdpy11::MultivariateGeneticValueToFitnessMap&,
+                      const fwdpy11::GeneticValueIsTrait&,
                       const fwdpy11::GeneticValueNoise&>(),
              py::arg("ndimensions"), py::arg("focal_trait"),
              py::arg("genetic_values_to_fitness_map"), py::arg("noise"),
@@ -68,8 +68,7 @@ init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
                 auto noise = p.attr("loads")(t[2]);
                 return fwdpy11::DiploidMultivariateEffectsStrictAdditive(
                     ndim, focal_trait,
-                    gv2w.cast<const fwdpy11::
-                                  MultivariateGeneticValueToFitnessMap&>(),
+                    gv2w.cast<const fwdpy11::GeneticValueIsTrait&>(),
                     noise.cast<const fwdpy11::GeneticValueNoise&>());
             }));
 }

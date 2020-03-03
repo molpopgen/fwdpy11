@@ -22,18 +22,19 @@
 #include <gsl/gsl_math.h>
 #include <cmath>
 #include <vector>
-#include "MultivariateGeneticValueToFitnessMap.hpp"
-#include "default_update.hpp"
+#include "GeneticValueToFitnessMap.hpp"
+#include "../genetic_values/default_update.hpp"
 
 namespace fwdpy11
 {
-    struct MultivariateGSS : public MultivariateGeneticValueToFitnessMap
+    struct MultivariateGSS : public GeneticValueIsTrait
     {
         std::vector<double> optima;
         double VS;
 
         MultivariateGSS(std::vector<double> input_optima, double VS_)
-            : optima(std::move(input_optima)), VS(VS_)
+            : GeneticValueIsTrait{ input_optima.size() },
+              optima(std::move(input_optima)), VS(VS_)
         {
         }
 
@@ -53,7 +54,7 @@ namespace fwdpy11
             return std::exp(-sqdiff / (2.0 * VS));
         }
 
-        std::unique_ptr<MultivariateGeneticValueToFitnessMap>
+        std::unique_ptr<GeneticValueToFitnessMap>
         clone() const
         {
             return std::unique_ptr<MultivariateGSS>(

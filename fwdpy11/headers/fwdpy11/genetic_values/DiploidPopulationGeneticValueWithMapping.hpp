@@ -24,7 +24,8 @@
 
 namespace fwdpy11
 {
-    struct DiploidPopulationGeneticValueWithMapping : public DiploidPopulationGeneticValue
+    struct DiploidPopulationGeneticValueWithMapping
+        : public DiploidPopulationGeneticValue
     ///API class.
     {
         /// Classes deriving from this must call gv2w->update
@@ -33,27 +34,36 @@ namespace fwdpy11
         /// This must be updated, too:
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
-        DiploidPopulationGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_)
-            : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() },
+        DiploidPopulationGeneticValueWithMapping(
+            std::size_t ndim, const GeneticValueToFitnessMap& gv2w_)
+            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() },
               noise_fxn{ new NoNoise() }
         {
+            if (this->total_dim != gv2w->total_dim)
+                {
+                    throw std::invalid_argument("dimension mismatch");
+                }
         }
 
-        DiploidPopulationGeneticValueWithMapping(const GeneticValueToFitnessMap& gv2w_,
-                                         const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() }, noise_fxn{
-                  noise_.clone()
-              }
+        DiploidPopulationGeneticValueWithMapping(
+            std::size_t ndim, const GeneticValueToFitnessMap& gv2w_,
+            const GeneticValueNoise& noise_)
+            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() },
+              noise_fxn{ noise_.clone() }
         {
+            if (this->total_dim != gv2w->total_dim)
+                {
+                    throw std::invalid_argument("dimension mismatch");
+                }
         }
 
-        inline virtual double
+        virtual double
         genetic_value_to_fitness(const DiploidMetadata& metadata) const
         {
-            return gv2w->operator()(metadata);
+            return gv2w->operator()(metadata, gvalues);
         }
 
-        inline virtual double
+        virtual double
         noise(const GSLrng_t& rng, const DiploidMetadata& offspring_metadata,
               const std::size_t parent1, const std::size_t parent2,
               const DiploidPopulation& pop) const

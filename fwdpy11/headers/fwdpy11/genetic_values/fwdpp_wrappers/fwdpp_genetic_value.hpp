@@ -24,7 +24,9 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_)
-            : DiploidPopulationGeneticValueWithMapping{ GeneticValueIsFitness() },
+            : DiploidPopulationGeneticValueWithMapping{ 1,
+                                                        GeneticValueIsFitness(
+                                                            1) },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction{})
         {
@@ -32,8 +34,8 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_,
-                                   const GeneticValueToFitnessMap& gv2w_)
-            : DiploidPopulationGeneticValueWithMapping{ gv2w_ },
+                            const GeneticValueToFitnessMap& gv2w_)
+            : DiploidPopulationGeneticValueWithMapping{ 1, gv2w_ },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
         {
@@ -41,9 +43,9 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_,
-                                   const GeneticValueToFitnessMap& gv2w_,
-                                   const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValueWithMapping{ gv2w_, noise_ },
+                            const GeneticValueToFitnessMap& gv2w_,
+                            const GeneticValueNoise& noise_)
+            : DiploidPopulationGeneticValueWithMapping{ 1, gv2w_, noise_ },
               gv{ std::forward<forwarded_fwdppT>(gv_)
 
               },
@@ -56,8 +58,8 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t diploid_index,
                          const fwdpy11::DiploidPopulation& pop) const
         {
-            gvalues[0]
-                = gv(pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations);
+            gvalues[0] = gv(pop.diploids[diploid_index], pop.haploid_genomes,
+                            pop.mutations);
             return gvalues[0];
         }
 

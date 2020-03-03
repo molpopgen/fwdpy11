@@ -1,5 +1,5 @@
 #include <pybind11/pybind11.h>
-#include <fwdpy11/genetic_values/MultivariateGeneticValueToFitnessMap.hpp>
+#include <fwdpy11/genetic_value_to_fitness/MultivariateGeneticValueToFitnessMap.hpp>
 
 namespace py = pybind11;
 
