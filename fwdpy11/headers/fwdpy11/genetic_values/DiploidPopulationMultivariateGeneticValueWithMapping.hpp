@@ -20,31 +20,31 @@
 #define FWDPY11_POP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
 
 #include <memory>
-#include "DiploidPopulationGeneticValueWithMapping.hpp"
+#include "DiploidPopulationGeneticValue.hpp"
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include "noise.hpp"
 
 namespace fwdpy11
 {
     struct DiploidPopulationMultivariateGeneticValueWithMapping
-        : public DiploidPopulationGeneticValueWithMapping
+        : public DiploidGeneticValue
     {
         DiploidPopulationMultivariateGeneticValueWithMapping(
             std::size_t ndim, const GeneticValueIsTrait& gv2w_)
-            : DiploidPopulationGeneticValueWithMapping(ndim, gv2w_)
+            : DiploidGeneticValue(ndim, gv2w_, NoNoise())
         {
         }
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
             std::size_t ndim, const GeneticValueIsTrait& gv2w_,
             const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValueWithMapping(ndim, gv2w_, noise_)
+            : DiploidGeneticValue(ndim, gv2w_, noise_)
         {
         }
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
             const DiploidPopulationMultivariateGeneticValueWithMapping& other)
-            : DiploidPopulationGeneticValueWithMapping(
+            : DiploidGeneticValue(
                 other.total_dim, *other.gv2w, *other.noise_fxn)
         {
         }

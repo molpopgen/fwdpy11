@@ -3,14 +3,13 @@
 
 #include <type_traits>
 #include <functional>
-#include "../DiploidPopulationGeneticValueWithMapping.hpp"
+#include "../DiploidPopulationGeneticValue.hpp"
 #include "../noise.hpp"
 
 namespace fwdpy11
 {
     template <typename fwdppT, typename pickleFunction>
-    struct fwdpp_genetic_value
-        : public fwdpy11::DiploidPopulationGeneticValueWithMapping
+    struct fwdpp_genetic_value : public fwdpy11::DiploidGeneticValue
     {
         using gvalue_map_ptr
             = std::unique_ptr<fwdpy11::GeneticValueToFitnessMap>;
@@ -23,10 +22,8 @@ namespace fwdpy11
             "std::function<pybind11::object(const fwdppT*)>");
 
         template <typename forwarded_fwdppT>
-        fwdpp_genetic_value(forwarded_fwdppT&& gv_)
-            : DiploidPopulationGeneticValueWithMapping{ 1,
-                                                        GeneticValueIsFitness(
-                                                            1) },
+        explicit fwdpp_genetic_value(forwarded_fwdppT&& gv_)
+            : DiploidGeneticValue{ 1, GeneticValueIsFitness(1), NoNoise() },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction{})
         {
@@ -35,7 +32,7 @@ namespace fwdpy11
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_)
-            : DiploidPopulationGeneticValueWithMapping{ 1, gv2w_ },
+            : DiploidGeneticValue{ 1, gv2w_, NoNoise() },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
         {
@@ -45,7 +42,7 @@ namespace fwdpy11
         fwdpp_genetic_value(forwarded_fwdppT&& gv_,
                             const GeneticValueToFitnessMap& gv2w_,
                             const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValueWithMapping{ 1, gv2w_, noise_ },
+            : DiploidGeneticValue{ 1, gv2w_, noise_ },
               gv{ std::forward<forwarded_fwdppT>(gv_)
 
               },

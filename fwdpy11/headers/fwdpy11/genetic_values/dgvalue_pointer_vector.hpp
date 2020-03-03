@@ -38,10 +38,9 @@ namespace fwdpy11
     // to be passed as an argument to a C++ function.
     // Thus, we compromise with raw pointers stored in a vector.
     {
-        const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
-            genetic_values;
+        const std::vector<fwdpy11::DiploidGeneticValue *> genetic_values;
 
-        std::vector<fwdpy11::DiploidPopulationGeneticValue *>
+        std::vector<fwdpy11::DiploidGeneticValue *>
         init_from_list(pybind11::list l)
         {
             if (l.empty())
@@ -49,11 +48,10 @@ namespace fwdpy11
                     throw std::invalid_argument(
                         "list of genetic values cannot be empty");
                 }
-            std::vector<fwdpy11::DiploidPopulationGeneticValue *> rv;
+            std::vector<fwdpy11::DiploidGeneticValue *> rv;
             for (auto i : l)
                 {
-                    auto *ref
-                        = i.cast<fwdpy11::DiploidPopulationGeneticValue *>();
+                    auto *ref = i.cast<fwdpy11::DiploidGeneticValue *>();
                     rv.push_back(ref);
                 }
             for (std::size_t i = 1; i < rv.size(); ++i)
@@ -69,7 +67,7 @@ namespace fwdpy11
             return rv;
         }
 
-        dgvalue_pointer_vector_(fwdpy11::DiploidPopulationGeneticValue &gv)
+        dgvalue_pointer_vector_(fwdpy11::DiploidGeneticValue &gv)
             : genetic_values{ &gv }
         {
         }

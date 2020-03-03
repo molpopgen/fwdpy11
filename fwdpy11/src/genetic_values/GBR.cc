@@ -25,9 +25,7 @@ and random effects on trait value.
 void
 init_GBR(py::module& m)
 {
-    py::class_<fwdpy11::DiploidGBR,
-               fwdpy11::DiploidPopulationGeneticValueWithMapping>(m,
-                                                                  "GBR",
+    py::class_<fwdpy11::DiploidGBR, fwdpy11::DiploidGeneticValue>(m, "GBR",
                                                                   R"delim(
         The "gene-based recessive" trait model described in Thornton et al.
         2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
