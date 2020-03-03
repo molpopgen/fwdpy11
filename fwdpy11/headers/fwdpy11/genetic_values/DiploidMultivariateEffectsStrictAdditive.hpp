@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <functional>
-#include "DiploidPopulationGeneticValue.hpp"
+#include "DiploidGeneticValue.hpp"
 #include "default_update.hpp"
 
 namespace fwdpy11

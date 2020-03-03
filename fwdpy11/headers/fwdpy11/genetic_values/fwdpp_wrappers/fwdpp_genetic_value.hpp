@@ -3,7 +3,7 @@
 
 #include <type_traits>
 #include <functional>
-#include "../DiploidPopulationGeneticValue.hpp"
+#include "../DiploidGeneticValue.hpp"
 #include "../noise.hpp"
 
 namespace fwdpy11
