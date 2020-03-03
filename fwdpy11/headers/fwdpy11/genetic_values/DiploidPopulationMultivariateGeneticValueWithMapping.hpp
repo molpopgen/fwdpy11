@@ -20,48 +20,37 @@
 #define FWDPY11_POP_MULTIVARIATE_GENETIC_VALUE_WITH_MAPPING_HPP__
 
 #include <memory>
-#include "DiploidPopulationGeneticValue.hpp"
+#include "DiploidPopulationGeneticValueWithMapping.hpp"
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include "noise.hpp"
 
 namespace fwdpy11
 {
     struct DiploidPopulationMultivariateGeneticValueWithMapping
-        : public DiploidPopulationGeneticValue
+        : public DiploidPopulationGeneticValueWithMapping
     {
-        /// Classes deriving from this must call gv2w->update
-        /// from their own update functions.
-        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
-        /// This must be updated, too:
-        std::unique_ptr<GeneticValueNoise> noise_fxn;
-
         DiploidPopulationMultivariateGeneticValueWithMapping(
-            std::size_t ndim,
-            const GeneticValueIsTrait& gv2w_)
-            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
-                  new NoNoise()
-              }
+            std::size_t ndim, const GeneticValueIsTrait& gv2w_)
+            : DiploidPopulationGeneticValueWithMapping(ndim, gv2w_)
         {
         }
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
-            std::size_t ndim,
-            const GeneticValueIsTrait& gv2w_,
+            std::size_t ndim, const GeneticValueIsTrait& gv2w_,
             const GeneticValueNoise& noise_)
-            : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
-                  noise_.clone()
-              }
+            : DiploidPopulationGeneticValueWithMapping(ndim, gv2w_, noise_)
         {
         }
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
             const DiploidPopulationMultivariateGeneticValueWithMapping& other)
-            : DiploidPopulationGeneticValue(other.total_dim), gv2w{ other.gv2w->clone() },
-              noise_fxn{ other.noise_fxn->clone() }
+            : DiploidPopulationGeneticValueWithMapping(
+                other.total_dim, *other.gv2w, *other.noise_fxn)
         {
         }
 
-        virtual ~DiploidPopulationMultivariateGeneticValueWithMapping() = default;
+        virtual ~DiploidPopulationMultivariateGeneticValueWithMapping()
+            = default;
 
         virtual double
         genetic_value_to_fitness(const DiploidMetadata& metadata) const
