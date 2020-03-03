@@ -45,7 +45,7 @@ void
 init_Additive(py::module& m)
 {
     py::class_<fwdpy11::DiploidAdditive,
-               fwdpy11::DiploidPopulationGeneticValueWithMapping>(
+               fwdpy11::DiploidGeneticValue>(
         m, "Additive", "Additive genetic values.")
         .def(py::init([](const double scaling) {
                  return fwdpy11::DiploidAdditive(

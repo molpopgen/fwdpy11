@@ -16,7 +16,7 @@
 
 namespace py = pybind11;
 
-struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
+struct snowdrift : public fwdpy11::DiploidGeneticValue
 /* This is our stateful fitness object.
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
@@ -43,8 +43,9 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::DiploidPopulationGeneticValue{ 1 }, b1(b1_), b2(b2_),
-          c1(c1_), c2(c2_), phenotypes()
+        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
+                                        fwdpy11::NoNoise() },
+          b1(b1_), b2(b2_), c1(c1_), c2(c2_), phenotypes()
     {
     }
 
@@ -55,8 +56,9 @@ struct snowdrift : public fwdpy11::DiploidPopulationGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::DiploidPopulationGeneticValue{ 1 }, b1(b1_), b2(b2_),
-          c1(c1_), c2(c2_), phenotypes(std::forward<T>(p))
+        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
+                                        fwdpy11::NoNoise() },
+          b1(b1_), b2(b2_), c1(c1_), c2(c2_), phenotypes(std::forward<T>(p))
     {
     }
 
@@ -142,11 +144,10 @@ PYBIND11_MODULE(snowdrift, m)
 
     // We need to import the Python version of our base class:
     pybind11::object imported_snowdrift_base_class_type
-        = pybind11::module::import("fwdpy11").attr("GeneticValue");
+        = pybind11::module::import("fwdpy11").attr("DiploidGeneticValue");
 
     // Create a Python class based on our new type
-    py::class_<snowdrift, fwdpy11::DiploidPopulationGeneticValue>(
-        m, "DiploidSnowdrift")
+    py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "DiploidSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
         .def_readonly("b1", &snowdrift::b1)

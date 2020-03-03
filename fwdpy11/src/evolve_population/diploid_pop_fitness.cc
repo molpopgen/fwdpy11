@@ -3,7 +3,7 @@
 void
 calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const std::vector<fwdpy11::DiploidPopulationGeneticValue *>
+    const std::vector<fwdpy11::DiploidGeneticValue *>
         &gvalue_pointers,
     const std::vector<std::size_t> &deme_to_gvalue_map,
     std::vector<fwdpy11::DiploidMetadata> &offspring_metadata,
@@ -44,7 +44,7 @@ calculate_diploid_fitness(
 fwdpp::gsl_ran_discrete_t_ptr
 calculate_diploid_fitness_genomes(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const fwdpy11::DiploidPopulationGeneticValue &genetic_value_fxn,
+    const fwdpy11::DiploidGeneticValue &genetic_value_fxn,
     std::vector<fwdpy11::DiploidMetadata> &offspring_metadata)
 {
     // Calculate parental fitnesses

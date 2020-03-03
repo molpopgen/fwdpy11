@@ -40,8 +40,7 @@ genetic value to fitness and random effects ("noise").
 void
 init_Multiplicative(py::module& m)
 {
-    py::class_<fwdpy11::DiploidMult,
-               fwdpy11::DiploidPopulationGeneticValueWithMapping>(
+    py::class_<fwdpy11::DiploidMult, fwdpy11::DiploidGeneticValue>(
         m, "Multiplicative", "Multiplicative genetic values.")
         .def(py::init([](const double scaling) {
                  return fwdpy11::DiploidMult(
@@ -95,9 +94,9 @@ init_Multiplicative(py::module& m)
                 auto t1 = p.attr("loads")(t[1]);
                 auto t2 = p.attr("loads")(t[2]);
                 auto a = (pol == 1) ? fwdpp::multiplicative_diploid(
-                                          fwdpp::trait(scaling))
+                             fwdpp::trait(scaling))
                                     : fwdpp::multiplicative_diploid(
-                                          fwdpp::fitness(scaling));
+                                        fwdpp::fitness(scaling));
                 //Do the casts in the constructor
                 //to avoid any nasty issues w/
                 //refs to temp
