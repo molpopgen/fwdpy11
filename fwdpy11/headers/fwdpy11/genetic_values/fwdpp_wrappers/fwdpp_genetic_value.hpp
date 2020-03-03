@@ -51,20 +51,13 @@ namespace fwdpy11
         {
         }
 
-        inline double
+        double
         calculate_gvalue(const std::size_t diploid_index,
-                         const fwdpy11::DiploidPopulation& pop) const
+                         const fwdpy11::DiploidPopulation& pop) const override
         {
             gvalues[0] = gv(pop.diploids[diploid_index], pop.haploid_genomes,
                             pop.mutations);
             return gvalues[0];
-        }
-
-        inline void
-        update(const fwdpy11::DiploidPopulation& pop)
-        {
-            gv2w->update(pop);
-            noise_fxn->update(pop);
         }
 
         virtual pybind11::object
