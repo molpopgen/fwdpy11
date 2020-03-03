@@ -9,6 +9,12 @@ init_GeneticValueToFitnessMap(py::module& m)
     py::class_<fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueToFitnessMap",
         "ABC for functions translating genetic values into fitness.")
-        .def_property_readonly("shape",&fwdpy11::GeneticValueToFitnessMap::shape);
+        .def_property_readonly("shape",
+                               &fwdpy11::GeneticValueToFitnessMap::shape,
+                               R"delim(
+        Returns the shape (dimensonality) of the object
+
+        .. versionadded:: 0.7.0
+        )delim");
 }
 
