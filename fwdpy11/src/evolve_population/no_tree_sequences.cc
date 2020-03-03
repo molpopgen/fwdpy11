@@ -32,7 +32,7 @@
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpy11/sim_functions.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <fwdpy11/evolve/DiploidPopulation_generation.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>

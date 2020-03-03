@@ -1,7 +1,7 @@
 #include <algorithm> //for std::max
 #include <pybind11/pybind11.h>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 
 struct GeneralW : public fwdpy11::DiploidGeneticValue

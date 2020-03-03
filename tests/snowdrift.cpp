@@ -12,7 +12,7 @@
 #include <pybind11/stl.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpp/fitness_models.hpp>
-#include <fwdpy11/genetic_values/DiploidPopulationGeneticValue.hpp>
+#include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 
 namespace py = pybind11;
 
@@ -21,11 +21,11 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
  * It records the model parameters and holds a
  * vector to track individual phenotypes.
  *
- * Here, we publicly inherit from fwdpy11::DiploidPopulationGeneticValue,
+ * Here, we publicly inherit from fwdpy11::DiploidGeneticValue,
  * which is defined in the header included above.  It is
  * an abstract class in C++ terms, and is reflected
  * as a Python Abstract Base Class (ABC) called
- * fwdpy11.genetic_values.DiploidPopulationGeneticValue.
+ * fwdpy11.genetic_values.DiploidGeneticValue.
  *
  * The phenotypes get updated each generation during
  * the simulation.
