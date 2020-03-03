@@ -50,7 +50,7 @@ set(GSL_SOURCES src/gsl/init.cc
     src/gsl/gsl_random.cc)
 
 set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc
-    src/genetic_values/GeneticValue.cc
+    src/genetic_values/DiploidGeneticValue.cc
     src/genetic_values/Additive.cc
     src/genetic_values/Multiplicative.cc
     src/genetic_values/GBR.cc
