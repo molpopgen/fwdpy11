@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
+// Copyright (C) 2020 Kevin Thornton <krthornt@uci.edu>
 //
 // This file is part of fwdpy11.
 //
@@ -16,16 +16,14 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-#ifndef FWDPY11_GENETIC_VALUES_MULT_HPP__
-#define FWDPY11_GENETIC_VALUES_MULT_HPP__
 
-#include <fwdpp/fitness_models.hpp>
-#include "details/pickle_multiplicative.hpp"
-#include "fwdpp_wrappers/fwdpp_genetic_value.hpp"
+#include <pybind11/pybind11.h>
+#include <fwdpy11/regions/Sregion.hpp>
 
-namespace fwdpy11
+double
+from_mvnorm(double deviate, double P, const fwdpy11::Sregion& s)
 {
-    using DiploidMult = fwdpp_genetic_value<fwdpp::multiplicative_diploid,
-                                           pickle_multiplicative>;
-} // namespace fwdpy11
-#endif
+    return s.from_mvnorm(deviate, P);
+}
+
+PYBIND11_MODULE(sregion_cdf, m) { m.def("from_mvnorm", &from_mvnorm); }

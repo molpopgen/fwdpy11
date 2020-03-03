@@ -6,7 +6,7 @@ using namespace pybind11::literals;
 
 struct EsizeZero : public fwdpy11::Sregion
 {
-    EsizeZero(const fwdpy11::Region& r) : fwdpy11::Sregion(r, 1.)
+    EsizeZero(const fwdpy11::Region& r) : fwdpy11::Sregion(r, 1., 1)
     {
     }
 
@@ -32,6 +32,18 @@ struct EsizeZero : public fwdpy11::Sregion
     unpickle(pybind11::tuple t)
     {
         return EsizeZero(fwdpy11::Region::unpickle(t[0]));
+    }
+
+    double
+    from_mvnorm(const double, const double) const override
+    {
+        return 0.0;
+    }
+
+    std::vector<double>
+    get_dominance() const override
+    {
+        return {1.};
     }
 
     std::uint32_t
