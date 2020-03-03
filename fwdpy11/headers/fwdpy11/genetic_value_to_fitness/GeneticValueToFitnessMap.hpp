@@ -47,11 +47,19 @@ namespace fwdpy11
         virtual void update(const DiploidPopulation & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
+        virtual pybind11::tuple shape() const 
+        {
+            return pybind11::make_tuple(total_dim);
+        }
     };
 
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
-        GeneticValueIsFitness() : GeneticValueToFitnessMap(1) {}
+        explicit GeneticValueIsFitness(std::size_t ndim)
+            : GeneticValueToFitnessMap(ndim)
+        {
+        }
+
         inline double
         operator()(const DiploidMetadata &metadata,
                    const std::vector<double> & /*genetic_values*/) const
@@ -65,20 +73,23 @@ namespace fwdpy11
         clone() const
         {
             return std::unique_ptr<GeneticValueIsFitness>(
-                new GeneticValueIsFitness());
+                new GeneticValueIsFitness(this->total_dim));
         }
 
         virtual pybind11::object
         pickle() const
         {
-            return pybind11::bytes("GeneticValueIsFitness");
+            auto t = pybind11::make_tuple(this->total_dim);
+            pybind11::object o(t);
+            return o;
         }
     };
 
     struct GeneticValueIsTrait : public GeneticValueToFitnessMap
     /// Another ABC.  Effectively a type trait
     {
-        explicit GeneticValueIsTrait(std::size_t ndim) : GeneticValueToFitnessMap(ndim)
+        explicit GeneticValueIsTrait(std::size_t ndim)
+            : GeneticValueToFitnessMap(ndim)
         {
         }
     };

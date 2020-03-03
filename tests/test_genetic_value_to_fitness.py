@@ -25,13 +25,14 @@ import numpy as np
 class testGeneticValueIsFitness(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.g = fwdpy11.GeneticValueIsFitness()
+        self.g = fwdpy11.GeneticValueIsFitness(1)
 
     def testPickle(self):
         import pickle
         p = pickle.dumps(self.g, -1)
         up = pickle.loads(p)
         self.assertEqual(type(up), type(self.g))
+        self.assertEqual(self.g.shape, up.shape)
 
 
 class testGSS(unittest.TestCase):
