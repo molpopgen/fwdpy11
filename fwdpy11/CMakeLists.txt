@@ -55,7 +55,6 @@ set(GENETIC_VALUE_SOURCES src/genetic_values/init.cc
     src/genetic_values/Multiplicative.cc
     src/genetic_values/GBR.cc
     src/genetic_values/DiploidMultivariateEffectsStrictAdditive.cc
-    src/genetic_values/DiploidMultivariateGeneticValueWithMapping.cc
     src/genetic_values/dgvalue_pointer_vector.cc)
 
 set(GENETIC_VALUE_TO_FITNESS_SOURCES
