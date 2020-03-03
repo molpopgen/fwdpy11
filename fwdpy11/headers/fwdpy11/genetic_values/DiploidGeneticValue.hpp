@@ -55,9 +55,26 @@ namespace fwdpy11
         /// This must be updated, too:
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
-        explicit DiploidGeneticValue(std::size_t dimensonality,
-                                     const GeneticValueToFitnessMap& gv2w_,
-                                     const GeneticValueNoise& noise_)
+        explicit DiploidGeneticValue(std::size_t ndim)
+            : total_dim(ndim), gvalues(total_dim, 0.),
+              gv2w{ new GeneticValueIsFitness{ total_dim } }, noise_fxn{
+                  new NoNoise()
+              }
+        {
+        }
+
+        DiploidGeneticValue(std::size_t dimensonality,
+                            const GeneticValueToFitnessMap& gv2w_)
+            : total_dim(dimensonality),
+              gvalues(total_dim, 0.0), gv2w{ gv2w_.clone() }, noise_fxn{
+                  new NoNoise
+              }
+        {
+        }
+
+        DiploidGeneticValue(std::size_t dimensonality,
+                            const GeneticValueToFitnessMap& gv2w_,
+                            const GeneticValueNoise& noise_)
             : total_dim(dimensonality),
               gvalues(total_dim, 0.0), gv2w{ gv2w_.clone() }, noise_fxn{
                   noise_.clone()
@@ -83,7 +100,6 @@ namespace fwdpy11
             gv2w->update(pop);
             noise_fxn->update(pop);
         }
-
 
         // To be called from w/in a simulation
         virtual void

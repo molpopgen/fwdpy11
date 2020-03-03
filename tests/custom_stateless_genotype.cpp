@@ -8,12 +8,7 @@ struct GeneralW : public fwdpy11::DiploidGeneticValue
 {
     fwdpp::site_dependent_genetic_value w;
 
-    GeneralW()
-        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
-                                        fwdpy11::NoNoise() },
-          w{}
-    {
-    }
+    GeneralW() : fwdpy11::DiploidGeneticValue{ 1 }, w{} {}
 
     inline double
     calculate_gvalue(const std::size_t diploid_index,

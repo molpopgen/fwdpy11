@@ -43,9 +43,8 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
-                                        fwdpy11::NoNoise() },
-          b1(b1_), b2(b2_), c1(c1_), c2(c2_), phenotypes()
+        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), phenotypes()
     {
     }
 
@@ -56,9 +55,8 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::DiploidGeneticValue{ 1, fwdpy11::GeneticValueIsFitness{ 1 },
-                                        fwdpy11::NoNoise() },
-          b1(b1_), b2(b2_), c1(c1_), c2(c2_), phenotypes(std::forward<T>(p))
+        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), phenotypes(std::forward<T>(p))
     {
     }
 
@@ -109,7 +107,7 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
                         pop.diploids[i], pop.haploid_genomes, pop.mutations);
             }
         // This is strictly not necessary in this specific
-        // case, but it is required in general, so we 
+        // case, but it is required in general, so we
         // do it here by way of example.
         noise_fxn->update(pop);
     }
