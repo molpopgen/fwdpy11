@@ -38,7 +38,8 @@ namespace fwdpy11
     {
         virtual ~GeneticValueToFitnessMap() = default;
         virtual double
-        operator()(const DiploidMetadata & /*metadata*/) const = 0;
+        operator()(const DiploidMetadata & /*metadata*/,
+                   const std::vector<double> & /*genetic_values*/) const = 0;
         virtual void update(const DiploidPopulation & /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
@@ -47,7 +48,8 @@ namespace fwdpy11
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
         inline double
-        operator()(const DiploidMetadata &metadata) const
+        operator()(const DiploidMetadata &metadata,
+                   const std::vector<double> & /*genetic_values*/) const
         {
             return metadata.g;
         }
@@ -90,7 +92,8 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const DiploidMetadata &metadata) const
+        operator()(const DiploidMetadata &metadata,
+                   const std::vector<double> & /*genetic_values*/) const
         {
             return std::exp(
                 -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
@@ -157,7 +160,8 @@ namespace fwdpy11
         }
 
         inline double
-        operator()(const DiploidMetadata &metadata) const
+        operator()(const DiploidMetadata &metadata,
+                   const std::vector<double> & /*genetic_values*/) const
         {
             return std::exp(
                 -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
