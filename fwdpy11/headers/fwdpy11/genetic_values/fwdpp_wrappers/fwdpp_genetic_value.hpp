@@ -24,7 +24,7 @@ namespace fwdpy11
 
         template <typename forwarded_fwdppT>
         fwdpp_genetic_value(forwarded_fwdppT&& gv_)
-            : DiploidPopulationGeneticValueWithMapping{ GeneticValueIsFitness() },
+            : DiploidPopulationGeneticValueWithMapping{ GeneticValueIsFitness(1) },
               gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction{})
         {

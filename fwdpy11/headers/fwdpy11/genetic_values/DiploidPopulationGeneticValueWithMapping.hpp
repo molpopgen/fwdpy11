@@ -39,6 +39,10 @@ namespace fwdpy11
             : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() },
               noise_fxn{ new NoNoise() }
         {
+            if(this->total_dim != gv2w->total_dim)
+            {
+                throw std::invalid_argument("dimension mismatch");
+            }
         }
 
         DiploidPopulationGeneticValueWithMapping(
@@ -47,6 +51,10 @@ namespace fwdpy11
             : DiploidPopulationGeneticValue(1), gv2w{ gv2w_.clone() },
               noise_fxn{ noise_.clone() }
         {
+            if(this->total_dim != gv2w->total_dim)
+            {
+                throw std::invalid_argument("dimension mismatch");
+            }
         }
 
         virtual double

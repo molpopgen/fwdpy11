@@ -8,6 +8,7 @@ init_GeneticValueToFitnessMap(py::module& m)
 {
     py::class_<fwdpy11::GeneticValueToFitnessMap>(
         m, "GeneticValueToFitnessMap",
-        "ABC for functions translating genetic values into fitness.");
+        "ABC for functions translating genetic values into fitness.")
+        .def_property_readonly("shape",&fwdpy11::GeneticValueToFitnessMap::shape);
 }
 
