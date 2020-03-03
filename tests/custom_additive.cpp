@@ -11,9 +11,9 @@ struct additive : public fwdpy11::DiploidGeneticValue
     {
     }
 
-    inline double
+    double
     calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidPopulation& pop) const
+                     const fwdpy11::DiploidPopulation& pop) const override
     {
         double sum = 0;
         for (auto m :
@@ -30,33 +30,12 @@ struct additive : public fwdpy11::DiploidGeneticValue
         return gvalues[0];
     }
 
-    double
-    genetic_value_to_fitness(const fwdpy11::DiploidMetadata& metadata) const
-    {
-        return metadata.g;
-    }
-
-    double
-    noise(const fwdpy11::GSLrng_t& /*rng*/,
-          const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
-          const std::size_t /*parent1*/, const std::size_t /*parent2*/,
-          const fwdpy11::DiploidPopulation& /*pop*/) const
-    {
-        return 0.0;
-    }
-
     pybind11::object
-    pickle() const
+    pickle() const override
     {
         return pybind11::bytes("custom_additive");
     }
     DEFAULT_DIPLOID_POP_UPDATE();
-
-    pybind11::tuple
-    shape() const
-    {
-        return pybind11::make_tuple(1);
-    }
 };
 
 //Standard pybind11 stuff goes here
@@ -64,8 +43,7 @@ PYBIND11_MODULE(custom_additive, m)
 {
     pybind11::object imported_custom_additive_base_class_type
         = pybind11::module::import("fwdpy11").attr("DiploidGeneticValue");
-    pybind11::class_<additive, fwdpy11::DiploidGeneticValue>(
-        m, "additive")
+    pybind11::class_<additive, fwdpy11::DiploidGeneticValue>(m, "additive")
         .def(pybind11::init<>())
         .def(pybind11::pickle([](const additive& a) { return a.pickle(); },
                               [](pybind11::object o) {
