@@ -2,7 +2,7 @@
 // class that is not exposed to Python
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/genetic_values/MultivariateGSSmo.hpp>
+#include <fwdpy11/genetic_value_to_fitness/MultivariateGSSmo.hpp>
 
 void
 update(fwdpy11::DiploidPopulation& pop, fwdpy11::MultivariateGSSmo& gssmo)

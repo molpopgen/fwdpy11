@@ -23,7 +23,7 @@
 #include <cmath>
 #include <vector>
 #include "MultivariateGeneticValueToFitnessMap.hpp"
-#include "default_update.hpp"
+#include "../genetic_values/default_update.hpp"
 
 namespace fwdpy11
 {

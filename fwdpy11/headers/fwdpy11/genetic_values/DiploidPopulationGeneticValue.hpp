@@ -24,7 +24,7 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include "GeneticValueToFitness.hpp"
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include "noise.hpp"
 
 namespace fwdpy11

@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/genetic_values/MultivariateGSSmo.hpp>
+#include <fwdpy11/genetic_value_to_fitness/MultivariateGSSmo.hpp>
 
 namespace py = pybind11;
 
