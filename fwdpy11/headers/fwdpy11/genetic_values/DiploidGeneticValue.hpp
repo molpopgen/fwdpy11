@@ -137,12 +137,6 @@ namespace fwdpy11
                 }
             return pybind11::make_tuple(total_dim);
         }
-
-        std::vector<double>
-        genetic_values() const
-        {
-            return gvalues;
-        }
     };
 } //namespace fwdpy11
 
