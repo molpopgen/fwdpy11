@@ -109,7 +109,7 @@ class test_PickleGammaS(unittest.TestCase):
         self.assertEqual(self.r.c, up.c)
         self.assertEqual(self.r.l, up.l)
         self.assertEqual(up.mean, -0.2)
-        self.assertEqual(up.shape, 0.5)
+        self.assertEqual(up.shape_parameter, 0.5)
         self.assertEqual(up.h, DOM)
 
 
@@ -206,6 +206,20 @@ class test_PickleConstantS(unittest.TestCase):
         self.assertEqual(up.h, DOM)
 
 
+class Test_mvDES(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.r = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
+            0, 1, 1, -0.1)], np.zeros(2), np.identity(2))
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertTrue(np.array_equal(up.means, self.r.means))
+        self.assertTrue(np.array_equal(up.matrix, np.identity(2)))
+        self.assertTrue(np.array_equal(up.dominance, self.r.dominance))
+
+
 class testMutationRegions(unittest.TestCase):
     @classmethod
     def setUp(self):
@@ -216,6 +230,9 @@ class testMutationRegions(unittest.TestCase):
     def test_create(self):
         mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
 
+    def test_shape(self):
+        self.assertEqual(self.sregions[0].shape, (1,))
+
 
 class testMultivariateGaussianEffects(unittest.TestCase):
     def testConstruction(self):
@@ -224,6 +241,10 @@ class testMultivariateGaussianEffects(unittest.TestCase):
                 0, 1, 1, np.identity(2))
         except Exception:
             self.fail("Unexpected exception during object construction")
+
+    def test_shape(self):
+        mv = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2))
+        self.assertEqual(mv.shape, (2,))
 
     def testInvalidMatrixShape(self):
         # Input matrix has wrong shape:

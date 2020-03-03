@@ -1,4 +1,5 @@
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/regions/Sregion.hpp>
 
 namespace py = pybind11;
@@ -33,6 +34,10 @@ init_Sregion(py::module& m)
             "c", [](const fwdpy11::Sregion& s) { return s.region.coupled; },
             "Coupling parameter")
         .def_readonly("scaling", &fwdpy11::Sregion::scaling,
-                      "Scaling parameter");
+                      "Scaling parameter")
+        .def_property_readonly("dominance", &fwdpy11::Sregion::get_dominance,
+                               "Dominance values.  Added in 0.7.0")
+        .def_property_readonly("shape", &fwdpy11::Sregion::shape,
+                               "Return shape.  Added in 0.7.0");
 }
 
