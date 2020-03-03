@@ -7,7 +7,7 @@ void
 init_DiploidMultivariateEffectsStrictAdditive(py::module& m)
 {
     py::class_<fwdpy11::DiploidMultivariateEffectsStrictAdditive,
-               fwdpy11::DiploidPopulationMultivariateGeneticValueWithMapping>(
+               fwdpy11::DiploidGeneticValue>(
         m, "StrictAdditiveMultivariateEffects",
         R"delim(
         Multivariate trait values under strictly additive effects.

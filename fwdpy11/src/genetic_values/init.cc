@@ -6,7 +6,6 @@ void init_GeneticValue(py::module&);
 void init_Additive(py::module&);
 void init_Multiplicative(py::module&);
 void init_GBR(py::module&);
-void init_DiploidPopulationMultivariateGeneticValueWithMapping(py::module&);
 void init_DiploidMultivariateEffectsStrictAdditive(py::module&);
 void init_dgvalue_pointer_vector(py::module&);
 
@@ -14,7 +13,6 @@ void
 init_base_classes(py::module& m)
 {
     init_GeneticValue(m);
-    init_DiploidPopulationMultivariateGeneticValueWithMapping(m);
 }
 
 void
