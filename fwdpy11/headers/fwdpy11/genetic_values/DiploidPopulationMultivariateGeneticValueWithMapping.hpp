@@ -21,7 +21,7 @@
 
 #include <memory>
 #include "DiploidPopulationGeneticValue.hpp"
-#include <fwdpy11/genetic_value_to_fitness/MultivariateGeneticValueToFitnessMap.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include "noise.hpp"
 
 namespace fwdpy11
@@ -31,13 +31,13 @@ namespace fwdpy11
     {
         /// Classes deriving from this must call gv2w->update
         /// from their own update functions.
-        std::unique_ptr<MultivariateGeneticValueToFitnessMap> gv2w;
+        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
         /// This must be updated, too:
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
             std::size_t ndim,
-            const MultivariateGeneticValueToFitnessMap& gv2w_)
+            const GeneticValueIsTrait& gv2w_)
             : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
                   new NoNoise()
               }
@@ -46,7 +46,7 @@ namespace fwdpy11
 
         DiploidPopulationMultivariateGeneticValueWithMapping(
             std::size_t ndim,
-            const MultivariateGeneticValueToFitnessMap& gv2w_,
+            const GeneticValueIsTrait& gv2w_,
             const GeneticValueNoise& noise_)
             : DiploidPopulationGeneticValue(ndim), gv2w{ gv2w_.clone() }, noise_fxn{
                   noise_.clone()

@@ -5,12 +5,10 @@
 
 namespace py = pybind11;
 
-
 void
 init_MultivariateGSSmo(py::module& m)
 {
-    py::class_<fwdpy11::MultivariateGSSmo,
-               fwdpy11::MultivariateGeneticValueToFitnessMap>(
+    py::class_<fwdpy11::MultivariateGSSmo, fwdpy11::GeneticValueIsTrait>(
         m, "MultivariateGSSmo",
         "Multivariate Gaussian stabilizing selection with moving optima.")
         .def(py::init([](py::array_t<std::uint32_t> timepoints,
