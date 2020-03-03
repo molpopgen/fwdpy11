@@ -78,7 +78,7 @@ namespace fwdpy11
     struct GeneticValueIsTrait : public GeneticValueToFitnessMap
     /// Another ABC.  Effectively a type trait
     {
-        GeneticValueIsTrait(std::size_t ndim) : GeneticValueToFitnessMap(ndim)
+        explicit GeneticValueIsTrait(std::size_t ndim) : GeneticValueToFitnessMap(ndim)
         {
         }
     };
