@@ -48,10 +48,12 @@ def _merge(self):
     keys = np.concatenate((self.neutral_keys, self.selected_keys))
     return merged[sorted_pos_indexes, :], keys[sorted_pos_indexes]
 
+# NOTE: the following two properties only need sorting if
+# the DataMatrix is not generated from a tree sequence.
 
 def _sorted_neutral(self):
     """
-    :returns: Neutral mutations and keys sorted by position
+    :returns: Neutral mutations and keys
     :rtype: tuple
 
     The neutral matrix is a :class:`numpy.ndarray`
@@ -65,7 +67,7 @@ def _sorted_neutral(self):
 
 def _sorted_selected(self):
     """
-    :returns: Selected mutations and keys sorted by position
+    :returns: Selected mutations and keys
     :rtype: tuple
 
     The selected matrix is a :class:`numpy.ndarray`
@@ -80,5 +82,5 @@ def _sorted_selected(self):
 
 def _patch_data_matrix(dm):
     dm.merge = _merge
-    dm.sorted_neutral = property(_sorted_neutral)
-    dm.sorted_selected = property(_sorted_selected)
+    dm.neutral_matrix = property(_sorted_neutral)
+    dm.selected_matrix = property(_sorted_selected)
