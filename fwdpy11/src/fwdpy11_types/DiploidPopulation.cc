@@ -84,11 +84,18 @@ init_DiploidPopulation(py::module& m)
              INIT_DOCSTRING)
         .def(py::init<const std::vector<std::uint32_t>&, double>(),
              py::arg("demesizes"), py::arg("length"), INIT_DOCSTRING_DEMESIZES)
-        .def(py::init<const fwdpy11::DiploidPopulation::dipvector_t&,
-                      const fwdpy11::DiploidPopulation::gcont_t&,
-                      const fwdpy11::DiploidPopulation::mcont_t&>(),
+        .def(py::init([](const fwdpy11::DiploidPopulation::dipvector_t& d,
+                         const fwdpy11::DiploidPopulation::gcont_t& h,
+                         const fwdpy11::DiploidPopulation::mcont_t& m) {
+                 PyErr_WarnEx(PyExc_DeprecationWarning,
+                              "Initializing a diploid population "
+                              "from low-level objects is deprecated "
+                              "and will be removed in 0.8.0",
+                              0);
+                 return fwdpy11::DiploidPopulation(d, h, m);
+             }),
              R"delim(
-             Construct with tuple of (diploids, haploid_genomes, mutations).
+             Construct with diploids, haploid_genomes, and mutations.
              
              .. versionadded:: 0.1.4
              )delim",
@@ -119,6 +126,10 @@ init_DiploidPopulation(py::module& m)
                fwdpy11::DiploidPopulation::gcont_t& haploid_genomes,
                fwdpy11::DiploidPopulation::mcont_t& mutations,
                py::args args) -> fwdpy11::DiploidPopulation {
+                PyErr_WarnEx(PyExc_DeprecationWarning,
+                             "DiploidPopulation.create is deprecated "
+                             "and will be removed in 0.8.0",
+                             0);
                 if (args.size() == 0)
                     {
                         return fwdpy11::create_wrapper<
@@ -142,9 +153,9 @@ init_DiploidPopulation(py::module& m)
         Unlike the constructor method, this method results
         in no temporary copies of input data.
 
-        :param diplods: A :class:`fwdpy11.VecDiploid`
-        :param haploid_genomes: A :class:`fwdpy11.VecGamete`
-        :param mutations: A :class:`fwdpy11.VecMutation`
+        :param diplods: A :class:`fwdpy11.DiploidVector`
+        :param haploid_genomes: A :class:`fwdpy11.HaploidGenomeVector`
+        :param mutations: A :class:`fwdpy11.MutationVector`
         :param args: Fixations, fixation times, and generation
 
         :rtype: :class:`fwdpy11.DiploidPopulation`
@@ -153,8 +164,8 @@ init_DiploidPopulation(py::module& m)
 
         When passing in extra args, they must be the following:
 
-        fixations: A :class:`fwdpy11.VecMutation`
-        fixation times: A :class:`fwdpy11.VecUint32`
+        fixations: A :class:`fwdpy11.MutationVector`
+        fixation times: A :class:`list`
         generation: A non-negative integer
 
         It is required that len(fixations) == len(fixation times).
