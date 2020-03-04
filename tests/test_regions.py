@@ -216,6 +216,9 @@ class testMutationRegions(unittest.TestCase):
     def test_create(self):
         mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
 
+    def test_shape(self):
+        self.assertEqual(self.sregions[0].shape, (1,))
+
 
 class testMultivariateGaussianEffects(unittest.TestCase):
     def testConstruction(self):
@@ -224,6 +227,10 @@ class testMultivariateGaussianEffects(unittest.TestCase):
                 0, 1, 1, np.identity(2))
         except Exception:
             self.fail("Unexpected exception during object construction")
+
+    def test_shape(self):
+        mv = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2))
+        self.assertEqual(mv.shape, (2,))
 
     def testInvalidMatrixShape(self):
         # Input matrix has wrong shape:

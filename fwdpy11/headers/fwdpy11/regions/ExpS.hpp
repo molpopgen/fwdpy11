@@ -14,7 +14,7 @@ namespace fwdpy11
         double mean, dominance;
 
         ExpS(const Region& r, double sc, double m, double h)
-            : Sregion(r, sc), mean(m), dominance(h)
+            : Sregion(r, sc, 1), mean(m), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
@@ -58,6 +58,18 @@ namespace fwdpy11
                     return gsl_ran_exponential(rng.get(), mean) / scaling;
                 },
                 [this]() { return dominance; }, this->label());
+        }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double P) const override
+        {
+            return gsl_cdf_exponential_Pinv(P, mean) / scaling;
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return { dominance };
         }
 
         pybind11::tuple

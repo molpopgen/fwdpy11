@@ -36,3 +36,6 @@ set_target_properties(inherit_noise PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_
 pybind11_add_module(EsizeZero EsizeZero.cpp)
 target_link_libraries(EsizeZero PRIVATE GSL::gsl GSL::gslcblas)
 set_target_properties(EsizeZero PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+pybind11_add_module(sregion_cdf sregion_cdf.cpp)
+target_link_libraries(sregion_cdf PRIVATE GSL::gsl GSL::gslcblas)
+set_target_properties(sregion_cdf PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)

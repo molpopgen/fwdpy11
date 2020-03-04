@@ -15,7 +15,7 @@ namespace fwdpy11
         bool is_neutral;
 
         ConstantS(const Region& r, const double s, const double es, const double h)
-            : Sregion(r, s), esize(es), dominance(h), is_neutral(false)
+            : Sregion(r, s, 1), esize(es), dominance(h), is_neutral(false)
         {
             if (!std::isfinite(esize))
                 {
@@ -35,7 +35,7 @@ namespace fwdpy11
         // of MutationRegions to supply neutral variants.
         // This constructor is NOT exposed to Python.
         ConstantS(const Region& r)
-            : Sregion(r, 1.), esize(0.), dominance(1.), is_neutral(true)
+            : Sregion(r, 1., 1), esize(0.), dominance(1.), is_neutral(true)
         {
         }
 
@@ -68,6 +68,19 @@ namespace fwdpy11
                 [this, &rng]() { return region(rng); },
                 [this]() { return esize / scaling; }, [this]() { return dominance; },
                 this->label());
+        }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double /*P*/) const override
+        {
+            //NOTE: ignores the input!
+            return esize / scaling;
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return {dominance};
         }
 
         pybind11::tuple
