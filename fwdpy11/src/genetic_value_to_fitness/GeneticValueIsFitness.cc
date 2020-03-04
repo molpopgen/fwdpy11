@@ -1,4 +1,4 @@
-#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

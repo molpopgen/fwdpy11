@@ -25,7 +25,10 @@
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
-#include "noise.hpp"
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
+#include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
+#include <fwdpy11/genetic_value_noise/NoNoise.hpp>
 
 namespace fwdpy11
 {

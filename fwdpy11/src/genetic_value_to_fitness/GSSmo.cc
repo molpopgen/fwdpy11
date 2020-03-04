@@ -1,6 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GSSmo.hpp>
 
 namespace py = pybind11;
 
