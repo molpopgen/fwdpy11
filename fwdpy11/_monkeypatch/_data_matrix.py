@@ -51,6 +51,13 @@ def _merge(self):
 # NOTE: the following two properties only need sorting if
 # the DataMatrix is not generated from a tree sequence.
 
+
+def _return_sorted_matrix(self, sm, k):
+    pos = sm.positions
+    posi = np.argsort(pos)
+    return np.array(sm, copy=False)[posi, :], k
+
+
 def _sorted_neutral(self):
     """
     :returns: Neutral mutations and keys
@@ -60,9 +67,7 @@ def _sorted_neutral(self):
 
     .. versionadded:: 0.6.1
     """
-    pos = self.neutral.positions
-    posi = np.argsort(pos)
-    return np.array(self.neutral, copy=False)[posi, :], self.neutral_keys[posi]
+    return _return_sorted_matrix(self, self.neutral, self.neutral_keys)
 
 
 def _sorted_selected(self):
@@ -74,10 +79,7 @@ def _sorted_selected(self):
 
     .. versionadded:: 0.6.1
     """
-    pos = self.selected.positions
-    posi = np.argsort(pos)
-    return np.array(self.selected, copy=False)[posi, :], \
-        self.selected_keys[posi, ]
+    return _return_sorted_matrix(self, self.selected, self.selected_keys)
 
 
 def _patch_data_matrix(dm):
