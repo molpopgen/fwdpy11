@@ -4,6 +4,24 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.1
+++++++++++++++++++++++++++++++++++++++++
+
+This is a maintenance release that clears up a few issues:
+
+*  `Issue 246 <https://github.com/molpopgen/fwdpy11/issues/246>`_
+*  `Issue 280 <https://github.com/molpopgen/fwdpy11/issues/280>`_
+*  `Issue 339 <https://github.com/molpopgen/fwdpy11/issues/339>`_
+*  `Issue 365 <https://github.com/molpopgen/fwdpy11/issues/365>`_
+*  `Issue 386 <https://github.com/molpopgen/fwdpy11/issues/386>`_
+*  `Issue 397 <https://github.com/molpopgen/fwdpy11/issues/397>`_
+
+The following features are added:
+
+* :attr:`fwdpy11.DataMatrix.neutral_matrix`
+* :attr:`fwdpy11.DataMatrix.selected_matrix`
+* :func:`fwdpy11.DataMatrix.merge`
+
 0.6.0
 ++++++++++++++++++++++++++++++++++++++++
 
