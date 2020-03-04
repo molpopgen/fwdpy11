@@ -119,7 +119,7 @@ class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
         npos = self.gm.neutral.positions
         npos_idx = np.argsort(npos)
         self.assertTrue(np.array_equal(m[w, :], self.gm_neutral[npos_idx, :]))
-        self.assertTrue(np.array_equal(self.gm.sorted_neutral[0], m[w, :]))
+        self.assertTrue(np.array_equal(self.gm.neutral_matrix[0], m[w, :]))
 
 
 if __name__ == "__main__":
