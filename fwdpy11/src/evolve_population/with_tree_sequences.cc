@@ -347,9 +347,15 @@ evolve_with_tree_sequences(
                 rng, pop, genetics, current_demographic_state, pop.generation,
                 pop.tables, offspring, offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
-            // TODO: this needs cleanup in 0.7.0, so that parental genotypes
-            // can affect things.  Right now, we are requiring the offspring
-            // genotypes to be in pop.diploids in the gvalue calculations.
+            // NOTE: by swapping the diploids here, it is not possible
+            // for genetics.value to make use of parental genotype information.
+            // Although mutations that went extinct this generation still
+            // exist in pop, we are limited in our ability to pass down
+            // "indirect" genetic effects for more than one generation
+            // due to the possibility of recycling.  It is likely
+            // that an explicity pedigree structure would be required
+            // to make these models "nice".  See GitHub issue 372
+            // for a bit more context.
             pop.diploids.swap(offspring);
             calculate_diploid_fitness(rng, pop, genetics.gvalue,
                                       deme_to_gvalue_map, offspring_metadata,
