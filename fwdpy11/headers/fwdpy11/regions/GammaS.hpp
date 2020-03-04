@@ -14,7 +14,7 @@ namespace fwdpy11
         double mean, shape, dominance;
 
         GammaS(const Region& r, double sc, double m, double s, double h)
-            : Sregion(r, sc), mean(m), shape(s), dominance(h)
+            : Sregion(r, sc, 1), mean(m), shape(s), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
@@ -48,6 +48,7 @@ namespace fwdpy11
                 << ')';
             return out.str();
         }
+
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
@@ -63,6 +64,18 @@ namespace fwdpy11
                            / scaling;
                 },
                 [this]() { return dominance; }, this->label());
+        }
+
+        double
+        from_mvnorm(const double /*deviate*/, const double P) const override
+        {
+            return gsl_cdf_gamma_Pinv(P, shape, mean / shape) / scaling;
+        }
+
+        std::vector<double>
+        get_dominance() const override
+        {
+            return { dominance };
         }
 
         pybind11::tuple
