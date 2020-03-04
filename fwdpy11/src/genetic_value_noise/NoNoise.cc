@@ -1,5 +1,5 @@
 #include <pybind11/pybind11.h>
-#include <fwdpy11/genetic_values/noise.hpp>
+#include <fwdpy11/genetic_value_noise/NoNoise.hpp>
 
 namespace py = pybind11;
 

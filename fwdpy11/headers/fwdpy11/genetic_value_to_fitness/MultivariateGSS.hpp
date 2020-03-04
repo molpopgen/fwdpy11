@@ -22,7 +22,7 @@
 #include <gsl/gsl_math.h>
 #include <cmath>
 #include <vector>
-#include "GeneticValueToFitnessMap.hpp"
+#include "GeneticValueIsTrait.hpp"
 #include "../genetic_values/default_update.hpp"
 
 namespace fwdpy11

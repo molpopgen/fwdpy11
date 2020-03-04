@@ -1,4 +1,5 @@
 #include <fwdpy11/genetic_values/DiploidMult.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

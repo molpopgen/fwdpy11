@@ -4,7 +4,7 @@
 #include <type_traits>
 #include <functional>
 #include "../DiploidGeneticValue.hpp"
-#include "../noise.hpp"
+#include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 
 namespace fwdpy11
 {
@@ -43,9 +43,7 @@ namespace fwdpy11
                             const GeneticValueToFitnessMap& gv2w_,
                             const GeneticValueNoise& noise_)
             : DiploidGeneticValue{ 1, gv2w_, noise_ },
-              gv{ std::forward<forwarded_fwdppT>(gv_)
-
-              },
+              gv{ std::forward<forwarded_fwdppT>(gv_) },
               pickle_fxn(pickleFunction())
 
         {
@@ -60,8 +58,8 @@ namespace fwdpy11
             return gvalues[0];
         }
 
-        virtual pybind11::object
-        pickle() const
+        pybind11::object
+        pickle() const override
         {
             return pickle_fxn(gv);
         }
