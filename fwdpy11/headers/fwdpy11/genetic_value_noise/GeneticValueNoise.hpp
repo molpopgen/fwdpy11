@@ -24,7 +24,6 @@
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/rng.hpp>
-#include "default_update.hpp"
 
 namespace fwdpy11
 {
@@ -41,44 +40,6 @@ namespace fwdpy11
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
-    };
-
-    struct NoNoise : public GeneticValueNoise
-    {
-        virtual double
-        operator()(const GSLrng_t& /*rng*/,
-                   const DiploidMetadata& /*offspring_metadata*/,
-                   const std::size_t /*parent1*/,
-                   const std::size_t /*parent2*/,
-                   const DiploidPopulation& /*pop*/) const
-        {
-            return 0.;
-        }
-
-        DEFAULT_DIPLOID_POP_UPDATE();
-
-        std::unique_ptr<GeneticValueNoise>
-        clone() const
-        {
-            return std::unique_ptr<NoNoise>(new NoNoise());
-        }
-
-        virtual pybind11::object
-        pickle() const
-        {
-            return pybind11::bytes("NoNoise");
-        }
-
-        static inline const NoNoise
-        unpickle(pybind11::object& o)
-        {
-            auto s = o.cast<std::string>();
-            if (s != "NoNoise")
-                {
-                    throw std::runtime_error("invalid object state");
-                }
-            return NoNoise();
-        }
     };
 } // namespace fwdpy11
 

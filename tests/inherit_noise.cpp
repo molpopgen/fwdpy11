@@ -18,29 +18,32 @@
 //
 
 #include <pybind11/pybind11.h>
-#include <fwdpy11/genetic_values/noise.hpp>
+#include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 
 struct IneritedNoise : public fwdpy11::GeneticValueNoise
 {
-    virtual double
+    double
     operator()(const fwdpy11::GSLrng_t& /*rng*/,
                const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
                const std::size_t parent1, const std::size_t /*parent2*/,
-               const fwdpy11::DiploidPopulation& pop) const
+               const fwdpy11::DiploidPopulation& pop) const override
     {
         return pop.diploid_metadata[parent1].e + pop.generation;
     }
 
-    DEFAULT_DIPLOID_POP_UPDATE();
+    void
+    update(const fwdpy11::DiploidPopulation& /*pop*/) override
+    {
+    }
 
     std::unique_ptr<fwdpy11::GeneticValueNoise>
-    clone() const
+    clone() const override
     {
         return std::unique_ptr<IneritedNoise>(new IneritedNoise());
     }
 
-    virtual pybind11::object
-    pickle() const
+    pybind11::object
+    pickle() const override
     {
         return pybind11::bytes("IneritedNoise");
     }

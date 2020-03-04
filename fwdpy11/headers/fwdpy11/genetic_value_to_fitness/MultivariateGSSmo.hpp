@@ -24,7 +24,7 @@
 #include <cmath>
 #include <vector>
 #include <stdexcept>
-#include "GeneticValueToFitnessMap.hpp"
+#include "GeneticValueIsTrait.hpp"
 
 namespace fwdpy11
 {
