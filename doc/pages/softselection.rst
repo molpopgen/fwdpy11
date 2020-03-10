@@ -35,10 +35,13 @@ breeding individuals ("adults") in each deme is fixed at a certain value.
 A nice overview of this model and how it compares to others in [Felsenstein1976]_.
 You may also find [Christiansen1974]_ and [Christiansen1975]_ useful.
 
-Each generation, offspring ("juveniles") are generated in each deme.  Parents are drawn
-from demes according to a migration matrix, if one is provided, else they are drawn from
-the parents in the offspring deme.  Within a parental deme, a specific parent is
-chosen proportionally to relative fitness within the deme.
+Each generation, we generate offspring ("juveniles") in each deme.  In the absence of
+migration, all parents of all offspring come from the offspring deme.  With a migration
+matrix, we first choose the "source" deme, pick parents from that deme, and then
+create the offspring in the offspring deme.  Thus, we are modeling juvenile migration.
+Selfing is a property of demes and is applied to parents: we choose a parental deme,
+then choose a parent, and then decide if that parent selfs.
+
 
 The timings of events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -433,7 +436,7 @@ For example, consider the following matrix:
    m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
    m
 
-The first row corresponds to the ancestry of deme ``0``, such that 90% of parents will be
+The first row corresponds to the ancestry of deme ``0``, such that 90% of offspring will be
 non-migrants and 10% will be migrants from deme ``1``:
 
 .. ipython:: python
@@ -441,7 +444,7 @@ non-migrants and 10% will be migrants from deme ``1``:
    m[0,]
 
 To be concrete, if the size of deme ``0`` in the next generation is 1,000, then the expected
-number of migrant and non-migrant parents of offspring in deme ``0`` is:
+number of migrant and non-migrant offspring of offspring in deme ``0`` is:
 
 .. ipython:: python
 
@@ -541,11 +544,11 @@ independent of of source deme sizes.  To revisit our earlier example:
    m[0,] * 1000
 
 ``fwdpy11`` allows for a different migration scheme where the size of the source deme
-matters.  For this model, ``M[i ,j]`` is the probability that an individual from
-deme ``j`` is a parent in deme ``i``.  Internally, the migration matrix entries
+matters.  For this model, ``M[i ,j]`` is the probability that an individual with parents from
+deme ``j`` is born in deme ``i``.  Internally, the migration matrix entries
 ``M[i, j]`` are multiplied by the size of the *source* demes, which means that
 larger demes with nonzero migration rates to other demes have a larger chance
-of being parents.
+of being sources of migrant offspring.
 
 For example:
 
@@ -558,8 +561,8 @@ For example:
    # row by its sum
    md/np.sum(md, axis=1)[:, None]
 
-The first matrix is the same as in the preceding section--90% of the parents of deme
-``0`` will be from deme ``0``.  In the second matrix, that fraction is reduced to
+The first matrix is the same as in the preceding section--90% of the offspring in deme
+``0`` will have parents from deme ``0``.  In the second matrix, that fraction is reduced to
 about 82% because deme ``1`` is twice as large as deme ``0``.
 
 To enable this migration model, the following methods are equivalent:
@@ -583,30 +586,6 @@ To enable this migration model, the following methods are equivalent:
 
 
 .. _migration_and_selfing:
-
-Migration and selfing
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-Within each deme, the selfing rate :math:`S` is the probability that an
-individual selfs, and :math:`1-S` is the probability that an individual
-outcrosses with another.
-
-For a single deme, everything is very straightforward.  Likewise for many demes with no
-migration.  The challenge arises when we have multiple demes, nonzero selfing rates in
-one or more of them, and nonzero migration.
-
-The challenge is due to the fact that  we consider the migration matrix elements
-to be the probability of migration from deme ``j`` into deme ``i``.
-
-If we focus on an offspring deme and pull a migrant parent from the migration matrix, one 
-of two things may happen:
-
-1. The migrant parent selfs, which occurs with probability :math:`S` for that migrant's deme.
-2. The migrant parent outcrosses
-
-In the second case, we have to go back to our migration matrix to choose another parent. Internally,
-a second lookup table is used where each entry in row :math:`M_{i,-}` is multiplied by :math:`1 - S_j`,
-where :math:`S_j` is the selfing probability in source deme :math:`j`.
 
 Examples of models
 -------------------------------------------------
