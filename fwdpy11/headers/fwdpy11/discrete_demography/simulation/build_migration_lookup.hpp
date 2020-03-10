@@ -101,29 +101,6 @@ namespace fwdpy11
                                     ml.lookups[dest].reset(
                                         gsl_ran_discrete_preproc(temp.size(),
                                                                  temp.data()));
-                                    bool nonzero = false;
-                                    for (std::size_t source = 0;
-                                         source < npops; ++source)
-                                        {
-                                            double p = 1.0
-                                                       - selfing_rates
-                                                             .get()[source];
-                                            temp[source] *= p;
-                                            if (p > 0.)
-                                                {
-                                                    nonzero = true;
-                                                }
-                                        }
-                                    if (nonzero)
-                                        {
-                                            ml.olookups[dest].reset(
-                                                gsl_ran_discrete_preproc(
-                                                    temp.size(), temp.data()));
-                                        }
-                                    else
-                                        {
-                                            ml.olookups[dest].reset(nullptr);
-                                        }
                                 }
                             else // There is no possible migration into this deme
                                 {
