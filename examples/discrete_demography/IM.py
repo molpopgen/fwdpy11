@@ -67,6 +67,9 @@ def make_parser():
                           "Danger zone with selection :).")
     optional.add_argument('--rho', type=float, default=1e3,
                           help="Scaled recombination rate, rho = 4*Nref*r")
+    optional.add_argument('--show2d', action='store_true', default=False,
+                          help="Display 2d fs comparison of the mean fs from"
+                               "the simulation to moments")
 
     return parser
 
@@ -144,7 +147,8 @@ def build_demography(args):
     # Change split time from generations/(2*Nref) to
     # generations/Nref.
     d, t1, t2 = two_deme_IM(args.Nref, 2.0*args.tsplit, args.split,
-                            (args.N0, args.N1), migrates)
+                            (args.N0, args.N1), migrates,
+                            burnin=20.)
     simlen = int(t1 + t2)
     N0 = np.rint(args.N0*args.Nref).astype(int)
     N1 = np.rint(args.N1*args.Nref).astype(int)
@@ -181,7 +185,7 @@ def build_parameters_dict(args):
     return pdict, finalNs
 
 
-def per_deme_fs(pop):
+def full_joint_fs(pop):
     """
     Get the marginal SFS per deme.
     """
@@ -193,8 +197,8 @@ def per_deme_fs(pop):
     deme0 = an[np.where(nt['deme'][an] == 0)[0]]
     deme1 = an[np.where(nt['deme'][an] == 1)[0]]
 
-    fs = pop.tables.fs([deme0, deme1], marginalize=True)
-    return fs[0], fs[1]
+    jfs = pop.tables.fs([deme0, deme1], marginalize=False)
+    return jfs
 
 
 def subsample_fs(pop, args):
@@ -224,12 +228,13 @@ def runsim(args, pdict, seed):
     fwdpy11.evolvets(rng, pop, params, 100)
     if args.gamma is None:
         fwdpy11.infinite_sites(rng, pop, args.theta/float(4.*args.Nref))
-    sfs0, sfs1 = per_deme_fs(pop)
+    full_jfs = full_joint_fs(pop)
     sfs0_rs, sfs1_rs = subsample_fs(pop, args)
-    return sfs0, sfs1, sfs0_rs, sfs1_rs
+    return full_jfs, sfs0_rs, sfs1_rs
 
 
-def plot_fs(args, moments_fs, fwdpy11_fs, fwdpy11_sample_fs):
+def plot_fs(args, moments_fs, fwdpy11_fs,
+            fwdpy11_sample_fs):
     fwdpy11_fs0 = project_fs(fwdpy11_fs[0], 2*args.nsam)
     fwdpy11_fs1 = project_fs(fwdpy11_fs[1], 2*args.nsam)
     moments_fs0 = moments_fs.marginalize([1])
@@ -289,19 +294,34 @@ if __name__ == "__main__":
     sum_fs1 = np.zeros(2*finalNs[1]+1)
     sum_samples_fs0 = np.zeros(2*args.nsam-1)
     sum_samples_fs1 = np.zeros(2*args.nsam-1)
+    mean_full_jFS = None
     with concurrent.futures.ProcessPoolExecutor() as e:
         futures = {e.submit(runsim, args, pdict, i) for i in seeds}
         for fut in concurrent.futures.as_completed(futures):
-            sfs0, sfs1, sfs0_rs, sfs1_rs = fut.result()
-            sum_fs0 += sfs0
-            sum_fs1 += sfs1
+            full_jfs, sfs0_rs, sfs1_rs = fut.result()
+            if mean_full_jFS is None:
+                mean_full_jFS = full_jfs
+            else:
+                mean_full_jFS += full_jfs
+            sum_fs0 += full_jfs.sum(axis=1).todense()
+            sum_fs1 += full_jfs.sum(axis=0).todense()
             sum_samples_fs0 += sfs0_rs
             sum_samples_fs1 += sfs1_rs
 
+    # NOTE: using /= for the next
+    # line basically zeros everything out!
+    mean_full_jFS = mean_full_jFS/args.nreps
     sum_fs0 /= args.nreps
     sum_fs1 /= args.nreps
     sum_samples_fs0 /= args.nreps
     sum_samples_fs1 /= args.nreps
     if HAVE_MOMENTS is True:
+        mean_full_jFS = moments.Spectrum(mean_full_jFS.todense())
+        projected_jfs = mean_full_jFS.project([2*args.nsam, 2*args.nsam])
+        print("Mean Fst from forward sims = {}".format(projected_jfs.Fst()))
+        print("Fst from moments = {}".format(moments_fs.Fst()))
         plot_fs(args, moments_fs, (sum_fs0, sum_fs1),
                 (sum_samples_fs0, sum_samples_fs1))
+        if args.show2d is True:
+            moments.Plotting.plot_2d_comp_Poisson(args.theta * moments_fs,
+                                                  projected_jfs, resid_range=10)
