@@ -4,6 +4,16 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.2
+++++++++++++++++++++++++++++++++++++++++
+
+This release changes the migration code to model juvenile migration.
+These changes simplify the back end and give the same results (in
+distribution).  The relevant PRs are:
+
+* `PR416 <https://github.com/molpopgen/fwdpy11/pull/416>`_ 
+* `PR417 <https://github.com/molpopgen/fwdpy11/pull/417>`_ 
+
 0.6.1
 ++++++++++++++++++++++++++++++++++++++++
 
