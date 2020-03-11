@@ -42,6 +42,11 @@ create the offspring in the offspring deme.  Thus, we are modeling juvenile migr
 Selfing is a property of demes and is applied to parents: we choose a parental deme,
 then choose a parent, and then decide if that parent selfs.
 
+.. note::
+
+   The migration behavior changed in 0.6.2!  (This is mainly a note for
+   the developers.)
+
 
 The timings of events
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
