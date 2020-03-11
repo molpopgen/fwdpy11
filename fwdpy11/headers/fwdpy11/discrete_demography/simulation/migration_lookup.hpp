@@ -30,10 +30,10 @@ namespace fwdpy11
     {
         struct migration_lookup
         {
-            std::vector<fwdpp::gsl_ran_discrete_t_ptr> lookups, olookups;
+            std::vector<fwdpp::gsl_ran_discrete_t_ptr> lookups;
             const bool null_migmatrix;
             migration_lookup(std::int32_t maxdemes, bool isnull)
-                : lookups(maxdemes), olookups(maxdemes), null_migmatrix(isnull)
+                : lookups(maxdemes), null_migmatrix(isnull)
             {
             }
         };
