@@ -45,7 +45,7 @@ namespace fwdpy11
                     },
                     [deme, outer_this](double& d, const fwdpy11::Mutation& mut) {
                         return outer_this->multi_deme_Aa(deme, d, mut);
-                    }));
+                    }, starting_value));
                 return outer_this->gvalues[0];
             }
         };
