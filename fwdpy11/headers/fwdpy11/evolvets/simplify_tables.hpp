@@ -26,6 +26,7 @@
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
+#include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/remove_fixations_from_gametes.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
 //#include "confirm_mutation_counts.hpp"
@@ -63,6 +64,21 @@ namespace fwdpy11
                     }
             }
 #endif
+        // Remove mutations that are simplified out
+        // from the population hash table.
+        std::vector<int> preserved(pop.mutations.size(), 0);
+        for(auto p : rv.second)
+        {
+            preserved[p]=1;
+        }
+        for(std::size_t p=0; p < preserved.size(); ++p)
+        {
+            if(!preserved[p])
+            {
+                fwdpp::ts::detail::process_mutation_index(pop.mutations, pop.mut_lookup, p);
+            }
+        }
+                
         if (suppress_edge_table_indexing == true)
             {
                 pop.mcounts.resize(pop.mutations.size(), 0);
