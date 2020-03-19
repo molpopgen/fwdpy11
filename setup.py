@@ -235,7 +235,7 @@ setup(
     long_description=long_desc,
     long_description_content_type='text/x-rst',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.4.3', 'numpy', 'tskit>=0.1.4'],
+    install_requires=['pybind11>=2.4.3', 'numpy', 'tskit>=0.1.4', 'sparse'],
     cmdclass={'build_ext': CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,
