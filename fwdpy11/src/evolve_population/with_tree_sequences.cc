@@ -99,9 +99,19 @@ void
 final_population_cleanup(bool suppress_edge_table_indexing,
                          bool preserve_selected_fixations,
                          bool remove_extinct_mutations_at_finish,
+                         std::uint32_t last_preserved_generation,
+                         const std::vector<std::uint32_t> &last_preserved_generation_counts,
                          fwdpy11::DiploidPopulation &pop)
 {
     index_and_count_mutations(suppress_edge_table_indexing, pop);
+    if(pop.generation == last_preserved_generation)
+    {
+        std::transform(begin(pop.mcounts_from_preserved_nodes),
+                end(pop.mcounts_from_preserved_nodes),
+                begin(last_preserved_generation_counts),
+                begin(pop.mcounts_from_preserved_nodes),
+                std::minus<std::uint32_t>());
+    }
     if (!preserve_selected_fixations)
         {
             auto itr = std::remove_if(
@@ -317,6 +327,8 @@ evolve_with_tree_sequences(
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
         simplification_rv;
+    std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
+    decltype(pop.mcounts) last_preserved_generation_counts;
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             // NOTE: demographic changes are applied with respect
@@ -336,7 +348,10 @@ evolve_with_tree_sequences(
                     final_population_cleanup(
                         suppress_edge_table_indexing,
                         preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, pop);
+                        remove_extinct_mutations_at_finish,
+                        last_preserved_generation,
+                        last_preserved_generation_counts,
+                        pop);
                     std::ostringstream o;
                     o << "extinction at time " << pop.generation;
                     throw ddemog::GlobalExtinction(o.str());
@@ -491,7 +506,8 @@ evolve_with_tree_sequences(
                                     static_cast<double>(pop.generation),
                                     x.first, x.second });
                         }
-                    track_ancestral_counts(pop, sr.samples);
+                    track_ancestral_counts(sr.samples, &last_preserved_generation,
+                                           last_preserved_generation_counts, pop);
                     // Finally, clear the input
                     sr.samples.clear();
                 }
@@ -522,7 +538,10 @@ evolve_with_tree_sequences(
         }
     final_population_cleanup(suppress_edge_table_indexing,
                              preserve_selected_fixations,
-                             remove_extinct_mutations_at_finish, pop);
+                             remove_extinct_mutations_at_finish,
+                             last_preserved_generation,
+                             last_preserved_generation_counts,
+                             pop);
     ddemog::save_model_state(current_demographic_state, demography);
 }
 

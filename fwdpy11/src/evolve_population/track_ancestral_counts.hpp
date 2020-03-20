@@ -1,9 +1,17 @@
 #ifndef FWDPY11_TSEVOLVE_TRACK_ANCESTRAL_COUNTS_HPP
 #define FWDPY11_TSEVOLVE_TRACK_ANCESTRAL_COUNTS_HPP
 
-#include <fwdpy11/types/DiploidPopulation.hpp>
+#include <cstdint>
+#include <vector>
 
-void track_ancestral_counts(fwdpy11::DiploidPopulation &pop,
-                            const std::vector<fwdpp::uint_t> &individuals);
+namespace fwdpy11
+{
+    class DiploidPopulation;
+}
+
+void track_ancestral_counts(const std::vector<std::uint32_t> &individuals,
+                            std::uint32_t *last_preserved_generation,
+                            std::vector<std::uint32_t> &last_preserved_generation_counts,
+                            fwdpy11::DiploidPopulation &pop);
 
 #endif
