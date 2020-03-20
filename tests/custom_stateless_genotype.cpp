@@ -20,7 +20,7 @@
               [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
               [](double& g, const fwdpy11::Mutation& m) {
                   g *= (1.0 + m.h);
-              }));
+              }, 1.0));
         return gvalues[0];
     }
 

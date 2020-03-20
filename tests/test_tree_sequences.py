@@ -153,6 +153,16 @@ def validate_mut_lookup_content(pop):
     return ml_contents == mt_contents
 
 
+class TestBadGenomeLength(unittest.TestCase):
+    def test_length_zero(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.DiploidPopulation(100, 0.)
+
+    def test_negative_length(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.DiploidPopulation(100, -1.)
+
+
 class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
