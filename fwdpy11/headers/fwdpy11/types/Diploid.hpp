@@ -58,23 +58,9 @@ namespace fwdpy11
                       == std::tie(rhs.nodes[0], rhs.nodes[1])
                && std::tie(lhs.parents[0], lhs.parents[1])
                       == std::tie(rhs.parents[0], rhs.parents[1])
-               && std::tie(lhs.geography[0], lhs.geography[1],
-                           lhs.geography[2])
-                      == std::tie(rhs.geography[0], rhs.geography[1],
-                                  rhs.geography[2]);
+               && std::tie(lhs.geography[0], lhs.geography[1], lhs.geography[2])
+                      == std::tie(rhs.geography[0], rhs.geography[1], rhs.geography[2]);
     }
-
-    struct ancient_sample_record
-    /*! When tracking ancient samples, 
-     * We want to be able to provide access to
-     * the individual's metadata PLUS
-     * when they existed and what nodes 
-     * on the tree they are.
-     */
-    {
-        double time;
-        fwdpp::ts::TS_NODE_INT n1, n2;
-    };
 
     //! Typedef for container of diploids
     using dipvector_t = std::vector<DiploidGenotype>;

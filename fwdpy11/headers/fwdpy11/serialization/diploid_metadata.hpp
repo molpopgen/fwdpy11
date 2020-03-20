@@ -35,8 +35,7 @@ namespace fwdpy11
     {
         template <typename streamtype>
         inline void
-        operator()(streamtype& buffer,
-                   std::vector<fwdpy11::DiploidMetadata>& vmd) const
+        operator()(streamtype& buffer, std::vector<fwdpy11::DiploidMetadata>& vmd) const
         {
             fwdpp::io::scalar_reader r;
             std::size_t s;
@@ -60,31 +59,16 @@ namespace fwdpy11
         }
     };
 
-    struct serialize_ancient_sample_records
-    {
-        template <typename streamtype>
-        inline void
-        operator()(
-            streamtype& buffer,
-            const std::vector<fwdpy11::ancient_sample_record>& var) const
-        {
-            fwdpp::io::scalar_writer w;
-            std::size_t s = var.size();
-            w(buffer, &s);
-            for (const auto& ar : var)
-                {
-                    w(buffer, &ar.time);
-                    w(buffer, &ar.n1);
-                    w(buffer, &ar.n2);
-                }
-        }
-    };
     struct deserialize_ancient_sample_records
     {
+        struct ancient_sample_record
+        {
+            double time;
+            fwdpp::ts::TS_NODE_INT n1, n2;
+        };
         template <typename streamtype>
         inline void
-        operator()(streamtype& buffer,
-                   std::vector<fwdpy11::ancient_sample_record>& var) const
+        operator()(streamtype& buffer, std::vector<ancient_sample_record>& var) const
         {
             fwdpp::io::scalar_reader r;
             std::size_t s = var.size();
