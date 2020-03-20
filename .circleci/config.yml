@@ -67,10 +67,12 @@ jobs:
             make html -C doc
             make doctest -C doc
 
-      - run:
-          name: Validate URL in the manual.
-          command: |
-              make linkcheck -C doc
+      # This is fickle b/c it often fails due to connection 
+      # issues rather than real URL problems
+      #- run:
+      #    name: Validate URL in the manual.
+      #    command: |
+      #        make linkcheck -C doc
 
       - run:
           name: Make sure we can build a distribution tarball.
