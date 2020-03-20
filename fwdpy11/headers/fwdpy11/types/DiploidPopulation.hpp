@@ -110,13 +110,11 @@ namespace fwdpy11
         //TODO figure out what to do with class constructor??
         //TODO Introduce types for ancient sample individual and node tracking
         std::vector<DiploidMetadata> diploid_metadata, ancient_sample_metadata;
-        std::vector<ancient_sample_record> ancient_sample_records;
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
             : Population{ N, length }, diploids(N, { 0, 0 }),
-              diploid_metadata(N), ancient_sample_metadata{},
-              ancient_sample_records{}
+              diploid_metadata(N), ancient_sample_metadata{}
         {
             finish_construction({ N });
         }
@@ -128,9 +126,7 @@ namespace fwdpy11
                           length },
               diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
                        { 0, 0 }),
-              diploid_metadata(N), ancient_sample_metadata{},
-              ancient_sample_records{}
-
+              diploid_metadata(N), ancient_sample_metadata{}
         {
             finish_construction(deme_sizes);
         }
@@ -143,7 +139,7 @@ namespace fwdpy11
                          std::forward<genomes_input>(g),
                          std::forward<mutations_input>(m), 100),
               diploids(std::forward<diploids_input>(d)), diploid_metadata(N),
-              ancient_sample_metadata{}, ancient_sample_records{}
+              ancient_sample_metadata{}
         //! Constructor for pre-determined population status
         {
             this->process_individual_input();

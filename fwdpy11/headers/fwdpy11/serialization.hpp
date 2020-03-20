@@ -47,7 +47,9 @@ namespace fwdpy11
             // The reason is that the fwdpp back-end regenerates
             // them by traversing genomes, but we may have neutral
             // mutations not in the genomes.
-            return 5;
+            // Changed to 6 in 0.6.3 because we removed "ancient sample
+            // records" that weren't being used.
+            return 6;
         }
 
         template <typename streamtype, typename poptype>
@@ -59,12 +61,10 @@ namespace fwdpy11
             buffer.write(reinterpret_cast<char *>(&m), sizeof(decltype(m)));
             buffer.write(reinterpret_cast<const char *>((&pop->generation)),
                          sizeof(unsigned));
-            fwdpy11::serialize_diploid_metadata()(buffer,
-                                                  pop->diploid_metadata);
-            fwdpy11::serialize_diploid_metadata()(
-                buffer, pop->ancient_sample_metadata);
-            fwdpy11::serialize_ancient_sample_records()(
-                buffer, pop->ancient_sample_records);
+            fwdpy11::serialize_diploid_metadata()(buffer, pop->diploid_metadata);
+            fwdpy11::serialize_diploid_metadata()(buffer, pop->ancient_sample_metadata);
+            //fwdpy11::serialize_ancient_sample_records()(
+            //   buffer, pop->ancient_sample_records);
             fwdpp::io::serialize_population(buffer, *pop);
             //preserved mutation counts added in 0.5.2, which is format version 4
             fwdpp::io::scalar_writer w;
@@ -116,8 +116,7 @@ namespace fwdpy11
                 int version = 1;
                 if (have_magic)
                     {
-                        buffer.read(reinterpret_cast<char *>(&version),
-                                    sizeof(int));
+                        buffer.read(reinterpret_cast<char *>(&version), sizeof(int));
                     }
                 if (version == 1)
                     {
@@ -127,13 +126,17 @@ namespace fwdpy11
                                                  "was last supported in "
                                                  "fwdpy11 0.1.4");
                     }
-                buffer.read(reinterpret_cast<char *>(&pop.generation),
-                            sizeof(unsigned));
+                buffer.read(reinterpret_cast<char *>(&pop.generation), sizeof(unsigned));
                 deserialize_diploid_metadata()(buffer, pop.diploid_metadata);
-                deserialize_diploid_metadata()(buffer,
-                                               pop.ancient_sample_metadata);
-                fwdpy11::deserialize_ancient_sample_records()(
-                    buffer, pop.ancient_sample_records);
+                deserialize_diploid_metadata()(buffer, pop.ancient_sample_metadata);
+                if (version < 6)
+                    {
+                        std::vector<
+                            deserialize_ancient_sample_records::ancient_sample_record>
+                            ancient_sample_records;
+                        fwdpy11::deserialize_ancient_sample_records()(
+                            buffer, ancient_sample_records);
+                    }
                 fwdpp::io::deserialize_population(buffer, pop);
                 std::size_t msize;
                 fwdpp::io::scalar_reader r;
@@ -143,8 +146,7 @@ namespace fwdpy11
                         pop.mcounts_from_preserved_nodes.resize(msize);
                         if (msize > 0)
                             {
-                                r(buffer,
-                                  pop.mcounts_from_preserved_nodes.data(),
+                                r(buffer, pop.mcounts_from_preserved_nodes.data(),
                                   msize);
                             }
                     }
@@ -162,20 +164,18 @@ namespace fwdpy11
                 // NOTE: version 0.5.0 added in a site table that previous versions
                 // did not have.  Further, the mutation table entries differed in
                 // previous versions.
-                if (!pop.tables.mutation_table.empty()
-                    && pop.tables.site_table.empty())
+                if (!pop.tables.mutation_table.empty() && pop.tables.site_table.empty())
                     {
-                        fwdpp::ts::io::
-                            fix_mutation_table_repopulate_site_table(
-                                pop.tables, pop.mutations);
+                        fwdpp::ts::io::fix_mutation_table_repopulate_site_table(
+                            pop.tables, pop.mutations);
                     }
                 if (version < 4 && !pop.tables.edge_table.empty())
                     {
                         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);
-                        fwdpp::ts::count_mutations(
-                            pop.tables, pop.mutations, samples, pop.mcounts,
-                            pop.mcounts_from_preserved_nodes);
+                        fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
+                                                   pop.mcounts,
+                                                   pop.mcounts_from_preserved_nodes);
                     }
                 if (version > 2)
                     {
@@ -183,17 +183,13 @@ namespace fwdpy11
                         if (msize > 0)
                             {
                                 pop.genetic_value_matrix.resize(msize);
-                                r(buffer, pop.genetic_value_matrix.data(),
-                                  msize);
+                                r(buffer, pop.genetic_value_matrix.data(), msize);
                             }
                         r(buffer, &msize);
                         if (msize > 0)
                             {
-                                pop.ancient_sample_genetic_value_matrix.resize(
-                                    msize);
-                                r(buffer,
-                                  pop.ancient_sample_genetic_value_matrix
-                                      .data(),
+                                pop.ancient_sample_genetic_value_matrix.resize(msize);
+                                r(buffer, pop.ancient_sample_genetic_value_matrix.data(),
                                   msize);
                             }
                     }

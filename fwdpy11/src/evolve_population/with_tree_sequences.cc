@@ -60,7 +60,6 @@ apply_treseq_resetting_of_ancient_samples(
         {
             pop.tables.preserved_nodes.clear();
             pop.ancient_sample_metadata.clear();
-            pop.ancient_sample_records.clear();
             pop.ancient_sample_genetic_value_matrix.clear();
         }
 }
@@ -485,11 +484,6 @@ evolve_with_tree_sequences(
                                             + offset
                                             + genetics.gvalue[0]->total_dim);
                                 }
-                            // Record the time and nodes for this individual
-                            pop.ancient_sample_records.emplace_back(
-                                fwdpy11::ancient_sample_record{
-                                    static_cast<double>(pop.generation),
-                                    x.first, x.second });
                         }
                     track_ancestral_counts(pop, sr.samples);
                     // Finally, clear the input
