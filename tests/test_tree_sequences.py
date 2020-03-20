@@ -161,6 +161,12 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         assert max(self.pop.mcounts) == 2 * \
             self.pop.N, "Nothing fixed, so test case is not helpful"
 
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
+
     def test_simplify(self):
         tables, idmap = fwdpy11.simplify(self.pop, [i for i in range(10)])
         for i in range(10):
@@ -685,6 +691,12 @@ class TestMutationCounts(unittest.TestCase):
         fwdpy11.evolvets(self.rng2, self.pop2, params2,
                          100, remove_extinct_variants=False)
 
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
+
     def test_mutation_counts(self):
         self.assertEqual(sum(self.pop.mcounts), sum(self.pop2.mcounts))
 
@@ -724,6 +736,12 @@ class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
                          100, track_mutation_counts=True)
         assert len(
             self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
 
     def test_max_mcounts(self):
         self.assertTrue(max(self.pop.mcounts) < 2*self.pop.N)
@@ -795,6 +813,12 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
                          100, self.recorder, track_mutation_counts=True)
         assert len(
             self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
+
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
 
     def test_mutation_table_contents(self):
         self.assertEqual(len(self.pop.mcounts), len(
@@ -896,6 +920,12 @@ class TestSimplificationInterval(unittest.TestCase):
         samples = [i for i in range(2*self.pop.N)] + \
             self.pop.tables.preserved_nodes
         vi = fwdpy11.TreeIterator(self.pop.tables, samples)
+
+    def test_mut_lookup(self):
+        self.assertEqual(len(self.pop.mut_lookup),
+                         len(self.pop.tables.mutations))
+        self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
+        self.assertTrue(validate_mut_lookup_content(self.pop))
 
 
 class TestFixationPreservation(unittest.TestCase):
