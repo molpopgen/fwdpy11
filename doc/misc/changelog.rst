@@ -4,6 +4,23 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.3
+++++++++++++++++++++++++++++++++++++++++
+
+Maintenance release.
+
+This release fixes two bugs. Both are related to internal details of book-keeping various data
+structures:
+
+*  `Issue 420 <https://github.com/molpopgen/fwdpy11/issues/420>`_
+*  `Issue 422 <https://github.com/molpopgen/fwdpy11/issues/422>`_
+
+Other changes:
+
+* :mod:`sparse` is added to ``install_requires`` in ``setup.py``.  `Issue 421 <https://github.com/molpopgen/fwdpy11/issues/421>`_
+* :class:`fwdpy11.TableCollection`'s validation of genome lengths is improved. `PR428 <https://github.com/molpopgen/fwdpy11/pull/428>`_ 
+* The C++ base class for a population is now a concrete class rather than a template alias.  This change enables forward declarations in header files. `PR427 <https://github.com/molpopgen/fwdpy11/pull/427>`_ 
+
 0.6.2
 ++++++++++++++++++++++++++++++++++++++++
 
