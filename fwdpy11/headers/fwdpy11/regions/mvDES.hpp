@@ -185,7 +185,7 @@ namespace fwdpy11
             gsl_vector_const_view d = gsl_matrix_const_diagonal(vcov_copy.get());
             for (std::size_t i = 0; i < d.vector.size; ++i)
                 {
-                    rv.push_back(gsl_vector_get(&d.vector, i));
+                    rv.push_back(std::sqrt(gsl_vector_get(&d.vector, i)));
                 }
             return rv;
         }
