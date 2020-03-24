@@ -63,15 +63,16 @@ namespace fwdpy11
         /*!
           Constructor for constant effect size sims.
 
+          \param treat_as_neutral Set neutral field to this value
           \param pos_ Mutation position
           \param s_ Selection coefficient
           \param h_ Dominance coefficient
           \param g_ Generation when mutation arose
           \param x_ Value to assign to mutation_base::xtra
         */
-        Mutation(const double &pos_, const double &s_, const double &h_,
-                 const unsigned &g_, const std::uint16_t x_ = 0) noexcept
-            : mutation_base(pos_, (s_ == 0.) ? true : false, x_), g(g_), s(s_),
+        Mutation(bool treat_as_neutral, const double pos_, const double s_,
+                 const double h_, const unsigned g_, const std::uint16_t x_ = 0) noexcept
+            : mutation_base(pos_, treat_as_neutral, x_), g(g_), s(s_),
               h(h_), esizes{}, heffects{}
         {
         }
@@ -79,6 +80,7 @@ namespace fwdpy11
         /*!
           Constructor for constant effect size + variable effect size sims.
 
+          \param treat_as_neutral Set neutral field to this value
           \param pos_ Mutation position
           \param s_ Selection coefficient
           \param h_ Dominance coefficient
@@ -88,55 +90,40 @@ namespace fwdpy11
           \param heffects_ Vector of heterozygous effects
         */
         template <typename vectype>
-        Mutation(const double &pos_, const double &s_, const double &h_,
-                 const unsigned &g_, vectype &&esizes_, vectype &&heffects_,
-                 const std::uint16_t x_ = 0) noexcept
-            : fwdpp::mutation_base(pos_, true, x_), g(g_), s(s_), h(h_),
+        Mutation(bool treat_as_neutral, const double pos_, const double s_,
+                 const double h_, const unsigned g_, vectype &&esizes_,
+                 vectype &&heffects_, const std::uint16_t x_ = 0) noexcept
+            : fwdpp::mutation_base(pos_, treat_as_neutral, x_), g(g_), s(s_), h(h_),
               esizes(std::forward<vectype>(esizes_)),
               heffects(std::forward<vectype>(heffects_))
         {
-            this->neutral
-                = ((s == 0.0)
-                   && std::all_of(std::begin(this->esizes),
-                                  std::end(this->esizes),
-                                  [](const double d) { return d == 0.; }));
         }
 
         Mutation(constructor_tuple t) noexcept
-            : mutation_base(std::get<0>(t),
-                            (std::get<1>(t) == 0.) ? true : false,
+            : mutation_base(std::get<0>(t), (std::get<1>(t) == 0.) ? true : false,
                             std::get<4>(t)),
               g(std::get<3>(t)), s(std::get<1>(t)),
               h(std::get<2>(t)), esizes{}, heffects{}
         {
-            this->neutral
-                = ((s == 0.0)
-                   && std::all_of(std::begin(this->esizes),
-                                  std::end(this->esizes),
-                                  [](const double d) { return d == 0.; }));
         }
 
         Mutation(constructor_tuple_variable_effects t) noexcept
-            : mutation_base(std::get<0>(t),
-                            (std::get<1>(t) == 0.) ? true : false,
+            : mutation_base(std::get<0>(t), (std::get<1>(t) == 0.) ? true : false,
                             std::get<6>(t)),
               g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t)),
               esizes(std::get<4>(t)), heffects(std::get<5>(t))
         {
             this->neutral
                 = ((s == 0.0)
-                   && std::all_of(std::begin(this->esizes),
-                                  std::end(this->esizes),
+                   && std::all_of(std::begin(this->esizes), std::end(this->esizes),
                                   [](const double d) { return d == 0.; }));
         }
 
         bool
         operator==(const Mutation &rhs) const
         {
-            return std::tie(this->g, this->s, this->h, this->esizes,
-                            this->heffects)
-                       == std::tie(rhs.g, rhs.s, rhs.h, rhs.esizes,
-                                   rhs.heffects)
+            return std::tie(this->g, this->s, this->h, this->esizes, this->heffects)
+                       == std::tie(rhs.g, rhs.s, rhs.h, rhs.esizes, rhs.heffects)
                    && is_equal(rhs);
         }
     };
