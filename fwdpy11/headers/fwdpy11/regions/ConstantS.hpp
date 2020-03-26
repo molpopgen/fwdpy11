@@ -12,10 +12,10 @@ namespace fwdpy11
     struct ConstantS : public Sregion
     {
         double esize, dominance;
+        bool is_neutral;
 
-        ConstantS(const Region& r, const double s, const double es,
-                  const double h)
-            : Sregion(r, s), esize(es), dominance(h)
+        ConstantS(const Region& r, const double s, const double es, const double h)
+            : Sregion(r, s), esize(es), dominance(h), is_neutral(false)
         {
             if (!std::isfinite(esize))
                 {
@@ -25,6 +25,18 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("dominance must be finite");
                 }
+            if (esize == 0.0)
+                {
+                    throw std::invalid_argument("effect size cannot be 0.0");
+                }
+        }
+
+        // Constructor added in 0.6.3 to allow the back-end
+        // of MutationRegions to supply neutral variants.
+        // This constructor is NOT exposed to Python.
+        ConstantS(const Region& r)
+            : Sregion(r, 1.), esize(0.), dominance(1.), is_neutral(true)
+        {
         }
 
         std::unique_ptr<Sregion>
@@ -44,37 +56,42 @@ namespace fwdpy11
                 << ", scaling=" << this->scaling << ')';
             return out.str();
         }
+
         std::uint32_t
-        operator()(
-            fwdpp::flagged_mutation_queue& recycling_bin,
-            std::vector<Mutation>& mutations,
-            std::unordered_multimap<double, std::uint32_t>& lookup_table,
-            const std::uint32_t generation, const GSLrng_t& rng) const
+        operator()(fwdpp::flagged_mutation_queue& recycling_bin,
+                   std::vector<Mutation>& mutations,
+                   std::unordered_multimap<double, std::uint32_t>& lookup_table,
+                   const std::uint32_t generation, const GSLrng_t& rng) const
         {
             return infsites_Mutation(
-                recycling_bin, mutations, lookup_table, generation,
+                recycling_bin, mutations, lookup_table, is_neutral, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return esize / scaling; },
-                [this]() { return dominance; }, this->label());
+                [this]() { return esize / scaling; }, [this]() { return dominance; },
+                this->label());
         }
 
         pybind11::tuple
         pickle() const
         {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), esize,
-                                        dominance);
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), esize, dominance,
+                                        is_neutral);
         }
 
         static ConstantS
         unpickle(pybind11::tuple t)
         {
-            if (t.size() != 3)
+            if (t.size() != 4)
                 {
                     throw std::runtime_error("invalid tuple size");
                 }
             auto base = t[0].cast<pybind11::tuple>();
-            return ConstantS(Region::unpickle(base[0]), base[1].cast<double>(),
-                             t[1].cast<double>(), t[2].cast<double>());
+            bool is_neutral = t[3].cast<bool>();
+            if (is_neutral == false)
+                {
+                    return ConstantS(Region::unpickle(base[0]), base[1].cast<double>(),
+                                     t[1].cast<double>(), t[2].cast<double>());
+                }
+            return ConstantS(Region::unpickle(base[0]));
         }
     };
 } // namespace fwdpy11
