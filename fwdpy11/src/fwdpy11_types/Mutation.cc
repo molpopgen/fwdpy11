@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/stl.h>
 #include <fwdpy11/numpy/array.hpp>
@@ -10,9 +11,11 @@ init_Mutation(py::module &m)
     // Sugar types
     py::class_<fwdpy11::Mutation, fwdpp::mutation_base>(
         m, "Mutation", "Mutation with effect size and dominance")
-        .def(py::init<double, double, double, unsigned, std::uint16_t>(),
-             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
-             py::arg("label"),
+        .def(py::init(
+                 [](double pos, double s, double h, unsigned g, std::uint16_t label) {
+                     return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
+                 }),
+             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("label"),
              R"delim(
                 Construct a mutations.
 
@@ -41,8 +44,7 @@ init_Mutation(py::module &m)
                     0
                 )delim")
         .def(py::init([](double pos, double s, double h, fwdpp::uint_t g,
-                         py::list esizes, py::list heffects,
-                         std::uint16_t label) {
+                         py::list esizes, py::list heffects, std::uint16_t label) {
                  std::vector<double> esizes_;
                  std::vector<double> heffects_;
                  for (auto i : esizes)
@@ -53,11 +55,17 @@ init_Mutation(py::module &m)
                      {
                          heffects_.push_back(i.cast<double>());
                      }
-                 return fwdpy11::Mutation(pos, s, h, g, std::move(esizes_),
+                 bool neutral = (s == 0.);
+                 if (!esizes_.empty() && neutral == true)
+                     {
+                         neutral = std::all_of(begin(esizes_), end(esizes_),
+                                               [](double d) { return d == 0.; });
+                     }
+                 return fwdpy11::Mutation(neutral, pos, s, h, g, std::move(esizes_),
                                           std::move(heffects_), label);
              }),
-             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"),
-             py::arg("esizes"), py::arg("heffects"), py::arg("label"),
+             py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("esizes"),
+             py::arg("heffects"), py::arg("label"),
              R"delim(
 			 Construct a mutation with both a constant effect and/or
 			 a vector of effects.
@@ -97,19 +105,18 @@ init_Mutation(py::module &m)
                     0
                     0
                 )delim")
-        .def_readonly(
-            "g", &fwdpy11::Mutation::g,
-            "Generation when mutation arose (origination time). (read-only)")
+        .def_readonly("g", &fwdpy11::Mutation::g,
+                      "Generation when mutation arose (origination time). (read-only)")
         .def_readonly("s", &fwdpy11::Mutation::s,
                       "Selection coefficient/effect size. (read-only)")
         .def_readonly("h", &fwdpy11::Mutation::h,
                       "Dominance/effect in heterozygotes. (read-only)")
-        .def_property_readonly("heffects",
-                               [](const fwdpy11::Mutation &self) {
-                                   return fwdpy11::make_1d_ndarray_readonly(
-                                       self.heffects);
-                               },
-                               R"delim(
+        .def_property_readonly(
+            "heffects",
+            [](const fwdpy11::Mutation &self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.heffects);
+            },
+            R"delim(
 				Vector of heterozygous effects.
 
 				.. versionadded:: 0.2.0
@@ -118,12 +125,12 @@ init_Mutation(py::module &m)
 
                     Property is now a readonly numpy.ndarray
 				)delim")
-        .def_property_readonly("esizes",
-                               [](const fwdpy11::Mutation &self) {
-                                   return fwdpy11::make_1d_ndarray_readonly(
-                                       self.esizes);
-                               },
-                               R"delim(
+        .def_property_readonly(
+            "esizes",
+            [](const fwdpy11::Mutation &self) {
+                return fwdpy11::make_1d_ndarray_readonly(self.esizes);
+            },
+            R"delim(
 				Vector of effect sizes.
 
 				.. versionadded:: 0.2.0
@@ -134,9 +141,7 @@ init_Mutation(py::module &m)
 				)delim")
         .def_property_readonly(
             "key",
-            [](const fwdpy11::Mutation &m) {
-                return py::make_tuple(m.pos, m.s, m.g);
-            },
+            [](const fwdpy11::Mutation &m) { return py::make_tuple(m.pos, m.s, m.g); },
             R"delim(It is often useful to have a unique key for
                     tracking mutations.  This property returns 
                     the tuple (pos, esize, origin).
@@ -145,26 +150,24 @@ init_Mutation(py::module &m)
                    )delim")
         .def(py::pickle(
             [](const fwdpy11::Mutation &m) {
-                return py::make_tuple(m.pos, m.s, m.h, m.g, m.esizes,
+                return py::make_tuple(m.neutral, m.pos, m.s, m.h, m.g, m.esizes,
                                       m.heffects, m.xtra);
             },
             [](py::tuple p) {
-                return std::unique_ptr<fwdpy11::Mutation>(
-                    new fwdpy11::Mutation(
-                        p[0].cast<double>(), p[1].cast<double>(),
-                        p[2].cast<double>(), p[3].cast<unsigned>(),
-                        p[4].cast<std::vector<double>>(),
-                        p[5].cast<std::vector<double>>(),
-                        p[6].cast<std::uint16_t>()));
+                return std::unique_ptr<fwdpy11::Mutation>(new fwdpy11::Mutation(
+                    p[0].cast<bool>(), p[1].cast<double>(), p[2].cast<double>(),
+                    p[3].cast<double>(), p[4].cast<unsigned>(),
+                    p[5].cast<std::vector<double>>(), p[6].cast<std::vector<double>>(),
+                    p[7].cast<std::uint16_t>()));
             }))
         .def("__str__",
              [](const fwdpy11::Mutation &m) {
-                 return "Mutation[" + std::to_string(m.pos) + ","
-                        + std::to_string(m.s) + "," + std::to_string(m.h) + ","
-                        + std::to_string(m.g) + "," + std::to_string(m.xtra)
-                        + "]";
+                 return "Mutation[" + std::to_string(m.pos) + "," + std::to_string(m.s)
+                        + "," + std::to_string(m.h) + "," + std::to_string(m.g) + ","
+                        + std::to_string(m.xtra) + "]";
              })
-        .def("__eq__", [](const fwdpy11::Mutation &a,
-                          const fwdpy11::Mutation &b) { return a == b; });
+        .def("__eq__", [](const fwdpy11::Mutation &a, const fwdpy11::Mutation &b) {
+            return a == b;
+        });
 }
 
