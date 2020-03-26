@@ -139,7 +139,7 @@ namespace fwdpy11
                         "call to gsl_ran_multivariate_gaussian failed");
                 }
             return infsites_Mutation(
-                recycling_bin, mutations, lookup_table, generation,
+                recycling_bin, mutations, lookup_table, false, generation,
                 [this, &rng]() { return region(rng); },
                 [this]() { return fixed_effect; },
                 [this]() { return dominance; },
