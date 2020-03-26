@@ -56,7 +56,7 @@ namespace fwdpy11
             const std::uint32_t generation, const GSLrng_t& rng) const
         {
             return infsites_Mutation(
-                recycling_bin, mutations, lookup_table, generation,
+                recycling_bin, mutations, lookup_table, false, generation, 
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() {
                     return gsl_ran_gamma(rng.get(), shape, mean / shape)
