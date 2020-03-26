@@ -24,7 +24,7 @@ namespace
         };
         const auto return_zero = []() { return 0.0; };
         auto key = fwdpy11::infsites_Mutation(
-            recycling_bin, pop.mutations, pop.mut_lookup, generation, uniform,
+            recycling_bin, pop.mutations, pop.mut_lookup, true, generation, uniform,
             return_zero, return_zero, 0);
         return fwdpp::ts::new_variant_record(
             pop.mutations[key].pos, fwdpp::ts::default_ancestral_state, key,
