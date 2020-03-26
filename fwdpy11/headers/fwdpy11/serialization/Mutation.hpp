@@ -32,11 +32,14 @@ namespace fwdpp
         template <> struct serialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_writer writer;
-            serialize_mutation<fwdpy11::Mutation>() : writer{} {}
+            serialize_mutation<fwdpy11::Mutation>() : writer{}
+            {
+            }
             template <typename streamtype>
             inline void
             operator()(streamtype &buffer, const fwdpy11::Mutation &m) const
             {
+                writer(buffer, &m.neutral);
                 writer(buffer, &m.g);
                 writer(buffer, &m.pos);
                 writer(buffer, &m.s);
@@ -59,14 +62,18 @@ namespace fwdpp
         template <> struct deserialize_mutation<fwdpy11::Mutation>
         {
             io::scalar_reader reader;
-            deserialize_mutation<fwdpy11::Mutation>() : reader{} {}
+            deserialize_mutation<fwdpy11::Mutation>() : reader{}
+            {
+            }
             template <typename streamtype>
             inline fwdpy11::Mutation
             operator()(streamtype &buffer) const
             {
                 uint_t g;
+                bool neutral;
                 double pos, s, h;
                 decltype(fwdpy11::Mutation::xtra) xtra;
+                reader(buffer, &neutral);
                 reader(buffer, &g);
                 reader(buffer, &pos);
                 reader(buffer, &s);
@@ -86,7 +93,7 @@ namespace fwdpp
                         hs.resize(ns);
                         reader(buffer, hs.data(), nh);
                     }
-                return fwdpy11::Mutation(pos, s, h, g, std::move(ss),
+                return fwdpy11::Mutation(neutral, pos, s, h, g, std::move(ss),
                                          std::move(hs), xtra);
             }
         };

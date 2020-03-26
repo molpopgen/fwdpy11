@@ -30,6 +30,7 @@
 #include <fwdpp/ts/serialization.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpy11/serialization/diploid_metadata.hpp>
+#include "serialization/backwards_compat.hpp"
 
 namespace fwdpy11
 {
@@ -48,7 +49,8 @@ namespace fwdpy11
             // them by traversing genomes, but we may have neutral
             // mutations not in the genomes.
             // Changed to 6 in 0.6.3 because we removed "ancient sample
-            // records" that weren't being used.
+            // records" that weren't being used and we changed the C++
+            // constructor for Mutation.
             return 6;
         }
 
@@ -136,8 +138,12 @@ namespace fwdpy11
                             ancient_sample_records;
                         fwdpy11::deserialize_ancient_sample_records()(
                             buffer, ancient_sample_records);
+                        backwards_compat::deserialize_population_details(pop, buffer);
                     }
-                fwdpp::io::deserialize_population(buffer, pop);
+                else
+                    {
+                        fwdpp::io::deserialize_population(buffer, pop);
+                    }
                 std::size_t msize;
                 fwdpp::io::scalar_reader r;
                 if (version >= 4) // >= version 0.5.2
