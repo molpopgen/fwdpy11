@@ -31,9 +31,8 @@ namespace fwdpy11
               typename dominance_function>
     std::size_t
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
-                      Population::mcont_t &mutations,
-                      Population::lookup_table_t &lookup,
-                      const fwdpp::uint_t &generation,
+                      Population::mcont_t &mutations, Population::lookup_table_t &lookup,
+                      const bool treat_as_neutral, const fwdpp::uint_t &generation,
                       const position_function &posmaker,
                       const effect_size_function &esize_maker,
                       const dominance_function &hmaker,
@@ -52,6 +51,7 @@ namespace fwdpy11
      * \param recycling_bin Recycling queue for mutations.
      * \param mutations Container of mutations
      * \param lookup Lookup table for mutation positions
+     * \param treat_as_neutral The neutral field will be assigned this value
      * \param generation The generation that is being mutated
      * \param pselected  The probability that a new mutation affects fitness
      * \param posmaker A function generating a mutation position.  Must be
@@ -74,21 +74,19 @@ namespace fwdpy11
                 pos = posmaker();
             }
         auto idx = fwdpp::recycle_mutation_helper(recycling_bin, mutations,
-                                                  pos, esize_maker(), hmaker(),
-                                                  generation, x);
+                                                  treat_as_neutral, pos, esize_maker(),
+                                                  hmaker(), generation, x);
         lookup.emplace(pos, idx);
         return idx;
     }
 
     template <typename position_function, typename fixed_effect_size_function,
-              typename fixed_dominance_function,
-              typename effect_sizes_function,
+              typename fixed_dominance_function, typename effect_sizes_function,
               typename dominance_values_function>
     std::size_t
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
-                      Population::mcont_t &mutations,
-                      Population::lookup_table_t &lookup,
-                      const fwdpp::uint_t &generation,
+                      Population::mcont_t &mutations, Population::lookup_table_t &lookup,
+                      const bool treat_as_neutral, const fwdpp::uint_t &generation,
                       const position_function &posmaker,
                       const fixed_effect_size_function &fixed_esize_maker,
                       const fixed_dominance_function &fixed_hmaker,
@@ -109,6 +107,7 @@ namespace fwdpy11
      * \param recycling_bin Recycling queue for mutations.
      * \param mutations Container of mutations
      * \param lookup Lookup table for mutation positions
+     * \param treat_as_neutral The neutral field will be assigned this value
      * \param generation The generation that is being mutated
      * \param pselected  The probability that a new mutation affects fitness
      * \param posmaker A function generating a mutation position.  Must be
@@ -131,8 +130,8 @@ namespace fwdpy11
                 pos = posmaker();
             }
         auto idx = fwdpp::recycle_mutation_helper(
-            recycling_bin, mutations, pos, fixed_esize_maker(), fixed_hmaker(),
-            generation, esizes(), dominance(), x);
+            recycling_bin, mutations, treat_as_neutral, pos, fixed_esize_maker(),
+            fixed_hmaker(), generation, esizes(), dominance(), x);
         lookup.emplace(pos, idx);
         return idx;
     }
