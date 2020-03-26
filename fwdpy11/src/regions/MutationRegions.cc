@@ -16,18 +16,15 @@ init_MutationRegions(py::module& m)
             "create",
             [](double pneutral, const std::vector<fwdpy11::Region>& neutral,
                py::list selected) -> fwdpy11::MutationRegions {
-                std::vector<std::unique_ptr<fwdpy11::Sregion>> nregions,
-                    sregions;
+                std::vector<std::unique_ptr<fwdpy11::Sregion>> nregions, sregions;
 
                 std::vector<double> nweights, sweights;
 
                 for (auto& n : neutral)
                     {
                         nweights.push_back(n.weight);
-                        nregions.emplace_back(new fwdpy11::ConstantS(
-                            fwdpy11::Region(n.beg, n.end, n.weight, n.coupled,
-                                            n.label),
-                            1.0, 0.0, 0.0));
+                        nregions.emplace_back(new fwdpy11::ConstantS(fwdpy11::Region(
+                            n.beg, n.end, n.weight, n.coupled, n.label)));
                     }
 
                 for (auto& s : selected)
@@ -37,7 +34,7 @@ init_MutationRegions(py::module& m)
                         sregions.emplace_back(ref.clone());
                     }
 
-                return fwdpy11::MutationRegions::create(
-                    pneutral, nweights, sweights, nregions, sregions);
+                return fwdpy11::MutationRegions::create(pneutral, nweights, sweights,
+                                                        nregions, sregions);
             });
 }
