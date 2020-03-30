@@ -33,3 +33,6 @@ set_target_properties(discrete_demography_roundtrips PROPERTIES LIBRARY_OUTPUT_D
 pybind11_add_module(inherit_noise inherit_noise.cpp)
 target_link_libraries(inherit_noise PRIVATE GSL::gsl GSL::gslcblas)
 set_target_properties(inherit_noise PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+pybind11_add_module(EsizeZero EsizeZero.cpp)
+target_link_libraries(EsizeZero PRIVATE GSL::gsl GSL::gslcblas)
+set_target_properties(EsizeZero PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
