@@ -9,11 +9,12 @@ version, etc.
 
 Maintenance release.
 
-This release fixes two bugs. Both are related to internal details of book-keeping various data
-structures:
+This release fixes three bugs. The first two are related to internal
+details of book-keeping various data structures:
 
 *  `Issue 420 <https://github.com/molpopgen/fwdpy11/issues/420>`_
 *  `Issue 422 <https://github.com/molpopgen/fwdpy11/issues/422>`_
+*  `Issue 432 <https://github.com/molpopgen/fwdpy11/issues/432>`_
 
 Other changes:
 
