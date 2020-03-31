@@ -11,16 +11,16 @@ namespace fwdpy11
 
     struct GammaS : public Sregion
     {
-        double mean, shape, dominance;
+        double mean, shape_parameter, dominance;
 
         GammaS(const Region& r, double sc, double m, double s, double h)
-            : Sregion(r, sc, 1), mean(m), shape(s), dominance(h)
+            : Sregion(r, sc, 1), mean(m), shape_parameter(s), dominance(h)
         {
             if (!std::isfinite(mean))
                 {
                     throw std::invalid_argument("mean must be finite");
                 }
-            if (!std::isfinite(shape))
+            if (!std::isfinite(shape_parameter))
                 {
                     throw std::invalid_argument("shape must be finite");
                 }
@@ -43,7 +43,7 @@ namespace fwdpy11
             out.precision(4);
             out << "GammaS(";
             this->region.region_repr(out);
-            out << ", mean=" << this->mean << ", shape=" << this->shape
+            out << ", mean=" << this->mean << ", shape=" << this->shape_parameter
                 << ", h=" << this->dominance << ", scaling=" << this->scaling
                 << ')';
             return out.str();
@@ -60,7 +60,7 @@ namespace fwdpy11
                 recycling_bin, mutations, lookup_table, false, generation, 
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() {
-                    return gsl_ran_gamma(rng.get(), shape, mean / shape)
+                    return gsl_ran_gamma(rng.get(), shape_parameter, mean / shape_parameter)
                            / scaling;
                 },
                 [this]() { return dominance; }, this->label());
@@ -69,7 +69,7 @@ namespace fwdpy11
         double
         from_mvnorm(const double /*deviate*/, const double P) const override
         {
-            return gsl_cdf_gamma_Pinv(P, shape, mean / shape) / scaling;
+            return gsl_cdf_gamma_Pinv(P, shape_parameter, mean / shape_parameter) / scaling;
         }
 
         std::vector<double>
@@ -81,7 +81,7 @@ namespace fwdpy11
         pybind11::tuple
         pickle() const
         {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), mean, shape,
+            return pybind11::make_tuple(Sregion::pickle_Sregion(), mean, shape_parameter,
                                         dominance);
         }
 
