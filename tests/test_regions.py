@@ -109,7 +109,7 @@ class test_PickleGammaS(unittest.TestCase):
         self.assertEqual(self.r.c, up.c)
         self.assertEqual(self.r.l, up.l)
         self.assertEqual(up.mean, -0.2)
-        self.assertEqual(up.shape, 0.5)
+        self.assertEqual(up.shape_parameter, 0.5)
         self.assertEqual(up.h, DOM)
 
 
