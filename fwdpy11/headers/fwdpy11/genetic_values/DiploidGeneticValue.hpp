@@ -134,7 +134,7 @@ namespace fwdpy11
         virtual pybind11::tuple
         shape() const
         {
-            if (total_dim != 1 || total_dim != gvalues.size())
+            if (total_dim>1 && total_dim != gvalues.size())
                 {
                     throw std::runtime_error("dimensionality mismatch");
                 }
