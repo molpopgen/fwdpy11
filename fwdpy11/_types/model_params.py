@@ -237,5 +237,20 @@ class ModelParams(object):
                 "mutation rate to neutral variants is > 0 but no Regions are defined")
         if self.simlen is None or self.simlen < 0:
             raise ValueError("simlen cannot be none or < 0")
+        # Added in 0.7.0
+        for s in self.sregions:
+            try:
+                if s.shape != self.gvalue.shape:
+                    e = "Sregion and genetic value "
+                    "dimension mismatch: {} {}, {} {}".format(
+                        type(s), s.shape, type(self.gvalue), self.gvalue.shape)
+                    raise ValueError(e)
+            except:  # NOQA
+                for g in self.gvalue:
+                    if s.shape != g.shape:
+                        e = "Sregion and genetic value "
+                        "dimension mismatch: {} {}, {} {}".format(
+                            type(s), s.shape, type(self.gvalue), self.gvalue.shape)
+                        raise ValueError(e)
         # if self.rates[2] > 0 and len(self.recregions) == 0:
         #     raise ValueError("recombination rate is > 0 but no Regions are defined")
