@@ -13,8 +13,8 @@ namespace
 {
     using matrix_ptr = std::unique_ptr<gsl_matrix, std::function<void(gsl_matrix *)>>;
     fwdpy11::mvDES
-    create_from_python(py::array_t<double> means, py::array_t<double> vcov,
-                       py::list sregions)
+    create_from_python(py::list sregions, py::array_t<double> means,
+                       py::array_t<double> vcov)
     {
         auto means_buffer = means.request();
         if (means_buffer.ndim != 1)
@@ -53,8 +53,8 @@ init_mvDES(py::module &m)
 {
     py::class_<fwdpy11::mvDES, fwdpy11::Sregion>(m, "mvDES")
         .def(py::init(
-            [](py::array_t<double> means, py::array_t<double> vcov, py::list sregions) {
-                return create_from_python(means, vcov, sregions);
+            [](py::list sregions, py::array_t<double> means, py::array_t<double> vcov) {
+                return create_from_python(sregions, means, vcov);
             }))
         .def("__repr__", &fwdpy11::mvDES::repr)
         .def_property_readonly("means", &fwdpy11::mvDES::get_means)
