@@ -76,7 +76,7 @@ namespace fwdpy11
 
         virtual double
         operator()(const DiploidMetadata & /*metadata*/,
-                   const std::vector<double> &values) const
+                   const std::vector<double> &values) const override
         {
             if (values.size() != ndim)
                 {
@@ -91,14 +91,14 @@ namespace fwdpy11
         }
 
         std::unique_ptr<GeneticValueToFitnessMap>
-        clone() const
+        clone() const override
         {
             return std::unique_ptr<MultivariateGSSmo>(
                 new MultivariateGSSmo(*this));
         }
 
         pybind11::object
-        pickle() const
+        pickle() const override
         {
             pybind11::list l;
             for (auto x : optima)
@@ -126,7 +126,7 @@ namespace fwdpy11
         }
 
         inline void
-        update(const DiploidPopulation &pop)
+        update(const DiploidPopulation &pop) override
         {
             update_details(pop);
         }
