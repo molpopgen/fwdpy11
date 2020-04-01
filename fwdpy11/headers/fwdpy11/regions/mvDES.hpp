@@ -85,7 +85,7 @@ namespace fwdpy11
                 }
             if (odist.size() == 1)
                 {
-                    for (std::size_t i = i; i < n; ++i)
+                    for (std::size_t i = 0; i < n; ++i)
                         {
                             rv.emplace_back(odist[0]->clone());
                         }
@@ -242,8 +242,8 @@ namespace fwdpy11
                 }
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, false, generation,
-                [this, &rng]() { return region(rng); }, [this]() { return 0.0; },
-                [this]() { return 1.0; }, [this]() { return deviates; },
+                [this, &rng]() { return region(rng); }, []() { return 0.0; },
+                []() { return 1.0; }, [this]() { return deviates; },
                 [this]() { return dominance_values; }, this->label());
         }
 
