@@ -44,8 +44,9 @@ class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation([50, 50], 1)
-        mvDES = fwdpy11.mvDES(np.zeros(2), np.identity(2),
-                              [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.1)])
+        mvDES = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
+            0, 1, 1, -0.1)], np.zeros(2), np.identity(2))
+
         self.pdict = {'nregions': [],
                       'sregions': [mvDES],
                       'recregions': [fwdpy11.PoissonInterval(0, 1, 1e-2)],

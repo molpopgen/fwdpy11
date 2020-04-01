@@ -209,8 +209,8 @@ class test_PickleConstantS(unittest.TestCase):
 class Test_mvDES(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.r = fwdpy11.mvDES(np.zeros(2), np.identity(2),
-                               [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.1)])
+        self.r = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
+            0, 1, 1, -0.1)], np.zeros(2), np.identity(2))
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
