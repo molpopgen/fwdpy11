@@ -341,6 +341,12 @@ evolve_with_tree_sequences(
             // can affect things.  Right now, we are requiring the offspring
             // genotypes to be in pop.diploids in the gvalue calculations.
             pop.diploids.swap(offspring);
+            // TODO: deal with random effects
+            for (auto &i : genetics.gvalue)
+                {
+                    i->update(pop);
+                }
+
             calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                                       offspring_metadata, new_diploid_gvalues,
                                       record_genotype_matrix);
@@ -349,13 +355,6 @@ evolve_with_tree_sequences(
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
-            // TODO: deal with random effects
-            // NOTE: this was moved from BEFORE to AFTER
-            // calling calculate_diploid_fitness on Feb 12, 2020.
-            for (auto &i : genetics.gvalue)
-                {
-                    i->update(pop);
-                }
 
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
