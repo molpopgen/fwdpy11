@@ -5,6 +5,7 @@
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/regions/mvDES.hpp>
+#include <fwdpy11/numpy/array.hpp>
 
 namespace py = pybind11;
 
@@ -54,5 +55,9 @@ init_mvDES(py::module &m)
         .def(py::init(
             [](py::array_t<double> means, py::array_t<double> vcov, py::list sregions) {
                 return create_from_python(means, vcov, sregions);
-            }));
+            }))
+        .def_property_readonly("means", &fwdpy11::mvDES::get_means)
+        .def_property_readonly("matrix", &fwdpy11::mvDES::get_matrix)
+        .def(py::pickle([](const fwdpy11::mvDES &self) { return self.pickle(); },
+                        &fwdpy11::mvDES::unpickle));
 }

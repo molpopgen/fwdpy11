@@ -206,6 +206,20 @@ class test_PickleConstantS(unittest.TestCase):
         self.assertEqual(up.h, DOM)
 
 
+class Test_mvDES(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.r = fwdpy11.mvDES(np.zeros(2), np.identity(2),
+                               [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.1)])
+
+    def test_pickling(self):
+        p = pickle.dumps(self.r, -1)
+        up = pickle.loads(p)
+        self.assertTrue(np.array_equal(up.means, self.r.means))
+        self.assertTrue(np.array_equal(up.matrix, np.identity(2)))
+        self.assertTrue(np.array_equal(up.dominance, self.r.dominance))
+
+
 class testMutationRegions(unittest.TestCase):
     @classmethod
     def setUp(self):

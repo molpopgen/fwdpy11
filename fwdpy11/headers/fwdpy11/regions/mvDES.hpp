@@ -20,11 +20,13 @@
 #ifndef FWDPY11_MVDES_HPP
 #define FWDPY11_MVDES_HPP
 
-#include "Sregion.hpp"
-#include <fwdpy11/policies/mutation.hpp>
 #include <functional>
 #include <algorithm>
 #include <cmath>
+#include "Sregion.hpp"
+#include <fwdpy11/policies/mutation.hpp>
+#include <fwdpy11/numpy/array.hpp>
+#include <pybind11/stl.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_linalg.h>
@@ -274,7 +276,62 @@ namespace fwdpy11
         pybind11::tuple
         pickle() const override
         {
-            throw std::runtime_error("mvDES has not implemented pickling");
+            auto dumps = pybind11::module::import("pickle").attr("dumps");
+            pybind11::list pickled_des;
+            for (auto &s : output_distributions)
+                {
+                    pickled_des.append(dumps(s.get(), -1));
+                }
+            std::vector<double> m(vcov_copy->data,
+                                  vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
+            return pybind11::make_tuple(pickled_des, means, m, vcov_copy->size1);
+        }
+
+        static mvDES
+        unpickle(pybind11::tuple t)
+        {
+            if (t.size() != 4)
+                {
+                    throw std::runtime_error("invalid tuple size");
+                }
+
+            std::vector<std::unique_ptr<Sregion>> des;
+            auto l = t[0].cast<pybind11::list>();
+            auto loads = pybind11::module::import("pickle").attr("loads");
+            for (auto i : l)
+                {
+                    auto temp = loads(i);
+                    des.emplace_back(temp.cast<Sregion &>().clone());
+                }
+            auto means = t[1].cast<std::vector<double>>();
+            auto mdata = t[2].cast<std::vector<double>>();
+            auto size = t[3].cast<std::size_t>();
+            matrix_ptr m(gsl_matrix_alloc(size, size),
+                         [](gsl_matrix *m) { gsl_matrix_free(m); });
+            std::size_t k = 0;
+            for (std::size_t i = 0; i < size; ++i)
+                {
+                    for (std::size_t j = 0; j < size; ++j)
+                        {
+                            gsl_matrix_set(m.get(), i, j, mdata[k++]);
+                        }
+                }
+            return mvDES(des, std::move(means), *m);
+        }
+
+        pybind11::array_t<double>
+        get_means() const
+        {
+            return make_1d_ndarray_readonly(means);
+        }
+
+        pybind11::array_t<double>
+        get_matrix() const
+        {
+            std::vector<double> m(vcov_copy->data,
+                                  vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
+            return make_2d_array_with_capsule(std::move(m), vcov_copy->size1,
+                                              vcov_copy->size2);
         }
     };
 } // namespace fwdpy11
