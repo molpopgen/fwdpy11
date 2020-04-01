@@ -56,6 +56,7 @@ init_mvDES(py::module &m)
             [](py::array_t<double> means, py::array_t<double> vcov, py::list sregions) {
                 return create_from_python(means, vcov, sregions);
             }))
+        .def("__repr__", &fwdpy11::mvDES::repr)
         .def_property_readonly("means", &fwdpy11::mvDES::get_means)
         .def_property_readonly("matrix", &fwdpy11::mvDES::get_matrix)
         .def(py::pickle([](const fwdpy11::mvDES &self) { return self.pickle(); },

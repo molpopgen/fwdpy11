@@ -257,7 +257,14 @@ namespace fwdpy11
         std::string
         repr() const override
         {
-            throw std::runtime_error("mvDES does not implement __repr__");
+            using namespace pybind11::literals;
+            pybind11::list des_repr;
+            for (auto &d : output_distributions)
+                {
+                    des_repr.append(d->repr());
+                }
+            auto r = "mvDES({}, {}, {})"_s.format(des_repr, get_means(), get_matrix());
+            return r;
         }
 
         double
