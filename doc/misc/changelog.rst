@@ -4,6 +4,14 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.6.4
+++++++++++++++++++++++++++++++++++++++++
+
+Fixes a bug where the timing of updates to stateful genetic values
+was off by one generation:
+
+*  `Issue 437 <https://github.com/molpopgen/fwdpy11/issues/437>`_
+
 0.6.3
 ++++++++++++++++++++++++++++++++++++++++
 
