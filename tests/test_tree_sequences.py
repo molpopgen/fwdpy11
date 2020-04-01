@@ -738,6 +738,43 @@ class TestMutationCounts(unittest.TestCase):
             all([i == j for i, j in zip(mc2, self.pop2.mcounts)]) is True)
 
 
+class TestUpdateTiming(unittest.TestCase):
+    """
+    Motivated by issue 437.
+    This test case constructs a situation
+    where we know exactly when a change should
+    happen and what its outcome should be.
+    If the optimum shifts at generation X,
+    then the current parents should experience
+    reduced fitness at that time, which we can
+    measure by their mean fitness, which is trivial
+    if there are no mutations.
+    """
+    def testTiming(self):
+        """
+        Make sure that timings occur when we expect.
+        """
+        from test_tree_sequences import set_up_quant_trait_model
+        params, rng, pop = set_up_quant_trait_model(1.1)
+        params.rates = (0, 0, 0)
+
+        class Recorder(object):
+            def __init__(self):
+                self.data = []
+
+            def __call__(self, pop, sampler):
+                if pop.generation >= 990:
+                    md = np.array(pop.diploid_metadata, copy=False)
+                    self.data.append((pop.generation, md['w'].mean()))
+        r = Recorder()
+        fwdpy11.evolvets(rng, pop, params, 1000, r)
+        for i in r.data:
+            if i[0] < pop.N:
+                self.assertAlmostEqual(i[1], 1.0)
+            else:
+                self.assertAlmostEqual(i[1], np.exp(-0.50))
+
+
 class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
