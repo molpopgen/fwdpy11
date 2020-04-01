@@ -49,7 +49,7 @@ def set_up_quant_trait_model(simlen=1.0):
     # TODO add neutral variants
     N = 1000
     demography = fwdpy11.DiscreteDemography()
-    rho = 1.
+    rho = 2.
     # theta = 100.
     # nreps = 500
     # mu = theta/(4*N)
