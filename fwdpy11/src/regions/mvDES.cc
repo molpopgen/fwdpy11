@@ -48,14 +48,30 @@ namespace
     }
 }
 
+static const auto mvDES_CLASS_DOCSTRING = R"delim(
+General multivariate distribution of effect sizes.
+
+.. versionadded:: 0.7.0
+)delim";
+
+static const auto mvDES_INIT_DOCSTRING = R"delim(
+:param des: Distributions of effect sizes
+:type des: list
+:param means: means marginal gaussian Distributions
+:type means: numpy.ndarray
+:param matrix: Variance/covariance matrix
+:type matrix: numpy.ndarray
+)delim";
+
 void
 init_mvDES(py::module &m)
 {
-    py::class_<fwdpy11::mvDES, fwdpy11::Sregion>(m, "mvDES")
-        .def(py::init(
-            [](py::list sregions, py::array_t<double> means, py::array_t<double> vcov) {
-                return create_from_python(sregions, means, vcov);
-            }))
+    py::class_<fwdpy11::mvDES, fwdpy11::Sregion>(m, "mvDES", mvDES_CLASS_DOCSTRING)
+        .def(py::init([](py::list sregions, py::array_t<double> means,
+                         py::array_t<double> vcov) {
+                 return create_from_python(sregions, means, vcov);
+             }),
+             py::arg("des"), py::arg("means"), py::arg("matrix"), mvDES_INIT_DOCSTRING)
         .def("__repr__", &fwdpy11::mvDES::repr)
         .def_property_readonly("means", &fwdpy11::mvDES::get_means)
         .def_property_readonly("matrix", &fwdpy11::mvDES::get_matrix)
