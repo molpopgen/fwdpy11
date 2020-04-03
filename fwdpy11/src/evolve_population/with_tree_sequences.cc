@@ -265,6 +265,14 @@ evolve_with_tree_sequences(
                               offspring_metadata, new_diploid_gvalues,
                               record_genotype_matrix);
     pop.diploid_metadata.swap(offspring_metadata);
+    ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
+                                      demography, current_demographic_state);
+    if (current_demographic_state->will_go_globally_extinct() == true)
+        {
+            std::ostringstream o;
+            o << "extinction at time " << pop.generation;
+            throw ddemog::GlobalExtinction(o.str());
+        }
 
     if (!pop.mutations.empty())
         {
@@ -311,27 +319,6 @@ evolve_with_tree_sequences(
     decltype(pop.mcounts) last_preserved_generation_counts;
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
-            // NOTE: demographic changes are applied with respect
-            // to a PARENTAL generation, so we call this...
-            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                              demography, current_demographic_state);
-
-            if (current_demographic_state->will_go_globally_extinct() == true)
-                {
-                    simplification_rv = simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier, pop);
-                    final_population_cleanup(
-                        suppress_edge_table_indexing, preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, last_preserved_generation,
-                        last_preserved_generation_counts, pop);
-                    std::ostringstream o;
-                    o << "extinction at time " << pop.generation;
-                    throw ddemog::GlobalExtinction(o.str());
-                }
-            // ...before updating this:
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
                                           pop.generation, pop.tables, offspring,
@@ -471,6 +458,26 @@ evolve_with_tree_sequences(
                     // Finally, clear the input
                     sr.samples.clear();
                 }
+
+            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
+                                              demography, current_demographic_state);
+
+            if (current_demographic_state->will_go_globally_extinct() == true)
+                {
+                    simplification_rv = simplification(
+                        preserve_selected_fixations, simulating_neutral_variants,
+                        suppress_edge_table_indexing,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, simplifier, pop);
+                    final_population_cleanup(
+                        suppress_edge_table_indexing, preserve_selected_fixations,
+                        remove_extinct_mutations_at_finish, last_preserved_generation,
+                        last_preserved_generation_counts, pop);
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
+
             stopping_criteron_met = stopping_criteron(pop, simplified);
         }
 

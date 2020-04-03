@@ -699,14 +699,14 @@ class TestIMModel(unittest.TestCase):
         self.rng = fwdpy11.GSLrng(666)
         self.Nref = 200
         self.Tsplit = 10
-        psplit = 0.2
+        self.psplit = 0.2
         self.gens_post_split = 5
         self.N0t = 300
         self.N1t = 400
-        G0 = self.getG(self.Nref*(1.-psplit), self.N0t, self.gens_post_split)
-        G1 = self.getG(self.Nref*(psplit), self.N1t, self.gens_post_split)
+        G0 = self.getG(self.Nref*(1.-self.psplit), self.N0t, self.gens_post_split)
+        G1 = self.getG(self.Nref*(self.psplit), self.N1t, self.gens_post_split)
 
-        split = [fwdpy11.move_individuals(self.Tsplit, 0, 1, psplit)]
+        split = [fwdpy11.move_individuals(self.Tsplit, 0, 1, self.psplit)]
         growth = [fwdpy11.SetExponentialGrowth(self.Tsplit, 0, G0),
                   fwdpy11.SetExponentialGrowth(self.Tsplit, 1, G1)]
         m = np.zeros(4).reshape(2, 2)
@@ -748,8 +748,8 @@ class TestIMModel(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit)
         deme_sizes = self.pop.deme_sizes()
-        self.assertEqual(len(deme_sizes[0]), 1)  # Split hasn't happened
-        self.assertEqual(deme_sizes[1][0], self.Nref)
+        self.assertEqual(len(deme_sizes[0]), 2)  # Split hasn't happened
+        self.assertEqual(deme_sizes[1][0], int((1.-self.psplit)*self.Nref))
 
         self.pdict['simlen'] = self.gens_post_split
         params = fwdpy11.ModelParams(**self.pdict)
