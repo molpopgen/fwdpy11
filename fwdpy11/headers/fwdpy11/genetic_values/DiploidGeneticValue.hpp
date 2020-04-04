@@ -41,7 +41,7 @@ namespace fwdpy11
     /// 4. If a derived class has any of its own data, provide a means for updating. This is update()
     ///
     /// In a simulation, we want the following operations:
-    /// pop.diploid_metadata[i].g = gv(i,pop);
+    /// pop.diploid_metadata[i].g = gv(i,metadata,pop);
     /// pop.diploid_metadata[i].e = gv.noise(rng, pop.diploid_medatadata[i],p1,p2,pop);
     /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i], gv.gvalues);
     /// These operations are handled by operator()
@@ -94,6 +94,7 @@ namespace fwdpy11
         // Callable from Python
         virtual double
         calculate_gvalue(const std::size_t /*diploid_index*/,
+                         const DiploidMetadata & /*diploid_metadata*/,
                          const DiploidPopulation& /*pop*/) const = 0;
         virtual pybind11::object pickle() const = 0;
 
@@ -110,7 +111,7 @@ namespace fwdpy11
                    const DiploidPopulation& pop,
                    DiploidMetadata& metadata) const
         {
-            metadata.g = calculate_gvalue(diploid_index, pop);
+            metadata.g = calculate_gvalue(diploid_index, metadata, pop);
             metadata.e = noise(rng, metadata, metadata.parents[0],
                                metadata.parents[1], pop);
             metadata.w = genetic_value_to_fitness(metadata);

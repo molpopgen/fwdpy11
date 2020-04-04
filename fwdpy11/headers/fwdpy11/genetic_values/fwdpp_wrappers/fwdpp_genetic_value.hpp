@@ -19,8 +19,8 @@ namespace fwdpy11
         {
             double
             operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
-                       const std::size_t diploid_index,
-                       const fwdpy11::DiploidPopulation& pop) const
+                       const std::size_t diploid_index, const DiploidPopulation& pop,
+                       const DiploidMetadata& /*metadata*/) const
             {
                 outer_this->gvalues[0] = outer_this->make_return_value(
                     outer_this->gv(pop.diploids[diploid_index], pop.haploid_genomes,
@@ -34,25 +34,26 @@ namespace fwdpy11
         {
             double
             operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
-                       const std::size_t diploid_index,
-                       const fwdpy11::DiploidPopulation& pop) const
+                       const std::size_t diploid_index, const DiploidPopulation& pop,
+                       const DiploidMetadata& metadata) const
             {
-                std::size_t deme = pop.diploid_metadata[diploid_index].deme;
+                std::size_t deme = metadata.deme;
                 outer_this->gvalues[0] = outer_this->make_return_value(outer_this->gv(
                     pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
-                    [deme, outer_this](double& d, const fwdpy11::Mutation& mut) {
+                    [deme, outer_this](double& d, const Mutation& mut) {
                         return outer_this->multi_deme_aa(deme, d, mut);
                     },
-                    [deme, outer_this](double& d, const fwdpy11::Mutation& mut) {
+                    [deme, outer_this](double& d, const Mutation& mut) {
                         return outer_this->multi_deme_Aa(deme, d, mut);
-                    }, starting_value));
+                    },
+                    starting_value));
                 return outer_this->gvalues[0];
             }
         };
 
         using callback_type = std::function<double(
             const stateless_site_dependent_genetic_value_wrapper*, const std::size_t,
-            const fwdpy11::DiploidPopulation&)>;
+            const DiploidPopulation&, const DiploidMetadata&)>;
 
         callback_type
         init_callback(std::size_t n)
@@ -121,9 +122,10 @@ namespace fwdpy11
 
         double
         calculate_gvalue(const std::size_t diploid_index,
-                         const fwdpy11::DiploidPopulation& pop) const override
+                         const DiploidMetadata& metadata,
+                         const DiploidPopulation& pop) const override
         {
-            return callback(this, diploid_index, pop);
+            return callback(this, diploid_index, pop, metadata);
         }
 
         pybind11::object

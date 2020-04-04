@@ -42,7 +42,8 @@ namespace fwdpy11
 
         double
         calculate_gvalue(const std::size_t diploid_index,
-                         const DiploidPopulation &pop) const
+                         const DiploidMetadata& /*metadata*/,
+                         const DiploidPopulation& pop) const
         {
             std::fill(begin(gvalues), end(gvalues), 0.0);
 
