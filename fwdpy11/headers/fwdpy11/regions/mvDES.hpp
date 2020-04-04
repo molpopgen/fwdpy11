@@ -85,7 +85,7 @@ namespace fwdpy11
                 }
             if (odist.size() == 1)
                 {
-                    for (std::size_t i = i; i < n; ++i)
+                    for (std::size_t i = 0; i < n; ++i)
                         {
                             rv.emplace_back(odist[0]->clone());
                         }
