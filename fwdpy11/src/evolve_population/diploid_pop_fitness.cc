@@ -18,11 +18,11 @@ calculate_diploid_fitness(
                                        * gvalue_pointers[0]->total_dim);
         }
     auto gvoffset = new_diploid_gvalues.data();
-    for (std::size_t i = 0; i < pop.diploids.size();
+    for (std::size_t i = 0; i < offspring_metadata.size();
          ++i, gvoffset += gvalue_pointers[0]->total_dim)
         {
             auto idx = deme_to_gvalue_map[offspring_metadata[i].deme];
-            gvalue_pointers[idx]->operator()(rng, i, pop,
+            gvalue_pointers[idx]->operator()(rng, offspring_metadata[i].label, pop,
                                              offspring_metadata[i]);
             if (update_genotype_matrix == true)
                 {

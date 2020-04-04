@@ -334,20 +334,47 @@ evolve_with_tree_sequences(
             // to make these models "nice".  See GitHub issue 372
             // for a bit more context.
             pop.diploids.swap(offspring);
+            ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
+                                                      offspring_metadata, demography,
+                                                      current_demographic_state);
+            // NOTE: the two swaps of the metadata ensure 
+            // that the update loop below passes the correct
+            // metadata on, and that we then have the
+            // metadata in the expected places for 
+            // calculate_diploid_fitness
+            pop.diploid_metadata.swap(offspring_metadata);
             // TODO: deal with random effects
-            for (auto &i : genetics.gvalue)
+            for (auto &i : genetics.gvalue) 
                 {
                     i->update(pop);
                 }
-
+            pop.diploid_metadata.swap(offspring_metadata);
             calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                                       offspring_metadata, new_diploid_gvalues,
                                       record_genotype_matrix);
-            // NOTE: this may need revisiting in 0.7.0
             pop.genetic_value_matrix.swap(new_diploid_gvalues);
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
-            pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
+
+            ddemog::finalize_demographic_state(rng, pop.generation, pop.diploid_metadata,
+                                               demography, current_demographic_state);
+
+            pop.N = static_cast<std::uint32_t>(pop.diploids.size());
+            if (current_demographic_state->will_go_globally_extinct() == true)
+                {
+                    simplification_rv = simplification(
+                        preserve_selected_fixations, simulating_neutral_variants,
+                        suppress_edge_table_indexing,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        post_simplification_recorder, simplifier, pop);
+                    final_population_cleanup(
+                        suppress_edge_table_indexing, preserve_selected_fixations,
+                        remove_extinct_mutations_at_finish, last_preserved_generation,
+                        last_preserved_generation_counts, pop);
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
 
             if (gen > 0 && gen % simplification_interval == 0.0)
                 {
@@ -458,26 +485,6 @@ evolve_with_tree_sequences(
                     // Finally, clear the input
                     sr.samples.clear();
                 }
-
-            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                              demography, current_demographic_state);
-
-            if (current_demographic_state->will_go_globally_extinct() == true)
-                {
-                    simplification_rv = simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier, pop);
-                    final_population_cleanup(
-                        suppress_edge_table_indexing, preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, last_preserved_generation,
-                        last_preserved_generation_counts, pop);
-                    std::ostringstream o;
-                    o << "extinction at time " << pop.generation;
-                    throw ddemog::GlobalExtinction(o.str());
-                }
-
             stopping_criteron_met = stopping_criteron(pop, simplified);
         }
 

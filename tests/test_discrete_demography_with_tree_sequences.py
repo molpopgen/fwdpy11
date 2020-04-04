@@ -40,10 +40,13 @@ class WhoWhereWhen(object):
         self.data = []
 
     def __call__(self, pop, sampler):
-        for i, j in enumerate(pop.diploid_metadata):
-            if i != j.label:
+        if pop.N != len(pop.diploids):
+            raise RuntimeError("incorrect total population size")
+        for i in range(len(pop.diploids)):
+            if i != pop.diploid_metadata[i].label:
                 raise RuntimeError("index does not equal metadata label value")
-            self.data.append(IndividualLocation(pop.generation, i, j.deme))
+            self.data.append(IndividualLocation(
+                pop.generation, i, pop.diploid_metadata[i].deme))
 
 
 class TestConstantPopulationSize(unittest.TestCase):
