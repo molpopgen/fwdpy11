@@ -751,7 +751,7 @@ class TestIMModel(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit)
         deme_sizes = self.pop.deme_sizes()
-        self.assertEqual(len(deme_sizes[0]), 2)  # Split hasn't happened
+        self.assertEqual(len(deme_sizes[0]), 2)
         self.assertEqual(deme_sizes[1][0], int((1.-self.psplit)*self.Nref))
 
         self.pdict['simlen'] = self.gens_post_split
