@@ -17,10 +17,23 @@ init_GeneticValueToFitnessMap(py::module& m)
         )delim")
         .def_property_readonly(
             "maps_to_fitness",
-            [](const fwdpy11::GeneticValueToFitnessMap& self) { return self.isfitness; })
-        .def_property_readonly("maps_to_trait_value",
-                               [](const fwdpy11::GeneticValueToFitnessMap& self) {
-                                   return !self.isfitness;
-                               });
+            [](const fwdpy11::GeneticValueToFitnessMap& self) { return self.isfitness; },
+            R"delim(
+        Returns True if object represents a mapping directly to fitness, and
+        False otherwise.
+
+        .. versionadded:: 0.7.0
+        )delim")
+        .def_property_readonly(
+            "maps_to_trait_value",
+            [](const fwdpy11::GeneticValueToFitnessMap& self) {
+                return !self.isfitness;
+            },
+            R"delim(
+        Returns True if object represents a trait value, and
+        False otherwise.
+
+        .. versionadded:: 0.7.0
+        )delim");
 }
 
