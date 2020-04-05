@@ -55,18 +55,18 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
     roundtrip_rv_type rv;
-    for (std::uint32_t gen = 0; gen < ngens; ++gen, ++pop.generation)
+    ddemog::update_demography_manager(rng, pop.generation,
+                                      pop.diploid_metadata, demography,
+                                      current_demographic_state);
+    if (current_demographic_state->will_go_globally_extinct() == true)
         {
-            ddemog::update_demography_manager(rng, pop.generation,
-                                              pop.diploid_metadata, demography,
-                                              current_demographic_state);
-            if (pop.N == 0)
-                {
-                    std::ostringstream o;
-                    o << "extinction at time " << pop.generation;
-                    throw ddemog::GlobalExtinction(o.str());
-                }
-
+            std::ostringstream o;
+            o << "extinction at time " << pop.generation;
+            throw ddemog::GlobalExtinction(o.str());
+        }
+    for (std::uint32_t gen = 0; gen < ngens; ++gen)
+        {
+            ++pop.generation;
             // Generate the offspring
             for (std::int32_t deme = 0; deme < current_demographic_state->maxdemes;
                  ++deme)
@@ -109,6 +109,18 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
             pop.diploid_metadata.swap(offspring_metadata);
             offspring_metadata.clear();
 
+            ddemog::update_demography_manager(rng, pop.generation,
+                                              pop.diploid_metadata, demography,
+                                              current_demographic_state);
+            if (current_demographic_state->will_go_globally_extinct() == true)
+                {
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
+                }
+            // NOTE: this test doesn't populate the diploid genotypes.
+            // Only the metadata "evolve", so this update differs
+            // from what we do in a "real" simulation.
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
         }
     ddemog::save_model_state(current_demographic_state, demography);
