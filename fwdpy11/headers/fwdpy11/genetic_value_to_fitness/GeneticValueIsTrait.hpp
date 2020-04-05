@@ -28,7 +28,7 @@ namespace fwdpy11
     /// Another ABC.  Effectively a type trait
     {
         explicit GeneticValueIsTrait(std::size_t ndim)
-            : GeneticValueToFitnessMap(ndim)
+            : GeneticValueToFitnessMap(ndim, maps_to_fitness(false))
         {
         }
     };

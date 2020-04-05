@@ -23,23 +23,34 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
+#include <fwdpp/named_type.hpp>
 
 namespace fwdpy11
 {
+    struct genetic_value_maps_to_fitness
+    {
+    };
+
+    using maps_to_fitness
+        = fwdpp::strong_types::named_type<bool, genetic_value_maps_to_fitness>;
+
     struct GeneticValueToFitnessMap
     {
         std::size_t total_dim;
-        explicit GeneticValueToFitnessMap(std::size_t ndim) : total_dim{ ndim }
+        const bool isfitness;
+        explicit GeneticValueToFitnessMap(std::size_t ndim, const maps_to_fitness& m)
+            : total_dim{ndim}, isfitness{m.get()}
         {
         }
         virtual ~GeneticValueToFitnessMap() = default;
         virtual double
-        operator()(const DiploidMetadata & /*metadata*/,
-                   const std::vector<double> & /*genetic_values*/) const = 0;
-        virtual void update(const DiploidPopulation & /*pop*/) = 0;
+        operator()(const DiploidMetadata& /*metadata*/,
+                   const std::vector<double>& /*genetic_values*/) const = 0;
+        virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
-        virtual pybind11::tuple shape() const 
+        virtual pybind11::tuple
+        shape() const
         {
             return pybind11::make_tuple(total_dim);
         }
