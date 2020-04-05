@@ -89,9 +89,10 @@ namespace fwdpy11
             }
 
         } // namespace detail
+
         template <typename METADATATYPE>
         inline void
-        update_demography_manager(
+        mass_migrations_and_current_sizes(
             const GSLrng_t &rng, const std::uint32_t generation,
             std::vector<METADATATYPE> &metadata,
             DiscreteDemography &demography,
@@ -106,6 +107,16 @@ namespace fwdpy11
             get_current_deme_sizes(
                 metadata,
                 current_demographic_state->sizes_rates.current_deme_sizes);
+        }
+
+        template <typename METADATATYPE>
+        inline void
+        finalize_demographic_state(
+            const GSLrng_t &rng, const std::uint32_t generation,
+            std::vector<METADATATYPE> &metadata,
+            DiscreteDemography &demography,
+            demographic_model_state_pointer &current_demographic_state)
+        {
             current_demographic_state->fitnesses.update(
                 current_demographic_state->sizes_rates.current_deme_sizes,
                 metadata);
@@ -121,6 +132,22 @@ namespace fwdpy11
             detail::validate_parental_state(generation,
                                             current_demographic_state);
         }
+       
+        template <typename METADATATYPE>
+        inline void
+        update_demography_manager(
+            const GSLrng_t &rng, const std::uint32_t generation,
+            std::vector<METADATATYPE> &metadata,
+            DiscreteDemography &demography,
+            demographic_model_state_pointer &current_demographic_state)
+        {
+            mass_migrations_and_current_sizes(rng, generation, metadata,
+                                              demography, current_demographic_state);
+            finalize_demographic_state(rng, generation, metadata,
+                                       demography, current_demographic_state);
+        }
+        
+            
     } // namespace discrete_demography
 } // namespace fwdpy11
 #endif
