@@ -27,7 +27,7 @@ namespace fwdpy11
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
         explicit GeneticValueIsFitness(std::size_t ndim)
-            : GeneticValueToFitnessMap(ndim)
+            : GeneticValueToFitnessMap(ndim, maps_to_fitness(true))
         {
         }
 
