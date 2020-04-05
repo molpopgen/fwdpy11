@@ -1,12 +1,12 @@
-.. _developers:
+.. _writingplugins:
 
-Information for developers
+Writing "plugins" using C++
 ====================================================================================
 
 New functionality may be added through new Python code and/or new C++ code.  Further, you may use the existing C++ types
 in Python extensions depending on fwdpy11.  For example, you could write a custom "evolve" function for
-non-Wright-Fisher models.  Or, you could write custom fitness functions.  See :ref:`customgvalues` for an example of the
-latter, which uses cppimport_ to create an "on the fly" module that is compiled upon import.
+non-Wright-Fisher models.  Or, you could write custom genetic value objects.  There are several examples
+of custom genetic value objects in the unit tests.
 
 Finding the headers
 ---------------------------------------
@@ -51,7 +51,7 @@ Extensions using cppimport_ require "mako" headers to guide compilation.  You ma
 
 
 Dealing with GSL errors in custom C++ code
------------------------------------------
+----------------------------------------------------------------------------------
 
 The GSL uses C-like error handling.  Here, this means that there is a global error handling function
 that will print the error to screen and then abort the running process.  The behavior of abort-on-error is not
