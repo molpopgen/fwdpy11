@@ -21,7 +21,9 @@
 
 #include <fwdpy11/types/DiploidPopulation.hpp>
 
-#define DEFAULT_DIPLOID_POP_UPDATE()                                            \
-    inline void update(const fwdpy11::DiploidPopulation& /*pop*/) {}
+#define DEFAULT_DIPLOID_POP_UPDATE()                                                    \
+    inline void update(const fwdpy11::DiploidPopulation& /*pop*/) override              \
+    {                                                                                   \
+    }
 
 #endif
