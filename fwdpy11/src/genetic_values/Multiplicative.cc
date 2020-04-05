@@ -62,7 +62,7 @@ namespace
     struct multi_deme_multiplicative_hom
     {
         double scaling;
-        multi_deme_multiplicative_hom( double s) :  scaling(s)
+        multi_deme_multiplicative_hom(double s) : scaling(s)
         {
         }
 
@@ -155,10 +155,23 @@ init_Multiplicative(py::module& m)
         .def_property_readonly("scaling", &DiploidMult::scaling,
                                "Access to the scaling parameter.")
         .def_property_readonly(
-            "is_fitness", &DiploidMult::is_fitness,
-            "Returns True if instance calculates fitness as the genetic "
-            "value "
-            "and False if the genetic value is a trait value.")
+            "is_fitness",
+            [](const DiploidMult& self) {
+                PyErr_WarnEx(
+                    PyExc_DeprecationWarning,
+                    "Additive.is_fitness is deprecated.  Use maps_to_fitness instead",
+                    0);
+                return self.is_fitness();
+            },
+            R"delim(
+            Returns True if instance calculates fitness as the genetic value
+            and False if the genetic value is a trait value.
+            
+            .. deprecated:: 0.7.0
+
+                Use :attr:`fwdpy11.DiploidGeneticValue.maps_to_fitness` instead.
+            )delim")
+
         .def(py::pickle(
             [](const DiploidMult& a) {
                 auto p = py::module::import("pickle");
