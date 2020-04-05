@@ -3,8 +3,6 @@ Mapping genetic values to fitness
 
 .. autoclass:: fwdpy11.GeneticValueToFitnessMap
 
-.. autoclass:: fwdpy11.MultivariateGeneticValueToFitnessMap
-
 .. autoclass:: fwdpy11.GeneticValueIsTrait
 
 .. autoclass:: fwdpy11.GeneticValueIsFitness
