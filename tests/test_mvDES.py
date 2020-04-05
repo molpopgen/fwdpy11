@@ -72,6 +72,7 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
             Track the fitnesses of individuals who are
             "mass copied"
             """
+
             def __init__(self):
                 self.data = []
 
@@ -96,6 +97,78 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
             self.assertEqual(i[2], 1)  # deme == 1
             self.assertTrue(i[1] <= 1.0)  # Mutations are harmful in this deme
             self.assertEqual(i[0], 1)  # Generation == 1, when mass mig happened
+
+
+class TestMassMigrationsWithMoves(unittest.TestCase):
+    """
+    Mass migration happens via moves in generation 1.
+    Half the individuals are moved from deme 0 to found deme 1
+    This class uses a custom recorder to detect those copied
+    individuals and make sure that their fitnesses are all
+    <= 1 because the DES has all mutations being harmful
+    in that deme.
+    """
+    @classmethod
+    def setUpClass(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1)
+        vcv_matrix = np.array([1, 0.99, 0.99, 1.]).reshape((2, 2))
+        mvDES = fwdpy11.mvDES([fwdpy11.ConstantS(0, 1, 1, 0.1), fwdpy11.ConstantS(
+            0, 1, 1, -0.1)], np.zeros(2), vcv_matrix)
+        moves = [fwdpy11.move_individuals(1, 0, 1, 0.5)]
+
+        self.pdict = {'nregions': [],
+                      'sregions': [mvDES],
+                      'recregions': [fwdpy11.PoissonInterval(0, 1, 1e-2)],
+                      'rates': (0, 1, None),
+                      'gvalue': fwdpy11.Multiplicative(2., ndemes=2),
+                      'demography': fwdpy11.DiscreteDemography(mass_migrations=moves),
+                      'simlen': 2,
+                      'prune_selected': True}
+        self.params = fwdpy11.ModelParams(**self.pdict)
+        self.rng = fwdpy11.GSLrng(918273)
+
+        class CheckFitnesses(object):
+            """
+            Track the fitnesses of individuals who are
+            "mass moved"
+            """
+
+            def __init__(self):
+                self.data = []
+
+            def __call__(self, pop, sampler):
+                # Moves don't affect the amount of metadata
+                # vs diploid genotypes
+                assert len(pop.diploids) == len(pop.diploid_metadata)
+                if pop.generation == 1:
+                    for i in range(len(pop.diploids)):
+                        md = pop.diploid_metadata[i]
+                        dip = pop.diploids[md.label]
+                        a = len(pop.haploid_genomes[dip.first].smutations)
+                        b = len(pop.haploid_genomes[dip.second].smutations)
+                        self.data.append((pop.generation,
+                                          pop.diploid_metadata[i].w,
+                                          pop.diploid_metadata[i].deme,
+                                          a+b))
+        self.f = CheckFitnesses()
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100, self.f)
+        assert len(self.f.data) > 0, "No data recorded so test is useless"
+        assert any([i[3] > 0 for i in self.f.data]), \
+            "No mutations in copied individuals so test is useless"
+
+    def test_recorded_data(self):
+        deme_counts = np.unique(
+            np.array([i[2] for i in self.f.data]), return_counts=True)
+        self.assertEqual(len(deme_counts[0]), 2)
+        for i in [0, 1]:
+            self.assertEqual(deme_counts[1][i], self.pop.N//2)
+        for i in self.f.data:
+            if i[2] == 0:  # deme 0
+                self.assertTrue(i[1] >= 1.0)  # Mutations are beneficial in this deme
+                self.assertEqual(i[0], 1)  # Generation == 1, when mass mig happened
+            else:
+                self.assertEqual(i[2], 1)
+                self.assertTrue(i[1] <= 1.0)  # Mutations are harmful in this deme
 
 
 class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
