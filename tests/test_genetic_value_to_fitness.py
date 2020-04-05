@@ -49,6 +49,10 @@ class testGSS(unittest.TestCase):
         self.assertEqual(up.VS, self.VS)
         self.assertEqual(up.opt, self.opt)
 
+    def test_mapping(self):
+        self.assertEqual(self.g.maps_to_fitness, False)
+        self.assertEqual(self.g.maps_to_trait_value, True)
+
 
 class testGSSmo(unittest.TestCase):
     @classmethod
@@ -64,6 +68,10 @@ class testGSSmo(unittest.TestCase):
         self.assertEqual(up.opt, 0.0)
         self.assertEqual(up.optima, self.optima)
 
+    def test_mapping(self):
+        self.assertEqual(self.g.maps_to_fitness, False)
+        self.assertEqual(self.g.maps_to_trait_value, True)
+
 
 class testMultivariateGSSmo(unittest.TestCase):
     @classmethod
@@ -78,6 +86,10 @@ class testMultivariateGSSmo(unittest.TestCase):
         p = pickle.dumps(self.mvgssmo)
         up = pickle.loads(p)
         self.assertEqual(self.mvgssmo, up)
+
+    def test_mapping(self):
+        self.assertEqual(self.mvgssmo.maps_to_fitness, False)
+        self.assertEqual(self.mvgssmo.maps_to_trait_value, True)
 
 
 if __name__ == "__main__":
