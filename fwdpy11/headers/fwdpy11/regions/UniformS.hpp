@@ -35,13 +35,13 @@ namespace fwdpy11
         }
 
         std::unique_ptr<Sregion>
-        clone() const
+        clone() const override
         {
             return std::unique_ptr<UniformS>(new UniformS(*this));
         }
 
         std::string
-        repr() const
+        repr() const override
         {
             std::ostringstream out;
             out.precision(4);
@@ -58,7 +58,7 @@ namespace fwdpy11
             fwdpp::flagged_mutation_queue& recycling_bin,
             std::vector<Mutation>& mutations,
             std::unordered_multimap<double, std::uint32_t>& lookup_table,
-            const std::uint32_t generation, const GSLrng_t& rng) const
+            const std::uint32_t generation, const GSLrng_t& rng) const override
         {
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, false, generation,
@@ -82,7 +82,7 @@ namespace fwdpy11
         }
 
         pybind11::tuple
-        pickle() const
+        pickle() const override
         {
             return pybind11::make_tuple(Sregion::pickle_Sregion(), lo, hi,
                                         dominance);
