@@ -66,9 +66,24 @@ init_DiploidGeneticValue(py::module& m)
             "Access the random noise funcion")
         .def_property_readonly(
             "maps_to_fitness",
-            [](const fwdpy11::DiploidGeneticValue& self) { return self.gv2w->isfitness; })
-        .def_property_readonly("maps_to_trait_value",
-                               [](const fwdpy11::DiploidGeneticValue& self) {
-                                   return !self.gv2w->isfitness;
-                               });
+            [](const fwdpy11::DiploidGeneticValue& self) {
+                return self.gv2w->isfitness;
+            },
+            R"delim(
+        Returns True if object represents a mapping directly to fitness, and
+        False otherwise.
+
+        .. versionadded:: 0.7.0
+        )delim")
+        .def_property_readonly(
+            "maps_to_trait_value",
+            [](const fwdpy11::DiploidGeneticValue& self) {
+                return !self.gv2w->isfitness;
+            },
+            R"delim(
+        Returns True if object represents a trait value, and
+        False otherwise.
+
+        .. versionadded:: 0.7.0
+        )delim");
 }
