@@ -18,6 +18,7 @@ Welcome to fwdpy11's documentation!
     misc/deprecated
     misc/todo
     misc/pubs
+    misc/developersguide
     misc/writingplugins
 
 .. toctree::
