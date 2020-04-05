@@ -20,6 +20,14 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(self.t.scaling, 2.0)
         self.assertEqual(self.tn.scaling, 1.0)
 
+    def testFitnessOrTraitBaseClassProperty(self):
+        self.assertEqual(self.w.maps_to_fitness, True)
+        self.assertEqual(self.w.maps_to_trait_value, False)
+        self.assertEqual(self.t.maps_to_fitness, False)
+        self.assertEqual(self.t.maps_to_trait_value, True)
+        self.assertEqual(self.tn.maps_to_fitness, False)
+        self.assertEqual(self.tn.maps_to_trait_value, True)
+
     def testFitnessOrTrait(self):
         self.assertEqual(self.w.is_fitness, True)
         self.assertEqual(self.t.is_fitness, False)
@@ -91,6 +99,14 @@ class testMultiplicative(unittest.TestCase):
         self.assertEqual(self.t.is_fitness, False)
         self.assertEqual(self.tn.is_fitness, False)
 
+    def testFitnessOrTraitBaseClassProperty(self):
+        self.assertEqual(self.w.maps_to_fitness, True)
+        self.assertEqual(self.w.maps_to_trait_value, False)
+        self.assertEqual(self.t.maps_to_fitness, False)
+        self.assertEqual(self.t.maps_to_trait_value, True)
+        self.assertEqual(self.tn.maps_to_fitness, False)
+        self.assertEqual(self.tn.maps_to_trait_value, True)
+
     def testPickleFitness(self):
         import pickle
         p = pickle.dumps(self.w)
@@ -133,6 +149,8 @@ class testGBR(unittest.TestCase):
     def testPicklingGSS(self):
         import pickle
         gbr = fwdpy11.GBR(self.gss)
+        self.assertFalse(gbr.maps_to_fitness)
+        self.assertFalse(gbr.maps_to_fitness)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.nonoise), type(up.noise))
@@ -141,6 +159,8 @@ class testGBR(unittest.TestCase):
     def testPicklingGSSGaussianNoise(self):
         import pickle
         gbr = fwdpy11.GBR(self.gss, self.gnoise)
+        self.assertFalse(gbr.maps_to_fitness)
+        self.assertFalse(gbr.maps_to_fitness)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
         self.assertEqual(type(self.gnoise), type(up.noise))
