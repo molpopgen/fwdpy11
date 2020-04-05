@@ -16,7 +16,7 @@ namespace fwdpy11
     {
       private:
         void
-        process_individual_input()
+        process_individual_input() override
         {
             std::vector<fwdpp::uint_t> gcounts(this->haploid_genomes.size(),
                                                0);
@@ -171,7 +171,7 @@ namespace fwdpy11
         virtual std::vector<std::size_t>
         add_mutations(typename fwdpp_base::mcont_t &new_mutations,
                       const std::vector<std::size_t> &individuals,
-                      const std::vector<short> &haploid_genomes)
+                      const std::vector<short> &haploid_genomes) override
         {
             std::unordered_set<double> poschecker;
             for (const auto &m : new_mutations)
@@ -208,7 +208,7 @@ namespace fwdpy11
 
         fwdpp::data_matrix
         sample_individuals(const std::vector<std::size_t> &individuals,
-                           const bool haplotype, const bool remove_fixed) const
+                           const bool haplotype, const bool remove_fixed) const override
         {
             return sample_individuals_details(*this, individuals, haplotype,
                                               remove_fixed);
@@ -218,7 +218,7 @@ namespace fwdpy11
         sample_random_individuals(const GSLrng_t &rng,
                                   const std::uint32_t nsam,
                                   const bool haplotype,
-                                  const bool remove_fixed) const
+                                  const bool remove_fixed) const override
         {
             return sample_random_individuals_details(*this, rng, nsam,
                                                      haplotype, remove_fixed);

@@ -103,7 +103,7 @@ namespace fwdpy11
         }
 
         virtual std::unique_ptr<Sregion>
-        clone() const
+        clone() const override
         {
             return std::unique_ptr<MultivariateGaussianEffects>(
                 new MultivariateGaussianEffects(
@@ -113,7 +113,7 @@ namespace fwdpy11
                     false));
         }
         std::string
-        repr() const
+        repr() const override
         {
             std::ostringstream out;
             out.precision(4);
@@ -129,7 +129,7 @@ namespace fwdpy11
             fwdpp::flagged_mutation_queue &recycling_bin,
             std::vector<Mutation> &mutations,
             std::unordered_multimap<double, std::uint32_t> &lookup_table,
-            const std::uint32_t generation, const GSLrng_t &rng) const
+            const std::uint32_t generation, const GSLrng_t &rng) const override
         {
             int rv = gsl_ran_multivariate_gaussian(rng.get(), mu.get(),
                                                    matrix.get(), &res.vector);
@@ -162,7 +162,7 @@ namespace fwdpy11
         }
 
         pybind11::tuple
-        pickle() const
+        pickle() const override
         {
             pybind11::list matrix_data;
             for (std::size_t i = 0; i < matrix->size1; ++i)
