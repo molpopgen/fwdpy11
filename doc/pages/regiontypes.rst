@@ -32,6 +32,10 @@ Setting up genomic intervals
 
     .. automethod:: __init__
 
+.. autoclass:: fwdpy11.LogNormalS
+
+    .. automethod:: __init__
+
 .. autoclass:: fwdpy11.mvDES
 
     .. automethod:: __init__
