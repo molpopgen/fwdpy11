@@ -47,14 +47,15 @@ init_LogNormalS(py::module& m)
 
             .. versionadded: : 0.7.0
         )delim")
-        .def(py::init([](double beg, double end, double h, double weight, bool coupled,
-                         std::uint16_t label, double scaling) {
-                 return fwdpy11 ::LogNormalS(
-                     fwdpy11::Region(beg, end, weight, coupled, label), scaling, h);
-             }),
-             py::arg("beg"), py::arg("end"), py::arg("weight"),
-             py::arg("coupled") = true, py::arg("h") = 1.0, py::arg("label") = 0,
-             py::arg("scaling") = 1.0)
+        .def_static(
+            "mv",
+            [](double beg, double end, double weight, double h, bool coupled,
+               std::uint16_t label, double scaling) {
+                return fwdpy11 ::LogNormalS(
+                    fwdpy11::Region(beg, end, weight, coupled, label), scaling, h);
+            },
+            py::arg("beg"), py::arg("end"), py::arg("weight"), py::arg("h") = 1.0,
+            py::arg("coupled") = true, py::arg("label") = 0, py::arg("scaling") = 1.0)
         .def_readonly("zeta", &fwdpy11::LogNormalS::zeta)
         .def_readonly("sigma", &fwdpy11::LogNormalS::sigma)
         .def_readonly("h", &fwdpy11::LogNormalS::dominance)

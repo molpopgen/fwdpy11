@@ -12,10 +12,12 @@ namespace fwdpy11
     struct LogNormalS : public Sregion
     {
         const double zeta, sigma, dominance;
+        const bool univariate;
 
         LogNormalS(const Region& r, double scaling, double zeta_, double sigma_,
                    double h)
-            : Sregion(r, scaling, 1), zeta(zeta_), sigma(sigma_), dominance(h)
+            : Sregion(r, scaling, 1), zeta(zeta_), sigma(sigma_), dominance(h),
+              univariate(true)
         {
             if (!std::isfinite(zeta))
                 {
@@ -34,7 +36,8 @@ namespace fwdpy11
         // For use with mvS
         LogNormalS(const Region& r, double scaling, double h)
             : Sregion(r, scaling, 1), zeta(std::numeric_limits<double>::quiet_NaN()),
-              sigma(std::numeric_limits<double>::quiet_NaN()), dominance(h)
+              sigma(std::numeric_limits<double>::quiet_NaN()), dominance(h),
+              univariate(false)
         {
         }
 
@@ -74,6 +77,11 @@ namespace fwdpy11
         double
         from_mvnorm(const double deviate, const double /*P*/) const override
         {
+            if (univariate)
+                {
+                    throw std::invalid_argument(
+                        "invalid init method used to set up multivariate lognormal");
+                }
             return std::exp(deviate);
         }
 
@@ -87,19 +95,25 @@ namespace fwdpy11
         pickle() const override
         {
             return pybind11::make_tuple(Sregion::pickle_Sregion(), zeta, sigma,
-                                        dominance);
+                                        dominance, univariate);
         }
 
         static LogNormalS
         unpickle(pybind11::tuple t)
         {
-            if (t.size() != 4)
+            if (t.size() != 5)
                 {
                     throw std::runtime_error("invalid tuple size");
                 }
             auto base = t[0].cast<pybind11::tuple>();
+            bool uv = t[4].cast<bool>();
+            if (uv)
+                {
+                    return LogNormalS(Region::unpickle(base[0]), base[1].cast<double>(),
+                                      t[1].cast<double>(), t[2].cast<double>(),
+                                      t[3].cast<double>());
+                }
             return LogNormalS(Region::unpickle(base[0]), base[1].cast<double>(),
-                              t[1].cast<double>(), t[2].cast<double>(),
                               t[3].cast<double>());
         }
     };
