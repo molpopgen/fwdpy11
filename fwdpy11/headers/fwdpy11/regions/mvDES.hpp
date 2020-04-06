@@ -25,6 +25,7 @@
 #include <cmath>
 #include "Sregion.hpp"
 #include "LogNormalS.hpp"
+#include "MultivariateGaussianEffects.hpp"
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include <pybind11/stl.h>
@@ -234,6 +235,21 @@ namespace fwdpy11
               output_distributions(clone_and_fill(odist, vcov.size1)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
               deviates(vcov.size1),
+              dominance_values(fill_dominance(output_distributions)),
+              means(std::move(gaussian_means)),
+              res(gsl_vector_view_array(deviates.data(), deviates.size())),
+              // NOTE: use of calloc to initialize mu to all zeros
+              mu(gsl_vector_const_view_array(means.data(), means.size())),
+              stddev(get_standard_deviations())
+        {
+            finalize_setup();
+        }
+
+        mvDES(const MultivariateGaussianEffects &odist,
+              std::vector<double> gaussian_means)
+            : Sregion(odist.region, 1., odist.input_matrix_copy->size1),
+              vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
+              matrix(decompose()), deviates(odist.input_matrix_copy->size1),
               dominance_values(fill_dominance(output_distributions)),
               means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
