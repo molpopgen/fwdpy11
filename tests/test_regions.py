@@ -219,6 +219,35 @@ class Test_mvDES(unittest.TestCase):
         self.assertTrue(np.array_equal(up.matrix, np.identity(2)))
         self.assertTrue(np.array_equal(up.dominance, self.r.dominance))
 
+    def test_bad_init_1(self):
+        with self.assertRaises(ValueError):
+            fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
+                0, 1, 1, -0.1)], np.zeros(3), np.identity(2))
+
+    def test_mvLogNormalS(self):
+        try:
+            mvln = fwdpy11.LogNormalS.mv(0, 1, 1)
+            fwdpy11.mvDES(mvln, np.zeros(5), np.identity(5))
+        except:  # NOQA
+            self.fail("unexpected exception")
+
+    def test_mvLogNormalS_bad_init(self):
+        mvln = fwdpy11.LogNormalS.mv(0, 1, 1)
+        with self.assertRaises(ValueError):
+            fwdpy11.mvDES([mvln], np.zeros(5), np.identity(5))
+
+    def test_MultivariateGaussian(self):
+        try:
+            mvg = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(4))
+            fwdpy11.mvDES(mvg, np.zeros(4))
+        except:  # NOQA
+            self.fail("unexpected exception")
+
+    def test_MultivariateGaussian_bad_init(self):
+        mvg = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(4))
+        with self.assertRaises(ValueError):
+            fwdpy11.mvDES([mvg], np.zeros(4), np.identity(4))
+
 
 class testMutationRegions(unittest.TestCase):
     @classmethod
