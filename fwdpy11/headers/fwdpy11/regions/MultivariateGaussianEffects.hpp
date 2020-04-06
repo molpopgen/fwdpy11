@@ -23,6 +23,7 @@ namespace fwdpy11
         using vector_ptr
             = std::unique_ptr<gsl_vector, std::function<void(gsl_vector *)>>;
         std::vector<double> effect_sizes, dominance_values;
+        matrix_ptr input_matrix_copy;
         // Stores the Cholesky decomposition
         matrix_ptr matrix;
         // Stores the results of gsl_ran_multivariate_gaussian
@@ -32,26 +33,20 @@ namespace fwdpy11
         double fixed_effect, dominance;
 
         MultivariateGaussianEffects(const Region &r, const double sc,
-                                    const gsl_matrix &input_matrix, double s,
-                                    // NOTE: matrix_is_covariance is
-                                    // NOT exposed to Python
-                                    double h, bool matrix_is_covariance)
+                                    const gsl_matrix &input_matrix, double s, double h)
             : Sregion(r, sc, input_matrix.size1), effect_sizes(input_matrix.size1),
               dominance_values(input_matrix.size1, h),
+              input_matrix_copy(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
+                                [](gsl_matrix *m) { gsl_matrix_free(m); }),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
               // Holds the results of calls to mvn, and maps the
               // output to effect_sizes
-              res(gsl_vector_view_array(effect_sizes.data(),
-                                        effect_sizes.size())),
+              res(gsl_vector_view_array(effect_sizes.data(), effect_sizes.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_calloc(input_matrix.size1),
                  [](gsl_vector *v) { gsl_vector_free(v); }),
               fixed_effect(s), dominance(h)
-        // If matrix_is_covariance is true, then the input_matrix is treated
-        // as a covariance matrix, meaning that we copy it and store its
-        // Cholesky decomposition.  If matrix_is_covariance is false,
-        // then input_matrix is assumed to be a valid Cholesky decomposition.
         {
             if (!std::isfinite(fixed_effect))
                 {
@@ -67,8 +62,7 @@ namespace fwdpy11
                 }
             // If any values are non-finite, throw an exception
             if (std::any_of(input_matrix.data,
-                            input_matrix.data
-                                + input_matrix.size1 * input_matrix.size2,
+                            input_matrix.data + input_matrix.size1 * input_matrix.size2,
                             [](double d) { return !std::isfinite(d); })
                 == true)
                 {
@@ -86,18 +80,20 @@ namespace fwdpy11
                     gsl_set_error_handler(error_handler);
                     throw std::runtime_error("failure copying input matrix");
                 }
-            if (matrix_is_covariance)
+            rv = gsl_matrix_memcpy(input_matrix_copy.get(), &input_matrix);
+            if (rv != GSL_SUCCESS)
                 {
-                    rv = gsl_linalg_cholesky_decomp1(matrix.get());
-                    if (rv == GSL_EDOM)
-                        {
-                            // Reset error handler on the way out
-                            gsl_set_error_handler(error_handler);
-                            throw std::invalid_argument(
-                                "Cholesky decomposition failed");
-                        }
+                    // Reset error handler on the way out
+                    gsl_set_error_handler(error_handler);
+                    throw std::runtime_error("failure copying input matrix");
                 }
-
+            rv = gsl_linalg_cholesky_decomp1(matrix.get());
+            if (rv == GSL_EDOM)
+                {
+                    // Reset error handler on the way out
+                    gsl_set_error_handler(error_handler);
+                    throw std::invalid_argument("Cholesky decomposition failed");
+                }
             // Reset error handler on the way out
             gsl_set_error_handler(error_handler);
         }
@@ -109,9 +105,9 @@ namespace fwdpy11
                 new MultivariateGaussianEffects(
                     fwdpy11::Region(this->beg(), this->end(), this->weight(),
                                     this->region.coupled, this->label()),
-                    1.0, *matrix.get(), this->fixed_effect, this->dominance,
-                    false));
+                    1.0, *input_matrix_copy.get(), this->fixed_effect, this->dominance));
         }
+
         std::string
         repr() const override
         {
@@ -125,14 +121,13 @@ namespace fwdpy11
         }
 
         virtual std::uint32_t
-        operator()(
-            fwdpp::flagged_mutation_queue &recycling_bin,
-            std::vector<Mutation> &mutations,
-            std::unordered_multimap<double, std::uint32_t> &lookup_table,
-            const std::uint32_t generation, const GSLrng_t &rng) const override
+        operator()(fwdpp::flagged_mutation_queue &recycling_bin,
+                   std::vector<Mutation> &mutations,
+                   std::unordered_multimap<double, std::uint32_t> &lookup_table,
+                   const std::uint32_t generation, const GSLrng_t &rng) const override
         {
-            int rv = gsl_ran_multivariate_gaussian(rng.get(), mu.get(),
-                                                   matrix.get(), &res.vector);
+            int rv = gsl_ran_multivariate_gaussian(rng.get(), mu.get(), matrix.get(),
+                                                   &res.vector);
             if (rv != GSL_SUCCESS)
                 {
                     throw std::runtime_error(
@@ -141,10 +136,9 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, false, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return fixed_effect; },
-                [this]() { return dominance; },
-                [this]() { return effect_sizes; },
-                [this]() { return dominance_values; }, this->label());
+                [this]() { return fixed_effect; }, [this]() { return dominance; },
+                [this]() { return effect_sizes; }, [this]() { return dominance_values; },
+                this->label());
         }
 
         double
@@ -165,18 +159,18 @@ namespace fwdpy11
         pickle() const override
         {
             pybind11::list matrix_data;
-            for (std::size_t i = 0; i < matrix->size1; ++i)
+            for (std::size_t i = 0; i < input_matrix_copy->size1; ++i)
                 {
-                    for (std::size_t j = 0; j < matrix->size2; ++j)
+                    for (std::size_t j = 0; j < input_matrix_copy->size2; ++j)
                         {
                             matrix_data.append(
-                                gsl_matrix_get(matrix.get(), i, j));
+                                gsl_matrix_get(input_matrix_copy.get(), i, j));
                         }
                 }
 
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), matrix_data,
-                                        matrix->size1, matrix->size2,
-                                        fixed_effect, dominance);
+            return pybind11::make_tuple(
+                Sregion::pickle_Sregion(), matrix_data, input_matrix_copy->size1,
+                input_matrix_copy->size2, fixed_effect, dominance);
         }
 
         static MultivariateGaussianEffects
@@ -195,11 +189,10 @@ namespace fwdpy11
                 {
                     input_matrix_data.push_back(i.cast<double>());
                 }
-            auto v = gsl_matrix_const_view_array(input_matrix_data.data(),
-                                                 size1, size2);
-            return MultivariateGaussianEffects(
-                Region::unpickle(base[0]), base[1].cast<double>(), v.matrix,
-                t[4].cast<double>(), t[5].cast<double>(), false);
+            auto v = gsl_matrix_const_view_array(input_matrix_data.data(), size1, size2);
+            return MultivariateGaussianEffects(Region::unpickle(base[0]),
+                                               base[1].cast<double>(), v.matrix,
+                                               t[4].cast<double>(), t[5].cast<double>());
         }
     };
 
@@ -212,8 +205,9 @@ namespace fwdpy11
             {
                 return false;
             }
-        return rhs.fixed_effect == rhs.fixed_effect
-               && rhs.dominance == rhs.dominance
+        return rhs.fixed_effect == rhs.fixed_effect && rhs.dominance == rhs.dominance
+               && gsl_matrix_equal(rhs.input_matrix_copy.get(),
+                                   rhs.input_matrix_copy.get())
                && gsl_matrix_equal(rhs.matrix.get(), rhs.matrix.get());
     }
 
