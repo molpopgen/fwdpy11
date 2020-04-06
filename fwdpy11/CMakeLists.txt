@@ -45,7 +45,8 @@ set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
-    src/regions/mvDES.cc)
+    src/regions/mvDES.cc
+    src/regions/LogNormalS.cc)
 
 set(GSL_SOURCES src/gsl/init.cc
     src/gsl/gsl_random.cc)

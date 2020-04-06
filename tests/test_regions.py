@@ -300,6 +300,28 @@ class testRecombinationRegions(unittest.TestCase):
                                           fwdpy11.GaussianS(1, 2, 1, 0.25)])
 
 
+class TestLogNormalS(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.lns = fwdpy11.LogNormalS(0, 1, 1, 0.1, 2)
+
+    def test_create(self):
+        self.assertEqual(self.lns.b, 0)
+        self.assertEqual(self.lns.e, 1)
+        self.assertEqual(self.lns.w, 1)
+        self.assertEqual(self.lns.zeta, 0.1)
+        self.assertEqual(self.lns.sigma, 2)
+
+    def test_pickling(self):
+        p = pickle.dumps(self.lns, -1)
+        up = pickle.loads(p)
+        self.assertEqual(up.b, 0)
+        self.assertEqual(up.e, 1)
+        self.assertEqual(up.w, 1)
+        self.assertEqual(up.zeta, 0.1)
+        self.assertEqual(up.sigma, 2)
+
+
 class testPoissonInterval(unittest.TestCase):
     @classmethod
     def setUp(self):
