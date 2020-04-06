@@ -194,7 +194,7 @@ namespace fwdpy11
         }
     };
 
-    bool
+    inline bool
     operator==(const MultivariateGaussianEffects &lhs,
                const MultivariateGaussianEffects &rhs)
     {
