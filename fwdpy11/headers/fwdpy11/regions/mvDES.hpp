@@ -248,6 +248,7 @@ namespace fwdpy11
         mvDES(const MultivariateGaussianEffects &odist,
               std::vector<double> gaussian_means)
             : Sregion(odist.region, 1., odist.input_matrix_copy->size1),
+              output_distributions(clone_and_fill(odist, odist.input_matrix_copy->size1)),
               vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
               matrix(decompose()), deviates(odist.input_matrix_copy->size1),
               dominance_values(fill_dominance(output_distributions)),
