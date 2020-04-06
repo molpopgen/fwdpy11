@@ -3,11 +3,16 @@
 
 namespace py = pybind11;
 
+static const auto INIT = R"delim(
+Log-normal distribution of effect sizes.
+
+.. versionadded:: 0.7.0
+)delim";
+
 void
 init_LogNormalS(py::module& m)
 {
-    py::class_<fwdpy11::LogNormalS, fwdpy11::Sregion>(
-        m, "LogNormalS", "Log-normal distribution of effect sizes")
+    py::class_<fwdpy11::LogNormalS, fwdpy11::Sregion>(m, "LogNormalS", INIT)
         .def(
             py::init([](double beg, double end, double weight, double zeta, double sigma,
                         double h, bool coupled, std::uint16_t label, double scaling) {
@@ -44,8 +49,6 @@ init_LogNormalS(py::module& m)
                 # A simple case
                 import fwdpy11
                 gdist=fwdpy11.LogNormalS(0, 1, 1, -0.1, 0.35)
-
-            .. versionadded: : 0.7.0
         )delim")
         .def_static(
             "mv",
