@@ -111,7 +111,8 @@ static const auto mvDES_INIT_DOCSTRING = R"delim(
 )delim";
 
 static const auto mvDES_INIT_DOCSTRING_LOGNORMAL = R"delim(
-Create a multivariate lognormal
+Create a multivariate lognormal representing 
+different effect sizes in different demes.
 
 :param mvln: A lognormal region
 :type mvln: :class:`fwdpy11.LogNormalS`
@@ -119,6 +120,16 @@ Create a multivariate lognormal
 :type means: numpy.ndarray
 :param matrix: Variance/covariance matrix
 :type matrix: numpy.ndarray
+)delim";
+
+static const auto mvDES_INIT_DOCSTRING_GAUSSIAN = R"delim(
+Create a multivariate gaussian representing 
+different effect sizes in different demes.
+
+:param mvln: A multivariate Gaussian region
+:type mvln: :class:`fwdpy11.MultivariateGaussianEffects`
+:param means: means marginal gaussian Distributions
+:type means: numpy.ndarray
 )delim";
 
 void
@@ -144,6 +155,16 @@ init_mvDES(py::module &m)
              }),
              py::arg("mvln"), py::arg("means"), py::arg("matrix"),
              mvDES_INIT_DOCSTRING_LOGNORMAL)
+        .def(py::init([](const fwdpy11::MultivariateGaussianEffects &mvgauss,
+                         py::array_t<double> means) {
+                 auto mu = convert_means(means);
+                 if (mu.size() != mvgauss.input_matrix_copy->size1)
+                     {
+                         throw std::invalid_argument("incorrect number of mean values");
+                     }
+                 return fwdpy11::mvDES(mvgauss, std::move(mu));
+             }),
+             py::arg("mvgauss"), py::arg("means"), mvDES_INIT_DOCSTRING_GAUSSIAN)
         .def("__repr__", &fwdpy11::mvDES::repr)
         .def_property_readonly("means", &fwdpy11::mvDES::get_means)
         .def_property_readonly("matrix", &fwdpy11::mvDES::get_matrix)
