@@ -218,6 +218,11 @@ class TestMultivariateLogNormalAndGaussian(unittest.TestCase):
         except:  # NOQA
             self.assertFail("unexpected exception")
 
+    def test_mvLogNormalS_bad_init(self):
+        mvln = fwdpy11.LogNormalS.mv(0, 1, 1)
+        with self.assertRaises(ValueError):
+            fwdpy11.mvDES([mvln], np.zeros(5), np.identity(5))
+
 
 if __name__ == "__main__":
     unittest.main()
