@@ -77,11 +77,6 @@ namespace fwdpy11
         double
         from_mvnorm(const double deviate, const double /*P*/) const override
         {
-            if (univariate)
-                {
-                    throw std::invalid_argument(
-                        "invalid init method used to set up multivariate lognormal");
-                }
             return std::exp(deviate);
         }
 

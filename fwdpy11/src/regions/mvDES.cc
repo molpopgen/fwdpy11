@@ -39,8 +39,22 @@ namespace
             }
 
         std::vector<std::unique_ptr<fwdpy11::Sregion>> output_distributions;
+        pybind11::handle lognormal
+            = pybind11::module::import("fwdpy11").attr("LogNormalS");
+        pybind11::handle mvgaussian
+            = pybind11::module::import("fwdpy11").attr("MultivariateGaussianEffects");
         for (auto s : sregions)
             {
+                if (pybind11::isinstance(s, lognormal))
+                    {
+                        throw std::invalid_argument(
+                            "incorrect init method using LogNormalS");
+                    }
+                if (pybind11::isinstance(s, mvgaussian))
+                    {
+                        throw std::invalid_argument(
+                            "incorrect init method using MultivariateGaussianEffects");
+                    }
                 output_distributions.emplace_back(
                     s.cast<const fwdpy11::Sregion &>().clone());
             }
