@@ -142,11 +142,9 @@ namespace fwdpy11
         }
 
         double
-        from_mvnorm(const double /*deviate*/, const double /*P*/) const override
+        from_mvnorm(const double deviate, const double /*P*/) const override
         {
-            throw std::invalid_argument(
-                "MultivariateGaussianEffects is not allowed to be part of "
-                "multivariate DES");
+            return deviate;
         }
 
         std::vector<double>
