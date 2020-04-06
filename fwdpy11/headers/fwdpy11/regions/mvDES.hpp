@@ -24,6 +24,7 @@
 #include <algorithm>
 #include <cmath>
 #include "Sregion.hpp"
+#include "LogNormalS.hpp"
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include <pybind11/stl.h>
@@ -91,6 +92,14 @@ namespace fwdpy11
                         }
                 }
             return rv;
+        }
+
+        std::vector<std::unique_ptr<Sregion>>
+        clone_and_fill(const Sregion &odist, std::size_t n)
+        {
+            std::vector<std::unique_ptr<Sregion>> temp;
+            temp.emplace_back(odist.clone());
+            return fill_output_distributions(temp, n);
         }
 
         std::vector<double>
@@ -207,6 +216,22 @@ namespace fwdpy11
               std::vector<double> gaussian_means, const gsl_matrix &vcov)
             : Sregion(get_region(odist), 1., odist.size()), // 1. is a dummy param here.
               output_distributions(fill_output_distributions(odist, vcov.size1)),
+              vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
+              deviates(vcov.size1),
+              dominance_values(fill_dominance(output_distributions)),
+              means(std::move(gaussian_means)),
+              res(gsl_vector_view_array(deviates.data(), deviates.size())),
+              // NOTE: use of calloc to initialize mu to all zeros
+              mu(gsl_vector_const_view_array(means.data(), means.size())),
+              stddev(get_standard_deviations())
+        {
+            finalize_setup();
+        }
+
+        mvDES(const LogNormalS &odist, std::vector<double> gaussian_means,
+              const gsl_matrix &vcov)
+            : Sregion(odist.region, 1., vcov.size1),
+              output_distributions(clone_and_fill(odist, vcov.size1)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
               deviates(vcov.size1),
               dominance_values(fill_dominance(output_distributions)),
