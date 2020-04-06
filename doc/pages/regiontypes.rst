@@ -36,6 +36,8 @@ Setting up genomic intervals
 
     .. automethod:: __init__
 
+    .. automethod:: mv
+
 .. autoclass:: fwdpy11.mvDES
 
     .. automethod:: __init__

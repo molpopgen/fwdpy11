@@ -322,6 +322,31 @@ class TestLogNormalS(unittest.TestCase):
         self.assertEqual(up.sigma, 2)
 
 
+class TestMultivariateLogNormalS(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=3., coupled=False)
+
+    def test_create(self):
+        self.assertEqual(self.lns.b, 0)
+        self.assertEqual(self.lns.e, 1)
+        self.assertEqual(self.lns.w, 1)
+        self.assertEqual(self.lns.c, False)
+        self.assertTrue(np.isnan(self.lns.zeta))
+        self.assertTrue(np.isnan(self.lns.sigma))
+
+    def test_pickling(self):
+        p = pickle.dumps(self.lns, -1)
+        up = pickle.loads(p)
+        self.assertEqual(up.b, 0)
+        self.assertEqual(up.e, 1)
+        self.assertEqual(up.w, 1)
+        self.assertEqual(up.c, False)
+        self.assertEqual(up.scaling, 3.)
+        self.assertTrue(np.isnan(up.zeta))
+        self.assertTrue(np.isnan(up.sigma))
+
+
 class testPoissonInterval(unittest.TestCase):
     @classmethod
     def setUp(self):
