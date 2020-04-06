@@ -30,7 +30,7 @@ init_MultivariateGaussianEffects(py::module& m)
                      r.data(0, 0), r.shape(0), r.shape(1));
                  return fwdpy11::MultivariateGaussianEffects(
                      fwdpy11::Region(beg, end, weight, coupled, label), 1.0,
-                     v.matrix, fixed_effect, h, true);
+                     v.matrix, fixed_effect, h);
              }),
              py::arg("beg"), py::arg("end"), py::arg("weight"),
              py::arg("matrix"), py::arg("fixed_effect") = 0.0,
