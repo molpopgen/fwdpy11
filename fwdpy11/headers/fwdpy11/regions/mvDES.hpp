@@ -78,6 +78,7 @@ namespace fwdpy11
         {
             if (odist.size() > 1 && odist.size() != n)
                 {
+                    pybind11::print(odist.size(), n);
                     throw std::invalid_argument("invalid number of Sregion objects");
                 }
             std::vector<std::unique_ptr<Sregion>> rv;
@@ -87,7 +88,7 @@ namespace fwdpy11
                 }
             if (odist.size() == 1)
                 {
-                    for (std::size_t i = 0; i < n; ++i)
+                    for (std::size_t i = 1; i < n; ++i)
                         {
                             rv.emplace_back(odist[0]->clone());
                         }
@@ -210,6 +211,7 @@ namespace fwdpy11
         // Stores the means of the mvn distribution, which are all zero
         gsl_vector_const_view mu;
         std::vector<double> stddev;
+        const bool lognormal_init, mvgaussian_init;
 
       public:
         // NOTE: the "scaling" concept is handled by the output_distributions.
@@ -224,7 +226,8 @@ namespace fwdpy11
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
-              stddev(get_standard_deviations())
+              stddev(get_standard_deviations()), lognormal_init(false),
+              mvgaussian_init(false)
         {
             finalize_setup();
         }
@@ -240,7 +243,8 @@ namespace fwdpy11
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
-              stddev(get_standard_deviations())
+              stddev(get_standard_deviations()), lognormal_init(true),
+              mvgaussian_init(false)
         {
             finalize_setup();
         }
@@ -248,15 +252,16 @@ namespace fwdpy11
         mvDES(const MultivariateGaussianEffects &odist,
               std::vector<double> gaussian_means)
             : Sregion(odist.region, 1., odist.input_matrix_copy->size1),
-              output_distributions(clone_and_fill(odist, odist.input_matrix_copy->size1)),
+              output_distributions(
+                  clone_and_fill(odist, odist.input_matrix_copy->size1)),
               vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
               matrix(decompose()), deviates(odist.input_matrix_copy->size1),
-              dominance_values(odist.dominance_values),
-              means(std::move(gaussian_means)),
+              dominance_values(odist.dominance_values), means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
-              stddev(get_standard_deviations())
+              stddev(get_standard_deviations()), lognormal_init(false),
+              mvgaussian_init(true)
         {
             finalize_setup();
         }
@@ -292,6 +297,19 @@ namespace fwdpy11
         std::unique_ptr<Sregion>
         clone() const override
         {
+            if (lognormal_init)
+                {
+                    return std::unique_ptr<mvDES>(new mvDES(
+                        *dynamic_cast<LogNormalS *>(output_distributions[0].get()),
+                        means, *(this->vcov_copy)));
+                }
+            else if (mvgaussian_init)
+                {
+                    return std::unique_ptr<mvDES>(
+                        new mvDES(*dynamic_cast<MultivariateGaussianEffects *>(
+                                      output_distributions[0].get()),
+                                  means));
+                }
             return std::unique_ptr<mvDES>(
                 new mvDES(output_distributions, means, *(this->vcov_copy)));
         }
