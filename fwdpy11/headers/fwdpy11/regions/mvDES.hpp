@@ -43,6 +43,87 @@ namespace fwdpy11
             = std::unique_ptr<gsl_matrix, std::function<void(gsl_matrix *)>>;
         using vector_ptr
             = std::unique_ptr<gsl_vector, std::function<void(gsl_vector *)>>;
+        using callback_type = std::function<std::uint32_t(
+            const mvDES *, fwdpp::flagged_mutation_queue &r, std::vector<Mutation> &,
+            std::unordered_multimap<double, std::uint32_t> &, const std::uint32_t,
+            const GSLrng_t &)>;
+
+        struct default_callback
+        {
+            inline std::uint32_t
+            operator()(const mvDES *outer_this,
+                       fwdpp::flagged_mutation_queue &recycling_bin,
+                       std::vector<Mutation> &mutations,
+                       std::unordered_multimap<double, std::uint32_t> &lookup_table,
+                       const std::uint32_t generation, const GSLrng_t &rng) const
+            {
+                outer_this->generate_deviates(rng);
+                for (std::size_t i = 0; i < outer_this->deviates.size(); ++i)
+                    {
+                        // Subtract means from the deviates so we
+                        // can use N(0, sigma[i]) cdf.
+                        outer_this->deviates[i]
+                            = outer_this->output_distributions[i]->from_mvnorm(
+                                outer_this->deviates[i],
+                                gsl_cdf_gaussian_P(outer_this->deviates[i]
+                                                       - outer_this->means[i],
+                                                   outer_this->stddev[i]));
+                    }
+                return outer_this->generate_mutation(recycling_bin, mutations,
+                                                     lookup_table, generation, rng);
+            }
+        };
+
+        struct specialized_callback
+        {
+            inline std::uint32_t
+            operator()(const mvDES *outer_this,
+                       fwdpp::flagged_mutation_queue &recycling_bin,
+                       std::vector<Mutation> &mutations,
+                       std::unordered_multimap<double, std::uint32_t> &lookup_table,
+                       const std::uint32_t generation, const GSLrng_t &rng) const
+            {
+                outer_this->generate_deviates(rng);
+                for (std::size_t i = 0; i < outer_this->deviates.size(); ++i)
+                    {
+                        // Subtract means from the deviates so we
+                        // can use N(0, sigma[i]) cdf.
+                        outer_this->deviates[i]
+                            = outer_this->output_distributions[0]->from_mvnorm(
+                                outer_this->deviates[i],
+                                gsl_cdf_gaussian_P(outer_this->deviates[i]
+                                                       - outer_this->means[i],
+                                                   outer_this->stddev[i]));
+                    }
+                return outer_this->generate_mutation(recycling_bin, mutations,
+                                                     lookup_table, generation, rng);
+            }
+        };
+
+        void
+        generate_deviates(const GSLrng_t &rng) const
+        {
+            int rv = gsl_ran_multivariate_gaussian(rng.get(), &mu.vector, matrix.get(),
+                                                   &res.vector);
+            if (rv != GSL_SUCCESS)
+                {
+                    throw std::runtime_error(
+                        "call to gsl_ran_multivariate_gaussian failed");
+                }
+        }
+
+        std::size_t
+        generate_mutation(fwdpp::flagged_mutation_queue &recycling_bin,
+                          Population::mcont_t &mutations,
+                          Population::lookup_table_t &lookup_table,
+                          const fwdpp::uint_t &generation, const GSLrng_t &rng) const
+        {
+            return infsites_Mutation(
+                recycling_bin, mutations, lookup_table, false, generation,
+                [this, &rng]() { return this->region(rng); }, []() { return 0.0; },
+                []() { return 1.0; }, [this]() { return this->deviates; },
+                [this]() { return this->dominance_values; }, this->label());
+        }
 
         Region
         get_region(const std::vector<std::unique_ptr<Sregion>> &odists)
@@ -97,11 +178,11 @@ namespace fwdpy11
         }
 
         std::vector<std::unique_ptr<Sregion>>
-        clone_and_fill(const Sregion &odist, std::size_t n)
+        clone_into_vector(const Sregion &odist)
         {
             std::vector<std::unique_ptr<Sregion>> temp;
             temp.emplace_back(odist.clone());
-            return fill_output_distributions(temp, n);
+            return temp;
         }
 
         std::vector<double>
@@ -212,6 +293,7 @@ namespace fwdpy11
         gsl_vector_const_view mu;
         std::vector<double> stddev;
         const bool lognormal_init, mvgaussian_init;
+        const callback_type callback;
 
       public:
         // NOTE: the "scaling" concept is handled by the output_distributions.
@@ -227,7 +309,7 @@ namespace fwdpy11
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
               stddev(get_standard_deviations()), lognormal_init(false),
-              mvgaussian_init(false)
+              mvgaussian_init(false), callback(default_callback())
         {
             finalize_setup();
         }
@@ -235,7 +317,7 @@ namespace fwdpy11
         mvDES(const LogNormalS &odist, std::vector<double> gaussian_means,
               const gsl_matrix &vcov)
             : Sregion(odist.region, 1., vcov.size1),
-              output_distributions(clone_and_fill(odist, vcov.size1)),
+              output_distributions(clone_into_vector(odist)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
               deviates(vcov.size1),
               dominance_values(fill_dominance(output_distributions)),
@@ -244,7 +326,7 @@ namespace fwdpy11
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
               stddev(get_standard_deviations()), lognormal_init(true),
-              mvgaussian_init(false)
+              mvgaussian_init(false), callback(specialized_callback())
         {
             finalize_setup();
         }
@@ -252,8 +334,7 @@ namespace fwdpy11
         mvDES(const MultivariateGaussianEffects &odist,
               std::vector<double> gaussian_means)
             : Sregion(odist.region, 1., odist.input_matrix_copy->size1),
-              output_distributions(
-                  clone_and_fill(odist, odist.input_matrix_copy->size1)),
+              output_distributions(clone_into_vector(odist)),
               vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
               matrix(decompose()), deviates(odist.input_matrix_copy->size1),
               dominance_values(odist.dominance_values), means(std::move(gaussian_means)),
@@ -261,7 +342,7 @@ namespace fwdpy11
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_const_view_array(means.data(), means.size())),
               stddev(get_standard_deviations()), lognormal_init(false),
-              mvgaussian_init(true)
+              mvgaussian_init(true), callback(specialized_callback())
         {
             finalize_setup();
         }
@@ -272,26 +353,8 @@ namespace fwdpy11
                    std::unordered_multimap<double, std::uint32_t> &lookup_table,
                    const std::uint32_t generation, const GSLrng_t &rng) const override
         {
-            int rv = gsl_ran_multivariate_gaussian(rng.get(), &mu.vector, matrix.get(),
-                                                   &res.vector);
-            if (rv != GSL_SUCCESS)
-                {
-                    throw std::runtime_error(
-                        "call to gsl_ran_multivariate_gaussian failed");
-                }
-            for (std::size_t i = 0; i < deviates.size(); ++i)
-                {
-                    // Subtract means from the deviates so we
-                    // can use N(0, sigma[i]) cdf.
-                    deviates[i] = output_distributions[i]->from_mvnorm(
-                        deviates[i],
-                        gsl_cdf_gaussian_P(deviates[i] - means[i], stddev[i]));
-                }
-            return infsites_Mutation(
-                recycling_bin, mutations, lookup_table, false, generation,
-                [this, &rng]() { return region(rng); }, []() { return 0.0; },
-                []() { return 1.0; }, [this]() { return deviates; },
-                [this]() { return dominance_values; }, this->label());
+            return callback(this, recycling_bin, mutations, lookup_table, generation,
+                            rng);
         }
 
         std::unique_ptr<Sregion>
