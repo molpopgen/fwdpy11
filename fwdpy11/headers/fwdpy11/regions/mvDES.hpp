@@ -251,7 +251,7 @@ namespace fwdpy11
               output_distributions(clone_and_fill(odist, odist.input_matrix_copy->size1)),
               vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
               matrix(decompose()), deviates(odist.input_matrix_copy->size1),
-              dominance_values(fill_dominance(output_distributions)),
+              dominance_values(odist.dominance_values),
               means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
