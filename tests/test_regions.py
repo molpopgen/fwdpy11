@@ -231,6 +231,12 @@ class Test_mvDES(unittest.TestCase):
         except:  # NOQA
             self.fail("unexpected exception")
 
+    def test_mvLogNormalS_pickling(self):
+        mvln = fwdpy11.LogNormalS.mv(0, 1, 1)
+        des = fwdpy11.mvDES(mvln, np.zeros(5), np.identity(5))
+        p = pickle.dumps(des, -1)
+        pickle.loads(p)
+
     def test_mvLogNormalS_bad_init(self):
         mvln = fwdpy11.LogNormalS.mv(0, 1, 1)
         with self.assertRaises(ValueError):
@@ -242,6 +248,12 @@ class Test_mvDES(unittest.TestCase):
             fwdpy11.mvDES(mvg, np.zeros(4))
         except:  # NOQA
             self.fail("unexpected exception")
+
+    def test_MultivariateGaussian_pickling(self):
+        mvg = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(4))
+        des = fwdpy11.mvDES(mvg, np.zeros(4))
+        p = pickle.dumps(des, -1)
+        pickle.loads(p)
 
     def test_MultivariateGaussian_bad_init(self):
         mvg = fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(4))

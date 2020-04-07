@@ -343,6 +343,21 @@ namespace fwdpy11
         pybind11::tuple
         pickle() const override
         {
+            if (lognormal_init)
+                {
+                    std::vector<double> m(vcov_copy->data,
+                                          vcov_copy->data
+                                              + vcov_copy->size1 * vcov_copy->size2);
+                    return pybind11::make_tuple(output_distributions[0]->pickle(), means,
+                                                m);
+                }
+
+            if (mvgaussian_init)
+                {
+                    return pybind11::make_tuple(output_distributions[0]->pickle(),
+                                                means);
+                }
+
             auto dumps = pybind11::module::import("pickle").attr("dumps");
             pybind11::list pickled_des;
             for (auto &s : output_distributions)
@@ -357,6 +372,31 @@ namespace fwdpy11
         static mvDES
         unpickle(pybind11::tuple t)
         {
+            if (t.size() == 2)
+                {
+                    return mvDES(MultivariateGaussianEffects::unpickle(
+                                     t[0].cast<pybind11::tuple>()),
+                                 t[1].cast<std::vector<double>>());
+                }
+
+            if (t.size() == 3)
+                {
+                    auto means = t[1].cast<std::vector<double>>();
+                    matrix_ptr m(gsl_matrix_alloc(means.size(), means.size()),
+                                 [](gsl_matrix *m) { gsl_matrix_free(m); });
+                    auto mdata = t[2].cast<std::vector<double>>();
+                    std::size_t k = 0;
+                    for (std::size_t i = 0; i < means.size(); ++i)
+                        {
+                            for (std::size_t j = 0; j < means.size(); ++j)
+                                {
+                                    gsl_matrix_set(m.get(), i, j, mdata[k++]);
+                                }
+                        }
+                    return mvDES(LogNormalS::unpickle(t[0].cast<pybind11::tuple>()),
+                                 std::move(means), *m);
+                }
+
             if (t.size() != 4)
                 {
                     throw std::runtime_error("invalid tuple size");
