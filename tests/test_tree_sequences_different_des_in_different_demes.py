@@ -214,5 +214,57 @@ class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):
         self.assertTrue(np.allclose(gv, md['g']))
 
 
+class TestGaussianStabilizingSelection(unittest.TestCase):
+    """
+    Quick sim w/high migration rate
+    to put the same mutation in both demes.
+    """
+    @classmethod
+    def setUpClass(self):
+        pdict = {
+            "nregions": [],
+            "sregions": [
+                fwdpy11.mvDES(
+                    fwdpy11.MultivariateGaussianEffects(
+                        0, 1, 1, h=1, matrix=np.identity(2)),
+                    np.zeros(2),
+                )
+            ],
+            "recregions": [],
+            "rates": (0, 1e-3, None),
+            "demography": fwdpy11.DiscreteDemography(
+                migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
+            ),
+            "simlen": 100,
+            "gvalue": fwdpy11.Additive(ndemes=2, scaling=2,
+                                       gv2w=fwdpy11.GSS(opt=0, VS=1)),
+        }
+
+        self.params = fwdpy11.ModelParams(**pdict)
+        self.pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+        self.rng = fwdpy11.GSLrng(1010)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 10)
+
+        tv = fwdpy11.TreeIterator(
+            self.pop.tables, self.pop.alive_nodes, update_samples=True)
+        nt = np.array(self.pop.tables.nodes, copy=False)
+        demes_with_muts = np.zeros(2)
+        for t in tv:
+            for m in t.mutations():
+                demes = np.unique(nt['deme'][t.samples_below(m.node)])
+                for d in demes:
+                    demes_with_muts[d] += 1
+        assert np.all(demes_with_muts > 0), "test requires mutations in both demes"
+
+    def test_genetic_values(self):
+        for m in self.pop.diploid_metadata:
+            g = 0.0
+            for i in [self.pop.diploids[m.label].first,
+                      self.pop.diploids[m.label].second]:
+                for k in self.pop.haploid_genomes[i].smutations:
+                    g += self.pop.mutations[k].esizes[m.deme]
+            self.assertAlmostEqual(m.g, g)
+
+
 if __name__ == "__main__":
     unittest.main()
