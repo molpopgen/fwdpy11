@@ -319,8 +319,8 @@ namespace fwdpy11
             : Sregion(odist.region, 1., vcov.size1),
               output_distributions(clone_into_vector(odist)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
-              deviates(vcov.size1),
-              dominance_values(fill_dominance(output_distributions)),
+              deviates(vcov.size1), dominance_values(std::vector<double>(
+                                        gaussian_means.size(), odist.dominance)),
               means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
