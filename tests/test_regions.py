@@ -4,6 +4,7 @@ import fwdpy11
 import numpy as np
 import unittest
 import pickle
+import call_Sregion
 
 # Choose global values that differ from default values in Python class constructors
 BEG, END, WEIGHT, DOM, LABEL, COUPLED = 0.0, 1.0, 0.5, 0.5, 63, False
@@ -61,6 +62,18 @@ class testExpS(unittest.TestCase):
     def testBadDominance(self):
         with self.assertRaises(ValueError):
             fwdpy11.ExpS(0, 1, 1, -1.0, h=np.nan)
+
+    def test_call(self):
+        e = fwdpy11.ExpS(0, 1, 1.0, -0.1)
+        m = call_Sregion.call(e, 101)
+        self.assertTrue(m.s <= 0.0)
+        self.assertEqual(m.label, 0)
+        self.assertEqual(m.h, 1)
+        e = fwdpy11.ExpS(0, 1, 1.0, 0.1, h=0.25, label=3)
+        m = call_Sregion.call(e, 101)
+        self.assertTrue(m.s >= 0.0)
+        self.assertEqual(m.label, 3)
+        self.assertEqual(m.h, 0.25)
 
 
 class test_PickleExpS(unittest.TestCase):
