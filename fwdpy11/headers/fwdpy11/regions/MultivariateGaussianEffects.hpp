@@ -144,7 +144,7 @@ namespace fwdpy11
         double
         from_mvnorm(const double deviate, const double /*P*/) const override
         {
-            return deviate;
+            return deviate / scaling;
         }
 
         std::vector<double>
