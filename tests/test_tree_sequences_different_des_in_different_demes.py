@@ -17,6 +17,10 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# This file contains round-trip tests of correctness using
+# fwdpy11.mvDES to specify different DES in different demes.
+# Low-level tests of fwdpy11.mvDES itself are in test_regions.py
+
 import fwdpy11
 import unittest
 import numpy as np
