@@ -37,6 +37,11 @@
 namespace fwdpy11
 {
     class mvDES : public Sregion
+    // NOTE: the class details here are rather complex.
+    // In the future, it may be better to define a second
+    // class that mvDES encapsulates.  Doing so would solve
+    // much of the constructor, pickling, etc., problems,
+    // handled here.
     {
       private:
         using matrix_ptr
