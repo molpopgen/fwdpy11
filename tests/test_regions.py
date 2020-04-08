@@ -370,6 +370,7 @@ class TestLogNormalS(unittest.TestCase):
         m = call_Sregion.call(lns, 191)
         self.assertTrue(m.s <= 0.)
 
+
 class TestMultivariateLogNormalS(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -393,6 +394,15 @@ class TestMultivariateLogNormalS(unittest.TestCase):
         self.assertEqual(up.scaling, 3.)
         self.assertTrue(np.isnan(up.zeta))
         self.assertTrue(np.isnan(up.sigma))
+
+    def test_call(self):
+        mv = fwdpy11.mvDES(self.lns, np.zeros(2), np.identity(2))
+        m = call_Sregion.call(mv, 191)
+        self.assertTrue(np.all(m.esizes >= 0.))
+        lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-1)
+        mv = fwdpy11.mvDES(lns, np.zeros(2), np.identity(2))
+        m = call_Sregion.call(mv, 191)
+        self.assertTrue(np.all(m.esizes <= 0.))
 
 
 class testPoissonInterval(unittest.TestCase):
