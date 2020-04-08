@@ -39,3 +39,6 @@ set_target_properties(EsizeZero PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOUR
 pybind11_add_module(sregion_cdf sregion_cdf.cpp)
 target_link_libraries(sregion_cdf PRIVATE GSL::gsl GSL::gslcblas)
 set_target_properties(sregion_cdf PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)
+pybind11_add_module(call_Sregion call_Sregion.cpp)
+target_link_libraries(call_Sregion PRIVATE GSL::gsl GSL::gslcblas)
+set_target_properties(call_Sregion PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/tests)

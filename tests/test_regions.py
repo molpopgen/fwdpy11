@@ -4,6 +4,7 @@ import fwdpy11
 import numpy as np
 import unittest
 import pickle
+import call_Sregion
 
 # Choose global values that differ from default values in Python class constructors
 BEG, END, WEIGHT, DOM, LABEL, COUPLED = 0.0, 1.0, 0.5, 0.5, 63, False
@@ -362,6 +363,12 @@ class TestLogNormalS(unittest.TestCase):
         self.assertEqual(up.zeta, 0.1)
         self.assertEqual(up.sigma, 2)
 
+    def test_call(self):
+        m = call_Sregion.call(self.lns, 191)
+        self.assertTrue(m.s >= 0.)
+        lns = fwdpy11.LogNormalS(0, 1, 1, 0.1, 2, scaling=-1)
+        m = call_Sregion.call(lns, 191)
+        self.assertTrue(m.s <= 0.)
 
 class TestMultivariateLogNormalS(unittest.TestCase):
     @classmethod
