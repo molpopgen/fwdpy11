@@ -139,5 +139,68 @@ Let's put it in a simulation and run it:
 "Custom" multivariate distributions
 ------------------------------------------------------------------
 
+The previous two sections cover cases where the methods for generating
+deviates from a multivariate distribution are straightforward and agreed
+upon.
+
+In order to simulate multivariate distributions of effect sizes based on
+:class:`fwdpy11.Sregion` types, we follow a fairly intuitive approach
+described in [Song2000]_.  Briefly, the multivariate Gaussian kernel is
+used to produce deviates.  Then, the quantiles from the cummulative distribution
+of each marginal Gaussian are used to generate a deviate from the desired output distribution of interest.
+
+For a simulation with `n` populations we need:
+
+* A :class:`list` of `n` :class:`fwdpy11.Sregion` objects
+* An array of `n` means for the multivariate Gaussian
+* An `n-by-n` covariance matrix for the multivariate 
+  Gaussian
+
+The following generates exponentially distributed effect sizes in each deme
+with a high correlation across demes:
+
+.. ipython:: python
+
+    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5)]*2, np.zeros(2),
+                np.matrix([1, 0.9, 0.9, 1]).reshape((2, 2)))
+    params.sregions = [mvdes]
+    pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    for i in pop.tables.mutations:
+        print(pop.mutations[i.key].esizes)
+
+We can mix and match our distributions.  Here, the distribution of effect
+sizes in deme 0 is exponential and the distribution in deme 1 is gamma.  The
+two distributions have means with opposite signs and the magnitudes of the
+marginal deviates negatively covary:
+
+.. ipython:: python
+
+    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
+                           fwdpy11.GammaS(0, 1, 1, mean=0.1, shape=1)],
+                np.zeros(2),
+                np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)))
+    params.sregions = [mvdes]
+    pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    for i in pop.tables.mutations:
+        print(pop.mutations[i.key].esizes)
+
+The type :class:`fwdpy11.ConstantS` has intuitive behavior:
+
+.. ipython:: python
+
+    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
+                           fwdpy11.ConstantS(0, 1, 1, -0.1)],
+                np.zeros(2),
+                np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)))
+    params.sregions = [mvdes]
+    params.rates = (0, 5e-3, None)
+    pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+    rng = fwdpy11.GSLrng(1010)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    for i in pop.tables.mutations:
+        print(pop.mutations[i.key].esizes)
+
 Recipes
 ------------------------------------------------------------------
