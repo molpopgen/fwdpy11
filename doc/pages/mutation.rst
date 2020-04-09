@@ -1,3 +1,5 @@
+.. _mutationregions:
+
 Variation in mutation rates
 =================================================================
 
