@@ -9,6 +9,23 @@ Log-normal distribution of effect sizes.
 .. versionadded:: 0.7.0
 )delim";
 
+static const auto MV_DOCSTRING = R"delim(
+Create an instance compatible with 
+:class:`fwdpy11.mvDES`. See :ref:`mvdes` for
+details.
+
+:param beg: the beginning of the region
+:param end: the end of the region
+:param weight: the weight to assign
+:param zeta: the zeta parameter
+:param sigma: the sigma parameter
+:param h: the dominance
+:param coupled: if True, the weight is converted to(end-beg)*weight
+:param label: Not relevant to recombining regions.
+    Otherwise, this value will be used
+    to take mutations from this region.
+)delim";
+
 void
 init_LogNormalS(py::module& m)
 {
@@ -58,7 +75,8 @@ init_LogNormalS(py::module& m)
                     fwdpy11::Region(beg, end, weight, coupled, label), scaling, h);
             },
             py::arg("beg"), py::arg("end"), py::arg("weight"), py::arg("h") = 1.0,
-            py::arg("coupled") = true, py::arg("label") = 0, py::arg("scaling") = 1.0)
+            py::arg("coupled") = true, py::arg("label") = 0, py::arg("scaling") = 1.0,
+            MV_DOCSTRING)
         .def_readonly("zeta", &fwdpy11::LogNormalS::zeta)
         .def_readonly("sigma", &fwdpy11::LogNormalS::sigma)
         .def_readonly("h", &fwdpy11::LogNormalS::dominance)
