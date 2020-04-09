@@ -39,6 +39,7 @@ Welcome to fwdpy11's documentation!
     pages/mutation
     pages/recombination
     pages/softselection
+    pages/mvdes
     pages/demographydebugger
     pages/tsoverview
     pages/tstypes
