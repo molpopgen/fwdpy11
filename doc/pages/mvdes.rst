@@ -204,3 +204,52 @@ The type :class:`fwdpy11.ConstantS` has intuitive behavior:
 
 Recipes
 ------------------------------------------------------------------
+
+Different signs in different demes
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Consider two demes.  You want any beneficial mutation in one deme to
+be deleterious in the other and vice-versa.
+
+For the multivariate Gaussian, use the covariance matrix as done above.  Note
+that this approach only generates a *tendency* to different signs in different demes.
+
+With the multivariate lognormal, the best we can do is to use negative 
+correlations such that deleterious mutations in deme 0 are less deleterious in deme 1, etc.:
+
+.. ipython:: python
+
+    sregions = [fwdpy11.mvDES(fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200),
+                np.zeros(2), np.matrix([1, -0.99, -0.99, 1]).reshape((2,2)))]
+    sregions.append(fwdpy11.mvDES(fwdpy11.LogNormalS.mv(0, 1, 1, scaling=200),
+                np.zeros(2), np.matrix([1, -0.99, -0.99, 1]).reshape((2,2))))
+    params.sregions = sregions
+    params.rates = (0, 5e-3, None)
+    pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+    rng = fwdpy11.GSLrng(1010)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    for i in pop.tables.mutations:
+        print(pop.mutations[i.key].esizes)
+
+In the output, we see that an effect size in deme `i` has a corresponding effect size in deme `j` that is a about an order of magnitude smaller in absolute value.
+        
+For the general approach, simply create a :class:`list` of objects with the desired mean (or constant) effect sizes.  For example:
+
+.. ipython:: python
+
+    sregions = [fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
+                           fwdpy11.ExpS(0, 1, 1, 0.1)],
+                np.zeros(2),
+                np.identity(2))]
+    sregions.append(fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1),
+                           fwdpy11.ExpS(0, 1, 1, -0.5)],
+                np.zeros(2),
+                np.identity(2)))
+    params.sregions = sregions
+    params.rates = (0, 5e-3, None)
+    pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
+    rng = fwdpy11.GSLrng(1010)
+    fwdpy11.evolvets(rng, pop, params, 10)
+    for i in pop.tables.mutations:
+        print(pop.mutations[i.key].esizes)
+        
