@@ -27,6 +27,8 @@ evolving withing discrete sub-populations, or demes.
 If you want to skip the details and see basic models provided by ``fwdpy11``, then
 see :ref:`demographic_models`.
 
+Once you've digested this section, you may want to read :ref:`mvdes`.
+
 The model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
