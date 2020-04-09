@@ -96,8 +96,7 @@ namespace fwdpy11
                         outer_this->deviates[i]
                             = outer_this->output_distributions[0]->from_mvnorm(
                                 outer_this->deviates[i],
-                                gsl_cdf_gaussian_P(outer_this->deviates[i]
-                                                       - outer_this->means[i],
+                                gsl_cdf_gaussian_P(outer_this->deviates[i],
                                                    outer_this->stddev[i]));
                     }
                 return outer_this->generate_mutation(recycling_bin, mutations,
