@@ -17,10 +17,11 @@
 
 # Main goal is to test pickling
 
-import fwdpy11
 import unittest
+
 import numpy as np
 
+import fwdpy11
 
 class testGeneticValueIsFitness(unittest.TestCase):
     @classmethod
@@ -29,6 +30,7 @@ class testGeneticValueIsFitness(unittest.TestCase):
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.g, -1)
         up = pickle.loads(p)
         self.assertEqual(type(up), type(self.g))
@@ -44,6 +46,7 @@ class testGSS(unittest.TestCase):
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.g, -1)
         up = pickle.loads(p)
         self.assertEqual(up.VS, self.VS)
@@ -62,6 +65,7 @@ class testGSSmo(unittest.TestCase):
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.g)
         up = pickle.loads(p)
         self.assertEqual(up.VS, 1.0)
@@ -76,13 +80,13 @@ class testGSSmo(unittest.TestCase):
 class testMultivariateGSSmo(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.optima = np.array([0., 0., 1., 1.]).reshape(2, 2)
+        self.optima = np.array([0.0, 0.0, 1.0, 1.0]).reshape(2, 2)
         self.timepoints = [0, 100]
-        self.mvgssmo = fwdpy11.MultivariateGSSmo(
-            self.timepoints, self.optima, 1.0)
+        self.mvgssmo = fwdpy11.MultivariateGSSmo(self.timepoints, self.optima, 1.0)
 
     def test_pickle(self):
         import pickle
+
         p = pickle.dumps(self.mvgssmo)
         up = pickle.loads(p)
         self.assertEqual(self.mvgssmo, up)

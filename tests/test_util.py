@@ -20,9 +20,9 @@
 # Unit tests of fwdpy11
 
 import unittest
-from quick_pops import quick_neutral_slocus
-import fwdpy11
 
+import fwdpy11
+from quick_pops import quick_neutral_slocus
 
 class testAddMutations(unittest.TestCase):
     @classmethod
@@ -41,16 +41,20 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
         # Get extant mutations
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
-        g = [i[0] for i in enumerate(
-            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
-            self.pop.haploid_genomes[i[0]].n > 0]
+        g = [
+            i[0]
+            for i in enumerate(self.pop.haploid_genomes)
+            if extant[0][0] in i[1].mutations and self.pop.haploid_genomes[i[0]].n > 0
+        ]
         self.assertEqual(sum([self.pop.haploid_genomes[i].n for i in g]), extant[0][1])
         fwdpy11.change_effect_size(self.pop, extant[0][0], -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, -0.1)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
-        g2 = [i[0] for i in enumerate(self.pop.haploid_genomes) if
-              extant[0][0] in i[1].smutations and
-              self.pop.haploid_genomes[i[0]].n > 0]
+        g2 = [
+            i[0]
+            for i in enumerate(self.pop.haploid_genomes)
+            if extant[0][0] in i[1].smutations and self.pop.haploid_genomes[i[0]].n > 0
+        ]
         self.assertEqual(g, g2)
 
     def test_change_esize_nothing_happens(self):
@@ -60,35 +64,40 @@ class test_ChangeEsizeDiploid(unittest.TestCase):
         # Get extant mutations
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
         # Get gametes with this mutation
-        g = [i[0] for i in enumerate(
-            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
-            self.pop.haploid_genomes[i[0]].n > 0]
+        g = [
+            i[0]
+            for i in enumerate(self.pop.haploid_genomes)
+            if extant[0][0] in i[1].mutations and self.pop.haploid_genomes[i[0]].n > 0
+        ]
         self.assertEqual(sum([self.pop.haploid_genomes[i].n for i in g]), extant[0][1])
         fwdpy11.change_effect_size(self.pop, extant[0][0], 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].s, 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
-        g2 = [i[0] for i in enumerate(self.pop.haploid_genomes) if
-              extant[0][0] in i[1].mutations and
-              self.pop.haploid_genomes[i[0]].n > 0]
+        g2 = [
+            i[0]
+            for i in enumerate(self.pop.haploid_genomes)
+            if extant[0][0] in i[1].mutations and self.pop.haploid_genomes[i[0]].n > 0
+        ]
         self.assertEqual(g, g2)
 
     def testVectorEffects(self):
         extant = [i for i in enumerate(self.pop.mcounts) if i[1] > 0]
-        g = [i[0] for i in enumerate(
-            self.pop.haploid_genomes) if extant[0][0] in i[1].mutations and
-            self.pop.haploid_genomes[i[0]].n > 0]
-        fwdpy11.change_effect_size(self.pop, extant[0][0],
-                                        0.0, 0.0, [1.], [-1.])
+        g = [
+            i[0]
+            for i in enumerate(self.pop.haploid_genomes)
+            if extant[0][0] in i[1].mutations and self.pop.haploid_genomes[i[0]].n > 0
+        ]
+        fwdpy11.change_effect_size(self.pop, extant[0][0], 0.0, 0.0, [1.0], [-1.0])
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, False)
         self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 1.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
 
         # Now, replace it w/a neutral mutation
-        fwdpy11.change_effect_size(self.pop, extant[0][0],
-                                        0.0, 0.0, [0.], [-1.])
+        fwdpy11.change_effect_size(self.pop, extant[0][0], 0.0, 0.0, [0.0], [-1.0])
         self.assertEqual(self.pop.mutations[extant[0][0]].neutral, True)
         self.assertEqual(self.pop.mutations[extant[0][0]].esizes[0], 0.0)
         self.assertEqual(self.pop.mutations[extant[0][0]].heffects[0], -1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

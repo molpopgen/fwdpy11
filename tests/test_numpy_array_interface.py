@@ -1,6 +1,6 @@
 import unittest
-import numpy_array_interface
 
+import numpy_array_interface
 
 class TestNumpyArrayInterface1D(unittest.TestCase):
     @classmethod

@@ -13,7 +13,8 @@ def exponential_growth_rate(N0, Nt, time):
     if N0 < 1 or Nt < 1:
         raise ValueError("N0 and Nt must both be >= 1")
     import numpy as np
-    return np.exp((np.log(Nt) - np.log(N0))/time)
+
+    return np.exp((np.log(Nt) - np.log(N0)) / time)
 
 
 def migration_matrix_single_extant_deme(ndemes, focal_deme):
@@ -30,6 +31,7 @@ def migration_matrix_single_extant_deme(ndemes, focal_deme):
     .. versionadded:: 0.6.0
     """
     import numpy as np
-    m = np.zeros(ndemes*ndemes).reshape(ndemes, ndemes)
+
+    m = np.zeros(ndemes * ndemes).reshape(ndemes, ndemes)
     m[focal_deme, focal_deme] = 1.0
     return m

@@ -16,6 +16,7 @@ You can find the location of the installed header files programatically within P
 .. ipython:: python
 
     import fwdpy11
+
     print(fwdpy11.get_includes())
     print(fwdpy11.get_fwdpp_includes())
 

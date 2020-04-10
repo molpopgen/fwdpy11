@@ -1,11 +1,11 @@
-import unittest
 import pickle
+import unittest
+
 import numpy as np
+
 import fwdpy11 as fp11
-import fwdpy11
 import fwdpy11.ezparams
 import snowdrift
-
 
 class SamplePhenotypes(object):
     """
@@ -39,16 +39,17 @@ def evolve_snowdrift(args):
     pop = fp11.DiploidPopulation(N)
     # Initialize a random number generator
     rng = fp11.GSLrng(seed)
-    p = {'sregions': [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
-         'recregions': [fp11.Region(0, 1, 1)],
-         'nregions': [],
-         'gvalue': snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2),
-         # evolve for 100 generations so that unit tests are
-         # fast
-         'demography': np.array([N] * 100, dtype=np.uint32),
-         'rates': (0.0, 0.0025, 0.001),
-         'prune_selected': False
-         }
+    p = {
+        "sregions": [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
+        "recregions": [fp11.Region(0, 1, 1)],
+        "nregions": [],
+        "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2),
+        # evolve for 100 generations so that unit tests are
+        # fast
+        "demography": np.array([N] * 100, dtype=np.uint32),
+        "rates": (0.0, 0.0025, 0.001),
+        "prune_selected": False,
+    }
     params = fwdpy11.ModelParams(**p)
     sampler = SamplePhenotypes(params.gvalue)
     fp11.evolve_genomes(rng, pop, params, sampler)
@@ -73,7 +74,7 @@ class testSnowdrift(unittest.TestCase):
         self.f.phenotypes = [1, 2, 3, 4]
         p = pickle.dumps(self.f, -1)
         up = pickle.loads(p)
-        self.assertEqual(up.phenotypes, self.f. phenotypes)
+        self.assertEqual(up.phenotypes, self.f.phenotypes)
 
     def test_evolve(self):
         p = evolve_snowdrift((1000, 42))

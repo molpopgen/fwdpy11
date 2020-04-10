@@ -1,7 +1,7 @@
-import fwdpy11
-import gsl_error
 import unittest
 
+import fwdpy11
+import gsl_error
 
 class testGSLerror(unittest.TestCase):
     def testErrorHandler(self):

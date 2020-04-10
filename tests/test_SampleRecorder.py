@@ -1,7 +1,8 @@
 import unittest
-import numpy as np
-import fwdpy11
 
+import numpy as np
+
+import fwdpy11
 
 class testSampleRecorder(unittest.TestCase):
     @classmethod
@@ -18,7 +19,7 @@ class testSampleRecorder(unittest.TestCase):
         self.sr.assign(samples)
         self.assertEqual(len(self.sr.samples), 4)
         for i in range(4):
-            self.assertEqual(self.sr.samples[i], i+1)
+            self.assertEqual(self.sr.samples[i], i + 1)
 
 
 if __name__ == "__main__":

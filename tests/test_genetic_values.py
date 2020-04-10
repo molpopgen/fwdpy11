@@ -1,19 +1,16 @@
 import unittest
-import fwdpy11
+
 import numpy as np
 
+import fwdpy11
 
 class testAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
         GN = fwdpy11.GaussianNoise
         self.w = fwdpy11.Additive(2.0)
-        self.t = fwdpy11.Additive(
-            2.0, fwdpy11.GSS(0.0, 1.0))
-        self.tn = fwdpy11.Additive(1.0,
-                                   fwdpy11.GSS(
-                                       0.0, 1.0),
-                                   GN(mean=0.1, sd=2.0))
+        self.t = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
+        self.tn = fwdpy11.Additive(1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0))
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -35,36 +32,37 @@ class testAdditive(unittest.TestCase):
 
     def testPickleFitness(self):
         import pickle
+
         p = pickle.dumps(self.w)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.w.scaling)
         self.assertTrue(up.is_fitness)
         self.assertEqual(type(up.noise), type(self.w.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.w.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.w.gvalue_to_fitness))
 
     def testPickleTraitNoNoise(self):
         import pickle
+
         p = pickle.dumps(self.t)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.t.scaling)
         self.assertTrue(up.is_fitness is False)
         self.assertEqual(type(up.noise), type(self.t.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.t.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.t.gvalue_to_fitness))
 
     def testPickleTraitWithNoise(self):
         import pickle
+
         p = pickle.dumps(self.tn)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.is_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
 
     def testPickleTraitWithNoiseToFile(self):
         import pickle
+
         with open("ptest.pickle", "wb") as f:
             pickle.dump(self.tn, f)
 
@@ -73,8 +71,7 @@ class testAdditive(unittest.TestCase):
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.is_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
 
 
 class testMultiplicative(unittest.TestCase):
@@ -82,12 +79,10 @@ class testMultiplicative(unittest.TestCase):
     def setUp(self):
         GN = fwdpy11.GaussianNoise
         self.w = fwdpy11.Multiplicative(2.0)
-        self.t = fwdpy11.Multiplicative(
-            2.0, fwdpy11.GSS(0.0, 1.0))
-        self.tn = fwdpy11.Multiplicative(1.0,
-                                         fwdpy11.GSS(
-                                             0.0, 1.0),
-                                         GN(mean=0.1, sd=2.0))
+        self.t = fwdpy11.Multiplicative(2.0, fwdpy11.GSS(0.0, 1.0))
+        self.tn = fwdpy11.Multiplicative(
+            1.0, fwdpy11.GSS(0.0, 1.0), GN(mean=0.1, sd=2.0)
+        )
 
     def testScaling(self):
         self.assertEqual(self.w.scaling, 2.0)
@@ -109,45 +104,45 @@ class testMultiplicative(unittest.TestCase):
 
     def testPickleFitness(self):
         import pickle
+
         p = pickle.dumps(self.w)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.w.scaling)
         self.assertTrue(up.is_fitness)
         self.assertEqual(type(up.noise), type(self.w.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.w.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.w.gvalue_to_fitness))
 
     def testPickleTraitNoNoise(self):
         import pickle
+
         p = pickle.dumps(self.t)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.t.scaling)
         self.assertTrue(up.is_fitness is False)
         self.assertEqual(type(up.noise), type(self.t.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.t.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.t.gvalue_to_fitness))
 
     def testPickleTraitWithNoise(self):
         import pickle
+
         p = pickle.dumps(self.tn)
         up = pickle.loads(p)
         self.assertEqual(up.scaling, self.tn.scaling)
         self.assertTrue(up.is_fitness is False)
         self.assertEqual(type(up.noise), type(self.tn.noise))
-        self.assertEqual(type(up.gvalue_to_fitness),
-                         type(self.tn.gvalue_to_fitness))
+        self.assertEqual(type(up.gvalue_to_fitness), type(self.tn.gvalue_to_fitness))
 
 
 class testGBR(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.gss = fwdpy11.GSS(0.0, 1.0)
-        self.gnoise = fwdpy11.GaussianNoise(
-            mean=0.0, sd=1.0)
+        self.gnoise = fwdpy11.GaussianNoise(mean=0.0, sd=1.0)
         self.nonoise = fwdpy11.NoNoise()
 
     def testPicklingGSS(self):
         import pickle
+
         gbr = fwdpy11.GBR(self.gss)
         self.assertFalse(gbr.maps_to_fitness)
         self.assertFalse(gbr.maps_to_fitness)
@@ -158,6 +153,7 @@ class testGBR(unittest.TestCase):
 
     def testPicklingGSSGaussianNoise(self):
         import pickle
+
         gbr = fwdpy11.GBR(self.gss, self.gnoise)
         self.assertFalse(gbr.maps_to_fitness)
         self.assertFalse(gbr.maps_to_fitness)
@@ -184,12 +180,11 @@ class testGSSandGSSmoConsistency(unittest.TestCase):
     fitness calculations would come out differently
     and the test would fail.
     """
+
     @classmethod
     def setUp(self):
-        self.a = fwdpy11.Additive(
-            2.0, fwdpy11.GSS(0.0, 1.0))
-        self.b = fwdpy11.Additive(
-            2.0, fwdpy11.GSSmo([(0, 0.0, 1.0)]))
+        self.a = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
+        self.b = fwdpy11.Additive(2.0, fwdpy11.GSSmo([(0, 0.0, 1.0)]))
         self.pop = fwdpy11.DiploidPopulation(1000)
 
     def testFitnesses(self):

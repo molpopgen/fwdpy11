@@ -29,17 +29,17 @@
 # a quick sim to make sure that they are all in both genomes
 # and in the mutation table.
 
-import fwdpy11
 import unittest
-import EsizeZero
 
+import EsizeZero
+import fwdpy11
 
 class Recorder(object):
     def __init__(self):
         self.data = []
 
     def __call__(self, pop, sampler):
-        in_genome = [False]*len(pop.mutations)
+        in_genome = [False] * len(pop.mutations)
         for i in pop.diploids:
             for g in [i.first, i.second]:
                 for k in pop.haploid_genomes[g].smutations:
@@ -51,16 +51,17 @@ class Recorder(object):
 class TestEsizeZero(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        pdict = {'nregions': [],
-                 'sregions': [EsizeZero.EsizeZero(0, 1, 1, True, 0)],
-                 'recregions': [fwdpy11.PoissonInterval(0, 1, 1)],
-                 'rates': (0, 5, None),
-                 'gvalue': fwdpy11.Multiplicative(2.),
-                 'demography': fwdpy11.DiscreteDemography(),
-                 'simlen': 10
-                 }
+        pdict = {
+            "nregions": [],
+            "sregions": [EsizeZero.EsizeZero(0, 1, 1, True, 0)],
+            "recregions": [fwdpy11.PoissonInterval(0, 1, 1)],
+            "rates": (0, 5, None),
+            "gvalue": fwdpy11.Multiplicative(2.0),
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 10,
+        }
         self.params = fwdpy11.ModelParams(**pdict)
-        self.pop = fwdpy11.DiploidPopulation(500, 1.)
+        self.pop = fwdpy11.DiploidPopulation(500, 1.0)
         self.rng = fwdpy11.GSLrng(512035)
 
     def test_simulation(self):

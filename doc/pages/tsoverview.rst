@@ -80,26 +80,28 @@ Wright-Fisher model for a diploid population without recombination and without s
     import tskit
     import numpy as np
 
+.. ipython:: python
+
     def wf1(N, ngens):
-        tc = tskit.TableCollection(1.0) 
+        tc = tskit.TableCollection(1.0)
         # Add 2N nodes at time = 0.
-        # These nodes represent the 
+        # These nodes represent the
         # initial list of parental
         # gametes
-        for i in range(2*N):
+        for i in range(2 * N):
             tc.nodes.add_row(time=0, flags=tskit.NODE_IS_SAMPLE)
         next_offspring_index = len(tc.nodes)
         first_parental_index = 0
-        for gen in range(1,ngens+1):
+        for gen in range(1, ngens + 1):
             assert next_offspring_index == len(tc.nodes)
-            assert first_parental_index == len(tc.nodes) - 2*N
+            assert first_parental_index == len(tc.nodes) - 2 * N
             # Pick 2N parents
-            parents = np.random.randint(0, N, 2*N)
+            parents = np.random.randint(0, N, 2 * N)
             for parent1, parent2 in zip(parents[::2], parents[1::2]):
                 # Pick 1 gamete from each parent
                 mendel = np.random.random_sample(2)
-                g1 = first_parental_index + 2*parent1 + (mendel[0] < 0.5)
-                g2 = first_parental_index + 2*parent2 + (mendel[1] < 0.5)
+                g1 = first_parental_index + 2 * parent1 + (mendel[0] < 0.5)
+                g2 = first_parental_index + 2 * parent2 + (mendel[1] < 0.5)
                 # Add nodes for our offspring's
                 # two gametes
                 tc.nodes.add_row(time=gen, flags=tskit.NODE_IS_SAMPLE)
@@ -108,9 +110,11 @@ Wright-Fisher model for a diploid population without recombination and without s
                 # transmission from parental
                 # nodes to offspring nodes
                 tc.edges.add_row(left=0.0, right=1.0, parent=g1, child=next_offspring_index)
-                tc.edges.add_row(left=0.0, right=1.0, parent=g2, child=next_offspring_index+1)
+                tc.edges.add_row(
+                    left=0.0, right=1.0, parent=g2, child=next_offspring_index + 1
+                )
                 next_offspring_index += 2
-            first_parental_index += 2*N
+            first_parental_index += 2 * N
         return tc
 
 
@@ -122,7 +126,7 @@ Let's run the simulation for a few generations and look at the resulting tree:
     np.random.seed(42)
     tc = wf1(3, 4)
     # Before we can get a tree sequence from
-    # the data, we must change direction of 
+    # the data, we must change direction of
     # time from foward to backwards to satisty
     # tskit:
     t = tc.nodes.time
@@ -148,8 +152,8 @@ Let's apply the simplification algorithm that:
     ts = tc.tree_sequence()
     tree = ts.first()
     imap = {node_map[node]: node for node in range(len(node_map))}
-    nl = {i:"{}->{}".format(imap[i],i) for i in tree.nodes()}
-    print(tree.draw(format="unicode",node_labels=nl))
+    nl = {i: "{}->{}".format(imap[i], i) for i in tree.nodes()}
+    print(tree.draw(format="unicode", node_labels=nl))
 
 That's much nicer!  The simplified tree shows now the *input* node ids are remapped to *output* node ids
 in such a manner that relative ordering is preserved.

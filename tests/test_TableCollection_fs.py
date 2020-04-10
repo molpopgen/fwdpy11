@@ -17,9 +17,11 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import fwdpy11
 import unittest
+
 import numpy as np
+
+import fwdpy11
 
 # NOTE: these tests can all be improved in the future
 # by having a conversion from msprime/tskit that lifts
@@ -32,7 +34,7 @@ import numpy as np
 def fs_from_ndarray(gm):
     gm_rc = np.sum(gm, axis=1)
     gm_uc = np.unique(gm_rc, return_counts=True)
-    gm_fs = np.zeros(gm.shape[1]+1, dtype=np.int32)
+    gm_fs = np.zeros(gm.shape[1] + 1, dtype=np.int32)
     gm_fs[gm_uc[0]] += gm_uc[1]
     return gm_fs
 
@@ -41,17 +43,20 @@ class TestSingleDemeCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         import msprime
+
         Ne = 1000
         Nr = 100.0
-        ts = msprime.simulate(2*Ne, Ne=Ne, recombination_rate=Nr/Ne,
-                              random_seed=666)
+        ts = msprime.simulate(
+            2 * Ne, Ne=Ne, recombination_rate=Nr / Ne, random_seed=666
+        )
         self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
         rng = fwdpy11.GSLrng(12343)
-        fwdpy11.infinite_sites(rng, self.pop, Nr/Ne)
+        fwdpy11.infinite_sites(rng, self.pop, Nr / Ne)
 
     def test_comparison_to_genotype_matrix(self):
-        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.alive_nodes, True, False)
+        dm = fwdpy11.data_matrix_from_tables(
+            self.pop.tables, self.pop.alive_nodes, True, False
+        )
         gm = np.array(dm.neutral, copy=False)
         gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
@@ -60,17 +65,16 @@ class TestSingleDemeCase(unittest.TestCase):
 
     def test_comparison_to_genotype_matrix_for_sample(self):
         A, B = 103, 210
-        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.alive_nodes[A:B],
-                                             True, False)
+        dm = fwdpy11.data_matrix_from_tables(
+            self.pop.tables, self.pop.alive_nodes[A:B], True, False
+        )
         gm = np.array(dm.neutral, copy=False)
         gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes[A:B]])
         self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
 
     def test_skipping_neutral_variants(self):
-        tc_fs = self.pop.tables.fs(
-            [self.pop.alive_nodes], include_neutral=False)
+        tc_fs = self.pop.tables.fs([self.pop.alive_nodes], include_neutral=False)
         self.assertEqual(tc_fs.sum(), 0)
 
     def test_empty_samples_list(self):
@@ -84,35 +88,37 @@ class TestSingleDemeCase(unittest.TestCase):
 
     def test_two_overlapping_windows(self):
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
-        wfs = self.pop.tables.fs([self.pop.alive_nodes],
-                                 windows=[(0, 1./3.), (1./3., 1.0)])
+        wfs = self.pop.tables.fs(
+            [self.pop.alive_nodes], windows=[(0, 1.0 / 3.0), (1.0 / 3.0, 1.0)]
+        )
         self.assertTrue(np.array_equal(wfs, tc_fs))
 
     def test_three_overlapping_windows(self):
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
-        wfs = self.pop.tables.fs([self.pop.alive_nodes],
-                                 windows=[(0, 1./3.), (1./3., 2./3.),
-                                          (2./3., 1)])
+        wfs = self.pop.tables.fs(
+            [self.pop.alive_nodes],
+            windows=[(0, 1.0 / 3.0), (1.0 / 3.0, 2.0 / 3.0), (2.0 / 3.0, 1)],
+        )
         self.assertTrue(np.array_equal(wfs, tc_fs))
 
     def test_random_number_of_windows(self):
         nw = np.random.randint(100, 300)
-        lefts = np.arange(nw)/(nw-1)
-        windows = [(lefts[i], lefts[i+1]) for i in range(len(lefts)-1)]
+        lefts = np.arange(nw) / (nw - 1)
+        windows = [(lefts[i], lefts[i + 1]) for i in range(len(lefts) - 1)]
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes])
-        wfs = self.pop.tables.fs([self.pop.alive_nodes],
-                                 windows=windows)
+        wfs = self.pop.tables.fs([self.pop.alive_nodes], windows=windows)
         self.assertTrue(np.array_equal(wfs, tc_fs))
 
     def test_separated_windows(self):
         windows = [(0, 0.25), (0.66, 0.9)]
-        dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                             self.pop.alive_nodes,
-                                             True, False)
+        dm = fwdpy11.data_matrix_from_tables(
+            self.pop.tables, self.pop.alive_nodes, True, False
+        )
         gm = np.array(dm.neutral, copy=False)
         gm_pos = np.array([self.pop.mutations[k].pos for k in dm.neutral_keys])
-        gm_pos_in_windows = np.where((gm_pos < 0.25) |
-                                     ((gm_pos >= 0.66) & (gm_pos < 0.9)))[0]
+        gm_pos_in_windows = np.where(
+            (gm_pos < 0.25) | ((gm_pos >= 0.66) & (gm_pos < 0.9))
+        )[0]
         gm = gm[gm_pos_in_windows, :]
         gm_fs = fs_from_ndarray(gm)
         tc_fs = self.pop.tables.fs([self.pop.alive_nodes], windows=windows)
@@ -123,31 +129,36 @@ class TestTwoDemeCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         import msprime
+
         Ne = 1000
         Nr = 100.0
         nodes_per_deme = 1000
-        config = [msprime.PopulationConfiguration(nodes_per_deme),
-                  msprime.PopulationConfiguration(nodes_per_deme)]
+        config = [
+            msprime.PopulationConfiguration(nodes_per_deme),
+            msprime.PopulationConfiguration(nodes_per_deme),
+        ]
 
-        events = [msprime.MassMigration(1*Ne, 1, 0, 1.0)]
-        ts = msprime.simulate(population_configurations=config,
-                              demographic_events=events,
-                              Ne=Ne, recombination_rate=Nr/Ne,
-                              random_seed=666)
+        events = [msprime.MassMigration(1 * Ne, 1, 0, 1.0)]
+        ts = msprime.simulate(
+            population_configurations=config,
+            demographic_events=events,
+            Ne=Ne,
+            recombination_rate=Nr / Ne,
+            random_seed=666,
+        )
         self.pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
         rng = fwdpy11.GSLrng(12343)
-        fwdpy11.infinite_sites(rng, self.pop, Nr/Ne)
+        fwdpy11.infinite_sites(rng, self.pop, Nr / Ne)
 
     def test_marginal_deme_fs(self):
         a = self.pop.alive_nodes
         nodes = np.array(self.pop.tables.nodes, copy=False)
-        d0 = a[np.where(nodes['deme'][a] == 0)[0]]
-        d1 = a[np.where(nodes['deme'][a] == 1)[0]]
+        d0 = a[np.where(nodes["deme"][a] == 0)[0]]
+        d1 = a[np.where(nodes["deme"][a] == 1)[0]]
 
         for samples in (d0, d1):
             tc_fs = self.pop.tables.fs([samples])
-            dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                 samples, True, True)
+            dm = fwdpy11.data_matrix_from_tables(self.pop.tables, samples, True, True)
             gm = np.array(dm.neutral, copy=False)
             gm_fs = fs_from_ndarray(gm)
             self.assertTrue(np.array_equal(gm_fs[1:-1], tc_fs.data[1:-1]))
@@ -155,15 +166,14 @@ class TestTwoDemeCase(unittest.TestCase):
     def test_joint_deme_fs(self):
         a = self.pop.alive_nodes
         nodes = np.array(self.pop.tables.nodes, copy=False)
-        d0 = a[np.where(nodes['deme'][a] == 0)[0]]
-        d1 = a[np.where(nodes['deme'][a] == 1)[0]]
+        d0 = a[np.where(nodes["deme"][a] == 0)[0]]
+        d1 = a[np.where(nodes["deme"][a] == 1)[0]]
 
         tc_fs = self.pop.tables.fs([d0, d1])
         tc_fs0 = tc_fs.sum(axis=1).todense()
         tc_fs1 = tc_fs.sum(axis=0).todense()
         for i, j in zip((tc_fs0, tc_fs1), (d0, d1)):
-            dm = fwdpy11.data_matrix_from_tables(self.pop.tables,
-                                                 j, True, True)
+            dm = fwdpy11.data_matrix_from_tables(self.pop.tables, j, True, True)
             gm = np.array(dm.neutral, copy=False)
             gm_fs = fs_from_ndarray(gm)
             self.assertTrue(np.array_equal(gm_fs[1:-1], i.data[1:-1]))
@@ -171,8 +181,8 @@ class TestTwoDemeCase(unittest.TestCase):
     def test_joint_deme_fs_marginalize(self):
         a = self.pop.alive_nodes
         nodes = np.array(self.pop.tables.nodes, copy=False)
-        d0 = a[np.where(nodes['deme'][a] == 0)[0]]
-        d1 = a[np.where(nodes['deme'][a] == 1)[0]]
+        d0 = a[np.where(nodes["deme"][a] == 0)[0]]
+        d1 = a[np.where(nodes["deme"][a] == 1)[0]]
         tc_fs = self.pop.tables.fs([d0, d1])
         tc_fs_deme0 = tc_fs.sum(axis=1).todense()
         tc_fs_deme1 = tc_fs.sum(axis=0).todense()
@@ -198,14 +208,18 @@ class TestTwoDemeCase(unittest.TestCase):
         sample_lists = [a[:10], a[20:30], a[200:210]]
         windows = [(0.1, 0.23), (0.723, 0.85)]
         fs1 = self.pop.tables.fs(
-            [sample_lists[0]], windows=windows, separate_windows=True)
+            [sample_lists[0]], windows=windows, separate_windows=True
+        )
         fs2 = self.pop.tables.fs(
-            [sample_lists[1]], windows=windows, separate_windows=True)
+            [sample_lists[1]], windows=windows, separate_windows=True
+        )
         fs3 = self.pop.tables.fs(
-            [sample_lists[2]], windows=windows, separate_windows=True)
+            [sample_lists[2]], windows=windows, separate_windows=True
+        )
 
-        mfs = self.pop.tables.fs(sample_lists, marginalize=True,
-                                 windows=windows, separate_windows=True)
+        mfs = self.pop.tables.fs(
+            sample_lists, marginalize=True, windows=windows, separate_windows=True
+        )
 
         for i, j in zip(mfs, range(len(windows))):
             self.assertTrue(np.ma.allequal(i[0], fs1[j]))

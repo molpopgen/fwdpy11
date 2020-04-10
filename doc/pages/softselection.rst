@@ -78,7 +78,7 @@ For example, to initialize a population with 25 individuals in demes ``0`` and `
     md = np.array(pop.diploid_metadata, copy=False)
     pop.deme_sizes()
     for m in pop.diploid_metadata:
-       for n in m.nodes:
+        for n in m.nodes:
             assert m.deme == pop.tables.nodes[n].deme
 
 Another method involves mass migration events at the beginning of a simulation.
@@ -99,14 +99,15 @@ function that we'll use repeatedly below:
 .. ipython:: python
 
     def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
-        pdict = {'nregions': [],
-                'sregions': [],
-                'recregions': [],
-                'rates': (0, 0, 0,),
-                'gvalue': fwdpy11.Multiplicative(2.),
-                'demography': ddemog,
-                'simlen': simlen
-               }
+        pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0,),
+            "gvalue": fwdpy11.Multiplicative(2.0),
+            "demography": ddemog,
+            "simlen": simlen,
+        }
         params = fwdpy11.ModelParams(**pdict)
         rng = fwdpy11.GSLrng(seed)
         fwdpy11.evolvets(rng, pop, params, 100, recorder)
@@ -117,12 +118,13 @@ We will also define a simple class to record all deme sizes over time:
 
 .. ipython:: python
 
+    # fmt: off
     class SizeTracker(object):
         def __init__(self):
             self.data = []
         def __call__(self, pop, sampler):
-            self.data.append((pop.generation, pop.N,
-                             pop.deme_sizes()))
+            self.data.append((pop.generation, pop.N, pop.deme_sizes()))
+    # fmt: on
 
 
 Compatibility with previous versions of fwdpy11
@@ -134,14 +136,15 @@ to specify the demography using that approach:
 
 .. ipython:: python
 
-       N = np.array([10]*10 + [5]*5 + [10]*10, dtype=np.uint32)
-       pdict = {'nregions': [],
-               'sregions': [],
-               'recregions': [],
-               'rates': (0, 0, 0,),
-               'gvalue': fwdpy11.Multiplicative(2.),
-               'demography': N
-              }
+       N = np.array([10] * 10 + [5] * 5 + [10] * 10, dtype=np.uint32)
+       pdict = {
+           "nregions": [],
+           "sregions": [],
+           "recregions": [],
+           "rates": (0, 0, 0,),
+           "gvalue": fwdpy11.Multiplicative(2.0),
+           "demography": N,
+       }
        params = fwdpy11.ModelParams(**pdict)
        rng = fwdpy11.GSLrng(654321)
        pop = fwdpy11.DiploidPopulation(10, 1.0)
@@ -232,7 +235,7 @@ Here is the version implemented via a  copy:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation(50, 1.)
+    pop = fwdpy11.DiploidPopulation(50, 1.0)
     copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
@@ -250,7 +253,7 @@ Here is the version using a move:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation(100, 1.)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
     move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
     setup_and_run_model(pop, ddemog, 1)
@@ -278,13 +281,11 @@ work":
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation(50, 1.)
-    copy = [fwdpy11.copy_individuals(0, 0, 1, 1.0),
-            fwdpy11.copy_individuals(0, 0, 2, 1.0)]
+    pop = fwdpy11.DiploidPopulation(50, 1.0)
+    copy = [fwdpy11.copy_individuals(0, 0, 1, 1.0), fwdpy11.copy_individuals(0, 0, 2, 1.0)]
     ddemog = fwdpy11.DiscreteDemography(mass_migrations=copy)
     setup_and_run_model(pop, ddemog, 1)
     pop.deme_sizes()
-    
 
 When the events are moves, it is not possible to move more than 100% 
 of the individuals.  Attempting to do so will raise a ``ValueError``
@@ -292,17 +293,16 @@ exception:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation(50, 1.)
+    pop = fwdpy11.DiploidPopulation(50, 1.0)
     # Move all of deme 0 into demes 1 and 2,
-    # which means we're trying to move 200% 
+    # which means we're trying to move 200%
     # of deme 0...
-    move = [fwdpy11.move_individuals(0, 0, 1, 1.0),
-            fwdpy11.move_individuals(0, 0, 2, 1.0)]
+    move = [fwdpy11.move_individuals(0, 0, 1, 1.0), fwdpy11.move_individuals(0, 0, 2, 1.0)]
     # ... which is not allowed
     try:
-       ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
+        ddemog = fwdpy11.DiscreteDemography(mass_migrations=move)
     except ValueError as e:
-       print(e)
+        print(e)
 
 The rate of drift
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -328,8 +328,10 @@ This class is relatively straightforward to use, so let's dive right in:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation([20, 20], 1.)
-    dd = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(when=5,deme=1,new_size=100)])
+    pop = fwdpy11.DiploidPopulation([20, 20], 1.0)
+    dd = fwdpy11.DiscreteDemography(
+        set_deme_sizes=[fwdpy11.SetDemeSize(when=5, deme=1, new_size=100)]
+    )
     st = SizeTracker()
     setup_and_run_model(pop, dd, 10, st)
     for i in st.data:
@@ -339,8 +341,10 @@ You may also kill off demes by setting their size to zero:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation([20, 20, 20], 1.)
-    dd = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(when=5,deme=1,new_size=0)])
+    pop = fwdpy11.DiploidPopulation([20, 20, 20], 1.0)
+    dd = fwdpy11.DiscreteDemography(
+        set_deme_sizes=[fwdpy11.SetDemeSize(when=5, deme=1, new_size=0)]
+    )
     st = SizeTracker()
     setup_and_run_model(pop, dd, 6, st)
     for i in st.data:
@@ -357,8 +361,8 @@ Let's look at an example:
 
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation([50], 1.)
-    g = [fwdpy11.SetExponentialGrowth(when=0,deme=0,G=1.1)]
+    pop = fwdpy11.DiploidPopulation([50], 1.0)
+    g = [fwdpy11.SetExponentialGrowth(when=0, deme=0, G=1.1)]
     dd = fwdpy11.DiscreteDemography(set_growth_rates=g)
     st = SizeTracker()
     setup_and_run_model(pop, dd, 6, st)
@@ -373,8 +377,8 @@ rules:
 
    N0 = np.float(50.0)
    for i in range(6):
-       Ni = N0*np.power(1.1,i+1)
-       print(i+1, Ni, np.rint(Ni))
+       Ni = N0 * np.power(1.1, i + 1)
+       print(i + 1, Ni, np.rint(Ni))
 
 You may need to keep the rounding policy in mind when trying to predict final deme sizes when testing
 or when trying to convert a model from continuous time into discrete time.
@@ -391,19 +395,21 @@ type to track parents each generation:
 
 .. ipython:: python
 
+    # fmt: off
     class ParentTracker(object):
         def __init__(self):
             self.data = []
         def __call__(self, pop, sampler):
             for i in pop.diploid_metadata:
-                 self.data.append((i.label, i.deme, i.parents))
+                self.data.append((i.label, i.deme, i.parents))
+    # fmt: on
 
 Let's run a simulation for a couple of generations:
    
 .. ipython:: python
 
-    pop = fwdpy11.DiploidPopulation([5, 5], 1.)
-    sr = [fwdpy11.SetSelfingRate(when=0, deme=1, S=1.0)] # Deme 1 always selfs
+    pop = fwdpy11.DiploidPopulation([5, 5], 1.0)
+    sr = [fwdpy11.SetSelfingRate(when=0, deme=1, S=1.0)]  # Deme 1 always selfs
     dd = fwdpy11.DiscreteDemography(set_selfing_rates=sr)
     pt = ParentTracker()
     setup_and_run_model(pop, dd, 2, pt)
@@ -440,7 +446,7 @@ For example, consider the following matrix:
 
 .. ipython:: python
 
-   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
    m
 
 The first row corresponds to the ancestry of deme ``0``, such that 90% of offspring will be
@@ -448,7 +454,9 @@ non-migrants and 10% will be migrants from deme ``1``:
 
 .. ipython:: python
 
-   m[0,]
+   m[
+       0,
+   ]
 
 To be concrete, if the size of deme ``0`` in the next generation is 1,000, then the expected
 number of migrant and non-migrant offspring of offspring in deme ``0`` is:
@@ -462,7 +470,9 @@ due to non-migrants:
 
 .. ipython:: python
 
-   m[1,]
+   m[
+       1,
+   ]
 
 The ``numpy`` array is sufficient to construct our demographic model:
 
@@ -496,6 +506,7 @@ offspring in deme 1 are migrants or not:
 
 .. ipython:: python
 
+    # fmt: off
     class MigrationTracker(object):
         def __init__(self, N0):
             self.N0 = N0
@@ -510,6 +521,7 @@ offspring in deme 1 are migrants or not:
                         else:
                             p.append((j, False))
                     self.data.append((pop.generation, i.label, i.deme, p))
+    # fmt: on
 
 .. ipython:: python
 
@@ -523,18 +535,20 @@ offspring in deme 1 are migrants or not:
     mt = MigrationTracker(10)
     setup_and_run_model(pop, dd, 4, mt)
 
+.. ipython:: python
+
     for i in mt.data:
         nmig = 0
         if i[1] > 10:
             if i[3][0][1] is True:
-                nmig+=1
+                nmig += 1
             if i[3][1][1] is True:
-                nmig+=1
+                nmig += 1
         mstring = ""
         if nmig > 0:
-            mstring="<- {} migrant parent".format(nmig)
+            mstring = "<- {} migrant parent".format(nmig)
         if nmig > 1:
-            mstring += 's'
+            mstring += "s"
         print(i, mstring)
 
 An alternative model of migration
@@ -545,7 +559,7 @@ independent of of source deme sizes.  To revisit our earlier example:
 
 .. ipython:: python
 
-   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2,2)
+   m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
    # The is the expected number of parents from demes 0 and 1
    # to offspring born in deme 0:
    m[0,] * 1000
@@ -563,10 +577,10 @@ For example:
 
    deme_sizes = np.array([1000, 2000])
    m
-   md = m*deme_sizes
+   md = m * deme_sizes
    # The following line divides each
    # row by its sum
-   md/np.sum(md, axis=1)[:, None]
+   md / np.sum(md, axis=1)[:, None]
 
 The first matrix is the same as in the preceding section--90% of the offspring in deme
 ``0`` will have parents from deme ``0``.  In the second matrix, that fraction is reduced to
@@ -575,10 +589,12 @@ about 82% because deme ``1`` is twice as large as deme ``0``.
 To enable this migration model, the following methods are equivalent:
 
 .. ipython:: python
-   
+
    # Method 1: pass a tuple with your numpy array and True
    # to indicate scaling M[i, j] by source deme sizes:
    d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
+
+.. ipython:: python
 
    # Method 2: construct an instance of fwdpy11.MigrationMatrix,
    # passing True as the second argument to indicate the scaling
@@ -625,33 +641,32 @@ for ``Nanc`` generations before the split.
     m01, m10 = 0.01, 0.0267
 
     # The split event
-    split = [fwdpy11.move_individuals(when=Nanc, source=0,
-                                      destination=1,
-                                      fraction=psplit)] 
+    split = [fwdpy11.move_individuals(when=Nanc, source=0, destination=1, fraction=psplit)]
     # Get growth rates and set growth rate changes,
     # taking care to handle our rounding!
-    gens_post_split = np.rint(Nanc*T).astype(int)
-    N0split = np.rint(Nanc*(1.-psplit))
-    N0final = np.rint(N0*Nanc)
-    N1split = np.rint(Nanc*psplit)
-    N1final = np.rint(N1*Nanc)
-    G0 = fwdpy11.exponential_growth_rate(N0split, N0final,
-                                         gens_post_split)
-    G1 = fwdpy11.exponential_growth_rate(N1split, N1final,
-                                         gens_post_split)
-    growth = [fwdpy11.SetExponentialGrowth(Nanc, 0, G0),
-              fwdpy11.SetExponentialGrowth(Nanc, 1, G1)]
+    gens_post_split = np.rint(Nanc * T).astype(int)
+    N0split = np.rint(Nanc * (1.0 - psplit))
+    N0final = np.rint(N0 * Nanc)
+    N1split = np.rint(Nanc * psplit)
+    N1final = np.rint(N1 * Nanc)
+    G0 = fwdpy11.exponential_growth_rate(N0split, N0final, gens_post_split)
+    G1 = fwdpy11.exponential_growth_rate(N1split, N1final, gens_post_split)
+    growth = [
+        fwdpy11.SetExponentialGrowth(Nanc, 0, G0),
+        fwdpy11.SetExponentialGrowth(Nanc, 1, G1),
+    ]
 
-    # Set up the migration matrix for two demes, but only 
+    # Set up the migration matrix for two demes, but only
     # deme zero exists.
     m = fwdpy11.migration_matrix_single_extant_deme(2, 0)
     # The rows of the matrix change at the split:
-    cm = [fwdpy11.SetMigrationRates(Nanc, 0, [1.-m10, m10]),
-          fwdpy11.SetMigrationRates(Nanc, 1, [m01, 1.-m01])]
-    d = fwdpy11.DiscreteDemography(mass_migrations=split,
-                                   set_growth_rates=growth,
-                                   set_migration_rates=cm,
-                                   migmatrix=m)
+    cm = [
+        fwdpy11.SetMigrationRates(Nanc, 0, [1.0 - m10, m10]),
+        fwdpy11.SetMigrationRates(Nanc, 1, [m01, 1.0 - m01]),
+    ]
+    d = fwdpy11.DiscreteDemography(
+        mass_migrations=split, set_growth_rates=growth, set_migration_rates=cm, migmatrix=m
+    )
 
 The above code made use of two helper functions:
 
@@ -663,7 +678,7 @@ Finally, we can run it:
 .. ipython:: python
 
     pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
-    setup_and_run_model(pop, d, Nanc+gens_post_split)
+    setup_and_run_model(pop, d, Nanc + gens_post_split)
 
 Now we check the final population sizes and make sure they are correct:
 
@@ -679,13 +694,12 @@ scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic
 .. ipython:: python
 
     import fwdpy11.demographic_models.IM
-    d2, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(Nanc, T,
-                                                                       psplit,
-                                                                       (N0, N1),
-                                                                       (m01, m10),
-                                                                       burnin=1.0)
+
+    d2, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(
+        Nanc, T, psplit, (N0, N1), (m01, m10), burnin=1.0
+    )
     pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
-    setup_and_run_model(pop2, d2, Nanc+gens_post_split)
+    setup_and_run_model(pop2, d2, Nanc + gens_post_split)
     assert pop.generation == pop2.generation
     assert pop2.generation == tsplit + tafter_split
     ds2 = pop2.deme_sizes()

@@ -1,6 +1,8 @@
 import sys
+
 import numpy as np
 import pandas as pd
+
 import fwdpy11
 
 N = int(sys.argv[1])
