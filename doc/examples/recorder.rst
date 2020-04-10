@@ -39,9 +39,11 @@ For the record, the Python equivalent to what we've generated in C++ is:
 .. code-block:: python
 
     gvalues = []
+
+
     def r(pop, sampler):
         md = np.array(pop.diploid_metadata, copy=False)
-        gvalues.append(md['g'].mean())
+        gvalues.append(md["g"].mean())
 
 I expect the performance of both methods to be nearly equivalent, largely because traversing the metadata once per
 generation is extremely fast compared to everything else going on in a simulation.

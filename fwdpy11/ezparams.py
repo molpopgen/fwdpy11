@@ -28,35 +28,36 @@ def mslike(pop, **kwargs):
     :params kwargs: Keyword arguments.
     """
     import fwdpy11
+
     if isinstance(pop, fwdpy11.DiploidPopulation) is False:
         raise ValueError("incorrect pop type: " + str(type(pop)))
-    defaults = {'simlen': 10*pop.N,
-                'beg': 0.0,
-                'end': 1.0,
-                'theta': 100.0,
-                'pneutral': 1.0,
-                'rho': 100.0,
-                'dfe': None
-                }
+    defaults = {
+        "simlen": 10 * pop.N,
+        "beg": 0.0,
+        "end": 1.0,
+        "theta": 100.0,
+        "pneutral": 1.0,
+        "rho": 100.0,
+        "dfe": None,
+    }
     for key, value in kwargs.items():
         if key in defaults:
             defaults[key] = value
     import numpy as np
 
-    params = {'demography': np.array([pop.N]*defaults['simlen'],
-              dtype=np.uint32),
-              'nregions': [fwdpy11.Region(defaults['beg'],
-                           defaults['end'], 1.0)],
-              'recregions': [fwdpy11.Region(defaults['beg'],
-                             defaults['end'], 1.0)],
-              'rates': ((defaults['pneutral']*defaults['theta'])/(4.0*pop.N),
-                        ((1.0-defaults['pneutral'])*defaults['theta']) /
-                        (4.0*pop.N),
-                        defaults['rho']/(4.0*float(pop.N))),
-              'gvalue': fwdpy11.Multiplicative(2.0)
-              }
-    if defaults['dfe'] is None:
-        params['sregions'] = []
+    params = {
+        "demography": np.array([pop.N] * defaults["simlen"], dtype=np.uint32),
+        "nregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
+        "recregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
+        "rates": (
+            (defaults["pneutral"] * defaults["theta"]) / (4.0 * pop.N),
+            ((1.0 - defaults["pneutral"]) * defaults["theta"]) / (4.0 * pop.N),
+            defaults["rho"] / (4.0 * float(pop.N)),
+        ),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+    }
+    if defaults["dfe"] is None:
+        params["sregions"] = []
     else:
-        params['sregions'] = [defaults['dfe']]
+        params["sregions"] = [defaults["dfe"]]
     return params

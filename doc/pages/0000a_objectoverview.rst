@@ -73,9 +73,11 @@ Let's print the contents of those genomes and some type info:
 .. ipython:: python
 
     for i in (pop.diploids[0].first, pop.diploids[0].second):
-        print(pop.haploid_genomes[i].smutations,
-              type(pop.haploid_genomes[i].smutations),
-              pop.haploid_genomes[i].smutations.dtype)
+        print(
+            pop.haploid_genomes[i].smutations,
+            type(pop.haploid_genomes[i].smutations),
+            pop.haploid_genomes[i].smutations.dtype,
+        )
 
 So we see that mutation indexes are stored in numpy arrays.
 
@@ -90,10 +92,12 @@ Let's take a look at the mutations for one of the genomes:
 .. ipython:: python
 
     for k in pop.haploid_genomes[pop.diploids[0].first].smutations:
-        print(k,"-> {0:0.2f} {1:0.0f} {2:0.2f}".format(
-              pop.mutations[k].pos,
-              pop.mutations[k].g,
-              pop.mutations[k].s))
+        print(
+            k,
+            "-> {0:0.2f} {1:0.0f} {2:0.2f}".format(
+                pop.mutations[k].pos, pop.mutations[k].g, pop.mutations[k].s
+            ),
+        )
 
 The outputs are the mutation index, followed by the position,
 generation when the mutation arose, and the mutation's effect size.
@@ -175,9 +179,9 @@ to filter on neutral-vs-selected because neutral mutations have been added to th
 .. ipython:: python
 
     keys = []
-    vi = fwdpy11.VariantIterator(pop.tables,
-                                 pop.diploid_metadata[0].nodes,
-                                 include_neutral_variants=False)
+    vi = fwdpy11.VariantIterator(
+        pop.tables, pop.diploid_metadata[0].nodes, include_neutral_variants=False
+    )
     for v in vi:
         r = v.records[0]
         keys.append(r.key)
@@ -194,9 +198,9 @@ Let's create the full genotype matrix for this individual at selected variants:
 .. ipython:: python
 
     genotypes = np.array([], dtype=np.int8)
-    vi = fwdpy11.VariantIterator(pop.tables,
-                                 pop.diploid_metadata[0].nodes,
-                                 include_neutral_variants=False)
+    vi = fwdpy11.VariantIterator(
+        pop.tables, pop.diploid_metadata[0].nodes, include_neutral_variants=False
+    )
     for v in vi:
         r = v.records[0]
         genotypes = np.concatenate((genotypes, v.genotypes))
@@ -236,9 +240,9 @@ Repeating the above using structured arrays:
 
     edges = np.array(pop.tables.edges, copy=False)
     nodes = np.array(pop.tables.nodes, copy=False)
-    edge_indexes = ((edges['child']==0) | (edges['child']==1)).nonzero()
+    edge_indexes = ((edges["child"] == 0) | (edges["child"] == 1)).nonzero()
     print(edges[edge_indexes])
-    print(nodes['time'][edges['parent'][edge_indexes]])
+    print(nodes["time"][edges["parent"][edge_indexes]])
 
 The relevant numpy dtypes are:
 

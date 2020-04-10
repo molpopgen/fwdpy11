@@ -20,41 +20,51 @@
 import argparse
 import sys
 
-
 def print_includes():
     from ._dev import get_fwdpp_includes
     from ._dev import get_includes
 
     idirs = [get_includes(), get_fwdpp_includes()]
 
-    print(' '.join('-I' + idir for idir in idirs))
+    print(" ".join("-I" + idir for idir in idirs))
 
 
 def get_fwdpy11_includes():
     from ._dev import get_includes
+
     return get_includes()
 
 
 def get_fwdpp_includes():
     from ._dev import get_fwdpp_includes
+
     return get_fwdpp_includes()
 
 
 def print_mako():
     from ._dev import minimal_mako
+
     print(minimal_mako())
 
 
 def main():
-    parser = argparse.ArgumentParser(prog='python -m fwdpy11')
-    parser.add_argument('--includes', action='store_true',
-                        help='Print the CPPFLAGS required to use fwdpy11 and fwdpp headers.')
-    parser.add_argument('--fwdpy11_headers', action='store_true',
-                        help='Get location of fwdpy11 headers')
-    parser.add_argument('--fwdpp_headers', action='store_true',
-                        help='Get location of fwdpp headers')
-    parser.add_argument('--mako', action='store_true',
-                        help="Print minimal mako header for use with cppimport.")
+    parser = argparse.ArgumentParser(prog="python -m fwdpy11")
+    parser.add_argument(
+        "--includes",
+        action="store_true",
+        help="Print the CPPFLAGS required to use fwdpy11 and fwdpp headers.",
+    )
+    parser.add_argument(
+        "--fwdpy11_headers", action="store_true", help="Get location of fwdpy11 headers"
+    )
+    parser.add_argument(
+        "--fwdpp_headers", action="store_true", help="Get location of fwdpp headers"
+    )
+    parser.add_argument(
+        "--mako",
+        action="store_true",
+        help="Print minimal mako header for use with cppimport.",
+    )
     args = parser.parse_args()
     if not sys.argv[1:]:
         parser.print_help()

@@ -17,11 +17,12 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import fwdpy11
 import unittest
-import sregion_cdf
+
 import scipy.stats
 
+import fwdpy11
+import sregion_cdf
 
 class TestSregionFromCDF(unittest.TestCase):
     @classmethod
@@ -31,7 +32,7 @@ class TestSregionFromCDF(unittest.TestCase):
         self.P = 0.1
 
     def get_deviate(self, dist):
-        return sregion_cdf.from_mvnorm(0., self.P, dist)
+        return sregion_cdf.from_mvnorm(0.0, self.P, dist)
 
     def test_ExpS(self):
         mean = 0.2
@@ -43,7 +44,7 @@ class TestSregionFromCDF(unittest.TestCase):
     def test_ExpS_with_scaling(self):
         mean = 0.2
         scaling = 1e3
-        e = fwdpy11.ExpS(0, 1, 1, mean*scaling, scaling=scaling)
+        e = fwdpy11.ExpS(0, 1, 1, mean * scaling, scaling=scaling)
         d = self.get_deviate(e)
         exp = scipy.stats.expon(0, mean)
         self.assertAlmostEqual(self.P, exp.cdf(d))
@@ -58,7 +59,7 @@ class TestSregionFromCDF(unittest.TestCase):
     def test_GaussianS_with_scaling(self):
         sd = 0.333
         scaling = 1e3
-        g = fwdpy11.GaussianS(0, 1, 1, sd*scaling, scaling=scaling)
+        g = fwdpy11.GaussianS(0, 1, 1, sd * scaling, scaling=scaling)
         d = self.get_deviate(g)
         norm = scipy.stats.norm(0, sd)
         self.assertAlmostEqual(self.P, norm.cdf(d))
@@ -70,18 +71,18 @@ class TestSregionFromCDF(unittest.TestCase):
         shape = 2.6
         g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape=shape)
         d = self.get_deviate(g)
-        gamma = scipy.stats.gamma(a=shape, scale=mean/shape)
+        gamma = scipy.stats.gamma(a=shape, scale=mean / shape)
         self.assertAlmostEqual(self.P, gamma.cdf(d))
 
     def test_GammaS_with_scaling(self):
         # a = shape
         # b = mean/shape
         scaling = 1e3
-        mean = 5*scaling
+        mean = 5 * scaling
         shape = 2.6
         g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape=shape, scaling=scaling)
         d = self.get_deviate(g)
-        gamma = scipy.stats.gamma(a=shape, scale=mean/(scaling*shape))
+        gamma = scipy.stats.gamma(a=shape, scale=mean / (scaling * shape))
         self.assertAlmostEqual(self.P, gamma.cdf(d))
 
     def test_UniformS(self):
@@ -89,7 +90,7 @@ class TestSregionFromCDF(unittest.TestCase):
         hi = 0.47
         u = fwdpy11.UniformS(0, 1, 1, lo, hi)
         d = self.get_deviate(u)
-        uniform = scipy.stats.uniform(loc=lo, scale=hi-lo)
+        uniform = scipy.stats.uniform(loc=lo, scale=hi - lo)
         self.assertAlmostEqual(self.P, uniform.cdf(d))
 
     def test_UniformS_with_scaling(self):
@@ -98,8 +99,8 @@ class TestSregionFromCDF(unittest.TestCase):
         scaling = 1e3
         u = fwdpy11.UniformS(0, 1, 1, lo, hi, scaling=scaling)
         d = self.get_deviate(u)
-        uniform = scipy.stats.uniform(loc=lo, scale=hi-lo)
-        self.assertAlmostEqual(self.P, uniform.cdf(d*scaling))
+        uniform = scipy.stats.uniform(loc=lo, scale=hi - lo)
+        self.assertAlmostEqual(self.P, uniform.cdf(d * scaling))
 
 
 if __name__ == "__main__":

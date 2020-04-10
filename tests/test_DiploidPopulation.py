@@ -17,8 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import unittest
-import fwdpy11
 
+import fwdpy11
 
 class testDiploidPopulation(unittest.TestCase):
     @classmethod
@@ -34,14 +34,14 @@ class testDiploidPopulation(unittest.TestCase):
     def test_fitnesses(self):
         # All fitnesses should be 1
         self.assertEqual(
-            sum([i.w for i in self.pop.diploid_metadata]),
-            float(self.pop.N))
+            sum([i.w for i in self.pop.diploid_metadata]), float(self.pop.N)
+        )
 
     def test_labels(self):
         # All diploids should be labeled 0 to pop.N-1
         self.assertEqual(
-            [i.label for i in self.pop.diploid_metadata],
-            [i for i in range(self.pop.N)])
+            [i.label for i in self.pop.diploid_metadata], [i for i in range(self.pop.N)]
+        )
 
     def test_genetic_values(self):
         self.assertEqual(sum([i.g for i in self.pop.diploid_metadata]), 0.0)
@@ -60,6 +60,7 @@ class testSampling(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         from quick_pops import quick_nonneutral_slocus
+
         self.pop = quick_nonneutral_slocus()
         self.rng = fwdpy11.GSLrng(42)
 
@@ -84,6 +85,7 @@ class testPythonObjects(unittest.TestCase):
     @classmethod
     def setUp(self):
         from quick_pops import quick_slocus_qtrait_pop_params
+
         self.pop, self.pdict = quick_slocus_qtrait_pop_params()
         self.rng = fwdpy11.GSLrng(101)
 
@@ -98,8 +100,7 @@ class testPythonObjects(unittest.TestCase):
             self.assertTrue(i[1] < self.pop.N)
 
     def test_nodes(self):
-        self.assertEqual(len(self.pop.diploids),
-                         len(self.pop.diploid_metadata))
+        self.assertEqual(len(self.pop.diploids), len(self.pop.diploid_metadata))
         for i in self.pop.diploid_metadata:
             self.assertEqual(i.nodes[0], fwdpy11.NULL_NODE)
             self.assertEqual(i.nodes[1], fwdpy11.NULL_NODE)

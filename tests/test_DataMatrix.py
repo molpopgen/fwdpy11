@@ -1,8 +1,9 @@
 import unittest
-import fwdpy11
-import numpy as np
-from quick_pops import quick_nonneutral_slocus
 
+import numpy as np
+
+import fwdpy11
+from quick_pops import quick_nonneutral_slocus
 
 class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
     """
@@ -10,22 +11,25 @@ class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
     but the purpose here is to make sure that the wrappers
     are working appropriately.
     """
+
     @classmethod
     def setUpClass(self):
         self.pop = quick_nonneutral_slocus()
         self.indlist = [i for i in range(100, 150)]
         self.keys = fwdpy11.mutation_keys(self.pop, self.indlist)
         self.hm = fwdpy11.haplotype_matrix(
-            self.pop, self.indlist, self.keys[0], self.keys[1])
+            self.pop, self.indlist, self.keys[0], self.keys[1]
+        )
         self.gm = fwdpy11.genotype_matrix(
-            self.pop, self.indlist, self.keys[0], self.keys[1])
+            self.pop, self.indlist, self.keys[0], self.keys[1]
+        )
         self.hm_neutral = np.array(self.hm.neutral)
         self.hm_selected = np.array(self.hm.selected)
         self.gm_neutral = np.array(self.gm.neutral)
         self.gm_selected = np.array(self.gm.selected)
 
     def testNcol(self):
-        self.assertEqual(self.hm.ncol, 2*len(self.indlist))
+        self.assertEqual(self.hm.ncol, 2 * len(self.indlist))
         self.assertEqual(self.gm.ncol, len(self.indlist))
 
     def testKeyNeutralityAndCount(self):
@@ -49,20 +53,18 @@ class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
         j = 0
         for i in range(100, 150):
             # Num neutral variants in diploid i, gamete 0
-            nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
+            nmuts = len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
             self.assertEqual(nmuts, colSums[j])
             # Num neutral variants in diploid i, gamete 1
-            nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].second].mutations)
+            nmuts = len(self.pop.haploid_genomes[self.pop.diploids[i].second].mutations)
             self.assertEqual(nmuts, colSums[j + 1])
 
             # Now, test numbers of selected
-            nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
+            nmuts = len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
             self.assertEqual(nmuts, colSumsSel[j])
             nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations
+            )
             self.assertEqual(nmuts, colSumsSel[j + 1])
 
             j += 2
@@ -77,17 +79,17 @@ class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
         self.assertEqual(len(colSumsSel), self.gm_selected.shape[1])
         j = 0
         for i in range(100, 150):
-            nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
+            nmuts = len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations)
             nmuts += len(
-                self.pop.haploid_genomes[self.pop.diploids[i].second].mutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].second].mutations
+            )
             self.assertEqual(nmuts, colSums[j])
 
             # Now, test numbers of selected
-            nmuts = len(
-                self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
+            nmuts = len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations)
             nmuts += len(
-                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations)
+                self.pop.haploid_genomes[self.pop.diploids[i].second].smutations
+            )
             self.assertEqual(nmuts, colSumsSel[j])
 
             j += 1
@@ -102,19 +104,22 @@ class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
         self.assertEqual(len(rowSumsSel), len(sel_sample))
         i = 0
         for ni in neut_sample:
-            num_ones = ni[1].count('1')
+            num_ones = ni[1].count("1")
             self.assertEqual(num_ones, rowSums[i])
             i += 1
 
     def test_merge(self):
         m, keys = self.gm.merge()
-        s = (self.gm_neutral.shape[0] + self.gm_selected.shape[0],
-             self.gm_neutral.shape[1])
+        s = (
+            self.gm_neutral.shape[0] + self.gm_selected.shape[0],
+            self.gm_neutral.shape[1],
+        )
 
         self.assertEqual(m.shape, s)
 
         neutral = np.array(
-            [self.pop.mutations[k].neutral for k in keys], dtype=np.int32)
+            [self.pop.mutations[k].neutral for k in keys], dtype=np.int32
+        )
         w = np.where(neutral == 1)[0]
         npos = self.gm.neutral.positions
         npos_idx = np.argsort(npos)

@@ -28,8 +28,8 @@ import unittest
 # from quick_pops import quick_slocus_qtrait_pop_params
 # import numpy as np
 # import pickle
-# 
-# 
+#
+#
 # class testDiploidParams(unittest.TestCase):
 #     @classmethod
 #     def setUpClass(self):
@@ -41,12 +41,12 @@ import unittest
 #                       'rates': [0, 0, 0],
 #                       'demography': np.array([100] * 100, dtype=np.uint32)
 #                       }
-# 
+#
 #     def test_DiploidParamsDefaults(self):
 #         from fwdpy11.fitness import DiploidMult
 #         m = fp11mp.DiploidParams(**self.pdict)
 #         self.assertEqual(type(m.gvalue), DiploidMult)
-# 
+#
 #     def test_DiploidParamsQDefaults(self):
 #         self.pdict['prune_selected'] = False  # Suppresses a warning
 #         from fwdpy11.trait_values import DiploidAdditiveTrait
@@ -56,7 +56,7 @@ import unittest
 #         self.assertEqual(type(m.trait2w), GSS)
 #         self.assertEqual(m.trait2w.VS, 1.0)
 #         self.assertEqual(m.trait2w.O, 0.0)
-# 
+#
 #     def test_set_nregions(self):
 #         self.setUpClass()
 #         m = fp11mp.DiploidParams(**self.pdict)
@@ -74,7 +74,7 @@ import unittest
 #             m.nregions = fp11.Region(0, 1, 1)
 #         with self.assertRaises(TypeError):
 #             m.nregions = [fp11.ExpS(0, 1, 1, 0.25)]
-# 
+#
 #     def test_set_recregions(self):
 #         self.setUpClass()
 #         m = fp11mp.DiploidParams(**self.pdict)
@@ -92,7 +92,7 @@ import unittest
 #             m.recregions = fp11.Region(0, 1, 1)
 #         with self.assertRaises(TypeError):
 #             m.recregions = [fp11.ExpS(0, 1, 1, 0.25)]
-# 
+#
 #     def test_set_sregions(self):
 #         self.setUpClass()
 #         m = fp11mp.DiploidParams(**self.pdict)
@@ -109,7 +109,7 @@ import unittest
 #             m.sregions = fp11.GaussianS(0, 1, 1, 0.2)
 #         with self.assertRaises(TypeError):
 #             m.sregions = [fp11.Region(0, 1, 1)]
-# 
+#
 #     def test_init_demog(self):
 #         self.setUpClass()
 #         try:
@@ -117,19 +117,19 @@ import unittest
 #             m
 #         except:
 #             self.fail("unexpected exception")
-# 
+#
 #     def test_init_demog_list(self):
 #         self.pdict['demography'] = [100] * 10
 #         with self.assertRaises(ValueError):
 #             m = fp11mp.DiploidParams(**self.pdict)
 #             m
-# 
+#
 #     def test_init_bad_popsizes(self):
 #         self.pdict['demography'] = np.array([100] * 10 + [-1])
 #         with self.assertRaises(ValueError):
 #             m = fp11mp.DiploidParams(**self.pdict)
 #             m
-# 
+#
 #     def test_bad_rates(self):
 #         self.setUpClass()
 #         self.pdict['mutrate_n'] = None
@@ -140,7 +140,7 @@ import unittest
 #         with self.assertRaises(ValueError):
 #             m = fp11mp.DiploidParams(**self.pdict)
 #             m
-# 
+#
 #     def test_warning_for_zero_rate(self):
 #         # We pass in some sregions but leave mutrate_s == 0.
 #         self.setUpClass()
@@ -148,7 +148,7 @@ import unittest
 #         with self.assertWarns(UserWarning):
 #             m = fp11mp.DiploidParams(**self.pdict)
 #             m.validate()
-# 
+#
 #     def test_set_rates_list(self):
 #         self.setUpClass()
 #         self.pdict['rates'] = [0., 1e-3, 0.25]
@@ -157,7 +157,7 @@ import unittest
 #             m
 #         except:
 #             self.fail("unexpected exception")
-# 
+#
 #     def test_set_rates_tuple(self):
 #         m = fp11mp.DiploidParams()
 #         m.rates = (0., 1e-3, 0.25)
@@ -166,7 +166,7 @@ import unittest
 #         self.assertEqual(m.recrate, 0.25)
 #         with self.assertRaises(ValueError):
 #             m.rates = (0., -1e-3, 0.25)
-# 
+#
 #     def test_set_rates_dict(self):
 #         m = fp11mp.DiploidParams()
 #         with self.assertRaises(ValueError):
@@ -177,17 +177,17 @@ import unittest
 #                        'recrate': 1e-3}
 #         with self.assertRaises(ValueError):
 #             m.rates = {'monkeys_n': 1e-3}
-# 
+#
 #     def test_set_gvalue(self):
 #         m = fp11mp.DiploidParams()
 #         from fwdpy11.fitness import DiploidAdditive
 #         m.gvalue = DiploidAdditive()
-# 
+#
 #     def test_set_bad_gvalue(self):
 #         m = fp11mp.DiploidParams()
 #         with self.assertRaises(ValueError):
 #             m.gvalue = []
-# 
+#
 #     def test_invalid_kwargs(self):
 #         from fwdpy11.fitness import DiploidAdditive
 #         with self.assertRaises(ValueError):

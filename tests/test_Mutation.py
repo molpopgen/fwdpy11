@@ -17,10 +17,10 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import unittest
-import fwdpy11
 import pickle
+import unittest
 
+import fwdpy11
 
 class testSingleEffectMutation(unittest.TestCase):
     @classmethod
@@ -45,8 +45,7 @@ class testSingleEffectMutation(unittest.TestCase):
 class testMultiEffectMutation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.m = fwdpy11.Mutation(
-            1.0, -1.0, 0.25, 0, [1., 2.], [-1.0, 1. / 3.], 13)
+        self.m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, [1.0, 2.0], [-1.0, 1.0 / 3.0], 13)
 
     def testConstruct(self):
         self.assertEqual(self.m.pos, 1.0)
@@ -70,19 +69,18 @@ class testMultiEffectMutationDiploidPopulationPickling(unittest.TestCase):
         fixations = fwdpy11.MutationVector()
         gametes = fwdpy11.HaploidGenomeVector()
         diploids = fwdpy11.DiploidVector()
-        mutations.append(fwdpy11.Mutation(
-            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
-        fixations.append(fwdpy11.Mutation(
-            0.1, -0.01, 1.0, 0, [-1., 2.], [5., 4.], 0))
-        gametes.append(fwdpy11.HaploidGenome(
-            (2, [], [0])))
+        mutations.append(
+            fwdpy11.Mutation(0.1, -0.01, 1.0, 0, [-1.0, 2.0], [5.0, 4.0], 0)
+        )
+        fixations.append(
+            fwdpy11.Mutation(0.1, -0.01, 1.0, 0, [-1.0, 2.0], [5.0, 4.0], 0)
+        )
+        gametes.append(fwdpy11.HaploidGenome((2, [], [0])))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         ftimes = [1]
-        self.pop = fwdpy11.DiploidPopulation.create(diploids,
-                                            gametes,
-                                            mutations,
-                                            fixations,
-                                            ftimes, 2)
+        self.pop = fwdpy11.DiploidPopulation.create(
+            diploids, gametes, mutations, fixations, ftimes, 2
+        )
 
     def testPickle(self):
         p = pickle.dumps(self.pop)

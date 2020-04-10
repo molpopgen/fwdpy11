@@ -1,20 +1,19 @@
-import fwdpy11
-import fwdpy11.ezparams
-import fwdpy11
 import pickle
 import unittest
+
 import custom_additive as ca
 import custom_stateless_genotype as general
-
+import fwdpy11
+import fwdpy11.ezparams
 
 class testCustomAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000)
-        self.pdict = fwdpy11.ezparams.mslike(self.pop,
-                                             dfe=fwdpy11.ExpS(0, 1, 1, -0.05),
-                                             pneutral=0.95, simlen=10)
-        self.pdict['gvalue'] = ca.additive()
+        self.pdict = fwdpy11.ezparams.mslike(
+            self.pop, dfe=fwdpy11.ExpS(0, 1, 1, -0.05), pneutral=0.95, simlen=10
+        )
+        self.pdict["gvalue"] = ca.additive()
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 
@@ -39,11 +38,13 @@ class testGeneralModule(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(1000)
-        self.pdict = fwdpy11.ezparams.mslike(self.pop,
-                                             dfe=fwdpy11.ConstantS(
-                                                 0, 1, 1, -0.05, 0.05),
-                                             pneutral=0.95, simlen=10)
-        self.pdict['gvalue'] = general.GeneralW()
+        self.pdict = fwdpy11.ezparams.mslike(
+            self.pop,
+            dfe=fwdpy11.ConstantS(0, 1, 1, -0.05, 0.05),
+            pneutral=0.95,
+            simlen=10,
+        )
+        self.pdict["gvalue"] = general.GeneralW()
         self.rng = fwdpy11.GSLrng(42)
         self.params = fwdpy11.ModelParams(**self.pdict)
 

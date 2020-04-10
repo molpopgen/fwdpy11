@@ -38,10 +38,11 @@ def evolve_genomes(rng, pop, params, recorder=None):
 
     """
     import warnings
+
     # warnings.simplefilter("default")
     warnings.warn(
         "Simulation without tree sequences is being considered for deprecation!",
-        PendingDeprecationWarning
+        PendingDeprecationWarning,
     )
     # Test parameters while suppressing warnings
     with warnings.catch_warnings():
@@ -52,19 +53,30 @@ def evolve_genomes(rng, pop, params, recorder=None):
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import evolve_without_tree_sequences
     from ._fwdpy11 import dispatch_create_GeneticMap
+
     pneutral = 0.0
     if params.mutrate_n + params.mutrate_s > 0.0:
-        pneutral = params.mutrate_n/(params.mutrate_n+params.mutrate_s)
+        pneutral = params.mutrate_n / (params.mutrate_n + params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     if recorder is None:
         from ._fwdpy11 import RecordNothing
+
         recorder = RecordNothing()
 
     # FIXME: passing params.popsizes is a hack introduced in 0.6.0
     # top maintain API compatibility
-    evolve_without_tree_sequences(rng, pop, params.popsizes,
-                                  params.mutrate_n, params.mutrate_s,
-                                  mm, rm, params.gvalue,
-                                  recorder, params.pself, params.prune_selected)
+    evolve_without_tree_sequences(
+        rng,
+        pop,
+        params.popsizes,
+        params.mutrate_n,
+        params.mutrate_s,
+        mm,
+        rm,
+        params.gvalue,
+        recorder,
+        params.pself,
+        params.prune_selected,
+    )

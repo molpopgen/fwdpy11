@@ -19,23 +19,25 @@
 
 import sys
 
+from fwdpy11._version import __version__  # NOQA
+
+from ._demography import *  # NOQA
+from ._dev import *  # NOQA
+from ._evolve_genomes import *  # NOQA
+from ._evolvets import *  # NOQA
+from ._fwdpy11 import *  # NOQA
+from ._monkeypatch import _data_matrix  # NOQA
+from ._monkeypatch import _diploid_population  # NOQA
+from ._monkeypatch import _table_collection  # NOQA
+from ._types.demography_debugger import DemographyDebugger  # NOQA
+from ._types.model_params import *  # NOQA
+
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
 
-from fwdpy11._version import __version__ # NOQA
-from ._fwdpy11 import * # NOQA
-from ._dev import * # NOQA
-from ._types.model_params import * # NOQA
-from ._types.demography_debugger import DemographyDebugger # NOQA
-from ._evolve_genomes import * # NOQA
-from ._evolvets import * # NOQA
-from ._monkeypatch import _diploid_population # NOQA
-from ._monkeypatch import _table_collection # NOQA
-from ._monkeypatch import _data_matrix # NOQA
-from ._demography import * # NOQA
 
 # NOTE: some operations that can be implemented efficiently
 # in Python are supplied as monkey-patches to the pybind11 classes
-_monkeypatch._diploid_population._patch_diploid_population(DiploidPopulation) # NOQA
-_monkeypatch._table_collection._patch_table_collection(TableCollection) # NOQA
-_monkeypatch._data_matrix._patch_data_matrix(DataMatrix) # NOQA
+_monkeypatch._diploid_population._patch_diploid_population(DiploidPopulation)  # NOQA
+_monkeypatch._table_collection._patch_table_collection(TableCollection)  # NOQA
+_monkeypatch._data_matrix._patch_data_matrix(DataMatrix)  # NOQA
