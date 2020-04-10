@@ -18,12 +18,19 @@
 #
 
 
-def evolvets(rng, pop, params, simplification_interval, recorder=None,
-             post_simplification_recorder=None,
-             suppress_table_indexing=False, record_gvalue_matrix=False,
-             stopping_criterion=None,
-             track_mutation_counts=False,
-             remove_extinct_variants=True):
+def evolvets(
+    rng,
+    pop,
+    params,
+    simplification_interval,
+    recorder=None,
+    post_simplification_recorder=None,
+    suppress_table_indexing=False,
+    record_gvalue_matrix=False,
+    stopping_criterion=None,
+    track_mutation_counts=False,
+    remove_extinct_variants=True,
+):
     """
     Evolve a population with tree sequence recording
 
@@ -73,10 +80,12 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
 
     if recorder is None:
         from ._fwdpy11 import NoAncientSamples
+
         recorder = NoAncientSamples()
 
     if post_simplification_recorder is None:
         from ._fwdpy11 import RecordNothing
+
         post_simplification_recorder = RecordNothing()
         reset_treeseqs_after_simplify = False
     else:
@@ -84,29 +93,45 @@ def evolvets(rng, pop, params, simplification_interval, recorder=None,
 
     if stopping_criterion is None:
         from ._fwdpy11 import _no_stopping
+
         stopping_criterion = _no_stopping
 
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import dispatch_create_GeneticMap
     from ._fwdpy11 import evolve_with_tree_sequences
+
     pneutral = 0.0
-    if params.mutrate_n + params.mutrate_s > 0.:
-        pneutral = params.mutrate_n/(params.mutrate_n + params.mutrate_s)
+    if params.mutrate_n + params.mutrate_s > 0.0:
+        pneutral = params.mutrate_n / (params.mutrate_n + params.mutrate_s)
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
     rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
 
     from ._fwdpy11 import SampleRecorder
+
     sr = SampleRecorder()
     from ._fwdpy11 import _dgvalue_pointer_vector
+
     gvpointers = _dgvalue_pointer_vector(params.gvalue)
-    evolve_with_tree_sequences(rng, pop, sr, simplification_interval,
-                               params.demography, params.simlen,
-                               params.mutrate_n, params.mutrate_s,
-                               mm, rm, gvpointers,
-                               recorder, stopping_criterion,
-                               params.pself, params.prune_selected is False,
-                               suppress_table_indexing, record_gvalue_matrix,
-                               track_mutation_counts,
-                               remove_extinct_variants,
-                               reset_treeseqs_after_simplify,
-                               post_simplification_recorder)
+    evolve_with_tree_sequences(
+        rng,
+        pop,
+        sr,
+        simplification_interval,
+        params.demography,
+        params.simlen,
+        params.mutrate_n,
+        params.mutrate_s,
+        mm,
+        rm,
+        gvpointers,
+        recorder,
+        stopping_criterion,
+        params.pself,
+        params.prune_selected is False,
+        suppress_table_indexing,
+        record_gvalue_matrix,
+        track_mutation_counts,
+        remove_extinct_variants,
+        reset_treeseqs_after_simplify,
+        post_simplification_recorder,
+    )

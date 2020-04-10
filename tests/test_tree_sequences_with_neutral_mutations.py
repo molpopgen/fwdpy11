@@ -1,10 +1,11 @@
-import unittest
-import fwdpy11
-import numpy as np
 import copy
-from test_tree_sequences import set_up_quant_trait_model
-from test_tree_sequences import set_up_standard_pop_gen_model
+import unittest
 
+import numpy as np
+
+import fwdpy11
+from test_tree_sequences import (set_up_quant_trait_model,
+                                 set_up_standard_pop_gen_model)
 
 def _count_mutations_from_diploids(pop):
     mc = np.zeros(len(pop.mutations), dtype=np.uint32)
@@ -22,7 +23,8 @@ def _count_mutations_from_diploids(pop):
 
 def _compare_counts_for_nonneutral_variants(pop, mc):
     w = np.array(
-        [i for i, j in enumerate(pop.mutations) if j.neutral is False], dtype=np.uint32)
+        [i for i, j in enumerate(pop.mutations) if j.neutral is False], dtype=np.uint32
+    )
     return all(pop.mcounts[w] == mc[w]) is True
 
 
@@ -45,8 +47,9 @@ class TestKeepFixations(unittest.TestCase):
         """
         Tests atypical use case where neutral mutations are placed into genomes
         """
-        fwdpy11.evolvets(self.rng, self.pop, self.params, 100,
-                         suppress_table_indexing=True)
+        fwdpy11.evolvets(
+            self.rng, self.pop, self.params, 100, suppress_table_indexing=True
+        )
         mc = _count_mutations_from_diploids(self.pop)
         self.assertTrue(_compare_counts_for_nonneutral_variants(self.pop, mc))
 
@@ -56,15 +59,14 @@ class TestKeepFixations(unittest.TestCase):
         should give the same mutation counts.
         """
         pop2 = copy.deepcopy(self.pop)
-        rng = fwdpy11.GSLrng(101*45*110*210)  # Use same seed!!!
+        rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)  # Use same seed!!!
         self.params.prune_selected = False
         params = copy.deepcopy(self.params)
-        fwdpy11.evolvets(rng, pop2, params, 100,
-                         suppress_table_indexing=True)
-        fwdpy11.evolvets(self.rng, self.pop, self.params, 100,
-                         suppress_table_indexing=True)
-        ti = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2*self.pop.N)])
+        fwdpy11.evolvets(rng, pop2, params, 100, suppress_table_indexing=True)
+        fwdpy11.evolvets(
+            self.rng, self.pop, self.params, 100, suppress_table_indexing=True
+        )
+        ti = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         mc = _count_mutations_from_diploids(self.pop)
         for t in ti:
             for m in t.mutations():
@@ -90,14 +92,15 @@ class TestPruneFixations(unittest.TestCase):
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         mc = _count_mutations_from_diploids(self.pop)
         self.assertTrue(_compare_counts_for_nonneutral_variants(self.pop, mc))
-        self.assertEqual(len(np.where(mc == 2*self.pop.N)[0]), 0)
+        self.assertEqual(len(np.where(mc == 2 * self.pop.N)[0]), 0)
 
     def test_mutation_counts_with_indexing_suppressed(self):
-        fwdpy11.evolvets(self.rng, self.pop, self.params, 100,
-                         suppress_table_indexing=True)
+        fwdpy11.evolvets(
+            self.rng, self.pop, self.params, 100, suppress_table_indexing=True
+        )
         mc = _count_mutations_from_diploids(self.pop)
         self.assertTrue(_compare_counts_for_nonneutral_variants(self.pop, mc))
-        self.assertEqual(len(np.where(mc == 2*self.pop.N)[0]), 0)
+        self.assertEqual(len(np.where(mc == 2 * self.pop.N)[0]), 0)
 
 
 class TestNeutralMutRegions(unittest.TestCase):
@@ -105,13 +108,15 @@ class TestNeutralMutRegions(unittest.TestCase):
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
         self.params.rates = (1e-3, self.params.rates[1], self.params.rates[2])
-        self.params.nregions = [fwdpy11.Region(0, 0.25, 1),
-                                fwdpy11.Region(0.5, 1, 1)]
+        self.params.nregions = [fwdpy11.Region(0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
 
     def test_neutral_mut_locations(self):
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
-        pos = [self.pop.tables.sites[i.site].position for
-               i in self.pop.tables.mutations if i.neutral]
+        pos = [
+            self.pop.tables.sites[i.site].position
+            for i in self.pop.tables.mutations
+            if i.neutral
+        ]
         self.assertTrue(all([i < 0.25 or i >= 0.5 for i in pos]))
 
 

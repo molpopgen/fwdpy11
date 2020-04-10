@@ -17,9 +17,10 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import fwdpy11
-import sparse
 import numpy as np
+import sparse
+
+import fwdpy11
 
 # Functions related to FS calculation
 
@@ -46,10 +47,9 @@ def _validate_windows(windows, genome_length):
             raise ValueError("windows must be [a, b) and a < b")
         for i in w:
             if i < 0 or i > genome_length:
-                raise ValueError(
-                    "window coordinates must be [0, genome_length)")
+                raise ValueError("window coordinates must be [0, genome_length)")
     for i in range(1, len(windows), 2):
-        if windows[i-1][0] < windows[i][1] and windows[i][0] < windows[i-1][1]:
+        if windows[i - 1][0] < windows[i][1] and windows[i][0] < windows[i - 1][1]:
             raise ValueError("windows cannot overlap")
 
 
@@ -78,11 +78,11 @@ def _1dfs(self, samples, windows, include_function, simplify):
     consistency w/ndfs output.
     """
     t, s = _simplify(self, samples, simplify)
-    fs = [np.zeros(len(s)+1, dtype=np.int32) for i in windows]
+    fs = [np.zeros(len(s) + 1, dtype=np.int32) for i in windows]
     ti = fwdpy11.TreeIterator(t, s)
     windex = 0
     sites = np.array(t.sites, copy=False)
-    positions = sites['position'][:]
+    positions = sites["position"][:]
     for tree in ti:
         for m in tree.mutations():
             if include_function(m):
@@ -104,14 +104,15 @@ def _1dfs(self, samples, windows, include_function, simplify):
     return rv
 
 
-def _ndfs(self, samples, sample_groups, num_sample_groups,
-          windows, include_function, simplify):
+def _ndfs(
+    self, samples, sample_groups, num_sample_groups, windows, include_function, simplify
+):
     """
     For more than one sample, always work with the joint FS
     at first. When the marginals are wanted, we extract them
     later.
     """
-    shapes = tuple(len(i)+1 for i in samples)
+    shapes = tuple(len(i) + 1 for i in samples)
     dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
 
     sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
@@ -120,7 +121,7 @@ def _ndfs(self, samples, sample_groups, num_sample_groups,
     counts = np.zeros(len(samples), dtype=np.int32)
     windex = 0
     sites = np.array(t.sites, copy=False)
-    positions = sites['position'][:]
+    positions = sites["position"][:]
     for tree in ti:
         for m in tree.mutations():
             if include_function(m):
@@ -163,8 +164,7 @@ def _handle_fs_marginalizing(fs, marginalize, nwindows, num_sample_groups):
     return rv
 
 
-def _fs_implementation(self, samples, windows,
-                       include_function, simplify):
+def _fs_implementation(self, samples, windows, include_function, simplify):
     """
     self is a fwdpy11.TableCollection
     samples is a list of 1d numpy.ndarray
@@ -175,26 +175,36 @@ def _fs_implementation(self, samples, windows,
     # Don't figure out sample groups when
     # there is only 1
     if len(samples) == 1:
-        return _1dfs(self, samples[0], windows,
-                     include_function, simplify)
+        return _1dfs(self, samples[0], windows, include_function, simplify)
 
-    sample_groups = np.array([NOT_A_SAMPLE]*len(self.nodes), dtype=np.int32)
+    sample_groups = np.array([NOT_A_SAMPLE] * len(self.nodes), dtype=np.int32)
     for i, j in enumerate(samples):
         if np.any(sample_groups[j] != NOT_A_SAMPLE):
-            raise ValueError(
-                "sample nodes cannot be part of multiple sample groups")
+            raise ValueError("sample nodes cannot be part of multiple sample groups")
         sample_groups[j] = i
 
     num_sample_groups = i + 1
-    return _ndfs(self, samples, sample_groups, num_sample_groups,
-                 windows, include_function, simplify)
+    return _ndfs(
+        self,
+        samples,
+        sample_groups,
+        num_sample_groups,
+        windows,
+        include_function,
+        simplify,
+    )
 
 
-def _fs(self, samples, marginalize=False,
-        simplify=False, windows=None,
-        separate_windows=False,
-        include_neutral=True,
-        include_selected=True):
+def _fs(
+    self,
+    samples,
+    marginalize=False,
+    simplify=False,
+    windows=None,
+    separate_windows=False,
+    include_neutral=True,
+    include_selected=True,
+):
     """
     :param samples: lists of numpy arrays of sample nodes
     :param marginalize: For ``FS`` involving multiple samples,
@@ -247,8 +257,9 @@ def _fs(self, samples, marginalize=False,
     _validate_windows(windows, self.genome_length)
 
     if include_neutral is False and include_selected is False:
-        raise ValueError("One or both of include_neutral "
-                         "and include_selected must be True")
+        raise ValueError(
+            "One or both of include_neutral " "and include_selected must be True"
+        )
 
     include_function = _include_both
     if include_neutral is False:
@@ -256,11 +267,9 @@ def _fs(self, samples, marginalize=False,
     elif include_selected is False:
         include_function = _include_neutral
 
-    lfs = _fs_implementation(self, samples, windows,
-                             include_function, simplify)
+    lfs = _fs_implementation(self, samples, windows, include_function, simplify)
     if separate_windows is True:
-        lfs = _handle_fs_marginalizing(lfs, marginalize,
-                                       len(windows), len(samples))
+        lfs = _handle_fs_marginalizing(lfs, marginalize, len(windows), len(samples))
         return lfs
     fs = lfs[0]
     for i in lfs[1:]:

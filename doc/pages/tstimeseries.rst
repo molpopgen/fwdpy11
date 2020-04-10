@@ -27,22 +27,24 @@ alive individuals:
 
     from collections import namedtuple
 
-    MutData = namedtuple('MutData',['pos','origin','s','daf'])
+    MutData = namedtuple("MutData", ["pos", "origin", "s", "daf"])
 
     freqs = []
 
+.. ipython:: python
+
     def track_freqs(pop):
-       for t, n, m in pop.sample_timepoints(False):
-          tables, idmap = fwdpy11.simplify_tables(pop.tables, n)
-          trees = fwdpy11.TreeIterator(tables, idmap[n])
-          for tree in trees:
-             for mut in tree.mutations():
-                k = mut.key
-                p = pop.mutations[k].pos
-                g = pop.mutations[k].g
-                s = pop.mutations[k].s
-                daf = tree.leaf_counts(mut.node)
-                freqs.append(MutData(p,g,s,daf/len(n)))
+        for t, n, m in pop.sample_timepoints(False):
+            tables, idmap = fwdpy11.simplify_tables(pop.tables, n)
+            trees = fwdpy11.TreeIterator(tables, idmap[n])
+            for tree in trees:
+                for mut in tree.mutations():
+                    k = mut.key
+                    p = pop.mutations[k].pos
+                    g = pop.mutations[k].g
+                    s = pop.mutations[k].s
+                    daf = tree.leaf_counts(mut.node)
+                    freqs.append(MutData(p, g, s, daf / len(n)))
 
 The use of :func:`fwdpy11.DiploidPopulation.sample_timepoints` deserves some comment.  We pass `False`
 to this function, telling it not to process the currently-alive individuals.  If we passed in `True` instead,
@@ -57,41 +59,52 @@ Now, we run a simple simulation with the above function passed into :func:`fwdpy
     import numpy as np
 
     tspop = fwdpy11.DiploidPopulation(100, 1.0)
-    pdict = {'gvalue': fwdpy11.Multiplicative(2.),
-              'nregions': [],
-              'sregions': [fwdpy11.GammaS(0,1,1,2.0,1,scaling=200)],
-              'recregions': [fwdpy11.PoissonInterval(0,1,0.1)],
-              'rates': (0, 1e-2, None),
-              'demography': np.array([100]*100, dtype=np.uint32)
-              }
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "nregions": [],
+        "sregions": [fwdpy11.GammaS(0, 1, 1, 2.0, 1, scaling=200)],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 0.1)],
+        "rates": (0, 1e-2, None),
+        "demography": np.array([100] * 100, dtype=np.uint32),
+    }
     params = fwdpy11.ModelParams(**pdict)
 
     preserver = fwdpy11.RandomAncientSamples(42, 100, np.arange(1, 100))
 
     rng = fwdpy11.GSLrng(125323)
 
-    fwdpy11.evolvets(rng, tspop, params, 30,
-                     recorder=preserver,
-                     post_simplification_recorder=track_freqs,
-                     suppress_table_indexing=True)
+    fwdpy11.evolvets(
+        rng,
+        tspop,
+        params,
+        30,
+        recorder=preserver,
+        post_simplification_recorder=track_freqs,
+        suppress_table_indexing=True,
+    )
 
 Finally, we plot our allele frequencies over time:
 
 .. ipython:: python
 
     from matplotlib import rc
-    rc('font',**{'size':18})
+
+    rc("font", **{"size": 18})
     import matplotlib.pyplot as plt
     import pandas as pd
+
     freqdf = pd.DataFrame(freqs, columns=MutData._fields)
 
-    for n, g in freqdf.groupby(['pos','origin','s']):
+.. ipython:: python
+
+    for n, g in freqdf.groupby(["pos", "origin", "s"]):
         x = np.arange(len(g.daf))
         x += n[1]
-        plt.plot(x, g.daf);
+        plt.plot(x, g.daf)
 
-    plt.xlabel("Time (generation)");
-    plt.ylabel("Mutation frequency");
-    @savefig efficient_timeseries_example.png width=6in
-    plt.tight_layout();
-   
+.. ipython:: python
+
+   plt.xlabel("Time (generation)");
+   plt.ylabel("Mutation frequency");
+   @savefig efficient_timeseries_example.png width=6in
+   plt.tight_layout();

@@ -18,8 +18,8 @@
 #
 
 import unittest
-import fwdpy11
 
+import fwdpy11
 
 class testDiploidPopulationAddMutations(unittest.TestCase):
     @classmethod
@@ -28,7 +28,7 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
         self.mvec = fwdpy11.MutationVector()
         self.nmut = fwdpy11.Mutation(0.1, 0.0, 0.0, 0, 0)
         self.smut = fwdpy11.Mutation(1.2, -0.01, 0.0, 0, 0)
-        self.smut_vec = fwdpy11.Mutation(1.3, 0., 0., 0, [-1., 0], [1, 1], 0)
+        self.smut_vec = fwdpy11.Mutation(1.3, 0.0, 0.0, 0, [-1.0, 0], [1, 1], 0)
 
     def testAddOneNeutralMutation(self):
         self.mvec.append(self.nmut)
@@ -38,13 +38,17 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
             self.assertEqual(self.pop.mutations[i].neutral, True)
             self.assertEqual(self.pop.mcounts[i], 1)
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 1)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 1
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 0
+        )
 
     def testAddOneSelectedMutation(self):
         self.mvec.append(self.smut)
@@ -54,13 +58,17 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
             self.assertEqual(self.pop.mutations[i].neutral, False)
             self.assertEqual(self.pop.mcounts[i], 2)
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 1)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 1
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 1)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 1
+        )
 
     def testAddOneSelectedMutationWithVecEffects(self):
         self.mvec.append(self.smut_vec)
@@ -77,13 +85,17 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
             self.assertEqual(self.pop.mutations[i].neutral, False)
             self.assertEqual(self.pop.mcounts[i], 2)
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].mutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 1)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].first].smutations), 1
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].mutations), 0
+        )
         self.assertEqual(
-            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 1)
+            len(self.pop.haploid_genomes[self.pop.diploids[0].second].smutations), 1
+        )
 
     def testAddMultipleMutationsSimple(self):
         self.mvec.append(self.smut)
@@ -110,22 +122,30 @@ class testDiploidPopulationAddMutations(unittest.TestCase):
             self.assertEqual(self.pop.mcounts[i], len(ind1) + len(ind2))
         for i in ind1:
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations), 1)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations), 1
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations), 1)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations), 1
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].second].mutations), 0)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].second].mutations), 0
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations), 0)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations), 0
+            )
         for i in ind2:
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations), 0)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].first].mutations), 0
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations), 0)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].first].smutations), 0
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].second].mutations), 1)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].second].mutations), 1
+            )
             self.assertEqual(
-                len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations), 1)
+                len(self.pop.haploid_genomes[self.pop.diploids[i].second].smutations), 1
+            )
 
     def testAddSameMutationPosition(self):
         self.mvec.append(self.nmut)

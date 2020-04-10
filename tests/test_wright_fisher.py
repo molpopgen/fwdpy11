@@ -1,7 +1,8 @@
 import unittest
-import fwdpy11 as fp11
+
 import numpy as np
 
+import fwdpy11 as fp11
 
 class GenerationRecorder(object):
     def __init__(self):
@@ -16,6 +17,7 @@ class testWFevolve(unittest.TestCase):
     def setUpClass(self):
         from fwdpy11 import ModelParams
         from fwdpy11 import Multiplicative
+
         self.pop = fp11.DiploidPopulation(1000)
         self.rng = fp11.GSLrng(42)
         self.recorder = GenerationRecorder()
@@ -29,13 +31,12 @@ class testWFevolve(unittest.TestCase):
 
     def testEvolve(self):
         from fwdpy11 import evolve_genomes as evolve
+
         evolve(self.rng, self.pop, self.p, self.recorder)
-        self.assertEqual(self.recorder.generations,
-                         [i + 1 for i in range(100)])
+        self.assertEqual(self.recorder.generations, [i + 1 for i in range(100)])
         self.p.demography = np.array([self.pop.N] * 24, dtype=np.uint32)
         evolve(self.rng, self.pop, self.p, self.recorder)
-        self.assertEqual(self.recorder.generations,
-                         [i + 1 for i in range(124)])
+        self.assertEqual(self.recorder.generations, [i + 1 for i in range(124)])
 
 
 if __name__ == "__main__":

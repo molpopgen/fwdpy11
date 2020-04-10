@@ -611,12 +611,13 @@ API and back-end changes:
 .. code-block:: python
 
     import fwdpy11
+
     Spop = fwdpy11.SlocusPop
 
 Alternately:
 
 .. code-block:: python
-    
+
     from fwdpy11 import SlocusPop as Spop
 
 .. _pybind11: https://github.com/pybind/pybind11

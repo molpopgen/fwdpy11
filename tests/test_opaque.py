@@ -22,8 +22,8 @@
 # Python lists
 
 import unittest
-import fwdpy11
 
+import fwdpy11
 
 class testDiploidPopulation(unittest.TestCase):
     @classmethod
@@ -31,37 +31,28 @@ class testDiploidPopulation(unittest.TestCase):
         self.pop = fwdpy11.DiploidPopulation(1000)
 
     def test_mutations(self):
-        self.assertTrue(
-            type(self.pop.mutations)
-            is fwdpy11.MutationVector)
+        self.assertTrue(type(self.pop.mutations) is fwdpy11.MutationVector)
         self.assertFalse(type(self.pop.mutations) is list)
         self.assertTrue(type(list(self.pop.mutations)) is list)
 
     def test_diploids(self):
-        self.assertTrue(
-            type(self.pop.diploids)
-            is fwdpy11.DiploidVector)
+        self.assertTrue(type(self.pop.diploids) is fwdpy11.DiploidVector)
 
     def test_a_diploid(self):
-        self.assertTrue(
-            type(self.pop.diploids[0])
-            is fwdpy11.DiploidGenotype)
+        self.assertTrue(type(self.pop.diploids[0]) is fwdpy11.DiploidGenotype)
 
     def test_gametes(self):
-        self.assertTrue(
-            type(self.pop.haploid_genomes)
-            is fwdpy11.HaploidGenomeVector)
+        self.assertTrue(type(self.pop.haploid_genomes) is fwdpy11.HaploidGenomeVector)
 
 
 class DiploidTypeSampler(object):
     def __call__(self, pop):
-        assert(type(pop.mutations) is fwdpy11.MutationVector)
-        assert(type(pop.mutations) is not list)
-        assert(type(list(pop.mutations)) is list)
-        assert(type(pop.diploids) is fwdpy11.DiploidVector)
-        assert(type(pop.diploids[0])
-               is fwdpy11.DiploidGenotype)
-        assert(type(pop.haploid_genomes) is fwdpy11.HaploidGenomeVector)
+        assert type(pop.mutations) is fwdpy11.MutationVector
+        assert type(pop.mutations) is not list
+        assert type(list(pop.mutations)) is list
+        assert type(pop.diploids) is fwdpy11.DiploidVector
+        assert type(pop.diploids[0]) is fwdpy11.DiploidGenotype
+        assert type(pop.haploid_genomes) is fwdpy11.HaploidGenomeVector
 
 
 class testDiploidPopulationSampler(unittest.TestCase):
@@ -70,15 +61,17 @@ class testDiploidPopulationSampler(unittest.TestCase):
         from fwdpy11.ezparams import mslike
         from fwdpy11 import Multiplicative
         from fwdpy11 import ModelParams
+
         self.sampler = DiploidTypeSampler()
         self.pop = fwdpy11.DiploidPopulation(1000)
         self.params_dict = mslike(self.pop, simlen=10)
-        self.params_dict['gvalue'] = Multiplicative(2.)
+        self.params_dict["gvalue"] = Multiplicative(2.0)
         self.params = ModelParams(**self.params_dict)
         self.rng = fwdpy11.GSLrng(42)
 
     def testSampler(self):
         from fwdpy11 import evolve_genomes as evolve
+
         try:
             evolve(self.rng, self.pop, self.params, self.sampler)
         except:

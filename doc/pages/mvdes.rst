@@ -37,18 +37,21 @@ distributions and there is no correlation in the effect size in the two demes.
 
 .. ipython:: python
 
-    pdict = {'nregions': [],
-            'recregions': [],
-            'sregions': [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)),
-                         np.zeros(2))],
-            'rates': (0, 1e-3, None),
-            'demography': fwdpy11.DiscreteDemography(
-                migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
-            ),
-            'simlen': 100,
-            'gvalue': fwdpy11.Additive(ndemes=2, scaling=2,
-                                       gv2w=fwdpy11.GSS(opt=0, VS=10)),
-           }
+    pdict = {
+        "nregions": [],
+        "recregions": [],
+        "sregions": [
+            fwdpy11.mvDES(
+                fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2)), np.zeros(2)
+            )
+        ],
+        "rates": (0, 1e-3, None),
+        "demography": fwdpy11.DiscreteDemography(
+            migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
+        ),
+        "simlen": 100,
+        "gvalue": fwdpy11.Additive(ndemes=2, scaling=2, gv2w=fwdpy11.GSS(opt=0, VS=10)),
+    }
 
 Most of the above is standard.  Let's dissect the new bits:
 
@@ -81,8 +84,10 @@ Let's look at another example where effect sizes covary negatively across demes 
 
 .. ipython:: python
 
-    vcv = np.array([1., -0.99, -0.99, 1.]).reshape((2,2))
-    params.sregions = [fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcv), np.zeros(2))]
+    vcv = np.array([1.0, -0.99, -0.99, 1.0]).reshape((2, 2))
+    params.sregions = [
+        fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcv), np.zeros(2))
+    ]
     params.rates = (0, 5e-3, None)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -107,8 +112,9 @@ Gaussian kernel.
 
 .. ipython:: python
 
-    mvdes = fwdpy11.mvDES(fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200),
-                np.zeros(2), np.identity(2))
+    mvdes = fwdpy11.mvDES(
+        fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200), np.zeros(2), np.identity(2)
+    )
 
 .. note::
 
@@ -120,16 +126,17 @@ Let's put it in a simulation and run it:
 
 .. ipython:: python
 
-    pdict = {'nregions': [],
-            'recregions': [],
-            'sregions': [mvdes],
-            'rates': (0, 1e-3, None),
-            'demography': fwdpy11.DiscreteDemography(
-                migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
-            ),
-            'simlen': 100,
-            'gvalue': fwdpy11.Multiplicative(ndemes=2, scaling=2)
-           }
+    pdict = {
+        "nregions": [],
+        "recregions": [],
+        "sregions": [mvdes],
+        "rates": (0, 1e-3, None),
+        "demography": fwdpy11.DiscreteDemography(
+            migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
+        ),
+        "simlen": 100,
+        "gvalue": fwdpy11.Multiplicative(ndemes=2, scaling=2),
+    }
     params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -161,8 +168,11 @@ with a high correlation across demes:
 
 .. ipython:: python
 
-    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5)]*2, np.zeros(2),
-                np.matrix([1, 0.9, 0.9, 1]).reshape((2, 2)))
+    mvdes = fwdpy11.mvDES(
+        [fwdpy11.ExpS(0, 1, 1, -0.5)] * 2,
+        np.zeros(2),
+        np.matrix([1, 0.9, 0.9, 1]).reshape((2, 2)),
+    )
     params.sregions = [mvdes]
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -176,10 +186,11 @@ marginal deviates negatively covary:
 
 .. ipython:: python
 
-    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
-                           fwdpy11.GammaS(0, 1, 1, mean=0.1, shape=1)],
-                np.zeros(2),
-                np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)))
+    mvdes = fwdpy11.mvDES(
+        [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.GammaS(0, 1, 1, mean=0.1, shape=1)],
+        np.zeros(2),
+        np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
+    )
     params.sregions = [mvdes]
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -190,10 +201,11 @@ The type :class:`fwdpy11.ConstantS` has intuitive behavior:
 
 .. ipython:: python
 
-    mvdes = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
-                           fwdpy11.ConstantS(0, 1, 1, -0.1)],
-                np.zeros(2),
-                np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)))
+    mvdes = fwdpy11.mvDES(
+        [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.ConstantS(0, 1, 1, -0.1)],
+        np.zeros(2),
+        np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
+    )
     params.sregions = [mvdes]
     params.rates = (0, 5e-3, None)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
@@ -219,10 +231,20 @@ correlations such that deleterious mutations in deme 0 are less deleterious in d
 
 .. ipython:: python
 
-    sregions = [fwdpy11.mvDES(fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200),
-                np.zeros(2), np.matrix([1, -0.99, -0.99, 1]).reshape((2,2)))]
-    sregions.append(fwdpy11.mvDES(fwdpy11.LogNormalS.mv(0, 1, 1, scaling=200),
-                np.zeros(2), np.matrix([1, -0.99, -0.99, 1]).reshape((2,2))))
+    sregions = [
+        fwdpy11.mvDES(
+            fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200),
+            np.zeros(2),
+            np.matrix([1, -0.99, -0.99, 1]).reshape((2, 2)),
+        )
+    ]
+    sregions.append(
+        fwdpy11.mvDES(
+            fwdpy11.LogNormalS.mv(0, 1, 1, scaling=200),
+            np.zeros(2),
+            np.matrix([1, -0.99, -0.99, 1]).reshape((2, 2)),
+        )
+    )
     params.sregions = sregions
     params.rates = (0, 5e-3, None)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
@@ -237,14 +259,20 @@ For the general approach, simply create a :class:`list` of objects with the desi
 
 .. ipython:: python
 
-    sregions = [fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, -0.5),
-                           fwdpy11.ExpS(0, 1, 1, 0.1)],
-                np.zeros(2),
-                np.identity(2))]
-    sregions.append(fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1),
-                           fwdpy11.ExpS(0, 1, 1, -0.5)],
-                np.zeros(2),
-                np.identity(2)))
+    sregions = [
+        fwdpy11.mvDES(
+            [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.ExpS(0, 1, 1, 0.1)],
+            np.zeros(2),
+            np.identity(2),
+        )
+    ]
+    sregions.append(
+        fwdpy11.mvDES(
+            [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.5)],
+            np.zeros(2),
+            np.identity(2),
+        )
+    )
     params.sregions = sregions
     params.rates = (0, 5e-3, None)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
@@ -252,7 +280,6 @@ For the general approach, simply create a :class:`list` of objects with the desi
     fwdpy11.evolvets(rng, pop, params, 10)
     for i in pop.tables.mutations:
         print(pop.mutations[i.key].esizes)
-        
 Polygenic traits, multiple demes, correlated effect sizes, and different optima
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

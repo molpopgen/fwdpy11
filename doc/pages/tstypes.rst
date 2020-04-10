@@ -9,14 +9,17 @@ Low-level data types
 * :class:`fwdpy11.Node` defines nodes
 * :class:`fwdpy11.Edge` defines edges
 * :class:`fwdpy11.Site` defines a site (genomic location) where a mutation is present.
-* :class:`fwdpy11.MutationRecord` defines mutations associated with :class:`fwdpy11.Site` objects on trees and in :class:`fwdpy11.PopulationBase` objects.
+* :class:`fwdpy11.MutationRecord` defines mutations associated with :class:`fwdpy11.Site`
+  objects on trees and in :class:`fwdpy11.PopulationBase` objects.
 
 * :class:`fwdpy11.NodeTable` represents a node table
 * :class:`fwdpy11.EdgeTable` represents an edge table
 * :class:`fwdpy11.MutationTable` represents a mutation table
 * :class:`fwdpy11.SiteTable` represents a site table
 
-These types are all analogous to the corresponding tskit_ types.  Here, :class:`fwdpy11.MutationRecord` plays the role of `tskit.Mutation`, but with additional data fields that are useful for the forward-time simulations.
+These types are all analogous to the corresponding tskit_ types.
+Here, :class:`fwdpy11.MutationRecord` plays the role of `tskit.Mutation`,
+but with additional data fields that are useful for the forward-time simulations.
 
 Table collections
 ----------------------------------------------------------
@@ -52,18 +55,18 @@ which involves repeated swapping of the IDs of potential ancestors until the MRC
 
     import tskit
     import numpy as np
-    
+
     # The following makes use of the Kirk Lohmueller seed.
-    np.random.seed(101*405*10*110)
-    
+    np.random.seed(101 * 405 * 10 * 110)
+
     tc = tskit.TableCollection(1)
-    
+
     nsam = 10
-    
+
     for i in range(nsam):
         tc.nodes.add_row(time=0, flags=1)
-    
-    nodes = np.arange(2*nsam - 1, dtype=np.int32)
+
+    nodes = np.arange(2 * nsam - 1, dtype=np.int32)
     time = 0.0
 
 
@@ -75,25 +78,24 @@ which involves repeated swapping of the IDs of potential ancestors until the MRC
     # Oxford Surveys in Evolutionary Biology 7 (1): 44.
     n = nsam
     while n > 1:
-        rcoal = (n*(n-1))/2.
-        tcoal = np.random.exponential(1./rcoal)
+        rcoal = (n * (n - 1)) / 2.0
+        tcoal = np.random.exponential(1.0 / rcoal)
         time += tcoal
         tc.nodes.add_row(time=time)
-        ancestor = 2*nsam - n
-        p = np.random.choice(n,1)[0]
-        tc.edges.add_row(left=0., right=1., parent=ancestor, child=nodes[p])
-        nodes[p] = nodes[n-1]
-        p = np.random.choice(n-1,1)[0]
-        tc.edges.add_row(left=0., right=1., parent=ancestor, child=nodes[p])
-        nodes[p] = nodes[2*nsam - n]
+        ancestor = 2 * nsam - n
+        p = np.random.choice(n, 1)[0]
+        tc.edges.add_row(left=0.0, right=1.0, parent=ancestor, child=nodes[p])
+        nodes[p] = nodes[n - 1]
+        p = np.random.choice(n - 1, 1)[0]
+        tc.edges.add_row(left=0.0, right=1.0, parent=ancestor, child=nodes[p])
+        nodes[p] = nodes[2 * nsam - n]
         n -= 1
 
-    
 .. ipython:: python
 
     tc.sort()
     ts = tc.tree_sequence()
-    print(ts.first().draw(format='unicode'))
+    print(ts.first().draw(format="unicode"))
 
 The above tree correponds to a sample size of 10 haplotypes.  The tree shows the node labels.  The nodes labelled 0
 through 9 correspond to the present time point--these are "alive nodes" or the "current generation" if we are thinking
@@ -108,16 +110,20 @@ may look at the leaf counts attribute of a marginal tree:
 
 .. ipython:: python
 
-    # Let's store our 
+    # Let's store our
     # tree in a variable now
     t = ts.first()
+
+.. ipython:: python
 
     def get_leaf_counts(tree, i):
         return len([j for j in tree.leaves(i)])
 
+.. ipython:: python
+
     # Map node ids to their leaf counts using a dict
-    lcmap = {i:"{}".format(get_leaf_counts(t,i)) for i in range(len(ts.tables.nodes))}
-    print(t.draw(format="unicode",node_labels=lcmap))
+    lcmap = {i: "{}".format(get_leaf_counts(t, i)) for i in range(len(ts.tables.nodes))}
+    print(t.draw(format="unicode", node_labels=lcmap))
 
 Children and siblings
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -141,7 +147,8 @@ these the left and right children, respectively, of node 15.
             return "{}->NULL".format(i)
         return "{}->".format(i) + str((lc, rc))
 
-    cmap = {i:get_children(t,i) for i in range(len(ts.tables.nodes))}
+
+    cmap = {i: get_children(t, i) for i in range(len(ts.tables.nodes))}
     print(t.draw(format="unicode", node_labels=cmap))
 
 Likewise, we may look at the sibling relationships amongst nodes:
@@ -155,7 +162,9 @@ Likewise, we may look at the sibling relationships amongst nodes:
             return "{}->NULL".format(i)
         return "{}->".format(i) + str((ls, rs))
 
-    smap = {i:get_sibs(t,i) for i in range(len(ts.tables.nodes))}
+.. ipython:: python
+
+    smap = {i: get_sibs(t, i) for i in range(len(ts.tables.nodes))}
     print(t.draw(format="unicode", node_labels=smap))
 
 Multiply-linked lists

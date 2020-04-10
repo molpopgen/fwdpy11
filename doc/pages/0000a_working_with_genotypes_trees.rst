@@ -58,17 +58,20 @@ We may obtain the genotypes for the samples all at once using the following func
 
 .. ipython:: python
 
-   dm = fwdpy11.data_matrix_from_tables(pop.tables, [i for i in range(50)],
-                                        record_neutral=False,
-                                        record_selected=True,
-                                        include_fixations=True)
+   dm = fwdpy11.data_matrix_from_tables(
+       pop.tables,
+       [i for i in range(50)],
+       record_neutral=False,
+       record_selected=True,
+       include_fixations=True,
+   )
    selected_sfs_from_matrix = np.zeros(50)
    # Get the row sums, which are the DAF
    # for each site
    rc = np.sum(dm.selected, axis=1)
    n, c = np.unique(rc, return_counts=True)
    for i, j in zip(n, c):
-       selected_sfs_from_matrix[i-1] = j
+       selected_sfs_from_matrix[i - 1] = j
    assert np.array_equal(selected_sfs, selected_sfs_from_matrix)
 
 Notes:
@@ -91,12 +94,17 @@ the previous example, and tests that the data are identical:
     windows = [(0, 0.25), (0.75, 1.0)]
     selected_genotypes = np.array(dm.selected)
     p = np.array(dm.selected.positions)
-    dmi = fwdpy11.DataMatrixIterator(pop.tables,
-                                    [i for i in range(50)], windows,
-                                    neutral=False, selected=True, fixations=True)
-    for i,j in zip(dmi, windows):
+    dmi = fwdpy11.DataMatrixIterator(
+        pop.tables,
+        [i for i in range(50)],
+        windows,
+        neutral=False,
+        selected=True,
+        fixations=True,
+    )
+    for i, j in zip(dmi, windows):
         idx = np.where((p >= j[0]) & (p < j[1]))[0]
-        slice = selected_genotypes[idx,:] 
+        slice = selected_genotypes[idx, :]
         assert np.array_equal(i.selected, slice)
 
 Tree traversal

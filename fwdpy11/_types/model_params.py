@@ -53,6 +53,7 @@ class ModelParams(object):
 
     def _set_demography(self, value):
         from fwdpy11 import DiscreteDemography
+
         if isinstance(value, DiscreteDemography):
             return value
 
@@ -231,10 +232,12 @@ class ModelParams(object):
             raise TypeError("rates cannot be None")
         if self.rates[1] > 0 and len(self.sregions) == 0:
             raise ValueError(
-                "mutation rate to selected variants is > 0 but no Sregions are defined")
+                "mutation rate to selected variants is > 0 but no Sregions are defined"
+            )
         if self.rates[0] > 0 and len(self.nregions) == 0:
             raise ValueError(
-                "mutation rate to neutral variants is > 0 but no Regions are defined")
+                "mutation rate to neutral variants is > 0 but no Regions are defined"
+            )
         if self.simlen is None or self.simlen < 0:
             raise ValueError("simlen cannot be none or < 0")
         # Added in 0.7.0
@@ -243,14 +246,16 @@ class ModelParams(object):
                 if s.shape != self.gvalue.shape:
                     e = "Sregion and genetic value "
                     "dimension mismatch: {} {}, {} {}".format(
-                        type(s), s.shape, type(self.gvalue), self.gvalue.shape)
+                        type(s), s.shape, type(self.gvalue), self.gvalue.shape
+                    )
                     raise ValueError(e)
             except:  # NOQA
                 for g in self.gvalue:
                     if s.shape != g.shape:
                         e = "Sregion and genetic value "
                         "dimension mismatch: {} {}, {} {}".format(
-                            type(s), s.shape, type(self.gvalue), self.gvalue.shape)
+                            type(s), s.shape, type(self.gvalue), self.gvalue.shape
+                        )
                         raise ValueError(e)
         # if self.rates[2] > 0 and len(self.recregions) == 0:
         #     raise ValueError("recombination rate is > 0 but no Regions are defined")

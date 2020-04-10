@@ -1,6 +1,6 @@
 import unittest
-import pickling_composed_classes as PC
 
+import pickling_composed_classes as PC
 
 class testPickleComposedClass(unittest.TestCase):
     @classmethod
@@ -10,6 +10,7 @@ class testPickleComposedClass(unittest.TestCase):
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.C, -1)
         up = pickle.loads(p)
         self.assertEqual(type(up), type(self.C))

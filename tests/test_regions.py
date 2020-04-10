@@ -1,10 +1,12 @@
 # Unit tests for fwdpy11.regions
 
-import fwdpy11
-import numpy as np
-import unittest
 import pickle
+import unittest
+
+import numpy as np
+
 import call_Sregion
+import fwdpy11
 
 # Choose global values that differ from default values in Python class constructors
 BEG, END, WEIGHT, DOM, LABEL, COUPLED = 0.0, 1.0, 0.5, 0.5, 63, False
@@ -88,18 +90,17 @@ class testGammaS(unittest.TestCase):
 
     def testBadShape(self):
         with self.assertRaises(ValueError):
-            fwdpy11.GammaS(0, 1, 1, mean=1., shape=np.nan)
+            fwdpy11.GammaS(0, 1, 1, mean=1.0, shape=np.nan)
 
     def testBadDominance(self):
         with self.assertRaises(ValueError):
-            fwdpy11.GammaS(0, 1, 1, mean=1., shape=1., h=np.nan)
+            fwdpy11.GammaS(0, 1, 1, mean=1.0, shape=1.0, h=np.nan)
 
 
 class test_PickleGammaS(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.r = fwdpy11.GammaS(BEG, END, WEIGHT,
-                                -0.2, 0.5, DOM, COUPLED, LABEL)
+        self.r = fwdpy11.GammaS(BEG, END, WEIGHT, -0.2, 0.5, DOM, COUPLED, LABEL)
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -125,14 +126,13 @@ class testUniformS(unittest.TestCase):
 
     def testBadDominance(self):
         with self.assertRaises(ValueError):
-            fwdpy11.UniformS(0, 1, 1, lo=1., hi=1., h=np.nan)
+            fwdpy11.UniformS(0, 1, 1, lo=1.0, hi=1.0, h=np.nan)
 
 
 class test_PickleUniformS(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.r = fwdpy11.UniformS(BEG, END, WEIGHT,
-                                  -0.2, 0.5, DOM, COUPLED, LABEL)
+        self.r = fwdpy11.UniformS(BEG, END, WEIGHT, -0.2, 0.5, DOM, COUPLED, LABEL)
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -164,8 +164,7 @@ class testGaussianS(unittest.TestCase):
 class test_PickleGaussianS(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.r = fwdpy11.GaussianS(BEG, END, WEIGHT,
-                                   0.5, DOM, COUPLED, LABEL)
+        self.r = fwdpy11.GaussianS(BEG, END, WEIGHT, 0.5, DOM, COUPLED, LABEL)
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -192,8 +191,7 @@ class testConstantS(unittest.TestCase):
 class test_PickleConstantS(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.r = fwdpy11.ConstantS(BEG, END, WEIGHT,
-                                   0.5, DOM, COUPLED, LABEL)
+        self.r = fwdpy11.ConstantS(BEG, END, WEIGHT, 0.5, DOM, COUPLED, LABEL)
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -210,8 +208,11 @@ class test_PickleConstantS(unittest.TestCase):
 class Test_mvDES(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.r = fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
-            0, 1, 1, -0.1)], np.zeros(2), np.identity(2))
+        self.r = fwdpy11.mvDES(
+            [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.1)],
+            np.zeros(2),
+            np.identity(2),
+        )
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -222,8 +223,11 @@ class Test_mvDES(unittest.TestCase):
 
     def test_bad_init_1(self):
         with self.assertRaises(ValueError):
-            fwdpy11.mvDES([fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(
-                0, 1, 1, -0.1)], np.zeros(3), np.identity(2))
+            fwdpy11.mvDES(
+                [fwdpy11.ExpS(0, 1, 1, 0.1), fwdpy11.ExpS(0, 1, 1, -0.1)],
+                np.zeros(3),
+                np.identity(2),
+            )
 
     def test_mvLogNormalS(self):
         try:
@@ -266,8 +270,10 @@ class testMutationRegions(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.nregions = [fwdpy11.Region(0, 1, 1)]
-        self.sregions = [fwdpy11.ConstantS(
-            0, 1, 1, -0.1, 0.25), fwdpy11.ExpS(0, 1, 0.001, 0.01, 1.0)]
+        self.sregions = [
+            fwdpy11.ConstantS(0, 1, 1, -0.1, 0.25),
+            fwdpy11.ExpS(0, 1, 0.001, 0.01, 1.0),
+        ]
 
     def test_create(self):
         mr = fwdpy11.MutationRegions.create(0.5, self.nregions, self.sregions)  # NOQA
@@ -279,8 +285,7 @@ class testMutationRegions(unittest.TestCase):
 class testMultivariateGaussianEffects(unittest.TestCase):
     def testConstruction(self):
         try:
-            fwdpy11.MultivariateGaussianEffects(
-                0, 1, 1, np.identity(2))
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, np.identity(2))
         except Exception:
             self.fail("Unexpected exception during object construction")
 
@@ -292,22 +297,19 @@ class testMultivariateGaussianEffects(unittest.TestCase):
         # Input matrix has wrong shape:
         m = np.array([-1.0] * 4)
         with self.assertRaises(ValueError):
-            fwdpy11.MultivariateGaussianEffects(
-                0, 1, 1, m)
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, m)
 
     def testInvalidMatrixShape2(self):
         m = np.array([-1.0] * 6).reshape((3, 2))
         with self.assertRaises(ValueError):
-            fwdpy11.MultivariateGaussianEffects(
-                0, 1, 1, m)
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, m)
 
     def testInvalidMatrix(self):
         # This is not a positive-definite covariance
         # matrix:
         m = np.array([-1.0] * 4).reshape((2, 2))
         with self.assertRaises(ValueError):
-            fwdpy11.MultivariateGaussianEffects(
-                0, 1, 1, m)
+            fwdpy11.MultivariateGaussianEffects(0, 1, 1, m)
 
     def testMatrixWithNAN(self):
         m = np.identity(4).reshape((4, 4))
@@ -320,7 +322,8 @@ class test_PickleMultivariateGaussianEffects(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.r = fwdpy11.MultivariateGaussianEffects(
-            BEG, END, WEIGHT, np.identity(2), -0.3, DOM, COUPLED, LABEL)
+            BEG, END, WEIGHT, np.identity(2), -0.3, DOM, COUPLED, LABEL
+        )
 
     def test_pickling(self):
         p = pickle.dumps(self.r, -1)
@@ -330,16 +333,16 @@ class test_PickleMultivariateGaussianEffects(unittest.TestCase):
 
 class testRecombinationRegions(unittest.TestCase):
     def test_create(self):
-        rr = fwdpy11.RecombinationRegions(1e-3,
-                                          [fwdpy11.Region(0, 1, 1),
-                                              fwdpy11.Region(1, 2, 1)])
+        rr = fwdpy11.RecombinationRegions(
+            1e-3, [fwdpy11.Region(0, 1, 1), fwdpy11.Region(1, 2, 1)]
+        )
         self.assertEqual(len(rr.weights), 2)
 
     def test_bad_input(self):
         with self.assertRaises(TypeError):
-            fwdpy11.RecombinationRegions(1e-3,
-                                         [fwdpy11.ExpS(0, 1, 1, -0.2),
-                                          fwdpy11.GaussianS(1, 2, 1, 0.25)])
+            fwdpy11.RecombinationRegions(
+                1e-3, [fwdpy11.ExpS(0, 1, 1, -0.2), fwdpy11.GaussianS(1, 2, 1, 0.25)]
+            )
 
 
 class TestLogNormalS(unittest.TestCase):
@@ -365,16 +368,16 @@ class TestLogNormalS(unittest.TestCase):
 
     def test_call(self):
         m = call_Sregion.call(self.lns, 191)
-        self.assertTrue(m.s >= 0.)
+        self.assertTrue(m.s >= 0.0)
         lns = fwdpy11.LogNormalS(0, 1, 1, 0.1, 2, scaling=-1)
         m = call_Sregion.call(lns, 191)
-        self.assertTrue(m.s <= 0.)
+        self.assertTrue(m.s <= 0.0)
 
 
 class TestMultivariateLogNormalS(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=3., coupled=False)
+        self.lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=3.0, coupled=False)
 
     def test_create(self):
         self.assertEqual(self.lns.b, 0)
@@ -391,18 +394,18 @@ class TestMultivariateLogNormalS(unittest.TestCase):
         self.assertEqual(up.e, 1)
         self.assertEqual(up.w, 1)
         self.assertEqual(up.c, False)
-        self.assertEqual(up.scaling, 3.)
+        self.assertEqual(up.scaling, 3.0)
         self.assertTrue(np.isnan(up.zeta))
         self.assertTrue(np.isnan(up.sigma))
 
     def test_call(self):
         mv = fwdpy11.mvDES(self.lns, np.zeros(2), np.identity(2))
         m = call_Sregion.call(mv, 191)
-        self.assertTrue(np.all(m.esizes >= 0.))
+        self.assertTrue(np.all(m.esizes >= 0.0))
         lns = fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-1)
         mv = fwdpy11.mvDES(lns, np.zeros(2), np.identity(2))
         m = call_Sregion.call(mv, 191)
-        self.assertTrue(np.all(m.esizes <= 0.))
+        self.assertTrue(np.all(m.esizes <= 0.0))
 
 
 class testPoissonInterval(unittest.TestCase):
@@ -447,7 +450,7 @@ class testFixedCrossovers(unittest.TestCase):
 class testPoissonPoint(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.pi = fwdpy11.PoissonPoint(1., 0.5)
+        self.pi = fwdpy11.PoissonPoint(1.0, 0.5)
 
     def test_pickling(self):
         p = pickle.dumps(self.pi)
@@ -459,13 +462,14 @@ class testPoissonPoint(unittest.TestCase):
 class testBinomialPoint(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.pi = fwdpy11.BinomialPoint(1., 0.5)
+        self.pi = fwdpy11.BinomialPoint(1.0, 0.5)
 
     def test_pickling(self):
         p = pickle.dumps(self.pi)
         up = pickle.loads(p)
         self.assertEqual(up.position, self.pi.position)
         self.assertEqual(up.probability, self.pi.probability)
+
 
 # class test_Region_repr(unittest.TestCase):
 #     @classmethod

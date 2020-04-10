@@ -19,15 +19,16 @@
 
 import unittest
 
-
 class testNoNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
+
         self.n = fwdpy11.NoNoise()
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.n, -1)
         up = pickle.loads(p)
         self.assertEqual(type(up), type(self.n))
@@ -37,10 +38,12 @@ class testNoNoisePackageAlias(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11 as fancyname
+
         self.n = fancyname.NoNoise()
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.n, -1)
         up = pickle.loads(p)
         self.assertEqual(type(up), type(self.n))
@@ -50,13 +53,14 @@ class testGaussianNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
+
         self.sd = 1.0
         self.mean = 0.0
-        self.n = fwdpy11.GaussianNoise(
-            sd=self.sd, mean=self.mean)
+        self.n = fwdpy11.GaussianNoise(sd=self.sd, mean=self.mean)
 
     def testPickle(self):
         import pickle
+
         p = pickle.dumps(self.n, -1)
         up = pickle.loads(p)
         self.assertEqual(up.sd, self.sd)

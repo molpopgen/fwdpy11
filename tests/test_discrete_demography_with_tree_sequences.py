@@ -17,22 +17,22 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import unittest
-import fwdpy11
-import numpy as np
 from collections import namedtuple
 
+import numpy as np
+
+import fwdpy11
 
 def validate_alive_node_metadata(pop):
     nodes = np.array(pop.tables.nodes, copy=False)
     for md in pop.diploid_metadata:
         for i in [0, 1]:
-            if md.deme != nodes['deme'][md.nodes[i]]:
+            if md.deme != nodes["deme"][md.nodes[i]]:
                 return False
     return True
 
 
-IndividualLocation = namedtuple(
-    "IndividualLocation", ['generation', 'label', 'deme'])
+IndividualLocation = namedtuple("IndividualLocation", ["generation", "label", "deme"])
 
 
 class WhoWhereWhen(object):
@@ -45,18 +45,21 @@ class WhoWhereWhen(object):
         for i in range(len(pop.diploids)):
             if i != pop.diploid_metadata[i].label:
                 raise RuntimeError("index does not equal metadata label value")
-            self.data.append(IndividualLocation(
-                pop.generation, i, pop.diploid_metadata[i].deme))
+            self.data.append(
+                IndividualLocation(pop.generation, i, pop.diploid_metadata[i].deme)
+            )
 
 
 class TestConstantPopulationSize(unittest.TestCase):
     """
     This tests the absence of demographic events.
     """
+
     @classmethod
     def setUp(self):
         from test_demographic_models import setup_pop_rng
         from test_demographic_models import setup_pdict
+
         d = fwdpy11.DiscreteDemography()
         self.pop, self.rng = setup_pop_rng()
         self.pdict = setup_pdict(d, 10)
@@ -74,24 +77,25 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
     Basically doing the same tests
     as test_discrete_demography.TestDiscreteDemography
     """
+
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(644611)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.)
-        self.pdict = {'nregions': [],
-                      'sregions': [],
-                      'recregions': [],
-                      'rates': (0, 0, 0),
-                      'demography': None,
-                      'simlen': 1,
-                      'gvalue': fwdpy11.Additive(2.)
-                      }
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0),
+            "demography": None,
+            "simlen": 1,
+            "gvalue": fwdpy11.Additive(2.0),
+        }
 
     def test_simple_moves_from_single_deme(self):
-        d = fwdpy11.DiscreteDemography(
-            [fwdpy11.move_individuals(1, 0, 1, 0.5)])
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 2
+        d = fwdpy11.DiscreteDemography([fwdpy11.move_individuals(1, 0, 1, 0.5)])
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 2
         params = fwdpy11.ModelParams(**self.pdict)
         w = WhoWhereWhen()
         fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
@@ -102,7 +106,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
         # Validate the parents (inefficiently...)
-        pdata = [i for i in w.data if i.generation == self.pop.generation-1]
+        pdata = [i for i in w.data if i.generation == self.pop.generation - 1]
         self.assertEqual(len(set(pdata)), self.pop.N)
         parents_deme_0 = set()
         parents_deme_1 = set()
@@ -119,10 +123,9 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertEqual(len(parents_deme_1.intersection(parents_deme_0)), 0)
 
     def test_simple_copies_from_single_deme(self):
-        d = fwdpy11.DiscreteDemography(
-            [fwdpy11.copy_individuals(1, 0, 1, 0.5)])
-        self.pdict['simlen'] = 2
-        self.pdict['demography'] = d
+        d = fwdpy11.DiscreteDemography([fwdpy11.copy_individuals(1, 0, 1, 0.5)])
+        self.pdict["simlen"] = 2
+        self.pdict["demography"] = d
         params = fwdpy11.ModelParams(**self.pdict)
         w = WhoWhereWhen()
         fwdpy11.evolvets(self.rng, self.pop, params, 100, w)
@@ -132,7 +135,7 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
         # Validate the parents (inefficiently...)
-        pdata = [i for i in w.data if i.generation == self.pop.generation-1]
+        pdata = [i for i in w.data if i.generation == self.pop.generation - 1]
         self.assertEqual(len(set([i.label for i in pdata])), 100)
         parents_deme_0 = set()
         parents_deme_1 = set()
@@ -150,11 +153,14 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_back_and_forth_move(self):
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.move_individuals(1, 0, 1, 0.5),
-             fwdpy11.move_individuals(2, 1, 0, 1.)])
+            [
+                fwdpy11.move_individuals(1, 0, 1, 0.5),
+                fwdpy11.move_individuals(2, 1, 0, 1.0),
+            ]
+        )
 
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 3
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         deme_sizes = self.pop.deme_sizes()
@@ -165,11 +171,14 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_back_and_forth_copy(self):
         d = fwdpy11.DiscreteDemography(
-            [fwdpy11.copy_individuals(1, 0, 1, 0.5),
-             fwdpy11.copy_individuals(2, 1, 0, 1.)])
+            [
+                fwdpy11.copy_individuals(1, 0, 1, 0.5),
+                fwdpy11.copy_individuals(2, 1, 0, 1.0),
+            ]
+        )
 
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 3
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -179,12 +188,13 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_moves_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
-        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.0)
         # In generation 0, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
         d = fwdpy11.DiscreteDemography(
-            mass_migrations=[fwdpy11.move_individuals(0, 1, 2, 0.5)])
-        self.pdict['demography'] = d
+            mass_migrations=[fwdpy11.move_individuals(0, 1, 2, 0.5)]
+        )
+        self.pdict["demography"] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         # We now expect 50, 25, and 25 individuals in
@@ -198,12 +208,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_simple_copies_from_multiple_demes(self):
         # Set 1/2 the population to start in deme 1:
-        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.0)
         # In generation 0, we move 1/2 of deme 1 to
         # deme 2, which creates a new deme:
-        d = fwdpy11.DiscreteDemography(
-            [fwdpy11.copy_individuals(0, 1, 2, 0.5)])
-        self.pdict['demography'] = d
+        d = fwdpy11.DiscreteDemography([fwdpy11.copy_individuals(0, 1, 2, 0.5)])
+        self.pdict["demography"] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         # We now expect 50, 50, and 25 individuals in
@@ -218,11 +227,11 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
     def test_single_deme_growth(self):
         N1 = 3412
         t = 111
-        G = np.exp((np.log(N1)-np.log(self.pop.N))/t)
+        G = np.exp((np.log(N1) - np.log(self.pop.N)) / t)
         g = [fwdpy11.SetExponentialGrowth(16, 0, G)]
         d = fwdpy11.DiscreteDemography(set_growth_rates=g)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 15+t+1
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 15 + t + 1
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.N, N1)
@@ -231,20 +240,20 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth(self):
         N0 = [90, 10]
-        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.0)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
-        G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
-        G1 = np.exp((np.log(N1[1])-np.log(N0[1]))/t[1])
+        G0 = np.exp((np.log(N1[0]) - np.log(N0[0])) / t[0])
+        G1 = np.exp((np.log(N1[1]) - np.log(N0[1])) / t[1])
 
         g = []
         g.append(fwdpy11.SetExponentialGrowth(7, 0, G0))
-        g.append(fwdpy11.SetExponentialGrowth(7+t[0], 0, fwdpy11.NOGROWTH))
+        g.append(fwdpy11.SetExponentialGrowth(7 + t[0], 0, fwdpy11.NOGROWTH))
         g.append(fwdpy11.SetExponentialGrowth(33, 1, G1))
-        g.append(fwdpy11.SetExponentialGrowth(33+t[1], 1, fwdpy11.NOGROWTH))
+        g.append(fwdpy11.SetExponentialGrowth(33 + t[1], 1, fwdpy11.NOGROWTH))
         d = fwdpy11.DiscreteDemography(set_growth_rates=g)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 100
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 100
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
@@ -257,23 +266,22 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth_with_hard_reset(self):
         N0 = [90, 10]
-        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.0)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
-        G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
-        G1 = np.exp((np.log(N1[1])-np.log(N0[1]))/t[1])
+        G0 = np.exp((np.log(N1[0]) - np.log(N0[0])) / t[0])
+        G1 = np.exp((np.log(N1[1]) - np.log(N0[1])) / t[1])
 
         g = []
         g.append(fwdpy11.SetExponentialGrowth(7, 0, G0))
         g.append(fwdpy11.SetExponentialGrowth(33, 1, G1))
-        g.append(fwdpy11.SetExponentialGrowth(33+t[1], 1, fwdpy11.NOGROWTH))
+        g.append(fwdpy11.SetExponentialGrowth(33 + t[1], 1, fwdpy11.NOGROWTH))
         # Cut off the growth in deme 0 after a few generations,
         # and manually set the new deme size to 100 w/no growth
         p = [fwdpy11.SetDemeSize(11, 0, 100)]
-        d = fwdpy11.DiscreteDemography(set_deme_sizes=p,
-                                       set_growth_rates=g)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 100
+        d = fwdpy11.DiscreteDemography(set_deme_sizes=p, set_growth_rates=g)
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 100
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
@@ -286,30 +294,29 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
 
     def test_two_deme_growth_without_hard_reset(self):
         N0 = [90, 10]
-        self.pop = fwdpy11.DiploidPopulation(N0, 1.)
+        self.pop = fwdpy11.DiploidPopulation(N0, 1.0)
         t = [14, 23]  # generations of growth in each deme
         N1 = [5361, 616]
-        G0 = np.exp((np.log(N1[0])-np.log(N0[0]))/t[0])
-        G1 = np.exp((np.log(N1[1])-np.log(N0[1]))/t[1])
+        G0 = np.exp((np.log(N1[0]) - np.log(N0[0])) / t[0])
+        G1 = np.exp((np.log(N1[1]) - np.log(N0[1])) / t[1])
 
         g = []
         g.append(fwdpy11.SetExponentialGrowth(7, 0, G0))
-        g.append(fwdpy11.SetExponentialGrowth(7+t[0], 0, fwdpy11.NOGROWTH))
+        g.append(fwdpy11.SetExponentialGrowth(7 + t[0], 0, fwdpy11.NOGROWTH))
         g.append(fwdpy11.SetExponentialGrowth(33, 1, G1))
-        g.append(fwdpy11.SetExponentialGrowth(33+t[1], 1, fwdpy11.NOGROWTH))
+        g.append(fwdpy11.SetExponentialGrowth(33 + t[1], 1, fwdpy11.NOGROWTH))
         # after X generations of growth, N[0] changes to 100
         # and the growth rate is not reset.
         p = [fwdpy11.SetDemeSize(11, 0, 100, False)]
-        d = fwdpy11.DiscreteDemography(set_growth_rates=g,
-                                       set_deme_sizes=p)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 100
+        d = fwdpy11.DiscreteDemography(set_growth_rates=g, set_deme_sizes=p)
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 100
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
         md = np.array(self.pop.diploid_metadata, copy=False)
         deme_sizes = self.pop.deme_sizes()
-        N1[0] = np.round(100.*np.power(G0, 7 + t[0] - 11))
+        N1[0] = np.round(100.0 * np.power(G0, 7 + t[0] - 11))
         self.assertEqual(self.pop.N, sum(N1))
         for i, j in zip(deme_sizes[1], N1):
             self.assertEqual(i, j)
@@ -323,14 +330,16 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         1 and 2 both equal to 0.5 the initial
         size.
         """
-        m = [fwdpy11.move_individuals(0, 0, 2, 0.5),
-             fwdpy11.move_individuals(0, 0, 1, 0.5)]
+        m = [
+            fwdpy11.move_individuals(0, 0, 2, 0.5),
+            fwdpy11.move_individuals(0, 0, 1, 0.5),
+        ]
         d = fwdpy11.DiscreteDemography(m)
         N0 = self.pop.N
-        self.pdict['demography'] = d
+        self.pdict["demography"] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        expected = {0: 0, 1: N0//2, 2: N0//2}
+        expected = {0: 0, 1: N0 // 2, 2: N0 // 2}
         deme_sizes = self.pop.deme_sizes()
         for i, j in zip(deme_sizes[0], deme_sizes[1]):
             self.assertEqual(expected[i], j)
@@ -348,15 +357,17 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         the initial size and the size of demes 2 and 3
         should be 0.5*initial size
         """
-        m = [fwdpy11.move_individuals(0, 0, 3, 0.5),
-             fwdpy11.copy_individuals(0, 0, 1, 1),
-             fwdpy11.move_individuals(0, 0, 2, 0.5)]
+        m = [
+            fwdpy11.move_individuals(0, 0, 3, 0.5),
+            fwdpy11.copy_individuals(0, 0, 1, 1),
+            fwdpy11.move_individuals(0, 0, 2, 0.5),
+        ]
         d = fwdpy11.DiscreteDemography(m)
         N0 = self.pop.N
-        self.pdict['demography'] = d
+        self.pdict["demography"] = d
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
-        expected = {0: 0, 1: N0, 2: N0//2, 3: N0//2}
+        expected = {0: 0, 1: N0, 2: N0 // 2, 3: N0 // 2}
         deme_sizes = self.pop.deme_sizes()
         for i, j in zip(deme_sizes[0], deme_sizes[1]):
             self.assertEqual(expected[i], j)
@@ -375,13 +386,13 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         g = [fwdpy11.SetExponentialGrowth(0, 0, 1.1)]
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_growth_rates=g)
         N0 = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         deme_sizes = self.pop.deme_sizes()
-        N5 = np.round(N0*np.power(g[0].G, 5))
-        N_after_mass_mig = [N5//2, N5-N5//2]
+        N5 = np.round(N0 * np.power(g[0].G, 5))
+        N_after_mass_mig = [N5 // 2, N5 - N5 // 2]
         for i, j in zip(deme_sizes[1], N_after_mass_mig):
             self.assertEqual(i, j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -394,14 +405,14 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
         g = [fwdpy11.SetExponentialGrowth(0, 0, 1.1)]
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_growth_rates=g)
         N0 = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         deme_sizes = self.pop.deme_sizes()
-        N5 = np.round(N0*np.power(g[0].G, 5))
-        N_after_mass_mig_0 = np.round((N5//2)*np.power(g[0].G, 5))
-        N = [N_after_mass_mig_0, N5 - N5//2]
+        N5 = np.round(N0 * np.power(g[0].G, 5))
+        N_after_mass_mig_0 = np.round((N5 // 2) * np.power(g[0].G, 5))
+        N = [N_after_mass_mig_0, N5 - N5 // 2]
         for i, j in zip(N, deme_sizes[1]):
             self.assertEqual(i, j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -411,21 +422,22 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(42)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.)
-        self.pdict = {'nregions': [],
-                      'sregions': [],
-                      'recregions': [],
-                      'rates': (0, 0, 0),
-                      'demography': None,
-                      'simlen': 1,
-                      'gvalue': fwdpy11.Additive(2.)
-                      }
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0),
+            "demography": None,
+            "simlen": 1,
+            "gvalue": fwdpy11.Additive(2.0),
+        }
 
     def test_global_extinction_single_deme(self):
         ds = [fwdpy11.SetDemeSize(4, 0, 0)]
         d = fwdpy11.DiscreteDemography(set_deme_sizes=ds)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.GlobalExtinction):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -433,15 +445,14 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
         self.assertEqual(self.pop.N, 100)
         self.assertEqual(self.pop.generation, 4)
         nodes = np.array(self.pop.tables.nodes)
-        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 4))
+        self.assertTrue(np.all(nodes["time"][self.pop.alive_nodes] == 4))
 
     def test_no_valid_parents(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
-        d = fwdpy11.DiscreteDemography(mass_migrations=m,
-                                       set_deme_sizes=s)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -450,8 +461,8 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
         m = [fwdpy11.copy_individuals(0, 0, 1, 1.0)]
         s = [fwdpy11.SetDemeSize(0, 0, 0), fwdpy11.SetDemeSize(2, 0, 100)]
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -459,12 +470,10 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
     def test_no_valid_parents_with_migration(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
-        M = np.array([0.5]*4).reshape(2, 2)
-        d = fwdpy11.DiscreteDemography(mass_migrations=m,
-                                       set_deme_sizes=s,
-                                       migmatrix=M)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        M = np.array([0.5] * 4).reshape(2, 2)
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s, migmatrix=M)
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -472,15 +481,13 @@ class TestSimpleDemeSizeChanges(unittest.TestCase):
     def test_no_valid_parents_with_migration_2(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
-        M = np.array([0.5]*4).reshape(2, 2)
-        cM = [fwdpy11.SetMigrationRates(
-            0, np.array([0, 1, 0, 1]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=m,
-                                       set_deme_sizes=s,
-                                       set_migration_rates=cM,
-                                       migmatrix=M)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 10
+        M = np.array([0.5] * 4).reshape(2, 2)
+        cM = [fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=m, set_deme_sizes=s, set_migration_rates=cM, migmatrix=M
+        )
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 10
         params = fwdpy11.ModelParams(**self.pdict)
         try:
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -492,29 +499,30 @@ class TestSimpleMigrationModels(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(42)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.)
-        self.pdict = {'nregions': [],
-                      'sregions': [],
-                      'recregions': [],
-                      'rates': (0, 0, 0),
-                      'demography': None,
-                      'simlen': 1,
-                      'gvalue': fwdpy11.Additive(2.)
-                      }
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0),
+            "demography": None,
+            "simlen": 1,
+            "gvalue": fwdpy11.Additive(2.0),
+        }
 
     def test_simple_two_deme_migration(self):
-        mm = np.array([0.5]*4).reshape(2, 2)
-        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.)
+        mm = np.array([0.5] * 4).reshape(2, 2)
+        self.pop = fwdpy11.DiploidPopulation([50, 50], 1.0)
         d = fwdpy11.DiscreteDemography(migmatrix=mm)
         N = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 5
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(N, self.pop.N)
         deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
-            self.assertEqual(i, self.pop.N//2)
+            self.assertEqual(i, self.pop.N // 2)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_change_migration_rates_simple_two_deme_migration(self):
@@ -531,19 +539,19 @@ class TestSimpleMigrationModels(unittest.TestCase):
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(
-            3, np.array([1, 0, 1, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
-                                       set_migration_rates=smr)
+        smr = [fwdpy11.SetMigrationRates(3, np.array([1, 0, 1, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=mmigs, migmatrix=mm, set_migration_rates=smr
+        )
         N = self.pop.N
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 5
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(N, self.pop.N)
         deme_sizes = self.pop.deme_sizes()
         for i in deme_sizes[1]:
-            self.assertEqual(i, self.pop.N//2)
+            self.assertEqual(i, self.pop.N // 2)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
     def test_change_migration_rates_simple_two_deme_migration_bad_matrix(self):
@@ -561,12 +569,12 @@ class TestSimpleMigrationModels(unittest.TestCase):
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(
-            3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
-        d = fwdpy11.DiscreteDemography(mass_migrations=mmigs, migmatrix=mm,
-                                       set_migration_rates=smr)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
+        smr = [fwdpy11.SetMigrationRates(3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=mmigs, migmatrix=mm, set_migration_rates=smr
+        )
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 5
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.DemographyError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -584,9 +592,10 @@ class TestSimpleMigrationModels(unittest.TestCase):
         s = [fwdpy11.SetSelfingRate(0, 1, 1.0)]
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
         d = fwdpy11.DiscreteDemography(
-            mass_migrations=mmigs, migmatrix=mm, set_selfing_rates=s)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
+            mass_migrations=mmigs, migmatrix=mm, set_selfing_rates=s
+        )
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 5
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertTrue(validate_alive_node_metadata(self.pop))
@@ -596,15 +605,16 @@ class TestGrowthModels(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(42)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.)
-        self.pdict = {'nregions': [],
-                      'sregions': [],
-                      'recregions': [],
-                      'rates': (0, 0, 0),
-                      'demography': None,
-                      'simlen': 1,
-                      'gvalue': fwdpy11.Additive(2.)
-                      }
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0),
+            "demography": None,
+            "simlen": 1,
+            "gvalue": fwdpy11.Additive(2.0),
+        }
 
     def test_global_extinction_single_deme(self):
         """
@@ -613,24 +623,25 @@ class TestGrowthModels(unittest.TestCase):
         """
         g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
         d = fwdpy11.DiscreteDemography(set_growth_rates=g)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 20
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 20
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(fwdpy11.GlobalExtinction):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.generation, 7)
 
         nodes = np.array(self.pop.tables.nodes)
-        self.assertTrue(np.all(nodes['time'][self.pop.alive_nodes] == 7))
+        self.assertTrue(np.all(nodes["time"][self.pop.alive_nodes] == 7))
 
     def test_shrink_to_zero_then_recolonize(self):
-        m = [fwdpy11.copy_individuals(0, 0, 1, 1.0),
-             fwdpy11.copy_individuals(10, 1, 0, 1.0)]
+        m = [
+            fwdpy11.copy_individuals(0, 0, 1, 1.0),
+            fwdpy11.copy_individuals(10, 1, 0, 1.0),
+        ]
         g = [fwdpy11.SetExponentialGrowth(0, 0, 0.5)]
-        d = fwdpy11.DiscreteDemography(mass_migrations=m,
-                                       set_growth_rates=g)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 20
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_growth_rates=g)
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 20
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -643,42 +654,47 @@ class TestGeneticValueLists(unittest.TestCase):
     when the number of genetic value objects
     are out of whack vis-a-vis the demography.
     """
+
     @classmethod
     def setUp(self):
         self.rng = fwdpy11.GSLrng(42)
-        self.pop = fwdpy11.DiploidPopulation(100, 1.)
-        self.pdict = {'nregions': [],
-                      'sregions': [],
-                      'recregions': [],
-                      'rates': (0, 0, 0),
-                      'demography': None,
-                      'simlen': 1,
-                      'gvalue': fwdpy11.Additive(2.)
-                      }
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+        self.pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0, 0, 0),
+            "demography": None,
+            "simlen": 1,
+            "gvalue": fwdpy11.Additive(2.0),
+        }
 
     def test_too_many(self):
-        self.pdict['demography'] = np.array([self.pop.N]*10, dtype=np.uint32)
-        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2
+        self.pdict["demography"] = np.array([self.pop.N] * 10, dtype=np.uint32)
+        self.pdict["gvalue"] = [fwdpy11.Additive(2.0)] * 2
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(ValueError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
     def test_too_few(self):
-        mmigs = [fwdpy11.move_individuals(
-            0, 0, 1, 1./3.), fwdpy11.move_individuals(0, 0, 2, 1./3.)]
+        mmigs = [
+            fwdpy11.move_individuals(0, 0, 1, 1.0 / 3.0),
+            fwdpy11.move_individuals(0, 0, 2, 1.0 / 3.0),
+        ]
         d = fwdpy11.DiscreteDemography(mass_migrations=mmigs)
-        self.pdict['demography'] = d
-        self.pdict['simlen'] = 5
-        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2  # This is the error
+        self.pdict["demography"] = d
+        self.pdict["simlen"] = 5
+        self.pdict["gvalue"] = [fwdpy11.Additive(2.0)] * 2  # This is the error
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(ValueError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
 
     def test_too_few_alt_method(self):
         self.pop = fwdpy11.DiploidPopulation(
-            [0, self.pop.N//3, 2*self.pop.N//3], 1)
-        self.pdict['demography'] = np.array([self.pop.N]*100, dtype=np.uint32)
-        self.pdict['gvalue'] = [fwdpy11.Additive(2.0)]*2  # This is the error
+            [0, self.pop.N // 3, 2 * self.pop.N // 3], 1
+        )
+        self.pdict["demography"] = np.array([self.pop.N] * 100, dtype=np.uint32)
+        self.pdict["gvalue"] = [fwdpy11.Additive(2.0)] * 2  # This is the error
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(ValueError):
             fwdpy11.evolvets(self.rng, self.pop, params, 100)
@@ -694,8 +710,9 @@ class TestIMModel(unittest.TestCase):
     where we may want to simplify more often during the
     exponential growth phase in order to save memory.
     """
+
     def getG(N0, Nt, t):
-        return np.exp((np.log(Nt) - np.log(N0))/t)
+        return np.exp((np.log(Nt) - np.log(N0)) / t)
 
     @classmethod
     def setUp(self):
@@ -706,38 +723,45 @@ class TestIMModel(unittest.TestCase):
         self.gens_post_split = 5
         self.N0t = 300
         self.N1t = 400
-        G0 = self.getG(self.Nref*(1.-self.psplit), self.N0t, self.gens_post_split)
-        G1 = self.getG(self.Nref*(self.psplit), self.N1t, self.gens_post_split)
+        G0 = self.getG(self.Nref * (1.0 - self.psplit), self.N0t, self.gens_post_split)
+        G1 = self.getG(self.Nref * (self.psplit), self.N1t, self.gens_post_split)
 
         split = [fwdpy11.move_individuals(self.Tsplit, 0, 1, self.psplit)]
-        growth = [fwdpy11.SetExponentialGrowth(self.Tsplit, 0, G0),
-                  fwdpy11.SetExponentialGrowth(self.Tsplit, 1, G1)]
+        growth = [
+            fwdpy11.SetExponentialGrowth(self.Tsplit, 0, G0),
+            fwdpy11.SetExponentialGrowth(self.Tsplit, 1, G1),
+        ]
         m = np.zeros(4).reshape(2, 2)
         m[0, 0] = 1
-        cm = [fwdpy11.SetMigrationRates(self.Tsplit, 0, [0.98, 0.02]),
-              fwdpy11.SetMigrationRates(self.Tsplit, 1, [0.02, 0.98])]
-        d = fwdpy11.DiscreteDemography(mass_migrations=split,
-                                       set_growth_rates=growth,
-                                       set_migration_rates=cm,
-                                       migmatrix=m)
+        cm = [
+            fwdpy11.SetMigrationRates(self.Tsplit, 0, [0.98, 0.02]),
+            fwdpy11.SetMigrationRates(self.Tsplit, 1, [0.02, 0.98]),
+        ]
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=split,
+            set_growth_rates=growth,
+            set_migration_rates=cm,
+            migmatrix=m,
+        )
 
         nregions = []
         sregions = []
         recregions = []
 
-        self.pdict = {'nregions': nregions,
-                      'sregions': sregions,
-                      'recregions': recregions,
-                      'rates': (0, 0, 0),
-                      'gvalue': fwdpy11.Multiplicative(2.),
-                      'demography': d,
-                      'simlen': -1,
-                      'prune_selected': True
-                      }
+        self.pdict = {
+            "nregions": nregions,
+            "sregions": sregions,
+            "recregions": recregions,
+            "rates": (0, 0, 0),
+            "gvalue": fwdpy11.Multiplicative(2.0),
+            "demography": d,
+            "simlen": -1,
+            "prune_selected": True,
+        }
         self.pop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
 
     def test_complete_sim(self):
-        self.pdict['simlen'] = self.Tsplit + self.gens_post_split
+        self.pdict["simlen"] = self.Tsplit + self.gens_post_split
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, params.simlen)
@@ -746,19 +770,18 @@ class TestIMModel(unittest.TestCase):
         self.assertEqual(deme_sizes[1][1], self.N1t)
 
     def test_evolve_in_two_steps(self):
-        self.pdict['simlen'] = self.Tsplit
+        self.pdict["simlen"] = self.Tsplit
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit)
         deme_sizes = self.pop.deme_sizes()
         self.assertEqual(len(deme_sizes[0]), 2)
-        self.assertEqual(deme_sizes[1][0], int((1.-self.psplit)*self.Nref))
+        self.assertEqual(deme_sizes[1][0], int((1.0 - self.psplit) * self.Nref))
 
-        self.pdict['simlen'] = self.gens_post_split
+        self.pdict["simlen"] = self.gens_post_split
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 2)  # Simplify more often
-        self.assertEqual(self.pop.generation,
-                         self.Tsplit + self.gens_post_split)
+        self.assertEqual(self.pop.generation, self.Tsplit + self.gens_post_split)
         deme_sizes = self.pop.deme_sizes()
         self.assertEqual(deme_sizes[1][0], self.N0t)
         self.assertEqual(deme_sizes[1][1], self.N1t)
@@ -768,18 +791,17 @@ class TestIMModel(unittest.TestCase):
         Tests the more complex case of restarting a sim
         when multiple demes are present.
         """
-        self.pdict['simlen'] = self.Tsplit + 3  # Evolve past the split
+        self.pdict["simlen"] = self.Tsplit + 3  # Evolve past the split
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, self.Tsplit + 3)
         deme_sizes = self.pop.deme_sizes()
         self.assertTrue(all([i > 0 for i in deme_sizes[1].tolist()]))
 
-        self.pdict['simlen'] = self.gens_post_split - 3
+        self.pdict["simlen"] = self.gens_post_split - 3
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 2)  # Simplify more often
-        self.assertEqual(self.pop.generation,
-                         self.Tsplit + self.gens_post_split)
+        self.assertEqual(self.pop.generation, self.Tsplit + self.gens_post_split)
         deme_sizes = self.pop.deme_sizes()
         self.assertEqual(deme_sizes[1][0], self.N0t)
         self.assertEqual(deme_sizes[1][1], self.N1t)
@@ -791,7 +813,7 @@ class TestIMModel(unittest.TestCase):
         properly reset when confronted with a "fresh"
         population.
         """
-        self.pdict['simlen'] = self.Tsplit + self.gens_post_split
+        self.pdict["simlen"] = self.Tsplit + self.gens_post_split
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 5)
         self.assertEqual(self.pop.generation, params.simlen)

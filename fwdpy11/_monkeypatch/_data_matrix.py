@@ -19,7 +19,6 @@
 
 import numpy as np
 
-
 def _merge(self):
     """
     Merge the neutral and selected data.
@@ -40,13 +39,12 @@ def _merge(self):
     elif nneutral > 0 and nselected == 0:
         return np.array(self.neutral), self.neutral_keys
 
-    positions = np.concatenate((self.neutral.positions,
-                                self.selected.positions))
+    positions = np.concatenate((self.neutral.positions, self.selected.positions))
     sorted_pos_indexes = np.argsort(positions)
-    merged = np.concatenate(
-        (np.array(self.neutral), np.array(self.selected)), axis=0)
+    merged = np.concatenate((np.array(self.neutral), np.array(self.selected)), axis=0)
     keys = np.concatenate((self.neutral_keys, self.selected_keys))
     return merged[sorted_pos_indexes, :], keys[sorted_pos_indexes]
+
 
 # NOTE: the following two properties only need sorting if
 # the DataMatrix is not generated from a tree sequence.

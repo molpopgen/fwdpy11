@@ -41,7 +41,7 @@ the optimum shift:
 
     # The tuples are (generation, optimum, VS), where
     # VS is the inverse strength of stabilizing selection
-    gssmo = fwdpy11.GSSmo([(0,0,1), (10*N,1,1)]) 
+    gssmo = fwdpy11.GSSmo([(0, 0, 1), (10 * N, 1, 1)])
 
 
 Our `gssmo` variable is an instance of a class that maps genetic values to fitness, and we use it to construct
@@ -74,15 +74,16 @@ preferred method for construction is to "explode" a `dict` containing our parame
 
 .. ipython:: python
 
-    pdict = {'gvalue': additive_gss,
-            'nregions': [],
-            'sregions': [fwdpy11.GaussianS(0, 1, 1, 0.15, 1)],
-            'recregions': [fwdpy11.Region(0,1,1)],
-            'rates': (0.0, MU, RHO/(4*N)),
-            'demography': fwdpy11.DiscreteDemography(),  # No special demographic events
-            'simlen': 10*N + 100,
-            'prune_selected': False
-            }
+    pdict = {
+        "gvalue": additive_gss,
+        "nregions": [],
+        "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.15, 1)],
+        "recregions": [fwdpy11.Region(0, 1, 1)],
+        "rates": (0.0, MU, RHO / (4 * N)),
+        "demography": fwdpy11.DiscreteDemography(),  # No special demographic events
+        "simlen": 10 * N + 100,
+        "prune_selected": False,
+    }
     params = fwdpy11.ModelParams(**pdict)
 
 
@@ -116,15 +117,17 @@ it shows that we can basically do (almost) anything we want here in terms of tim
 
 .. ipython:: python
 
+    # fmt: off
     class Recorder(object):
         def __init__(self, popsize):
             self.gbar = []
             self.individuals = np.arange(popsize, dtype=np.int32)
         def __call__(self, pop, ancient_sampler_recorder):
-            if pop.generation >= 10*pop.N:
+            if pop.generation >= 10 * pop.N:
                 md = np.array(pop.diploid_metadata, copy=False)
-                self.gbar.append((pop.generation, md['g'].mean()))
+                self.gbar.append((pop.generation, md["g"].mean()))
                 ancient_sampler_recorder.assign(self.individuals)
+    # fmt: on
 
 See :ref:`timeseries` for more details about these sorts of types.
 
@@ -175,7 +178,7 @@ and the structured array methods:
 
 .. ipython:: python
 
-    print(alive_metadata['g'].mean(), alive_metadata['g'].var(), alive_metadata['w'].mean())
+    print(alive_metadata["g"].mean(), alive_metadata["g"].var(), alive_metadata["w"].mean())
 
 Next, we will plot the mean trait value over time from the metadata.
 The first thing we may want to take care of is that our metadata for 'alive'
@@ -183,7 +186,7 @@ and for 'ancient' samples are stored separately.  Let's fix that:
 
 .. ipython:: python
 
-    ancient_md = np.array(pop.ancient_sample_metadata, copy = False)
+    ancient_md = np.array(pop.ancient_sample_metadata, copy=False)
     all_md = np.concatenate((ancient_md, alive_metadata))
 
 Combining the metadata resulted in a copy, which you can see in the flags. The new
@@ -202,15 +205,16 @@ the node times associated with our metadata nodes.  We will get these times by c
 
     node_table = np.array(pop.tables.nodes, copy=False)
     print(node_table.dtype)
-    mdtimes = node_table['time'][all_md['nodes'][:,0]]
+    mdtimes = node_table["time"][all_md["nodes"][:, 0]]
 
 Now, it is straightforward to create a `pandas.DataFrame` and aggregate with respect to time:
     
 .. ipython:: python
 
     import pandas as pd
-    df = pd.DataFrame(data={'time':mdtimes, 'g':all_md['g']})
-    df = df.groupby(['time']).mean().reset_index()
+
+    df = pd.DataFrame(data={"time": mdtimes, "g": all_md["g"]})
+    df = df.groupby(["time"]).mean().reset_index()
 
 The plotting is standard, too:
 
@@ -300,13 +304,12 @@ from the tree sequences.
 
 .. ipython:: python
 
-    nmuts = np.zeros(2*pop.N, dtype=np.int32)
+    nmuts = np.zeros(2 * pop.N, dtype=np.int32)
     for i, dip in enumerate(pop.diploids):
         first = pop.haploid_genomes[dip.first].smutations
         second = pop.haploid_genomes[dip.second].smutations
-        nmuts[2*i] = len(first)
-        nmuts[2*i+1] = len(second)
-            
+        nmuts[2 * i] = len(first)
+        nmuts[2 * i + 1] = len(second)
 
 When using the tree sequences for the calculation, note that we have to avoid neutral variants,
 as we added them in above.  We can do so by passing `include_neutral_variants=False` to the constructor
@@ -317,15 +320,15 @@ to the time point of interest, which includes all currently alive nodes:
 
     tables, idmap = fwdpy11.simplify_tables(pop.tables, pop.alive_nodes)
     remapped_samples = idmap[pop.alive_nodes]
-    nmuts_ts = np.zeros(2*pop.N, dtype=np.int32)
-    vi = fwdpy11.VariantIterator(pop.tables,
-                                 remapped_samples,
-                                 include_neutral_variants=False)
+    nmuts_ts = np.zeros(2 * pop.N, dtype=np.int32)
+    vi = fwdpy11.VariantIterator(
+        pop.tables, remapped_samples, include_neutral_variants=False
+    )
     for v in vi:
         g = v.genotypes
         r = v.records[0]
         if pop.mutations[r.key].neutral is False:
             who = np.where(g == 1)[0]
             nmuts_ts[who] += 1
-        
+
     assert np.array_equal(nmuts, nmuts_ts), "Number of mutations error"

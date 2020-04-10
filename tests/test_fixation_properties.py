@@ -24,11 +24,11 @@
 # Instead, we use pybind11 + cppimport to expose the underlying
 # C++ API to Python, create pops manually, and test the API.
 
-import unittest
 import os
-import fwdpy11
-import fixation_properties as fp
+import unittest
 
+import fixation_properties as fp
+import fwdpy11
 
 class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     @classmethod
@@ -39,8 +39,7 @@ class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
         diploids = fwdpy11.DiploidVector()
         mutations.append(fwdpy11.Mutation(0.1, -0.01, 1.0, 0, 0))
         mutations.append(fwdpy11.Mutation(0.2, 0.0, 1.0, 0, 0))
-        gametes.append(fwdpy11.HaploidGenome(
-            (4, [1], [0])))
+        gametes.append(fwdpy11.HaploidGenome((4, [1], [0])))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         diploids.append(fwdpy11.DiploidGenotype(0, 0))
         self.pop = fwdpy11.DiploidPopulation(diploids, gametes, mutations)
@@ -81,45 +80,47 @@ class testFixationPreservation(unittest.TestCase):
     @classmethod
     def setUp(self):
         import numpy as np
+
         N = 1000
-        demography = np.array([N]*10*N, dtype=np.uint32)
-        rho = 1.
-        r = rho/(4*N)
+        demography = np.array([N] * 10 * N, dtype=np.uint32)
+        rho = 1.0
+        r = rho / (4 * N)
 
         a = fwdpy11.Multiplicative(2.0)
-        self.p = {'nregions': [],
-                  'sregions': [fwdpy11.ExpS(0, 1, 1, 0.01)],
-                  'recregions': [fwdpy11.Region(0, 1, 1)],
-                  'rates': (0.0, 0.00005, r),
-                  'gvalue': a,
-                  'demography': demography
-                  }
+        self.p = {
+            "nregions": [],
+            "sregions": [fwdpy11.ExpS(0, 1, 1, 0.01)],
+            "recregions": [fwdpy11.Region(0, 1, 1)],
+            "rates": (0.0, 0.00005, r),
+            "gvalue": a,
+            "demography": demography,
+        }
         self.pop = fwdpy11.DiploidPopulation(N)
-        self.rng = fwdpy11.GSLrng(101*45*110*210)
+        self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
 
     def testPopGenSimWithoutPruning(self):
         import fwdpy11
         import numpy as np
-        self.p['prune_selected'] = False
+
+        self.p["prune_selected"] = False
         params = fwdpy11.ModelParams(**self.p)
         fwdpy11.evolve_genomes(self.rng, self.pop, params)
-        assert len(
-            self.pop.fixations) > 0, "Test is meaningless without fixations"
+        assert len(self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)
-        self.assertEqual(len(np.where(mc == 2*self.pop.N)
-                             [0]), len(self.pop.fixations))
+        self.assertEqual(
+            len(np.where(mc == 2 * self.pop.N)[0]), len(self.pop.fixations)
+        )
 
     def testPopGenSimWithPruning(self):
         import fwdpy11
         import numpy as np
-        self.p['prune_selected'] = True
+
+        self.p["prune_selected"] = True
         params = fwdpy11.ModelParams(**self.p)
         fwdpy11.evolve_genomes(self.rng, self.pop, params)
-        assert len(
-            self.pop.fixations) > 0, "Test is meaningless without fixations"
+        assert len(self.pop.fixations) > 0, "Test is meaningless without fixations"
         mc = np.array(self.pop.mcounts)
-        self.assertEqual(len(np.where(mc == 2*self.pop.N)
-                             [0]), 0)
+        self.assertEqual(len(np.where(mc == 2 * self.pop.N)[0]), 0)
 
 
 if __name__ == "__main__":
