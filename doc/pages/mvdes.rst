@@ -253,3 +253,7 @@ For the general approach, simply create a :class:`list` of objects with the desi
     for i in pop.tables.mutations:
         print(pop.mutations[i.key].esizes)
         
+Polygenic traits, multiple demes, correlated effect sizes, and different optima
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+See :ref:`GSSDivergentOptima`.
