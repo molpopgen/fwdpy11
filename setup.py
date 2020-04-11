@@ -4,6 +4,7 @@ import platform
 import re
 import subprocess
 import sys
+import warnings
 from distutils.version import LooseVersion
 
 import setuptools
@@ -19,6 +20,9 @@ __version__ = "0.7.0"
 
 if sys.version_info < (3, 3):
     raise RuntimeError("Python >= 3.3 required")
+
+if sys.version_info < (3, 6):
+    warnings.warn("Python version 3.6 or later will be required in fwdpy11 0.8.0")
 
 if pybind11.__version__ < "2.4.3":
     raise RuntimeError("pybind11 >= " + "2.4.3" + " required")
