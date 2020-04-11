@@ -63,6 +63,9 @@ Most of the above is standard.  Let's dissect the new bits:
   no covariance in effect sizes across demes.
 * The final constructor argument specifies the mean of each marginal Gaussian
   distribution. The means are both zero.
+* Our genetic value type accepts an `ndemes` parameter, telling it that it has
+  to look for deme-specific effect sizes.  This value must be set to the maximum
+  number of demes that will exist during a simulation.
 
 Let's evolve the model now:
 
