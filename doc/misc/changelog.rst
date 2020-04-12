@@ -4,6 +4,36 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.7.0
+++++++++++++++++++++++++++++++++++++++++
+
+Major feature release allowing mutations to have different
+effect sizes in different demes.
+
+Bugs fixed:
+
+* Temporal samplers now get the correct offspring metadata in simulations
+  with tree sequence recording. `Issue 444 <https://github.com/molpopgen/fwdpy11/issues/444>`_
+
+New features:
+
+* Added :class:`fwdpy11.mvDES`, which allows multivariate distributions of effect sizes
+  such that mutations have different effect sizes in different demes. See :ref:`mvdes`
+  for details.  `PR 443 <https://github.com/molpopgen/fwdpy11/pull/443>`_
+  `PR 452 <https://github.com/molpopgen/fwdpy11/pull/452>`_
+* :class:`fwdpy11.GeneticValueToFitnessMap` now records whether or not genetic
+  values are mapped to fitness or are a trait value via :attr:`fwdpy11.GeneticValueToFitnessMap.maps_to_fitness`
+  and :attr:`fwdpy11.GeneticValueToFitnessMap.maps_to_trait_value`.
+  `PR 447 <https://github.com/molpopgen/fwdpy11/pull/447>`_
+
+Other changes (see the 0.7.0 milestone on GitHub)
+
+* This release deprecates several features that are no longer sensible given that most
+  simulations will use tree sequence recording.  You will see warnings pop up if you
+  use these features (or run the unit tests).  These features will be removed
+  in 0.8.0.
+* Many back-end changes to the C++ code simplify things in various places.
+
 0.6.4
 ++++++++++++++++++++++++++++++++++++++++
 
