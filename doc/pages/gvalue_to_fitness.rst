@@ -2,6 +2,7 @@ Mapping genetic values to fitness
 ======================================================================
 
 .. autoclass:: fwdpy11.GeneticValueToFitnessMap
+    :members:
 
 .. autoclass:: fwdpy11.GeneticValueIsTrait
 
