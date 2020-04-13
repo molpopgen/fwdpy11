@@ -23,6 +23,7 @@
 #include <fwdpy11/genetic_value_to_fitness/PleiotropicOptima.hpp>
 
 namespace py = pybind11;
+using namespace py::literals;
 
 static const auto INIT_3 =
     R"delim(
@@ -53,6 +54,11 @@ init_PleiotropicOptima(py::module& m)
         .def_readonly("when", &fwdpy11::PleiotropicOptima::when)
         .def_readonly("optima", &fwdpy11::PleiotropicOptima::optima)
         .def_readonly("VS", &fwdpy11::PleiotropicOptima::VW)
+        .def("__repr__",
+             [](const fwdpy11::PleiotropicOptima& self) {
+                 return "PleiotropicOptima(when={}, optima={}, VS={})"_s.format(
+                     self.when, self.optima, self.VW);
+             })
         .def(py::pickle(
             [](const fwdpy11::PleiotropicOptima& self) {
                 return py::make_tuple(self.when, self.optima, self.VW);

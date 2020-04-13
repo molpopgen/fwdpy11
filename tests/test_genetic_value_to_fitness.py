@@ -74,7 +74,7 @@ class testGSSmo(unittest.TestCase):
         self.assertEqual(up.opt, 0.0)
         for i, j in zip(up.optima, self.optima):
             self.assertEqual(i.when, j.when)
-            self.assertEqual(i.opt, j.opt)
+            self.assertEqual(i.optimum, j.optimum)
             self.assertEqual(i.VS, j.VS)
 
     def test_mapping(self):

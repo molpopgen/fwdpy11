@@ -21,6 +21,7 @@
 #include <fwdpy11/genetic_value_to_fitness/Optimum.hpp>
 
 namespace py = pybind11;
+using namespace py::literals;
 
 static const auto CLASS_DOCSTRING =
     R"delim(
@@ -55,8 +56,13 @@ init_Optimum(py::module& m)
              py::arg("optimum"), py::arg("VS"), INIT_3)
         .def(py::init<double, double>(), py::arg("optimum"), py::arg("VS"), INIT_2)
         .def_readonly("when", &fwdpy11::Optimum::when)
-        .def_readonly("opt", &fwdpy11::Optimum::opt)
+        .def_readonly("optimum", &fwdpy11::Optimum::opt)
         .def_readonly("VS", &fwdpy11::Optimum::VW)
+        .def("__repr__",
+             [](const fwdpy11::Optimum& self) {
+                 return "Optimum(when={}, optimum={}, VS={})"_s.format(
+                     self.when, self.opt, self.VW);
+             })
         .def(py::pickle(
             [](const fwdpy11::Optimum& self) {
                 return py::make_tuple(self.when, self.opt, self.VW);
