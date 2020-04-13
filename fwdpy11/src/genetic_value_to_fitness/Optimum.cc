@@ -33,16 +33,16 @@ static const auto INIT_3 =
     R"delim(
 :param when: The time when the optimum shifts
 :type when: int
-:param opt: The trait value
-:type opt: float
+:param optimum: The trait value
+:type optimum: float
 :param VS: Strength of stabilizing selection
 :type VS: float
 )delim";
 
 static const auto INIT_2 =
     R"delim(
-:param opt: The trait value
-:type opt: float
+:param optimum: The trait value
+:type optimum: float
 :param VS: Strength of stabilizing selection
 :type VS: float
 )delim";
@@ -51,8 +51,9 @@ void
 init_Optimum(py::module& m)
 {
     py::class_<fwdpy11::Optimum>(m, "Optimum", CLASS_DOCSTRING)
-        .def(py::init<std::uint32_t, double, double>(), INIT_3)
-        .def(py::init<double, double>(), INIT_2)
+        .def(py::init<std::uint32_t, double, double>(), py::arg("when"),
+             py::arg("optimum"), py::arg("VS"), INIT_3)
+        .def(py::init<double, double>(), py::arg("optimum"), py::arg("VS"), INIT_2)
         .def_readonly("when", &fwdpy11::Optimum::when)
         .def_readonly("opt", &fwdpy11::Optimum::opt)
         .def_readonly("VS", &fwdpy11::Optimum::VW)
