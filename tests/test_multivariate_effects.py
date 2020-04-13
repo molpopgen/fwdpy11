@@ -6,6 +6,7 @@ import fwdpy11
 import poptools
 import testMultivariateGSSmo
 
+
 def set_up_quant_trait_model():
     N = 1000
     demography = np.array([N] * 10 * N, dtype=np.uint32)
@@ -16,7 +17,11 @@ def set_up_quant_trait_model():
     ntraits = 4
     optima = np.array(np.zeros(len(timepoints) * ntraits))
     optima = optima.reshape((len(timepoints), ntraits))
-    GSSmo = fwdpy11.MultivariateGSSmo(timepoints, optima, 1)
+    PO = fwdpy11.PleiotropicOptima
+    po = []
+    for i, j in enumerate(timepoints):
+        po.append(PO(j, optima[i, :], 1))
+    GSSmo = fwdpy11.MultivariateGSSmo(po)
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
     a = fwdpy11.StrictAdditiveMultivariateEffects(ntraits, 0, GSSmo)
@@ -70,7 +75,11 @@ class TestMultivariateGSSmoCPP(unittest.TestCase):
         optima = np.array(np.zeros(len(timepoints) * self.ntraits))
         optima = optima.reshape((len(timepoints), self.ntraits))
         optima[1, 0] = 1
-        GSSmo = fwdpy11.MultivariateGSSmo(timepoints, optima, 1)
+        PO = fwdpy11.PleiotropicOptima
+        po = []
+        for i, t in enumerate(timepoints):
+            po.append(PO(t, optima[i, :], 1))
+        GSSmo = fwdpy11.MultivariateGSSmo(po)
 
         co = testMultivariateGSSmo.get_optima(GSSmo)
         self.assertTrue(all([i == 0 for i in co]))

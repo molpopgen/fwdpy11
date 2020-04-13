@@ -23,6 +23,7 @@
 #include <cmath>
 #include <vector>
 #include "GeneticValueIsTrait.hpp"
+#include "PleiotropicOptima.hpp"
 #include "../genetic_values/default_update.hpp"
 
 namespace fwdpy11
@@ -33,8 +34,13 @@ namespace fwdpy11
         double VS;
 
         MultivariateGSS(std::vector<double> input_optima, double VS_)
-            : GeneticValueIsTrait{ input_optima.size() },
-              optima(std::move(input_optima)), VS(VS_)
+            : GeneticValueIsTrait{input_optima.size()}, optima(std::move(input_optima)),
+              VS(VS_)
+        {
+        }
+
+        explicit MultivariateGSS(const PleiotropicOptima& po)
+            : GeneticValueIsTrait{po.optima.size()}, optima{po.optima}, VS{po.VW}
         {
         }
 
@@ -57,8 +63,7 @@ namespace fwdpy11
         std::unique_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::unique_ptr<MultivariateGSS>(
-                new MultivariateGSS(*this));
+            return std::unique_ptr<MultivariateGSS>(new MultivariateGSS(*this));
         }
 
         pybind11::object

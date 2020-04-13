@@ -37,8 +37,8 @@ def set_up_quant_trait_model():
     demography = np.array([N] * (10 * N + 100), dtype=np.uint32)
     rho = 1.0
     r = rho / (4 * N)
-
-    GSSmo = fwdpy11.GSSmo([(0, 0, 1), (10 * N, 1, 1)])
+    Opt = fwdpy11.Optimum
+    GSSmo = fwdpy11.GSSmo([Opt(0, 0, 1), Opt(10 * N, 1, 1)])
     a = fwdpy11.Additive(2.0, GSSmo)
     p = {
         "nregions": [],

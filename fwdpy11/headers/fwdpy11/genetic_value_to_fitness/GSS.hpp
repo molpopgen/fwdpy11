@@ -23,6 +23,7 @@
 #include <cmath>
 #include <vector>
 #include "GeneticValueIsTrait.hpp"
+#include "Optimum.hpp"
 
 namespace fwdpy11
 {
@@ -30,7 +31,7 @@ namespace fwdpy11
     {
         const double opt, VS;
         GSS(const double opt_, const double VS_)
-            : GeneticValueIsTrait{ 1 }, opt{ opt_ }, VS{ VS_ }
+            : GeneticValueIsTrait{1}, opt{opt_}, VS{VS_}
         {
             if (VS <= 0.0)
                 {
@@ -38,15 +39,17 @@ namespace fwdpy11
                 }
             if (!std::isfinite(VS) || !std::isfinite(opt))
                 {
-                    throw std::invalid_argument(
-                        "Both VS and opt must be finite values");
+                    throw std::invalid_argument("Both VS and opt must be finite values");
                 }
         }
 
+        explicit GSS(const Optimum &o) : GeneticValueIsTrait{1}, opt{o.opt}, VS{o.VW}
+        {
+        }
+
         double
-        operator()(
-            const DiploidMetadata &metadata,
-            const std::vector<double> & /*genetic_values*/) const override
+        operator()(const DiploidMetadata &metadata,
+                   const std::vector<double> & /*genetic_values*/) const override
         {
             return std::exp(
                 -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));

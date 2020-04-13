@@ -23,6 +23,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class testGeneticValueIsFitness(unittest.TestCase):
     @classmethod
     def setUp(self):
@@ -60,7 +61,8 @@ class testGSS(unittest.TestCase):
 class testGSSmo(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.optima = [(0, 0.0, 1.0), (100, 1.0, 1.0)]
+        Opt = fwdpy11.Optimum
+        self.optima = [Opt(0, 0.0, 1.0), Opt(100, 1.0, 1.0)]
         self.g = fwdpy11.GSSmo(self.optima)
 
     def testPickle(self):
@@ -70,7 +72,10 @@ class testGSSmo(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(up.VS, 1.0)
         self.assertEqual(up.opt, 0.0)
-        self.assertEqual(up.optima, self.optima)
+        for i, j in zip(up.optima, self.optima):
+            self.assertEqual(i.when, j.when)
+            self.assertEqual(i.opt, j.opt)
+            self.assertEqual(i.VS, j.VS)
 
     def test_mapping(self):
         self.assertEqual(self.g.maps_to_fitness, False)

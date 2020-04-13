@@ -25,102 +25,73 @@
 #include <vector>
 #include <stdexcept>
 #include "GeneticValueIsTrait.hpp"
+#include "PleiotropicOptima.hpp"
 
 namespace fwdpy11
 {
     struct MultivariateGSSmo : public GeneticValueIsTrait
     {
-        std::vector<std::uint32_t> timepoints;
-        std::vector<double> optima;
-        std::size_t current_timepoint, ndim, optima_offset;
-        double VS;
+        std::vector<PleiotropicOptima> optima;
+        std::size_t current_timepoint;
 
-        MultivariateGSSmo(std::vector<std::uint32_t> input_timepoints,
-                          std::vector<double> input_optima, double VS_)
-            : GeneticValueIsTrait{ input_timepoints.empty()
-                                            ? 0
-                                            : input_optima.size()
-                                                  / input_timepoints.size() },
-              timepoints(std::move(input_timepoints)),
-              optima(std::move(input_optima)), current_timepoint(1), ndim(0),
-              optima_offset(0), VS(VS_)
+        MultivariateGSSmo(const std::vector<PleiotropicOptima> &po)
+            : GeneticValueIsTrait{po.empty() ? 0 : po[0].optima.size()}, optima(po),
+              current_timepoint(0)
         {
-            if (timepoints.empty())
+            if (po.empty())
                 {
-                    throw std::invalid_argument("empty timepoints");
+                    throw std::invalid_argument("empty list of PleiotropicOptima");
                 }
-            if (optima.empty())
+            for (auto &o : optima)
                 {
-                    throw std::invalid_argument("empty optima");
+                    if (o.optima.size() != total_dim)
+                        {
+                            throw std::invalid_argument(
+                                "all lists of optima must be the same length");
+                        }
                 }
-            if (timepoints.front() != 0)
-                {
-                    throw std::invalid_argument(
-                        "first timepoint is not at zero");
-                }
-            if (optima.size() % timepoints.size() != 0.0)
-                {
-                    throw std::invalid_argument(
-                        "incorrect number of optima or time points");
-                }
-            if (!std::isfinite(VS))
-                {
-                    throw std::invalid_argument("VS must be finite");
-                }
-            if (VS <= 0.0)
-                {
-                    throw std::invalid_argument("VS must be >= 0");
-                }
-            ndim = optima.size() / timepoints.size();
         }
 
         double
         operator()(const DiploidMetadata & /*metadata*/,
                    const std::vector<double> &values) const override
         {
-            if (values.size() != ndim)
+            if (values.size() != total_dim)
                 {
                     throw std::runtime_error("dimension mismatch");
                 }
             double sqdiff = 0.0;
             for (std::size_t i = 0; i < values.size(); ++i)
                 {
-                    sqdiff += gsl_pow_2(values[i] - optima[optima_offset + i]);
+                    sqdiff += gsl_pow_2(values[i] - optima[current_timepoint].optima[i]);
                 }
-            return std::exp(-sqdiff / (2.0 * VS));
+            return std::exp(-sqdiff / (2.0 * optima[current_timepoint].VW));
         }
 
         std::unique_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::unique_ptr<MultivariateGSSmo>(
-                new MultivariateGSSmo(*this));
+            return std::unique_ptr<MultivariateGSSmo>(new MultivariateGSSmo(*this));
         }
 
         pybind11::object
         pickle() const override
         {
             pybind11::list l;
-            for (auto x : optima)
+            for (auto &x : optima)
                 {
-                    l.append(x);
+                    l.append(pybind11::make_tuple(x.when, x.optima, x.VW));
                 }
-            pybind11::list tp;
-            for (auto x : timepoints)
-                {
-                    tp.append(x);
-                }
-            return pybind11::make_tuple(tp, l, VS);
+            return l;
         }
 
         template <typename poptype>
         inline void
         update_details(const poptype &pop)
         {
-            if (current_timepoint < timepoints.size()
-                && pop.generation >= timepoints[current_timepoint])
+            if (current_timepoint < optima.size() - 1
+                && pop.generation >= optima[current_timepoint].when)
                 {
-                    optima_offset += ndim;
                     ++current_timepoint;
                 }
         }
