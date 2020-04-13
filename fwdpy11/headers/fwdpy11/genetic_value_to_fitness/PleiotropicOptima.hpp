@@ -80,6 +80,12 @@ namespace fwdpy11
     {
         return lhs.when == rhs.when && lhs.VW == rhs.VW && lhs.optima == rhs.optima;
     }
+
+    inline bool
+    operator<(const PleiotropicOptima& lhs, const PleiotropicOptima& rhs)
+    {
+        return lhs.when < rhs.when;
+    }
 }
 
 #endif
