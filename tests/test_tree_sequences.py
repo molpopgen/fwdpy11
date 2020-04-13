@@ -27,6 +27,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class Recorder(object):
     def __init__(self, seed, samplesize, timepoints):
         np.random.seed(seed)
@@ -53,8 +54,8 @@ def set_up_quant_trait_model(simlen=1.0):
     # nreps = 500
     # mu = theta/(4*N)
     r = rho / (4 * N)
-
-    GSSmo = fwdpy11.GSSmo([(0, 0, 1), (N, 1, 1)])
+    Opt = fwdpy11.Optimum
+    GSSmo = fwdpy11.GSSmo([Opt(0, 0, 1), Opt(N, 1, 1)])
     a = fwdpy11.Additive(2.0, GSSmo)
     p = {
         "nregions": [],

@@ -14,6 +14,12 @@ Mapping genetic values to fitness
 .. autoclass:: fwdpy11.GSSmo
     :members:
 
+.. autoclass:: fwdpy11.Optimum
+    :members:
+
+.. autoclass:: fwdpy11.PleiotropicOptima
+    :members:
+
 .. autoclass:: fwdpy11.MultivariateGSS
     :members:
 

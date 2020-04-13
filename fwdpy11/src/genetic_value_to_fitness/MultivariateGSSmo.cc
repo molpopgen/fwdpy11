@@ -5,6 +5,33 @@
 
 namespace py = pybind11;
 
+static const auto INIT_DEPRECATED =
+    R"delim(
+:param timepoints: Time when the optima change
+:type timepoints: numpy.array
+:param optima: The optima corresponding to each time point
+:type optima: numpy.ndarray
+:param VS: Strength of stabilizing selection
+:type VS: float
+
+The rows of optima should correpond to the optimal trait values at
+each time point.  The first row must correspond to a time point of zero.
+
+The following example changes the optimum from 0 to 1 for the first
+trait at 10N generations into a simulation:
+
+.. testcode::
+
+import fwdpy11
+import numpy as np
+popsize = 1000
+timepoints = np.array([0,10*popsize], dtype=np.uint32)
+ntraits = 3
+optima = np.array(np.zeros(2*ntraits)).reshape((len(timepoints), ntraits))
+optima[1,0] = 1
+mvgssmo = fwdpy11.MultivariateGSSmo(timepoints,optima, 1)
+)delim";
+
 void
 init_MultivariateGSSmo(py::module& m)
 {
@@ -13,67 +40,44 @@ init_MultivariateGSSmo(py::module& m)
         "Multivariate Gaussian stabilizing selection with moving optima.")
         .def(py::init([](py::array_t<std::uint32_t> timepoints,
                          py::array_t<double> optima, double VS) {
+                 PyErr_WarnEx(PyExc_DeprecationWarning,
+                              "This __init__ function is deprecated.  Please use list "
+                              "of fwdpy11.PleiotropicOptima instead",
+                              0);
+
                  auto t = timepoints.unchecked<1>();
                  auto o = optima.unchecked<2>();
 
-                 std::vector<std::uint32_t> it(t.data(0),
-                                               t.data(0) + t.shape(0));
-                 std::vector<double> io(
-                     o.data(0, 0), o.data(0, 0) + o.shape(0) * o.shape(1));
-
-                 return fwdpy11::MultivariateGSSmo(std::move(it),
-                                                   std::move(io), VS);
+                 std::vector<fwdpy11::PleiotropicOptima> po;
+                 for (py::ssize_t i = 0; i < t.size(); ++i)
+                     {
+                         std::vector<double> temp;
+                         for (py::ssize_t j = 0; j < o.shape(1); ++j)
+                             {
+                                 temp.push_back(o(i, j));
+                             }
+                         po.emplace_back(t(i), std::move(temp), VS);
+                     }
+                 return fwdpy11::MultivariateGSSmo(po);
              }),
-             R"delim(
-        :param timepoints: Time when the optima change
-        :type timepoints: numpy.array
-        :param optima: The optima corresponding to each time point
-        :type optima: numpy.ndarray
-        :param VS: Strength of stabilizing selection
-        :type VS: float
-
-        The rows of optima should correpond to the optimal trait values at
-        each time point.  The first row must correspond to a time point of zero.
-
-        The following example changes the optimum from 0 to 1 for the first
-        trait at 10N generations into a simulation:
-        
-        .. testcode::
-
-            import fwdpy11
-            import numpy as np
-            popsize = 1000
-            timepoints = np.array([0,10*popsize], dtype=np.uint32)
-            ntraits = 3
-            optima = np.array(np.zeros(2*ntraits)).reshape((len(timepoints), ntraits))
-            optima[1,0] = 1
-            mvgssmo = fwdpy11.MultivariateGSSmo(timepoints,optima, 1)
-        )delim")
+             INIT_DEPRECATED)
+        .def(py::init<const std::vector<fwdpy11::PleiotropicOptima>&>())
         .def(py::pickle(
-            [](const fwdpy11::MultivariateGSSmo& self) {
-                return self.pickle();
-            },
+            [](const fwdpy11::MultivariateGSSmo& self) { return self.pickle(); },
             [](py::object o) {
-                auto t = o.cast<py::tuple>();
-                auto l = t[0].cast<py::list>();
-                std::vector<std::uint32_t> tp;
+                auto l = o.cast<py::list>();
+                std::vector<fwdpy11::PleiotropicOptima> optima;
                 for (auto i : l)
                     {
-                        tp.push_back(i.cast<std::uint32_t>());
+                        auto j = i.cast<py::tuple>();
+                        optima.emplace_back(j[0].cast<std::uint32_t>(),
+                                            j[1].cast<std::vector<double>>(),
+                                            j[2].cast<double>());
                     }
-                l = t[1].cast<py::list>();
-                std::vector<double> optima;
-                for (auto i : l)
-                    {
-                        optima.push_back(i.cast<double>());
-                    }
-                double vs = t[2].cast<double>();
-                return fwdpy11::MultivariateGSSmo(std::move(tp),
-                                                  std::move(optima), vs);
+                return fwdpy11::MultivariateGSSmo(optima);
             }))
         .def("__eq__", [](const fwdpy11::MultivariateGSSmo& lhs,
                           const fwdpy11::MultivariateGSSmo& rhs) {
-            return lhs.timepoints == rhs.timepoints && lhs.optima == rhs.optima
-                   && lhs.VS == rhs.VS;
+            return lhs.optima == rhs.optima;
         });
 }
