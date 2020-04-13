@@ -39,9 +39,12 @@ We will use :class:`fwdpy11.GSSmo` to parameterize the optimum shift:
 
 .. ipython:: python
 
-    # The tuples are (generation, optimum, VS), where
-    # VS is the inverse strength of stabilizing selection
-    gssmo = fwdpy11.GSSmo([fwdpy11.Optimum(0, 0, 1), fwdpy11.Optimum(10 * N, 1, 1)])
+    gssmo = fwdpy11.GSSmo(
+        [
+            fwdpy11.Optimum(when=0, optimum=0., VS=1.),
+            fwdpy11.Optimum(when=10 * N, optimum=1., VS=1.),
+        ]
+    )
 
 
 Our `gssmo` variable is an instance of a class that maps genetic values to fitness, and we use it to construct
