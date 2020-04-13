@@ -24,12 +24,32 @@
 
 namespace py = pybind11;
 
+static const auto INIT_3 =
+    R"delim(
+:param when: When the optima shift
+:type when: int
+:param optima: the new optima values
+:type optima: list
+:param VS: strength of stablizing selection
+:type VS: float
+)delim";
+
+const auto INIT_2 =
+    R"delim(
+:param optima: the new optima values
+:type optima: list
+:param VS: strength of stablizing selection
+:type VS: float
+)delim";
+
 void
 init_PleiotropicOptima(py::module& m)
 {
     py::class_<fwdpy11::PleiotropicOptima>(m, "PleiotropicOptima")
-        .def(py::init<std::uint32_t, std::vector<double>, double>())
-        .def(py::init<std::vector<double>, double>())
+        .def(py::init<std::uint32_t, std::vector<double>, double>(), py::arg("when"),
+             py::arg("optima"), py::arg("VS"), INIT_3)
+        .def(py::init<std::vector<double>, double>(), py::arg("optima"), py::arg("VS"),
+             INIT_2)
         .def_readonly("when", &fwdpy11::PleiotropicOptima::when)
         .def_readonly("optima", &fwdpy11::PleiotropicOptima::optima)
         .def_readonly("VS", &fwdpy11::PleiotropicOptima::VW)
