@@ -20,7 +20,7 @@ def set_up_quant_trait_model():
     PO = fwdpy11.PleiotropicOptima
     po = []
     for i, j in enumerate(timepoints):
-        po.append(PO(j, optima[i, :], 1))
+        po.append(PO(when=j, optima=optima[i, :], VS=1))
     GSSmo = fwdpy11.MultivariateGSSmo(po)
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
