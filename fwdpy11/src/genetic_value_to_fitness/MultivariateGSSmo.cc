@@ -30,6 +30,16 @@ ntraits = 3
 optima = np.array(np.zeros(2*ntraits)).reshape((len(timepoints), ntraits))
 optima[1,0] = 1
 mvgssmo = fwdpy11.MultivariateGSSmo(timepoints,optima, 1)
+
+.. deprecated:: 0.7.1
+)delim";
+
+static const auto INIT_OPTIMA =
+    R"delim(
+:param optima: List of :class:`fwdpy11.PleiotropicOptima`
+:type optima: list
+
+.. versionadded:: 0.7.1
 )delim";
 
 void
@@ -61,7 +71,7 @@ init_MultivariateGSSmo(py::module& m)
                  return fwdpy11::MultivariateGSSmo(po);
              }),
              INIT_DEPRECATED)
-        .def(py::init<const std::vector<fwdpy11::PleiotropicOptima>&>())
+        .def(py::init<const std::vector<fwdpy11::PleiotropicOptima>&>(), INIT_OPTIMA)
         .def(py::pickle(
             [](const fwdpy11::MultivariateGSSmo& self) { return self.pickle(); },
             [](py::object o) {
