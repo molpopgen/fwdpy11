@@ -24,6 +24,7 @@
 #include <cmath>
 #include <vector>
 #include <stdexcept>
+#include <algorithm>
 #include "GeneticValueIsTrait.hpp"
 #include "PleiotropicOptima.hpp"
 
@@ -49,6 +50,10 @@ namespace fwdpy11
                             throw std::invalid_argument(
                                 "all lists of optima must be the same length");
                         }
+                }
+            if (!std::is_sorted(begin(optima), end(optima)))
+                {
+                    throw std::invalid_argument("optima must be sorted by `when` field");
                 }
         }
 
