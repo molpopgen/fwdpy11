@@ -51,7 +51,7 @@ class testGSS(unittest.TestCase):
         p = pickle.dumps(self.g, -1)
         up = pickle.loads(p)
         self.assertEqual(up.VS, self.VS)
-        self.assertEqual(up.opt, self.opt)
+        self.assertEqual(up.optimum, self.opt)
 
     def test_mapping(self):
         self.assertEqual(self.g.maps_to_fitness, False)
@@ -71,7 +71,7 @@ class testGSSmo(unittest.TestCase):
         p = pickle.dumps(self.g)
         up = pickle.loads(p)
         self.assertEqual(up.VS, 1.0)
-        self.assertEqual(up.opt, 0.0)
+        self.assertEqual(up.optimum, 0.0)
         for i, j in zip(up.optima, self.optima):
             self.assertEqual(i.when, j.when)
             self.assertEqual(i.optimum, j.optimum)
