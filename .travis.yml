@@ -8,14 +8,6 @@ matrix:
         - USECONDA=1
 
     - os: linux
-      dist: xenial
-      python: 3.5
-      env:
-        - XENIAL=1
-        - CC=gcc
-        - CXX=g++
-
-    - os: linux
       dist: bionic
       python: 3.6
       env:
