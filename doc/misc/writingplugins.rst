@@ -37,7 +37,10 @@ fdwpy11:
     python3 -m fwdpy11 --fwdpp_headers
     python3 -m fwdpy11 --fwdpy11_headers
 
-The above two commands are useful when using tools like `cmake` to configure build systems.
+The above two commands are useful when using tools like `cmake` to configure build systems.  Here is an example
+from one of the examples that comes with `fwdpy11`:
+
+.. literalinclude:: ../../examples/plugin/CMakeLists.txt
 
 Mako headers for cppimport
 ------------------------------------------
