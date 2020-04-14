@@ -48,7 +48,14 @@ init_GSSmo(py::module& m)
              py::arg("optima"), INIT_TUPLES)
         .def(py::init<std::vector<fwdpy11::Optimum>>(), py::arg("optima"), INIT_OPTIMA)
         .def_readonly("VS", &fwdpy11::GSSmo::VS)
-        .def_readonly("opt", &fwdpy11::GSSmo::opt)
+        .def_readonly("optimum", &fwdpy11::GSSmo::opt)
+        .def_property_readonly(
+            "opt",
+            [](const fwdpy11::GSSmo& self) {
+                PyErr_WarnEx(PyExc_DeprecationWarning,
+                             "GSSmo.opt is deprecated.  Use GSSmo.optimum instead.", 0);
+                return self.opt;
+            })
         .def_readonly("optima", &fwdpy11::GSSmo::optima)
         .def(py::pickle([](const fwdpy11::GSSmo& g) { return g.pickle(); },
                         [](py::object o) {
