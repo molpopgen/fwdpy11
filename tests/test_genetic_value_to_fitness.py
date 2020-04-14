@@ -85,9 +85,12 @@ class testGSSmo(unittest.TestCase):
 class testMultivariateGSSmo(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.optima = np.array([0.0, 0.0, 1.0, 1.0]).reshape(2, 2)
-        self.timepoints = [0, 100]
-        self.mvgssmo = fwdpy11.MultivariateGSSmo(self.timepoints, self.optima, 1.0)
+        optima = np.array([0.0, 0.0, 1.0, 1.0]).reshape(2, 2)
+        timepoints = [0, 100]
+        po = []
+        for i, t in enumerate(timepoints):
+            po.append(fwdpy11.PleiotropicOptima(when=t, optima=optima[i, :], VS=1))
+        self.mvgssmo = fwdpy11.MultivariateGSSmo(po)
 
     def test_pickle(self):
         import pickle
