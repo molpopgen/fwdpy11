@@ -17,60 +17,69 @@ namespace fwdpy11
       private:
         struct single_deme_callback
         {
-            double
-            operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
-                       const std::size_t diploid_index, const DiploidMetadata& /*metadata*/,
+            const single_deme_het_fxn single_deme_Aa;
+            const single_deme_hom_fxn single_deme_aa;
+
+            explicit single_deme_callback(double aa_scaling)
+                : single_deme_Aa(), single_deme_aa(aa_scaling)
+            {
+            }
+
+            inline double
+            operator()(const fwdpp::site_dependent_genetic_value& gv,
+                       const std::size_t diploid_index,
+                       const DiploidMetadata& /*metadata*/,
                        const DiploidPopulation& pop) const
             {
-                outer_this->gvalues[0] = outer_this->make_return_value(
-                    outer_this->gv(pop.diploids[diploid_index], pop.haploid_genomes,
-                                   pop.mutations, outer_this->single_deme_aa,
-                                   outer_this->single_deme_Aa, starting_value));
-                return outer_this->gvalues[0];
+                return gv(pop.diploids[diploid_index], pop.haploid_genomes,
+                          pop.mutations, single_deme_aa, single_deme_Aa, starting_value);
             }
         };
 
         struct multi_deme_callback
         {
-            double
-            operator()(const stateless_site_dependent_genetic_value_wrapper* outer_this,
-                       const std::size_t diploid_index,const DiploidMetadata& metadata,
+            const multi_deme_het_fxn multi_deme_Aa;
+            const multi_deme_hom_fxn multi_deme_aa;
+
+            explicit multi_deme_callback(double aa_scaling)
+                : multi_deme_Aa(), multi_deme_aa(aa_scaling)
+            {
+            }
+
+            inline double
+            operator()(const fwdpp::site_dependent_genetic_value& gv,
+                       const std::size_t diploid_index, const DiploidMetadata& metadata,
                        const DiploidPopulation& pop) const
             {
                 std::size_t deme = metadata.deme;
-                outer_this->gvalues[0] = outer_this->make_return_value(outer_this->gv(
+                return gv(
                     pop.diploids[diploid_index], pop.haploid_genomes, pop.mutations,
-                    [deme, outer_this](double& d, const Mutation& mut) {
-                        return outer_this->multi_deme_aa(deme, d, mut);
+                    [deme, this](double& d, const Mutation& mut) {
+                        return multi_deme_aa(deme, d, mut);
                     },
-                    [deme, outer_this](double& d, const Mutation& mut) {
-                        return outer_this->multi_deme_Aa(deme, d, mut);
+                    [deme, this](double& d, const Mutation& mut) {
+                        return multi_deme_Aa(deme, d, mut);
                     },
-                    starting_value));
-                return outer_this->gvalues[0];
+                    starting_value);
             }
         };
 
         using callback_type = std::function<double(
-            const stateless_site_dependent_genetic_value_wrapper*, const std::size_t,
+            const fwdpp::site_dependent_genetic_value&, const std::size_t,
             const DiploidMetadata&, const DiploidPopulation&)>;
 
         callback_type
-        init_callback(std::size_t n)
+        init_callback(std::size_t n, double aa_scaling)
         {
             if (n == 1)
                 {
-                    return single_deme_callback();
+                    return single_deme_callback(aa_scaling);
                 }
-            return multi_deme_callback();
+            return multi_deme_callback(aa_scaling);
         }
 
         fwdpp::site_dependent_genetic_value gv;
         double aa_scaling;
-        decltype(single_deme_het_fxn()) single_deme_Aa;
-        decltype(single_deme_hom_fxn(aa_scaling)) single_deme_aa;
-        decltype(multi_deme_het_fxn()) multi_deme_Aa;
-        decltype(multi_deme_hom_fxn(aa_scaling)) multi_deme_aa;
         std::function<double(double)> make_return_value;
         callback_type callback;
         bool isfitness;
@@ -80,29 +89,18 @@ namespace fwdpy11
         stateless_site_dependent_genetic_value_wrapper(std::size_t ndim, double scaling,
                                                        make_return_value_fxn&& mrv)
             : DiploidGeneticValue{ndim}, gv{}, aa_scaling(scaling),
-              single_deme_Aa(single_deme_het_fxn()),
-              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
-              multi_deme_Aa(multi_deme_het_fxn()),
-              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
               make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim)), isfitness(true)
+              callback(init_callback(ndim, aa_scaling)), isfitness(true)
         {
         }
-
-        // NOTE: the following two constructors ASSUME
-        // that isfitness == false!!!
 
         template <typename make_return_value_fxn>
         stateless_site_dependent_genetic_value_wrapper(
             std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
             const GeneticValueToFitnessMap& gv2w_)
             : DiploidGeneticValue{ndim, gv2w_}, gv{}, aa_scaling(scaling),
-              single_deme_Aa(single_deme_het_fxn()),
-              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
-              multi_deme_Aa(multi_deme_het_fxn()),
-              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
               make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim)), isfitness(false)
+              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
         {
         }
 
@@ -111,12 +109,8 @@ namespace fwdpy11
             std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
             const GeneticValueToFitnessMap& gv2w_, const GeneticValueNoise& noise_)
             : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{}, aa_scaling(scaling),
-              single_deme_Aa(single_deme_het_fxn()),
-              single_deme_aa(single_deme_hom_fxn(aa_scaling)),
-              multi_deme_Aa(multi_deme_het_fxn()),
-              multi_deme_aa(multi_deme_hom_fxn(aa_scaling)),
               make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim)), isfitness(false)
+              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
         {
         }
 
@@ -125,7 +119,8 @@ namespace fwdpy11
                          const DiploidMetadata& metadata,
                          const DiploidPopulation& pop) const override
         {
-            return callback(this, diploid_index, metadata, pop);
+            gvalues[0] = make_return_value(callback(gv, diploid_index, metadata, pop));
+            return gvalues[0];
         }
 
         pybind11::object
