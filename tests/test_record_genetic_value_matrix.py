@@ -32,6 +32,7 @@ import numpy as np
 
 import fwdpy11
 
+
 def set_up_quant_trait_model():
     N = 1000
     demography = np.array([N] * (10 * N + 100), dtype=np.uint32)
@@ -260,6 +261,90 @@ class TestTwoTraitsIsotropy(unittest.TestCase):
                 d0 = np.power(i - self.zopt, 2.0)
                 d1 = np.power(j - 0.0, 2.0)
                 self.assertTrue(np.isclose(np.exp(-(d0 + d1) / (2.0 * self.VS)), w))
+
+    def test_pickling(self):
+        pp = pickle.dumps(self.pop, -1)
+        up = pickle.loads(pp)
+        gv = self.pop.genetic_values
+        upgv = up.genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+        gv = self.pop.ancient_sample_genetic_values
+        upgv = up.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, upgv))
+
+    def test_pickle_to_file(self):
+        with tempfile.NamedTemporaryFile(delete=False) as tfile:
+            self.pop.pickle_to_file(tfile)
+            tfile.seek(0)
+            pop2 = fwdpy11.DiploidPopulation.load_from_pickle_file(tfile)
+        gv = self.pop.genetic_values
+        gv2 = pop2.genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
+        gv = self.pop.ancient_sample_genetic_values
+        gv2 = pop2.ancient_sample_genetic_values
+        self.assertTrue(np.array_equal(gv, gv2))
+
+
+class TestWithFirstGenerationPreserved(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_quant_trait_model()
+        preserver = PreserveN(10 * self.pop.N, 10)
+        fwdpy11.evolvets(
+            self.rng,
+            self.pop,
+            self.params,
+            100,
+            preserver,
+            record_gvalue_matrix=True,
+            preserve_first_generation=True,
+        )
+
+    def test_alive_genetic_values(self):
+        for i, j in zip(self.pop.genetic_values.flatten(), self.pop.diploid_metadata):
+            self.assertEqual(i, j.g)
+
+    def test_alive_genetic_value_reconstruction(self):
+        ti = fwdpy11.TreeIterator(
+            self.pop.tables, self.pop.alive_nodes, update_samples=True
+        )
+        gv = np.zeros(2 * self.pop.N)
+        for t in ti:
+            for m in t.mutations():
+                for b in t.samples_below(m.node):
+                    gv[b] += self.pop.mutations[m.key].s
+        gv = gv.reshape((self.pop.N, 2))
+        gv = np.sum(gv, axis=1)
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        self.assertTrue(np.allclose(gv, md["g"]))
+
+    def test_ancient_sample_genetic_values(self):
+        for i, j in zip(
+            self.pop.ancient_sample_genetic_values, self.pop.ancient_sample_metadata
+        ):
+            self.assertEqual(i, j.g)
+
+    def test_ancient_sample_genetic_value_reconstruction(self):
+        as_gv = self.pop.ancient_sample_genetic_values
+        amd = np.array(self.pop.ancient_sample_metadata, copy=False)
+        nt = np.array(self.pop.tables.nodes, copy=False)
+        ancient_nodes = amd["nodes"][:, 0]
+        ancient_node_times = nt["time"][ancient_nodes]
+        for time, n, md in self.pop.sample_timepoints(include_alive=False):
+            w = np.where(ancient_node_times == time)[0]
+            gvslice = as_gv[w].flatten()
+            ti = fwdpy11.TreeIterator(self.pop.tables, n, update_samples=True)
+            gv = np.zeros(len(n))
+            node_map = np.array([np.iinfo(np.int32).max] * len(nt), dtype=np.int32)
+            for i, j in enumerate(n):
+                node_map[j] = i
+            for t in ti:
+                for m in t.mutations():
+                    for b in t.samples_below(m.node):
+                        gv[node_map[b]] += self.pop.mutations[m.key].s
+            gv = gv.reshape((len(w), 2))
+            gv = np.sum(gv, axis=1)
+            self.assertTrue(np.allclose(gv, gvslice))
 
     def test_pickling(self):
         pp = pickle.dumps(self.pop, -1)
