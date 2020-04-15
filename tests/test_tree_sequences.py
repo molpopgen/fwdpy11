@@ -1403,5 +1403,58 @@ class TestTrackMutationCounts(unittest.TestCase):
             self.assertEqual(self.ft.freqs[i.key][-1][0], j)
 
 
+class TestRecapitation(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.params, self.rng, self.pop = set_up_standard_pop_gen_model(0.50)
+        fwdpy11.evolvets(
+            self.rng, self.pop, self.params, 100, preserve_first_generation=True
+        )
+        self.amd = np.array(self.pop.ancient_sample_metadata, copy=False)
+        self.tskit_ts = self.pop.dump_tables_to_tskit()
+
+    def test_ancient_sample_records(self):
+        self.assertEqual(len(self.pop.ancient_sample_metadata), self.pop.N)
+        self.assertEqual(len(self.pop.tables.preserved_nodes), 2 * self.pop.N)
+
+    def test_ancient_sample_times(self):
+        nodes = np.array(self.pop.tables.nodes, copy=False)
+        self.assertTrue(np.all(nodes["time"][self.amd["nodes"].flatten()] == 0))
+
+    def test_number_of_roots(self):
+        tv = fwdpy11.TreeIterator(
+            self.pop.tables,
+            np.concatenate((self.pop.alive_nodes, self.amd["nodes"].flatten())),
+        )
+        for t in tv:
+            self.assertEqual(len(t.roots), 2 * len(self.amd))
+
+        for t in self.tskit_ts.trees():
+            self.assertEqual(t.num_roots, 2 * len(self.amd))
+
+    def test_recapitation(self):
+        """
+        Recapitation w/o recombination means we can predict
+        exactly how many new nodes there will be.
+        """
+        import msprime
+
+        coalesced_ts = msprime.simulate(
+            Ne=self.pop.N, from_ts=self.tskit_ts, recombination_rate=self.params.recrate
+        )
+        self.assertTrue(
+            len(coalesced_ts.tables.nodes) > len(self.tskit_ts.tables.nodes)
+        )
+
+    def test_invalid_preservation(self):
+        """
+        Pop is already evolved, so we'll get an error now.
+        """
+        with self.assertRaises(ValueError):
+            fwdpy11.evolvets(
+                self.rng, self.pop, self.params, 100, preserve_first_generation=True
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
