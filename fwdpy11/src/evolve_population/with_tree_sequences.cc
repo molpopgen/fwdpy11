@@ -162,6 +162,7 @@ evolve_with_tree_sequences(
     bool record_genotype_matrix, const bool track_mutation_counts_during_sim,
     const bool remove_extinct_mutations_at_finish,
     const bool reset_treeseqs_to_alive_nodes_after_simplification,
+    const bool preserve_first_generation,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder)
 {
     if (gvalue_pointers.genetic_values.empty())
@@ -317,6 +318,41 @@ evolve_with_tree_sequences(
         simplification_rv;
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
     decltype(pop.mcounts) last_preserved_generation_counts;
+    if (preserve_first_generation)
+        {
+            if (pop.generation != 0)
+                {
+                    throw std::invalid_argument(
+                        "cannot preserve first generation when pop.generation != 0");
+                }
+            pop.fill_alive_nodes();
+            pop.tables.preserved_nodes.insert(end(pop.tables.preserved_nodes),
+                                              begin(pop.alive_nodes),
+                                              end(pop.alive_nodes));
+            pop.ancient_sample_metadata.insert(end(pop.ancient_sample_metadata),
+                                               begin(pop.diploid_metadata),
+                                               end(pop.diploid_metadata));
+            if (record_genotype_matrix == true)
+                {
+                    for (const auto &md : pop.diploid_metadata)
+                        {
+                            auto offset = md.label * genetics.gvalue[0]->total_dim;
+                            pop.ancient_sample_genetic_value_matrix.insert(
+                                end(pop.ancient_sample_genetic_value_matrix),
+                                begin(pop.genetic_value_matrix) + offset,
+                                begin(pop.genetic_value_matrix) + offset
+                                    + genetics.gvalue[0]->total_dim);
+                        }
+                }
+            std::vector<std::uint32_t> individuals;
+            for (const auto &md : pop.diploid_metadata)
+                {
+                    individuals.push_back(md.label);
+                }
+            track_ancestral_counts(individuals, &last_preserved_generation,
+                                   last_preserved_generation_counts, pop);
+        }
+
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
@@ -337,14 +373,14 @@ evolve_with_tree_sequences(
             ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
                                                       offspring_metadata, demography,
                                                       current_demographic_state);
-            // NOTE: the two swaps of the metadata ensure 
+            // NOTE: the two swaps of the metadata ensure
             // that the update loop below passes the correct
             // metadata on, and that we then have the
-            // metadata in the expected places for 
+            // metadata in the expected places for
             // calculate_diploid_fitness
             pop.diploid_metadata.swap(offspring_metadata);
             // TODO: deal with random effects
-            for (auto &i : genetics.gvalue) 
+            for (auto &i : genetics.gvalue)
                 {
                     i->update(pop);
                 }
