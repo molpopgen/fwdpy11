@@ -3,31 +3,24 @@
 void
 calculate_diploid_fitness(
     const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    const std::vector<fwdpy11::DiploidGeneticValue *>
-        &gvalue_pointers,
+    const std::vector<fwdpy11::DiploidGeneticValue *> &gvalue_pointers,
     const std::vector<std::size_t> &deme_to_gvalue_map,
     std::vector<fwdpy11::DiploidMetadata> &offspring_metadata,
-    std::vector<double> &new_diploid_gvalues,
-    const bool update_genotype_matrix)
+    std::vector<double> &new_diploid_gvalues, const bool update_genotype_matrix)
 {
     // Calculate parental fitnesses
     double sum_parental_fitnesses = 0.0;
-    if (update_genotype_matrix == true)
-        {
-            new_diploid_gvalues.resize(offspring_metadata.size()
-                                       * gvalue_pointers[0]->total_dim);
-        }
-    auto gvoffset = new_diploid_gvalues.data();
-    for (std::size_t i = 0; i < offspring_metadata.size();
-         ++i, gvoffset += gvalue_pointers[0]->total_dim)
+    new_diploid_gvalues.clear();
+    for (std::size_t i = 0; i < offspring_metadata.size(); ++i)
         {
             auto idx = deme_to_gvalue_map[offspring_metadata[i].deme];
             gvalue_pointers[idx]->operator()(rng, offspring_metadata[i].label, pop,
                                              offspring_metadata[i]);
             if (update_genotype_matrix == true)
                 {
-                    std::copy(begin(gvalue_pointers[idx]->gvalues),
-                              end(gvalue_pointers[idx]->gvalues), gvoffset);
+                    new_diploid_gvalues.insert(end(new_diploid_gvalues),
+                                               begin(gvalue_pointers[idx]->gvalues),
+                                               end(gvalue_pointers[idx]->gvalues));
                 }
             sum_parental_fitnesses += offspring_metadata[i].w;
         }
@@ -65,13 +58,12 @@ calculate_diploid_fitness_genomes(
             throw std::runtime_error("non-finite fitnesses encountered");
         }
 
-    auto rv = fwdpp::gsl_ran_discrete_t_ptr(gsl_ran_discrete_preproc(
-        parental_fitnesses.size(), parental_fitnesses.data()));
+    auto rv = fwdpp::gsl_ran_discrete_t_ptr(
+        gsl_ran_discrete_preproc(parental_fitnesses.size(), parental_fitnesses.data()));
     if (rv == nullptr)
         {
             // This is due to negative fitnesses
-            throw std::runtime_error(
-                "fitness lookup table could not be generated");
+            throw std::runtime_error("fitness lookup table could not be generated");
         }
     return rv;
 }
