@@ -265,6 +265,7 @@ evolve_with_tree_sequences(
     calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,
                               offspring_metadata, new_diploid_gvalues,
                               record_genotype_matrix);
+    pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
     ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
                                       demography, current_demographic_state);
@@ -334,15 +335,9 @@ evolve_with_tree_sequences(
                                                end(pop.diploid_metadata));
             if (record_genotype_matrix == true)
                 {
-                    for (const auto &md : pop.diploid_metadata)
-                        {
-                            auto offset = md.label * genetics.gvalue[0]->total_dim;
-                            pop.ancient_sample_genetic_value_matrix.insert(
-                                end(pop.ancient_sample_genetic_value_matrix),
-                                begin(pop.genetic_value_matrix) + offset,
-                                begin(pop.genetic_value_matrix) + offset
-                                    + genetics.gvalue[0]->total_dim);
-                        }
+                    pop.ancient_sample_genetic_value_matrix.insert(
+                        end(pop.ancient_sample_genetic_value_matrix),
+                        begin(pop.genetic_value_matrix), end(pop.genetic_value_matrix));
                 }
             std::vector<std::uint32_t> individuals;
             for (const auto &md : pop.diploid_metadata)
