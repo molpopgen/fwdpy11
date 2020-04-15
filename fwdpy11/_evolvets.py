@@ -30,6 +30,7 @@ def evolvets(
     stopping_criterion=None,
     track_mutation_counts=False,
     remove_extinct_variants=True,
+    preserve_first_generation=False,
 ):
     """
     Evolve a population with tree sequence recording
@@ -68,6 +69,10 @@ def evolvets(
     .. versionchanged:: 0.5.2
 
         Added post_simplification_recorder.
+
+    .. versionchanged:: 0.7.1
+
+        Added preserve_first_generation.
 
     """
     import warnings
@@ -133,5 +138,6 @@ def evolvets(
         track_mutation_counts,
         remove_extinct_variants,
         reset_treeseqs_after_simplify,
+        preserve_first_generation,
         post_simplification_recorder,
     )
