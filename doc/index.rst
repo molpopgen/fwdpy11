@@ -82,3 +82,4 @@ Welcome to fwdpy11's documentation!
     examples/IM
     examples/gss_divergent_optima
     examples/initfrommsprime
+    examples/finishwithmsprime
