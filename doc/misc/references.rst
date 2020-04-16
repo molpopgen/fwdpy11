@@ -17,5 +17,7 @@ References
         
 .. [Nelson2019]  Nelson, Dominic, Jerome Kelleher, Aaron Ragsdale, Gil McVean, and Simon Gravel. 2019. “Coupling Wright-Fisher and Coalescent Dynamics for Realistic Simulation of Population-Scale Datasets.” bioRxiv. https://doi.org/10.1101/674440.
 
+.. [Ralph2020] Ralph, Peter, Kevin Thornton, and Jerome Kelleher. 2019. “Efficiently Summarizing Relationships in Large Samples: A General Duality between Statistics of Genealogies and Genomes.” bioRxiv. https://doi.org/10.1101/779132.
+
 .. [Song2000] Song, P. 2000 Multivariate dispersion models generated from Gaussian copula. Scandinavian Journal of Statistics 27, 305–320.
 
