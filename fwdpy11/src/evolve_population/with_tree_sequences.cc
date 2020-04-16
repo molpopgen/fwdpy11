@@ -326,6 +326,11 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument(
                         "cannot preserve first generation when pop.generation != 0");
                 }
+            if (pop.tables.edge_table.empty() == false)
+                {
+                    throw std::invalid_argument("cannot preserve first generation when "
+                                                "the edge table is not empty");
+                }
             pop.fill_alive_nodes();
             pop.tables.preserved_nodes.insert(end(pop.tables.preserved_nodes),
                                               begin(pop.alive_nodes),
