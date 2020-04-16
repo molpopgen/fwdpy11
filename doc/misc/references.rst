@@ -14,6 +14,8 @@ References
 .. [Kelleher2018] Kelleher, Jerome, Kevin R. Thornton, Jaime Ashander, and Peter L. Ralph. 2018. “Efficient Pedigree Recording for Fast Population Genetics Simulation.” PLoS Computational Biology 14 (11): e1006581.
 
 .. [Levene1953] Levene, Howard. 1953. “Genetic Equilibrium When More Than One Ecological Niche Is Available.” The American Naturalist 87 (836): 331–33.
+        
+.. [Nelson2019]  Nelson, Dominic, Jerome Kelleher, Aaron Ragsdale, Gil McVean, and Simon Gravel. 2019. “Coupling Wright-Fisher and Coalescent Dynamics for Realistic Simulation of Population-Scale Datasets.” bioRxiv. https://doi.org/10.1101/674440.
 
 .. [Song2000] Song, P. 2000 Multivariate dispersion models generated from Gaussian copula. Scandinavian Journal of Statistics 27, 305–320.
 
