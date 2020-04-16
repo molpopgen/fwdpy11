@@ -1456,5 +1456,29 @@ class TestRecapitation(unittest.TestCase):
             )
 
 
+class TestInvalidAttemptAtRecapitation(unittest.TestCase):
+    def test_after_starting_from_msprime(self):
+        import msprime
+
+        ts = msprime.simulate(100, Ne=100)
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+
+        a = fwdpy11.Multiplicative(2.0)
+        p = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "rates": (0.0, 0.0, 0),
+            "gvalue": a,
+            "prune_selected": True,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 100,
+        }
+        params = fwdpy11.ModelParams(**p)
+        rng = fwdpy11.GSLrng(666 ** 2)
+        with self.assertRaises(ValueError):
+            fwdpy11.evolvets(rng, pop, params, 100, preserve_first_generation=True)
+
+
 if __name__ == "__main__":
     unittest.main()
