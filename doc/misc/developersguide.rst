@@ -54,13 +54,13 @@ In addition to `black`, `import` statements should be sorted using isort_:
 
 .. code-block:: bash
 
-    isort -lai 1 file.py
+    isort file.py
 
 Or, in `vim/neovim`:
 
 .. code-block:: vim
 
-    :!isort -lai 1 %
+    :!isort %
 
 .. note::
 
