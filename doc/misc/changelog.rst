@@ -4,6 +4,21 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
 version, etc.
 
+0.7.1
+++++++++++++++++++++++++++++++++++++++++
+
+Maintenance release and one new feature:
+
+* Allow the first generation of a simulation to be preserved. `PR470 <https://github.com/molpopgen/fwdpy11/pull/470>`_
+  See :ref:`finishwithmsprime`.
+* Parameterizing classes like :class:`fwdpy11.GSSmo` is now more Pythonic,
+  and some existing ``init`` methods are deprecated in favor of the
+  new approach. `PR461 <https://github.com/molpopgen/fwdpy11/pull/461>`_.
+
+This release include several other improvements to documentation and user interface.
+All changes are backwards-compatible, and deprecation warnings are issued when
+necessary.  See the 0.7.1 milestone on ``GitHub`` for details.
+
 0.7.0
 ++++++++++++++++++++++++++++++++++++++++
 
