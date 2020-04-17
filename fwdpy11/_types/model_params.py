@@ -197,6 +197,12 @@ class ModelParams(object):
 
     @pself.setter
     def pself(self, pself_):
+        import warnings
+
+        warnings.warn(
+            "use of ModelParams.pself will be deprecated in 0.8.0",
+            PendingDeprecationWarning,
+        )
         self.__pself = pself_
 
     @property
@@ -238,6 +244,14 @@ class ModelParams(object):
             raise ValueError(
                 "mutation rate to neutral variants is > 0 but no Regions are defined"
             )
+        if self.pself != 0.0:  # Not equal to the default value
+            import warnings
+
+            warnings.warn(
+                "use of ModelParams.pself will be deprecated in 0.8.0",
+                PendingDeprecationWarning,
+            )
+
         if self.simlen is None or self.simlen < 0:
             raise ValueError("simlen cannot be none or < 0")
         # Added in 0.7.0
