@@ -44,20 +44,30 @@ def evolvets(
     :param simplification_interval: Number of generations between simplifications.
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
-    :type recorder: callable
+    :type recorder: function
     :param post_simplification_recorder: (None) A temporal sampler
-    :type post_simplification_recorder: callable
-    :param suppress_table_indexing: (False) Prevents edge table indexing until end of simulation
-    :type suppress_table_indexing: boolean
-    :param record_gvalue_matrix: (False) Whether to record genetic values into :attr:`fwdpy11.PopulationBase.genetic_values`.
-    :type record_gvalue_matrix: boolean
+    :type post_simplification_recorder: function
+    :param suppress_table_indexing: (False) Prevents edge table indexing until
+                                    end of simulation
+    :type suppress_table_indexing: bool
+    :param record_gvalue_matrix: (False) Whether to record genetic values into
+                                 :attr:`fwdpy11.PopulationBase.genetic_values`.
+    :type record_gvalue_matrix: bool
+    :param preserve_first_generation: (False) Whether to record generation 0 as
+                                      ancient samples. Must be `True` for
+                                      tree sequence "recapitation". See
+                                      :ref:`finishwithmsprime`.
+    :type preserve_first_generation: bool
 
-    The recording of genetic values into :attr:`fwdpy11.PopulationBase.genetic_values` is suppressed by default.  First, it
-    is redundant with :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a single trait.
-    Second, we save some memory by not tracking these matrices.  However, it is useful to track these data for some
+    The recording of genetic values into :attr:`fwdpy11.PopulationBase.genetic_values`
+    is suppressed by default.  First, it is redundant with
+    :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a
+    single trait. Second, we save some memory by not tracking these matrices.
+    However, it is useful to track these data for some
     cases when simulating multivariate mutational effects (pleiotropy).
 
-    For a detailed description of `post_simplification_recorder`, see :ref:`tstimeseries`.
+    For a detailed description of `post_simplification_recorder`,
+    see :ref:`tstimeseries`.
 
     .. note::
         If recorder is None,
