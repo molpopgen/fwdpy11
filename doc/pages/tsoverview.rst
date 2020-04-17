@@ -3,21 +3,13 @@
 Conceptual overview of tree sequence recording
 --------------------------------------------------------------
 
-fwdpy11 0.2.0 added support for tree sequence recording (TSR), which is a method to both speed up
-forward-time simulations and to track the entire genealogical history of the simulation.  The key reference
-describing TSR is::
+``fwdpy11`` 0.2.0 added support for tree sequence recording (``TSR``),
+which is a method to both speed up forward-time simulations and to
+track the entire genealogical history of the simulation.
+The key reference describing ``TSR`` is [Kelleher2018]_, which in turn relies
+heavily on concepts described in [Kelleher2016]_.
 
-    Kelleher, Jerome, Kevin Thornton, Jaime Ashander, and Peter Ralph. 2018.
-    Efficient Pedigree Recording for Fast Population Genetics Simulation.
-    bioRxiv. https://doi.org/10.1101/248500.
-
-The methods described in the 2018 paper rely heavily on concepts described in the preceding work::
-
-    Kelleher, Jerome, Alison M. Etheridge, and Gilean McVean. 2016.
-    Efficient Coalescent Simulation and Genealogical Analysis for Large Sample Sizes.
-    PLoS Computational Biology 12 (5): e1004842.
-
-The goal of TSR is to track a set of tables that contain the trees describing the ancestry of the population.
+The goal of ``TSR`` is to track a set of tables that contain the trees describing the ancestry of the population.
 
 Trees and tables
 ++++++++++++++++++++++++++++++++
@@ -32,7 +24,7 @@ This tree is the "marginal" history of a genomic segment covering the half-open 
 all genomic positions in this interval have the same ancestry, and recombination results in different intervals having
 different trees.
 
-Following Kelleher *et al.* (2016, PLoS Computational Biology), we can represent the above tree using two tables:
+Following [Kelleher2016]_, we can represent the above tree using two tables:
 
 .. figure:: ../images/tables.png
 
@@ -158,13 +150,13 @@ Let's apply the simplification algorithm that:
 That's much nicer!  The simplified tree shows now the *input* node ids are remapped to *output* node ids
 in such a manner that relative ordering is preserved.
  
-Thus, the most practical view of TSR is this: we speed up the simulations by *not* simulating neutral mutations.
+Thus, the most practical view of ``TSR`` is this: we speed up the simulations by *not* simulating neutral mutations.
 We only have to simulate the selected variants and occasionally simplify our messy trees.  The realized speedups are
 huge, and I refer you to the 2018 paper for the data on that.  But our simulations are not only faster.  They record
 much more information.  The tables of nodes, edges, etc., record the entire history of the simulation with respect to a
 set of sample nodes.
 
-Anyone interested in some of the more technical details of implementing TSR can take a look at the tutorials_ accompanying the 2018 paper.
+Anyone interested in some of the more technical details of implementing ``TSR`` can take a look at the tutorials_ accompanying the 2018 paper.
 
 
 Sample recording
