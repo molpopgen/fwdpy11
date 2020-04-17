@@ -77,10 +77,10 @@ def run_msprime_get_stats(Ne, nsam, rho, theta, model, seed):
     ts = run_msprime(Ne, rho, theta, model, seed)
     samples = [i for i in ts.samples()]
     S1 = len(ts.tables.sites)
-    pi1 = ts.diversity([samples])
+    pi1 = ts.diversity([samples])[0]
     rsample = np.random.choice(samples, nsam, replace=False)
-    S2 = ts.segregating_sites([rsample])
-    pi2 = ts.diversity([rsample])
+    S2 = ts.segregating_sites([rsample])[0]
+    pi2 = ts.diversity([rsample])[0]
     return SimOutput(S1, pi1, S2, pi2)
 
 
