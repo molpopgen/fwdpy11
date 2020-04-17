@@ -61,6 +61,8 @@ jobs:
             PYTHONPATH=. python examples/discrete_demography/localadaptation.py -N 500 --rho 100 --mu 2.5e-4 --sigma 0.1
             PYTHONPATH=. python examples/discrete_demography/IM.py --Nref 100 --N0 2 -T 0.1 --split 0.2 --N1 1.5 --rho 10.0 --nreps 1 --seed 666
             PYTHONPATH=. python examples/gss_divergent_optima/gss_divergent_optima.py 500 100
+            PYTHONPATH=. python examples/tskit/init_with_ts.py -N 100 --rho 10 --theta 10 --nreps 1 --simlen 10 --seed 666 --nsam 10 --model hudson 
+            PYTHONPATH=. python examples/tskit/finish_with_msprime.py -N 100 --rho 10 --theta 10 --nreps 1 --simlen 10 --seed 666 --nsam 10 --model hudson 
 
       - run:
           name: Build the manual and run doctests
