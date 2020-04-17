@@ -74,7 +74,6 @@ Get a joint ``fs`` from nodes from each deme:
 
 .. ipython:: python
 
-
     fs = pop.tables.fs([deme0_nodes[:10], deme1_nodes[50:55]])
     fs
 
@@ -91,6 +90,7 @@ Obtain the full :class:`numpy.ndarray` for the joint ``fs``:
 We can use standard array operations to get the marginal ``fs`` from our joint ``fs``:
 
 .. ipython:: python
+    :okwarning:
 
     fs.sum(axis=1).todense()
     fs.sum(axis=0).todense()
