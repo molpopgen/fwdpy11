@@ -7,6 +7,8 @@ References
 
 .. [Felsenstein1976] Felsenstein, J. 1976. “The Theoretical Population Genetics of Variable Selection and Migration.” Annual Review of Genetics 10: 253–80.
 
+.. [Haller2019] Haller, B. C., J. Galloway, and J. Kelleher. 2019. “Tree‐sequence Recording in SLiM Opens New Horizons for Forward‐time Simulation of Whole Genomes.” Molecular Ecology. https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.12968.
+
 .. [Jouganous2017] Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017. “Inferring the Joint Demographic History of Multiple Populations: Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.
 
 .. [Kelleher2016] Kelleher, Jerome, Alison M. Etheridge, and Gilean McVean. 2016. “Efficient Coalescent Simulation and Genealogical Analysis for Large Sample Sizes.” PLoS Computational Biology 12 (5): e1004842.
