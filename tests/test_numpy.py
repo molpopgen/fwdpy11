@@ -4,6 +4,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class test_DiploidPopulation(unittest.TestCase):
     """
     Test coercion of population data

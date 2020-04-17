@@ -24,6 +24,7 @@ import numpy as np
 import discrete_demography_roundtrips as ddr
 import fwdpy11
 
+
 class TestMoveOrCopyIndividuals(unittest.TestCase):
     """
     Tests functions for object construction and

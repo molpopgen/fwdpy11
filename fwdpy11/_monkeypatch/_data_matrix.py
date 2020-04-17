@@ -19,6 +19,7 @@
 
 import numpy as np
 
+
 def _merge(self):
     """
     Merge the neutral and selected data.

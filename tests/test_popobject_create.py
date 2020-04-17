@@ -24,6 +24,7 @@ import unittest
 
 import fwdpy11
 
+
 class testDiploidCreate(unittest.TestCase):
     @classmethod
     def setUp(self):

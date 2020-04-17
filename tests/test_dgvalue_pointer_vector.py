@@ -4,6 +4,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class TestConstruction(unittest.TestCase):
     @classmethod
     def setUpClass(self):

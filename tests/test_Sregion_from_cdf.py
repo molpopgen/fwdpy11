@@ -24,6 +24,7 @@ import scipy.stats
 import fwdpy11
 import sregion_cdf
 
+
 class TestSregionFromCDF(unittest.TestCase):
     @classmethod
     def setUpClass(self):

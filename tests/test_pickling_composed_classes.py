@@ -2,6 +2,7 @@ import unittest
 
 import pickling_composed_classes as PC
 
+
 class testPickleComposedClass(unittest.TestCase):
     @classmethod
     def setUp(self):

@@ -7,11 +7,10 @@ import sys
 import warnings
 from distutils.version import LooseVersion
 
+import pybind11
 import setuptools
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
-
-import pybind11
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")

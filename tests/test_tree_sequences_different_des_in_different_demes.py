@@ -27,6 +27,7 @@ import numpy as np
 
 import fwdpy11
 
+
 def gvalue_multiplicative(pop, ind, scaling):
     g = 1.0
     keys = [k for k in pop.haploid_genomes[pop.diploids[ind].first].smutations]

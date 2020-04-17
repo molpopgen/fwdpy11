@@ -4,6 +4,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):

@@ -22,6 +22,7 @@ import numpy as np
 
 import pickling_cpp
 
+
 class testPickleMutation(unittest.TestCase):
     @classmethod
     def setUp(self):

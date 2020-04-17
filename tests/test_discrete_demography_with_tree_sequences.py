@@ -23,6 +23,7 @@ import numpy as np
 
 import fwdpy11
 
+
 def validate_alive_node_metadata(pop):
     nodes = np.array(pop.tables.nodes, copy=False)
     for md in pop.diploid_metadata:

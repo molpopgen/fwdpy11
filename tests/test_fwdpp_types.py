@@ -2,6 +2,7 @@ import unittest
 
 from quick_pops import quick_nonneutral_slocus
 
+
 class testWriteMutationLabel(unittest.TestCase):
     def test_write_label(self):
         pop = quick_nonneutral_slocus()

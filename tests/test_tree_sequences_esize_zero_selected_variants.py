@@ -34,6 +34,7 @@ import unittest
 import EsizeZero
 import fwdpy11
 
+
 class Recorder(object):
     def __init__(self):
         self.data = []

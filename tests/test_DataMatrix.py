@@ -5,6 +5,7 @@ import numpy as np
 import fwdpy11
 from quick_pops import quick_nonneutral_slocus
 
+
 class TestDataMatrixFromDiploidPopulation(unittest.TestCase):
     """
     Much of this is already tested in fwdpp's unit tests,

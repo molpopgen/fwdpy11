@@ -4,6 +4,7 @@ import numpy as np
 
 import fwdpy11 as fp11
 
+
 class GenerationRecorder(object):
     def __init__(self):
         self.generations = []

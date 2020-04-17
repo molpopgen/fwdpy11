@@ -5,6 +5,7 @@ import numpy as np
 import fwdpy11
 import inherit_noise
 
+
 class TestInheritNoise(unittest.TestCase):
     """
     The class inherit_noise.TestInheritNoise passes the

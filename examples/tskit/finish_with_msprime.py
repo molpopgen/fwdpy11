@@ -27,7 +27,6 @@ import pandas as pd
 
 import fwdpy11
 
-
 SimOutput = namedtuple("SimOutput", ["S2N", "Pi2N", "Sn", "Pin"])
 
 

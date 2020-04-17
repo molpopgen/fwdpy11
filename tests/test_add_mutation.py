@@ -21,6 +21,7 @@ import unittest
 
 import fwdpy11
 
+
 class testDiploidPopulationAddMutations(unittest.TestCase):
     @classmethod
     def setUp(self):

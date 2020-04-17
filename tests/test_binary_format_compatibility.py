@@ -4,6 +4,7 @@ import unittest
 
 import fwdpy11
 
+
 class TestOldBinaryFileFormats(unittest.TestCase):
     def test_reading_045(self):
         pop = fwdpy11.DiploidPopulation.load_from_file("tests/v045.bin")

@@ -22,6 +22,7 @@ import unittest
 
 import fwdpy11
 
+
 class testSingleEffectMutation(unittest.TestCase):
     @classmethod
     def setUp(self):

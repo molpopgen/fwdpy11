@@ -7,6 +7,7 @@ import fwdpy11
 from test_tree_sequences import (set_up_quant_trait_model,
                                  set_up_standard_pop_gen_model)
 
+
 def _count_mutations_from_diploids(pop):
     mc = np.zeros(len(pop.mutations), dtype=np.uint32)
     for d in pop.diploids:

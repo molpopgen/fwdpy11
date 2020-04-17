@@ -20,6 +20,7 @@
 import numpy as np
 import tskit
 
+
 def _alive_nodes(self):
     """
     List of alive nodes corresponding to individuals.

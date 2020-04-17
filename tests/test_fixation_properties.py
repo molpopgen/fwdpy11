@@ -30,6 +30,7 @@ import unittest
 import fixation_properties as fp
 import fwdpy11
 
+
 class testFixationsAreSortedDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):

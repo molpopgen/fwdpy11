@@ -3,6 +3,7 @@ import unittest
 import fwdpy11
 from quick_pops import quick_nonneutral_slocus
 
+
 class test_mutation_labels(unittest.TestCase):
     def test_label_selected_mutations(self):
         pop = quick_nonneutral_slocus(dfe=fwdpy11.ExpS(0, 1, 1, -0.1, 1.0, label=2))

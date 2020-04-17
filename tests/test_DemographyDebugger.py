@@ -27,6 +27,7 @@ import numpy as np
 
 import fwdpy11
 
+
 def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
     pdict = {
         "nregions": [],

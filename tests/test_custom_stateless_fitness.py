@@ -6,6 +6,7 @@ import custom_stateless_genotype as general
 import fwdpy11
 import fwdpy11.ezparams
 
+
 class testCustomAdditive(unittest.TestCase):
     @classmethod
     def setUp(self):

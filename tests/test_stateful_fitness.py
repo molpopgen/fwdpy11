@@ -7,6 +7,7 @@ import fwdpy11 as fp11
 import fwdpy11.ezparams
 import snowdrift
 
+
 class SamplePhenotypes(object):
     """
     Temporal sampler checks that one can hook

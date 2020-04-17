@@ -2,6 +2,7 @@ import unittest
 
 import numpy_array_interface
 
+
 class TestNumpyArrayInterface1D(unittest.TestCase):
     @classmethod
     def setUp(self):

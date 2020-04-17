@@ -24,6 +24,7 @@ import unittest
 import fwdpy11
 from quick_pops import quick_neutral_slocus
 
+
 class testAddMutations(unittest.TestCase):
     @classmethod
     def setUpClass(self):

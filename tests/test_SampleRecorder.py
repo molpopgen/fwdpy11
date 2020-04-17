@@ -4,6 +4,7 @@ import numpy as np
 
 import fwdpy11
 
+
 class testSampleRecorder(unittest.TestCase):
     @classmethod
     def setUp(self):

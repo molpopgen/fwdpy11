@@ -19,6 +19,7 @@
 
 import unittest
 
+
 class testNoNoise(unittest.TestCase):
     @classmethod
     def setUp(self):
