@@ -81,5 +81,5 @@ Welcome to fwdpy11's documentation!
     examples/localadaptation
     examples/IM
     examples/gss_divergent_optima
-    examples/initfrommsprime
-    examples/finishwithmsprime
+    examples/precapitation
+    examples/recapitation
