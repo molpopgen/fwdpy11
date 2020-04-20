@@ -23,3 +23,4 @@ References
 
 .. [Song2000] Song, P. 2000 Multivariate dispersion models generated from Gaussian copula. Scandinavian Journal of Statistics 27, 305–320.
 
+.. [Tennessen2012] Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, Wenqing Fu, Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012. “Evolution and Functional Impact of Rare Coding Variation from Deep Sequencing of Human Exomes.” Science 337 (6090): 64–69.

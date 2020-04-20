@@ -17,6 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
 import unittest
 
 import numpy as np
@@ -100,6 +101,33 @@ class TestTwoDemeIMModel(unittest.TestCase):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], np.rint(self.N0 * self.Nanc).astype(int))
         self.assertEqual(deme_sizes[1], np.rint(self.N1 * self.Nanc).astype(int))
+
+
+@unittest.skipIf(
+    "RUN_EXPENSIVE_TESTS" not in os.environ or os.environ["RUN_EXPENSIVE_TESTS"] != "1",
+    "Expensive test.",
+)
+class TestTennessenModel(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        from fwdpy11.demographic_models.human import tennessen
+
+        self.demog, self.simlen, self.Nref = tennessen(0)
+        self.pop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
+        self.pdict = setup_pdict(self.demog, self.simlen)
+        self.params = fwdpy11.ModelParams(**self.pdict)
+        self.rng = fwdpy11.GSLrng(915153)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+
+    def test_generation(self):
+        self.assertEqual(self.pop.generation, self.simlen)
+
+    def test_final_deme_sizes(self):
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_sizes = np.unique(md["deme"], return_counts=True)
+        expected_deme_sizes = [424000, 512000]
+        for i, j in zip(deme_sizes[1], expected_deme_sizes):
+            self.assertEqual(i, j)
 
 
 if __name__ == "__main__":
