@@ -8,27 +8,20 @@ import warnings
 from distutils.version import LooseVersion
 
 import pybind11
-import setuptools
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
+
+PYBIND11_MIN_VERSION = "2.4.3"
+TSKIT_MIN_VERSION = "0.2.3"
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
 
-__version__ = "0.7.1"
-
-if sys.version_info < (3, 3):
-    raise RuntimeError("Python >= 3.3 required")
-
 if sys.version_info < (3, 6):
-    warnings.warn("Python version 3.6 or later will be required in fwdpy11 0.8.0")
+    raise RuntimeError("Python >= 3.6 required")
 
-if pybind11.__version__ < "2.4.3":
-    raise RuntimeError("pybind11 >= " + "2.4.3" + " required")
-
-if sys.version_info >= (3, 7):
-    if pybind11.__version__ < "2.3.0":
-        raise RuntimeError("Python 3.7 and newer required pybind11 2.3 or greater")
+if pybind11.__version__ < PYBIND11_MIN_VERSION:
+    raise RuntimeError(f"pybind11 >= {PYBIND11_MIN_VERSION} required")
 
 
 # clang/llvm is default for OS X builds.
@@ -214,7 +207,7 @@ for root, dirnames, filenames in os.walk("fwdpy11/headers"):
             try:
                 if "*.hpp" not in generated_package_data[replace]:
                     generated_package_data[replace].append("*.hpp")
-            except:
+            except:  # NOQA
                 generated_package_data[replace] = ["*.hpp"]
         g = glob.glob(root + "/*.tcc")
         if len(g) > 0:
@@ -226,14 +219,13 @@ for root, dirnames, filenames in os.walk("fwdpy11/headers"):
             try:
                 if "*.tcc" not in generated_package_data[replace]:
                     generated_package_data[replace].append("*.tcc")
-            except:
+            except:  # NOQA
                 generated_package_data[replace] = ["*.tcc"]
 
 long_desc = open("README.rst").read()
 
 setup(
     name="fwdpy11",
-    version=__version__,
     author="Kevin Thornton",
     author_email="krthornt@uci.edu",
     url="http://molpopgen.github.io/fwdpy11",
@@ -251,7 +243,14 @@ setup(
     long_description=long_desc,
     long_description_content_type="text/x-rst",
     ext_modules=ext_modules,
-    install_requires=["pybind11>=2.4.3", "numpy", "tskit>=0.1.4", "sparse"],
+    install_requires=[
+        f"pybind11>={PYBIND11_MIN_VERSION}",
+        "numpy",
+        f"tskit>={TSKIT_MIN_VERSION}",
+        "sparse",
+    ],
+    setup_requires=["setuptools_scm"],
+    use_scm_version={"write_to": "fwdpy11/_version.py"},
     cmdclass={"build_ext": CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,

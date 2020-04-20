@@ -16,6 +16,7 @@ dependencies:
     - sparse
     - pandas
     - matplotlib
+    - setuptools_scm
     - ipython
     - cmake
     - pip

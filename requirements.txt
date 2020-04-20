@@ -1,6 +1,6 @@
 # As of 0.2.0, pybind11 
 # must not be installed via pip
-# pybind11==2.4.3
+pybind11==2.4.3
 numpy
 sparse
 scipy
@@ -13,3 +13,5 @@ ipython
 matplotlib
 seaborn
 msprime
+tskit==0.2.3
+setuptools_scm==1.11.1
