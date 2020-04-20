@@ -2,3 +2,4 @@
 *.rendered*
 *.cppimporthash
 *.pyc
+_version.py
