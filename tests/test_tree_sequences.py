@@ -82,7 +82,6 @@ def set_up_standard_pop_gen_model(simlen=1.0):
     """
     # TODO add neutral variants
     N = 1000
-    demography = fwdpy11.DiscreteDemography()
     rho = 1.0
     # theta = 100.
     # nreps = 500
@@ -101,7 +100,7 @@ def set_up_standard_pop_gen_model(simlen=1.0):
         "rates": (0.0, 0.001, r),
         "gvalue": a,
         "prune_selected": True,
-        "demography": demography,
+        "demography": fwdpy11.DiscreteDemography(),
         "simlen": np.rint(simlen * N).astype(int),
     }
     params = fwdpy11.ModelParams(**p)
@@ -690,7 +689,9 @@ class TestMutationCounts(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        self.params.demography = np.array([self.pop.N] * 200, dtype=np.uint32)
+        pdict = self.params.as_dict()
+        pdict["simlen"] = 200
+        self.params = fwdpy11.ModelParams(**pdict)
         self.pop2 = copy.deepcopy(self.pop)
         self.rng2 = fwdpy11.GSLrng(101 * 45 * 110 * 210)
         params2 = copy.deepcopy(self.params)
@@ -752,7 +753,9 @@ class TestUpdateTiming(unittest.TestCase):
         from test_tree_sequences import set_up_quant_trait_model
 
         params, rng, pop = set_up_quant_trait_model(1.1)
-        params.rates = (0, 0, 0)
+        pdict = params.as_dict()
+        pdict["rates"] = (0, 0, 0)
+        params = fwdpy11.ModelParams(**pdict)
 
         class Recorder(object):
             def __init__(self):
@@ -764,7 +767,6 @@ class TestUpdateTiming(unittest.TestCase):
                     self.data.append((pop.generation, md["w"].mean()))
 
         r = Recorder()
-        fwdpy11.evolvets(rng, pop, params, 1000, r)
         for i in r.data:
             if i[0] < pop.N:
                 self.assertAlmostEqual(i[1], 1.0)
@@ -936,7 +938,6 @@ class TestSimplificationInterval(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.N = 1000
-        self.demography = np.array([self.N] * 100, dtype=np.uint32)
         self.rho = 1.0
         self.theta = 100.0
         self.nreps = 500
@@ -951,7 +952,8 @@ class TestSimplificationInterval(unittest.TestCase):
             "rates": (0.0, 0.025, self.r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": self.demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 100,
         }
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -975,7 +977,6 @@ class TestSimplificationInterval(unittest.TestCase):
 class TestFixationPreservation(unittest.TestCase):
     def testQtraitSim(self):
         N = 1000
-        demography = np.array([N] * 3 * N, dtype=np.uint32)
         rho = 1.0
         r = rho / (4 * N)
 
@@ -988,7 +989,8 @@ class TestFixationPreservation(unittest.TestCase):
             "rates": (0.0, 0.005, r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 3 * N,
         }
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -1013,7 +1015,6 @@ class TestFixationPreservation(unittest.TestCase):
 
     def testPopGenSim(self):
         N = 1000
-        demography = np.array([N] * 2 * N, dtype=np.uint32)
         rho = 1.0
         r = rho / (4 * N)
 
@@ -1025,7 +1026,8 @@ class TestFixationPreservation(unittest.TestCase):
             "rates": (0.0, 0.00005, r),
             "gvalue": a,
             "prune_selected": True,
-            "demography": demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 2 * N,
         }
         params = fwdpy11.ModelParams(**p)
         rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -1146,7 +1148,6 @@ class TestDataMatrixIterator(unittest.TestCase):
     def setUpClass(self):
         # TODO add neutral variants
         self.N = 1000
-        self.demography = np.array([self.N] * self.N, dtype=np.uint32)
         self.rho = 1.0
         self.theta = 100.0
         self.nreps = 500
@@ -1162,7 +1163,8 @@ class TestDataMatrixIterator(unittest.TestCase):
             "rates": (0.0, 0.025, self.r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": self.demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": self.N,
         }
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
@@ -1292,7 +1294,6 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                         assert tables.nodes[idmap[ni]].time == t
 
         self.N = 1000
-        self.demography = np.array([self.N] * 101, dtype=np.uint32)
         self.rho = 1.0
         self.r = self.rho / (4 * self.N)
 
@@ -1305,7 +1306,8 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
             "rates": (0.0, 0.025, self.r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": self.demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": 101,
         }
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)

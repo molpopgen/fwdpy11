@@ -4,8 +4,7 @@ import unittest
 import numpy as np
 
 import fwdpy11
-from test_tree_sequences import (set_up_quant_trait_model,
-                                 set_up_standard_pop_gen_model)
+from test_tree_sequences import set_up_quant_trait_model, set_up_standard_pop_gen_model
 
 
 def _count_mutations_from_diploids(pop):
@@ -33,8 +32,10 @@ class TestKeepFixations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        self.params.rates = (1e-3, self.params.rates[1], self.params.rates[2])
-        self.params.nregions = [fwdpy11.Region(0, 1, 1)]
+        pdict = self.params.as_dict()
+        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["nregions"] = [fwdpy11.Region(0, 1, 1)]
+        self.params = fwdpy11.ModelParams(**pdict)
 
     def test_mutation_counts_with_indexing(self):
         """
@@ -61,7 +62,9 @@ class TestKeepFixations(unittest.TestCase):
         """
         pop2 = copy.deepcopy(self.pop)
         rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)  # Use same seed!!!
-        self.params.prune_selected = False
+        pdict = self.params.as_dict()
+        pdict["prune_selected"] = False
+        self.params = fwdpy11.ModelParams(**pdict)
         params = copy.deepcopy(self.params)
         fwdpy11.evolvets(rng, pop2, params, 100, suppress_table_indexing=True)
         fwdpy11.evolvets(
@@ -82,11 +85,16 @@ class TestPruneFixations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
-        self.params.rates = (1e-3, self.params.rates[1], self.params.rates[2])
-        self.params.nregions = [fwdpy11.Region(0, 1, 1)]
+        pdict = self.params.as_dict()
+        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["nregions"] = [fwdpy11.Region(0, 1, 1)]
+        self.params = fwdpy11.ModelParams(**pdict)
 
+    @unittest.skip("doesn't test anything...")
     def test_no_mutations(self):
-        self.params.rates = (0, 0, 0)
+        pdict = self.params.as_dict()
+        pdict["rates"] = (0, 0, 0)
+        self.params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
 
     def test_mutation_counts_with_indexing(self):
@@ -108,8 +116,10 @@ class TestNeutralMutRegions(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
-        self.params.rates = (1e-3, self.params.rates[1], self.params.rates[2])
-        self.params.nregions = [fwdpy11.Region(0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
+        pdict = self.params.as_dict()
+        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["nregions"] = [fwdpy11.Region(0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
+        self.params = fwdpy11.ModelParams(**pdict)
 
     def test_neutral_mut_locations(self):
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)

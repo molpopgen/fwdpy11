@@ -123,10 +123,8 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
-        import numpy as np
 
         self.N = 1000
-        self.demography = np.array([self.N] * self.N, dtype=np.uint32)
         self.rho = 1.0
         self.theta = 100.0
         self.nreps = 500
@@ -142,7 +140,8 @@ class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
             "rates": (0.0, 0.025, self.r),
             "gvalue": a,
             "prune_selected": False,
-            "demography": self.demography,
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": self.N,
         }
         self.params = fwdpy11.ModelParams(**self.p)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)

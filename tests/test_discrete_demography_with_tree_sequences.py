@@ -665,13 +665,12 @@ class TestGeneticValueLists(unittest.TestCase):
             "sregions": [],
             "recregions": [],
             "rates": (0, 0, 0),
-            "demography": None,
+            "demography": fwdpy11.DiscreteDemography(),
             "simlen": 1,
             "gvalue": fwdpy11.Additive(2.0),
         }
 
     def test_too_many(self):
-        self.pdict["demography"] = np.array([self.pop.N] * 10, dtype=np.uint32)
         self.pdict["gvalue"] = [fwdpy11.Additive(2.0)] * 2
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(ValueError):
@@ -694,7 +693,6 @@ class TestGeneticValueLists(unittest.TestCase):
         self.pop = fwdpy11.DiploidPopulation(
             [0, self.pop.N // 3, 2 * self.pop.N // 3], 1
         )
-        self.pdict["demography"] = np.array([self.pop.N] * 100, dtype=np.uint32)
         self.pdict["gvalue"] = [fwdpy11.Additive(2.0)] * 2  # This is the error
         params = fwdpy11.ModelParams(**self.pdict)
         with self.assertRaises(ValueError):

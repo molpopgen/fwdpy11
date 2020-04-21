@@ -1,8 +1,6 @@
 import pickle
 import unittest
 
-import numpy as np
-
 import fwdpy11 as fp11
 import fwdpy11.ezparams
 import snowdrift
@@ -20,7 +18,7 @@ class SamplePhenotypes(object):
         self.f = f
         # self.a = fwdpy11.genetic_values.DiploidAdditive(2.0)
 
-    def __call__(self, pop):
+    def __call__(self, pop, sampler):
         pass
         # for i in range(pop.N):
         #     w = self.a(pop.diploids[i], pop)
@@ -37,7 +35,7 @@ def evolve_snowdrift(args):
     N, seed = args
     # Construct as single-deme object
     # with N diploids
-    pop = fp11.DiploidPopulation(N)
+    pop = fp11.DiploidPopulation(N, 1.)
     # Initialize a random number generator
     rng = fp11.GSLrng(seed)
     p = {
@@ -47,13 +45,14 @@ def evolve_snowdrift(args):
         "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2),
         # evolve for 100 generations so that unit tests are
         # fast
-        "demography": np.array([N] * 100, dtype=np.uint32),
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 100,
         "rates": (0.0, 0.0025, 0.001),
         "prune_selected": False,
     }
     params = fwdpy11.ModelParams(**p)
     sampler = SamplePhenotypes(params.gvalue)
-    fp11.evolve_genomes(rng, pop, params, sampler)
+    fp11.evolvets(rng, pop, params, 100, sampler)
     # return our pop
     return pop
 

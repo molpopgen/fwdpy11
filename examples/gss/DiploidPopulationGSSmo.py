@@ -211,9 +211,6 @@ def runsim(args):
         ]
     )
 
-    popsizes = [args.popsize] * (
-        10 * args.popsize + int(args.time * float(args.popsize))
-    )
     p = {
         "nregions": [],  # No neutral mutations -- add them later!
         "gvalue": fwdpy11.Additive(2.0, GSSmo),
@@ -222,7 +219,8 @@ def runsim(args):
         "rates": (0.0, args.mu, args.rho / float(4 * args.popsize)),
         # Keep mutations at frequency 1 in the pop if they affect fitness.
         "prune_selected": False,
-        "demography": np.array(popsizes, dtype=np.uint32),
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 10 * args.popsize + int(args.time + float(args.popsize)),
     }
     params = fwdpy11.ModelParams(**p)
 

@@ -44,7 +44,8 @@ def runsim(argtuple):
             fwdpy11.Region(0, 1.0 / 3.0, 1),
             fwdpy11.Region(2.0 / 3.0, 1.0, 1),
         ],
-        "demography": np.array([N] * 20 * N, dtype=np.uint32),
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 20 * N,
     }
     params = fwdpy11.ModelParams(**pdict)
 

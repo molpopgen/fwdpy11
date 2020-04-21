@@ -36,6 +36,9 @@ def evolve_genomes(rng, pop, params, recorder=None):
         If recorder is None,
         then :class:`fwdpy11.RecordNothing` will be used.
 
+    .. versionchanged:: 0.8.0
+
+        Update to refactored ModelParams
     """
     import warnings
 
@@ -44,11 +47,6 @@ def evolve_genomes(rng, pop, params, recorder=None):
         "Simulation without tree sequences is being considered for deprecation!",
         PendingDeprecationWarning,
     )
-    # Test parameters while suppressing warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        # Will throw exception if anything is wrong:
-        params.validate()
 
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import evolve_without_tree_sequences

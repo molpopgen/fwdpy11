@@ -16,11 +16,81 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import warnings
+
+import attr
+import numpy as np
+
+import fwdpy11
 
 
+@attr.s(kw_only=True, frozen=True)
 class ModelParams(object):
     """
-    Class to hold simulation parameters
+    This class stores and validates the parameters of a simulation.
+    Instances of this class are constructed using ``kwargs``
+    and instance attributes are immutable once initialized.
+
+    This class accepts the following ``kwargs``, which are also
+    the attribute names for instances:
+
+    :param nregions: List of regions where neutral mutations occur
+    :type nregions: list[fwdpy11.Region]
+    :param sregions: List of regions where selected mutations occur
+    :type sregions: list[fwdpy11.Sregion]
+    :param recregions: List of regions where recombination events occur
+    :type recregions: list[fwdpy11.Region] or list[fwdpy11.GeneticMapUnit]
+    :param rates: The neutral mutation rate, selected mutation rate, and
+                  total recombination rate, respectively.
+                  See below for more details.
+    :type rates: list
+    :param demography: The demographic model to simulate
+    :type demography: fwdpy11.DiscreteDemography
+    :param simlen: The number of time steps to evolve
+    :type simlen: int
+    :param prune_selected: If ``True``, remove selected fixations from
+                           the population when they are first detected
+                           as fixed.
+    :type prune_selected: bool
+
+    The following attributes exist, and may be set as ``kwargs``,
+    but are best set via ``rates``.  Currently, these attributes
+    are only used internally.  As such, they are prone to
+    refactoring in future versions.
+
+    :param mutrate_n: The neutral mutation rate
+    :type mutrate_n: float
+    :param mutrate_s: The neutral mutation rate
+    :type mutrate_s: float
+    :param recrate: The recombination rate
+    :type recrate: float or None
+
+    The following ``kwargs``/attributes are pending deprecation along
+    with simulations without tree sequence recording:
+
+    :param pself: The probabilility that an individual selfs.
+                  For simulations with tree sequence recording,
+                  this parameter has no effect.  Instead, use
+                  the methods described :ref:`here <softselection>`.
+    :type self: float
+    :param popsizes: A list of population sizes over time.
+                     For simulations with tree sequence recording,
+                     this parameter has no effect.  Instead, use
+                     the methods described :ref:`here <softselection>`.
+    :type popsizes: numpy.ndarray
+
+    .. note::
+
+        The ``rates`` field must be a list of length three (3).
+        The first two values must be non-negative floats. For
+        the recombination rate, the third value must also
+        be a non-negative float if all objects in ``recrates``
+        are instances of :class:`fwdpy11.Region`. However,
+        if they are instead instances of :class:`fwdpy11.GeneticMapUnit`,
+        then the final element in ``rates`` must be ``None``.
+        See the :ref:`section <geneticmaps>` on setting
+        recombination rates for details.
+
 
     .. versionadded:: 0.1.1
 
@@ -32,244 +102,200 @@ class ModelParams(object):
 
         Updated to support :class:`fwdpy11.DiscreteDemography`
 
+    .. versionchanged:: 0.8.0
+
+        Refactored class internals using ``attrs``.
     """
 
-    def __init__(self, **kwargs):
-        self.__nregions = []
-        self.__sregions = None
-        self.__recregions = None
-        self.__demography = None
-        self.__prune_selected = True
-        self.__rates = None
-        self.__gvalue = None
-        self.__pself = 0.0
-        self.__simlen = None
-        self.__popsizes = None  # FIXME: this is a hack in 0.6.0
-        for key, value in kwargs.items():
-            if key in dir(self) and key[:1] != "_":
-                setattr(self, key, value)
-            elif key not in dir(self):
-                raise ValueError(key, " not a valid parameter for this class.")
+    nregions = attr.ib(factory=list)
+    sregions = attr.ib(factory=list)
+    recregions = attr.ib(factory=list)
+    rates = attr.ib(factory=list, converter=list)
+    gvalue = attr.ib(default=None)
+    demography = attr.ib(default=fwdpy11.DiscreteDemography())
+    simlen: int = attr.ib(converter=int)
+    prune_selected: bool = attr.ib(default=True)
 
-    def _set_demography(self, value):
-        from fwdpy11 import DiscreteDemography
+    pself: float = attr.ib(default=0.0)  # Deprecated
+    popsizes = attr.ib()  # FIXME: this is a hack from 0.6.0
 
-        if isinstance(value, DiscreteDemography):
-            return value
+    # These attributes are the elements
+    # store in rates
+    mutrate_n: float = attr.ib(
+        converter=float, validator=attr.validators.instance_of(float)
+    )
+    mutrate_s: float = attr.ib(
+        converter=float, validator=attr.validators.instance_of(float)
+    )
+    recrate = attr.ib()
 
-        # Assume value is a numpy array of pop
-        # sizes over time
-        self.simlen = len(value)
-        self.__popsizes = value  # FIXME: this is a hack in 0.6.0
-        return DiscreteDemography(value)
+    @nregions.validator
+    def validate_nregions(self, attribute, value):
+        for i in value:
+            attr.validators.instance_of(fwdpy11.Region)(self, attribute, i)
 
-    @property
-    def nregions(self):
-        """
-        Get or set the neutral regions.
-        """
-        return self.__nregions
+    @sregions.validator
+    def validate_sregions(self, attribute, value):
+        for i in value:
+            attr.validators.instance_of(fwdpy11.Sregion)(self, attribute, i)
+            try:
+                if i.shape != self.gvalue.shape:
+                    e = "Sregion and genetic value "
+                    "dimension mismatch: {} {}, {} {}".format(
+                        type(i), i.shape, type(self.gvalue), self.gvalue.shape
+                    )
+                    raise ValueError(e)
+            except AttributeError:
+                for g in self.gvalue:
+                    if i.shape != g.shape:
+                        e = "Sregion and genetic value "
+                        "dimension mismatch: {} {}, {} {}".format(
+                            type(i), i.shape, type(self.gvalue), g.shape
+                        )
+                        raise ValueError(e)
 
-    @nregions.setter
-    def nregions(self, nregions_):
-        self.__nregions = nregions_
+    @recregions.validator
+    def validate_recregions(self, attribute, value):
+        try:
+            for i in value:
+                attr.validators.instance_of(fwdpy11.Region)(self, attribute, i)
+        except TypeError:
+            try:
+                for i in value:
+                    attr.validators.instance_of(fwdpy11.GeneticMapUnit)(
+                        self, attribute, i
+                    )
+            except TypeError:
+                raise
 
-    @property
-    def sregions(self):
-        """
-        Get or set the selected regions.
-        """
-        return self.__sregions
+    @rates.validator
+    def rates_validator(self, attribute, value):
+        if len(value) != 3:
+            raise ValueError(f"rates must be of length 3, but we got {value} instead")
 
-    @sregions.setter
-    def sregions(self, sregions_):
-        self.__sregions = sregions_
+    @mutrate_n.validator
+    @mutrate_s.validator
+    def individual_rate_validator(self, attribute, value):
+        # NOTE: not decorated as recrate validator b/c that
+        # attribute is allowed to be None
+        if not np.isfinite(value):
+            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
+        if value < 0.0:
+            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
 
-    @property
-    def recregions(self):
-        """
-        Get or set the recombination regions.
-        """
-        return self.__recregions
-
-    @recregions.setter
-    def recregions(self, recregions_):
-        self.__recregions = recregions_
-
-    @property
-    def prune_selected(self):
-        """
-        Get or set whether or not selected fixations
-        are to be removed during simulaton.
-
-        When setting, a bool is required.
-        """
-        return self.__prune_selected
-
-    @prune_selected.setter
-    def prune_selected(self, value):
-        self.__prune_selected = bool(value)
-
-    @nregions.setter
-    def nregions(self, nregions):
-        self.__nregions = nregions
-
-    @sregions.setter
-    def sregions(self, sregions):
-        self.__sregions = sregions
-
-    @property
-    def demography(self):
-        """
-        Get or set demographic history.
-        """
-        return self.__demography
-
-    @demography.setter
-    def demography(self, value):
-        self.__demography = self._set_demography(value)
-
-    @property
-    def simlen(self):
-        """
-        Get or set the length of the simulation.
-
-        .. versionadded:: 0.6.0
-        """
-        return self.__simlen
-
-    @simlen.setter
-    def simlen(self, value):
-        self.__simlen = value
-
-    @property
-    def gvalue(self):
-        """
-        Get/set the type name of the genetic value
-        calculator.
-        """
-        return self.__gvalue
-
-    @gvalue.setter
-    def gvalue(self, gvalue_):
-        self.__gvalue = gvalue_
-
-    @property
-    def rates(self):
-        """
-        Get/set mutation and recombination rates.
-        """
-        return self.__rates
-
-    @rates.setter
-    def rates(self, rates_):
-        if len(rates_) != 3:
-            raise ValueError("length of rates must be 3")
-        self.__rates = rates_
-
-    @property
-    def mutrate_n(self):
-        """
-        Return neutral mutation rate(s).
-        """
-        return self.__rates[0]
-
-    @property
-    def mutrate_s(self):
-        """
-        Return selected mutation rate(s).
-        """
-        return self.__rates[1]
-
-    @property
-    def recrate(self):
-        """
-        Return recombination rate(s).
-        """
-        return self.__rates[2]
-
-    @property
-    def pself(self):
-        """
-        Get/set selfing probability/probabilities.
-        """
-        return self.__pself
-
-    @pself.setter
-    def pself(self, pself_):
-        import warnings
-
-        warnings.warn(
-            "use of ModelParams.pself will be deprecated in 0.8.0",
-            PendingDeprecationWarning,
-        )
-        self.__pself = pself_
-
-    @property
-    def popsizes(self):
-        """
-        This is a hack in 0.6.0 so that
-        simulations w/o tree sequences use the
-        same API as previous versions.
-        """
-        # FIXME: hack introduced in 0.6.0
-        return self.__popsizes
-
-    def validate(self):
-        """
-        Error check model params.
-
-        :raises TypeError: Throws TypeError if validation fails.
-
-        """
-        if self.nregions is None:
-            raise TypeError("neutral regions cannot be None")
-        if self.sregions is None:
-            raise TypeError("selected regions cannot be None")
-        if self.recregions is None:
-            raise TypeError("recombination regions cannot be None")
-        if self.demography is None:
-            raise TypeError("demography cannot be None")
-        if self.prune_selected is None:
-            raise TypeError("prune_selected cannot be None")
-        if self.gvalue is None:
-            raise TypeError("gvalue cannot be None")
-        if self.rates is None:
-            raise TypeError("rates cannot be None")
-        if self.rates[1] > 0 and len(self.sregions) == 0:
-            raise ValueError(
-                "mutation rate to selected variants is > 0 but no Sregions are defined"
-            )
-        if self.rates[0] > 0 and len(self.nregions) == 0:
+    @mutrate_n.validator
+    def validate_mutrate_n(self, attribute, value):
+        if value > 0 and len(self.nregions) == 0:
             raise ValueError(
                 "mutation rate to neutral variants is > 0 but no Regions are defined"
             )
-        if self.pself != 0.0:  # Not equal to the default value
-            import warnings
 
+    @mutrate_s.validator
+    def validate_mutrate_s(self, attribute, value):
+        if value > 0 and len(self.sregions) == 0:
+            raise ValueError(
+                "mutation rate to selected variants is > 0 but no Sregions are defined"
+            )
+
+    @recrate.validator
+    def validate_recrate(self, attribute, value):
+        if value is None:
+            for i in self.recregions:
+                if not isinstance(i, fwdpy11.GeneticMapUnit):
+                    raise ValueError(
+                        f"recrate of {value} must be paired with"
+                        " instances of fwdpy11.GeneticMapUnit"
+                    )
+        else:
+            for i in self.recregions:
+                if not isinstance(i, fwdpy11.Region):
+                    raise ValueError(
+                        f"recrate of {value} must be paired with"
+                        " instances of fwdpy11.Region"
+                    )
+            attr.validators.instance_of(float)(self, attribute, value)
+            self.individual_rate_validator(attribute, value)
+
+    @mutrate_n.default
+    def mutrate_n_default(self):
+        return self.rates[0]
+
+    @mutrate_s.default
+    def mutrate_s_default(self):
+        return self.rates[1]
+
+    @recrate.default
+    def recrate_default(self):
+        if self.rates[2] is None:
+            return None
+        return float(self.rates[2])
+
+    @popsizes.default
+    def popsizes_default(self):
+        if isinstance(self.demography, fwdpy11.DiscreteDemography):
+            return None
+
+        # Otherwise, assume that it is a numpy array
+        warnings.warn(
+            "attribute popsizes is being considered for"
+            " deprecation (along with simulations without tree sequences)",
+            PendingDeprecationWarning,
+        )
+        return self.demography
+
+    @simlen.default
+    def simlen_default(self):
+        if isinstance(self.demography, fwdpy11.DiscreteDemography):
+            return 0
+        return len(self.demography)
+
+    @simlen.validator
+    def validate_simlen(self, attribute, value):
+        if value <= 0:
+            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
+
+        if self.popsizes is not None and value != len(self.popsizes):
+            raise ValueError(
+                f"simlen must equal len(self.popsizes), but we got {value} and "
+                f"{len(self.popsizes)} instead"
+            )
+
+    @gvalue.validator
+    def validate_gvalue(self, attribute, value):
+        try:
+            for i in value:
+                attr.validators.instance_of(fwdpy11.DiploidGeneticValue)(
+                    self, attribute, i
+                )
+        except TypeError:
+            try:
+                attr.validators.instance_of(fwdpy11.DiploidGeneticValue)(
+                    self, attribute, value
+                )
+            except TypeError:
+                raise
+
+    @demography.validator
+    def validate_demography(self, attribute, value):
+        if isinstance(value, fwdpy11.DiscreteDemography):
+            return
+        # self.simlen = len(value)
+        # self.popsizes = value  # FIXME: this is a hack in 0.6.0
+        # self.demography = fwdpy11.DiscreteDemography(value)
+
+    @pself.validator
+    def validate_pself(self, attribute, value):
+        if value != 0.0:
             warnings.warn(
-                "use of ModelParams.pself will be deprecated in 0.8.0",
+                "attribute pself is being considered for"
+                " deprecation (along with simulations without tree sequences)",
                 PendingDeprecationWarning,
             )
 
-        if self.simlen is None or self.simlen < 0:
-            raise ValueError("simlen cannot be none or < 0")
-        # Added in 0.7.0
-        for s in self.sregions:
-            try:
-                if s.shape != self.gvalue.shape:
-                    e = "Sregion and genetic value "
-                    "dimension mismatch: {} {}, {} {}".format(
-                        type(s), s.shape, type(self.gvalue), self.gvalue.shape
-                    )
-                    raise ValueError(e)
-            except:  # NOQA
-                for g in self.gvalue:
-                    if s.shape != g.shape:
-                        e = "Sregion and genetic value "
-                        "dimension mismatch: {} {}, {} {}".format(
-                            type(s), s.shape, type(self.gvalue), self.gvalue.shape
-                        )
-                        raise ValueError(e)
-        # if self.rates[2] > 0 and len(self.recregions) == 0:
-        #     raise ValueError("recombination rate is > 0 but no Regions are defined")
+    def as_dict(self):
+        """
+        Return instance attributes as a :class:`dict`.
+
+        .. versionadded:: 0.8.0
+        """
+        return attr.asdict(self)

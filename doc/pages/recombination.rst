@@ -1,3 +1,5 @@
+.. _geneticmaps:
+
 Genetic maps
 ==============================================================
 
@@ -34,7 +36,7 @@ We can set up this model using instances of :class:`fwdpy11.Region`:
 .. note::
 
      The `recrate` value above would be set for a simulation
-     via :attr:`fwdpy11.ModelParams.rates`
+     via the ``rates`` ``kwarg`` to :class:`fwdpy11.ModelParams`
 
 By default, a "region" object's total weight is recorded internally as 
 :math:`weight\times (end-beg)`, which you can see in the output from the
