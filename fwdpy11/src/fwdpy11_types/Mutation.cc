@@ -81,39 +81,6 @@ init_Mutation(py::module &m)
 			 .. versionadded:: 0.2.0
 
 			 )delim")
-        .def(py::init([](fwdpy11::Mutation::constructor_tuple t) {
-                PyErr_WarnEx(
-                    PyExc_DeprecationWarning,
-                    "Constructing a Mutation with a tuple is deprecated "
-                    "and will be removed in 0.8.0",
-                    0);
-                 return fwdpy11::Mutation(std::move(t));
-             }),
-             R"delim(
-                Construct mutation from a tuple.
-
-                The tuple should contain (pos, s, h, g, label)
-
-                .. testcode::
-
-                    import fwdpy11
-                    m = fwdpy11.Mutation((1.0, -1.0, 0.25, 0, 0))
-                    print(m.pos)
-                    print(m.s)
-                    print(m.h)
-                    print(m.g)
-                    print(m.label)
-
-                .. testoutput::
-                    
-                    1.0
-                    -1.0
-                    0.25
-                    0
-                    0
-
-                .. deprecated:: 0.7.0
-                )delim")
         .def_readonly("g", &fwdpy11::Mutation::g,
                       "Generation when mutation arose (origination time). (read-only)")
         .def_readonly("s", &fwdpy11::Mutation::s,

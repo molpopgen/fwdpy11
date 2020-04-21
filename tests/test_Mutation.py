@@ -26,7 +26,7 @@ import fwdpy11
 class testSingleEffectMutation(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.m = fwdpy11.Mutation((1.0, -1.0, 0.25, 0, 13))
+        self.m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, 13)
 
     def testConstruct(self):
         self.assertEqual(self.m.pos, 1.0)

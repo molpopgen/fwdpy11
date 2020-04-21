@@ -52,13 +52,6 @@ namespace fwdpy11
         //! Dominance of the mutation
         double h;
         std::vector<double> esizes, heffects;
-        //! Alias for tuple type that can be used for object construction
-        using constructor_tuple
-            = std::tuple<double, double, double, unsigned, std::uint16_t>;
-        //! Alias for tuple type that accommodates variable effect sizes
-        using constructor_tuple_variable_effects
-            = std::tuple<double, double, double, unsigned, std::vector<double>,
-                         std::vector<double>, std::uint16_t>;
 
         /*!
           Constructor for constant effect size sims.
@@ -97,26 +90,6 @@ namespace fwdpy11
               esizes(std::forward<vectype>(esizes_)),
               heffects(std::forward<vectype>(heffects_))
         {
-        }
-
-        Mutation(constructor_tuple t) noexcept
-            : mutation_base(std::get<0>(t), (std::get<1>(t) == 0.) ? true : false,
-                            std::get<4>(t)),
-              g(std::get<3>(t)), s(std::get<1>(t)),
-              h(std::get<2>(t)), esizes{}, heffects{}
-        {
-        }
-
-        Mutation(constructor_tuple_variable_effects t) noexcept
-            : mutation_base(std::get<0>(t), (std::get<1>(t) == 0.) ? true : false,
-                            std::get<6>(t)),
-              g(std::get<3>(t)), s(std::get<1>(t)), h(std::get<2>(t)),
-              esizes(std::get<4>(t)), heffects(std::get<5>(t))
-        {
-            this->neutral
-                = ((s == 0.0)
-                   && std::all_of(std::begin(this->esizes), std::end(this->esizes),
-                                  [](const double d) { return d == 0.; }));
         }
 
         bool
