@@ -28,14 +28,6 @@ class test_DiploidPopulation(unittest.TestCase):
             self.assertEqual(i["g"], j.g)
             self.assertEqual(i["s"], j.s)
 
-            m = fwdpy11.Mutation(tuple(i)[:-1])
-            self.assertEqual(m.pos, j.pos)
-            self.assertEqual(m.s, j.s)
-            self.assertEqual(m.h, j.h)
-            self.assertEqual(m.g, j.g)
-            self.assertEqual(m.label, j.label)
-            self.assertEqual(m.neutral, j.neutral)
-
     def testDiploidTraits(self):
         dips = np.array(self.pop.diploid_metadata)
         for i, j in zip(dips, self.pop.diploid_metadata):
