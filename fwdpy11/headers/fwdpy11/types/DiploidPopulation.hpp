@@ -3,7 +3,6 @@
 
 #include "Population.hpp"
 #include "Diploid.hpp"
-#include "create_pops.hpp"
 #include <stdexcept>
 #include <limits>
 #include <unordered_set>
@@ -18,16 +17,7 @@ namespace fwdpy11
         void
         process_individual_input() override
         {
-            std::vector<fwdpp::uint_t> gcounts(this->haploid_genomes.size(),
-                                               0);
-            for (auto &&dip : diploids)
-                {
-                    this->validate_individual_keys(dip.first);
-                    this->validate_individual_keys(dip.second);
-                    gcounts[dip.first]++;
-                    gcounts[dip.second]++;
-                }
-            this->validate_haploid_genome_counts(gcounts);
+            throw std::runtime_error("DiploidPopulation::process_individual_input is not implemented");
         }
 
         void
@@ -129,20 +119,6 @@ namespace fwdpy11
               diploid_metadata(N), ancient_sample_metadata{}
         {
             finish_construction(deme_sizes);
-        }
-
-        template <typename diploids_input, typename genomes_input,
-                  typename mutations_input>
-        explicit DiploidPopulation(diploids_input &&d, genomes_input &&g,
-                                   mutations_input &&m)
-            : Population(static_cast<fwdpp::uint_t>(d.size()),
-                         std::forward<genomes_input>(g),
-                         std::forward<mutations_input>(m), 100),
-              diploids(std::forward<diploids_input>(d)), diploid_metadata(N),
-              ancient_sample_metadata{}
-        //! Constructor for pre-determined population status
-        {
-            this->process_individual_input();
         }
 
         ~DiploidPopulation() = default;

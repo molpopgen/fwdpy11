@@ -25,7 +25,6 @@ namespace fwdpy11
     // Base class for population types
     {
       private:
-        virtual void process_individual_input() = 0;
 
         static fwdpp::ts::table_collection
         init_tables(const fwdpp::uint_t N, const double L)

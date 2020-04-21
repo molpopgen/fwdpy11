@@ -26,7 +26,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/types/create_pops.hpp>
 #include <fwdpy11/serialization.hpp>
 #include <fwdpy11/serialization/Mutation.hpp>
 #include <fwdpy11/serialization/Diploid.hpp>
@@ -84,23 +83,6 @@ init_DiploidPopulation(py::module& m)
              INIT_DOCSTRING)
         .def(py::init<const std::vector<std::uint32_t>&, double>(),
              py::arg("demesizes"), py::arg("length"), INIT_DOCSTRING_DEMESIZES)
-        .def(py::init([](const fwdpy11::DiploidPopulation::dipvector_t& d,
-                         const fwdpy11::DiploidPopulation::gcont_t& h,
-                         const fwdpy11::DiploidPopulation::mcont_t& m) {
-                 PyErr_WarnEx(PyExc_DeprecationWarning,
-                              "Initializing a diploid population "
-                              "from low-level objects is deprecated "
-                              "and will be removed in 0.8.0",
-                              0);
-                 return fwdpy11::DiploidPopulation(d, h, m);
-             }),
-             R"delim(
-             Construct with diploids, haploid_genomes, and mutations.
-             
-             .. versionadded:: 0.1.4
-             )delim",
-             py::arg("diploids"), py::arg("haploid_genomes"),
-             py::arg("mutations"))
         .def(py::init<const fwdpy11::DiploidPopulation&>(),
              R"delim(
                 Copy constructor
@@ -120,62 +102,6 @@ init_DiploidPopulation(py::module& m)
         .def_readwrite("ancient_sample_metadata",
                        &fwdpy11::DiploidPopulation::ancient_sample_metadata,
                        "Container of metadata for ancient samples.")
-        .def_static(
-            "create",
-            [](fwdpy11::DiploidPopulation::dipvector_t& diploids,
-               fwdpy11::DiploidPopulation::gcont_t& haploid_genomes,
-               fwdpy11::DiploidPopulation::mcont_t& mutations,
-               py::args args) -> fwdpy11::DiploidPopulation {
-                PyErr_WarnEx(PyExc_DeprecationWarning,
-                             "DiploidPopulation.create is deprecated "
-                             "and will be removed in 0.8.0",
-                             0);
-                if (args.size() == 0)
-                    {
-                        return fwdpy11::create_wrapper<
-                            fwdpy11::DiploidPopulation>()(
-                            std::move(diploids), std::move(haploid_genomes),
-                            std::move(mutations));
-                    }
-                auto& fixations
-                    = args[0].cast<fwdpy11::DiploidPopulation::mcont_t&>();
-                auto ftimes = args[1].cast<std::vector<fwdpp::uint_t>>();
-                auto g = args[2].cast<fwdpp::uint_t>();
-                return fwdpy11::create_wrapper<fwdpy11::DiploidPopulation>()(
-                    std::move(diploids), std::move(haploid_genomes),
-                    std::move(mutations), std::move(fixations),
-                    std::move(ftimes), g);
-            },
-            py::arg("diploids"), py::arg("haploid_genomes"),
-            py::arg("mutations"),
-            R"delim(
-        Create a new object from input data.
-        Unlike the constructor method, this method results
-        in no temporary copies of input data.
-
-        :param diplods: A :class:`fwdpy11.DiploidVector`
-        :param haploid_genomes: A :class:`fwdpy11.HaploidGenomeVector`
-        :param mutations: A :class:`fwdpy11.MutationVector`
-        :param args: Fixations, fixation times, and generation
-
-        :rtype: :class:`fwdpy11.DiploidPopulation`
-
-        See :ref:`popobjects` for example use.
-
-        When passing in extra args, they must be the following:
-
-        fixations: A :class:`fwdpy11.MutationVector`
-        fixation times: A :class:`list`
-        generation: A non-negative integer
-
-        It is required that len(fixations) == len(fixation times).
-
-        The result of passing in these extra args will be an object
-        with its fixation data populated and its generation set
-        to the input value.
-
-        .. versionadded:: 0.1.4
-        )delim")
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;
