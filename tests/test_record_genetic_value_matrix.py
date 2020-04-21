@@ -1,20 +1,20 @@
 #
-# Copyright (C) 2020 Kevin Thornton <krthornt@uci.edu>
+# Copyright(C) 2020 Kevin Thornton < krthornt @uci.edu>
 #
 # This file is part of fwdpy11.
 #
-# fwdpy11 is free software: you can redistribute it and/or modify
+# fwdpy11 is free software : you can redistribute it and / or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # fwdpy11 is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
+# along with fwdpy11.If not, see < http: //www.gnu.org/licenses/>.
 #
 
 """
@@ -62,9 +62,13 @@ def set_up_two_trait_quant_trait_model():
     rho = 1.0
     r = rho / (4 * N)
 
-    optima = np.zeros(4).reshape(2, 2)
-    optima[1, 0] = np.sqrt(2.0)
-    GSSmo = fwdpy11.MultivariateGSSmo([0, 10 * N], optima, 2)
+    optima = [
+        fwdpy11.PleiotropicOptima(when=0, optima=np.zeros(2), VS=2),
+        fwdpy11.PleiotropicOptima(
+            when=10 * N, optima=np.array([np.sqrt(2.0), 0]), VS=2
+        ),
+    ]
+    GSSmo = fwdpy11.MultivariateGSSmo(optima)
     a = fwdpy11.StrictAdditiveMultivariateEffects(2, 0, GSSmo)
     vcov = np.identity(2)
     np.fill_diagonal(vcov, 0.25)

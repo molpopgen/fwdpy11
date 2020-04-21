@@ -50,7 +50,7 @@ distributions and there is no correlation in the effect size in the two demes.
             migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
         ),
         "simlen": 100,
-        "gvalue": fwdpy11.Additive(ndemes=2, scaling=2, gv2w=fwdpy11.GSS(opt=0, VS=10)),
+        "gvalue": fwdpy11.Additive(ndemes=2, scaling=2, gv2w=fwdpy11.GSS(optimum=0, VS=10)),
     }
 
 Most of the above is standard.  Let's dissect the new bits:

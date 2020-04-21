@@ -10,11 +10,16 @@ rho = float(sys.argv[2])
 
 moving_optimum_deme_0 = fwdpy11.GSSmo(
     [
-        (0, 0, 1),  # Generation 0, optimum = 0, VS = 1
-        (10 * N, 1, 1),  # Generation 10N, optimum = 1, VS = 1
+        fwdpy11.Optimum(when=0, optimum=0, VS=1),
+        fwdpy11.Optimum(when=10 * N, optimum=1, VS=1),
     ]
 )
-moving_optimum_deme_1 = fwdpy11.GSSmo([(0, 0, 1), (10 * N, -1, 1)])
+moving_optimum_deme_1 = fwdpy11.GSSmo(
+    [
+        fwdpy11.Optimum(when=0, optimum=0, VS=1),
+        fwdpy11.Optimum(when=10 * N, optimum=-1, VS=1),
+    ]
+)
 
 # The covariance matrix for effect sizes.
 # The marginal Gaussians will have mean zero and sd = 0.1
