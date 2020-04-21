@@ -4,7 +4,6 @@ import platform
 import re
 import subprocess
 import sys
-import warnings
 from distutils.version import LooseVersion
 
 import pybind11
@@ -16,9 +15,6 @@ TSKIT_MIN_VERSION = "0.2.3"
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
-
-if sys.version_info < (3, 6):
-    raise RuntimeError("Python >= 3.6 required")
 
 if pybind11.__version__ < PYBIND11_MIN_VERSION:
     raise RuntimeError(f"pybind11 >= {PYBIND11_MIN_VERSION} required")
@@ -235,14 +231,14 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     ],
     description="Forward-time population genetic simulation in Python",
-    license="GPL >= 3",
-    requires=["pybind11", "numpy", "tskit"],
+    license="GNU GPLv3+",
     provides=["fwdpy11"],
     obsoletes=["none"],
     data_files=[("fwdpy11", ["COPYING", "README.rst"])],
     long_description=long_desc,
     long_description_content_type="text/x-rst",
     ext_modules=ext_modules,
+    python_requires=">=3.6",
     install_requires=[
         f"pybind11>={PYBIND11_MIN_VERSION}",
         "numpy",
