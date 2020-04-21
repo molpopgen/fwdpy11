@@ -8,6 +8,7 @@ scipy
 #below are for building package,
 #dox, and running tests
 sphinx
+sphinx_issues
 pandas
 ipython
 matplotlib

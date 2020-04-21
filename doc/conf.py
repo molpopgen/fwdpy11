@@ -64,7 +64,10 @@ extensions = [
     "sphinx.ext.intersphinx",
     "IPython.sphinxext.ipython_console_highlighting",
     "IPython.sphinxext.ipython_directive",
+    "sphinx_issues",
 ]
+
+issues_github_path = "molpopgen/fwdpy11"
 
 intersphinx_mapping = {
     "https://docs.python.org/3/": None,
