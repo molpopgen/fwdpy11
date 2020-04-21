@@ -17,6 +17,7 @@ dependencies:
     - pandas
     - matplotlib
     - setuptools_scm
+    - sphinx_issues
     - ipython
     - cmake
     - pip
