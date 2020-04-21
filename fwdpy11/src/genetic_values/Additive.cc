@@ -157,23 +157,6 @@ init_Additive(py::module& m)
              py::arg("ndemes") = 1, ADDITIVE_CONSTRUCTOR_3)
         .def_property_readonly("scaling", &DiploidAdditive::scaling,
                                "Access to the scaling parameter.")
-        .def_property_readonly(
-            "is_fitness",
-            [](const DiploidAdditive& self) {
-                PyErr_WarnEx(
-                    PyExc_DeprecationWarning,
-                    "Additive.is_fitness is deprecated.  Use maps_to_fitness instead",
-                    0);
-                return self.is_fitness();
-            },
-            R"delim(
-            Returns True if instance calculates fitness as the genetic value
-            and False if the genetic value is a trait value.
-            
-            .. deprecated:: 0.7.0
-
-                Use :attr:`fwdpy11.DiploidGeneticValue.maps_to_fitness` instead.
-            )delim")
         .def(py::pickle(
             [](const DiploidAdditive& a) {
                 auto p = py::module::import("pickle");

@@ -15,7 +15,7 @@ To simulate a "standard population genetic" simulation with additive effects on 
 
     import fwdpy11
     a = fwdpy11.Additive(2.0)
-    print(a.is_fitness)
+    print(a.maps_to_fitness)
     print(a.scaling)
 
 .. testoutput::
@@ -32,7 +32,7 @@ To simulate fitness that is multiplicative across sites, use :class:`fwdpy11.Mul
 
     import fwdpy11
     m = fwdpy11.Multiplicative(2.0)
-    print(m.is_fitness)
+    print(m.maps_to_fitness)
     print(m.scaling)
 
 
@@ -50,7 +50,7 @@ Guassiant stablizing selection around a constant optimum trait value of zero wit
 
     import fwdpy11
     a = fwdpy11.Additive(2.0, fwdpy11.GSS(0, 1))
-    print(a.is_fitness)
+    print(a.maps_to_fitness)
 
 .. testoutput::
 
