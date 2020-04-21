@@ -84,15 +84,11 @@ def evolvets(
 
         Added preserve_first_generation.
 
+    .. versionchanged:: 0.8.0
+
+        Update to refactored ModelParams
+
     """
-    import warnings
-
-    # Test parameters while suppressing warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        # Will throw exception if anything is wrong:
-        params.validate()
-
     if recorder is None:
         from ._fwdpy11 import NoAncientSamples
 

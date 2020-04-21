@@ -88,10 +88,11 @@ Let's look at another example where effect sizes covary negatively across demes 
 .. ipython:: python
 
     vcv = np.array([1.0, -0.99, -0.99, 1.0]).reshape((2, 2))
-    params.sregions = [
+    pdict["sregions"] = [
         fwdpy11.mvDES(fwdpy11.MultivariateGaussianEffects(0, 1, 1, vcv), np.zeros(2))
     ]
-    params.rates = (0, 5e-3, None)
+    pdict["rates"] = (0, 5e-3, None)
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
     for i in pop.tables.mutations:
@@ -176,7 +177,8 @@ with a high correlation across demes:
         np.zeros(2),
         np.matrix([1, 0.9, 0.9, 1]).reshape((2, 2)),
     )
-    params.sregions = [mvdes]
+    pdict["sregions"] = [mvdes]
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
     for i in pop.tables.mutations:
@@ -194,7 +196,8 @@ marginal deviates negatively covary:
         np.zeros(2),
         np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
     )
-    params.sregions = [mvdes]
+    pdict["sregions"] = [mvdes]
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     fwdpy11.evolvets(rng, pop, params, 10)
     for i in pop.tables.mutations:
@@ -209,8 +212,9 @@ The type :class:`fwdpy11.ConstantS` has intuitive behavior:
         np.zeros(2),
         np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
     )
-    params.sregions = [mvdes]
-    params.rates = (0, 5e-3, None)
+    pdict["rates"] = (0, 5e-3, None)
+    pdict["sregions"] = [mvdes]
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     rng = fwdpy11.GSLrng(1010)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -248,8 +252,8 @@ correlations such that deleterious mutations in deme 0 are less deleterious in d
             np.matrix([1, -0.99, -0.99, 1]).reshape((2, 2)),
         )
     )
-    params.sregions = sregions
-    params.rates = (0, 5e-3, None)
+    pdict["sregions"] = sregions
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     rng = fwdpy11.GSLrng(1010)
     fwdpy11.evolvets(rng, pop, params, 10)
@@ -276,13 +280,14 @@ For the general approach, simply create a :class:`list` of objects with the desi
             np.identity(2),
         )
     )
-    params.sregions = sregions
-    params.rates = (0, 5e-3, None)
+    pdict["sregions"] = sregions
+    params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
     rng = fwdpy11.GSLrng(1010)
     fwdpy11.evolvets(rng, pop, params, 10)
     for i in pop.tables.mutations:
         print(pop.mutations[i.key].esizes)
+
 Polygenic traits, multiple demes, correlated effect sizes, and different optima
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

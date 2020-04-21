@@ -244,6 +244,7 @@ setup(
         "numpy",
         f"tskit>={TSKIT_MIN_VERSION}",
         "sparse",
+        "attrs",
     ],
     setup_requires=["setuptools_scm"],
     use_scm_version={"write_to": "fwdpy11/_version.py"},

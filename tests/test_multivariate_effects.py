@@ -9,7 +9,6 @@ import testMultivariateGSSmo
 
 def set_up_quant_trait_model():
     N = 1000
-    demography = np.array([N] * 10 * N, dtype=np.uint32)
     rho = 1000.0
     r = rho / (4 * N)
 
@@ -32,7 +31,8 @@ def set_up_quant_trait_model():
         "rates": (0.0, 0.001, r),
         "gvalue": a,
         "prune_selected": False,
-        "demography": demography,
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 10 * N,
     }
     params = fwdpy11.ModelParams(**p)
     rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)

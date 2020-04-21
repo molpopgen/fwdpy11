@@ -78,7 +78,8 @@ class TestTwoDemeIMModel(unittest.TestCase):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], int((1.0 - 0.7) * self.Nanc))
 
-        params.simlen = self.t2
+        pdict["simlen"] = self.t2
+        params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
         self.assertEqual(self.pop.generation, self.t1 + self.t2)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -95,7 +96,8 @@ class TestTwoDemeIMModel(unittest.TestCase):
         self.assertTrue(0 in deme_sizes)
         self.assertTrue(1 in deme_sizes)
 
-        params.simlen = self.t2 - deltat
+        pdict["simlen"] = self.t2 - deltat
+        params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
         self.assertEqual(self.pop.generation, self.t1 + self.t2)
         deme_sizes = self.pop.deme_sizes(as_dict=True)

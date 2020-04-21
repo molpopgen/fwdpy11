@@ -130,6 +130,11 @@ We will also define a simple class to record all deme sizes over time:
 Compatibility with previous versions of fwdpy11
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. versionchanged:: 0.8.0
+
+    You now must specify ``simlen`` manually.
+
+
 Previous versions only supported size changes within a single deme.  These size changes were
 parameterized via a ``numpy`` array specifying the size at each time point.  It is still possible
 to specify the demography using that approach:
@@ -143,27 +148,13 @@ to specify the demography using that approach:
            "recregions": [],
            "rates": (0, 0, 0,),
            "gvalue": fwdpy11.Multiplicative(2.0),
-           "demography": N,
+           "demography": fwdpy11.DiscreteDemography(N),
+           "simlen": len(N),
        }
        params = fwdpy11.ModelParams(**pdict)
        rng = fwdpy11.GSLrng(654321)
        pop = fwdpy11.DiploidPopulation(10, 1.0)
        fwdpy11.evolvets(rng, pop, params, 100)
-
-Internally, the ``numpy`` array gets converted to instances of :class:`fwdpy11.SetDemeSize`, which is described
-below (:ref:`set_deme_sizes`).  These instances are stored in a :class:`fwdpy11.DiscreteDemography` object:
-
-.. ipython:: python
-
-    print(params.demography)
-    for i in params.demography.set_deme_sizes:
-        print(i)
-
-The simulation length is inferred from the ``numpy`` array, too:
-
-.. ipython:: python
-
-    params.simlen, len(N)
 
 Event types
 ------------------------------------------------
