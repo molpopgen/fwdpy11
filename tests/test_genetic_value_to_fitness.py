@@ -43,7 +43,7 @@ class testGSS(unittest.TestCase):
     def setUp(self):
         self.VS = 1.0
         self.opt = 0.0
-        self.g = fwdpy11.GSS(VS=self.VS, opt=self.opt)
+        self.g = fwdpy11.GSS(VS=self.VS, optimum=self.opt)
 
     def testPickle(self):
         import pickle

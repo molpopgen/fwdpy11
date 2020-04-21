@@ -5,17 +5,6 @@
 
 namespace py = pybind11;
 
-static const auto INIT_TUPLES =
-    R"delim(
-:param optima: Model parameters over time
-:type optima: list
-
-Each element of optima must be a tuple of 
-(generation, optimal trait value, VS)
-
-.. deprecated:: 0.7.1
-)delim";
-
 static const auto INIT_OPTIMA =
     R"delim(
 :param optima: Optima, sorted by time
@@ -32,20 +21,6 @@ init_GSSmo(py::module& m)
 {
     py::class_<fwdpy11::GSSmo, fwdpy11::GeneticValueIsTrait>(
         m, "GSSmo", "Gaussian stabilizing selection with a moving optimum.")
-        .def(py::init([](std::vector<std::tuple<std::uint32_t, double, double>> tuples) {
-                 PyErr_WarnEx(PyExc_DeprecationWarning,
-                              "Construction with tuples is deprecated.  Please use list "
-                              "of fwdpy11.Optimum instead",
-                              0);
-                 std::vector<fwdpy11::Optimum> optima;
-                 for (auto& t : tuples)
-                     {
-                         optima.emplace_back(std::get<0>(t), std::get<1>(t),
-                                             std::get<2>(t));
-                     }
-                 return fwdpy11::GSSmo(std::move(optima));
-             }),
-             py::arg("optima"), INIT_TUPLES)
         .def(py::init<std::vector<fwdpy11::Optimum>>(), py::arg("optima"), INIT_OPTIMA)
         .def_readonly("VS", &fwdpy11::GSSmo::VS)
         .def_readonly("optimum", &fwdpy11::GSSmo::opt)

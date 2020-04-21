@@ -15,11 +15,11 @@ for more info about that.
 Scripts
 -------------------------------------
 
-The simulation script is `SlocusPopGSSmo.py`.  To see how to use it:
+The simulation script is `DiploidPopulationPoploSSmo.py`.  To see how to use it:
 
 .. code-block:: bash
 
-    python3 SlocusPopGSSmo.py --help
+    python3 DiploidPopulationPopGSSmo.py --help
 
 There are several scripts:
 

@@ -160,7 +160,7 @@ class testGSS(unittest.TestCase):
         self.x = fwdpy11.GSS(0.0, 1.0)
 
     def testProperties(self):
-        self.assertEqual(self.x.opt, 0.0)
+        self.assertEqual(self.x.optimum, 0.0)
         self.assertEqual(self.x.VS, 1.0)
 
 
@@ -175,7 +175,9 @@ class testGSSandGSSmoConsistency(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.a = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
-        self.b = fwdpy11.Additive(2.0, fwdpy11.GSSmo([(0, 0.0, 1.0)]))
+        self.b = fwdpy11.Additive(
+            2.0, fwdpy11.GSSmo([fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0)])
+        )
         self.pop = fwdpy11.DiploidPopulation(1000)
 
     def testFitnesses(self):

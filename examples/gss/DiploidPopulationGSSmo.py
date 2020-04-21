@@ -204,7 +204,12 @@ def runsim(args):
     np.random.seed(args.seed)
     rng = fwdpy11.GSLrng(args.seed)
 
-    GSSmo = fwdpy11.GSSmo([(0, 0, args.VS), (10 * args.popsize, args.opt, args.VS)])
+    GSSmo = fwdpy11.GSSmo(
+        [
+            fwdpy11.Optimum(when=0, optimum=0, VS=args.VS),
+            fwdpy11.Optimum(when=10 * args.popsize, optimum=args.opt, VS=args.VS),
+        ]
+    )
 
     popsizes = [args.popsize] * (
         10 * args.popsize + int(args.time * float(args.popsize))
