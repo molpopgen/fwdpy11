@@ -1442,7 +1442,9 @@ class TestRecapitation(unittest.TestCase):
         import msprime
 
         coalesced_ts = msprime.simulate(
-            Ne=self.pop.N, from_ts=self.tskit_ts, recombination_rate=self.params.recrate
+            Ne=self.pop.N,
+            from_ts=self.tskit_ts,
+            recombination_rate=self.params.rates.recombination_rate,
         )
         self.assertTrue(
             len(coalesced_ts.tables.nodes) > len(self.tskit_ts.tables.nodes)

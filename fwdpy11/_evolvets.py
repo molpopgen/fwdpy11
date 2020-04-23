@@ -112,10 +112,12 @@ def evolvets(
     from ._fwdpy11 import evolve_with_tree_sequences
 
     pneutral = 0.0
-    if params.mutrate_n + params.mutrate_s > 0.0:
-        pneutral = params.mutrate_n / (params.mutrate_n + params.mutrate_s)
+    if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:
+        pneutral = params.rates.neutral_mutation_rate / (
+            params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate
+        )
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
+    rm = dispatch_create_GeneticMap(params.rates.recombination_rate, params.recregions)
 
     from ._fwdpy11 import SampleRecorder
 
@@ -130,8 +132,8 @@ def evolvets(
         simplification_interval,
         params.demography,
         params.simlen,
-        params.mutrate_n,
-        params.mutrate_s,
+        params.rates.neutral_mutation_rate,
+        params.rates.selected_mutation_rate,
         mm,
         rm,
         gvpointers,
