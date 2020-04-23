@@ -69,7 +69,8 @@ def quick_slocus_qtrait_pop_params(N=1000, simlen=100):
         "sregions": [GaussianS(0, 1, 1, 0.25)],
         "recregions": [Region(0, 1, 1)],
         "rates": (0.0, 2e-3, 1e-3),
-        "demography": np.array([N] * simlen, dtype=np.uint32),
+        "popsizes": np.array([N] * simlen, dtype=np.uint32),
+        "simlen": simlen,
         "gvalue": Additive(2.0, GSS(VS=1.0, optimum=0.0)),
         "prune_selected": False,
     }

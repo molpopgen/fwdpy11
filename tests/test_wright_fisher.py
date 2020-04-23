@@ -22,7 +22,8 @@ class testWFevolve(unittest.TestCase):
         self.recorder = GenerationRecorder()
         self.p = {
             "rates": (1e-3, 1e-3, 1e-3),
-            "demography": np.array([1000] * 100, dtype=np.uint32),
+            "popsizes": np.array([1000] * 100, dtype=np.uint32),
+            "simlen": 100,
             "nregions": [fwdpy11.Region(0, 1, 1)],
             "sregions": [fwdpy11.ExpS(0, 1, 1, -1e-2)],
             "recregions": [fwdpy11.Region(0, 1, 1)],
@@ -34,7 +35,8 @@ class testWFevolve(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.p)
         fwdpy11.evolve_genomes(self.rng, self.pop, params, self.recorder)
         self.assertEqual(self.recorder.generations, [i + 1 for i in range(100)])
-        self.p["demography"] = np.array([self.pop.N] * 24, dtype=np.uint32)
+        self.p["popsizes"] = np.array([self.pop.N] * 24, dtype=np.uint32)
+        self.p["simlen"] = len(self.p["popsizes"])
         params = fwdpy11.ModelParams(**self.p)
         fwdpy11.evolve_genomes(self.rng, self.pop, params, self.recorder)
         self.assertEqual(self.recorder.generations, [i + 1 for i in range(124)])
