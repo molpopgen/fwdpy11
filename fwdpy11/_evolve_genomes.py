@@ -53,10 +53,12 @@ def evolve_genomes(rng, pop, params, recorder=None):
     from ._fwdpy11 import dispatch_create_GeneticMap
 
     pneutral = 0.0
-    if params.mutrate_n + params.mutrate_s > 0.0:
-        pneutral = params.mutrate_n / (params.mutrate_n + params.mutrate_s)
+    if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:
+        pneutral = params.rates.neutral_mutation_rate / (
+            params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate
+        )
     mm = MutationRegions.create(pneutral, params.nregions, params.sregions)
-    rm = dispatch_create_GeneticMap(params.recrate, params.recregions)
+    rm = dispatch_create_GeneticMap(params.rates.recombination_rate, params.recregions)
 
     if recorder is None:
         from ._fwdpy11 import RecordNothing
@@ -69,8 +71,8 @@ def evolve_genomes(rng, pop, params, recorder=None):
         rng,
         pop,
         params.popsizes,
-        params.mutrate_n,
-        params.mutrate_s,
+        params.rates.neutral_mutation_rate,
+        params.rates.selected_mutation_rate,
         mm,
         rm,
         params.gvalue,

@@ -24,6 +24,68 @@ import numpy as np
 import fwdpy11
 
 
+@attr.s(kw_only=True, frozen=True, slots=True)
+class MutationAndRecombinationRates(object):
+    """
+    Stores and validates the mutation and recombination rate parameters
+    of a simulation.
+
+    Instances of this class are created by ``kwargs`` that populate
+    attributes of the same name:
+
+    :param neutral_mutation_rate:
+    :type neutral_mutation_rate: float
+    :param selected_mutation_rate:
+    :type selected_mutation_rate: float
+    :param recombination_rate:
+    :type recombination_rate: float or None
+
+    Instances of this class are passed as the ``rates`` ``kwarg``
+    to :class:`fwdpy11.ModelParams`.
+
+    .. versionadded:: 0.8.0
+    """
+
+    neutral_mutation_rate: float = attr.ib(converter=float)
+    selected_mutation_rate: float = attr.ib(converter=float)
+    recombination_rate = attr.ib()
+
+    @neutral_mutation_rate.validator
+    @selected_mutation_rate.validator
+    def validate_individual_rate(self, attribute, value):
+        if not np.isfinite(value):
+            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
+        if value < 0.0:
+            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
+
+    @recombination_rate.validator
+    def validate_recombination_rate(self, attribute, value):
+        if value is None:
+            return
+        try:
+            value = float(value)
+        except TypeError:
+            raise ValueError(
+                f"{attribute} must be convertible to float, but we got {value} instead"
+            )
+        attr.validators.instance_of(float)(self, attribute, value)
+        self.validate_individual_rate(attribute, value)
+
+
+def _convert_rates(value):
+    if isinstance(value, MutationAndRecombinationRates):
+        return value
+
+    try:
+        return MutationAndRecombinationRates(
+            neutral_mutation_rate=value[0],
+            selected_mutation_rate=value[1],
+            recombination_rate=value[2],
+        )
+    except KeyError:
+        return MutationAndRecombinationRates(**value)
+
+
 @attr.s(kw_only=True, frozen=True)
 class ModelParams(object):
     """
@@ -43,7 +105,7 @@ class ModelParams(object):
     :param rates: The neutral mutation rate, selected mutation rate, and
                   total recombination rate, respectively.
                   See below for more details.
-    :type rates: list
+    :type rates: list or fwdpy11.MutationAndRecombinationRates
     :param demography: The demographic model to simulate
     :type demography: fwdpy11.DiscreteDemography
     :param simlen: The number of time steps to evolve
@@ -52,18 +114,6 @@ class ModelParams(object):
                            the population when they are first detected
                            as fixed.
     :type prune_selected: bool
-
-    The following attributes exist, and may be set as ``kwargs``,
-    but are best set via ``rates``.  Currently, these attributes
-    are only used internally.  As such, they are prone to
-    refactoring in future versions.
-
-    :param mutrate_n: The neutral mutation rate
-    :type mutrate_n: float
-    :param mutrate_s: The neutral mutation rate
-    :type mutrate_s: float
-    :param recrate: The recombination rate
-    :type recrate: float or None
 
     The following ``kwargs``/attributes are pending deprecation along
     with simulations without tree sequence recording:
@@ -81,8 +131,10 @@ class ModelParams(object):
 
     .. note::
 
-        The ``rates`` field must be a list of length three (3).
-        The first two values must be non-negative floats. For
+        To initialize the ``rates`` field, we require an instance of
+        fwdpy11.MutationAndRecombinationRates or a list of length three (3)
+        specifying the three rates.
+        The two mutation rates must be non-negative floats. For
         the recombination rate, the third value must also
         be a non-negative float if all objects in ``recrates``
         are instances of :class:`fwdpy11.Region`. However,
@@ -105,43 +157,21 @@ class ModelParams(object):
     .. versionchanged:: 0.8.0
 
         Refactored class internals using ``attrs``.
+        Mutation and recombination rates now
+        stored in :class:`fwdpy11.MutationAndRecombinationRates`
     """
 
     nregions = attr.ib(factory=list)
     sregions = attr.ib(factory=list)
     recregions = attr.ib(factory=list)
-    rates = attr.ib(factory=list, converter=list)
+    rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
     demography = attr.ib(default=fwdpy11.DiscreteDemography())
-    simlen: int = attr.ib(converter=int)
+    simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
 
     pself: float = attr.ib(default=0.0)  # Deprecated
     popsizes = attr.ib()  # FIXME: this is a hack from 0.6.0
-
-    # These attributes are the elements
-    # store in rates
-    mutrate_n: float = attr.ib(
-        converter=float, validator=attr.validators.instance_of(float)
-    )
-    mutrate_s: float = attr.ib(
-        converter=float, validator=attr.validators.instance_of(float)
-    )
-    recrate = attr.ib()
-
-    @mutrate_n.default
-    def mutrate_n_default(self):
-        return self.rates[0]
-
-    @mutrate_s.default
-    def mutrate_s_default(self):
-        return self.rates[1]
-
-    @recrate.default
-    def recrate_default(self):
-        if self.rates[2] is None:
-            return None
-        return float(self.rates[2])
 
     @popsizes.default
     def popsizes_default(self):
@@ -155,12 +185,6 @@ class ModelParams(object):
             PendingDeprecationWarning,
         )
         return self.demography
-
-    @simlen.default
-    def simlen_default(self):
-        if isinstance(self.demography, fwdpy11.DiscreteDemography):
-            return 0
-        return len(self.demography)
 
     @nregions.validator
     def validate_nregions(self, attribute, value):
@@ -203,51 +227,22 @@ class ModelParams(object):
 
     @rates.validator
     def rates_validator(self, attribute, value):
-        if len(value) != 3:
-            raise ValueError(f"rates must be of length 3, but we got {value} instead")
-
-    @mutrate_n.validator
-    @mutrate_s.validator
-    def individual_rate_validator(self, attribute, value):
-        # NOTE: not decorated as recrate validator b/c that
-        # attribute is allowed to be None
-        if not np.isfinite(value):
-            raise ValueError(f"{attribute} must be finite, but we got {value} instead")
-        if value < 0.0:
-            raise ValueError(f"{attribute} must be >= 0.0, but we got {value} instead")
-
-    @mutrate_n.validator
-    def validate_mutrate_n(self, attribute, value):
-        if value > 0 and len(self.nregions) == 0:
-            raise ValueError(
-                "mutation rate to neutral variants is > 0 but no Regions are defined"
-            )
-
-    @mutrate_s.validator
-    def validate_mutrate_s(self, attribute, value):
-        if value > 0 and len(self.sregions) == 0:
-            raise ValueError(
-                "mutation rate to selected variants is > 0 but no Sregions are defined"
-            )
-
-    @recrate.validator
-    def validate_recrate(self, attribute, value):
-        if value is None:
+        if value.recombination_rate is None:
             for i in self.recregions:
                 if not isinstance(i, fwdpy11.GeneticMapUnit):
                     raise ValueError(
-                        f"recrate of {value} must be paired with"
+                        f"recombination rate of {value.recombination_rate}"
+                        " must be paired with"
                         " instances of fwdpy11.GeneticMapUnit"
                     )
         else:
             for i in self.recregions:
                 if not isinstance(i, fwdpy11.Region):
                     raise ValueError(
-                        f"recrate of {value} must be paired with"
+                        f"recombination rate of {value.recombination_rate}"
+                        " must be paired with"
                         " instances of fwdpy11.Region"
                     )
-            attr.validators.instance_of(float)(self, attribute, value)
-            self.individual_rate_validator(attribute, value)
 
     @gvalue.validator
     def validate_gvalue(self, attribute, value):

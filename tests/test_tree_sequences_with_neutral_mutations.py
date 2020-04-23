@@ -33,7 +33,11 @@ class TestKeepFixations(unittest.TestCase):
     def setUp(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
         pdict = self.params.as_dict()
-        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["rates"] = (
+            1e-3,
+            self.params.rates.selected_mutation_rate,
+            self.params.rates.recombination_rate,
+        )
         pdict["nregions"] = [fwdpy11.Region(0, 1, 1)]
         self.params = fwdpy11.ModelParams(**pdict)
 
@@ -86,7 +90,11 @@ class TestPruneFixations(unittest.TestCase):
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
         pdict = self.params.as_dict()
-        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["rates"] = (
+            1e-3,
+            self.params.rates.selected_mutation_rate,
+            self.params.rates.recombination_rate,
+        )
         pdict["nregions"] = [fwdpy11.Region(0, 1, 1)]
         self.params = fwdpy11.ModelParams(**pdict)
 
@@ -117,7 +125,11 @@ class TestNeutralMutRegions(unittest.TestCase):
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
         pdict = self.params.as_dict()
-        pdict["rates"] = (1e-3, self.params.rates[1], self.params.rates[2])
+        pdict["rates"] = (
+            1e-3,
+            self.params.rates.selected_mutation_rate,
+            self.params.rates.recombination_rate,
+        )
         pdict["nregions"] = [fwdpy11.Region(0, 0.25, 1), fwdpy11.Region(0.5, 1, 1)]
         self.params = fwdpy11.ModelParams(**pdict)
 
