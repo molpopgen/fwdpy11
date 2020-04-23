@@ -129,6 +129,39 @@ class ModelParams(object):
     )
     recrate = attr.ib()
 
+    @mutrate_n.default
+    def mutrate_n_default(self):
+        return self.rates[0]
+
+    @mutrate_s.default
+    def mutrate_s_default(self):
+        return self.rates[1]
+
+    @recrate.default
+    def recrate_default(self):
+        if self.rates[2] is None:
+            return None
+        return float(self.rates[2])
+
+    @popsizes.default
+    def popsizes_default(self):
+        if isinstance(self.demography, fwdpy11.DiscreteDemography):
+            return None
+
+        # Otherwise, assume that it is a numpy array
+        warnings.warn(
+            "attribute popsizes is being considered for"
+            " deprecation (along with simulations without tree sequences)",
+            PendingDeprecationWarning,
+        )
+        return self.demography
+
+    @simlen.default
+    def simlen_default(self):
+        if isinstance(self.demography, fwdpy11.DiscreteDemography):
+            return 0
+        return len(self.demography)
+
     @nregions.validator
     def validate_nregions(self, attribute, value):
         for i in value:
@@ -216,50 +249,6 @@ class ModelParams(object):
             attr.validators.instance_of(float)(self, attribute, value)
             self.individual_rate_validator(attribute, value)
 
-    @mutrate_n.default
-    def mutrate_n_default(self):
-        return self.rates[0]
-
-    @mutrate_s.default
-    def mutrate_s_default(self):
-        return self.rates[1]
-
-    @recrate.default
-    def recrate_default(self):
-        if self.rates[2] is None:
-            return None
-        return float(self.rates[2])
-
-    @popsizes.default
-    def popsizes_default(self):
-        if isinstance(self.demography, fwdpy11.DiscreteDemography):
-            return None
-
-        # Otherwise, assume that it is a numpy array
-        warnings.warn(
-            "attribute popsizes is being considered for"
-            " deprecation (along with simulations without tree sequences)",
-            PendingDeprecationWarning,
-        )
-        return self.demography
-
-    @simlen.default
-    def simlen_default(self):
-        if isinstance(self.demography, fwdpy11.DiscreteDemography):
-            return 0
-        return len(self.demography)
-
-    @simlen.validator
-    def validate_simlen(self, attribute, value):
-        if value <= 0:
-            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
-
-        if self.popsizes is not None and value != len(self.popsizes):
-            raise ValueError(
-                f"simlen must equal len(self.popsizes), but we got {value} and "
-                f"{len(self.popsizes)} instead"
-            )
-
     @gvalue.validator
     def validate_gvalue(self, attribute, value):
         try:
@@ -279,9 +268,18 @@ class ModelParams(object):
     def validate_demography(self, attribute, value):
         if isinstance(value, fwdpy11.DiscreteDemography):
             return
-        # self.simlen = len(value)
-        # self.popsizes = value  # FIXME: this is a hack in 0.6.0
-        # self.demography = fwdpy11.DiscreteDemography(value)
+        raise ValueError(f"Unknown type for {attribute}: {type(value)}")
+
+    @simlen.validator
+    def validate_simlen(self, attribute, value):
+        if value <= 0:
+            raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
+
+        if self.popsizes is not None and value != len(self.popsizes):
+            raise ValueError(
+                f"simlen must equal len(self.popsizes), but we got {value} and "
+                f"{len(self.popsizes)} instead"
+            )
 
     @pself.validator
     def validate_pself(self, attribute, value):

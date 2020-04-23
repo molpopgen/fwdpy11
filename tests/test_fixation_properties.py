@@ -95,7 +95,8 @@ class testFixationPreservation(unittest.TestCase):
             "recregions": [fwdpy11.Region(0, 1, 1)],
             "rates": (0.0, 0.00005, r),
             "gvalue": a,
-            "demography": demography,
+            "popsizes": demography,
+            "simlen": len(demography),
         }
         self.pop = fwdpy11.DiploidPopulation(N)
         self.rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)
