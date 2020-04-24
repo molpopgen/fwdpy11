@@ -14,11 +14,6 @@ namespace fwdpy11
     class DiploidPopulation : public Population
     {
       private:
-        void
-        process_individual_input() override
-        {
-            throw std::runtime_error("DiploidPopulation::process_individual_input is not implemented");
-        }
 
         void
         fill_sample_nodes_from_metadata(
