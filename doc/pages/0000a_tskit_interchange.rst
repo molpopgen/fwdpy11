@@ -3,9 +3,8 @@
 Data interchange with tskit
 ======================================================================
 
-The tree sequence data structures may be converted to the analogous `tskit` objects using the following function:
-
-.. autofunction:: fwdpy11.DiploidPopulation.dump_tables_to_tskit
+The tree sequence data structures may be converted to the analogous `tskit` objects using 
+:func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit`.
 
 Let's take a look:
 
@@ -35,13 +34,40 @@ Decoding the metadata
    print(type(first_individual))
    print(first_individual)
 
-.. note::
+In order to distinguish "alive" from "dead" individuals (*e.g.*, those 
+preserved as ancient samples), we need to make use of flags found in
+:mod:`fwdpy11.tskit_tools`. For example, to identify all currently alive
+individuals in the individual table:
 
-   `tskit`'s IndividualTable does not distinguish "alive" from "dead" individuals.
-   Thus, the metadata for :attr:`fwdpy11.DiploidPopulation.diploid_metadata` and
-   :attr:`fwdpy11.DiploidPopulation.ancient_sample_metadata` are concatenated,
-   with the former coming before the latter. For all nodes corresponding to individuals,
-   their `flag` field is set to `tskit.NODE_IS_SAMPLE` in the nodes table.
+.. ipython:: python
+
+    import fwdpy11.tskit_tools
+
+    alive_individuals = ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+
+To find the nodes corresponding to those individuals:
+
+.. ipython:: python
+
+    alive_individual_nodes = (ts.tables.nodes.individual >= 0) & (
+        (
+            ts.tables.individuals.flags[ts.tables.nodes.individual]
+            & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+        )
+        > 0
+    )
+
+    # The time of these nodes should all be zero because we simulated
+    # non-overlapping generations
+    alive_node_times = np.unique(
+        ts.tables.nodes.time[np.where(alive_individual_nodes)], return_counts=True
+    )
+    alive_node_times
+
+.. todo::
+
+    Provide nice functions to return nodes from various times,
+    etc..
 
 The mutation metadata are trickier still, but the same general principles apply:
 
@@ -64,8 +90,12 @@ The mutation metadata are trickier still, but the same general principles apply:
        f"heffects: {m.heffects}\n"
    )
 
-Note that the `tskit` representation of the mutation record's the allele's *age* in generations while :attr:`fwdpy11.Mutation.g` is the generation when the mutation arose.  The reason for this discrepancy is because the two packages record time in different directions!  The conversion to and from is trivial:
+Note that the `tskit` representation of the mutation record's the allele's
+*age* in generations while :attr:`fwdpy11.Mutation.g` is the generation when
+the mutation arose.  The reason for this discrepancy is because the two packages
+record time in different directions!  The conversion to and from is trivial:
 
 .. ipython:: python
 
    print(f"Origin to age = {pop.generation - m.g + 1}")
+

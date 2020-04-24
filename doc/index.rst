@@ -63,6 +63,7 @@ Welcome to fwdpy11's documentation!
     pages/model_params
     pages/functions
     pages/demographic_models
+    pages/tskit_tools
 
 .. toctree::
     :caption: References
