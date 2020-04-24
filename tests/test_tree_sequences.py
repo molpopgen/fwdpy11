@@ -225,6 +225,10 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             tt_tskit += t.get_total_branch_length()
         self.assertEqual(tt_fwd, tt_tskit)
 
+        for i, j in enumerate(self.pop.diploid_metadata):
+            self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[0]], i)
+            self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[1]], i)
+
         # Now, we make sure that the metadata can
         # be decoded
         md = tskit.unpack_bytes(
@@ -683,6 +687,14 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     def test_dump_to_tskit(self):
         dumped_ts = self.pop.dump_tables_to_tskit()
         self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
+
+        metadata = [i for i in self.pop.diploid_metadata]
+        metadata.extend([i for i in self.pop.ancient_sample_metadata])
+
+        self.assertTrue(len(metadata) > len(self.pop.diploid_metadata))
+        for i, j in enumerate(metadata):
+            self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[0]], i)
+            self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[1]], i)
 
 
 class TestMutationCounts(unittest.TestCase):
