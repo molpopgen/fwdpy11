@@ -20,6 +20,8 @@
 import numpy as np
 import tskit
 
+import fwdpy11.tskit_tools
+
 
 def _alive_nodes(self):
     """
@@ -126,9 +128,11 @@ def _initializeIndividualTable(self, tc):
     """
     # First, alive individuals:
     individal_nodes = {}
+    flags = []
     for i in range(self.N):
         individal_nodes[2 * i] = i
         individal_nodes[2 * i + 1] = i
+        flags.append(fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE)
     metadata_strings = _generate_individual_metadata(self.diploid_metadata, tc)
 
     # Now, preserved nodes
@@ -138,13 +142,20 @@ def _initializeIndividualTable(self, tc):
         individal_nodes[i.nodes[0]] = num_ind_nodes
         individal_nodes[i.nodes[1]] = num_ind_nodes
         num_ind_nodes += 1
+        flag = fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
+        if (
+            self.tables.nodes[i.nodes[0]].time == 0.0
+            and self.tables.nodes[i.nodes[1]].time == 0.0
+        ):
+            flag |= fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+        flags.append(flag)
 
     metadata_strings.extend(
         _generate_individual_metadata(self.ancient_sample_metadata, tc)
     )
 
     md, mdo = tskit.pack_bytes(metadata_strings)
-    flags = [0 for i in range(self.N + len(self.ancient_sample_metadata))]
+    # flags = [0 for i in range(self.N + len(self.ancient_sample_metadata))]
     tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
     return individal_nodes
 

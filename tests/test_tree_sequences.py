@@ -24,8 +24,10 @@ import unittest
 from collections import namedtuple
 
 import numpy as np
+import tskit
 
 import fwdpy11
+import fwdpy11.tskit_tools
 
 
 class Recorder(object):
@@ -228,6 +230,38 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         for i, j in enumerate(self.pop.diploid_metadata):
             self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[0]], i)
             self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[1]], i)
+
+        # Check that our individual flags, added in 0.8.0, are okay
+        tskit_alive_nodes = (
+            dumped_ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+        )
+        self.assertTrue(len((tskit_alive_nodes > 0)), len(self.pop.diploid_metadata))
+        for i, j in enumerate(self.pop.diploid_metadata):
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[i]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
+                )
+                == 0
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[i]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+                )
+                == 0
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[i]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+                )
+                > 0
+            )
+            for n in j.nodes:
+                self.assertTrue(
+                    (dumped_ts.tables.nodes.flags[n] & tskit.NODE_IS_SAMPLE) > 0
+                )
 
         # Now, we make sure that the metadata can
         # be decoded
@@ -695,6 +729,44 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         for i, j in enumerate(metadata):
             self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[0]], i)
             self.assertEqual(dumped_ts.tables.nodes.individual[j.nodes[1]], i)
+
+        # Check that our individual flags, added in 0.8.0, are okay
+        tskit_alive_nodes = (
+            dumped_ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+        )
+        self.assertTrue(len((tskit_alive_nodes > 0)), len(self.pop.diploid_metadata))
+        for i, j in enumerate(self.pop.ancient_sample_metadata):
+            for n in j.nodes:
+                self.assertTrue(
+                    (dumped_ts.tables.nodes.flags[n] & tskit.NODE_IS_SAMPLE) > 0
+                )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
+                )
+                > 1
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+                )
+                == 0
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+                )
+                == 0
+            )
 
 
 class TestMutationCounts(unittest.TestCase):
@@ -1445,6 +1517,41 @@ class TestRecapitation(unittest.TestCase):
 
         for t in self.tskit_ts.trees():
             self.assertEqual(t.num_roots, 2 * len(self.amd))
+
+    def test_dump_to_tskit(self):
+        dumped_ts = self.pop.dump_tables_to_tskit()
+        for i, j in enumerate(self.pop.ancient_sample_metadata):
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
+                )
+                > 0
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+                )
+                > 0
+            )
+            self.assertTrue(
+                (
+                    dumped_ts.tables.individuals.flags[
+                        i + len(self.pop.diploid_metadata)
+                    ]
+                    & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+                )
+                == 0
+            )
+            for n in j.nodes:
+                self.assertTrue(
+                    (dumped_ts.tables.nodes.flags[n] & tskit.NODE_IS_SAMPLE) > 0
+                )
 
     def test_recapitation(self):
         """
