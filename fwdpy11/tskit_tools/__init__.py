@@ -17,4 +17,11 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+"""
+This module contains various things to help
+interact with :mod:`tskit`.
+
+.. versionadded:: 0.8.0
+"""
+
 from ._flags import *  # NOQA
