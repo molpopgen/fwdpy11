@@ -246,6 +246,16 @@ Use the following flags to enable an "extreme" debugging mode of the C++ standar
    CXXFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" \
       CPPFLAGS="-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC" python3 setup.py build_ext -i
 
+Static analysis using clang-tidy
+-----------------------------------------------------------------------
+
+It is sometimes useful to go through the code and to a "static" analysis to look for problems. The clang-tidy
+tool is especially useful.  For example:
+
+.. code-block:: bash
+
+   find fwdpy11/src/ -name '*.cc' | xargs -I {} clang-tidy -checks='performance-*' {}  -- -I/usr/include/python3.7m -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers
+
 Bioconda
 =================================
 
