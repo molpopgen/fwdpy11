@@ -1,26 +1,22 @@
 import os
+import sysconfig
 
 import ycm_core
 
-cwd = os.path.dirname(os.path.realpath(__file__))
-
-FLAGS = [
-    "-Wall",
-    "-Weffc++",
-    "-std=c++14",
-    "-Werr",
+flags = [
     "-x",
     "c++",
-    "-I",
-    ".",
-    "-I",
-    cwd + "/fwdpy11/headers/fwdpp",
-    "-I",
-    cwd + "/fwdpy11/headers",
+    f"-I{os.path.dirname(os.path.abspath(__file__))}/fwdpy11/headers",
+    f"-I{os.path.dirname(os.path.abspath(__file__))}/fwdpy11/headers/fwdpp",
+    f"-I{sysconfig.get_paths()['include']}",
+    "-I/usr/local/include",
+    "-Wall",
+    "-Werr",
+    "-Wconversion",
+    "-Weffc++",
+    "-std=c++14",
 ]
 
 
-def FlagsForFile(filename):
-    dirname = os.path.dirname(filename)
-    flags = {"flags": FLAGS, "do_cache": True}
-    return flags
+def Settings(**kwargs):
+    return {"flags": flags}
