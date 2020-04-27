@@ -25,7 +25,7 @@ if (ENABLE_PROFILING)
 endif()
 
 set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
-add_subdirectory(fwdpy11)
+add_subdirectory(src)
 
 if(BUILD_UNIT_TESTS)
     add_subdirectory(tests)
