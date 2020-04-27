@@ -19,4 +19,7 @@ flags = [
 
 
 def Settings(**kwargs):
-    return {"flags": flags}
+    if kwargs["language"] == "cfamily":
+        return {"flags": flags}
+    if kwargs["language"] == "python":
+        pass
