@@ -6,10 +6,9 @@ import subprocess
 import sys
 from distutils.version import LooseVersion
 
+import pybind11
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
-
-import pybind11
 
 PYBIND11_MIN_VERSION = "2.4.3"
 TSKIT_MIN_VERSION = "0.2.3"
