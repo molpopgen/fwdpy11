@@ -24,6 +24,7 @@
 #include <memory>
 #include <numeric>
 #include <algorithm>
+#include <stdexcept>
 #include <cmath>
 #include <fwdpp/gsl_discrete.hpp>
 #include "constants.hpp"
