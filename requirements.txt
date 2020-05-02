@@ -17,3 +17,9 @@ seaborn
 msprime
 tskit==0.2.3
 setuptools_scm==1.11.1
+
+#below are for formatting, linting,
+#etc.
+black
+flake8
+flake8-bugbear
