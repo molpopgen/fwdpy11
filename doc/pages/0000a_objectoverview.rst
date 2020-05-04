@@ -110,13 +110,6 @@ the metadata types associated with diploids:
 Diploid metadata
 ----------------------------------------------------------------
 
-.. note::
-
-    One issue is that metadata are part of the base class on the C++ 
-    side. Future releases will fix this, and the base class will become 
-    independent from assumptions about diploidy. The documentation
-    is mocked to show the intended layout of attributes.
-
 In addition to the genomes, individuals are associated metadata represented as
 instances of :class:`fwdpy11.DiploidMetadata`, stored in
 :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.  Let's look at the data for
