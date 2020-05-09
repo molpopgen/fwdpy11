@@ -6,6 +6,16 @@ Upgrade path
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
 
+0.8.0
+-------------------------------------------------
+
+* :class:`fwdpy11.DiscreteDemography` can no longer be initialized with a ``numpy`` array as a positional
+  argument. Now, pass it as the value to the ``set_deme_sizes`` keyword argument.
+* :class:`fwdpy11.DiscreteDemography` no longer accepts a :class:`tuple` for the ``migmatrix`` keyword
+  argument. See :ref:`here <migration>`.
+* Initialization of :class:`fwdpy11.SetMigrationRates` has changed for the case
+  of resetting the entire migration matrix. See :ref:`here <migration>`.
+
 0.5.0
 -------------------------------------------------
 

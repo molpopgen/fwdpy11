@@ -86,6 +86,14 @@ def _convert_rates(value):
         return MutationAndRecombinationRates(**value)
 
 
+def _convert_demography(o):
+    try:
+        o.items()
+        return fwdpy11.DiscreteDemography(**o)
+    except AttributeError:
+        return o
+
+
 @attr.s(kw_only=True, frozen=True)
 class ModelParams(object):
     """
@@ -166,7 +174,9 @@ class ModelParams(object):
     recregions = attr.ib(factory=list)
     rates: MutationAndRecombinationRates = attr.ib(converter=_convert_rates)
     gvalue = attr.ib(default=None)
-    demography = attr.ib(default=fwdpy11.DiscreteDemography())
+    demography = attr.ib(
+        default=fwdpy11.DiscreteDemography(), converter=_convert_demography
+    )
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
 

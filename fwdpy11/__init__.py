@@ -17,6 +17,10 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+""" fwdpy11
+
+    isort:skip_file
+"""
 import sys
 
 from fwdpy11._version import version as __version__  # NOQA
@@ -29,9 +33,19 @@ from ._fwdpy11 import *  # NOQA
 from ._monkeypatch import _data_matrix  # NOQA
 from ._monkeypatch import _diploid_population  # NOQA
 from ._monkeypatch import _table_collection  # NOQA
+from .discrete_demography import (  # NOQA
+    DiscreteDemography,
+    MassMigration,
+    move_individuals,
+    copy_individuals,
+    SetDemeSize,
+    MigrationMatrix,
+    SetExponentialGrowth,
+    SetMigrationRates,
+    SetSelfingRate,
+)
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
-
 
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")

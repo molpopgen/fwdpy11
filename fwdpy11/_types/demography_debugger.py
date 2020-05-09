@@ -59,7 +59,10 @@ class DemographyDebugger(object):
         # The setup
         self.M = None
         if events.migmatrix is not None:
-            self.M = np.copy(events.migmatrix.M)
+            try:
+                self.M = np.copy(events.migmatrix.M)
+            except AttributeError:
+                self.M = np.copy(events.migmatrix)
         self._validate_migration_rate_change_lengths(events)
 
         self.maxdemes = self._get_maxdemes(pop, events)
@@ -97,6 +100,8 @@ class DemographyDebugger(object):
         max_from_events = -1
 
         def update_max_from_events(m, e):
+            if e is None:
+                return m
             for i in e:
                 try:
                     m = max(m, i.deme)
@@ -132,24 +137,30 @@ class DemographyDebugger(object):
         """
         Various checks on the lengths of new migration rates.
         """
-        if self.M is None and len(events.set_migration_rates) > 0:
+        if (
+            self.M is None
+            and events.set_migration_rates is not None
+            and len(events.set_migration_rates) > 0
+        ):
             raise ValueError(
                 "migration rate changes are " "set but there is no migration matrix"
             )
-        for i in events.set_migration_rates:
-            if i.deme >= 0:
-                if len(i.migrates) != self.M.shape[0]:
-                    raise ValueError("Migration rates mismatch")
-            else:  # Are replacing the entire matrix
-                if len(i.migrates.flatten()) != len(self.M.flatten()):
-                    raise ValueError("Migration rates mismatch")
+        if events.set_migration_rates is not None:
+            for i in events.set_migration_rates:
+                if i.deme >= 0:
+                    if len(i.migrates) != self.M.shape[0]:
+                        raise ValueError("Migration rates mismatch")
+                else:  # Are replacing the entire matrix
+                    if len(i.migrates.flatten()) != len(self.M.flatten()):
+                        raise ValueError("Migration rates mismatch")
 
     def _get_event_names(self, events):
         # NOTE: we rely on the fact that all public fields of
         # DiscreteDemography are event lists or the migration
         # matrix.  Thus, we filter out migmatrix and all
         # magic fxns.
-        return [i for i in events.__dir__() if "__" not in i and "migmatrix" not in i]
+        not_allowed = ["migmatrix", "asdict", "fromdict"]
+        return [i for i in events.__dir__() if "__" not in i and i not in not_allowed]
 
     def _make_event_queues(self, events):
         """
@@ -160,7 +171,10 @@ class DemographyDebugger(object):
 
         rv = {}
         for e in self._get_event_names(events):
-            rv[e] = deque([i for i in events.__getattribute__(e)])
+            if events.__getattribute__(e) is not None:
+                rv[e] = deque([i for i in events.__getattribute__(e)])
+            else:
+                rv[e] = deque([])
 
         return rv
 
