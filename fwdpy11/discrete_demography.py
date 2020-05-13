@@ -24,8 +24,10 @@ import numpy as np
 
 import fwdpy11
 
-from .class_decorators import (attr_class_to_from_dict,
-                               attr_class_to_from_dict_no_recurse)
+from .class_decorators import (
+    attr_class_to_from_dict,
+    attr_class_to_from_dict_no_recurse,
+)
 
 
 @attr_class_to_from_dict
@@ -507,3 +509,13 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     def __setstate__(self, d):
         self.__dict__.update(d)
         super(DiscreteDemography, self).__init__(**d)
+
+    def _timed_events(self):
+        for i in [
+            self.mass_migrations,
+            self.set_deme_sizes,
+            self.set_growth_rates,
+            self.set_selfing_rates,
+            self.set_migration_rates,
+        ]:
+            yield i

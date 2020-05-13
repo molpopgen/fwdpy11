@@ -801,7 +801,9 @@ class TestIMModel(unittest.TestCase):
 
         self.pdict["simlen"] = self.gens_post_split - 3
         params = fwdpy11.ModelParams(**self.pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 2)  # Simplify more often
+        fwdpy11.evolvets(
+            self.rng, self.pop, params, 2, check_demographic_event_timings=False
+        )  # Simplify more often
         self.assertEqual(self.pop.generation, self.Tsplit + self.gens_post_split)
         deme_sizes = self.pop.deme_sizes()
         self.assertEqual(deme_sizes[1][0], self.N0t)
