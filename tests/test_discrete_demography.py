@@ -36,7 +36,6 @@ class TestMoveOrCopyIndividuals(unittest.TestCase):
         self.assertEqual(m.when, 0)
         self.assertEqual(m.source, 2)
         self.assertEqual(m.destination, 1)
-        self.assertEqual(m.number, 0)
         self.assertEqual(m.fraction, 0.1)
         self.assertEqual(m.move_individuals, True)
         self.assertEqual(m.resets_growth_rate, True)
@@ -46,7 +45,6 @@ class TestMoveOrCopyIndividuals(unittest.TestCase):
         self.assertEqual(ump.when, 0)
         self.assertEqual(ump.source, 2)
         self.assertEqual(ump.destination, 1)
-        self.assertEqual(ump.number, 0)
         self.assertEqual(ump.fraction, 0.1)
         self.assertEqual(ump.move_individuals, True)
         self.assertEqual(ump.resets_growth_rate, True)
@@ -57,7 +55,6 @@ class TestMoveOrCopyIndividuals(unittest.TestCase):
         self.assertEqual(m.when, 0)
         self.assertEqual(m.source, 2)
         self.assertEqual(m.destination, 1)
-        self.assertEqual(m.number, 0)
         self.assertEqual(m.fraction, 0.1)
         self.assertEqual(m.move_individuals, False)
 
@@ -66,7 +63,6 @@ class TestMoveOrCopyIndividuals(unittest.TestCase):
         self.assertEqual(ump.when, 0)
         self.assertEqual(ump.source, 2)
         self.assertEqual(ump.destination, 1)
-        self.assertEqual(ump.number, 0)
         self.assertEqual(ump.fraction, 0.1)
         self.assertEqual(ump.move_individuals, False)
         self.assertTrue(m == ump)
@@ -133,9 +129,11 @@ class TestMigrationMatrix(unittest.TestCase):
         m = fwdpy11.MigrationMatrix(np.identity(2))
         p = pickle.dumps(m, -1)
         up = pickle.loads(p)
+        self.assertEqual(m, up)
         self.assertEqual(up.shape, (2, 2))
         self.assertTrue(np.array_equal(up.M, np.identity(2)))
 
+    @unittest.skip("obsolete, and a bad idea anyways")
     def testSettingRates(self):
         m = fwdpy11.MigrationMatrix(np.identity(2))
         m._set_migration_rates(0, [0.5, 0.5])
@@ -184,12 +182,12 @@ class TestSetMigrationRates(unittest.TestCase):
         self.assertTrue(np.array_equal(m.migrates, np.array([0, 1, 0])))
 
     def test_reset_entire_matrix(self):
-        m = fwdpy11.SetMigrationRates(3, np.identity(3))
+        m = fwdpy11.SetMigrationRates(3, None, np.identity(3))
         self.assertTrue(np.array_equal(m.migrates, np.identity(3)))
 
     def test_reset_entire_matrix_bad_inputs(self):
         with self.assertRaises(ValueError):
-            fwdpy11.SetMigrationRates(3, np.arange(4).reshape(2, 2))
+            fwdpy11.SetMigrationRates(3, None, np.arange(4).reshape(2, 2))
 
     def test_pickle(self):
         m = fwdpy11.SetMigrationRates(0, 0, np.array([0, 1, 0]))
@@ -201,6 +199,7 @@ class TestSetMigrationRates(unittest.TestCase):
 
 
 class TestDiscreteDemographyInitialization(unittest.TestCase):
+    @unittest.skip("obsolete: UI may need rethinking")
     def test_init_migmatrix_with_tuple(self):
         mm = np.array([0.3, 0.7, 0.7, 0.3]).reshape(2, 2)
         try:
@@ -235,17 +234,12 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
         fwdpy11.DiscreteDemography(set_deme_sizes=c)
 
     def test_init_from_numpy(self):
-        """
-        NOTE: this test is important b/c it tests
-        that the __init__ function overloads can be seen.
-        If they are re-ordered, then this test may fail.
-        """
         N = 1000
         popsizes = np.array(
             [N] * 10 * N + [int(0.1 * N)] * int(0.1 * N) + [2 * N] * 100,
             dtype=np.uint32,
         )
-        demography = fwdpy11.DiscreteDemography(popsizes)
+        demography = fwdpy11.DiscreteDemography(set_deme_sizes=popsizes)
         self.assertEqual(len(np.unique(popsizes)), len(demography.set_deme_sizes))
 
     def test_init_with_two_growth_changes_same_generation(self):
@@ -318,6 +312,7 @@ class TestDiscreteDemographyInitialization(unittest.TestCase):
         with self.assertRaises(AttributeError):
             del d.migmatrix
 
+    @unittest.skip("obsolete")
     def test_identity_matrix_conversion_to_None(self):
         mm = np.identity(5)
         d = fwdpy11.DiscreteDemography(migmatrix=mm)
@@ -616,7 +611,7 @@ class TestDiscreteDemography(unittest.TestCase):
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(3, np.array([1, 0, 1, 0]).reshape(2, 2))]
+        smr = [fwdpy11.SetMigrationRates(3, None, np.array([1, 0, 1, 0]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(
             mass_migrations=mmigs, migmatrix=mm, set_migration_rates=smr
         )
@@ -645,7 +640,9 @@ class TestDiscreteDemography(unittest.TestCase):
         """
         mm = np.array([0, 1, 1, 0]).reshape(2, 2)
         mmigs = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
-        smr = [fwdpy11.SetMigrationRates(3, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))]
+        smr = [
+            fwdpy11.SetMigrationRates(3, None, np.array([0.5, 0.5, 0, 0]).reshape(2, 2))
+        ]
         d = fwdpy11.DiscreteDemography(
             mass_migrations=mmigs, migmatrix=mm, set_migration_rates=smr
         )
@@ -856,7 +853,7 @@ class TestDemographyError(unittest.TestCase):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
         M = np.array([0.5] * 4).reshape(2, 2)
-        cM = [fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        cM = [fwdpy11.SetMigrationRates(0, None, np.array([0, 1, 0, 1]).reshape(2, 2))]
         d = fwdpy11.DiscreteDemography(
             mass_migrations=m, set_deme_sizes=s, set_migration_rates=cM, migmatrix=M
         )
@@ -864,6 +861,87 @@ class TestDemographyError(unittest.TestCase):
             ddr.DiscreteDemography_roundtrip(self.rng, self.pop, d, 5)
         except Exception:
             self.fail("unexpected exception")
+
+
+class TestEventSorting(unittest.TestCase):
+    """
+    Doesn't test all possibilities, esp. for MassMigration events
+    """
+
+    def test_events_are_sorted(self):
+        d = fwdpy11.DiscreteDemography(
+            mass_migrations=[
+                fwdpy11.MassMigration(when=10, source=0, destination=1, fraction=0.25),
+                fwdpy11.MassMigration(when=1, source=1, destination=0, fraction=0.25),
+            ],
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(when=10, deme=0, new_size=11),
+                fwdpy11.SetDemeSize(when=3, deme=1, new_size=100),
+            ],
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(when=10, deme=0, G=0.25),
+                fwdpy11.SetExponentialGrowth(when=1, deme=0, G=fwdpy11.NOGROWTH),
+            ],
+            set_selfing_rates=[
+                fwdpy11.SetSelfingRate(when=303, deme=0, S=0.1),
+                fwdpy11.SetSelfingRate(when=1, deme=0, S=1.0),
+            ],
+            set_migration_rates=[
+                fwdpy11.SetMigrationRates(when=10, deme=0, migrates=[0.5, 0.5]),
+                fwdpy11.SetMigrationRates(when=8, deme=0, migrates=[1, 0.0]),
+            ],
+            migmatrix=np.eye(2),
+        )
+        for i in [
+            d.mass_migrations,
+            d.set_deme_sizes,
+            d.set_growth_rates,
+            d.set_selfing_rates,
+            d.set_migration_rates,
+        ]:
+            self.assertTrue(i == sorted(i, key=lambda x: x.when))
+
+
+class TestPickling(unittest.TestCase):
+    """
+    Test pickling a couple of models that use all of the features.
+    """
+
+    def test_pickle_IM_with_selfing(self):
+        import fwdpy11.demographic_models.IM as IM
+
+        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25], as_dict=True)
+        temp[0]["set_selfing_rates"] = [fwdpy11.SetSelfingRate(0, 0, 0.1)]
+        im = fwdpy11.DiscreteDemography(**temp[0])
+        pi = pickle.dumps(im)
+        up = pickle.loads(pi)
+        self.assertEqual(im, up)
+
+    def test_pickle_IM_with_whole_migmatrix_reset(self):
+        import fwdpy11.demographic_models.IM as IM
+
+        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25], as_dict=True)
+        temp[0]["set_migration_rates"].append(
+            fwdpy11.SetMigrationRates(10000 + 10, None, np.eye(2))
+        )
+        im = fwdpy11.DiscreteDemography(**temp[0])
+        pi = pickle.dumps(im)
+        up = pickle.loads(pi)
+        self.assertEqual(im, up)
+
+    def test_pickle_tennessen(self):
+        import fwdpy11.demographic_models.human as human
+
+        tennessen = human.tennessen()
+        pt = pickle.dumps(tennessen)
+        up = pickle.loads(pt)
+        self.assertEqual(tennessen, up)
+
+    def test_pickle_model_with_scaled_migration_matrix(self):
+        m = fwdpy11.DiscreteDemography(migmatrix=(np.eye(2), True))
+        p = pickle.dumps(m)
+        up = pickle.loads(p)
+        self.assertEqual(m, up)
 
 
 if __name__ == "__main__":

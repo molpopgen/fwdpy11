@@ -148,7 +148,7 @@ to specify the demography using that approach:
            "recregions": [],
            "rates": (0, 0, 0,),
            "gvalue": fwdpy11.Multiplicative(2.0),
-           "demography": fwdpy11.DiscreteDemography(N),
+           "demography": fwdpy11.DiscreteDemography(set_deme_sizes=N),
            "simlen": len(N),
        }
        params = fwdpy11.ModelParams(**pdict)
@@ -471,7 +471,6 @@ The ``numpy`` array is sufficient to construct our demographic model:
 
     d = fwdpy11.DiscreteDemography(migmatrix=m)
     d.migmatrix
-    d.migmatrix.M
 
 By default, there is no migration, which is represented by the value ``None``.  For example,
 the following model has no migration events:
@@ -482,13 +481,12 @@ the following model has no migration events:
     d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
     d.migmatrix is None
 
-Likewise, if an identity matrix is provided an migration rates are never changed later,
-then the input matrix is ignored:
+In order to specify a model with no initial migration, you may use an identity matrix:
 
 .. ipython:: python
 
     d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
-    d.migmatrix is None
+    d.migmatrix
 
 The only reason to use the identity matrix is to start a simulation with no migration
 and then change the rates later via instances of :class:`fwdpy11.SetMigrationRates`.
@@ -577,21 +575,19 @@ The first matrix is the same as in the preceding section--90% of the offspring i
 ``0`` will have parents from deme ``0``.  In the second matrix, that fraction is reduced to
 about 82% because deme ``1`` is twice as large as deme ``0``.
 
-To enable this migration model, the following methods are equivalent:
+To enable this migration model, create an instance of :class:`fwdpy11.MigrationMatrix` and
+pass ``True`` as the second parameter:
 
 .. ipython:: python
 
-   # Method 1: pass a tuple with your numpy array and True
-   # to indicate scaling M[i, j] by source deme sizes:
-   d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
-
-.. ipython:: python
-
-   # Method 2: construct an instance of fwdpy11.MigrationMatrix,
-   # passing True as the second argument to indicate the scaling
-   # by source deme size.
    M = fwdpy11.MigrationMatrix(m, True)
    d = fwdpy11.DiscreteDemography(migmatrix=M)
+
+This will also work, but is less explicit:
+
+.. ipython:: python
+
+   d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
 
 .. note::
 

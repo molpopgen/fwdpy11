@@ -107,7 +107,11 @@ class TestDetectingExtinctions(unittest.TestCase):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
         M = np.array([0.5] * 4).reshape(2, 2)
-        cM = [fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2))]
+        cM = [
+            fwdpy11.SetMigrationRates(
+                when=0, deme=None, migrates=np.array([0, 1, 0, 1]).reshape(2, 2)
+            )
+        ]
         d = fwdpy11.DiscreteDemography(
             mass_migrations=m, set_deme_sizes=s, set_migration_rates=cM, migmatrix=M
         )
@@ -130,8 +134,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
         M = np.array([0.5] * 4).reshape(2, 2)
         cM = [
-            fwdpy11.SetMigrationRates(0, np.array([0, 1, 0, 1]).reshape(2, 2)),
-            fwdpy11.SetMigrationRates(1, np.array([0.5] * 4).reshape(2, 2)),
+            fwdpy11.SetMigrationRates(0, None, np.array([0, 1, 0, 1]).reshape(2, 2)),
+            fwdpy11.SetMigrationRates(1, None, np.array([0.5] * 4).reshape(2, 2)),
         ]
         d = fwdpy11.DiscreteDemography(
             mass_migrations=m, set_deme_sizes=s, set_migration_rates=cM, migmatrix=M
@@ -147,7 +151,9 @@ class TestDetectingExtinctions(unittest.TestCase):
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
         M = np.array([0.5] * 4).reshape(2, 2)
         d = fwdpy11.DiscreteDemography(
-            mass_migrations=m, set_deme_sizes=s, migmatrix=(M, True)
+            mass_migrations=m,
+            set_deme_sizes=s,
+            migmatrix=fwdpy11.MigrationMatrix(M, True),
         )
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)

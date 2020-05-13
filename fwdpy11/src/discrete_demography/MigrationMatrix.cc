@@ -24,78 +24,20 @@
 namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
 
-static const auto INIT_DOCSTRING = R"delim(
-
-:param migmatrix: A square matrix of non-negative floats.
-:type migmatrix: numpy.ndarray
-:param scaled: (True) If entries in `migmatrix` will be multiplied by deme sizes during simulation
-:type scaled: bool
-)delim";
-
 void
 init_MigrationMatrix(py::module &m)
 {
-    py::class_<ddemog::MigrationMatrix>(m, "MigrationMatrix",
-                                         R"delim(
-        The forward migration matrix for a simulation.
-
-        .. versionadded:: 0.5.3
-        )delim")
+    py::class_<ddemog::MigrationMatrix>(m, "_ll_MigrationMatrix")
         .def(py::init([](py::array_t<double> m, const bool scaled) {
                  auto r = m.unchecked<2>();
                  if (r.shape(0) != r.shape(1))
                      {
-                         throw std::invalid_argument(
-                             "MigrationMatrix must be square");
+                         throw std::invalid_argument("MigrationMatrix must be square");
                      }
                  auto d = r.data(0, 0);
                  std::vector<double> M(d, d + r.shape(0) * r.shape(1));
-                 return ddemog::MigrationMatrix(std::move(M), r.shape(0),
-                                                 scaled);
+                 return ddemog::MigrationMatrix(std::move(M), r.shape(0), scaled);
              }),
-             py::arg("migmatrix"), py::arg("scale_by_source_deme_sizes") = false,
-             INIT_DOCSTRING)
-        .def_property_readonly("shape",
-                               [](ddemog::MigrationMatrix &self) {
-                                   return pybind11::make_tuple(self.npops,
-                                                               self.npops);
-                               })
-        .def_property_readonly("M",
-                               [](const ddemog::MigrationMatrix &self) {
-                                   auto M(self.M);
-                                   return fwdpy11::make_2d_array_with_capsule(
-                                       std::move(M), self.npops, self.npops);
-                               })
-        .def_readonly("scaled", &ddemog::MigrationMatrix::scaled)
-        .def("_set_migration_rates",
-             &ddemog::MigrationMatrix::set_migration_rates, py::arg("source"),
-             py::arg("rates"))
-        .def("_set_migration_rates",
-             [](ddemog::MigrationMatrix &self, py::array_t<double> migrates) {
-                 auto r = migrates.unchecked<2>();
-                 std::vector<double> m;
-                 for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
-                     {
-                         for (decltype(i) j = 0; j < r.shape(1); ++j)
-                             {
-                                 m.push_back(r(i, j));
-                             }
-                     }
-                 self.set_migration_rates(ddemog::NULLDEME, m);
-             })
-        .def(py::pickle(
-            [](const ddemog::MigrationMatrix &self) {
-                return py::make_tuple(self.M, self.npops, self.scaled);
-            },
-            [](pybind11::tuple t) {
-                if (t.size() != 3)
-                    {
-                        throw std::runtime_error("invalid tuple size");
-                    }
-                auto M = t[0].cast<std::vector<double>>();
-                auto n = t[1].cast<std::size_t>();
-                auto s = t[2].cast<bool>();
-                return ddemog::MigrationMatrix(std::move(M), n, s);
-            }));
+             py::arg("migmatrix"), py::arg("scaled") = false);
 }
 

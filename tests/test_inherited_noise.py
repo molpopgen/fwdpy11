@@ -27,7 +27,7 @@ class TestInheritNoise(unittest.TestCase):
             "recregions": [],
             "rates": (0, 0, 0),
             "demography": fwdpy11.DiscreteDemography(
-                np.array([self.pop.N] * 3, dtype=np.uint32)
+                set_deme_sizes=np.array([self.pop.N] * 3, dtype=np.uint32)
             ),
             "popsizes": np.array([self.pop.N] * 3, dtype=np.uint32),
             "simlen": 3,

@@ -24,53 +24,12 @@ namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
 using SDS = ddemog::SetDemeSize;
 
-static const auto INIT_DOCSTRING = R"delim(
-:param when: The generation when the event occurs
-:type when: int
-:param deme: The deme whose size will change
-:type deme: int
-:param new_size: The new size
-:type new_size: int
-:param resets_growth_rate: (True) If deme size change resets growth rate to :data:`fwdpy11.NOGROWTH`
-:type resets_growth_rate: bool
-)delim";
-
 void
 init_SetDemeSize(py::module &m)
 {
-    py::class_<SDS>(m, "SetDemeSize",
-                    R"delim(
-        Set the size of a deme at a given time.
-        
-        .. versionadded:: 0.5.3
-        )delim")
-        .def(py::init<decltype(SDS::when), decltype(SDS::deme),
-                      decltype(SDS::new_size),
+    py::class_<SDS>(m, "_ll_SetDemeSize")
+        .def(py::init<decltype(SDS::when), decltype(SDS::deme), decltype(SDS::new_size),
                       decltype(SDS::resets_growth_rate)>(),
              py::arg("when"), py::arg("deme"), py::arg("new_size"),
-             py::arg("resets_growth_rate") = true, INIT_DOCSTRING)
-        .def_readonly("when", &SDS::when)
-        .def_readonly("deme", &SDS::deme)
-        .def_readonly("new_size", &SDS::new_size)
-        .def_readonly("resets_growth_rate", &SDS::resets_growth_rate)
-        .def("__repr__",
-             [](const SDS &self) {
-                 std::ostringstream o;
-                 o << "SetDemeSize(when=" << self.when
-                   << ", deme=" << self.deme << ", new_size=" << self.new_size
-                   << ", resets_growth_rate=" << self.resets_growth_rate
-                   << ")";
-                 return o.str();
-             })
-        .def(py::pickle(
-            [](const SDS &self) {
-                return py::make_tuple(self.when, self.deme, self.new_size,
-                                      self.resets_growth_rate);
-            },
-            [](py::tuple t) {
-                return SDS(t[0].cast<decltype(SDS::when)>(),
-                           t[1].cast<decltype(SDS::deme)>(),
-                           t[2].cast<decltype(SDS::new_size)>(),
-                           t[3].cast<decltype(SDS::resets_growth_rate)>());
-            }));
+             py::arg("resets_growth_rate"));
 }
