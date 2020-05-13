@@ -157,9 +157,12 @@ class DemographyDebugger(object):
     def _get_event_names(self, events):
         # NOTE: we rely on the fact that all public fields of
         # DiscreteDemography are event lists or the migration
-        # matrix.  Thus, we filter out migmatrix and all
-        # magic fxns.
-        not_allowed = ["migmatrix", "asdict", "fromdict"]
+        # matrix.  Thus, we filter out migmatrix, all
+        # magic fxns, and some others that aren't relevant.
+        # FIXME: a more Pythonic approach would be only to
+        # pull out attributes that are not None, are iterable,
+        # and whose elements contain a "when" attribute.
+        not_allowed = ["migmatrix", "asdict", "fromdict", "_timed_events"]
         return [i for i in events.__dir__() if "__" not in i and i not in not_allowed]
 
     def _make_event_queues(self, events):

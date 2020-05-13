@@ -98,7 +98,9 @@ class TestTwoDemeIMModel(unittest.TestCase):
 
         pdict["simlen"] = self.t2 - deltat
         params = fwdpy11.ModelParams(**pdict)
-        fwdpy11.evolvets(self.rng, self.pop, params, 10)
+        fwdpy11.evolvets(
+            self.rng, self.pop, params, 10, check_demographic_event_timings=False
+        )
         self.assertEqual(self.pop.generation, self.t1 + self.t2)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], np.rint(self.N0 * self.Nanc).astype(int))

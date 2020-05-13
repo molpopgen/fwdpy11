@@ -63,6 +63,18 @@ a new deme (deme 1), then that means that half of the current alive individuals
 (possible parents) have their ``deme`` field changed from zero to one
 prior to generating any offspring.
 
+The objects events all have an attribute called ``when``, which
+parameterizes when the event occurs in a simulation.  The value of ``when``
+is with respect to the current generation time of the population 
+(:attr:`fwdpy11.DiploidPopulation.generation`). When events are registered
+to occur prior to this time, you will see warnings.  See :func:`fwdpy11.evolvets` 
+for details.
+
+Events scheduled for prior than the population's current time are allowed
+because there are valid modeling reasons to allow them.  For example, you
+may want to evolve for a while and then change some other model parameter
+like the recombination rate, and then keep evolving.
+
 .. _soft_sel_deme_setup:
 
 Setting the initial demes in a simulation

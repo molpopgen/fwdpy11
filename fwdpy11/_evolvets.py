@@ -17,6 +17,23 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import fwdpy11
+
+
+def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
+    too_early = []
+    for i in demography._timed_events():
+        if i is not None:
+            for j in i:
+                if j.when < generation:
+                    too_early.append(j)
+    if len(too_early) > 0:
+        import warnings
+
+        msg = "The following demographic events are registered to occur "
+        msg += f"before the current generation, which is {generation}: {too_early}"
+        warnings.warn(msg)
+
 
 def evolvets(
     rng,
@@ -31,6 +48,7 @@ def evolvets(
     track_mutation_counts=False,
     remove_extinct_variants=True,
     preserve_first_generation=False,
+    check_demographic_event_timings=True,
 ):
     """
     Evolve a population with tree sequence recording
@@ -58,6 +76,11 @@ def evolvets(
                                       tree sequence "recapitation". See
                                       :ref:`finishwithmsprime`.
     :type preserve_first_generation: bool
+    :param check_demographic_event_timings: (True) If ``True``, then issue
+                                            warnings if demographic events
+                                            will occur prior to the current
+                                            generation of the population.
+    :type check_demographic_event_timings: bool
 
     The recording of genetic values into :attr:`fwdpy11.PopulationBase.genetic_values`
     is suppressed by default.  First, it is redundant with
@@ -86,7 +109,8 @@ def evolvets(
 
     .. versionchanged:: 0.8.0
 
-        Update to refactored ModelParams
+        Update to refactored ModelParams.
+        Added ``check_demographic_event_timings``.
 
     """
     if recorder is None:
@@ -110,6 +134,9 @@ def evolvets(
     from ._fwdpy11 import MutationRegions
     from ._fwdpy11 import dispatch_create_GeneticMap
     from ._fwdpy11 import evolve_with_tree_sequences
+
+    if check_demographic_event_timings:
+        _validate_event_timings(params.demography, pop.generation)
 
     pneutral = 0.0
     if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:

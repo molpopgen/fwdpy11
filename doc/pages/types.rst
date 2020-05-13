@@ -48,6 +48,8 @@ Populations of diploids
 
 .. autoclass:: fwdpy11.DiploidPopulation
    :members:
+
+   .. autoattribute:: fwdpy11.DiploidPopulation.generation
     
 Diploid Genotypes
 ----------------------------------------
