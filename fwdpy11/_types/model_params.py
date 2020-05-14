@@ -295,10 +295,10 @@ class ModelParams(object):
                 PendingDeprecationWarning,
             )
 
-    def as_dict(self):
+    def asdict(self):
         """
         Return instance attributes as a :class:`dict`.
 
         .. versionadded:: 0.8.0
         """
-        return attr.asdict(self)
+        return attr.asdict(self, recurse=False)

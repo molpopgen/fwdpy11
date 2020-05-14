@@ -15,6 +15,10 @@ imperfect/incomplete.
   argument. See :ref:`here <migration>`.
 * Initialization of :class:`fwdpy11.SetMigrationRates` has changed for the case
   of resetting the entire migration matrix. See :ref:`here <migration>`.
+* The ``shape`` ``kwarg`` to initialize a :class:`fwdpy11.GammaS` has been
+  renamed ``shape_parameter``.
+* The ``matrix`` ``kwarg`` to initialize a :class:`fwdpy11.MultivariateGaussianEffects`
+  has been renamed ``cov_matrix``.
 
 0.5.0
 -------------------------------------------------

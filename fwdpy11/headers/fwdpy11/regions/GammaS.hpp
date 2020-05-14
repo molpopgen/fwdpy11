@@ -36,19 +36,6 @@ namespace fwdpy11
             return std::unique_ptr<GammaS>(new GammaS(*this));
         }
 
-        std::string
-        repr() const override
-        {
-            std::ostringstream out;
-            out.precision(4);
-            out << "GammaS(";
-            this->region.region_repr(out);
-            out << ", mean=" << this->mean << ", shape=" << this->shape_parameter
-                << ", h=" << this->dominance << ", scaling=" << this->scaling
-                << ')';
-            return out.str();
-        }
-
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
@@ -76,26 +63,6 @@ namespace fwdpy11
         get_dominance() const override
         {
             return { dominance };
-        }
-
-        pybind11::tuple
-        pickle() const override
-        {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), mean, shape_parameter,
-                                        dominance);
-        }
-
-        static GammaS
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 4)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            auto base = t[0].cast<pybind11::tuple>();
-            return GammaS(Region::unpickle(base[0]), base[1].cast<double>(),
-                          t[1].cast<double>(), t[2].cast<double>(),
-                          t[3].cast<double>());
         }
     };
 } // namespace fwdpy11

@@ -32,7 +32,7 @@ class TestKeepFixations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["rates"] = (
             1e-3,
             self.params.rates.selected_mutation_rate,
@@ -66,7 +66,7 @@ class TestKeepFixations(unittest.TestCase):
         """
         pop2 = copy.deepcopy(self.pop)
         rng = fwdpy11.GSLrng(101 * 45 * 110 * 210)  # Use same seed!!!
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["prune_selected"] = False
         self.params = fwdpy11.ModelParams(**pdict)
         params = copy.deepcopy(self.params)
@@ -89,7 +89,7 @@ class TestPruneFixations(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["rates"] = (
             1e-3,
             self.params.rates.selected_mutation_rate,
@@ -100,7 +100,7 @@ class TestPruneFixations(unittest.TestCase):
 
     @unittest.skip("doesn't test anything...")
     def test_no_mutations(self):
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["rates"] = (0, 0, 0)
         self.params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
@@ -124,7 +124,7 @@ class TestNeutralMutRegions(unittest.TestCase):
     @classmethod
     def setUp(self):
         self.params, self.rng, self.pop = set_up_standard_pop_gen_model()
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["rates"] = (
             1e-3,
             self.params.rates.selected_mutation_rate,

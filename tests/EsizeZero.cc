@@ -16,24 +16,6 @@ struct EsizeZero : public fwdpy11::Sregion
         return std::unique_ptr<EsizeZero>(new EsizeZero(*this));
     }
 
-    std::string
-    repr() const override
-    {
-        return "EsizeZero()"_s;
-    }
-
-    pybind11::tuple
-    pickle() const override
-    {
-        return pybind11::make_tuple(Sregion::pickle_Sregion());
-    }
-
-    static EsizeZero
-    unpickle(pybind11::tuple t)
-    {
-        return EsizeZero(fwdpy11::Region::unpickle(t[0]));
-    }
-
     double
     from_mvnorm(const double, const double) const override
     {

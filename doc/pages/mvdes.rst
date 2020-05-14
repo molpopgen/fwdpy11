@@ -192,7 +192,7 @@ marginal deviates negatively covary:
 .. ipython:: python
 
     mvdes = fwdpy11.mvDES(
-        [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.GammaS(0, 1, 1, mean=0.1, shape=1)],
+        [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.GammaS(0, 1, 1, mean=0.1, shape_parameter=1)],
         np.zeros(2),
         np.matrix([1, -0.9, -0.9, 1]).reshape((2, 2)),
     )

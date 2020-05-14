@@ -36,18 +36,6 @@ namespace fwdpy11
             return std::unique_ptr<GaussianS>(new GaussianS(*this));
         }
 
-        std::string
-        repr() const override
-        {
-            std::ostringstream out;
-            out.precision(4);
-            out << "GaussianS(";
-            this->region.region_repr(out);
-            out << ", sd=" << this->sd << ", h=" << this->dominance
-                << ", scaling=" << this->scaling << ')';
-            return out.str();
-        }
-
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
@@ -74,25 +62,6 @@ namespace fwdpy11
         get_dominance() const override
         {
             return { dominance };
-        }
-
-        pybind11::tuple
-        pickle() const override
-        {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), sd,
-                                        dominance);
-        }
-
-        static GaussianS
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 3)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            auto base = t[0].cast<pybind11::tuple>();
-            return GaussianS(Region::unpickle(base[0]), base[1].cast<double>(),
-                             t[1].cast<double>(), t[2].cast<double>());
         }
     };
 } // namespace fwdpy11
