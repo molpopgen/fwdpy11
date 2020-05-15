@@ -48,51 +48,7 @@ namespace fwdpy11
         {
             return gsl_ran_flat(rng.get(), beg, end);
         }
-
-        pybind11::tuple
-        pickle() const
-        {
-            return pybind11::make_tuple(beg, end, weight, coupled, label);
-        }
-
-        static Region
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 5)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            return Region(t[0].cast<double>(), t[1].cast<double>(),
-                          t[2].cast<double>(), t[3].cast<bool>(),
-                          t[4].cast<std::uint16_t>());
-        }
-
-        void
-        region_repr(std::ostringstream& o) const
-        {
-            o << "beg=" << this->beg << ", end=" << this->end
-              << ", weight=" << this->weight;
-        }
-
-        std::string
-        repr() const
-        {
-            std::ostringstream o;
-            o.precision(4);
-            o << "Region(";
-            this->region_repr(o);
-            o << ")";
-            return o.str();
-        }
     };
-
-    inline bool
-    operator==(const Region& lhs, const Region& rhs)
-    {
-        return lhs.beg == rhs.beg && lhs.end == rhs.end
-               && lhs.weight == rhs.weight && lhs.coupled == rhs.coupled
-               && lhs.label == rhs.label;
-    }
 } // namespace fwdpy11
 
 #endif

@@ -45,18 +45,6 @@ namespace fwdpy11
             return std::unique_ptr<ConstantS>(new ConstantS(*this));
         }
 
-        std::string
-        repr() const override
-        {
-            std::ostringstream out;
-            out.precision(4);
-            out << "ConstantS(";
-            this->region.region_repr(out);
-            out << ", s=" << this->esize << ", h=" << this->dominance
-                << ", scaling=" << this->scaling << ')';
-            return out.str();
-        }
-
         std::uint32_t
         operator()(fwdpp::flagged_mutation_queue& recycling_bin,
                    std::vector<Mutation>& mutations,
@@ -81,30 +69,6 @@ namespace fwdpy11
         get_dominance() const override
         {
             return {dominance};
-        }
-
-        pybind11::tuple
-        pickle() const override
-        {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), esize, dominance,
-                                        is_neutral);
-        }
-
-        static ConstantS
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 4)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            auto base = t[0].cast<pybind11::tuple>();
-            bool is_neutral = t[3].cast<bool>();
-            if (is_neutral == false)
-                {
-                    return ConstantS(Region::unpickle(base[0]), base[1].cast<double>(),
-                                     t[1].cast<double>(), t[2].cast<double>());
-                }
-            return ConstantS(Region::unpickle(base[0]));
         }
     };
 } // namespace fwdpy11

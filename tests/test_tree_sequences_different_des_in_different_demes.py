@@ -262,7 +262,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
             "sregions": [
                 fwdpy11.mvDES(
                     fwdpy11.MultivariateGaussianEffects(
-                        0, 1, 1, h=1, matrix=np.identity(2)
+                        0, 1, 1, h=1, cov_matrix=np.identity(2)
                     ),
                     np.zeros(2),
                 )

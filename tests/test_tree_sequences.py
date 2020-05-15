@@ -95,7 +95,9 @@ def set_up_standard_pop_gen_model(simlen=1.0):
     p = {
         "nregions": [],
         "sregions": [
-            fwdpy11.GammaS(0, 1, 1.0 - pselected, mean=-5, shape=1, scaling=2 * N),
+            fwdpy11.GammaS(
+                0, 1, 1.0 - pselected, mean=-5, shape_parameter=1, scaling=2 * N
+            ),
             fwdpy11.ConstantS(0, 1, pselected, 1000, scaling=2 * N),
         ],
         "recregions": [fwdpy11.Region(0, 1, 1)],
@@ -773,7 +775,7 @@ class TestMutationCounts(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model()
-        pdict = self.params.as_dict()
+        pdict = self.params.asdict()
         pdict["simlen"] = 200
         self.params = fwdpy11.ModelParams(**pdict)
         self.pop2 = copy.deepcopy(self.pop)
@@ -837,7 +839,7 @@ class TestUpdateTiming(unittest.TestCase):
         from test_tree_sequences import set_up_quant_trait_model
 
         params, rng, pop = set_up_quant_trait_model(1.1)
-        pdict = params.as_dict()
+        pdict = params.asdict()
         pdict["rates"] = (0, 0, 0)
         params = fwdpy11.ModelParams(**pdict)
 

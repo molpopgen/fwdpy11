@@ -43,6 +43,7 @@ from .discrete_demography import (  # NOQA
     SetMigrationRates,
     SetSelfingRate,
 )
+from .regions import * # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
 from ._evolvets import *  # NOQA

@@ -95,52 +95,15 @@ namespace
     }
 }
 
-static const auto mvDES_CLASS_DOCSTRING = R"delim(
-General multivariate distribution of effect sizes.
-
-.. versionadded:: 0.7.0
-)delim";
-
-static const auto mvDES_INIT_DOCSTRING = R"delim(
-:param des: Distributions of effect sizes
-:type des: list
-:param means: means marginal gaussian Distributions
-:type means: numpy.ndarray
-:param matrix: Variance/covariance matrix
-:type matrix: numpy.ndarray
-)delim";
-
-static const auto mvDES_INIT_DOCSTRING_LOGNORMAL = R"delim(
-Create a multivariate lognormal representing 
-different effect sizes in different demes.
-
-:param mvln: A lognormal region
-:type mvln: :class:`fwdpy11.LogNormalS`
-:param means: means marginal gaussian Distributions
-:type means: numpy.ndarray
-:param matrix: Variance/covariance matrix
-:type matrix: numpy.ndarray
-)delim";
-
-static const auto mvDES_INIT_DOCSTRING_GAUSSIAN = R"delim(
-Create a multivariate gaussian representing 
-different effect sizes in different demes.
-
-:param mvln: A multivariate Gaussian region
-:type mvln: :class:`fwdpy11.MultivariateGaussianEffects`
-:param means: means marginal gaussian Distributions
-:type means: numpy.ndarray
-)delim";
-
 void
 init_mvDES(py::module &m)
 {
-    py::class_<fwdpy11::mvDES, fwdpy11::Sregion>(m, "mvDES", mvDES_CLASS_DOCSTRING)
+    py::class_<fwdpy11::mvDES, fwdpy11::Sregion>(m, "_ll_mvDES")
         .def(py::init([](py::list sregions, py::array_t<double> means,
                          py::array_t<double> vcov) {
                  return create_from_python(sregions, means, vcov);
              }),
-             py::arg("des"), py::arg("means"), py::arg("matrix"), mvDES_INIT_DOCSTRING)
+             py::arg("des"), py::arg("means"), py::arg("matrix"))
         .def(py::init([](const fwdpy11::LogNormalS &mvln, py::array_t<double> means,
                          py::array_t<double> vcov) {
                  if (mvln.univariate == true)
@@ -153,10 +116,9 @@ init_mvDES(py::module &m)
                  auto matrix = convert_matrix(vcov);
                  return fwdpy11::mvDES(mvln, std::move(mu), *matrix);
              }),
-             py::arg("mvln"), py::arg("means"), py::arg("matrix"),
-             mvDES_INIT_DOCSTRING_LOGNORMAL)
+             py::arg("des"), py::arg("means"), py::arg("matrix"))
         .def(py::init([](const fwdpy11::MultivariateGaussianEffects &mvgauss,
-                         py::array_t<double> means) {
+                         py::array_t<double> means, py::object) {
                  auto mu = convert_means(means);
                  if (mu.size() != mvgauss.input_matrix_copy->size1)
                      {
@@ -164,10 +126,5 @@ init_mvDES(py::module &m)
                      }
                  return fwdpy11::mvDES(mvgauss, std::move(mu));
              }),
-             py::arg("mvgauss"), py::arg("means"), mvDES_INIT_DOCSTRING_GAUSSIAN)
-        .def("__repr__", &fwdpy11::mvDES::repr)
-        .def_property_readonly("means", &fwdpy11::mvDES::get_means)
-        .def_property_readonly("matrix", &fwdpy11::mvDES::get_matrix)
-        .def(py::pickle([](const fwdpy11::mvDES &self) { return self.pickle(); },
-                        &fwdpy11::mvDES::unpickle));
+             py::arg("des"), py::arg("means"), py::arg("matrix"));
 }

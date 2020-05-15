@@ -381,19 +381,6 @@ namespace fwdpy11
                 new mvDES(output_distributions, means, *(this->vcov_copy)));
         }
 
-        std::string
-        repr() const override
-        {
-            using namespace pybind11::literals;
-            pybind11::list des_repr;
-            for (auto &d : output_distributions)
-                {
-                    des_repr.append(d->repr());
-                }
-            auto r = "mvDES({}, {}, {})"_s.format(des_repr, get_means(), get_matrix());
-            return r;
-        }
-
         double
         from_mvnorm(const double, const double) const override
         {
@@ -407,106 +394,19 @@ namespace fwdpy11
             return dominance_values;
         }
 
-        pybind11::tuple
-        pickle() const override
-        {
-            if (lognormal_init)
-                {
-                    std::vector<double> m(vcov_copy->data,
-                                          vcov_copy->data
-                                              + vcov_copy->size1 * vcov_copy->size2);
-                    return pybind11::make_tuple(output_distributions[0]->pickle(), means,
-                                                m);
-                }
+        //get_means() const
+        //{
+        //    return make_1d_ndarray_readonly(means);
+        //}
 
-            if (mvgaussian_init)
-                {
-                    return pybind11::make_tuple(output_distributions[0]->pickle(),
-                                                means);
-                }
-
-            auto dumps = pybind11::module::import("pickle").attr("dumps");
-            pybind11::list pickled_des;
-            for (auto &s : output_distributions)
-                {
-                    pickled_des.append(dumps(s.get(), -1));
-                }
-            std::vector<double> m(vcov_copy->data,
-                                  vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
-            return pybind11::make_tuple(pickled_des, means, m, vcov_copy->size1);
-        }
-
-        static mvDES
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() == 2)
-                {
-                    return mvDES(MultivariateGaussianEffects::unpickle(
-                                     t[0].cast<pybind11::tuple>()),
-                                 t[1].cast<std::vector<double>>());
-                }
-
-            if (t.size() == 3)
-                {
-                    auto means = t[1].cast<std::vector<double>>();
-                    matrix_ptr m(gsl_matrix_alloc(means.size(), means.size()),
-                                 [](gsl_matrix *m) { gsl_matrix_free(m); });
-                    auto mdata = t[2].cast<std::vector<double>>();
-                    std::size_t k = 0;
-                    for (std::size_t i = 0; i < means.size(); ++i)
-                        {
-                            for (std::size_t j = 0; j < means.size(); ++j)
-                                {
-                                    gsl_matrix_set(m.get(), i, j, mdata[k++]);
-                                }
-                        }
-                    return mvDES(LogNormalS::unpickle(t[0].cast<pybind11::tuple>()),
-                                 std::move(means), *m);
-                }
-
-            if (t.size() != 4)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-
-            std::vector<std::unique_ptr<Sregion>> des;
-            auto l = t[0].cast<pybind11::list>();
-            auto loads = pybind11::module::import("pickle").attr("loads");
-            for (auto i : l)
-                {
-                    auto temp = loads(i);
-                    des.emplace_back(temp.cast<Sregion &>().clone());
-                }
-            auto means = t[1].cast<std::vector<double>>();
-            auto mdata = t[2].cast<std::vector<double>>();
-            auto size = t[3].cast<std::size_t>();
-            matrix_ptr m(gsl_matrix_alloc(size, size),
-                         [](gsl_matrix *m) { gsl_matrix_free(m); });
-            std::size_t k = 0;
-            for (std::size_t i = 0; i < size; ++i)
-                {
-                    for (std::size_t j = 0; j < size; ++j)
-                        {
-                            gsl_matrix_set(m.get(), i, j, mdata[k++]);
-                        }
-                }
-            return mvDES(des, std::move(means), *m);
-        }
-
-        pybind11::array_t<double>
-        get_means() const
-        {
-            return make_1d_ndarray_readonly(means);
-        }
-
-        pybind11::array_t<double>
-        get_matrix() const
-        {
-            std::vector<double> m(vcov_copy->data,
-                                  vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
-            return make_2d_array_with_capsule(std::move(m), vcov_copy->size1,
-                                              vcov_copy->size2);
-        }
+        //pybind11::array_t<double>
+        //get_matrix() const
+        //{
+        //    std::vector<double> m(vcov_copy->data,
+        //                          vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
+        //    return make_2d_array_with_capsule(std::move(m), vcov_copy->size1,
+        //                                      vcov_copy->size2);
+        //}
     };
 } // namespace fwdpy11
 

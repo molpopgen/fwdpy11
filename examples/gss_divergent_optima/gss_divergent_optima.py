@@ -35,7 +35,7 @@ pdict = {
         # Multivariate Gaussian distribution of effect sizes
         fwdpy11.mvDES(
             fwdpy11.MultivariateGaussianEffects(
-                beg=0, end=1, weight=1, h=1, matrix=covariance_matrix
+                beg=0, end=1, weight=1, h=1, cov_matrix=covariance_matrix
             ),
             # Means of zero for each marginal Gaussian
             np.zeros(2),

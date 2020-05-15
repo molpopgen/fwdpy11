@@ -108,18 +108,6 @@ namespace fwdpy11
                     1.0, *input_matrix_copy.get(), this->fixed_effect, this->dominance));
         }
 
-        std::string
-        repr() const override
-        {
-            std::ostringstream out;
-            out.precision(4);
-            out << "MultivariateGaussianEffects(";
-            this->region.region_repr(out);
-            out << ", s=" << this->fixed_effect << ", h=" << this->dominance
-                << ", matrix at " << matrix.get() << ')';
-            return out.str();
-        }
-
         virtual std::uint32_t
         operator()(fwdpp::flagged_mutation_queue &recycling_bin,
                    std::vector<Mutation> &mutations,
@@ -152,63 +140,7 @@ namespace fwdpy11
         {
             return dominance_values;
         }
-
-        pybind11::tuple
-        pickle() const override
-        {
-            pybind11::list matrix_data;
-            for (std::size_t i = 0; i < input_matrix_copy->size1; ++i)
-                {
-                    for (std::size_t j = 0; j < input_matrix_copy->size2; ++j)
-                        {
-                            matrix_data.append(
-                                gsl_matrix_get(input_matrix_copy.get(), i, j));
-                        }
-                }
-
-            return pybind11::make_tuple(
-                Sregion::pickle_Sregion(), matrix_data, input_matrix_copy->size1,
-                input_matrix_copy->size2, fixed_effect, dominance);
-        }
-
-        static MultivariateGaussianEffects
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 6)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            auto base = t[0].cast<pybind11::tuple>();
-            std::vector<double> input_matrix_data;
-            pybind11::list input_matrix_list = t[1].cast<pybind11::list>();
-            std::size_t size1 = t[2].cast<std::size_t>();
-            std::size_t size2 = t[3].cast<std::size_t>();
-            for (auto i : input_matrix_list)
-                {
-                    input_matrix_data.push_back(i.cast<double>());
-                }
-            auto v = gsl_matrix_const_view_array(input_matrix_data.data(), size1, size2);
-            return MultivariateGaussianEffects(Region::unpickle(base[0]),
-                                               base[1].cast<double>(), v.matrix,
-                                               t[4].cast<double>(), t[5].cast<double>());
-        }
     };
-
-    inline bool
-    operator==(const MultivariateGaussianEffects &lhs,
-               const MultivariateGaussianEffects &rhs)
-    {
-        bool base_equal = lhs.is_equal(rhs);
-        if (base_equal == false)
-            {
-                return false;
-            }
-        return rhs.fixed_effect == rhs.fixed_effect && rhs.dominance == rhs.dominance
-               && gsl_matrix_equal(rhs.input_matrix_copy.get(),
-                                   rhs.input_matrix_copy.get())
-               && gsl_matrix_equal(rhs.matrix.get(), rhs.matrix.get());
-    }
-
 } // namespace fwdpy11
 
 #endif

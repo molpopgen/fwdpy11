@@ -32,18 +32,6 @@ namespace fwdpy11
             return std::unique_ptr<ExpS>(new ExpS(*this));
         }
 
-        std::string
-        repr() const override
-        {
-            std::ostringstream out;
-            out.precision(4);
-            out << "ExpS(";
-            this->region.region_repr(out);
-            out << ", mean=" << this->mean << ", h=" << this->dominance
-                << ", scaling=" << this->scaling << ')';
-            return out.str();
-        }
-
         std::uint32_t
         operator()(
             fwdpp::flagged_mutation_queue& recycling_bin,
@@ -70,25 +58,6 @@ namespace fwdpy11
         get_dominance() const override
         {
             return { dominance };
-        }
-
-        pybind11::tuple
-        pickle() const override
-        {
-            return pybind11::make_tuple(Sregion::pickle_Sregion(), mean,
-                                        dominance);
-        }
-
-        static ExpS
-        unpickle(pybind11::tuple t)
-        {
-            if (t.size() != 3)
-                {
-                    throw std::runtime_error("invalid tuple size");
-                }
-            auto base = t[0].cast<pybind11::tuple>();
-            return ExpS(Region::unpickle(base[0]), base[1].cast<double>(),
-                        t[1].cast<double>(), t[2].cast<double>());
         }
     };
 } // namespace fwdpy11

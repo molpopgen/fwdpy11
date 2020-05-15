@@ -61,8 +61,6 @@ namespace fwdpy11
         }
 
         virtual std::unique_ptr<Sregion> clone() const = 0;
-        virtual std::string repr() const = 0;
-        virtual pybind11::tuple pickle() const = 0;
         virtual std::uint32_t operator()(
             fwdpp::flagged_mutation_queue& /*recycling_bin*/,
             std::vector<Mutation>& /*mutations*/,
@@ -79,29 +77,6 @@ namespace fwdpy11
         shape() const
         {
             return pybind11::make_tuple(total_dim);
-        }
-
-        pybind11::tuple
-        pickle_Sregion() const
-        {
-            return pybind11::make_tuple(region.pickle(), scaling);
-        }
-
-        static std::tuple<Region, double>
-        unpickle_Sregion(pybind11::tuple t)
-        {
-            if (t.size() != 2)
-                {
-                    throw std::runtime_error("inalid tuple size");
-                }
-            return std::make_tuple(Region::unpickle(t[0]),
-                                   t[1].cast<double>());
-        }
-
-        inline bool
-        is_equal(const Sregion& rhs) const
-        {
-            return this->region == rhs.region && this->scaling == rhs.scaling;
         }
     };
 } // namespace fwdpy11

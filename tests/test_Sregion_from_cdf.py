@@ -70,7 +70,7 @@ class TestSregionFromCDF(unittest.TestCase):
         # b = mean/shape
         mean = 5
         shape = 2.6
-        g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape=shape)
+        g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape_parameter=shape)
         d = self.get_deviate(g)
         gamma = scipy.stats.gamma(a=shape, scale=mean / shape)
         self.assertAlmostEqual(self.P, gamma.cdf(d))
@@ -81,7 +81,7 @@ class TestSregionFromCDF(unittest.TestCase):
         scaling = 1e3
         mean = 5 * scaling
         shape = 2.6
-        g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape=shape, scaling=scaling)
+        g = fwdpy11.GammaS(0, 1, 1, mean=mean, shape_parameter=shape, scaling=scaling)
         d = self.get_deviate(g)
         gamma = scipy.stats.gamma(a=shape, scale=mean / (scaling * shape))
         self.assertAlmostEqual(self.P, gamma.cdf(d))
