@@ -344,12 +344,13 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     :param when: The generation when the event occurs
     :type when: int
     :param deme: The row index of the migration matrix
-    :type when: int or None
+    :type deme: int or None
     :param migrates: The migration rates from `deme` to all other populations.
     :type migrates: list or numpy.ndarray
 
     In order to change the entire migration matrix, pass ``None`` (or -1)
-    to ``deme`` and a 2d ``numpy.ndarray`` for ``migrates``.
+    to ``deme`` and a 2d ``numpy.ndarray`` for ``migrates``.  A value of
+    ``None`` will be converted to ``-1`` in this case.
 
     .. versionadded:: 0.5.3
 
