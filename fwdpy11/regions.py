@@ -70,6 +70,10 @@ class Region(fwdpy11._fwdpy11._ll_Region):
     """
     A genomic region, defined by half-open interval [beg, end)
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -89,6 +93,11 @@ class Region(fwdpy11._fwdpy11._ll_Region):
     .. versionchanged:: 0.3.0
 
         Refactored from a pure Python class to a C++/pybind11 class
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -117,6 +126,10 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     """
     Mutations with fixed effect sizes
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -136,6 +149,11 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 
     When coupled is True, the "weight" may be interpreted
     as a "per base pair" (or per unit, generally speaking) term.
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -174,6 +192,10 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     """
     Exponential distribution of effect sizes
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -193,6 +215,11 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 
     When coupled is True, the "weight" may be interpreted
     as a "per base pair" (or per unit, generally speaking) term.
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     import numpy as np
@@ -233,6 +260,10 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     """
     Gamma distribution of effect sizes
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -254,6 +285,11 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 
     When coupled is True, the "weight" may be
     interpreted as a "per base pair" (or per unit, generally speaking) term.
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -294,6 +330,10 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     """
     Gaussian distribution of effect sizes
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -313,6 +353,11 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 
     When coupled is True, the "weight" may be
     interpreted as a "per base pair" (or per unit, generally speaking) term.
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -351,6 +396,10 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     """
     Log-normal distribution of effect sizes.
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -374,6 +423,11 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     interpreted as a "per base pair" (or per unit, generally speaking) term.
 
     .. versionadded:: 0.7.0
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -457,6 +511,11 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     """
     Uniform distrubution of effect sizes
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: the beginning of the region
     :type beg: float
     :param end: the end of the region
@@ -478,6 +537,11 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 
     When coupled is True, the "weight" may be
     interpreted as a "per base pair" (or per unit, generally speaking) term.
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -521,6 +585,10 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     This class can be used to generate mutations with both vectors
     of effect sizes as well as a separate fixed effect.
 
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
     :param beg: Beginning of the region
     :type beg: float
     :param end: End of the region
@@ -548,6 +616,11 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
         drawn from a multivariate normal.
 
     .. versionadded:: 0.3.0
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     beg: float
@@ -605,7 +678,9 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     """
     General multivariate distribution of effect sizes.
 
-    .. versionadded:: 0.7.0
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
 
     :param des: Distributions of effect sizes
     :type des: list
@@ -613,6 +688,13 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     :type means: numpy.ndarray
     :param matrix: Variance/covariance matrix
     :type matrix: numpy.ndarray
+
+    .. versionadded:: 0.7.0
+
+    .. versionchanged:: 0.8.0
+
+        Refactored to use attrs and inherit from
+        low-level C++ class
     """
 
     des: object
