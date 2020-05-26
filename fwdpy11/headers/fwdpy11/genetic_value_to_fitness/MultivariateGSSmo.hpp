@@ -34,10 +34,10 @@ namespace fwdpy11
     {
         std::vector<PleiotropicOptima> optima;
         std::size_t current_timepoint;
-
+        const std::size_t total_dim;
         MultivariateGSSmo(const std::vector<PleiotropicOptima> &po)
-            : GeneticValueIsTrait{po.empty() ? 0 : po[0].optima.size()}, optima(po),
-              current_timepoint(0)
+            : GeneticValueIsTrait{}, optima(po),
+              current_timepoint(0), total_dim{po.empty() ? 0 : po[0].optima.size()}
         {
             if (po.empty())
                 {
@@ -99,6 +99,12 @@ namespace fwdpy11
                 {
                     ++current_timepoint;
                 }
+        }
+
+        pybind11::tuple
+        shape() const override
+        {
+            return pybind11::make_tuple(total_dim);
         }
 
         void

@@ -60,7 +60,7 @@ namespace fwdpy11
 
         explicit DiploidGeneticValue(std::size_t ndim)
             : total_dim(ndim), gvalues(total_dim, 0.),
-              gv2w{ new GeneticValueIsFitness{ total_dim } }, noise_fxn{
+              gv2w{ new GeneticValueIsFitness{ndim} }, noise_fxn{
                   new NoNoise()
               }
         {

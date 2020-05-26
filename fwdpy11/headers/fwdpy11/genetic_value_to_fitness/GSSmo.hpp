@@ -15,11 +15,12 @@ namespace fwdpy11
         std::size_t current_optimum;
         // Tuple is time, optimum, VS
         std::vector<Optimum> optima;
+        const std::size_t total_dim;
 
         GSSmo(std::vector<Optimum> optima_)
-            : GeneticValueIsTrait{1}, VS{std::numeric_limits<double>::quiet_NaN()},
+            : GeneticValueIsTrait{}, VS{std::numeric_limits<double>::quiet_NaN()},
               opt{std::numeric_limits<double>::quiet_NaN()}, current_optimum(1),
-              optima(std::move(optima_))
+              optima(std::move(optima_)), total_dim{1}
         {
             if (optima.empty())
                 {
@@ -73,6 +74,12 @@ namespace fwdpy11
         pickle() const override
         {
             return pybind11::make_tuple(opt, VS, current_optimum, optima);
+        }
+
+        pybind11::tuple
+        shape() const override
+        {
+            return pybind11::make_tuple(total_dim);
         }
     };
 } // namespace fwdpy11

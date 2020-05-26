@@ -30,8 +30,8 @@ namespace fwdpy11
     {
         const std::uint32_t when;
         const double opt;
-        const double
-            VW; // NOTE: this is used as VS until we sort out nomenclature issues
+        // NOTE: this is used as VS until we sort out nomenclature issues
+        const double VW;
 
         Optimum(std::uint32_t w, double o, double vw) : when(w), opt(o), VW(vw)
         {

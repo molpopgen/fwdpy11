@@ -30,8 +30,9 @@ namespace fwdpy11
     struct GSS : public GeneticValueIsTrait
     {
         const double opt, VS;
+        const std::size_t total_dim;
         GSS(const double opt_, const double VS_)
-            : GeneticValueIsTrait{1}, opt{opt_}, VS{VS_}
+            : GeneticValueIsTrait{}, opt{opt_}, VS{VS_}, total_dim{1}
         {
             if (VS <= 0.0)
                 {
@@ -43,7 +44,8 @@ namespace fwdpy11
                 }
         }
 
-        explicit GSS(const Optimum &o) : GeneticValueIsTrait{1}, opt{o.opt}, VS{o.VW}
+        explicit GSS(const Optimum &o)
+            : GeneticValueIsTrait{}, opt{o.opt}, VS{o.VW}, total_dim{1}
         {
         }
 
@@ -70,6 +72,12 @@ namespace fwdpy11
         pickle() const override
         {
             return pybind11::make_tuple(opt, VS);
+        }
+
+        pybind11::tuple
+        shape() const override
+        {
+            return pybind11::make_tuple(total_dim);
         }
     };
 } // namespace fwdpy11

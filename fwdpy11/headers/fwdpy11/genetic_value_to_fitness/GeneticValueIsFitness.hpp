@@ -26,8 +26,9 @@ namespace fwdpy11
 {
     struct GeneticValueIsFitness : public GeneticValueToFitnessMap
     {
+        const std::size_t total_dim;
         explicit GeneticValueIsFitness(std::size_t ndim)
-            : GeneticValueToFitnessMap(ndim, maps_to_fitness(true))
+            : GeneticValueToFitnessMap( maps_to_fitness(true)), total_dim{ndim}
         {
         }
 
@@ -57,6 +58,12 @@ namespace fwdpy11
             auto t = pybind11::make_tuple(this->total_dim);
             pybind11::object o(t);
             return o;
+        }
+
+        pybind11::tuple
+        shape() const override
+        {
+            return pybind11::make_tuple(total_dim);
         }
     };
 } // namespace fwdpy11

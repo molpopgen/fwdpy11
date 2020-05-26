@@ -32,15 +32,17 @@ namespace fwdpy11
     {
         std::vector<double> optima;
         double VS;
+        const std::size_t total_dim;
 
         MultivariateGSS(std::vector<double> input_optima, double VS_)
-            : GeneticValueIsTrait{input_optima.size()}, optima(std::move(input_optima)),
-              VS(VS_)
+            : GeneticValueIsTrait{}, optima(std::move(input_optima)),
+              VS(VS_), total_dim{input_optima.size()}
         {
         }
 
         explicit MultivariateGSS(const PleiotropicOptima& po)
-            : GeneticValueIsTrait{po.optima.size()}, optima{po.optima}, VS{po.VW}
+            : GeneticValueIsTrait{}, optima{po.optima}, VS{po.VW}, total_dim{
+                                                                       po.optima.size()}
         {
         }
 
@@ -75,6 +77,12 @@ namespace fwdpy11
                     l.append(x);
                 }
             return pybind11::make_tuple(l, VS);
+        }
+
+        pybind11::tuple
+        shape() const override
+        {
+            return pybind11::make_tuple(total_dim);
         }
 
         DEFAULT_DIPLOID_POP_UPDATE()

@@ -36,10 +36,8 @@ namespace fwdpy11
 
     struct GeneticValueToFitnessMap
     {
-        std::size_t total_dim;
         const bool isfitness;
-        explicit GeneticValueToFitnessMap(std::size_t ndim, const maps_to_fitness& m)
-            : total_dim{ndim}, isfitness{m.get()}
+        explicit GeneticValueToFitnessMap(const maps_to_fitness& m) : isfitness{m.get()}
         {
         }
         virtual ~GeneticValueToFitnessMap() = default;
@@ -49,11 +47,7 @@ namespace fwdpy11
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::object pickle() const = 0;
-        virtual pybind11::tuple
-        shape() const
-        {
-            return pybind11::make_tuple(total_dim);
-        }
+        virtual pybind11::tuple shape() const = 0;
     };
 } //namespace fwdpy11
 
