@@ -20,7 +20,6 @@
 #define FWDPY11_GENETIC_VALUES_NOISE_HPP__
 
 #include <memory>
-#include <pybind11/pybind11.h>
 #include <fwdpy11/types/Diploid.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/rng.hpp>

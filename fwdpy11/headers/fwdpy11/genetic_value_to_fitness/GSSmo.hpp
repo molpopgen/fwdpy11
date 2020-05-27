@@ -1,7 +1,6 @@
 #ifndef FWDPY11_GSSMO
 #define FWDPY11_GSSMO
 
-#include <pybind11/stl.h>
 #include <algorithm>
 #include <vector>
 #include "GeneticValueIsTrait.hpp"
