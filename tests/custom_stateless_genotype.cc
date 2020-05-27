@@ -29,7 +29,7 @@ struct GeneralW : public fwdpy11::DiploidGeneticValue
     }
 
     pybind11::object
-    pickle() const override
+    pickle() const
     {
         return pybind11::bytes("custom_stateless_genotype");
     }

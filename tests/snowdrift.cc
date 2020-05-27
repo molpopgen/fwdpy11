@@ -113,13 +113,12 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
         noise_fxn->update(pop);
     }
 
-    // In order to support pickling, the ABC requries
-    // that the following function be defined for a subclass.
+    // In order to support pickling, we provide this function.
     // It must return the relevant data needed for serialization
     // as a Python object.  pybind11 makes this easy (for most
     // cases, most of the time).
     py::object
-    pickle() const override
+    pickle() const
     {
         return py::make_tuple(b1, b2, c1, c2, phenotypes);
     }

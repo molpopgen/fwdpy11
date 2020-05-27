@@ -21,7 +21,6 @@
 #include <fwdpy11/types/Mutation.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
 #include <pybind11/pybind11.h>
-#include "gvalue_pickle_helpers.hpp"
 
 namespace
 {
@@ -91,80 +90,34 @@ namespace
 
     using DiploidAdditive = fwdpy11::stateless_site_dependent_genetic_value_wrapper<
         single_deme_additive_het, single_deme_additive_hom, multi_deme_additive_het,
-        multi_deme_additive_hom, pickle_gvalue, 0>;
+        multi_deme_additive_hom, 0>;
 }
-
-namespace
-{
-    static const auto ADDITIVE_CONSTRUCTOR_1 =
-        R"delim(
-Additive effects on fitness.
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-
-For a model of fitness, the genetic value is 1, 1+e*h,
-1+scaling*e for genotypes AA, Aa, and aa, respectively.
-)delim";
-
-    static const auto ADDITIVE_CONSTRUCTOR_2 =
-        R"delim(
-Construct an object of additive effects on a trait with a specific
-functional mapping from genetic value to fitness.
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-:param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
-)delim";
-
-    static const auto ADDITIVE_CONSTRUCTOR_3 =
-        R"delim(
-Additive effects on a trait with a specific mapping from 
-genetic value to fitness and random effects ("noise").
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-:param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
-:param noise: Function to generate random effects on trait value.
-:type noise: :class:`fwdpy11.GeneticValueNoise`
-)delim";
-} // namespace
 
 namespace py = pybind11;
 
 void
 init_Additive(py::module& m)
 {
-    py::class_<DiploidAdditive, fwdpy11::DiploidGeneticValue>(m, "Additive",
-                                                              "Additive genetic values.")
-        .def(py::init([](const double scaling, std::size_t ndemes) {
-                 return DiploidAdditive(ndemes, scaling, final_additive_fitness());
-             }),
-             py::arg("scaling"), py::arg("ndemes") = 1, ADDITIVE_CONSTRUCTOR_1)
-        .def(py::init([](const double scaling, const fwdpy11::GeneticValueIsTrait& g,
+    py::class_<DiploidAdditive, fwdpy11::DiploidGeneticValue>(m, "_ll_Additive")
+        .def(py::init([](double scaling, py::object gvalue_to_fitness, py::object noise,
                          std::size_t ndemes) {
-                 return DiploidAdditive(ndemes, scaling, final_additive_trait(), g);
+                 if (gvalue_to_fitness.is_none() && noise.is_none())
+                     {
+                         return DiploidAdditive(ndemes, scaling,
+                                                final_additive_fitness());
+                     }
+                 if (noise.is_none())
+                     {
+                         return DiploidAdditive(
+                             ndemes, scaling, final_additive_trait(),
+                             gvalue_to_fitness
+                                 .cast<const fwdpy11::GeneticValueIsTrait&>());
+                     }
+                 return DiploidAdditive(
+                     ndemes, scaling, final_additive_trait(),
+                     gvalue_to_fitness.cast<const fwdpy11::GeneticValueIsTrait&>(),
+                     noise.cast<const fwdpy11::GeneticValueNoise&>());
              }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("ndemes") = 1,
-             ADDITIVE_CONSTRUCTOR_2)
-        .def(py::init([](const double scaling, const fwdpy11::GeneticValueIsTrait& g,
-                         const fwdpy11::GeneticValueNoise& n, std::size_t ndemes) {
-                 return DiploidAdditive(ndemes, scaling, final_additive_trait(), g, n);
-             }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"),
-             py::arg("ndemes") = 1, ADDITIVE_CONSTRUCTOR_3)
-        .def_property_readonly("scaling", &DiploidAdditive::scaling,
-                               "Access to the scaling parameter.")
-        .def(py::pickle(
-            [](const DiploidAdditive& a) {
-                auto p = py::module::import("pickle");
-                return py::make_tuple(a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
-                                      p.attr("dumps")(a.noise_fxn->clone(), -1));
-            },
-            [](py::tuple t) {
-                return unpickle_gvalue<DiploidAdditive, final_additive_fitness,
-                                       final_additive_trait, std::true_type>(t);
-            }));
+             py::arg("scaling"), py::arg("gvalue_to_fitness"), py::arg("noise"),
+             py::arg("ndemes"));
 }

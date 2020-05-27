@@ -52,9 +52,10 @@ pdict = {
         fwdpy11.Additive(
             ndemes=2,  # Number of demes
             scaling=2,  # 0, 0+sh, 0+2s for AA, Aa, and aa, respectively
-            gv2w=moving_optimum_deme_0,  # Mapping of trait (genetic) value to fitness
+            # Mapping of trait (genetic) value to fitness
+            gvalue_to_fitness=moving_optimum_deme_0,
         ),
-        fwdpy11.Additive(ndemes=2, scaling=2, gv2w=moving_optimum_deme_1),
+        fwdpy11.Additive(ndemes=2, scaling=2, gvalue_to_fitness=moving_optimum_deme_1),
     ],
 }
 

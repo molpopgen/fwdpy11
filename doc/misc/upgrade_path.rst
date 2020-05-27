@@ -17,6 +17,8 @@ imperfect/incomplete.
   renamed ``shape_parameter``.
 * The ``matrix`` ``kwarg`` to initialize a :class:`fwdpy11.MultivariateGaussianEffects`
   has been renamed ``cov_matrix``.
+* The ``kwarg`` ``gw2w`` for genetic value objects ``init`` methods has been replaced with ``gvalue_to_fitness``.
+* The ``when`` ``kwargs`` for :class:`fwdpy11.Optimum` and :class:`fwdpy11.PleiotropicOptima` ``init`` methods is now the **third** positional argument rather than the first.  This change should be caught at run time (the new classes won't auto-convert ``float`` to ``int``, and is fixed by adding parameter names when initializing instances of these types.
 
 0.5.0
 -------------------------------------------------

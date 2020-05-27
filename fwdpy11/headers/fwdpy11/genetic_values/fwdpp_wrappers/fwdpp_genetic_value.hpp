@@ -11,7 +11,7 @@ namespace fwdpy11
 {
     template <typename single_deme_het_fxn, typename single_deme_hom_fxn,
               typename multi_deme_het_fxn, typename multi_deme_hom_fxn,
-              typename pickle_fxn, int starting_value>
+              int starting_value>
     class stateless_site_dependent_genetic_value_wrapper : public DiploidGeneticValue
     {
       private:
@@ -121,12 +121,6 @@ namespace fwdpy11
         {
             gvalues[0] = make_return_value(callback(gv, diploid_index, metadata, pop));
             return gvalues[0];
-        }
-
-        pybind11::object
-        pickle() const override
-        {
-            return pickle_fxn()(*this);
         }
 
         double

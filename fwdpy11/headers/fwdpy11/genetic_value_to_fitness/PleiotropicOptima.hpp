@@ -34,6 +34,7 @@ namespace fwdpy11
         const std::uint32_t when;
         const std::vector<double> optima;
         const double VW;
+        static const std::uint32_t null = std::numeric_limits<std::uint32_t>::max();
 
         PleiotropicOptima(std::uint32_t w, std::vector<double> o, double vw)
             : when{w}, optima{std::move(o)}, VW{vw}

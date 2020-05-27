@@ -1,7 +1,6 @@
 #ifndef FWDPY11_GSSMO
 #define FWDPY11_GSSMO
 
-#include <pybind11/stl.h>
 #include <algorithm>
 #include <vector>
 #include "GeneticValueIsTrait.hpp"
@@ -24,6 +23,14 @@ namespace fwdpy11
             if (optima.empty())
                 {
                     throw std::invalid_argument("empty container of optima");
+                }
+            for (auto &o : optima)
+                {
+                    if (o.when == Optimum::null)
+                        {
+                            throw std::invalid_argument(
+                                "invalid when value for Optimum");
+                        }
                 }
             if (!std::is_sorted(
                     optima.begin(), optima.end(),
@@ -67,12 +74,6 @@ namespace fwdpy11
         clone() const override
         {
             return std::unique_ptr<GSSmo>(new GSSmo(*this));
-        }
-
-        pybind11::object
-        pickle() const override
-        {
-            return pybind11::make_tuple(opt, VS, current_optimum, optima);
         }
     };
 } // namespace fwdpy11

@@ -78,7 +78,7 @@ class TestMultivariateGSSmoCPP(unittest.TestCase):
         PO = fwdpy11.PleiotropicOptima
         po = []
         for i, t in enumerate(timepoints):
-            po.append(PO(t, optima[i, :], 1))
+            po.append(PO(when=t, optima=optima[i, :], VS=1))
         GSSmo = fwdpy11.MultivariateGSSmo(po)
 
         co = testMultivariateGSSmo.get_optima(GSSmo)

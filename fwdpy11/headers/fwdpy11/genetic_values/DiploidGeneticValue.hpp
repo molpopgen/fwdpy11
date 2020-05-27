@@ -96,7 +96,6 @@ namespace fwdpy11
         calculate_gvalue(const std::size_t /*diploid_index*/,
                          const DiploidMetadata & /*diploid_metadata*/,
                          const DiploidPopulation& /*pop*/) const = 0;
-        virtual pybind11::object pickle() const = 0;
 
         virtual void
         update(const DiploidPopulation& pop)

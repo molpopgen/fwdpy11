@@ -66,17 +66,6 @@ namespace fwdpy11
             return std::unique_ptr<MultivariateGSS>(new MultivariateGSS(*this));
         }
 
-        pybind11::object
-        pickle() const override
-        {
-            pybind11::list l;
-            for (auto x : optima)
-                {
-                    l.append(x);
-                }
-            return pybind11::make_tuple(l, VS);
-        }
-
         DEFAULT_DIPLOID_POP_UPDATE()
     };
 } // namespace fwdpy11

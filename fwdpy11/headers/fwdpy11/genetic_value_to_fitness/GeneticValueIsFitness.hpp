@@ -50,14 +50,6 @@ namespace fwdpy11
             return std::unique_ptr<GeneticValueIsFitness>(
                 new GeneticValueIsFitness(this->total_dim));
         }
-
-        pybind11::object
-        pickle() const override
-        {
-            auto t = pybind11::make_tuple(this->total_dim);
-            pybind11::object o(t);
-            return o;
-        }
     };
 } // namespace fwdpy11
 

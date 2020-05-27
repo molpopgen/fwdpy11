@@ -6,10 +6,6 @@ namespace py = pybind11;
 void
 init_NoNoise(py::module& m)
 {
-    py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(
-        m, "NoNoise", "Type implying no random effects on genetic values.")
-        .def(py::init<>())
-        .def(py::pickle(
-            [](const fwdpy11::NoNoise& o) -> py::object { return o.pickle(); },
-            [](py::object& o) { return fwdpy11::NoNoise::unpickle(o); }));
+    py::class_<fwdpy11::NoNoise, fwdpy11::GeneticValueNoise>(m, "_ll_NoNoise")
+        .def(py::init<>());
 }

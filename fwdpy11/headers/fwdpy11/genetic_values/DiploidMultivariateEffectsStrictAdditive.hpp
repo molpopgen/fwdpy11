@@ -78,12 +78,6 @@ namespace fwdpy11
                 }
             return gvalues[focal_trait_index];
         }
-
-        pybind11::object
-        pickle() const
-        {
-            return pybind11::make_tuple(gvalues.size(), focal_trait_index);
-        }
     };
 } // namespace fwdpy11
 
