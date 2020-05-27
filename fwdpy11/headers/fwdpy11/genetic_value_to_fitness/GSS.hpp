@@ -65,12 +65,6 @@ namespace fwdpy11
         {
             return std::unique_ptr<GSS>(new GSS(opt, VS));
         }
-
-        pybind11::object
-        pickle() const override
-        {
-            return pybind11::make_tuple(opt, VS);
-        }
     };
 } // namespace fwdpy11
 

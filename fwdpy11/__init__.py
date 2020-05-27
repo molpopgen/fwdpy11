@@ -27,7 +27,6 @@ from fwdpy11._version import version as __version__  # NOQA
 
 from ._demography import *  # NOQA
 from ._dev import *  # NOQA
-from ._evolve_genomes import *  # NOQA
 from ._fwdpy11 import *  # NOQA
 from ._monkeypatch import _data_matrix  # NOQA
 from ._monkeypatch import _diploid_population  # NOQA
@@ -43,9 +42,24 @@ from .discrete_demography import (  # NOQA
     SetMigrationRates,
     SetSelfingRate,
 )
-from .regions import * # NOQA
+from .regions import *  # NOQA
+from .genetic_values import (  # NOQA
+    PleiotropicOptima,
+    Optimum,
+    GSS,
+    GSSmo,
+    MultivariateGSS,
+    MultivariateGSSmo,
+    NoNoise,
+    GaussianNoise,
+    Additive,
+    Multiplicative,
+    GBR,
+    StrictAdditiveMultivariateEffects,
+)
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
+from ._evolve_genomes import *  # NOQA
 from ._evolvets import *  # NOQA
 
 if sys.version_info[0] < 3:

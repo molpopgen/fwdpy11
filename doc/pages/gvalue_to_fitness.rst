@@ -9,22 +9,22 @@ Mapping genetic values to fitness
 .. autoclass:: fwdpy11.GeneticValueIsFitness
 
 .. autoclass:: fwdpy11.GSS
-    :members:
+    :members: asdict
 
 .. autoclass:: fwdpy11.GSSmo
-    :members:
+    :members: asdict
 
 .. autoclass:: fwdpy11.Optimum
-    :members:
+    :members: asdict
 
 .. autoclass:: fwdpy11.PleiotropicOptima
-    :members:
+    :members: asdict
 
 .. autoclass:: fwdpy11.MultivariateGSS
-    :members:
+    :members: asdict
 
 .. autoclass:: fwdpy11.MultivariateGSSmo
-    :members:
+    :members: asdict
 
 
 

@@ -56,14 +56,14 @@ init_DiploidGeneticValue(py::module& m)
 
                       .. versionadded:: 0.3.0
                       )delim")
-        .def_property_readonly(
-            "gvalue_to_fitness",
-            [](const fwdpy11::DiploidGeneticValue& o) { return o.gv2w->clone(); },
-            "Access the genetic value to fitness map.")
-        .def_property_readonly(
-            "noise",
-            [](const fwdpy11::DiploidGeneticValue& o) { return o.noise_fxn->clone(); },
-            "Access the random noise funcion")
+        //.def_property_readonly(
+        //    "gvalue_to_fitness",
+        //    [](const fwdpy11::DiploidGeneticValue& o) { return o.gv2w->clone(); },
+        //    "Access the genetic value to fitness map.")
+        //.def_property_readonly(
+        //    "noise",
+        //    [](const fwdpy11::DiploidGeneticValue& o) { return o.noise_fxn->clone(); },
+        //    "Access the random noise funcion")
         .def_property_readonly(
             "maps_to_fitness",
             [](const fwdpy11::DiploidGeneticValue& self) {

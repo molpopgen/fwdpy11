@@ -48,7 +48,6 @@ namespace fwdpy11
                    const std::vector<double>& /*genetic_values*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueToFitnessMap> clone() const = 0;
-        virtual pybind11::object pickle() const = 0;
         virtual pybind11::tuple
         shape() const
         {

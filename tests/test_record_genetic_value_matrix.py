@@ -38,7 +38,9 @@ def set_up_quant_trait_model():
     rho = 1.0
     r = rho / (4 * N)
     Opt = fwdpy11.Optimum
-    GSSmo = fwdpy11.GSSmo([Opt(0, 0, 1), Opt(10 * N, 1, 1)])
+    GSSmo = fwdpy11.GSSmo(
+        [Opt(when=0, optimum=0, VS=1), Opt(when=10 * N, optimum=1, VS=1)]
+    )
     a = fwdpy11.Additive(2.0, GSSmo)
     p = {
         "nregions": [],

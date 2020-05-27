@@ -62,7 +62,10 @@ class testGSSmo(unittest.TestCase):
     @classmethod
     def setUp(self):
         Opt = fwdpy11.Optimum
-        self.optima = [Opt(0, 0.0, 1.0), Opt(100, 1.0, 1.0)]
+        self.optima = [
+            Opt(when=0, optimum=0.0, VS=1.0),
+            Opt(when=100, optimum=1.0, VS=1.0),
+        ]
         self.g = fwdpy11.GSSmo(self.optima)
 
     def testPickle(self):
@@ -70,8 +73,8 @@ class testGSSmo(unittest.TestCase):
 
         p = pickle.dumps(self.g)
         up = pickle.loads(p)
-        self.assertEqual(up.VS, 1.0)
-        self.assertEqual(up.optimum, 0.0)
+        # self.assertEqual(up.VS, 1.0)
+        # self.assertEqual(up.optimum, 0.0)
         for i, j in zip(up.optima, self.optima):
             self.assertEqual(i.when, j.when)
             self.assertEqual(i.optimum, j.optimum)

@@ -32,6 +32,7 @@ namespace fwdpy11
         const double opt;
         const double
             VW; // NOTE: this is used as VS until we sort out nomenclature issues
+        static const std::uint32_t null = std::numeric_limits<std::uint32_t>::max();
 
         Optimum(std::uint32_t w, double o, double vw) : when(w), opt(o), VW(vw)
         {
@@ -45,8 +46,7 @@ namespace fwdpy11
                 }
         }
 
-        Optimum(double o, double vw)
-            : when(std::numeric_limits<std::uint32_t>::max()), opt(o), VW(vw)
+        Optimum(double o, double vw) : when(null), opt(o), VW(vw)
         {
             if (!std::isfinite(opt) || !std::isfinite(VW))
                 {
@@ -58,6 +58,7 @@ namespace fwdpy11
                 }
         }
     };
+
 }
 
 #endif

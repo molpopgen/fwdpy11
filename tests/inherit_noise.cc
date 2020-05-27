@@ -43,7 +43,7 @@ struct IneritedNoise : public fwdpy11::GeneticValueNoise
     }
 
     pybind11::object
-    pickle() const override
+    pickle() const
     {
         return pybind11::bytes("IneritedNoise");
     }

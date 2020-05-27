@@ -39,7 +39,6 @@ namespace fwdpy11
                    const DiploidPopulation& /*pop*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
-        virtual pybind11::object pickle() const = 0;
     };
 } // namespace fwdpy11
 

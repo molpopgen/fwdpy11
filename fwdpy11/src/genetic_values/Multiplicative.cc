@@ -21,7 +21,6 @@
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
 #include <fwdpy11/types/Mutation.hpp>
 #include <pybind11/pybind11.h>
-#include "gvalue_pickle_helpers.hpp"
 
 namespace py = pybind11;
 
@@ -91,77 +90,36 @@ namespace
         }
     };
 
-    using DiploidMult = fwdpy11::stateless_site_dependent_genetic_value_wrapper<
-        single_deme_multiplicative_het, single_deme_multiplicative_hom,
-        multi_deme_multiplicative_het, multi_deme_multiplicative_hom, pickle_gvalue, 1>;
-} // namespace fwdpy11
-
-static const auto MULT_CONSTRUCTOR_1 =
-    R"delim(
-Multiplicative effects on fitness.
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-
-For a model of fitness, the genetic value is 1, 1+e*h,
-1+scaling*e for genotypes AA, Aa, and aa, respectively.
-)delim";
-
-static const auto MULT_CONSTRUCTOR_2 =
-    R"delim(
-Construct an object of multiplicative effects on a trait with a specific
-functional mapping from genetic value to fitness.
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-:param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
-)delim";
-
-static const auto MULT_CONSTRUCTOR_3 =
-    R"delim(
-Multiplicative effects on a trait with a specific mapping from 
-genetic value to fitness and random effects ("noise").
-
-:param scaling: How to treat mutant homozygotes.
-:type scaling: float
-:param gv2w: Map from genetic value to fitness.
-:type gv2w: :class:`fwdpy11.GeneticValueIsTrait`
-:param noise: Function to generate random effects on trait value.
-:type noise: :class:`fwdpy11.GeneticValueNoise`
-)delim";
+    using DiploidMultiplicative
+        = fwdpy11::stateless_site_dependent_genetic_value_wrapper<
+            single_deme_multiplicative_het, single_deme_multiplicative_hom,
+            multi_deme_multiplicative_het, multi_deme_multiplicative_hom, 1>;
+}
 
 void
 init_Multiplicative(py::module& m)
 {
-    py::class_<DiploidMult, fwdpy11::DiploidGeneticValue>(
-        m, "Multiplicative", "Multiplicative genetic values.")
-        .def(py::init([](const double scaling, std::size_t ndemes) {
-                 return DiploidMult(ndemes, scaling, final_multiplicative_fitness());
-             }),
-             py::arg("scaling"), py::arg("ndemes") = 1, MULT_CONSTRUCTOR_1)
-        .def(py::init([](const double scaling, const fwdpy11::GeneticValueIsTrait& g,
+    py::class_<DiploidMultiplicative, fwdpy11::DiploidGeneticValue>(m,
+                                                                    "_ll_Multiplicative")
+        .def(py::init([](double scaling, py::object gvalue_to_fitness, py::object noise,
                          std::size_t ndemes) {
-                 return DiploidMult(ndemes, scaling, final_multiplicative_trait(), g);
+                 if (gvalue_to_fitness.is_none() && noise.is_none())
+                     {
+                         return DiploidMultiplicative(ndemes, scaling,
+                                                      final_multiplicative_fitness());
+                     }
+                 if (noise.is_none())
+                     {
+                         return DiploidMultiplicative(
+                             ndemes, scaling, final_multiplicative_trait(),
+                             gvalue_to_fitness
+                                 .cast<const fwdpy11::GeneticValueIsTrait&>());
+                     }
+                 return DiploidMultiplicative(
+                     ndemes, scaling, final_multiplicative_trait(),
+                     gvalue_to_fitness.cast<const fwdpy11::GeneticValueIsTrait&>(),
+                     noise.cast<const fwdpy11::GeneticValueNoise&>());
              }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("ndemes") = 1,
-             MULT_CONSTRUCTOR_2)
-        .def(py::init([](const double scaling, const fwdpy11::GeneticValueIsTrait& g,
-                         const fwdpy11::GeneticValueNoise& n, std::size_t ndemes) {
-                 return DiploidMult(ndemes, scaling, final_multiplicative_trait(), g, n);
-             }),
-             py::arg("scaling"), py::arg("gv2w"), py::arg("noise"),
-             py::arg("ndemes") = 1, MULT_CONSTRUCTOR_3)
-        .def_property_readonly("scaling", &DiploidMult::scaling,
-                               "Access to the scaling parameter.")
-        .def(py::pickle(
-            [](const DiploidMult& a) {
-                auto p = py::module::import("pickle");
-                return py::make_tuple(a.pickle(), p.attr("dumps")(a.gv2w->clone(), -1),
-                                      p.attr("dumps")(a.noise_fxn->clone(), -1));
-            },
-            [](py::tuple t) {
-                return unpickle_gvalue<DiploidMult, final_multiplicative_fitness,
-                                       final_multiplicative_trait, std::true_type>(t);
-            }));
+             py::arg("scaling"), py::arg("gvalue_to_fitness"), py::arg("noise"),
+             py::arg("ndemes"));
 }

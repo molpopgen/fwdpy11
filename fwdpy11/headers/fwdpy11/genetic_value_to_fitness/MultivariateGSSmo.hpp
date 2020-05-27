@@ -45,6 +45,14 @@ namespace fwdpy11
                 }
             for (auto &o : optima)
                 {
+                    if (o.when == PleiotropicOptima::null)
+                        {
+                            throw std::invalid_argument(
+                                "invalid when value for PleiotropicOptima");
+                        }
+                }
+            for (auto &o : optima)
+                {
                     if (o.optima.size() != total_dim)
                         {
                             throw std::invalid_argument(
@@ -77,17 +85,6 @@ namespace fwdpy11
         clone() const override
         {
             return std::unique_ptr<MultivariateGSSmo>(new MultivariateGSSmo(*this));
-        }
-
-        pybind11::object
-        pickle() const override
-        {
-            pybind11::list l;
-            for (auto &x : optima)
-                {
-                    l.append(pybind11::make_tuple(x.when, x.optima, x.VW));
-                }
-            return l;
         }
 
         template <typename poptype>

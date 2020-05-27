@@ -139,7 +139,7 @@ class testGBR(unittest.TestCase):
         self.assertFalse(gbr.maps_to_fitness)
         p = pickle.dumps(gbr, -1)
         up = pickle.loads(p)
-        self.assertEqual(type(self.nonoise), type(up.noise))
+        self.assertTrue(up.noise is None)
         self.assertEqual(type(self.gss), type(up.gvalue_to_fitness))
 
     def testPicklingGSSGaussianNoise(self):

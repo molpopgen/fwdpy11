@@ -40,7 +40,9 @@ class TestPickling(unittest.TestCase):
             "rates": [0, 0.01, None],
             "demography": fwdpy11.DiscreteDemography(),
             "simlen": 10,
-            "gvalue": fwdpy11.Multiplicative(2.0),
+            "gvalue": fwdpy11.Multiplicative(
+                2.0, fwdpy11.GSS(fwdpy11.Optimum(VS=1, optimum=0.0))
+            ),
         }
 
     def test_pickle_IM_with_selfing(self):

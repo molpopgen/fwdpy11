@@ -46,23 +46,6 @@ namespace fwdpy11
         {
             return std::unique_ptr<NoNoise>(new NoNoise());
         }
-
-        pybind11::object
-        pickle() const override
-        {
-            return pybind11::bytes("NoNoise");
-        }
-
-        static inline const NoNoise
-        unpickle(pybind11::object& o)
-        {
-            auto s = o.cast<std::string>();
-            if (s != "NoNoise")
-                {
-                    throw std::runtime_error("invalid object state");
-                }
-            return NoNoise();
-        }
     };
 } // namespace fwdpy11
 

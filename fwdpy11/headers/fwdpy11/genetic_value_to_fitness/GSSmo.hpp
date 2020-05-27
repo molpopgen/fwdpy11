@@ -25,6 +25,14 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("empty container of optima");
                 }
+            for (auto &o : optima)
+                {
+                    if (o.when == Optimum::null)
+                        {
+                            throw std::invalid_argument(
+                                "invalid when value for Optimum");
+                        }
+                }
             if (!std::is_sorted(
                     optima.begin(), optima.end(),
                     [](const Optimum &a, const Optimum &b) { return a.when < b.when; }))
@@ -67,12 +75,6 @@ namespace fwdpy11
         clone() const override
         {
             return std::unique_ptr<GSSmo>(new GSSmo(*this));
-        }
-
-        pybind11::object
-        pickle() const override
-        {
-            return pybind11::make_tuple(opt, VS, current_optimum, optima);
         }
     };
 } // namespace fwdpy11
