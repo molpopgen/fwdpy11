@@ -43,6 +43,13 @@ from .discrete_demography import (  # NOQA
     SetSelfingRate,
 )
 from .regions import *  # NOQA
+from .genetic_map_unit import (
+    PoissonPoint,
+    PoissonInterval,
+    BinomialInterval,
+    BinomialPoint,
+    FixedCrossovers,
+)
 from .genetic_values import (  # NOQA
     PleiotropicOptima,
     Optimum,
