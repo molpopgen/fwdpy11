@@ -24,6 +24,20 @@ import numpy as np
 import fwdpy11
 
 
+def _starting_pdict():
+    return {
+        "nregions": [],
+        "sregions": [fwdpy11.ExpS(0, 1, 1, -0.1, 0.25)],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
+        "rates": [0, 0.01, None],
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 10,
+        "gvalue": fwdpy11.Multiplicative(
+            2.0, fwdpy11.GSS(fwdpy11.Optimum(VS=1, optimum=0.0))
+        ),
+    }
+
+
 class TestPickling(unittest.TestCase):
     """
     Test pickling a couple of models that use all of the features.
@@ -33,17 +47,7 @@ class TestPickling(unittest.TestCase):
 
     @classmethod
     def setUp(self):
-        self.pdict = {
-            "nregions": [],
-            "sregions": [fwdpy11.ExpS(0, 1, 1, -0.1, 0.25)],
-            "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
-            "rates": [0, 0.01, None],
-            "demography": fwdpy11.DiscreteDemography(),
-            "simlen": 10,
-            "gvalue": fwdpy11.Multiplicative(
-                2.0, fwdpy11.GSS(fwdpy11.Optimum(VS=1, optimum=0.0))
-            ),
-        }
+        self.pdict = _starting_pdict()
 
     def test_pickle_IM_with_selfing(self):
         import fwdpy11.demographic_models.IM as IM
@@ -88,6 +92,41 @@ class TestPickling(unittest.TestCase):
         pi = pickle.dumps(params)
         up = pickle.loads(pi)
         self.assertEqual(params.demography, up.demography)
+
+
+class TestEval(unittest.TestCase):
+    """
+    Test round-tripping model parameters
+    through strings.
+
+    These tests reveal quirks, such
+    as not getting the name spaces
+    of other packages such as numpy.
+    """
+
+    def test_round_trip_through_str(self):
+        import fwdpy11.demographic_models.human as human
+        from numpy import array  # NOQA
+
+        tennessen = human.tennessen()
+        pdict = _starting_pdict()
+        pdict["demography"] = tennessen[0]
+        params = fwdpy11.ModelParams(**pdict)
+        params_s = str(params)
+        params_eval = eval(params_s)
+        self.assertEqual(params, params_eval)
+
+    def test_round_trip_through_bytes(self):
+        import fwdpy11.demographic_models.human as human
+        from numpy import array  # NOQA
+
+        tennessen = human.tennessen()
+        pdict = _starting_pdict()
+        pdict["demography"] = tennessen[0]
+        params = fwdpy11.ModelParams(**pdict)
+        params_s = bytes(str(params).encode("utf-8"))
+        params_eval = eval(params_s.decode("utf-8"))
+        self.assertEqual(params, params_eval)
 
 
 if __name__ == "__main__":
