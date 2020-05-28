@@ -444,7 +444,7 @@ class testFixedCrossovers(unittest.TestCase):
         up = pickle.loads(p)
         self.assertEqual(up.beg, self.pi.beg)
         self.assertEqual(up.end, self.pi.end)
-        self.assertEqual(up.nxovers, self.pi.nxovers)
+        self.assertEqual(up.num_xovers, self.pi.num_xovers)
 
 
 class testPoissonPoint(unittest.TestCase):
