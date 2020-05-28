@@ -34,6 +34,7 @@ def _add_deprecated_properties(self):
     We've been using some non-Pythonic property names for a while.
     This decorator adds them back
     """
+
     def b(self):
         warnings.warn("b is deprecated in favor of beg", DeprecationWarning)
         return self.beg
@@ -63,9 +64,12 @@ def _add_deprecated_properties(self):
     return self
 
 
+_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
+
+
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class Region(fwdpy11._fwdpy11._ll_Region):
     """
     A genomic region, defined by half-open interval [beg, end)
@@ -121,7 +125,7 @@ class Region(fwdpy11._fwdpy11._ll_Region):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     """
     Mutations with fixed effect sizes
@@ -187,7 +191,7 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     """
     Exponential distribution of effect sizes
@@ -255,7 +259,7 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     """
     Gamma distribution of effect sizes
@@ -325,7 +329,7 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     """
     Gaussian distribution of effect sizes
@@ -391,7 +395,7 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     """
     Log-normal distribution of effect sizes.
@@ -507,7 +511,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     """
     Uniform distrubution of effect sizes
@@ -577,7 +581,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 
 @_add_deprecated_properties
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True, eq=False)
+@attr.s(eq=False, **_common_attr_attribs)
 class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffects):
     """
     Pleiotropic effects via a multivariate Gaussian distribution.
@@ -673,7 +677,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True, eq=False)
+@attr.s(eq=False, **_common_attr_attribs)
 class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     """
     General multivariate distribution of effect sizes.

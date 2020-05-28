@@ -27,9 +27,11 @@ import fwdpy11._fwdpy11
 from .class_decorators import (attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
 
+_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
+
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class Optimum(fwdpy11._fwdpy11._ll_Optimum):
     """
     Parameters for a trait optimum.
@@ -76,7 +78,7 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True, eq=False)
+@attr.s(**_common_attr_attribs, eq=False)
 class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
     """
     Parameters for multiple trait optima
@@ -132,7 +134,7 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GSS(fwdpy11._fwdpy11._ll_GSS):
     """
     Gaussian stabilizing selection on a single trait.
@@ -182,7 +184,7 @@ class GSS(fwdpy11._fwdpy11._ll_GSS):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait with moving
@@ -229,7 +231,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
     """
     Multivariate gaussian stablizing selection.
@@ -289,7 +291,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection with moving optima
@@ -332,7 +334,7 @@ class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
     """
     No random effects on genetic values
@@ -355,7 +357,7 @@ class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
     """
     Gaussian noise added to genetic values.
@@ -389,7 +391,7 @@ class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class Additive(fwdpy11._fwdpy11._ll_Additive):
     """
     Additive effects on genetic values.
@@ -441,7 +443,7 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
     """
     Multiplicative effects on genetic values.
@@ -493,7 +495,7 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class GBR(fwdpy11._fwdpy11._ll_GBR):
     """
     The "gene-based recessive" trait model described in Thornton et al.
@@ -533,7 +535,7 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class StrictAdditiveMultivariateEffects(
     fwdpy11._fwdpy11._ll_StrictAdditiveMultivariateEffects
 ):
