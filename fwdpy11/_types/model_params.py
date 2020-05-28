@@ -23,8 +23,15 @@ import numpy as np
 
 import fwdpy11
 
+_common_attr_attribs = {
+    "kw_only": True,
+    "frozen": True,
+    "slots": True,
+    "repr_ns": "fwdpy11",
+}
 
-@attr.s(kw_only=True, frozen=True, slots=True)
+
+@attr.s(**_common_attr_attribs)
 class MutationAndRecombinationRates(object):
     """
     Stores and validates the mutation and recombination rate parameters
@@ -94,7 +101,7 @@ def _convert_demography(o):
         return o
 
 
-@attr.s(kw_only=True, frozen=True)
+@attr.s(**_common_attr_attribs)
 class ModelParams(object):
     """
     This class stores and validates the parameters of a simulation.

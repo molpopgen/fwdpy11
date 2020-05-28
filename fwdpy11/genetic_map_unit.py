@@ -24,9 +24,11 @@ import fwdpy11._fwdpy11
 
 from .class_decorators import attr_class_to_from_dict
 
+_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
+
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     """
     Generate poisson number of crossover breakpoints.
@@ -74,7 +76,7 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     """
     Generate a recombination breakpoint at a fixed position if the
@@ -120,7 +122,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     """
     Generate exactly one crossover with a given probability
@@ -164,7 +166,7 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     """
     Generate a crossover breakpoint at a fixed position with a
@@ -211,7 +213,7 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, auto_attribs=True)
+@attr.s(**_common_attr_attribs)
 class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     """
     Generate a fixed number of crossover breakpoints.

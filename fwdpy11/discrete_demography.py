@@ -29,9 +29,10 @@ from .class_decorators import (
     attr_class_to_from_dict_no_recurse,
 )
 
+_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 @attr_class_to_from_dict
-@attr.s(frozen=True)
+@attr.s(**_common_attr_attribs)
 class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
     """
     Mass migration events.
@@ -147,7 +148,7 @@ def copy_individuals(
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True)
+@attr.s(**_common_attr_attribs)
 class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
     """
     Set the size of a deme at a given time.
@@ -193,7 +194,7 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True)
+@attr.s(**_common_attr_attribs)
 class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     """
     Set the growth rate of a deme at a given time.
@@ -233,7 +234,7 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True)
+@attr.s(**_common_attr_attribs)
 class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
     """
     Set the selfing probability within a deme at a given time.
@@ -273,7 +274,7 @@ class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, eq=False)
+@attr.s(eq=False, **_common_attr_attribs)
 class MigrationMatrix(fwdpy11._fwdpy11._ll_MigrationMatrix):
     """
     The forward migration matrix for a simulation.
@@ -330,7 +331,7 @@ def _set_migration_rates_convert_deme(i: typing.Optional[int]) -> int:
 
 
 @attr_class_to_from_dict
-@attr.s(frozen=True, eq=False)
+@attr.s(eq=False, **_common_attr_attribs)
 class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     """
     Set the migration parameters of a simulation at a given time.
@@ -442,7 +443,7 @@ def _convert_migmatrix(o):
 
 
 @attr_class_to_from_dict_no_recurse
-@attr.s(frozen=True)
+@attr.s(**_common_attr_attribs)
 class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     """
     Representation of demographic events acting on
