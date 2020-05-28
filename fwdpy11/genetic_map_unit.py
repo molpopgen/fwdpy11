@@ -35,6 +35,13 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     are also ``kwargs`` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
+    :param beg: The beginning of the region
+    :type beg: float
+    :param end: The end of the region
+    :type end: float
+    :param mean: The mean number of breakpoints per meiosis
+    :type mean: float
+
     .. versionadded:: 0.3.0
 
     .. versionchanged:: 0.5.0
@@ -77,6 +84,11 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     are also ``kwargs`` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
+    :param position: The position of the crossover
+    :type position: float
+    :param mean: The mean number of breakpoints per meiosis
+    :type mean: float
+
     .. versionadded:: 0.3.0
 
     .. versionchanged:: 0.5.0
@@ -117,6 +129,13 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     are also ``kwargs`` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
+    :param beg: The beginning of the region
+    :type beg: float
+    :param end: The end of the region
+    :type end: float
+    :param probability: The probability of a recombination (per meiosis).
+    :type probability: float
+
     .. versionadded:: 0.5.2
 
     .. versionchanged:: 0.7.1
@@ -155,6 +174,11 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     This class has the following attributes, whose names
     are also ``kwargs`` for intitialization.  The attribute names
     also determine the order of positional arguments:
+
+    :param position: The beginning of the region
+    :type position: float
+    :param probability: The probability of a recombination (per meiosis).
+    :type probability: float
 
     .. versionadded:: 0.3.0
 
@@ -195,6 +219,13 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     This class has the following attributes, whose names
     are also ``kwargs`` for intitialization.  The attribute names
     also determine the order of positional arguments:
+
+    :param beg: The beginning of the region
+    :type beg: float
+    :param end: The end of the region
+    :type end: float
+    :param num_xovers: The number of breakpoints per meiosis
+    :type num_xovers: float
 
     .. versionadded:: 0.3.0
 
