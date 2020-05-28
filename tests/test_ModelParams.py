@@ -81,7 +81,7 @@ class TestPickling(unittest.TestCase):
         import fwdpy11.demographic_models.human as human
 
         tennessen = human.tennessen()
-        self.pdict["demography"] = tennessen[0]
+        self.pdict["demography"] = tennessen
         params = fwdpy11.ModelParams(**self.pdict)
         pi = pickle.dumps(params)
         up = pickle.loads(pi)
@@ -112,7 +112,7 @@ class TestEval(unittest.TestCase):
 
         tennessen = human.tennessen()
         pdict = _starting_pdict()
-        pdict["demography"] = tennessen[0]
+        pdict["demography"] = tennessen
         params = fwdpy11.ModelParams(**pdict)
         params_s = str(params)
         params_eval = eval(params_s)
@@ -124,7 +124,7 @@ class TestEval(unittest.TestCase):
 
         tennessen = human.tennessen()
         pdict = _starting_pdict()
-        pdict["demography"] = tennessen[0]
+        pdict["demography"] = tennessen
         params = fwdpy11.ModelParams(**pdict)
         params_s = bytes(str(params).encode("utf-8"))
         params_eval = eval(params_s.decode("utf-8"))

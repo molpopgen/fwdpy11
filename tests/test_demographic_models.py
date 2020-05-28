@@ -148,7 +148,9 @@ class TestTennessenModel(unittest.TestCase):
     def setUpClass(self):
         from fwdpy11.demographic_models.human import tennessen
 
-        self.demog, self.simlen, self.Nref = tennessen(0)
+        self.demog = tennessen(0)
+        self.simlen = self.demog.metadata["simlen"]
+        self.Nref = self.demog.metadata["Nref"]
         self.pop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
         self.pdict = setup_pdict(self.demog, self.simlen)
         self.params = fwdpy11.ModelParams(**self.pdict)

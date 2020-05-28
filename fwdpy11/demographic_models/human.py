@@ -2,9 +2,20 @@
 This module provided pre-calculated demographic models
 for human populations.
 """
+import attr
 import numpy as np
 
 import fwdpy11
+
+from .demographic_model_details import (DemographicModelCitation,
+                                        DemographicModelDetails)
+
+
+@attr.s()
+class _TennessenParameterValidator(object):
+    """ Make sure that we get an actual int """
+
+    burnin = attr.ib(type=int, validator=attr.validators.instance_of(int))
 
 
 def tennessen(burnin: int = 20):
@@ -33,6 +44,7 @@ def tennessen(burnin: int = 20):
     .. versionadded:: 0.7.2
 
     """
+    _TennessenParameterValidator(burnin)
     Nref = 7310  # Ancestral population dize
     NAfr0 = 14474  # Initial size change
     NB = 1861  # Eurasian bottleneck size
@@ -121,4 +133,23 @@ def tennessen(burnin: int = 20):
         set_migration_rates=mig_rates,
         set_growth_rates=growth_rates,
     )
-    return ddemog, total_sim_length, Nref
+    full_citation = (
+        f"Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, "
+        f"Wenqing Fu, Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012. "
+        f"“Evolution and Functional Impact of Rare Coding Variation from Deep "
+        f"Sequencing of Human Exomes.” Science 337 (6090): 64–69.",
+    )
+    return DemographicModelDetails(
+        model=ddemog,
+        name="Tennessen et al. model of African and European demography.",
+        source={"function": "fwdpy11.demographic_models.human.tennessen"},
+        parameters={"burnin": burnin},
+        citation=DemographicModelCitation(
+            DOI="10.1126/science.1219240", full_citation=full_citation[0], metadata=None
+        ),
+        metadata={
+            "deme_labels": {0: "African", 1: "Eurasian"},
+            "simlen": total_sim_length,
+            "Nref": Nref,
+        },
+    )
