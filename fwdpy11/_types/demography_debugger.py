@@ -58,14 +58,18 @@ class DemographyDebugger(object):
         """
         # The setup
         self.M = None
-        if events.migmatrix is not None:
+        try:
+            _events = events.model
+        except AttributeError:
+            _events = events
+        if _events.migmatrix is not None:
             try:
-                self.M = np.copy(events.migmatrix.M)
+                self.M = np.copy(_events.migmatrix.M)
             except AttributeError:
-                self.M = np.copy(events.migmatrix)
-        self._validate_migration_rate_change_lengths(events)
+                self.M = np.copy(_events.migmatrix)
+        self._validate_migration_rate_change_lengths(_events)
 
-        self.maxdemes = self._get_maxdemes(pop, events)
+        self.maxdemes = self._get_maxdemes(pop, _events)
 
         if self.maxdemes < 1:
             raise ValueError(
@@ -89,7 +93,7 @@ class DemographyDebugger(object):
 
         # The real work
         self._report = None
-        self._process_demographic_model(events, simlen)
+        self._process_demographic_model(_events, simlen)
 
     def _get_maxdemes(self, pop, events):
         """

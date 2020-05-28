@@ -694,13 +694,13 @@ scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic
 
     import fwdpy11.demographic_models.IM
 
-    d2, tsplit, tafter_split = fwdpy11.demographic_models.IM.two_deme_IM(
+    dmodel = fwdpy11.demographic_models.IM.two_deme_IM(
         Nanc, T, psplit, (N0, N1), (m01, m10), burnin=1.0
     )
     pop2 = fwdpy11.DiploidPopulation(Nanc, 1.0)
-    setup_and_run_model(pop2, d2, Nanc + gens_post_split)
+    setup_and_run_model(pop2, dmodel.model, dmodel.metadata.simlen)
     assert pop.generation == pop2.generation
-    assert pop2.generation == tsplit + tafter_split
+    assert pop2.generation == dmodel.metadata.simlen
     ds2 = pop2.deme_sizes()
     assert np.array_equal(ds[0], ds2[0])
     assert np.array_equal(ds[1], ds2[1])

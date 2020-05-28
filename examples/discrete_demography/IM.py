@@ -187,7 +187,7 @@ def build_demography(args):
 
     # Change split time from generations/(2*Nref) to
     # generations/Nref.
-    d, t1, t2 = two_deme_IM(
+    dmodel = two_deme_IM(
         args.Nref,
         2.0 * args.tsplit,
         args.split,
@@ -195,10 +195,10 @@ def build_demography(args):
         migrates,
         burnin=20.0,
     )
-    simlen = int(t1 + t2)
+    simlen = int(dmodel.metadata.split_time + dmodel.metadata.gens_post_split)
     N0 = np.rint(args.N0 * args.Nref).astype(int)
     N1 = np.rint(args.N1 * args.Nref).astype(int)
-    return d, simlen, (N0, N1)
+    return dmodel, simlen, (N0, N1)
 
 
 def build_parameters_dict(args):

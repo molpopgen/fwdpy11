@@ -195,6 +195,11 @@ class ModelParams(object):
         if isinstance(self.demography, fwdpy11.DiscreteDemography):
             return None
 
+        if isinstance(
+            self.demography, fwdpy11.demographic_models.DemographicModelDetails
+        ):
+            return None
+
         # Otherwise, assume that it is a numpy array
         warnings.warn(
             "attribute popsizes is being considered for"
@@ -279,6 +284,9 @@ class ModelParams(object):
     @demography.validator
     def validate_demography(self, attribute, value):
         if isinstance(value, fwdpy11.DiscreteDemography):
+            return
+
+        if isinstance(value, fwdpy11.demographic_models.DemographicModelDetails):
             return
         raise ValueError(f"Unknown type for {attribute}: {type(value)}")
 
