@@ -21,7 +21,8 @@ import typing
 
 import attr
 
-from fwdpy11.class_decorators import attr_class_to_from_dict_no_recurse
+from fwdpy11.class_decorators import (attr_class_to_from_dict,
+                                      attr_class_to_from_dict_no_recurse)
 
 _common_attr_attribs = {
     "kw_only": True,
@@ -40,6 +41,20 @@ class DemographicModelDetails(object):
     parameters: object
     citation: typing.Optional[typing.Dict]
     metadata: typing.Optional[object] = None
+
+    def __getstate__(self):
+        return self.asdict()
+
+    def __setstate__(self, d):
+        self.__dict__.update(d)
+
+
+@attr_class_to_from_dict
+@attr.s(**_common_attr_attribs)
+class DemographicModelCitation(object):
+    DOI: object
+    full_citation: object
+    metadata: object
 
     def __getstate__(self):
         return self.asdict()
