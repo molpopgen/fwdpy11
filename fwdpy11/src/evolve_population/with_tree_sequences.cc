@@ -206,7 +206,7 @@ evolve_with_tree_sequences(
         }
 
     // Set up discrete demography types. New in 0.6.0
-    auto current_demographic_state = ddemog::initialize_model_state(
+    auto current_demographic_state = ddemog::initialize_demographic_model_state(
         pop.generation, pop.diploid_metadata, demography);
     if (gvalue_pointers.genetic_values.size()
         > static_cast<std::size_t>(current_demographic_state->maxdemes))

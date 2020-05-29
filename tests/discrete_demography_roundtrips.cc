@@ -50,7 +50,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
 //
 {
-    auto current_demographic_state = ddemog::initialize_model_state(
+    auto current_demographic_state = ddemog::initialize_demographic_model_state(
         pop.generation, pop.diploid_metadata, demography);
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);

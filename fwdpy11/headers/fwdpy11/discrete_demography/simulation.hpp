@@ -31,6 +31,5 @@
 #include "simulation/pick_parents.hpp"
 #include "simulation/demographic_model_state.hpp"
 #include "simulation/update_demography_manager.hpp"
-#include "simulation/set_model_state.hpp"
 
 #endif

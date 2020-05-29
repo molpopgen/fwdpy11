@@ -90,6 +90,27 @@ namespace fwdpy11
                 return ttlN_next() == 0;
             }
         };
+
+        template <typename METADATATYPE>
+        inline std::unique_ptr<demographic_model_state>
+        initialize_demographic_model_state(std::uint32_t generation,
+                                           const std::vector<METADATATYPE> &metadata,
+                                           DiscreteDemography &demography)
+        {
+            std::unique_ptr<demographic_model_state> rv(nullptr);
+            if (rv == nullptr || generation == 0)
+                // If there is no state, then we need to make
+                // one.  If there is a state, but the generation
+                // is zero, then we assume that the demography
+                // has been used for a different simulatin replicate
+                // and thus reset it.
+                {
+                    demography.update_event_times(generation);
+                    rv.reset(new demographic_model_state(metadata, demography));
+                }
+            return rv;
+        }
+    
     } // namespace discrete_demography
 } // namespace fwdpy11
 
