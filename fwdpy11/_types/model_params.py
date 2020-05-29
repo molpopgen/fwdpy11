@@ -22,6 +22,8 @@ import attr
 import numpy as np
 
 import fwdpy11
+from fwdpy11.class_decorators import (attr_add_asblack,
+                                      attr_class_to_from_dict_no_recurse)
 
 _common_attr_attribs = {
     "kw_only": True,
@@ -31,6 +33,8 @@ _common_attr_attribs = {
 }
 
 
+@attr_add_asblack
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class MutationAndRecombinationRates(object):
     """
@@ -101,6 +105,8 @@ def _convert_demography(o):
         return o
 
 
+@attr_add_asblack
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class ModelParams(object):
     """
@@ -309,11 +315,3 @@ class ModelParams(object):
                 " deprecation (along with simulations without tree sequences)",
                 PendingDeprecationWarning,
             )
-
-    def asdict(self):
-        """
-        Return instance attributes as a :class:`dict`.
-
-        .. versionadded:: 0.8.0
-        """
-        return attr.asdict(self, recurse=False)

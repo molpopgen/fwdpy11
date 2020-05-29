@@ -5,6 +5,7 @@ numpy
 sparse
 scipy
 attrs
+black
 
 #below are for building package,
 #dox, and running tests
@@ -20,7 +21,6 @@ setuptools_scm==1.11.1
 
 #below are for formatting, linting,
 #etc.
-black
 flake8
 flake8-bugbear
 blacken-docs

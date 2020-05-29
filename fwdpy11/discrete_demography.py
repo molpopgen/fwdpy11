@@ -24,13 +24,15 @@ import numpy as np
 
 import fwdpy11
 
-from .class_decorators import (
-    attr_class_to_from_dict,
-    attr_class_to_from_dict_no_recurse,
-)
+from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
+                               attr_class_to_from_dict,
+                               attr_class_to_from_dict_no_recurse)
 
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
+
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
@@ -87,13 +89,6 @@ class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
             self.resets_growth_rate,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(MassMigration, self).__init__(**d)
-
 
 def move_individuals(
     when: int,
@@ -147,6 +142,8 @@ def copy_individuals(
     return MassMigration(when, source, destination, fraction, False, resets_growth_rate)
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
@@ -185,15 +182,10 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
             self.when, self.deme, self.new_size, self.resets_growth_rate
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(SetDemeSize, self).__init__(**d)
-
 
 @attr_class_to_from_dict
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr.s(**_common_attr_attribs)
 class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     """
@@ -225,14 +217,9 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     def __attrs_post_init__(self):
         super(SetExponentialGrowth, self).__init__(self.when, self.deme, self.G)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(SetExponentialGrowth, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
@@ -273,6 +260,8 @@ class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
         super(SetSelfingRate, self).__init__(**d)
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(eq=False, **_common_attr_attribs)
 class MigrationMatrix(fwdpy11._fwdpy11._ll_MigrationMatrix):
@@ -303,13 +292,6 @@ class MigrationMatrix(fwdpy11._fwdpy11._ll_MigrationMatrix):
     def __attrs_post_init__(self):
         super(MigrationMatrix, self).__init__(self.migmatrix, self.scaled)
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(MigrationMatrix, self).__init__(self.migmatrix, self.scaled)
-
     def __eq__(self, other):
         return self.scaled == other.scaled and np.array_equal(
             self.migmatrix, other.migmatrix
@@ -330,6 +312,7 @@ def _set_migration_rates_convert_deme(i: typing.Optional[int]) -> int:
     return int(i)
 
 
+@attr_add_asblack
 @attr_class_to_from_dict
 @attr.s(eq=False, **_common_attr_attribs)
 class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
@@ -442,6 +425,8 @@ def _convert_migmatrix(o):
     return MigrationMatrix(o)
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
@@ -504,13 +489,6 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             migmatrix=self.migmatrix,
             set_migration_rates=self.set_migration_rates,
         )
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(DiscreteDemography, self).__init__(**d)
 
     def _timed_events(self):
         for i in [

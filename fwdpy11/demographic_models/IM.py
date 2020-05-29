@@ -5,16 +5,18 @@ This module provides functions to generate demographic events for
 import attr
 import numpy as np
 
-from fwdpy11.class_decorators import attr_class_to_from_dict
+from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
+                                      attr_class_to_from_dict)
 
 _common_attr_attribs = {
     "frozen": True,
     "auto_attribs": True,
-    "slots": True,
     "repr_ns": "fwdpy11.demographic_models.IM",
 }
 
 
+@attr_add_asblack
+# @attr_class_pickle
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs, eq=False)
 class TwoDemeIMParameters(object):
@@ -44,12 +46,6 @@ class TwoDemeIMParameters(object):
     migrates: list
     burnin: float
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-
     def __eq__(self, other):
         return all(
             [self.Nanc, self.T, self.psplit, self.Ns, self.burnin]
@@ -57,6 +53,8 @@ class TwoDemeIMParameters(object):
         ) is True and np.array_equal(self.migrates, other.migrates)
 
 
+@attr_add_asblack
+@attr_class_pickle
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class TwoDemeIMMetaData(object):
@@ -77,12 +75,6 @@ class TwoDemeIMMetaData(object):
     split_time: int
     gens_post_split: int
     simlen: int
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
 
 
 def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):

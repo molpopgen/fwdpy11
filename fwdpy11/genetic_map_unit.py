@@ -22,11 +22,14 @@ import numpy as np
 
 import fwdpy11._fwdpy11
 
-from .class_decorators import attr_class_to_from_dict
+from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
+                               attr_class_to_from_dict)
 
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
@@ -67,14 +70,9 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     def __attrs_post_init__(self):
         super(PoissonInterval, self).__init__(self.beg, self.end, self.mean)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(PoissonInterval, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
@@ -121,6 +119,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
         super(PoissonPoint, self).__init__(**d)
 
 
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
@@ -157,14 +156,9 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     def __attrs_post_init__(self):
         super(BinomialInterval, self).__init__(self.beg, self.end, self.probability)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(BinomialInterval, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
@@ -204,14 +198,9 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     def __attrs_post_init__(self):
         super(BinomialPoint, self).__init__(self.position, self.probability)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(BinomialPoint, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
@@ -251,10 +240,3 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
 
     def __attrs_post_init__(self):
         super(FixedCrossovers, self).__init__(self.beg, self.end, self.num_xovers)
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(FixedCrossovers, self).__init__(**d)
