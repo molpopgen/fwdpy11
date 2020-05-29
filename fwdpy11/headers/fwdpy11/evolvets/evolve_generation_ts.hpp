@@ -39,16 +39,15 @@ namespace fwdpy11
 {
 
     template <typename poptype, typename rng_t, typename genetic_param_holder>
-    std::pair<fwdpp::ts::mut_rec_intermediates,
-              fwdpp::ts::mut_rec_intermediates>
-    generate_offspring(
-        const rng_t& rng,
-        const std::pair<std::size_t, std::size_t> parent_indexes, poptype& pop,
-        typename poptype::diploid_t& offspring, genetic_param_holder& genetics)
+    std::pair<fwdpp::ts::mut_rec_intermediates, fwdpp::ts::mut_rec_intermediates>
+    generate_offspring(const rng_t& rng,
+                       const std::pair<std::size_t, std::size_t> parent_indexes,
+                       poptype& pop, typename poptype::diploid_t& offspring,
+                       genetic_param_holder& genetics)
     {
         auto offspring_data = fwdpp::ts::generate_offspring(
-            rng.get(), parent_indexes, fwdpp::ts::selected_variants_only(),
-            pop, genetics, offspring);
+            rng.get(), parent_indexes, fwdpp::ts::selected_variants_only(), pop,
+            genetics, offspring);
 #ifndef NDEBUG
         for (auto& m : offspring_data.first.mutation_keys)
             {
@@ -65,10 +64,9 @@ namespace fwdpy11
     }
 
     inline std::pair<fwdpp::ts::TS_NODE_INT, fwdpp::ts::TS_NODE_INT>
-    parent_nodes_from_metadata(
-        const std::size_t i,
-        const std::vector<fwdpy11::DiploidMetadata>& metadata,
-        const bool swapped)
+    parent_nodes_from_metadata(const std::size_t i,
+                               const std::vector<fwdpy11::DiploidMetadata>& metadata,
+                               const bool swapped)
     {
         auto rv = std::make_pair(metadata[i].nodes[0], metadata[i].nodes[1]);
         if (swapped)
@@ -83,7 +81,7 @@ namespace fwdpy11
     evolve_generation_ts(
         const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
         // NOTE: could the manager? be const?
-        fwdpy11::discrete_demography::demographic_model_state_pointer&
+        std::unique_ptr<fwdpy11::discrete_demography::demographic_model_state>&
             current_demographic_state,
         const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
         std::vector<fwdpy11::DiploidGenotype>& offspring,
@@ -111,21 +109,19 @@ namespace fwdpy11
                 for (decltype(next_N_deme) ind = 0; ind < next_N_deme; ++ind)
                     {
                         // Get the parents
-                        auto pdata
-                            = fwdpy11::discrete_demography::pick_parents(
-                                rng, deme, current_demographic_state->miglookup,
-                                current_demographic_state->sizes_rates.current_deme_sizes,
-                                current_demographic_state->sizes_rates.selfing_rates,
-                                current_demographic_state->fitnesses);
+                        auto pdata = fwdpy11::discrete_demography::pick_parents(
+                            rng, deme, current_demographic_state->miglookup,
+                            current_demographic_state->sizes_rates.current_deme_sizes,
+                            current_demographic_state->sizes_rates.selfing_rates,
+                            current_demographic_state->fitnesses);
                         fwdpy11::DiploidGenotype dip{
                             std::numeric_limits<std::size_t>::max(),
-                            std::numeric_limits<std::size_t>::max()
-                        };
+                            std::numeric_limits<std::size_t>::max()};
                         //auto p1 = pick1();
                         //auto p2 = pick2(p1);
                         auto offspring_data = generate_offspring(
-                            rng, std::make_pair(pdata.parent1, pdata.parent2),
-                            pop, dip, genetics);
+                            rng, std::make_pair(pdata.parent1, pdata.parent2), pop, dip,
+                            genetics);
                         auto p1id = parent_nodes_from_metadata(
                             pdata.parent1, pop.diploid_metadata,
                             offspring_data.first.swapped);
@@ -148,17 +144,16 @@ namespace fwdpy11
                             offspring_data.second.mutation_keys, tables);
 
                         // Add metadata for the offspring
-                        offspring_metadata.emplace_back(
-                            fwdpy11::DiploidMetadata{
-                                0.0,
-                                0.0,
-                                1.,
-                                { 0, 0, 0 },
-                                offspring_metadata.size(),
-                                { pdata.parent1, pdata.parent2 },
-                                deme,
-                                0,
-                                { offspring_node_1, offspring_node_2 } });
+                        offspring_metadata.emplace_back(fwdpy11::DiploidMetadata{
+                            0.0,
+                            0.0,
+                            1.,
+                            {0, 0, 0},
+                            offspring_metadata.size(),
+                            {pdata.parent1, pdata.parent2},
+                            deme,
+                            0,
+                            {offspring_node_1, offspring_node_2}});
                         offspring.emplace_back(std::move(dip));
 
                         next_index_local = offspring_node_2;
@@ -166,11 +161,9 @@ namespace fwdpy11
             }
         assert(next_index_local == pop.tables.num_nodes() - 1);
         if (next_index_local
-            != static_cast<decltype(next_index_local)>(pop.tables.num_nodes()
-                                                       - 1))
+            != static_cast<decltype(next_index_local)>(pop.tables.num_nodes() - 1))
             {
-                throw std::runtime_error(
-                    "error in book-keeping offspring nodes");
+                throw std::runtime_error("error in book-keeping offspring nodes");
             }
     }
 } // namespace fwdpy11

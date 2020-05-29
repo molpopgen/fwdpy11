@@ -61,7 +61,7 @@ namespace fwdpy11
 
             inline void
             validate_parental_state(std::uint32_t generation,
-                                    const demographic_model_state_pointer
+                                    const std::unique_ptr<demographic_model_state>
                                         &current_demographic_state)
             {
                 const auto &next_N_deme
@@ -96,7 +96,7 @@ namespace fwdpy11
             const GSLrng_t &rng, const std::uint32_t generation,
             std::vector<METADATATYPE> &metadata,
             DiscreteDemography &demography,
-            demographic_model_state_pointer &current_demographic_state)
+            std::unique_ptr<demographic_model_state> &current_demographic_state)
         {
             mass_migration(
                 rng, generation, demography.mass_migration_tracker,
@@ -115,7 +115,7 @@ namespace fwdpy11
             const GSLrng_t &rng, const std::uint32_t generation,
             std::vector<METADATATYPE> &metadata,
             DiscreteDemography &demography,
-            demographic_model_state_pointer &current_demographic_state)
+            std::unique_ptr<demographic_model_state> &current_demographic_state)
         {
             current_demographic_state->fitnesses.update(
                 current_demographic_state->sizes_rates.current_deme_sizes,
@@ -139,7 +139,7 @@ namespace fwdpy11
             const GSLrng_t &rng, const std::uint32_t generation,
             std::vector<METADATATYPE> &metadata,
             DiscreteDemography &demography,
-            demographic_model_state_pointer &current_demographic_state)
+            std::unique_ptr<demographic_model_state> &current_demographic_state)
         {
             mass_migrations_and_current_sizes(rng, generation, metadata,
                                               demography, current_demographic_state);

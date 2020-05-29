@@ -123,7 +123,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
             // from what we do in a "real" simulation.
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
         }
-    ddemog::save_model_state(current_demographic_state, demography);
+    //ddemog::save_model_state(current_demographic_state, demography);
     return rv;
 }
 

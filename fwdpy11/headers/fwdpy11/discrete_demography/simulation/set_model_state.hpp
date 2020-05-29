@@ -30,34 +30,25 @@ namespace fwdpy11
     {
 
         template <typename METADATATYPE>
-        inline demographic_model_state_pointer
+        inline std::unique_ptr<demographic_model_state>
         initialize_model_state(std::uint32_t generation,
                                const std::vector<METADATATYPE>& metadata,
                                DiscreteDemography& demography)
         {
-            // "steal" pointer from input
-            auto rv = demography.get_model_state();
-
+            std::unique_ptr<demographic_model_state> rv(nullptr);
             if (rv == nullptr || generation == 0)
-            // If there is no state, then we need to make
-            // one.  If there is a state, but the generation
-            // is zero, then we assume that the demography
-            // has been used for a different simulatin replicate
-            // and thus reset it.
+                // If there is no state, then we need to make
+                // one.  If there is a state, but the generation
+                // is zero, then we assume that the demography
+                // has been used for a different simulatin replicate
+                // and thus reset it.
                 {
                     demography.update_event_times(generation);
-                    rv.reset(
-                        new demographic_model_state(metadata, demography));
+                    rv.reset(new demographic_model_state(metadata, demography));
                 }
             return rv;
         }
 
-        inline void
-        save_model_state(demographic_model_state_pointer& state,
-                         DiscreteDemography& demography)
-        {
-            demography.set_model_state(state);
-        }
     } // namespace discrete_demography
 } // namespace fwdpy11
 #endif
