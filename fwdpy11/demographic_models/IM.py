@@ -21,6 +21,19 @@ class TwoDemeIMParameters(object):
     """
     Holds the parameters to :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
 
+    Instances of this class are held as the ``parameters`` attribute of
+    :class:`fwdpy11.demographic_models.DemographicModelDetails`.
+
+    Attribute names are the same as the ``kwargs`` to
+    :func:`fwdpy11.demographic_models.IM.two_deme_IM`:
+
+    :param Nanc:
+    :param T:
+    :param psplit:
+    :param Ns:
+    :param migrates:
+    :param burnin:
+
     .. versionadded:: 0.8.0
     """
 
@@ -49,6 +62,9 @@ class TwoDemeIMParameters(object):
 class TwoDemeIMMetaData(object):
     """
     Holds metadata returned by :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
+
+    Instances of this class are held as the ``metadata`` attribute of
+    :class:`fwdpy11.demographic_models.DemographicModelDetails`.
 
     :param split_time: The time until the two demes split
     :param gens_post_split: The time from the split until the end of the simulation
@@ -96,15 +112,10 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     :type migrates: float
     :param burnin: Time to simulate before the split, in units of Nanc
     :type burnin: float
-    :param as_dict: If False, return an instance of
-                    :class:`fwdpy11.DiscreteDemography`.
-                    Otherwise, return a dict that can be
-                    used to construct a ``DiscreteDemography``
-                    instance.
-    :type as_dict: boolean
-    :rtype: tuple
-    :returns: the model events, the split time, and
-              the time to simulate post-split.
+    :returns: The model events, instances of
+              :class:`fwdpy11.demographic_models.IM.TwoDemeIMParameters`
+              and :class:`fwdpy11.demographic_models.IM.TwoDemeIMMetaData`.
+    :rtype: fwdpy11.demographic_models.DemographicModelDetails
 
     .. note::
 
@@ -112,6 +123,10 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
         construct a population with intitial size ``Nanc``.
 
     .. versionadded:: 0.6.0
+
+    .. versionchanged:: 0.8.0
+
+        Returns instance of :class:`fwdpy11.demographic_models.DemographicModelDetails`
     """
     import fwdpy11
     import numpy as np

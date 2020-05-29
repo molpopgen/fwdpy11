@@ -35,6 +35,31 @@ _common_attr_attribs = {
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class DemographicModelDetails(object):
+    """
+    Stores rich information about a demographic model.
+    Instances of this class get returned by functions
+    generating pre-calculated models.
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param model: The demographic model parameters
+    :type model: object
+    :param name: The name of the model
+    :type name: str
+    :param source: The source of the model
+    :type source: dict
+    :param parameters: The parameters used to generate ``model``
+    :type parameters: object
+    :param citation: Citation information
+    :type citation: dict or fwdpy11.demographic_models.DemographicModelCitation or None
+    :param metadata: Optional field for additional info
+    :type metadata: object
+
+    .. versionadded:: 0.8.0
+    """
+
     model: object
     name: str
     source: typing.Dict
@@ -52,6 +77,21 @@ class DemographicModelDetails(object):
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class DemographicModelCitation(object):
+    """
+    Citation information for a demographic model
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param DOI: The Digital Object Identifier
+    :param full_citation: Something string-like giving the full citation.
+    :param metadata: Any additional information that may be needed.
+
+
+    .. versionadded:: 0.8.0
+    """
+
     DOI: object
     full_citation: object
     metadata: object

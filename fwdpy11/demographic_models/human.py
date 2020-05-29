@@ -31,8 +31,12 @@ def tennessen(burnin: int = 20):
                    Defaults to 20.
     :type param: int
 
-    :returns: The demographic model, simulation length, and ancestral population size
-    :rtype: tuple
+    :returns: The demographic model
+    :rtype: fwdpy11.demographic_models.DemographicModelDetails
+
+    The ``metadata`` field of the return value contains information about
+    the simulation length, ancestral population size (``Nref``), etc.,
+    and the mapping of integer values to deme names.
 
     When this model is run, deme ``0`` corresponds to ``African`` and deme
     ``1`` corresponds to Eurasian.
@@ -42,6 +46,10 @@ def tennessen(burnin: int = 20):
         This implementation is based on code provided by Aaron Ragsdale.
 
     .. versionadded:: 0.7.2
+
+    .. versionchanged:: 0.8.0
+
+        Returns instance of :class:`fwdpy11.demographic_models.DemographicModelDetails`
 
     """
     _TennessenParameterValidator(burnin)
