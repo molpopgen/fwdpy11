@@ -2,9 +2,90 @@
 This module provides functions to generate demographic events for
 "isolation-with-migration", or IM, models.
 """
+import attr
+import numpy as np
+
+from fwdpy11.class_decorators import attr_class_to_from_dict
+
+_common_attr_attribs = {
+    "frozen": True,
+    "auto_attribs": True,
+    "slots": True,
+    "repr_ns": "fwdpy11.demographic_models.IM",
+}
 
 
-def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0, as_dict=False):
+@attr_class_to_from_dict
+@attr.s(**_common_attr_attribs, eq=False)
+class TwoDemeIMParameters(object):
+    """
+    Holds the parameters to :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
+
+    Instances of this class are held as the ``parameters`` attribute of
+    :class:`fwdpy11.demographic_models.DemographicModelDetails`.
+
+    Attribute names are the same as the ``kwargs`` to
+    :func:`fwdpy11.demographic_models.IM.two_deme_IM`:
+
+    :param Nanc:
+    :param T:
+    :param psplit:
+    :param Ns:
+    :param migrates:
+    :param burnin:
+
+    .. versionadded:: 0.8.0
+    """
+
+    Nanc: int
+    T: float
+    psplit: float
+    Ns: tuple
+    migrates: list
+    burnin: float
+
+    def __getstate__(self):
+        return self.asdict()
+
+    def __setstate__(self, d):
+        self.__dict__.update(d)
+
+    def __eq__(self, other):
+        return all(
+            [self.Nanc, self.T, self.psplit, self.Ns, self.burnin]
+            == [other.Nanc, other.T, other.psplit, other.Ns, other.burnin]
+        ) is True and np.array_equal(self.migrates, other.migrates)
+
+
+@attr_class_to_from_dict
+@attr.s(**_common_attr_attribs)
+class TwoDemeIMMetaData(object):
+    """
+    Holds metadata returned by :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
+
+    Instances of this class are held as the ``metadata`` attribute of
+    :class:`fwdpy11.demographic_models.DemographicModelDetails`.
+
+    :param split_time: The time until the two demes split
+    :param gens_post_split: The time from the split until the end of the simulation
+    :param simlen: ``split_time`` + ``gens_post_split``
+
+    .. versionadded:: 0.8.0
+
+    """
+
+    split_time: int
+    gens_post_split: int
+    simlen: int
+
+    def __getstate__(self):
+        return self.asdict()
+
+    def __setstate__(self, d):
+        self.__dict__.update(d)
+
+
+def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     """
     Isolation-with-migration (IM) model for two demes.
 
@@ -31,15 +112,10 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0, as_dict=False):
     :type migrates: float
     :param burnin: Time to simulate before the split, in units of Nanc
     :type burnin: float
-    :param as_dict: If False, return an instance of
-                    :class:`fwdpy11.DiscreteDemography`.
-                    Otherwise, return a dict that can be
-                    used to construct a ``DiscreteDemography``
-                    instance.
-    :type as_dict: boolean
-    :rtype: tuple
-    :returns: the model events, the split time, and
-              the time to simulate post-split.
+    :returns: The model events, instances of
+              :class:`fwdpy11.demographic_models.IM.TwoDemeIMParameters`
+              and :class:`fwdpy11.demographic_models.IM.TwoDemeIMMetaData`.
+    :rtype: fwdpy11.demographic_models.DemographicModelDetails
 
     .. note::
 
@@ -47,9 +123,14 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0, as_dict=False):
         construct a population with intitial size ``Nanc``.
 
     .. versionadded:: 0.6.0
+
+    .. versionchanged:: 0.8.0
+
+        Returns instance of :class:`fwdpy11.demographic_models.DemographicModelDetails`
     """
     import fwdpy11
     import numpy as np
+    from .demographic_model_details import DemographicModelDetails
 
     N0, N1 = Ns
     m01, m10 = migrates
@@ -94,7 +175,18 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0, as_dict=False):
         "set_migration_rates": cm,
         "migmatrix": m,
     }
-    if as_dict is False:
-        return fwdpy11.DiscreteDemography(**mdict), split_time, gens_post_split
 
-    return mdict, split_time, gens_post_split
+    return DemographicModelDetails(
+        model=fwdpy11.DiscreteDemography(**mdict),
+        name="Two deme isolation-with-migration (IM) model",
+        source={"function": "fwdpy11.demographic_models.IM.two_deme_IM"},
+        parameters=TwoDemeIMParameters(
+            Nanc=Nanc, T=T, psplit=psplit, Ns=Ns, migrates=migrates, burnin=burnin,
+        ),
+        citation=None,
+        metadata=TwoDemeIMMetaData(
+            split_time=split_time,
+            gens_post_split=gens_post_split,
+            simlen=split_time + gens_post_split,
+        ),
+    )

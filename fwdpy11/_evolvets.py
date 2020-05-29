@@ -135,8 +135,17 @@ def evolvets(
     from ._fwdpy11 import dispatch_create_GeneticMap
     from ._fwdpy11 import evolve_with_tree_sequences
 
+    try:
+        # DemographicModelDetails ?
+        demographic_model = params.demography.model
+    except AttributeError:
+        # No, assume it is a DiscreteDemography
+        demographic_model = params.demography
+    except Exception as e:
+        raise e
+
     if check_demographic_event_timings:
-        _validate_event_timings(params.demography, pop.generation)
+        _validate_event_timings(demographic_model, pop.generation)
 
     pneutral = 0.0
     if params.rates.neutral_mutation_rate + params.rates.selected_mutation_rate > 0.0:
@@ -157,7 +166,7 @@ def evolvets(
         pop,
         sr,
         simplification_interval,
-        params.demography,
+        demographic_model,
         params.simlen,
         params.rates.neutral_mutation_rate,
         params.rates.selected_mutation_rate,

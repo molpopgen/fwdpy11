@@ -56,13 +56,16 @@ class TestTwoDemeIMModel(unittest.TestCase):
         self.N0, self.N1 = 1.1, 3.0
         from fwdpy11.demographic_models.IM import two_deme_IM
 
-        self.d, self.t1, self.t2 = two_deme_IM(
+        self.model = two_deme_IM(
             self.Nanc, 0.1, 0.7, (self.N0, self.N1), (1e-2, 0.25), burnin=1.0
         )
         self.pop, self.rng = setup_pop_rng(self.Nanc)
 
     def test_complete_sim(self):
-        pdict = setup_pdict(self.d, self.t1 + self.t2)
+        pdict = setup_pdict(
+            self.model.model,
+            self.model.metadata.split_time + self.model.metadata.gens_post_split,
+        )
         params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
         self.assertEqual(self.pop.generation, params.simlen)
@@ -71,40 +74,69 @@ class TestTwoDemeIMModel(unittest.TestCase):
         self.assertEqual(deme_sizes[1], np.rint(self.N1 * self.Nanc).astype(int))
 
     def test_evolve_in_two_steps(self):
-        pdict = setup_pdict(self.d, self.t1)
+        pdict = setup_pdict(self.model.model, self.model.metadata.split_time)
         params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
-        self.assertEqual(self.pop.generation, self.t1)
+        self.assertEqual(self.pop.generation, self.model.metadata.split_time)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], int((1.0 - 0.7) * self.Nanc))
 
-        pdict["simlen"] = self.t2
+        pdict["simlen"] = self.model.metadata.gens_post_split
         params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
-        self.assertEqual(self.pop.generation, self.t1 + self.t2)
+        self.assertEqual(
+            self.pop.generation,
+            self.model.metadata.split_time + self.model.metadata.gens_post_split,
+        )
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], np.rint(self.N0 * self.Nanc).astype(int))
         self.assertEqual(deme_sizes[1], np.rint(self.N1 * self.Nanc).astype(int))
 
     def test_evolve_in_two_steps_restart_with_two_demes(self):
         deltat = 2
-        pdict = setup_pdict(self.d, self.t1 + deltat)
+        pdict = setup_pdict(self.model.model, self.model.metadata.split_time + deltat)
         params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 10)
-        self.assertEqual(self.pop.generation, self.t1 + deltat)
+        self.assertEqual(self.pop.generation, self.model.metadata.split_time + deltat)
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertTrue(0 in deme_sizes)
         self.assertTrue(1 in deme_sizes)
 
-        pdict["simlen"] = self.t2 - deltat
+        pdict["simlen"] = self.model.metadata.gens_post_split - deltat
         params = fwdpy11.ModelParams(**pdict)
         fwdpy11.evolvets(
             self.rng, self.pop, params, 10, check_demographic_event_timings=False
         )
-        self.assertEqual(self.pop.generation, self.t1 + self.t2)
+        self.assertEqual(
+            self.pop.generation,
+            self.model.metadata.split_time + self.model.metadata.gens_post_split,
+        )
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], np.rint(self.N0 * self.Nanc).astype(int))
         self.assertEqual(deme_sizes[1], np.rint(self.N1 * self.Nanc).astype(int))
+
+
+class TestTwoDemeIMModelVariousInitMethods(unittest.TestCase):
+    def test_init_migrates_tuple(self):
+        from fwdpy11.demographic_models.IM import two_deme_IM
+        model = two_deme_IM(
+            1000, 0.1, 0.7, (1.1, 2.7), (1e-2, 0.25), burnin=1.0
+        )
+        self.assertEqual(model, model)
+
+    def test_init_migrates_list(self):
+        from fwdpy11.demographic_models.IM import two_deme_IM
+        model = two_deme_IM(
+            1000, 0.1, 0.7, (1.1, 2.7), [1e-2, 0.25], burnin=1.0
+        )
+        self.assertEqual(model, model)
+
+    def test_init_migrates_numpy(self):
+        from fwdpy11.demographic_models.IM import two_deme_IM
+        model = two_deme_IM(
+            1000, 0.1, 0.7, (1.1, 2.7), np.array([1e-2, 0.25]), burnin=1.0
+        )
+        self.assertEqual(model, model)
 
 
 @unittest.skipIf(
@@ -116,7 +148,9 @@ class TestTennessenModel(unittest.TestCase):
     def setUpClass(self):
         from fwdpy11.demographic_models.human import tennessen
 
-        self.demog, self.simlen, self.Nref = tennessen(0)
+        self.demog = tennessen(0)
+        self.simlen = self.demog.metadata["simlen"]
+        self.Nref = self.demog.metadata["Nref"]
         self.pop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
         self.pdict = setup_pdict(self.demog, self.simlen)
         self.params = fwdpy11.ModelParams(**self.pdict)

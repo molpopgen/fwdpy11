@@ -910,9 +910,9 @@ class TestPickling(unittest.TestCase):
     def test_pickle_IM_with_selfing(self):
         import fwdpy11.demographic_models.IM as IM
 
-        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25], as_dict=True)
-        temp[0]["set_selfing_rates"] = [fwdpy11.SetSelfingRate(0, 0, 0.1)]
-        im = fwdpy11.DiscreteDemography(**temp[0])
+        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25]).model.asdict()
+        temp["set_selfing_rates"] = [fwdpy11.SetSelfingRate(0, 0, 0.1)]
+        im = fwdpy11.DiscreteDemography(**temp)
         pi = pickle.dumps(im)
         up = pickle.loads(pi)
         self.assertEqual(im, up)
@@ -920,11 +920,11 @@ class TestPickling(unittest.TestCase):
     def test_pickle_IM_with_whole_migmatrix_reset(self):
         import fwdpy11.demographic_models.IM as IM
 
-        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25], as_dict=True)
-        temp[0]["set_migration_rates"].append(
+        temp = IM.two_deme_IM(1000, 100, 0.25, [0.5, 3], [0.1, 0.25]).model.asdict()
+        temp["set_migration_rates"].append(
             fwdpy11.SetMigrationRates(10000 + 10, None, np.eye(2))
         )
-        im = fwdpy11.DiscreteDemography(**temp[0])
+        im = fwdpy11.DiscreteDemography(**temp)
         pi = pickle.dumps(im)
         up = pickle.loads(pi)
         self.assertEqual(im, up)
