@@ -20,11 +20,12 @@
 import attr
 
 
-def fromdict(cls):
+def _fromdict(cls):
     """
     Add a classmethod to create an instance from
     a dictionary.
     """
+
     def _fromdict(cls, d):
         """Build an instance from a dictionary"""
         return cls(**d)
@@ -33,7 +34,6 @@ def fromdict(cls):
     return cls
 
 
-@fromdict
 def attr_class_to_from_dict(cls):
     """
     When a class is built using attrs, this decorator
@@ -46,10 +46,9 @@ def attr_class_to_from_dict(cls):
         return attr.asdict(self)
 
     cls.asdict = _asdict
-    return cls
+    return _fromdict(cls)
 
 
-@fromdict
 def attr_class_to_from_dict_no_recurse(cls):
     """
     When a class is built using attrs, this decorator
@@ -64,5 +63,76 @@ def attr_class_to_from_dict_no_recurse(cls):
         return attr.asdict(self, recurse=False)
 
     cls.asdict = _asdict
+
+    return _fromdict(cls)
+
+
+def _add_getstate(cls):
+    """
+    Add __getstate__ via the __dict__
+    """
+
+    def getstate(self):
+        return self.asdict()
+
+    cls.__getstate__ = getstate
+
+    return cls
+
+
+def attr_class_pickle(cls):
+    """
+    Simplistic pickling based
+    on the __dict__
+    """
+
+    def setstate(self, d):
+        self.__dict__.update(d)
+
+    cls.__setstate__ = setstate
+
+    return _add_getstate(cls)
+
+
+def attr_class_pickle_with_super(cls):
+    """
+    Add simplistic pickling to a class
+    that inherits from another.
+
+    This is tied to our coding stanard,
+    where a Python class inheriting from
+    a C++ class must use common kwargs
+    for both.
+
+    In some cases, the C++ class requires
+    more nuanced initialization, so we
+    cannot use this decorator.
+    """
+
+    def setstate(self, d):
+        self.__dict__.update(d)
+        super(cls, self).__init__(**d)
+
+    cls.__setstate__ = setstate
+    return _add_getstate(cls)
+
+
+def attr_add_asblack(cls):
+    """
+    The default __repr__ from attrs isn't readable
+    for complex classes.  This adds a method
+    for pretty-printing out the class using black's
+    formatting rules
+    """
+
+    def _asblack(self):
+        """
+        Return a string representation formatted with black
+        """
+        import black
+
+        return black.format_str(str(self), mode=black.Mode())
+
+    cls.asblack = _asblack
 
     return cls

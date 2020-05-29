@@ -21,7 +21,8 @@ import typing
 
 import attr
 
-from fwdpy11.class_decorators import (attr_class_to_from_dict,
+from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
+                                      attr_class_to_from_dict,
                                       attr_class_to_from_dict_no_recurse)
 
 _common_attr_attribs = {
@@ -32,6 +33,8 @@ _common_attr_attribs = {
 }
 
 
+@attr_add_asblack
+@attr_class_pickle
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class DemographicModelDetails(object):
@@ -67,13 +70,9 @@ class DemographicModelDetails(object):
     citation: typing.Optional[typing.Dict]
     metadata: typing.Optional[object] = None
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-
-
+@attr_add_asblack
+@attr_class_pickle
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class DemographicModelCitation(object):
@@ -95,9 +94,3 @@ class DemographicModelCitation(object):
     DOI: object
     full_citation: object
     metadata: object
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)

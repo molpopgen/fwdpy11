@@ -25,7 +25,8 @@ import numpy as np
 
 import fwdpy11._fwdpy11
 
-from .class_decorators import (attr_class_to_from_dict,
+from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
+                               attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
 
 
@@ -68,6 +69,8 @@ _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy1
 
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class Region(fwdpy11._fwdpy11._ll_Region):
@@ -115,15 +118,10 @@ class Region(fwdpy11._fwdpy11._ll_Region):
             self.beg, self.end, self.weight, self.coupled, self.label
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(Region, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
@@ -181,15 +179,10 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
             self.scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(ConstantS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class ExpS(fwdpy11._fwdpy11._ll_ExpS):
@@ -249,15 +242,10 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
             self.scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(ExpS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class GammaS(fwdpy11._fwdpy11._ll_GammaS):
@@ -319,15 +307,10 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
             self.scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(GammaS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
@@ -385,15 +368,10 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
             self.scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(GaussianS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
@@ -501,15 +479,10 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
             scaling=scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(LogNormalS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
@@ -571,15 +544,10 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
             self.scaling,
         )
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(UniformS, self).__init__(**d)
-
 
 @_add_deprecated_properties
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(eq=False, **_common_attr_attribs)
 class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffects):
@@ -668,14 +636,9 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
             return False
         return np.array_equal(self.cov_matrix, other.cov_matrix)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(MultivariateGaussianEffects, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, **_common_attr_attribs)
 class mvDES(fwdpy11._fwdpy11._ll_mvDES):
@@ -707,10 +670,3 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 
     def __attrs_post_init__(self):
         super(mvDES, self).__init__(self.des, self.means, self.matrix)
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(mvDES, self).__init__(**d)

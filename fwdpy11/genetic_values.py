@@ -24,12 +24,15 @@ import numpy as np
 
 import fwdpy11._fwdpy11
 
-from .class_decorators import (attr_class_to_from_dict,
+from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
+                               attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
 
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class Optimum(fwdpy11._fwdpy11._ll_Optimum):
@@ -69,14 +72,9 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
     def __attrs_post_init__(self):
         super(Optimum, self).__init__(self.optimum, self.VS, self.when)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(Optimum, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs, eq=False)
 class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
@@ -116,13 +114,6 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
     def __attrs_post_init__(self):
         super(PleiotropicOptima, self).__init__(self.optima, self.VS, self.when)
 
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(PleiotropicOptima, self).__init__(**d)
-
     def __eq__(self, other):
         optima_equal = np.array_equal(self.optima, other.optima)
         VS_equal = self.VS == other.VS
@@ -133,6 +124,7 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
         return optima_equal and VS_equal and when_equal
 
 
+@attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class GSS(fwdpy11._fwdpy11._ll_GSS):
@@ -183,6 +175,8 @@ class GSS(fwdpy11._fwdpy11._ll_GSS):
             super(GSS, self).__init__(self.optimum, self.VS)
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
@@ -222,14 +216,8 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
     def __attrs_post_init__(self):
         super(GSSmo, self).__init__(self.optima)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(GSSmo, self).__init__(self.optima)
-
-
+@attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
@@ -290,6 +278,8 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
             super(MultivariateGSS, self).__init__(self.optima, self.VS)
 
 
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
@@ -325,14 +315,9 @@ class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
     def __attrs_post_init__(self):
         super(MultivariateGSSmo, self).__init__(self.optima)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(MultivariateGSSmo, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
@@ -348,14 +333,9 @@ class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
     def __attrs_post_init__(self):
         super(NoNoise, self).__init__()
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(NoNoise, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
 class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
@@ -382,14 +362,9 @@ class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
     def __attrs_post_init__(self):
         super(GaussianNoise, self).__init__(self.sd, self.mean)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(GaussianNoise, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class Additive(fwdpy11._fwdpy11._ll_Additive):
@@ -434,14 +409,9 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
             self.scaling, self.gvalue_to_fitness, self.noise, self.ndemes
         )
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(Additive, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
@@ -486,14 +456,9 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
             self.scaling, self.gvalue_to_fitness, self.noise, self.ndemes
         )
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(Multiplicative, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class GBR(fwdpy11._fwdpy11._ll_GBR):
@@ -526,14 +491,9 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
     def __attrs_post_init__(self):
         super(GBR, self).__init__(self.gvalue_to_fitness, self.noise)
 
-    def __getstate__(self):
-        return self.asdict()
 
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(GBR, self).__init__(**d)
-
-
+@attr_add_asblack
+@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class StrictAdditiveMultivariateEffects(
@@ -578,10 +538,3 @@ class StrictAdditiveMultivariateEffects(
         super(StrictAdditiveMultivariateEffects, self).__init__(
             self.ndimensions, self.focal_trait, self.gvalue_to_fitness, self.noise
         )
-
-    def __getstate__(self):
-        return self.asdict()
-
-    def __setstate__(self, d):
-        self.__dict__.update(d)
-        super(StrictAdditiveMultivariateEffects, self).__init__(**d)
