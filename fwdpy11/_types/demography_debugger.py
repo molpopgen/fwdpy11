@@ -129,10 +129,10 @@ class DemographyDebugger(object):
 
         if self.M.shape[0] < current_max:
             raise ValueError(
-                "The MigrationMatrix shape, {}, "
-                "does not match the max number of "
-                "demes present in the "
-                "simulation, ".format(self.M.shape, current_max)
+                f"The MigrationMatrix shape, {self.M.shape}, "
+                f"does not match the max number of "
+                f"demes present in the "
+                f"simulation, {current_max}"
             )
 
         return max(current_max, self.M.shape[0])
@@ -195,7 +195,7 @@ class DemographyDebugger(object):
 
     def _get_next_event_time(self, event_queues):
         t = None
-        for key, value in event_queues.items():
+        for _, value in event_queues.items():
             if len(value) > 0:
                 if t is None:
                     t = value[0].when
