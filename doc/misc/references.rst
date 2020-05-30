@@ -1,26 +1,30 @@
 References
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. [Christiansen1974] Christiansen, Freddy Bugge. 1974. “Sufficient Conditions for Protected Polymorphism in a Subdivided Population.” The American Naturalist 108 (960): 157–66.
+.. [Christiansen1974] Christiansen, Freddy Bugge. 1974. “Sufficient Conditions for Protected Polymorphism in a Subdivided Population.” The American Naturalist 108 (960): 157–66. DOI:10.1086/282896
 
-.. [Christiansen1975] Christiansen, Freddy Bugge. 1975. “Hard and Soft Selection in a Subdivided Population.” The American Naturalist 109 (965): 11–16.
+.. [Christiansen1975] Christiansen, Freddy Bugge. 1975. “Hard and Soft Selection in a Subdivided Population.” The American Naturalist 109 (965): 11–16. DOI:10.1086/282970
 
-.. [Felsenstein1976] Felsenstein, J. 1976. “The Theoretical Population Genetics of Variable Selection and Migration.” Annual Review of Genetics 10: 253–80.
+.. [Felsenstein1976] Felsenstein, J. 1976. “The Theoretical Population Genetics of Variable Selection and Migration.” Annual Review of Genetics 10: 253–80. DOI:10.1146/annurev.ge.10.120176.001345
 
-.. [Haller2019] Haller, B. C., J. Galloway, and J. Kelleher. 2019. “Tree‐sequence Recording in SLiM Opens New Horizons for Forward‐time Simulation of Whole Genomes.” Molecular Ecology. https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.12968.
+.. [Haller2019] Haller, B. C., J. Galloway, and J. Kelleher. 2019. “Tree‐sequence Recording in SLiM Opens New Horizons for Forward‐time Simulation of Whole Genomes.” Molecular Ecology. https://onlinelibrary.wiley.com/doi/abs/10.1111/1755-0998.12968. DOI:10.1111/1755-0998.12968
 
-.. [Jouganous2017] Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017. “Inferring the Joint Demographic History of Multiple Populations: Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.
+.. [Jouganous2017] Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017. “Inferring the Joint Demographic History of Multiple Populations: Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67. DOI:10.1534/genetics.117.200493
 
-.. [Kelleher2016] Kelleher, Jerome, Alison M. Etheridge, and Gilean McVean. 2016. “Efficient Coalescent Simulation and Genealogical Analysis for Large Sample Sizes.” PLoS Computational Biology 12 (5): e1004842.
+.. [Kelleher2016] Kelleher, Jerome, Alison M. Etheridge, and Gilean McVean. 2016. “Efficient Coalescent Simulation and Genealogical Analysis for Large Sample Sizes.” PLoS Computational Biology 12 (5): e1004842. DOI:10.1371/journal.pcbi.1004842
 
-.. [Kelleher2018] Kelleher, Jerome, Kevin R. Thornton, Jaime Ashander, and Peter L. Ralph. 2018. “Efficient Pedigree Recording for Fast Population Genetics Simulation.” PLoS Computational Biology 14 (11): e1006581.
+.. [Kelleher2018] Kelleher, Jerome, Kevin R. Thornton, Jaime Ashander, and Peter L. Ralph. 2018. “Efficient Pedigree Recording for Fast Population Genetics Simulation.” PLoS Computational Biology 14 (11): e1006581. DOI:10.1371/journal.pcbi.1006581
 
-.. [Levene1953] Levene, Howard. 1953. “Genetic Equilibrium When More Than One Ecological Niche Is Available.” The American Naturalist 87 (836): 331–33.
+.. [Levene1953] Levene, Howard. 1953. “Genetic Equilibrium When More Than One Ecological Niche Is Available.” The American Naturalist 87 (836): 331–33. DOI:10.1086/281792
         
-.. [Nelson2019]  Nelson, Dominic, Jerome Kelleher, Aaron Ragsdale, Gil McVean, and Simon Gravel. 2019. “Coupling Wright-Fisher and Coalescent Dynamics for Realistic Simulation of Population-Scale Datasets.” bioRxiv. https://doi.org/10.1101/674440.
+.. [Nelson2020] Nelson, Dominic, Jerome Kelleher, Aaron P. Ragsdale, Claudia Moreau, Gil McVean, and Simon Gravel. 2020. “Accounting for Long-Range Correlations in Genome-Wide Simulations of Large Cohorts.” PLoS Genetics 16 (5): e1008619. DOI: 10.1371/journal.pgen.1008619
 
-.. [Ralph2020] Ralph, Peter, Kevin Thornton, and Jerome Kelleher. 2019. “Efficiently Summarizing Relationships in Large Samples: A General Duality between Statistics of Genealogies and Genomes.” bioRxiv. https://doi.org/10.1101/779132.
+.. [Ralph2020] Ralph, Peter, Kevin Thornton, and Jerome Kelleher. 2020. “Efficiently Summarizing Relationships in Large Samples: A General Duality Between Statistics of Genealogies and Genomes.” Genetics, May. https://doi.org/10.1534/genetics.120.303253.
 
-.. [Song2000] Song, P. 2000 Multivariate dispersion models generated from Gaussian copula. Scandinavian Journal of Statistics 27, 305–320.
+.. [Song2000] Song, P. 2000 Multivariate dispersion models generated from Gaussian copula. Scandinavian Journal of Statistics 27, 305–320. DOI:10.1111/1467-9469.00191
 
-.. [Tennessen2012] Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, Wenqing Fu, Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012. “Evolution and Functional Impact of Rare Coding Variation from Deep Sequencing of Human Exomes.” Science 337 (6090): 64–69.
+.. [Tennessen2012] Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, Wenqing Fu, Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012. “Evolution and Functional Impact of Rare Coding Variation from Deep Sequencing of Human Exomes.” Science 337 (6090): 64–69. DOI:10.1126/science.1219240
+
+.. [Thornton2014] Thornton, Kevin R. 2014. “A C++ Template Library for Efficient Forward-Time Population Genetic Simulation of Large Populations.” Genetics 198 (1): 157–66. DOI:10.1534/genetics.114.165019
+
+.. [Thornton2019] Thornton, Kevin R. 2019. “Polygenic Adaptation to an Environmental Shift: Temporal Dynamics of Variation Under Gaussian Stabilizing Selection and Additive Effects on a Single Trait.” Genetics 213 (4): 1513–30. DOI:10.1534/genetics.119.302662
