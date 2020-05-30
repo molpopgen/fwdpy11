@@ -426,7 +426,6 @@ def _convert_migmatrix(o):
 
 
 @attr_add_asblack
-@attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
@@ -489,6 +488,14 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             migmatrix=self.migmatrix,
             set_migration_rates=self.set_migration_rates,
         )
+
+    def __getstate__(self):
+        return (self.asdict(), self._state_asdict())
+
+    def __setstate__(self, t):
+        self.__dict__.update(t[0])
+        super(DiscreteDemography, self).__init__(**t[0])
+        self._reset_state(t[1])
 
     def _timed_events(self):
         for i in [
