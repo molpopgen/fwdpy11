@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <cstdint>
+#include <unordered_set>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include "get_max_number_of_demes.hpp"
 #include "multideme_fitness_lookups.hpp"
