@@ -39,15 +39,13 @@ namespace fwdpy11
         {
           private:
             std::unique_ptr<MigrationMatrix>
-            init_migmatrix(
-                const std::unique_ptr<const MigrationMatrix> &Minput)
+            init_migmatrix(const std::unique_ptr<const MigrationMatrix> &Minput)
             {
                 if (Minput == nullptr)
                     {
                         return nullptr;
                     }
-                return std::unique_ptr<MigrationMatrix>(
-                    new MigrationMatrix(*Minput));
+                return std::unique_ptr<MigrationMatrix>(new MigrationMatrix(*Minput));
             }
 
             std::uint32_t next_global_N;
@@ -91,26 +89,92 @@ namespace fwdpy11
             }
         };
 
+        template <typename T>
+        inline void
+        get_event_times_before_current_time(std::uint32_t generation, const T &events,
+                                            std::unordered_set<std::uint32_t> &times)
+        {
+            for (auto i = begin(events); i < end(events) && i->when <= generation; ++i)
+                {
+                    times.insert(i->when);
+                }
+        }
+
         template <typename METADATATYPE>
         inline std::unique_ptr<demographic_model_state>
         initialize_demographic_model_state(std::uint32_t generation,
                                            const std::vector<METADATATYPE> &metadata,
                                            DiscreteDemography &demography)
         {
-            std::unique_ptr<demographic_model_state> rv(nullptr);
-            if (rv == nullptr || generation == 0)
-                // If there is no state, then we need to make
-                // one.  If there is a state, but the generation
-                // is zero, then we assume that the demography
-                // has been used for a different simulatin replicate
-                // and thus reset it.
+            std::unique_ptr<demographic_model_state> rv(
+                new demographic_model_state(metadata, demography));
+            // To make progress refactoring:
+            // 1. Need to mock the effect of mass migrations,
+            //    which means change sizes and update growth rates.
+            //    This mock should replace the functionality
+            //    of mass_migrations_and_current_sizes, updating
+            //    rv->sizes_rates.current_deme_sizes
+            // 2. call apply_demographic_events,
+            //    then rv->set_next_global_N, then
+            //    build_migration_lookup, and then
+            //    validate_parental_state for good measure.
+            //
+            // Only 1 requires new code! The only other real
+            // trick is to get a list of all event times <= generation.
+            // NOTE: there will be some nuance here.  Technically, we need to
+            // apply demographic events for all times < generation, then
+            // update rv->fitnesses and then apply events at time
+            // genertion.
+
+            // Set pointers for events to point to the first event
+            // happening at >= generation.
+            demography.update_event_times(generation);
+
+            std::unordered_set<std::uint32_t> event_times_temp;
+            get_event_times_before_current_time(generation, demography.mass_migrations,
+                                                event_times_temp);
+            get_event_times_before_current_time(generation, demography.set_growth_rates,
+                                                event_times_temp);
+            get_event_times_before_current_time(generation, demography.set_deme_sizes,
+                                                event_times_temp);
+            get_event_times_before_current_time(generation, demography.set_selfing_rates,
+                                                event_times_temp);
+            get_event_times_before_current_time(
+                generation, demography.set_migration_rates, event_times_temp);
+            std::vector<std::uint32_t> event_times(begin(event_times_temp),
+                                                   end(event_times_temp));
+            std::sort(begin(event_times), end(event_times));
+            auto event_time = begin(event_times);
+            for (; event_time < end(event_times) && *event_time < generation;
+                 ++event_time)
                 {
-                    demography.update_event_times(generation);
-                    rv.reset(new demographic_model_state(metadata, demography));
+                    // Mock mass migrations here and do other events
                 }
+            // update the fitness lookup
+
+            // Do remaining events to set up the next generation
+            for (; event_time < end(event_times); ++event_time)
+                {
+                    if (*event_time != generation)
+                        {
+                            throw std::runtime_error(
+                                "invalid event time found when initializing demographic "
+                                "model state");
+                        }
+                }
+            //if (rv == nullptr || generation == 0)
+            //    // If there is no state, then we need to make
+            //    // one.  If there is a state, but the generation
+            //    // is zero, then we assume that the demography
+            //    // has been used for a different simulatin replicate
+            //    // and thus reset it.
+            //    {
+            //        demography.update_event_times(generation);
+            //        rv.reset(new demographic_model_state(metadata, demography));
+            //    }
             return rv;
         }
-    
+
     } // namespace discrete_demography
 } // namespace fwdpy11
 
