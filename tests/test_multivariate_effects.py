@@ -19,7 +19,7 @@ def set_up_quant_trait_model():
     PO = fwdpy11.PleiotropicOptima
     po = []
     for i, j in enumerate(timepoints):
-        po.append(PO(when=j, optima=optima[i, :], VS=1))
+        po.append(PO(when=int(j), optima=optima[i, :], VS=1.0))
     GSSmo = fwdpy11.MultivariateGSSmo(po)
     cmat = np.identity(ntraits)
     np.fill_diagonal(cmat, 0.1)
@@ -78,7 +78,7 @@ class TestMultivariateGSSmoCPP(unittest.TestCase):
         PO = fwdpy11.PleiotropicOptima
         po = []
         for i, t in enumerate(timepoints):
-            po.append(PO(when=t, optima=optima[i, :], VS=1))
+            po.append(PO(when=int(t), optima=optima[i, :], VS=1.0))
         GSSmo = fwdpy11.MultivariateGSSmo(po)
 
         co = testMultivariateGSSmo.get_optima(GSSmo)

@@ -10,14 +10,14 @@ rho = float(sys.argv[2])
 
 moving_optimum_deme_0 = fwdpy11.GSSmo(
     [
-        fwdpy11.Optimum(when=0, optimum=0, VS=1),
-        fwdpy11.Optimum(when=10 * N, optimum=1, VS=1),
+        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+        fwdpy11.Optimum(when=10 * N, optimum=1.0, VS=1.0),
     ]
 )
 moving_optimum_deme_1 = fwdpy11.GSSmo(
     [
-        fwdpy11.Optimum(when=0, optimum=0, VS=1),
-        fwdpy11.Optimum(when=10 * N, optimum=-1, VS=1),
+        fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
+        fwdpy11.Optimum(when=10 * N, optimum=-1.0, VS=1.0),
     ]
 )
 

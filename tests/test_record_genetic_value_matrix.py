@@ -39,7 +39,7 @@ def set_up_quant_trait_model():
     r = rho / (4 * N)
     Opt = fwdpy11.Optimum
     GSSmo = fwdpy11.GSSmo(
-        [Opt(when=0, optimum=0, VS=1), Opt(when=10 * N, optimum=1, VS=1)]
+        [Opt(when=0, optimum=0.0, VS=1.0), Opt(when=10 * N, optimum=1.0, VS=1.0)]
     )
     a = fwdpy11.Additive(2.0, GSSmo)
     p = {
@@ -64,9 +64,9 @@ def set_up_two_trait_quant_trait_model():
     r = rho / (4 * N)
 
     optima = [
-        fwdpy11.PleiotropicOptima(when=0, optima=np.zeros(2), VS=2),
+        fwdpy11.PleiotropicOptima(when=0, optima=np.zeros(2), VS=2.0),
         fwdpy11.PleiotropicOptima(
-            when=10 * N, optima=np.array([np.sqrt(2.0), 0]), VS=2
+            when=10 * N, optima=np.array([np.sqrt(2.0), 0]), VS=2.0
         ),
     ]
     GSSmo = fwdpy11.MultivariateGSSmo(optima)

@@ -206,7 +206,7 @@ def runsim(args):
 
     GSSmo = fwdpy11.GSSmo(
         [
-            fwdpy11.Optimum(when=0, optimum=0, VS=args.VS),
+            fwdpy11.Optimum(when=0, optimum=0.0, VS=args.VS),
             fwdpy11.Optimum(when=10 * args.popsize, optimum=args.opt, VS=args.VS),
         ]
     )

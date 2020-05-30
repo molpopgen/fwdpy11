@@ -92,7 +92,7 @@ class testMultivariateGSSmo(unittest.TestCase):
         timepoints = [0, 100]
         po = []
         for i, t in enumerate(timepoints):
-            po.append(fwdpy11.PleiotropicOptima(when=t, optima=optima[i, :], VS=1))
+            po.append(fwdpy11.PleiotropicOptima(when=t, optima=optima[i, :], VS=1.0))
         self.mvgssmo = fwdpy11.MultivariateGSSmo(po)
 
     def test_pickle(self):

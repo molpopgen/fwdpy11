@@ -65,9 +65,14 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
         low-level C++ class
     """
 
-    optimum: float
-    VS: float
-    when: typing.Optional[int] = None
+    optimum: float = attr.ib(validator=attr.validators.instance_of(float))
+    VS: float = attr.ib(validator=attr.validators.instance_of(float))
+    when: typing.Optional[int] = attr.ib(default=None)
+
+    @when.validator
+    def validate_when(self, attribute, value):
+        if value is not None:
+            attr.validators.instance_of(int)(self, attribute, value)
 
     def __attrs_post_init__(self):
         super(Optimum, self).__init__(self.optimum, self.VS, self.when)
@@ -108,8 +113,13 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
     """
 
     optima: typing.List[float]
-    VS: float
-    when: typing.Optional[int] = None
+    VS: float = attr.ib(validator=attr.validators.instance_of(float))
+    when: typing.Optional[int] = attr.ib(default=None)
+
+    @when.validator
+    def validate_when(self, attribute, value):
+        if value is not None:
+            attr.validators.instance_of(int)(self, attribute, value)
 
     def __attrs_post_init__(self):
         super(PleiotropicOptima, self).__init__(self.optima, self.VS, self.when)
