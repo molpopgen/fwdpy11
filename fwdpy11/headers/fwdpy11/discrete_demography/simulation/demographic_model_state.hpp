@@ -39,15 +39,13 @@ namespace fwdpy11
         {
           private:
             std::unique_ptr<MigrationMatrix>
-            init_migmatrix(
-                const std::unique_ptr<const MigrationMatrix> &Minput)
+            init_migmatrix(const std::unique_ptr<const MigrationMatrix> &Minput)
             {
                 if (Minput == nullptr)
                     {
                         return nullptr;
                     }
-                return std::unique_ptr<MigrationMatrix>(
-                    new MigrationMatrix(*Minput));
+                return std::unique_ptr<MigrationMatrix>(new MigrationMatrix(*Minput));
             }
 
             std::uint32_t next_global_N;
@@ -70,6 +68,21 @@ namespace fwdpy11
                   M(init_migmatrix(demography.migmatrix)),
                   miglookup(maxdemes, M == nullptr)
             {
+            }
+
+
+            // This constructor is only used when resetting
+            // the state from an event like pickling a DiscreteDemography
+            // instance.
+            demographic_model_state(std::int32_t maxdemes_, deme_properties sizes_rates_,
+                                    std::unique_ptr<MigrationMatrix> M_)
+                : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
+                  sizes_rates(std::move(sizes_rates_)), M(std::move(M_)),
+                  miglookup(maxdemes, M == nullptr)
+            {
+                next_global_N
+                    = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
+                                      end(sizes_rates.next_deme_sizes.get()), 0u);
             }
 
             void

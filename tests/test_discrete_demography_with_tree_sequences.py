@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import pickle
 import unittest
 from collections import namedtuple
 
@@ -803,6 +804,35 @@ class TestIMModel(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(
             self.rng, self.pop, params, 2, check_demographic_event_timings=False
+        )  # Simplify more often
+        self.assertEqual(self.pop.generation, self.Tsplit + self.gens_post_split)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertEqual(deme_sizes[1][0], self.N0t)
+        self.assertEqual(deme_sizes[1][1], self.N1t)
+
+    def test_evolve_in_two_steps_restart_with_two_demes_and_pickle(self):
+        """
+        Tests the more complex case of restarting a sim
+        when multiple demes are present and we pickle the
+        demographic model.
+        """
+        self.pdict["simlen"] = self.Tsplit + 3  # Evolve past the split
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 5)
+        self.assertEqual(self.pop.generation, self.Tsplit + 3)
+        deme_sizes = self.pop.deme_sizes()
+        self.assertTrue(all([i > 0 for i in deme_sizes[1].tolist()]))
+
+        self.pdict["simlen"] = self.gens_post_split - 3
+        params = fwdpy11.ModelParams(**self.pdict)
+        pparams = pickle.dumps(params, -1)
+        unpickled_params = pickle.loads(pparams)
+        fwdpy11.evolvets(
+            self.rng,
+            self.pop,
+            unpickled_params,
+            2,
+            check_demographic_event_timings=False,
         )  # Simplify more often
         self.assertEqual(self.pop.generation, self.Tsplit + self.gens_post_split)
         deme_sizes = self.pop.deme_sizes()

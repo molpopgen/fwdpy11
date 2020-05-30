@@ -166,7 +166,15 @@ class DemographyDebugger(object):
         # FIXME: a more Pythonic approach would be only to
         # pull out attributes that are not None, are iterable,
         # and whose elements contain a "when" attribute.
-        not_allowed = ["migmatrix", "asblack", "asdict", "fromdict", "_timed_events"]
+        not_allowed = [
+            "migmatrix",
+            "asblack",
+            "asdict",
+            "fromdict",
+            "_timed_events",
+            "_state_asdict",
+            "_reset_state",
+        ]
         return [i for i in events.__dir__() if "__" not in i and i not in not_allowed]
 
     def _make_event_queues(self, events):

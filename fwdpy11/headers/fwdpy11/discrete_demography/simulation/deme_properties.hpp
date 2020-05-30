@@ -31,13 +31,11 @@ namespace fwdpy11
         {
             template <typename METADATATYPE>
             current_deme_sizes_vector
-            init_deme_sizes_from_metadata(
-                std::uint32_t max_number_demes,
-                const std::vector<METADATATYPE>& metadata)
+            init_deme_sizes_from_metadata(std::uint32_t max_number_demes,
+                                          const std::vector<METADATATYPE>& metadata)
             {
                 current_deme_sizes_vector v(
-                    current_deme_sizes_vector::value_type(max_number_demes,
-                                                          0));
+                    current_deme_sizes_vector::value_type(max_number_demes, 0));
                 auto& ref = v.get();
                 std::fill(begin(ref), end(ref), 0);
                 for (auto&& i : metadata)
@@ -62,13 +60,24 @@ namespace fwdpy11
                   next_deme_sizes(
                       next_deme_sizes_vector::value_type(max_number_demes, 0)),
                   growth_rate_onset_times(
-                      growth_rates_onset_times_vector::value_type(
-                          max_number_demes, 0)),
+                      growth_rates_onset_times_vector::value_type(max_number_demes, 0)),
                   growth_initial_sizes(current_deme_sizes.get()),
-                  growth_rates(growth_rates_vector::value_type(
-                      max_number_demes, NOGROWTH)),
-                  selfing_rates(
-                      selfing_rates_vector::value_type(max_number_demes, 0.))
+                  growth_rates(
+                      growth_rates_vector::value_type(max_number_demes, NOGROWTH)),
+                  selfing_rates(selfing_rates_vector::value_type(max_number_demes, 0.))
+            {
+            }
+
+            deme_properties(current_deme_sizes_vector _cdsv,
+                            next_deme_sizes_vector _ndsv,
+                            growth_rates_onset_times_vector _grotv,
+                            growth_initial_size_vector _gisv, growth_rates_vector _sgrv,
+                            selfing_rates_vector _srv)
+                : current_deme_sizes(std::move(_cdsv)),
+                  next_deme_sizes(std::move(_ndsv)),
+                  growth_rate_onset_times(std::move(_grotv)),
+                  growth_initial_sizes(std::move(_gisv)), growth_rates(std::move(_sgrv)),
+                  selfing_rates(std::move(_srv))
             {
             }
         };
