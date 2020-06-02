@@ -33,7 +33,7 @@ def _starting_pdict():
         "demography": fwdpy11.DiscreteDemography(),
         "simlen": 10,
         "gvalue": fwdpy11.Multiplicative(
-            2.0, fwdpy11.GSS(fwdpy11.Optimum(VS=1, optimum=0.0))
+            2.0, fwdpy11.GSS(fwdpy11.Optimum(VS=1.0, optimum=0.0))
         ),
     }
 
