@@ -4,33 +4,24 @@
 
 namespace py = pybind11;
 
+static const auto CLASS_DOCSTRING =
+    R"delim(
+A haploid genome.  This object represents the ordered
+mutations inherited from a single parent.
+)delim";
+
+static const auto INIT_DOCSTRING_1 =
+    R"delim(
+Construct haploid genome from tuple.
+
+The tuple must be (n, mutations, smutations).
+)delim";
+
 void
 init_HaploidGenome(py::module &m)
 {
-    py::class_<fwdpp::haploid_genome>(m, "HaploidGenome", R"delim(
-    A haploid genome.  This object represents the ordered
-    mutations inherited from a single parent.
-)delim")
-        .def(py::init<fwdpp::haploid_genome::constructor_tuple>(),
-             R"delim(
-                Construct haploid genome from tuple.
-                
-                The tuple must be (n, mutations, smutations)
-
-                .. testcode::
-
-                    import fwdpy11
-                    g = fwdpy11.HaploidGenome((1, [2], [0]))
-                    print(g.n)
-                    print(list(g.mutations))
-                    print(list(g.smutations))
-
-                .. testoutput::
-
-                    1
-                    [2]
-                    [0]
-                )delim")
+    py::class_<fwdpp::haploid_genome>(m, "HaploidGenome")
+        .def(py::init<fwdpp::haploid_genome::constructor_tuple>())
         .def_readonly("n", &fwdpp::haploid_genome::n,
                       "Number of occurrences in the population. This has "
                       "little meaning beyond book-keeping used by the C++ "
@@ -57,11 +48,10 @@ init_HaploidGenome(py::module &m)
             },
             [](py::tuple t) {
                 return fwdpp::haploid_genome(t[0].cast<fwdpp::uint_t>(),
-                                     t[1].cast<std::vector<fwdpp::uint_t>>(),
-                                     t[2].cast<std::vector<fwdpp::uint_t>>());
+                                             t[1].cast<std::vector<fwdpp::uint_t>>(),
+                                             t[2].cast<std::vector<fwdpp::uint_t>>());
             }))
-        .def("__eq__", [](const fwdpp::haploid_genome &a, const fwdpp::haploid_genome &b) {
-            return a == b;
-        });
+        .def("__eq__", [](const fwdpp::haploid_genome &a,
+                          const fwdpp::haploid_genome &b) { return a == b; });
 }
 
