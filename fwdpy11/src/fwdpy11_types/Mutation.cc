@@ -5,6 +5,52 @@
 
 namespace py = pybind11;
 
+static const auto INIT_DOCSTRING_1 =
+    R"delim(
+Construct a mutations.
+
+:param pos: Mutation position (float)
+:param s: Effect size (float)
+:param h: Dominance term (float)
+:param g: Origin time (unsigned integer)
+:param label: Label (16 bit integer)
+
+.. testcode::
+
+    import fwdpy11
+    m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, 0)
+    print(m.pos)
+    print(m.s)
+    print(m.h)
+    print(m.g)
+    print(m.label)
+
+.. testoutput::
+    
+    1.0
+    -1.0
+    0.25
+    0
+    0
+)delim";
+
+static const auto INIT_DOCSTRING_2 =
+    R"delim(
+Construct a mutation with both a constant effect and/or
+a vector of effects.
+
+:param pos: Mutation position (float)
+:param s: Effect size (float)
+:param h: Dominance term (float)
+:param g: Origin time (unsigned integer)
+:param esizes: List of effect sizes (list of float)
+:param heffects: List of heterozygous effects (list of float)
+:param label: Label (16 bit integer)
+
+.. versionadded:: 0.2.0
+
+)delim";
+
 void
 init_Mutation(py::module &m)
 {
@@ -16,33 +62,7 @@ init_Mutation(py::module &m)
                      return fwdpy11::Mutation(s == 0., pos, s, h, g, label);
                  }),
              py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("label"),
-             R"delim(
-                Construct a mutations.
-
-                :param pos: Mutation position (float)
-                :param s: Effect size (float)
-                :param h: Dominance term (float)
-                :param g: Origin time (unsigned integer)
-                :param label: Label (16 bit integer)
-
-                .. testcode::
-
-                    import fwdpy11
-                    m = fwdpy11.Mutation(1.0, -1.0, 0.25, 0, 0)
-                    print(m.pos)
-                    print(m.s)
-                    print(m.h)
-                    print(m.g)
-                    print(m.label)
-
-                .. testoutput::
-                    
-                    1.0
-                    -1.0
-                    0.25
-                    0
-                    0
-                )delim")
+             INIT_DOCSTRING_1)
         .def(py::init([](double pos, double s, double h, fwdpp::uint_t g,
                          py::list esizes, py::list heffects, std::uint16_t label) {
                  std::vector<double> esizes_;
@@ -65,22 +85,7 @@ init_Mutation(py::module &m)
                                           std::move(heffects_), label);
              }),
              py::arg("pos"), py::arg("s"), py::arg("h"), py::arg("g"), py::arg("esizes"),
-             py::arg("heffects"), py::arg("label"),
-             R"delim(
-			 Construct a mutation with both a constant effect and/or
-			 a vector of effects.
-
-			 :param pos: Mutation position (float)
-			 :param s: Effect size (float)
-			 :param h: Dominance term (float)
-			 :param g: Origin time (unsigned integer)
-			 :param esizes: List of effect sizes (list of float)
-			 :param heffects: List of heterozygous effects (list of float)
-			 :param label: Label (16 bit integer)
-				
-			 .. versionadded:: 0.2.0
-
-			 )delim")
+             py::arg("heffects"), py::arg("label"), INIT_DOCSTRING_2)
         .def_readonly("g", &fwdpy11::Mutation::g,
                       "Generation when mutation arose (origination time). (read-only)")
         .def_readonly("s", &fwdpy11::Mutation::s,
