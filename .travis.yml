@@ -9,11 +9,24 @@ matrix:
 
     - os: linux
       dist: bionic
+      env:
+        - USECONDA=1
+        - CXXSTANDARD=17
+
+    - os: linux
+      dist: bionic
       python: 3.6
       env:
         - CC=gcc
         - CXX=g++
 
+    - os: linux
+      dist: bionic
+      python: 3.6
+      env:
+        - CC=gcc
+        - CXX=g++
+        - CXXSTANDARD=17
 #    - os: osx 
 #      osx_image: xcode8.3
 #      env: OSXGCC=1 # Test build with conda's gcc on OS X
