@@ -53,10 +53,10 @@ namespace fwdpy11
         }
 
         inline void
-        save_model_state(demographic_model_state_pointer& state,
+        save_model_state(demographic_model_state_pointer state,
                          DiscreteDemography& demography)
         {
-            demography.set_model_state(state);
+            demography.set_model_state(std::move(state));
         }
     } // namespace discrete_demography
 } // namespace fwdpy11

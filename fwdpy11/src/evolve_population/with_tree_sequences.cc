@@ -550,7 +550,7 @@ evolve_with_tree_sequences(
                              remove_extinct_mutations_at_finish,
                              last_preserved_generation, last_preserved_generation_counts,
                              pop);
-    ddemog::save_model_state(current_demographic_state, demography);
+    ddemog::save_model_state(std::move(current_demographic_state), demography);
 }
 
 void

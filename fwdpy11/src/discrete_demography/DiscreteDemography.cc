@@ -151,7 +151,7 @@ init_DiscreteDemography(py::module& m)
                  auto state = self.get_model_state();
                  if (state == nullptr)
                      {
-                         self.set_model_state(state);
+                         self.set_model_state(std::move(state));
                          return py::none();
                      }
                  py::dict rv;
@@ -161,10 +161,10 @@ init_DiscreteDemography(py::module& m)
                      }
                  catch (...)
                      {
-                         self.set_model_state(state);
+                         self.set_model_state(std::move(state));
                          throw;
                      }
-                 self.set_model_state(state);
+                 self.set_model_state(std::move(state));
                  return rv;
              })
         .def("_reset_state", [](ddemog::DiscreteDemography& self, py::object o) {
@@ -214,6 +214,6 @@ init_DiscreteDemography(py::module& m)
                     state.reset(new ddemog::demographic_model_state(
                         maxdemes, std::move(sizes_rates), std::move(M)));
                 }
-            self.set_model_state(state);
+            self.set_model_state(std::move(state));
         });
 }
