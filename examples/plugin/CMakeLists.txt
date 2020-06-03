@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(gavlue_recorder)
 
+# As of 0.8.0, fwdpy11
+# is compiled with the C++15 language
+# standard (-std=c++14)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 14) 
 find_package(pybind11)
 message(STATUS "Found pybind11: ${pybind11_VERSION}")
 if(${pybind11_VERSION} VERSION_LESS '2.2.3')
