@@ -10,7 +10,7 @@ then
     fi
     if [ "$TRAVIS_OS_NAME" == "osx" ];
     then 
-        wget https://repo.continuum.io/miniconda/Miniconda3-4.3.21-MacOSX-x86_64.sh -O miniconda.sh;
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh;
     fi
     bash miniconda.sh -b -p $HOME/miniconda
     export PATH="$HOME/miniconda/bin:$PATH"
@@ -20,13 +20,13 @@ then
     # Useful for debugging any issues with conda
     conda info -a
     conda create -q -n test-environment
-    condat activate test-environment
+    conda activate test-environment
     if [ "$TRAVIS_OS_NAME" == "linux" ];
     then conda install gcc_linux-64 gxx_linux-64;
     fi
-    if [ "$TRAVIS_OS_NAME" == "osx" -a "$OSXGCC" == "1" ];
+    if [ "$TRAVIS_OS_NAME" == "osx" ];
     then
-        conda install gcc;
+        conda install clangxx_osx-64;
     fi
     conda install cython numpy gsl
     conda install -c conda-forge pybind11==2.4.3 numpy msprime openblas cmake sparse
@@ -36,8 +36,11 @@ then
     echo `which python`
     echo `which python3`
 else
-    sudo apt-get update -qq
-    sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev;
+    if [ "$TRAVIS_OS_NAME" == "linux" ]; 
+    then 
+        sudo apt-get update -qq
+        sudo apt-get -f install python-dev libffi-dev libssl-dev libhdf5-dev cmake libgsl-dev;
+    fi
     pip install --upgrade -r requirements.txt
 
     # We need to get pybind11 NOT from pip
