@@ -27,14 +27,13 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        class EmptyDeme : public std::exception
+        class __attribute__((visibility("default"))) EmptyDeme : public std::exception
         {
           private:
             std::string message_;
 
           public:
-            explicit EmptyDeme(std::string message)
-                : message_(std::move(message))
+            explicit EmptyDeme(std::string message) : message_(std::move(message))
             {
             }
             virtual const char*
@@ -44,14 +43,14 @@ namespace fwdpy11
             }
         };
 
-        struct DemographyError : public std::exception
+        class __attribute__((visibility("default"))) DemographyError
+            : public std::exception
         {
           private:
             std::string message_;
 
           public:
-            explicit DemographyError(std::string message)
-                : message_(std::move(message))
+            explicit DemographyError(std::string message) : message_(std::move(message))
             {
             }
             virtual const char*
@@ -61,14 +60,14 @@ namespace fwdpy11
             }
         };
 
-        struct GlobalExtinction : public std::exception
+        class __attribute__((visibility("default"))) GlobalExtinction
+            : public std::exception
         {
           private:
             std::string message_;
 
           public:
-            explicit GlobalExtinction(std::string message)
-                : message_(std::move(message))
+            explicit GlobalExtinction(std::string message) : message_(std::move(message))
             {
             }
             virtual const char*

@@ -9,26 +9,43 @@ matrix:
 
     - os: linux
       dist: bionic
+      env:
+        - USECONDA=1
+        - CXXSTANDARD=17
+
+    - os: linux
+      dist: bionic
       python: 3.6
       env:
         - CC=gcc
         - CXX=g++
 
-#    - os: osx 
-#      osx_image: xcode8.3
-#      env: OSXGCC=1 # Test build with conda's gcc on OS X
-#    - os: osx 
-#      osx_image: xcode8.3
-#      env: OSXGCC=0 # 0 means clang/llvm build
-#    - os: osx
-#      osx_image: xcode8.2
-#      env: OSXGCC=0
-#    - os: osx 
-#      osx_image: xcode8.1
-#      env: OSXGCC=0
-#    - os: osx
-#      osx_image: xcode8
-#      env: OSXGCC=0
+    - os: linux
+      dist: bionic
+      python: 3.6
+      env:
+        - CC=gcc
+        - CXX=g++
+        - CXXSTANDARD=17
+
+    # 9.4 uses a macOS 10.13
+    # image
+    # - os: osx 
+    #   osx_image: xcode9.4
+    #   language: generic
+
+    - os: osx 
+      osx_image: xcode9.4
+      language: generic
+      env:
+        - USECONDA=1
+
+    - os: osx 
+      osx_image: xcode9.4
+      language: generic
+      env:
+        - USECONDA=1
+        - CXXSTANDARD=17
 
 sudo: true
 
