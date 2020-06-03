@@ -20,8 +20,8 @@ The tuple must be (n, mutations, smutations).
 void
 init_HaploidGenome(py::module &m)
 {
-    py::class_<fwdpp::haploid_genome>(m, "HaploidGenome")
-        .def(py::init<fwdpp::haploid_genome::constructor_tuple>())
+    py::class_<fwdpp::haploid_genome>(m, "HaploidGenome", CLASS_DOCSTRING)
+        .def(py::init<fwdpp::haploid_genome::constructor_tuple>(), INIT_DOCSTRING_1)
         .def_readonly("n", &fwdpp::haploid_genome::n,
                       "Number of occurrences in the population. This has "
                       "little meaning beyond book-keeping used by the C++ "

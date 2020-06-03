@@ -546,12 +546,13 @@ static const auto INIT_DOCSTRING_1 =
 void
 init_DataMatrixIterator(py::module& m)
 {
-    py::class_<DataMatrixIterator>(m, "DataMatrixIterator")
+    py::class_<DataMatrixIterator>(m, "DataMatrixIterator", CLASS_DOCSTRING)
         .def(py::init<const fwdpp::ts::table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool, bool, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("intervals"),
-             py::arg("neutral"), py::arg("selected"), py::arg("fixations") = false)
+             py::arg("neutral"), py::arg("selected"), py::arg("fixations") = false,
+             INIT_DOCSTRING_1)
         .def("__iter__", [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
         .def("__next__", &DataMatrixIterator::next_data_matrix)
         .def_property_readonly("neutral", &DataMatrixIterator::neutral,
