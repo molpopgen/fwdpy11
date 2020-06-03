@@ -59,6 +59,12 @@ if "--disable_lto" in sys.argv:
 else:
     SKIP_LTO = False
 
+if "--cpp17" in sys.argv:
+    USE_CPP17 = True
+    sys.argv.remove("--cpp17")
+else:
+    USE_CPP17 = False
+
 # if '--assert' in sys.argv:
 #     ASSERT_MODE = True
 #     sys.argv.remove('--assert')
@@ -131,6 +137,9 @@ class CMakeBuild(build_ext):
 
         if SKIP_LTO is True:
             cmake_args.append("-DDISABLE_LTO=ON")
+
+        if USE_CPP17 is True:
+            cmake_args.append("-DUSECPP17=ON")
 
         subprocess.check_call(
             ["cmake", ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env
