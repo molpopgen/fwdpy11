@@ -268,7 +268,7 @@ evolve_with_tree_sequences(
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
     ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                      demography, current_demographic_state);
+                                      demography, *current_demographic_state);
     if (current_demographic_state->will_go_globally_extinct() == true)
         {
             std::ostringstream o;
@@ -356,7 +356,7 @@ evolve_with_tree_sequences(
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
-            fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
+            fwdpy11::evolve_generation_ts(rng, pop, genetics, *current_demographic_state,
                                           pop.generation, pop.tables, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
@@ -372,7 +372,7 @@ evolve_with_tree_sequences(
             pop.diploids.swap(offspring);
             ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
                                                       offspring_metadata, demography,
-                                                      current_demographic_state);
+                                                      *current_demographic_state);
             // NOTE: the two swaps of the metadata ensure
             // that the update loop below passes the correct
             // metadata on, and that we then have the
@@ -393,7 +393,7 @@ evolve_with_tree_sequences(
             pop.diploid_metadata.swap(offspring_metadata);
 
             ddemog::finalize_demographic_state(rng, pop.generation, pop.diploid_metadata,
-                                               demography, current_demographic_state);
+                                               demography, *current_demographic_state);
 
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
             if (current_demographic_state->will_go_globally_extinct() == true)
@@ -550,7 +550,7 @@ evolve_with_tree_sequences(
                              remove_extinct_mutations_at_finish,
                              last_preserved_generation, last_preserved_generation_counts,
                              pop);
-    ddemog::save_model_state(current_demographic_state, demography);
+    ddemog::save_model_state(std::move(current_demographic_state), demography);
 }
 
 void

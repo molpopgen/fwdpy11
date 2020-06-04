@@ -371,7 +371,7 @@ namespace fwdpy11
             }
 
             void
-            set_model_state(demographic_model_state_pointer& state)
+            set_model_state(demographic_model_state_pointer state)
             // Not visible to Python
             {
                 model_state = std::move(state);
