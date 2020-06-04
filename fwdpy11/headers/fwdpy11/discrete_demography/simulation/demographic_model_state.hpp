@@ -39,7 +39,7 @@ namespace fwdpy11
         {
           private:
             std::unique_ptr<MigrationMatrix>
-            init_migmatrix(const std::unique_ptr<const MigrationMatrix> &Minput)
+            init_migmatrix(const std::unique_ptr<const MigrationMatrix>& Minput)
             {
                 if (Minput == nullptr)
                     {
@@ -60,8 +60,8 @@ namespace fwdpy11
             // NOTE: demography.update_event_times() needs to have been
             // called first!
             template <typename METADATATYPE>
-            demographic_model_state(const std::vector<METADATATYPE> &metadata,
-                                    DiscreteDemography &demography)
+            demographic_model_state(const std::vector<METADATATYPE>& metadata,
+                                    DiscreteDemography& demography)
                 : next_global_N(0),
                   maxdemes(get_max_number_of_demes()(metadata, demography)),
                   fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
@@ -69,7 +69,6 @@ namespace fwdpy11
                   miglookup(maxdemes, M == nullptr)
             {
             }
-
 
             // This constructor is only used when resetting
             // the state from an event like pickling a DiscreteDemography
@@ -103,6 +102,35 @@ namespace fwdpy11
                 return ttlN_next() == 0;
             }
         };
+
+        template <typename METADATATYPE>
+        inline demographic_model_state_pointer
+        initialize_model_state(std::uint32_t generation,
+                               const std::vector<METADATATYPE>& metadata,
+                               DiscreteDemography& demography)
+        {
+            // "steal" pointer from input
+            auto rv = demography.get_model_state();
+
+            if (rv == nullptr || generation == 0)
+                // If there is no state, then we need to make
+                // one.  If there is a state, but the generation
+                // is zero, then we assume that the demography
+                // has been used for a different simulatin replicate
+                // and thus reset it.
+                {
+                    demography.update_event_times(generation);
+                    rv.reset(new demographic_model_state(metadata, demography));
+                }
+            return rv;
+        }
+
+        inline void
+        save_model_state(demographic_model_state_pointer state,
+                         DiscreteDemography& demography)
+        {
+            demography.set_model_state(std::move(state));
+        }
     } // namespace discrete_demography
 } // namespace fwdpy11
 
