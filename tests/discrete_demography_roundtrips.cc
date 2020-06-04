@@ -57,7 +57,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
     roundtrip_rv_type rv;
     ddemog::update_demography_manager(rng, pop.generation,
                                       pop.diploid_metadata, demography,
-                                      current_demographic_state);
+                                      *current_demographic_state);
     if (current_demographic_state->will_go_globally_extinct() == true)
         {
             std::ostringstream o;
@@ -111,7 +111,7 @@ DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng,
 
             ddemog::update_demography_manager(rng, pop.generation,
                                               pop.diploid_metadata, demography,
-                                              current_demographic_state);
+                                              *current_demographic_state);
             if (current_demographic_state->will_go_globally_extinct() == true)
                 {
                     std::ostringstream o;

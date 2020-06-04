@@ -82,8 +82,7 @@ namespace fwdpy11
     void
     evolve_generation_ts(
         const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
-        // NOTE: could the manager? be const?
-        fwdpy11::discrete_demography::demographic_model_state_pointer&
+        const fwdpy11::discrete_demography::demographic_model_state&
             current_demographic_state,
         const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
         std::vector<fwdpy11::DiploidGenotype>& offspring,
@@ -103,20 +102,20 @@ namespace fwdpy11
         // Generate the offspring
         auto next_index_local = next_index;
         using maxdeme_type = typename std::remove_const<decltype(
-            current_demographic_state->maxdemes)>::type;
-        for (maxdeme_type deme = 0; deme < current_demographic_state->maxdemes; ++deme)
+            current_demographic_state.maxdemes)>::type;
+        for (maxdeme_type deme = 0; deme < current_demographic_state.maxdemes; ++deme)
             {
                 auto next_N_deme
-                    = current_demographic_state->sizes_rates.next_deme_sizes.get()[deme];
+                    = current_demographic_state.sizes_rates.next_deme_sizes.get()[deme];
                 for (decltype(next_N_deme) ind = 0; ind < next_N_deme; ++ind)
                     {
                         // Get the parents
                         auto pdata
                             = fwdpy11::discrete_demography::pick_parents(
-                                rng, deme, current_demographic_state->miglookup,
-                                current_demographic_state->sizes_rates.current_deme_sizes,
-                                current_demographic_state->sizes_rates.selfing_rates,
-                                current_demographic_state->fitnesses);
+                                rng, deme, current_demographic_state.miglookup,
+                                current_demographic_state.sizes_rates.current_deme_sizes,
+                                current_demographic_state.sizes_rates.selfing_rates,
+                                current_demographic_state.fitnesses);
                         fwdpy11::DiploidGenotype dip{
                             std::numeric_limits<std::size_t>::max(),
                             std::numeric_limits<std::size_t>::max()
