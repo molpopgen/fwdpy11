@@ -1,5 +1,7 @@
-#include <pybind11/pybind11.h>
+#pragma GCC visibility push(default)
 #include <fwdpp/ts/exceptions.hpp>
+#pragma GCC visibility pop
+#include <pybind11/pybind11.h>
 
 namespace py = pybind11;
 
@@ -24,12 +26,19 @@ void init_PoissonPoint(py::module &);
 void init_FixedCrossovers(py::module &);
 void init_BinomialInterval(py::module &);
 
-
 void
 initialize_fwdpp_types(py::module &m)
 {
     py::register_exception<fwdpp::ts::tables_error>(m, "TablesError");
     py::register_exception<fwdpp::ts::samples_error>(m, "SamplesError");
+
+
+    // For testing only, mostly to check symbol visibility of 
+    // exception types, which has been an issue on macOS
+    m.def("_throw_TablesError",
+          []() { throw fwdpp::ts::tables_error("this is a TablesError"); });
+    m.def("_throw_SamplesError",
+          []() { throw fwdpp::ts::samples_error("this is a SamplesError"); });
 
     init_mutation_base(m);
     init_HaploidGenome(m);
