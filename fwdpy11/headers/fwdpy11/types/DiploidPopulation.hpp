@@ -70,9 +70,9 @@ namespace fwdpy11
                                 {
                                     auto &md = diploid_metadata[i];
                                     md.deme = deme_label;
-                                    tables.node_table[md.nodes[0]].deme
+                                    tables.nodes[md.nodes[0]].deme
                                         = deme_label;
-                                    tables.node_table[md.nodes[1]].deme
+                                    tables.nodes[md.nodes[1]].deme
                                         = deme_label;
                                 }
                             ++deme_label;

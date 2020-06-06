@@ -8,7 +8,7 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 fwdpp::data_matrix
-generate_data_matrix(const fwdpp::ts::table_collection& tables,
+generate_data_matrix(const fwdpp::ts::std_table_collection& tables,
                      const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                      bool record_neutral, bool record_selected, bool include_fixations, double start,
                      double stop)

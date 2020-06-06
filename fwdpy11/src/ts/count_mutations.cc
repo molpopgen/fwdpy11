@@ -34,7 +34,7 @@ init_count_mutations(py::module& m)
 
     m.def(
         "count_mutations",
-        [](const fwdpp::ts::table_collection& tables,
+        [](const fwdpp::ts::std_table_collection& tables,
            const std::vector<fwdpy11::Mutation>& mutations,
            const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
             std::vector<fwdpp::uint_t> mc(mutations.size(), 0);

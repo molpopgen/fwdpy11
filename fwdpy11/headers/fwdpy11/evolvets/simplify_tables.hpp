@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <vector>
 #include <stdexcept>
-#include <fwdpp/ts/table_collection.hpp>
+#include <fwdpp/ts/std_table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/recycling.hpp>
@@ -40,8 +40,8 @@ namespace fwdpy11
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
     simplify_tables(poptype &pop,
                     std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
-                    fwdpp::ts::table_collection &tables,
-                    fwdpp::ts::table_simplifier &simplifier,
+                    fwdpp::ts::std_table_collection &tables,
+                    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> &simplifier,
                     const bool preserve_selected_fixations,
                     const bool simulating_neutral_variants,
                     const bool suppress_edge_table_indexing)
@@ -115,7 +115,7 @@ namespace fwdpy11
         // no matter what.
 
         auto itr = std::remove_if(
-            tables.mutation_table.begin(), tables.mutation_table.end(),
+            tables.mutations.begin(), tables.mutations.end(),
             [&pop, &mcounts_from_preserved_nodes, preserve_selected_fixations](
                 const fwdpp::ts::mutation_record &mr) {
                 if (pop.mutations[mr.key].neutral == false
@@ -126,8 +126,8 @@ namespace fwdpy11
                 return pop.mcounts[mr.key] == 2 * pop.diploids.size()
                        && mcounts_from_preserved_nodes[mr.key] == 0;
             });
-        auto d = std::distance(itr, end(tables.mutation_table));
-        tables.mutation_table.erase(itr, end(tables.mutation_table));
+        auto d = std::distance(itr, end(tables.mutations));
+        tables.mutations.erase(itr, end(tables.mutations));
         if (d)
             {
                 tables.rebuild_site_table();

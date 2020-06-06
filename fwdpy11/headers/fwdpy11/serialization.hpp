@@ -166,16 +166,16 @@ namespace fwdpy11
                             }
                     }
 
-                pop.tables = fwdpp::ts::io::deserialize_tables(buffer);
+                pop.tables = fwdpp::ts::io::deserialize_tables<fwdpp::ts::std_table_collection>()(buffer);
                 // NOTE: version 0.5.0 added in a site table that previous versions
                 // did not have.  Further, the mutation table entries differed in
                 // previous versions.
-                if (!pop.tables.mutation_table.empty() && pop.tables.site_table.empty())
+                if (!pop.tables.mutations.empty() && pop.tables.sites.empty())
                     {
                         fwdpp::ts::io::fix_mutation_table_repopulate_site_table(
                             pop.tables, pop.mutations);
                     }
-                if (version < 4 && !pop.tables.edge_table.empty())
+                if (version < 4 && !pop.tables.edges.empty())
                     {
                         std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);

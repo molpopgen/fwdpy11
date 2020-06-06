@@ -13,7 +13,7 @@
 namespace py = pybind11;
 
 // TODO put this in a header in case anyone else finds it useful?
-std::tuple<fwdpp::ts::node_vector, fwdpp::ts::edge_vector, int, double>
+std::tuple<fwdpp::ts::std_table_collection::node_table, fwdpp::ts::std_table_collection::edge_table, int, double>
 convert_tables_from_tskit(py::object ts)
 {
     py::object tstables = ts.attr("tables");
@@ -83,8 +83,8 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
         }
 
     fwdpy11::DiploidPopulation pop(twoN / 2, l);
-    pop.tables.node_table.swap(nodes);
-    pop.tables.edge_table.swap(edges);
+    pop.tables.nodes.swap(nodes);
+    pop.tables.edges.swap(edges);
     // NOTE: this may be an issue when we allow variable survival probabilitites!
     pop.tables.update_offset();
     if (!pop.tables.edges_are_sorted())
@@ -101,15 +101,15 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
         {
             pop.diploid_metadata[i].nodes[0] = 2 * i;
             pop.diploid_metadata[i].nodes[1] = 2 * i + 1;
-            if (pop.tables.node_table[2*i].deme 
-                != pop.tables.node_table[2*i+1].deme)
+            if (pop.tables.nodes[2*i].deme 
+                != pop.tables.nodes[2*i+1].deme)
                 {
                     throw std::invalid_argument(
                         "inconsistent deme fields for nodes in the same "
                         "individual");
                 }
             pop.diploid_metadata[i].deme
-                = pop.tables.node_table[2*i].deme;
+                = pop.tables.nodes[2*i].deme;
         }
     return pop;
 }

@@ -70,7 +70,7 @@ simplification(
     bool suppress_edge_table_indexing,
     bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
-    fwdpp::ts::table_simplifier &simplifier, fwdpy11::DiploidPopulation &pop)
+    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> &simplifier, fwdpy11::DiploidPopulation &pop)
 {
     auto simplification_rv = fwdpy11::simplify_tables(
         pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
@@ -109,13 +109,13 @@ final_population_cleanup(
     if (!preserve_selected_fixations)
         {
             auto itr = std::remove_if(
-                pop.tables.mutation_table.begin(), pop.tables.mutation_table.end(),
+                pop.tables.mutations.begin(), pop.tables.mutations.end(),
                 [&pop](const fwdpp::ts::mutation_record &mr) {
                     return pop.mcounts[mr.key] == 2 * pop.diploids.size()
                            && pop.mcounts_from_preserved_nodes[mr.key] == 0;
                 });
-            auto d = std::distance(itr, end(pop.tables.mutation_table));
-            pop.tables.mutation_table.erase(itr, end(pop.tables.mutation_table));
+            auto d = std::distance(itr, end(pop.tables.mutations));
+            pop.tables.mutations.erase(itr, end(pop.tables.mutations));
             if (d)
                 {
                     pop.tables.rebuild_site_table();
@@ -200,7 +200,7 @@ evolve_with_tree_sequences(
         {
             throw std::invalid_argument("simulation length must be > 0");
         }
-    if (pop.tables.node_table.empty())
+    if (pop.tables.nodes.empty())
         {
             throw std::invalid_argument("node table is not initialized");
         }
@@ -282,11 +282,11 @@ evolve_with_tree_sequences(
             // containing neutral variants not in haploid_genome objects.
             // To correctly handle this case, we build the recycling bin
             // from any elements in pop.mutations not in the mutation table.
-            if (!pop.tables.node_table.empty())
+            if (!pop.tables.nodes.empty())
                 {
                     std::vector<std::size_t> indexes(pop.mutations.size());
                     std::iota(begin(indexes), end(indexes), 0);
-                    for (auto &m : pop.tables.mutation_table)
+                    for (auto &m : pop.tables.mutations)
                         {
                             indexes[m.key] = std::numeric_limits<std::size_t>::max();
                         }
@@ -310,9 +310,9 @@ evolve_with_tree_sequences(
                 }
         }
 
-    fwdpp::ts::TS_NODE_INT next_index = pop.tables.node_table.size();
+    fwdpp::ts::TS_NODE_INT next_index = pop.tables.nodes.size();
     bool simplified = false;
-    fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
+    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
@@ -326,7 +326,7 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument(
                         "cannot preserve first generation when pop.generation != 0");
                 }
-            if (pop.tables.edge_table.empty() == false)
+            if (pop.tables.edges.empty() == false)
                 {
                     throw std::invalid_argument("cannot preserve first generation when "
                                                 "the edge table is not empty");

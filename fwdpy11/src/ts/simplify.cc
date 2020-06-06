@@ -40,7 +40,7 @@ simplify(const fwdpy11::Population& pop,
     // NOTE: If the user wants to keep ancient samples,
     // they must pass them in to the samples list
     t.preserved_nodes.clear();
-    fwdpp::ts::table_simplifier simplifier(pop.tables.genome_length());
+    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
     auto rv = simplifier.simplify(t, samples);
     t.build_indexes();
     return py::make_tuple(std::move(t), fwdpy11::make_1d_array_with_capsule(
@@ -92,11 +92,11 @@ init_simplify_functions(py::module& m)
 
     m.def(
         "simplify_tables",
-        [](const fwdpp::ts::table_collection& tables,
+        [](const fwdpp::ts::std_table_collection& tables,
            const std::vector<fwdpp::ts::TS_NODE_INT>& samples) -> py::tuple {
             auto t(tables);
             t.preserved_nodes.clear();
-            fwdpp::ts::table_simplifier simplifier(tables.genome_length());
+            fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
             auto rv = simplifier.simplify(t, samples);
             t.build_indexes();
             return py::make_tuple(std::move(t),fwdpy11::make_1d_array_with_capsule(std::move(rv.first)));
