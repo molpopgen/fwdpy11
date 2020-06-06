@@ -11,7 +11,7 @@
 #include <fwdpp/poptypes/popbase.hpp>
 #include <fwdpp/sampling_functions.hpp>
 #include <fwdpp/data_matrix.hpp>
-#include <fwdpp/ts/table_collection.hpp>
+#include <fwdpp/ts/std_table_collection.hpp>
 #include "../rng.hpp"
 #include "Mutation.hpp"
 
@@ -26,7 +26,7 @@ namespace fwdpy11
     {
       private:
 
-        static fwdpp::ts::table_collection
+        static fwdpp::ts::std_table_collection
         init_tables(const fwdpp::uint_t N, const double L)
         // Default initialization of tables.
         // We ensure that there are 2N nodes in pop zero
@@ -34,9 +34,9 @@ namespace fwdpy11
         {
             if (L == std::numeric_limits<double>::max())
                 {
-                    return fwdpp::ts::table_collection(L);
+                    return fwdpp::ts::std_table_collection(L);
                 }
-            return fwdpp::ts::table_collection(2 * N, 0, 0, L);
+            return fwdpp::ts::std_table_collection(2 * N, 0, 0, L);
         }
 
         bool
@@ -60,7 +60,7 @@ namespace fwdpy11
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
-        fwdpp::ts::table_collection tables;
+        fwdpp::ts::std_table_collection tables;
         std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes, preserved_sample_nodes;
 
         // These track genetic values for the individuals differently
@@ -194,7 +194,7 @@ namespace fwdpy11
             this->mut_lookup.clear();
             if (from_tables)
                 {
-                    for (const auto &mr : this->tables.mutation_table)
+                    for (const auto &mr : this->tables.mutations)
                         {
                             if (mr.key >= this->mutations.size())
                                 {
@@ -203,7 +203,7 @@ namespace fwdpy11
                                         "table key out of range");
                                 }
                             this->mut_lookup.emplace(
-                                this->tables.site_table[mr.site].position, mr.key);
+                                this->tables.sites[mr.site].position, mr.key);
                         }
                 }
             else

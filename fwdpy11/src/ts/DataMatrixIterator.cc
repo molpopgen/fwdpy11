@@ -21,8 +21,8 @@ class DataMatrixIterator
 // next interval without having to initiate a new tree_visitor.
 {
   private:
-    using site_table_itr = fwdpp::ts::site_vector::const_iterator;
-    using mut_table_itr = fwdpp::ts::mutation_key_vector::const_iterator;
+    using site_table_itr = fwdpp::ts::std_table_collection::site_table::const_iterator;
+    using mut_table_itr = fwdpp::ts::std_table_collection::mutation_table::const_iterator;
     std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes;
@@ -37,7 +37,7 @@ class DataMatrixIterator
     bool matrix_requires_clearing;
 
     std::unique_ptr<fwdpp::ts::tree_visitor>
-    initialize_current_tree(const fwdpp::ts::table_collection& tables,
+    initialize_current_tree(const fwdpp::ts::std_table_collection& tables,
                             const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
     {
         std::unique_ptr<fwdpp::ts::tree_visitor> rv(new fwdpp::ts::tree_visitor(
@@ -98,10 +98,10 @@ class DataMatrixIterator
     }
 
     std::unordered_map<std::size_t, double>
-    set_positions(const fwdpp::ts::table_collection& tables)
+    set_positions(const fwdpp::ts::std_table_collection& tables)
     {
         std::unordered_map<std::size_t, double> rv;
-        for (auto& m : tables.mutation_table)
+        for (auto& m : tables.mutations)
             {
                 if (rv.find(m.key) != end(rv))
                     {
@@ -109,11 +109,11 @@ class DataMatrixIterator
                             "mutation key present more than once in "
                             "MutationTable");
                     }
-                if (m.site >= tables.site_table.size())
+                if (m.site >= tables.sites.size())
                     {
                         throw fwdpp::ts::tables_error("invalid site id");
                     }
-                rv[m.key] = tables.site_table[m.site].position;
+                rv[m.key] = tables.sites[m.site].position;
             }
         return rv;
     }
@@ -396,7 +396,7 @@ class DataMatrixIterator
     }
 
   public:
-    DataMatrixIterator(const fwdpp::ts::table_collection& tables,
+    DataMatrixIterator(const fwdpp::ts::std_table_collection& tables,
                        const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                        const std::vector<std::pair<double, double>>& intervals,
                        bool neutral, bool selected, bool fixations)
@@ -404,9 +404,9 @@ class DataMatrixIterator
           position_ranges(init_intervals(intervals)), genotypes(samples.size(), 0),
           mutation_positions(set_positions(tables)),
           dmatrix(new fwdpp::data_matrix(samples.size())),
-          sbeg(begin(tables.site_table)), send(end(tables.site_table)),
-          scurrent(init_trees_and_sites()), mbeg(begin(tables.mutation_table)),
-          mend(end(tables.mutation_table)), mcurrent(begin(tables.mutation_table)),
+          sbeg(begin(tables.sites)), send(end(tables.sites)),
+          scurrent(init_trees_and_sites()), mbeg(begin(tables.mutations)),
+          mend(end(tables.mutations)), mcurrent(begin(tables.mutations)),
           current_range(0), include_neutral_variants(neutral),
           include_selected_variants(selected), include_fixations(fixations),
           matrix_requires_clearing(false)
@@ -547,7 +547,7 @@ void
 init_DataMatrixIterator(py::module& m)
 {
     py::class_<DataMatrixIterator>(m, "DataMatrixIterator", CLASS_DOCSTRING)
-        .def(py::init<const fwdpp::ts::table_collection&,
+        .def(py::init<const fwdpp::ts::std_table_collection&,
                       const std::vector<fwdpp::ts::TS_NODE_INT>&,
                       const std::vector<std::pair<double, double>>&, bool, bool, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("intervals"),

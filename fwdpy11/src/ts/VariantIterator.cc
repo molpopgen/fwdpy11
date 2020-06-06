@@ -3,6 +3,7 @@
 #include <pybind11/stl.h>
 #include <fwdpy11/types/Population.hpp>
 #include <fwdpy11/numpy/array.hpp>
+#include <fwdpp/ts/std_table_collection.hpp>
 #include <fwdpp/ts/site_visitor.hpp>
 #include <fwdpp/ts/marginal_tree_functions/samples.hpp>
 
@@ -11,8 +12,8 @@ namespace py = pybind11;
 class VariantIterator
 {
   private:
-    using site_table_itr = fwdpp::ts::site_vector::const_iterator;
-    fwdpp::ts::site_visitor sv;
+    using site_table_itr = fwdpp::ts::std_table_collection::site_table::const_iterator;
+    fwdpp::ts::site_visitor<fwdpp::ts::std_table_collection> sv;
     site_table_itr scurrent, send;
     std::vector<std::int8_t> genotype_data;
     bool include_neutral, include_selected;
@@ -23,13 +24,13 @@ class VariantIterator
   public:
     py::array_t<std::int8_t> genotypes;
     double current_position;
-    VariantIterator(const fwdpp::ts::table_collection& tc,
+    VariantIterator(const fwdpp::ts::std_table_collection& tc,
                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                     const double beg, const double end,
                     const bool include_neutral_variant,
                     const bool include_selected_variants)
-        : sv(tc, samples), scurrent(begin(tc.site_table)),
-          send(std::end(tc.site_table)), genotype_data(samples.size(), 0),
+        : sv(tc, samples), scurrent(begin(tc.sites)),
+          send(std::end(tc.sites)), genotype_data(samples.size(), 0),
           include_neutral(include_neutral_variant),
           include_selected(include_selected_variants), from(beg), to(end),
           convert(false), mutation_records{},
@@ -135,7 +136,7 @@ init_variant_iterator(py::module& m)
     py::class_<VariantIterator>(
         m, "VariantIterator",
         "An iterable class for traversing genotypes in a tree sequence.")
-        .def(py::init([](const fwdpp::ts::table_collection& tables,
+        .def(py::init([](const fwdpp::ts::std_table_collection& tables,
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          double begin, double end,
                          bool include_neutral_variants,

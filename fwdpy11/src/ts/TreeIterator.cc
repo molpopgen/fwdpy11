@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
+#include <fwdpp/ts/std_table_collection.hpp>
 #include <fwdpp/ts/tree_visitor.hpp>
 #include <fwdpp/ts/marginal_tree.hpp>
 #include <fwdpp/ts/marginal_tree_functions/roots.hpp>
@@ -10,9 +11,9 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::edge_table);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::node_table);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::mutation_table);
 
 class tree_visitor_wrapper
 {
@@ -43,9 +44,9 @@ class tree_visitor_wrapper
     // bad things from happening in the
     // calling environment
     py::object tables_;
-    fwdpp::ts::site_vector::const_iterator first_site, end_of_sites,
+    fwdpp::ts::std_table_collection::site_table::const_iterator first_site, end_of_sites,
         current_site;
-    fwdpp::ts::mutation_key_vector::const_iterator first_mutation,
+    fwdpp::ts::std_table_collection::mutation_table::const_iterator first_mutation,
         end_of_mutations, current_mutation;
     bool update_samples;
     const double from, until;
@@ -57,23 +58,23 @@ class tree_visitor_wrapper
                          const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
                          bool update_samples_below, double start, double stop)
         : tables_(tables),
-          first_site(tables_.cast<const fwdpp::ts::table_collection&>()
-                         .site_table.begin()),
-          end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
-                           .site_table.end()),
+          first_site(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                         .sites.begin()),
+          end_of_sites(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                           .sites.end()),
           current_site(first_site),
-          first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
-                             .mutation_table.begin()),
-          end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
-                               .mutation_table.end()),
+          first_mutation(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                             .mutations.begin()),
+          end_of_mutations(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                               .mutations.end()),
           current_mutation(first_mutation),
           update_samples(update_samples_below), from(start), until(stop),
-          visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
+          visitor(tables_.cast<const fwdpp::ts::std_table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
     {
         validate_from_until(
-            tables_.cast<fwdpp::ts::table_collection&>().genome_length());
+            tables_.cast<fwdpp::ts::std_table_collection&>().genome_length());
     }
 
     tree_visitor_wrapper(
@@ -81,23 +82,23 @@ class tree_visitor_wrapper
         const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
         bool update_samples_below, double start, double stop)
         : tables_(tables),
-          first_site(tables_.cast<const fwdpp::ts::table_collection&>()
-                         .site_table.begin()),
-          end_of_sites(tables_.cast<const fwdpp::ts::table_collection&>()
-                           .site_table.end()),
+          first_site(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                         .sites.begin()),
+          end_of_sites(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                           .sites.end()),
           current_site(first_site),
-          first_mutation(tables_.cast<const fwdpp::ts::table_collection&>()
-                             .mutation_table.begin()),
-          end_of_mutations(tables_.cast<const fwdpp::ts::table_collection&>()
-                               .mutation_table.end()),
+          first_mutation(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                             .mutations.begin()),
+          end_of_mutations(tables_.cast<const fwdpp::ts::std_table_collection&>()
+                               .mutations.end()),
           current_mutation(first_mutation),
           update_samples(update_samples_below), from(start), until(stop),
-          visitor(tables_.cast<const fwdpp::ts::table_collection&>(), samples,
+          visitor(tables_.cast<const fwdpp::ts::std_table_collection&>(), samples,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
     {
         validate_from_until(
-            tables_.cast<fwdpp::ts::table_collection&>().genome_length());
+            tables_.cast<fwdpp::ts::std_table_collection&>().genome_length());
     }
 
     inline bool
@@ -234,8 +235,8 @@ class tree_visitor_wrapper
         return tables_;
     }
 
-    std::pair<fwdpp::ts::site_vector::const_iterator,
-              fwdpp::ts::site_vector::const_iterator>
+    std::pair<fwdpp::ts::std_table_collection::site_table::const_iterator,
+              fwdpp::ts::std_table_collection::site_table::const_iterator>
     get_sites_on_current_tree()
     {
         double pos = std::min(visitor.tree().right, until);
@@ -266,8 +267,8 @@ class tree_visitor_wrapper
         return std::make_pair(current_site, end_of_range);
     }
 
-    std::pair<fwdpp::ts::mutation_key_vector::const_iterator,
-              fwdpp::ts::mutation_key_vector::const_iterator>
+    std::pair<fwdpp::ts::std_table_collection::mutation_table::const_iterator,
+              fwdpp::ts::std_table_collection::mutation_table::const_iterator>
     get_mutations_on_current_tree()
     {
         double pos = std::min(visitor.tree().right, until);
@@ -371,7 +372,7 @@ init_tree_iterator(py::module& m)
         .def(
             "total_time",
             [](const tree_visitor_wrapper& self,
-               const fwdpp::ts::node_vector& nodes) {
+               const fwdpp::ts::std_table_collection::node_table& nodes) {
                 const auto& m = self.visitor.tree();
                 if (m.parents.size() != nodes.size())
                     {

@@ -250,24 +250,24 @@ init_DiploidPopulation(py::module& m)
                     {
                         dump(md, f);
                     }
-                dump(py::make_tuple(self.tables.node_table.size(),
-                                    self.tables.edge_table.size(),
-                                    self.tables.mutation_table.size(),
-                                    self.tables.site_table.size()),
+                dump(py::make_tuple(self.tables.nodes.size(),
+                                    self.tables.edges.size(),
+                                    self.tables.mutations.size(),
+                                    self.tables.sites.size()),
                      f);
-                for (auto& n : self.tables.node_table)
+                for (auto& n : self.tables.nodes)
                     {
                         dump(n, f);
                     }
-                for (auto& e : self.tables.edge_table)
+                for (auto& e : self.tables.edges)
                     {
                         dump(e, f);
                     }
-                for (auto& m : self.tables.mutation_table)
+                for (auto& m : self.tables.mutations)
                     {
                         dump(m, f);
                     }
-                for (auto& s : self.tables.site_table)
+                for (auto& s : self.tables.sites)
                     {
                         dump(s, f);
                     }
@@ -358,31 +358,31 @@ init_DiploidPopulation(py::module& m)
                 py::tuple table_data = load(f);
                 auto table_len = table_data[0].cast<std::size_t>();
                 rv.tables.clear();
-                rv.tables.node_table.reserve(table_len);
+                rv.tables.nodes.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.node_table.push_back(
+                        rv.tables.nodes.push_back(
                             load(f).cast<fwdpp::ts::node>());
                     }
                 table_len = table_data[1].cast<std::size_t>();
-                rv.tables.edge_table.reserve(table_len);
+                rv.tables.edges.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.edge_table.push_back(
+                        rv.tables.edges.push_back(
                             load(f).cast<fwdpp::ts::edge>());
                     }
                 table_len = table_data[2].cast<std::size_t>();
-                rv.tables.mutation_table.reserve(table_len);
+                rv.tables.mutations.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.mutation_table.push_back(
+                        rv.tables.mutations.push_back(
                             load(f).cast<fwdpp::ts::mutation_record>());
                     }
                 table_len = table_data[3].cast<std::size_t>();
-                rv.tables.site_table.reserve(table_len);
+                rv.tables.sites.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.site_table.push_back(
+                        rv.tables.sites.push_back(
                             load(f).cast<fwdpp::ts::site>());
                     }
 

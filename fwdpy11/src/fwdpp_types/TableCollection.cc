@@ -1,4 +1,4 @@
-#include <fwdpp/ts/table_collection.hpp>
+#include <fwdpp/ts/std_table_collection.hpp>
 #include <fwdpy11/util/convert_lists.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
@@ -7,10 +7,10 @@
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::edge_vector);
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::node_vector);
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::mutation_key_vector);
-PYBIND11_MAKE_OPAQUE(fwdpp::ts::site_vector);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::edge_table);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::node_table);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::mutation_table);
+PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::site_table);
 
 void
 init_ts_TableCollection(py::module& m)
@@ -20,60 +20,60 @@ init_ts_TableCollection(py::module& m)
     // TODO: work out conversion to msprime format
     // TODO: allow preserved_nodes to be cleared
     // TODO: allow access to the "right" member functions
-    py::class_<fwdpp::ts::table_collection>(
+    py::class_<fwdpp::ts::std_table_collection>(
         m, "TableCollection",
         "A table collection representing a succinct tree sequence.")
         .def_property_readonly(
-            "L", &fwdpp::ts::table_collection::genome_length, "Genome length")
-        .def_readonly("edges", &fwdpp::ts::table_collection::edge_table,
+            "L", &fwdpp::ts::std_table_collection::genome_length, "Genome length")
+        .def_readonly("edges", &fwdpp::ts::std_table_collection::edges,
                       "The :class:`fwdpy11.EdgeTable`.")
-        .def_readonly("nodes", &fwdpp::ts::table_collection::node_table,
+        .def_readonly("nodes", &fwdpp::ts::std_table_collection::nodes,
                       "The :class:`fwdpy11.NodeTable`.")
         .def_readonly("mutations",
-                      &fwdpp::ts::table_collection::mutation_table,
+                      &fwdpp::ts::std_table_collection::mutations,
                       "The :class:`fwdpy11.MutationTable`.")
         .def_readonly("sites",
-                      &fwdpp::ts::table_collection::site_table,
+                      &fwdpp::ts::std_table_collection::sites,
                       "The :class:`fwdpy11.SiteTable`.")
-        .def_readonly("input_left", &fwdpp::ts::table_collection::input_left)
+        .def_readonly("input_left", &fwdpp::ts::std_table_collection::input_left)
         .def_readonly("output_right",
-                      &fwdpp::ts::table_collection::output_right)
+                      &fwdpp::ts::std_table_collection::output_right)
         .def_readonly("preserved_nodes",
-                      &fwdpp::ts::table_collection::preserved_nodes,
+                      &fwdpp::ts::std_table_collection::preserved_nodes,
                       "List of nodes corresponding to ancient samples.")
         .def_property_readonly("genome_length",
-                               &fwdpp::ts::table_collection::genome_length,
+                               &fwdpp::ts::std_table_collection::genome_length,
                                "Return the genome/sequence length.")
         .def("__eq__",
-             [](const fwdpp::ts::table_collection& lhs,
-                const fwdpp::ts::table_collection& rhs) { return lhs == rhs; })
+             [](const fwdpp::ts::std_table_collection& lhs,
+                const fwdpp::ts::std_table_collection& rhs) { return lhs == rhs; })
         .def(py::pickle(
-            [](const fwdpp::ts::table_collection& tables) {
+            [](const fwdpp::ts::std_table_collection& tables) {
                 return py::make_tuple(
                     tables.genome_length(),
-                    fwdpy11::vector_to_list(tables.node_table),
-                    fwdpy11::vector_to_list(tables.edge_table),
-                    fwdpy11::vector_to_list(tables.mutation_table),
-                    fwdpy11::vector_to_list(tables.site_table),
+                    fwdpy11::vector_to_list(tables.nodes),
+                    fwdpy11::vector_to_list(tables.edges),
+                    fwdpy11::vector_to_list(tables.mutations),
+                    fwdpy11::vector_to_list(tables.sites),
                     fwdpy11::vector_to_list(tables.preserved_nodes));
             },
             [](py::tuple t) {
                 auto length = t[0].cast<double>();
-                fwdpp::ts::table_collection tables(length);
-                tables.node_table
-                    = fwdpy11::list_to_vector<fwdpp::ts::node_vector>(
+                fwdpp::ts::std_table_collection tables(length);
+                tables.nodes
+                    = fwdpy11::list_to_vector<fwdpp::ts::std_table_collection::node_table>(
                         t[1].cast<py::list>());
-                tables.edge_table
-                    = fwdpy11::list_to_vector<fwdpp::ts::edge_vector>(
+                tables.edges
+                    = fwdpy11::list_to_vector<fwdpp::ts::std_table_collection::edge_table>(
                         t[2].cast<py::list>());
-                tables.mutation_table
-                    = fwdpy11::list_to_vector<fwdpp::ts::mutation_key_vector>(
+                tables.mutations
+                    = fwdpy11::list_to_vector<fwdpp::ts::std_table_collection::mutation_table>(
                         t[3].cast<py::list>());
-                tables.site_table
-                    = fwdpy11::list_to_vector<fwdpp::ts::site_vector>(
+                tables.sites
+                    = fwdpy11::list_to_vector<fwdpp::ts::std_table_collection::site_table>(
                         t[4].cast<py::list>());
                 tables.preserved_nodes = fwdpy11::list_to_vector<decltype(
-                    fwdpp::ts::table_collection::preserved_nodes)>(
+                    fwdpp::ts::std_table_collection::preserved_nodes)>(
                     t[5].cast<py::list>());
                 tables.build_indexes();
                 return tables;

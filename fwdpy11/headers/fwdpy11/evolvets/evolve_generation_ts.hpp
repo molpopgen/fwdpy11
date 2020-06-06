@@ -84,7 +84,7 @@ namespace fwdpy11
         const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
         const fwdpy11::discrete_demography::demographic_model_state&
             current_demographic_state,
-        const fwdpp::uint_t generation, fwdpp::ts::table_collection& tables,
+        const fwdpp::uint_t generation, fwdpp::ts::std_table_collection& tables,
         std::vector<fwdpy11::DiploidGenotype>& offspring,
         std::vector<fwdpy11::DiploidMetadata>& offspring_metadata,
         std::int32_t next_index)
