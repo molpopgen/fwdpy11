@@ -103,9 +103,7 @@ Finally, we plot our allele frequencies over time:
         x += n[1]
         plt.plot(x, g.daf)
 
-.. ipython:: python
-
-   plt.xlabel("Time (generation)");
-   plt.ylabel("Mutation frequency");
-   @savefig efficient_timeseries_example.png width=6in
-   plt.tight_layout();
+    plt.xlabel("Time (generation)");
+    plt.ylabel("Mutation frequency");
+    @savefig efficient_timeseries_example.png width=6in
+    plt.tight_layout();
