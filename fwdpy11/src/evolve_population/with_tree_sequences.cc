@@ -27,6 +27,8 @@
 #include <stdexcept>
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
+#include <fwdpp/ts/simplify_tables.hpp>
+#include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
@@ -64,16 +66,22 @@ apply_treseq_resetting_of_ancient_samples(
         }
 }
 
+template<typename SimplificationState>
 std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
 simplification(
     bool preserve_selected_fixations, bool simulating_neutral_variants,
     bool suppress_edge_table_indexing,
     bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
-    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> &simplifier, fwdpy11::DiploidPopulation &pop)
+    SimplificationState &simplifier_state, 
+    fwdpp::ts::edge_buffer & new_edge_buffer,
+    std::vector<fwdpp::ts::TS_NODE_INT> & alive_at_last_simplification,
+    fwdpy11::DiploidPopulation &pop)
 {
     auto simplification_rv = fwdpy11::simplify_tables(
-        pop, pop.mcounts_from_preserved_nodes, pop.tables, simplifier,
+        pop, pop.mcounts_from_preserved_nodes,
+        alive_at_last_simplification,
+        pop.tables, simplifier_state, new_edge_buffer,
         preserve_selected_fixations, simulating_neutral_variants,
         suppress_edge_table_indexing);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
@@ -83,6 +91,13 @@ simplification(
         }
     remap_metadata(pop.ancient_sample_metadata, simplification_rv.first);
     remap_metadata(pop.diploid_metadata, simplification_rv.first);
+    alive_at_last_simplification.clear();
+    for(auto & md : pop.diploid_metadata)
+    {
+        alive_at_last_simplification.push_back(md.nodes[0]);
+        alive_at_last_simplification.push_back(md.nodes[1]); 
+    }
+
     if (reset_treeseqs_to_alive_nodes_after_simplification == true)
         {
             apply_treseq_resetting_of_ancient_samples(post_simplification_recorder, pop);
@@ -312,13 +327,15 @@ evolve_with_tree_sequences(
 
     fwdpp::ts::TS_NODE_INT next_index = pop.tables.nodes.size();
     bool simplified = false;
-    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
+    auto simplifier_state = fwdpp::ts::make_simplifier_state(pop.tables);
+    fwdpp::ts::edge_buffer new_edge_buffer{};
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
         simplification_rv;
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
     decltype(pop.mcounts) last_preserved_generation_counts;
+    pop.fill_alive_nodes();
     if (preserve_first_generation)
         {
             if (pop.generation != 0)
@@ -331,7 +348,6 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument("cannot preserve first generation when "
                                                 "the edge table is not empty");
                 }
-            pop.fill_alive_nodes();
             pop.tables.preserved_nodes.insert(end(pop.tables.preserved_nodes),
                                               begin(pop.alive_nodes),
                                               end(pop.alive_nodes));
@@ -353,11 +369,13 @@ evolve_with_tree_sequences(
                                    last_preserved_generation_counts, pop);
         }
 
+    std::vector<fwdpp::ts::TS_NODE_INT> alive_at_last_simplification(pop.alive_nodes);
+
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, *current_demographic_state,
-                                          pop.generation, pop.tables, offspring,
+                                          pop.generation, pop.tables, new_edge_buffer, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
@@ -402,7 +420,8 @@ evolve_with_tree_sequences(
                         preserve_selected_fixations, simulating_neutral_variants,
                         suppress_edge_table_indexing,
                         reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier, pop);
+                        post_simplification_recorder, simplifier_state, new_edge_buffer,
+                        alive_at_last_simplification, pop);
                     final_population_cleanup(
                         suppress_edge_table_indexing, preserve_selected_fixations,
                         remove_extinct_mutations_at_finish, last_preserved_generation,
@@ -418,7 +437,8 @@ evolve_with_tree_sequences(
                         preserve_selected_fixations, simulating_neutral_variants,
                         suppress_edge_table_indexing,
                         reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier, pop);
+                        post_simplification_recorder, simplifier_state, new_edge_buffer,
+                        alive_at_last_simplification, pop);
                     simplified = true;
                 }
             else
@@ -544,7 +564,8 @@ evolve_with_tree_sequences(
                 preserve_selected_fixations, simulating_neutral_variants,
                 suppress_edge_table_indexing,
                 reset_treeseqs_to_alive_nodes_after_simplification,
-                post_simplification_recorder, simplifier, pop);
+                post_simplification_recorder, simplifier_state, new_edge_buffer,
+                alive_at_last_simplification, pop);
         }
     final_population_cleanup(suppress_edge_table_indexing, preserve_selected_fixations,
                              remove_extinct_mutations_at_finish,

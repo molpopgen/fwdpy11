@@ -32,8 +32,8 @@
 #include <fwdpp/mutate_recombine.hpp>
 #include <fwdpp/ts/generate_offspring.hpp>
 #include <fwdpp/ts/table_collection.hpp>
-#include <fwdpp/ts/table_simplifier.hpp>
 #include <fwdpp/ts/recording/diploid_offspring.hpp>
+#include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/recording/mutations.hpp>
 #include <fwdpy11/discrete_demography/simulation.hpp>
 
@@ -87,6 +87,7 @@ namespace fwdpy11
         const fwdpy11::discrete_demography::demographic_model_state&
             current_demographic_state,
         const fwdpp::uint_t generation, fwdpp::ts::std_table_collection& tables,
+        fwdpp::ts::edge_buffer & new_edge_buffer,
         std::vector<fwdpy11::DiploidGenotype>& offspring,
         std::vector<fwdpy11::DiploidMetadata>& offspring_metadata,
         std::int32_t next_index)
@@ -136,14 +137,14 @@ namespace fwdpy11
                         fwdpp::ts::TS_NODE_INT offspring_node_1
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.first.breakpoints, p1id, deme,
-                                generation, tables);
+                                generation, tables, new_edge_buffer);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_1, pop.mutations,
                             offspring_data.first.mutation_keys, tables);
                         fwdpp::ts::TS_NODE_INT offspring_node_2
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.second.breakpoints, p2id, deme,
-                                generation, tables);
+                                generation, tables, new_edge_buffer);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_2, pop.mutations,
                             offspring_data.second.mutation_keys, tables);
