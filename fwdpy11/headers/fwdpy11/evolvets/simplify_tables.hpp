@@ -24,7 +24,8 @@
 #include <vector>
 #include <stdexcept>
 #include <fwdpp/ts/std_table_collection.hpp>
-#include <fwdpp/ts/table_simplifier.hpp>
+#include <fwdpp/ts/recording/edge_buffer.hpp>
+#include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include <fwdpp/ts/remove_fixations_from_gametes.hpp>
@@ -36,20 +37,26 @@ namespace fwdpy11
 
     // TODO allow for fixation recording
     // and simulation of neutral variants
-    template <typename poptype>
+    template <typename poptype, typename SimplificationState>
     std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
     simplify_tables(poptype &pop,
                     std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
+                    std::vector<fwdpp::ts::TS_NODE_INT> & alive_at_last_simplification,
                     fwdpp::ts::std_table_collection &tables,
-                    fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> &simplifier,
+                    SimplificationState & simplifier_state,
+                    fwdpp::ts::edge_buffer & new_edge_buffer,
                     const bool preserve_selected_fixations,
                     const bool simulating_neutral_variants,
                     const bool suppress_edge_table_indexing)
     {
-        tables.sort_tables_for_simplification();
+        // As of 0.8.0, we do not need to sort edges!
+        tables.sort_mutations();
         pop.fill_alive_nodes();
-        auto rv = simplifier.simplify(tables, pop.alive_nodes);
-
+        std::vector<fwdpp::ts::TS_NODE_INT> idmap;
+        std::vector<std::size_t> preserved_nodes;
+        fwdpp::ts::simplify_tables(pop.alive_nodes, alive_at_last_simplification,
+                simplifier_state, pop.tables, new_edge_buffer, idmap, preserved_nodes);
+        auto rv = std::make_pair(std::move(idmap), std::move(preserved_nodes));
         for (auto &s : pop.alive_nodes)
             {
                 s = rv.first[s];
