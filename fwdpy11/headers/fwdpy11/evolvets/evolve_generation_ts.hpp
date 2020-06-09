@@ -33,6 +33,8 @@
 #include <fwdpp/ts/generate_offspring.hpp>
 #include <fwdpp/ts/table_collection.hpp>
 #include <fwdpp/ts/table_simplifier.hpp>
+#include <fwdpp/ts/recording/diploid_offspring.hpp>
+#include <fwdpp/ts/recording/mutations.hpp>
 #include <fwdpy11/discrete_demography/simulation.hpp>
 
 namespace fwdpy11
@@ -132,16 +134,16 @@ namespace fwdpy11
                             pdata.parent2, pop.diploid_metadata,
                             offspring_data.second.swapped);
                         fwdpp::ts::TS_NODE_INT offspring_node_1
-                            = tables.register_diploid_offspring(
+                            = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.first.breakpoints, p1id, deme,
-                                generation);
+                                generation, tables);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_1, pop.mutations,
                             offspring_data.first.mutation_keys, tables);
                         fwdpp::ts::TS_NODE_INT offspring_node_2
-                            = tables.register_diploid_offspring(
+                            = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.second.breakpoints, p2id, deme,
-                                generation);
+                                generation, tables);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_2, pop.mutations,
                             offspring_data.second.mutation_keys, tables);
