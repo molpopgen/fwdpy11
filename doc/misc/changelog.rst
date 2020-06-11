@@ -1,8 +1,75 @@
 Changelog
 ====================================================================================
 
-Major changes are listed below.  Each release likely contains fiddling with back-end code, updates to latest fwdpp
-version, etc.
+Major changes are listed below.  Each release likely contains fiddling with back-end code,
+updates to latest `fwdpp` version, etc.
+
+0.8.0a0
+++++++++++++++++++++++++++++++++++++++++
+
+This is the first alpha release of 0.8.0.
+
+In addition to what is below, this release contains
+a smattering of build system changes, documentation changes,
+etc., that are collected under the 0.8.0 milestone on `Github`.
+
+`API`/`UI` changes:
+
+This release brings Python classes that have been reimplemented using `attrs <https://www.attrs.org>`_.  These changes have a lot of benefits:
+
+* A lot of C++ code got removed (yay!) because we can use `attrs` for the pickling
+  machinery, `__repr__`, etc..
+* We now get *much* nicer `__repr__` for all of the types that get sent into
+  instances of :class:`fwdpy11.ModelParams`.
+
+However, these changes required some simplification to the `__init__` methods,
+which meant some `API` breakage. See the :ref:`upgrade guide <upgrade_path>`
+for details.
+
+This release also removes features deprecated in previous releases. :pr:`482`
+
+Performance improvements:
+
+* Sorting edge tables prior to tree sequence simplification has been replaced 
+  by an efficient buffering algorithm. :pr:`526`.
+
+New demographic models:
+
+* The [Tennessen2012]_ model is added via :func:`fwdpy11.demographic_models.human.tennessen`.
+  :pr:`479`
+
+Improved behavior:
+
+* Improved warnings about demographic events scheduled to happen
+  before the population's current generation. :pr:`495`
+* Built-in demographic models now return instances of 
+  :class:`fwdpy11.demographic_models.DemographicModelDetails`.
+  Such instances can be passed as the `demography` keyword argument
+  to initialize :class:`fwdpy11.ModelParams`.
+  :pr:`509`.
+* The "individual" column of a node table is now populated
+  when exporting to a :class:`tskit.TableCollection`. :pr:`488`
+
+Changes to implementation of Python classes
+
+* :class:`fwdpy11.ModelParams` has been reimplemented
+  using `attrs <https://www.attrs.org>`_. :pr:`484`, :pr:`486`, :pr:`487`.
+* Demographic model types are now implemented using `attrs <https://www.attrs.org>`_ and
+  inherit from the C++ back-end class. :pr:`492`
+* Region types are now implemented using `attrs <https://www.attrs.org>`_ and
+  inherit from the C++ back-end class. :pr:`497`
+* Genetic value types are now implemented using `attrs <https://www.attrs.org>`_ and
+  inherit from the C++ back-end class. :pr:`504`
+* Genetic map unit types are now implemented using `attrs <https://www.attrs.org>`_ and
+  inherit from the C++ back-end class. :pr:`506`
+
+C++ back end changes:
+
+* The default C++ language standard is now C++14. :pr:`517`.
+* Custom exceptions now have default symbol visibility. :pr:`519`.
+* The back-end code for discrete demography got cleaned up. :pr:`521`.
+* The `fwdpp` submodule was updated a few times. 
+  :pr:`489` :pr:`523` :pr:`525`
 
 0.7.1
 ++++++++++++++++++++++++++++++++++++++++

@@ -75,6 +75,7 @@ intersphinx_mapping = {
     "sparse": ("https://sparse.pydata.org/en/latest/", None),
     "tskit": ("https://tskit.readthedocs.io/en/stable", None),
     "msprime": ("https://msprime.readthedocs.io/en/stable", None),
+    "attrs": ("https://www.attrs.org/en/stable", None),
 }
 
 # 'breathe']
