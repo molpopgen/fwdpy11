@@ -15,7 +15,7 @@ init_count_mutations(py::module& m)
     m.def(
         "count_mutations",
         [](const fwdpy11::Population& pop,
-           const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
+           const std::vector<fwdpp::ts::table_index_t>& samples) {
             std::vector<fwdpp::uint_t> mc(pop.mutations.size(), 0);
             fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples, mc);
             return fwdpy11::make_1d_array_with_capsule(std::move(mc));
@@ -36,7 +36,7 @@ init_count_mutations(py::module& m)
         "count_mutations",
         [](const fwdpp::ts::std_table_collection& tables,
            const std::vector<fwdpy11::Mutation>& mutations,
-           const std::vector<fwdpp::ts::TS_NODE_INT>& samples) {
+           const std::vector<fwdpp::ts::table_index_t>& samples) {
             std::vector<fwdpp::uint_t> mc(mutations.size(), 0);
             fwdpp::ts::count_mutations(tables, mutations, samples, mc);
             return fwdpy11::make_1d_array_with_capsule(std::move(mc));

@@ -11,7 +11,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 py::tuple
 simplify(const fwdpy11::Population& pop,
-         const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+         const std::vector<fwdpp::ts::table_index_t>& samples)
 {
     if (pop.tables.genome_length() == std::numeric_limits<double>::max())
         {
@@ -28,8 +28,8 @@ simplify(const fwdpy11::Population& pop,
             throw std::invalid_argument("empty sample list");
         }
     if (std::any_of(samples.begin(), samples.end(),
-                    [&pop](const fwdpp::ts::TS_NODE_INT s) {
-                        return s == fwdpp::ts::TS_NULL_NODE
+                    [&pop](const fwdpp::ts::table_index_t s) {
+                        return s == fwdpp::ts::NULL_INDEX
                                || static_cast<std::size_t>(s)
                                       >= pop.tables.num_nodes();
                     }))
@@ -93,7 +93,7 @@ init_simplify_functions(py::module& m)
     m.def(
         "simplify_tables",
         [](const fwdpp::ts::std_table_collection& tables,
-           const std::vector<fwdpp::ts::TS_NODE_INT>& samples) -> py::tuple {
+           const std::vector<fwdpp::ts::table_index_t>& samples) -> py::tuple {
             auto t(tables);
             t.preserved_nodes.clear();
             fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};

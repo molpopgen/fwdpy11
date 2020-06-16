@@ -9,7 +9,7 @@ PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 fwdpp::data_matrix
 generate_data_matrix(const fwdpp::ts::std_table_collection& tables,
-                     const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                     const std::vector<fwdpp::ts::table_index_t>& samples,
                      bool record_neutral, bool record_selected, bool include_fixations, double start,
                      double stop)
 {
@@ -24,7 +24,7 @@ init_data_matrix_from_tables(py::module& m)
     m.def(
         "make_data_matrix",
         [](const fwdpy11::Population& pop,
-           const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+           const std::vector<fwdpp::ts::table_index_t>& samples,
            const bool record_neutral, const bool record_selected) {
             return fwdpp::ts::generate_data_matrix(
                 pop.tables, samples, record_neutral,

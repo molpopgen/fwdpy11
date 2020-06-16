@@ -8,7 +8,7 @@
 
 void
 remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
-               const std::vector<fwdpp::ts::TS_NODE_INT> &idmap);
+               const std::vector<fwdpp::ts::table_index_t> &idmap);
 void
 coordinate_count_vector_sizes(
     std::size_t nmutations, std::vector<std::uint32_t> &mcounts,

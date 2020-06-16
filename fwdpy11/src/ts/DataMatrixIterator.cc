@@ -38,7 +38,7 @@ class DataMatrixIterator
 
     std::unique_ptr<fwdpp::ts::tree_visitor>
     initialize_current_tree(const fwdpp::ts::std_table_collection& tables,
-                            const std::vector<fwdpp::ts::TS_NODE_INT>& samples)
+                            const std::vector<fwdpp::ts::table_index_t>& samples)
     {
         std::unique_ptr<fwdpp::ts::tree_visitor> rv(new fwdpp::ts::tree_visitor(
             tables, samples, fwdpp::ts::update_samples_list(true)));
@@ -397,7 +397,7 @@ class DataMatrixIterator
 
   public:
     DataMatrixIterator(const fwdpp::ts::std_table_collection& tables,
-                       const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                       const std::vector<fwdpp::ts::table_index_t>& samples,
                        const std::vector<std::pair<double, double>>& intervals,
                        bool neutral, bool selected, bool fixations)
         : current_tree(initialize_current_tree(tables, samples)), next_tree(nullptr),
@@ -548,7 +548,7 @@ init_DataMatrixIterator(py::module& m)
 {
     py::class_<DataMatrixIterator>(m, "DataMatrixIterator", CLASS_DOCSTRING)
         .def(py::init<const fwdpp::ts::std_table_collection&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&,
+                      const std::vector<fwdpp::ts::table_index_t>&,
                       const std::vector<std::pair<double, double>>&, bool, bool, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("intervals"),
              py::arg("neutral"), py::arg("selected"), py::arg("fixations") = false,

@@ -25,7 +25,7 @@
 #include <tuple>
 #include <vector>
 #include <gsl/gsl_matrix.h>
-#include <fwdpp/named_type.hpp>
+#include <fwdpp/util/named_type.hpp>
 
 #include "MassMigration.hpp"
 #include "MigrationMatrix.hpp"

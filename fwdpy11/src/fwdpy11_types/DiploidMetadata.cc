@@ -89,8 +89,8 @@ init_DiploidMetadata(py::module &m)
                 rv.deme = t[6].cast<std::int32_t>();
                 rv.sex = t[7].cast<std::int32_t>();
                 ttuple = t[8].cast<py::tuple>();
-                rv.nodes[0] = ttuple[0].cast<fwdpp::ts::TS_NODE_INT>();
-                rv.nodes[1] = ttuple[1].cast<fwdpp::ts::TS_NODE_INT>();
+                rv.nodes[0] = ttuple[0].cast<fwdpp::ts::table_index_t>();
+                rv.nodes[1] = ttuple[1].cast<fwdpp::ts::table_index_t>();
                 return rv;
             }));
 }

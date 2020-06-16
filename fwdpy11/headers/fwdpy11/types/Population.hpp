@@ -61,7 +61,7 @@ namespace fwdpy11
         fwdpp::uint_t generation;
 
         fwdpp::ts::std_table_collection tables;
-        std::vector<fwdpp::ts::TS_NODE_INT> alive_nodes, preserved_sample_nodes;
+        std::vector<fwdpp::ts::table_index_t> alive_nodes, preserved_sample_nodes;
 
         // These track genetic values for the individuals differently
         // from what diploid_metadata/ancient_sample_metadata do.

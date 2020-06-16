@@ -23,7 +23,7 @@
 #include <pybind11/pybind11.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
-#include <fwdpp/named_type.hpp>
+#include <fwdpp/util/named_type.hpp>
 
 namespace fwdpy11
 {

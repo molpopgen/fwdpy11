@@ -177,7 +177,7 @@ namespace fwdpy11
                     }
                 if (version < 4 && !pop.tables.edges.empty())
                     {
-                        std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N);
+                        std::vector<fwdpp::ts::table_index_t> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);
                         fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
                                                    pop.mcounts,

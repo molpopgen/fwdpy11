@@ -18,9 +18,9 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::mutation_table);
 class tree_visitor_wrapper
 {
   private:
-    inline fwdpp::ts::TS_NODE_INT
-    fetch(const std::vector<fwdpp::ts::TS_NODE_INT>& data,
-          fwdpp::ts::TS_NODE_INT index)
+    inline fwdpp::ts::table_index_t
+    fetch(const std::vector<fwdpp::ts::table_index_t>& data,
+          fwdpp::ts::table_index_t index)
     {
         if (static_cast<std::size_t>(index) >= data.size())
             {
@@ -53,9 +53,9 @@ class tree_visitor_wrapper
 
   public:
     fwdpp::ts::tree_visitor visitor;
-    std::vector<fwdpp::ts::TS_NODE_INT> samples_below_buffer;
+    std::vector<fwdpp::ts::table_index_t> samples_below_buffer;
     tree_visitor_wrapper(py::object tables,
-                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                         const std::vector<fwdpp::ts::table_index_t>& samples,
                          bool update_samples_below, double start, double stop)
         : tables_(tables),
           first_site(tables_.cast<const fwdpp::ts::std_table_collection&>()
@@ -78,8 +78,8 @@ class tree_visitor_wrapper
     }
 
     tree_visitor_wrapper(
-        py::object tables, const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
-        const std::vector<fwdpp::ts::TS_NODE_INT>& preserved_nodes,
+        py::object tables, const std::vector<fwdpp::ts::table_index_t>& samples,
+        const std::vector<fwdpp::ts::table_index_t>& preserved_nodes,
         bool update_samples_below, double start, double stop)
         : tables_(tables),
           first_site(tables_.cast<const fwdpp::ts::std_table_collection&>()
@@ -139,44 +139,44 @@ class tree_visitor_wrapper
         return rv;
     }
 
-    fwdpp::ts::TS_NODE_INT
+    fwdpp::ts::table_index_t
     sample_size() const
     {
         return visitor.tree().sample_size();
     }
 
-    py::array_t<fwdpp::ts::TS_NODE_INT>
+    py::array_t<fwdpp::ts::table_index_t>
     nodes()
     {
-        std::vector<fwdpp::ts::TS_NODE_INT> vnodes(
+        std::vector<fwdpp::ts::table_index_t> vnodes(
             nodes_preorder(visitor.tree()));
         return fwdpy11::make_1d_array_with_capsule(std::move(vnodes));
     }
 
-    py::array_t<fwdpp::ts::TS_NODE_INT>
+    py::array_t<fwdpp::ts::table_index_t>
     samples() const
     {
-        std::vector<fwdpp::ts::TS_NODE_INT> s(
+        std::vector<fwdpp::ts::table_index_t> s(
             visitor.tree().samples_list_begin(),
             visitor.tree().samples_list_end());
         return fwdpy11::make_1d_array_with_capsule(std::move(s));
     }
 
     py::array
-    samples_below(const fwdpp::ts::TS_NODE_INT node, bool sorted)
+    samples_below(const fwdpp::ts::table_index_t node, bool sorted)
     {
         if (!update_samples)
             {
                 throw std::invalid_argument("sample tracking not initialized");
             }
-        if (node == fwdpp::ts::TS_NULL_NODE)
+        if (node == fwdpp::ts::NULL_INDEX)
             {
                 throw std::invalid_argument("invalid node");
             }
         samples_below_buffer.clear();
         fwdpp::ts::process_samples(
             visitor.tree(), fwdpp::ts::convert_sample_index_to_nodes(true),
-            node, [this](fwdpp::ts::TS_NODE_INT s) {
+            node, [this](fwdpp::ts::table_index_t s) {
                 samples_below_buffer.push_back(s);
             });
         if (sorted)
@@ -187,44 +187,44 @@ class tree_visitor_wrapper
         return fwdpy11::make_1d_ndarray_readonly(samples_below_buffer);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    parent(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    parent(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().parents, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    left_sib(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    left_sib(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().left_sib, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    right_sib(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    right_sib(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().right_sib, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    left_child(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    left_child(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().left_child, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    right_child(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    right_child(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().right_child, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    leaf_counts(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    leaf_counts(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().leaf_counts, u);
     }
 
-    fwdpp::ts::TS_NODE_INT
-    preserved_leaf_counts(fwdpp::ts::TS_NODE_INT u)
+    fwdpp::ts::table_index_t
+    preserved_leaf_counts(fwdpp::ts::table_index_t u)
     {
         return fetch(this->visitor.tree().preserved_leaf_counts, u);
     }
@@ -318,13 +318,13 @@ init_tree_iterator(py::module& m)
         
                 Add begin, end options as floats for initializing
             )delim")
-        .def(py::init<py::object, const std::vector<fwdpp::ts::TS_NODE_INT>&,
+        .def(py::init<py::object, const std::vector<fwdpp::ts::table_index_t>&,
                       bool, double, double>(),
              py::arg("tables"), py::arg("samples"),
              py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
-        .def(py::init<py::object, const std::vector<fwdpp::ts::TS_NODE_INT>&,
-                      const std::vector<fwdpp::ts::TS_NODE_INT>&, bool, double,
+        .def(py::init<py::object, const std::vector<fwdpp::ts::table_index_t>&,
+                      const std::vector<fwdpp::ts::table_index_t>&, bool, double,
                       double>(),
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
              py::arg("update_samples") = false, py::arg("begin") = 0.0,
@@ -383,7 +383,7 @@ init_tree_iterator(py::module& m)
                 double tt = 0.0;
                 for (std::size_t i = 0; i < m.parents.size(); ++i)
                     {
-                        if (m.parents[i] != fwdpp::ts::TS_NULL_NODE)
+                        if (m.parents[i] != fwdpp::ts::NULL_INDEX)
                             {
                                 tt += nodes[i].time - nodes[m.parents[i]].time;
                             }

@@ -28,6 +28,7 @@
 #include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
+#include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
@@ -67,7 +68,7 @@ apply_treseq_resetting_of_ancient_samples(
 }
 
 template<typename SimplificationState>
-std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
+std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
 simplification(
     bool preserve_selected_fixations, bool simulating_neutral_variants,
     bool suppress_edge_table_indexing,
@@ -75,7 +76,7 @@ simplification(
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
     SimplificationState &simplifier_state, 
     fwdpp::ts::edge_buffer & new_edge_buffer,
-    std::vector<fwdpp::ts::TS_NODE_INT> & alive_at_last_simplification,
+    std::vector<fwdpp::ts::table_index_t> & alive_at_last_simplification,
     fwdpy11::DiploidPopulation &pop)
 {
     auto simplification_rv = fwdpy11::simplify_tables(
@@ -133,7 +134,7 @@ final_population_cleanup(
             pop.tables.mutations.erase(itr, end(pop.tables.mutations));
             if (d)
                 {
-                    pop.tables.rebuild_site_table();
+                    fwdpp::ts::rebuild_site_table(pop.tables);
                 }
             fwdpp::ts::remove_fixations_from_haploid_genomes(
                 pop.haploid_genomes, pop.mutations, pop.mcounts,
@@ -325,13 +326,13 @@ evolve_with_tree_sequences(
                 }
         }
 
-    fwdpp::ts::TS_NODE_INT next_index = pop.tables.nodes.size();
+    fwdpp::ts::table_index_t next_index = pop.tables.nodes.size();
     bool simplified = false;
     auto simplifier_state = fwdpp::ts::make_simplifier_state(pop.tables);
     fwdpp::ts::edge_buffer new_edge_buffer{};
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
-    std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
+    std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
         simplification_rv;
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
     decltype(pop.mcounts) last_preserved_generation_counts;
@@ -369,7 +370,7 @@ evolve_with_tree_sequences(
                                    last_preserved_generation_counts, pop);
         }
 
-    std::vector<fwdpp::ts::TS_NODE_INT> alive_at_last_simplification(pop.alive_nodes);
+    std::vector<fwdpp::ts::table_index_t> alive_at_last_simplification(pop.alive_nodes);
 
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
@@ -446,7 +447,7 @@ evolve_with_tree_sequences(
                     simplified = false;
                 }
             if (pop.tables.num_nodes()
-                >= std::numeric_limits<fwdpp::ts::TS_NODE_INT>::max() - 1)
+                >= std::numeric_limits<fwdpp::ts::table_index_t>::max() - 1)
                 {
                     throw std::runtime_error("range error for node labels");
                 }
@@ -552,7 +553,7 @@ evolve_with_tree_sequences(
     std::sort(begin(pop.alive_nodes), end(pop.alive_nodes));
     auto itr = std::remove_if(
         begin(pop.tables.preserved_nodes), end(pop.tables.preserved_nodes),
-        [&pop](const fwdpp::ts::TS_NODE_INT l) {
+        [&pop](const fwdpp::ts::table_index_t l) {
             return std::binary_search(begin(pop.alive_nodes), end(pop.alive_nodes), l);
         });
     pop.tables.preserved_nodes.erase(itr, end(pop.tables.preserved_nodes));

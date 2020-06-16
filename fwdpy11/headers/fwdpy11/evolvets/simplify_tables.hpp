@@ -24,6 +24,7 @@
 #include <vector>
 #include <stdexcept>
 #include <fwdpp/ts/std_table_collection.hpp>
+#include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
@@ -38,24 +39,22 @@ namespace fwdpy11
     // TODO allow for fixation recording
     // and simulation of neutral variants
     template <typename poptype, typename SimplificationState>
-    std::pair<std::vector<fwdpp::ts::TS_NODE_INT>, std::vector<std::size_t>>
-    simplify_tables(poptype &pop,
-                    std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
-                    std::vector<fwdpp::ts::TS_NODE_INT> & alive_at_last_simplification,
-                    fwdpp::ts::std_table_collection &tables,
-                    SimplificationState & simplifier_state,
-                    fwdpp::ts::edge_buffer & new_edge_buffer,
-                    const bool preserve_selected_fixations,
-                    const bool simulating_neutral_variants,
-                    const bool suppress_edge_table_indexing)
+    std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
+    simplify_tables(
+        poptype &pop, std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
+        std::vector<fwdpp::ts::table_index_t> &alive_at_last_simplification,
+        fwdpp::ts::std_table_collection &tables, SimplificationState &simplifier_state,
+        fwdpp::ts::edge_buffer &new_edge_buffer, const bool preserve_selected_fixations,
+        const bool simulating_neutral_variants, const bool suppress_edge_table_indexing)
     {
         // As of 0.8.0, we do not need to sort edges!
-        tables.sort_mutations();
+        fwdpp::ts::sort_mutation_table(tables);
         pop.fill_alive_nodes();
-        std::vector<fwdpp::ts::TS_NODE_INT> idmap;
+        std::vector<fwdpp::ts::table_index_t> idmap;
         std::vector<std::size_t> preserved_nodes;
         fwdpp::ts::simplify_tables(pop.alive_nodes, alive_at_last_simplification,
-                simplifier_state, pop.tables, new_edge_buffer, idmap, preserved_nodes);
+                                   fwdpp::ts::simplification_flags{}, simplifier_state,
+                                   pop.tables, new_edge_buffer, idmap, preserved_nodes);
         auto rv = std::make_pair(std::move(idmap), std::move(preserved_nodes));
         for (auto &s : pop.alive_nodes)
             {
@@ -74,18 +73,19 @@ namespace fwdpy11
         // Remove mutations that are simplified out
         // from the population hash table.
         std::vector<int> preserved(pop.mutations.size(), 0);
-        for(auto p : rv.second)
-        {
-            preserved[p]=1;
-        }
-        for(std::size_t p=0; p < preserved.size(); ++p)
-        {
-            if(!preserved[p])
+        for (auto p : rv.second)
             {
-                fwdpp::ts::detail::process_mutation_index(pop.mutations, pop.mut_lookup, p);
+                preserved[p] = 1;
             }
-        }
-                
+        for (std::size_t p = 0; p < preserved.size(); ++p)
+            {
+                if (!preserved[p])
+                    {
+                        fwdpp::ts::detail::process_mutation_index(pop.mutations,
+                                                                  pop.mut_lookup, p);
+                    }
+            }
+
         if (suppress_edge_table_indexing == true)
             {
                 pop.mcounts.resize(pop.mutations.size(), 0);
@@ -95,9 +95,8 @@ namespace fwdpy11
         tables.build_indexes();
         if (pop.tables.preserved_nodes.empty())
             {
-                fwdpp::ts::count_mutations(tables, pop.mutations,
-                                           pop.alive_nodes, pop.mcounts,
-                                           mcounts_from_preserved_nodes);
+                fwdpp::ts::count_mutations(tables, pop.mutations, pop.alive_nodes,
+                                           pop.mcounts, mcounts_from_preserved_nodes);
             }
         else
             {
@@ -123,8 +122,8 @@ namespace fwdpy11
 
         auto itr = std::remove_if(
             tables.mutations.begin(), tables.mutations.end(),
-            [&pop, &mcounts_from_preserved_nodes, preserve_selected_fixations](
-                const fwdpp::ts::mutation_record &mr) {
+            [&pop, &mcounts_from_preserved_nodes,
+             preserve_selected_fixations](const fwdpp::ts::mutation_record &mr) {
                 if (pop.mutations[mr.key].neutral == false
                     && preserve_selected_fixations)
                     {
@@ -137,7 +136,7 @@ namespace fwdpy11
         tables.mutations.erase(itr, end(tables.mutations));
         if (d)
             {
-                tables.rebuild_site_table();
+                fwdpp::ts::rebuild_site_table(tables);
             }
         return rv;
     } // namespace fwdpy11

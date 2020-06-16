@@ -17,7 +17,7 @@ namespace fwdpy11
 
         void
         fill_sample_nodes_from_metadata(
-            std::vector<fwdpp::ts::TS_NODE_INT> &n,
+            std::vector<fwdpp::ts::table_index_t> &n,
             const std::vector<fwdpy11::DiploidMetadata> &metadata)
         {
             n.clear();
