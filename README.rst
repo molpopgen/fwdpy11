@@ -21,13 +21,13 @@ fwdpp_ as its C++ back-end.
 Build status
 -----------------------
 
-Master:
+Main:
 
-.. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=master
+.. image:: https://travis-ci.org/molpopgen/fwdpy11.svg?branch=main
     :target: https://travis-ci.org/molpopgen/fwdpy11
 
-.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/master
+.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/main.svg?style=svg
+    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/main
 
 Development: 
 
@@ -40,7 +40,7 @@ Development:
 Manual
 -----------------------
 
-Latest/master:
+Latest/main:
 
 .. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=latest
 	:target: http://fwdpy11.readthedocs.io/en/latest/?badge=latest
@@ -61,7 +61,7 @@ Python code style:
 Features
 -----------------------
 
-* Picklable population objects
+* Pickle-able population objects
 * Parallel computation via multiprocessing_ or concurrent.futures_.
 * Custom temporal samplers to analyze populations *during* a simulation may be written in pure Python.
 * Flexible interface for simulating models with multiple populations.
