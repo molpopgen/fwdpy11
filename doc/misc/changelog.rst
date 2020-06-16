@@ -4,6 +4,14 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.8.0a1
+++++++++++++++++++++++++++++++++++++++++
+
+Second alpha release of 0.8.0:
+
+* Update the ``fwdpp`` submodule. :pr:`529`
+* Update documentation related to genetic maps. :pr:`530`
+
 0.8.0a0
 ++++++++++++++++++++++++++++++++++++++++
 
