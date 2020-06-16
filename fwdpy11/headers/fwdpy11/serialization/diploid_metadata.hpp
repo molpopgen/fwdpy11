@@ -64,7 +64,7 @@ namespace fwdpy11
         struct ancient_sample_record
         {
             double time;
-            fwdpp::ts::TS_NODE_INT n1, n2;
+            fwdpp::ts::table_index_t n1, n2;
         };
         template <typename streamtype>
         inline void

@@ -8,6 +8,7 @@
 #include <fwdpp/ts/definitions.hpp>
 #include <fwdpp/ts/edge.hpp>
 #include <fwdpp/ts/node.hpp>
+#include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace py = pybind11;
@@ -86,8 +87,8 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
     pop.tables.nodes.swap(nodes);
     pop.tables.edges.swap(edges);
     // NOTE: this may be an issue when we allow variable survival probabilitites!
-    pop.tables.update_offset();
-    if (!pop.tables.edges_are_sorted())
+    pop.tables.edge_offset = static_cast<fwdpp::ts::table_index_t>(pop.tables.num_edges());
+    if(!fwdpp::ts::edge_table_minimally_sorted(pop.tables))
         {
             throw std::runtime_error("edge table is not sorted");
         }

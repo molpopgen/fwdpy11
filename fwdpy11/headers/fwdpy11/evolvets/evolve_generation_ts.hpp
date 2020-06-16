@@ -66,7 +66,7 @@ namespace fwdpy11
         return offspring_data;
     }
 
-    inline std::pair<fwdpp::ts::TS_NODE_INT, fwdpp::ts::TS_NODE_INT>
+    inline std::pair<fwdpp::ts::table_index_t, fwdpp::ts::table_index_t>
     parent_nodes_from_metadata(
         const std::size_t i,
         const std::vector<fwdpy11::DiploidMetadata>& metadata,
@@ -134,14 +134,14 @@ namespace fwdpy11
                         auto p2id = parent_nodes_from_metadata(
                             pdata.parent2, pop.diploid_metadata,
                             offspring_data.second.swapped);
-                        fwdpp::ts::TS_NODE_INT offspring_node_1
+                        fwdpp::ts::table_index_t offspring_node_1
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.first.breakpoints, p1id, deme,
                                 generation, tables, new_edge_buffer);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_1, pop.mutations,
                             offspring_data.first.mutation_keys, tables);
-                        fwdpp::ts::TS_NODE_INT offspring_node_2
+                        fwdpp::ts::table_index_t offspring_node_2
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.second.breakpoints, p2id, deme,
                                 generation, tables, new_edge_buffer);

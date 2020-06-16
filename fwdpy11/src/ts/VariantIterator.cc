@@ -25,7 +25,7 @@ class VariantIterator
     py::array_t<std::int8_t> genotypes;
     double current_position;
     VariantIterator(const fwdpp::ts::std_table_collection& tc,
-                    const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                    const std::vector<fwdpp::ts::table_index_t>& samples,
                     const double beg, const double end,
                     const bool include_neutral_variant,
                     const bool include_selected_variants)
@@ -79,7 +79,7 @@ class VariantIterator
                                 int ni = 0;
                                 fwdpp::ts::process_samples(
                                     sv.current_tree(), convert, i->node,
-                                    [this, i, &ni](fwdpp::ts::TS_NODE_INT u) {
+                                    [this, i, &ni](fwdpp::ts::table_index_t u) {
                                         ++ni;
                                         genotype_data[u] = i->derived_state;
                                     });
@@ -137,7 +137,7 @@ init_variant_iterator(py::module& m)
         m, "VariantIterator",
         "An iterable class for traversing genotypes in a tree sequence.")
         .def(py::init([](const fwdpp::ts::std_table_collection& tables,
-                         const std::vector<fwdpp::ts::TS_NODE_INT>& samples,
+                         const std::vector<fwdpp::ts::table_index_t>& samples,
                          double begin, double end,
                          bool include_neutral_variants,
                          bool include_selected_variants) {
@@ -177,7 +177,7 @@ init_variant_iterator(py::module& m)
                          const bool include_preserved, double begin,
                          double end, bool include_neutral_variants,
                          bool include_selected_variants) {
-                 std::vector<fwdpp::ts::TS_NODE_INT> samples(2 * pop.N, 0);
+                 std::vector<fwdpp::ts::table_index_t> samples(2 * pop.N, 0);
                  std::iota(samples.begin(), samples.end(), 0);
                  if (include_preserved)
                      {

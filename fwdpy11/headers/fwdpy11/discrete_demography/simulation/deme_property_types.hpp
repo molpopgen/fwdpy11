@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <vector>
 #include "detail.hpp"
-#include <fwdpp/named_type.hpp>
+#include <fwdpp/util/named_type.hpp>
 
 namespace fwdpy11
 {

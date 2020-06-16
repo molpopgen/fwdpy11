@@ -7,14 +7,14 @@
 
 void
 remap_metadata(std::vector<fwdpy11::DiploidMetadata> &metadata,
-               const std::vector<fwdpp::ts::TS_NODE_INT> &idmap)
+               const std::vector<fwdpp::ts::table_index_t> &idmap)
 {
     for (auto &m : metadata)
         {
             m.nodes[0] = idmap[m.nodes[0]];
             m.nodes[1] = idmap[m.nodes[1]];
-            if (m.nodes[0] == fwdpp::ts::TS_NULL_NODE
-                || m.nodes[1] == fwdpp::ts::TS_NULL_NODE)
+            if (m.nodes[0] == fwdpp::ts::NULL_INDEX
+                || m.nodes[1] == fwdpp::ts::NULL_INDEX)
                 {
                     throw std::runtime_error(
                         "error remapping node field of individual metadata");
