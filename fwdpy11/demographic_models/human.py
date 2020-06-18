@@ -2,6 +2,8 @@
 This module provided pre-calculated demographic models
 for human populations.
 """
+import enum
+
 import attr
 import numpy as np
 
@@ -11,6 +13,24 @@ from .demographic_model_details import (DemographicModelCitation,
                                         DemographicModelDetails)
 
 
+class TennessenModel(enum.Enum):
+    """
+    Enumeration type declaring alternative implementations
+    of the Tennessen et al. (2012) model. See
+    :func:`fwdpy11.demographic_models.human.tennessen` for
+    details.
+    """
+
+    V0 = 0
+    """
+    Default version of the model
+    """
+    V1 = 1
+    """
+    Alternate version of the model
+    """
+
+
 @attr.s()
 class _TennessenParameterValidator(object):
     """ Make sure that we get an actual int """
@@ -18,7 +38,7 @@ class _TennessenParameterValidator(object):
     burnin = attr.ib(type=int, validator=attr.validators.instance_of(int))
 
 
-def tennessen(burnin: int = 20):
+def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V0):
     """
     Generate parameters for the demographic model described in:
 
@@ -30,6 +50,8 @@ def tennessen(burnin: int = 20):
     :param burnin: Burn-in time, as a multiplier of the ancestral population size.
                    Defaults to 20.
     :type param: int
+    :param model_version: Specify which "flavor" of the model to run.  See below.
+    :type model_version: fwdpy11.demographic_models.human.TennessenModel
 
     :returns: The demographic model
     :rtype: fwdpy11.demographic_models.DemographicModelDetails
@@ -41,25 +63,52 @@ def tennessen(burnin: int = 20):
     When this model is run, deme ``0`` corresponds to ``African`` and deme
     ``1`` corresponds to Eurasian.
 
+    Due to uncertainty in the literature over the details of this model,
+    we provide two slightly different implementations.  The first
+    implementation is the default, and is specified by
+    :attr:`fwdpy11.demographic_models.human.TennessenModel.V0`.  For this
+    model, the final deme sizes are those shown in Figure 3 of the
+    Tennessen et al. (2012) paper.
+    If :attr:`fwdpy11.demographic_models.human.TennessenModel.V1` is
+    used instead, then the final sizes are obtained by calculating them
+    forwards in time using a combination of the information from
+    Tennessen et al. (2012) and Fu et al. 2013. However, due to having
+    to convert from continuous to discrete time, etc., other definitions
+    of this model are also possible.  Here, all deme sizes and times
+    are obtained using :func:`numpy.rint`.
+
+
     .. note::
 
         This implementation is based on code provided by Aaron Ragsdale.
 
-    .. versionadded:: 0.7.2
-
-    .. versionchanged:: 0.8.0
-
-        Returns instance of :class:`fwdpy11.demographic_models.DemographicModelDetails`
-
+    .. versionadded:: 0.8.0
     """
     _TennessenParameterValidator(burnin)
     Nref = 7310  # Ancestral population dize
     NAfr0 = 14474  # Initial size change
     NB = 1861  # Eurasian bottleneck size
-    NAfr = 424000  # Final African pop'n size
+    if model_version == TennessenModel.V0:
+        NAfr = 420000  # Final African pop'n size
+    elif model_version == TennessenModel.V1:
+        NAfr = 423125  # Final African pop'n size
+    else:
+        raise ValueError("invalid model_version")
+
     NEur0 = 1032  # Eurasian second bottleneck size
-    NEur1 = 9237  # Eurasian size as rapid growth starts
-    NEur = 512000  # Final Eurasian pop'n size
+    if model_version == TennessenModel.V0:
+        NEur1 = 9237  # Eurasian size as rapid growth starts
+    elif model_version == TennessenModel.V1:
+        NEur1 = 9279  # Eurasian size as rapid growth starts
+    else:
+        raise ValueError("invalid model_version")
+
+    if model_version == TennessenModel.V0:
+        NEur = 512000  # Final Eurasian pop'n size
+    elif model_version == TennessenModel.V1:
+        NEur = 501425  # Final Eurasian pop'n size
+    else:
+        raise ValueError("invalid model_version")
     T_Af = 148000
     T_B = 51000
     T_Eu_As = 23000
@@ -145,15 +194,25 @@ def tennessen(burnin: int = 20):
         f"Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, "
         f"Wenqing Fu, Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012. "
         f"“Evolution and Functional Impact of Rare Coding Variation from Deep "
-        f"Sequencing of Human Exomes.” Science 337 (6090): 64–69.",
+        f"Sequencing of Human Exomes.” Science 337 (6090): 64–69. ",
+        f"and Figure S5 of: ",
+        f"Fu, Wenqing, Timothy D. O’Connor, Goo Jun, Hyun Min Kang, Goncalo Abecasis, "
+        f"Suzanne M. Leal, Stacey Gabriel, et al. 2013. “Analysis of 6,515 "
+        f"Exomes Reveals the Recent Origin of Most Human Protein-Coding Variants.” "
+        f"Nature 493 (7431): 216–20",
     )
+
+    full_citation = str().join([str(i) for i in full_citation])
+
     return DemographicModelDetails(
         model=ddemog,
         name="Tennessen et al. model of African and European demography.",
         source={"function": "fwdpy11.demographic_models.human.tennessen"},
         parameters={"burnin": burnin},
         citation=DemographicModelCitation(
-            DOI="10.1126/science.1219240", full_citation=full_citation[0], metadata=None
+            DOI="10.1126/science.1219240 and 10.1038/nature11690",
+            full_citation=full_citation,
+            metadata=None,
         ),
         metadata={
             "deme_labels": {0: "African", 1: "Eurasian"},
