@@ -131,7 +131,11 @@ def attr_add_asblack(cls):
         """
         import black
 
-        return black.format_str(str(self), mode=black.Mode())
+        # The try/except is to handle black's changing API
+        try:
+            return black.format_str(str(self), mode=black.Mode())
+        except AttributeError:
+            return black.format_str(str(self), mode=black.FileMode())
 
     cls.asblack = _asblack
 
