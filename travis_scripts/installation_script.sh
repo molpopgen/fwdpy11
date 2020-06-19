@@ -29,7 +29,7 @@ then
         conda install clangxx_osx-64;
     fi
     conda install cython numpy gsl
-    conda install -c conda-forge pybind11==2.4.3 numpy msprime openblas cmake sparse
+    conda install -c conda-forge pybind11==2.4.3 numpy msprime openblas cmake sparse black
     # Weird stuff is happening right now, so we force numpy and numpy base:
     # conda install -c conda-forge numpy==1.16.2 numpy-base==1.16.2
     # conda install -c conda-forge sphinx nbsphinx ipython matplotlib msprime
