@@ -119,20 +119,19 @@ class TestTwoDemeIMModel(unittest.TestCase):
 class TestTwoDemeIMModelVariousInitMethods(unittest.TestCase):
     def test_init_migrates_tuple(self):
         from fwdpy11.demographic_models.IM import two_deme_IM
-        model = two_deme_IM(
-            1000, 0.1, 0.7, (1.1, 2.7), (1e-2, 0.25), burnin=1.0
-        )
+
+        model = two_deme_IM(1000, 0.1, 0.7, (1.1, 2.7), (1e-2, 0.25), burnin=1.0)
         self.assertEqual(model, model)
 
     def test_init_migrates_list(self):
         from fwdpy11.demographic_models.IM import two_deme_IM
-        model = two_deme_IM(
-            1000, 0.1, 0.7, (1.1, 2.7), [1e-2, 0.25], burnin=1.0
-        )
+
+        model = two_deme_IM(1000, 0.1, 0.7, (1.1, 2.7), [1e-2, 0.25], burnin=1.0)
         self.assertEqual(model, model)
 
     def test_init_migrates_numpy(self):
         from fwdpy11.demographic_models.IM import two_deme_IM
+
         model = two_deme_IM(
             1000, 0.1, 0.7, (1.1, 2.7), np.array([1e-2, 0.25]), burnin=1.0
         )
@@ -163,7 +162,36 @@ class TestTennessenModel(unittest.TestCase):
     def test_final_deme_sizes(self):
         md = np.array(self.pop.diploid_metadata, copy=False)
         deme_sizes = np.unique(md["deme"], return_counts=True)
-        expected_deme_sizes = [424000, 512000]
+        expected_deme_sizes = [420000, 512000]
+        for i, j in zip(deme_sizes[1], expected_deme_sizes):
+            self.assertEqual(i, j)
+
+
+@unittest.skipIf(
+    "RUN_EXPENSIVE_TESTS" not in os.environ or os.environ["RUN_EXPENSIVE_TESTS"] != "1",
+    "Expensive test.",
+)
+class TestTennessenModelV1(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        from fwdpy11.demographic_models.human import tennessen
+
+        self.demog = tennessen(0, fwdpy11.demographic_models.human.TennessenModel.V1)
+        self.simlen = self.demog.metadata["simlen"]
+        self.Nref = self.demog.metadata["Nref"]
+        self.pop = fwdpy11.DiploidPopulation(self.Nref, 1.0)
+        self.pdict = setup_pdict(self.demog, self.simlen)
+        self.params = fwdpy11.ModelParams(**self.pdict)
+        self.rng = fwdpy11.GSLrng(915153)
+        fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
+
+    def test_generation(self):
+        self.assertEqual(self.pop.generation, self.simlen)
+
+    def test_final_deme_sizes(self):
+        md = np.array(self.pop.diploid_metadata, copy=False)
+        deme_sizes = np.unique(md["deme"], return_counts=True)
+        expected_deme_sizes = [423125, 501425]
         for i, j in zip(deme_sizes[1], expected_deme_sizes):
             self.assertEqual(i, j)
 
