@@ -52,7 +52,7 @@ class tree_visitor_wrapper
     const double from, until;
 
   public:
-    fwdpp::ts::tree_visitor visitor;
+    fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection> visitor;
     std::vector<fwdpp::ts::table_index_t> samples_below_buffer;
     tree_visitor_wrapper(py::object tables,
                          const std::vector<fwdpp::ts::table_index_t>& samples,

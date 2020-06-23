@@ -7,7 +7,6 @@ set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc
     src/fwdpp_types/Edge.cc
     src/fwdpp_types/MutationRecord.cc
     src/fwdpp_types/Site.cc
-    src/fwdpp_types/IndexedEdge.cc
     src/fwdpp_types/NodeTable.cc
     src/fwdpp_types/EdgeTable.cc
     src/fwdpp_types/MutationTable.cc

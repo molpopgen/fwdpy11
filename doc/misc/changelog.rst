@@ -4,6 +4,18 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.8.0
+****************************************
+
+Stable release. In addition to what is in the previous alpha releases:
+
+* Memory use is substantially reduced due to some improvements
+  in `fwdpp`.  :pr:`533` brings in two changes from `fwdpp`,
+  :pr:`molpopgen/fwdpp#287` and :pr:`molpopgen/fwdpp#288`.
+
+This release includes some minor `API` changes.
+See the :ref:`upgrade guide <upgrade_path>` for details.
+
 0.8.0a1
 ++++++++++++++++++++++++++++++++++++++++
 
