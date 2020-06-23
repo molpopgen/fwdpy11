@@ -176,13 +176,6 @@ Types related to tree sequence recording
 
     .. autoattribute:: right
 
-.. autoclass:: fwdpy11.IndexedEdge
-
-    .. autoattribute:: pos
-    .. autoattribute:: time
-    .. autoattribute:: parent
-    .. autoattribute:: child
-
 .. autoclass:: fwdpy11.NodeTable
 .. autoclass:: fwdpy11.Node
 

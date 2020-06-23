@@ -19,6 +19,8 @@ imperfect/incomplete.
   has been renamed ``cov_matrix``.
 * The ``kwarg`` ``gw2w`` for genetic value objects ``init`` methods has been replaced with ``gvalue_to_fitness``.
 * The ``when`` ``kwargs`` for :class:`fwdpy11.Optimum` and :class:`fwdpy11.PleiotropicOptima` ``init`` methods is now the **third** positional argument rather than the first.  This change should be caught at run time (the new classes won't auto-convert ``float`` to ``int``, and is fixed by adding parameter names when initializing instances of these types.
+* The type of :attr:`fwdpy11.TableCollection.input_left` and :attr:`fwdpy11.TableCollection.output_right` has changed
+  to a simple index vector (:pr:`529`).  This change is a BIG memory savings when simulating large regions.
 
 0.5.0
 -------------------------------------------------

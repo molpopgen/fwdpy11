@@ -13,7 +13,7 @@
 namespace py = pybind11;
 
 class DataMatrixIterator
-// Encapsulate fwdpp::ts::tree_visitor and fwdpp::data_matrix
+// Encapsulate fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection> and fwdpp::data_matrix
 // to provide very fast interation over multiple genomic intervals.
 // We accomplish this by copying the state of the current tree_visitor
 // whenever we recognize that the current tree overlaps with the next interval.
@@ -23,7 +23,7 @@ class DataMatrixIterator
   private:
     using site_table_itr = fwdpp::ts::std_table_collection::site_table::const_iterator;
     using mut_table_itr = fwdpp::ts::std_table_collection::mutation_table::const_iterator;
-    std::unique_ptr<fwdpp::ts::tree_visitor> current_tree, next_tree;
+    std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>> current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes;
     std::unordered_map<std::size_t, double> mutation_positions;
@@ -36,11 +36,11 @@ class DataMatrixIterator
     const bool include_neutral_variants, include_selected_variants, include_fixations;
     bool matrix_requires_clearing;
 
-    std::unique_ptr<fwdpp::ts::tree_visitor>
+    std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>>
     initialize_current_tree(const fwdpp::ts::std_table_collection& tables,
                             const std::vector<fwdpp::ts::table_index_t>& samples)
     {
-        std::unique_ptr<fwdpp::ts::tree_visitor> rv(new fwdpp::ts::tree_visitor(
+        std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>> rv(new fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>(
             tables, samples, fwdpp::ts::update_samples_list(true)));
         auto flag = rv->operator()();
         if (flag == false)
@@ -438,7 +438,7 @@ class DataMatrixIterator
                         if (right > position_ranges[current_range + 1].first)
                             {
                                 next_tree.reset(
-                                    new fwdpp::ts::tree_visitor(*current_tree));
+                                    new fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>(*current_tree));
                             }
                     }
                 for (; scurrent < send && scurrent->position < tree.right
