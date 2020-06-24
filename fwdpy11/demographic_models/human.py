@@ -32,10 +32,15 @@ class TennessenModel(enum.Enum):
 
 
 @attr.s()
-class _TennessenParameterValidator(object):
+class _ModelParameterValidator(object):
     """ Make sure that we get an actual int """
 
-    burnin = attr.ib(type=int, validator=attr.validators.instance_of(int))
+    burnin = attr.ib(type=int, kw_only=True, validator=attr.validators.instance_of(int))
+
+    @burnin.validator
+    def validate_burnin(self, attribute, value):
+        if value < 0:
+            raise ValueError("burnin must be >= 0")
 
 
 def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V0):
@@ -84,7 +89,7 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
 
     .. versionadded:: 0.8.0
     """
-    _TennessenParameterValidator(burnin)
+    _ModelParameterValidator(burnin=burnin)
     Nref = 7310  # Ancestral population dize
     NAfr0 = 14474  # Initial size change
     NB = 1861  # Eurasian bottleneck size
@@ -218,5 +223,214 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
             "deme_labels": {0: "African", 1: "Eurasian"},
             "simlen": total_sim_length,
             "Nref": Nref,
+        },
+    )
+
+
+def jouganous_three_deme(burnin: int = 20):
+    """
+    Generate parameters for the demographic model described in Table 2 of:
+
+    Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017.
+    “Inferring the Joint Demographic History of Multiple Populations:
+    Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.
+
+    :param burnin: Burn-in time, as a multiplier of the ancestral population size.
+                   Defaults to 20.
+    :type param: int
+    :returns: The demographic model
+    :rtype: fwdpy11.demographic_models.DemographicModelDetails
+
+    The ``metadata`` field of the return value contains information about
+    the simulation length, ancestral population size (``Nref``), etc.,
+    and the mapping of integer values to deme names.
+
+    .. versionadded:: 0.8.1
+
+    """
+    _ModelParameterValidator(burnin=burnin)
+
+    NA = 11273  # Ancestral population size
+
+    gens_burn_in = burnin * NA
+
+    # TAF years ago, change the ancestral
+    # deme size to the African deme size.
+    TAF = 312000
+    NAF = 23721
+
+    # TB years ago, the ancestral population
+    # splits into the population ancestral
+    # to modern Africa and population B,
+    # which is the ancestor of modern
+    # Eurasian populations.
+    TB = 125000
+    NB = 3104
+
+    # TAS_EU years ago, pop B splits into
+    # EU (modern European) and AS (modern
+    # Asian).
+    TAS_EU = 42300
+    NAS0 = 923
+    NEU0 = 2271
+
+    generation_time = 29
+    # These are the CONTINUOUS growth
+    # rates inferred in Jouganous et al.
+    rAS = 0.00309  # units of 2NA
+    rEU = 0.00196
+    tg = TAS_EU / generation_time  # Time AS and EU grow exponentially, in generations
+
+    # Get the discrete-time growth rates...
+    NASF = NAS0 * np.exp(rAS * tg)
+    NEUF = NEU0 * np.exp(rEU * tg)
+    NASFi = np.rint(NASF)
+    NEUFi = np.rint(NEUF)
+
+    # ... which are these:
+    dGAS = np.exp((np.log(NASFi) - np.log(NAS0)) / np.rint(tg))
+    dGEU = np.exp((np.log(NEUFi) - np.log(NEU0)) / np.rint(tg))
+
+    # Now, convert all the times from years into discrete
+    # generations.
+
+    TAFg = 0
+
+    TBg = np.rint((TAF - TB) / generation_time).astype(int)
+    TAS_EUg = np.rint((TB - TAS_EU) / generation_time).astype(int)
+    total_sim_length = gens_burn_in + TAFg + TBg + TAS_EUg + np.rint(tg).astype(int)
+
+    # Build up the events list
+    deme_labels = {"AFR": 0, "B_CEU": 1, "CHB": 2}
+
+    migmatrix = np.zeros(9).reshape(3, 3)
+    migmatrix[0, 0] = 1.0
+    change_migrates = []
+
+    T = TAFg
+
+    # Change size of AFR
+    set_deme_sizes = [
+        fwdpy11.SetDemeSize(
+            when=gens_burn_in + T, deme=deme_labels["AFR"], new_size=NAF
+        )
+    ]
+
+    T += TBg
+
+    # "Bud" off deme B
+    mass_migrations = [
+        fwdpy11.copy_individuals(
+            when=gens_burn_in + T,
+            source=deme_labels["AFR"],
+            destination=deme_labels["B_CEU"],
+            fraction=NB / NAF,
+        )
+    ]
+
+    mAF_B = 15.8e-5
+    change_migrates.append(
+        fwdpy11.SetMigrationRates(
+            when=gens_burn_in + T,
+            deme=deme_labels["AFR"],
+            migrates=[1.0 - mAF_B, mAF_B, 0.0],
+        )
+    )
+    change_migrates.append(
+        fwdpy11.SetMigrationRates(
+            when=gens_burn_in + T,
+            deme=deme_labels["B_CEU"],
+            migrates=[mAF_B, 1.0 - mAF_B, 0.0],
+        )
+    )
+
+    # Split B into CEU and CHB ("European" and "Asian")
+    # CEU inherits the deme label of B.
+    T += TAS_EUg
+    mass_migrations.append(
+        fwdpy11.copy_individuals(
+            when=gens_burn_in + T,
+            source=deme_labels["B_CEU"],
+            destination=deme_labels["CHB"],
+            fraction=NAS0 / NB,
+        )
+    )
+
+    set_deme_sizes.append(
+        fwdpy11.SetDemeSize(
+            when=gens_burn_in + T, deme=deme_labels["B_CEU"], new_size=NEU0
+        )
+    )
+
+    set_growth_rates = [
+        fwdpy11.SetExponentialGrowth(
+            when=gens_burn_in + T, deme=deme_labels["B_CEU"], G=dGEU
+        )
+    ]
+
+    set_growth_rates.append(
+        fwdpy11.SetExponentialGrowth(
+            when=gens_burn_in + T, deme=deme_labels["CHB"], G=dGAS
+        )
+    )
+
+    mAF_CEU = 1.10e-5
+    mAF_CHB = 0.48e-5
+    mCEU_CHB = 4.19e-5
+
+    change_migrates.append(
+        fwdpy11.SetMigrationRates(
+            when=gens_burn_in + T,
+            deme=deme_labels["AFR"],
+            migrates=[1.0 - (mAF_CEU + mAF_CHB), mAF_CEU, mAF_CHB],
+        )
+    )
+
+    change_migrates.append(
+        fwdpy11.SetMigrationRates(
+            when=gens_burn_in + T,
+            deme=deme_labels["B_CEU"],
+            migrates=[mAF_CEU, 1.0 - (mAF_CEU + mCEU_CHB), mCEU_CHB],
+        )
+    )
+
+    change_migrates.append(
+        fwdpy11.SetMigrationRates(
+            when=gens_burn_in + T,
+            deme=deme_labels["CHB"],
+            migrates=[mAF_CHB, mCEU_CHB, 1.0 - (mAF_CHB + mCEU_CHB)],
+        )
+    )
+
+    ddemog = fwdpy11.DiscreteDemography(
+        mass_migrations=mass_migrations,
+        set_deme_sizes=set_deme_sizes,
+        migmatrix=migmatrix,
+        set_migration_rates=change_migrates,
+        set_growth_rates=set_growth_rates,
+    )
+
+    full_citation = (
+        f"Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017."
+        f" “Inferring the Joint Demographic History "
+        f"of Multiple Populations: Beyond the Diffusion Approximation.”"
+        f" Genetics 206 (3): 1549–67."
+    )
+    full_citation = str().join([str(i) for i in full_citation])
+
+    return DemographicModelDetails(
+        model=ddemog,
+        name="Jouganous et al. 3-deme model.",
+        source={"function": "fwdpy11.demographic_models.human.jouganous_three_deme"},
+        parameters={"burnin": burnin},
+        citation=DemographicModelCitation(
+            DOI="10.1534/genetics.117.200493",
+            full_citation=full_citation,
+            metadata="Parameters from Table 2.",
+        ),
+        metadata={
+            "deme_labels": {value: key for key, value in deme_labels.items()},
+            "simlen": total_sim_length,
+            "Nref": NA,
         },
     )

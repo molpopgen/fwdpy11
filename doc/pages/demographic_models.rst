@@ -27,6 +27,7 @@ Human demographic models
 This module provides the following models:
 
 * [Tennessen2012]_ via :func:`fwdpy11.demographic_models.human.tennessen`.
+* The three deme model from Table 2 of [Jouganous2017]_ via :func:`fwdpy11.demographic_models.human.jouganous_three_deme`.
 
 .. automodule:: fwdpy11.demographic_models.human
    :members:
