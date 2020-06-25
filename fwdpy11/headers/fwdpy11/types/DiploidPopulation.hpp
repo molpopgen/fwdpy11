@@ -20,11 +20,22 @@ namespace fwdpy11
             std::vector<fwdpp::ts::table_index_t> &n,
             const std::vector<fwdpy11::DiploidMetadata> &metadata)
         {
+            std::unordered_set<fwdpp::ts::table_index_t> unodes;
+            const auto update = [&unodes,&n](auto i)
+            {
+                if(unodes.find(i) == end(unodes))
+                {
+                    n.push_back(i);
+                    unodes.insert(i);
+                }
+            };
             n.clear();
             for (auto &md : metadata)
                 {
-                    n.push_back(md.nodes[0]);
-                    n.push_back(md.nodes[1]);
+                    for(auto i : md.nodes)
+                    {
+                        update(i);
+                    }
                 }
         }
 

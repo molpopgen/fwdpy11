@@ -92,12 +92,8 @@ simplification(
         }
     remap_metadata(pop.ancient_sample_metadata, simplification_rv.first);
     remap_metadata(pop.diploid_metadata, simplification_rv.first);
-    alive_at_last_simplification.clear();
-    for(auto & md : pop.diploid_metadata)
-    {
-        alive_at_last_simplification.push_back(md.nodes[0]);
-        alive_at_last_simplification.push_back(md.nodes[1]); 
-    }
+    pop.fill_alive_nodes();
+    alive_at_last_simplification.assign(begin(pop.alive_nodes), end(pop.alive_nodes));
 
     if (reset_treeseqs_to_alive_nodes_after_simplification == true)
         {
