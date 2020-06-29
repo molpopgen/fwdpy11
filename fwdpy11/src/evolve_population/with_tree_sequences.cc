@@ -324,8 +324,9 @@ evolve_with_tree_sequences(
 
     fwdpp::ts::table_index_t next_index = pop.tables.nodes.size();
     bool simplified = false;
-    auto simplifier_state = fwdpp::ts::make_simplifier_state(pop.tables);
-    fwdpp::ts::edge_buffer new_edge_buffer{};
+    auto simplifier_state = 
+        std::make_unique<decltype(fwdpp::ts::make_simplifier_state(pop.tables))>(fwdpp::ts::make_simplifier_state(pop.tables));
+    auto new_edge_buffer = std::make_unique<fwdpp::ts::edge_buffer>(fwdpp::ts::edge_buffer{});
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
@@ -372,7 +373,7 @@ evolve_with_tree_sequences(
         {
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, *current_demographic_state,
-                                          pop.generation, pop.tables, new_edge_buffer, offspring,
+                                          pop.generation, pop.tables, *new_edge_buffer, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
@@ -417,8 +418,10 @@ evolve_with_tree_sequences(
                         preserve_selected_fixations, simulating_neutral_variants,
                         suppress_edge_table_indexing,
                         reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier_state, new_edge_buffer,
+                        post_simplification_recorder, *simplifier_state, *new_edge_buffer,
                         alive_at_last_simplification, pop);
+                    simplifier_state.reset(nullptr);
+                    new_edge_buffer.reset(nullptr);
                     final_population_cleanup(
                         suppress_edge_table_indexing, preserve_selected_fixations,
                         remove_extinct_mutations_at_finish, last_preserved_generation,
@@ -434,7 +437,7 @@ evolve_with_tree_sequences(
                         preserve_selected_fixations, simulating_neutral_variants,
                         suppress_edge_table_indexing,
                         reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, simplifier_state, new_edge_buffer,
+                        post_simplification_recorder, *simplifier_state, *new_edge_buffer,
                         alive_at_last_simplification, pop);
                     simplified = true;
                 }
@@ -561,9 +564,11 @@ evolve_with_tree_sequences(
                 preserve_selected_fixations, simulating_neutral_variants,
                 suppress_edge_table_indexing,
                 reset_treeseqs_to_alive_nodes_after_simplification,
-                post_simplification_recorder, simplifier_state, new_edge_buffer,
+                post_simplification_recorder, *simplifier_state, *new_edge_buffer,
                 alive_at_last_simplification, pop);
         }
+    simplifier_state.reset(nullptr);
+    new_edge_buffer.reset(nullptr);
     final_population_cleanup(suppress_edge_table_indexing, preserve_selected_fixations,
                              remove_extinct_mutations_at_finish,
                              last_preserved_generation, last_preserved_generation_counts,
