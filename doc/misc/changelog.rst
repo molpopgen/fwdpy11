@@ -4,6 +4,15 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.8.1
+****************************************
+
+* Fixed a back-end bug that could have led to corrupt sample lists for simplification. :pr:`536`.
+* Made improvements to memory handling of data structures when simulations end. :pr:`537`.
+* Added the three-deme model of Jouganous et al. (2017).
+  See :func:`fwdpy11.demographic_models.human.jouganous_three_deme`.
+  :pr:`534`
+
 0.8.0
 ****************************************
 
