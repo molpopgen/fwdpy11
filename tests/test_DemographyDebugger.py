@@ -68,6 +68,14 @@ class TestBadMassMigrations(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             setup_and_run_model(self.pop, d, 5)
 
+    def test_failure_to_update_migration_matrix(self):
+        M = np.zeros(4).reshape(2, 2)
+        M[0, 0] = 1.0
+        mm = [fwdpy11.move_individuals(when=10, source=0, destination=1, fraction=0.25)]
+        d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mm)
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger(self.pop, d)
+
 
 class TestDetectingExtinctions(unittest.TestCase):
     @classmethod
