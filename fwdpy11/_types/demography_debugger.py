@@ -406,7 +406,7 @@ class DemographyDebugger(object):
 
         return next_deme_sizes
 
-    def _validate_migraton_rates(self, t, next_deme_sizes):
+    def _validate_migration_rates(self, t, next_deme_sizes):
         if self._events.migmatrix is None:
             return
         for i, j in enumerate(next_deme_sizes):
@@ -488,7 +488,7 @@ class DemographyDebugger(object):
                 temp = "Global extinction occurs at time {}".format(t)
                 warnings.warn(temp)
                 self._report.append(temp + "\n")
-            self._validate_migraton_rates(t, next_deme_sizes)
+            self._validate_migration_rates(t, next_deme_sizes)
             self.current_deme_sizes = next_deme_sizes
             last_t = t
             t = self._get_next_event_time(event_queues)
