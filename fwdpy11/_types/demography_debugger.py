@@ -428,8 +428,6 @@ class DemographyDebugger(object):
                     s = "deme {} has size {} at time {} " + "but has no valid parents"
                     temp = (self._label_deme(i), N, t)
                     raise ValueError(s.format(*temp))
-                # FIXME: if M[i, i] == 0 and M[i, ].sum() > 0,
-                # then deme i will have metadata.
                 elif self._events.migmatrix.M[i, i] != 0.0:
                     s = (
                         "deme {} at time {} "
