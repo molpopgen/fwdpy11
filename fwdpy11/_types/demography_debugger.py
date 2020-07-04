@@ -17,13 +17,31 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
+import typing
 import warnings
 
+import attr
 import numpy as np
 
 import fwdpy11
 
 
+def _create_event_list(o):
+    try:
+        return fwdpy11.DiscreteDemography(**o.model.asdict())
+    except AttributeError:
+        return fwdpy11.DiscreteDemography(**o.asdict())
+
+
+def _create_initial_deme_sizes(o):
+    try:
+        md = np.array(o.diploid_metadata, copy=False)
+        return np.unique(md["deme"], return_counts=True)[1]
+    except AttributeError:
+        return o
+
+
+@attr.s()
 class DemographyDebugger(object):
     """
     Efficiently debug demographic events.
@@ -40,36 +58,15 @@ class DemographyDebugger(object):
     .. versionadded:: 0.6.0
     """
 
-    def __init__(self, pop, events, simlen=None, deme_labels=None):
-        """
-        :param pop: A population
-        :type pop: :class:`fwdpy11.DiploidPopulation`
-        :param events: The demographic events
-        :type events: :class:`fwdpy11.DiscreteDemography`
-        :param simlen: The total length of the simulation
-        :type simlen: int
-        :deme labels: A map from deme index to some other
-                      kind of printable name
-        :type labels: dict
+    initial_deme_sizes = attr.ib(converter=_create_initial_deme_sizes)
+    _events = attr.ib(converter=_create_event_list)
+    simlen = attr.ib(default=None)
+    deme_labels = attr.ib(default=None)
 
-        If ``simlen`` is provided, and it is greater than the time
-        of the last event, then the final deme sizes will be calculated
-        and reported.
-        """
-        # The setup
-        self.M = None
-        try:
-            _events = events.model
-        except AttributeError:
-            _events = events
-        if _events.migmatrix is not None:
-            try:
-                self.M = np.copy(_events.migmatrix.M)
-            except AttributeError:
-                self.M = np.copy(_events.migmatrix)
-        self._validate_migration_rate_change_lengths(_events)
+    def __attrs_post_init__(self):
+        self._validate_migration_rate_change_lengths(self._events)
 
-        self.maxdemes = self._get_maxdemes(pop, _events)
+        self.maxdemes = self._get_maxdemes()
 
         if self.maxdemes < 1:
             raise ValueError(
@@ -77,7 +74,7 @@ class DemographyDebugger(object):
             )
 
         self.current_deme_sizes = np.zeros(self.maxdemes, dtype=np.uint32)
-        for i, j in zip(*pop.deme_sizes()):
+        for i, j in enumerate(self.initial_deme_sizes):
             self.current_deme_sizes[i] = j
 
         self.growth_rates = np.array([fwdpy11.NOGROWTH] * self.maxdemes)
@@ -89,18 +86,16 @@ class DemographyDebugger(object):
         self.went_extinct = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata = np.zeros(self.maxdemes, dtype=np.int32)
         self.has_metadata[(self.current_deme_sizes > 0)] = 1
-        self.deme_labels = deme_labels
 
         # The real work
         self._report = None
-        self._process_demographic_model(_events, simlen)
+        self._process_demographic_model(self._events, self.simlen)
 
-    def _get_maxdemes(self, pop, events):
+    def _get_maxdemes(self):
         """
         The maximum number of demes the sim can ever see.
         """
-        md = np.array(pop.diploid_metadata, copy=False)
-        max_from_md = md["deme"].max()
+        max_from_md = len(self.initial_deme_sizes)
         max_from_events = -1
 
         def update_max_from_events(m, e):
@@ -115,34 +110,34 @@ class DemographyDebugger(object):
             return m
 
         for i in [
-            events.mass_migrations,
-            events.set_growth_rates,
-            events.set_deme_sizes,
-            events.set_selfing_rates,
-            events.set_migration_rates,
+            self._events.mass_migrations,
+            self._events.set_growth_rates,
+            self._events.set_deme_sizes,
+            self._events.set_selfing_rates,
+            self._events.set_migration_rates,
         ]:
             max_from_events = update_max_from_events(max_from_events, i)
 
         current_max = max(max_from_md, max_from_events) + 1
-        if self.M is None:
+        if self._events.migmatrix is None:
             return current_max
 
-        if self.M.shape[0] < current_max:
+        if self._events.migmatrix.shape[0] < current_max:
             raise ValueError(
-                f"The MigrationMatrix shape, {self.M.shape}, "
+                f"The MigrationMatrix shape, {self._events.migmatrix.shape}, "
                 f"does not match the max number of "
                 f"demes present in the "
                 f"simulation, {current_max}"
             )
 
-        return max(current_max, self.M.shape[0])
+        return max(current_max, self._events.migmatrix.shape[0])
 
     def _validate_migration_rate_change_lengths(self, events):
         """
         Various checks on the lengths of new migration rates.
         """
         if (
-            self.M is None
+            self._events.migmatrix is None
             and events.set_migration_rates is not None
             and len(events.set_migration_rates) > 0
         ):
@@ -152,10 +147,10 @@ class DemographyDebugger(object):
         if events.set_migration_rates is not None:
             for i in events.set_migration_rates:
                 if i.deme >= 0:
-                    if len(i.migrates) != self.M.shape[0]:
+                    if len(i.migrates) != self._events.migmatrix.shape[0]:
                         raise ValueError("Migration rates mismatch")
                 else:  # Are replacing the entire matrix
-                    if len(i.migrates.flatten()) != len(self.M.flatten()):
+                    if len(i.migrates.flatten()) != len(self._events.migmatrix.M.flatten()):
                         raise ValueError("Migration rates mismatch")
 
     def _get_event_names(self, events):
@@ -370,15 +365,15 @@ class DemographyDebugger(object):
     def _apply_SetMigrationRates(self, t, event_queues):
         for e in self._current_events(t, event_queues, "set_migration_rates"):
             if e.deme >= 0:
-                self.M[e.deme, :] = e.migrates
+                self._events.migmatrix.M[e.deme, :] = e.migrates
                 temp = (self._label_deme(e.deme), e.migrates)
                 self._report.append(
                     "\tMigration rates into " "deme {} set to {}\n".format(*temp)
                 )
             else:
-                self.M[:] = e.migrates.reshape(self.M.shape)
+                self._events.migmatrix.M[:] = e.migrates.reshape(self._events.migmatrix.M.shape)
                 self._report.append(
-                    "\tMigration matrix " "reset to:\n\t\t{}".format(self.M)
+                    "\tMigration matrix " "reset to:\n\t\t{}".format(self._events.migmatrix.M)
                 )
 
     def _apply_growth_rates(self, t, event_queues):
@@ -407,12 +402,12 @@ class DemographyDebugger(object):
         return next_deme_sizes
 
     def _validate_migraton_rates(self, t, next_deme_sizes):
-        if self.M is None:
+        if self._events.migmatrix is None:
             return
         for i, j in enumerate(next_deme_sizes):
             if j == 0:
-                if self.M[i,].sum() != 0:
-                    temp = (self._label_deme(i), t, self.M[i, j])
+                if self._events.migmatrix.M[i,].sum() != 0:
+                    temp = (self._label_deme(i), t, self._events.migmatrix.M[i, j])
                     raise ValueError(
                         "there is migration "
                         "into empty deme {} "
@@ -424,13 +419,13 @@ class DemographyDebugger(object):
         for i, j in enumerate(self.has_metadata):
             if j == 0 and self.current_deme_sizes[i] > 0:
                 N = self.current_deme_sizes[i]
-                if self.M is None:
+                if self._events.migmatrix is None:
                     s = "deme {} has size {} at time {} " + "but has no valid parents"
                     temp = (self._label_deme(i), N, t)
                     raise ValueError(s.format(*temp))
                 # FIXME: if M[i, i] == 0 and M[i, ].sum() > 0,
                 # then deme i will have metadata.
-                elif self.M[i, i] != 0.0:
+                elif self._events.migmatrix.M[i, i] != 0.0:
                     s = (
                         "deme {} at time {} "
                         + "has no valid parents in that deme "
@@ -438,12 +433,12 @@ class DemographyDebugger(object):
                     )
                     temp = (self._label_deme(i), N, t)
                     raise ValueError(s.format(*temp))
-                elif self.M[i,].sum() > 0:
+                elif self._events.migmatrix.M[i,].sum() > 0:
                     self.has_metadata[i] = 1
                     self.went_extinct[i] = 0
-            elif self.current_deme_sizes[i] > 0 and self.M is not None:
+            elif self.current_deme_sizes[i] > 0 and self._events.migmatrix is not None:
                 # NOTE: Fix for issue 538, in 0.8.2
-                if self.M[i,].sum() == 0:
+                if self._events.migmatrix.M[i,].sum() == 0:
                     s = (
                         f"deme {i} at time {t} has size {self.current_deme_sizes[i]} "
                         f"but an empty row in the migration matrix"
