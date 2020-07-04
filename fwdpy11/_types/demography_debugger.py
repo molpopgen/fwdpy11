@@ -150,7 +150,9 @@ class DemographyDebugger(object):
                     if len(i.migrates) != self._events.migmatrix.shape[0]:
                         raise ValueError("Migration rates mismatch")
                 else:  # Are replacing the entire matrix
-                    if len(i.migrates.flatten()) != len(self._events.migmatrix.M.flatten()):
+                    if len(i.migrates.flatten()) != len(
+                        self._events.migmatrix.M.flatten()
+                    ):
                         raise ValueError("Migration rates mismatch")
 
     def _get_event_names(self, events):
@@ -371,9 +373,12 @@ class DemographyDebugger(object):
                     "\tMigration rates into " "deme {} set to {}\n".format(*temp)
                 )
             else:
-                self._events.migmatrix.M[:] = e.migrates.reshape(self._events.migmatrix.M.shape)
+                self._events.migmatrix.M[:] = e.migrates.reshape(
+                    self._events.migmatrix.M.shape
+                )
                 self._report.append(
-                    "\tMigration matrix " "reset to:\n\t\t{}".format(self._events.migmatrix.M)
+                    "\tMigration matrix "
+                    "reset to:\n\t\t{}".format(self._events.migmatrix.M)
                 )
 
     def _apply_growth_rates(self, t, event_queues):
