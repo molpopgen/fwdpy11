@@ -441,6 +441,14 @@ class DemographyDebugger(object):
                 elif self.M[i,].sum() > 0:
                     self.has_metadata[i] = 1
                     self.went_extinct[i] = 0
+            elif self.current_deme_sizes[i] > 0 and self.M is not None:
+                # NOTE: Fix for issue 538, in 0.8.2
+                if self.M[i,].sum() == 0:
+                    s = (
+                        f"deme {i} at time {t} has size {self.current_deme_sizes[i]} "
+                        f"but an empty row in the migration matrix"
+                    )
+                    raise ValueError(s)
 
     def _generate_report(self, event_queues, simlen):
         """
