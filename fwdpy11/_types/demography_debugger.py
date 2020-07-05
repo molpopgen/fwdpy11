@@ -58,7 +58,7 @@ class DemographyDebugger(object):
     of the model details for double-checking.
 
     If model errors are found, a ``ValueError`` exception
-    is raised. The types of errors are the same as would
+    is raised. The goal is to catch the types of errors that would
     result in an exception during a simulation.
 
     The class initialized with the following arguments,
