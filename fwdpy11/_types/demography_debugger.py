@@ -41,6 +41,12 @@ def _create_initial_deme_sizes(o):
         return o
 
 
+def _convert_simlen(simlen):
+    if simlen is None:
+        return simlen
+    return int(simlen)
+
+
 @attr.s()
 class DemographyDebugger(object):
     """
@@ -55,12 +61,29 @@ class DemographyDebugger(object):
     is raised. The types of errors are the same as would
     result in an exception during a simulation.
 
+    The class initialized with the following arguments,
+    which may be either positional or keyword:
+
+    :param initial_deme_sizes: The initial sizes of each deme
+    :type initial_deme_sizes: list or fwdpy11.DiploidPopulation
+    :param events: The demographic model
+    :type events: fwdpy11.DiscreteDemography or fwdpy11.DemographicModelDetails
+    :param simlen: The length of the simulation.  Defaults to `None`.
+    :type simlen: int
+    :param deme_labels: A map from deme index to a printable name
+    :type deme_labels: dict
+
     .. versionadded:: 0.6.0
+
+    .. versionchanged:: 0.8.1
+
+        Initialization now done with attr.
+        A list of initial deme sizes is now accepted.
     """
 
     initial_deme_sizes = attr.ib(converter=_create_initial_deme_sizes)
     _events = attr.ib(converter=_create_event_list)
-    simlen = attr.ib(default=None)
+    simlen = attr.ib(converter=_convert_simlen, default=None)
     deme_labels = attr.ib(default=None)
 
     def __attrs_post_init__(self):
