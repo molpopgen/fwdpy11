@@ -36,7 +36,7 @@ def _create_event_list(o):
 def _create_initial_deme_sizes(o):
     try:
         md = np.array(o.diploid_metadata, copy=False)
-        return np.unique(md["deme"], return_counts=True)[1]
+        return np.unique(md["deme"], return_counts=True)[1].tolist()
     except AttributeError:
         return o
 
@@ -90,6 +90,22 @@ class DemographyDebugger(object):
         # The real work
         self._report = None
         self._process_demographic_model(self._events, self.simlen)
+
+    @initial_deme_sizes.validator
+    def validate_initial_deme_sizes(self, attribute, value):
+        if len(value) == 0:
+            raise ValueError("Initial deme sizes not provided")
+        if any([i < 0 for i in value]) is True:
+            raise ValueError("Initial deme sizes cannot be negative")
+        for i in value:
+            attr.validators.instance_of(int)(self, attribute, i)
+
+    @simlen.validator
+    def validate_simlen(self, attribute, value):
+        if value is not None:
+            attr.validators.instance_of(int)(self, attribute, value)
+            if value <= 0:
+                raise ValueError("simlen must be None or > 0")
 
     def _get_maxdemes(self):
         """
@@ -489,6 +505,8 @@ class DemographyDebugger(object):
             self._validate_migration_rates(t, next_deme_sizes)
             self.current_deme_sizes = next_deme_sizes
             last_t = t
+            if simlen is not None and last_t > simlen:
+                warnings.warn(f"current time {last_t} is > simulation length {simlen}")
             t = self._get_next_event_time(event_queues)
 
         if simlen is not None and simlen > last_t:
