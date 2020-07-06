@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import json
+
 import numpy as np
 import tskit
 
@@ -160,13 +162,45 @@ def _initializeIndividualTable(self, tc):
     return individal_nodes
 
 
-def _dump_tables_to_tskit(self):
+def _dump_tables_to_tskit(self, parameters=None):
     """
     Dump the population's TableCollection into
     an tskit TreeSequence
 
+    :param parameters: The simulation parameters for the provenance table.
+    :type parameters: None or dict
+
     :rtype: tskit.TreeSequence
+
+    .. versionchanged:: 0.8.2
+
+        Added `parameters`.
+        Generate provenance information for return value.
+        The provenance information is validated using
+        :func:`tskit.validate_provenance`, which may
+        raise an exception.
     """
+    from fwdpy11 import pybind11_version, gsl_version
+
+    environment = tskit.provenance.get_environment(
+        extra_libs={
+            "gsl": {"version": gsl_version()["gsl_version"]},
+            "pybind11": {"version": pybind11_version()["pybind11_version"]},
+        }
+    )
+
+    provenance = {
+        "schema_version": "1.0.0",
+        "software": {"name": "fwdpy11", "version": f"{fwdpy11.__version__}"},
+        "environment": environment,
+        "parameters": {},
+    }
+
+    if parameters is not None:
+        provenance["parameters"] = parameters
+
+    tskit.validate_provenance(provenance)
+
     node_view = np.array(self.tables.nodes, copy=True)
     node_view["time"] -= node_view["time"].max()
     node_view["time"][np.where(node_view["time"] != 0.0)[0]] *= -1.0
@@ -223,6 +257,7 @@ def _dump_tables_to_tskit(self):
         metadata=md,
         metadata_offset=mdo,
     )
+    tc.provenances.add_row(json.dumps(provenance))
     return tc.tree_sequence()
 
 
