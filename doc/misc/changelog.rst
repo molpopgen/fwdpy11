@@ -4,6 +4,13 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.x.x
+****************************************
+
+* :func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit` now populates
+  the provenance table. :pr:`542`
+
+
 0.8.2
 ****************************************
 
