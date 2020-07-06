@@ -321,6 +321,23 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
         self.assertEqual(mcounts_comparison(self.pop, dumped_ts), True)
 
+    def test_dump_to_tskit_parameters_round_trip(self):
+        import json
+        import tskit
+
+        dumped_ts = self.pop.dump_tables_to_tskit(
+            parameters={"model": str(self.params)}
+        )
+        p = json.loads(dumped_ts.provenance(0).record)
+        try:
+            tskit.validate_provenance(p)
+        except:  # NOQA
+            self.fail("unexpected exception")
+
+        array = np.array  # NOQA
+        mp = eval(p["parameters"]["model"])
+        self.assertTrue(mp == self.params)
+
     def test_TreeIterator(self):
         # The first test ensures that TreeIterator
         # simply holds a reference to the input tables,
