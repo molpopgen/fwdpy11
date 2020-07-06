@@ -17,5 +17,19 @@ Debugging Demographic models
         pop.N, 0.3, 0.2, (2, 3.33), [0.01, 0.1]
     )
 
+    # Let the debugger figure out initial deme
+    # sizes from pop
     d = fwdpy11.DemographyDebugger(pop, dmodel)
+
+    # A list of integers also works for the
+    # initial deme sizes
+    d = fwdpy11.DemographyDebugger(
+        [100],
+        dmodel,
+        simlen=dmodel.metadata.simlen,
+        deme_labels={0: "ANCESTRAL", 1: "DERIVED"},
+    )
+
     print(d.report)
+
+
