@@ -1,5 +1,11 @@
 .. _demographic_models:
 
+The demography debugger
+======================================================================
+
+.. autoclass:: fwdpy11.DemographyDebugger
+   :members:
+
 Pre-computed demographic models
 ======================================================================
 

@@ -9,9 +9,10 @@ imperfect/incomplete.
 0.8.2
 -------------------------------------------------
 
-* The first `kwarg`/positional argument for initializing a :class:`fwdpy11.DemographyDebugger` has been renamed `initial_deme_sizes`.  As the argument
-is required, and previously only took one possible type, we expect this
-change to not really break anyone's code.
+* The first `kwarg`/positional argument for initializing a 
+  :class:`fwdpy11.DemographyDebugger` has been renamed `initial_deme_sizes`.
+  As the argument is required, and previously only took one possible type,
+  we expect this change to not really break anyone's code.
 
 0.8.0
 -------------------------------------------------

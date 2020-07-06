@@ -45,12 +45,12 @@ The first argument is the population itself.  The second is an instance of the f
     for such recording.  The first function adds samples one
     at a time:
 
-    .. autoattribute:: fwdpy11.SampleRecorder.add_sample
+    .. autofunction:: fwdpy11.SampleRecorder.add_sample
 
     The second is more efficient, adding in "batch" mode
     via a numpy array with dtype uint32:
 
-    .. autoattribute:: fwdpy11.SampleRecorder.assign
+    .. autofunction:: fwdpy11.SampleRecorder.assign
 
     The following is essentially pseudocode to illustrate the process:
 

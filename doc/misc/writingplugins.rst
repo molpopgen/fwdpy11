@@ -77,4 +77,4 @@ handler. The constructor disables the error handler, storing the value of the di
 the handler.
 
 To see this in action, check out the unit test file `tests/test_GSLerror.py` and its associated C++ file
-`tests/gsl_error.cpp`.
+`tests/gsl_error.cc`.

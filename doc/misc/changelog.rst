@@ -123,7 +123,7 @@ C++ back end changes:
 Maintenance release and one new feature:
 
 * Allow the first generation of a simulation to be preserved. PR :pr:`470` 
-  See :ref:`finishwithmsprime`.
+  See :ref:`recapitation`.
 * Parameterizing classes like :class:`fwdpy11.GSSmo` is now more Pythonic,
   and some existing ``init`` methods are deprecated in favor of the
   new approach. PR :pr:`461`.
@@ -231,7 +231,7 @@ release candidates (see below) plus the following:
   PR :pr:`399` 
 * Creating populations from :mod:`msprime` input improved.
   PR :pr:`395` 
-* Added :class:`PendingDeprecationWarning` to :func:`fwdpy11.evolve_genomes`.
+* Added :class:`PendingDeprecationWarning` to ``fwdpy11.evolve_genomes``.
   PR :pr:`396` 
 
 .. note::
@@ -379,7 +379,7 @@ Several performance fixes:
 
 This release fixes three bugs:
 
-* :class:`fwdpy11.IndexedEdge` is now exposed to Python. Previously, attempting to access :attr:`fwdpy11.TableCollection.input_left` or :attr:`fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible. PR :pr:`266`
+* ``fwdpy11.IndexedEdge`` is now exposed to Python. Previously, attempting to access `fwdpy11.TableCollection.input_left` or `fwdpy11.TableCollection.output_right` would give an error because the class contained in these lists wasn't visible. PR :pr:`266`
 * :func:`fwdpy11.TreeIterator.roots` now returns the array of roots on the current tree.  Previously, empty arrays were returned. PR :pr:`267`
 * Corruption of the samples list using the standalone simplify function. PR :pr:`270`
 
@@ -403,7 +403,7 @@ Even though this release changes some of the tree sequence data structures, we a
 
 Minor changes include:
 
-* Add :func:`fwdpy11.gsl_version`. PR :pr:`256`
+* Add `fwdpy11.gsl_version`. PR :pr:`256`
 * :attr:`fwdpy11.Mutation.g` is converted to the mutation's age when dumping table collections to tskit's format. PR :pr:`257`
 * New exception types from fwdpp registered as Python exceptions. PR :pr:`260`
 * Several updates to documentation and to continuous integration testing.
@@ -476,7 +476,7 @@ Minor bugfix release:
 Deprecations of note
 -------------------------------------------------------------
 
-* :class:`fwdpy11.MlocusPop` is *tentatively* deprecated.  The new features described in :ref:`generalized_maps` make
+* `fwdpy11.MlocusPop` is *tentatively* deprecated.  The new features described in :ref:`geneticmapunit` make
   this class obsolete, but we will await a final verdict pending more testing.
 
 Bug fixes
@@ -527,8 +527,8 @@ Other changes in this release include
 
 It may be helpful to look at the following documentation pages:
 
-* :ref:`pickling_pops`
-* :ref:`generalized_maps`
+* :ref:`savingsimstodisk`
+* :ref:`geneticmapunit`
 
 Detailed changes:
 

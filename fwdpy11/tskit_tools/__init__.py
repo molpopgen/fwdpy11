@@ -19,7 +19,7 @@
 
 """
 This module contains various things to help
-interact with :mod:`tskit`.
+interact with ``tskit``.
 
 .. versionadded:: 0.8.0
 """

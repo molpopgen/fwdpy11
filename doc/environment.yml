@@ -3,10 +3,9 @@ name: fwdpy_docs
 channels:
     - defaults
     - conda-forge
-    - bioconda
 
 dependencies:
-    - python>=3.6
+    - python>=3.7
     - sphinx_rtd_theme
     - pybind11>=2.4.3
     - gsl
@@ -15,12 +14,8 @@ dependencies:
     - openblas
     - numpy
     - sparse
-    - pandas
-    - matplotlib
     - setuptools_scm
     - sphinx-issues
     - ipython
     - cmake
-    - pip
-    - pip:
-        - cppimport
+    - black

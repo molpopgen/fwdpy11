@@ -3,4 +3,4 @@
 Example of "stateful fitness": the snowdrift model
 ====================================================================
 
-.. literalinclude:: ../../tests/snowdrift.cpp
+.. literalinclude:: ../../tests/snowdrift.cc
