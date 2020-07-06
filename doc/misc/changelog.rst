@@ -4,6 +4,16 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.8.2
+****************************************
+
+* Fix issue where :class:`fwdpy11.DemographyDebugger` failed to
+  catch populations with empty migration matrix rows after
+  mass migration. :pr:`539`
+* :class:`fwdpy11.DemographyDebugger` is now implemented
+  with `attrs`. :pr:`540`.  This change changes a keyword
+  argument for this class.  See :ref:`upgrade guide <upgrade_path>`.
+
 0.8.1
 ****************************************
 
