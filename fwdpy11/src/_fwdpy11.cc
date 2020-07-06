@@ -9,8 +9,7 @@ static_assert(GSL_MAJOR_VERSION >= 2, "GSL major version >= 2 required");
 static_assert(GSL_MINOR_VERSION >= 3, "GSL minor version >= 3 required");
 
 void
-gsl_error_to_exception(const char *reason, const char *file, int line,
-                       int gsl_errno)
+gsl_error_to_exception(const char *reason, const char *file, int line, int gsl_errno)
 {
     std::ostringstream o;
     o << "GSL error raised: " << reason << ", " << file << ", " << line << ", "
@@ -29,9 +28,9 @@ void initialize_genetic_value_noise(py::module &);
 void initialize_genetic_value_to_fitness(py::module &);
 void init_genetic_values(py::module &);
 void init_GSL(py::module &);
-void init_ts(py::module&);
-void init_evolution_functions(py::module&);
-void init_discrete_demography(py::module & m);
+void init_ts(py::module &);
+void init_evolution_functions(py::module &);
+void init_discrete_demography(py::module &m);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
@@ -42,9 +41,9 @@ PYBIND11_MODULE(_fwdpy11, m)
     // When the module exits, restore the old handler.
     // We re-use variables to suppress unused variable warnings.
     py::module::import("atexit").attr("register")(
-        py::cpp_function{ [&handler, &custom_handler]() {
+        py::cpp_function{[&handler, &custom_handler]() {
             custom_handler = gsl_set_error_handler(handler);
-        } });
+        }});
 
     initialize_fwdpp_types(m);
     initialize_fwdpp_functions(m);
@@ -58,4 +57,18 @@ PYBIND11_MODULE(_fwdpy11, m)
     init_ts(m);
     init_evolution_functions(m);
     init_discrete_demography(m);
+
+    m.def(
+        "pybind11_version",
+        []() {
+            py::dict rv;
+            std::ostringstream o;
+            o << PYBIND11_VERSION;
+            rv["pybind11_version"] = o.str();
+            return rv;
+        },
+        R"delim(
+    Returns the version of pybind11 used to
+    compile fwdpy11.
+    )delim");
 }

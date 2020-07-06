@@ -14,6 +14,7 @@ message(STATUS "Found pybind11: ${pybind11_VERSION}")
 if(${pybind11_VERSION} VERSION_LESS '2.4.3')
     message(FATAL_ERROR "pybind11 version must be >= '2.4.3'")
 endif()
+add_definitions(-DPYBIND11_VERSION="${pybind11_VERSION}")
 
 find_package(GSL REQUIRED)
 option(USE_WEFFCPP "Use -Weffc++ during compilation" OFF)
