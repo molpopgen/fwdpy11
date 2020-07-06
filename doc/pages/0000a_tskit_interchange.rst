@@ -13,11 +13,54 @@ Let's take a look:
    ts = pop.dump_tables_to_tskit()
    print(type(ts))
 
-.. note::
 
-   There is no function to dump a :class:`fwdpy11.TableCollection` directly.  The reason is that, if you
-   have a new table collection that you got from simplifying within fwdpy11, you could have done the 
-   exact same operation from within tskit. 
+You may provide a `dict` that reflects the simulation parameters used.  This `dict`
+will be part of the provenance information encoded in the :class:`tskit.TreeSequence`.
+For example:
+
+.. code-block:: python
+
+    # Assuming mp is a fwdpy11.ModelParams:
+    ts = pop.dump_tables_to_tskit(parameters={"model": str(mp), "seed": 12345})
+
+Ultimately, it is up to you to decide what to include in `parameters`.
+For example, if could be a script:
+
+.. code-block:: python
+
+    # Bonus points for somehow including the git commit hash corresponding
+    # to the version of the script that you used!
+    parameters = {"script": "/path/to/script", "type": "script", "seed": 1234}
+
+In order to get the provenance information back out from a :class:`tskit.TreeSequence`:
+
+.. code-block:: python
+
+    import json
+
+    provenance = json.decodes(ts.provenance(0).record)
+
+If you recorded an instance of :class:`fwdpy11.ModelParams` as your `parameters`, you
+can even reconstruct the original object (if you have the correct modules imported).
+For example, if we assume that we encoded the model parameters as shown two listings ago:
+
+.. code-block:: python
+
+    import tskit
+    import json
+    import numpy as np
+    import fwdpy11
+
+    ts = tskit.load("sim.trees")
+    provenance = json.decodes(ts.provenance(0).record)
+    array = np.array # Annoyance!
+    mp = eval(provenance["parameters"]["model"])
+
+It is possible for model parameters to contain `numpy` arrays.  Unfortunately, their
+string representations are not namespace-qualified, meaning that they say `array` rather
+than `numpy.array` or `np.array`.
+Thus, I made a type alias so that the `eval` would work.
+
 
 Decoding the metadata
 -----------------------------------------------
@@ -43,7 +86,9 @@ individuals in the individual table:
 
     import fwdpy11.tskit_tools
 
-    alive_individuals = ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+    alive_individuals = (
+        ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
+    )
 
 To find the nodes corresponding to those individuals:
 
