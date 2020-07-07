@@ -500,6 +500,11 @@ class DemographyDebugger(object):
         temp = self._format_deme_sizes(self.current_deme_sizes)
         self._report = ["Deme sizes at time {}: {}\n".format(0, temp)]
         t = self._get_next_event_time(event_queues)
+        if t > 0:
+            # If the first event is after time zero, let's make
+            # sure that the input migration matrix is valid.
+            # This fixes github issue 544
+            self._validate_migration_rates(0, self.current_deme_sizes)
         global_extinction = False
         last_t = None
         while t is not None and global_extinction is False:

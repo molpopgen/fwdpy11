@@ -169,5 +169,35 @@ class TestDetectingExtinctions(unittest.TestCase):
             setup_and_run_model(self.pop, d, 5)
 
 
+class TestBadModels(unittest.TestCase):
+    def test_github_issue_544(self):
+        pop = fwdpy11.DiploidPopulation(100, 1)
+        mass_migrations = [
+            fwdpy11.move_individuals(when=100, source=0, destination=1, fraction=0.5)
+        ]
+        m = 1e-3
+        migmatrix = np.array([1.0 - m, m, m, 1.0 - m]).reshape(2, 2)
+        bad_dmodel = fwdpy11.DiscreteDemography(
+            mass_migrations=mass_migrations, migmatrix=migmatrix
+        )
+        with self.assertRaises(ValueError):
+            fwdpy11.DemographyDebugger([100], bad_dmodel)
+
+        pdict = {
+            "nregions": [],
+            "sregions": [],
+            "recregions": [],
+            "gvalue": fwdpy11.Multiplicative(1.0),
+            "rates": [0, 0, 0],
+            "demography": bad_dmodel,
+            "simlen": 150,
+        }
+
+        rng = fwdpy11.GSLrng(1010)
+        mp = fwdpy11.ModelParams(**pdict)
+        with self.assertRaises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(rng, pop, mp, 100)
+
+
 if __name__ == "__main__":
     unittest.main()
