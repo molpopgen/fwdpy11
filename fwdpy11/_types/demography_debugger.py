@@ -17,6 +17,7 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import collections
+import copy
 import typing
 import warnings
 
@@ -28,9 +29,13 @@ import fwdpy11
 
 def _create_event_list(o):
     try:
-        return fwdpy11.DiscreteDemography(**o.model.asdict())
+        d = o.model.asdict()
+        dc = copy.deepcopy(d)
+        return fwdpy11.DiscreteDemography(**dc)
     except AttributeError:
-        return fwdpy11.DiscreteDemography(**o.asdict())
+        d = o.asdict()
+        dc = copy.deepcopy(d)
+        return fwdpy11.DiscreteDemography(**dc)
 
 
 def _create_initial_deme_sizes(o):
