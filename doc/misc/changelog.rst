@@ -11,6 +11,8 @@ updates to latest `fwdpp` version, etc.
   the provenance table. :pr:`542`
 * Improve checking migration rates in :class:`fwdpy11.DemographyDebugger`. :pr:`545`
 * :class:`fwdpy11.DemographyDebugger` now makes a deep copy of input. :pr:`546`
+* The C++ back-ends for Gaussian stabilizing selection classes got streamlined
+  without changing the user interface. :pr:`547`
 * Manual got overhauled. :pr:`543`
 
 
