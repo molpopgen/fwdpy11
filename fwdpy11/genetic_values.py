@@ -249,7 +249,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
     also determine the order of positional arguments:
 
     :param optima: The optimum value for each trait over time
-    :type optima: np.ndarray or list[fwdpy11.PleiotropicOptima]
+    :type optima: numpy.array or list[fwdpy11.PleiotropicOptima]
     :param VS: Inverse strength of stablizing selection
     :type VS: float or None
 
@@ -529,7 +529,7 @@ class StrictAdditiveMultivariateEffects(
     :param focal_trait: Index of the focal trait
     :type focal_trait: int
     :param gvalue_to_fitness: Function mapping trait value to fitness
-    :type gvalue_to_fitness: :class:`fwdpy11.MultivariateGeneticValueToFitnessMap`
+    :type gvalue_to_fitness: :class:`fwdpy11.GeneticValueToFitnessMap`
     :param noise: Function adding random additive noise to trait value
     :type noise: :class:`fwdpy11.GeneticValueNoise`
 

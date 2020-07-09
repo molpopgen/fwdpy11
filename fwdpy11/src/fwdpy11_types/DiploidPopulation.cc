@@ -125,27 +125,6 @@ init_DiploidPopulation(py::module& m)
                 return pop.sample_individuals(individuals, haplotype,
                                               remove_fixed);
             },
-            R"delim(
-             Return a sample from a population.
-
-             :param individuals: Indexes of individuals in the sample
-             :type individuals: list
-             :param haplotype: (True) Determines the encoding of the return type
-             :type haplotype: bool
-             :param remove_fixed: (True) Remove fixed variants from the sample
-             :type remove_fixed: bool
-
-             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
-             :rtype: :class:`fwdpy11.sampling.DataMatrix`
-
-             .. versionadded:: 0.1.4
-
-             .. versionchanged:: 0.2.0
-
-                Change to an overloaded function returning a 
-                :class:`fwdpy11.sampling.DataMatrix` instead of 
-                the "classic libsequence" layout.
-             )delim",
             py::arg("individuals"), py::arg("haplotype") = true,
             py::arg("remove_fixed") = true)
         .def(
@@ -157,30 +136,7 @@ init_DiploidPopulation(py::module& m)
                                                      remove_fixed);
             },
             py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
-            py::arg("remove_fixed") = true,
-            R"delim(
-             Return a sample from a population.
-
-             :param rng: Random number generator
-             :type rng: :class:`fwdpy11.GSLrng`
-             :param nsam: The sample size
-             :type nsam: int
-             :param haplotype: (True) Determines the encoding of the return type
-             :type haplotype: bool
-             :param remove_fixed: (True) Remove fixed variants from the sample
-             :type remove_fixed: bool
-
-             :returns: A haplotype matrix if haplotype is True. Otherwise, a genotype matrix.
-             :rtype: :class:`fwdpy11.sampling.DataMatrix`
-
-             .. versionadded:: 0.1.4
-
-             .. versionchanged:: 0.2.0
-
-                Change to an overloaded function returning a 
-                :class:`fwdpy11.sampling.DataMatrix` instead of 
-                the "classic libsequence" layout.
-             )delim")
+            py::arg("remove_fixed") = true)
         .def("add_mutations", &fwdpy11::DiploidPopulation::add_mutations)
         .def(
             "dump_to_file",

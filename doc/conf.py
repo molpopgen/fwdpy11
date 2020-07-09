@@ -39,11 +39,27 @@ else:
 
 nitpicky = True
 nitpick_ignore = [
-    ("py:class", "pybind11_builtins.pybind11_object"),
-    ("py:class", "fwdpy11._regions.Region"),
-    ("py:class", "fwdpy11._regions.Sregion"),
-    ("py:class", "object"),
-    ("py:obj", "tuple"),
+    ("py:class", "fwdpy11._fwdpy11.GSLrng"),
+    ("py:class", "fwdpy11._fwdpy11.PopulationBase"),
+    ("py:class", "fwdpy11._fwdpy11.TreeIterator"),
+    ("py:class", "fwdpy11._fwdpy11.DiploidPopulation"),
+    ("py:class", "fwdpy11._fwdpy11.TableCollection"),
+    ("py:class", "fwdpy11._fwdpy11.NodeTable"),
+    ("py:class", "fwdpy11._fwdpy11.SampleRecorder"),
+    ("py:class", "fwdpy11._fwdpy11.RandomAncientSamples"),
+    ("py:class", "fwdpy11._fwdpy11.GeneticValueNoise"),
+    ("py:class", "fwdpy11._fwdpy11.GeneticValueIsTrait"),
+    ("py:class", "fwdpy11.discrete_demography.MassMigration"),
+    ("py:class", "fwdpy11.genetic_values.Optimum"),
+    ("py:class", "fwdpy11.genetic_values.PleiotropicOptima"),
+    ("py:class", "numpy.uint16"),
+    ("py:mod", "msprime"),
+    ("py:mod", "tskit"),
+    # ("py:class", "pybind11_builtins.pybind11_object"),
+    # ("py:class", "fwdpy11._regions.Region"),
+    # ("py:class", "fwdpy11._regions.Sregion"),
+    # ("py:class", "object"),
+    # ("py:obj", "tuple"),
 ]
 #    subprocess.Popen(['doxygen', 'fwdpp.doxygen'],env=my_env)
 # -- General configuration ------------------------------------------------
@@ -139,7 +155,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "unused_pages"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"

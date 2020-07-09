@@ -8,5 +8,4 @@ Adding random noise to genetic values
 .. autoclass:: fwdpy11.NoNoise
 
 .. autoclass:: fwdpy11.GaussianNoise
-    :members:
-
+    :members: asdict, fromdict, asblack

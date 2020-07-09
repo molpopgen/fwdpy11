@@ -62,9 +62,9 @@ def evolvets(
     :param simplification_interval: Number of generations between simplifications.
     :type simplification_interval: int
     :param recorder: (None) A temporal sampler/data recorder.
-    :type recorder: function
+    :type recorder: typing.Callable
     :param post_simplification_recorder: (None) A temporal sampler
-    :type post_simplification_recorder: function
+    :type post_simplification_recorder: typing.Callable
     :param suppress_table_indexing: (False) Prevents edge table indexing until
                                     end of simulation
     :type suppress_table_indexing: bool

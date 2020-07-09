@@ -16,7 +16,6 @@ Welcome to fwdpy11's documentation!
     misc/changelog
     misc/upgrade_path
     misc/deprecated
-    misc/todo
     misc/pubs
     misc/developersguide
     misc/writingplugins
@@ -28,26 +27,20 @@ Welcome to fwdpy11's documentation!
     pages/definitions
 
 .. toctree::
-    :caption: Introduction by way of example
+    :caption: Tutorials
 
-    pages/0000a_anintroexample.rst
+    pages/tutorial.rst
+    pages/advancedtopics.rst
 
 .. toctree::
     :caption: Objects and concepts
 
-    pages/0000a_objectoverview.rst
-    pages/mutation
-    pages/recombination
     pages/softselection
     pages/mvdes
-    pages/demographydebugger
     pages/tsoverview
     pages/tstypes
     pages/tablefs.rst
-    pages/0000a_tskit_interchange
     pages/recorders
-    pages/tstimeseries
-    pages/0000a_working_with_genotypes_trees.rst
 
 
 .. toctree::
@@ -84,3 +77,6 @@ Welcome to fwdpy11's documentation!
     examples/gss_divergent_optima
     examples/precapitation
     examples/recapitation
+
+.. todolist::
+

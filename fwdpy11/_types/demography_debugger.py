@@ -57,8 +57,8 @@ class DemographyDebugger(object):
     """
     Efficiently debug demographic events.
 
-    The class rapidly executes a mock simulation
-    of demographic events in order to try to rapidly
+    The class executes a mock simulation
+    of demographic events in order to quickly
     detect errors. It also generates a "report"
     of the model details for double-checking.
 
@@ -66,13 +66,14 @@ class DemographyDebugger(object):
     is raised. The goal is to catch the types of errors that would
     result in an exception during a simulation.
 
-    The class initialized with the following arguments,
+    The class is initialized with the following arguments,
     which may be either positional or keyword:
 
     :param initial_deme_sizes: The initial sizes of each deme
     :type initial_deme_sizes: list or fwdpy11.DiploidPopulation
     :param events: The demographic model
-    :type events: fwdpy11.DiscreteDemography or fwdpy11.DemographicModelDetails
+    :type events: fwdpy11.DiscreteDemography or
+                  fwdpy11.demographic_models.DemographicModelDetails
     :param simlen: The length of the simulation.  Defaults to `None`.
     :type simlen: int
     :param deme_labels: A map from deme index to a printable name

@@ -14,26 +14,38 @@ init_tsrecorders(py::module& m)
         "Allow recording of ancient samples during simulations with tree "
         "sequences.")
         .def(py::init<>())
-        .def_property_readonly("samples",
-                               [](const fwdpy11::SampleRecorder& self) {
-                                   return fwdpy11::make_1d_ndarray(
-                                       self.samples);
-                               },
-                               "Access to samples. For unit-testing purposes")
+        .def_property_readonly(
+            "samples",
+            [](const fwdpy11::SampleRecorder& self) {
+                return fwdpy11::make_1d_ndarray(self.samples);
+            },
+            "Access to samples. For unit-testing purposes")
         .def("add_sample", &fwdpy11::SampleRecorder::add_sample,
-             py::arg("individual"),
-             "Add the index of an individual to the list of samples")
+             R"delim(
+             Add the index of an individual to the list of samples
+
+             :param individual_index: The index of the individual to preserve
+             :type individual_index: int
+             )delim",
+             py::arg("individual_index"))
         .def("assign", &fwdpy11::SampleRecorder::assign, py::arg("samples"),
-             "Add a list of individuals to the list of samples.  Input is a "
-             "numpy array with dtype np.uint32");
+             R"delim(
+         Add a list of individuals to the list of samples.
+
+         :param samples: Array of individual indexes
+         :type samples: numpy.array
+
+         The :class:`numpy.dtype` of ``samples`` must be
+         ``np.uint32``.
+         )delim");
 
     py::class_<fwdpy11::no_ancient_samples>(
         m, "NoAncientSamples",
         "A recorder for tree sequence simulations that does nothing.")
         .def(py::init<>())
-        .def("__call__", [](fwdpy11::no_ancient_samples& na,
-                            const fwdpy11::DiploidPopulation& pop,
-                            fwdpy11::SampleRecorder& sr) { na(pop, sr); });
+        .def("__call__",
+             [](fwdpy11::no_ancient_samples& na, const fwdpy11::DiploidPopulation& pop,
+                fwdpy11::SampleRecorder& sr) { na(pop, sr); });
 
     py::class_<fwdpy11::random_ancient_samples>(
         m, "RandomAncientSamples",
@@ -46,8 +58,7 @@ init_tsrecorders(py::module& m)
                      {
                          tp.push_back(r(i));
                      };
-                 return fwdpy11::random_ancient_samples(seed, samplesize,
-                                                        std::move(tp));
+                 return fwdpy11::random_ancient_samples(seed, samplesize, std::move(tp));
              }),
              py::arg("seed"), py::arg("samplesize"), py::arg("timepoints"))
         .def("__call__", [](fwdpy11::random_ancient_samples& na,
