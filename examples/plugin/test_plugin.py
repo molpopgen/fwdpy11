@@ -10,7 +10,7 @@ pdict = {
     "sregions": [fwdpy11.GaussianS(0, 1, 1, 0.25)],
     "recregions": [fwdpy11.Region(0, 1, 1)],
     "rates": (0.0, 5e-3, 5e-3),
-    "gvalue": fwdpy11.Additive(2.0, fwdpy11.GSS(VS=1, optimum=1)),
+    "gvalue": fwdpy11.Additive(2.0, fwdpy11.GSS(VS=1.0, optimum=1.0)),
     "prune_selected": False,
 }
 

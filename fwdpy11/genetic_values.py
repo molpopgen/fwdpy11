@@ -137,7 +137,7 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
-class GSS(fwdpy11._fwdpy11._ll_GSS):
+class GSS(fwdpy11._fwdpy11._ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait.
 
@@ -170,9 +170,13 @@ class GSS(fwdpy11._fwdpy11._ll_GSS):
 
     def __attrs_post_init__(self):
         if self.VS is None:
-            super(GSS, self).__init__(self.optimum)
+            super(GSS, self).__init__(
+                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
+            )
         else:
-            super(GSS, self).__init__(self.optimum, self.VS)
+            super(GSS, self).__init__(
+                [Optimum(optimum=self.optimum, VS=self.VS, when=0)]
+            )
 
     def __getstate__(self):
         return self.asdict()
@@ -180,9 +184,13 @@ class GSS(fwdpy11._fwdpy11._ll_GSS):
     def __setstate__(self, d):
         self.__dict__.update(d)
         if self.VS is None:
-            super(GSS, self).__init__(self.optimum)
+            super(GSS, self).__init__(
+                [Optimum(optimum=self.optimum.optimum, VS=self.optimum.VS, when=0)]
+            )
         else:
-            super(GSS, self).__init__(self.optimum, self.VS)
+            super(GSS, self).__init__(
+                [Optimum(optimum=self.optimum, VS=self.VS, when=0)]
+            )
 
 
 @attr_add_asblack
@@ -230,7 +238,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
-class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
+class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection.
 
@@ -273,9 +281,9 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
 
     def __attrs_post_init__(self):
         if self.VS is None:
-            super(MultivariateGSS, self).__init__(self.optima)
+            super(MultivariateGSS, self).__init__([self.optima])
         else:
-            super(MultivariateGSS, self).__init__(self.optima, self.VS)
+            super(MultivariateGSS, self).__init__(self._convert_to_list())
 
     def __getstate__(self):
         return self.asdict()
@@ -283,9 +291,14 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSS):
     def __setstate__(self, d):
         self.__dict__.update(d)
         if self.VS is None:
-            super(MultivariateGSS, self).__init__(self.optima)
+            super(MultivariateGSS, self).__init__([self.optima])
         else:
-            super(MultivariateGSS, self).__init__(self.optima, self.VS)
+            super(MultivariateGSS, self).__init__(self._convert_to_list())
+
+    def _convert_to_list(self):
+        if self.VS is None:
+            raise ValueError("VS must not be None")
+        return [PleiotropicOptima(optima=self.optima, VS=self.VS, when=0)]
 
 
 @attr_add_asblack

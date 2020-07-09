@@ -1048,7 +1048,7 @@ class TestSimplificationInterval(unittest.TestCase):
         self.nreps = 500
         self.mu = self.theta / (4 * self.N)
         self.r = self.rho / (4 * self.N)
-        self.GSS = fwdpy11.GSS(VS=1, optimum=0)
+        self.GSS = fwdpy11.GSS(VS=1.0, optimum=0.0)
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],
@@ -1085,7 +1085,7 @@ class TestFixationPreservation(unittest.TestCase):
         rho = 1.0
         r = rho / (4 * N)
 
-        GSS = fwdpy11.GSS(VS=1, optimum=1)
+        GSS = fwdpy11.GSS(VS=1.0, optimum=1.0)
         a = fwdpy11.Additive(2.0, GSS)
         p = {
             "nregions": [],
@@ -1169,7 +1169,7 @@ class TestMetaData(unittest.TestCase):
         rho = 1.0
         r = rho / (4 * N)
 
-        GSS = fwdpy11.GSS(VS=1, optimum=1)
+        GSS = fwdpy11.GSS(VS=1.0, optimum=1.0)
         a = fwdpy11.Additive(2.0, GSS)
         p = {
             "nregions": [],
@@ -1259,7 +1259,7 @@ class TestDataMatrixIterator(unittest.TestCase):
         self.mu = self.theta / (4 * self.N)
         self.r = self.rho / (4 * self.N)
 
-        self.GSS = fwdpy11.GSS(VS=1, optimum=0)
+        self.GSS = fwdpy11.GSS(VS=1.0, optimum=0.0)
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],
@@ -1402,7 +1402,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         self.rho = 1.0
         self.r = self.rho / (4 * self.N)
 
-        self.GSS = fwdpy11.GSS(VS=1, optimum=0)
+        self.GSS = fwdpy11.GSS(VS=1.0, optimum=0.0)
         a = fwdpy11.Additive(2.0, self.GSS)
         self.p = {
             "nregions": [],

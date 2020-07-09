@@ -274,7 +274,7 @@ class TestGaussianStabilizingSelection(unittest.TestCase):
             ),
             "simlen": 100,
             "gvalue": fwdpy11.Additive(
-                ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0, VS=1)
+                ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=1.0)
             ),
         }
 

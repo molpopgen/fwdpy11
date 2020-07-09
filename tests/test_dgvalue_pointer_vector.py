@@ -31,7 +31,7 @@ class TestBadInput(unittest.TestCase):
 
     def test_invalid_dimensionality(self):
         a = fwdpy11.Additive(2.0)
-        mvgss = fwdpy11.MultivariateGSS(np.zeros(2), 10)
+        mvgss = fwdpy11.MultivariateGSS(np.zeros(2), 10.0)
         mv = fwdpy11.StrictAdditiveMultivariateEffects(2, 0, mvgss)
         from fwdpy11._fwdpy11 import _dgvalue_pointer_vector
 
