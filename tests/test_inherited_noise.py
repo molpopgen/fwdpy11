@@ -32,7 +32,7 @@ class TestInheritNoise(unittest.TestCase):
             "popsizes": np.array([self.pop.N] * 3, dtype=np.uint32),
             "simlen": 3,
             "gvalue": fwdpy11.Additive(
-                2.0, fwdpy11.GSS(0, 1), inherit_noise.IneritedNoise()
+                2.0, fwdpy11.GSS(optimum=0.0, VS=1.0), inherit_noise.IneritedNoise()
             ),
         }
 

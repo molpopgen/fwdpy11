@@ -51,7 +51,7 @@ distributions and there is no correlation in the effect size in the two demes.
         ),
         "simlen": 100,
         "gvalue": fwdpy11.Additive(
-            ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0, VS=10)
+            ndemes=2, scaling=2, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=10.0)
         ),
     }
 

@@ -63,9 +63,7 @@ set(GENETIC_VALUE_TO_FITNESS_SOURCES
     src/genetic_value_to_fitness/GeneticValueToFitnessMap.cc
     src/genetic_value_to_fitness/GeneticValueIsFitness.cc
     src/genetic_value_to_fitness/GeneticValueIsTrait.cc
-    src/genetic_value_to_fitness/GSS.cc
     src/genetic_value_to_fitness/GSSmo.cc
-    src/genetic_value_to_fitness/MultivariateGSS.cc
     src/genetic_value_to_fitness/MultivariateGSSmo.cc
     src/genetic_value_to_fitness/Optimum.cc
     src/genetic_value_to_fitness/PleiotropicOptima.cc)
