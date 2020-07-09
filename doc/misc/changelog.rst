@@ -9,6 +9,9 @@ updates to latest `fwdpp` version, etc.
 
 * :func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit` now populates
   the provenance table. :pr:`542`
+* Improve checking migration rates in :class:`fwdpy11.DemographyDebugger`. :pr:`545`
+* :class:`fwdpy11.DemographyDebugger` now makes a deep copy of input. :pr:`546`
+* Manual got overhauled. :pr:`543`
 
 
 0.8.2
