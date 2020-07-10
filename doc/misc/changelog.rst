@@ -4,7 +4,7 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-0.x.x
+0.8.3
 ****************************************
 
 * :func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit` now populates
@@ -14,6 +14,8 @@ updates to latest `fwdpp` version, etc.
 * The C++ back-ends for Gaussian stabilizing selection classes got streamlined
   without changing the user interface. :pr:`547`
 * Manual got overhauled. :pr:`543`
+* Snowdrift example (:ref:`here <stateful_fitness>`) reimplemented
+  using ``attrs``. :pr:`548`
 
 
 0.8.2
