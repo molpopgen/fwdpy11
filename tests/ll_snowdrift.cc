@@ -1,12 +1,7 @@
 /* Implement a stateful fitness model.
  * We define a new C++ type that will be
- * wrapped as a fwdpy11.fitness.DiploidFitness
+ * wrapped as a fwdpy11.DiploidGeneticValue
  * object.
- *
- * Such a fitness model is ultimately responsible
- * for generating a bound C++ callback whose signature
- * is fwdpy11::single_locus_fitness_fxn.
- *
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -17,8 +12,9 @@
 namespace py = pybind11;
 
 struct snowdrift : public fwdpy11::DiploidGeneticValue
-/* This is our stateful fitness object.
- * It records the model parameters and holds a
+/* This is the low-level implementation of our
+ * stateful fitness object.  It records the
+ * model parameters and holds a
  * vector to track individual phenotypes.
  *
  * Here, we publicly inherit from fwdpy11::DiploidGeneticValue,
@@ -112,19 +108,9 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
         // do it here by way of example.
         noise_fxn->update(pop);
     }
-
-    // In order to support pickling, we provide this function.
-    // It must return the relevant data needed for serialization
-    // as a Python object.  pybind11 makes this easy (for most
-    // cases, most of the time).
-    py::object
-    pickle() const
-    {
-        return py::make_tuple(b1, b2, c1, c2, phenotypes);
-    }
 };
 
-PYBIND11_MODULE(snowdrift, m)
+PYBIND11_MODULE(ll_snowdrift, m)
 {
     m.doc() = "Example of custom stateful fitness model.";
 
@@ -133,44 +119,8 @@ PYBIND11_MODULE(snowdrift, m)
         = pybind11::module::import("fwdpy11").attr("DiploidGeneticValue");
 
     // Create a Python class based on our new type
-    py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "DiploidSnowdrift")
+    py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "_ll_DiploidSnowdrift")
         .def(py::init<double, double, double, double>(), py::arg("b1"),
              py::arg("b2"), py::arg("c1"), py::arg("c2"))
-        .def_readonly("b1", &snowdrift::b1)
-        .def_readonly("b2", &snowdrift::b2)
-        .def_readonly("c1", &snowdrift::c1)
-        .def_readonly("c2", &snowdrift::c2)
-        .def_readwrite("phenotypes", &snowdrift::phenotypes)
-        // Implement pickling support
-        .def(py::pickle(
-            //Pickling here is quite simple.  We simply
-            //return the results of the member fxn
-            [](const snowdrift &s) { return s.pickle(); },
-            //Unpickling is almost always harder:
-            //Note that any of the Python steps below
-            //will raise exceptions if they fail,
-            //making this code safe at run time.
-            [](py::object o) {
-                //Convert object to tuple.
-                py::tuple t(o);
-                // Check tuple size and
-                // throw error if it is not right
-                if (t.size() != 5)
-                    {
-                        throw std::runtime_error("invalid object state");
-                    }
-
-                //Get our data out via pybind11's casting
-                //mechanisms.  If things are not
-                //cast-able, exceptions are thrown
-                double b1 = t[0].cast<double>();
-                double b2 = t[1].cast<double>();
-                double c1 = t[2].cast<double>();
-                double c2 = t[3].cast<double>();
-                auto p = t[4].cast<std::vector<double>>();
-                //Create our object, using move semantics
-                //for efficiency
-                snowdrift rv(b1, b2, c1, c2, std::move(p));
-                return rv;
-            }));
+        .def_readwrite("phenotypes", &snowdrift::phenotypes);
 }
