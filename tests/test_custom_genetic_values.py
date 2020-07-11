@@ -47,11 +47,7 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
                 migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
             ),
             "simlen": 100,
-            "gvalue": fwdpy11.Additive(
-                ndemes=2,
-                scaling=2,
-                gvalue_to_fitness=GSS,
-            ),
+            "gvalue": fwdpy11.Additive(ndemes=2, scaling=2, gvalue_to_fitness=GSS,),
         }
 
         params = fwdpy11.ModelParams(**pdict)
@@ -75,6 +71,40 @@ class TestCustomGeneticValueisTrait(unittest.TestCase):
         fwdpy11.evolvets(rng, pop2, params, 100, suppress_table_indexing=True)
         md2 = np.array(pop.diploid_metadata)
         self.assertAlmostEqual(md["g"].mean(), md2["g"].mean())
+
+    def test_run_stateful(self):
+
+        import pygss
+
+        GSS = pygss.PyGSSRandomOptimum(opt=0.0, VS=1.0)
+
+        pdict = {
+            "nregions": [],
+            "sregions": [
+                fwdpy11.mvDES(
+                    fwdpy11.MultivariateGaussianEffects(
+                        0, 1, 1, h=0.25, cov_matrix=np.identity(2)
+                    ),
+                    np.zeros(2),
+                )
+            ],
+            "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
+            "rates": (0, 1e-2, None),
+            "demography": fwdpy11.DiscreteDemography(
+                migmatrix=np.array([0.9, 0.1, 0.1, 0.9]).reshape((2, 2))
+            ),
+            "simlen": 5,
+            "gvalue": fwdpy11.Additive(ndemes=2, scaling=2, gvalue_to_fitness=GSS,),
+        }
+
+        params = fwdpy11.ModelParams(**pdict)
+        pop = fwdpy11.DiploidPopulation([1000, 1000], 1.0)
+
+        rng = fwdpy11.GSLrng(1010)
+        fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
+        self.assertEqual(
+            len(params.gvalue.gvalue_to_fitness.optima), pop.generation + 1
+        )
 
 
 if __name__ == "__main__":
