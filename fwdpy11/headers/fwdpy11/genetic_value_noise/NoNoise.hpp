@@ -41,10 +41,10 @@ namespace fwdpy11
         {
         }
 
-        std::unique_ptr<GeneticValueNoise>
+        std::shared_ptr<GeneticValueNoise>
         clone() const override
         {
-            return std::unique_ptr<NoNoise>(new NoNoise());
+            return std::make_shared<NoNoise>();
         }
     };
 } // namespace fwdpy11

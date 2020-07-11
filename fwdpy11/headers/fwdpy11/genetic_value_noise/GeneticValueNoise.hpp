@@ -37,7 +37,7 @@ namespace fwdpy11
                    const std::size_t /*parent2*/,
                    const DiploidPopulation& /*pop*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
-        virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
+        virtual std::shared_ptr<GeneticValueNoise> clone() const = 0;
     };
 } // namespace fwdpy11
 

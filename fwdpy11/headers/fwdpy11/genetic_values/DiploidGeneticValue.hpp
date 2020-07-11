@@ -56,7 +56,7 @@ namespace fwdpy11
         /// from their own update functions.
         std::shared_ptr<GeneticValueToFitnessMap> gv2w;
         /// This must be updated, too:
-        std::unique_ptr<GeneticValueNoise> noise_fxn;
+        std::shared_ptr<GeneticValueNoise> noise_fxn;
 
         explicit DiploidGeneticValue(std::size_t ndim)
             : total_dim(ndim), gvalues(total_dim, 0.),

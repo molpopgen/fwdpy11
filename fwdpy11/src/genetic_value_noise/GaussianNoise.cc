@@ -24,10 +24,10 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     {
     }
 
-    std::unique_ptr<fwdpy11::GeneticValueNoise>
+    std::shared_ptr<fwdpy11::GeneticValueNoise>
     clone() const override
     {
-        return std::unique_ptr<GaussianNoise>(new GaussianNoise(*this));
+        return std::make_shared<GaussianNoise>(*this);
     }
 };
 
