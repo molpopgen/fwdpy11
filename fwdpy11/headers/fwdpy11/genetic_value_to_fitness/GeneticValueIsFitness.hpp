@@ -44,11 +44,10 @@ namespace fwdpy11
         {
         }
 
-        std::unique_ptr<GeneticValueToFitnessMap>
+        std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::unique_ptr<GeneticValueIsFitness>(
-                new GeneticValueIsFitness(this->total_dim));
+            return std::make_shared<GeneticValueIsFitness>(this->total_dim);
         }
     };
 } // namespace fwdpy11

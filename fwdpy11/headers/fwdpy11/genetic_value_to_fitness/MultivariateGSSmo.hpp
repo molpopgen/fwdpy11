@@ -81,10 +81,10 @@ namespace fwdpy11
             return std::exp(-sqdiff / (2.0 * optima[current_timepoint].VW));
         }
 
-        std::unique_ptr<GeneticValueToFitnessMap>
+        std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::unique_ptr<MultivariateGSSmo>(new MultivariateGSSmo(*this));
+            return std::make_shared<MultivariateGSSmo>(*this);
         }
 
         template <typename poptype>
