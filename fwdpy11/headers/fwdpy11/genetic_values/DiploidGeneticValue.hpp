@@ -54,7 +54,7 @@ namespace fwdpy11
         mutable std::vector<double> gvalues;
         /// Classes deriving from this must call gv2w->update
         /// from their own update functions.
-        std::unique_ptr<GeneticValueToFitnessMap> gv2w;
+        std::shared_ptr<GeneticValueToFitnessMap> gv2w;
         /// This must be updated, too:
         std::unique_ptr<GeneticValueNoise> noise_fxn;
 

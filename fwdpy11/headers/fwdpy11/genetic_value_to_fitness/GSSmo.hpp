@@ -70,10 +70,10 @@ namespace fwdpy11
             update_details(pop);
         }
 
-        std::unique_ptr<GeneticValueToFitnessMap>
+        std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::unique_ptr<GSSmo>(new GSSmo(*this));
+            return std::make_shared<GSSmo>(*this);
         }
     };
 } // namespace fwdpy11
