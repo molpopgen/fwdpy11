@@ -18,6 +18,23 @@ class genetic_value_is_trait_default_clone(object):
         return cls
 
 
+def genetic_value_noise_default_clone(cls):
+    from fwdpy11 import GeneticValueNoise
+
+    def clone(self):
+
+        # create a new object without initializing it
+        cloned = cls.__new__(cls)
+        # clone C++ state
+        GeneticValueNoise.__init__(cloned)
+        # clone Python state
+        cloned.__dict__.update(self.__dict__)
+        return cloned
+
+    cls.clone = clone
+    return cls
+
+
 def default_update(cls):
     def update(self, pop):
         pass
