@@ -11,12 +11,11 @@ class GeneticValueNoiseTrampoline : public fwdpy11::GeneticValueNoise
     double
     operator()(const fwdpy11::GSLrng_t& rng,
                const fwdpy11::DiploidMetadata& offspring_metadata,
-               const std::size_t parent1, const std::size_t parent2,
                const fwdpy11::DiploidPopulation& pop) const override
     {
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueNoise,
-                                    "__call__", operator(), rng, offspring_metadata, parent1,
-                                    parent2, pop);
+                                    "__call__", operator(), rng, offspring_metadata,
+                                    pop);
     }
 
     void

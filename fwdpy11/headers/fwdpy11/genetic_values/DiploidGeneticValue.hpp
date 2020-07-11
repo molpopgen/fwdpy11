@@ -60,18 +60,14 @@ namespace fwdpy11
 
         explicit DiploidGeneticValue(std::size_t ndim)
             : total_dim(ndim), gvalues(total_dim, 0.),
-              gv2w{ new GeneticValueIsFitness{ total_dim } }, noise_fxn{
-                  new NoNoise()
-              }
+              gv2w{new GeneticValueIsFitness{total_dim}}, noise_fxn{new NoNoise()}
         {
         }
 
         DiploidGeneticValue(std::size_t dimensonality,
                             const GeneticValueToFitnessMap& gv2w_)
             : total_dim(dimensonality),
-              gvalues(total_dim, 0.0), gv2w{ gv2w_.clone() }, noise_fxn{
-                  new NoNoise
-              }
+              gvalues(total_dim, 0.0), gv2w{gv2w_.clone()}, noise_fxn{new NoNoise}
         {
         }
 
@@ -79,9 +75,7 @@ namespace fwdpy11
                             const GeneticValueToFitnessMap& gv2w_,
                             const GeneticValueNoise& noise_)
             : total_dim(dimensonality),
-              gvalues(total_dim, 0.0), gv2w{ gv2w_.clone() }, noise_fxn{
-                  noise_.clone()
-              }
+              gvalues(total_dim, 0.0), gv2w{gv2w_.clone()}, noise_fxn{noise_.clone()}
         {
         }
 
@@ -92,10 +86,9 @@ namespace fwdpy11
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
 
         // Callable from Python
-        virtual double
-        calculate_gvalue(const std::size_t /*diploid_index*/,
-                         const DiploidMetadata & /*diploid_metadata*/,
-                         const DiploidPopulation& /*pop*/) const = 0;
+        virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
+                                        const DiploidMetadata& /*diploid_metadata*/,
+                                        const DiploidPopulation& /*pop*/) const = 0;
 
         virtual void
         update(const DiploidPopulation& pop)
@@ -107,12 +100,10 @@ namespace fwdpy11
         // To be called from w/in a simulation
         virtual void
         operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const DiploidPopulation& pop,
-                   DiploidMetadata& metadata) const
+                   const DiploidPopulation& pop, DiploidMetadata& metadata) const
         {
             metadata.g = calculate_gvalue(diploid_index, metadata, pop);
-            metadata.e = noise(rng, metadata, metadata.parents[0],
-                               metadata.parents[1], pop);
+            metadata.e = noise(rng, metadata, pop);
             metadata.w = genetic_value_to_fitness(metadata);
         }
 
@@ -124,17 +115,15 @@ namespace fwdpy11
 
         virtual double
         noise(const GSLrng_t& rng, const DiploidMetadata& offspring_metadata,
-              const std::size_t parent1, const std::size_t parent2,
               const DiploidPopulation& pop) const
         {
-            return noise_fxn->operator()(rng, offspring_metadata, parent1,
-                                         parent2, pop);
+            return noise_fxn->operator()(rng, offspring_metadata, pop);
         }
 
         virtual pybind11::tuple
         shape() const
         {
-            if (total_dim>1 && total_dim != gvalues.size())
+            if (total_dim > 1 && total_dim != gvalues.size())
                 {
                     throw std::runtime_error("dimensionality mismatch");
                 }
