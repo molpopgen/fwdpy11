@@ -24,11 +24,10 @@ struct IneritedNoise : public fwdpy11::GeneticValueNoise
 {
     double
     operator()(const fwdpy11::GSLrng_t& /*rng*/,
-               const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
-               const std::size_t parent1, const std::size_t /*parent2*/,
+               const fwdpy11::DiploidMetadata& offspring_metadata,
                const fwdpy11::DiploidPopulation& pop) const override
     {
-        return pop.diploid_metadata[parent1].e + pop.generation;
+        return pop.diploid_metadata[offspring_metadata.parents[0]].e + pop.generation;
     }
 
     void
@@ -36,10 +35,10 @@ struct IneritedNoise : public fwdpy11::GeneticValueNoise
     {
     }
 
-    std::unique_ptr<fwdpy11::GeneticValueNoise>
+    std::shared_ptr<fwdpy11::GeneticValueNoise>
     clone() const override
     {
-        return std::unique_ptr<IneritedNoise>(new IneritedNoise());
+        return std::make_shared<IneritedNoise>();
     }
 
     pybind11::object
@@ -65,8 +64,7 @@ PYBIND11_MODULE(inherit_noise, m)
     pybind11::object imported_base
         = pybind11::module::import("fwdpy11").attr("GeneticValueNoise");
 
-    pybind11::class_<IneritedNoise, fwdpy11::GeneticValueNoise>(
-        m, "IneritedNoise")
+    pybind11::class_<IneritedNoise, fwdpy11::GeneticValueNoise>(m, "IneritedNoise")
         .def(pybind11::init<>())
         .def(pybind11::pickle(
             [](const IneritedNoise& self) { return self.pickle(); },

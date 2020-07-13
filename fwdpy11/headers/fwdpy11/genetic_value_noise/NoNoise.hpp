@@ -29,8 +29,6 @@ namespace fwdpy11
         double
         operator()(const GSLrng_t& /*rng*/,
                    const DiploidMetadata& /*offspring_metadata*/,
-                   const std::size_t /*parent1*/,
-                   const std::size_t /*parent2*/,
                    const DiploidPopulation& /*pop*/) const override
         {
             return 0.;
@@ -41,10 +39,10 @@ namespace fwdpy11
         {
         }
 
-        std::unique_ptr<GeneticValueNoise>
+        std::shared_ptr<GeneticValueNoise>
         clone() const override
         {
-            return std::unique_ptr<NoNoise>(new NoNoise());
+            return std::make_shared<NoNoise>();
         }
     };
 } // namespace fwdpy11

@@ -33,11 +33,9 @@ namespace fwdpy11
         virtual double
         operator()(const GSLrng_t& /* rng */,
                    const DiploidMetadata& /*offspring_metadata*/,
-                   const std::size_t /*parent1*/,
-                   const std::size_t /*parent2*/,
                    const DiploidPopulation& /*pop*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
-        virtual std::unique_ptr<GeneticValueNoise> clone() const = 0;
+        virtual std::shared_ptr<GeneticValueNoise> clone() const = 0;
     };
 } // namespace fwdpy11
 
