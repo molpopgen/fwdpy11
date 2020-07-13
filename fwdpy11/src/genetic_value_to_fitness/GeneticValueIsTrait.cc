@@ -6,21 +6,56 @@
 
 namespace py = pybind11;
 
+struct genetic_values_buffer_proxy
+{
+    double* data;
+    std::size_t size;
+    genetic_values_buffer_proxy() : data{nullptr}, size{0}
+    {
+    }
+};
+
+struct GeneticValueIsTraitData
+{
+    fwdpy11::DiploidMetadata offspring_metadata_copy;
+    py::object offspring_metadata;
+    genetic_values_buffer_proxy buffer;
+    py::object genetic_values;
+
+    GeneticValueIsTraitData()
+        : offspring_metadata_copy{},
+          offspring_metadata{
+              py::cast<fwdpy11::DiploidMetadata*>(&offspring_metadata_copy)},
+          buffer{}, genetic_values{py::cast<genetic_values_buffer_proxy*>(&buffer)}
+    {
+    }
+};
+
 class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
 // Trampoline class allowing custom
 // GeneticValueIsTrait to be written
 // in Python
 {
+  private:
+    mutable GeneticValueIsTraitData data;
+    py::object pydata;
+
   public:
-    using fwdpy11::GeneticValueIsTrait::GeneticValueIsTrait;
+    GeneticValueIsTraitTrampoline(std::size_t ndim)
+        : fwdpy11::GeneticValueIsTrait(ndim), data{},
+          pydata{py::cast<GeneticValueIsTraitData*>(&data)}
+    {
+    }
 
     double
     operator()(const fwdpy11::DiploidMetadata& metadata,
                const std::vector<double>& genetic_values) const override
     {
-        auto a = fwdpy11::make_1d_ndarray(genetic_values);
+        data.offspring_metadata_copy = metadata;
+        data.buffer.data = const_cast<double*>(genetic_values.data());
+        data.buffer.size = genetic_values.size();
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueIsTrait,
-                                    "__call__", operator(), metadata, a);
+                                    "__call__", operator(), pydata);
     }
 
     void
@@ -51,4 +86,17 @@ init_GeneticValueIsTrait(py::module& m)
         "ABC for functions mapping genetic values representing traits to "
         "fitness.")
         .def(py::init<std::size_t>(), py::arg("ndim") = 1);
+
+    py::class_<genetic_values_buffer_proxy>(m, "_GeneticValuesBufferProxy",
+                                            py::buffer_protocol())
+        .def_buffer([](const genetic_values_buffer_proxy& self) {
+            return py::buffer_info(self.data, sizeof(double),
+                                   py::format_descriptor<double>::format(), 1,
+                                   {self.size}, {sizeof(double)}
+                                   );
+        });
+
+    py::class_<GeneticValueIsTraitData>(m, "GeneticValueIsTraitData")
+        .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
+        .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
 }

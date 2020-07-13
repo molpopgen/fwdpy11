@@ -35,8 +35,11 @@ class PyGSS(fwdpy11.GeneticValueIsTrait):
     def __attrs_post_init__(self):
         fwdpy11.GeneticValueIsTrait.__init__(self)
 
-    def __call__(self, metadata, genetic_values):
-        return math.e ** (-((metadata.g + metadata.e - self.opt) ** 2) / (2 * self.VS))
+    def __call__(self, data):
+        return math.e ** (
+            -((data.offspring_metadata.g + data.offspring_metadata.e - self.opt) ** 2)
+            / (2 * self.VS)
+        )
 
 
 @fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone()
@@ -49,8 +52,11 @@ class PyGSSRandomOptimum(fwdpy11.GeneticValueIsTrait):
         fwdpy11.GeneticValueIsTrait.__init__(self)
         self.optima = []
 
-    def __call__(self, metadata, genetic_values):
-        return math.e ** (-((metadata.g + metadata.e - self.opt) ** 2) / (2 * self.VS))
+    def __call__(self, data):
+        return math.e ** (
+            -((data.offspring_metadata.g + data.offspring_metadata.e - self.opt) ** 2)
+            / (2 * self.VS)
+        )
 
     def update(self, pop):
         self.opt = np.random.normal(0.0, 1.0, 1,)[0]
