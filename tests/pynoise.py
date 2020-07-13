@@ -23,5 +23,5 @@ import fwdpy11.custom_genetic_value_decorators
 @fwdpy11.custom_genetic_value_decorators.default_update
 @fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone
 class PyNoise(fwdpy11.GeneticValueNoise):
-    def __call__(self, rng, metadata, pop):
+    def __call__(self, rng, data):
         return fwdpy11.gsl_ran_gaussian_ziggurat(rng, 0.1)

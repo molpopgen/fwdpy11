@@ -3,19 +3,42 @@
 
 namespace py = pybind11;
 
+struct NoiseFunctionData
+{
+    fwdpy11::DiploidMetadata offspring_copy, parent1_copy, parent2_copy;
+    py::object offspring, parent1, parent2;
+    NoiseFunctionData()
+        : offspring_copy{}, parent1_copy{}, parent2_copy{},
+          offspring{py::cast<fwdpy11::DiploidMetadata*>(&offspring_copy)},
+          parent1{py::cast<fwdpy11::DiploidMetadata*>(&parent1_copy)},
+          parent2{py::cast<fwdpy11::DiploidMetadata*>(&parent2_copy)}
+    {
+    }
+};
+
 class GeneticValueNoiseTrampoline : public fwdpy11::GeneticValueNoise
 {
+  private:
+    mutable NoiseFunctionData data;
+    py::object pydata;
+
   public:
-    using fwdpy11::GeneticValueNoise::GeneticValueNoise;
+    GeneticValueNoiseTrampoline()
+        : fwdpy11::GeneticValueNoise(), data{}, pydata{
+                                                    py::cast<NoiseFunctionData*>(&data)}
+    {
+    }
 
     double
     operator()(const fwdpy11::GSLrng_t& rng,
                const fwdpy11::DiploidMetadata& offspring_metadata,
                const fwdpy11::DiploidPopulation& pop) const override
     {
+        data.offspring_copy = offspring_metadata;
+        data.parent1_copy = pop.diploid_metadata[offspring_metadata.parents[0]];
+        data.parent2_copy = pop.diploid_metadata[offspring_metadata.parents[1]];
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueNoise,
-                                    "__call__", operator(), rng, offspring_metadata,
-                                    pop);
+                                    "__call__", operator(), rng, pydata);
     }
 
     void
@@ -44,4 +67,9 @@ init_GeneticValueNoise(py::module& m)
         m, "GeneticValueNoise",
         "ABC for noise classes affecting :class:`fwdpy11.DiploidPopulation`.")
         .def(py::init<>());
+
+    py::class_<NoiseFunctionData>(m, "NoiseFunctionData")
+        .def_readonly("offspring_metadata", &NoiseFunctionData::offspring)
+        .def_readonly("parent1_metadata", &NoiseFunctionData::parent1)
+        .def_readonly("parent2_metadata", &NoiseFunctionData::parent2);
 }
