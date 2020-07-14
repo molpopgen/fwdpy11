@@ -68,7 +68,7 @@ init_GeneticValueNoise(py::module& m)
         "ABC for noise classes affecting :class:`fwdpy11.DiploidPopulation`.")
         .def(py::init<>());
 
-    py::class_<NoiseFunctionData>(m, "NoiseFunctionData")
+    py::class_<NoiseFunctionData>(m, "PyGeneticValueNoiseData")
         .def_readonly("offspring_metadata", &NoiseFunctionData::offspring)
         .def_readonly("parent1_metadata", &NoiseFunctionData::parent1)
         .def_readonly("parent2_metadata", &NoiseFunctionData::parent2);

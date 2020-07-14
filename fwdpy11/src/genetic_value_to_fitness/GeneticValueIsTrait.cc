@@ -96,7 +96,7 @@ init_GeneticValueIsTrait(py::module& m)
                                    );
         });
 
-    py::class_<GeneticValueIsTraitData>(m, "GeneticValueIsTraitData")
+    py::class_<GeneticValueIsTraitData>(m, "PyGeneticValueIsTraitData")
         .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
         .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
 }
