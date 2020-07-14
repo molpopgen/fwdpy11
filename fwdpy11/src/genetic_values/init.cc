@@ -3,6 +3,7 @@
 namespace py = pybind11;
 
 void init_DiploidGeneticValue(py::module&);
+void init_PyDiploidGeneticValue(py::module&);
 void init_Additive(py::module&);
 void init_Multiplicative(py::module&);
 void init_GBR(py::module&);
@@ -13,6 +14,7 @@ void
 init_base_classes(py::module& m)
 {
     init_DiploidGeneticValue(m);
+    init_PyDiploidGeneticValue(m);
 }
 
 void

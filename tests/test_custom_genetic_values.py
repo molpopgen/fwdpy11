@@ -48,6 +48,18 @@ def build_model(gvalue_to_fitness, noise, simlen):
     return pdict
 
 
+def build_single_trait_model(gvalue, simlen):
+    pdict = {
+        "nregions": [],
+        "sregions": [fwdpy11.GaussianS(0.0, 1.0, 1.0, 0.1)],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
+        "rates": (0, 1e-3, None),
+        "simlen": simlen,
+        "gvalue": gvalue,
+    }
+    return pdict
+
+
 class TestCustomGeneticValueisTrait(unittest.TestCase):
     def test_run(self):
 
@@ -111,6 +123,32 @@ class TestCustomGeneticValueNoise(unittest.TestCase):
         self.assertEqual(pop.generation, params.simlen)
         md = np.array(pop.diploid_metadata)
         self.assertTrue(len(np.where(md["e"] > 0)[0]) > 0)
+
+
+class TestCustomPyGeneticValue(unittest.TestCase):
+    @classmethod
+    def setUp(self):
+        import pygss
+        import pyadditive
+        import pynoise
+
+        PyA = pyadditive.PyAdditive(
+            pygss.PyGSS(opt=0.0, VS=1.0), noise=pynoise.PyNoise()
+        )
+
+        self.pdict_PyA = build_single_trait_model(PyA, 100)
+
+    def test_run(self):
+        mparams_PyA = fwdpy11.ModelParams(**self.pdict_PyA)
+        rng_PyA = fwdpy11.GSLrng(42 * 666)
+        pop_PyA = fwdpy11.DiploidPopulation(1000, 1.0)
+
+        fwdpy11.evolvets(rng_PyA, pop_PyA, mparams_PyA, 100)
+        if len(pop_PyA.tables.mutations) == 0:
+            self.fail("simulation ended with no mutations")
+        md = np.array(pop_PyA.diploid_metadata, copy=False)
+        self.assertTrue(md['g'].var() > 0.)
+        self.assertTrue(md['e'].var() > 0.)
 
 
 if __name__ == "__main__":
