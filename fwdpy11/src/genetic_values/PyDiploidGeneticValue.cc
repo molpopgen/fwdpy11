@@ -76,12 +76,22 @@ struct genome_data_proxy
 
 struct PyDiploidGeneticValueData
 {
+    py::list
+    fill_genomes(py::object g1, py::object g2)
+    {
+        py::list rv;
+        rv.append(g1);
+        rv.append(g2);
+        return rv;
+    }
+
     fwdpy11::DiploidMetadata metadata_proxy, parent1_metadata_proxy,
         parent2_metadata_proxy;
     genome_data_proxy genome1_data, genome2_data;
     double_array_proxy gvalues_proxy;
     py::object offspring_metadata, parent1_metadata, parent2_metadata, genome1, genome2,
         gvalues;
+    py::list genomes;
     PyDiploidGeneticValueData()
         : metadata_proxy{}, genome1_data{}, genome2_data{},
           offspring_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
@@ -89,7 +99,8 @@ struct PyDiploidGeneticValueData
           parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
           genome1{py::cast<genome_data_proxy*>(&genome1_data)},
           genome2{py::cast<genome_data_proxy*>(&genome2_data)},
-          gvalues{py::cast<double_array_proxy*>(&gvalues_proxy)}
+          gvalues{py::cast<double_array_proxy*>(&gvalues_proxy)}, genomes{fill_genomes(
+                                                                      genome1, genome2)}
     {
     }
 };
@@ -135,7 +146,6 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     py::object pydata;
 
   public:
-
     PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map,
                                     py::object noise)
         : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map, noise), data{},
@@ -189,8 +199,7 @@ init_PyDiploidGeneticValue(py::module& m)
         .def_readwrite("parent1_metadata", &PyDiploidGeneticValueData::parent1_metadata)
         .def_readwrite("parent2_metadata", &PyDiploidGeneticValueData::parent2_metadata)
         .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
-        .def_readonly("genome1", &PyDiploidGeneticValueData::genome1)
-        .def_readonly("genome2", &PyDiploidGeneticValueData::genome2);
+        .def_readonly("genomes", &PyDiploidGeneticValueData::genomes);
 
     py::class_<genome_data_proxy>(m, "HaploidGenomeProxy")
         .def_readonly("effect_sizes", &genome_data_proxy::effect_sizes)
