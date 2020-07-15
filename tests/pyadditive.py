@@ -29,6 +29,8 @@ class PyAdditive(fwdpy11.PyDiploidGeneticValue):
     def calculate_gvalue(self, data):
         s = 0.0
         for g in data.genomes:
-            s += np.array(g.effect_sizes, copy=False).sum()
-        np.array(data.gvalues, copy=False)[0] = s
+            v = memoryview(g.effect_sizes)
+            for i in v:
+                s += i
+        memoryview(data.gvalues)[0] = s
         return s
