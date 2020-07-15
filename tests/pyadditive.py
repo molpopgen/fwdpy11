@@ -23,11 +23,8 @@ import fwdpy11
 
 
 class PyAdditive(fwdpy11.PyDiploidGeneticValue):
-    def __init__(self, gvalue_to_fitness, noise=None):
-        if noise is None:
-            fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness)
-        else:
-            fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise)
+    def __init__(self, gvalue_to_fitness=None, noise=None):
+        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise)
 
     def calculate_gvalue(self, data):
         s = np.array(data.genome1.effect_sizes, copy=False).sum()

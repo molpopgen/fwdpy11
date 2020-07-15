@@ -96,23 +96,34 @@ struct PyDiploidGeneticValueData
 
 class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValue
 {
+  private:
+    std::shared_ptr<fwdpy11::GeneticValueToFitnessMap>
+    dispatch_gv2w(std::size_t ndim, py::object gvalue_to_fitness_map)
+    {
+        fwdpy11::GeneticValueIsFitness w(ndim);
+        if (gvalue_to_fitness_map.is_none())
+            {
+                return w.clone();
+            }
+        return gvalue_to_fitness_map.cast<fwdpy11::GeneticValueIsTrait&>().clone();
+    }
+
+    std::shared_ptr<fwdpy11::GeneticValueNoise>
+    dispatch_noise(py::object noise)
+    {
+        fwdpy11::NoNoise nonoise;
+        if (noise.is_none())
+            {
+                return nonoise.clone();
+            }
+        return noise.cast<fwdpy11::GeneticValueNoise&>().clone();
+    }
 
   public:
-    PyDiploidGeneticValue(std::size_t ndim) : fwdpy11::DiploidGeneticValue(ndim)
-    {
-    }
-
-    PyDiploidGeneticValue(std::size_t ndim, py::object gvalue_to_fitness_map)
-        : fwdpy11::DiploidGeneticValue(
-            ndim, gvalue_to_fitness_map.cast<const fwdpy11::GeneticValueIsTrait&>())
-    {
-    }
-
     PyDiploidGeneticValue(std::size_t ndim, py::object gvalue_to_fitness_map,
                           py::object noise)
-        : fwdpy11::DiploidGeneticValue(
-            ndim, gvalue_to_fitness_map.cast<const fwdpy11::GeneticValueIsTrait&>(),
-            noise.cast<const fwdpy11::GeneticValueNoise&>())
+        : fwdpy11::DiploidGeneticValue(ndim, *dispatch_gv2w(ndim, gvalue_to_fitness_map),
+                                       *dispatch_noise(noise))
     {
     }
 };
@@ -124,18 +135,6 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     py::object pydata;
 
   public:
-    PyDiploidGeneticValueTrampoline(std::size_t ndim)
-        : PyDiploidGeneticValue(ndim), data{}, pydata{
-                                                   py::cast<PyDiploidGeneticValueData*>(
-                                                       &data)}
-    {
-    }
-
-    PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map)
-        : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map), data{},
-          pydata{py::cast<PyDiploidGeneticValueData*>(&data)}
-    {
-    }
 
     PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map,
                                     py::object noise)
@@ -177,8 +176,6 @@ init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t>())
-        .def(py::init<std::size_t, py::object>())
         .def(py::init<std::size_t, py::object, py::object>())
         .def("update_members",
              [](PyDiploidGeneticValue& self, const fwdpy11::DiploidPopulation& pop) {
