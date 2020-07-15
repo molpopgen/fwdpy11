@@ -100,8 +100,8 @@ struct PyDiploidGeneticValueData
     PyDiploidGeneticValueData()
         : metadata_proxy{}, genome1_data{}, genome2_data{},
           offspring_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
-          parent1_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
-          parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
+          parent1_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent1_metadata_proxy)},
+          parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent2_metadata_proxy)},
           genome1{py::cast<genome_data_proxy*>(&genome1_data)},
           genome2{py::cast<genome_data_proxy*>(&genome2_data)},
           gvalues{py::cast<double_array_proxy*>(&gvalues_proxy)}, genomes{fill_list(
@@ -202,6 +202,8 @@ init_PyDiploidGeneticValue(py::module& m)
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
         .def_readwrite("offspring_metadata",
                        &PyDiploidGeneticValueData::offspring_metadata)
+        .def_readwrite("parent1_metadata",
+                       &PyDiploidGeneticValueData::parent1_metadata)
         .def_readwrite("parental_metadata",
                        &PyDiploidGeneticValueData::parental_metadata)
         .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
