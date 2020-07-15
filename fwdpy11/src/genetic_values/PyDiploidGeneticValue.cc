@@ -43,16 +43,18 @@ using mutation_key_array_proxy = array_proxy<std::uint32_t>;
 
 struct genome_data_proxy
 {
-    double_array_proxy effect_sizes_proxy, dominance_proxy;
+    double_array_proxy effect_sizes_proxy, dominance_proxy, positions_proxy;
     mutation_key_array_proxy smutations_proxy;
-    py::object effect_sizes, dominance, smutations;
-    std::vector<double> effect_sizes_cpp, dominance_cpp;
+    py::object effect_sizes, dominance, smutations, positions;
+    std::vector<double> effect_sizes_cpp, dominance_cpp, positions_cpp;
 
     genome_data_proxy()
-        : effect_sizes_proxy{}, dominance_proxy{}, smutations_proxy{},
+        : effect_sizes_proxy{}, dominance_proxy{}, positions_proxy{}, smutations_proxy{},
           effect_sizes{py::cast<double_array_proxy*>(&effect_sizes_proxy)},
           dominance{py::cast<double_array_proxy*>(&dominance_proxy)},
-          smutations{py::cast<mutation_key_array_proxy*>(&smutations_proxy)}
+          smutations{py::cast<mutation_key_array_proxy*>(&smutations_proxy)},
+          positions{py::cast<double_array_proxy*>(&positions_proxy)},
+          effect_sizes_cpp{}, dominance_cpp{}, positions_cpp{}
     {
     }
 
@@ -62,14 +64,17 @@ struct genome_data_proxy
     {
         effect_sizes_cpp.clear();
         dominance_cpp.clear();
+        positions_cpp.clear();
         for (auto k : smutations)
             {
                 auto& m = mutations[k];
                 effect_sizes_cpp.push_back(m.s);
                 dominance_cpp.push_back(m.h);
+                positions_cpp.push_back(m.pos);
             }
         effect_sizes_proxy.set(effect_sizes_cpp);
         dominance_proxy.set(dominance_cpp);
+        positions_proxy.set(positions_cpp);
         smutations_proxy.set(smutations);
     }
 };
@@ -204,6 +209,7 @@ init_PyDiploidGeneticValue(py::module& m)
     py::class_<genome_data_proxy>(m, "HaploidGenomeProxy")
         .def_readonly("effect_sizes", &genome_data_proxy::effect_sizes)
         .def_readonly("dominance", &genome_data_proxy::dominance)
+        .def_readonly("positions", &genome_data_proxy::positions)
         .def_readonly("smutations", &genome_data_proxy::smutations);
 
     py::class_<double_array_proxy>(m, "_FloatProxy", py::buffer_protocol())
