@@ -178,6 +178,14 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
         PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue, data);
     }
 
+    double
+    genetic_value_to_fitness(
+        const fwdpy11::DiploidMetadata& offspring_metadata) const override
+    {
+        PYBIND11_OVERLOAD(double, PyDiploidGeneticValue, genetic_value_to_fitness,
+                          offspring_metadata);
+    }
+
     void
     update(const fwdpy11::DiploidPopulation& pop) override
     {
