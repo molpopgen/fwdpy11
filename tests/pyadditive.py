@@ -24,7 +24,7 @@ import fwdpy11
 
 class PyAdditive(fwdpy11.PyDiploidGeneticValue):
     def __init__(self, gvalue_to_fitness=None, noise=None):
-        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise)
+        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise, False)
 
     def calculate_gvalue(self, data):
         s = 0.0
