@@ -233,8 +233,8 @@ init_PyDiploidGeneticValue(py::module& m)
     py::class_<mutation_key_array_proxy>(m, "_MutationKeyArrayProxy",
                                          py::buffer_protocol())
         .def_buffer([](const mutation_key_array_proxy& self) {
-            return py::buffer_info(self.data, sizeof(double),
-                                   py::format_descriptor<double>::format(), 1,
-                                   {self.size}, {sizeof(double)});
+            return py::buffer_info(self.data, sizeof(std::uint32_t),
+                                   py::format_descriptor<std::uint32_t>::format(), 1,
+                                   {self.size}, {sizeof(std::uint32_t)});
         });
 }
