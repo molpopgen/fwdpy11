@@ -38,6 +38,14 @@ template <typename T> struct array_proxy
     }
 };
 
+template <typename T>
+inline py::buffer_info
+as_buffer(const array_proxy<T>& self)
+{
+    return py::buffer_info(self.data, sizeof(T), py::format_descriptor<T>::format(), 1,
+                           {self.size}, {sizeof(T)});
+}
+
 using double_array_proxy = array_proxy<double>;
 using mutation_key_array_proxy = array_proxy<std::uint32_t>;
 
@@ -110,7 +118,8 @@ struct PyDiploidGeneticValueData
         gvalues;
     py::list genomes, parental_metadata;
     PyDiploidGeneticValueData(bool fill_mutations_list)
-        : metadata_proxy{}, genome1_data{fill_mutations_list}, genome2_data{fill_mutations_list},
+        : metadata_proxy{}, genome1_data{fill_mutations_list},
+          genome2_data{fill_mutations_list},
           offspring_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
           parent1_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent1_metadata_proxy)},
           parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent2_metadata_proxy)},
@@ -153,7 +162,8 @@ class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValue
     PyDiploidGeneticValue(std::size_t ndim, py::object gvalue_to_fitness_map,
                           py::object noise, bool fill_mutations_list)
         : fwdpy11::DiploidGeneticValue(ndim, *dispatch_gv2w(ndim, gvalue_to_fitness_map),
-                                       *dispatch_noise(noise)), filling_mutations{fill_mutations_list}
+                                       *dispatch_noise(noise)),
+          filling_mutations{fill_mutations_list}
     {
     }
 };
@@ -167,8 +177,8 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
   public:
     PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map,
                                     py::object noise, bool fill_mutations_list)
-        : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map, noise, fill_mutations_list), data{fill_mutations_list},
-          pydata{py::cast<PyDiploidGeneticValueData*>(&data)}
+        : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map, noise, fill_mutations_list),
+          data{fill_mutations_list}, pydata{py::cast<PyDiploidGeneticValueData*>(&data)}
     {
     }
 
@@ -237,17 +247,10 @@ init_PyDiploidGeneticValue(py::module& m)
         .def_readonly("mutations", &genome_data_proxy::pymutations);
 
     py::class_<double_array_proxy>(m, "_FloatProxy", py::buffer_protocol())
-        .def_buffer([](const double_array_proxy& self) {
-            return py::buffer_info(self.data, sizeof(double),
-                                   py::format_descriptor<double>::format(), 1,
-                                   {self.size}, {sizeof(double)});
-        });
+        .def_buffer([](const double_array_proxy& self) { return as_buffer(self); });
 
     py::class_<mutation_key_array_proxy>(m, "_MutationKeyArrayProxy",
                                          py::buffer_protocol())
-        .def_buffer([](const mutation_key_array_proxy& self) {
-            return py::buffer_info(self.data, sizeof(std::uint32_t),
-                                   py::format_descriptor<std::uint32_t>::format(), 1,
-                                   {self.size}, {sizeof(std::uint32_t)});
-        });
+        .def_buffer(
+            [](const mutation_key_array_proxy& self) { return as_buffer(self); });
 }
