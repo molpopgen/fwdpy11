@@ -244,7 +244,14 @@ init_PyDiploidGeneticValue(py::module& m)
         .def_readonly("dominance", &genome_data_proxy::dominance)
         .def_readonly("positions", &genome_data_proxy::positions)
         .def_readonly("smutations", &genome_data_proxy::smutations)
-        .def_readonly("mutations", &genome_data_proxy::pymutations);
+        .def_property_readonly("mutations",
+                               [](const genome_data_proxy& self) -> py::object {
+                                   if (self.filling_mutations == false)
+                                       {
+                                           return py::none();
+                                       }
+                                   return self.pymutations;
+                               });
 
     py::class_<double_array_proxy>(m, "_FloatProxy", py::buffer_protocol())
         .def_buffer([](const double_array_proxy& self) { return as_buffer(self); });
