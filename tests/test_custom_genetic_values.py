@@ -132,6 +132,34 @@ class TestCustomPyGeneticValue(unittest.TestCase):
         import pyadditive
         import pynoise
 
+        f = pyadditive.PyAdditive.calculate_gvalue
+
+        def intercept(self, data):
+            for g in data.genomes:
+                assert g.mutations is None
+                p = memoryview(g.positions)
+                if len(p) > 0:
+                    for i in p:
+                        assert i >= 0.0 and i < 1.
+                    assert type(p[0]) == float
+                m = memoryview(g.smutations)
+                if len(m) > 0:
+                    assert type(m[0]) == int
+                e = memoryview(g.effect_sizes)
+                if len(e) > 0:
+                    assert type(e[0]) == float
+                h = memoryview(g.dominance)
+                if len(h) > 0:
+                    for i in h:
+                        assert i == 1.0
+                    assert type(h[0]) == float
+                assert len(p) == len(m)
+                assert len(m) == len(e)
+                assert len(h) == len(e)
+            return f(self, data)
+
+        pyadditive.PyAdditive.calculate_gvalue = intercept
+
         PyA = pyadditive.PyAdditive(
             pygss.PyGSS(opt=0.0, VS=1.0), noise=pynoise.PyNoise()
         )
@@ -147,8 +175,8 @@ class TestCustomPyGeneticValue(unittest.TestCase):
         if len(pop_PyA.tables.mutations) == 0:
             self.fail("simulation ended with no mutations")
         md = np.array(pop_PyA.diploid_metadata, copy=False)
-        self.assertTrue(md['g'].var() > 0.)
-        self.assertTrue(md['e'].var() > 0.)
+        self.assertTrue(md["g"].var() > 0.0)
+        self.assertTrue(md["e"].var() > 0.0)
 
 
 if __name__ == "__main__":
