@@ -183,19 +183,29 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     }
 
     double
-    calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidMetadata& diploid_metadata,
-                     const fwdpy11::DiploidPopulation& pop) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData input_data) const override
     {
-        data.metadata_proxy = diploid_metadata;
-        data.parent1_metadata_proxy = pop.diploid_metadata[diploid_metadata.parents[0]];
-        data.parent2_metadata_proxy = pop.diploid_metadata[diploid_metadata.parents[1]];
+        data.metadata_proxy = input_data.offspring_metadata.get();
+        data.parent1_metadata_proxy
+            = input_data.pop.get()
+                  .diploid_metadata[input_data.offspring_metadata.get().parents[0]];
+        data.parent2_metadata_proxy
+            = input_data.pop.get()
+                  .diploid_metadata[input_data.offspring_metadata.get().parents[1]];
         data.genome1_data.set_data(
-            pop.haploid_genomes[pop.diploids[diploid_index].first].smutations,
-            pop.mutations);
+            input_data.pop.get()
+                .haploid_genomes[input_data.pop.get()
+                                     .diploids[input_data.offspring_metadata.get().label]
+                                     .first]
+                .smutations,
+            input_data.pop.get().mutations);
         data.genome2_data.set_data(
-            pop.haploid_genomes[pop.diploids[diploid_index].second].smutations,
-            pop.mutations);
+            input_data.pop.get()
+                .haploid_genomes[input_data.pop.get()
+                                     .diploids[input_data.offspring_metadata.get().label]
+                                     .second]
+                .smutations,
+            input_data.pop.get().mutations);
         data.gvalues_proxy.data = gvalues.data();
         data.gvalues_proxy.size = gvalues.size();
         PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue, data);

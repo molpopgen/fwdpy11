@@ -87,9 +87,7 @@ namespace fwdpy11
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
 
         // Callable from Python
-        virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
-                                        const DiploidMetadata& /*diploid_metadata*/,
-                                        const DiploidPopulation& /*pop*/) const = 0;
+        virtual double calculate_gvalue(const DiploidGeneticValueData data) const = 0;
 
         virtual void
         update(const DiploidPopulation& pop)
@@ -102,9 +100,7 @@ namespace fwdpy11
         virtual void
         operator()(DiploidGeneticValueData data) const
         {
-            data.offspring_metadata.get().g
-                = calculate_gvalue(data.offspring_metadata.get().label,
-                                   data.offspring_metadata.get(), data.pop.get());
+            data.offspring_metadata.get().g = calculate_gvalue(data);
             data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
             data.offspring_metadata.get().w
                 = genetic_value_to_fitness(data.offspring_metadata.get());

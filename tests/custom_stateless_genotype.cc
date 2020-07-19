@@ -8,23 +8,20 @@ struct GeneralW : public fwdpy11::DiploidGeneticValue
 {
     fwdpp::site_dependent_genetic_value w;
 
-    GeneralW() : fwdpy11::DiploidGeneticValue{ 1 }, w{} {}
+    GeneralW() : fwdpy11::DiploidGeneticValue{1}, w{}
+    {
+    }
 
     inline double
-    calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidMetadata& /*metadata*/,
-                     const fwdpy11::DiploidPopulation& pop) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
     {
-        gvalues[0]
-            = std::max(0.0, w(
-                                pop.diploids[diploid_index],
-                                pop.haploid_genomes, pop.mutations,
-                                [](double& g, const fwdpy11::Mutation& m) {
-                                    g *= (1.0 + m.s);
-                                },
-                                [](double& g, const fwdpy11::Mutation& m) {
-                                    g *= (1.0 + m.h);
-                                }, 1.0));
+        gvalues[0] = std::max(
+            0.0,
+            w(
+                data.pop.get().diploids[data.offspring_metadata.get().label],
+                data.pop.get().haploid_genomes, data.pop.get().mutations,
+                [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.s); },
+                [](double& g, const fwdpy11::Mutation& m) { g *= (1.0 + m.h); }, 1.0));
         return gvalues[0];
     }
 

@@ -15,8 +15,9 @@ init_DiploidGeneticValue(py::module& m)
             "__call__",
             [](const fwdpy11::DiploidGeneticValue& gv, const std::size_t diploid_index,
                const fwdpy11::DiploidPopulation& pop) {
-                return gv.calculate_gvalue(pop.diploid_metadata[diploid_index].label,
-                                           pop.diploid_metadata[diploid_index], pop);
+                return std::numeric_limits<double>::quiet_NaN();
+                //return gv.calculate_gvalue(pop.diploid_metadata[diploid_index].label,
+                //                           pop.diploid_metadata[diploid_index], pop);
             },
             R"delim(
              :param diploid_index: The index of the individual to calculate.
