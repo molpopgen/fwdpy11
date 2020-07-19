@@ -22,17 +22,20 @@
 
 struct IneritedNoise : public fwdpy11::GeneticValueNoise
 {
+    std::uint32_t generation;
+
+    IneritedNoise() : GeneticValueNoise{}, generation{} {}
+
     double
-    operator()(const fwdpy11::GSLrng_t& /*rng*/,
-               const fwdpy11::DiploidMetadata& offspring_metadata,
-               const fwdpy11::DiploidPopulation& pop) const override
+    operator()(const fwdpy11::DiploidGeneticValueNoiseData data) const override
     {
-        return pop.diploid_metadata[offspring_metadata.parents[0]].e + pop.generation;
+        return data.parent1_metadata.get().e + generation;
     }
 
     void
-    update(const fwdpy11::DiploidPopulation& /*pop*/) override
+    update(const fwdpy11::DiploidPopulation& pop) override
     {
+        generation = pop.generation;
     }
 
     std::shared_ptr<fwdpy11::GeneticValueNoise>

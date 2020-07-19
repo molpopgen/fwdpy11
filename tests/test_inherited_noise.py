@@ -40,13 +40,13 @@ class TestInheritNoise(unittest.TestCase):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolvets(self.rng, self.pop, params, 100)
         self.assertEqual(self.pop.generation, 3)
-        self.assertTrue(all([i.e == 6 for i in self.pop.diploid_metadata]) is True)
+        self.assertTrue(all([i.e == 6.0 for i in self.pop.diploid_metadata]) is True)
 
     def test_noise_values_without_tree_sequences(self):
         params = fwdpy11.ModelParams(**self.pdict)
         fwdpy11.evolve_genomes(self.rng, self.pop, params)
         self.assertEqual(self.pop.generation, 3)
-        self.assertTrue(all([i.e == 6 for i in self.pop.diploid_metadata]) is True)
+        self.assertTrue(all([i.e == 6.0 for i in self.pop.diploid_metadata]) is True)
 
 
 if __name__ == "__main__":

@@ -105,8 +105,7 @@ namespace fwdpy11
             data.offspring_metadata.get().g
                 = calculate_gvalue(data.offspring_metadata.get().label,
                                    data.offspring_metadata.get(), data.pop.get());
-            data.offspring_metadata.get().e
-                = noise(data.rng.get(), data.offspring_metadata.get(), data.pop.get());
+            data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
             data.offspring_metadata.get().w
                 = genetic_value_to_fitness(data.offspring_metadata.get());
         }
@@ -118,10 +117,9 @@ namespace fwdpy11
         }
 
         virtual double
-        noise(const GSLrng_t& rng, const DiploidMetadata& offspring_metadata,
-              const DiploidPopulation& pop) const
+        noise(const DiploidGeneticValueNoiseData data) const
         {
-            return noise_fxn->operator()(rng, offspring_metadata, pop);
+            return noise_fxn->operator()(data);
         }
 
         virtual pybind11::tuple

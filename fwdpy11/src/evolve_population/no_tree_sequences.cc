@@ -171,12 +171,12 @@ evolve_without_tree_sequences(
             handle_fixations(remove_selected_fixations, N_next, pop);
 
             pop.diploids.swap(offspring);
+            // TODO: deal with random effects
+            genetic_value_fxn.update(pop);
             lookup = calculate_diploid_fitness_genomes(
                 rng, pop, genetic_value_fxn, offspring_metadata);
             pop.diploid_metadata.swap(offspring_metadata);
             pop.N = N_next;
-            // TODO: deal with random effects
-            genetic_value_fxn.update(pop);
             recorder(pop); // The user may now analyze the pop'n
         }
 }

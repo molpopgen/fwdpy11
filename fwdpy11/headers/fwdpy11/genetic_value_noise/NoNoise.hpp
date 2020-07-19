@@ -27,9 +27,7 @@ namespace fwdpy11
     struct NoNoise : public GeneticValueNoise
     {
         double
-        operator()(const GSLrng_t& /*rng*/,
-                   const DiploidMetadata& /*offspring_metadata*/,
-                   const DiploidPopulation& /*pop*/) const override
+        operator()(const DiploidGeneticValueNoiseData /*data*/) const override
         {
             return 0.;
         }
