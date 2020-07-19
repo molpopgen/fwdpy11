@@ -14,8 +14,12 @@ calculate_diploid_fitness(
     for (std::size_t i = 0; i < offspring_metadata.size(); ++i)
         {
             auto idx = deme_to_gvalue_map[offspring_metadata[i].deme];
-            gvalue_pointers[idx]->operator()(rng, offspring_metadata[i].label, pop,
-                                             offspring_metadata[i]);
+            //gvalue_pointers[idx]->operator()(rng, offspring_metadata[i].label, pop,
+            //                                 offspring_metadata[i]);
+            gvalue_pointers[idx]->operator()(fwdpy11::DiploidGeneticValueData(
+                rng, pop, pop.diploid_metadata[offspring_metadata[i].parents[0]],
+                pop.diploid_metadata[offspring_metadata[i].parents[1]], i,
+                offspring_metadata[i]));
             if (update_genotype_matrix == true)
                 {
                     new_diploid_gvalues.insert(end(new_diploid_gvalues),
@@ -45,7 +49,10 @@ calculate_diploid_fitness_genomes(
     double sum_parental_fitnesses = 0.0;
     for (std::size_t i = 0; i < pop.diploids.size(); ++i)
         {
-            genetic_value_fxn(rng, i, pop, offspring_metadata[i]);
+            genetic_value_fxn(fwdpy11::DiploidGeneticValueData(
+                rng, pop, pop.diploid_metadata[offspring_metadata[i].parents[0]],
+                pop.diploid_metadata[offspring_metadata[i].parents[1]], i,
+                offspring_metadata[i]));
             parental_fitnesses[i] = offspring_metadata[i].w;
             sum_parental_fitnesses += parental_fitnesses[i];
         }

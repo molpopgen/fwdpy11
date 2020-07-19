@@ -29,6 +29,7 @@
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
+#include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
 
 namespace fwdpy11
 {
@@ -99,12 +100,15 @@ namespace fwdpy11
 
         // To be called from w/in a simulation
         virtual void
-        operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const DiploidPopulation& pop, DiploidMetadata& metadata) const
+        operator()(DiploidGeneticValueData data) const
         {
-            metadata.g = calculate_gvalue(diploid_index, metadata, pop);
-            metadata.e = noise(rng, metadata, pop);
-            metadata.w = genetic_value_to_fitness(metadata);
+            data.offspring_metadata.get().g
+                = calculate_gvalue(data.offspring_metadata.get().label,
+                                   data.offspring_metadata.get(), data.pop.get());
+            data.offspring_metadata.get().e
+                = noise(data.rng.get(), data.offspring_metadata.get(), data.pop.get());
+            data.offspring_metadata.get().w
+                = genetic_value_to_fitness(data.offspring_metadata.get());
         }
 
         virtual double
