@@ -65,17 +65,18 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     }
 
     double
-    genetic_value_to_fitness(const fwdpy11::DiploidMetadata &metadata) const override
+    genetic_value_to_fitness(
+        const fwdpy11::DiploidGeneticValueToFitnessData data) const override
     // This function converts genetic value to fitness.
     {
         double fitness = 0.0;
-        double zself = metadata.g;
+        double zself = data.offspring_metadata.get().g;
         auto N = phenotypes.size();
         for (std::size_t j = 0; j < N; ++j)
             {
                 // A record of which diploid we are
                 // processesing is the label field of the meta data.
-                if (metadata.label != j)
+                if (data.offspring_metadata.get().label != j)
                     {
                         double zpair = zself + phenotypes[j];
                         // Payoff function from Fig 1

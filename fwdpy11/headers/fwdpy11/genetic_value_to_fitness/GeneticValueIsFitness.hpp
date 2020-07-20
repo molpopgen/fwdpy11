@@ -32,11 +32,9 @@ namespace fwdpy11
         }
 
         double
-        operator()(
-            const DiploidMetadata &metadata,
-            const std::vector<double> & /*genetic_values*/) const override
+        operator()(const DiploidGeneticValueToFitnessData data) const override
         {
-            return metadata.g;
+            return data.offspring_metadata.get().g;
         }
 
         void

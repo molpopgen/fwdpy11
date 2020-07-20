@@ -19,40 +19,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
+#include <fwdpy11/util/array_proxy.hpp>
+#include "../genetic_value_to_fitness/GeneticValueIsTraitData.hpp"
 
 namespace py = pybind11;
 
-template <typename T> struct array_proxy
-{
-    T* data;
-    std::size_t size;
-    array_proxy() : data{nullptr}, size{0}
-    {
-    }
-
-    void
-    set(const std::vector<T>& v)
-    {
-        data = const_cast<T*>(v.data());
-        size = v.size();
-    }
-};
-
-template <typename T>
-inline py::buffer_info
-as_buffer(const array_proxy<T>& self)
-{
-    return py::buffer_info(self.data, sizeof(T), py::format_descriptor<T>::format(), 1,
-                           {self.size}, {sizeof(T)});
-}
-
-using double_array_proxy = array_proxy<double>;
-using mutation_key_array_proxy = array_proxy<std::uint32_t>;
-
 struct genome_data_proxy
 {
-    double_array_proxy effect_sizes_proxy, dominance_proxy, positions_proxy;
-    mutation_key_array_proxy smutations_proxy;
+    fwdpy11::double_array_proxy effect_sizes_proxy, dominance_proxy, positions_proxy;
+    fwdpy11::uint32_array_proxy smutations_proxy;
     py::object effect_sizes, dominance, smutations, positions;
     std::vector<double> effect_sizes_cpp, dominance_cpp, positions_cpp;
     py::list pymutations;
@@ -60,12 +35,12 @@ struct genome_data_proxy
 
     genome_data_proxy(bool fill_mutations_list)
         : effect_sizes_proxy{}, dominance_proxy{}, positions_proxy{}, smutations_proxy{},
-          effect_sizes{py::cast<double_array_proxy*>(&effect_sizes_proxy)},
-          dominance{py::cast<double_array_proxy*>(&dominance_proxy)},
-          smutations{py::cast<mutation_key_array_proxy*>(&smutations_proxy)},
-          positions{py::cast<double_array_proxy*>(&positions_proxy)}, effect_sizes_cpp{},
-          dominance_cpp{}, positions_cpp{}, pymutations{}, filling_mutations{
-                                                               fill_mutations_list}
+          effect_sizes{py::cast<fwdpy11::double_array_proxy*>(&effect_sizes_proxy)},
+          dominance{py::cast<fwdpy11::double_array_proxy*>(&dominance_proxy)},
+          smutations{py::cast<fwdpy11::uint32_array_proxy*>(&smutations_proxy)},
+          positions{py::cast<fwdpy11::double_array_proxy*>(&positions_proxy)},
+          effect_sizes_cpp{}, dominance_cpp{}, positions_cpp{}, pymutations{},
+          filling_mutations{fill_mutations_list}
     {
     }
 
@@ -113,7 +88,7 @@ struct PyDiploidGeneticValueData
     fwdpy11::DiploidMetadata metadata_proxy, parent1_metadata_proxy,
         parent2_metadata_proxy;
     genome_data_proxy genome1_data, genome2_data;
-    double_array_proxy gvalues_proxy;
+    fwdpy11::double_array_proxy gvalues_proxy;
     py::object offspring_metadata, parent1_metadata, parent2_metadata, genome1, genome2,
         gvalues;
     py::list genomes, parental_metadata;
@@ -125,9 +100,9 @@ struct PyDiploidGeneticValueData
           parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent2_metadata_proxy)},
           genome1{py::cast<genome_data_proxy*>(&genome1_data)},
           genome2{py::cast<genome_data_proxy*>(&genome2_data)},
-          gvalues{py::cast<double_array_proxy*>(&gvalues_proxy)}, genomes{fill_list(
-                                                                      genome1, genome2)},
-          parental_metadata{fill_list(parent1_metadata, parent2_metadata)}
+          gvalues{py::cast<fwdpy11::double_array_proxy*>(&gvalues_proxy)},
+          genomes{fill_list(genome1, genome2)}, parental_metadata{fill_list(
+                                                    parent1_metadata, parent2_metadata)}
     {
     }
 };
@@ -172,13 +147,17 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
 {
   private:
     mutable PyDiploidGeneticValueData data;
+    mutable GeneticValueIsTraitData gv2w_data;
     py::object pydata;
+    py::object pygv2wdata;
 
   public:
     PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map,
                                     py::object noise, bool fill_mutations_list)
         : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map, noise, fill_mutations_list),
-          data{fill_mutations_list}, pydata{py::cast<PyDiploidGeneticValueData*>(&data)}
+          data{fill_mutations_list}, gv2w_data{},
+          pydata{py::cast<PyDiploidGeneticValueData*>(&data)},
+          pygv2wdata{py::cast<GeneticValueIsTraitData*>(&gv2w_data)}
     {
     }
 
@@ -213,10 +192,23 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
 
     double
     genetic_value_to_fitness(
-        const fwdpy11::DiploidMetadata& offspring_metadata) const override
+        const fwdpy11::DiploidGeneticValueToFitnessData input_data) const override
+    // NOTE: see https://pybind11.readthedocs.io/en/stable/advanced/classes.html#extended-trampoline-class-functionality
     {
-        PYBIND11_OVERLOAD(double, PyDiploidGeneticValue, genetic_value_to_fitness,
-                          offspring_metadata);
+        pybind11::gil_scoped_acquire gil; // Acquire the GIL while in this scope.
+        // Try to look up the overloaded method on the Python side.
+        pybind11::function overload
+            = pybind11::get_overload(this, "genetic_value_to_fitness");
+        if (overload)
+            {
+                gv2w_data.offspring_metadata_copy = input_data.offspring_metadata.get();
+                gv2w_data.buffer.data
+                    = const_cast<double*>(input_data.gvalues.get().data());
+                gv2w_data.buffer.size = input_data.gvalues.get().size();
+                auto obj = overload(pygv2wdata);
+                return obj.cast<double>();
+            }
+        return this->gv2w->operator()(input_data);
     }
 
     void
@@ -262,12 +254,4 @@ init_PyDiploidGeneticValue(py::module& m)
                                        }
                                    return self.pymutations;
                                });
-
-    py::class_<double_array_proxy>(m, "_FloatProxy", py::buffer_protocol())
-        .def_buffer([](const double_array_proxy& self) { return as_buffer(self); });
-
-    py::class_<mutation_key_array_proxy>(m, "_MutationKeyArrayProxy",
-                                         py::buffer_protocol())
-        .def_buffer(
-            [](const mutation_key_array_proxy& self) { return as_buffer(self); });
 }

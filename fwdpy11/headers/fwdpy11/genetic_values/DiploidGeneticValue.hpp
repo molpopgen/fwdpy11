@@ -102,14 +102,14 @@ namespace fwdpy11
         {
             data.offspring_metadata.get().g = calculate_gvalue(data);
             data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
-            data.offspring_metadata.get().w
-                = genetic_value_to_fitness(data.offspring_metadata.get());
+            data.offspring_metadata.get().w = genetic_value_to_fitness(
+                DiploidGeneticValueToFitnessData(data, gvalues));
         }
 
         virtual double
-        genetic_value_to_fitness(const DiploidMetadata& metadata) const
+        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data) const
         {
-            return gv2w->operator()(metadata, gvalues);
+            return gv2w->operator()(data);
         }
 
         virtual double

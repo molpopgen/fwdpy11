@@ -75,7 +75,7 @@ namespace fwdpy11
         std::size_t metadata_index;
         std::reference_wrapper<fwdpy11::DiploidMetadata> offspring_metadata;
 
-        DiploidGeneticValueToFitnessData(const DiploidGeneticValueData& data,
+        explicit DiploidGeneticValueToFitnessData(const DiploidGeneticValueData& data,
                                          const std::vector<double>& gvalues_)
             : rng(data.rng), parent1_metadata(data.parent1_metadata),
               parent2_metadata(data.parent2_metadata), gvalues(gvalues_),

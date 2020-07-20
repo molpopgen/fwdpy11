@@ -24,6 +24,7 @@
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 #include <fwdpp/util/named_type.hpp>
+#include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
 
 namespace fwdpy11
 {
@@ -44,8 +45,7 @@ namespace fwdpy11
         }
         virtual ~GeneticValueToFitnessMap() = default;
         virtual double
-        operator()(const DiploidMetadata& /*metadata*/,
-                   const std::vector<double>& /*genetic_values*/) const = 0;
+        operator()(const DiploidGeneticValueToFitnessData /*data*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::shared_ptr<GeneticValueToFitnessMap> clone() const = 0;
         virtual pybind11::tuple

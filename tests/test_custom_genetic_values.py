@@ -140,7 +140,7 @@ class TestCustomPyGeneticValue(unittest.TestCase):
                 p = memoryview(g.positions)
                 if len(p) > 0:
                     for i in p:
-                        assert i >= 0.0 and i < 1.
+                        assert i >= 0.0 and i < 1.0
                     assert type(p[0]) == float
                 m = memoryview(g.smutations)
                 if len(m) > 0:
@@ -177,6 +177,44 @@ class TestCustomPyGeneticValue(unittest.TestCase):
         md = np.array(pop_PyA.diploid_metadata, copy=False)
         self.assertTrue(md["g"].var() > 0.0)
         self.assertTrue(md["e"].var() > 0.0)
+
+
+class TestCustomPyGeneticValueOverloadGeneticValueToFitness(unittest.TestCase):
+    def build_model(self, gvalue, simlen):
+        pdict = {
+            "nregions": [],
+            "sregions": [fwdpy11.GaussianS(beg=0.0, end=1.0, weight=1.0, sd=0.1)],
+            "recregions": [fwdpy11.PoissonInterval(0, 1, 0.5)],
+            "rates": (0, 1e-2, None),
+            "demography": fwdpy11.DiscreteDemography(),
+            "simlen": simlen,
+            "gvalue": gvalue,
+        }
+        return pdict
+
+    def test_run(self):
+
+        import pyadditivegss
+
+        pygv = pyadditivegss.PyAdditiveGSS(opt=0.0, VS=1.0)
+        pdict = self.build_model(pygv, 100)
+
+        params = fwdpy11.ModelParams(**pdict)
+        pop = fwdpy11.DiploidPopulation(1000, 1.0)
+
+        rng = fwdpy11.GSLrng(1010)
+        fwdpy11.evolvets(rng, pop, params, 100, suppress_table_indexing=True)
+
+        self.assertEqual(pop.generation, params.simlen)
+        md = np.array(pop.diploid_metadata)
+
+        pdict["gvalue"] = fwdpy11.Additive(2.0, fwdpy11.GSS(optimum=0.0, VS=1.0))
+        params = fwdpy11.ModelParams(**pdict)
+        pop2 = fwdpy11.DiploidPopulation(1000, 1.0)
+        rng = fwdpy11.GSLrng(1010)
+        fwdpy11.evolvets(rng, pop2, params, 100, suppress_table_indexing=True)
+        md2 = np.array(pop.diploid_metadata)
+        self.assertAlmostEqual(md["g"].mean(), md2["g"].mean())
 
 
 if __name__ == "__main__":
