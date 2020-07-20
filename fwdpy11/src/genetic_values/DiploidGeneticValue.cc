@@ -11,38 +11,6 @@ init_DiploidGeneticValue(py::module& m)
         m, "DiploidGeneticValue",
         "ABC for genetic value calculations for diploid members of "
         ":class:`fwdpy11.DiploidPopulation`")
-        .def(
-            "__call__",
-            [](const fwdpy11::DiploidGeneticValue& gv, const std::size_t diploid_index,
-               const fwdpy11::DiploidPopulation& pop) {
-                return std::numeric_limits<double>::quiet_NaN();
-                //return gv.calculate_gvalue(pop.diploid_metadata[diploid_index].label,
-                //                           pop.diploid_metadata[diploid_index], pop);
-            },
-            R"delim(
-             :param diploid_index: The index of the individual to calculate.
-             :type diploid_index: int >= 0
-             :param pop: The population object containing the individual.
-             :type pop: :class:`fwdpy11.DiploidPopulation`
-             :return: The genetic value of an individual.
-             :rtype: float
-             )delim",
-            py::arg("diploid_index"), py::arg("pop"))
-        .def(
-            "fitness",
-            [](const fwdpy11::DiploidGeneticValue& gv, const std::size_t diploid_index,
-               const fwdpy11::DiploidPopulation& pop) {
-                return gv.genetic_value_to_fitness(pop.diploid_metadata[diploid_index]);
-            },
-            R"delim(
-        :param diploid_index: The index of the individual
-        :type diploid_index: int >= 0
-        :param pop: The population containing the individual
-        :type pop: :class:`fwdpy11.DiploidPopulation`
-        :return: The fitness of an individual.
-        :rtype: float
-        )delim",
-            py::arg("diploid_index"), py::arg("pop"))
         .def_property_readonly(
             "shape",
             [](const fwdpy11::DiploidGeneticValue& self) { return self.shape(); },
