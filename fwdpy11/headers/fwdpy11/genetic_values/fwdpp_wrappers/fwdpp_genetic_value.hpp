@@ -115,11 +115,11 @@ namespace fwdpy11
         }
 
         double
-        calculate_gvalue(const std::size_t diploid_index,
-                         const DiploidMetadata& metadata,
-                         const DiploidPopulation& pop) const override
+        calculate_gvalue(const DiploidGeneticValueData data) const override
         {
-            gvalues[0] = make_return_value(callback(gv, diploid_index, metadata, pop));
+            gvalues[0] = make_return_value(
+                callback(gv, data.offspring_metadata.get().label,
+                         data.offspring_metadata.get(), data.pop.get()));
             return gvalues[0];
         }
 

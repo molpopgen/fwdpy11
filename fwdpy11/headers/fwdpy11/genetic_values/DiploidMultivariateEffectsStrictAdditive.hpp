@@ -41,12 +41,12 @@ namespace fwdpy11
         }
 
         double
-        calculate_gvalue(const std::size_t diploid_index,
-                         const DiploidMetadata& /*metadata*/,
-                         const DiploidPopulation& pop) const
+        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
         {
             std::fill(begin(gvalues), end(gvalues), 0.0);
 
+            const auto & pop = data.pop.get();
+            const auto diploid_index = data.offspring_metadata.get().label;
             for (auto key :
                  pop.haploid_genomes[pop.diploids[diploid_index].first]
                      .smutations)

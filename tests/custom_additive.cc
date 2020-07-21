@@ -5,21 +5,21 @@
 
 struct additive : public fwdpy11::DiploidGeneticValue
 {
-    additive() : fwdpy11::DiploidGeneticValue(1) {}
+    additive() : fwdpy11::DiploidGeneticValue(1)
+    {
+    }
 
     double
-    calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidMetadata& /*metadata*/,
-                     const fwdpy11::DiploidPopulation& pop) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
     {
+        const auto& pop = data.pop.get();
+        const auto diploid_index = data.offspring_metadata.get().label;
         double sum = 0;
-        for (auto m :
-             pop.haploid_genomes[pop.diploids[diploid_index].first].smutations)
+        for (auto m : pop.haploid_genomes[pop.diploids[diploid_index].first].smutations)
             {
                 sum += pop.mutations[m].s;
             }
-        for (auto m : pop.haploid_genomes[pop.diploids[diploid_index].second]
-                          .smutations)
+        for (auto m : pop.haploid_genomes[pop.diploids[diploid_index].second].smutations)
             {
                 sum += pop.mutations[m].s;
             }

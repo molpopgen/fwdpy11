@@ -164,28 +164,5 @@ class testGSS(unittest.TestCase):
         self.assertEqual(self.x.VS, 1.0)
 
 
-class testGSSandGSSmoConsistency(unittest.TestCase):
-    """
-    This tests that GSS and GSSmo have opt and VS
-    in the same order.  If that were not true,
-    fitness calculations would come out differently
-    and the test would fail.
-    """
-
-    @classmethod
-    def setUp(self):
-        self.a = fwdpy11.Additive(2.0, fwdpy11.GSS(0.0, 1.0))
-        self.b = fwdpy11.Additive(
-            2.0, fwdpy11.GSSmo([fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0)])
-        )
-        self.pop = fwdpy11.DiploidPopulation(1000)
-
-    def testFitnesses(self):
-        wa = [self.a.fitness(i, self.pop) for i in range(self.pop.N)]
-        wb = [self.b.fitness(i, self.pop) for i in range(self.pop.N)]
-        for i, j in zip(wa, wb):
-            self.assertEqual(i, j)
-
-
 if __name__ == "__main__":
     unittest.main()

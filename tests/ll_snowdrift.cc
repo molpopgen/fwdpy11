@@ -39,8 +39,8 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
 
     // This constructor is exposed to Python
     snowdrift(double b1_, double b2_, double c1_, double c2_)
-        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
-          c2(c2_), phenotypes()
+        : fwdpy11::DiploidGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+          phenotypes()
     {
     }
 
@@ -51,34 +51,32 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     //initialize the phenotypes w/o extra copies.
     template <typename T>
     snowdrift(double b1_, double b2_, double c1_, double c2_, T &&p)
-        : fwdpy11::DiploidGeneticValue{ 1 }, b1(b1_), b2(b2_), c1(c1_),
-          c2(c2_), phenotypes(std::forward<T>(p))
+        : fwdpy11::DiploidGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+          phenotypes(std::forward<T>(p))
     {
     }
 
     double
-    calculate_gvalue(const std::size_t diploid_index,
-                     const fwdpy11::DiploidMetadata& /*metadata*/,
-                     const fwdpy11::DiploidPopulation& /*pop*/) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
     // The call operator must return the genetic value of an individual
     {
-        gvalues[0] = phenotypes[diploid_index];
+        gvalues[0] = phenotypes[data.offspring_metadata.get().label];
         return gvalues[0];
     }
 
     double
     genetic_value_to_fitness(
-        const fwdpy11::DiploidMetadata &metadata) const override
+        const fwdpy11::DiploidGeneticValueToFitnessData data) const override
     // This function converts genetic value to fitness.
     {
         double fitness = 0.0;
-        double zself = metadata.g;
+        double zself = data.offspring_metadata.get().g;
         auto N = phenotypes.size();
         for (std::size_t j = 0; j < N; ++j)
             {
                 // A record of which diploid we are
                 // processesing is the label field of the meta data.
-                if (metadata.label != j)
+                if (data.offspring_metadata.get().label != j)
                     {
                         double zpair = zself + phenotypes[j];
                         // Payoff function from Fig 1
@@ -120,7 +118,7 @@ PYBIND11_MODULE(ll_snowdrift, m)
 
     // Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "_ll_DiploidSnowdrift")
-        .def(py::init<double, double, double, double>(), py::arg("b1"),
-             py::arg("b2"), py::arg("c1"), py::arg("c2"))
+        .def(py::init<double, double, double, double>(), py::arg("b1"), py::arg("b2"),
+             py::arg("c1"), py::arg("c2"))
         .def_readwrite("phenotypes", &snowdrift::phenotypes);
 }

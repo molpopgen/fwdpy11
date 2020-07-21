@@ -89,12 +89,12 @@ namespace
         }
 
         double
-        calculate_gvalue(const std::size_t diploid_index,
-                         const fwdpy11::DiploidMetadata& /*metadata*/,
-                         const fwdpy11::DiploidPopulation& pop) const override
+        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
         {
-            deme = pop.diploid_metadata[diploid_index].deme;
-            gvalues[0] = f(diploid_index, pop);
+            deme = data.pop.get()
+                       .diploid_metadata[data.offspring_metadata.get().label]
+                       .deme;
+            gvalues[0] = f(data.offspring_metadata.get().label, data.pop.get());
             return gvalues[0];
         }
     };

@@ -106,6 +106,8 @@ set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
     src/discrete_demography/DiscreteDemography.cc
     src/discrete_demography/exceptions.cc)
 
+set (ARRAY_PROXY_SOURCES src/array_proxies/init.cc)
+
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
@@ -117,7 +119,8 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${TS_SOURCES}
     ${GSL_SOURCES}
     ${EVOLVE_POPULATION_SOURCES}
-    ${DISCRETE_DEMOGRAPHY_SOURCES})
+    ${DISCRETE_DEMOGRAPHY_SOURCES}
+    ${ARRAY_PROXY_SOURCES})
 
 set(LTO_OPTIONS)
 if(ENABLE_PROFILING OR DISABLE_LTO)

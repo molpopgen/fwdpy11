@@ -30,15 +30,13 @@ class GeneticValueNoiseTrampoline : public fwdpy11::GeneticValueNoise
     }
 
     double
-    operator()(const fwdpy11::GSLrng_t& rng,
-               const fwdpy11::DiploidMetadata& offspring_metadata,
-               const fwdpy11::DiploidPopulation& pop) const override
+    operator()(const fwdpy11::DiploidGeneticValueNoiseData input_data) const override
     {
-        data.offspring_copy = offspring_metadata;
-        data.parent1_copy = pop.diploid_metadata[offspring_metadata.parents[0]];
-        data.parent2_copy = pop.diploid_metadata[offspring_metadata.parents[1]];
+        data.offspring_copy = input_data.offspring_metadata.get();
+        data.parent1_copy = input_data.parent1_metadata.get();
+        data.parent2_copy = input_data.parent2_metadata.get();
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueNoise,
-                                    "__call__", operator(), rng, pydata);
+                                    "__call__", operator(), input_data.rng.get(), pydata);
     }
 
     void

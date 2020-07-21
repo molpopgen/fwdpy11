@@ -66,17 +66,17 @@ namespace fwdpy11
         }
 
         double
-        operator()(const DiploidMetadata & /*metadata*/,
-                   const std::vector<double> &values) const override
+        operator()(const DiploidGeneticValueToFitnessData data) const override
         {
-            if (values.size() != total_dim)
+            if (data.gvalues.get().size() != total_dim)
                 {
                     throw std::runtime_error("dimension mismatch");
                 }
             double sqdiff = 0.0;
-            for (std::size_t i = 0; i < values.size(); ++i)
+            for (std::size_t i = 0; i < data.gvalues.get().size(); ++i)
                 {
-                    sqdiff += gsl_pow_2(values[i] - optima[current_timepoint].optima[i]);
+                    sqdiff += gsl_pow_2(data.gvalues.get()[i]
+                                        - optima[current_timepoint].optima[i]);
                 }
             return std::exp(-sqdiff / (2.0 * optima[current_timepoint].VW));
         }

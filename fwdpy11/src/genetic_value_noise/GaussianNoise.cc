@@ -11,11 +11,9 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     GaussianNoise(const double s, const double m) : sd{ s }, mean{ m } {}
 
     double
-    operator()(const fwdpy11::GSLrng_t& rng,
-               const fwdpy11::DiploidMetadata& /*offspring_metadata*/,
-               const fwdpy11::DiploidPopulation& /*pop*/) const override
+    operator()(const fwdpy11::DiploidGeneticValueNoiseData data) const override
     {
-        return mean + gsl_ran_gaussian_ziggurat(rng.get(), sd);
+        return mean + gsl_ran_gaussian_ziggurat(data.rng.get().get(), sd);
     }
 
     void

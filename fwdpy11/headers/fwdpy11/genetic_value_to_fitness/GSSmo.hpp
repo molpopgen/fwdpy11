@@ -43,11 +43,12 @@ namespace fwdpy11
         }
 
         double
-        operator()(const DiploidMetadata &metadata,
-                   const std::vector<double> & /*genetic_values*/) const override
+        operator()(const DiploidGeneticValueToFitnessData data) const override
         {
-            return std::exp(
-                -(std::pow(metadata.g + metadata.e - opt, 2.0) / (2.0 * VS)));
+            return std::exp(-(std::pow(data.offspring_metadata.get().g
+                                           + data.offspring_metadata.get().e - opt,
+                                       2.0)
+                              / (2.0 * VS)));
         }
 
         template <typename poptype>

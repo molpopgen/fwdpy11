@@ -29,6 +29,7 @@
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
+#include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
 
 namespace fwdpy11
 {
@@ -86,9 +87,7 @@ namespace fwdpy11
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
 
         // Callable from Python
-        virtual double calculate_gvalue(const std::size_t /*diploid_index*/,
-                                        const DiploidMetadata& /*diploid_metadata*/,
-                                        const DiploidPopulation& /*pop*/) const = 0;
+        virtual double calculate_gvalue(const DiploidGeneticValueData data) const = 0;
 
         virtual void
         update(const DiploidPopulation& pop)
@@ -99,25 +98,24 @@ namespace fwdpy11
 
         // To be called from w/in a simulation
         virtual void
-        operator()(const GSLrng_t& rng, std::size_t diploid_index,
-                   const DiploidPopulation& pop, DiploidMetadata& metadata) const
+        operator()(DiploidGeneticValueData data) const
         {
-            metadata.g = calculate_gvalue(diploid_index, metadata, pop);
-            metadata.e = noise(rng, metadata, pop);
-            metadata.w = genetic_value_to_fitness(metadata);
+            data.offspring_metadata.get().g = calculate_gvalue(data);
+            data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
+            data.offspring_metadata.get().w = genetic_value_to_fitness(
+                DiploidGeneticValueToFitnessData(data, gvalues));
         }
 
         virtual double
-        genetic_value_to_fitness(const DiploidMetadata& metadata) const
+        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data) const
         {
-            return gv2w->operator()(metadata, gvalues);
+            return gv2w->operator()(data);
         }
 
         virtual double
-        noise(const GSLrng_t& rng, const DiploidMetadata& offspring_metadata,
-              const DiploidPopulation& pop) const
+        noise(const DiploidGeneticValueNoiseData data) const
         {
-            return noise_fxn->operator()(rng, offspring_metadata, pop);
+            return noise_fxn->operator()(data);
         }
 
         virtual pybind11::tuple

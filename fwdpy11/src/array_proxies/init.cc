@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2029 Kevin Thornton <krthornt@uci.edu>
+// Copyright (C) 2017-2020 Kevin Thornton <krthornt@uci.edu>
 //
 // This file is part of fwdpy11.
 //
@@ -16,33 +16,20 @@
 // You should have received a copy of the GNU General Public License
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
-//
-#ifndef FWDPY11_NO_NOISE_HPP
-#define FWDPY11_NO_NOISE_HPP
 
-#include "GeneticValueNoise.hpp"
+#include <fwdpy11/util/array_proxy.hpp>
 
-namespace fwdpy11
+namespace py = pybind11;
+
+void
+init_array_proxies(py::module& m)
 {
-    struct NoNoise : public GeneticValueNoise
-    {
-        double
-        operator()(const DiploidGeneticValueNoiseData /*data*/) const override
-        {
-            return 0.;
-        }
+    py::class_<fwdpy11::double_array_proxy>(m, "_FloatProxy", py::buffer_protocol())
+        .def_buffer(
+            [](const fwdpy11::double_array_proxy& self) { return as_buffer(self); });
 
-        void
-        update(const DiploidPopulation& /*pop*/) override
-        {
-        }
-
-        std::shared_ptr<GeneticValueNoise>
-        clone() const override
-        {
-            return std::make_shared<NoNoise>();
-        }
-    };
-} // namespace fwdpy11
-
-#endif
+    py::class_<fwdpy11::uint32_array_proxy>(m, "_Uint32ArrayProxy",
+                                            py::buffer_protocol())
+        .def_buffer(
+            [](const fwdpy11::uint32_array_proxy& self) { return as_buffer(self); });
+}
