@@ -47,21 +47,20 @@ namespace fwdpy11
         }
     };
 
-    // NOTE: the next two structs may be collabsible into one?
+    // NOTE: the next two structs may be collapsible into one?
 
     struct DiploidGeneticValueNoiseData
     {
         std::reference_wrapper<const fwdpy11::GSLrng_t> rng;
         std::reference_wrapper<const fwdpy11::DiploidMetadata> parent1_metadata,
-            parent2_metadata;
+            parent2_metadata, offspring_metadata;
         std::size_t metadata_index;
-        std::reference_wrapper<fwdpy11::DiploidMetadata> offspring_metadata;
 
         explicit DiploidGeneticValueNoiseData(const DiploidGeneticValueData& data)
             : rng(data.rng), parent1_metadata(data.parent1_metadata),
               parent2_metadata(data.parent2_metadata),
-              metadata_index(data.metadata_index),
-              offspring_metadata(data.offspring_metadata)
+              offspring_metadata(data.offspring_metadata),
+              metadata_index(data.metadata_index)
         {
         }
     };
@@ -70,17 +69,17 @@ namespace fwdpy11
     {
         std::reference_wrapper<const fwdpy11::GSLrng_t> rng;
         std::reference_wrapper<const fwdpy11::DiploidMetadata> parent1_metadata,
-            parent2_metadata;
+            parent2_metadata, offspring_metadata;
         std::reference_wrapper<const std::vector<double>> gvalues;
         std::size_t metadata_index;
-        std::reference_wrapper<fwdpy11::DiploidMetadata> offspring_metadata;
 
         explicit DiploidGeneticValueToFitnessData(const DiploidGeneticValueData& data,
-                                         const std::vector<double>& gvalues_)
+                                                  const std::vector<double>& gvalues_)
             : rng(data.rng), parent1_metadata(data.parent1_metadata),
-              parent2_metadata(data.parent2_metadata), gvalues(gvalues_),
-              metadata_index(data.metadata_index),
-              offspring_metadata(data.offspring_metadata)
+              parent2_metadata(data.parent2_metadata),
+              offspring_metadata(data.offspring_metadata),
+              gvalues(gvalues_),
+              metadata_index(data.metadata_index)
         {
         }
     };
