@@ -11,14 +11,20 @@ class DiploidSnowdrift(ll_snowdrift._ll_DiploidSnowdrift):
     This is the user-facing Python representation of
     a simple snowdrift model.
     """
+
+    seed = attr.ib()
     b1 = attr.ib()
     b2 = attr.ib()
     c1 = attr.ib()
     c2 = attr.ib()
+    slope = attr.ib()
+    p0 = attr.ib()
 
     def __attrs_post_init__(self):
         # Need to initialize the C++ base class
-        super(DiploidSnowdrift, self).__init__(self.b1, self.b2, self.c1, self.c2)
+        super(DiploidSnowdrift, self).__init__(
+            self.seed, self.b1, self.b2, self.c1, self.c2, self.slope, self.p0
+        )
 
     def __getstate__(self):
         # asdict is provided by the 2nd class

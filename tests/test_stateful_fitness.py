@@ -1,3 +1,4 @@
+import math
 import pickle
 import unittest
 
@@ -16,8 +17,11 @@ class SamplePhenotypes(object):
     are as expected.
     """
 
-    def __init__(self, f):
+    def __init__(self, f, slope, p0):
         self.f = f
+        self.slope = slope
+        self.p0 = p0
+        self.sig0 = (1.0 / slope) * math.log(self.p0 / (1.0 - self.p0))
 
     def __call__(self, pop, sampler):
         for i in range(pop.N):
@@ -26,6 +30,7 @@ class SamplePhenotypes(object):
                 w += pop.mutations[m].s
             for m in pop.haploid_genomes[pop.diploids[i].second].smutations:
                 w += pop.mutations[m].s
+            w = 1.0 / (1.0 + math.exp(-self.slope * (w + self.sig0)))
             assert np.isclose(w, self.f.phenotypes[i])
 
 
@@ -46,7 +51,7 @@ def evolve_snowdrift(args):
         "sregions": [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
         "recregions": [fp11.Region(0, 1, 1)],
         "nregions": [],
-        "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2),
+        "gvalue": snowdrift.DiploidSnowdrift(12345, 0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
         "demography": fwdpy11.DiscreteDemography(),
@@ -55,7 +60,7 @@ def evolve_snowdrift(args):
         "prune_selected": False,
     }
     params = fwdpy11.ModelParams(**p)
-    sampler = SamplePhenotypes(params.gvalue)
+    sampler = SamplePhenotypes(params.gvalue, 1, 0.3)
     fp11.evolvets(rng, pop, params, 100, sampler)
     # return our pop
     return pop
@@ -64,7 +69,7 @@ def evolve_snowdrift(args):
 class testSnowdrift(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.f = snowdrift.DiploidSnowdrift(1, -1, 0.1, 0.2)
+        self.f = snowdrift.DiploidSnowdrift(54321, 1, -1, 0.1, 0.2, 1, 0.3)
 
     def testShape(self):
         s = self.f.shape
