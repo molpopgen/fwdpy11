@@ -115,7 +115,7 @@ namespace fwdpy11
         }
 
         double
-        calculate_gvalue(const DiploidGeneticValueData data) const override
+        calculate_gvalue(const DiploidGeneticValueData data) override
         {
             gvalues[0] = make_return_value(
                 callback(gv, data.offspring_metadata.get().label,

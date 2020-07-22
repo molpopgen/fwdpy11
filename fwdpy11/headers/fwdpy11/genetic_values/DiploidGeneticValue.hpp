@@ -52,7 +52,7 @@ namespace fwdpy11
     /// Any deme/geography-specific details must be handled by the derived class.
     {
         std::size_t total_dim;
-        mutable std::vector<double> gvalues;
+        std::vector<double> gvalues;
         /// Classes deriving from this must call gv2w->update
         /// from their own update functions.
         std::shared_ptr<GeneticValueToFitnessMap> gv2w;
@@ -87,13 +87,13 @@ namespace fwdpy11
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
 
         // Callable from Python
-        virtual double calculate_gvalue(const DiploidGeneticValueData data) const = 0;
+        virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 
         virtual void update(const DiploidPopulation& pop) = 0;
 
         // To be called from w/in a simulation
         virtual void
-        operator()(DiploidGeneticValueData data) const
+        operator()(DiploidGeneticValueData data) 
         {
             data.offspring_metadata.get().g = calculate_gvalue(data);
             data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
@@ -102,7 +102,7 @@ namespace fwdpy11
         }
 
         virtual double
-        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data) const
+        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data) 
         {
             return gv2w->operator()(data);
         }

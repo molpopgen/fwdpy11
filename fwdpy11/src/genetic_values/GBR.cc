@@ -89,7 +89,7 @@ namespace
         }
 
         double
-        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
+        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) override
         {
             deme = data.pop.get()
                        .diploid_metadata[data.offspring_metadata.get().label]

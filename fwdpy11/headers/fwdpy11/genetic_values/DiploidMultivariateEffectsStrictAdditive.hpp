@@ -41,7 +41,7 @@ namespace fwdpy11
         }
 
         double
-        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
+        calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) override
         {
             std::fill(begin(gvalues), end(gvalues), 0.0);
 

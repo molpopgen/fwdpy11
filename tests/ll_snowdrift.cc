@@ -53,7 +53,7 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     }
 
     double
-    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) override
     // The call operator must return the genetic value of an individual
     {
         gvalues[0] = phenotypes[data.metadata_index];
@@ -62,7 +62,7 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
 
     double
     genetic_value_to_fitness(
-        const fwdpy11::DiploidGeneticValueToFitnessData data) const override
+        const fwdpy11::DiploidGeneticValueToFitnessData data) override
     // This function converts genetic value to fitness.
     {
         double zself = data.offspring_metadata.get().g;

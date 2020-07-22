@@ -162,7 +162,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     }
 
     double
-    calculate_gvalue(const fwdpy11::DiploidGeneticValueData input_data) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData input_data) override
     {
         data.metadata_proxy = input_data.offspring_metadata.get();
         data.parent1_metadata_proxy
@@ -192,7 +192,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
 
     double
     genetic_value_to_fitness(
-        const fwdpy11::DiploidGeneticValueToFitnessData input_data) const override
+        const fwdpy11::DiploidGeneticValueToFitnessData input_data) override
     // NOTE: see https://pybind11.readthedocs.io/en/stable/advanced/classes.html#extended-trampoline-class-functionality
     {
         pybind11::gil_scoped_acquire gil; // Acquire the GIL while in this scope.
