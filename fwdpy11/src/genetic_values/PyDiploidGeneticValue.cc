@@ -209,6 +209,9 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
                     = const_cast<double*>(input_data.gvalues.get().data());
                 gv2w_data.buffer.size = input_data.gvalues.get().size();
                 gv2w_data.offspring_metadata_index = input_data.metadata_index;
+                gv2w_data.parent1_copy = input_data.parent1_metadata.get();
+                gv2w_data.parent2_copy = input_data.parent2_metadata.get();
+
                 auto obj = overload(pygv2wdata);
                 return obj.cast<double>();
             }

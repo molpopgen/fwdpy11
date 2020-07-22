@@ -28,6 +28,8 @@ class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
     operator()(const fwdpy11::DiploidGeneticValueToFitnessData input_data) const override
     {
         data.offspring_metadata_copy = input_data.offspring_metadata.get();
+        data.parent1_copy = input_data.parent1_metadata.get();
+        data.parent2_copy = input_data.parent2_metadata.get();
         data.buffer.data = const_cast<double*>(input_data.gvalues.get().data());
         data.buffer.size = input_data.gvalues.get().size();
         data.offspring_metadata_index = input_data.metadata_index;
@@ -68,5 +70,7 @@ init_GeneticValueIsTrait(py::module& m)
         .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
         .def_readonly("offspring_metadata_index",
                       &GeneticValueIsTraitData::offspring_metadata_index)
+        .def_readonly("parent1_metadata",&GeneticValueIsTraitData::parent1)
+        .def_readonly("parent2_metadata",&GeneticValueIsTraitData::parent2)
         .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
 }
