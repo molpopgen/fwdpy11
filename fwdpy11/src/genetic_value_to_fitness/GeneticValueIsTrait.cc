@@ -8,7 +8,6 @@
 
 namespace py = pybind11;
 
-
 class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
 // Trampoline class allowing custom
 // GeneticValueIsTrait to be written
@@ -31,6 +30,7 @@ class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
         data.offspring_metadata_copy = input_data.offspring_metadata.get();
         data.buffer.data = const_cast<double*>(input_data.gvalues.get().data());
         data.buffer.size = input_data.gvalues.get().size();
+        data.offspring_metadata_index = input_data.metadata_index;
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueIsTrait,
                                     "__call__", operator(), pydata);
     }
@@ -66,5 +66,7 @@ init_GeneticValueIsTrait(py::module& m)
 
     py::class_<GeneticValueIsTraitData>(m, "PyGeneticValueIsTraitData")
         .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
+        .def_readonly("offspring_metadata_index",
+                      &GeneticValueIsTraitData::offspring_metadata_index)
         .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
 }
