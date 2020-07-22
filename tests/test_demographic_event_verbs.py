@@ -33,6 +33,13 @@ import fwdpy11
 
 
 @attr.s(auto_attribs=True)
+class NumberOfParentsAtTime(object):
+    generation: int
+    deme: int
+    size: int
+
+
+@attr.s(auto_attribs=True)
 class DemeSizeAtTime(object):
     generation: int
     deme: int
@@ -41,14 +48,26 @@ class DemeSizeAtTime(object):
 
 @attr.s(auto_attribs=True)
 class DemeSizeTracker(object):
-    data: typing.List[DemeSizeAtTime]
+    parent_numbers: typing.List[NumberOfParentsAtTime]
+    individual_numbers: typing.List[DemeSizeAtTime]
 
     def __call__(
         self, pop: fwdpy11.DiploidPopulation, sampler: fwdpy11.SampleRecorder
     ) -> None:
+        for i in pop.diploid_metadata:
+            for n in i.nodes:
+                assert (
+                    pop.tables.nodes[n].time == pop.generation
+                ), f"{pop.tables.nodes[n].time}, {pop.generation}"
         deme_sizes = pop.deme_sizes()
         for i, j in zip(deme_sizes[0], deme_sizes[1]):
-            self.data.append(DemeSizeAtTime(pop.generation, i, j))
+            self.parent_numbers.append(NumberOfParentsAtTime(pop.generation, i, j))
+
+        number_of_individuals = np.unique(
+            [i.deme for i in pop.diploid_metadata[: pop.N]], return_counts=True
+        )
+        for i, j in zip(number_of_individuals[0], number_of_individuals[1]):
+            self.individual_numbers.append(DemeSizeAtTime(pop.generation, i, j))
 
 
 def branch(when: int, fraction: float) -> fwdpy11.DiscreteDemography:
@@ -122,14 +141,35 @@ def merge(
     )
 
 
-def pulse_migration(when: int, fraction: float) -> fwdpy11.DiscreteDemography:
+def pulse_migration(
+    when: int, sizes_when: typing.List[int], ancestry_fraction: float
+) -> fwdpy11.DiscreteDemography:
     """
-    A fraction of individuals from deme 0 are copied to deme 1.
+    At time ``when``, ``ancestry_fraction`` of deme 1
+    comes from deme 0, meaning that the offspring born in generation
+    ``when + 1`` have a parent from 0 with probability ``ancestry_fraction``
+    and a parent from 1 with probability ``1. - ancestry_fraction``.
 
-    If deme 1 does not exist at time when, it will be created.  Thus, this is the
-    same as "branch".
+    The size of deme 1 remains unchanged.
+
+    To get this right, we need to know the deme sizes at the time of
+    the pulse migration.  These sizes let us calculate how many individuals
+    to copy from i to j to be potential parents of generation ``when + 1``.
     """
-    return branch(when, fraction)
+    parents_needed_from_deme_0 = np.rint(
+        ancestry_fraction * sizes_when[1] / (1.0 - ancestry_fraction)
+    ).astype(int)
+    copy_fraction = parents_needed_from_deme_0 / sizes_when[0]
+
+    mass_migrations = [
+        fwdpy11.copy_individuals(
+            when=when, source=0, destination=1, fraction=copy_fraction
+        )
+    ]
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=when, deme=1, new_size=sizes_when[1])]
+    return fwdpy11.DiscreteDemography(
+        mass_migrations=mass_migrations, set_deme_sizes=set_deme_sizes
+    )
 
 
 def build_params(
@@ -149,13 +189,17 @@ def build_params(
 
 def run_model(
     params: fwdpy11.ModelParams, popsizes: typing.Union[int, typing.List], seed: int
-) -> fwdpy11.DiploidPopulation:
+) -> typing.Tuple[
+    fwdpy11.DiploidPopulation,
+    typing.List[NumberOfParentsAtTime],
+    typing.List[DemeSizeAtTime],
+]:
     # 1.0 is the genome length for the tree sequence recording
     pop = fwdpy11.DiploidPopulation(popsizes, 1.0)
     rng = fwdpy11.GSLrng(seed)
-    tracker = DemeSizeTracker([])
+    tracker = DemeSizeTracker([], [])
     fwdpy11.evolvets(rng, pop, params, 10, tracker)  # simplify every 10 generations
-    return pop, tracker.data
+    return pop, tracker.parent_numbers, tracker.individual_numbers
 
 
 class TestBranch(unittest.TestCase):
@@ -166,22 +210,33 @@ class TestBranch(unittest.TestCase):
         self.popsizes = 100
         demography = branch(self.when, self.fraction)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
         self.assertEqual(deme_sizes[0], self.popsizes)
         self.assertEqual(deme_sizes[1], np.rint(self.fraction * self.popsizes))
 
-    def test_sizes_over_time(self):
+    def test_parent_sizes_over_time(self):
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 0]), self.params.simlen
+            len([i for i in self.num_parents if i.deme == 0]), self.params.simlen
         )
         # Deme 1 first appeared in generation 10, so there were 9 generations
         # w/o that deme around.
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 1]),
+            len([i for i in self.num_parents if i.deme == 1]),
             self.params.simlen - self.when + 1,
+        )
+
+    def test_deme_sizes_over_time(self):
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 0]), self.params.simlen
+        )
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 1]),
+            self.params.simlen - self.when,
         )
 
 
@@ -193,7 +248,9 @@ class TestSplit(unittest.TestCase):
         self.popsizes = 100
         demography = split(self.when, self.fraction)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -201,15 +258,28 @@ class TestSplit(unittest.TestCase):
         self.assertEqual(deme_sizes[1], np.rint(self.fraction * self.popsizes))
         self.assertEqual(deme_sizes[2], np.rint((1.0 - self.fraction) * self.popsizes))
 
-    def test_sizes_over_time(self):
+    def test_parent_sizes_over_time(self):
         self.assertEqual(
-            max([i.generation for i in self.size_data if i.deme == 0]), self.when
+            max([i.generation for i in self.num_parents if i.deme == 0]), self.when
         )
         self.assertEqual(
-            min([i.generation for i in self.size_data if i.deme == 1]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 1]), self.when
         )
         self.assertEqual(
-            min([i.generation for i in self.size_data if i.deme == 2]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 2]), self.when
+        )
+
+    def test_deme_sizes_over_time(self):
+        self.assertEqual(
+            max([i.generation for i in self.num_individuals if i.deme == 0]), self.when
+        )
+        self.assertEqual(
+            min([i.generation for i in self.num_individuals if i.deme == 1]),
+            self.when + 1,
+        )
+        self.assertEqual(
+            min([i.generation for i in self.num_individuals if i.deme == 2]),
+            self.when + 1,
         )
 
 
@@ -224,7 +294,9 @@ class TestSplitViaMoves(unittest.TestCase):
         self.popsizes = 100
         demography = split_via_moves(self.when, self.fraction)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -232,15 +304,27 @@ class TestSplitViaMoves(unittest.TestCase):
         self.assertEqual(deme_sizes[1], np.rint(self.fraction * self.popsizes))
         self.assertEqual(deme_sizes[2], np.rint((1.0 - self.fraction) * self.popsizes))
 
-    def test_sizes_over_time(self):
+    def test_parent_sizes_over_time(self):
         self.assertEqual(
-            max([i.generation for i in self.size_data if i.deme == 0]), self.when - 1
+            max([i.generation for i in self.num_parents if i.deme == 0]), self.when - 1
         )
         self.assertEqual(
-            min([i.generation for i in self.size_data if i.deme == 1]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 1]), self.when
         )
         self.assertEqual(
-            min([i.generation for i in self.size_data if i.deme == 2]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 2]), self.when
+        )
+
+    def test_deme_sizes_over_time(self):
+        self.assertEqual(
+            max([i.generation for i in self.num_individuals if i.deme == 0]),
+            self.when - 1,
+        )
+        self.assertEqual(
+            min([i.generation for i in self.num_individuals if i.deme == 1]), self.when
+        )
+        self.assertEqual(
+            min([i.generation for i in self.num_individuals if i.deme == 2]), self.when
         )
 
 
@@ -253,7 +337,9 @@ class TestMergeKeepAncestralDemes(unittest.TestCase):
         self.popsizes = [100, 100]
         demography = merge(self.when, self.p0, self.p1, True)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -264,23 +350,39 @@ class TestMergeKeepAncestralDemes(unittest.TestCase):
             np.rint(self.p0 * self.popsizes[0]) + np.rint(self.p1 * self.popsizes[1]),
         )
 
-    def test_sizes_over_time(self):
+    def test_parent_sizes_over_time(self):
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 0]), self.params.simlen
+            len([i for i in self.num_parents if i.deme == 0]), self.params.simlen
         )
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 1]), self.params.simlen
+            len([i for i in self.num_parents if i.deme == 1]), self.params.simlen
         )
 
-        min_deme_2 = min([i.generation for i in self.size_data if i.deme == 2])
+        min_deme_2 = min([i.generation for i in self.num_parents if i.deme == 2])
 
         self.assertEqual(min_deme_2, self.when)
 
-        # Deme 2 first appeared in generation 10, so there were 9 generations
-        # w/o that deme around.
+        # Deme 2 parents first appeared in generation 10, so there were 9 generations
+        # w/o any
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 2]),
+            len([i for i in self.num_parents if i.deme == 2]),
             self.params.simlen - self.when + 1,
+        )
+
+    def test_deme_sizes_over_time(self):
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 0]), self.params.simlen
+        )
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 1]), self.params.simlen
+        )
+        min_deme_2 = min([i.generation for i in self.num_individuals if i.deme == 2])
+
+        self.assertEqual(min_deme_2, self.when + 1)
+
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 2]),
+            self.params.simlen - self.when,
         )
 
 
@@ -293,7 +395,9 @@ class TestMergeKillAncestralDemes(unittest.TestCase):
         self.popsizes = [100, 100]
         demography = merge(self.when, self.p0, self.p1, False)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -304,19 +408,38 @@ class TestMergeKillAncestralDemes(unittest.TestCase):
             np.rint(self.p0 * self.popsizes[0]) + np.rint(self.p1 * self.popsizes[1]),
         )
 
-    def test_sizes_over_time(self):
-        self.assertEqual(len([i for i in self.size_data if i.deme == 0]), self.when)
-        self.assertEqual(len([i for i in self.size_data if i.deme == 1]), self.when)
+    def test_parent_sizes_over_time(self):
+        self.assertEqual(len([i for i in self.num_parents if i.deme == 0]), self.when)
+        self.assertEqual(len([i for i in self.num_parents if i.deme == 1]), self.when)
 
-        min_deme_2 = min([i.generation for i in self.size_data if i.deme == 2])
+        min_deme_2 = min([i.generation for i in self.num_parents if i.deme == 2])
 
         self.assertEqual(min_deme_2, self.when)
 
-        # Deme 2 first appeared in generation 10, so there were 9 generations
-        # w/o that deme around.
+        # Deme 2 parents first appeared in generation 10, so there were 9 generations
+        # w/o any
         self.assertEqual(
-            len([i for i in self.size_data if i.deme == 2]),
+            len([i for i in self.num_parents if i.deme == 2]),
             self.params.simlen - self.when + 1,
+        )
+
+    def test_deme_sizes_over_time(self):
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 0]), self.when
+        )
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 1]), self.when
+        )
+
+        min_deme_2 = min([i.generation for i in self.num_individuals if i.deme == 2])
+
+        self.assertEqual(min_deme_2, self.when + 1)
+
+        # Deme 2 parents first appeared in generation 10, so there were 9 generations
+        # w/o any
+        self.assertEqual(
+            len([i for i in self.num_individuals if i.deme == 2]),
+            self.params.simlen - self.when,
         )
 
 
@@ -324,39 +447,51 @@ class TestPulseMigration(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.when = 10
-        self.fraction = 0.23
+        self.ancestry_fraction = 0.23
         self.popsizes = [200, 100]
-        demography = pulse_migration(self.when, self.fraction)
+        demography = pulse_migration(self.when, self.popsizes, self.ancestry_fraction)
         self.params = build_params(demography, 50)
-        self.pop, self.size_data = run_model(self.params, self.popsizes, 666)
+        self.pop, self.num_parents, self.num_individuals = run_model(
+            self.params, self.popsizes, 666
+        )
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
-        self.assertEqual(deme_sizes[0], self.popsizes[0])
-        self.assertEqual(
-            deme_sizes[1], np.rint(self.fraction * self.popsizes[0]) + self.popsizes[1]
+        for key, value in deme_sizes.items():
+            self.assertEqual(value, self.popsizes[key])
+
+    def test_parent_sizes_over_time(self):
+        self.assertTrue(
+            all([i.size == self.popsizes[0] for i in self.num_parents if i.deme == 0])
         )
 
-    def test_sizes_over_time(self):
-        self.assertTrue(
-            all([i.size == self.popsizes[0] for i in self.size_data if i.deme == 0])
-        )
         self.assertTrue(
             all(
                 [
                     i.size == self.popsizes[1]
-                    for i in self.size_data
-                    if i.deme == 1 and i.generation < 10
+                    for i in self.num_parents
+                    if i.deme == 1 and i.generation != self.when
                 ]
             )
         )
+
+    def test_deme_sizes_over_time(self):
         self.assertTrue(
             all(
                 [
-                    i.size
-                    == self.popsizes[1] + np.rint(self.fraction * self.popsizes[0])
-                    for i in self.size_data
-                    if i.deme == 1 and i.generation >= 10
+                    i.size == self.popsizes[0]
+                    for i in self.num_individuals
+                    if i.deme == 0
+                ]
+            )
+        )
+
+        self.assertTrue(
+            all(
+                [
+                    i.size == self.popsizes[1]
+                    for i in self.num_individuals
+                    if i.deme == 1
                 ]
             )
         )
