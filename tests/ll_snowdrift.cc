@@ -91,10 +91,6 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
                                   pop.mutations);
                 phenotypes.push_back(1. / (1. + std::exp(-slope * (g + sig0))));
             }
-        // This is strictly not necessary in this specific
-        // case, but it is required in general, so we
-        // do it here by way of example.
-        noise_fxn->update(pop);
     }
 };
 
