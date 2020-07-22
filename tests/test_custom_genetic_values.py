@@ -156,6 +156,7 @@ class TestCustomPyGeneticValue(unittest.TestCase):
                 assert len(p) == len(m)
                 assert len(m) == len(e)
                 assert len(h) == len(e)
+                assert data.offspring_metadata_index < np.iinfo(np.uint64).max
             return f(self, data)
 
         pyadditive.PyAdditive.calculate_gvalue = intercept
