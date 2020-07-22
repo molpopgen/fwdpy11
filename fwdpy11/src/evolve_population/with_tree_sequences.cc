@@ -164,7 +164,7 @@ evolve_with_tree_sequences(
     // NOTE: gvalue_pointers is a change in 0.6.0,
     // and the object holds non-const bare pointers
     // to objects owned by Python.
-    const fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
+    fwdpy11::dgvalue_pointer_vector_ &gvalue_pointers,
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,

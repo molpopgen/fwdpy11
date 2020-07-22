@@ -10,7 +10,7 @@ struct additive : public fwdpy11::DiploidGeneticValue
     }
 
     double
-    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) override
     {
         const auto& pop = data.pop.get();
         const auto diploid_index = data.offspring_metadata.get().label;

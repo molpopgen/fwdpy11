@@ -38,7 +38,7 @@ namespace fwdpy11
     // to be passed as an argument to a C++ function.
     // Thus, we compromise with raw pointers stored in a vector.
     {
-        const std::vector<fwdpy11::DiploidGeneticValue *> genetic_values;
+        std::vector<fwdpy11::DiploidGeneticValue *> genetic_values;
 
         std::vector<fwdpy11::DiploidGeneticValue *>
         init_from_list(pybind11::list l)

@@ -13,7 +13,7 @@ struct GeneralW : public fwdpy11::DiploidGeneticValue
     }
 
     inline double
-    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) const override
+    calculate_gvalue(const fwdpy11::DiploidGeneticValueData data) override
     {
         gvalues[0] = std::max(
             0.0,
