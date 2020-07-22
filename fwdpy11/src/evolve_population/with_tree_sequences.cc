@@ -270,6 +270,8 @@ evolve_with_tree_sequences(
     for (auto &i : genetics.gvalue)
         {
             i->update(pop);
+            i->gv2w->update(pop);
+            i->noise_fxn->update(pop);
         }
     std::vector<fwdpy11::DiploidMetadata> offspring_metadata(pop.diploid_metadata);
     std::vector<fwdpy11::DiploidGenotype> offspring;
@@ -399,6 +401,8 @@ evolve_with_tree_sequences(
             for (auto &i : genetics.gvalue)
                 {
                     i->update(pop);
+                    i->gv2w->update(pop);
+                    i->noise_fxn->update(pop);
                 }
             pop.diploid_metadata.swap(offspring_metadata);
             calculate_diploid_fitness(rng, pop, genetics.gvalue, deme_to_gvalue_map,

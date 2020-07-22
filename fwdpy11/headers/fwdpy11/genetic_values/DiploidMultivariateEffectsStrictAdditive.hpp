@@ -78,6 +78,11 @@ namespace fwdpy11
                 }
             return gvalues[focal_trait_index];
         }
+
+        void
+        update(const fwdpy11::DiploidPopulation& /*pop*/) override
+        {
+        }
     };
 } // namespace fwdpy11
 

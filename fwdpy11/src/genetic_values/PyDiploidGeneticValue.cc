@@ -214,9 +214,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     void
     update(const fwdpy11::DiploidPopulation& pop) override
     {
-        PYBIND11_OVERLOAD(void, PyDiploidGeneticValue, update, pop);
-        gv2w->update(pop);
-        noise_fxn->update(pop);
+        PYBIND11_OVERLOAD_PURE(void, PyDiploidGeneticValue, update, pop);
     }
 };
 
@@ -225,12 +223,7 @@ init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t, py::object, py::object, bool>())
-        .def("update_members",
-             [](PyDiploidGeneticValue& self, const fwdpy11::DiploidPopulation& pop) {
-                 self.gv2w->update(pop);
-                 self.noise_fxn->update(pop);
-             });
+        .def(py::init<std::size_t, py::object, py::object, bool>());
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
         .def_readwrite("offspring_metadata",
