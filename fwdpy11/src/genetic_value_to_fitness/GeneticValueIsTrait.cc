@@ -27,12 +27,7 @@ class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
     double
     operator()(const fwdpy11::DiploidGeneticValueToFitnessData input_data) const override
     {
-        data.offspring_metadata_copy = input_data.offspring_metadata.get();
-        data.parent1_copy = input_data.parent1_metadata.get();
-        data.parent2_copy = input_data.parent2_metadata.get();
-        data.buffer.data = const_cast<double*>(input_data.gvalues.get().data());
-        data.buffer.size = input_data.gvalues.get().size();
-        data.offspring_metadata_index = input_data.metadata_index;
+        set_data(input_data, data);
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueIsTrait,
                                     "__call__", operator(), pydata);
     }
