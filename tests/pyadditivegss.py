@@ -20,8 +20,10 @@
 import math
 
 import fwdpy11
+import fwdpy11.custom_genetic_value_decorators
 
 
+@fwdpy11.custom_genetic_value_decorators.default_update
 class PyAdditiveGSS(fwdpy11.PyDiploidGeneticValue):
     def __init__(self, opt, VS):
         self.opt = opt

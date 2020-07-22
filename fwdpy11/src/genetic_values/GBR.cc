@@ -97,6 +97,11 @@ namespace
             gvalues[0] = f(data.offspring_metadata.get().label, data.pop.get());
             return gvalues[0];
         }
+
+        void
+        update(const fwdpy11::DiploidPopulation& /*pop*/) override
+        {
+        }
     };
 }
 

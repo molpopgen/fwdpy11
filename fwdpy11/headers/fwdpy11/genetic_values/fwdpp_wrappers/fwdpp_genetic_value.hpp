@@ -123,6 +123,11 @@ namespace fwdpy11
             return gvalues[0];
         }
 
+        void
+        update(const fwdpy11::DiploidPopulation& /*pop*/) override
+        {
+        }
+
         double
         scaling() const
         {

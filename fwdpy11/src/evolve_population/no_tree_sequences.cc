@@ -123,6 +123,8 @@ evolve_without_tree_sequences(
     // so we must call update(...) prior to calculating fitness,
     // else bad stuff like segfaults could happen.
     genetic_value_fxn.update(pop);
+    genetic_value_fxn.gv2w->update(pop);
+    genetic_value_fxn.noise_fxn->update(pop);
     std::vector<fwdpy11::DiploidMetadata> offspring_metadata(
         pop.diploid_metadata);
     auto lookup = calculate_diploid_fitness_genomes(
@@ -173,6 +175,8 @@ evolve_without_tree_sequences(
             pop.diploids.swap(offspring);
             // TODO: deal with random effects
             genetic_value_fxn.update(pop);
+            genetic_value_fxn.gv2w->update(pop);
+            genetic_value_fxn.noise_fxn->update(pop);
             lookup = calculate_diploid_fitness_genomes(
                 rng, pop, genetic_value_fxn, offspring_metadata);
             pop.diploid_metadata.swap(offspring_metadata);

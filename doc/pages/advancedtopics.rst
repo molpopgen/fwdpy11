@@ -710,17 +710,9 @@ Method requirements
 :class:`fwdpy11.PyDiploidGeneticValue` *does* provide a default ``update``
 function that updates the genetic-value-to-fitness-map and noise objects.
 
-If you define your own ``update`` function, it needs to have this form:
-
-.. code-block:: python
-
-       def update(self, pop: fwdpy11.DiploidPopulation) -> None:
-           # Update any data for this instance...
-           # ...
-           # ..., then make sure that the
-           # update members are called for the other
-           # objects:
-           self.update_members(pop)
+If your model can allow a no-op ``update`` function, you may apply
+the decorator
+:attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone`.
 
 The ``calculate_gvalue`` function is more complex because it has more
 responsibilities:

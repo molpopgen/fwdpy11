@@ -89,12 +89,7 @@ namespace fwdpy11
         // Callable from Python
         virtual double calculate_gvalue(const DiploidGeneticValueData data) const = 0;
 
-        virtual void
-        update(const DiploidPopulation& pop)
-        {
-            gv2w->update(pop);
-            noise_fxn->update(pop);
-        }
+        virtual void update(const DiploidPopulation& pop) = 0;
 
         // To be called from w/in a simulation
         virtual void
