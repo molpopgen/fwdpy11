@@ -228,7 +228,6 @@ init_PyDiploidGeneticValue(py::module& m)
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
         .def_readwrite("offspring_metadata",
                        &PyDiploidGeneticValueData::offspring_metadata)
-        .def_readwrite("parent1_metadata", &PyDiploidGeneticValueData::parent1_metadata)
         .def_readwrite("parental_metadata",
                        &PyDiploidGeneticValueData::parental_metadata)
         .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
