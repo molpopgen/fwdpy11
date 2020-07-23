@@ -7,6 +7,8 @@ References
 
 .. [Christiansen1975] Christiansen, Freddy Bugge. 1975. “Hard and Soft Selection in a Subdivided Population.” The American Naturalist 109 (965): 11–16. DOI:10.1086/282970
 
+.. [Doebeli2004] Doebeli, Michael, Christoph Hauert, and Timothy Killingback. 2004. “The Evolutionary Origin of Cooperators and Defectors.” Science 306 (5697): 859–62.
+
 .. [EyreWalker2010] Eyre-Walker, Adam. 2010. “Evolution in Health and Medicine Sackler Colloquium: Genetic Architecture of a Complex Trait and Its Implications for Fitness and Genome-Wide Association Studies.” Proceedings of the National Academy of Sciences of the United States of America 107 Suppl 1 (January): 1752–56.
 
 .. [Felsenstein1976] Felsenstein, J. 1976. “The Theoretical Population Genetics of Variable Selection and Migration.” Annual Review of Genetics 10: 253–80. DOI:10.1146/annurev.ge.10.120176.001345

@@ -306,6 +306,8 @@ I feel that some comments about this model are warranted:
   the trait again should they drift to a frequency below :math:`x` if the
   simulation is run a bit longer.
 
+.. _gvalues_python:
+
 Writing genetic value classes in Python
 ---------------------------------------------------------------------
 
@@ -399,6 +401,67 @@ If you are interested in additive effects models but a new "noise"
 model, then use :class:`fwdpy11.Additive` along with your custom
 type.
 
+.. todo:: 
+
+    Move the discussion of the next two functions.  It is only
+    possible to call them via an "update" like for snowdrift
+    models and it is not going to be faster than the current
+    memoryview method that a standard model would/should apply.
+
+``fwdpy11`` provides the following helper functions to improve efficiency:
+
+.. py:function:: fwdpy11.strict_additive_effects
+
+   This function computes the sum of effect sizes in a 
+   diploid genome, ignoring dominance.  The return value
+   is an offset from zero, so add 1.0 to convert to a 
+   fitness if needed.
+
+   :param diploid: An individual
+   :type diploid: fwdpy11.DiploidGenotype
+   :param genomes: A population's genomes list
+   :type genomes: fwdpy11.HaploidGenomeVector
+   :param mutations: A population's mutations list
+   :type mutations: fwdpy11.MutationVector
+   :returns: Sum of effect sizes
+   :rtype: float
+
+.. py:function:: fwdpy11.additive_effects
+
+   This function computes the sum of effect sizes in a 
+   diploid genome, accounting for dominance.  The return value
+   is an offset from zero, so add 1.0 to convert to a 
+   fitness if needed.
+
+   :param diploid: An individual
+   :type diploid: fwdpy11.DiploidGenotype
+   :param genomes: A population's genomes list
+   :type genomes: fwdpy11.HaploidGenomeVector
+   :param mutations: A population's mutations list
+   :type mutations: fwdpy11.MutationVector
+   :params scaling: The scaling of homozygous mutant effects
+   :type scaling: float
+   :returns: Sum of effect sizes
+   :rtype: float
+
+The first function is equivalent to the following Python code:
+
+.. code-block:: python
+
+   def strict_additive_effects(
+       diploid: fwdpy11.DiploidGenotype,
+       genomes: fwdpy11.HaploidGenomeVector,
+       mutations: fwdpy11.MutationVector,
+   ) -> float:
+       g = 0.0
+       for i in [dip.first, dip.second]:
+           for k in genomes[i].smutations:
+               g += mutations[k].s
+       return g
+
+The second function uses C++ code from ``fwdpp`` to do the calculation
+accounting for dominance effects.
+
 Technical issues
 +++++++++++++++++++++++++++++++
 
@@ -428,10 +491,15 @@ The idiomatic approach in ``Python 3`` is:
        def __init__(self):
            self.b = "I am a Base"
 
+
+.. ipython:: python
+
    class Derived(Base):
        def __init__(self):
            self.d = "I am a Derived"
            super(Derived, self).__init__()
+
+.. ipython:: python
 
    d = Derived()
    print(d.b)
@@ -832,6 +900,16 @@ most explicit approach is probably to use :class:`collections.Counter`:
                 s += 2.0 * i[1]
         memoryview(data.gvalues)[0] = s
         return s
+
+More complex scenarios: social interactions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some models are not easily implemented with the genetic value +
+genetic value to fitness map + noise trio of types defined here.
+The reason has to do with how these types are applied during a simulation,
+which is described in more detail :ref:`here <gvalue_technical_details>`, and
+in :ref:`this section <gvalue_simulation_behavior>` specifically.
+
 
 The data types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

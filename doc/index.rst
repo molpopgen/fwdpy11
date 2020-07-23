@@ -30,7 +30,7 @@ Welcome to fwdpy11's documentation!
     :caption: Tutorials
 
     pages/tutorial.rst
-    pages/advancedtopics.rst
+    pages/advancedtopics
 
 .. toctree::
     :caption: Objects and concepts
@@ -41,6 +41,11 @@ Welcome to fwdpy11's documentation!
     pages/tstypes
     pages/tablefs.rst
     pages/recorders
+
+.. toctree::
+    :caption: Technical details
+
+    technical/genetic_values
 
 
 .. toctree::
@@ -70,7 +75,6 @@ Welcome to fwdpy11's documentation!
 
     examples/bgs
     examples/gss
-    examples/snowdrift
     examples/recorder
     examples/migtest
     examples/localadaptation
@@ -78,6 +82,7 @@ Welcome to fwdpy11's documentation!
     examples/gss_divergent_optima
     examples/precapitation
     examples/recapitation
+    examples/pysnowdrift
 
 .. todolist::
 
