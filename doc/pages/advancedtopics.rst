@@ -524,7 +524,7 @@ Genetic value to fitness maps
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Here, one derives a new class from :class:`fwdpy11.GeneticValueIsTrait`.
-The basic form of such a class must look like:
+The basic form of such a class is:
 
 .. code-block:: python
 
@@ -545,8 +545,8 @@ The basic form of such a class must look like:
            pass
 
 
-If the object does not need to manage an internal state, we can simplify a 
-bit with another decorator:
+If the object does not need to manage an internal state that changes over time,
+we can simplify a bit with another decorator:
 
 .. code-block:: python
 
@@ -592,6 +592,19 @@ The type passed into the ``__call__`` function is:
        access to those fields that have been assigned to the offspring.
        (This is a *copy* of the metadata from the C++ side.)
 
+   .. py:attribute:: offspring_metadata_index
+
+       A 64 bit integer that gives the location (index) of
+       ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+       This index is useful in the event of mass migrations via copies,
+       which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
+       and this value.
+
+   .. py:attribute:: parental_metadata
+
+       A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
+       The data are in order according to ``offspring_metadata.parents``.
+
    .. py:attribute:: genetic_values
 
        A buffer containing genetic value information for the offspring.
@@ -605,8 +618,8 @@ The type passed into the ``__call__`` function is:
 Genetic value "noise"
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-A custom "noise: class inherits from :class:`fwdpy11.GeneticValueNoise`.
-A minimal implementation looks like:
+A custom "noise" class inherits from :class:`fwdpy11.GeneticValueNoise`.
+A minimal implementation has the following form:
 
 .. code-block:: python
 
@@ -630,6 +643,8 @@ and standard deviation ``0.1``:
 .. literalinclude:: ../../tests/pynoise.py
    :lines: 19-
 
+See :func:`fwdpy11.gsl_ran_gaussian_ziggurat` for details on that function.
+
 The data type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -643,13 +658,18 @@ The data type
 
        A copy of the offspring's :class:`fwdpy11.DiploidMetadata`
 
-   .. py:attribute:: parent1_metadata
+   .. py:attribute:: offspring_metadata_index
 
-       A copy of the first parent's :class:`fwdpy11.DiploidMetadata`
+       A 64 bit integer that gives the location (index) of
+       ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+       This index is useful in the event of mass migrations via copies,
+       which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
+       and this value.
 
-   .. py:attribute:: parent2_metadata
+   .. py:attribute:: parental_metadata
 
-       A copy of the first parent's :class:`fwdpy11.DiploidMetadata`
+       A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
+       The data are in order according to ``offspring_metadata.parents``.
 
 New genetic value models
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -669,21 +689,58 @@ The ABC type is :class:`fwdpy11.PyDiploidGeneticValue`:
        :type genetic_value_to_fitness: fwdpy11.GeneticValueIsTrait or None
        :param noise:
        :type noise: fwdpy11.GeneticValueNoise or None
+       :param fill_mutations: If `True`, populate :attr:`fwdpy11.HaploidGenomeProxy.mutations`
+       :type fill_mutations: bool
+
+       .. note::
+
+           ``fill_mutations = True`` is expensive.  For many models,
+           the other attributes of :class:`fwdpy11.HaploidGenomeProxy`
+           should be preferred for performance reasons.
 
    .. py:method:: calculate_gvalue
        :abstractmethod:
 
        :param data: Input data
-       :type data: fwdpy11.PyDiploidGeneticValue
+       :type data: fwdpy11.PyDiploidGeneticValueData
        :returns: The value to be stored in the offspring's
                  :attr:`fwdpy11.DiploidMetadata.g`
        :rtype: float
+
+   .. py:method:: genetic_value_to_fitness
+
+       :param data: Input data
+       :type data: fwdpy11.PyGeneticValueIsTraitData
+
+       :returns: fitness
+       :rtype: float
+
+       .. note::
+
+           This function does not need to be defined 
+           by derived classes most of the time.
+           The default behavior is to apply
+           the instance of :class:`fwdpy11.GeneticValueToFitnessMap`
+           stored by the instance of :class:`fwdpy11.DiploidGeneticValue`
+           (or :class:`fwdpy11.PyDiploidGeneticValue`).  Defining
+           this function in a derived class skips calling held instance
+           in favor of the derived class implementation.
+           In general, one only needs to derive this class for models
+           where either individual genetic values depend on genotypes of the 
+           rest of the population.
+
 
    .. py:method:: update
 
        :param pop: The population being simulated
        :type pop: fwdpy11.DiploidPopulation
        :rtype: None
+
+       .. note::
+
+           A default implementation can be defined using
+           the decorator
+           :attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone`.
 
 Outline of user-defined classes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -702,7 +759,7 @@ described above and would look something like this:
            pass
 
        def update(self, pop: fwdpy11.DiploidPopulation) -> None:
-           self.update_members(pop)
+           pass
 
 Method requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -713,6 +770,10 @@ function that updates the genetic-value-to-fitness-map and noise objects.
 If your model can allow a no-op ``update`` function, you may apply
 the decorator
 :attr:`fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone`.
+
+The ``genetic_value_to_fitness`` function must completely replace the
+functionality of an instance of :class:`fwdpy11.GeneticValueIsTrait`.
+See :ref:`here <python_gvalue_to_fitness>` for details.
 
 The ``calculate_gvalue`` function is more complex because it has more
 responsibilities:
@@ -785,6 +846,14 @@ The data types
 
        A copy of the offspring's :class:`fwdpy11.DiploidMetadata`
 
+   .. py:attribute:: offspring_metadata_index
+
+       A 64 bit integer that gives the location (index) of
+       ``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+       This index is useful in the event of mass migrations via copies,
+       which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
+       and this value.
+
    .. py:attribute:: parental_metadata
 
        A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
@@ -828,8 +897,17 @@ The data types
        The values of :attr:`fwdpy11.Mutation.h` for each
        element of ``smutations``.
 
-   All of these attributes are thin buffers to memory stored
-   on the C++ side. Efficient access would have the form:
+   .. py:attribute:: mutations
+
+       A :class:`list` of all :class:`fwdpy11.Mutation`
+       instances in this genome.  This list is not
+       filled unless ``fill_mutations = True`` when
+       initializing :class:`fwdpy11.PyDiploidGeneticValue`.
+
+
+   All of these attributes except ``mutations`` are thin buffers
+   to memory stored on the C++ side.
+   Efficient access would have the form:
        
        .. code-block:: python
        
