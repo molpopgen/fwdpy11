@@ -65,7 +65,6 @@ init_GeneticValueIsTrait(py::module& m)
         .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
         .def_readonly("offspring_metadata_index",
                       &GeneticValueIsTraitData::offspring_metadata_index)
-        .def_readonly("parent1_metadata",&GeneticValueIsTraitData::parent1)
-        .def_readonly("parent2_metadata",&GeneticValueIsTraitData::parent2)
+        .def_readonly("parental_metadata",&GeneticValueIsTraitData::parental_metadata)
         .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
 }
