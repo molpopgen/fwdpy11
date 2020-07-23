@@ -7,6 +7,7 @@
 #include <functional>
 #include "DiploidGeneticValue.hpp"
 #include "default_update.hpp"
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 
 namespace fwdpy11
 {

@@ -21,32 +21,18 @@
 
 #include <cstdint>
 #include <vector>
-#include <pybind11/pybind11.h>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
-#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
-#include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
 #include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
+#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
     struct DiploidGeneticValue
     /// API class
-    /// For a diploid simulation, we need the following concepts:
-    /// 1. Calculate the genetic value of a diploid, g.  This is calculate_gvalue()
-    /// 2. Calculate any random effects, or "noise", e.  This is noise(...)
-    /// 3. Calculate the final fitness, w = f(g,e). This is genetic_value_to_fitness()
-    /// 4. If a derived class has any of its own data, provide a means for updating. This is update()
-    ///
-    /// In a simulation, we want the following operations:
-    /// pop.diploid_metadata[i].g = gv(i,metadata,pop);
-    /// pop.diploid_metadata[i].e = gv.noise(rng, pop.diploid_medatadata[i],p1,p2,pop);
-    /// pop.diploid_metadata[i].w = gv.genetic_value_to_fitness(pop.diploid_metadata[i], gv.gvalues);
-    /// These operations are handled by operator()
-    /// At the end of a generation, update may be called.
     ///
     /// Things to note:
     /// Any deme/geography-specific details must be handled by the derived class.
@@ -80,13 +66,12 @@ namespace fwdpy11
         {
         }
 
+        // The type is move-only
         virtual ~DiploidGeneticValue() = default;
-
         DiploidGeneticValue(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue(DiploidGeneticValue&&) = default;
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
 
-        // Callable from Python
         virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 
         virtual void update(const DiploidPopulation& pop) = 0;

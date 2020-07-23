@@ -19,6 +19,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/util/array_proxy.hpp>
 #include "../genetic_value_to_fitness/GeneticValueIsTraitData.hpp"
 
