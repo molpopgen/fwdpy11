@@ -44,8 +44,7 @@ def evolve_genomes(rng, pop, params, recorder=None):
 
     # warnings.simplefilter("default")
     warnings.warn(
-        "Simulation without tree sequences is being considered for deprecation!",
-        PendingDeprecationWarning,
+        "Simulation without tree sequences is deprecated", DeprecationWarning,
     )
 
     from ._fwdpy11 import MutationRegions

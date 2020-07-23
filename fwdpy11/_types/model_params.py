@@ -208,9 +208,9 @@ class ModelParams(object):
 
         # Otherwise, assume that it is a numpy array
         warnings.warn(
-            "attribute popsizes is being considered for"
-            " deprecation (along with simulations without tree sequences)",
-            PendingDeprecationWarning,
+            "attribute popsizes is deprecated"
+            " and will be removed in a future release.",
+            DeprecationWarning,
         )
         return self.demography
 
@@ -311,7 +311,7 @@ class ModelParams(object):
     def validate_pself(self, attribute, value):
         if value != 0.0:
             warnings.warn(
-                "attribute pself is being considered for"
-                " deprecation (along with simulations without tree sequences)",
-                PendingDeprecationWarning,
+                "attribute pself is deprecated"
+                " and will be removed in a future version",
+                DeprecationWarning,
             )
