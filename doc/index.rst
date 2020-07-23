@@ -57,6 +57,7 @@ Welcome to fwdpy11's documentation!
     pages/functions
     pages/demographic_models
     pages/tskit_tools
+    pages/gslrandom.rst
 
 .. toctree::
     :caption: References
