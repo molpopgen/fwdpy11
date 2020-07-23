@@ -92,8 +92,8 @@ namespace fwdpy11
         virtual void update(const DiploidPopulation& pop) = 0;
 
         // To be called from w/in a simulation
-        virtual void
-        operator()(DiploidGeneticValueData data) 
+        inline void
+        operator()(DiploidGeneticValueData data)
         {
             data.offspring_metadata.get().g = calculate_gvalue(data);
             data.offspring_metadata.get().e = noise(DiploidGeneticValueNoiseData(data));
@@ -102,7 +102,7 @@ namespace fwdpy11
         }
 
         virtual double
-        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data) 
+        genetic_value_to_fitness(const DiploidGeneticValueToFitnessData data)
         {
             return gv2w->operator()(data);
         }
