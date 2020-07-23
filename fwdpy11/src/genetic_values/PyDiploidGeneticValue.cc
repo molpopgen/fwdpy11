@@ -223,7 +223,9 @@ init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t, py::object, py::object, bool>());
+        .def(py::init<std::size_t, py::object, py::object, bool>(), py::arg("ndim"),
+             py::arg("genetic_value_to_fitness"), py::arg("noise"),
+             py::arg("fill_mutations"));
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
         .def_readwrite("offspring_metadata",
