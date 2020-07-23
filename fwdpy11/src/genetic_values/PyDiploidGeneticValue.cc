@@ -92,6 +92,7 @@ struct PyDiploidGeneticValueData
     py::object offspring_metadata, parent1_metadata, parent2_metadata, genome1, genome2,
         gvalues;
     py::list genomes, parental_metadata;
+    std::size_t offspring_metadata_index;
     PyDiploidGeneticValueData(bool fill_mutations_list)
         : metadata_proxy{}, genome1_data{fill_mutations_list},
           genome2_data{fill_mutations_list},
@@ -102,7 +103,8 @@ struct PyDiploidGeneticValueData
           genome2{py::cast<genome_data_proxy*>(&genome2_data)},
           gvalues{py::cast<fwdpy11::double_array_proxy*>(&gvalues_proxy)},
           genomes{fill_list(genome1, genome2)}, parental_metadata{fill_list(
-                                                    parent1_metadata, parent2_metadata)}
+                                                    parent1_metadata, parent2_metadata)},
+          offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
     {
     }
 };
@@ -187,6 +189,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
             input_data.pop.get().mutations);
         data.gvalues_proxy.data = gvalues.data();
         data.gvalues_proxy.size = gvalues.size();
+        data.offspring_metadata_index = input_data.metadata_index;
         PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue, data);
     }
 
@@ -201,10 +204,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
             = pybind11::get_overload(this, "genetic_value_to_fitness");
         if (overload)
             {
-                gv2w_data.offspring_metadata_copy = input_data.offspring_metadata.get();
-                gv2w_data.buffer.data
-                    = const_cast<double*>(input_data.gvalues.get().data());
-                gv2w_data.buffer.size = input_data.gvalues.get().size();
+                set_data(input_data, gv2w_data);
                 auto obj = overload(pygv2wdata);
                 return obj.cast<double>();
             }
@@ -232,7 +232,9 @@ init_PyDiploidGeneticValue(py::module& m)
         .def_readwrite("parental_metadata",
                        &PyDiploidGeneticValueData::parental_metadata)
         .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
-        .def_readonly("genomes", &PyDiploidGeneticValueData::genomes);
+        .def_readonly("genomes", &PyDiploidGeneticValueData::genomes)
+        .def_readonly("offspring_metadata_index",
+                      &PyDiploidGeneticValueData::offspring_metadata_index);
 
     py::class_<genome_data_proxy>(m, "HaploidGenomeProxy")
         .def_readonly("effect_sizes", &genome_data_proxy::effect_sizes)

@@ -20,26 +20,44 @@
 #ifndef FWPY11_GENETIC_VALUE_IS_TRAIT_DATA_HPP
 #define FWPY11_GENETIC_VALUE_IS_TRAIT_DATA_HPP
 
+#include <limits>
 #include <fwdpy11/util/array_proxy.hpp>
 #include <fwdpy11/types/Diploid.hpp>
+#include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
 #include <pybind11/pybind11.h>
 
 using genetic_values_buffer_proxy = fwdpy11::double_array_proxy;
 
 struct GeneticValueIsTraitData
 {
-    fwdpy11::DiploidMetadata offspring_metadata_copy;
-    pybind11::object offspring_metadata;
+    fwdpy11::DiploidMetadata offspring_metadata_copy, parent1_copy, parent2_copy;
+    pybind11::object offspring_metadata, parent1, parent2;
     genetic_values_buffer_proxy buffer;
     pybind11::object genetic_values;
+    std::size_t offspring_metadata_index;
 
     GeneticValueIsTraitData()
-        : offspring_metadata_copy{},
+        : offspring_metadata_copy{}, parent1_copy{}, parent2_copy{},
           offspring_metadata{
               pybind11::cast<fwdpy11::DiploidMetadata*>(&offspring_metadata_copy)},
-          buffer{}, genetic_values{pybind11::cast<genetic_values_buffer_proxy*>(&buffer)}
+          parent1{pybind11::cast<fwdpy11::DiploidMetadata*>(&parent1_copy)},
+          parent2{pybind11::cast<fwdpy11::DiploidMetadata*>(&parent2_copy)}, buffer{},
+          genetic_values{pybind11::cast<genetic_values_buffer_proxy*>(&buffer)},
+          offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
     {
     }
 };
+
+inline void
+set_data(const fwdpy11::DiploidGeneticValueToFitnessData& input_data,
+         GeneticValueIsTraitData& data)
+{
+    data.offspring_metadata_copy = input_data.offspring_metadata.get();
+    data.buffer.data = const_cast<double*>(input_data.gvalues.get().data());
+    data.buffer.size = input_data.gvalues.get().size();
+    data.offspring_metadata_index = input_data.metadata_index;
+    data.parent1_copy = input_data.parent1_metadata.get();
+    data.parent2_copy = input_data.parent2_metadata.get();
+}
 
 #endif
