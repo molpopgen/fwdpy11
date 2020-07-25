@@ -70,6 +70,27 @@ class DemeSizeTracker(object):
             self.individual_numbers.append(DemeSizeAtTime(pop.generation, i, j))
 
 
+@attr.s(auto_attribs=True)
+class ParentData(object):
+    offspring_generation: int
+    offspring_deme: int
+    parent1: int
+    parent2: int
+
+
+@attr.s(auto_attribs=True)
+class TrackParents(object):
+    parents: typing.List[ParentData]
+
+    def __call__(
+        self, pop: fwdpy11.DiploidPopulation, sampler: fwdpy11.SampleRecorder
+    ) -> None:
+        for i in pop.diploid_metadata:
+            self.parents.append(
+                ParentData(pop.generation, i.deme, i.parents[0], i.parents[1])
+            )
+
+
 def branch(when: int, fraction: float) -> fwdpy11.DiscreteDemography:
     """
     A deme gives rise to a new daugther deme.
@@ -172,6 +193,43 @@ def pulse_migration(
     )
 
 
+def pulse_migration_via_setting_migration_rates(
+    when: int, source: int, destination: int, fraction: float
+) -> fwdpy11.DiscreteDemography:
+    """
+    An arguably simpler implementation of pulse migration.
+    The migration matrix is interpreted as the ancestry proportion
+    from each input deme each generation.
+
+    At generation when, we can change the migration inputs into deme
+    ``destination`` and then reset them at generation when + 1.
+
+    The outcome is that the offspring born at time when + 1 are the
+    result of the pulse migration and offspring born at time when + 2
+    have the reset ancestry proportions.
+
+    Below, we test this function by setting source = 0, destination = 1,
+    fraction = 1.0, meaning that deme 1 is replaced by deme 0, meaning
+    that all parents of offspring born at time when + 1 must be
+    from deme 0.
+    """
+    migmatrix = np.eye(2)
+    m = np.zeros(2)
+    m[source] = fraction
+    m[destination] = 1.0 - fraction
+    set_migration_rates = [
+        fwdpy11.SetMigrationRates(when=when, deme=destination, migrates=m)
+    ]
+    set_migration_rates.append(
+        fwdpy11.SetMigrationRates(
+            when=when + 1, deme=destination, migrates=migmatrix[destination, :]
+        )
+    )
+    return fwdpy11.DiscreteDemography(
+        migmatrix=migmatrix, set_migration_rates=set_migration_rates
+    )
+
+
 def build_params(
     demography: fwdpy11.DiscreteDemography, simlen: int
 ) -> fwdpy11.ModelParams:
@@ -200,6 +258,17 @@ def run_model(
     tracker = DemeSizeTracker([], [])
     fwdpy11.evolvets(rng, pop, params, 10, tracker)  # simplify every 10 generations
     return pop, tracker.parent_numbers, tracker.individual_numbers
+
+
+def run_model_with_parent_tracking(
+    params: fwdpy11.ModelParams, popsizes: typing.Union[int, typing.List], seed: int
+) -> typing.Tuple[fwdpy11.DiploidPopulation, typing.List[ParentData]]:
+    # 1.0 is the genome length for the tree sequence recording
+    pop = fwdpy11.DiploidPopulation(popsizes, 1.0)
+    rng = fwdpy11.GSLrng(seed)
+    tracker = TrackParents([])
+    fwdpy11.evolvets(rng, pop, params, 10, tracker)  # simplify every 10 generations
+    return pop, tracker.parents
 
 
 class TestBranch(unittest.TestCase):
@@ -495,6 +564,44 @@ class TestPulseMigration(unittest.TestCase):
                 ]
             )
         )
+
+
+class TestPulseMigrationViaSettingMigrationRates(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.when = 10
+        self.ancestry_fraction = 1.0
+        self.popsizes = [200, 100]
+        demography = pulse_migration_via_setting_migration_rates(
+            self.when, 0, 1, self.ancestry_fraction
+        )
+        self.params = build_params(demography, 50)
+        self.pop, self.parents = run_model_with_parent_tracking(
+            self.params, self.popsizes, 666
+        )
+
+    def test_final_sizes(self):
+        deme_sizes = self.pop.deme_sizes(as_dict=True)
+        for key, value in deme_sizes.items():
+            self.assertEqual(value, self.popsizes[key])
+
+    def test_parents_generation_when_plus_one(self):
+        plist = [i for i in self.parents if i.offspring_generation == self.when + 1]
+        self.assertEqual(len(plist), self.pop.N)
+        for p in plist:
+            self.assertTrue(p.parent1 < self.popsizes[0])
+            self.assertTrue(p.parent2 < self.popsizes[0])
+
+    def test_parents_all_other_generations(self):
+        plist = [i for i in self.parents if i.offspring_generation != self.when + 1]
+        self.assertEqual(len(plist), self.pop.N * (self.params.simlen - 1))
+        for p in plist:
+            if p.offspring_deme == 0:
+                self.assertTrue(p.parent1 < self.popsizes[0])
+                self.assertTrue(p.parent2 < self.popsizes[0])
+            else:
+                self.assertTrue(p.parent1 >= self.popsizes[0])
+                self.assertTrue(p.parent2 >= self.popsizes[0])
 
 
 if __name__ == "__main__":
