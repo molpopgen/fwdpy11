@@ -30,10 +30,20 @@ using genetic_values_buffer_proxy = fwdpy11::double_array_proxy;
 
 struct GeneticValueIsTraitData
 {
+    pybind11::list
+    fill_list(pybind11::object o1, pybind11::object o2)
+    {
+        pybind11::list rv;
+        rv.append(o1);
+        rv.append(o2);
+        return rv;
+    }
+    
     fwdpy11::DiploidMetadata offspring_metadata_copy, parent1_copy, parent2_copy;
     pybind11::object offspring_metadata, parent1, parent2;
     genetic_values_buffer_proxy buffer;
     pybind11::object genetic_values;
+    pybind11::list parental_metadata;
     std::size_t offspring_metadata_index;
 
     GeneticValueIsTraitData()
@@ -43,6 +53,7 @@ struct GeneticValueIsTraitData
           parent1{pybind11::cast<fwdpy11::DiploidMetadata*>(&parent1_copy)},
           parent2{pybind11::cast<fwdpy11::DiploidMetadata*>(&parent2_copy)}, buffer{},
           genetic_values{pybind11::cast<genetic_values_buffer_proxy*>(&buffer)},
+          parental_metadata{fill_list(parent1, parent2)},
           offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
     {
     }

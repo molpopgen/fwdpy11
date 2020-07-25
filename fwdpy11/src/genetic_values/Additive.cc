@@ -20,6 +20,7 @@
 #include <functional>
 #include <fwdpy11/types/Mutation.hpp>
 #include <fwdpy11/genetic_values/fwdpp_wrappers/fwdpp_genetic_value.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <pybind11/pybind11.h>
 
 namespace

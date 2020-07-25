@@ -5,14 +5,24 @@ namespace py = pybind11;
 
 struct NoiseFunctionData
 {
+    py::list
+    fill_list(py::object o1, py::object o2)
+    {
+        py::list rv;
+        rv.append(o1);
+        rv.append(o2);
+        return rv;
+    }
     fwdpy11::DiploidMetadata offspring_copy, parent1_copy, parent2_copy;
     py::object offspring, parent1, parent2;
+    py::list parental_metadata;
     std::size_t offspring_metadata_index;
     NoiseFunctionData()
         : offspring_copy{}, parent1_copy{}, parent2_copy{},
           offspring{py::cast<fwdpy11::DiploidMetadata*>(&offspring_copy)},
           parent1{py::cast<fwdpy11::DiploidMetadata*>(&parent1_copy)},
           parent2{py::cast<fwdpy11::DiploidMetadata*>(&parent2_copy)},
+          parental_metadata{fill_list(parent1, parent2)},
           offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
     {
     }
@@ -74,6 +84,5 @@ init_GeneticValueNoise(py::module& m)
         .def_readonly("offspring_metadata", &NoiseFunctionData::offspring)
         .def_readonly("offspring_metadata_index",
                       &NoiseFunctionData::offspring_metadata_index)
-        .def_readonly("parent1_metadata", &NoiseFunctionData::parent1)
-        .def_readonly("parent2_metadata", &NoiseFunctionData::parent2);
+        .def_readonly("parental_metadata", &NoiseFunctionData::parental_metadata);
 }

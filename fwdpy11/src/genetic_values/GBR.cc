@@ -1,5 +1,5 @@
 #include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
-#include <fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/genetic_value_noise/GeneticValueNoise.hpp>
 #include <pybind11/pybind11.h>
 

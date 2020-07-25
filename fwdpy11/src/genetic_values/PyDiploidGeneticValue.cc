@@ -19,10 +19,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
+#include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
 #include <fwdpy11/util/array_proxy.hpp>
+#include <fwdpp/fitness_models.hpp>
 #include "../genetic_value_to_fitness/GeneticValueIsTraitData.hpp"
 
 namespace py = pybind11;
+
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
+PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::haploid_genome>);
 
 struct genome_data_proxy
 {
@@ -218,17 +223,43 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
     }
 };
 
+double
+strict_additive_effects(const fwdpy11::Diploid& diploid,
+                        const std::vector<fwdpp::haploid_genome>& genomes,
+                        const std::vector<fwdpy11::Mutation>& mutations)
+{
+    double g = 0.0;
+    for (auto k : genomes[diploid.first].smutations)
+        {
+            g += mutations[k].s;
+        }
+    for (auto k : genomes[diploid.second].smutations)
+        {
+            g += mutations[k].s;
+        }
+    return g;
+}
+
+double
+additive_effects(const fwdpy11::Diploid& diploid,
+                 const std::vector<fwdpp::haploid_genome>& genomes,
+                 const std::vector<fwdpy11::Mutation>& mutations, double scaling)
+{
+    return fwdpp::additive_diploid(fwdpp::trait(scaling))(diploid, genomes, mutations);
+}
+
 void
 init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t, py::object, py::object, bool>());
+        .def(py::init<std::size_t, py::object, py::object, bool>(), py::arg("ndim"),
+             py::arg("genetic_value_to_fitness"), py::arg("noise"),
+             py::arg("fill_mutations"));
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
         .def_readwrite("offspring_metadata",
                        &PyDiploidGeneticValueData::offspring_metadata)
-        .def_readwrite("parent1_metadata", &PyDiploidGeneticValueData::parent1_metadata)
         .def_readwrite("parental_metadata",
                        &PyDiploidGeneticValueData::parental_metadata)
         .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
@@ -249,4 +280,7 @@ init_PyDiploidGeneticValue(py::module& m)
                                        }
                                    return self.pymutations;
                                });
+
+    m.def("strict_additive_effects", &strict_additive_effects);
+    m.def("additive_effects", &additive_effects);
 }
