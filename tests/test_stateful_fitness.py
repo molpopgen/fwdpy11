@@ -51,7 +51,7 @@ def evolve_snowdrift(args):
         "sregions": [fp11.ExpS(0, 1, 1, -0.1, 1.0)],
         "recregions": [fp11.Region(0, 1, 1)],
         "nregions": [],
-        "gvalue": snowdrift.DiploidSnowdrift(12345, 0.2, -0.2, 1, -2, 1, 0.3),
+        "gvalue": snowdrift.DiploidSnowdrift(0.2, -0.2, 1, -2, 1, 0.3),
         # evolve for 100 generations so that unit tests are
         # fast
         "demography": fwdpy11.DiscreteDemography(),
@@ -69,7 +69,7 @@ def evolve_snowdrift(args):
 class testSnowdrift(unittest.TestCase):
     @classmethod
     def setUp(self):
-        self.f = snowdrift.DiploidSnowdrift(54321, 1, -1, 0.1, 0.2, 1, 0.3)
+        self.f = snowdrift.DiploidSnowdrift(1, -1, 0.1, 0.2, 1, 0.3)
 
     def testShape(self):
         s = self.f.shape
