@@ -30,7 +30,6 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
  * calculated using fwdpp's machinery.
  */
 {
-    fwdpy11::GSLrng_t rng;
     const double b1, b2, c1, c2, slope, sig0;
     // This is our stateful data,
     // which is a record of the
@@ -40,9 +39,9 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     const fwdpp::additive_diploid additive;
 
     // This constructor is exposed to Python
-    snowdrift(unsigned seed, double b1_, double b2_, double c1_, double c2_,
+    snowdrift(double b1_, double b2_, double c1_, double c2_,
               double slope, double p0)
-        : fwdpy11::DiploidGeneticValue{1}, rng{seed}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
+        : fwdpy11::DiploidGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
           slope(slope), sig0(1. / slope * std::log(p0 / (1. - p0))),
           phenotypes(), additive{fwdpp::trait{2.0}}
     {
@@ -67,10 +66,10 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     {
         double zself = data.offspring_metadata.get().g;
         auto N = phenotypes.size();
-        auto other = gsl_rng_uniform_int(rng.get(), N);
+        auto other = gsl_rng_uniform_int(data.rng.get().get(), N);
         while (other == data.offspring_metadata.get().label)
             {
-                other = gsl_rng_uniform_int(rng.get(), N);
+                other = gsl_rng_uniform_int(data.rng.get().get(), N);
             }
         double zpair = zself + phenotypes[other];
         double a
@@ -104,8 +103,8 @@ PYBIND11_MODULE(ll_snowdrift, m)
 
     // Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "_ll_DiploidSnowdrift")
-        .def(py::init<unsigned, double, double, double, double, double, double>(),
-             py::arg("seed"), py::arg("b1"), py::arg("b2"), py::arg("c1"), py::arg("c2"),
+        .def(py::init<double, double, double, double, double, double>(),
+             py::arg("b1"), py::arg("b2"), py::arg("c1"), py::arg("c2"),
              py::arg("slope"), py::arg("p0"))
         .def_readwrite("phenotypes", &snowdrift::phenotypes);
 }
