@@ -18,7 +18,6 @@ Welcome to fwdpy11's documentation!
     misc/deprecated
     misc/pubs
     misc/developersguide
-    misc/writingplugins
 
 .. toctree::
     :caption: Concepts
@@ -46,6 +45,7 @@ Welcome to fwdpy11's documentation!
     :caption: Technical details
 
     technical/genetic_values
+    technical/writingplugins
 
 
 .. toctree::

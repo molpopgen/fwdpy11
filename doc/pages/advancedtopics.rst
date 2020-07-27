@@ -401,13 +401,6 @@ If you are interested in additive effects models but a new "noise"
 model, then use :class:`fwdpy11.Additive` along with your custom
 type.
 
-.. todo:: 
-
-    Move the discussion of the next two functions.  It is only
-    possible to call them via an "update" like for snowdrift
-    models and it is not going to be faster than the current
-    memoryview method that a standard model would/should apply.
-
 ``fwdpy11`` provides the following helper functions to improve efficiency:
 
 .. py:function:: fwdpy11.strict_additive_effects
@@ -417,12 +410,10 @@ type.
    is an offset from zero, so add 1.0 to convert to a 
    fitness if needed.
 
-   :param diploid: An individual
-   :type diploid: fwdpy11.DiploidGenotype
-   :param genomes: A population's genomes list
-   :type genomes: fwdpy11.HaploidGenomeVector
-   :param mutations: A population's mutations list
-   :type mutations: fwdpy11.MutationVector
+   :param pop: The population
+   :type pop: fwdpy11.DiploidPopulation
+   :param metadata: The offspring metadata
+   :type metadata: fwdpy11.DiploidMetadata
    :returns: Sum of effect sizes
    :rtype: float
 
@@ -433,15 +424,12 @@ type.
    is an offset from zero, so add 1.0 to convert to a 
    fitness if needed.
 
-   :param diploid: An individual
-   :type diploid: fwdpy11.DiploidGenotype
-   :param genomes: A population's genomes list
-   :type genomes: fwdpy11.HaploidGenomeVector
-   :param mutations: A population's mutations list
-   :type mutations: fwdpy11.MutationVector
-   :params scaling: The scaling of homozygous mutant effects
+   :param pop: The population
+   :type pop: fwdpy11.DiploidPopulation
+   :param metadata: The offspring metadata
+   :type metadata: fwdpy11.DiploidMetadata
    :type scaling: float
-   :returns: Sum of effect sizes
+   :returns: Sum of effect sizes (accounting for heterozygous effects)
    :rtype: float
 
 The first function is equivalent to the following Python code:
@@ -449,14 +437,13 @@ The first function is equivalent to the following Python code:
 .. code-block:: python
 
    def strict_additive_effects(
-       diploid: fwdpy11.DiploidGenotype,
-       genomes: fwdpy11.HaploidGenomeVector,
-       mutations: fwdpy11.MutationVector,
+       pop: fwdpy11.DiploidPopulation, metadata: fwdpy11.DiploidMetadata,
    ) -> float:
        g = 0.0
+       dip = pop.diploids[metadata.label]
        for i in [dip.first, dip.second]:
-           for k in genomes[i].smutations:
-               g += mutations[k].s
+           for k in pop.haploid_genomes[i].smutations:
+               g += pop.mutations[k].s
        return g
 
 The second function uses C++ code from ``fwdpp`` to do the calculation
@@ -606,7 +593,7 @@ The basic form of such a class is:
            # Do NOT call super()!
            fwdpy11.GeneticValueIsTrait.__init__(self)
 
-       def __call__(self, data: fwdpy11.GeneticValueIsTraitData) -> float:
+       def __call__(self, data: fwdpy11.DiploidGeneticValueToFitnessData) -> float:
            pass
 
        def update(pop: fwdpy11.DiploidPopulation) -> None:
@@ -629,7 +616,7 @@ we can simplify a bit with another decorator:
            # Do NOT call super()!
            fwdpy11.GeneticValueIsTrait.__init__(self)
 
-       def __call__(self, data: fwdpy11.GeneticValueIsTraitData) -> float:
+       def __call__(self, data: fwdpy11.DiploidGeneticValueToFitnessData) -> float:
            pass
 
 
@@ -648,9 +635,13 @@ The data type
 
 The type passed into the ``__call__`` function is:
 
-.. py:class:: fwdpy11.PyGeneticValueIsTraitData
+.. py:class:: fwdpy11.DiploidGeneticValueToFitnessData
 
    .. versionadded:: 0.9.0
+
+   This class supports the buffer protocol, which exposes the
+   genetic values array.  The most efficient access will
+   be via a :class:`memoryview`.
 
    Instances of this class have the following attributes:
 
@@ -668,20 +659,14 @@ The type passed into the ``__call__`` function is:
        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
        and this value.
 
-   .. py:attribute:: parental_metadata
+   .. py:attribute:: parent1_metadata
 
-       A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
-       The data are in order according to ``offspring_metadata.parents``.
+       The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
-   .. py:attribute:: genetic_values
+   .. py:attribute:: parent2_metadata
 
-       A buffer containing genetic value information for the offspring.
-       It is only useful for multivariate models. Efficient access
-       would have the form:
-       
-       .. code-block:: python
-       
-           gv = memoryview(data.genetic_values)
+       The second parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+
 
 Genetic value "noise"
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -693,9 +678,7 @@ A minimal implementation has the following form:
 
     @fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone
     class MyGeneticValueNoise(fwdpy11.GeneticValueNoise):
-        def __call__(
-            self, rng: fwdpy11.GSLrng, data: fwdpy11.PyGeneticValueNoiseData
-        ) -> float:
+        def __call__(self, data: fwdpy11.DiploidGeneticValueNoiseData) -> float:
             pass
 
         def update(pop: fwdpy11.DiploidPopulation) -> None:
@@ -716,15 +699,22 @@ See :func:`fwdpy11.gsl_ran_gaussian_ziggurat` for details on that function.
 The data type
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. py:class:: fwdpy11.PyGeneticValueNoiseData
+.. py:class:: fwdpy11.DiploidGeneticValueNoiseData
 
    .. versionadded:: 0.9.0
 
    Instances of this class have the following attributes:
 
+   .. py:attribute:: rng
+
+       The simulation's random number generation, an
+       instance of :class:`fwdpy11.GSLrng`
+
    .. py:attribute:: offspring_metadata
 
-       A copy of the offspring's :class:`fwdpy11.DiploidMetadata`
+       An instance of :class:`fwdpy11.DiploidMetadata`, giving you
+       access to those fields that have been assigned to the offspring.
+       (This is a *copy* of the metadata from the C++ side.)
 
    .. py:attribute:: offspring_metadata_index
 
@@ -734,10 +724,13 @@ The data type
        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
        and this value.
 
-   .. py:attribute:: parental_metadata
+   .. py:attribute:: parent1_metadata
 
-       A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
-       The data are in order according to ``offspring_metadata.parents``.
+       The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
+
+   .. py:attribute:: parent2_metadata
+
+       The first parent's metadata (:class:`fwdpy11.DiploidMetadata`).
 
 New genetic value models
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -757,14 +750,6 @@ The ABC type is :class:`fwdpy11.PyDiploidGeneticValue`:
        :type genetic_value_to_fitness: fwdpy11.GeneticValueIsTrait or None
        :param noise:
        :type noise: fwdpy11.GeneticValueNoise or None
-       :param fill_mutations: If `True`, populate :attr:`fwdpy11.HaploidGenomeProxy.mutations`
-       :type fill_mutations: bool
-
-       .. note::
-
-           ``fill_mutations = True`` is expensive.  For many models,
-           the other attributes of :class:`fwdpy11.HaploidGenomeProxy`
-           should be preferred for performance reasons.
 
    .. py:method:: calculate_gvalue
        :abstractmethod:
@@ -778,7 +763,7 @@ The ABC type is :class:`fwdpy11.PyDiploidGeneticValue`:
    .. py:method:: genetic_value_to_fitness
 
        :param data: Input data
-       :type data: fwdpy11.PyGeneticValueIsTraitData
+       :type data: fwdpy11.DiploidGeneticValueToFitnessData
 
        :returns: fitness
        :rtype: float
@@ -795,7 +780,7 @@ The ABC type is :class:`fwdpy11.PyDiploidGeneticValue`:
            in favor of the derived class implementation.
            In general, one only needs to derive this class for models
            where either individual genetic values depend on genotypes of the 
-           rest of the population.
+           rest of the population. See :ref:`here <more_complex_gvalue_models>`.
 
 
    .. py:method:: update
@@ -852,8 +837,8 @@ responsibilities:
    the genetic values for all trait dimensions. See :ref:`here <python_genetic_value_dimensions>`.
    For the common case of a one-dimensional genetic value,
    you populate element ``0`` of this array with value that you
-   will return from this function. This "genetic values array" is stored in
-   :attr:`fwdpy11.PyDiploidGeneticValueData.gvalues`
+   will return from this function. The "genetic values array" is 
+   accessible via the Python buffer protocol.
    The next section shows a concrete example.
 
 .. note::
@@ -884,13 +869,12 @@ most explicit approach is probably to use :class:`collections.Counter`:
     def calculate_gvalue(self, data):
         s = 0.0
         c = Counter()
-        for g in data.genomes:
-            for p, e, h in zip(
-                memoryview(g.positions),
-                memoryview(g.effect_sizes),
-                memoryview(g.dominance),
-            ):
-                c.update([(p, e, h)])
+        pop = data.pop
+        dip = data.diploids[data.offspring_metadata.label]
+        for g in [dip.first, dip.second]:
+            for k in pop.haploid_genomes[g].smutations:
+                m = pop.mutations[k]
+                c.update([(m.pos, m.s, m.h)])
         for i, j in c.items():
             if j == 1:  # Aa
                 s += i[1] * i[2]
@@ -898,10 +882,17 @@ most explicit approach is probably to use :class:`collections.Counter`:
                 # This is a hard-coded "scaling"
                 # of 2
                 s += 2.0 * i[1]
-        memoryview(data.gvalues)[0] = s
+        # Use a memory view to update
+        # the genetic values array
+        memoryview(data)[0] = s
         return s
 
-More complex scenarios: social interactions
+For additive cases like this, though, you'll get better performance
+with :func:`fwdpy11.additive_effects`.
+
+.. _more_complex_gvalue_models:
+
+More complex scenarios (such as social interactions)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Some models are not easily implemented with the genetic value +
@@ -918,11 +909,32 @@ The data types
 
    .. versionadded:: 0.9.0
 
+   This class supports the buffer protocol, which exposes the
+   genetic values array.  The most efficient access will
+   be via a :class:`memoryview`.
+
    Instances of this class have the following attributes:
+
+   .. py:attribute:: rng
+
+       The simulation's random number generation, an
+       instance of :class:`fwdpy11.GSLrng`
+
+   .. py:attribute:: pop
+
+       The population, an instance of :class:`fwdpy11.DiploidPopulation`
 
    .. py:attribute:: offspring_metadata
 
-       A copy of the offspring's :class:`fwdpy11.DiploidMetadata`
+       The offspring's :class:`fwdpy11.DiploidMetadata`
+
+   .. py:attribute:: parent1_metadata
+
+       The first parent's :class:`fwdpy11.DiploidMetadata`
+
+   .. py:attribute:: parent2_metadata
+
+       The second parent's :class:`fwdpy11.DiploidMetadata`
 
    .. py:attribute:: offspring_metadata_index
 
@@ -931,62 +943,3 @@ The data types
        This index is useful in the event of mass migrations via copies,
        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
        and this value.
-
-   .. py:attribute:: parental_metadata
-
-       A :class:`list` of :class:`fwdpy11.DiploidMetadata`.
-       The data are in order according to ``offspring_metadata.parents``.
-
-   .. py:attribute:: gvalues
-
-       A buffer object referring to an array of floats.
-       The buffer length is equal to the trait dimensionality.
-       A :class:`memoryview` would provide the most efficient
-       access.
-
-   .. py:attribute:: genomes
-
-       An :class:`list` of instances of :class:`fwdpy11.HaploidGenomeProxy`
-
-.. py:class:: fwdpy11.HaploidGenomeProxy
-
-   Proxy class for data contained in :class:`fwdpy11.HaploidGenome`. 
-
-   .. versionadded:: 0.9.0
-
-   Instances of this class have the following attributes:
-
-   .. py:attribute:: smutations
-
-       The data from :attr:`fwdpy11.HaploidGenome.smutations`.
-
-   .. py:attribute:: positions
-
-       The values of :attr:`fwdpy11.Mutation.pos` for each
-       element of ``smutations``.
-
-   .. py:attribute:: effect_sizes
-
-       The values of :attr:`fwdpy11.Mutation.s` for each
-       element of ``smutations``.
-
-   .. py:attribute:: dominance
-
-       The values of :attr:`fwdpy11.Mutation.h` for each
-       element of ``smutations``.
-
-   .. py:attribute:: mutations
-
-       A :class:`list` of all :class:`fwdpy11.Mutation`
-       instances in this genome.  This list is not
-       filled unless ``fill_mutations = True`` when
-       initializing :class:`fwdpy11.PyDiploidGeneticValue`.
-
-
-   All of these attributes except ``mutations`` are thin buffers
-   to memory stored on the C++ side.
-   Efficient access would have the form:
-       
-       .. code-block:: python
-       
-           esizes = memoryview(data.effect_sizes)

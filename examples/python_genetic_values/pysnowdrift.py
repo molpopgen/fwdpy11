@@ -27,12 +27,14 @@ class PySnowdrift(fwdpy11.PyDiploidGeneticValue):
     seed = attr.ib()
 
     def __attrs_post_init__(self):
-        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, None, None, False)
+        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, None, None)
         self.phenotypes = []
         self.sig0 = (1.0 / self.slope) * math.log(self.p0 / (1.0 - self.p0))
         self.rng = fwdpy11.GSLrng(self.seed)
 
-    def genetic_value_to_fitness(self, data):
+    def genetic_value_to_fitness(
+        self, data: fwdpy11.DiploidGeneticValueToFitnessData
+    ) -> float:
         zself = self.phenotypes[data.offspring_metadata.label]
         other = int(fwdpy11.gsl_ran_flat(self.rng, 0, len(self.phenotypes)))
         while other == data.offspring_metadata.label:
@@ -46,27 +48,27 @@ class PySnowdrift(fwdpy11.PyDiploidGeneticValue):
         )
         return max(a, 0.0)
 
-    def calculate_gvalue(self, data):
+    def calculate_gvalue(self, data: fwdpy11.PyDiploidGeneticValueData) -> float:
         g = self.phenotypes[data.offspring_metadata.label]
         memoryview(data)[0] = g
         return g
 
-    def sigmoidize(self, g):
+    def sigmoidize(self, g: float) -> float:
         return 1.0 / (1.0 + math.e ** -(self.slope * (g + self.sig0)))
 
-    def phenotype(self, diploid, genomes, mutations):
+    def phenotype(
+        self, pop: fwdpy11.DiploidPopulation, metadata: fwdpy11.DiploidMetadata
+    ) -> float:
         """
         An individual's phenotype is determined by additive effects
         plus a sigmoid function that bounds trait values on [0, 1]
         and places a non-mutant individual at trait value self.p0.
         """
-        g = fwdpy11.strict_additive_effects(diploid, genomes, mutations)
+        g = fwdpy11.strict_additive_effects(pop, metadata)
         return self.sigmoidize(g)
 
-    def update(self, pop):
-        self.phenotypes = [
-            self.phenotype(d, pop.haploid_genomes, pop.mutations) for d in pop.diploids
-        ]
+    def update(self, pop: fwdpy11.DiploidPopulation) -> None:
+        self.phenotypes = [self.phenotype(pop, d) for d in pop.diploid_metadata]
 
 
 class GetP(object):

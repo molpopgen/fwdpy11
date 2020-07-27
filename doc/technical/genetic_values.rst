@@ -74,11 +74,11 @@ the Python versions are listed at the end of this section.
 
        @typing.final
        def __call__(self, data: MockDiploidGeneticValueData) -> None:
-           # Set the genetic value metadata for offspring
+           #Set the genetic value metadata for offspring
            data.offspring_metadata.g = self.calculate_gvalue(data)
-           # Set the random effects metadata for offspring
+           #Set the random effects metadata for offspring
            data.offspring_metadata.e = self.noise(MockDiploidGeneticValueNoiseData(data))
-           # Set the fitness metadata for offspring
+           #Set the fitness metadata for offspring
            data.offspring_metadata.w = self.genetic_value_to_fitness(
                MockDiploidGeneticValueToFitnessData(data)
            )
@@ -147,9 +147,9 @@ During a simulation, the following operations happen:
    gv.genetic_value_to_fitness_map.update(pop)
    gv.noise_function.update(pop)
 
-   # offspring_metadata is a list of fwdpy11.DiploidMetadata
+#offspring_metadata is a list of fwdpy11.DiploidMetadata
    for o in offspring_metadata:
-       # Execute the calculations for each offspring
+#Execute the calculations for each offspring
        gv(MockDiploidGeneticValueData(o, pop))
 
 The definition of our classes and the way that ``update`` functions are applied
@@ -178,17 +178,18 @@ The member functions of our mock classes take different argument types.
 These types hold things like the offspring metadata, parental metadata, etc.,
 that may be needed to calculate return values.
 
-These data types differ if you write a new genetic value type in C++ or if you
-do it in Python.  The reason for this difference is to try to make Python
-genetic value calculations as efficient as possible.
-
-The types used on the C++ side are described in the next section.
-
 For a genetic value object written in Python:
 
 * ``MockDiploidGeneticValueData`` is :class:`fwdpy11.PyDiploidGeneticValueData`.
-* ``MockDiploidGeneticValueToFitnessData`` is :class:`fwdpy11.PyGeneticValueIsTraitData`.
-* ``MockDiploidGeneticValueNoiseData`` is :class:`fwdpy11.PyGeneticValueNoiseData`.
+* ``MockDiploidGeneticValueToFitnessData`` is :class:`fwdpy11.DiploidGeneticValueToFitnessData`.
+* ``MockDiploidGeneticValueNoiseData`` is :class:`fwdpy11.DiploidGeneticValueNoiseData`.
+
+The data types closely match those used by the C++ API, which are
+described in the next section.  The difference is that 
+:class:`fwdpy11.PyDiploidGeneticValueData` supports the buffer protocol
+in order to have write access to :attr:`fwdpy11.DiploidGeneticValue.genetic_values`.
+For the other two classes, their Python versions are exactly like their C++
+back ends.
 
 See :ref:`here <gvalues_python>` for details on writing Python genetic
 value classes.
