@@ -26,5 +26,5 @@ class PyNoise(fwdpy11.GeneticValueNoise):
     def __init__(self):
         fwdpy11.GeneticValueNoise.__init__(self)
 
-    def __call__(self, rng, data):
-        return fwdpy11.gsl_ran_gaussian_ziggurat(rng, 0.1)
+    def __call__(self, data):
+        return fwdpy11.gsl_ran_gaussian_ziggurat(data.rng, 0.1)

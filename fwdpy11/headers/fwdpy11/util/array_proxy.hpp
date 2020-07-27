@@ -27,6 +27,7 @@
 namespace fwdpy11
 {
     template <typename T> struct array_proxy
+    // NOTE: not the most const-correct type
     {
         T* data;
         std::size_t size;
@@ -34,10 +35,27 @@ namespace fwdpy11
         {
         }
 
+        template <typename VT>
+        explicit array_proxy(const VT& v) : data{v.data()}, size{v.size()}
+        {
+        }
+
+        template <typename VT>
+        explicit array_proxy(VT& v) : data{v.data()}, size{v.size()}
+        {
+        }
+
         void
         set(const std::vector<T>& v)
         {
             data = const_cast<T*>(v.data());
+            size = v.size();
+        }
+
+        void
+        set(std::vector<T>& v)
+        {
+            data = v.data();
             size = v.size();
         }
     };

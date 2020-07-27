@@ -48,7 +48,7 @@ class PySnowdrift(fwdpy11.PyDiploidGeneticValue):
 
     def calculate_gvalue(self, data):
         g = self.phenotypes[data.offspring_metadata.label]
-        memoryview(data.gvalues)[0] = g
+        memoryview(data)[0] = g
         return g
 
     def sigmoidize(self, g):

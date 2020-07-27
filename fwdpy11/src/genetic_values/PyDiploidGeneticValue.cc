@@ -17,99 +17,28 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 #include <fwdpy11/genetic_values/DiploidGeneticValue.hpp>
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsTrait.hpp>
-#include <fwdpy11/util/array_proxy.hpp>
 #include <fwdpp/fitness_models.hpp>
-#include "../genetic_value_to_fitness/GeneticValueIsTraitData.hpp"
 
 namespace py = pybind11;
 
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
-PYBIND11_MAKE_OPAQUE(std::vector<fwdpp::haploid_genome>);
-
-struct genome_data_proxy
-{
-    fwdpy11::double_array_proxy effect_sizes_proxy, dominance_proxy, positions_proxy;
-    fwdpy11::uint32_array_proxy smutations_proxy;
-    py::object effect_sizes, dominance, smutations, positions;
-    std::vector<double> effect_sizes_cpp, dominance_cpp, positions_cpp;
-    py::list pymutations;
-    bool filling_mutations;
-
-    genome_data_proxy(bool fill_mutations_list)
-        : effect_sizes_proxy{}, dominance_proxy{}, positions_proxy{}, smutations_proxy{},
-          effect_sizes{py::cast<fwdpy11::double_array_proxy*>(&effect_sizes_proxy)},
-          dominance{py::cast<fwdpy11::double_array_proxy*>(&dominance_proxy)},
-          smutations{py::cast<fwdpy11::uint32_array_proxy*>(&smutations_proxy)},
-          positions{py::cast<fwdpy11::double_array_proxy*>(&positions_proxy)},
-          effect_sizes_cpp{}, dominance_cpp{}, positions_cpp{}, pymutations{},
-          filling_mutations{fill_mutations_list}
-    {
-    }
-
-    void
-    set_data(const std::vector<std::uint32_t>& smutations,
-             const std::vector<fwdpy11::Mutation>& mutations)
-    {
-        effect_sizes_cpp.clear();
-        dominance_cpp.clear();
-        positions_cpp.clear();
-        if (filling_mutations)
-            {
-                pymutations.attr("clear")();
-            }
-        for (auto k : smutations)
-            {
-                auto& m = mutations[k];
-                effect_sizes_cpp.push_back(m.s);
-                dominance_cpp.push_back(m.h);
-                positions_cpp.push_back(m.pos);
-                if (filling_mutations)
-                    {
-                        pymutations.append(
-                            py::cast<const fwdpy11::Mutation*>(&mutations[k]));
-                    }
-            }
-        effect_sizes_proxy.set(effect_sizes_cpp);
-        dominance_proxy.set(dominance_cpp);
-        positions_proxy.set(positions_cpp);
-        smutations_proxy.set(smutations);
-    }
-};
-
 struct PyDiploidGeneticValueData
 {
-    py::list
-    fill_list(py::object o1, py::object o2)
-    {
-        py::list rv;
-        rv.append(o1);
-        rv.append(o2);
-        return rv;
-    }
+    std::reference_wrapper<const fwdpy11::GSLrng_t> rng;
+    std::reference_wrapper<const fwdpy11::DiploidPopulation> pop;
+    std::reference_wrapper<const fwdpy11::DiploidMetadata> offspring_metadata,
+        parent1_metadata, parent2_metadata;
+    std::size_t metadata_index;
+    std::reference_wrapper<std::vector<double>> gvalues;
 
-    fwdpy11::DiploidMetadata metadata_proxy, parent1_metadata_proxy,
-        parent2_metadata_proxy;
-    genome_data_proxy genome1_data, genome2_data;
-    fwdpy11::double_array_proxy gvalues_proxy;
-    py::object offspring_metadata, parent1_metadata, parent2_metadata, genome1, genome2,
-        gvalues;
-    py::list genomes, parental_metadata;
-    std::size_t offspring_metadata_index;
-    PyDiploidGeneticValueData(bool fill_mutations_list)
-        : metadata_proxy{}, genome1_data{fill_mutations_list},
-          genome2_data{fill_mutations_list},
-          offspring_metadata{py::cast<fwdpy11::DiploidMetadata*>(&metadata_proxy)},
-          parent1_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent1_metadata_proxy)},
-          parent2_metadata{py::cast<fwdpy11::DiploidMetadata*>(&parent2_metadata_proxy)},
-          genome1{py::cast<genome_data_proxy*>(&genome1_data)},
-          genome2{py::cast<genome_data_proxy*>(&genome2_data)},
-          gvalues{py::cast<fwdpy11::double_array_proxy*>(&gvalues_proxy)},
-          genomes{fill_list(genome1, genome2)}, parental_metadata{fill_list(
-                                                    parent1_metadata, parent2_metadata)},
-          offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
+    PyDiploidGeneticValueData(const fwdpy11::DiploidGeneticValueData& input_data,
+                              std::vector<double>& gv)
+        : rng{input_data.rng}, pop{input_data.pop},
+          offspring_metadata{input_data.offspring_metadata},
+          parent1_metadata{input_data.parent1_metadata},
+          parent2_metadata{input_data.parent2_metadata},
+          metadata_index{input_data.metadata_index}, gvalues{gv}
     {
     }
 };
@@ -140,62 +69,24 @@ class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValue
     }
 
   public:
-    bool filling_mutations;
     PyDiploidGeneticValue(std::size_t ndim, py::object gvalue_to_fitness_map,
-                          py::object noise, bool fill_mutations_list)
+                          py::object noise)
         : fwdpy11::DiploidGeneticValue(ndim, *dispatch_gv2w(ndim, gvalue_to_fitness_map),
-                                       *dispatch_noise(noise)),
-          filling_mutations{fill_mutations_list}
+                                       *dispatch_noise(noise))
     {
     }
 };
 
 class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
 {
-  private:
-    mutable PyDiploidGeneticValueData data;
-    mutable GeneticValueIsTraitData gv2w_data;
-    py::object pydata;
-    py::object pygv2wdata;
-
   public:
-    PyDiploidGeneticValueTrampoline(std::size_t ndim, py::object gvalue_to_fitness_map,
-                                    py::object noise, bool fill_mutations_list)
-        : PyDiploidGeneticValue(ndim, gvalue_to_fitness_map, noise, fill_mutations_list),
-          data{fill_mutations_list}, gv2w_data{},
-          pydata{py::cast<PyDiploidGeneticValueData*>(&data)},
-          pygv2wdata{py::cast<GeneticValueIsTraitData*>(&gv2w_data)}
-    {
-    }
+    using PyDiploidGeneticValue::PyDiploidGeneticValue;
 
     double
     calculate_gvalue(const fwdpy11::DiploidGeneticValueData input_data) override
     {
-        data.metadata_proxy = input_data.offspring_metadata.get();
-        data.parent1_metadata_proxy
-            = input_data.pop.get()
-                  .diploid_metadata[input_data.offspring_metadata.get().parents[0]];
-        data.parent2_metadata_proxy
-            = input_data.pop.get()
-                  .diploid_metadata[input_data.offspring_metadata.get().parents[1]];
-        data.genome1_data.set_data(
-            input_data.pop.get()
-                .haploid_genomes[input_data.pop.get()
-                                     .diploids[input_data.offspring_metadata.get().label]
-                                     .first]
-                .smutations,
-            input_data.pop.get().mutations);
-        data.genome2_data.set_data(
-            input_data.pop.get()
-                .haploid_genomes[input_data.pop.get()
-                                     .diploids[input_data.offspring_metadata.get().label]
-                                     .second]
-                .smutations,
-            input_data.pop.get().mutations);
-        data.gvalues_proxy.data = gvalues.data();
-        data.gvalues_proxy.size = gvalues.size();
-        data.offspring_metadata_index = input_data.metadata_index;
-        PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue, data);
+        PYBIND11_OVERLOAD_PURE(double, PyDiploidGeneticValue, calculate_gvalue,
+                               PyDiploidGeneticValueData(input_data, this->gvalues));
     }
 
     double
@@ -209,8 +100,7 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
             = pybind11::get_overload(this, "genetic_value_to_fitness");
         if (overload)
             {
-                set_data(input_data, gv2w_data);
-                auto obj = overload(pygv2wdata);
+                auto obj = overload(input_data);
                 return obj.cast<double>();
             }
         return this->gv2w->operator()(input_data);
@@ -224,28 +114,28 @@ class PyDiploidGeneticValueTrampoline : public PyDiploidGeneticValue
 };
 
 double
-strict_additive_effects(const fwdpy11::Diploid& diploid,
-                        const std::vector<fwdpp::haploid_genome>& genomes,
-                        const std::vector<fwdpy11::Mutation>& mutations)
+strict_additive_effects(const fwdpy11::DiploidPopulation& pop,
+                        const fwdpy11::DiploidMetadata& individual)
 {
     double g = 0.0;
-    for (auto k : genomes[diploid.first].smutations)
+    auto& diploid = pop.diploids[individual.label];
+    for (auto k : pop.haploid_genomes[diploid.first].smutations)
         {
-            g += mutations[k].s;
+            g += pop.mutations[k].s;
         }
-    for (auto k : genomes[diploid.second].smutations)
+    for (auto k : pop.haploid_genomes[diploid.second].smutations)
         {
-            g += mutations[k].s;
+            g += pop.mutations[k].s;
         }
     return g;
 }
 
 double
-additive_effects(const fwdpy11::Diploid& diploid,
-                 const std::vector<fwdpp::haploid_genome>& genomes,
-                 const std::vector<fwdpy11::Mutation>& mutations, double scaling)
+additive_effects(const fwdpy11::DiploidPopulation& pop,
+                 const fwdpy11::DiploidMetadata& individual, double scaling)
 {
-    return fwdpp::additive_diploid(fwdpp::trait(scaling))(diploid, genomes, mutations);
+    return fwdpp::additive_diploid(fwdpp::trait(scaling))(
+        pop.diploids[individual.label], pop.haploid_genomes, pop.mutations);
 }
 
 void
@@ -253,33 +143,43 @@ init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t, py::object, py::object, bool>(), py::arg("ndim"),
-             py::arg("genetic_value_to_fitness"), py::arg("noise"),
-             py::arg("fill_mutations"));
+        .def(py::init<std::size_t, py::object, py::object>(), py::arg("ndim"),
+             py::arg("genetic_value_to_fitness"), py::arg("noise"));
 
-    py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData")
-        .def_readwrite("offspring_metadata",
-                       &PyDiploidGeneticValueData::offspring_metadata)
-        .def_readwrite("parental_metadata",
-                       &PyDiploidGeneticValueData::parental_metadata)
-        .def_readwrite("gvalues", &PyDiploidGeneticValueData::gvalues)
-        .def_readonly("genomes", &PyDiploidGeneticValueData::genomes)
-        .def_readonly("offspring_metadata_index",
-                      &PyDiploidGeneticValueData::offspring_metadata_index);
-
-    py::class_<genome_data_proxy>(m, "HaploidGenomeProxy")
-        .def_readonly("effect_sizes", &genome_data_proxy::effect_sizes)
-        .def_readonly("dominance", &genome_data_proxy::dominance)
-        .def_readonly("positions", &genome_data_proxy::positions)
-        .def_readonly("smutations", &genome_data_proxy::smutations)
-        .def_property_readonly("mutations",
-                               [](const genome_data_proxy& self) -> py::object {
-                                   if (self.filling_mutations == false)
-                                       {
-                                           return py::none();
-                                       }
-                                   return self.pymutations;
-                               });
+    py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData",
+                                          py::buffer_protocol())
+        .def_property_readonly("rng",
+                               [](const PyDiploidGeneticValueData& self) {
+                                   return py::cast<const fwdpy11::GSLrng_t&>(
+                                       self.rng.get());
+                               })
+        .def_property_readonly("pop",
+                               [](const PyDiploidGeneticValueData& self) {
+                                   return py::cast<const fwdpy11::DiploidPopulation&>(
+                                       self.pop.get());
+                               })
+        .def_readonly("offspring_metadata_index", &PyDiploidGeneticValueData::metadata_index)
+        .def_property_readonly("offspring_metadata",
+                               [](const PyDiploidGeneticValueData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.offspring_metadata.get());
+                               })
+        .def_property_readonly("parent1_metadata",
+                               [](const PyDiploidGeneticValueData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.parent1_metadata.get());
+                               })
+        .def_property_readonly("parent2_metadata",
+                               [](const PyDiploidGeneticValueData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.parent2_metadata.get());
+                               })
+        .def_buffer([](const PyDiploidGeneticValueData& self) {
+            return pybind11::buffer_info(
+                const_cast<double*>(self.gvalues.get().data()), sizeof(double),
+                pybind11::format_descriptor<double>::format(), 1,
+                {self.gvalues.get().size()}, {sizeof(double)});
+        });
 
     m.def("strict_additive_effects", &strict_additive_effects);
     m.def("additive_effects", &additive_effects);

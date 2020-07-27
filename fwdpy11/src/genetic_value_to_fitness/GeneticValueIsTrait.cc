@@ -4,7 +4,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
-#include "GeneticValueIsTraitData.hpp"
 
 namespace py = pybind11;
 
@@ -13,23 +12,14 @@ class GeneticValueIsTraitTrampoline : public fwdpy11::GeneticValueIsTrait
 // GeneticValueIsTrait to be written
 // in Python
 {
-  private:
-    mutable GeneticValueIsTraitData data;
-    py::object pydata;
-
   public:
-    GeneticValueIsTraitTrampoline(std::size_t ndim)
-        : fwdpy11::GeneticValueIsTrait(ndim), data{},
-          pydata{py::cast<GeneticValueIsTraitData*>(&data)}
-    {
-    }
+    using fwdpy11::GeneticValueIsTrait::GeneticValueIsTrait;
 
     double
     operator()(const fwdpy11::DiploidGeneticValueToFitnessData input_data) const override
     {
-        set_data(input_data, data);
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueIsTrait,
-                                    "__call__", operator(), pydata);
+                                    "__call__", operator(), input_data);
     }
 
     void
@@ -61,10 +51,32 @@ init_GeneticValueIsTrait(py::module& m)
         "fitness.")
         .def(py::init<std::size_t>(), py::arg("ndim") = 1);
 
-    py::class_<GeneticValueIsTraitData>(m, "PyGeneticValueIsTraitData")
-        .def_readonly("offspring_metadata", &GeneticValueIsTraitData::offspring_metadata)
+    py::class_<fwdpy11::DiploidGeneticValueToFitnessData>(
+        m, "DiploidGeneticValueToFitnessData", py::buffer_protocol())
         .def_readonly("offspring_metadata_index",
-                      &GeneticValueIsTraitData::offspring_metadata_index)
-        .def_readonly("parental_metadata",&GeneticValueIsTraitData::parental_metadata)
-        .def_readonly("genetic_values", &GeneticValueIsTraitData::genetic_values);
+                      &fwdpy11::DiploidGeneticValueToFitnessData::metadata_index)
+        .def_property_readonly(
+            "offspring_metadata",
+            [](const fwdpy11::DiploidGeneticValueToFitnessData& self) {
+                return py::cast<const fwdpy11::DiploidMetadata&>(
+                    self.offspring_metadata.get());
+            })
+        .def_property_readonly(
+            "parent1_metadata",
+            [](const fwdpy11::DiploidGeneticValueToFitnessData& self) {
+                return py::cast<const fwdpy11::DiploidMetadata&>(
+                    self.parent1_metadata.get());
+            })
+        .def_property_readonly(
+            "parent2_metadata",
+            [](const fwdpy11::DiploidGeneticValueToFitnessData& self) {
+                return py::cast<const fwdpy11::DiploidMetadata&>(
+                    self.parent2_metadata.get());
+            })
+        .def_buffer([](const fwdpy11::DiploidGeneticValueToFitnessData& self) {
+            return pybind11::buffer_info(
+                const_cast<double*>(self.gvalues.get().data()), sizeof(double),
+                pybind11::format_descriptor<double>::format(), 1,
+                {self.gvalues.get().size()}, {sizeof(double)});
+        });
 }

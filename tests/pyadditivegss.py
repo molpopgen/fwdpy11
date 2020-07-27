@@ -28,7 +28,7 @@ class PyAdditiveGSS(fwdpy11.PyDiploidGeneticValue):
     def __init__(self, opt, VS):
         self.opt = opt
         self.VS = VS
-        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, None, None, False)
+        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, None, None)
 
     def genetic_value_to_fitness(self, data):
         return math.e ** (
@@ -37,10 +37,6 @@ class PyAdditiveGSS(fwdpy11.PyDiploidGeneticValue):
         )
 
     def calculate_gvalue(self, data):
-        s = 0.0
-        for g in data.genomes:
-            v = memoryview(g.effect_sizes)
-            for i in v:
-                s += i
-        memoryview(data.gvalues)[0] = s
+        s = fwdpy11.strict_additive_effects(data.pop, data.offspring_metadata)
+        memoryview(data)[0] = s
         return s

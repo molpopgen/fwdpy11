@@ -26,13 +26,9 @@ import fwdpy11.custom_genetic_value_decorators
 @fwdpy11.custom_genetic_value_decorators.default_update
 class PyAdditive(fwdpy11.PyDiploidGeneticValue):
     def __init__(self, gvalue_to_fitness=None, noise=None):
-        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise, False)
+        fwdpy11.PyDiploidGeneticValue.__init__(self, 1, gvalue_to_fitness, noise)
 
     def calculate_gvalue(self, data):
-        s = 0.0
-        for g in data.genomes:
-            v = memoryview(g.effect_sizes)
-            for i in v:
-                s += i
-        memoryview(data.gvalues)[0] = s
+        s = fwdpy11.strict_additive_effects(data.pop, data.offspring_metadata)
+        memoryview(data)[0] = s
         return s
