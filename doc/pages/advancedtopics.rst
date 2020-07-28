@@ -293,18 +293,18 @@ I feel that some comments about this model are warranted:
   meaning that it would explain a considerable amount of the genic
   variance for the trait (high :math:`2pqz^2`).  Such outcomes are contrary
   to the results of human GWAS.
-* Many applications of this model in the literature do arbitrary things to
-  the simulations, like only treating mutations in certain frequency ranges
-  as affecting trait values.  Thus, the predictions made by such studies are
-  not natural outcomes of evolutionary models.  Consider only applying
-  the ``getz`` function to mutations with frequency :math:`< x` in order
-  to say something about "rare alleles".  This treatment of the data actually
-  changes the model: mutations that are common now (at the end of the simulation)
-  were rare at some point in the past, and had frequencies :math:`< x`.  Therefore,
-  the model is one where mutations suddenly stop affecting the trait once
-  they hit some critical frequency. Presumably, the same variants would affect
-  the trait again should they drift to a frequency below :math:`x` if the
-  simulation is run a bit longer.
+* It becomes tempting to start doing arbitrary things when applying this model
+  to simulation output.  For example, only treating mutations in certain frequency
+  ranges as affecting trait values.  However, doing so means the predictions
+  made by such procedures are not natural outcomes of evolutionary models.
+  Consider only applying the ``getz`` function to mutations with frequency
+  :math:`< x` in order to say something about "rare alleles".
+  This treatment of the data actually changes the model: mutations that are common
+  now (at the end of the simulation) were rare at some point in the past,
+  and had frequencies :math:`< x`.  Therefore, the model is one where mutations
+  suddenly stop affecting the trait once they hit some critical frequency.
+  Presumably, the same variants would affect the trait again should they drift to
+  a frequency below :math:`x` if the simulation is run a bit longer.
 
 .. _gvalues_python:
 
