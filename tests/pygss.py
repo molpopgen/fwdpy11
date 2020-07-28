@@ -35,7 +35,7 @@ class PyGSS(fwdpy11.GeneticValueIsTrait):
     def __attrs_post_init__(self):
         fwdpy11.GeneticValueIsTrait.__init__(self)
 
-    def __call__(self, data):
+    def __call__(self, data: fwdpy11.DiploidGeneticValueToFitnessData) -> float:
         return math.e ** (
             -((data.offspring_metadata.g + data.offspring_metadata.e - self.opt) ** 2)
             / (2 * self.VS)
@@ -52,12 +52,12 @@ class PyGSSRandomOptimum(fwdpy11.GeneticValueIsTrait):
         fwdpy11.GeneticValueIsTrait.__init__(self)
         self.optima = []
 
-    def __call__(self, data):
+    def __call__(self, data: fwdpy11.DiploidGeneticValueToFitnessData) -> float:
         return math.e ** (
             -((data.offspring_metadata.g + data.offspring_metadata.e - self.opt) ** 2)
             / (2 * self.VS)
         )
 
-    def update(self, pop):
+    def update(self, pop: fwdpy11.DiploidPopulation) -> None:
         self.opt = np.random.normal(0.0, 1.0, 1,)[0]
         self.optima.append((pop.generation, self.opt))

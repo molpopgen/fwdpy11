@@ -3,54 +3,16 @@
 
 namespace py = pybind11;
 
-struct NoiseFunctionData
-{
-    py::list
-    fill_list(py::object o1, py::object o2)
-    {
-        py::list rv;
-        rv.append(o1);
-        rv.append(o2);
-        return rv;
-    }
-    fwdpy11::DiploidMetadata offspring_copy, parent1_copy, parent2_copy;
-    py::object offspring, parent1, parent2;
-    py::list parental_metadata;
-    std::size_t offspring_metadata_index;
-    NoiseFunctionData()
-        : offspring_copy{}, parent1_copy{}, parent2_copy{},
-          offspring{py::cast<fwdpy11::DiploidMetadata*>(&offspring_copy)},
-          parent1{py::cast<fwdpy11::DiploidMetadata*>(&parent1_copy)},
-          parent2{py::cast<fwdpy11::DiploidMetadata*>(&parent2_copy)},
-          parental_metadata{fill_list(parent1, parent2)},
-          offspring_metadata_index{std::numeric_limits<std::size_t>::max()}
-    {
-    }
-};
-
 class GeneticValueNoiseTrampoline : public fwdpy11::GeneticValueNoise
 {
-  private:
-    mutable NoiseFunctionData data;
-    py::object pydata;
-
   public:
-    GeneticValueNoiseTrampoline()
-        : fwdpy11::GeneticValueNoise(), data{}, pydata{
-                                                    py::cast<NoiseFunctionData*>(&data)}
-    {
-    }
+    using fwdpy11::GeneticValueNoise::GeneticValueNoise;
 
     double
     operator()(const fwdpy11::DiploidGeneticValueNoiseData input_data) const override
     {
-        data.offspring_copy = input_data.offspring_metadata.get();
-        data.parent1_copy = input_data.parent1_metadata.get();
-        data.parent2_copy = input_data.parent2_metadata.get();
-        data.offspring_metadata_index = input_data.metadata_index;
         PYBIND11_OVERLOAD_PURE_NAME(double, fwdpy11::GeneticValueNoise,
-                                    "__call__", operator(), input_data.rng.get(),
-                                    pydata);
+                                    "__call__", operator(), input_data);
     }
 
     void
@@ -80,9 +42,27 @@ init_GeneticValueNoise(py::module& m)
         "ABC for noise classes affecting :class:`fwdpy11.DiploidPopulation`.")
         .def(py::init<>());
 
-    py::class_<NoiseFunctionData>(m, "PyGeneticValueNoiseData")
-        .def_readonly("offspring_metadata", &NoiseFunctionData::offspring)
+    py::class_<fwdpy11::DiploidGeneticValueNoiseData>(m, "DiploidGeneticValueNoiseData")
+        .def_property_readonly("rng",
+                               [](const fwdpy11::DiploidGeneticValueNoiseData& self) {
+                                   return py::cast<const fwdpy11::GSLrng_t&>(
+                                       self.rng.get());
+                               })
         .def_readonly("offspring_metadata_index",
-                      &NoiseFunctionData::offspring_metadata_index)
-        .def_readonly("parental_metadata", &NoiseFunctionData::parental_metadata);
+                      &fwdpy11::DiploidGeneticValueNoiseData::metadata_index)
+        .def_property_readonly("offspring_metadata",
+                               [](const fwdpy11::DiploidGeneticValueNoiseData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.offspring_metadata.get());
+                               })
+        .def_property_readonly("parent1_metadata",
+                               [](const fwdpy11::DiploidGeneticValueNoiseData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.parent1_metadata.get());
+                               })
+        .def_property_readonly("parent2_metadata",
+                               [](const fwdpy11::DiploidGeneticValueNoiseData& self) {
+                                   return py::cast<const fwdpy11::DiploidMetadata&>(
+                                       self.parent2_metadata.get());
+                               });
 }
