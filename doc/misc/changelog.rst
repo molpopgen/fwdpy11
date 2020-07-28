@@ -4,6 +4,19 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.9.0
+****************************************
+
+This release enables custom genetic value models to be implemented in Python.
+To do so, the back-end for C++ genetic values was changed in a way that (hopefully!)
+future-proofs the API against future changes.  The approach taken to allowing
+Python genetic value types evolved quite a bit during development, so we won't
+refer to individual pull requests here.  Anyone interested can look at the 0.9.0
+milestone on GitHub.
+
+See :ref:`here <gvalues_python>` for the documentation on Python genetic values.
+
+
 0.8.3
 ****************************************
 
