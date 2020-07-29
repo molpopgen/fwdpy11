@@ -39,10 +39,9 @@ struct snowdrift : public fwdpy11::DiploidGeneticValue
     const fwdpp::additive_diploid additive;
 
     // This constructor is exposed to Python
-    snowdrift(double b1_, double b2_, double c1_, double c2_,
-              double slope, double p0)
-        : fwdpy11::DiploidGeneticValue{1}, b1(b1_), b2(b2_), c1(c1_), c2(c2_),
-          slope(slope), sig0(1. / slope * std::log(p0 / (1. - p0))),
+    snowdrift(double b1_, double b2_, double c1_, double c2_, double slope, double p0)
+        : fwdpy11::DiploidGeneticValue{1, nullptr, nullptr}, b1(b1_), b2(b2_), c1(c1_),
+          c2(c2_), slope(slope), sig0(1. / slope * std::log(p0 / (1. - p0))),
           phenotypes(), additive{fwdpp::trait{2.0}}
     {
         if (p0 == 0 || p0 == 1.)
@@ -103,8 +102,8 @@ PYBIND11_MODULE(ll_snowdrift, m)
 
     // Create a Python class based on our new type
     py::class_<snowdrift, fwdpy11::DiploidGeneticValue>(m, "_ll_DiploidSnowdrift")
-        .def(py::init<double, double, double, double, double, double>(),
-             py::arg("b1"), py::arg("b2"), py::arg("c1"), py::arg("c2"),
-             py::arg("slope"), py::arg("p0"))
+        .def(py::init<double, double, double, double, double, double>(), py::arg("b1"),
+             py::arg("b2"), py::arg("c1"), py::arg("c2"), py::arg("slope"),
+             py::arg("p0"))
         .def_readwrite("phenotypes", &snowdrift::phenotypes);
 }
