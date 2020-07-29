@@ -20,15 +20,6 @@ if pybind11.__version__ < PYBIND11_MIN_VERSION:
     raise RuntimeError(f"pybind11 >= {PYBIND11_MIN_VERSION} required")
 
 
-# clang/llvm is default for OS X builds.
-# can over-ride darwin-specific options
-# with setup.py --gcc install
-if "--gcc" in sys.argv:
-    USE_GCC = True
-    sys.argv.remove("--gcc")
-else:
-    USE_GCC = False
-
 if "--weffcpp" in sys.argv:
     USE_WEFFCPP = True
     sys.argv.remove("--weffcpp")
