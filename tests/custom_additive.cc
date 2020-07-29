@@ -5,7 +5,7 @@
 
 struct additive : public fwdpy11::DiploidGeneticValue
 {
-    additive() : fwdpy11::DiploidGeneticValue(1)
+    additive() : fwdpy11::DiploidGeneticValue{1, nullptr, nullptr}
     {
     }
 

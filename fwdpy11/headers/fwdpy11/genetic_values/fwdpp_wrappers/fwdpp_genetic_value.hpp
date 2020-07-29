@@ -68,6 +68,8 @@ namespace fwdpy11
             const fwdpp::site_dependent_genetic_value&, const std::size_t,
             const DiploidMetadata&, const DiploidPopulation&)>;
 
+        using make_return_value_t = std::function<double(double)>;
+
         callback_type
         init_callback(std::size_t n, double aa_scaling)
         {
@@ -80,37 +82,17 @@ namespace fwdpy11
 
         fwdpp::site_dependent_genetic_value gv;
         double aa_scaling;
-        std::function<double(double)> make_return_value;
+        make_return_value_t make_return_value;
         callback_type callback;
         bool isfitness;
 
       public:
-        template <typename make_return_value_fxn>
-        stateless_site_dependent_genetic_value_wrapper(std::size_t ndim, double scaling,
-                                                       make_return_value_fxn&& mrv)
-            : DiploidGeneticValue{ndim}, gv{}, aa_scaling(scaling),
-              make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim, aa_scaling)), isfitness(true)
-        {
-        }
-
-        template <typename make_return_value_fxn>
         stateless_site_dependent_genetic_value_wrapper(
-            std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
-            const GeneticValueToFitnessMap& gv2w_)
-            : DiploidGeneticValue{ndim, gv2w_}, gv{}, aa_scaling(scaling),
-              make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
-        {
-        }
-
-        template <typename make_return_value_fxn>
-        stateless_site_dependent_genetic_value_wrapper(
-            std::size_t ndim, double scaling, make_return_value_fxn&& mrv,
-            const GeneticValueToFitnessMap& gv2w_, const GeneticValueNoise& noise_)
+            std::size_t ndim, double scaling, make_return_value_t mrv,
+            const GeneticValueToFitnessMap* gv2w_, const GeneticValueNoise* noise_)
             : DiploidGeneticValue{ndim, gv2w_, noise_}, gv{}, aa_scaling(scaling),
-              make_return_value(std::forward<make_return_value_fxn>(mrv)),
-              callback(init_callback(ndim, aa_scaling)), isfitness(gv2w->isfitness)
+              make_return_value(std::move(mrv)),
+              callback(init_callback(ndim, aa_scaling)), isfitness(true)
         {
         }
 

@@ -100,24 +100,16 @@ void
 init_Additive(py::module& m)
 {
     py::class_<DiploidAdditive, fwdpy11::DiploidGeneticValue>(m, "_ll_Additive")
-        .def(py::init([](double scaling, py::object gvalue_to_fitness, py::object noise,
-                         std::size_t ndemes) {
-                 if (gvalue_to_fitness.is_none() && noise.is_none())
+        .def(py::init([](double scaling,
+                         const fwdpy11::GeneticValueIsTrait* gvalue_to_fitness,
+                         const fwdpy11::GeneticValueNoise* noise, std::size_t ndemes) {
+                 if (gvalue_to_fitness != nullptr)
                      {
-                         return DiploidAdditive(ndemes, scaling,
-                                                final_additive_fitness());
+                         return DiploidAdditive(ndemes, scaling, final_additive_trait(),
+                                                gvalue_to_fitness, noise);
                      }
-                 if (noise.is_none())
-                     {
-                         return DiploidAdditive(
-                             ndemes, scaling, final_additive_trait(),
-                             gvalue_to_fitness
-                                 .cast<const fwdpy11::GeneticValueIsTrait&>());
-                     }
-                 return DiploidAdditive(
-                     ndemes, scaling, final_additive_trait(),
-                     gvalue_to_fitness.cast<const fwdpy11::GeneticValueIsTrait&>(),
-                     noise.cast<const fwdpy11::GeneticValueNoise&>());
+                 return DiploidAdditive(ndemes, scaling, final_additive_fitness(),
+                                        gvalue_to_fitness, noise);
              }),
              py::arg("scaling"), py::arg("gvalue_to_fitness"), py::arg("noise"),
              py::arg("ndemes"));

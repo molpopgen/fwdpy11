@@ -75,14 +75,8 @@ namespace
             f;
 
       public:
-        GBR(std::size_t ndim, const fwdpy11::GeneticValueToFitnessMap& gv2w_)
-            : fwdpy11::DiploidGeneticValue{ndim, gv2w_},
-              deme(0), f{generate_backend_function(total_dim, deme)}
-        {
-        }
-
-        GBR(std::size_t ndim, const fwdpy11::GeneticValueToFitnessMap& gv2w_,
-            const fwdpy11::GeneticValueNoise& noise_)
+        GBR(std::size_t ndim, const fwdpy11::GeneticValueToFitnessMap* gv2w_,
+            const fwdpy11::GeneticValueNoise* noise_)
             : fwdpy11::DiploidGeneticValue{ndim, gv2w_, noise_},
               deme(0), f{generate_backend_function(total_dim, deme)}
         {
@@ -109,14 +103,9 @@ void
 init_GBR(py::module& m)
 {
     py::class_<GBR, fwdpy11::DiploidGeneticValue>(m, "_ll_GBR")
-        .def(py::init([](const fwdpy11::GeneticValueIsTrait& gvalue_to_fitness,
-                         py::object noise) {
-                 if (noise.is_none())
-                     {
-                         return GBR(1, gvalue_to_fitness);
-                     }
-                 return GBR(1, gvalue_to_fitness,
-                            noise.cast<const fwdpy11::GeneticValueNoise&>());
+        .def(py::init([](const fwdpy11::GeneticValueIsTrait* gvalue_to_fitness,
+                         const fwdpy11::GeneticValueNoise* noise) {
+                 return GBR(1, gvalue_to_fitness, noise);
              }),
              py::arg("gvalue_to_fitness"), py::arg("noise"));
 }

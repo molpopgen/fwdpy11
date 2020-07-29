@@ -31,12 +31,25 @@
 
 namespace fwdpy11
 {
-    struct DiploidGeneticValue
+    class DiploidGeneticValue
     /// API class
     ///
     /// Things to note:
     /// Any deme/geography-specific details must be handled by the derived class.
     {
+      private:
+        template <typename Base, typename Default, typename... Args>
+        std::shared_ptr<Base>
+        process_input(const Base* input, Args... args)
+        {
+            if (input == nullptr)
+                {
+                    return std::shared_ptr<Base>(new Default{args...});
+                }
+            return input->clone();
+        }
+
+      public:
         std::size_t total_dim;
         std::vector<double> gvalues;
         /// Classes deriving from this must call gv2w->update
@@ -45,24 +58,12 @@ namespace fwdpy11
         /// This must be updated, too:
         std::shared_ptr<GeneticValueNoise> noise_fxn;
 
-        explicit DiploidGeneticValue(std::size_t ndim)
+        DiploidGeneticValue(std::size_t ndim, const GeneticValueToFitnessMap* gv2w_,
+                            const GeneticValueNoise* noise)
             : total_dim(ndim), gvalues(total_dim, 0.),
-              gv2w{new GeneticValueIsFitness{total_dim}}, noise_fxn{new NoNoise()}
-        {
-        }
-
-        DiploidGeneticValue(std::size_t dimensonality,
-                            const GeneticValueToFitnessMap& gv2w_)
-            : total_dim(dimensonality),
-              gvalues(total_dim, 0.0), gv2w{gv2w_.clone()}, noise_fxn{new NoNoise}
-        {
-        }
-
-        DiploidGeneticValue(std::size_t dimensonality,
-                            const GeneticValueToFitnessMap& gv2w_,
-                            const GeneticValueNoise& noise_)
-            : total_dim(dimensonality),
-              gvalues(total_dim, 0.0), gv2w{gv2w_.clone()}, noise_fxn{noise_.clone()}
+              gv2w{process_input<GeneticValueToFitnessMap, GeneticValueIsFitness,
+                                 std::size_t>(gv2w_, ndim)},
+              noise_fxn{process_input<GeneticValueNoise, NoNoise>(noise)}
         {
         }
 

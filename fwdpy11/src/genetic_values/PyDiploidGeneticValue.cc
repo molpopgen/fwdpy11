@@ -45,34 +45,11 @@ struct PyDiploidGeneticValueData
 
 class PyDiploidGeneticValue : public fwdpy11::DiploidGeneticValue
 {
-  private:
-    std::shared_ptr<fwdpy11::GeneticValueToFitnessMap>
-    dispatch_gv2w(std::size_t ndim, py::object gvalue_to_fitness_map)
-    {
-        fwdpy11::GeneticValueIsFitness w(ndim);
-        if (gvalue_to_fitness_map.is_none())
-            {
-                return w.clone();
-            }
-        return gvalue_to_fitness_map.cast<fwdpy11::GeneticValueIsTrait&>().clone();
-    }
-
-    std::shared_ptr<fwdpy11::GeneticValueNoise>
-    dispatch_noise(py::object noise)
-    {
-        fwdpy11::NoNoise nonoise;
-        if (noise.is_none())
-            {
-                return nonoise.clone();
-            }
-        return noise.cast<fwdpy11::GeneticValueNoise&>().clone();
-    }
-
   public:
-    PyDiploidGeneticValue(std::size_t ndim, py::object gvalue_to_fitness_map,
-                          py::object noise)
-        : fwdpy11::DiploidGeneticValue(ndim, *dispatch_gv2w(ndim, gvalue_to_fitness_map),
-                                       *dispatch_noise(noise))
+    PyDiploidGeneticValue(std::size_t ndim,
+                          const fwdpy11::GeneticValueToFitnessMap* gvalue_to_fitness_map,
+                          const fwdpy11::GeneticValueNoise* noise)
+        : fwdpy11::DiploidGeneticValue(ndim, gvalue_to_fitness_map, noise)
     {
     }
 };
@@ -143,8 +120,10 @@ init_PyDiploidGeneticValue(py::module& m)
 {
     py::class_<PyDiploidGeneticValue, fwdpy11::DiploidGeneticValue,
                PyDiploidGeneticValueTrampoline>(m, "PyDiploidGeneticValue")
-        .def(py::init<std::size_t, py::object, py::object>(), py::arg("ndim"),
-             py::arg("genetic_value_to_fitness"), py::arg("noise"));
+        .def(py::init<std::size_t, const fwdpy11::GeneticValueToFitnessMap*,
+                      const fwdpy11::GeneticValueNoise*>(),
+             py::arg("ndim"), py::arg("genetic_value_to_fitness").none(true),
+             py::arg("noise").none(true));
 
     py::class_<PyDiploidGeneticValueData>(m, "PyDiploidGeneticValueData",
                                           py::buffer_protocol())
@@ -158,7 +137,8 @@ init_PyDiploidGeneticValue(py::module& m)
                                    return py::cast<const fwdpy11::DiploidPopulation&>(
                                        self.pop.get());
                                })
-        .def_readonly("offspring_metadata_index", &PyDiploidGeneticValueData::metadata_index)
+        .def_readonly("offspring_metadata_index",
+                      &PyDiploidGeneticValueData::metadata_index)
         .def_property_readonly("offspring_metadata",
                                [](const PyDiploidGeneticValueData& self) {
                                    return py::cast<const fwdpy11::DiploidMetadata&>(
