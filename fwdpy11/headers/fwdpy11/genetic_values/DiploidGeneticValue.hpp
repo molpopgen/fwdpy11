@@ -52,10 +52,11 @@ namespace fwdpy11
       public:
         std::size_t total_dim;
         std::vector<double> gvalues;
-        /// Classes deriving from this must call gv2w->update
-        /// from their own update functions.
+        // Even though these are stored as shared_ptr,
+        // this class is non-copyable because its state
+        // may change over time via the various update
+        // functions.
         std::shared_ptr<GeneticValueToFitnessMap> gv2w;
-        /// This must be updated, too:
         std::shared_ptr<GeneticValueNoise> noise_fxn;
 
         DiploidGeneticValue(std::size_t ndim, const GeneticValueToFitnessMap* gv2w_,
