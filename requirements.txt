@@ -9,7 +9,7 @@ black
 
 #below are for building package,
 #dox, and running tests
-sphinx
+sphinx==3.1
 sphinx-issues
 pandas
 ipython
