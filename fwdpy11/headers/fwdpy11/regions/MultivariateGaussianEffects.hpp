@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 #include <fwdpy11/policies/mutation.hpp>
+#include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include "Sregion.hpp"
 
 namespace fwdpy11
@@ -70,32 +71,24 @@ namespace fwdpy11
                         "input matrix contains non-finite values");
                 }
 
+            gsl_scoped_disable_error_handler_wrapper gsl_error_scope_guard;
             // Assign the matrix and do the Cholesky decomposition
-            auto error_handler = gsl_set_error_handler_off();
 
             int rv = gsl_matrix_memcpy(matrix.get(), &input_matrix);
             if (rv != GSL_SUCCESS)
                 {
-                    // Reset error handler on the way out
-                    gsl_set_error_handler(error_handler);
                     throw std::runtime_error("failure copying input matrix");
                 }
             rv = gsl_matrix_memcpy(input_matrix_copy.get(), &input_matrix);
             if (rv != GSL_SUCCESS)
                 {
-                    // Reset error handler on the way out
-                    gsl_set_error_handler(error_handler);
                     throw std::runtime_error("failure copying input matrix");
                 }
             rv = gsl_linalg_cholesky_decomp1(matrix.get());
             if (rv == GSL_EDOM)
                 {
-                    // Reset error handler on the way out
-                    gsl_set_error_handler(error_handler);
                     throw std::invalid_argument("Cholesky decomposition failed");
                 }
-            // Reset error handler on the way out
-            gsl_set_error_handler(error_handler);
         }
 
         virtual std::unique_ptr<Sregion>
