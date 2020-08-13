@@ -39,6 +39,7 @@
 #include <fwdpy11/regions/MutationRegions.hpp>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
+#include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/samplers.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
@@ -177,6 +178,8 @@ evolve_with_tree_sequences(
     const bool preserve_first_generation,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder)
 {
+    fwdpy11::gsl_scoped_convert_error_to_exception gsl_error_scope_guard;
+
     if (gvalue_pointers.genetic_values.empty())
         {
             throw std::invalid_argument("empty list of genetic values");
