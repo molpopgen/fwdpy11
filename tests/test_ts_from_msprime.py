@@ -19,19 +19,14 @@
 
 import unittest
 
-import numpy as np
-
 import fwdpy11
-
-# NOTE: msprime is imported on a per-test basis so as not
-# to confict w/other tests of the GSL error handling machinery
+import msprime
+import numpy as np
 
 
 class TestConversion(unittest.TestCase):
     @classmethod
     def setUp(self):
-        import msprime
-
         self.ts = msprime.simulate(10, recombination_rate=0.025, Ne=1000)
 
     # def testGetTablesDiscretizeTime(self):
@@ -53,8 +48,6 @@ class TestConversion(unittest.TestCase):
 
 class TestConversionFromMultipleDemes(unittest.TestCase):
     def test_deme_field_of_metadata(self):
-        import msprime
-
         nodes_per_deme = 500
         Ne = 3 * nodes_per_deme // 2
         Nr = 50.0
