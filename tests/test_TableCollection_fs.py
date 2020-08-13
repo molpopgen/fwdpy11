@@ -19,9 +19,9 @@
 
 import unittest
 
-import numpy as np
-
 import fwdpy11
+import msprime
+import numpy as np
 
 # NOTE: these tests can all be improved in the future
 # by having a conversion from msprime/tskit that lifts
@@ -42,8 +42,6 @@ def fs_from_ndarray(gm):
 class TestSingleDemeCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        import msprime
-
         Ne = 1000
         Nr = 100.0
         ts = msprime.simulate(
@@ -128,8 +126,6 @@ class TestSingleDemeCase(unittest.TestCase):
 class TestTwoDemeCase(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        import msprime
-
         Ne = 1000
         Nr = 100.0
         nodes_per_deme = 1000

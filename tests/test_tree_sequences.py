@@ -23,11 +23,11 @@ import pickle
 import unittest
 from collections import namedtuple
 
-import numpy as np
-import tskit
-
 import fwdpy11
 import fwdpy11.tskit_tools
+import msprime
+import numpy as np
+import tskit
 
 
 class Recorder(object):
@@ -1579,8 +1579,6 @@ class TestRecapitation(unittest.TestCase):
         Recapitation w/o recombination means we can predict
         exactly how many new nodes there will be.
         """
-        import msprime
-
         coalesced_ts = msprime.simulate(
             Ne=self.pop.N,
             from_ts=self.tskit_ts,
@@ -1602,8 +1600,6 @@ class TestRecapitation(unittest.TestCase):
 
 class TestInvalidAttemptAtRecapitation(unittest.TestCase):
     def test_after_starting_from_msprime(self):
-        import msprime
-
         ts = msprime.simulate(100, Ne=100)
         pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
 
