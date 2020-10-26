@@ -21,9 +21,8 @@ import typing
 import warnings
 
 import attr
-import numpy as np
-
 import fwdpy11._fwdpy11
+import numpy as np
 
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
@@ -37,23 +36,38 @@ def _add_deprecated_properties(self):
     """
 
     def b(self):
-        warnings.warn("b is deprecated in favor of beg", DeprecationWarning)
+        warnings.warn(
+            "b is deprecated in favor of beg and is scheduled for removal in 0.11.",
+            FutureWarning,
+        )
         return self.beg
 
     def e(self):
-        warnings.warn("e is deprecated in favor of end", DeprecationWarning)
+        warnings.warn(
+            "e is deprecated in favor of end and is scheduled for removal in 0.11.",
+            FutureWarning,
+        )
         return self.end
 
     def w(self):
-        warnings.warn("w is deprecated in favor of weight", DeprecationWarning)
+        warnings.warn(
+            "w is deprecated in favor of weight and is scheduled for removal in 0.11.",
+            FutureWarning,
+        )
         return self.weight
 
     def c(self):
-        warnings.warn("c is deprecated in favor of coupled", DeprecationWarning)
+        warnings.warn(
+            "c is deprecated in favor of coupled and is scheduled for removal in 0.11.",
+            FutureWarning,
+        )
         return self.coupled
 
     def l(self):
-        warnings.warn("l is deprecated in favor of label", DeprecationWarning)
+        warnings.warn(
+            "l is deprecated in favor of label and is scheduled for removal in 0.11.",
+            FutureWarning,
+        )
         return self.label
 
     self.b = property(b)
