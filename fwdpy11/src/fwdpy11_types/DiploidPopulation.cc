@@ -174,7 +174,7 @@ init_DiploidPopulation(py::module& m)
                 dump(py::make_tuple(
                          self.diploids.size(), self.haploid_genomes.size(),
                          self.mutations.size(), self.fixations.size(),
-                         self.generation, self.tables.genome_length()),
+                         self.generation, self.tables->genome_length()),
                      f);
                 for (auto& d : self.diploids)
                     {
@@ -206,28 +206,28 @@ init_DiploidPopulation(py::module& m)
                     {
                         dump(md, f);
                     }
-                dump(py::make_tuple(self.tables.nodes.size(),
-                                    self.tables.edges.size(),
-                                    self.tables.mutations.size(),
-                                    self.tables.sites.size()),
+                dump(py::make_tuple(self.tables->nodes.size(),
+                                    self.tables->edges.size(),
+                                    self.tables->mutations.size(),
+                                    self.tables->sites.size()),
                      f);
-                for (auto& n : self.tables.nodes)
+                for (auto& n : self.tables->nodes)
                     {
                         dump(n, f);
                     }
-                for (auto& e : self.tables.edges)
+                for (auto& e : self.tables->edges)
                     {
                         dump(e, f);
                     }
-                for (auto& m : self.tables.mutations)
+                for (auto& m : self.tables->mutations)
                     {
                         dump(m, f);
                     }
-                for (auto& s : self.tables.sites)
+                for (auto& s : self.tables->sites)
                     {
                         dump(s, f);
                     }
-                dump(self.tables.preserved_nodes, f);
+                dump(self.tables->preserved_nodes, f);
                 dump(self.genetic_value_matrix, f);
                 dump(self.ancient_sample_genetic_value_matrix, f);
             },
@@ -313,38 +313,38 @@ init_DiploidPopulation(py::module& m)
                     }
                 py::tuple table_data = load(f);
                 auto table_len = table_data[0].cast<std::size_t>();
-                rv.tables.clear();
-                rv.tables.nodes.reserve(table_len);
+                rv.tables->clear();
+                rv.tables->nodes.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.nodes.push_back(
+                        rv.tables->nodes.push_back(
                             load(f).cast<fwdpp::ts::node>());
                     }
                 table_len = table_data[1].cast<std::size_t>();
-                rv.tables.edges.reserve(table_len);
+                rv.tables->edges.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.edges.push_back(
+                        rv.tables->edges.push_back(
                             load(f).cast<fwdpp::ts::edge>());
                     }
                 table_len = table_data[2].cast<std::size_t>();
-                rv.tables.mutations.reserve(table_len);
+                rv.tables->mutations.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.mutations.push_back(
+                        rv.tables->mutations.push_back(
                             load(f).cast<fwdpp::ts::mutation_record>());
                     }
                 table_len = table_data[3].cast<std::size_t>();
-                rv.tables.sites.reserve(table_len);
+                rv.tables->sites.reserve(table_len);
                 for (std::size_t i = 0; i < table_len; ++i)
                     {
-                        rv.tables.sites.push_back(
+                        rv.tables->sites.push_back(
                             load(f).cast<fwdpp::ts::site>());
                     }
 
-                rv.tables.preserved_nodes
-                    = load(f).cast<decltype(rv.tables.preserved_nodes)>();
-                rv.tables.build_indexes();
+                rv.tables->preserved_nodes
+                    = load(f).cast<decltype(rv.tables->preserved_nodes)>();
+                rv.tables->build_indexes();
                 rv.rebuild_mutation_lookup(false);
                 rv.genetic_value_matrix
                     = load(f).cast<decltype(rv.genetic_value_matrix)>();

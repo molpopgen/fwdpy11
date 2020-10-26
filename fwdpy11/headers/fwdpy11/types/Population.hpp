@@ -25,8 +25,7 @@ namespace fwdpy11
     // Base class for population types
     {
       private:
-
-        static fwdpp::ts::std_table_collection
+        static std::shared_ptr<fwdpp::ts::std_table_collection>
         init_tables(const fwdpp::uint_t N, const double L)
         // Default initialization of tables.
         // We ensure that there are 2N nodes in pop zero
@@ -34,16 +33,17 @@ namespace fwdpy11
         {
             if (L == std::numeric_limits<double>::max())
                 {
-                    return fwdpp::ts::std_table_collection(L);
+                    return std::make_shared<fwdpp::ts::std_table_collection>(L);
                 }
-            return fwdpp::ts::std_table_collection(2 * N, 0, 0, L);
+            return std::make_shared<fwdpp::ts::std_table_collection>(2 * N, 0, 0, L);
+            // return fwdpp::ts::std_table_collection(2 * N, 0, 0, L);
         }
 
         bool
         tables_equal(const Population &rhs) const
         {
             // This is correct/validated as of fwdpp 0.7.2
-            return tables == rhs.tables;
+            return *tables == *rhs.tables;
         }
 
       public:
@@ -60,7 +60,7 @@ namespace fwdpy11
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
 
-        fwdpp::ts::std_table_collection tables;
+        std::shared_ptr<fwdpp::ts::std_table_collection> tables;
         std::vector<fwdpp::ts::table_index_t> alive_nodes, preserved_sample_nodes;
 
         // These track genetic values for the individuals differently
@@ -83,7 +83,9 @@ namespace fwdpy11
                 reserve_size)
             : fwdpp_base{std::forward<gametes_input>(g),
                          std::forward<mutations_input>(m), reserve_size},
-              N{N_}, generation{0}, tables(std::numeric_limits<double>::max()),
+              N{N_}, generation{0},
+              tables(std::make_shared<fwdpp::ts::std_table_collection>(
+                  std::numeric_limits<double>::max())),
               alive_nodes{}, preserved_sample_nodes{}, genetic_value_matrix{},
               ancient_sample_genetic_value_matrix{}
         {
@@ -194,7 +196,7 @@ namespace fwdpy11
             this->mut_lookup.clear();
             if (from_tables)
                 {
-                    for (const auto &mr : this->tables.mutations)
+                    for (const auto &mr : this->tables->mutations)
                         {
                             if (mr.key >= this->mutations.size())
                                 {
@@ -203,7 +205,7 @@ namespace fwdpy11
                                         "table key out of range");
                                 }
                             this->mut_lookup.emplace(
-                                this->tables.sites[mr.site].position, mr.key);
+                                this->tables->sites[mr.site].position, mr.key);
                         }
                 }
             else

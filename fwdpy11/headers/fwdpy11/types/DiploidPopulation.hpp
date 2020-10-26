@@ -51,7 +51,7 @@ namespace fwdpy11
                 {
                     d.label = label++;
                     d.w = 1.0;
-                    if (this->tables.genome_length()
+                    if (this->tables->genome_length()
                         == std::numeric_limits<double>::max())
                         {
                             d.nodes[0] = d.nodes[1] = -1;
@@ -62,7 +62,7 @@ namespace fwdpy11
                             d.nodes[1] = 2 * d.label + 1;
                         }
                 }
-            if (this->tables.genome_length()
+            if (this->tables->genome_length()
                 != std::numeric_limits<double>::max())
                 {
                     using itype = decltype(this->diploid_metadata[0].nodes[0]);
@@ -81,9 +81,9 @@ namespace fwdpy11
                                 {
                                     auto &md = diploid_metadata[i];
                                     md.deme = deme_label;
-                                    tables.nodes[md.nodes[0]].deme
+                                    tables->nodes[md.nodes[0]].deme
                                         = deme_label;
-                                    tables.nodes[md.nodes[1]].deme
+                                    tables->nodes[md.nodes[1]].deme
                                         = deme_label;
                                 }
                             ++deme_label;

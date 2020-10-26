@@ -54,7 +54,7 @@ namespace fwdpy11
         std::vector<std::size_t> preserved_nodes;
         fwdpp::ts::simplify_tables(pop.alive_nodes, alive_at_last_simplification,
                                    fwdpp::ts::simplification_flags{}, simplifier_state,
-                                   pop.tables, new_edge_buffer, idmap, preserved_nodes);
+                                   *pop.tables, new_edge_buffer, idmap, preserved_nodes);
         auto rv = std::make_pair(std::move(idmap), std::move(preserved_nodes));
         for (auto &s : pop.alive_nodes)
             {
@@ -92,8 +92,8 @@ namespace fwdpy11
                 pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
                 return rv;
             }
-        tables.build_indexes();
-        if (pop.tables.preserved_nodes.empty())
+        pop.tables->build_indexes();
+        if (pop.tables->preserved_nodes.empty())
             {
                 fwdpp::ts::count_mutations(tables, pop.mutations, pop.alive_nodes,
                                            pop.mcounts, mcounts_from_preserved_nodes);
@@ -121,7 +121,7 @@ namespace fwdpy11
         // no matter what.
 
         auto itr = std::remove_if(
-            tables.mutations.begin(), tables.mutations.end(),
+            pop.tables->mutations.begin(), pop.tables->mutations.end(),
             [&pop, &mcounts_from_preserved_nodes,
              preserve_selected_fixations](const fwdpp::ts::mutation_record &mr) {
                 if (pop.mutations[mr.key].neutral == false
@@ -132,8 +132,8 @@ namespace fwdpy11
                 return pop.mcounts[mr.key] == 2 * pop.diploids.size()
                        && mcounts_from_preserved_nodes[mr.key] == 0;
             });
-        auto d = std::distance(itr, end(tables.mutations));
-        tables.mutations.erase(itr, end(tables.mutations));
+        auto d = std::distance(itr, end(pop.tables->mutations));
+        pop.tables->mutations.erase(itr, end(pop.tables->mutations));
         if (d)
             {
                 fwdpp::ts::rebuild_site_table(tables);

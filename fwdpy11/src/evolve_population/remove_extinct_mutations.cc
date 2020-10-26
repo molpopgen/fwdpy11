@@ -77,15 +77,15 @@ remove_extinct_mutations(fwdpy11::Population& pop)
     reset_capacity(pop.mcounts_from_preserved_nodes);
 
     // Reindex the containers
-    for (std::size_t i = 0; i < pop.tables.mutations.size(); ++i)
+    for (std::size_t i = 0; i < pop.tables->mutations.size(); ++i)
         {
-            auto k = new_mutation_indexes[pop.tables.mutations[i].key];
+            auto k = new_mutation_indexes[pop.tables->mutations[i].key];
             if (k == std::numeric_limits<fwdpp::uint_t>::max())
                 {
                     throw std::runtime_error(
                         "bad mutation key remapping in mutation table");
                 }
-            pop.tables.mutations[i].key = k;
+            pop.tables->mutations[i].key = k;
         }
     for (auto& g : pop.haploid_genomes)
         {
