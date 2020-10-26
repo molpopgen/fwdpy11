@@ -20,7 +20,7 @@ init_ts_TableCollection(py::module& m)
     // TODO: work out conversion to msprime format
     // TODO: allow preserved_nodes to be cleared
     // TODO: allow access to the "right" member functions
-    py::class_<fwdpp::ts::std_table_collection>(
+    py::class_<fwdpp::ts::std_table_collection, std::shared_ptr<fwdpp::ts::std_table_collection>>(
         m, "TableCollection",
         "A table collection representing a succinct tree sequence.")
         .def_property_readonly(

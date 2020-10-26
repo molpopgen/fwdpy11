@@ -182,10 +182,10 @@ init_variant_iterator(py::module& m)
                  if (include_preserved)
                      {
                          samples.insert(samples.end(),
-                                        pop.tables.preserved_nodes.begin(),
-                                        pop.tables.preserved_nodes.end());
+                                        pop.tables->preserved_nodes.begin(),
+                                        pop.tables->preserved_nodes.end());
                      }
-                 return VariantIterator(pop.tables, samples, begin, end,
+                 return VariantIterator(*pop.tables, samples, begin, end,
                                         include_neutral_variants,
                                         include_selected_variants);
              }),

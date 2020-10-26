@@ -83,7 +83,7 @@ namespace fwdpy11
                 {
                     w(buffer, pop->mcounts.data(), msize);
                 }
-            fwdpp::ts::io::serialize_tables(buffer, pop->tables);
+            fwdpp::ts::io::serialize_tables(buffer, *pop->tables);
             msize = pop->genetic_value_matrix.size();
             w(buffer, &msize);
             if (msize > 0)
@@ -166,20 +166,21 @@ namespace fwdpy11
                             }
                     }
 
-                pop.tables = fwdpp::ts::io::deserialize_tables<fwdpp::ts::std_table_collection>()(buffer);
+                auto _tables = fwdpp::ts::io::deserialize_tables<fwdpp::ts::std_table_collection>()(buffer);
+                pop.tables.reset(new fwdpp::ts::std_table_collection(std::move(_tables)));
                 // NOTE: version 0.5.0 added in a site table that previous versions
                 // did not have.  Further, the mutation table entries differed in
                 // previous versions.
-                if (!pop.tables.mutations.empty() && pop.tables.sites.empty())
+                if (!pop.tables->mutations.empty() && pop.tables->sites.empty())
                     {
                         fwdpp::ts::io::fix_mutation_table_repopulate_site_table(
-                            pop.tables, pop.mutations);
+                            *pop.tables, pop.mutations);
                     }
-                if (version < 4 && !pop.tables.edges.empty())
+                if (version < 4 && !pop.tables->edges.empty())
                     {
                         std::vector<fwdpp::ts::table_index_t> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);
-                        fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples,
+                        fwdpp::ts::count_mutations(*pop.tables, pop.mutations, samples,
                                                    pop.mcounts,
                                                    pop.mcounts_from_preserved_nodes);
                     }

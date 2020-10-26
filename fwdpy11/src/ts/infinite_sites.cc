@@ -55,12 +55,12 @@ init_infinite_sites(py::module& m)
                   };
             pop.fill_alive_nodes();
             auto nmuts = fwdpp::ts::mutate_tables(
-                rng, apply_mutations, pop.tables, pop.alive_nodes, mu);
+                rng, apply_mutations, *pop.tables, pop.alive_nodes, mu);
             if (nmuts == 0)
                 {
                     return nmuts;
                 }
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations,
+            fwdpp::ts::count_mutations(*pop.tables, pop.mutations,
                                        pop.alive_nodes, pop.mcounts,
                                        pop.mcounts_from_preserved_nodes);
             return nmuts;

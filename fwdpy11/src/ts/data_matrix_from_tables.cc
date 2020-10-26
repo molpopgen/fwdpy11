@@ -27,7 +27,7 @@ init_data_matrix_from_tables(py::module& m)
            const std::vector<fwdpp::ts::table_index_t>& samples,
            const bool record_neutral, const bool record_selected) {
             return fwdpp::ts::generate_data_matrix(
-                pop.tables, samples, record_neutral,
+                *pop.tables, samples, record_neutral,
                 record_selected, true);
         },
         py::arg("pop"), py::arg("samples"), py::arg("record_neutral"),

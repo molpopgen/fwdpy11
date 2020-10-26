@@ -84,15 +84,15 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
         }
 
     fwdpy11::DiploidPopulation pop(twoN / 2, l);
-    pop.tables.nodes.swap(nodes);
-    pop.tables.edges.swap(edges);
+    pop.tables->nodes.swap(nodes);
+    pop.tables->edges.swap(edges);
     // NOTE: this may be an issue when we allow variable survival probabilitites!
-    pop.tables.edge_offset = static_cast<fwdpp::ts::table_index_t>(pop.tables.num_edges());
-    if(!fwdpp::ts::edge_table_minimally_sorted(pop.tables))
+    pop.tables->edge_offset = static_cast<fwdpp::ts::table_index_t>(pop.tables->num_edges());
+    if(!fwdpp::ts::edge_table_minimally_sorted(*pop.tables))
         {
             throw std::runtime_error("edge table is not sorted");
         }
-    pop.tables.build_indexes();
+    pop.tables->build_indexes();
 
     // Fixed in 0.5.3: metadata nodes now correct
     // This was GitHub issue 333
@@ -102,15 +102,15 @@ create_DiploidPopulation_from_tree_sequence(py::object ts)
         {
             pop.diploid_metadata[i].nodes[0] = 2 * i;
             pop.diploid_metadata[i].nodes[1] = 2 * i + 1;
-            if (pop.tables.nodes[2*i].deme 
-                != pop.tables.nodes[2*i+1].deme)
+            if (pop.tables->nodes[2*i].deme 
+                != pop.tables->nodes[2*i+1].deme)
                 {
                     throw std::invalid_argument(
                         "inconsistent deme fields for nodes in the same "
                         "individual");
                 }
             pop.diploid_metadata[i].deme
-                = pop.tables.nodes[2*i].deme;
+                = pop.tables->nodes[2*i].deme;
         }
     return pop;
 }

@@ -13,11 +13,11 @@ index_and_count_mutations(const bool suppress_edge_table_indexing,
         {
             return;
         }
-    if (pop.tables.preserved_nodes.empty())
+    if (pop.tables->preserved_nodes.empty())
         {
-            pop.tables.build_indexes();
+            pop.tables->build_indexes();
             pop.fill_alive_nodes();
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations,
+            fwdpp::ts::count_mutations(*pop.tables, pop.mutations,
                                        pop.alive_nodes, pop.mcounts);
         }
     else

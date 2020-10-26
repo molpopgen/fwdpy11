@@ -17,7 +17,7 @@ init_count_mutations(py::module& m)
         [](const fwdpy11::Population& pop,
            const std::vector<fwdpp::ts::table_index_t>& samples) {
             std::vector<fwdpp::uint_t> mc(pop.mutations.size(), 0);
-            fwdpp::ts::count_mutations(pop.tables, pop.mutations, samples, mc);
+            fwdpp::ts::count_mutations(*pop.tables, pop.mutations, samples, mc);
             return fwdpy11::make_1d_array_with_capsule(std::move(mc));
         },
         R"delim(

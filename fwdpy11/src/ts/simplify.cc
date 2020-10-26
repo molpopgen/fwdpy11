@@ -13,12 +13,12 @@ py::tuple
 simplify(const fwdpy11::Population& pop,
          const std::vector<fwdpp::ts::table_index_t>& samples)
 {
-    if (pop.tables.genome_length() == std::numeric_limits<double>::max())
+    if (pop.tables->genome_length() == std::numeric_limits<double>::max())
         {
             throw std::invalid_argument(
                 "population is not using tree sequences");
         }
-    if (pop.tables.num_nodes() == 0)
+    if (pop.tables->num_nodes() == 0)
         {
             throw std::invalid_argument(
                 "population has empty TableCollection");
@@ -31,12 +31,12 @@ simplify(const fwdpy11::Population& pop,
                     [&pop](const fwdpp::ts::table_index_t s) {
                         return s == fwdpp::ts::NULL_INDEX
                                || static_cast<std::size_t>(s)
-                                      >= pop.tables.num_nodes();
+                                      >= pop.tables->num_nodes();
                     }))
         {
             throw std::invalid_argument("invalid sample list");
         }
-    auto t(pop.tables);
+    auto t(*pop.tables);
     // NOTE: If the user wants to keep ancient samples,
     // they must pass them in to the samples list
     t.preserved_nodes.clear();

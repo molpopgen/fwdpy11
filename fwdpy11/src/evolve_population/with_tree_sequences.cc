@@ -60,9 +60,9 @@ apply_treseq_resetting_of_ancient_samples(
     fwdpy11::DiploidPopulation &pop)
 {
     recorder(pop);
-    if (!pop.tables.preserved_nodes.empty())
+    if (!pop.tables->preserved_nodes.empty())
         {
-            pop.tables.preserved_nodes.clear();
+            pop.tables->preserved_nodes.clear();
             pop.ancient_sample_metadata.clear();
             pop.ancient_sample_genetic_value_matrix.clear();
         }
@@ -83,7 +83,7 @@ simplification(
     auto simplification_rv = fwdpy11::simplify_tables(
         pop, pop.mcounts_from_preserved_nodes,
         alive_at_last_simplification,
-        pop.tables, simplifier_state, new_edge_buffer,
+        *pop.tables, simplifier_state, new_edge_buffer,
         preserve_selected_fixations, simulating_neutral_variants,
         suppress_edge_table_indexing);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
@@ -122,16 +122,16 @@ final_population_cleanup(
     if (!preserve_selected_fixations)
         {
             auto itr = std::remove_if(
-                pop.tables.mutations.begin(), pop.tables.mutations.end(),
+                pop.tables->mutations.begin(), pop.tables->mutations.end(),
                 [&pop](const fwdpp::ts::mutation_record &mr) {
                     return pop.mcounts[mr.key] == 2 * pop.diploids.size()
                            && pop.mcounts_from_preserved_nodes[mr.key] == 0;
                 });
-            auto d = std::distance(itr, end(pop.tables.mutations));
-            pop.tables.mutations.erase(itr, end(pop.tables.mutations));
+            auto d = std::distance(itr, end(pop.tables->mutations));
+            pop.tables->mutations.erase(itr, end(pop.tables->mutations));
             if (d)
                 {
-                    fwdpp::ts::rebuild_site_table(pop.tables);
+                    fwdpp::ts::rebuild_site_table(*pop.tables);
                 }
             fwdpp::ts::remove_fixations_from_haploid_genomes(
                 pop.haploid_genomes, pop.mutations, pop.mcounts,
@@ -147,7 +147,7 @@ final_population_cleanup(
                         }
                 }
         }
-    cleanup_metadata(pop.tables, pop.generation, pop.ancient_sample_metadata);
+    cleanup_metadata(*pop.tables, pop.generation, pop.ancient_sample_metadata);
     if (remove_extinct_mutations_at_finish)
         {
             remove_extinct_mutations(pop);
@@ -185,7 +185,7 @@ evolve_with_tree_sequences(
             throw std::invalid_argument("empty list of genetic values");
         }
     //validate the input params
-    if (pop.tables.genome_length() == std::numeric_limits<double>::max())
+    if (pop.tables->genome_length() == std::numeric_limits<double>::max())
         {
             throw std::invalid_argument(
                 "Population is not initialized with tree sequence support");
@@ -215,7 +215,7 @@ evolve_with_tree_sequences(
         {
             throw std::invalid_argument("simulation length must be > 0");
         }
-    if (pop.tables.nodes.empty())
+    if (pop.tables->nodes.empty())
         {
             throw std::invalid_argument("node table is not initialized");
         }
@@ -299,11 +299,11 @@ evolve_with_tree_sequences(
             // containing neutral variants not in haploid_genome objects.
             // To correctly handle this case, we build the recycling bin
             // from any elements in pop.mutations not in the mutation table.
-            if (!pop.tables.nodes.empty())
+            if (!pop.tables->nodes.empty())
                 {
                     std::vector<std::size_t> indexes(pop.mutations.size());
                     std::iota(begin(indexes), end(indexes), 0);
-                    for (auto &m : pop.tables.mutations)
+                    for (auto &m : pop.tables->mutations)
                         {
                             indexes[m.key] = std::numeric_limits<std::size_t>::max();
                         }
@@ -327,10 +327,10 @@ evolve_with_tree_sequences(
                 }
         }
 
-    fwdpp::ts::table_index_t next_index = pop.tables.nodes.size();
+    fwdpp::ts::table_index_t next_index = pop.tables->nodes.size();
     bool simplified = false;
     auto simplifier_state = 
-        std::make_unique<decltype(fwdpp::ts::make_simplifier_state(pop.tables))>(fwdpp::ts::make_simplifier_state(pop.tables));
+        std::make_unique<decltype(fwdpp::ts::make_simplifier_state(*pop.tables))>(fwdpp::ts::make_simplifier_state(*pop.tables));
     auto new_edge_buffer = std::make_unique<fwdpp::ts::edge_buffer>(fwdpp::ts::edge_buffer{});
     bool stopping_criteron_met = false;
     const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
@@ -346,12 +346,12 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument(
                         "cannot preserve first generation when pop.generation != 0");
                 }
-            if (pop.tables.edges.empty() == false)
+            if (pop.tables->edges.empty() == false)
                 {
                     throw std::invalid_argument("cannot preserve first generation when "
                                                 "the edge table is not empty");
                 }
-            pop.tables.preserved_nodes.insert(end(pop.tables.preserved_nodes),
+            pop.tables->preserved_nodes.insert(end(pop.tables->preserved_nodes),
                                               begin(pop.alive_nodes),
                                               end(pop.alive_nodes));
             pop.ancient_sample_metadata.insert(end(pop.ancient_sample_metadata),
@@ -378,7 +378,7 @@ evolve_with_tree_sequences(
         {
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, *current_demographic_state,
-                                          pop.generation, pop.tables, *new_edge_buffer, offspring,
+                                          pop.generation, *new_edge_buffer, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
@@ -452,12 +452,12 @@ evolve_with_tree_sequences(
                 {
                     simplified = false;
                 }
-            if (pop.tables.num_nodes()
+            if (pop.tables->num_nodes()
                 >= std::numeric_limits<fwdpp::ts::table_index_t>::max() - 1)
                 {
                     throw std::runtime_error("range error for node labels");
                 }
-            next_index = pop.tables.num_nodes();
+            next_index = pop.tables->num_nodes();
             if (track_mutation_counts_during_sim)
                 {
                     track_mutation_counts(pop, simplified, suppress_edge_table_indexing);
@@ -525,8 +525,8 @@ evolve_with_tree_sequences(
                                 }
                             auto x = fwdpy11::parent_nodes_from_metadata(
                                 i, pop.diploid_metadata, 0);
-                            pop.tables.preserved_nodes.push_back(x.first);
-                            pop.tables.preserved_nodes.push_back(x.second);
+                            pop.tables->preserved_nodes.push_back(x.first);
+                            pop.tables->preserved_nodes.push_back(x.second);
 
                             // Record the metadata for this individual
                             pop.ancient_sample_metadata.push_back(
@@ -558,11 +558,11 @@ evolve_with_tree_sequences(
     pop.fill_alive_nodes();
     std::sort(begin(pop.alive_nodes), end(pop.alive_nodes));
     auto itr = std::remove_if(
-        begin(pop.tables.preserved_nodes), end(pop.tables.preserved_nodes),
+        begin(pop.tables->preserved_nodes), end(pop.tables->preserved_nodes),
         [&pop](const fwdpp::ts::table_index_t l) {
             return std::binary_search(begin(pop.alive_nodes), end(pop.alive_nodes), l);
         });
-    pop.tables.preserved_nodes.erase(itr, end(pop.tables.preserved_nodes));
+    pop.tables->preserved_nodes.erase(itr, end(pop.tables->preserved_nodes));
     pop.alive_nodes.clear();
 
     if (!simplified)

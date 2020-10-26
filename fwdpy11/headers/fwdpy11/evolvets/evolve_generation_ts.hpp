@@ -86,7 +86,7 @@ namespace fwdpy11
         const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
         const fwdpy11::discrete_demography::demographic_model_state&
             current_demographic_state,
-        const fwdpp::uint_t generation, fwdpp::ts::std_table_collection& tables,
+        const fwdpp::uint_t generation,
         fwdpp::ts::edge_buffer & new_edge_buffer,
         std::vector<fwdpy11::DiploidGenotype>& offspring,
         std::vector<fwdpy11::DiploidMetadata>& offspring_metadata,
@@ -137,17 +137,17 @@ namespace fwdpy11
                         fwdpp::ts::table_index_t offspring_node_1
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.first.breakpoints, p1id, deme,
-                                generation, tables, new_edge_buffer);
+                                generation, *pop.tables, new_edge_buffer);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_1, pop.mutations,
-                            offspring_data.first.mutation_keys, tables);
+                            offspring_data.first.mutation_keys, *pop.tables);
                         fwdpp::ts::table_index_t offspring_node_2
                             = fwdpp::ts::record_diploid_offspring(
                                 offspring_data.second.breakpoints, p2id, deme,
-                                generation, tables, new_edge_buffer);
+                                generation, *pop.tables, new_edge_buffer);
                         fwdpp::ts::record_mutations_infinite_sites(
                             offspring_node_2, pop.mutations,
-                            offspring_data.second.mutation_keys, tables);
+                            offspring_data.second.mutation_keys, *pop.tables);
 
                         // Add metadata for the offspring
                         offspring_metadata.emplace_back(
@@ -166,9 +166,9 @@ namespace fwdpy11
                         next_index_local = offspring_node_2;
                     }
             }
-        assert(next_index_local == pop.tables.num_nodes() - 1);
+        assert(next_index_local == pop.tables->num_nodes() - 1);
         if (next_index_local
-            != static_cast<decltype(next_index_local)>(pop.tables.num_nodes()
+            != static_cast<decltype(next_index_local)>(pop.tables->num_nodes()
                                                        - 1))
             {
                 throw std::runtime_error(
