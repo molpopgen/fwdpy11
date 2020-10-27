@@ -83,6 +83,47 @@ class DiscreteDESD : public fwdpy11::Sregion
 void
 init_DiscreteDESD(py::module& m)
 {
-    py::class_<DiscreteDESD, fwdpy11::Sregion>(m, "_ll_DiscreteDESD");
+    py::class_<DiscreteDESD, fwdpy11::Sregion>(m, "_ll_DiscreteDESD")
+        .def(py::init([](double beg, double end, double weight,
+                         std::vector<std::tuple<double, double, double>> joint_dist,
+                         bool coupled, std::uint16_t label, double scaling) {
+                 if (joint_dist.empty())
+                     {
+                         throw std::invalid_argument("empty input list");
+                     }
+                 std::vector<double> esizes, dominance, weights;
+                 for (auto&& t : joint_dist)
+                     {
+                         auto e = std::get<0>(t);
+                         auto h = std::get<1>(t);
+                         auto w = std::get<2>(t);
+                         if (!std::isfinite(e))
+                             {
+                                 throw std::invalid_argument(
+                                     "non-finite effect size input");
+                             }
+                         if (!std::isfinite(h))
+                             {
+                                 throw std::invalid_argument(
+                                     "non-finite dominance input");
+                             }
+                         if (!std::isfinite(w))
+                             {
+                                 throw std::invalid_argument("non-finite weight input");
+                             }
+                         if (w < 0.0)
+                             {
+                                 throw std::invalid_argument("weights must be >= 0.0");
+                             }
+                         esizes.push_back(e);
+                         dominance.push_back(h);
+                         weights.push_back(w);
+                     }
+                 return DiscreteDESD(fwdpy11::Region(beg, end, weight, coupled, label),
+                                     scaling, std::move(esizes), std::move(dominance),
+                                     std::move(weights));
+             }),
+             py::arg("beg"), py::arg("end"), py::arg("weight"), py::arg("joint_dist"),
+             py::arg("coupled"), py::arg("label"), py::arg("scaling"));
 }
 
