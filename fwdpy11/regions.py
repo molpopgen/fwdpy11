@@ -83,6 +83,7 @@ _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy1
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -134,6 +135,7 @@ class Region(fwdpy11._fwdpy11._ll_Region):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -195,6 +197,7 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -258,6 +261,7 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -323,6 +327,7 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -384,6 +389,7 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -495,6 +501,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -560,6 +567,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 
 
 @_add_deprecated_properties
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -652,6 +660,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
 
 
 @attr_add_asblack
+@typing.final
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, **_common_attr_attribs)

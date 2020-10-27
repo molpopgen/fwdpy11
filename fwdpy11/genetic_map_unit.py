@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import typing
+
 import attr
 import numpy as np
 
@@ -28,6 +30,7 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -71,6 +74,7 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
         super(PoissonInterval, self).__init__(self.beg, self.end, self.mean)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -119,6 +123,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
         super(PoissonPoint, self).__init__(**d)
 
 
+@typing.final
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(**_common_attr_attribs)
@@ -157,6 +162,7 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
         super(BinomialInterval, self).__init__(self.beg, self.end, self.probability)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -199,6 +205,7 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
         super(BinomialPoint, self).__init__(self.position, self.probability)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict

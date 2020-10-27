@@ -31,6 +31,7 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -142,6 +143,7 @@ def copy_individuals(
     return MassMigration(when, source, destination, fraction, False, resets_growth_rate)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -183,6 +185,7 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
         )
 
 
+@typing.final
 @attr_class_to_from_dict
 @attr_add_asblack
 @attr_class_pickle_with_super
@@ -218,6 +221,7 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
         super(SetExponentialGrowth, self).__init__(self.when, self.deme, self.G)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -260,6 +264,7 @@ class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
         super(SetSelfingRate, self).__init__(**d)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -312,6 +317,7 @@ def _set_migration_rates_convert_deme(i: typing.Optional[int]) -> int:
     return int(i)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_to_from_dict
 @attr.s(eq=False, **_common_attr_attribs)
@@ -425,6 +431,7 @@ def _convert_migmatrix(o):
     return MigrationMatrix(o)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)

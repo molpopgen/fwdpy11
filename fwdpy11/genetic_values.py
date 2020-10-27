@@ -31,6 +31,7 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -78,6 +79,7 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
         super(Optimum, self).__init__(self.optimum, self.VS, self.when)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -134,6 +136,7 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
         return optima_equal and VS_equal and when_equal
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
@@ -193,6 +196,7 @@ class GSS(fwdpy11._fwdpy11._ll_GSSmo):
             )
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -235,6 +239,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
         super(GSSmo, self).__init__(self.optima)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
@@ -301,6 +306,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
         return [PleiotropicOptima(optima=self.optima, VS=self.VS, when=0)]
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -339,6 +345,7 @@ class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
         super(MultivariateGSSmo, self).__init__(self.optima)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -357,6 +364,7 @@ class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
         super(NoNoise, self).__init__()
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -386,6 +394,7 @@ class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
         super(GaussianNoise, self).__init__(self.sd, self.mean)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -433,6 +442,7 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
         )
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -480,6 +490,7 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
         )
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -515,6 +526,7 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
         super(GBR, self).__init__(self.gvalue_to_fitness, self.noise)
 
 
+@typing.final
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
