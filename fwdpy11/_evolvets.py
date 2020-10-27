@@ -41,6 +41,7 @@ def evolvets(
     params,
     simplification_interval,
     recorder=None,
+    *,
     post_simplification_recorder=None,
     suppress_table_indexing=False,
     record_gvalue_matrix=False,
