@@ -265,6 +265,11 @@ fwdpy11 is available through bioconda_ for Linux and for macOS:
 
     conda install -c bioconda fwdpy11
 
+.. note::
+
+   Please read the bioconda documentation!  
+   The order of channels matters.
+
 .. _fwdpy11: http://molpopgen.github.io/fwdpy11
 .. _fwdpp: http://molpopgen.github.io/fwdpp
 .. _GSL: http://gnu.org/software/gsl
