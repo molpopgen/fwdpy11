@@ -21,8 +21,9 @@ import typing
 import warnings
 
 import attr
-import fwdpy11._fwdpy11
 import numpy as np
+
+import fwdpy11._fwdpy11
 
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
@@ -684,3 +685,28 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 
     def __attrs_post_init__(self):
         super(mvDES, self).__init__(self.des, self.means, self.matrix)
+
+
+@attr_add_asblack
+@attr_class_pickle_with_super
+@attr_class_to_from_dict_no_recurse
+@attr.s(eq=False, **_common_attr_attribs)
+class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
+    beg: float
+    end: float
+    weight: float
+    joint_dist: typing.List[typing.Tuple[float, float, float]]
+    coupled: bool = True
+    label: int = 0
+    scaling: float = 1.0
+
+    def __attrs_post_init__(self):
+        super(DiscreteDESD, self).__init__(
+            self.beg,
+            self.end,
+            self.weight,
+            self.joint_dist,
+            self.coupled,
+            self.label,
+            self.scaling,
+        )

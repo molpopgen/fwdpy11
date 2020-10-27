@@ -408,6 +408,51 @@ class TestMultivariateLogNormalS(unittest.TestCase):
         self.assertTrue(np.all(m.esizes <= 0.0))
 
 
+class TestDiscreteDESD(unittest.TestCase):
+    def test_init(self):
+        jdist = [(0.1, 1, 1), (0.2, 0.5, 1)]
+        jd = fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+        self.assertEqual(jd.beg, 0)
+        self.assertEqual(jd.end, 1)
+        self.assertEqual(jd.weight, 2)
+        self.assertEqual(jd.joint_dist, jdist)
+
+    def test_pickle(self):
+        jdist = [(0.1, 1, 1), (0.2, 0.5, 1)]
+        jd = fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+        pp = pickle.dumps(jd, -1)
+        up = pickle.loads(pp)
+
+        self.assertEqual(jd.beg, up.beg)
+        self.assertEqual(jd.end, up.end)
+        self.assertEqual(jd.weight, up.weight)
+        self.assertEqual(jd.coupled, up.coupled)
+        self.assertEqual(jd.scaling, up.scaling)
+        self.assertEqual(jd.joint_dist, up.joint_dist)
+
+    def test_bad_init_1(self):
+        jdist = [(0.1, 1, np.nan), (0.2, 0.5, 1)]
+        with self.assertRaises(ValueError):
+            fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+    def test_bad_init_2(self):
+        jdist = [(0.1, 1, -1), (0.2, 0.5, 1)]
+        with self.assertRaises(ValueError):
+            fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+    def test_bad_init_3(self):
+        jdist = [(0.1, np.nan, 1), (0.2, 0.5, 1)]
+        with self.assertRaises(ValueError):
+            fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+    def test_bad_init_4(self):
+        jdist = [(np.nan, 1, 1), (0.2, 0.5, 1)]
+        with self.assertRaises(ValueError):
+            fwdpy11.DiscreteDESD(0, 1, 2, jdist)
+
+
 class testPoissonInterval(unittest.TestCase):
     @classmethod
     def setUp(self):
