@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import copy
 import typing
 
 import fwdpy11
@@ -60,6 +61,39 @@ PopulationMetadata = tskit.metadata.MetadataSchema(
     }
 )
 
+MutationMetadata = tskit.metadata.MetadataSchema(
+    {
+        "codec": "struct",
+        "type": "object",
+        "name": "Mutation metadata",
+        "properties": {
+            "s": {"type": "number", "binaryFormat": "d"},
+            "h": {"type": "number", "binaryFormat": "d"},
+            "origin": {"type": "number", "binaryFormat": "I"},
+            "neutral": {"type": "number", "binaryFormat": "?"},
+            "label": {"type": "number", "binaryFormat": "H"},
+            "key": {"type": "number", "binaryFormat": "Q"},
+        },
+        "additionalProperties": False,
+    }
+)
+
+_MutationMetaWithVectorsDict = copy.deepcopy(MutationMetadata.schema)
+
+_MutationMetaWithVectorsDict["name"] = "Mutation metadata with vectors"
+_MutationMetaWithVectorsDict["properties"]["esizes"] = {
+    "type": "array",
+    "items": {"type": "number", "binaryFormat": "d"},
+}
+_MutationMetaWithVectorsDict["properties"]["heffects"] = {
+    "type": "array",
+    "items": {"type": "number", "binaryFormat": "d"},
+}
+
+MutationMetadataWithVectors = tskit.metadata.MetadataSchema(
+    _MutationMetaWithVectorsDict
+)
+
 
 def generate_individual_metadata(
     metadata: fwdpy11._fwdpy11.DiploidMetadata,
@@ -75,4 +109,31 @@ def generate_individual_metadata(
         "deme": metadata.deme,
         "label": metadata.label,
     }
+    return d
+
+
+def determine_mutation_metadata_schema(
+    mutations: fwdpy11._fwdpy11.MutationVector,
+) -> tskit.metadata.MetadataSchema:
+    if len(mutations) == 0 or len(mutations[0].esizes) == 0:
+        return MutationMetadata
+
+    return MutationMetadataWithVectors
+
+
+def generate_mutation_metadata(
+    mr: fwdpy11._fwdpy11.MutationRecord, mutations: fwdpy11._fwdpy11.MutationVector
+) -> typing.Dict:
+    m = mutations[mr.key]
+    d = {
+        "s": m.s,
+        "h": m.h,
+        "origin": m.g,
+        "label": m.label,
+        "neutral": int(m.neutral),
+        "key": mr.key,
+    }
+    if len(m.esizes) > 0:
+        d["esizes"] = list(m.esizes)
+        d["heffects"] = list(m.heffects)
     return d

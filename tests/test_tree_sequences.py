@@ -302,22 +302,16 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             for k, l in zip(fwdpy11_md.geography, d["geography"]):
                 self.assertEqual(k, l)
 
-        md = tskit.unpack_bytes(
-            dumped_ts.tables.mutations.metadata,
-            dumped_ts.tables.mutations.metadata_offset,
-        )
-        for i, j, k in zip(
-            self.pop.tables.mutations, dumped_ts.tables.mutations.site, md
-        ):
-            d = eval(k)
+        for idx in range(len(self.pop.tables.mutations)):
+            i = self.pop.tables.mutations[idx]
+            j = dumped_ts.tables.mutations[idx].site
+            d = dumped_ts.tables.mutations[idx].metadata
             self.assertEqual(i.key, d["key"])
             site = dumped_ts.tables.sites[j]
             m = self.pop.mutations[d["key"]]
             self.assertEqual(site.position, m.pos)
             self.assertEqual(d["s"], m.s)
             self.assertEqual(d["h"], m.h)
-            self.assertTrue(np.array_equal(np.array(d["esizes"]), m.esizes))
-            self.assertTrue(np.array_equal(np.array(d["heffects"]), m.heffects))
             self.assertEqual(d["label"], m.label)
             self.assertEqual(d["neutral"], m.neutral)
 
