@@ -11,7 +11,7 @@ from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
 PYBIND11_MIN_VERSION = "2.4.3"
-TSKIT_MIN_VERSION = "0.2.3"
+TSKIT_MIN_VERSION = "0.3.2"
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
