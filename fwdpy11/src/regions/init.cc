@@ -14,6 +14,7 @@ void init_RecombinationRegions(py::module &);
 void init_MultivariateGaussianEffects(py::module &);
 void init_mvDES(py::module &);
 void init_LogNormalS(py::module &);
+void init_DiscreteDESD(py::module&);
 
 void
 initialize_regions(py::module &m)
@@ -30,4 +31,5 @@ initialize_regions(py::module &m)
     init_MultivariateGaussianEffects(m);
     init_mvDES(m);
     init_LogNormalS(m);
+    init_DiscreteDESD(m);
 }

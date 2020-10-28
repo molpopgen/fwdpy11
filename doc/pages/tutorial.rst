@@ -222,6 +222,7 @@ Built-in distributions of effect sizes
 * :class:`fwdpy11.GaussianS`
 * :class:`fwdpy11.MultivariateGaussianEffects`
 * :class:`fwdpy11.LogNormalS`
+* :class:`fwdpy11.DiscreteDESD`
 
 Labelling mutations from different regions
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

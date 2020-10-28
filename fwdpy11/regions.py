@@ -21,8 +21,9 @@ import typing
 import warnings
 
 import attr
-import fwdpy11._fwdpy11
 import numpy as np
+
+import fwdpy11._fwdpy11
 
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
@@ -684,3 +685,60 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 
     def __attrs_post_init__(self):
         super(mvDES, self).__init__(self.des, self.means, self.matrix)
+
+
+@attr_add_asblack
+@attr_class_pickle_with_super
+@attr_class_to_from_dict_no_recurse
+@attr.s(eq=False, **_common_attr_attribs)
+class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
+    """
+    Discretized distribution of effect sizes and dominance.
+
+    This class allows you to specify a discrete joint
+    distrubtion of effect size and dominance.
+
+    The distribution is specified by a list of tuples.
+    Each tuple contains (effect size, dominance, weight).
+    The weights must all be >= 0 and all values must fe finite.
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param beg: Beginning of the region
+    :type beg: float
+    :param end: End of the region
+    :type end: float
+    :param weight: Weight on the region
+    :type weight: float
+    :param joint_dist: The joint distribution + weights
+    :type joint_dist: list
+    :param coupled: Specify if weight is function of end-beg or not. Defaults to True
+    :type coupled: bool
+    :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
+    :type label: numpy.uint16
+    :param scaling: The scaling of the DFE
+    :type scaling: float
+
+    .. versionadded:: 0.10.0
+    """
+
+    beg: float
+    end: float
+    weight: float
+    joint_dist: typing.List[typing.Tuple[float, float, float]]
+    coupled: bool = True
+    label: int = 0
+    scaling: float = 1.0
+
+    def __attrs_post_init__(self):
+        super(DiscreteDESD, self).__init__(
+            self.beg,
+            self.end,
+            self.weight,
+            self.joint_dist,
+            self.coupled,
+            self.label,
+            self.scaling,
+        )

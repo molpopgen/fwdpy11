@@ -1,4 +1,4 @@
-set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc 
+set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc ;
     src/fwdpp_types/MutationBase.cc
     src/fwdpp_types/HaploidGenome.cc
     src/fwdpp_types/DataMatrix.cc
@@ -45,7 +45,8 @@ set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
     src/regions/RecombinationRegions.cc src/regions/MultivariateGaussianEffects.cc
     src/regions/mvDES.cc
-    src/regions/LogNormalS.cc)
+    src/regions/LogNormalS.cc
+    src/regions/DiscreteDESD.cc)
 
 set(GSL_SOURCES src/gsl/init.cc
     src/gsl/gsl_random.cc)
