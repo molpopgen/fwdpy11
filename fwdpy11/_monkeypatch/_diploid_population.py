@@ -98,13 +98,11 @@ def _generate_mutation_metadata(self):
 
 
 def _initializePopulationTable(node_view, tc):
-    population_metadata = []
+    tc.populations.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
+    )
     for i in sorted(np.unique(node_view["deme"])):
-        md = "deme" + str(i)
-        population_metadata.append(md.encode("utf-8"))
-
-    pmd, pmdo = tskit.pack_bytes(population_metadata)
-    tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
+        tc.populations.add_row(metadata={"name": "deme" + str(i)})
 
 
 def _initializeIndividualTable(self, tc):

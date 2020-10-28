@@ -51,6 +51,15 @@ IndividualDiploidMetadata = tskit.metadata.MetadataSchema(
     }
 )
 
+PopulationMetadata = tskit.metadata.MetadataSchema(
+    {
+        "codec": "json",
+        "type": "object",
+        "name": "Population metadata",
+        "properties": {"name": {"type": "string"}},
+    }
+)
+
 
 def generate_individual_metadata(
     metadata: fwdpy11._fwdpy11.DiploidMetadata,
