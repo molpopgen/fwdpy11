@@ -19,10 +19,10 @@
 
 import json
 
+import fwdpy11.tskit_tools
+import fwdpy11.tskit_tools.metadata_schema
 import numpy as np
 import tskit
-
-import fwdpy11.tskit_tools
 
 
 def _alive_nodes(self):
@@ -107,35 +107,24 @@ def _initializePopulationTable(node_view, tc):
     tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
 
 
-def _generate_individual_metadata(dmd, tc):
-    strings = []
-    for i in dmd:
-        d = {
-            "g": i.g,
-            "e": i.e,
-            "w": i.w,
-            "geography": i.geography,
-            "parents": i.parents,
-            "sex": i.sex,
-            "deme": i.deme,
-            "label": i.label,
-        }
-        strings.append(str(d).encode("utf-8"))
-    return strings
-
-
 def _initializeIndividualTable(self, tc):
     """
     Returns node ID -> individual map
     """
+    tc.individuals.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.IndividualDiploidMetadata
+    )
     # First, alive individuals:
     individal_nodes = {}
-    flags = []
-    for i in range(self.N):
+    for i, d in enumerate(self.diploid_metadata):
         individal_nodes[2 * i] = i
         individal_nodes[2 * i + 1] = i
-        flags.append(fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE)
-    metadata_strings = _generate_individual_metadata(self.diploid_metadata, tc)
+        tc.individuals.add_row(
+            flags=fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_individual_metadata(
+                d
+            ),
+        )
 
     # Now, preserved nodes
     num_ind_nodes = self.N
@@ -150,15 +139,13 @@ def _initializeIndividualTable(self, tc):
             and self.tables.nodes[i.nodes[1]].time == 0.0
         ):
             flag |= fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
-        flags.append(flag)
+        tc.individuals.add_row(
+            flags=flag,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_individual_metadata(
+                i
+            ),
+        )
 
-    metadata_strings.extend(
-        _generate_individual_metadata(self.ancient_sample_metadata, tc)
-    )
-
-    md, mdo = tskit.pack_bytes(metadata_strings)
-    # flags = [0 for i in range(self.N + len(self.ancient_sample_metadata))]
-    tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
     return individal_nodes
 
 
