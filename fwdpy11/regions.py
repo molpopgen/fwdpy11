@@ -692,6 +692,38 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 @attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, **_common_attr_attribs)
 class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
+    """
+    Discretized distribution of effect sizes and dominance.
+
+    This class allows you to specify a discrete joint
+    distrubtion of effect size and dominance.
+
+    The distribution is specified by a list of tuples.
+    Each tuple contains (effect size, dominance, weight).
+    The weights must all be >= 0 and all values must fe finite.
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param beg: Beginning of the region
+    :type beg: float
+    :param end: End of the region
+    :type end: float
+    :param weight: Weight on the region
+    :type weight: float
+    :param joint_dist: The joint distribution + weights
+    :type joint_dist: list
+    :param coupled: Specify if weight is function of end-beg or not. Defaults to True
+    :type coupled: bool
+    :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
+    :type label: numpy.uint16
+    :param scaling: The scaling of the DFE
+    :type scaling: float
+
+    .. versionadded:: 0.10.0
+    """
+
     beg: float
     end: float
     weight: float

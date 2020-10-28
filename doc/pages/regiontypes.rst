@@ -23,6 +23,8 @@ Setting up genomic intervals
 
     .. automethod:: mv
 
+.. autoclass:: fwdpy11.DiscreteDESD
+
 .. autoclass:: fwdpy11.mvDES
 
 .. autoclass:: fwdpy11.GeneticMapUnit
