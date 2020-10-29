@@ -18,11 +18,13 @@
 #
 
 import json
+import typing
+
+import numpy as np
+import tskit
 
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
-import numpy as np
-import tskit
 
 
 def _alive_nodes(self):
@@ -127,7 +129,7 @@ def _initializeIndividualTable(self, tc):
     return individal_nodes
 
 
-def _dump_tables_to_tskit(self, parameters=None):
+def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None):
     """
     Dump the population's TableCollection into
     an tskit TreeSequence
