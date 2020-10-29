@@ -146,6 +146,12 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
         The provenance information is validated using
         :func:`tskit.validate_provenance`, which may
         raise an exception.
+
+    .. versionchanged:: 0.10.0
+
+        Use tskit metadata schema.
+        Mutation time is now stored in the tskit.MutationTable column.
+        Origin time of mutations is part of the metadata.
     """
     from fwdpy11 import pybind11_version, gsl_version
 

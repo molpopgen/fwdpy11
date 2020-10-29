@@ -40,19 +40,16 @@ A common set of idioms used by these examples are:
 Decoding metadata from :class:`tskit.TreeSequence`
 ---------------------------------------------------------------------
 
-`tskit` and `fwdpy11` treat metadata quite differently.  The former is much more general,
-while the latter gives you direct access to the data objects on the C++ side.
-The `tskit` approach is based on binary strings.  What `fwdpy11` does is encode strings that
-can be converted back to Python dictionaries.  For example, here is how one may process the
-individual metadata after dumping the tables to `tskit`:
+As of version 0.10.0, we make use of the metadata schema introduced in `tskit` 0.3.2.
+See `here <https://tskit.readthedocs.io/en/latest/tutorial.html#working-with-metadata>`_ for details.
 
 .. code-block:: python
 
    import tskit
 
-   individuals = ts.tables.individuals
-   md = tskit.unpack_bytes(individuals.metadata, individuals.metadata_offset)
-   first_individual = eval(md[0])
+   first_individual = ts.tables.individuals[0].metadata
+
+The data stored in `first_individual` will be a :class:`dict`.
 
 In order to distinguish "alive" from "dead" individuals (*e.g.*, those 
 preserved as ancient samples), we need to make use of flags found in
@@ -94,20 +91,9 @@ The mutation metadata follow the same general recipe:
 
 .. code-block:: python
 
-   mutations = ts.tables.mutations
-   sites = ts.tables.sites
-   md = tskit.unpack_bytes(mutations.metadata, mutations.metadata_offset)
+   first_mutations = ts.tables.mutations[0].metadata
 
-Here, ``md`` is a :class:`dict` whose key names are the same as the attributes of 
-:class`fwdpy11.Mutation`, with one exception. The `tskit` representation
-of the mutation record's the allele's *age* in generations while
-:attr:`fwdpy11.Mutation.g` is the generation when the mutation arose.
-The reason for this discrepancy is because ``fwdpy11`` thinks forward in time
-while ``tskit`` thinks backwards. The conversion to and from is trivial:
-
-.. code-block:: python
-
-   print(f"Origin to age = {pop.generation - m.g + 1}")
+The mutation's data will be represented as a :class:`dict`.
 
 .. _howlongtorun:
 
