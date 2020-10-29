@@ -19,8 +19,9 @@
 import copy
 import typing
 
-import fwdpy11
 import tskit
+
+import fwdpy11
 
 IndividualDiploidMetadata = tskit.metadata.MetadataSchema(
     {
@@ -60,6 +61,14 @@ PopulationMetadata = tskit.metadata.MetadataSchema(
         "properties": {"name": {"type": "string"}},
     }
 )
+
+# NOTE: we could use JSON schema here and
+# have the array fields not included in "required".
+# However:
+# 1. That is much slower.
+# 2. This metadata contains floating point values.
+#    We don't want to lose precision in case anyone
+#    wants to try to recalculate diploid phenotypes/fitnesses
 
 MutationMetadata = tskit.metadata.MetadataSchema(
     {
