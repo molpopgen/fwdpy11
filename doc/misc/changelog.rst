@@ -10,7 +10,7 @@ updates to latest `fwdpp` version, etc.
 Interface changes:
 
 * When dumping tables to `tskit` via :func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit`, we now use the latest metadata methods.
-  See `here <processing_metadata>`_.
+  See :ref:`here <processing_metadata>`.
   :pr:`588`
 * Most arguments to :func:`fwdpy11.evolvets` are now keyword-only.
   :pr:`584`
