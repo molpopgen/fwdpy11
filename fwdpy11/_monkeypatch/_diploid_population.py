@@ -18,11 +18,13 @@
 #
 
 import json
+import typing
 
 import numpy as np
 import tskit
 
 import fwdpy11.tskit_tools
+import fwdpy11.tskit_tools.metadata_schema
 
 
 def _alive_nodes(self):
@@ -77,65 +79,32 @@ def _traverse_sample_timepoints(self, include_alive=True):
         yield self.generation, nodes, md
 
 
-# NOTE: mutation origin times are recorded forwards in time,
-# So we convert them into mutation ages.
-def _generate_mutation_metadata(self):
-    muts = []
-    for mr in self.tables.mutations:
-        m = self.mutations[mr.key]
-        d = {
-            "s": m.s,
-            "h": m.h,
-            "age": self.generation - m.g + 1,
-            "label": m.label,
-            "esizes": list(m.esizes),
-            "heffects": list(m.heffects),
-            "neutral": m.neutral,
-            "key": mr.key,
-        }
-        muts.append(str(d).encode("utf-8"))
-    return tskit.pack_bytes(muts)
-
-
 def _initializePopulationTable(node_view, tc):
-    population_metadata = []
+    tc.populations.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
+    )
     for i in sorted(np.unique(node_view["deme"])):
-        md = "deme" + str(i)
-        population_metadata.append(md.encode("utf-8"))
-
-    pmd, pmdo = tskit.pack_bytes(population_metadata)
-    tc.populations.set_columns(metadata=pmd, metadata_offset=pmdo)
-
-
-def _generate_individual_metadata(dmd, tc):
-    strings = []
-    for i in dmd:
-        d = {
-            "g": i.g,
-            "e": i.e,
-            "w": i.w,
-            "geography": i.geography,
-            "parents": i.parents,
-            "sex": i.sex,
-            "deme": i.deme,
-            "label": i.label,
-        }
-        strings.append(str(d).encode("utf-8"))
-    return strings
+        tc.populations.add_row(metadata={"name": "deme" + str(i)})
 
 
 def _initializeIndividualTable(self, tc):
     """
     Returns node ID -> individual map
     """
+    tc.individuals.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.IndividualDiploidMetadata
+    )
     # First, alive individuals:
     individal_nodes = {}
-    flags = []
-    for i in range(self.N):
+    for i, d in enumerate(self.diploid_metadata):
         individal_nodes[2 * i] = i
         individal_nodes[2 * i + 1] = i
-        flags.append(fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE)
-    metadata_strings = _generate_individual_metadata(self.diploid_metadata, tc)
+        tc.individuals.add_row(
+            flags=fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_individual_metadata(
+                d
+            ),
+        )
 
     # Now, preserved nodes
     num_ind_nodes = self.N
@@ -150,19 +119,17 @@ def _initializeIndividualTable(self, tc):
             and self.tables.nodes[i.nodes[1]].time == 0.0
         ):
             flag |= fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
-        flags.append(flag)
+        tc.individuals.add_row(
+            flags=flag,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_individual_metadata(
+                i
+            ),
+        )
 
-    metadata_strings.extend(
-        _generate_individual_metadata(self.ancient_sample_metadata, tc)
-    )
-
-    md, mdo = tskit.pack_bytes(metadata_strings)
-    # flags = [0 for i in range(self.N + len(self.ancient_sample_metadata))]
-    tc.individuals.set_columns(flags=flags, metadata=md, metadata_offset=mdo)
     return individal_nodes
 
 
-def _dump_tables_to_tskit(self, parameters=None):
+def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None):
     """
     Dump the population's TableCollection into
     an tskit TreeSequence
@@ -179,6 +146,12 @@ def _dump_tables_to_tskit(self, parameters=None):
         The provenance information is validated using
         :func:`tskit.validate_provenance`, which may
         raise an exception.
+
+    .. versionchanged:: 0.10.0
+
+        Use tskit metadata schema.
+        Mutation time is now stored in the tskit.MutationTable column.
+        Origin time of mutations is part of the metadata.
     """
     from fwdpy11 import pybind11_version, gsl_version
 
@@ -247,16 +220,21 @@ def _dump_tables_to_tskit(self, parameters=None):
         ancestral_state_offset=ancestral_state_offset,
     )
 
-    derived_state = np.zeros(len(mut_view), dtype=np.int8) + ord("1")
-    md, mdo = _generate_mutation_metadata(self)
-    tc.mutations.set_columns(
-        site=np.arange(len(mpos), dtype=np.int32),
-        node=mut_view["node"],
-        derived_state=derived_state,
-        derived_state_offset=ancestral_state_offset,
-        metadata=md,
-        metadata_offset=mdo,
+    tc.mutations.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.determine_mutation_metadata_schema(
+            self.mutations
+        )
     )
+    for m in self.tables.mutations:
+        tc.mutations.add_row(
+            site=m.site,
+            node=m.node,
+            derived_state="1",
+            time=self.generation - self.mutations[m.key].g,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_mutation_metadata(
+                m, self.mutations
+            ),
+        )
     tc.provenances.add_row(json.dumps(provenance))
     return tc.tree_sequence()
 

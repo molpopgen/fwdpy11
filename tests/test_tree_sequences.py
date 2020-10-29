@@ -269,53 +269,49 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
         # Now, we make sure that the metadata can
         # be decoded
-        md = tskit.unpack_bytes(
-            dumped_ts.tables.individuals.metadata,
-            dumped_ts.tables.individuals.metadata_offset,
-        )
-        for i, j in zip(self.pop.diploid_metadata, md):
-            d = eval(j)
-            self.assertEqual(i.g, d["g"])
-            self.assertEqual(i.w, d["w"])
-            self.assertEqual(i.e, d["e"])
-            self.assertEqual(i.label, d["label"])
-            self.assertEqual(i.parents, d["parents"])
-            self.assertEqual(i.sex, d["sex"])
-            self.assertEqual(i.deme, d["deme"])
-            self.assertEqual(i.geography, d["geography"])
+        md = []
+        for i, j in enumerate(self.pop.diploid_metadata):
+            d = dumped_ts.tables.individuals[i].metadata
+            md.append(d)
+            self.assertEqual(j.g, d["g"])
+            self.assertEqual(j.w, d["w"])
+            self.assertEqual(j.e, d["e"])
+            self.assertEqual(j.label, d["label"])
+            self.assertEqual(j.sex, d["sex"])
+            self.assertEqual(j.deme, d["deme"])
+            for k, l in zip(j.parents, d["parents"]):
+                self.assertEqual(k, l)
+            for k, l in zip(j.geography, d["geography"]):
+                self.assertEqual(k, l)
 
         # Test that we can go backwards from node table to individuals
         samples = np.where(dumped_ts.tables.nodes.flags == tskit.NODE_IS_SAMPLE)[0]
         self.assertEqual(len(samples), 2 * self.pop.N)
         for i in samples[::2]:
             ind = i // 2
-            d = eval(md[ind])
+            d = md[ind]
             fwdpy11_md = self.pop.diploid_metadata[ind]
             self.assertEqual(fwdpy11_md.g, d["g"])
             self.assertEqual(fwdpy11_md.w, d["w"])
             self.assertEqual(fwdpy11_md.e, d["e"])
             self.assertEqual(fwdpy11_md.label, d["label"])
-            self.assertEqual(fwdpy11_md.parents, d["parents"])
             self.assertEqual(fwdpy11_md.sex, d["sex"])
             self.assertEqual(fwdpy11_md.deme, d["deme"])
-            self.assertEqual(fwdpy11_md.geography, d["geography"])
+            for k, l in zip(fwdpy11_md.parents, d["parents"]):
+                self.assertEqual(k, l)
+            for k, l in zip(fwdpy11_md.geography, d["geography"]):
+                self.assertEqual(k, l)
 
-        md = tskit.unpack_bytes(
-            dumped_ts.tables.mutations.metadata,
-            dumped_ts.tables.mutations.metadata_offset,
-        )
-        for i, j, k in zip(
-            self.pop.tables.mutations, dumped_ts.tables.mutations.site, md
-        ):
-            d = eval(k)
+        for idx in range(len(self.pop.tables.mutations)):
+            i = self.pop.tables.mutations[idx]
+            j = dumped_ts.tables.mutations[idx].site
+            d = dumped_ts.tables.mutations[idx].metadata
             self.assertEqual(i.key, d["key"])
             site = dumped_ts.tables.sites[j]
             m = self.pop.mutations[d["key"]]
             self.assertEqual(site.position, m.pos)
             self.assertEqual(d["s"], m.s)
             self.assertEqual(d["h"], m.h)
-            self.assertTrue(np.array_equal(np.array(d["esizes"]), m.esizes))
-            self.assertTrue(np.array_equal(np.array(d["heffects"]), m.heffects))
             self.assertEqual(d["label"], m.label)
             self.assertEqual(d["neutral"], m.neutral)
 
