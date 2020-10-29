@@ -4,6 +4,33 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.10.0
+****************************************
+
+Interface changes:
+
+* When dumping tables to `tskit` via :func:`fwdpy11.DiploidPopulation.dump_tables_to_tskit`, we now use the latest metadata methods.
+  See `here <processing_metadata>`_.
+  :pr:`588`
+* Most arguments to :func:`fwdpy11.evolvets` are now keyword-only.
+  :pr:`584`
+* Added :class:`fwdpy11.DiscreteDESD`.
+  :pr:`587`
+
+Dependency updates:
+
+* Minimum `tskit` version is now 0.3.2.
+* Minimum `attrs` version is now 0.19.2.
+* `Sphinx` version pinned to 3.1.
+* The warnings for deprecated features got promoted to :class:`FutureWarning`.
+  :pr:`583`
+
+C++ back-end changes:
+
+* New method to handle GSL errors. :pr:`574`
+* Table collections are now managed by shared pointers. :pr:`582`
+
+
 0.9.0
 ****************************************
 
