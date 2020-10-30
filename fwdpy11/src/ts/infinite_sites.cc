@@ -23,9 +23,10 @@ namespace
             return gsl_ran_flat(rng.get(), left, right);
         };
         const auto return_zero = []() { return 0.0; };
+        const auto return_zero_h = [](const double) { return 0.0; };
         auto key = fwdpy11::infsites_Mutation(
             recycling_bin, pop.mutations, pop.mut_lookup, true, generation, uniform,
-            return_zero, return_zero, 0);
+            return_zero, return_zero_h, 0);
         return fwdpp::ts::new_variant_record(
             pop.mutations[key].pos, fwdpp::ts::default_ancestral_state, key,
             pop.mutations[key].neutral, fwdpp::ts::default_derived_state);

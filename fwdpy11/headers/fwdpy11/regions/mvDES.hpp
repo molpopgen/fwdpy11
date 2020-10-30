@@ -25,6 +25,7 @@
 #include <cmath>
 #include "Sregion.hpp"
 #include "LogNormalS.hpp"
+#include "MutationDominance.hpp"
 #include "MultivariateGaussianEffects.hpp"
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/numpy/array.hpp>
@@ -32,6 +33,9 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_errno.h>
+#include <limits>
+#include <locale>
+#include <stdexcept>
 
 namespace fwdpy11
 {
@@ -72,6 +76,9 @@ namespace fwdpy11
                                 gsl_cdf_gaussian_P(outer_this->deviates[i]
                                                        - outer_this->means[i],
                                                    outer_this->stddev[i]));
+                        outer_this->dominance_values[i]
+                            = outer_this->output_distributions[i]->generate_dominance(
+                                rng, outer_this->deviates[i]);
                     }
                 return outer_this->generate_mutation(recycling_bin, mutations,
                                                      lookup_table, generation, rng);
@@ -90,13 +97,14 @@ namespace fwdpy11
                 outer_this->generate_deviates(rng);
                 for (std::size_t i = 0; i < outer_this->deviates.size(); ++i)
                     {
-                        // Subtract means from the deviates so we
-                        // can use N(0, sigma[i]) cdf.
                         outer_this->deviates[i]
                             = outer_this->output_distributions[0]->from_mvnorm(
                                 outer_this->deviates[i],
                                 gsl_cdf_gaussian_P(outer_this->deviates[i],
                                                    outer_this->stddev[i]));
+                        outer_this->dominance_values[i]
+                            = outer_this->output_distributions[0]->generate_dominance(
+                                rng, outer_this->deviates[i]);
                     }
                 return outer_this->generate_mutation(recycling_bin, mutations,
                                                      lookup_table, generation, rng);
@@ -124,7 +132,7 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, false, generation,
                 [this, &rng]() { return this->region(rng); }, []() { return 0.0; },
-                []() { return 1.0; }, [this]() { return this->deviates; },
+                [](const double) { return 1.0; }, [this]() { return this->deviates; },
                 [this]() { return this->dominance_values; }, this->label());
         }
 
@@ -191,17 +199,8 @@ namespace fwdpy11
         fill_dominance(const std::vector<std::unique_ptr<Sregion>> &odist)
         // NOTE: domimnance needs to be pushed up to Sregion?
         {
-            std::vector<double> rv;
-            for (auto &&o : odist)
-                {
-                    auto d = o->get_dominance();
-                    if (d.size() > 1 || d.empty())
-                        {
-                            throw std::invalid_argument(
-                                "invalid number of dominance values");
-                        }
-                    rv.push_back(d[0]);
-                }
+            std::vector<double> rv(odist.size(),
+                                   std::numeric_limits<double>::quiet_NaN());
             return rv;
         }
 
@@ -301,11 +300,11 @@ namespace fwdpy11
         // NOTE: the "scaling" concept is handled by the output_distributions.
         mvDES(const std::vector<std::unique_ptr<Sregion>> &odist,
               std::vector<double> gaussian_means, const gsl_matrix &vcov)
-            : Sregion(get_region(odist), 1., odist.size()), // 1. is a dummy param here.
+            : Sregion(get_region(odist), 1., odist.size(),
+                      process_input_dominance(0.)), // 1. is a dummy param here.
               output_distributions(fill_output_distributions(odist, vcov.size1)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
-              deviates(vcov.size1),
-              dominance_values(fill_dominance(output_distributions)),
+              deviates(vcov.size1), dominance_values(fill_dominance(odist)),
               means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
@@ -316,13 +315,18 @@ namespace fwdpy11
             finalize_setup();
         }
 
+        // FIXME: to get the next 2 to work, the callbacks used
+        // need some thought...
+
         mvDES(const LogNormalS &odist, std::vector<double> gaussian_means,
               const gsl_matrix &vcov)
-            : Sregion(odist.region, 1., vcov.size1),
+            : Sregion(odist.region, 1., vcov.size1, process_input_dominance(0.)),
               output_distributions(clone_into_vector(odist)),
               vcov_copy(copy_input_matrix(vcov)), matrix(decompose()),
-              deviates(vcov.size1), dominance_values(std::vector<double>(
-                                        gaussian_means.size(), odist.dominance)),
+              deviates(vcov.size1),
+              // FIXME: this is wrong
+              dominance_values(gaussian_means.size(),
+                               std::numeric_limits<double>::quiet_NaN()),
               means(std::move(gaussian_means)),
               res(gsl_vector_view_array(deviates.data(), deviates.size())),
               // NOTE: use of calloc to initialize mu to all zeros
@@ -335,7 +339,8 @@ namespace fwdpy11
 
         mvDES(const MultivariateGaussianEffects &odist,
               std::vector<double> gaussian_means)
-            : Sregion(odist.region, 1., odist.input_matrix_copy->size1),
+            : Sregion(odist.region, 1., odist.input_matrix_copy->size1,
+                      process_input_dominance(0.)),
               output_distributions(clone_into_vector(odist)),
               vcov_copy(copy_input_matrix(*(odist.input_matrix_copy))),
               matrix(decompose()), deviates(odist.input_matrix_copy->size1),
@@ -386,10 +391,11 @@ namespace fwdpy11
                 "mvDES is not allowed to be part of multivariate DES");
         }
 
-        std::vector<double>
-        get_dominance() const override
+        double
+        generate_dominance(const GSLrng_t &rng, const double esize) const override final
         {
-            return dominance_values;
+            throw std::runtime_error("mvDES::generate_dominance is not implemented");
+            return std::numeric_limits<double>::quiet_NaN();
         }
     };
 } // namespace fwdpy11

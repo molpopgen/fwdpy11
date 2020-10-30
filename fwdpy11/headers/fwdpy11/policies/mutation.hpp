@@ -73,9 +73,11 @@ namespace fwdpy11
             {
                 pos = posmaker();
             }
+        auto esize = esize_maker();
+        auto dominance = hmaker(esize);
         auto idx = fwdpp::recycle_mutation_helper(recycling_bin, mutations,
-                                                  treat_as_neutral, pos, esize_maker(),
-                                                  hmaker(), generation, x);
+                                                  treat_as_neutral, pos, esize,
+                                                  dominance, generation, x);
         lookup.emplace(pos, idx);
         return idx;
     }
@@ -129,9 +131,11 @@ namespace fwdpy11
             {
                 pos = posmaker();
             }
+        auto esize = fixed_esize_maker();
+        auto fixed_dominance = fixed_hmaker(esize);
         auto idx = fwdpp::recycle_mutation_helper(
-            recycling_bin, mutations, treat_as_neutral, pos, fixed_esize_maker(),
-            fixed_hmaker(), generation, esizes(), dominance(), x);
+            recycling_bin, mutations, treat_as_neutral, pos, esize, fixed_dominance,
+            generation, esizes(), dominance(), x);
         lookup.emplace(pos, idx);
         return idx;
     }

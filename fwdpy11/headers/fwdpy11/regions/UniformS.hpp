@@ -5,16 +5,18 @@
 #include <stdexcept>
 #include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
+#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
 
     struct UniformS : public Sregion
     {
-        double lo, hi, dominance;
+        double lo, hi;
 
-        UniformS(const Region& r, double sc, double lo_, double hi_, double h)
-            : Sregion(r, sc, 1), lo(lo_), hi(hi_), dominance(h)
+        template <typename Dominance>
+        UniformS(const Region& r, double sc, double lo_, double hi_, Dominance&& h)
+            : Sregion(r, sc, 1, std::forward<Dominance>(h)), lo(lo_), hi(hi_)
         {
             if (!std::isfinite(lo))
                 {
@@ -23,10 +25,6 @@ namespace fwdpy11
             if (!std::isfinite(hi))
                 {
                     throw std::invalid_argument("hi must be finite");
-                }
-            if (!std::isfinite(dominance))
-                {
-                    throw std::invalid_argument("dominance must be finite");
                 }
             if (!(hi > lo))
                 {
@@ -37,7 +35,8 @@ namespace fwdpy11
         std::unique_ptr<Sregion>
         clone() const override
         {
-            return std::unique_ptr<UniformS>(new UniformS(*this));
+            return std::make_unique<UniformS>(this->region, this->scaling, this->lo,
+                                              this->hi, *this->dominance);
         }
 
         std::uint32_t
@@ -50,19 +49,16 @@ namespace fwdpy11
                 recycling_bin, mutations, lookup_table, false, generation,
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() { return gsl_ran_flat(rng.get(), lo, hi) / scaling; },
-                [this]() { return dominance; }, this->label());
+                [this, &rng](const double esize) {
+                    return dominance->generate_dominance(rng, esize);
+                },
+                this->label());
         }
 
         double
         from_mvnorm(const double /*deviate*/, const double P) const override
         {
             return gsl_cdf_flat_Pinv(P, lo, hi) / scaling;
-        }
-
-        std::vector<double>
-        get_dominance() const override
-        {
-            return {dominance};
         }
     };
 } // namespace fwdpy11

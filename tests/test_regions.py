@@ -219,7 +219,6 @@ class Test_mvDES(unittest.TestCase):
         up = pickle.loads(p)
         self.assertTrue(np.array_equal(up.means, self.r.means))
         self.assertTrue(np.array_equal(up.matrix, np.identity(2)))
-        self.assertTrue(np.array_equal(up.dominance, self.r.dominance))
 
     def test_bad_init_1(self):
         with self.assertRaises(ValueError):
