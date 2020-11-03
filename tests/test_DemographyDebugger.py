@@ -22,6 +22,7 @@ This is basically a test of bad models.
 """
 
 import unittest
+import warnings
 
 import numpy as np
 
@@ -33,7 +34,11 @@ def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
         "nregions": [],
         "sregions": [],
         "recregions": [],
-        "rates": (0, 0, 0,),
+        "rates": (
+            0,
+            0,
+            0,
+        ),
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": ddemog,
         "simlen": simlen,
@@ -41,6 +46,62 @@ def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
     params = fwdpy11.ModelParams(**pdict)
     rng = fwdpy11.GSLrng(seed)
     fwdpy11.evolvets(rng, pop, params, 100, recorder)
+
+
+class TestNoDemographicEvents(unittest.TestCase):
+    """
+    For issue #594
+    """
+
+    @classmethod
+    def setUpClass(self):
+        self.demog = fwdpy11.DiscreteDemography()
+
+    def test_no_demographic_events(self):
+        _ = fwdpy11.DemographyDebugger([100], self.demog)
+
+
+class TestEmptyEventLists(unittest.TestCase):
+    """
+    For issue #594
+    """
+
+    @classmethod
+    def setUpClass(self):
+        self.demog = fwdpy11.DiscreteDemography(
+            mass_migrations=[],
+            set_growth_rates=[],
+            set_deme_sizes=[],
+            set_selfing_rates=[],
+            migmatrix=None,
+            set_migration_rates=[],
+        )
+
+    def test_empty_event_lists(self):
+        _ = fwdpy11.DemographyDebugger([100], self.demog)
+
+
+class TestSingleDemeWithVariousMigrationMatrices(unittest.TestCase):
+    """
+    For issue #594
+    """
+
+    @classmethod
+    def setUp(self):
+        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    def test_one_by_one_migration_matrix(self):
+        """
+        Will warn about the 1-by-1 matrix
+        """
+        demog = fwdpy11.DiscreteDemography(migmatrix=np.array([[1.0]]))
+        with warnings.catch_warnings(record=True) as w:
+            _ = fwdpy11.DemographyDebugger([100], demog)
+
+    def test_two_by_two_migration_matrix(self):
+        demog = fwdpy11.DiscreteDemography(migmatrix=np.array([[1.0, 0.0], [0.0, 1.0]]))
+        with self.assertRaises(ValueError):
+            _ = fwdpy11.DemographyDebugger([100], demog)
 
 
 class TestBadMassMigrations(unittest.TestCase):

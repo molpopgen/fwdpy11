@@ -163,11 +163,15 @@ class DemographyDebugger(object):
         ]:
             max_from_events = update_max_from_events(max_from_events, i)
 
-        current_max = max(max_from_md, max_from_events) + 1
+        # NOTE: Changed in 0.10.1 from
+        # current_max = max(max_from_md, max_from_events) + 1
+        # to addres GitHub issue 594.
+        current_max = max(max_from_md, max_from_events + 1)
         if self._events.migmatrix is None:
             return current_max
 
-        if self._events.migmatrix.shape[0] < current_max:
+        # NOTE: changed from < to != in 0.10.1
+        if self._events.migmatrix.shape[0] != current_max:
             raise ValueError(
                 f"The MigrationMatrix shape, {self._events.migmatrix.shape}, "
                 f"does not match the max number of "
@@ -175,7 +179,15 @@ class DemographyDebugger(object):
                 f"simulation, {current_max}"
             )
 
-        return max(current_max, self._events.migmatrix.shape[0])
+        if self._events.migmatrix.shape[0] == 1:
+            warnings.warn(
+                "You are using a 1x1 migration matrix."
+                " You should prefer a migration matrix set to None in this case."
+            )
+
+        # NOTE: this is the return value prior to 0.10.1:
+        # max(current_max, self._events.migmatrix.shape[0])
+        return current_max
 
     def _validate_migration_rate_change_lengths(self, events):
         """
@@ -456,7 +468,12 @@ class DemographyDebugger(object):
             return
         for i, j in enumerate(next_deme_sizes):
             if j == 0:
-                if self._events.migmatrix.M[i,].sum() != 0:
+                if (
+                    self._events.migmatrix.M[
+                        i,
+                    ].sum()
+                    != 0
+                ):
                     temp = (self._label_deme(i), t, self._events.migmatrix.M[i, j])
                     raise ValueError(
                         "there is migration "
@@ -481,12 +498,22 @@ class DemographyDebugger(object):
                     )
                     temp = (self._label_deme(i), N, t)
                     raise ValueError(s.format(*temp))
-                elif self._events.migmatrix.M[i,].sum() > 0:
+                elif (
+                    self._events.migmatrix.M[
+                        i,
+                    ].sum()
+                    > 0
+                ):
                     self.has_metadata[i] = 1
                     self.went_extinct[i] = 0
             elif self.current_deme_sizes[i] > 0 and self._events.migmatrix is not None:
                 # NOTE: Fix for issue 538, in 0.8.2
-                if self._events.migmatrix.M[i,].sum() == 0:
+                if (
+                    self._events.migmatrix.M[
+                        i,
+                    ].sum()
+                    == 0
+                ):
                     s = (
                         f"deme {i} at time {t} has size {self.current_deme_sizes[i]} "
                         f"but an empty row in the migration matrix"
@@ -501,7 +528,7 @@ class DemographyDebugger(object):
         temp = self._format_deme_sizes(self.current_deme_sizes)
         self._report = ["Deme sizes at time {}: {}\n".format(0, temp)]
         t = self._get_next_event_time(event_queues)
-        if t > 0:
+        if t is not None and t > 0:
             # If the first event is after time zero, let's make
             # sure that the input migration matrix is valid.
             # This fixes github issue 544
