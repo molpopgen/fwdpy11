@@ -107,7 +107,7 @@ This release includes some minor `API` changes.
 See the :ref:`upgrade guide <upgrade_path>` for details.
 
 0.8.0a1
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 Second alpha release of 0.8.0:
 
@@ -115,7 +115,7 @@ Second alpha release of 0.8.0:
 * Update documentation related to genetic maps. :pr:`530`
 
 0.8.0a0
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 This is the first alpha release of 0.8.0.
 
@@ -182,7 +182,7 @@ C++ back end changes:
   :pr:`489` :pr:`523` :pr:`525`
 
 0.7.1
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 Maintenance release and one new feature:
 
@@ -197,7 +197,7 @@ All changes are backwards-compatible, and deprecation warnings are issued when
 necessary.  See the 0.7.1 milestone on ``GitHub`` for details.
 
 0.7.0
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 Major feature release allowing mutations to have different
 effect sizes in different demes.
@@ -226,7 +226,7 @@ Other changes (see the 0.7.0 milestone on GitHub)
 * Many back-end changes to the C++ code simplify things in various places.
 
 0.6.4
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 Fixes a bug where the timing of updates to stateful genetic values
 was off by one generation:
@@ -234,7 +234,7 @@ was off by one generation:
 *  :issue:`437`
 
 0.6.3
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 Maintenance release.
 
@@ -252,7 +252,7 @@ Other changes:
 * The C++ base class for a population is now a concrete class rather than a template alias.  This change enables forward declarations in header files. PR :pr:`427` 
 
 0.6.2
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 This release changes the migration code to model juvenile migration.
 These changes simplify the back end and give the same results (in
@@ -262,7 +262,7 @@ distribution).  The relevant PRs are:
 * PR :pr:`417` 
 
 0.6.1
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 This is a maintenance release that clears up a few issues:
 
@@ -280,7 +280,7 @@ The following features are added:
 * :func:`fwdpy11.DataMatrix.merge`
 
 0.6.0
-++++++++++++++++++++++++++++++++++++++++
+****************************************
 
 This is a major feature release.  The changes include all those listed for the various 
 release candidates (see below) plus the following:
@@ -308,7 +308,7 @@ release candidates (see below) plus the following:
 
 
 0.6.0rc2 
-++++++++++++++++
+****************
 
 Third release candidate of version 0.6.0!
 
@@ -336,13 +336,13 @@ Kind of a big release:
   
   
 0.6.0rc1
-++++++++++++++++
+****************
 
 This is the same as 0.6.0rc0 except that it is based on a master
 branch that's been rebased to have the bug fixes from 0.5.5 included.
 
 0.6.0rc0
-++++++++++++++++
+****************
 
 Support for demographic events involving discrete demes.   This is a release 
 candidate with minimal documentation beyond the examples (see below).
@@ -381,7 +381,7 @@ Changes to the build system and dependencies:
 * The ``-Weffc++`` flag is now optional during compilation.
 
 0.5.5
-++++++++++++++++
+****************
 
 This release fixes a rather serious bug.
 
@@ -397,14 +397,14 @@ there is the chance that the procedure of putting down neutral mutations
 now differs.
 
 0.5.4
-++++++++++++++++
+****************
 
 Bug fix release.
 
 * Fixes  :issue:`350`
 
 0.5.3
-++++++++++++++++
+****************
 
 New features:
 
@@ -416,7 +416,7 @@ Miscellaneous changes:
 * Links in the manual are now validated via CI. PR :pr:`331` 
 
 0.5.2
-++++++++++++++++
+****************
 
 The following bugs are fixed:
 
@@ -439,7 +439,7 @@ Several performance fixes:
 
 
 0.5.1
-++++++++++++++++
+****************
 
 This release fixes three bugs:
 
@@ -454,7 +454,7 @@ The following features are new:
 * Preorder traversal of nodes in the current tree is possible via :func:`fwdpy11.TreeIterator.nodes`.  Added :func:`fwdpy11.TreeIterator.samples` and :func:`fwdpy11.TreeIterator.samples_below`. PR :pr:`272`
 
 0.5.0
-+++++++++++
+***********
 
 This is an intermediate release as we are still working towards supporting more general demographic models.
 
@@ -473,26 +473,26 @@ Minor changes include:
 * Several updates to documentation and to continuous integration testing.
 
 0.4.5
-+++++++++++
+***********
 
 * :class:`fwdpy11.DataMatrixIterator` now correctly handles nested window coordinates. PR :pr:`244`.
 
 
 0.4.4
-+++++++++++
+***********
 
 * Add :class:`fwdpy11.DataMatrixIterator`. PR :pr:`243`.
 * Reduce time needed to execute unit tests of tree sequence functions.
 
 0.4.3
-++++++++++++++++++++++++++++++++++
+**********************************
 
 * Minor fixes to packaging of source distrubition.
 * Add a YCM config file to source repo
 * Allow mutation and recombination regions to be empty. PR :pr:`239`.
 
 0.4.2
-++++++++++++++++++++++++++++++++++
+**********************************
 
 Minor release:
 
@@ -501,7 +501,7 @@ Minor release:
 * Documentation updates
 
 0.4.1
-++++++++++++++++++++++++++++++++++
+**********************************
 
 Minor release:
 
@@ -512,7 +512,7 @@ Minor release:
 * Documentation updates
 
 0.4.0
-++++++++++++++++++++++++++++++++++
+**********************************
 
 This is a major refactoring:
 
@@ -526,7 +526,7 @@ The details for this release are best tracked via the cards in `Project 9 <https
 
 
 0.3.1
-++++++++++++++++++++++++++
+**************************
 
 Minor bugfix release:
 
@@ -535,7 +535,7 @@ Minor bugfix release:
 * Minor updates to the C++ backend of VariantIterator
 
 0.3.0
-++++++++++++++++++++++++++
+**************************
 
 Deprecations of note
 -------------------------------------------------------------
@@ -624,12 +624,12 @@ Changes to the C++ back-end include:
   and multi- variate genetic values. PR :pr:`172`
 
 Version 0.2.1
-++++++++++++++++++++++++++
+**************************
 
 This is a point release fixing some minor packaging problems in 0.2.0.
 
 Version 0.2.0
-++++++++++++++++++++++++++
+**************************
 
 This release represents major changes to the calclations of genetic values and to how simulations are parameterized.
 Please see :ref:`upgrade_path`, :ref:`genetic_values_types`, and :ref:`model_params` for details.
@@ -703,7 +703,7 @@ Back-end changes
   this :commit:`96e8b6e7ca4b257cb8ae5e704f6a36a4b5bfa7bc`.
 
 Version 0.1.4
-++++++++++++++++++++++++++
+**************************
 
 Bug fixes:
 --------------------------
@@ -749,12 +749,12 @@ Back-end changes
 * fwdpy11 are now based on the @property/@foo.setter idiom for safety and code reuse.  PR :pr:`21`
 
 Version 0.1.3.post1
-++++++++++++++++++++++++++
+**************************
 
 * Fixed :issue:`23` and :issue:`25` via PR :pr:`24`.
 
 Version 0.1.3
-++++++++++++++++++++++++++
+**************************
 
 Bug fixes:
 ------------------------
@@ -782,7 +782,7 @@ Back-end changes
 * fwdpy11.model_params now uses try/except rather than isinstance to check that rates are float-like types. :commit:`37112a60cd8fc74133945e522a47183314bf4085`
 
 Version 0.1.2
-++++++++++++++++++++++++++
+**************************
 
 Bug fixes:
 ---------------------
@@ -794,7 +794,7 @@ API and back-end changes:
 * :func:`fwdpy11.sampling.separate_samples_by_loci` changed to take a list of positions as first argument, and not a population object.
 
 Version 0.1.1
-++++++++++++++++++++++++++
+**************************
 
 Bug fixes:
 ---------------------
