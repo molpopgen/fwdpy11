@@ -60,9 +60,7 @@ individuals in the individual table:
 
     import fwdpy11.tskit_tools
 
-    alive_individuals = (
-        ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
-    )
+    alive_individuals = ts.tables.individuals.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
 
 To find the nodes corresponding to those individuals:
 
@@ -169,7 +167,7 @@ Let's set up a model where :math:`S` is exponentially distributed with mean ``-2
 We'll run a small population for a few generations.  This model will be nowhere
 near equilibrium, but we're just using it as an example:
 
-.. ipython:: python
+.. jupyter-execute::
 
     import fwdpy11
     import numpy as np
@@ -196,7 +194,7 @@ near equilibrium, but we're just using it as an example:
 
 Define a function relating :math:`S` to :math:`z`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     def getz(S, tau, sigma):
         if np.random.uniform() < 0.5:
@@ -208,7 +206,7 @@ Define a function relating :math:`S` to :math:`z`:
 
 Apply the function and look at the results:
 
-.. ipython:: python
+.. jupyter-execute::
 
     np.random.seed(101010)
     zvals = {}
@@ -221,7 +219,7 @@ Apply the function and look at the results:
 Traverse the tree sequence to get individual phenotypes under a 
 strictly additive model:
 
-.. ipython:: python
+.. jupyter-execute::
 
     phenotypes = np.zeros(pop.N)
     node_to_individual = {}
@@ -238,20 +236,20 @@ strictly additive model:
 
 The trait value distribution is:
 
-.. ipython:: python
+.. jupyter-execute::
 
     np.unique(phenotypes, return_counts=True)
 
 The mean trait value and the genetic variance are:
 
-.. ipython:: python
+.. jupyter-execute::
 
     phenotypes.mean()
     phenotypes.var()
 
 For our final trick, let's store them in the individual metadata:
 
-.. ipython:: python
+.. jupyter-execute::
 
     md = np.array(pop.diploid_metadata, copy=False)
     md["g"][:] = phenotypes
@@ -423,7 +421,8 @@ The first function is equivalent to the following Python code:
 .. code-block:: python
 
    def strict_additive_effects(
-       pop: fwdpy11.DiploidPopulation, metadata: fwdpy11.DiploidMetadata,
+       pop: fwdpy11.DiploidPopulation,
+       metadata: fwdpy11.DiploidMetadata,
    ) -> float:
        g = 0.0
        dip = pop.diploids[metadata.label]
@@ -458,21 +457,21 @@ classes are often called ``superclasses`` and derived classes are
 
 The idiomatic approach in ``Python 3`` is:
 
-.. ipython:: python
+.. jupyter-execute::
 
    class Base(object):
        def __init__(self):
            self.b = "I am a Base"
 
 
-.. ipython:: python
+.. jupyter-execute::
 
    class Derived(Base):
        def __init__(self):
            self.d = "I am a Derived"
            super(Derived, self).__init__()
 
-.. ipython:: python
+.. jupyter-execute::
 
    d = Derived()
    print(d.b)

@@ -12,7 +12,7 @@ black
 sphinx==3.1
 sphinx-issues
 pandas
-ipython
+jupyter-sphinx
 matplotlib
 seaborn
 msprime

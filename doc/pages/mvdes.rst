@@ -1,7 +1,7 @@
 .. _mvdes:
 
-.. ipython:: python
-   :suppress:
+.. jupyter-execute::
+   :hide-code:
 
    import fwdpy11
    import numpy as np
@@ -35,7 +35,7 @@ At this time, it is probably best to look at an example. The following code mode
 selection on a quantitative trait.  The effects sizes within each deme are themselves given by Gaussian
 distributions and there is no correlation in the effect size in the two demes.
 
-.. ipython:: python
+.. jupyter-execute::
 
     pdict = {
         "nregions": [],
@@ -71,7 +71,7 @@ Most of the above is standard.  Let's dissect the new bits:
 
 Let's evolve the model now:
 
-.. ipython:: python
+.. jupyter-execute::
 
     params = fwdpy11.ModelParams(**pdict)
     pop = fwdpy11.DiploidPopulation([100, 100], 1.0)
@@ -80,14 +80,14 @@ Let's evolve the model now:
 
 Let's extract the effect sizes from each deme:
 
-.. ipython:: python
+.. jupyter-execute::
 
     for i in pop.tables.mutations:
         print(pop.mutations[i.key].esizes)
 
 Let's look at another example where effect sizes covary negatively across demes and raise the mutation rate a bit:
 
-.. ipython:: python
+.. jupyter-execute::
 
     vcv = np.array([1.0, -0.99, -0.99, 1.0]).reshape((2, 2))
     pdict["sregions"] = [
@@ -116,7 +116,7 @@ size of a single deme) is a multivariate lognormal with means zero and an
 identity matrix as a covariance matrix used to specify the multivate 
 Gaussian kernel.
 
-.. ipython:: python
+.. jupyter-execute::
 
     mvdes = fwdpy11.mvDES(
         fwdpy11.LogNormalS.mv(0, 1, 1, scaling=-200), np.zeros(2), np.identity(2)
@@ -130,7 +130,7 @@ Gaussian kernel.
 
 Let's put it in a simulation and run it:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pdict = {
         "nregions": [],
@@ -172,7 +172,7 @@ For a simulation with `n` populations we need:
 The following generates exponentially distributed effect sizes in each deme
 with a high correlation across demes:
 
-.. ipython:: python
+.. jupyter-execute::
 
     mvdes = fwdpy11.mvDES(
         [fwdpy11.ExpS(0, 1, 1, -0.5)] * 2,
@@ -191,7 +191,7 @@ sizes in deme 0 is exponential and the distribution in deme 1 is gamma.  The
 two distributions have means with opposite signs and the magnitudes of the
 marginal deviates negatively covary:
 
-.. ipython:: python
+.. jupyter-execute::
 
     mvdes = fwdpy11.mvDES(
         [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.GammaS(0, 1, 1, mean=0.1, shape_parameter=1)],
@@ -207,7 +207,7 @@ marginal deviates negatively covary:
 
 The type :class:`fwdpy11.ConstantS` has intuitive behavior:
 
-.. ipython:: python
+.. jupyter-execute::
 
     mvdes = fwdpy11.mvDES(
         [fwdpy11.ExpS(0, 1, 1, -0.5), fwdpy11.ConstantS(0, 1, 1, -0.1)],
@@ -238,7 +238,7 @@ that this approach only generates a *tendency* to different signs in different d
 With the multivariate lognormal, the best we can do is to use negative 
 correlations such that deleterious mutations in deme 0 are less deleterious in deme 1, etc.:
 
-.. ipython:: python
+.. jupyter-execute::
 
     sregions = [
         fwdpy11.mvDES(
@@ -266,7 +266,7 @@ In the output, we see that an effect size in deme `i` has a corresponding effect
         
 For the general approach, simply create a :class:`list` of objects with the desired mean (or constant) effect sizes.  For example:
 
-.. ipython:: python
+.. jupyter-execute::
 
     sregions = [
         fwdpy11.mvDES(

@@ -245,7 +245,9 @@ Types related to discrete demographic events
    of course, wrong, and so a constant is provided to help
    other people with similar problems:
 
-.. ipython:: python
+.. jupyter-execute::
+
+   import fwdpy11
 
    print(fwdpy11.NOGROWTH)
 

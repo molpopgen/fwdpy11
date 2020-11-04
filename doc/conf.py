@@ -28,6 +28,8 @@ import pkg_resources
 if (os.environ.get("READTHEDOCS") == "True") is False:
     try:
         sys.path.insert(0, os.path.abspath(".."))
+        package_path = os.path.abspath('../')
+        os.environ['PYTHONPATH'] = ':'.join((package_path, os.environ.get('PYTHONPATH', '')))
         import fwdpy11  # NOQA
     except:  # NOQA
         raise
@@ -78,8 +80,7 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx.ext.intersphinx",
-    "IPython.sphinxext.ipython_console_highlighting",
-    "IPython.sphinxext.ipython_directive",
+    "jupyter_sphinx.execute",
     "sphinx_issues",
 ]
 

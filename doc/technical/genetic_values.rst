@@ -74,11 +74,11 @@ the Python versions are listed at the end of this section.
 
        @typing.final
        def __call__(self, data: MockDiploidGeneticValueData) -> None:
-           #Set the genetic value metadata for offspring
+           # Set the genetic value metadata for offspring
            data.offspring_metadata.g = self.calculate_gvalue(data)
-           #Set the random effects metadata for offspring
+           # Set the random effects metadata for offspring
            data.offspring_metadata.e = self.noise(MockDiploidGeneticValueNoiseData(data))
-           #Set the fitness metadata for offspring
+           # Set the fitness metadata for offspring
            data.offspring_metadata.w = self.genetic_value_to_fitness(
                MockDiploidGeneticValueToFitnessData(data)
            )

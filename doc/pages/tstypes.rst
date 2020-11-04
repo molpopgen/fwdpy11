@@ -51,7 +51,7 @@ We are going to look at a single tree, but the concepts apply to any of the tree
 recombination rates.  First, let's get a tree sequence using the linear-time algorithm of Hudson (1990), 
 which involves repeated swapping of the IDs of potential ancestors until the MRCA is reached.
 
-.. ipython:: python
+.. jupyter-execute::
 
     import tskit
     import numpy as np
@@ -70,7 +70,7 @@ which involves repeated swapping of the IDs of potential ancestors until the MRC
     time = 0.0
 
 
-.. ipython:: python
+.. jupyter-execute::
 
     # The citation for this algorithm is
     # Hudson, Richard R. 1990.
@@ -91,7 +91,7 @@ which involves repeated swapping of the IDs of potential ancestors until the MRC
         nodes[p] = nodes[2 * nsam - n]
         n -= 1
 
-.. ipython:: python
+.. jupyter-execute::
 
     tc.sort()
     ts = tc.tree_sequence()
@@ -108,18 +108,18 @@ about a forward simulation.  Further, we can describe the branches leading to th
 One thing that we often want to know is "how many samples descend from node `i`?" To do that, we
 may look at the leaf counts attribute of a marginal tree:
 
-.. ipython:: python
+.. jupyter-execute::
 
     # Let's store our
     # tree in a variable now
     t = ts.first()
 
-.. ipython:: python
+.. jupyter-execute::
 
     def get_leaf_counts(tree, i):
         return len([j for j in tree.leaves(i)])
 
-.. ipython:: python
+.. jupyter-execute::
 
     # Map node ids to their leaf counts using a dict
     lcmap = {i: "{}".format(get_leaf_counts(t, i)) for i in range(len(ts.tables.nodes))}
@@ -130,7 +130,7 @@ Children and siblings
 
 Let's take another look at our tree, labelled with node ids:
 
-.. ipython:: python
+.. jupyter-execute::
 
     print(t.draw(format="unicode"))
 
@@ -138,7 +138,7 @@ Let's take another look at our tree, labelled with node ids:
 Let's ponder node 15 for a moment.  It has two immediate descendants, nodes 11 and 14.  We may consider
 these the left and right children, respectively, of node 15.  
 
-.. ipython:: python
+.. jupyter-execute::
 
     def get_children(tree, i):
         lc = tree.left_child(i)
@@ -153,7 +153,7 @@ these the left and right children, respectively, of node 15.
 
 Likewise, we may look at the sibling relationships amongst nodes:
 
-.. ipython:: python
+.. jupyter-execute::
 
     def get_sibs(tree, i):
         ls = tree.left_sib(i)
@@ -162,7 +162,7 @@ Likewise, we may look at the sibling relationships amongst nodes:
             return "{}->NULL".format(i)
         return "{}->".format(i) + str((ls, rs))
 
-.. ipython:: python
+.. jupyter-execute::
 
     smap = {i: get_sibs(t, i) for i in range(len(ts.tables.nodes))}
     print(t.draw(format="unicode", node_labels=smap))
@@ -177,7 +177,7 @@ By convention, the value -1 is taken as a NULL value, signifying that there are 
 
 We can look directly at what theses arrays look like in our tree:
 
-.. ipython:: python
+.. jupyter-execute::
 
     nnodes = len(ts.tables.nodes)
     # First, let's write down our node ids:
