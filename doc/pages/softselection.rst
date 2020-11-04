@@ -1,7 +1,7 @@
 .. _softselection:
 
-.. ipython:: python
-   :suppress:
+.. jupyter-execute::
+   :hide-code:
 
    import fwdpy11
    import numpy as np
@@ -84,7 +84,7 @@ At the start of a simulation, you may assign diploids to demes
 when constructing an instance of :class:`fwdpy11.DiploidPopulation`.
 For example, to initialize a population with 25 individuals in demes ``0`` and ``1``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation([25, 25], 1.0)
     md = np.array(pop.diploid_metadata, copy=False)
@@ -108,14 +108,18 @@ These instances may be used to parameterize the ``demography`` field of a
 function that we'll use repeatedly below:
 
 
-.. ipython:: python
+.. jupyter-execute::
 
     def setup_and_run_model(pop, ddemog, simlen, recorder=None, seed=654321):
         pdict = {
             "nregions": [],
             "sregions": [],
             "recregions": [],
-            "rates": (0, 0, 0,),
+            "rates": (
+                0,
+                0,
+                0,
+            ),
             "gvalue": fwdpy11.Multiplicative(2.0),
             "demography": ddemog,
             "simlen": simlen,
@@ -128,15 +132,14 @@ function that we'll use repeatedly below:
 We will also define a simple class to record all deme sizes over time:
 
 
-.. ipython:: python
+.. jupyter-execute::
 
-    # fmt: off
     class SizeTracker(object):
         def __init__(self):
             self.data = []
+
         def __call__(self, pop, sampler):
             self.data.append((pop.generation, pop.N, pop.deme_sizes()))
-    # fmt: on
 
 
 Compatibility with previous versions of fwdpy11
@@ -151,14 +154,18 @@ Previous versions only supported size changes within a single deme.  These size 
 parameterized via a ``numpy`` array specifying the size at each time point.  It is still possible
 to specify the demography using that approach:
 
-.. ipython:: python
+.. jupyter-execute::
 
        N = np.array([10] * 10 + [5] * 5 + [10] * 10, dtype=np.uint32)
        pdict = {
            "nregions": [],
            "sregions": [],
            "recregions": [],
-           "rates": (0, 0, 0,),
+           "rates": (
+               0,
+               0,
+               0,
+           ),
            "gvalue": fwdpy11.Multiplicative(2.0),
            "demography": fwdpy11.DiscreteDemography(set_deme_sizes=N),
            "simlen": len(N),
@@ -236,7 +243,7 @@ demes 0 and 50 in deme 1, we have two options:
 
 Here is the version implemented via a  copy:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(50, 1.0)
     copy = [fwdpy11.copy_individuals(when=0, source=0, destination=1, fraction=1.0)]
@@ -247,14 +254,14 @@ Here is the version implemented via a  copy:
 
 Here is what our object looks like:
 
-.. ipython:: python
+.. jupyter-execute::
 
     copy[0]
 
 
 Here is the version using a move:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(100, 1.0)
     move = [fwdpy11.move_individuals(0, 0, 1, 0.5)]
@@ -265,7 +272,7 @@ Here is the version using a move:
 
 For comparison, here is the object specifying the move:
 
-.. ipython:: python
+.. jupyter-execute::
 
     move[0]
 
@@ -282,7 +289,7 @@ Multiple events involving the same source population in the same generation
 need some explaining.   If the events are copies, things will tend to "just
 work":
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(50, 1.0)
     copy = [fwdpy11.copy_individuals(0, 0, 1, 1.0), fwdpy11.copy_individuals(0, 0, 2, 1.0)]
@@ -294,7 +301,7 @@ When the events are moves, it is not possible to move more than 100%
 of the individuals.  Attempting to do so will raise a ``ValueError``
 exception:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(50, 1.0)
     # Move all of deme 0 into demes 1 and 2,
@@ -329,7 +336,7 @@ Instantaneous changes in deme size are managed by instances of
 
 This class is relatively straightforward to use, so let's dive right in:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation([20, 20], 1.0)
     dd = fwdpy11.DiscreteDemography(
@@ -342,7 +349,7 @@ This class is relatively straightforward to use, so let's dive right in:
 
 You may also kill off demes by setting their size to zero:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation([20, 20, 20], 1.0)
     dd = fwdpy11.DiscreteDemography(
@@ -362,7 +369,7 @@ and :attr:`fwdpy11.NOGROWTH` is equal to 1.0 to indicate no growth.
 
 Let's look at an example:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation([50], 1.0)
     g = [fwdpy11.SetExponentialGrowth(when=0, deme=0, G=1.1)]
@@ -376,7 +383,7 @@ The deme sizes each generation must be integer values.  The simulation uses C/C+
 rounding double-precision values to integer values. The function ``numpy.rint`` uses the same
 rules:
 
-.. ipython:: python
+.. jupyter-execute::
 
    N0 = np.float(50.0)
    for i in range(6):
@@ -396,20 +403,19 @@ unless they are picked twice as a parent by chance.
 Using this type is straightforward.  Before we dive in, we will create a new recorder
 type to track parents each generation:
 
-.. ipython:: python
+.. jupyter-execute::
 
-    # fmt: off
     class ParentTracker(object):
         def __init__(self):
             self.data = []
+
         def __call__(self, pop, sampler):
             for i in pop.diploid_metadata:
                 self.data.append((i.label, i.deme, i.parents))
-    # fmt: on
 
 Let's run a simulation for a couple of generations:
    
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation([5, 5], 1.0)
     sr = [fwdpy11.SetSelfingRate(when=0, deme=1, S=1.0)]  # Deme 1 always selfs
@@ -420,7 +426,7 @@ Let's run a simulation for a couple of generations:
 In our output, the deme label is the second value in each tuple, and any individual
 in deme 1 has the same parent listed twice because they were the product of a selfing event:
 
-.. ipython:: python
+.. jupyter-execute::
 
     for i in pt.data:
         print(i)
@@ -447,7 +453,7 @@ as well as coalescent simulations like *msprime* [Kelleher2016]_.
 
 For example, consider the following matrix:
 
-.. ipython:: python
+.. jupyter-execute::
 
    m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
    m
@@ -455,7 +461,7 @@ For example, consider the following matrix:
 The first row corresponds to the ancestry of deme ``0``, such that 90% of offspring will be
 non-migrants and 10% will be migrants from deme ``1``:
 
-.. ipython:: python
+.. jupyter-execute::
 
    m[
        0,
@@ -464,14 +470,16 @@ non-migrants and 10% will be migrants from deme ``1``:
 To be concrete, if the size of deme ``0`` in the next generation is 1,000, then the expected
 number of migrant and non-migrant offspring of offspring in deme ``0`` is:
 
-.. ipython:: python
+.. jupyter-execute::
 
-   m[0,] * 1e3
+   m[
+       0,
+   ] * 1e3
 
 The second row implies that half the ancestry of deme ``1`` is due to migrants and half
 due to non-migrants:
 
-.. ipython:: python
+.. jupyter-execute::
 
    m[
        1,
@@ -479,7 +487,7 @@ due to non-migrants:
 
 The ``numpy`` array is sufficient to construct our demographic model:
 
-.. ipython:: python
+.. jupyter-execute::
 
     d = fwdpy11.DiscreteDemography(migmatrix=m)
     d.migmatrix
@@ -487,7 +495,7 @@ The ``numpy`` array is sufficient to construct our demographic model:
 By default, there is no migration, which is represented by the value ``None``.  For example,
 the following model has no migration events:
 
-.. ipython:: python
+.. jupyter-execute::
 
     # Define demographic events w/o any migration stuff
     d = fwdpy11.DiscreteDemography(set_deme_sizes=[fwdpy11.SetDemeSize(0, 1, 500)])
@@ -495,7 +503,7 @@ the following model has no migration events:
 
 In order to specify a model with no initial migration, you may use an identity matrix:
 
-.. ipython:: python
+.. jupyter-execute::
 
     d = fwdpy11.DiscreteDemography(migmatrix=np.identity(2))
     d.migmatrix
@@ -505,13 +513,13 @@ and then change the rates later via instances of :class:`fwdpy11.SetMigrationRat
 To see this in action, we'll first generate a new type to track if parents of
 offspring in deme 1 are migrants or not:
 
-.. ipython:: python
+.. jupyter-execute::
 
-    # fmt: off
     class MigrationTracker(object):
         def __init__(self, N0):
             self.N0 = N0
             self.data = []
+
         def __call__(self, pop, sampler):
             for i in pop.diploid_metadata:
                 if i.deme == 1:
@@ -522,9 +530,8 @@ offspring in deme 1 are migrants or not:
                         else:
                             p.append((j, False))
                     self.data.append((pop.generation, i.label, i.deme, p))
-    # fmt: on
 
-.. ipython:: python
+.. jupyter-execute::
 
     # No migration at first
     mm = np.identity(2)
@@ -536,7 +543,7 @@ offspring in deme 1 are migrants or not:
     mt = MigrationTracker(10)
     setup_and_run_model(pop, dd, 4, mt)
 
-.. ipython:: python
+.. jupyter-execute::
 
     for i in mt.data:
         nmig = 0
@@ -558,12 +565,14 @@ An alternative model of migration
 The description of migration rates above implies that migration events are 
 independent of of source deme sizes.  To revisit our earlier example:
 
-.. ipython:: python
+.. jupyter-execute::
 
    m = np.array([0.9, 0.1, 0.5, 0.5]).reshape(2, 2)
    # The is the expected number of parents from demes 0 and 1
    # to offspring born in deme 0:
-   m[0,] * 1000
+   m[
+       0,
+   ] * 1000
 
 ``fwdpy11`` allows for a different migration scheme where the size of the source deme
 matters.  For this model, ``M[i ,j]`` is the probability that an individual with parents from
@@ -574,7 +583,7 @@ of being sources of migrant offspring.
 
 For example:
 
-.. ipython:: python
+.. jupyter-execute::
 
    deme_sizes = np.array([1000, 2000])
    m
@@ -590,14 +599,14 @@ about 82% because deme ``1`` is twice as large as deme ``0``.
 To enable this migration model, create an instance of :class:`fwdpy11.MigrationMatrix` and
 pass ``True`` as the second parameter:
 
-.. ipython:: python
+.. jupyter-execute::
 
    M = fwdpy11.MigrationMatrix(m, True)
    d = fwdpy11.DiscreteDemography(migmatrix=M)
 
 This will also work, but is less explicit:
 
-.. ipython:: python
+.. jupyter-execute::
 
    d = fwdpy11.DiscreteDemography(migmatrix=(m, True))
 
@@ -631,7 +640,7 @@ Here is the model in its entirety, with no mutation and no recombination.
 First, we will set up the demographic events.  The population with evolve
 for ``Nanc`` generations before the split.
 
-.. ipython:: python
+.. jupyter-execute::
 
     Nanc = 100
     T = 0.2
@@ -674,14 +683,14 @@ The above code made use of two helper functions:
 
 Finally, we can run it:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(Nanc, 1.0)
     setup_and_run_model(pop, d, Nanc + gens_post_split)
 
 Now we check the final population sizes and make sure they are correct:
 
-.. ipython:: python
+.. jupyter-execute::
 
     ds = pop.deme_sizes()
     assert ds[1][0] == N0final
@@ -690,7 +699,7 @@ Now we check the final population sizes and make sure they are correct:
 This model is common enough that you shouldn't have to implement it from 
 scratch each time.  For this reason, we provide it in :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
 
-.. ipython:: python
+.. jupyter-execute::
 
     import fwdpy11.demographic_models.IM
 

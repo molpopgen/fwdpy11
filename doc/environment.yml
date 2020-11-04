@@ -16,6 +16,6 @@ dependencies:
     - sparse
     - setuptools_scm
     - sphinx-issues
-    - ipython
+    - jupyter_sphinx
     - cmake
     - black

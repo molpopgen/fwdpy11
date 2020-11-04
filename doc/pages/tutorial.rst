@@ -3,8 +3,8 @@
 Tutorial
 =================================================
 
-.. ipython:: python
-    :suppress:
+.. jupyter-execute::
+    :hide-code:
 
     import fwdpy11
     import numpy as np
@@ -37,7 +37,7 @@ for how to initialize from :class:`tskit.TreeSequence` objects.
 To initialize a population of `N` diploids from a single deme and a given
 genome length:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(N=1000, length=100.0)
     pop.N
@@ -52,7 +52,7 @@ for a more detailed discussion of relevant data structures.
 
 To initialize a population with individuals in multiple demes:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(demesizes=[500, 500], length=100.0)
     pop.N
@@ -67,21 +67,21 @@ with each individual.  Individual metadata are instances of
 :class:`fwdpy11.DiploidMetadata` but they are also registered as a :class:`numpy.dtype`,
 meaning that we can look at the metadata as a :class:`numpy.recarray`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     md = np.array(pop.diploid_metadata, copy=False)
 
 The field names of our array are the same as the attribute names of
 :class:`fwdpy11.DiploidMetadata`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     md.dtype
 
 We can easily confirm the number of individuals in each deme using
 :func:`numpy.unique`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     np.unique(md["deme"], return_counts=True)
 
@@ -119,14 +119,14 @@ The following sets up a model where mutations have a constant effect size
 (:math:`s=-0.01`), dominance :math:`h=0.25`, and occur uniformly on 
 the interval :math:`[0, 1)`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     sregions = [fwdpy11.ConstantS(beg=0.0, end=1.0, weight=1.0, s=-0.01, h=0.25)]
 
 The previous example uses argument names for clarity, and the following is equivalent,
 with the ``int`` values getting converted to ``float`` automatically:
 
-.. ipython:: python
+.. jupyter-execute::
 
     sregions = [fwdpy11.ConstantS(0, 1, 1, -0.01, 0.25)]
     sregions[0]
@@ -140,7 +140,7 @@ as scaled with respect to the population size.  For example, selection coefficie
 may be exponentially-distributed with a mean of :math:`2Ns`.  To do this in
 ``fwdpy11``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     # ALPHA = 2Ns
     MEAN_ALPHA = -10
@@ -155,7 +155,7 @@ Region weighting
 When multiple "sregion" objects are used, the default behavior is to multiply
 the input `weight` by `end-beg`:
 
-.. ipython:: python
+.. jupyter-execute::
 
    sregions = [
        fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2),
@@ -169,7 +169,7 @@ In this example, twice as many mutations will have positions in :math:`[1, 3)` a
 
 To change the default behavior, one can prevent the coupling between input `weight` and region length:
 
-.. ipython:: python
+.. jupyter-execute::
 
    sregions = [
        fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, coupled=False),
@@ -183,7 +183,7 @@ The only thing that matters is the *relative* values from region to region.
 Simulations based on the above examples would give the same results if the `weight` were 42 or 73.06.
 Therefore, we can recreate our first example with code like the following:
 
-.. ipython:: python
+.. jupyter-execute::
 
    sregions = [
        fwdpy11.ExpS(beg=0.0, end=1.0, weight=56.0, mean=-0.2, coupled=False),
@@ -207,7 +207,7 @@ Setting the dominance of new mutations
 The dominance of a new mutation is set by the ``h`` parameter during
 initialization:
 
-.. ipython:: python
+.. jupyter-execute::
 
     fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=1.0)
     fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=0.0)
@@ -230,7 +230,7 @@ Labelling mutations from different regions
 It may be of use to know what region a mutation came from.  To do
 so, give a nonzero value to the ``label`` argument:
 
-.. ipython:: python
+.. jupyter-execute::
 
     fwdpy11.ConstantS(beg=0.0, end=1.0, weight=1.0, s=1e-3, label=1)
 
@@ -242,8 +242,8 @@ The value of ``label`` must fit into a 16-bit unsigned integer,
 in exceptions.  The following example tries to use a value one larger than
 the maximum allowed:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     fwdpy11.ConstantS(
         beg=0.0, end=1.0, weight=1.0, s=1e-3, label=np.iinfo(np.uint16).max + 1
@@ -301,7 +301,7 @@ the "rate per unit" and :math:`end-beg` as the number of units in the region. (F
 There are two ways to set this model up.  The first is arguably the most intuitive, which is to make
 one region twice as long as the other:
 
-.. ipython:: python
+.. jupyter-execute::
 
     import fwdpy11
 
@@ -328,7 +328,7 @@ In words, the ``recregions`` list and ``recrate`` value mean the following:
 A more abstract approach relies on setting ``coupled=False``, which means
 that the "raw" weights that you input are the exact values used internally:
 
-.. ipython:: python
+.. jupyter-execute::
 
     recregions = [
         fwdpy11.Region(beg=0, end=5, weight=1, coupled=False),
@@ -365,7 +365,7 @@ where recombination breakpoints are Poisson and binomially distributed.
 Let's revisit the example from the previous section.  This time, we will
 use :class:`fwdpy11.PoissonInterval`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     recregions = [
         fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3 / 3),
@@ -381,7 +381,7 @@ the mean number of breakpoints (per diploid, per generation) is :math:`1e-3`.
 Between each region, a single recombination occurs with probability of
 one-half, meaning that each region is assorting independently (50 `cM` between each region).
 
-.. ipython:: python
+.. jupyter-execute::
 
     NLOCI = 4
     LOCUS_LENGTH = 10
@@ -452,7 +452,7 @@ In this table:
 
 The most common values for ``scaling`` are ``1.0`` or ``2.0``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     gvalue = fwdpy11.Multiplicative(scaling=1.0)
     gvalue.scaling
@@ -502,7 +502,7 @@ To specify an additive effects model of a trait under Gaussian
 stabilizing selection with an optimum trait value of ``0.0`` and
 (inverse) strength of stabilizing selection ``VS = 1.0``, we write:
 
-.. ipython:: python
+.. jupyter-execute::
 
     gvalue = fwdpy11.Additive(
         scaling=2.0, gvalue_to_fitness=fwdpy11.GSS(optimum=0.0, VS=1.0)
@@ -515,7 +515,7 @@ See :class:`fwdpy11.GSS` for details.
 
 We can also add Gaussian noise to an individual's trait value:
 
-.. ipython:: python
+.. jupyter-execute::
 
     gvalue = fwdpy11.Additive(
         scaling=2.0,
@@ -564,7 +564,7 @@ the entire simulation.  We can parameterize a shifting optimum
 using :class:`fwdpy11.GSSmo`.  For example, to shift the optimum from ``0.0``
 to ``1.0`` at generation ``100``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     moving_optimum = fwdpy11.GSSmo(
         [
@@ -586,7 +586,7 @@ moving optimum:
 
 Let's code it up:
 
-.. ipython:: python
+.. jupyter-execute::
 
     optima = [fwdpy11.Optimum(when=0, optimum=0.0, VS=10.0)]
 
@@ -628,7 +628,7 @@ Consider the following verbal description of a model:
 
 To set this model up, first initialize the population to the ancestral state:
 
-.. ipython:: python
+.. jupyter-execute::
 
     pop = fwdpy11.DiploidPopulation(100, 1.0)
 
@@ -641,7 +641,7 @@ This is a 2-deme model, so we need a ``2x2`` matrix.  Initially, there is only t
 single ancestral deme, and therefore 100% of its ancestry each generation is
 from itself. Thus, our initial migration matrix looks like:
 
-.. ipython:: python
+.. jupyter-execute::
 
     migmatrix = np.zeros(4).reshape(2, 2)
     migmatrix[0, 0] = 1.0
@@ -650,7 +650,7 @@ from itself. Thus, our initial migration matrix looks like:
 At generation ``100``, we move half of the ancestral population (deme ``0``) to a new
 deme ``1``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     mass_migrations = [
         fwdpy11.move_individuals(when=100, source=0, destination=1, fraction=0.5)
@@ -658,7 +658,7 @@ deme ``1``:
 
 We now need to set up our new symmetric migration rates:
 
-.. ipython:: python
+.. jupyter-execute::
 
     m = 1e-3
     set_migration_rates = [
@@ -669,7 +669,7 @@ We now need to set up our new symmetric migration rates:
 We now have the parts of our model.  To build a model, we need to create
 an instance of :class:`fwdpy11.DiscreteDemography`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     dmodel = fwdpy11.DiscreteDemography(
         mass_migrations=mass_migrations,
@@ -679,22 +679,22 @@ an instance of :class:`fwdpy11.DiscreteDemography`:
 
 This class has a nice method for pretty-printing via ``black``:
 
-.. ipython:: python
+.. jupyter-execute::
 
     print(dmodel.asblack())
 
 Instances of :class:`fwdpy11.DiscreteDemography` are immutable, meaning that 
 the attributes are read-only and attempts to modify will raise exceptions:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     dmodel.mass_migrations = None
 
 However, you can get a :class:`dict` representation of the data, which you
 can modify:
 
-.. ipython:: python
+.. jupyter-execute::
 
     import copy
 
@@ -757,7 +757,7 @@ A more efficient approach to checking your models is to use :class:`fwdpy11.Demo
 
 The class also generates a "report" with a verbal description of the model:
 
-.. ipython:: python
+.. jupyter-execute::
 
     d = fwdpy11.DemographyDebugger(
         initial_deme_sizes=[100],
@@ -774,8 +774,8 @@ Let's take a look at passing in a bad model.  If we neglect to update
 the migration rates, then the model considers there to be no ancestry specified for
 deme ``1``:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     bad_dmodel = fwdpy11.DiscreteDemography(
         mass_migrations=mass_migrations, migmatrix=migmatrix
@@ -786,8 +786,8 @@ deme ``1``:
 Our ``dmodel2`` from above is also invalid, as deme ``1``
 never gets created since we deleted the mass migration event:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     fwdpy11.DemographyDebugger([100], dmodel2)
 
@@ -807,7 +807,7 @@ initialize a :class:`fwdpy11.ModelParams`.
 
 The following example uses what we discussed above:
 
-.. ipython:: python
+.. jupyter-execute::
 
     sregions = [fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2)]
     recregions = [fwdpy11.PoissonInterval(beg=0.0, end=0.1, mean=1e-3)]
@@ -828,7 +828,7 @@ The following example uses what we discussed above:
     )
     dbg = fwdpy11.DemographyDebugger([100], dmodel, 150)
 
-.. ipython:: python
+.. jupyter-execute::
 
     gvalue = fwdpy11.Additive(
         scaling=2.0,
@@ -869,7 +869,7 @@ There are a few new things here:
 
 Let's take a look at what we just built:
 
-.. ipython:: python
+.. jupyter-execute::
 
     print(params.asblack())
 
@@ -899,7 +899,7 @@ To evolve the population with tree sequence recording, we make a call
 to :func:`fwdpy11.evolvets`.  We also need an instance of :class:`fwdpy11.GSLrng`,
 which is a random number generator.
 
-.. ipython:: python
+.. jupyter-execute::
 
     rng = fwdpy11.GSLrng(42)
     pop = fwdpy11.DiploidPopulation(100, 1.0)
@@ -955,13 +955,13 @@ than actual functions.  For example, imagine that we only want
 to record individuals whose fitnesses are in the top ``X%``
 of those found in deme ``Y`` every ``10th`` generation:
 
-.. ipython:: python
+.. jupyter-execute::
 
-    # fmt: off
     class GetTopFitnessess(object):
         def __init__(self, X, Y):
             self.X = X
             self.Y = Y
+
         def __call__(self, pop, sampler):
             if pop.generation % 10 == 0.0:
                 md = np.array(pop.diploid_metadata, copy=False)
@@ -970,12 +970,11 @@ of those found in deme ``Y`` every ``10th`` generation:
                 q = np.quantile(w, self.Y)
                 geqq = np.where(w >= q)[0]
                 sampler.assign(inY[geqq])
-    # fmt: on
 
 The above class is not well-implemented at all, but it will suffice for our example,
 where we pass an instance on to :func:`fwdpy11.evolvets`:
 
-.. ipython:: python
+.. jupyter-execute::
 
     rng = fwdpy11.GSLrng(42)
     pop = fwdpy11.DiploidPopulation(100, 1.0)
@@ -986,11 +985,13 @@ where we pass an instance on to :func:`fwdpy11.evolvets`:
 
 At the end of the simulation, we indeed have metadata from "ancient samples":
 
-.. ipython:: python
+.. jupyter-execute::
 
     amd = np.array(pop.ancient_sample_metadata, copy=False)
     print(
-        amd[-5:,]
+        amd[
+            -5:,
+        ]
     )
 
 The following sampler types are built in to ``fwdpy11``:
@@ -1007,21 +1008,20 @@ than recording ancient samples.  Basically, we can track pretty
 much anything.  The following example tracks the mean genetic value
 in each deme every generation:
 
-.. ipython:: python
+.. jupyter-execute::
 
-    # fmt: off
     class TrackGvalues(object):
         def __init__(self):
             self.data = []
+
         def __call__(self, pop, sampler):
             md = np.array(pop.diploid_metadata, copy=False)
             for i in [0, 1]:
                 w = np.where(md["deme"] == i)[0]
                 if len(w):
                     self.data.append((pop.generation, i, md["g"][w].mean()))
-    # fmt: on
 
-.. ipython:: python
+.. jupyter-execute::
 
     rng = fwdpy11.GSLrng(42)
     pop = fwdpy11.DiploidPopulation(100, 1.0)
@@ -1037,7 +1037,7 @@ in each deme every generation:
 Starting a simulation with the output of a coalescent simulation
 ---------------------------------------------------------------------
 
-.. ipython:: python
+.. jupyter-execute::
 
     import msprime
 
@@ -1047,7 +1047,7 @@ Starting a simulation with the output of a coalescent simulation
 
 We can also start from a simulation of multiple demes:
 
-.. ipython:: python
+.. jupyter-execute::
 
     m = 1e-3
     ts = msprime.simulate(

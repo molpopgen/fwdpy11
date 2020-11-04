@@ -67,12 +67,12 @@ takes this "messy" node and edge table and returns "simplified" node and edge ta
 We can visualize this process using an example taken from the `tskit` tutorials_, which implements the discrete-time
 Wright-Fisher model for a diploid population without recombination and without selection:
 
-.. ipython:: python
+.. jupyter-execute::
 
     import tskit
     import numpy as np
 
-.. ipython:: python
+.. jupyter-execute::
 
     def wf1(N, ngens):
         tc = tskit.TableCollection(1.0)
@@ -112,8 +112,8 @@ Wright-Fisher model for a diploid population without recombination and without s
 
 Let's run the simulation for a few generations and look at the resulting tree:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     np.random.seed(42)
     tc = wf1(3, 4)
@@ -136,8 +136,8 @@ that the three diploids in the last generation are defined by node pairs `(24,25
 
 Let's apply the simplification algorithm that:
 
-.. ipython:: python
-    :okexcept:
+.. jupyter-execute::
+    :raises:
 
     samples = np.where(tc.nodes.time == 0)[0]
     node_map = tc.simplify(samples=samples.tolist())

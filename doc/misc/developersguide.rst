@@ -89,20 +89,6 @@ the following `normal` mode command:
 
     :!blacken-docs -E -l 89 -t py36 %
 
-Code blocks written using the `iPython` directive may fail to execute after formatting.
-Usually, this is due to blank likes being added in order to generate `PEP8`-compliant
-Python code.  However, this procedure often generates too many blank lines and the `iPython`
-parser raises an exception.  Sigh.  To work around this:
-
-* Add more `.. ipython:: python` directives to split the blocks up
-* Wrap class definitions in `# fmt: off` and `# fmt: on` comments to disable formatting using `black`.
-  You can find examples by grepping for `fmt` within the `.rst` files.
-
-The latter recommendation is needed because `PEP8` wants blank lines between the definitions of 
-class functions, yet the `iPython` parser will fail to properly parse such a class.  I tend to
-run `blacken-docs` after defining a class, manually delete the blank lines, and then wrap in the `fmt`
-comments.  This procedure is manual but not too burdensome.
-
 Docstrings in C++ code
 ++++++++++++++++++++++++++++++++++++++++++++
 

@@ -14,7 +14,7 @@ Finding the headers
 
 You can find the location of the installed header files using Python:
 
-.. ipython:: python
+.. jupyter-execute::
 
     import fwdpy11
 
