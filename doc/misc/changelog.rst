@@ -4,6 +4,23 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.10.1
+****************************************
+
+Point release.
+
+Bug fixes:
+
+* Fix some errors in :class:`fwdpy11.DemographyDebugger`. :pr:`594`
+
+Testing changes:
+
+* We now use GitHub actions instead of Travis. :pr:`593`
+
+Documentation changes:
+
+* We now use ``jupyter-sphinx`` to execute code in the manual. :pr:`597`
+
 0.10.0
 ****************************************
 
