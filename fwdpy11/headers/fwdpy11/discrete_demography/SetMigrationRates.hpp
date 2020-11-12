@@ -26,7 +26,6 @@
 #include <cstdint>
 #include <vector>
 #include <numeric>
-#include <tuple>
 #include <limits>
 #include <pybind11/numpy.h>
 #include "constants.hpp"
@@ -132,7 +131,7 @@ namespace fwdpy11
         inline bool
         operator<(const SetMigrationRates& lhs, const SetMigrationRates& rhs)
         {
-            return std::tie(lhs.when, lhs.deme) < std::tie(rhs.when, rhs.deme);
+            return lhs.when < rhs.when;
         }
     } // namespace discrete_demography
 } // namespace fwdpy11
