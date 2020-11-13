@@ -84,7 +84,14 @@ jobs:
           conda activate anaconda-client-env
           python setup.py build_ext --inplace
 
-      - name: Run tests
+      - name: Build and run C++ tests
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          cd cpptests && autoreconf --install && ./configure && cd ..
+          make check -C cpptests
+
+      - name: Run Python tests
         # shell: bash -l {0}
         run: |
           # conda init bash

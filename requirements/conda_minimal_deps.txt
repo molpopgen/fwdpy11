@@ -7,3 +7,6 @@ black
 tskit
 msprime
 gsl
+boost
+autoconf
+automake

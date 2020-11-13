@@ -19,7 +19,7 @@ jobs:
           name: Install dependencies and set path
           command: |
             sudo apt-get update
-            sudo apt-get install libgsl0-dev libcunit1-dev libconfig-dev cmake
+            sudo apt-get install libgsl0-dev libcunit1-dev libconfig-dev cmake libboost-test-dev autoconf
             pip install --user -r requirements.txt
             pip install --user twine
             curl -L https://github.com/pybind/pybind11/archive/v2.4.3.tar.gz > pybind11-2.4.3.tar.gz
@@ -39,7 +39,13 @@ jobs:
             python setup.py build_ext --inplace
 
       - run:
-          name: Run test suite
+          name: Build and run C++ test suite
+          command: |
+            cd cpptests && autoreconf --install && ./configure && cd ..
+            make check -C cpptests
+
+      - run:
+          name: Run Python test suite
           command: |
             python -W ignore -m unittest discover tests
 
