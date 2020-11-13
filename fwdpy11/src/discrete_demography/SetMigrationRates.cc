@@ -24,10 +24,24 @@
 #include <fwdpy11/discrete_demography/SetMigrationRates.hpp>
 
 namespace py = pybind11;
-using namespace py::literals;
 namespace ddemog = fwdpy11::discrete_demography;
 
 using SMR = ddemog::SetMigrationRates;
+
+std::vector<double>
+convert_migmatrix(py::array_t<double> migmatrix)
+{
+    std::vector<double> migrates;
+    auto r = migmatrix.unchecked<2>();
+    for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
+        {
+            for (decltype(i) j = 0; j < r.shape(1); ++j)
+                {
+                    migrates.push_back(r(i, j));
+                }
+        }
+    return migrates;
+}
 
 void
 init_SetMigrationRate(py::module& m)
@@ -35,6 +49,10 @@ init_SetMigrationRate(py::module& m)
     py::class_<SMR>(m, "_ll_SetMigrationRates")
         .def(py::init<std::uint32_t, std::int32_t, std::vector<double>>(),
              py::arg("when"), py::arg("deme"), py::arg("migrates"))
-        .def(py::init<std::uint32_t, py::array_t<double>>(), py::arg("when"),
-             py::arg("migmatrix"));
+        .def(py::init([](std::uint32_t when, py::array_t<double> migmatrix) {
+                 auto m = convert_migmatrix(migmatrix);
+                 return fwdpy11::discrete_demography::SetMigrationRates(when,
+                                                                        std::move(m));
+             }),
+             py::arg("when"), py::arg("migmatrix"));
 }
