@@ -38,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.python }}-conda-v1-${{ hashFiles('requirements/conda_minimal_deps.txt') }}
 
       - name: Install Conda
-        uses: conda-incubator/setup-miniconda@v1
+        uses: conda-incubator/setup-miniconda@v2
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           activate-environment: anaconda-client-env
