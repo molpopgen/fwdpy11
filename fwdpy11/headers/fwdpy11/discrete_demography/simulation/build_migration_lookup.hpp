@@ -33,7 +33,7 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        void
+        inline void
         build_migration_lookup(
             const std::unique_ptr<MigrationMatrix>& M,
             const current_deme_sizes_vector& current_deme_sizes,

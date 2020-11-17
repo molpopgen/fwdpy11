@@ -51,7 +51,7 @@ namespace fwdpy11
             }
         };
 
-        parent_data
+        inline parent_data
         pick_parents(const GSLrng_t& rng, const std::int32_t offspring_deme,
                      const migration_lookup& miglookup,
                      const current_deme_sizes_vector& current_deme_sizes,

@@ -31,7 +31,7 @@ namespace fwdpy11
     namespace discrete_demography
     {
         template <typename METADATATYPE>
-        void
+        inline void
         mass_migration(
             const GSLrng_t& rng, std::uint32_t t,
             mass_migration_range& mass_migration_ranges,
@@ -56,7 +56,7 @@ namespace fwdpy11
 
         namespace detail
         {
-            void
+            inline void
             update_current_deme_sizes(const std::uint32_t t,
                                       deme_size_change_range& event_ranges,
                                       deme_properties& sizes_rates)
@@ -94,7 +94,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             update_growth_rates(
                 const std::uint32_t t,
                 growth_rate_change_range& growth_rate_change_tracker,
@@ -127,7 +127,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             update_selfing_rates(
                 const std::uint32_t t,
                 selfing_rate_change_range& selfing_rate_change_tracker,
@@ -152,7 +152,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             update_migration_matrix(
                 const std::uint32_t t,
                 migration_rate_change_range& migration_rate_change_tracker,
@@ -172,7 +172,7 @@ namespace fwdpy11
                     }
             }
 
-            std::uint32_t
+            inline std::uint32_t
             apply_growth_rates_get_next_global_N(const std::uint32_t t,
                                                  deme_properties& sizes_rates)
             {
@@ -214,7 +214,7 @@ namespace fwdpy11
             }
         } // namespace detail
 
-        std::uint32_t
+        inline std::uint32_t
         apply_demographic_events(std::uint32_t t,
                                  DiscreteDemography& demography,
                                  std::unique_ptr<MigrationMatrix>& M,
@@ -246,7 +246,7 @@ namespace fwdpy11
         }
 
         template <typename METADATATYPE>
-        void
+        inline void
         get_current_deme_sizes(const std::vector<METADATATYPE>& metadata,
                                current_deme_sizes_vector& deme_sizes)
         {
