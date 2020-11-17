@@ -329,8 +329,11 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     :type when: int
     :param deme: The row index of the migration matrix
     :type deme: int or None
-    :param migrates: The migration rates from `deme` to all other populations.
+    :param migrates: The migration rates into `deme` from all other populations.
     :type migrates: list or numpy.ndarray
+
+    The migration rates are equivalent to the single-generation ancestry proportions
+    with respect to ``deme``.
 
     In order to change the entire migration matrix, pass ``None`` (or -1)
     to ``deme`` and a 2d ``numpy.ndarray`` for ``migrates``.  A value of
