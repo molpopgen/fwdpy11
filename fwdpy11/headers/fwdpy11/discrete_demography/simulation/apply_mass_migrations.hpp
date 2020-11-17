@@ -40,7 +40,7 @@ namespace fwdpy11
             using deme_map_t
                 = std::unordered_map<std::int32_t, std::vector<std::size_t>>;
             template <typename METADATATYPE>
-            deme_map_t
+            inline deme_map_t
             build_deme_map(const std::vector<METADATATYPE>& metadata)
             {
                 deme_map_t rv;
@@ -73,7 +73,7 @@ namespace fwdpy11
 
             using move_map_t = std::unordered_map<std::int32_t, move_stack>;
 
-            move_map_t
+            inline move_map_t
             build_move_sources(const GSLrng_t& rng, const deme_map_t& deme_map)
             {
                 move_map_t rv;
@@ -96,7 +96,7 @@ namespace fwdpy11
             }
 
             template <typename METADATATYPE>
-            void
+            inline void
             copy_individuals(const std::vector<std::size_t>& buffer,
                              std::int32_t destination,
                              std::vector<METADATATYPE>& metadata)
@@ -111,7 +111,7 @@ namespace fwdpy11
             }
 
             template <typename METADATATYPE>
-            void
+            inline void
             apply_copies(const GSLrng_t& rng, const MassMigration& mm,
                          const deme_map_t& deme_map,
                          uint32_t t,
@@ -154,7 +154,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             move_from_stack(std::int32_t destination, std::size_t n,
                             std::vector<std::int32_t>& moves, move_stack& ms)
             {
@@ -173,7 +173,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             apply_moves(const GSLrng_t& rng, const MassMigration& mm,
                         std::uint32_t t, std::vector<std::int32_t>& moves,
                         move_map_t& move_source)
@@ -202,7 +202,7 @@ namespace fwdpy11
                     }
             }
 
-            void
+            inline void
             update_changed_and_reset(
                 const MassMigration& mm,
                 std::unordered_map<std::int32_t, bool>& changed_and_reset)
@@ -227,7 +227,7 @@ namespace fwdpy11
                     }
             }
 
-            std::unordered_map<std::int32_t, std::size_t>
+            inline std::unordered_map<std::int32_t, std::size_t>
             get_deme_sizes(const deme_map_t& deme_map)
             {
                 std::unordered_map<std::int32_t, std::size_t> rv;
@@ -239,7 +239,7 @@ namespace fwdpy11
             }
 
             template <typename METADATATYPE>
-            std::unordered_map<std::int32_t, std::size_t>
+            inline std::unordered_map<std::int32_t, std::size_t>
             update_metadata_due_to_moves_and_copies(
                 const std::size_t initial_N, const deme_map_t& deme_map,
                 const std::vector<std::int32_t>& moves,
@@ -279,7 +279,7 @@ namespace fwdpy11
                 return deme_sizes;
             }
 
-            void
+            inline void
             update_growth_parameters(
                 std::uint32_t t,
                 const std::unordered_map<std::int32_t, std::size_t>&
@@ -319,7 +319,7 @@ namespace fwdpy11
         } // namespace detail
 
         template <typename METADATATYPE, typename ITERATOR>
-        ITERATOR
+        inline ITERATOR
         apply_mass_migrations(
             const GSLrng_t& rng, std::uint32_t t, const ITERATOR beg,
             const ITERATOR end, growth_rates_vector& growth_rates,
