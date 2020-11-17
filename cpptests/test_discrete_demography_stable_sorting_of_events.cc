@@ -19,10 +19,10 @@ struct demographic_event_stable_sorting_fixture
         fwdpy11::discrete_demography::DiscreteDemography::set_migration_rates_vector
             migration;
 
-        massmigs.emplace_back(5, 3, 5, 0, -1, 0.25, true, false, true);
-        massmigs.emplace_back(3, 2, 5, 0, -1, 0.25, true, false, true);
-        massmigs.emplace_back(4, 3, 4, 0, -1, 0.25, true, false, true);
-        massmigs.emplace_back(1, 2, 4, 0, -1, 0.25, true, false, true);
+        massmigs.emplace_back(5, 5, 3, 0, -1, 0.25, true, false, true);
+        massmigs.emplace_back(5, 3, 2, 0, -1, 0.25, true, false, true);
+        massmigs.emplace_back(4, 4, 3, 0, -1, 0.25, true, false, true);
+        massmigs.emplace_back(4, 1, 2, 0, -1, 0.25, true, false, true);
 
         growth.emplace_back(10, 1, 0.5);
         growth.emplace_back(10, 0, 0.25);
