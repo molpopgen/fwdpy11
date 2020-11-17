@@ -7,7 +7,6 @@
 #include <sstream>
 #include <cstdint>
 #include <fwdpy11/rng.hpp>
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {

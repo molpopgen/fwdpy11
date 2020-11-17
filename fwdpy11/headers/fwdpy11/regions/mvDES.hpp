@@ -28,7 +28,6 @@
 #include "MultivariateGaussianEffects.hpp"
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/numpy/array.hpp>
-#include <pybind11/stl.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_linalg.h>
@@ -163,7 +162,6 @@ namespace fwdpy11
         {
             if (odist.size() > 1 && odist.size() != n)
                 {
-                    pybind11::print(odist.size(), n);
                     throw std::invalid_argument("invalid number of Sregion objects");
                 }
             std::vector<std::unique_ptr<Sregion>> rv;
@@ -393,20 +391,6 @@ namespace fwdpy11
         {
             return dominance_values;
         }
-
-        //get_means() const
-        //{
-        //    return make_1d_ndarray_readonly(means);
-        //}
-
-        //pybind11::array_t<double>
-        //get_matrix() const
-        //{
-        //    std::vector<double> m(vcov_copy->data,
-        //                          vcov_copy->data + vcov_copy->size1 * vcov_copy->size2);
-        //    return make_2d_array_with_capsule(std::move(m), vcov_copy->size1,
-        //                                      vcov_copy->size2);
-        //}
     };
 } // namespace fwdpy11
 

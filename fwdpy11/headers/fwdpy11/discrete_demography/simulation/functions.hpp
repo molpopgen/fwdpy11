@@ -25,7 +25,6 @@
 #include "../MassMigration.hpp"
 #include "../DiscreteDemography.hpp"
 #include "deme_properties.hpp"
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
