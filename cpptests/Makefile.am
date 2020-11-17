@@ -3,7 +3,12 @@ noinst_PROGRAMS=fwdpy11_cpp_tests
 TESTS=$(noinst_PROGRAMS)
 
 fwdpy11_cpp_tests_SOURCES=fwdpy11_cpp_tests.cc \
-						  test_discrete_demography_stable_sorting_of_events.cc
+						  test_discrete_demography_stable_sorting_of_events.cc \
+						  test_lowlevel_demographic_events.cc \
+						  test_lowlevel_discrete_demography_bad_models.cc \
+						  test_lowlevel_discrete_demography_objects.cc \
+						  discrete_demography_roundtrips.cc \
+						  discrete_demography_util.cc
 
 AM_CPPFLAGS=-I../fwdpy11/headers -I../fwdpy11/headers/fwdpp 
 AM_CXXFLAGS=-W -Wall --coverage -DBOOST_TEST_DYN_LINK
