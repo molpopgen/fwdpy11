@@ -20,15 +20,13 @@
 #ifndef FWDPY11_SET_MIGRATION_RATES_HPP
 #define FWDPY11_SET_MIGRATION_RATES_HPP
 
-#include <gsl/gsl_matrix.h>
 #include <stdexcept>
 #include <cmath>
 #include <cstdint>
 #include <vector>
 #include <numeric>
-#include <tuple>
 #include <limits>
-#include <pybind11/numpy.h>
+#include <gsl/gsl_matrix.h>
 #include "constants.hpp"
 
 namespace fwdpy11
@@ -40,8 +38,7 @@ namespace fwdpy11
             std::uint32_t when;
             std::int32_t deme; // source deme
             std::vector<double> migrates;
-            SetMigrationRates(std::uint32_t w, std::int32_t d,
-                              std::vector<double> r)
+            SetMigrationRates(std::uint32_t w, std::int32_t d, std::vector<double> r)
                 : when(w), deme(d), migrates(std::move(r))
             {
                 if (deme < 0)
@@ -55,8 +52,7 @@ namespace fwdpy11
                         throw std::invalid_argument(
                             "SetMigrationRates: empty list of rates");
                     }
-                auto sum
-                    = std::accumulate(begin(migrates), end(migrates), 0.0);
+                auto sum = std::accumulate(begin(migrates), end(migrates), 0.0);
                 if (sum != 0. && sum != 1.0)
                     {
                         throw std::invalid_argument(
@@ -79,51 +75,46 @@ namespace fwdpy11
                     }
             }
 
-            SetMigrationRates(std::uint32_t w, pybind11::array_t<double> m)
-                : when(w), deme(NULLDEME), migrates()
+            SetMigrationRates(std::uint32_t w, std::vector<double> migmatrix)
+                : when(w), deme(NULLDEME), migrates(std::move(migmatrix))
             {
-                auto r = m.unchecked<2>();
-                if (r.shape(0) != r.shape(1))
+                if (migrates.empty())
                     {
-                        throw std::invalid_argument(
-                            "SetMigrationRates: input matrix must be square");
+                        throw std::invalid_argument("empty migration matrix");
                     }
-                for (decltype(r.shape(0)) i = 0; i < r.shape(0); ++i)
+                double nrow_d = std::sqrt(migrates.size());
+                double intpart;
+                auto f = std::modf(nrow_d, &intpart);
+                if (f != 0.0)
                     {
-                        for (decltype(i) j = 0; j < r.shape(1); ++j)
-                            {
-                                if (r(i, j) < 0.0)
-                                    {
-                                        throw std::invalid_argument(
-                                            "SetMigrationRates: rates must be "
-                                            "non-negative");
-                                    }
-                                if (!std::isfinite(r(i, j)))
-                                    {
-                                        throw std::invalid_argument(
-                                            "SetMigrationRates: rates must be "
-                                            "finite");
-                                    }
-                                migrates.push_back(r(i, j));
-                            }
+                        throw std::invalid_argument("input matrix is not square");
                     }
-                std::size_t npops = r.shape(0);
-                gsl_matrix_const_view v = gsl_matrix_const_view_array(
-                    migrates.data(), npops, npops);
-                for (std::size_t i = 0; i < npops; ++i)
+                std::size_t npops{static_cast<std::size_t>(nrow_d)};
+                gsl_matrix_const_view v
+                    = gsl_matrix_const_view_array(migrates.data(), npops, npops);
+                for (std::size_t r = 0; r < npops; ++r)
                     {
-                        gsl_vector_const_view r
-                            = gsl_matrix_const_row(&v.matrix, i);
+                        auto rview = gsl_matrix_const_row(&v.matrix, r);
                         double sum = 0.0;
-                        for (std::size_t j = 0; j < npops; ++j)
+                        for (std::size_t i = 0; i < rview.vector.size; ++i)
                             {
-                                sum += gsl_vector_get(&r.vector, j);
+                                auto v = gsl_vector_get(&rview.vector, i);
+                                if (v < 0)
+                                    {
+                                        throw std::invalid_argument(
+                                            "migration rates must be non-negative");
+                                    }
+                                if (!std::isfinite(v))
+                                    {
+                                        throw std::invalid_argument(
+                                            "migration rates must be finite");
+                                    }
+                                sum += v;
                             }
-                        if (sum != 0. && sum != 1.0)
+                        if (sum != 0.0 && sum != 1.0)
                             {
                                 throw std::invalid_argument(
-                                    "migration rates must sum to 0. or 1. in "
-                                    "a row.");
+                                    "migration matrix rows must sum to 0.0 or 1.0");
                             }
                     }
             }
@@ -132,7 +123,7 @@ namespace fwdpy11
         inline bool
         operator<(const SetMigrationRates& lhs, const SetMigrationRates& rhs)
         {
-            return std::tie(lhs.when, lhs.deme) < std::tie(rhs.when, rhs.deme);
+            return lhs.when < rhs.when;
         }
     } // namespace discrete_demography
 } // namespace fwdpy11

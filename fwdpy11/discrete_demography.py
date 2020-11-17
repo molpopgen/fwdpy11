@@ -386,9 +386,9 @@ def _convert_demographic_events_list(
         return o
 
     try:
-        rv = sorted(o, key=lambda x: (x.when, x.source, x.move_individuals))
+        rv = sorted(o, key=lambda x: (x.when, x.move_individuals))
     except AttributeError:
-        rv = sorted(o, key=lambda x: (x.when, x.deme))
+        rv = sorted(o, key=lambda x: (x.when))
 
     return rv
 

@@ -21,7 +21,6 @@
 #define FWDPY11_GET_MAX_NUMBER_OF_DEMES_HPP
 
 #include "../DiscreteDemography.hpp"
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {

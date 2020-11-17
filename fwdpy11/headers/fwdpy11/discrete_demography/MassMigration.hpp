@@ -76,11 +76,8 @@ namespace fwdpy11
         operator<(const MassMigration& lhs, const MassMigration& rhs)
         {
             // This operator forces copies to occur before moves
-            // from same source to same destination at same time.
-            return std::tie(lhs.when, lhs.source, lhs.destination,
-                            lhs.move_individuals)
-                   < std::tie(rhs.when, rhs.source, rhs.destination,
-                              rhs.move_individuals);
+            return std::tie(lhs.when, lhs.move_individuals)
+                   < std::tie(rhs.when, rhs.move_individuals);
         }
 
         inline bool

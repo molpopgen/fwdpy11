@@ -22,7 +22,6 @@
 #include <sstream>
 #include <algorithm>
 #include <memory>
-#include <tuple>
 #include <vector>
 #include <gsl/gsl_matrix.h>
 #include <fwdpp/util/named_type.hpp>

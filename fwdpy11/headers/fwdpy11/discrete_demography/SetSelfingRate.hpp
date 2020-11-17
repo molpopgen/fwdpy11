@@ -22,7 +22,6 @@
 #include <cstdint>
 #include <cmath>
 #include <stdexcept>
-#include <tuple>
 
 namespace fwdpy11
 {
@@ -58,7 +57,7 @@ namespace fwdpy11
         inline bool
         operator<(const SetSelfingRate& lhs, const SetSelfingRate& rhs)
         {
-            return std::tie(lhs.when, lhs.deme) < std::tie(rhs.when, rhs.deme);
+            return lhs.when < rhs.when;
         }
     } // namespace discrete_demography
 } // namespace fwdpy11
