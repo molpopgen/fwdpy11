@@ -30,7 +30,7 @@ init_MassMigration(py::module& m)
         .def(py::init([](std::uint32_t when, std::int32_t source,
                          std::int32_t destination, double fraction,
                          bool move_individuals, bool resets_growth_rate) {
-                 return ddemog::MassMigration(source, destination, when, 0, -1, fraction,
+                 return ddemog::MassMigration(when, source, destination, 0, -1, fraction,
                                               move_individuals, false,
                                               resets_growth_rate);
              }),

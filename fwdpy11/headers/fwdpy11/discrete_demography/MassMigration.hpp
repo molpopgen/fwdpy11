@@ -30,22 +30,20 @@ namespace fwdpy11
     {
         struct MassMigration
         {
-            std::int32_t source, destination; // Demes
             std::uint32_t when;               // when it happens
+            std::int32_t source, destination; // Demes
             std::uint32_t number;             // no. to move||copy
             std::int32_t sex;      // If event is sex-specific, this is the sex
             double fraction;       // fraction of deme to move||copy
             bool move_individuals; // If true, we move
-            bool
-                sex_specific; // If true, only apply to individuals with value sex
+            bool sex_specific;     // If true, only apply to individuals with value sex
             // If size is changed, but not growth rate, do we reset growth rate to zero?
             bool resets_growth_rate;
-            MassMigration(std::int32_t s, std::int32_t d, std::uint32_t w,
-                          std::uint32_t n, std::int32_t sx, double f, bool mv,
-                          bool ss, bool reset)
-                : source(s), destination(d), when(w), number(n), sex(sx),
-                  fraction(f), move_individuals(mv), sex_specific(ss),
-                  resets_growth_rate(reset)
+            MassMigration(std::uint32_t w, std::int32_t s, std::int32_t d,
+                          std::uint32_t n, std::int32_t sx, double f, bool mv, bool ss,
+                          bool reset)
+                : when(w), source(s), destination(d), number(n), sex(sx), fraction(f),
+                  move_individuals(mv), sex_specific(ss), resets_growth_rate(reset)
             {
                 if (!std::isfinite(fraction))
                     {
@@ -83,8 +81,7 @@ namespace fwdpy11
         inline bool
         operator==(const MassMigration& lhs, const MassMigration& rhs)
         {
-            return lhs.source == rhs.source
-                   && lhs.destination == rhs.destination
+            return lhs.source == rhs.source && lhs.destination == rhs.destination
                    && lhs.when == rhs.when && lhs.number == rhs.number
                    && lhs.fraction == rhs.fraction
                    && lhs.move_individuals == rhs.move_individuals
