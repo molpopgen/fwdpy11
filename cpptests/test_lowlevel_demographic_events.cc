@@ -364,5 +364,18 @@ BOOST_AUTO_TEST_CASE(test_exponential_decline)
                       fwdpy11::discrete_demography::GlobalExtinction);
 }
 
+// NOTE: the tests below are pretty extreme.
+// They are working hard to trigger exceptions
+
+BOOST_AUTO_TEST_CASE(bad_metadata_label_when_mass_migration_happens)
+{
+    mass_migrations.emplace_back(copy_individuals(0, 0, 1, 1., true));
+    // individual's array index no longer matches label. BAD
+    pop.diploid_metadata[0].label += 7;
+    auto ddemog = make_model();
+    BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
+                      std::runtime_error);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
 

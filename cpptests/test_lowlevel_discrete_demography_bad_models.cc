@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(test_migration_matrix_too_small)
 BOOST_AUTO_TEST_CASE(test_migration_matrix_too_large)
 // One deme and a 2x2 matrix
 {
-    set_migmatrix(std::vector<double>{0,1,1,0}, 2, false);
+    set_migmatrix(std::vector<double>{0, 1, 1, 0}, 2, false);
     auto ddemog = make_model();
     BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 5); },
                       std::invalid_argument);
@@ -185,6 +185,26 @@ BOOST_AUTO_TEST_CASE(test_no_valid_parents_with_migration_v2)
     DiscreteDemography_roundtrip(rng, pop, ddemog, 20);
     BOOST_CHECK_NO_THROW(
         try { DiscreteDemography_roundtrip(rng, pop, ddemog, 20); } catch (...){});
+}
+
+BOOST_AUTO_TEST_CASE(move_from_empty_deme)
+{
+    set_deme_sizes.emplace_back(0, 0, 0, true);
+    mass_migrations.emplace_back(copy_individuals(0, 0, 1, 1., true));
+    mass_migrations.emplace_back(move_individuals(1, 0, 1, 0.1, true));
+    auto ddemog = make_model();
+    BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
+                      std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(copy_from_empty_deme)
+{
+    set_deme_sizes.emplace_back(0, 0, 0, true);
+    mass_migrations.emplace_back(copy_individuals(0, 0, 1, 1., true));
+    mass_migrations.emplace_back(copy_individuals(1, 0, 1, 0.1, true));
+    auto ddemog = make_model();
+    BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
+                      std::runtime_error);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
