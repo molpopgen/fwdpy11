@@ -4,6 +4,26 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.11.0
+****************************************
+
+Point release.
+
+Behavior changes:
+
+* The events passed to :class:`fwdpy11.DiscreteDemography` are now sorted stably
+  by time. :pr:`598`
+
+Documentation changes:
+
+* Fixed documentation for :class:`fwdpy11.SetMigrationRates`. :pr:`603`
+
+Back end changes:
+
+* Cleanup some parts of the code base.  :pr:`604`
+* Make the C++ back-end of :class:`fwdpy11.MassMigration` have the same initialization
+  semantics as other demographic events. :pr:`605`.
+
 0.10.1
 ****************************************
 
