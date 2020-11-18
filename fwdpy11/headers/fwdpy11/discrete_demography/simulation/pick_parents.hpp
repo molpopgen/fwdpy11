@@ -26,18 +26,12 @@
 #include "migration_lookup.hpp"
 #include "deme_property_types.hpp"
 #include "multideme_fitness_lookups.hpp"
+#include "mating_event_type.hpp"
 
 namespace fwdpy11
 {
     namespace discrete_demography
     {
-        enum class mating_event_type
-        {
-            outcrossing,
-            selfing,
-            cloning // NOTE: not supported
-        };
-
         struct parent_data
         {
             std::size_t parent1, parent2;
@@ -51,7 +45,7 @@ namespace fwdpy11
             }
         };
 
-        parent_data
+        inline parent_data
         pick_parents(const GSLrng_t& rng, const std::int32_t offspring_deme,
                      const migration_lookup& miglookup,
                      const current_deme_sizes_vector& current_deme_sizes,

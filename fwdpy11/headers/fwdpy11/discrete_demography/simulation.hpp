@@ -28,6 +28,7 @@
 #include "simulation/migration_lookup.hpp"
 #include "simulation/build_migration_lookup.hpp"
 #include "simulation/functions.hpp"
+#include "simulation/mating_event_type.hpp"
 #include "simulation/pick_parents.hpp"
 #include "simulation/demographic_model_state.hpp"
 #include "simulation/update_demographic_model_state.hpp"
