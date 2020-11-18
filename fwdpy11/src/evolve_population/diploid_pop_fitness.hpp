@@ -15,12 +15,4 @@ calculate_diploid_fitness(const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulati
                           std::vector<double> &new_diploid_gvalues,
                           const bool update_genotype_matrix);
 
-// This overload was added in 0.6.0 as a temporary
-// hack b/c sims with tree sequences generate fitness
-// lookups via DiscreteDemography
-fwdpp::gsl_ran_discrete_t_ptr calculate_diploid_fitness_genomes(
-    const fwdpy11::GSLrng_t &rng, fwdpy11::DiploidPopulation &pop,
-    fwdpy11::DiploidGeneticValue &genetic_value_fxn,
-    std::vector<fwdpy11::DiploidMetadata> &offspring_metadata);
-
 #endif

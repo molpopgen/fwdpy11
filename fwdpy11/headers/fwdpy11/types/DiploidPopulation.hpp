@@ -7,7 +7,6 @@
 #include <limits>
 #include <unordered_set>
 #include <fwdpp/poptypes/tags.hpp>
-#include <fwdpp/sugar/add_mutation.hpp>
 
 namespace fwdpy11
 {
@@ -148,62 +147,6 @@ namespace fwdpy11
         {
             diploids.clear();
             popbase_t::clear_containers();
-        }
-
-        virtual std::vector<std::size_t>
-        add_mutations(typename fwdpp_base::mcont_t &new_mutations,
-                      const std::vector<std::size_t> &individuals,
-                      const std::vector<short> &haploid_genomes) override
-        {
-            std::unordered_set<double> poschecker;
-            for (const auto &m : new_mutations)
-                {
-                    if (this->mut_lookup.find(m.pos) != this->mut_lookup.end())
-                        {
-                            throw std::invalid_argument(
-                                "attempting to add new mutation at "
-                                "already-mutated position");
-                        }
-                    if (poschecker.find(m.pos) != poschecker.end())
-                        {
-                            throw std::invalid_argument(
-                                "attempting to add multiple mutations at the "
-                                "same position");
-                        }
-                    poschecker.insert(m.pos);
-                }
-            std::vector<std::size_t> rv;
-
-            for (auto &i : new_mutations)
-                {
-                    auto pos = i.pos;
-                    // remaining preconditions get checked by fwdpp:
-                    auto idx = fwdpp::add_mutation(
-                        *this, individuals, haploid_genomes, std::move(i));
-
-                    // fwdpp's function doesn't update the lookup:
-                    this->mut_lookup.emplace(pos, idx);
-                    rv.push_back(idx);
-                }
-            return rv;
-        }
-
-        fwdpp::data_matrix
-        sample_individuals(const std::vector<std::size_t> &individuals,
-                           const bool haplotype, const bool remove_fixed) const override
-        {
-            return sample_individuals_details(*this, individuals, haplotype,
-                                              remove_fixed);
-        }
-
-        fwdpp::data_matrix
-        sample_random_individuals(const GSLrng_t &rng,
-                                  const std::uint32_t nsam,
-                                  const bool haplotype,
-                                  const bool remove_fixed) const override
-        {
-            return sample_random_individuals_details(*this, rng, nsam,
-                                                     haplotype, remove_fixed);
         }
 
         void
