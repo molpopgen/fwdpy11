@@ -175,7 +175,7 @@ namespace fwdpy11
             }
 
             inline void
-            apply_moves(const GSLrng_t& rng, const MassMigration& mm,
+            apply_moves(const MassMigration& mm,
                         std::uint32_t t, std::vector<std::int32_t>& moves,
                         move_map_t& move_source)
             {
@@ -371,7 +371,7 @@ namespace fwdpy11
                                         rng, deme_map);
                                     initialized_moves = true;
                                 }
-                            detail::apply_moves(rng, *i, t, moves,
+                            detail::apply_moves(*i, t, moves,
                                                 move_source);
                             detail::update_changed_and_reset(
                                 *i, changed_and_reset);
