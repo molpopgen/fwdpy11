@@ -29,6 +29,7 @@
 #include "../../rng.hpp"
 #include "../MassMigration.hpp"
 #include "../constants.hpp"
+#include "../exceptions.hpp"
 #include "deme_property_types.hpp"
 
 namespace fwdpy11
@@ -124,7 +125,7 @@ namespace fwdpy11
                         std::ostringstream o;
                         o << "copies from empty deme " << mm.source
                           << " at time " << t << " attempted";
-                        throw std::runtime_error(o.str());
+                        throw DemographyError(o.str());
                     }
                 if (mm.fraction < 1.)
                     {
@@ -184,7 +185,7 @@ namespace fwdpy11
                         std::ostringstream o;
                         o << "moves from empty deme " << mm.source
                           << " at time " << t << " attempted";
-                        throw std::runtime_error(o.str());
+                        throw DemographyError(o.str());
                     }
                 if (mm.fraction < 1.0)
                     {

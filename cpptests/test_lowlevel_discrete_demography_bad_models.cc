@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(move_from_empty_deme)
     mass_migrations.emplace_back(move_individuals(1, 0, 1, 0.1, true));
     auto ddemog = make_model();
     BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
-                      std::runtime_error);
+                      fwdpy11::discrete_demography::DemographyError);
 }
 
 BOOST_AUTO_TEST_CASE(copy_from_empty_deme)
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(copy_from_empty_deme)
     mass_migrations.emplace_back(copy_individuals(1, 0, 1, 0.1, true));
     auto ddemog = make_model();
     BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
-                      std::runtime_error);
+                      fwdpy11::discrete_demography::DemographyError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
