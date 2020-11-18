@@ -52,13 +52,7 @@ namespace fwdpy11
                         throw std::invalid_argument(
                             "SetMigrationRates: empty list of rates");
                     }
-                auto sum = std::accumulate(begin(migrates), end(migrates), 0.0);
-                if (sum != 0. && sum != 1.0)
-                    {
-                        throw std::invalid_argument(
-                            "migration rates must sum to 0. or 1. in "
-                            "a row.");
-                    }
+
                 for (auto r : migrates)
                     {
                         if (r < 0.0)
@@ -72,6 +66,14 @@ namespace fwdpy11
                                 throw std::invalid_argument(
                                     "SetMigrationRates: rates must be finite");
                             }
+                    }
+
+                auto sum = std::accumulate(begin(migrates), end(migrates), 0.0);
+                if (sum != 0. && sum != 1.0)
+                    {
+                        throw std::invalid_argument(
+                            "migration rates must sum to 0. or 1. in "
+                            "a row.");
                     }
             }
 

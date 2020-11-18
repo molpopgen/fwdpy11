@@ -415,7 +415,7 @@ evolve_with_tree_sequences(
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
 
-            ddemog::finalize_demographic_state(rng, pop.generation, pop.diploid_metadata,
+            ddemog::finalize_demographic_state(pop.generation, pop.diploid_metadata,
                                                demography, *current_demographic_state);
 
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
