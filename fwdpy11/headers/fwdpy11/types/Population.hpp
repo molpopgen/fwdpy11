@@ -10,7 +10,6 @@
 #include <fwdpp/fwd_functional.hpp>
 #include <fwdpp/poptypes/popbase.hpp>
 #include <fwdpp/sampling_functions.hpp>
-#include <fwdpp/data_matrix.hpp>
 #include <fwdpp/ts/std_table_collection.hpp>
 #include "../rng.hpp"
 #include "Mutation.hpp"
@@ -76,32 +75,11 @@ namespace fwdpy11
         {
         }
 
-        template <typename gametes_input, typename mutations_input>
-        explicit Population(
-            const fwdpp::uint_t N_, gametes_input &&g, mutations_input &&m,
-            typename fwdpp_base::haploid_genome_t::mutation_container::size_type
-                reserve_size)
-            : fwdpp_base{std::forward<gametes_input>(g),
-                         std::forward<mutations_input>(m), reserve_size},
-              N{N_}, generation{0},
-              tables(std::make_shared<fwdpp::ts::std_table_collection>(
-                  std::numeric_limits<double>::max())),
-              alive_nodes{}, preserved_sample_nodes{}, genetic_value_matrix{},
-              ancient_sample_genetic_value_matrix{}
-        {
-        }
-
         virtual ~Population() = default;
         Population(Population &&) = default;
         Population(const Population &) = default;
         Population &operator=(const Population &) = default;
         Population &operator=(Population &&) = default;
-
-        virtual std::vector<std::size_t>
-        add_mutations(typename fwdpp_base::mcont_t &mutations,
-                      const std::vector<std::size_t> &individuals,
-                      const std::vector<short> &gametes)
-            = 0;
 
         std::int64_t
         find_mutation_by_key(const std::tuple<double, double, fwdpp::uint_t> &key,
@@ -131,63 +109,6 @@ namespace fwdpy11
                 return -1;
             return static_cast<std::int64_t>(
                 std::distance(this->fixations.begin(), itr));
-        }
-
-        virtual fwdpp::data_matrix sample_individuals(const std::vector<std::size_t> &,
-                                                      const bool, const bool) const = 0;
-        virtual fwdpp::data_matrix sample_random_individuals(const GSLrng_t &,
-                                                             const std::uint32_t,
-                                                             const bool,
-                                                             const bool) const = 0;
-
-        // The next two functions can be called from derived
-        // classes to help implementing the above two functions.
-        template <typename poptype>
-        fwdpp::data_matrix
-        sample_individuals_details(const poptype &pop,
-                                   const std::vector<std::size_t> &individuals,
-                                   const bool haplotype, const bool remove_fixed) const
-        {
-            if (std::any_of(
-                    individuals.begin(), individuals.end(),
-                    [&pop](const std::size_t i) { return i >= pop.diploids.size(); }))
-                {
-                    throw std::out_of_range("individual index out of range");
-                }
-            if (haplotype)
-                {
-                    // returns a haplotype matrix
-                    return fwdpp::sample_individuals(pop, individuals, true, true,
-                                                     remove_fixed);
-                }
-            auto keys = fwdpp::fwdpp_internal::generate_filter_sort_keys(
-                pop, individuals, true, true, remove_fixed);
-            return fwdpp::genotype_matrix(pop, individuals, keys.first, keys.second);
-        }
-
-        template <typename poptype>
-        fwdpp::data_matrix
-        sample_random_individuals_details(const poptype &pop, const GSLrng_t &rng,
-                                          const std::uint32_t nsam, const bool haplotype,
-                                          const bool remove_fixed) const
-        {
-            if (nsam > pop.N)
-                {
-                    throw std::invalid_argument("sample size > population size");
-                }
-            std::vector<std::size_t> all_individuals(pop.N);
-            std::iota(all_individuals.begin(), all_individuals.end(), 0);
-            if (nsam == pop.N)
-                {
-                    return sample_individuals_details(pop, all_individuals, haplotype,
-                                                      remove_fixed);
-                }
-
-            std::vector<std::size_t> individuals(nsam, 0);
-            gsl_ran_choose(rng.get(), individuals.data(), individuals.size(),
-                           all_individuals.data(), all_individuals.size(),
-                           sizeof(std::size_t));
-            return sample_individuals_details(pop, individuals, haplotype, remove_fixed);
         }
 
         void

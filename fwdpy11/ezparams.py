@@ -46,7 +46,6 @@ def mslike(pop, **kwargs):
     import numpy as np
 
     params = {
-        "popsizes": np.array([pop.N] * defaults["simlen"], dtype=np.uint32),
         "simlen": defaults["simlen"],
         "nregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
         "recregions": [fwdpy11.Region(defaults["beg"], defaults["end"], 1.0)],
