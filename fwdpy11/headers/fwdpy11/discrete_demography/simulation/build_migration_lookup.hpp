@@ -37,7 +37,7 @@ namespace fwdpy11
         build_migration_lookup(
             const std::unique_ptr<MigrationMatrix>& M,
             const current_deme_sizes_vector& current_deme_sizes,
-            const selfing_rates_vector& selfing_rates, migration_lookup& ml)
+            migration_lookup& ml)
         {
             if (M != nullptr)
                 {
