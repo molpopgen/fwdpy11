@@ -20,9 +20,6 @@ set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc ;
     src/fwdpp_types/BinomialInterval.cc)
 
 
-set(FWDPP_FUNCTIONS_SOURCES src/fwdpp_functions/init.cc
-    src/fwdpp_functions/data_matrix_creation.cc)
-
 set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/Mutation.cc
     src/fwdpy11_types/MutationVector.cc
@@ -36,10 +33,6 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/ts_from_tskit.cc
     src/fwdpy11_types/tsrecorders.cc
     src/fwdpy11_types/RecordNothing.cc)
-
-set(FWDPY11_FUNCTIONS_SOURCES src/fwdpy11_functions/init.cc
-    src/fwdpy11_functions/change_effect_size.cc
-    src/fwdpy11_functions/sort_gamete_keys.cc)
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
@@ -86,7 +79,6 @@ set(TS_SOURCES src/ts/init.cc src/ts/TreeIterator.cc src/ts/VariantIterator.cc
 
 set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
     src/evolve_population/with_tree_sequences.cc
-    src/evolve_population/no_tree_sequences.cc
     src/evolve_population/util.cc
     src/evolve_population/cleanup_metadata.cc
     src/evolve_population/diploid_pop_fitness.cc
@@ -110,9 +102,7 @@ set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
 set (ARRAY_PROXY_SOURCES src/array_proxies/init.cc)
 
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
-    ${FWDPP_FUNCTIONS_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
-    ${FWDPY11_FUNCTIONS_SOURCES}
     ${REGION_SOURCES}
     ${GENETIC_VALUE_NOISE_SOURCES}
     ${GENETIC_VALUE_TO_FITNESS_SOURCES}

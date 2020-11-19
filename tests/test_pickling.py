@@ -23,7 +23,7 @@ import numpy as np
 import pickling_cpp
 
 
-class testPickleMutation(unittest.TestCase):
+class TestPickleMutation(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11
@@ -45,7 +45,7 @@ class testPickleMutation(unittest.TestCase):
         self.assertEqual(m, self.m)
 
 
-class testPickleDiploidPopulation(unittest.TestCase):
+class TestPickleDiploidPopulation(unittest.TestCase):
     @classmethod
     def setUp(self):
         from quick_pops import quick_neutral_slocus
@@ -119,7 +119,7 @@ class testPickleDiploidPopulation(unittest.TestCase):
         self.assertEqual(up.genome_length, self.pop.tables.genome_length)
 
 
-class testPickleDiploidPopulationTreeSequences(unittest.TestCase):
+class TestPickleDiploidPopulationTreeSequences(unittest.TestCase):
     @classmethod
     def setUp(self):
         import fwdpy11

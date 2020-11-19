@@ -144,11 +144,6 @@ class ModelParams(object):
                   this parameter has no effect.  Instead, use
                   the methods described :ref:`here <softselection>`.
     :type self: float
-    :param popsizes: A list of population sizes over time.
-                     For simulations with tree sequence recording,
-                     this parameter has no effect.  Instead, use
-                     the methods described :ref:`here <softselection>`.
-    :type popsizes: numpy.ndarray
 
     .. note::
 
@@ -198,21 +193,14 @@ class ModelParams(object):
 
     @popsizes.default
     def popsizes_default(self):
-        if isinstance(self.demography, fwdpy11.DiscreteDemography):
-            return None
+        return None
 
-        if isinstance(
-            self.demography, fwdpy11.demographic_models.DemographicModelDetails
-        ):
-            return None
-
-        # Otherwise, assume that it is a numpy array
-        warnings.warn(
-            "attribute popsizes is deprecated"
-            " and will be removed in a future release.",
-            DeprecationWarning,
-        )
-        return self.demography
+    @popsizes.validator
+    def validate_popsizes(self, attribute, value):
+        if value is not None:
+            raise ValueError(
+                f"{attribute} has been removed. Please use demography keyword instead"
+            )
 
     @nregions.validator
     def validate_nregions(self, attribute, value):
