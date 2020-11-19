@@ -79,7 +79,7 @@ init_DiploidPopulation(py::module& m)
     py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
         m, "DiploidPopulation", "Representation of a diploid population")
         .def(py::init<fwdpp::uint_t, double>(), py::arg("N"),
-             py::arg("length") = std::numeric_limits<double>::max(),
+             py::arg("length"),
              INIT_DOCSTRING)
         .def(py::init<const std::vector<std::uint32_t>&, double>(),
              py::arg("demesizes"), py::arg("length"), INIT_DOCSTRING_DEMESIZES)
@@ -117,27 +117,6 @@ init_DiploidPopulation(py::module& m)
                 fwdpy11::serialization::deserialize_details()(in, pop);
                 return pop;
             }))
-        .def(
-            "sample",
-            [](const fwdpy11::DiploidPopulation& pop,
-               const std::vector<std::size_t>& individuals,
-               const bool haplotype, const bool remove_fixed) {
-                return pop.sample_individuals(individuals, haplotype,
-                                              remove_fixed);
-            },
-            py::arg("individuals"), py::arg("haplotype") = true,
-            py::arg("remove_fixed") = true)
-        .def(
-            "sample",
-            [](const fwdpy11::DiploidPopulation& pop,
-               const fwdpy11::GSLrng_t& rng, const std::uint32_t nsam,
-               const bool haplotype, const bool remove_fixed) {
-                return pop.sample_random_individuals(rng, nsam, haplotype,
-                                                     remove_fixed);
-            },
-            py::arg("rng"), py::arg("nsam"), py::arg("haplotype") = true,
-            py::arg("remove_fixed") = true)
-        .def("add_mutations", &fwdpy11::DiploidPopulation::add_mutations)
         .def(
             "dump_to_file",
             [](const fwdpy11::DiploidPopulation& pop,

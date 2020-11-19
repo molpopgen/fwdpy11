@@ -66,7 +66,6 @@ from .genetic_values import (  # NOQA
 )
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
-from ._evolve_genomes import *  # NOQA
 from ._evolvets import *  # NOQA
 
 if sys.version_info[0] < 3:

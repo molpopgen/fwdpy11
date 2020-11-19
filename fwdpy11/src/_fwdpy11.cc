@@ -11,9 +11,7 @@ static_assert(GSL_MINOR_VERSION >= 3, "GSL minor version >= 3 required");
 namespace py = pybind11;
 
 void initialize_fwdpp_types(py::module &);
-void initialize_fwdpp_functions(py::module &);
 void initialize_fwdpy11_types(py::module &m);
-void initialize_fwdpy11_functions(py::module &);
 void initialize_regions(py::module &);
 void initialize_genetic_value_noise(py::module &);
 void initialize_genetic_value_to_fitness(py::module &);
@@ -27,9 +25,7 @@ void init_array_proxies(py::module &m);
 PYBIND11_MODULE(_fwdpy11, m)
 {
     initialize_fwdpp_types(m);
-    initialize_fwdpp_functions(m);
     initialize_fwdpy11_types(m);
-    initialize_fwdpy11_functions(m);
     initialize_regions(m);
     initialize_genetic_value_noise(m);
     initialize_genetic_value_to_fitness(m);
