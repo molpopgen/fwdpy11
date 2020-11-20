@@ -1131,6 +1131,20 @@ For example, it could be a script:
     # to the version of the script that you used !
     parameters = {"script": "/path/to/script", "type": "script", "seed": 1234}
 
+You can go further than that, and even include the entire script.
+It turns out that Python files know who they are and can read themselves:
+
+.. code-block:: python
+
+    def read_self():
+        with open(__file__, "r") as f:
+            script = f.read()
+        return script
+
+
+    script = read_self()
+    parameters = {"script": script, "type": "script", "seed": 1234}
+
 In order to get the provenance information back out from a :class:`tskit.TreeSequence`:
 
 .. code-block:: python
