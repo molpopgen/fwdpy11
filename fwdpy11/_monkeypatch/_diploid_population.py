@@ -20,11 +20,10 @@
 import json
 import typing
 
-import numpy as np
-import tskit
-
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
+import numpy as np
+import tskit
 
 
 def _alive_nodes(self):
@@ -96,9 +95,11 @@ def _initializeIndividualTable(self, tc):
     )
     # First, alive individuals:
     individal_nodes = {}
+    num_ind_nodes = 0
     for i, d in enumerate(self.diploid_metadata):
         individal_nodes[2 * i] = i
         individal_nodes[2 * i + 1] = i
+        num_ind_nodes += 1
         tc.individuals.add_row(
             flags=fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE,
             metadata=fwdpy11.tskit_tools.metadata_schema.generate_individual_metadata(
@@ -107,17 +108,15 @@ def _initializeIndividualTable(self, tc):
         )
 
     # Now, preserved nodes
-    num_ind_nodes = self.N
+    node_time = np.array(self.tables.nodes, copy=False)["time"]
     for i in self.ancient_sample_metadata:
-        assert i not in individal_nodes, "indivudal record error"
+        assert i.nodes[0] not in individal_nodes, "indivudal record error"
+        assert i.nodes[1] not in individal_nodes, "indivudal record error"
         individal_nodes[i.nodes[0]] = num_ind_nodes
         individal_nodes[i.nodes[1]] = num_ind_nodes
         num_ind_nodes += 1
         flag = fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
-        if (
-            self.tables.nodes[i.nodes[0]].time == 0.0
-            and self.tables.nodes[i.nodes[1]].time == 0.0
-        ):
+        if node_time[i.nodes[0]] == 0.0 and node_time[i.nodes[1]] == 0.0:
             flag |= fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
         tc.individuals.add_row(
             flags=flag,
