@@ -1084,12 +1084,7 @@ class TestSimplificationInterval(unittest.TestCase):
         self.recorder = fwdpy11.RandomAncientSamples(
             seed=42, samplesize=10, timepoints=[i for i in range(1, 101)]
         )
-
-    def testEvolve(self):
-        # TODO: actually test something here :)
         fwdpy11.evolvets(self.rng, self.pop, self.params, 1, self.recorder)
-        samples = [i for i in range(2 * self.pop.N)] + self.pop.tables.preserved_nodes
-        vi = fwdpy11.TreeIterator(self.pop.tables, samples)
 
     def test_mut_lookup(self):
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.mutations))
