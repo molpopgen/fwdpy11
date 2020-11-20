@@ -18,6 +18,7 @@
 #
 
 import copy
+import json
 import os
 import pickle
 import unittest
@@ -208,10 +209,31 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
+    def test_parameters_roundtrip_through_tskit(self):
+        def inception():
+            with open(__file__, "r") as f:
+                contents = f.read()
+            return contents
+
+        script = inception()
+        dumped_ts = self.pop.dump_tables_to_tskit(
+            {"pdict": str(self.params.asdict()), "seed": str(42), "script": script}
+        )
+        provparams = json.loads(dumped_ts.provenance(0).record)
+        self.assertEqual(provparams["parameters"]["pdict"], str(self.params.asdict()))
+        pdict = eval(provparams["parameters"]["pdict"])
+        params = fwdpy11.ModelParams(**pdict)
+        self.assertEqual(self.params, params)
+        seed = eval(provparams["parameters"]["seed"])
+        self.assertEqual(seed, 42)
+        script_from_prov = provparams["parameters"]["script"]
+        self.assertEqual(script, script_from_prov)
+
     def test_dump_to_tskit(self):
         import tskit
 
         dumped_ts = self.pop.dump_tables_to_tskit()
+
         self.assertEqual(len(dumped_ts.tables.nodes), len(self.pop.tables.nodes))
         self.assertEqual(len(dumped_ts.tables.edges), len(self.pop.tables.edges))
         self.assertEqual(
