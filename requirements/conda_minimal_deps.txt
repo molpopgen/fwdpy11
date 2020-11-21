@@ -10,3 +10,5 @@ gsl
 boost
 autoconf
 automake
+pytest
+pytest-xdist

@@ -105,7 +105,7 @@ Building from the git repository:
     git submodule init
     git submodule update
     python setup.py build_ext -i
-    python -m unittest discover tests
+    python -m pytest tests
 
 Using pip on macOS and Linux (or pip3 as appropriate for your system):
 
