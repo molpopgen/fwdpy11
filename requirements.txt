@@ -18,6 +18,8 @@ seaborn
 msprime
 tskit>=0.3.2
 setuptools_scm==1.11.1
+pytest
+pytest-xdist
 
 #below are for formatting, linting,
 #etc.

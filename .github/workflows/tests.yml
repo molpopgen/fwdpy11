@@ -97,4 +97,4 @@ jobs:
           # conda init bash
           source ~/.bashrc
           conda activate anaconda-client-env
-          python -m unittest discover -v -f tests
+          python -m pytest -n 4 tests
