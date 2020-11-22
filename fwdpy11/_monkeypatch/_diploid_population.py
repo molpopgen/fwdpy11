@@ -20,10 +20,11 @@
 import json
 import typing
 
-import fwdpy11.tskit_tools
-import fwdpy11.tskit_tools.metadata_schema
 import numpy as np
 import tskit
+
+import fwdpy11.tskit_tools
+import fwdpy11.tskit_tools.metadata_schema
 
 
 def _alive_nodes(self):
@@ -128,6 +129,33 @@ def _initializeIndividualTable(self, tc):
     return individal_nodes
 
 
+def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None:
+    mpos = np.array([self.mutations[mr.key].pos for mr in self.tables.mutations])
+    ancestral_state = np.zeros(len(self.tables.mutations), dtype=np.int8) + ord("0")
+    ancestral_state_offset = np.arange(len(self.tables.mutations) + 1, dtype=np.uint32)
+    tc.sites.set_columns(
+        position=mpos,
+        ancestral_state=ancestral_state,
+        ancestral_state_offset=ancestral_state_offset,
+    )
+
+    tc.mutations.metadata_schema = (
+        fwdpy11.tskit_tools.metadata_schema.determine_mutation_metadata_schema(
+            self.mutations
+        )
+    )
+    for m in self.tables.mutations:
+        tc.mutations.add_row(
+            site=m.site,
+            node=m.node,
+            derived_state="1",
+            time=self.generation - self.mutations[m.key].g,
+            metadata=fwdpy11.tskit_tools.metadata_schema.generate_mutation_metadata(
+                m, self.mutations
+            ),
+        )
+
+
 def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None):
     """
     Dump the population's TableCollection into
@@ -177,7 +205,6 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
     node_view["time"] -= node_view["time"].max()
     node_view["time"][np.where(node_view["time"] != 0.0)[0]] *= -1.0
     edge_view = np.array(self.tables.edges, copy=False)
-    mut_view = np.array(self.tables.mutations, copy=False)
 
     tc = tskit.TableCollection(self.tables.genome_length)
 
@@ -210,30 +237,8 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
         child=edge_view["child"],
     )
 
-    mpos = np.array([self.mutations[i].pos for i in mut_view["key"]])
-    ancestral_state = np.zeros(len(mut_view), dtype=np.int8) + ord("0")
-    ancestral_state_offset = np.arange(len(mut_view) + 1, dtype=np.uint32)
-    tc.sites.set_columns(
-        position=mpos,
-        ancestral_state=ancestral_state,
-        ancestral_state_offset=ancestral_state_offset,
-    )
+    _dump_mutation_site_and_site_tables(self, tc)
 
-    tc.mutations.metadata_schema = (
-        fwdpy11.tskit_tools.metadata_schema.determine_mutation_metadata_schema(
-            self.mutations
-        )
-    )
-    for m in self.tables.mutations:
-        tc.mutations.add_row(
-            site=m.site,
-            node=m.node,
-            derived_state="1",
-            time=self.generation - self.mutations[m.key].g,
-            metadata=fwdpy11.tskit_tools.metadata_schema.generate_mutation_metadata(
-                m, self.mutations
-            ),
-        )
     tc.provenances.add_row(json.dumps(provenance))
     return tc.tree_sequence()
 
