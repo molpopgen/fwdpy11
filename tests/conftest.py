@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020 Kevin Thornton <krthornt@uci.edu>
+# Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
 #
 # This file is part of fwdpy11.
 #
@@ -16,14 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import pytest
 
-"""
-This module contains various things to help
-interact with ``tskit``.
+import fwdpy11
 
-.. versionadded:: 0.8.0
-"""
 
-from ._flags import *  # NOQA
-from .metadata import (DiploidMetadata, decode_individual_metadata,
-                       decode_mutation_metadata)
+@pytest.fixture
+def rng(request):
+    try:
+        seed = request.param.get("seed", None)
+        return fwdpy11.GSLrng(seed)
+    except: # NOQA
+        return fwdpy11.GSLrng(42)
