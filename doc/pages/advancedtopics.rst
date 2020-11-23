@@ -95,6 +95,17 @@ The mutation's data will be represented as a :class:`dict`.
 
 .. _howlongtorun:
 
+``fwdpy11`` provides the following functions and classes to decode and return all of the metadata.
+These functions are probably the most useful way to interact with the metadata.
+
+.. autofunction:: fwdpy11.tskit_tools.decode_individual_metadata
+
+.. autoclass:: fwdpy11.tskit_tools.DiploidMetadata
+
+.. autofunction:: fwdpy11.tskit_tools.decode_mutation_metadata
+
+
+
 How long to run the simulation
 ---------------------------------------------------------------------
 
