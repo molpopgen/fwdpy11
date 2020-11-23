@@ -1151,7 +1151,7 @@ In order to get the provenance information back out from a :class:`tskit.TreeSeq
 
     import json
 
-    provenance = json.decodes(ts.provenance(0).record)
+    provenance = json.loads(ts.provenance(0).record)
 
 If you recorded an instance of :class:`fwdpy11.ModelParams` as your ``parameters``, you
 can even reconstruct the original object (if you have the correct modules imported).
@@ -1165,7 +1165,7 @@ For example, if we assume that we encoded the model parameters as shown two list
     import fwdpy11
 
     ts = tskit.load("sim.trees")
-    provenance = json.decodes(ts.provenance(0).record)
+    provenance = json.loads(ts.provenance(0).record)
     array = np.array  # Annoyance!
     tmp = eval(provenance["parameters"]["model"])
 
