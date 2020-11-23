@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run Python test suite
           command: |
-              pytest -n 2 tests
+              python -m pytest -n 2 tests
 
       - run:
           name: Test building and running the plugin
