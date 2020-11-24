@@ -25,7 +25,6 @@
 #include <functional>
 #include <cmath>
 #include <stdexcept>
-#include <fwdpp/diploid.hh>
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/table_collection_functions.hpp>
