@@ -67,8 +67,8 @@ namespace
 
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidGenotype>);
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::DiploidMetadata>);
-PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::gcont_t);
-PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::genome_container);
+PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mutation_container);
 
 fwdpy11::DiploidPopulation
 create_DiploidPopulation_from_tree_sequence(py::object ts);

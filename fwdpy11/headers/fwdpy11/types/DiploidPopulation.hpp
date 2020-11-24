@@ -93,12 +93,13 @@ namespace fwdpy11
       public:
         using dipvector_t = std::vector<DiploidGenotype>;
         using diploid_t = dipvector_t::value_type;
+        using diploid_type = dipvector_t::value_type;
         using popbase_t = Population;
         using popmodel_t = fwdpp::poptypes::DIPLOID_TAG;
         using fitness_t
             = fwdpp::traits::fitness_fxn_t<dipvector_t,
-                                           typename popbase_t::gcont_t,
-                                           typename popbase_t::mcont_t>;
+                                           typename popbase_t::genome_container,
+                                           typename popbase_t::mutation_container>;
 
         dipvector_t diploids;
         //TODO: initalized ancient_sample_metadata and tables,
