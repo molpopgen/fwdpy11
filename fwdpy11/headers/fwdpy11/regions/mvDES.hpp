@@ -117,7 +117,7 @@ namespace fwdpy11
 
         std::size_t
         generate_mutation(fwdpp::flagged_mutation_queue &recycling_bin,
-                          Population::mcont_t &mutations,
+                          Population::mutation_container &mutations,
                           Population::lookup_table_t &lookup_table,
                           const fwdpp::uint_t &generation, const GSLrng_t &rng) const
         {

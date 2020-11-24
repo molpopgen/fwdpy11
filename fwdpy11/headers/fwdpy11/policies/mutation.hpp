@@ -31,9 +31,9 @@ namespace fwdpy11
               typename dominance_function>
     std::size_t
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
-                      Population::mcont_t &mutations, Population::lookup_table_t &lookup,
-                      const bool treat_as_neutral, const fwdpp::uint_t &generation,
-                      const position_function &posmaker,
+                      Population::mutation_container &mutations,
+                      Population::lookup_table_t &lookup, const bool treat_as_neutral,
+                      const fwdpp::uint_t &generation, const position_function &posmaker,
                       const effect_size_function &esize_maker,
                       const dominance_function &hmaker,
                       const decltype(Mutation::xtra) x = 0)
@@ -85,9 +85,9 @@ namespace fwdpy11
               typename dominance_values_function>
     std::size_t
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
-                      Population::mcont_t &mutations, Population::lookup_table_t &lookup,
-                      const bool treat_as_neutral, const fwdpp::uint_t &generation,
-                      const position_function &posmaker,
+                      Population::mutation_container &mutations,
+                      Population::lookup_table_t &lookup, const bool treat_as_neutral,
+                      const fwdpp::uint_t &generation, const position_function &posmaker,
                       const fixed_effect_size_function &fixed_esize_maker,
                       const fixed_dominance_function &fixed_hmaker,
                       const effect_sizes_function &esizes,

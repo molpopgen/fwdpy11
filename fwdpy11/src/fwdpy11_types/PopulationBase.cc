@@ -64,7 +64,7 @@ namespace
 
     py::array
     make_flattened_Mutation_array(
-        const fwdpy11::Population::mcont_t& mutations)
+        const fwdpy11::Population::mutation_container& mutations)
     {
         std::vector<flattened_Mutation> vfm;
         vfm.reserve(mutations.size());
@@ -77,8 +77,8 @@ namespace
     }
 } // namespace
 
-PYBIND11_MAKE_OPAQUE(fwdpy11::Population::gcont_t);
-PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mcont_t);
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::genome_container);
+PYBIND11_MAKE_OPAQUE(fwdpy11::Population::mutation_container);
 
 void
 init_PopulationBase(py::module& m)
