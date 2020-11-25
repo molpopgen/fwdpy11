@@ -14,6 +14,7 @@ void init_DiploidPopulation(py::module & m);
 void init_tsrecorders(py::module & m);
 void
 init_RecordNothing(pybind11::module &);
+void init_GeneticMapUnit(pybind11::module &);
 
 void initialize_fwdpy11_types(py::module & m)
 {
@@ -28,4 +29,5 @@ void initialize_fwdpy11_types(py::module & m)
     init_DiploidPopulation(m);
     init_RecordNothing(m);
     init_tsrecorders(m);
+    init_GeneticMapUnit(m);
 }

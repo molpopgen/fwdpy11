@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <fwdpy11/regions/RecombinationRegions.hpp>
+#include <fwdpy11/regions/GeneticMapUnit.hpp>
 
 namespace py = pybind11;
 
@@ -39,8 +40,8 @@ init_RecombinationRegions(py::module& m)
         std::vector<std::unique_ptr<fwdpp::genetic_map_unit>> callbacks;
         for (auto& i : l)
             {
-                auto& ref = i.cast<fwdpp::genetic_map_unit&>();
-                callbacks.emplace_back(ref.clone());
+                auto& ref = i.cast<fwdpy11::GeneticMapUnit&>();
+                callbacks.emplace_back(ref.ll_clone());
             }
         std::unique_ptr<fwdpy11::GeneralizedGeneticMap> rv(
             new fwdpy11::GeneralizedGeneticMap(std::move(callbacks)));

@@ -11,13 +11,7 @@ set(FWDPP_TYPES_SOURCES src/fwdpp_types/init.cc ;
     src/fwdpp_types/EdgeTable.cc
     src/fwdpp_types/MutationTable.cc
     src/fwdpp_types/SiteTable.cc
-    src/fwdpp_types/TableCollection.cc
-    src/fwdpp_types/GeneticMapUnit.cc 
-    src/fwdpp_types/PoissonInterval.cc 
-    src/fwdpp_types/BinomialPoint.cc
-    src/fwdpp_types/PoissonPoint.cc
-    src/fwdpp_types/FixedCrossovers.cc
-    src/fwdpp_types/BinomialInterval.cc)
+    src/fwdpp_types/TableCollection.cc)
 
 
 set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
@@ -32,7 +26,8 @@ set(FWDPY11_TYPES_SOURCES src/fwdpy11_types/init.cc
     src/fwdpy11_types/DiploidPopulation.cc
     src/fwdpy11_types/ts_from_tskit.cc
     src/fwdpy11_types/tsrecorders.cc
-    src/fwdpy11_types/RecordNothing.cc)
+    src/fwdpy11_types/RecordNothing.cc
+    src/fwdpy11_types/GeneticMapUnit.cc)
 
 set(REGION_SOURCES src/regions/init.cc src/regions/Region.cc src/regions/Sregion.cc src/regions/GammaS.cc src/regions/ConstantS.cc
     src/regions/ExpS.cc src/regions/UniformS.cc src/regions/GaussianS.cc src/regions/MutationRegions.cc
