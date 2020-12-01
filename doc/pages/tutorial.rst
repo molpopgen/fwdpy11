@@ -397,6 +397,28 @@ one-half, meaning that each region is assorting independently (50 `cM` between e
 
 As an aside, this example is not creating objects in order by their positions.  Such ordering is not required.
 
+Beginning in version ``0.12.0``, it is possible to restrict crossover positions to integer values.
+For the examples given above, crossover positions are floating-point values sampled uniformly from :math:`[beg, end)`.
+To restrict positions to integer values, we pass ``discrete=True`` when creating object instances:
+
+.. jupyter-execute::
+
+    recregions = [
+        fwdpy11.PoissonInterval(beg=0, end=5, mean=2e-3 / 3, discrete=True),
+        fwdpy11.PoissonInterval(beg=5, end=10, mean=1e-3 / 3, discrete=True),
+    ]
+
+Now, breakpoints from the first region will only take on values of ``0``, ``1``, ``2``, ``3``, or ``4``.
+
+Setting ``discrete=True`` requires the following:
+
+* Values for ``beg`` and ``end`` must be :class:`int`.  Thus, ``1`` is valid but ``1.0`` will raise a ``TypeError``.
+* ``end - beg`` must be ``> 1``.  This requirement prevents you from using ``beg=0`` and ``end=1``, for example,
+  which would result in the only possible crossover position being ``0``.
+* You must be more careful when using :mod:`msprime` to start/finish a simulation.
+  See :ref:`here <precapitation>` and :ref:`here <recapitation>` for details.
+
+
 The following classes are available:
 
 * :class:`fwdpy11.PoissonInterval`

@@ -3,6 +3,10 @@
 Starting a simulation with a tree sequence from msprime
 ================================================================================
 
+.. todo::
+
+   Document what to do with discrete crossover positions
+
 The following command line uses :mod:`msprime` to simulate under the discrete
 time Wright-Fisher model using the methods described in [Nelson2020]_.  Then,
 `fwdpy11` simulates for another 1,000 generations.  From the end of each simulation,
