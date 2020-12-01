@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import typing
+
 import attr
 import numpy as np
 
@@ -26,6 +28,11 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict)
 
 _common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
+
+
+def _is_integer_if_discrete(self, attribute, value):
+    if self.discrete is True:
+        attr.validators.instance_of(int)(self, attribute, value)
 
 
 @attr_add_asblack
@@ -41,11 +48,14 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
-    :type beg: float
+    :type beg: int or float
     :param end: The end of the region
-    :type end: float
+    :type end: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
+    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
+                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :type discrete: bool
 
     .. versionadded:: 0.3.0
 
@@ -61,14 +71,21 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
 
         Refactored to use attrs and inherit from
         low-level C++ class
+
+    .. versionchanged:: 0.12.0
+
+        Added ``discrete`` option to initializer.
     """
 
-    beg: float
-    end: float
+    beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    end: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     mean: float
+    discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
-        super(PoissonInterval, self).__init__(self.beg, self.end, self.mean)
+        super(PoissonInterval, self).__init__(
+            beg=self.beg, end=self.end, mean=self.mean, discrete=self.discrete
+        )
 
 
 @attr_add_asblack
@@ -85,9 +102,12 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     also determine the order of positional arguments:
 
     :param position: The position of the crossover
-    :type position: float
+    :type position: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
+    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
+                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :type discrete: bool
 
     .. versionadded:: 0.3.0
 
@@ -103,13 +123,20 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
 
         Refactored to use attrs and inherit from
         low-level C++ class
+
+    .. versionchanged:: 0.12.0
+
+        Added ``discrete`` option to initializer.
     """
 
-    position: float
+    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     mean: float
+    discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
-        super(PoissonPoint, self).__init__(self.position, self.mean)
+        super(PoissonPoint, self).__init__(
+            position=self.position, mean=self.mean, discrete=self.discrete
+        )
 
     def __getstate__(self):
         return self.asdict()
@@ -131,11 +158,14 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
-    :type beg: float
+    :type beg: int or float
     :param end: The end of the region
-    :type end: float
+    :type end: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
+    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
+                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :type discrete: bool
 
     .. versionadded:: 0.5.2
 
@@ -147,14 +177,24 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
 
         Refactored to use attrs and inherit from
         low-level C++ class
+
+    .. versionchanged:: 0.12.0
+
+        Added ``discrete`` option to initializer.
     """
 
-    beg: float
-    end: float
+    beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    end: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     probability: float
+    discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
-        super(BinomialInterval, self).__init__(self.beg, self.end, self.probability)
+        super(BinomialInterval, self).__init__(
+            beg=self.beg,
+            end=self.end,
+            probability=self.probability,
+            discrete=self.discrete,
+        )
 
 
 @attr_add_asblack
@@ -172,9 +212,12 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     also determine the order of positional arguments:
 
     :param position: The beginning of the region
-    :type position: float
+    :type position: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
+    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
+                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :type discrete: bool
 
     .. versionadded:: 0.3.0
 
@@ -190,13 +233,20 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
 
         Refactored to use attrs and inherit from
         low-level C++ class
+
+    .. versionchanged:: 0.12.0
+
+        Added ``discrete`` option to initializer.
     """
 
-    position: float
-    probability: float
+    position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    probability: typing.Union[int, float]
+    discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
-        super(BinomialPoint, self).__init__(self.position, self.probability)
+        super(BinomialPoint, self).__init__(
+            position=self.position, probability=self.probability, discrete=self.discrete
+        )
 
 
 @attr_add_asblack
@@ -212,11 +262,14 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
-    :type beg: float
+    :type beg: int or float
     :param end: The end of the region
-    :type end: float
+    :type end: int or float
     :param num_xovers: The number of breakpoints per meiosis
     :type num_xovers: float
+    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
+                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :type discrete: bool
 
     .. versionadded:: 0.3.0
 
@@ -232,11 +285,21 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
 
         Refactored to use attrs and inherit from
         low-level C++ class
+
+    .. versionchanged:: 0.12.0
+
+        Added ``discrete`` option to initializer.
     """
 
-    beg: float
-    end: float
+    beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
+    end: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
     num_xovers: int
+    discrete: bool = attr.ib(kw_only=True, default=False)
 
     def __attrs_post_init__(self):
-        super(FixedCrossovers, self).__init__(self.beg, self.end, self.num_xovers)
+        super(FixedCrossovers, self).__init__(
+            beg=self.beg,
+            end=self.end,
+            num_xovers=self.num_xovers,
+            discrete=self.discrete,
+        )
