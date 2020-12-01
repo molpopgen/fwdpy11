@@ -238,6 +238,13 @@ class ModelParams(object):
                     attr.validators.instance_of(fwdpy11.GeneticMapUnit)(
                         self, attribute, i
                     )
+                if not all([i.discrete for i in value]) and not all(
+                    [not i.discrete for i in value]
+                ):
+                    warnings.warn(
+                        "genetic map has a mix of discrete=True and discrete=False"
+                    )
+
             except TypeError:
                 raise
 
