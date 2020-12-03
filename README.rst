@@ -270,8 +270,8 @@ fwdpy11 is available through bioconda_ for Linux and for macOS:
    Please read the bioconda documentation!  
    The order of channels matters.
 
-.. _fwdpy11: http://molpopgen.github.io/fwdpy11
-.. _fwdpp: http://molpopgen.github.io/fwdpp
+.. _fwdpy11: https://github.com/molpopgen/fwdpy11
+.. _fwdpp: https://github.com/molpopgen/fwdpp
 .. _GSL: http://gnu.org/software/gsl
 .. _pybind11: https://github.com/pybind/pybind11
 .. _multiprocessing: https://docs.python.org/3/library/multiprocessing.html
