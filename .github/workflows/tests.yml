@@ -98,3 +98,12 @@ jobs:
           source ~/.bashrc
           conda activate anaconda-client-env
           python -m pytest -n 4 tests
+
+      - name: Build and run examples/plugin
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          PYTHONPATH=. cmake examples/plugin
+          make
+          PYTHONPATH=. python examples/plugin/test_plugin.py
+
