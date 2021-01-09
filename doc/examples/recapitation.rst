@@ -3,9 +3,9 @@
 Finishing a simulation with a tree sequence from msprime
 ================================================================================
 
-.. todo::
+.. note::
 
-   Document what to do with discrete crossover positions
+   See :ref:`here <msprime_subtleties>` for additional important information about interacting iwth ``msprime``.
 
 This example is complementary to :ref:`precapitation`.  Rather than starting
 with a tree sequence from :mod:`msprime`, we instead finish a simulation by "coalescing

@@ -939,3 +939,27 @@ The data types
        This index is useful in the event of mass migrations via copies,
        which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
        and this value.
+
+.. _msprime_subtleties:
+
+Subtleties of starting/finishing tree sequences using ``msprime``
+---------------------------------------------------------------------
+
+Some care is required starting a simulation from a tree sequence (see :ref:`here <precapitation>`) or finishing a simulation with one (see :ref:`here <recapitation>`).
+
+If simulating with discrete recombination positions (see :ref:`here <geneticmapunit>`), it may be important to realize that the current stable releases of ``msprime`` model continuous recombination breakpoints.
+A future ``msprime`` release will support discretized positions.
+
+When simulating with genome lengths longer than unity (1.0), determining the correct recombination rate for ``msprime`` needs additional work.
+The examples shown :ref:`here <recapitation>` and :ref:`here <precapitation>` show the following method for determining the ``msprime`` recombination rate:
+
+.. code-block:: python
+
+    recombination_rate = rho / Ne / 4
+
+That code implies a genome length of 1.0.
+A more general example, for a genome of length ``L`` would look like:
+
+.. code-block:: python
+
+    recombination_rate = rho / Ne / 4 / L
