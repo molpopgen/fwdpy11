@@ -3,9 +3,9 @@
 Starting a simulation with a tree sequence from msprime
 ================================================================================
 
-.. todo::
+.. note::
 
-   Document what to do with discrete crossover positions
+   See :ref:`here <msprime_subtleties>` for additional important information about interacting iwth ``msprime``.
 
 The following command line uses :mod:`msprime` to simulate under the discrete
 time Wright-Fisher model using the methods described in [Nelson2020]_.  Then,
