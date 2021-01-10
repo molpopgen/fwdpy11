@@ -20,6 +20,12 @@ Welcome to fwdpy11's documentation!
     misc/developersguide
 
 .. toctree::
+    :caption: Installation and setup
+    :maxdepth: 1
+
+    pages/userenv
+
+.. toctree::
     :caption: Concepts
     :maxdepth: 2
 
