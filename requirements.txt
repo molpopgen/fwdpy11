@@ -1,6 +1,4 @@
-# As of 0.2.0, pybind11 
-# must not be installed via pip
-pybind11==2.6.0
+pybind11[global]>=2.6.0
 numpy
 sparse
 scipy
