@@ -4,6 +4,27 @@ Changelog
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+0.12.0
+****************************************
+
+API breakage:
+
+* Simulation without tree sequence recording is no longer supported. :pr:`607`
+
+New features:
+
+* Recombination breakpoints can be restricted to integer positions. :pr:`612`
+* Improved methods for decoding `tskit` meta data. :pr:`609`.
+
+.. note:
+
+   The meta data decoding is still a moving target/work in progress.
+   We anticipate further changes as we get a better idea of what works well/is most useful.
+
+This release also includes several updates to dependencies, documentation, and CI testing.
+These changes are collected under the `0.12.0` milestone on `GitHub`.
+
+
 0.11.0
 ****************************************
 

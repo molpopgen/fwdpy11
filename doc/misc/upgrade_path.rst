@@ -6,6 +6,12 @@ Upgrade path
 This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
 imperfect/incomplete.
 
+0.12.0
+-------------------------------------------------
+
+This version removes simulation without tree sequence recording.
+The fix is to use tree sequence recording.
+
 0.8.2
 -------------------------------------------------
 
