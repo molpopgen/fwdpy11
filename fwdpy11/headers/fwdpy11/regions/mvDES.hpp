@@ -28,7 +28,6 @@
 #include "MutationDominance.hpp"
 #include "MultivariateGaussianEffects.hpp"
 #include <fwdpy11/policies/mutation.hpp>
-#include <fwdpy11/numpy/array.hpp>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_linalg.h>
