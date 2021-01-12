@@ -438,7 +438,7 @@ evolve_with_tree_sequences(
                     throw ddemog::GlobalExtinction(o.str());
                 }
 
-            if (gen > 0 && gen % simplification_interval == 0.0)
+            if (gen % simplification_interval == 0.0)
                 {
                     simplification_rv = simplification(
                         preserve_selected_fixations, simulating_neutral_variants,
