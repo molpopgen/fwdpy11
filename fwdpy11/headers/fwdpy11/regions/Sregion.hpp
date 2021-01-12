@@ -82,10 +82,10 @@ namespace fwdpy11
             return dominance->generate_dominance(rng, esize);
         }
 
-        virtual pybind11::tuple
+        virtual std::vector<std::size_t>
         shape() const
         {
-            return pybind11::make_tuple(total_dim);
+            return {total_dim};
         }
     };
 } // namespace fwdpy11

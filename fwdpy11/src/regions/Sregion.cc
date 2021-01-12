@@ -27,7 +27,14 @@ init_Sregion(py::module& m)
 
             Remove "dominance" property.
         )delim")
-        .def_property_readonly("shape", &fwdpy11::Sregion::shape,
-                               "Return shape.  Added in 0.7.0");
+        .def_property_readonly(
+            "shape",
+            [](const fwdpy11::Sregion& s) {
+                auto shape = s.shape();
+                auto l = py::cast(shape);
+                auto t = l.cast<py::tuple>();
+                return t;
+            },
+            "Return shape.  Added in 0.7.0");
 }
 
