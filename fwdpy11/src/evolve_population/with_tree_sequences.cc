@@ -372,6 +372,7 @@ evolve_with_tree_sequences(
         }
 
     std::vector<fwdpp::ts::table_index_t> alive_at_last_simplification(pop.alive_nodes);
+    new_edge_buffer->reset(alive_at_last_simplification.size());
 
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
