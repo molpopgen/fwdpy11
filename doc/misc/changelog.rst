@@ -11,6 +11,15 @@ API breakage:
 
 * Simulation without tree sequence recording is no longer supported. :pr:`607`
 
+Bug fixes:
+
+This release fixes two bugs.
+Neither bug would affect results.
+Rather, they affect the behavior of some advanced features.
+
+* Explicit initialization of a data structure used for simplification is now always done. :issue:`626` :pr:`627`
+* Simplification is now allowed to occur after a single generation. :issue:`624` :pr:`627`
+
 New features:
 
 * Recombination breakpoints can be restricted to integer positions. :pr:`612`
