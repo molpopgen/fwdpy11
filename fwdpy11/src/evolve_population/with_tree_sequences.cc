@@ -372,6 +372,7 @@ evolve_with_tree_sequences(
         }
 
     std::vector<fwdpp::ts::table_index_t> alive_at_last_simplification(pop.alive_nodes);
+    new_edge_buffer->reset(alive_at_last_simplification.size());
 
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
@@ -437,7 +438,7 @@ evolve_with_tree_sequences(
                     throw ddemog::GlobalExtinction(o.str());
                 }
 
-            if (gen > 0 && gen % simplification_interval == 0.0)
+            if (gen % simplification_interval == 0.0)
                 {
                     simplification_rv = simplification(
                         preserve_selected_fixations, simulating_neutral_variants,
