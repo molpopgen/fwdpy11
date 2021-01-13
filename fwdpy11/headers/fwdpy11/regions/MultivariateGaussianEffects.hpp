@@ -8,12 +8,14 @@
 #include <gsl/gsl_errno.h>
 #include <cmath>
 #include <algorithm>
+#include <limits>
 #include <stdexcept>
 #include <functional>
 #include <memory>
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include "Sregion.hpp"
+#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
@@ -23,39 +25,37 @@ namespace fwdpy11
             = std::unique_ptr<gsl_matrix, std::function<void(gsl_matrix *)>>;
         using vector_ptr
             = std::unique_ptr<gsl_vector, std::function<void(gsl_vector *)>>;
-        std::vector<double> effect_sizes, dominance_values;
         matrix_ptr input_matrix_copy;
         // Stores the Cholesky decomposition
         matrix_ptr matrix;
-        // Stores the results of gsl_ran_multivariate_gaussian
-        mutable gsl_vector_view res;
         // Stores the means of the mvn distribution, which are all zero
         vector_ptr mu;
-        double fixed_effect, dominance;
+        double fixed_effect;
+        mutable std::vector<double> effect_sizes, dominance_values;
+        // Stores the results of gsl_ran_multivariate_gaussian
+        mutable gsl_vector_view res;
 
+        template <typename Dominance>
         MultivariateGaussianEffects(const Region &r, const double sc,
-                                    const gsl_matrix &input_matrix, double s, double h)
-            : Sregion(r, sc, input_matrix.size1), effect_sizes(input_matrix.size1),
-              dominance_values(input_matrix.size1, h),
+                                    const gsl_matrix &input_matrix, double s,
+                                    Dominance &&h)
+            : Sregion(r, sc, input_matrix.size1, std::forward<Dominance>(h)),
               input_matrix_copy(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                                 [](gsl_matrix *m) { gsl_matrix_free(m); }),
               matrix(gsl_matrix_alloc(input_matrix.size1, input_matrix.size2),
                      [](gsl_matrix *m) { gsl_matrix_free(m); }),
-              // Holds the results of calls to mvn, and maps the
-              // output to effect_sizes
-              res(gsl_vector_view_array(effect_sizes.data(), effect_sizes.size())),
               // NOTE: use of calloc to initialize mu to all zeros
               mu(gsl_vector_calloc(input_matrix.size1),
                  [](gsl_vector *v) { gsl_vector_free(v); }),
-              fixed_effect(s), dominance(h)
+              fixed_effect(s), effect_sizes(input_matrix.size1),
+              dominance_values(input_matrix.size1, std::numeric_limits<double>::quiet_NaN()),
+              // Holds the results of calls to mvn, and maps the
+              // output to effect_sizes
+              res(gsl_vector_view_array(effect_sizes.data(), effect_sizes.size()))
         {
             if (!std::isfinite(fixed_effect))
                 {
                     throw std::invalid_argument("fixed_effect must be finite");
-                }
-            if (!std::isfinite(dominance))
-                {
-                    throw std::invalid_argument("dominance must be finite");
                 }
             if (matrix->size1 != matrix->size2)
                 {
@@ -109,6 +109,11 @@ namespace fwdpy11
         {
             int rv = gsl_ran_multivariate_gaussian(rng.get(), mu.get(), matrix.get(),
                                                    &res.vector);
+            for (std::size_t i = 0; i < effect_sizes.size(); ++i)
+                {
+                    dominance_values[i]
+                        = dominance->generate_dominance(rng, effect_sizes[i]);
+                }
             if (rv != GSL_SUCCESS)
                 {
                     throw std::runtime_error(
@@ -117,7 +122,10 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, false, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return fixed_effect; }, [this]() { return dominance; },
+                [this]() { return fixed_effect; },
+                [this, &rng](const double esize) {
+                    return dominance->generate_dominance(rng, esize);
+                },
                 [this]() { return effect_sizes; }, [this]() { return dominance_values; },
                 this->label());
         }
@@ -126,12 +134,6 @@ namespace fwdpy11
         from_mvnorm(const double deviate, const double /*P*/) const override
         {
             return deviate / scaling;
-        }
-
-        std::vector<double>
-        get_dominance() const override
-        {
-            return dominance_values;
         }
     };
 } // namespace fwdpy11

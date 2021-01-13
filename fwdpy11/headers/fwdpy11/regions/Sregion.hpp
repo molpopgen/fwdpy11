@@ -12,6 +12,7 @@
 #include <fwdpy11/rng.hpp>
 #include <gsl/gsl_cdf.h>
 #include "Region.hpp"
+#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
@@ -20,11 +21,14 @@ namespace fwdpy11
         Region region; // For returning positions
         double scaling;
         const std::size_t total_dim;
+        std::shared_ptr<MutationDominance> dominance;
 
         virtual ~Sregion() = default;
 
-        Sregion(const Region& r, double s, std::size_t dim)
-            : region(r), scaling(s), total_dim(dim)
+        template <typename Dominance>
+        Sregion(const Region& r, double s, std::size_t dim, Dominance&& h)
+            : region(r), scaling(s), total_dim(dim),
+              dominance(process_input_dominance(std::forward<Dominance>(h)))
         {
             if (!std::isfinite(scaling))
                 {
@@ -61,22 +65,27 @@ namespace fwdpy11
         }
 
         virtual std::unique_ptr<Sregion> clone() const = 0;
-        virtual std::uint32_t operator()(
-            fwdpp::flagged_mutation_queue& /*recycling_bin*/,
-            std::vector<Mutation>& /*mutations*/,
-            std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
-            const std::uint32_t /*generation*/,
-            const GSLrng_t& /*rng*/) const = 0;
+        virtual std::uint32_t
+        operator()(fwdpp::flagged_mutation_queue& /*recycling_bin*/,
+                   std::vector<Mutation>& /*mutations*/,
+                   std::unordered_multimap<double, std::uint32_t>& /*lookup_table*/,
+                   const std::uint32_t /*generation*/,
+                   const GSLrng_t& /*rng*/) const = 0;
         // Added in 0.7.0.  We now require that these types
         // are able to return deviates from the relevant cdf_P
         // function.
         virtual double from_mvnorm(const double /*deviate*/,
                                    const double /*P*/) const = 0;
-        virtual std::vector<double> get_dominance() const = 0;
-        virtual pybind11::tuple
+        virtual double
+        generate_dominance(const GSLrng_t& rng, const double esize) const
+        {
+            return dominance->generate_dominance(rng, esize);
+        }
+
+        virtual std::vector<std::size_t>
         shape() const
         {
-            return pybind11::make_tuple(total_dim);
+            return {total_dim};
         }
     };
 } // namespace fwdpy11

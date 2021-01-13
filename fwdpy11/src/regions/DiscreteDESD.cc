@@ -34,8 +34,9 @@ class DiscreteDESD : public fwdpy11::Sregion
   public:
     DiscreteDESD(const fwdpy11::Region& r, const double sc, std::vector<double> esize_,
                  std::vector<double> h_, std::vector<double> w_)
-        : fwdpy11::Sregion(r, sc, 1), esize{std::move(esize_)}, h{std::move(h_)},
-          weight{std::move(w_)}, sh_lookup{init_lookup()}
+        : fwdpy11::Sregion(r, sc, 1, fwdpy11::process_input_dominance(0.)),
+          esize{std::move(esize_)}, h{std::move(h_)}, weight{std::move(w_)},
+          sh_lookup{init_lookup()}
     {
         if (esize.size() != h.size() || esize.size() != weight.size()
             || h.size() != weight.size())
@@ -63,7 +64,7 @@ class DiscreteDESD : public fwdpy11::Sregion
             recycling_bin, mutations, lookup_table, false, generation,
             [this, &rng]() { return region(rng); },
             [this, idx]() { return esize[idx] / scaling; },
-            [this, idx]() { return h[idx]; }, this->label());
+            [this, idx](const double esize) { return h[idx]; }, this->label());
     }
 
     double
@@ -73,10 +74,10 @@ class DiscreteDESD : public fwdpy11::Sregion
         return 1.;
     }
 
-    std::vector<double>
-    get_dominance() const override
+    double
+    generate_dominance(const fwdpy11::GSLrng_t& rng, const double esize) const override
     {
-        return {h};
+        return std::numeric_limits<double>::quiet_NaN();
     }
 };
 

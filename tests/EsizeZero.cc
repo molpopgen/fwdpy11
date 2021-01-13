@@ -6,7 +6,8 @@ using namespace pybind11::literals;
 
 struct EsizeZero : public fwdpy11::Sregion
 {
-    EsizeZero(const fwdpy11::Region& r) : fwdpy11::Sregion(r, 1., 1)
+    EsizeZero(const fwdpy11::Region& r)
+        : fwdpy11::Sregion(r, 1., 1, fwdpy11::process_input_dominance(1.0))
     {
     }
 
@@ -22,10 +23,10 @@ struct EsizeZero : public fwdpy11::Sregion
         return 0.0;
     }
 
-    std::vector<double>
-    get_dominance() const override
+    double
+    generate_dominance(const fwdpy11::GSLrng_t&, const double) const override
     {
-        return {1.};
+        return 1.;
     }
 
     std::uint32_t
@@ -38,7 +39,7 @@ struct EsizeZero : public fwdpy11::Sregion
         return fwdpy11::infsites_Mutation(
             recycling_bin, mutations, lookup_table, false, generation,
             [this, &rng]() { return region(rng); }, []() { return 0.; },
-            []() { return 1.; }, this->label());
+            [](const double) { return 1.; }, this->label());
     }
 };
 

@@ -6,18 +6,20 @@
 #include <sstream>
 #include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
+#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
     struct LogNormalS : public Sregion
     {
-        const double zeta, sigma, dominance;
+        const double zeta, sigma;
         const bool univariate;
 
+        template <typename Dominance>
         LogNormalS(const Region& r, double scaling, double zeta_, double sigma_,
-                   double h)
-            : Sregion(r, scaling, 1), zeta(zeta_), sigma(sigma_), dominance(h),
-              univariate(true)
+                   Dominance&& h)
+            : Sregion(r, scaling, 1, std::forward<Dominance>(h)), zeta(zeta_),
+              sigma(sigma_), univariate(true)
         {
             if (!std::isfinite(zeta))
                 {
@@ -34,10 +36,11 @@ namespace fwdpy11
         }
 
         // For use with mvS
-        LogNormalS(const Region& r, double scaling, double h)
-            : Sregion(r, scaling, 1), zeta(std::numeric_limits<double>::quiet_NaN()),
-              sigma(std::numeric_limits<double>::quiet_NaN()), dominance(h),
-              univariate(false)
+        template <typename Dominance>
+        LogNormalS(const Region& r, double scaling, Dominance&& h)
+            : Sregion(r, scaling, 1, std::forward<Dominance>(h)),
+              zeta(std::numeric_limits<double>::quiet_NaN()),
+              sigma(std::numeric_limits<double>::quiet_NaN()), univariate(false)
         {
         }
 
@@ -59,19 +62,16 @@ namespace fwdpy11
                 [this, &rng]() {
                     return gsl_ran_lognormal(rng.get(), zeta, sigma) / scaling;
                 },
-                [this]() { return dominance; }, this->label());
+                [this, &rng](const double esize) {
+                    return dominance->generate_dominance(rng, esize);
+                },
+                this->label());
         }
 
         double
         from_mvnorm(const double deviate, const double /*P*/) const override
         {
             return std::exp(deviate) / scaling;
-        }
-
-        std::vector<double>
-        get_dominance() const override
-        {
-            return {dominance};
         }
     };
 }

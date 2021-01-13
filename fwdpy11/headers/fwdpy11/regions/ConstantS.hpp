@@ -5,25 +5,23 @@
 #include <stdexcept>
 #include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
+#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
 
     struct ConstantS : public Sregion
     {
-        double esize, dominance;
+        double esize;
         bool is_neutral;
 
-        ConstantS(const Region& r, const double s, const double es, const double h)
-            : Sregion(r, s, 1), esize(es), dominance(h), is_neutral(false)
+        template <typename Dominance>
+        ConstantS(const Region& r, const double s, const double es, Dominance&& h)
+            : Sregion(r, s, 1, std::forward<Dominance>(h)), esize(es), is_neutral(false)
         {
             if (!std::isfinite(esize))
                 {
                     throw std::invalid_argument("esize must be finite");
-                }
-            if (!std::isfinite(dominance))
-                {
-                    throw std::invalid_argument("dominance must be finite");
                 }
             if (esize == 0.0)
                 {
@@ -35,14 +33,15 @@ namespace fwdpy11
         // of MutationRegions to supply neutral variants.
         // This constructor is NOT exposed to Python.
         ConstantS(const Region& r)
-            : Sregion(r, 1., 1), esize(0.), dominance(1.), is_neutral(true)
+            : Sregion(r, 1., 1, process_input_dominance(1.)), esize(0.), is_neutral(true)
         {
         }
 
         std::unique_ptr<Sregion>
         clone() const override
         {
-            return std::unique_ptr<ConstantS>(new ConstantS(*this));
+            return std::make_unique<ConstantS>(this->region, this->scaling, this->esize,
+                                               *this->dominance);
         }
 
         std::uint32_t
@@ -54,7 +53,10 @@ namespace fwdpy11
             return infsites_Mutation(
                 recycling_bin, mutations, lookup_table, is_neutral, generation,
                 [this, &rng]() { return region(rng); },
-                [this]() { return esize / scaling; }, [this]() { return dominance; },
+                [this]() { return esize / scaling; },
+                [this, &rng](const double esize) {
+                    return dominance->generate_dominance(rng, esize);
+                },
                 this->label());
         }
 
@@ -63,12 +65,6 @@ namespace fwdpy11
         {
             //NOTE: ignores the input!
             return esize / scaling;
-        }
-
-        std::vector<double>
-        get_dominance() const override
-        {
-            return {dominance};
         }
     };
 } // namespace fwdpy11

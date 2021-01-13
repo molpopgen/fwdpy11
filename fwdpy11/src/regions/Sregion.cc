@@ -22,10 +22,19 @@ init_Sregion(py::module& m)
         .. versionchanged:: 0.8.0
 
             C++ version of class API minimized in favor of attrs.
+
+        .. versionchanged:: 0.13.0
+
+            Remove "dominance" property.
         )delim")
-        .def_property_readonly("dominance", &fwdpy11::Sregion::get_dominance,
-                               "Dominance values.  Added in 0.7.0")
-        .def_property_readonly("shape", &fwdpy11::Sregion::shape,
-                               "Return shape.  Added in 0.7.0");
+        .def_property_readonly(
+            "shape",
+            [](const fwdpy11::Sregion& s) {
+                auto shape = s.shape();
+                auto l = py::cast(shape);
+                auto t = l.cast<py::tuple>();
+                return t;
+            },
+            "Return shape.  Added in 0.7.0");
 }
 
