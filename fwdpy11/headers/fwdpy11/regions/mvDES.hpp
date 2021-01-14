@@ -25,7 +25,6 @@
 #include <cmath>
 #include "Sregion.hpp"
 #include "LogNormalS.hpp"
-#include "MutationDominance.hpp"
 #include "MultivariateGaussianEffects.hpp"
 #include <fwdpy11/policies/mutation.hpp>
 #include <gsl/gsl_matrix.h>

@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <fwdpy11/policies/mutation.hpp>
 #include "Sregion.hpp"
-#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {

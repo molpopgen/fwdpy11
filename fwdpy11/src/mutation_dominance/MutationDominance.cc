@@ -1,4 +1,4 @@
-#include <fwdpy11/regions/MutationDominance.hpp>
+#include <fwdpy11/mutation_dominance/MutationDominance.hpp>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

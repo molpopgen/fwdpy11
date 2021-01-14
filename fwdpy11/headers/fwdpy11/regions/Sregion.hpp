@@ -11,8 +11,8 @@
 #include <fwdpy11/types/Mutation.hpp>
 #include <fwdpy11/rng.hpp>
 #include <gsl/gsl_cdf.h>
+#include <fwdpy11/mutation_dominance/MutationDominance.hpp>
 #include "Region.hpp"
-#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {
