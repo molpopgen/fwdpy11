@@ -4,6 +4,7 @@
 #include <cmath>
 #include <memory>
 #include <stdexcept>
+#include <fwdpp/util/validators.hpp>
 #include <fwdpy11/rng.hpp>
 
 namespace fwdpy11
@@ -21,10 +22,7 @@ namespace fwdpy11
         double dominance;
         explicit FixedDominance(double d) : dominance{d}
         {
-            if (!std::isfinite(dominance))
-                {
-                    throw std::invalid_argument("dominance values must be finite");
-                }
+            fwdpp::validators::isfinite(d, "dominance values must be finite");
         }
 
         double
