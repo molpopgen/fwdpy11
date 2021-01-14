@@ -15,7 +15,6 @@
 #include <fwdpy11/policies/mutation.hpp>
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include "Sregion.hpp"
-#include "MutationDominance.hpp"
 
 namespace fwdpy11
 {

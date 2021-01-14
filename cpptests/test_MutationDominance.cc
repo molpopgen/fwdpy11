@@ -13,7 +13,7 @@
 #include <fwdpy11/regions/Sregion.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/Mutation.hpp>
-#include <fwdpy11/regions/MutationDominance.hpp>
+#include <fwdpy11/mutation_dominance/MutationDominance.hpp>
 
 BOOST_AUTO_TEST_SUITE(test_MutationDominance)
 
