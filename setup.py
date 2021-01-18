@@ -6,7 +6,6 @@ import subprocess
 import sys
 from distutils.version import LooseVersion
 
-import pybind11
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
@@ -15,10 +14,6 @@ TSKIT_MIN_VERSION = "0.3.2"
 
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
-
-if pybind11.__version__ < PYBIND11_MIN_VERSION:
-    raise RuntimeError(f"pybind11 >= {PYBIND11_MIN_VERSION} required")
-
 
 if "--weffcpp" in sys.argv:
     USE_WEFFCPP = True
@@ -140,37 +135,12 @@ class CMakeBuild(build_ext):
         )
 
 
-class get_pybind_include(object):
-    """Helper class to determine the pybind11 include path
-
-    The purpose of this class is to postpone importing pybind11
-    until it is actually installed, so that the ``get_include()``
-    method can be invoked. """
-
-    def __init__(self, user=False):
-        self.user = user
-
-    def __str__(self):
-        import pybind11
-
-        return pybind11.get_include(self.user)
-
-
 PKGS = [
     "fwdpy11",
     "fwdpy11.demographic_models",
     "fwdpy11.tskit_tools",
     "fwdpy11._types",
     "fwdpy11._monkeypatch",
-]
-
-INCLUDES = [
-    "fwdpy11/headers",
-    "fwdpy11/headers/fwdpp",
-    # Path to pybind11 headers
-    get_pybind_include(),
-    get_pybind_include(user=True),
-    os.path.join(sys.prefix, "include"),
 ]
 
 LIBRARY_DIRS = [os.path.join(sys.prefix, "lib")]
