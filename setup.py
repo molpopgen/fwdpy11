@@ -9,9 +9,6 @@ from distutils.version import LooseVersion
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-PYBIND11_MIN_VERSION = "2.6.0"
-TSKIT_MIN_VERSION = "0.3.2"
-
 if sys.version_info[0] < 3:
     raise ValueError("Python 3 is required!")
 
@@ -143,8 +140,6 @@ PKGS = [
     "fwdpy11._monkeypatch",
 ]
 
-LIBRARY_DIRS = [os.path.join(sys.prefix, "lib")]
-
 ext_modules = [
     CMakeExtension("fwdpy11._fwdpy11"),
 ]
@@ -189,35 +184,8 @@ for root, dirnames, filenames in os.walk("fwdpy11/headers"):
             except:  # NOQA
                 generated_package_data[replace] = ["*.tcc"]
 
-long_desc = open("README.rst").read()
-
 setup(
-    name="fwdpy11",
-    author="Kevin Thornton",
-    author_email="krthornt@uci.edu",
-    url="http://molpopgen.github.io/fwdpy11",
-    classifiers=[
-        "Intended Audience :: Science/Research",
-        "Topic :: Scientific/Engineering :: Bio-Informatics",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-    ],
-    description="Forward-time population genetic simulation in Python",
-    license="GNU GPLv3+",
-    provides=["fwdpy11"],
-    obsoletes=["none"],
-    data_files=[("fwdpy11", ["COPYING", "README.rst"])],
-    long_description=long_desc,
-    long_description_content_type="text/x-rst",
     ext_modules=ext_modules,
-    python_requires=">=3.6",
-    install_requires=[
-        f"pybind11>={PYBIND11_MIN_VERSION}",
-        "numpy",
-        f"tskit>={TSKIT_MIN_VERSION}",
-        "sparse",
-        "attrs>=0.19.2",
-    ],
-    setup_requires=["setuptools_scm"],
     use_scm_version={"write_to": "fwdpy11/_version.py"},
     cmdclass={"build_ext": CMakeBuild},
     packages=PKGS,
