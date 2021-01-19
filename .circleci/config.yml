@@ -89,13 +89,12 @@ jobs:
             python setup.py sdist
             python setup.py check
             python -m twine check dist/*.tar.gz
-      # This is removed b/c the failures here are not reproducible on more up-to-date distros.
-      # We will revisit this via GH actions
-      # - run:
-      #     name: Install from the distribution tarball and build manual from distribution
-      #     command: |
-      #       python -m venv venv
-      #       source venv/bin/activate 
-      #       pip install --upgrade setuptools pip pybind11
-      #       pip install dist/*.tar.gz 
+      
+      - run:
+          name: Install from the distribution tarball and build manual from distribution
+          command: |
+            python -m venv venv
+            source venv/bin/activate 
+            pip install --upgrade setuptools pip pybind11
+            pip install dist/*.tar.gz 
 
