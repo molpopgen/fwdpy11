@@ -18,3 +18,4 @@ include doc/Makefile
 recursive-include doc *.rst *.png
 include aclocal.m4
 recursive-include check_deps *
+exclude fwdpy11/headers/fwdpp
