@@ -84,7 +84,8 @@ simplification(
         alive_at_last_simplification,
         *pop.tables, simplifier_state, new_edge_buffer,
         preserve_selected_fixations, simulating_neutral_variants,
-        suppress_edge_table_indexing);
+        suppress_edge_table_indexing,
+        reset_treeseqs_to_alive_nodes_after_simplification);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
         {
             throw std::runtime_error("evolvets: count vector size mismatch after "

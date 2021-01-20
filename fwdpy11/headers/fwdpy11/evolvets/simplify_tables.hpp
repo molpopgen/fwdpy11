@@ -45,7 +45,8 @@ namespace fwdpy11
         std::vector<fwdpp::ts::table_index_t> &alive_at_last_simplification,
         fwdpp::ts::std_table_collection &tables, SimplificationState &simplifier_state,
         fwdpp::ts::edge_buffer &new_edge_buffer, const bool preserve_selected_fixations,
-        const bool simulating_neutral_variants, const bool suppress_edge_table_indexing)
+        const bool simulating_neutral_variants, const bool suppress_edge_table_indexing,
+        const bool reset_treeseqs_to_alive_nodes_after_simplification)
     {
         // As of 0.8.0, we do not need to sort edges!
         fwdpp::ts::sort_mutation_table(tables);
@@ -93,7 +94,7 @@ namespace fwdpy11
                 return rv;
             }
         pop.tables->build_indexes();
-        if (pop.tables->preserved_nodes.empty())
+        if (pop.tables->preserved_nodes.empty() || reset_treeseqs_to_alive_nodes_after_simplification)
             {
                 fwdpp::ts::count_mutations(tables, pop.mutations, pop.alive_nodes,
                                            pop.mcounts, mcounts_from_preserved_nodes);
