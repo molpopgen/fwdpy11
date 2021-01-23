@@ -1,29 +1,46 @@
-#include <numeric>
+#include <algorithm>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
-#include "index_and_count_mutations.hpp"
 
 void
-index_and_count_mutations(const bool suppress_edge_table_indexing,
+index_and_count_mutations(bool suppress_edge_table_indexing,
+                          bool simulating_neutral_variants,
+                          bool reset_treeseqs_to_alive_nodes_after_simplification,
                           fwdpy11::DiploidPopulation& pop)
 {
     pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
-    if (!suppress_edge_table_indexing)
+    if (!suppress_edge_table_indexing && !simulating_neutral_variants)
         {
             return;
         }
-    if (pop.tables->preserved_nodes.empty())
+    if (pop.tables->preserved_nodes.empty() || simulating_neutral_variants)
         {
             pop.tables->build_indexes();
             pop.fill_alive_nodes();
-            fwdpp::ts::count_mutations(*pop.tables, pop.mutations,
-                                       pop.alive_nodes, pop.mcounts);
+            fwdpp::ts::count_mutations(*pop.tables, pop.mutations, pop.alive_nodes,
+                                       pop.mcounts, pop.mcounts_from_preserved_nodes);
         }
     else
         {
-            fwdpp::fwdpp_internal::process_haploid_genomes(
-                pop.haploid_genomes, pop.mutations, pop.mcounts);
+            fwdpp::fwdpp_internal::process_haploid_genomes(pop.haploid_genomes,
+                                                           pop.mutations, pop.mcounts);
+        }
+    if (reset_treeseqs_to_alive_nodes_after_simplification)
+        {
+            auto itr = std::remove_if(
+                begin(pop.tables->mutations), end(pop.tables->mutations),
+                [&pop](const auto& mr) {
+                    return pop.mcounts[mr.key] + pop.mcounts_from_preserved_nodes[mr.key]
+                           == 0;
+                });
+            auto d = std::distance(itr, end(pop.tables->mutations));
+            pop.tables->mutations.erase(itr, end(pop.tables->mutations));
+            if (d)
+                {
+                    fwdpp::ts::rebuild_site_table(*pop.tables);
+                }
         }
 }
 

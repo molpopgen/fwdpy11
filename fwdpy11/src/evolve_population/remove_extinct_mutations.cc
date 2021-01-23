@@ -5,6 +5,7 @@
 #include <limits>
 #include <stdexcept>
 #include <fwdpy11/types/Population.hpp>
+#include "runtime_checks.hpp"
 
 namespace
 {
@@ -40,6 +41,7 @@ namespace
 void
 remove_extinct_mutations(fwdpy11::Population& pop)
 {
+    check_mutation_table_consistency_with_count_vectors(pop, __FILE__, __LINE__);
     std::vector<fwdpp::uint_t> summed_counts(pop.mcounts);
     std::transform(begin(pop.mcounts_from_preserved_nodes),
                    end(pop.mcounts_from_preserved_nodes), begin(summed_counts),

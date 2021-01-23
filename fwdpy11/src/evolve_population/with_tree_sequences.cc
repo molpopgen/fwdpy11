@@ -49,6 +49,7 @@
 #include "remove_extinct_mutations.hpp"
 #include "track_ancestral_counts.hpp"
 #include "remove_extinct_genomes.hpp"
+#include "runtime_checks.hpp"
 
 namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
@@ -105,12 +106,18 @@ simplification(
 void
 final_population_cleanup(
     bool suppress_edge_table_indexing, bool preserve_selected_fixations,
-    bool remove_extinct_mutations_at_finish, std::uint32_t last_preserved_generation,
+    bool remove_extinct_mutations_at_finish, bool simulating_neutral_variants,
+    bool reset_treeseqs_to_alive_nodes_after_simplification,
+    std::uint32_t last_preserved_generation,
     const std::vector<std::uint32_t> &last_preserved_generation_counts,
     fwdpy11::DiploidPopulation &pop)
 {
-    index_and_count_mutations(suppress_edge_table_indexing, pop);
-    if (pop.generation == last_preserved_generation)
+    index_and_count_mutations(suppress_edge_table_indexing, simulating_neutral_variants,
+                              reset_treeseqs_to_alive_nodes_after_simplification, pop);
+    check_mutation_table_consistency_with_count_vectors(pop, __FILE__, __LINE__);
+    if (pop.generation == last_preserved_generation &&
+            !reset_treeseqs_to_alive_nodes_after_simplification &&
+            !simulating_neutral_variants)
         {
             std::transform(begin(pop.mcounts_from_preserved_nodes),
                            end(pop.mcounts_from_preserved_nodes),
@@ -118,6 +125,7 @@ final_population_cleanup(
                            begin(pop.mcounts_from_preserved_nodes),
                            std::minus<std::uint32_t>());
         }
+    check_mutation_table_consistency_with_count_vectors(pop, __FILE__, __LINE__);
     if (!preserve_selected_fixations)
         {
             auto itr = std::remove_if(
@@ -431,7 +439,9 @@ evolve_with_tree_sequences(
                     new_edge_buffer.reset(nullptr);
                     final_population_cleanup(
                         suppress_edge_table_indexing, preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, last_preserved_generation,
+                        remove_extinct_mutations_at_finish, simulating_neutral_variants,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        last_preserved_generation,
                         last_preserved_generation_counts, pop);
                     std::ostringstream o;
                     o << "extinction at time " << pop.generation;
@@ -502,8 +512,20 @@ evolve_with_tree_sequences(
                                             end(simplification_rv.second),
                                             std::numeric_limits<std::size_t>::max()),
                                 end(simplification_rv.second));
-                            genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                pop.mcounts, pop.mcounts_from_preserved_nodes);
+                            if (simulating_neutral_variants)
+                                {
+                                    genetics.mutation_recycling_bin
+                                        = fwdpp::ts::make_mut_queue(
+                                            simplification_rv.second,
+                                            pop.mutations.size());
+                                }
+                            else
+                                {
+                                    genetics.mutation_recycling_bin
+                                        = fwdpp::ts::make_mut_queue(
+                                            pop.mcounts,
+                                            pop.mcounts_from_preserved_nodes);
+                                }
                         }
                     else
                         {
@@ -577,7 +599,8 @@ evolve_with_tree_sequences(
     simplifier_state.reset(nullptr);
     new_edge_buffer.reset(nullptr);
     final_population_cleanup(suppress_edge_table_indexing, preserve_selected_fixations,
-                             remove_extinct_mutations_at_finish,
+                             remove_extinct_mutations_at_finish, simulating_neutral_variants, 
+                             reset_treeseqs_to_alive_nodes_after_simplification,
                              last_preserved_generation, last_preserved_generation_counts,
                              pop);
     ddemog::save_model_state(std::move(current_demographic_state), demography);
