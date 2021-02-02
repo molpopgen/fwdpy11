@@ -34,6 +34,7 @@ class CountSamplesPerTimePoint(object):
         # and record their number.  We do this
         # by a "brute-force" approach
         for t, n, m in pop.sample_timepoints(False):
+            assert t != pop.generation
             if t not in self.timepoint_seen:
                 self.timepoint_seen[t] = 1
             else:
