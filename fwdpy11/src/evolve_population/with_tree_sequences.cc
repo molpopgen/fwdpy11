@@ -601,6 +601,13 @@ evolve_with_tree_sequences(
                 reset_treeseqs_to_alive_nodes_after_simplification,
                 post_simplification_recorder, *simplifier_state, *new_edge_buffer,
                 alive_at_last_simplification, pop);
+            if (!preserve_selected_fixations)
+                {
+                    fwdpp::ts::remove_fixations_from_haploid_genomes(
+                        pop.haploid_genomes, pop.mutations, pop.mcounts,
+                        pop.mcounts_from_preserved_nodes, 2 * pop.diploids.size(),
+                        preserve_selected_fixations);
+                }
         }
     simplifier_state.reset(nullptr);
     new_edge_buffer.reset(nullptr);
