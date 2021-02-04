@@ -21,10 +21,26 @@ import pytest
 import fwdpy11
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def rng(request):
     try:
         seed = request.param.get("seed", None)
         return fwdpy11.GSLrng(seed)
-    except: # NOQA
+    except AttributeError:  # NOQA
         return fwdpy11.GSLrng(42)
+
+
+@pytest.fixture(scope="function")
+def pop(request):
+    popsize = request.param["N"]
+    genome_length = request.param["genome_length"]
+    return fwdpy11.DiploidPopulation(popsize, genome_length)
+
+
+@pytest.fixture(scope="function")
+def mslike_pop(request):
+    try:
+        N = request.param.get("N", None)
+        return fwdpy11.DiploidPopulation(N, 1.0)
+    except AttributeError:  # NOQA
+        return fwdpy11.DiploidPopulation(1000, 1.0)

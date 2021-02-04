@@ -143,5 +143,34 @@ class TestNeutralMutRegions(unittest.TestCase):
         self.assertTrue(all([i < 0.25 or i >= 0.5 for i in pos]))
 
 
+def test_trigger_final_simplification_with_fixations_to_remove():
+    """
+    MRE that triggers an exception that would hit after many of the
+    changes in PR647 were in place.  Commit 06a8a41 avoids the exception.
+    """
+    burnin = 10
+    N = 133
+    pdict = {
+        # Add a region for neutral mutations:
+        "nregions": [fwdpy11.Region(0, 1, 1)],
+        "sregions": [fwdpy11.ExpS(beg=0, end=1, weight=1, mean=0.2)],
+        "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-2)],
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (1e-3, 1e-3, None),
+        "simlen": burnin * N,
+        "prune_selected": True,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(N, 1.0)
+    rng = fwdpy11.GSLrng(54321)
+
+    fwdpy11.evolvets(
+        rng,
+        pop,
+        params,
+        37,
+        suppress_table_indexing=False,
+    )
+
 if __name__ == "__main__":
     unittest.main()
