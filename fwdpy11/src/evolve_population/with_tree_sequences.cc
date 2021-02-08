@@ -157,6 +157,12 @@ final_population_cleanup(
             remove_extinct_mutations(pop);
         }
     remove_extinct_genomes(pop);
+    if (pop.mutations.size() != pop.mcounts.size()
+        || pop.mutations.size() != pop.mcounts_from_preserved_nodes.size())
+        {
+            throw std::runtime_error("mutation container size does not equal mutation "
+                                     "count container size(s)");
+        }
 }
 
 void
