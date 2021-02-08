@@ -229,6 +229,20 @@ evolve_with_tree_sequences(
         {
             throw std::invalid_argument("node table is not initialized");
         }
+    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
+    if (simulating_neutral_variants)
+        {
+            if (track_mutation_counts_during_sim)
+                {
+                    if (simplification_interval != 1)
+                        {
+                            throw std::invalid_argument(
+                                "when track_mutation_counts is True and simulating "
+                                "neutral mutations, the simplification interval must be "
+                                "1");
+                        }
+                }
+        }
 
     // Set up discrete demography types. New in 0.6.0
     auto current_demographic_state = ddemog::initialize_model_state(
@@ -345,7 +359,6 @@ evolve_with_tree_sequences(
     auto new_edge_buffer
         = std::make_unique<fwdpp::ts::edge_buffer>(fwdpp::ts::edge_buffer{});
     bool stopping_criteron_met = false;
-    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
         simplification_rv;
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
