@@ -11,7 +11,8 @@ index_and_count_mutations(bool suppress_edge_table_indexing,
                           fwdpy11::DiploidPopulation& pop)
 {
     pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
-    if (!suppress_edge_table_indexing && !simulating_neutral_variants)
+    if (!suppress_edge_table_indexing && !simulating_neutral_variants
+        && !reset_treeseqs_to_alive_nodes_after_simplification)
         {
             return;
         }
