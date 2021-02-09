@@ -24,6 +24,7 @@ import pickle
 import unittest
 from collections import namedtuple
 
+import pytest
 import msprime
 import numpy as np
 import tskit
@@ -218,7 +219,9 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             len(self.dumped_ts.tables.mutations), len(self.pop.tables.mutations)
         )
         eview = np.array(self.pop.tables.edges, copy=False)
-        self.assertEqual(eview["parent"].sum(), self.dumped_ts.tables.edges.parent.sum())
+        self.assertEqual(
+            eview["parent"].sum(), self.dumped_ts.tables.edges.parent.sum()
+        )
         self.assertEqual(eview["child"].sum(), self.dumped_ts.tables.edges.child.sum())
         self.assertEqual(eview["left"].sum(), self.dumped_ts.tables.edges.left.sum())
         self.assertEqual(eview["right"].sum(), self.dumped_ts.tables.edges.right.sum())
@@ -1425,6 +1428,58 @@ class TestInvalidAttemptAtRecapitation(unittest.TestCase):
         rng = fwdpy11.GSLrng(666 ** 2)
         with self.assertRaises(ValueError):
             fwdpy11.evolvets(rng, pop, params, 100, preserve_first_generation=True)
+
+
+class TouchTrees(object):
+    def __init__(self, index):
+        self.index = index
+        self.called = 0
+
+    def __call__(self, pop, sampler):
+        self.called += 1
+        if self.index is True:
+            pop.tables.build_indexes()
+        exception_happened = False
+
+        try:
+            _ = fwdpy11.TreeIterator(pop.tables, pop.alive_nodes, update_samples=True)
+        except ValueError:
+            exception_happened = True
+
+        if self.index is False:
+            assert exception_happened is True
+        else:
+            assert not exception_happened
+
+
+@pytest.fixture(scope="function", params=[True, False])
+def test_table_indexing_during_sim_recorder(request):
+    return TouchTrees(request.param)
+
+
+def test_table_indexing_during_sim(test_table_indexing_during_sim_recorder):
+    a = fwdpy11.Multiplicative(2.0)
+    p = {
+        "nregions": [],
+        "sregions": [fwdpy11.ExpS(0, 1, 1, -0.1)],
+        "recregions": [],
+        "rates": (0.0, 1e-2, 0),
+        "gvalue": a,
+        "demography": fwdpy11.DiscreteDemography(),
+        "simlen": 50,
+    }
+    params = fwdpy11.ModelParams(**p)
+    rng = fwdpy11.GSLrng(666 ** 2)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    fwdpy11.evolvets(
+        rng,
+        pop,
+        params,
+        10,
+        recorder=test_table_indexing_during_sim_recorder,
+        suppress_table_indexing=True,
+    )
+    assert test_table_indexing_during_sim_recorder.called > 0
 
 
 if __name__ == "__main__":

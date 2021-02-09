@@ -38,6 +38,7 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("input_left", &fwdpp::ts::std_table_collection::input_left)
         .def_readonly("output_right",
                       &fwdpp::ts::std_table_collection::output_right)
+        .def("build_indexes", &fwdpp::ts::std_table_collection::build_indexes)
         .def_readonly("preserved_nodes",
                       &fwdpp::ts::std_table_collection::preserved_nodes,
                       "List of nodes corresponding to ancient samples.")
