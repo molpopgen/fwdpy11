@@ -68,6 +68,14 @@ apply_treseq_resetting_of_ancient_samples(
         }
 }
 
+// NOTE: this should be part of fwdpp's edge table functions header!
+void
+clear_edge_table_indexes(fwdpp::ts::std_table_collection &tables)
+{
+    tables.input_left.clear();
+    tables.output_right.clear();
+}
+
 template <typename SimplificationState>
 std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
 simplification(
@@ -229,6 +237,20 @@ evolve_with_tree_sequences(
         {
             throw std::invalid_argument("node table is not initialized");
         }
+    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
+    if (simulating_neutral_variants)
+        {
+            if (track_mutation_counts_during_sim)
+                {
+                    if (simplification_interval != 1)
+                        {
+                            throw std::invalid_argument(
+                                "when track_mutation_counts is True and simulating "
+                                "neutral mutations, the simplification interval must be "
+                                "1");
+                        }
+                }
+        }
 
     // Set up discrete demography types. New in 0.6.0
     auto current_demographic_state = ddemog::initialize_model_state(
@@ -345,7 +367,6 @@ evolve_with_tree_sequences(
     auto new_edge_buffer
         = std::make_unique<fwdpp::ts::edge_buffer>(fwdpp::ts::edge_buffer{});
     bool stopping_criteron_met = false;
-    const bool simulating_neutral_variants = (mu_neutral > 0.0) ? true : false;
     std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
         simplification_rv;
     std::uint32_t last_preserved_generation = std::numeric_limits<std::uint32_t>::max();
@@ -387,6 +408,7 @@ evolve_with_tree_sequences(
     std::vector<fwdpp::ts::table_index_t> alive_at_last_simplification(pop.alive_nodes);
     new_edge_buffer->reset(alive_at_last_simplification.size());
 
+    clear_edge_table_indexes(*pop.tables);
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
@@ -466,6 +488,7 @@ evolve_with_tree_sequences(
             else
                 {
                     simplified = false;
+                    clear_edge_table_indexes(*pop.tables);
                 }
             if (pop.tables->num_nodes()
                 >= std::numeric_limits<fwdpp::ts::table_index_t>::max() - 1)
