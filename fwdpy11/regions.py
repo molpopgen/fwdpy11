@@ -107,7 +107,7 @@ class Region(fwdpy11._fwdpy11._ll_Region):
     :param label: Not relevant to recombining regions.
                   Otherwise, this value will be used to fill
                   :attr:`fwdpy11.Mutation.label`.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
 
     When coupled is True, the "weight" may be interpreted
     as a "per base pair" (or per unit, generally speaking) term.
@@ -160,7 +160,7 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -221,7 +221,7 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -286,7 +286,7 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -349,7 +349,7 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -412,7 +412,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     :param coupled: if True, the weight is converted to(end-beg)*weight
     :type Constructor: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -477,7 +477,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
         :param coupled: if True, the weight is converted to(end-beg)*weight
         :type coupled: bool
         :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-        :type label: numpy.uint16
+        :type label: :attr:`numpy.uint16`
         :param scaling: The scaling of the DFE
         :type scaling: float
         """
@@ -523,7 +523,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 
@@ -583,7 +583,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     :param weight: Weight on the region
     :type weight: float
     :param matrix: Variance-covariance matrix
-    :type matrix: numpy.ndarray
+    :type matrix: :class:`numpy.ndarray`
     :param fixed_effect: Fixed effect size. Defaults to 0.0.
     :type fixed_effect: float
     :param h: Dominance. Defaults to 1.0
@@ -591,7 +591,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     :param coupled: Specify if weight is function of end-beg or not. Defaults to True
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
 
     The input matrix must be square and semi-positive definite.   If either
     of these conditions are not met, ValueError will be raised. ValueError
@@ -667,9 +667,9 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     :param des: Distributions of effect sizes
     :type des: list
     :param means: means marginal gaussian Distributions
-    :type means: numpy.ndarray
+    :type means: :class:`numpy.ndarray`
     :param matrix: Variance/covariance matrix
-    :type matrix: numpy.ndarray
+    :type matrix: :class:`numpy.ndarray`
 
     .. versionadded:: 0.7.0
 
@@ -717,7 +717,7 @@ class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
     :param coupled: Specify if weight is function of end-beg or not. Defaults to True
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
-    :type label: numpy.uint16
+    :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
     :type scaling: float
 

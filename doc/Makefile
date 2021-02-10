@@ -1,20 +1,10 @@
-# Minimal makefile for Sphinx documentation
-#
+PYPATH=${PWD}/..
+MDFILES:=$(shell find . -type f -name '*.md')
+INDEX:=_build/html/index.html
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = fwdpy11
-SOURCEDIR     = .
-BUILDDIR      = _build
+all: $(INDEX)
+	PYTHONPATH=$(PYPATH) bash build.sh
+clean:
+	rm -rf _build
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-
-.PHONY: help Makefile
-
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+$(INDEX): $(MDFILE) _config.yml _toc.yml build.sh references.bib

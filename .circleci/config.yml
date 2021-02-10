@@ -21,6 +21,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install libgsl0-dev libcunit1-dev libconfig-dev cmake libboost-test-dev autoconf
             pip install --user -r requirements.txt
+            pip install --user -r doc/requirements.txt
             pip install --user twine
             curl -L https://github.com/pybind/pybind11/archive/v2.6.0.tar.gz > pybind11-2.6.0.tar.gz
             tar xzf pybind11-2.6.0.tar.gz
@@ -73,8 +74,9 @@ jobs:
       - run:
           name: Build the manual and run doctests
           command: |
-            make html -C doc
-            make doctest -C doc
+            cd doc
+            make
+            cd ..
 
       # This is fickle b/c it often fails due to connection 
       # issues rather than real URL problems

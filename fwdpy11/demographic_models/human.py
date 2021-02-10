@@ -80,7 +80,7 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
     Tennessen et al. (2012) and Fu et al. 2013. However, due to having
     to convert from continuous to discrete time, etc., other definitions
     of this model are also possible.  Here, all deme sizes and times
-    are obtained using :func:`numpy.rint`.
+    are obtained using :data:`numpy.rint`.
 
 
     .. note::

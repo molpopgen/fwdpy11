@@ -1,0 +1,5 @@
+jupyter-book
+numpy
+msprime
+tskit>=0.3.4
+sphinx-issues
