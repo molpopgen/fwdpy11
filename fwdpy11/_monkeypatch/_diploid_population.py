@@ -33,7 +33,7 @@ def _alive_nodes(self):
 
     :rtype: numpy.ndarray
 
-    .. vesionadded:: 0.5.3
+    .. versionadded:: 0.5.3
     """
     md = np.array(self.diploid_metadata, copy=False)
     return md["nodes"].flatten()

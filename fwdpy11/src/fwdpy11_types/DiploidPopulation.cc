@@ -353,9 +353,8 @@ init_DiploidPopulation(py::module& m)
         :param ts: A tree sequence from tskit
         :type ts: tskit.TreeSequence
 
+        :return: A population object with an initialized :class:`fwdpy11.TableCollection`
         :rtype: :class:`fwdpy11.DiploidPopulation`
-        :returns: A population object with an initialized
-        :class:`fwdpy11.TableCollection`
 
         .. versionadded:: 0.2.0
 
@@ -368,6 +367,6 @@ init_DiploidPopulation(py::module& m)
             of the coalescent model itself. A key issue
             is that your input tree sequence must have
             node times in the correct time units! (Generations,
-            for example.) See :ref:`ts` for more discussion
+            for example.)
         )delim");
 }

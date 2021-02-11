@@ -56,7 +56,7 @@ jobs:
         with:
           path: |
             ~/.local
-          key: ${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('doc/requirements.txt') }}
 
       - name: Install pip dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -64,6 +64,7 @@ jobs:
             # These are needed to install black:
             python3 -m pip install --upgrade setuptools wheel
             python3 -m pip install --upgrade -r requirements.txt
+            python3 -m pip install --upgrade -r doc/requirements.txt
             # For sdist validation
             python3 -m pip install --upgrade twine
 
@@ -96,9 +97,9 @@ jobs:
             python3 -m pytest -n 2 tests
 
       - name: Build manual and run doctests
+        working-directory: doc
         run: |
-            make html -C doc
-            make doctest -C doc
+            make
 
       - name: Validate the sdist
         run: |

@@ -1,0 +1,69 @@
+# Table of content
+# Learn more at https://jupyterbook.org/customize/toc.html
+#
+- file: intro
+
+- part: Miscellany
+  chapters:
+  - file: misc/changelog
+  - file: misc/deprecated
+  - file: misc/developersguide
+  - file: misc/pubs
+  - file: misc/upgrade_path
+  - file: misc/bibliography
+
+- part: Installation and setup
+  chapters:
+  - file: pages/userenv
+
+- part: Concepts
+  chapters:
+  - file: pages/definitions
+
+- part: Tutorials
+  chapters:
+  - file: pages/tutorial
+  - file: pages/advancedtopics
+
+- part: Objects and concepts
+  chapters:
+  - file: pages/softselection
+  - file: pages/mvdes
+  - file: pages/tsoverview
+  - file: pages/tstypes
+  - file: pages/tablefs
+  - file: pages/recorders
+
+- part: Technical details
+  chapters:
+  - file: technical/genetic_values
+  - file: technical/writingplugins
+
+- part: Data types and fuctions
+  chapters:
+  - file: pages/genetic_values
+  - file: pages/datamatrix
+  - file: pages/demographic_models
+  - file: pages/functions
+  - file: pages/gslrandom
+  - file: pages/gvaluenoise
+  - file: pages/gvalue_to_fitness
+  - file: pages/model_params
+  - file: pages/regiontypes
+  - file: pages/tskit_tools
+  - file: pages/types
+
+- part: Examples
+  chapters:
+  - file: examples/bgs
+  - file: examples/gss_divergent_optima
+  - file: examples/gss
+  - file: examples/IM
+  - file: examples/localadaptation
+  - file: examples/migtest
+  - file: examples/precapitation
+  - file: examples/pysnowdrift
+  - file: examples/recapitation
+  - file: examples/recorder
+
+

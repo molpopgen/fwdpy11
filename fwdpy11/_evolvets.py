@@ -75,7 +75,7 @@ def evolvets(
     :param preserve_first_generation: (False) Whether to record generation 0 as
                                       ancient samples. Must be `True` for
                                       tree sequence "recapitation". See
-                                      :ref:`finishwithmsprime`.
+                                      :ref:`recapitation`.
     :type preserve_first_generation: bool
     :param check_demographic_event_timings: (True) If ``True``, then issue
                                             warnings if demographic events
@@ -89,9 +89,6 @@ def evolvets(
     single trait. Second, we save some memory by not tracking these matrices.
     However, it is useful to track these data for some
     cases when simulating multivariate mutational effects (pleiotropy).
-
-    For a detailed description of `post_simplification_recorder`,
-    see :ref:`tstimeseries`.
 
     .. note::
         If recorder is None,
