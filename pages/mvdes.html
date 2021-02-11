@@ -1,0 +1,958 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Different effect sizes of mutations in different demes &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Conceptual overview of tree sequence recording" href="tsoverview.html" />
+    <link rel="prev" title="Soft selection with discrete demes" href="softselection.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/pages/mvdes.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/pages/mvdes.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/mvdes.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/pages/mvdes.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-multivariate-gaussian">
+   The multivariate Gaussian
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-multivariate-lognormal">
+   The multivariate lognormal
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#custom-multivariate-distributions">
+   “Custom” multivariate distributions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recipes">
+   Recipes
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#different-signs-in-different-demes">
+     Different signs in different demes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#polygenic-traits-multiple-demes-correlated-effect-sizes-and-different-optima">
+     Polygenic traits, multiple demes, correlated effect sizes, and different optima
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="different-effect-sizes-of-mutations-in-different-demes">
+<span id="mvdes"></span><h1>Different effect sizes of mutations in different demes<a class="headerlink" href="#different-effect-sizes-of-mutations-in-different-demes" title="Permalink to this headline">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.7.0.</span></p>
+</div>
+<p>This section describes how to allow mutations to have different effect sizes in different demes,
+building on the material from <a class="reference internal" href="softselection.html#softselection"><span class="std std-ref">Soft selection with discrete demes</span></a>.</p>
+<p>To allow for correlated effect sizes across demes, we used <a class="reference internal" href="regiontypes.html#fwdpy11.mvDES" title="fwdpy11.mvDES"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.mvDES</span></code></a> to model multivariate
+distributions of effect sizes.  This class inherits from <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> (see <a class="reference internal" href="tutorial.html#mutationregions"><span class="std std-ref">Defining distributions of mutation effect sizes</span></a>).
+In general, there is no standard <em>general</em> method for drawing random deviates from arbitrary multivariate
+distributions.  The approach that we take is to use a multivariate Gaussian distribution as the underlying kernel.</p>
+<p>First, we will describe the cases where the multivariate Gaussian kernel leads to output effect size distributions
+that have straightforward interpretations.  Then, we will move onto the more general case allowing you to construct
+multivariate distributions from current <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> types.</p>
+<div class="section" id="the-multivariate-gaussian">
+<h2>The multivariate Gaussian<a class="headerlink" href="#the-multivariate-gaussian" title="Permalink to this headline">¶</a></h2>
+<p>We may model Gaussian effect sizes using the existing <a class="reference internal" href="regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a>
+in conjunction with <a class="reference internal" href="regiontypes.html#fwdpy11.mvDES" title="fwdpy11.mvDES"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.mvDES</span></code></a>.  Using <a class="reference internal" href="regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a> on its
+own is used to model pleiotropic effects on a trait.  Here, we are re-using this type to model correlated
+effect sizes across demes.</p>
+<p>At this time, it is probably best to look at an example. The following code models Gaussian stabilizing
+selection on a quantitative trait.  The effects sizes within each deme are themselves given by Gaussian
+distributions and there is no correlation in the effect size in the two demes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">MultivariateGaussianEffects</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
+        <span class="n">migmatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
+        <span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Most of the above is standard.  Let’s dissect the new bits:</p>
+<ul class="simple">
+<li><p>An instance of <a class="reference internal" href="regiontypes.html#fwdpy11.mvDES" title="fwdpy11.mvDES"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.mvDES</span></code></a> is our only region with selected mutations.</p></li>
+<li><p>This instance holds an instance of <a class="reference internal" href="regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a>
+that puts mutations on the interval <span class="math notranslate nohighlight">\([0, 1)\)</span> with weight 1 and an identity
+matrix specifies the correlation in effect sizes between demes 0 and 1.  The
+identity matrix has the value zero for all off-diagonal elements, meaning
+no covariance in effect sizes across demes.</p></li>
+<li><p>The final constructor argument specifies the mean of each marginal Gaussian
+distribution. The means are both zero.</p></li>
+<li><p>Our genetic value type accepts an <code class="docutils literal notranslate"><span class="pre">ndemes</span></code> parameter, telling it that it has
+to look for deme-specific effect sizes.  This value must be set to the maximum
+number of demes that will exist during a simulation.</p></li>
+</ul>
+<p>Let’s evolve the model now:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s extract the effect sizes from each deme:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 0.09742853 -0.79068629]
+[-0.46314495 -0.31686816]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s look at another example where effect sizes covary negatively across demes and raise the mutation rate a bit:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vcv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">MultivariateGaussianEffects</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vcv</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<span class="p">]</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;rates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.65688902  0.67458945]
+[ 1.44236014 -1.19184102]
+[ 0.53515552 -0.49690106]
+[0.11239562 0.03076654]
+[ 0.0470034  -0.14227415]
+[-0.44707712  0.39814511]
+[-0.64860038  0.53073426]
+[-0.12680578 -0.00521323]
+[-1.702493    1.78230999]
+[-0.12798166 -0.14205828]
+[ 0.82686083 -0.68915806]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we see that the effect sizes often differ in sign between the two demes.</p>
+</div>
+<div class="section" id="the-multivariate-lognormal">
+<h2>The multivariate lognormal<a class="headerlink" href="#the-multivariate-lognormal" title="Permalink to this headline">¶</a></h2>
+<p>If <span class="math notranslate nohighlight">\(X\)</span> is a multivariate Gaussian distribution, <span class="math notranslate nohighlight">\(N(\mathbf{\mu}, \mathbf{\sum})\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{\mu}\)</span> is a vector of mean values and
+<span class="math notranslate nohighlight">\(\mathbf{\sum}\)</span> is the covariance matrix, then <span class="math notranslate nohighlight">\(Y = e^X\)</span> is a
+multivariate lognormal random variable with mean <span class="math notranslate nohighlight">\(E[Y]_i = e^{\mu_i + \frac{1}{2}\sum_{ii}}\)</span> and covariance matrix <span class="math notranslate nohighlight">\(Var[Y]_{i,j} = e^{\mu_i + \mu_j + \frac{1}{2}(\sum_{ii} + \sum_{jj})}(e^{\sum_{ij}}-1)\)</span>.</p>
+<p>To specify a multivariate lognormal distribution of effect sizes, we use
+the static class method <a class="reference internal" href="regiontypes.html#fwdpy11.LogNormalS.mv" title="fwdpy11.LogNormalS.mv"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.LogNormalS.mv()</span></code></a>.  The following code
+constructs a distribution of effect sizes such that <code class="docutils literal notranslate"><span class="pre">-2Ns</span></code> (where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the
+size of a single deme) is a multivariate lognormal with means zero and an
+identity matrix as a covariance matrix used to specify the multivate
+Gaussian kernel.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">LogNormalS</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=-</span><span class="mi">200</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lognormal distribution returns deviates <span class="math notranslate nohighlight">\(&gt; 0\)</span>.
+To model deleterious mutations/effect sizes &lt; 0, use the
+<code class="docutils literal notranslate"><span class="pre">scaling</span></code> parameter with a negative value like we just did!</p>
+</div>
+<p>Let’s put it in a simulation and run it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(</span>
+        <span class="n">migmatrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="n">ndemes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.00183755 -0.0009758 ]
+[-0.00110216 -0.00049425]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="custom-multivariate-distributions">
+<h2>“Custom” multivariate distributions<a class="headerlink" href="#custom-multivariate-distributions" title="Permalink to this headline">¶</a></h2>
+<p>The previous two sections cover cases where the methods for generating
+deviates from a multivariate distribution are straightforward and agreed
+upon.</p>
+<p>In order to simulate multivariate distributions of effect sizes based on
+<a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> types, we follow a fairly intuitive approach
+described in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id4"><span>XKS00</span></a>]</span>.  Briefly, the multivariate Gaussian kernel is
+used to produce deviates.  Then, the quantiles from the cummulative distribution
+of each marginal Gaussian are used to generate a deviate from the desired output distribution of interest.</p>
+<p>For a simulation with <code class="docutils literal notranslate"><span class="pre">n</span></code> populations we need:</p>
+<ul class="simple">
+<li><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <code class="docutils literal notranslate"><span class="pre">n</span></code> <a class="reference internal" href="regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> objects</p></li>
+<li><p>An array of <code class="docutils literal notranslate"><span class="pre">n</span></code> means for the multivariate Gaussian</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">n-by-n</span></code> covariance matrix for the multivariate
+Gaussian</p></li>
+</ul>
+<p>The following generates exponentially distributed effect sizes in each deme
+with a high correlation across demes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.05297616 -0.05994487]
+[-0.00600096 -0.00063   ]
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can mix and match our distributions.  Here, the distribution of effect
+sizes in deme 0 is exponential and the distribution in deme 1 is gamma.  The
+two distributions have means with opposite signs and the magnitudes of the
+marginal deviates negatively covary:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GammaS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">shape_parameter</span><span class="o">=</span><span class="mi">1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.17037555  0.17324704]
+[-0.22122016  0.22419496]
+[-1.78012379  0.01713378]
+[-0.36227095  0.10331541]
+[-0.24379116  0.12145104]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The type <a class="reference internal" href="regiontypes.html#fwdpy11.ConstantS" title="fwdpy11.ConstantS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ConstantS</span></code></a> has intuitive behavior:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mvdes</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">)],</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;rates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">mvdes</span><span class="p">]</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.99150137 -0.1       ]
+[-0.22828726 -0.1       ]
+[-0.10570464 -0.1       ]
+[-0.06271967 -0.1       ]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="recipes">
+<h2>Recipes<a class="headerlink" href="#recipes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="different-signs-in-different-demes">
+<h3>Different signs in different demes<a class="headerlink" href="#different-signs-in-different-demes" title="Permalink to this headline">¶</a></h3>
+<p>Consider two demes.  You want any beneficial mutation in one deme to
+be deleterious in the other and vice-versa.</p>
+<p>For the multivariate Gaussian, use the covariance matrix as done above.  Note
+that this approach only generates a <em>tendency</em> to different signs in different demes.</p>
+<p>With the multivariate lognormal, the best we can do is to use negative
+correlations such that deleterious mutations in deme 0 are less deleterious in deme 1, etc.:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">LogNormalS</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=-</span><span class="mi">200</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+<span class="n">sregions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">LogNormalS</span><span class="o">.</span><span class="n">mv</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.99</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sregions</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[0.00039308 0.0693669 ]
+[-0.01488498 -0.00173671]
+[-0.00514551 -0.00519719]
+[-0.00377736 -0.00592563]
+[0.00069116 0.0453049 ]
+[0.00355528 0.00643812]
+[-0.00208255 -0.01409883]
+[-0.01590584 -0.00175813]
+[-0.00045263 -0.04933448]
+[0.00227164 0.01008629]
+[0.01128436 0.00198865]
+[0.01109052 0.00222656]
+[-0.00256051 -0.01002711]
+[-0.00152782 -0.01807099]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the output, we see that an effect size in deme <code class="docutils literal notranslate"><span class="pre">i</span></code> has a corresponding effect size in deme <code class="docutils literal notranslate"><span class="pre">j</span></code> that is a about an order of magnitude smaller in absolute value.</p>
+<p>For the general approach, simply create a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of objects with the desired mean (or constant) effect sizes.  For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)],</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="p">]</span>
+<span class="n">sregions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">mvDES</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)],</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">pdict</span><span class="p">[</span><span class="s2">&quot;sregions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sregions</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">1010</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">esizes</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[-0.99150137  0.08290456]
+[ 0.04565745 -0.16002424]
+[-0.10570464  0.21656547]
+[ 0.41101789 -0.43686025]
+[-0.88406416  0.16572598]
+[ 0.25571088 -0.08508201]
+[ 0.15472792 -0.292425  ]
+[-0.14495801  0.08997944]
+[-0.06271967  0.15351897]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="polygenic-traits-multiple-demes-correlated-effect-sizes-and-different-optima">
+<h3>Polygenic traits, multiple demes, correlated effect sizes, and different optima<a class="headerlink" href="#polygenic-traits-multiple-demes-correlated-effect-sizes-and-different-optima" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="../examples/gss_divergent_optima.html#gssdivergentoptima"><span class="std std-ref">Adaptation to different optima with multivariate distribution of effect sizes</span></a>.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./pages"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="softselection.html" title="previous page">Soft selection with discrete demes</a>
+    <a class='right-next' id="next-link" href="tsoverview.html" title="next page">Conceptual overview of tree sequence recording</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

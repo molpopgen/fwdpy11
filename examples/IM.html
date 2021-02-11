@@ -1,0 +1,961 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isolation-with-migration (IM) &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Local adaptation of a quantitative trait" href="localadaptation.html" />
+    <link rel="prev" title="Gaussian stabilizing selection on a single trait (with a sudden optimum shift)" href="gss.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/examples/IM.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fexamples/IM.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="isolation-with-migration-im">
+<span id="imexample"></span><h1>Isolation-with-migration (IM)<a class="headerlink" href="#isolation-with-migration-im" title="Permalink to this headline">¶</a></h1>
+<p>This example uses <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a> to run
+simulations of an IM model and compare the results to the output of
+<a class="reference external" href="https://bitbucket.org/simongravel/moments">moments</a> <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id8"><span>JLRG17</span></a>]</span>, which calculates the expected mutation
+frequency spectrum using diffusion approximations.</p>
+<p>The goal of the script is to get the expected frequency spectrum (<code class="docutils literal notranslate"><span class="pre">FS</span></code>)
+for a sample taken from each deme.  We do this in two ways:</p>
+<ul class="simple">
+<li><p>We get the mean <code class="docutils literal notranslate"><span class="pre">FS</span></code> for each entire deme and then project it down
+to the <code class="docutils literal notranslate"><span class="pre">FS</span></code> for the desired sample size.</p></li>
+<li><p>We get the mean <code class="docutils literal notranslate"><span class="pre">FS</span></code> for the desired sample size.</p></li>
+</ul>
+<p>The final output is a figure showing the expectation obtained from <code class="docutils literal notranslate"><span class="pre">moments</span></code>
+and the two mean <code class="docutils literal notranslate"><span class="pre">FS</span></code> from <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>.  The figure shows the expectation
+separately for both demes.</p>
+<p>This script is a “deep dive” into this kind of modeling.  First,
+we have to deal with how the model parameters are scaled, and the
+fact that <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> does things differently from <code class="docutils literal notranslate"><span class="pre">moments</span></code>.  The
+difference between the two programs is especially tricky for the migration
+rates, and we need to reverse their order when using <code class="docutils literal notranslate"><span class="pre">moments</span></code> to
+get the expected frequency spectra.</p>
+<p>This script applies <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection.fs" title="fwdpy11.TableCollection.fs"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.fs()</span></code></a> to get the frequency
+spectra from the simulations. See <a class="reference internal" href="../pages/tablefs.html#tablefs"><span class="std std-ref">Calculating frequency spectra from tree sequences</span></a> for more details on that
+function.</p>
+<div class="figure align-default" id="id2">
+<img alt="../_images/moments_IM_neutral.png" src="../_images/moments_IM_neutral.png" />
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Example output from this script, generated by the command line
+show below.  This simulation does not involve any mutations
+affecting fitness.  Deme 0 splits equally into demes 0 and 1 0.3
+time units ago.  The two demes grow to 2 and 3 times the
+ancestral population size, respectively, and migration
+between demes is asymmetric.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 IM.py --Nref <span class="m">1000</span> --N0 <span class="m">2</span> --N1 <span class="m">3</span> --split <span class="m">0</span>.5 -T <span class="m">0</span>.3 --migrate <span class="m">2</span>.0 <span class="m">0</span>.5  --seed <span class="nv">$RANDOM</span> --nreps <span class="m">64</span> --theta <span class="m">100</span>
+</pre></div>
+</div>
+<div class="figure align-default" id="id3">
+<img alt="../_images/moments_IM_gamma_minus_5.png" src="../_images/moments_IM_gamma_minus_5.png" />
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">An example with selection, run using the command line shown below.
+In this example, the scaled strength of selection is <span class="math notranslate nohighlight">\(\gamma=2N_{ref}s=-5\)</span>
+for all new mutations.  In order to match diffusion results, <code class="docutils literal notranslate"><span class="pre">4Nu</span></code>
+must be low, else we risk seeing bizarre dynamics due to the
+interplay of a high mutation rate to mutations affecting fitness
+and insufficient recombination.  Due to the low mutation rate,
+we must run more replicates.  The “projected” <code class="docutils literal notranslate"><span class="pre">FS</span></code> look great,
+but there’s still some noise in the “real” <code class="docutils literal notranslate"><span class="pre">FS</span></code> because the sample
+size is rather small (15 diploids per deme).</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 IM.py --Nref <span class="m">1000</span> --N0 <span class="m">2</span> --N1 <span class="m">3</span> --split <span class="m">0</span>.5 -T <span class="m">0</span>.3 --migrate <span class="m">2</span>.0 <span class="m">0</span>.5  --seed <span class="nv">$RANDOM</span> --nreps <span class="m">512</span> --theta <span class="m">1</span> --gamma -5
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Copyright (C) 2020 Kevin Thornton &lt;krthornt@uci.edu&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of fwdpy11.</span>
+<span class="c1">#</span>
+<span class="c1"># fwdpy11 is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># fwdpy11 is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with fwdpy11.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.demographic_models.IM</span>
+
+<span class="n">HAVE_MOMENTS</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">moments</span>
+
+    <span class="n">HAVE_MOMENTS</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">warnings</span>
+
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t import moments, so we won&#39;t be making any plots!&quot;</span><span class="p">)</span>
+    <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">make_parser</span><span class="p">():</span>
+    <span class="n">ADHF</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="s2">&quot;IM.py&quot;</span><span class="p">,</span> <span class="n">formatter_class</span><span class="o">=</span><span class="n">ADHF</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--split&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Fraction that splits into deme 0&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--tsplit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-T&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Time since population split,&quot;</span> <span class="s2">&quot; in units of 2*Nref generations&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Random number seed&quot;</span><span class="p">)</span>
+
+    <span class="n">optional</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s2">&quot;Optional&quot;</span><span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--Nref&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Ancestral population size&quot;</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--N0&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Contemporary size of deme 0, relative to Nref&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--N1&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Contemporary size of deme 1, relative to Nref&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--gamma&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;2Ns&quot;</span><span class="p">)</span>
+    <span class="c1"># Require 0 &lt;= h &lt;= 2</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-H&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Dominance&quot;</span><span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--nreps&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of forward simulation replicates&quot;</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--migrates&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-M&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Migration rates, scaled by 2*Nref.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--nsam&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of diploids to sample from each deme&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--theta&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Scaled mutation rate. &quot;</span> <span class="s2">&quot;Danger zone with selection :).&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--rho&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Scaled recombination rate, rho = 4*Nref*r&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--show2d&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Display 2d fs comparison of the mean fs from&quot;</span> <span class="s2">&quot;the simulation to moments&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<span class="k">def</span> <span class="nf">IM_moments</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">ns</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Expected FS for IM model with selection</span>
+
+<span class="sd">    ns: sample sizes, given as [ns1, ns2]</span>
+<span class="sd">    s: frac that splits into deme 1 (1-s into deme 2)</span>
+<span class="sd">    nu1/nu2: contemporary population sizes, with exponenential size change</span>
+<span class="sd">    T: time between split and now (in 2Nref generations)</span>
+<span class="sd">    m12/m21: migration rates, scaled by 2Nref</span>
+<span class="sd">             mij is rate from j into i</span>
+
+<span class="sd">    The mutation rate theta=4*N_ref*u is assumed to be 1.</span>
+
+<span class="sd">    ns: the sample sizes (don&#39;t have to be equal) given as list of length 2</span>
+
+<span class="sd">    gamma: pop-size scaled selection coefficient (2Ns), default 0</span>
+<span class="sd">    h: dominance coefficient, default 0.5</span>
+
+<span class="sd">    Note that when integrating, gamma and h must be passed as lists of same</span>
+<span class="sd">    length as number of demes, with each entry specifying the coefficient in</span>
+<span class="sd">    each deme. If they are all the same, pass</span>
+<span class="sd">        `gamma=[gamma, gamma, ..., gamma], h=[h, h, ..., h]`</span>
+<span class="sd">    where the lengths are equal to the number of demes.</span>
+
+<span class="sd">    gamma = 2*N_ref*s, with the interpretation of fitnesses:</span>
+<span class="sd">        aa : 1</span>
+<span class="sd">        Aa : 1+2hs</span>
+<span class="sd">        AA : 1+2s</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span><span class="p">,</span> <span class="n">nu1</span><span class="p">,</span> <span class="n">nu2</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">m12</span><span class="p">,</span> <span class="n">m21</span> <span class="o">=</span> <span class="n">params</span>
+    <span class="c1"># equilibrium frequency spectrum</span>
+    <span class="n">sts</span> <span class="o">=</span> <span class="n">moments</span><span class="o">.</span><span class="n">LinearSystem_1D</span><span class="o">.</span><span class="n">steady_state_1D</span><span class="p">(</span><span class="n">ns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ns</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">moments</span><span class="o">.</span><span class="n">Spectrum</span><span class="p">(</span><span class="n">sts</span><span class="p">)</span>
+    <span class="c1"># split into two demes</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">moments</span><span class="o">.</span><span class="n">Manips</span><span class="o">.</span><span class="n">split_1D_to_2D</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">ns</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ns</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># define size change function</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">A</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">s</span><span class="p">,</span> <span class="n">s</span>
+
+    <span class="k">def</span> <span class="nf">nu1_func</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nu1</span> <span class="o">/</span> <span class="n">A</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">T</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">nu2_func</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">B</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nu2</span> <span class="o">/</span> <span class="n">B</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">T</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">nu_func</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">nu1_func</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="n">nu2_func</span><span class="p">(</span><span class="n">t</span><span class="p">)]</span>
+
+    <span class="c1"># integrate for time T</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span>
+        <span class="n">nu_func</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="n">m12</span><span class="p">],</span> <span class="p">[</span><span class="n">m21</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]),</span> <span class="n">gamma</span><span class="o">=</span><span class="p">[</span><span class="n">gamma</span><span class="p">,</span> <span class="n">gamma</span><span class="p">],</span> <span class="n">h</span><span class="o">=</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">fs</span>
+
+
+<span class="k">def</span> <span class="nf">build_demography</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the demography, the simulation length, and the</span>
+<span class="sd">    final total size in each deme.</span>
+
+<span class="sd">    The main real work here is to convert the input</span>
+<span class="sd">    paremeters to match the scaling expected by</span>
+<span class="sd">    fwdpy11.demographic_models.IM.two_deme_IM:</span>
+
+<span class="sd">    1. The input migration rates are in units of 2*Nref</span>
+<span class="sd">    2. The time since the split is also in units of 2*Nref</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">two_deme_IM</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">demographic_models</span><span class="o">.</span><span class="n">IM</span><span class="o">.</span><span class="n">two_deme_IM</span>
+
+    <span class="c1"># Rescale input migration rates</span>
+    <span class="n">migrates</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">migrates</span><span class="p">)</span>
+
+    <span class="c1"># Change split time from generations/(2*Nref) to</span>
+    <span class="c1"># generations/Nref.</span>
+    <span class="n">dmodel</span> <span class="o">=</span> <span class="n">two_deme_IM</span><span class="p">(</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">,</span>
+        <span class="mf">2.0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">tsplit</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+        <span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">N0</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">N1</span><span class="p">),</span>
+        <span class="n">migrates</span><span class="p">,</span>
+        <span class="n">burnin</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">simlen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dmodel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">split_time</span> <span class="o">+</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">gens_post_split</span><span class="p">)</span>
+    <span class="n">N0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">N0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">N1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">N1</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dmodel</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="p">(</span><span class="n">N0</span><span class="p">,</span> <span class="n">N1</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">build_parameters_dict</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns sim params and the final sizes</span>
+<span class="sd">    in each deme</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">demog</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">finalNs</span> <span class="o">=</span> <span class="n">build_demography</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">nregions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sregions</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">rho</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">))]</span>
+
+    <span class="n">rates</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">rates</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="n">nregions</span><span class="p">,</span>
+        <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="n">sregions</span><span class="p">,</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="n">recregions</span><span class="p">,</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="n">rates</span><span class="p">,</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">demog</span><span class="p">,</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+        <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">pdict</span><span class="p">,</span> <span class="n">finalNs</span>
+
+
+<span class="k">def</span> <span class="nf">full_joint_fs</span><span class="p">(</span><span class="n">pop</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the marginal SFS per deme.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">i</span><span class="o">.</span><span class="n">deme</span> <span class="o">==</span> <span class="n">nt</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">i</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">assert</span> <span class="n">i</span><span class="o">.</span><span class="n">deme</span> <span class="o">==</span> <span class="n">nt</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">i</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">an</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+    <span class="n">deme0</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nt</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">an</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="n">deme1</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">nt</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">][</span><span class="n">an</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+    <span class="n">jfs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">deme0</span><span class="p">,</span> <span class="n">deme1</span><span class="p">],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jfs</span>
+
+
+<span class="k">def</span> <span class="nf">subsample_fs</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">nodes0</span> <span class="o">=</span> <span class="n">md</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">nodes1</span> <span class="o">=</span> <span class="n">md</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="n">s0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">nodes0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">nodes1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">fs</span><span class="p">([</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">],</span> <span class="n">marginalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">fs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">project_fs</span><span class="p">(</span><span class="n">sfs</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">moments</span><span class="o">.</span><span class="n">Spectrum</span><span class="p">(</span><span class="n">sfs</span><span class="p">)</span>
+    <span class="n">psfs</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">project</span><span class="p">([</span><span class="n">n</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">psfs</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">runsim</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">pdict</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">infinite_sites</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">Nref</span><span class="p">))</span>
+    <span class="n">full_jfs</span> <span class="o">=</span> <span class="n">full_joint_fs</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+    <span class="n">sfs0_rs</span><span class="p">,</span> <span class="n">sfs1_rs</span> <span class="o">=</span> <span class="n">subsample_fs</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">full_jfs</span><span class="p">,</span> <span class="n">sfs0_rs</span><span class="p">,</span> <span class="n">sfs1_rs</span>
+
+
+<span class="k">def</span> <span class="nf">plot_fs</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">moments_fs</span><span class="p">,</span> <span class="n">fwdpy11_fs</span><span class="p">,</span> <span class="n">fwdpy11_sample_fs</span><span class="p">):</span>
+    <span class="n">fwdpy11_fs0</span> <span class="o">=</span> <span class="n">project_fs</span><span class="p">(</span><span class="n">fwdpy11_fs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">)</span>
+    <span class="n">fwdpy11_fs1</span> <span class="o">=</span> <span class="n">project_fs</span><span class="p">(</span><span class="n">fwdpy11_fs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">)</span>
+    <span class="n">moments_fs0</span> <span class="o">=</span> <span class="n">moments_fs</span><span class="o">.</span><span class="n">marginalize</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">moments_fs1</span> <span class="o">=</span> <span class="n">moments_fs</span><span class="o">.</span><span class="n">marginalize</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">figure</span><span class="o">=</span><span class="n">fig</span><span class="p">)</span>
+    <span class="n">deme0</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">deme1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fwdpy11_fs0</span><span class="p">,</span> <span class="s2">&quot;bo&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;fwdpy11 projected&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">fwdpy11_sample_fs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;go&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;fwdpy11 sample&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">moments_fs0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;r-&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;moments&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">moments_fs0</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">deme1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fwdpy11_fs1</span><span class="p">,</span> <span class="s2">&quot;bo&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;fwdpy11 projected&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">fwdpy11_sample_fs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;go&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;fwdpy11 sample&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">moments_fs1</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s2">&quot;r-&quot;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;moments&quot;</span><span class="p">,</span>
+        <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">moments_fs1</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Deme 0&quot;</span><span class="p">)</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Deme 1&quot;</span><span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Derived frequency&quot;</span><span class="p">)</span>
+    <span class="n">deme1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Derived frequency&quot;</span><span class="p">)</span>
+    <span class="n">deme0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;E[# mutations]&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;moments.png&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">make_parser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="k">if</span> <span class="n">HAVE_MOMENTS</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">moments_params</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">split</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">N0</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">N1</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">tsplit</span><span class="p">,</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">migrates</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">migrates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">moments_nsam</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">)</span>
+        <span class="n">mgamma</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="k">if</span> <span class="n">mgamma</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mgamma</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">moments_fs</span> <span class="o">=</span> <span class="n">IM_moments</span><span class="p">(</span><span class="n">moments_params</span><span class="p">,</span> <span class="n">moments_nsam</span><span class="p">,</span> <span class="n">mgamma</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">H</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+
+    <span class="c1"># Fail early if input params are bad</span>
+    <span class="n">pdict</span><span class="p">,</span> <span class="n">finalNs</span> <span class="o">=</span> <span class="n">build_parameters_dict</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span><span class="p">)</span>
+
+    <span class="n">sum_fs0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">finalNs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sum_fs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">finalNs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sum_samples_fs0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sum_samples_fs1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">mean_full_jFS</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">{</span><span class="n">e</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">runsim</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">pdict</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">fut</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+            <span class="n">full_jfs</span><span class="p">,</span> <span class="n">sfs0_rs</span><span class="p">,</span> <span class="n">sfs1_rs</span> <span class="o">=</span> <span class="n">fut</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mean_full_jFS</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">mean_full_jFS</span> <span class="o">=</span> <span class="n">full_jfs</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mean_full_jFS</span> <span class="o">+=</span> <span class="n">full_jfs</span>
+            <span class="n">sum_fs0</span> <span class="o">+=</span> <span class="n">full_jfs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+            <span class="n">sum_fs1</span> <span class="o">+=</span> <span class="n">full_jfs</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">todense</span><span class="p">()</span>
+            <span class="n">sum_samples_fs0</span> <span class="o">+=</span> <span class="n">sfs0_rs</span>
+            <span class="n">sum_samples_fs1</span> <span class="o">+=</span> <span class="n">sfs1_rs</span>
+
+    <span class="c1"># NOTE: using /= for the next</span>
+    <span class="c1"># line basically zeros everything out!</span>
+    <span class="n">mean_full_jFS</span> <span class="o">=</span> <span class="n">mean_full_jFS</span> <span class="o">/</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span>
+    <span class="n">sum_fs0</span> <span class="o">/=</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span>
+    <span class="n">sum_fs1</span> <span class="o">/=</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span>
+    <span class="n">sum_samples_fs0</span> <span class="o">/=</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span>
+    <span class="n">sum_samples_fs1</span> <span class="o">/=</span> <span class="n">args</span><span class="o">.</span><span class="n">nreps</span>
+    <span class="k">if</span> <span class="n">HAVE_MOMENTS</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">mean_full_jFS</span> <span class="o">=</span> <span class="n">moments</span><span class="o">.</span><span class="n">Spectrum</span><span class="p">(</span><span class="n">mean_full_jFS</span><span class="o">.</span><span class="n">todense</span><span class="p">())</span>
+        <span class="n">projected_jfs</span> <span class="o">=</span> <span class="n">mean_full_jFS</span><span class="o">.</span><span class="n">project</span><span class="p">([</span><span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean Fst from forward sims = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">projected_jfs</span><span class="o">.</span><span class="n">Fst</span><span class="p">()))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fst from moments = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">moments_fs</span><span class="o">.</span><span class="n">Fst</span><span class="p">()))</span>
+        <span class="n">plot_fs</span><span class="p">(</span>
+            <span class="n">args</span><span class="p">,</span> <span class="n">moments_fs</span><span class="p">,</span> <span class="p">(</span><span class="n">sum_fs0</span><span class="p">,</span> <span class="n">sum_fs1</span><span class="p">),</span> <span class="p">(</span><span class="n">sum_samples_fs0</span><span class="p">,</span> <span class="n">sum_samples_fs1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">show2d</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">moments</span><span class="o">.</span><span class="n">Plotting</span><span class="o">.</span><span class="n">plot_2d_comp_Poisson</span><span class="p">(</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">moments_fs</span><span class="p">,</span> <span class="n">projected_jfs</span><span class="p">,</span> <span class="n">resid_range</span><span class="o">=</span><span class="mi">10</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="gss.html" title="previous page">Gaussian stabilizing selection on a single trait (with a sudden optimum shift)</a>
+    <a class='right-next' id="next-link" href="localadaptation.html" title="next page">Local adaptation of a quantitative trait</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

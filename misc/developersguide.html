@@ -1,0 +1,735 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Developer’s guide &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Publications using fwdpy11" href="pubs.html" />
+    <link rel="prev" title="Deprecated features" href="deprecated.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/misc/developersguide.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fmisc/developersguide.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-code-standards">
+   C++ code standards
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-code-profiling">
+   Enabling code profiling
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#disabling-link-time-optimization-lto">
+   Disabling link-time optimization (LTO)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-debugging-symbols-in-the-c-code">
+   Enabling debugging symbols in the C++ code
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-assertions-in-the-c-code">
+   Enabling assertions in the C++ code
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
+   Enabling aggressive debugging of C++ STL templates using GCC
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#static-analysis-using-clang-tidy">
+   Static analysis using clang-tidy
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#code-formatting-style">
+     Code formatting style
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#python-code-standards">
+   Python code standards
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     Code formatting style
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#writing-documentation">
+   Writing documentation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#formatting-the-python-code-in-rst-files">
+     Formatting the Python code in rst files
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#docstrings-in-c-code">
+     Docstrings in C++ code
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="developer-s-guide">
+<span id="developersguide"></span><h1>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="c-code-standards">
+<h2>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="enabling-code-profiling">
+<h2>Enabling code profiling<a class="headerlink" href="#enabling-code-profiling" title="Permalink to this headline">¶</a></h2>
+<p>By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size. One side effect
+is that it becomes impossible to accurately profile the code.  To override these defaults:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --enable-profiling
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The package should not be installed with profiling enabled. This method of building
+is for developers who need to accurately profile the C++ back-end.  Also note that
+only the main package is affected.  Building the unit test modules is not affected.</p>
+</div>
+</div>
+<div class="section" id="disabling-link-time-optimization-lto">
+<h2>Disabling link-time optimization (LTO)<a class="headerlink" href="#disabling-link-time-optimization-lto" title="Permalink to this headline">¶</a></h2>
+<p>LTO is enabled by default and reduced the final library size substantially. However, it takes a
+long time and is therefore a drag during development.  To disable it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --disable_lto
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This option only affects the main package and not the unit tests.</p>
+</div>
+</div>
+<div class="section" id="enabling-debugging-symbols-in-the-c-code">
+<h2>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --debug
+</pre></div>
+</div>
+<p>Debug mode disables all compiler optimizations, allows C-like assertions, and generated debug symbols.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Never install the package compiled in debug mode!  First, things will run much more slowly.
+Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
+exist as a brute-force method to help developers quickly identify bugs.</p>
+</div>
+</div>
+<div class="section" id="enabling-assertions-in-the-c-code">
+<h2>Enabling assertions in the C++ code<a class="headerlink" href="#enabling-assertions-in-the-c-code" title="Permalink to this headline">¶</a></h2>
+<p>The fwdpp library code uses C’s assert macros in several places.  These are disabled by default.  However, it can be useful to
+enable them when hacking the code.  To do so, you must manually set your compiler flags with cmake:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake . -DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O2 -g&quot;</span>
+</pre></div>
+</div>
+<p>When compiling this way, fwdpy11 makes some extra checks that will throw <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> if they fail.  The fwdpp back
+end also makes extra checks.  If those fail, <code class="docutils literal notranslate"><span class="pre">abort</span></code> will be called, which will crash the Python interpreter.  Thus,
+compiling with this option is a “serious debugging mode only” option.</p>
+</div>
+<div class="section" id="enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
+<h2>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">¶</a></h2>
+<p>Use the following flags to enable an “extreme” debugging mode of the C++ standard template library:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> <span class="se">\</span>
+   <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> python3 setup.py build_ext -i
+</pre></div>
+</div>
+</div>
+<div class="section" id="static-analysis-using-clang-tidy">
+<h2>Static analysis using clang-tidy<a class="headerlink" href="#static-analysis-using-clang-tidy" title="Permalink to this headline">¶</a></h2>
+<p>It is sometimes useful to go through the code and to a “static” analysis to look for problems. The clang-tidy
+tool is especially useful.  For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span> <span class="p">|</span> xargs -I  clang-tidy -checks<span class="o">=</span><span class="s1">&#39;performance-*&#39;</span>   -- -I/usr/include/python3.7m -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers
+</pre></div>
+</div>
+<div class="section" id="code-formatting-style">
+<h3>Code formatting style<a class="headerlink" href="#code-formatting-style" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="python-code-standards">
+<h2>Python code standards<a class="headerlink" href="#python-code-standards" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h3>Code formatting style<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The formatting style is <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> with a line length of 89, which is specified
+in the <code class="docutils literal notranslate"><span class="pre">.flake8</span></code> file that is part of the source repository.</p>
+<p>The beauty of formatting with <code class="docutils literal notranslate"><span class="pre">black</span></code> is that you can just write all your Python
+code and then format at the end. For example, with <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you may use the
+plugin from the <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> repository and the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command to
+auto-format your code:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>Black
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>At the time of this writing (April 11, 2020), <code class="docutils literal notranslate"><span class="pre">vim/nvim</span></code> integration
+with <code class="docutils literal notranslate"><span class="pre">black</span></code> requires installing <code class="docutils literal notranslate"><span class="pre">black</span></code> from the GitHub repo
+and not from PyPi or conda.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+git://github.com/psf/black
+</pre></div>
+</div>
+</div>
+<p>Placing the following in your <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code> configuration file will
+map this command to the <code class="docutils literal notranslate"><span class="pre">F6</span></code> button:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>autocmd <span class="nb">FileType</span> python <span class="nb">nnoremap</span> <span class="p">&lt;</span>buffer<span class="p">&gt;</span> <span class="p">&lt;</span>f6<span class="p">&gt;</span> :Black<span class="p">&lt;</span>CR<span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> repository describes methods for integration with other editors.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Other than line length, all <code class="docutils literal notranslate"><span class="pre">black</span></code> parameters used are the defaults!</p>
+</div>
+<p>In addition to <code class="docutils literal notranslate"><span class="pre">black</span></code>, <code class="docutils literal notranslate"><span class="pre">import</span></code> statements should be sorted using <a class="reference external" href="https://github.com/timothycrosley/isort">isort</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>isort file.py
+</pre></div>
+</div>
+<p>Or, in <code class="docutils literal notranslate"><span class="pre">vim/neovim</span></code>:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:!</span>isort %
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the future, we may rely entirely on <code class="docutils literal notranslate"><span class="pre">black</span></code> to sort includes as
+<code class="docutils literal notranslate"><span class="pre">black/isort</span></code> compatibility evolves.</p>
+</div>
+</div>
+</div>
+<div class="section" id="writing-documentation">
+<h2>Writing documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="formatting-the-python-code-in-rst-files">
+<h3>Formatting the Python code in rst files<a class="headerlink" href="#formatting-the-python-code-in-rst-files" title="Permalink to this headline">¶</a></h3>
+<p>Code blocks in documentation should be formatted using <a class="reference external" href="https://github.com/asottile/blacken-docs">blacken-docs</a>.  In general,
+you can write your code blocks and format them after the fact using the following
+command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blacken-docs -E -l <span class="m">89</span> -t py36 file.rst
+</pre></div>
+</div>
+<p>Using an editor like <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you can format from within the editor using
+the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command:</p>
+<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:!</span>blacken<span class="p">-</span>docs <span class="p">-</span>E <span class="p">-</span><span class="k">l</span> <span class="m">89</span> <span class="p">-</span><span class="k">t</span> py36 %
+</pre></div>
+</div>
+</div>
+<div class="section" id="docstrings-in-c-code">
+<h3>Docstrings in C++ code<a class="headerlink" href="#docstrings-in-c-code" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./misc"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="deprecated.html" title="previous page">Deprecated features</a>
+    <a class='right-next' id="next-link" href="pubs.html" title="next page">Publications using fwdpy11</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

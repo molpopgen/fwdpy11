@@ -1,0 +1,846 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The demography debugger &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Function documentation" href="functions.html" />
+    <link rel="prev" title="DataMatrix and StateMatrix" href="datamatrix.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/pages/demographic_models.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/demographic_models.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#module-fwdpy11.demographic_models.IM">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       fwdpy11.demographic_models.IM
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#human-demographic-models">
+     Human demographic models
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="the-demography-debugger">
+<span id="demographic-models"></span><h1>The demography debugger<a class="headerlink" href="#the-demography-debugger" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="fwdpy11.DemographyDebugger">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">DemographyDebugger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">initial_deme_sizes</span></em>, <em class="sig-param"><span class="n">events</span></em>, <em class="sig-param"><span class="n">simlen</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">deme_labels</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographyDebugger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Efficiently debug demographic events.</p>
+<p>The class executes a mock simulation
+of demographic events in order to quickly
+detect errors. It also generates a “report”
+of the model details for double-checking.</p>
+<p>If model errors are found, a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> exception
+is raised. The goal is to catch the types of errors that would
+result in an exception during a simulation.</p>
+<p>The class is initialized with the following arguments,
+which may be either positional or keyword:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_deme_sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><em>fwdpy11.DiploidPopulation</em></a>) – The initial sizes of each deme</p></li>
+<li><p><strong>events</strong> (<a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><em>fwdpy11.DiscreteDemography</em></a><em> or
+</em><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><em>fwdpy11.demographic_models.DemographicModelDetails</em></a>) – The demographic model</p></li>
+<li><p><strong>simlen</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The length of the simulation.  Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>deme_labels</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – A map from deme index to a printable name</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.6.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.8.1: </span>Initialization now done with attr.
+A list of initial deme sizes is now accepted.</p>
+</div>
+<dl class="py method">
+<dt id="fwdpy11.DemographyDebugger.report">
+<em class="property">property </em><code class="sig-name descname">report</code><a class="headerlink" href="#fwdpy11.DemographyDebugger.report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtain the details of the demographic
+model as a nicely-formatting string.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fwdpy11.demographic_models">
+<span id="pre-computed-demographic-models"></span><h1>Pre-computed demographic models<a class="headerlink" href="#module-fwdpy11.demographic_models" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="fwdpy11.demographic_models.DemographicModelDetails">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.demographic_models.</code><code class="sig-name descname">DemographicModelDetails</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">model</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">source</span><span class="p">:</span> <span class="n">Dict</span></em>, <em class="sig-param"><span class="n">parameters</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></span></em>, <em class="sig-param"><span class="n">citation</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Dict<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores rich information about a demographic model.
+Instances of this class get returned by functions
+generating pre-calculated models.</p>
+<p>This class has the following attributes, whose names
+are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+also determine the order of positional arguments:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – The demographic model parameters</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – The name of the model</p></li>
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – The source of the model</p></li>
+<li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – The parameters used to generate <code class="docutils literal notranslate"><span class="pre">model</span></code></p></li>
+<li><p><strong>citation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em> or </em><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelCitation" title="fwdpy11.demographic_models.DemographicModelCitation"><em>fwdpy11.demographic_models.DemographicModelCitation</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – Citation information</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – Optional field for additional info</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.demographic_models.DemographicModelCitation">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.demographic_models.</code><code class="sig-name descname">DemographicModelCitation</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">DOI</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></span></em>, <em class="sig-param"><span class="n">full_citation</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></span></em>, <em class="sig-param"><span class="n">metadata</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelCitation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Citation information for a demographic model</p>
+<p>This class has the following attributes, whose names
+are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+also determine the order of positional arguments:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>DOI</strong> – The Digital Object Identifier</p></li>
+<li><p><strong>full_citation</strong> – Something string-like giving the full citation.</p></li>
+<li><p><strong>metadata</strong> – Any additional information that may be needed.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="module-fwdpy11.demographic_models.IM">
+<span id="fwdpy11-demographic-models-im"></span><h2><code class="docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM</span></code><a class="headerlink" href="#module-fwdpy11.demographic_models.IM" title="Permalink to this headline">¶</a></h2>
+<p>This module provides functions to generate demographic events for
+“isolation-with-migration”, or IM, models.</p>
+<dl class="py function">
+<dt id="fwdpy11.demographic_models.IM.two_deme_IM">
+<code class="sig-prename descclassname">fwdpy11.demographic_models.IM.</code><code class="sig-name descname">two_deme_IM</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Nanc</span></em>, <em class="sig-param"><span class="n">T</span></em>, <em class="sig-param"><span class="n">psplit</span></em>, <em class="sig-param"><span class="n">Ns</span></em>, <em class="sig-param"><span class="n">migrates</span></em>, <em class="sig-param"><span class="n">burnin</span><span class="o">=</span><span class="default_value">10.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Isolation-with-migration (IM) model for two demes.</p>
+<p>An ancestral population splits into two daughter demes.
+At the time of the split, <code class="docutils literal notranslate"><span class="pre">psplit</span></code> of the ancestral
+population moves into deme 1.  The two daughter populations
+begin exponential growth until the present time and migration
+may occur between them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Nanc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The ancestral population size.</p></li>
+<li><p><strong>T</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The time of the split, in units of Nanc generations
+into the past.</p></li>
+<li><p><strong>psplit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The proportion of the ancestral population that splits
+off to found deme 1</p></li>
+<li><p><strong>Ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – The final sizes of demes 0 and 1, relative to Nanc</p></li>
+<li><p><strong>migrates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The migration rates from 0 to 1 and from 1 to 0,
+respectively. Migration rates are the fraction
+of the destination deme replaced by the source
+deme.</p></li>
+<li><p><strong>burnin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Time to simulate before the split, in units of Nanc</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The model events, instances of
+<a class="reference internal" href="#fwdpy11.demographic_models.IM.TwoDemeIMParameters" title="fwdpy11.demographic_models.IM.TwoDemeIMParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.TwoDemeIMParameters</span></code></a>
+and <a class="reference internal" href="#fwdpy11.demographic_models.IM.TwoDemeIMMetaData" title="fwdpy11.demographic_models.IM.TwoDemeIMMetaData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.TwoDemeIMMetaData</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails">fwdpy11.demographic_models.DemographicModelDetails</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The events returned by this model assume/require that you will
+construct a population with intitial size <code class="docutils literal notranslate"><span class="pre">Nanc</span></code>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.6.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.8.0: </span>Returns instance of <a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.demographic_models.IM.TwoDemeIMParameters">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.demographic_models.IM.</code><code class="sig-name descname">TwoDemeIMParameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Nanc</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">T</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">psplit</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">Ns</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em>, <em class="sig-param"><span class="n">migrates</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></span></em>, <em class="sig-param"><span class="n">burnin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds the parameters to <a class="reference internal" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>.</p>
+<p>Instances of this class are held as the <code class="docutils literal notranslate"><span class="pre">parameters</span></code> attribute of
+<a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a>.</p>
+<p>Attribute names are the same as the <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> to
+<a class="reference internal" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Nanc</strong> – </p></li>
+<li><p><strong>T</strong> – </p></li>
+<li><p><strong>psplit</strong> – </p></li>
+<li><p><strong>Ns</strong> – </p></li>
+<li><p><strong>migrates</strong> – </p></li>
+<li><p><strong>burnin</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.demographic_models.IM.TwoDemeIMMetaData">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.demographic_models.IM.</code><code class="sig-name descname">TwoDemeIMMetaData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">split_time</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">gens_post_split</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">simlen</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMMetaData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds metadata returned by <a class="reference internal" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>.</p>
+<p>Instances of this class are held as the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> attribute of
+<a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>split_time</strong> – The time until the two demes split</p></li>
+<li><p><strong>gens_post_split</strong> – The time from the split until the end of the simulation</p></li>
+<li><p><strong>simlen</strong> – <code class="docutils literal notranslate"><span class="pre">split_time</span></code> + <code class="docutils literal notranslate"><span class="pre">gens_post_split</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="human-demographic-models">
+<h2>Human demographic models<a class="headerlink" href="#human-demographic-models" title="Permalink to this headline">¶</a></h2>
+<p>This module provides the following models:</p>
+<ul class="simple">
+<li><p><span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20"><span>TBOConnor+12</span></a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.tennessen" title="fwdpy11.demographic_models.human.tennessen"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.tennessen()</span></code></a>.</p></li>
+<li><p>The three deme model from Table 2 of <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id8"><span>JLRG17</span></a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="fwdpy11.demographic_models.human.jouganous_three_deme"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.jouganous_three_deme()</span></code></a>.</p></li>
+</ul>
+<span class="target" id="module-fwdpy11.demographic_models.human"></span><p>This module provided pre-calculated demographic models
+for human populations.</p>
+<dl class="py class">
+<dt id="fwdpy11.demographic_models.human.TennessenModel">
+<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.demographic_models.human.</code><code class="sig-name descname">TennessenModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enumeration type declaring alternative implementations
+of the Tennessen et al. (2012) model. See
+<a class="reference internal" href="#fwdpy11.demographic_models.human.tennessen" title="fwdpy11.demographic_models.human.tennessen"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.tennessen()</span></code></a> for
+details.</p>
+<dl class="py attribute">
+<dt id="fwdpy11.demographic_models.human.TennessenModel.V0">
+<code class="sig-name descname">V0</code><em class="property"> = 0</em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default version of the model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fwdpy11.demographic_models.human.TennessenModel.V1">
+<code class="sig-name descname">V1</code><em class="property"> = 1</em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alternate version of the model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="fwdpy11.demographic_models.human.jouganous_three_deme">
+<code class="sig-prename descclassname">fwdpy11.demographic_models.human.</code><code class="sig-name descname">jouganous_three_deme</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">burnin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">20</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate parameters for the demographic model described in Table 2 of:</p>
+<p>Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017.
+“Inferring the Joint Demographic History of Multiple Populations:
+Beyond the Diffusion Approximation.” Genetics 206 (3): 1549–67.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>burnin</strong> – Burn-in time, as a multiplier of the ancestral population size.
+Defaults to 20.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The demographic model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails">fwdpy11.demographic_models.DemographicModelDetails</a></p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field of the return value contains information about
+the simulation length, ancestral population size (<code class="docutils literal notranslate"><span class="pre">Nref</span></code>), etc.,
+and the mapping of integer values to deme names.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.1.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fwdpy11.demographic_models.human.tennessen">
+<code class="sig-prename descclassname">fwdpy11.demographic_models.human.</code><code class="sig-name descname">tennessen</code><span class="sig-paren">(</span><em class="sig-param">burnin: int = 20</em>, <em class="sig-param">model_version: fwdpy11.demographic_models.human.TennessenModel = &lt;TennessenModel.V0: 0&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.tennessen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate parameters for the demographic model described in:</p>
+<p>Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, Wenqing Fu,
+Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012.
+“Evolution and Functional Impact of Rare Coding Variation
+from Deep Sequencing of Human Exomes.” Science 337 (6090): 64–69.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>burnin</strong> – Burn-in time, as a multiplier of the ancestral population size.
+Defaults to 20.</p></li>
+<li><p><strong>model_version</strong> (<a class="reference internal" href="#fwdpy11.demographic_models.human.TennessenModel" title="fwdpy11.demographic_models.human.TennessenModel"><em>fwdpy11.demographic_models.human.TennessenModel</em></a>) – Specify which “flavor” of the model to run.  See below.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The demographic model</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails">fwdpy11.demographic_models.DemographicModelDetails</a></p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">metadata</span></code> field of the return value contains information about
+the simulation length, ancestral population size (<code class="docutils literal notranslate"><span class="pre">Nref</span></code>), etc.,
+and the mapping of integer values to deme names.</p>
+<p>When this model is run, deme <code class="docutils literal notranslate"><span class="pre">0</span></code> corresponds to <code class="docutils literal notranslate"><span class="pre">African</span></code> and deme
+<code class="docutils literal notranslate"><span class="pre">1</span></code> corresponds to Eurasian.</p>
+<p>Due to uncertainty in the literature over the details of this model,
+we provide two slightly different implementations.  The first
+implementation is the default, and is specified by
+<a class="reference internal" href="#fwdpy11.demographic_models.human.TennessenModel.V0" title="fwdpy11.demographic_models.human.TennessenModel.V0"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.TennessenModel.V0</span></code></a>.  For this
+model, the final deme sizes are those shown in Figure 3 of the
+Tennessen et al. (2012) paper.
+If <a class="reference internal" href="#fwdpy11.demographic_models.human.TennessenModel.V1" title="fwdpy11.demographic_models.human.TennessenModel.V1"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.TennessenModel.V1</span></code></a> is
+used instead, then the final sizes are obtained by calculating them
+forwards in time using a combination of the information from
+Tennessen et al. (2012) and Fu et al. 2013. However, due to having
+to convert from continuous to discrete time, etc., other definitions
+of this model are also possible.  Here, all deme sizes and times
+are obtained using <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.rint.html#numpy.rint" title="(in NumPy v1.20)"><code class="xref py py-data docutils literal notranslate"><span class="pre">numpy.rint</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This implementation is based on code provided by Aaron Ragsdale.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.8.0.</span></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./pages"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="datamatrix.html" title="previous page">DataMatrix and StateMatrix</a>
+    <a class='right-next' id="next-link" href="functions.html" title="next page">Function documentation</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

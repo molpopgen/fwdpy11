@@ -1,0 +1,637 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upgrade path &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Literature cited" href="bibliography.html" />
+    <link rel="prev" title="Publications using fwdpy11" href="pubs.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/misc/upgrade_path.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fmisc/upgrade_path.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id2">
+   0.12.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id3">
+   0.8.2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   0.8.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id5">
+   0.5.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id6">
+   0.2.0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id7">
+   0.1.4
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changes-to-datamatrix">
+     Changes to DataMatrix
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="upgrade-path">
+<span id="id1"></span><h1>Upgrade path<a class="headerlink" href="#upgrade-path" title="Permalink to this headline">¶</a></h1>
+<p>This document outlines how to upgrade existing scripts to new versions of fwdpy11.  This guide is likely
+imperfect/incomplete.</p>
+<div class="section" id="id2">
+<h2>0.12.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>This version removes simulation without tree sequence recording.
+The fix is to use tree sequence recording.</p>
+</div>
+<div class="section" id="id3">
+<h2>0.8.2<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>The first <code class="docutils literal notranslate"><span class="pre">kwarg</span></code>/positional argument for initializing a
+<a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> has been renamed <code class="docutils literal notranslate"><span class="pre">initial_deme_sizes</span></code>.
+As the argument is required, and previously only took one possible type,
+we expect this change to not really break anyone’s code.</p></li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>0.8.0<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../pages/types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> can no longer be initialized with a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array as a positional
+argument. Now, pass it as the value to the <code class="docutils literal notranslate"><span class="pre">set_deme_sizes</span></code> keyword argument.</p></li>
+<li><p>Initialization of <a class="reference internal" href="../pages/types.html#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code></a> has changed for the case
+of resetting the entire migration matrix. See <a class="reference internal" href="../pages/softselection.html#migration"><span class="std std-ref">here</span></a>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">shape</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> to initialize a <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.GammaS" title="fwdpy11.GammaS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GammaS</span></code></a> has been
+renamed <code class="docutils literal notranslate"><span class="pre">shape_parameter</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">matrix</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> to initialize a <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a>
+has been renamed <code class="docutils literal notranslate"><span class="pre">cov_matrix</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> <code class="docutils literal notranslate"><span class="pre">gw2w</span></code> for genetic value objects <code class="docutils literal notranslate"><span class="pre">init</span></code> methods has been replaced with <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a> and <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.PleiotropicOptima" title="fwdpy11.PleiotropicOptima"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PleiotropicOptima</span></code></a> <code class="docutils literal notranslate"><span class="pre">init</span></code> methods is now the <strong>third</strong> positional argument rather than the first.  This change should be caught at run time (the new classes won’t auto-convert <code class="docutils literal notranslate"><span class="pre">float</span></code> to <code class="docutils literal notranslate"><span class="pre">int</span></code>, and is fixed by adding parameter names when initializing instances of these types.</p></li>
+<li><p>The type of <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.input_left</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.output_right</span></code> has changed
+to a simple index vector (<a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/529">#529</a>).  This change is a BIG memory savings when simulating large regions.</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2>0.5.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>The following functions and types previously required a <a class="reference internal" href="../pages/types.html#fwdpy11.MutationVector" title="fwdpy11.MutationVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationVector</span></code></a> argument, but no longer do:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../pages/types.html#fwdpy11.VariantIterator" title="fwdpy11.VariantIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.VariantIterator</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/types.html#fwdpy11.DataMatrixIterator" title="fwdpy11.DataMatrixIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrixIterator</span></code></a></p></li>
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.data_matrix_from_tables()</span></code></p></li>
+</ul>
+<p>The extra argument could be eliminated due to the new attributes added to <a class="reference internal" href="../pages/types.html#fwdpy11.MutationRecord" title="fwdpy11.MutationRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationRecord</span></code></a>.</p>
+</div>
+<div class="section" id="id6">
+<h2>0.2.0<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>This release also separates out the data representing a diploid into two classes, <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidGenotype" title="fwdpy11.DiploidGenotype"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGenotype</span></code></a> and <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.</p>
+<p>This release contains major changes to how genetic values are calculated and to how simulations parameters are stored.
+These changes are major <em>simplifications</em> to the package.</p>
+<p>The changes to how diploid data are stored completely changes how custom genetic values calculations are implemented.</p>
+<p>Another major change is that genetic value and noise functions are no longer allowed to be written in Python.  We may
+bring that back in a later release.</p>
+<p>class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code> has been completely refactored.  See <a class="reference internal" href="../pages/datamatrix.html#datamatrix"><span class="std std-ref">DataMatrix and StateMatrix</span></a> for overview of current API.</p>
+<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample()</span></code> now returns a tuple with two elements, which represent neutral
+and selected gentoypes, respectively.  The previous  API made you choose neutral or selected for the return value, which
+was a list.</p>
+<p>Support for tree sequences will likely have a big impact on how you think about carrying out simulations.  See <a class="reference internal" href="../pages/tsoverview.html#tsoverview"><span class="std std-ref">Conceptual overview of tree sequence recording</span></a>
+and <a class="reference internal" href="../pages/tstypes.html#ts-data-types"><span class="std std-ref">Data structures related to tree sequences</span></a> for details.</p>
+</div>
+<div class="section" id="id7">
+<h2>0.1.4<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="changes-to-datamatrix">
+<h3>Changes to DataMatrix<a class="headerlink" href="#changes-to-datamatrix" title="Permalink to this headline">¶</a></h3>
+<p>The member types <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_neutral</span></code> and  <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_selected</span></code> are now read-only attributes.  In previous versions, they were functions.  To upgrade, simply remove any trailing <code class="docutils literal notranslate"><span class="pre">()</span></code>. In other words change this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">ndim_neutral</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">ndim_neutral</span>
+</pre></div>
+</div>
+<p>The properties <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.neutral</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> are now
+writeable.  This allows you to recode the data as needed.  For example, if you wish to swap the 0/1 values for a column,
+subtract 1 then multiply by -1.  The result will affect the data stored on the C++ side.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./misc"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="pubs.html" title="previous page">Publications using fwdpy11</a>
+    <a class='right-next' id="next-link" href="bibliography.html" title="next page">Literature cited</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

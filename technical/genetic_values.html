@@ -1,0 +1,1232 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Technical overview of genetic value calculations &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Writing “plugins” with C++" href="writingplugins.html" />
+    <link rel="prev" title="Time series analysis" href="../pages/recorders.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/technical/genetic_values.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Ftechnical/genetic_values.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-mock-overview-in-python">
+   A mock overview in Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#behavior-during-a-simulation">
+     Behavior during a simulation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-data-objects">
+     The data objects
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-c-side">
+   The C++ side
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-strict-additive-effects">
+     Example: strict additive effects
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#example-a-snowdrift-model">
+     Example: a snowdrift model
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="technical-overview-of-genetic-value-calculations">
+<span id="gvalue-technical-details"></span><h1>Technical overview of genetic value calculations<a class="headerlink" href="#technical-overview-of-genetic-value-calculations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-mock-overview-in-python">
+<h2>A mock overview in Python<a class="headerlink" href="#a-mock-overview-in-python" title="Permalink to this headline">¶</a></h2>
+<p>This section illustrates the technical details of genetic value objects
+by presenting a mock up of their <code class="docutils literal notranslate"><span class="pre">API</span></code> in Python. To help document
+key concepts, we make use of Python 3’s type hinting features from
+<a class="reference external" href="https://docs.python.org/3/library/typing.html#module-typing" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code></a> and decorators from <a class="reference external" href="https://docs.python.org/3/library/abc.html#module-abc" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">abc</span></code></a>:</p>
+<ul class="simple">
+<li><p>A class inheriting from <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></a> is an abstract base class.
+It is not possible to create instances of ABCs.  Rather, you must
+subclass them.</p></li>
+<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a> is
+a part of an ABC’s interface that must be defined by a subclass.
+In other words, to be a valid <code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValue</span></code>, subclasses
+must define the abstract methods.  In C++ terminology,
+these are “pure virtual” functions.</p></li>
+<li><p>A function decorated with <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.final" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">typing.final()</span></code></a> must not be redefined
+in a subclass. Doing so is considered an error, although Python
+will allow it.</p></li>
+<li><p>In Python, any undecorated functions are viewed as default implementations
+of the class’ behavior.  A subclass may or may not redefine
+them as needed.</p></li>
+</ul>
+<p>These concepts do not map perfectly from Python to C++, but it is close
+enough for now. Simply put, C++ is much stricter than Python.</p>
+<p>The following code block shows a Python mock-up corresponding to
+<a class="reference internal" href="../pages/genetic_values.html#fwdpy11.DiploidGeneticValue" title="fwdpy11.DiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code></a>. (The next section shows the actual
+definition of <a class="reference internal" href="../pages/genetic_values.html#fwdpy11.DiploidGeneticValue" title="fwdpy11.DiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code></a>.)</p>
+<p>This class is an abstract base class.  The initialization semantics are:</p>
+<ul class="simple">
+<li><p>The object is initialized with the dimensionality of the model, a
+genetic value to fitness map, and a noise function.</p></li>
+<li><p>If the genetic value to fitness map is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then the genetic
+value is assumed to be fitness itself (a “standard population
+genetic” simulation).  Thus, we supply <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsFitness" title="fwdpy11.GeneticValueIsFitness"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsFitness</span></code></a>.</p></li>
+<li><p>If the noise object is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then the model has no random effects and
+we supply <a class="reference internal" href="../pages/gvaluenoise.html#fwdpy11.NoNoise" title="fwdpy11.NoNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.NoNoise</span></code></a>.</p></li>
+</ul>
+<p>The remaining elements of the class are its public interface, consisting
+of a mixture of final functions, abstract methods, and default implementations.
+Each function takes a single argument, most of which are declared as some
+sort of mocked data type.  These data types hold data that are relevant
+to carrying out our calculations.  Below, the C++ versions get defined and
+the Python versions are listed at the end of this section.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MockDiploidGeneticValue</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">ndim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">genetic_value_to_fitness_map</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueToFitnessMap</span><span class="p">]</span>
+    <span class="n">noise_function</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueNoise</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">genetic_value_to_fitness_map</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">genetic_value_to_fitness_map</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GeneticValueIsFitness</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_function</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noise_function</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">NoNoise</span><span class="p">()</span>
+
+    <span class="nd">@typing</span><span class="o">.</span><span class="n">final</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Set the genetic value metadata for offspring</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_gvalue</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># Set the random effects metadata for offspring</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">(</span><span class="n">MockDiploidGeneticValueNoiseData</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="c1"># Set the fitness metadata for offspring</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">offspring_metadata</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">genetic_value_to_fitness</span><span class="p">(</span>
+            <span class="n">MockDiploidGeneticValueToFitnessData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function must populate self.gvalues</span>
+<span class="sd">        and return a single value for the offspring&#39;s DiploidMetadata.g</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;calculate_gvalue not implemented&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">genetic_value_to_fitness</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueToFitnessData</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">genetic_value_to_fitness_map</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">noise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;update not implemented&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To make things complete, a Python analogue of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap" title="fwdpy11.GeneticValueToFitnessMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueToFitnessMap</span></code></a>
+would look like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MockGeneticValueToFitnessMap</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="n">ndim</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueToFitnessData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;__call__ not implemented&quot;</span><span class="p">)</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;update not implemented&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Similarly, this is how we’d implement <a class="reference internal" href="../pages/gvaluenoise.html#fwdpy11.GeneticValueNoise" title="fwdpy11.GeneticValueNoise"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code></a> in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MockGeneticValueNoise</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">MockDiploidGeneticValueNoiseData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;__call__ not implemented&quot;</span><span class="p">)</span>
+
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;update not implemented&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="behavior-during-a-simulation">
+<span id="gvalue-simulation-behavior"></span><h3>Behavior during a simulation<a class="headerlink" href="#behavior-during-a-simulation" title="Permalink to this headline">¶</a></h3>
+<p>During a simulation, the following operations happen:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gv</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="n">gv</span><span class="o">.</span><span class="n">genetic_value_to_fitness_map</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+<span class="n">gv</span><span class="o">.</span><span class="n">noise_function</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">pop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>#offspring_metadata is a list of fwdpy11.DiploidMetadata</p>
+<p>: for o in offspring_metadata:</p>
+<p>#Execute the calculations for each offspring</p>
+<p>: gv(MockDiploidGeneticValueData(o, pop))</p>
+<p>The definition of our classes and the way that <code class="docutils literal notranslate"><span class="pre">update</span></code> functions are applied
+implies that all three objects are updated <em>independently from one another</em>.
+This independence covers a large number of use cases.  For example, a moving
+trait optimum (<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>) only needs acces to
+<a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.generation" title="fwdpy11.DiploidPopulation.generation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.generation</span></code></a> to know if it needs to update its
+internal state.</p>
+<p>For some models, this independent updating doesn’t do the job.  For example, if
+fitness depends on an individual’s genetic value <em>in comparison</em> to some or all
+other genetic values in the population (as may be the case for models of
+social interactions), then we don’t have an easy way to
+implement that using a class derived from <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a>.</p>
+<p>To handle these more complex models, subclasses may simply override the
+functions <code class="docutils literal notranslate"><span class="pre">genetic_value_to_fitness</span></code> and/or <code class="docutils literal notranslate"><span class="pre">noise</span></code> as needed.
+“Snowdrift” models of social interactions are one example where this method
+is necessary (see <a class="reference internal" href="#snowdrift-cpp-example"><span class="std std-ref">here</span></a> for a C++ implementation
+and <a class="reference internal" href="../examples/pysnowdrift.html#pysnowdrift"><span class="std std-ref">here</span></a> for a Python version).</p>
+</div>
+<div class="section" id="the-data-objects">
+<h3>The data objects<a class="headerlink" href="#the-data-objects" title="Permalink to this headline">¶</a></h3>
+<p>The member functions of our mock classes take different argument types.
+These types hold things like the offspring metadata, parental metadata, etc.,
+that may be needed to calculate return values.</p>
+<p>For a genetic value object written in Python:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueData</span></code> is <a class="reference internal" href="../pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValueData" title="fwdpy11.PyDiploidGeneticValueData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValueData</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueToFitnessData</span></code> is <a class="reference internal" href="../pages/advancedtopics.html#fwdpy11.DiploidGeneticValueToFitnessData" title="fwdpy11.DiploidGeneticValueToFitnessData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueToFitnessData</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueNoiseData</span></code> is <a class="reference internal" href="../pages/advancedtopics.html#fwdpy11.DiploidGeneticValueNoiseData" title="fwdpy11.DiploidGeneticValueNoiseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValueNoiseData</span></code></a>.</p></li>
+</ul>
+<p>The data types closely match those used by the C++ API, which are
+described in the next section.  The difference is that
+<a class="reference internal" href="../pages/advancedtopics.html#fwdpy11.PyDiploidGeneticValueData" title="fwdpy11.PyDiploidGeneticValueData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValueData</span></code></a> supports the buffer protocol
+in order to have write access to <a class="reference internal" href="../pages/genetic_values.html#fwdpy11.DiploidGeneticValue.genetic_values" title="fwdpy11.DiploidGeneticValue.genetic_values"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue.genetic_values</span></code></a>.
+For the other two classes, their Python versions are exactly like their C++
+back ends.</p>
+<p>See <a class="reference internal" href="../pages/advancedtopics.html#gvalues-python"><span class="std std-ref">here</span></a> for details on writing Python genetic
+value classes.</p>
+</div>
+</div>
+<div class="section" id="the-c-side">
+<h2>The C++ side<a class="headerlink" href="#the-c-side" title="Permalink to this headline">¶</a></h2>
+<p>This section shows the exact C++ implementations behind <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> <code class="docutils literal notranslate"><span class="pre">ABCs</span></code>.
+For those users implementing custom models, subclassing these types is
+the way to maximize performance.  Concrete examples of subclasses are shown
+below.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The C++ classes described here have functions that interact
+with Python.  A future version of <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> will likely
+remove these functions from the C++ side and move them to
+the Python-only side in order to promote thread safety.</p>
+</div>
+<p>The C++ back-end for <a class="reference internal" href="../pages/genetic_values.html#fwdpy11.DiploidGeneticValue" title="fwdpy11.DiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code></a> is found in the header file
+<code class="docutils literal notranslate"><span class="pre">&lt;fwdpy11/genetic_values/DiploidGeneticValue.hpp&gt;</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef FWDPY11_DIPLOID_GENETIC_VALUE_HPP__</span>
+<span class="cp">#define FWDPY11_DIPLOID_GENETIC_VALUE_HPP__</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/rng.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_noise/NoNoise.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_data/genetic_value_data.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">fwdpy11</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">DiploidGeneticValue</span>
+    <span class="c1">/// API class</span>
+    <span class="c1">///</span>
+    <span class="c1">/// Things to note:</span>
+    <span class="c1">/// Any deme/geography-specific details must be handled by the derived class.</span>
+    <span class="p">{</span>
+      <span class="k">private</span><span class="o">:</span>
+        <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">Base</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">Default</span><span class="p">,</span> <span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Base</span><span class="o">&gt;</span>
+        <span class="n">process_input</span><span class="p">(</span><span class="k">const</span> <span class="n">Base</span><span class="o">*</span> <span class="n">input</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">input</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Base</span><span class="o">&gt;</span><span class="p">(</span><span class="k">new</span> <span class="n">Default</span><span class="p">{</span><span class="n">args</span><span class="p">...});</span>
+                <span class="p">}</span>
+            <span class="k">return</span> <span class="n">input</span><span class="o">-&gt;</span><span class="n">clone</span><span class="p">();</span>
+        <span class="p">}</span>
+
+      <span class="k">public</span><span class="o">:</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">total_dim</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">gvalues</span><span class="p">;</span>
+        <span class="c1">// Even though these are stored as shared_ptr,</span>
+        <span class="c1">// this class is non-copyable because its state</span>
+        <span class="c1">// may change over time via the various update</span>
+        <span class="c1">// functions.</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GeneticValueToFitnessMap</span><span class="o">&gt;</span> <span class="n">gv2w</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GeneticValueNoise</span><span class="o">&gt;</span> <span class="n">noise_fxn</span><span class="p">;</span>
+
+        <span class="n">DiploidGeneticValue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">ndim</span><span class="p">,</span> <span class="k">const</span> <span class="n">GeneticValueToFitnessMap</span><span class="o">*</span> <span class="n">gv2w_</span><span class="p">,</span>
+                            <span class="k">const</span> <span class="n">GeneticValueNoise</span><span class="o">*</span> <span class="n">noise</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">total_dim</span><span class="p">(</span><span class="n">ndim</span><span class="p">),</span> <span class="n">gvalues</span><span class="p">(</span><span class="n">total_dim</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span>
+              <span class="n">gv2w</span><span class="p">{</span><span class="n">process_input</span><span class="o">&lt;</span><span class="n">GeneticValueToFitnessMap</span><span class="p">,</span> <span class="n">GeneticValueIsFitness</span><span class="p">,</span>
+                                 <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">gv2w_</span><span class="p">,</span> <span class="n">ndim</span><span class="p">)},</span>
+              <span class="n">noise_fxn</span><span class="p">{</span><span class="n">process_input</span><span class="o">&lt;</span><span class="n">GeneticValueNoise</span><span class="p">,</span> <span class="n">NoNoise</span><span class="o">&gt;</span><span class="p">(</span><span class="n">noise</span><span class="p">)}</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="c1">// The type is move-only</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">DiploidGeneticValue</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">DiploidGeneticValue</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">DiploidGeneticValue</span><span class="p">(</span><span class="n">DiploidGeneticValue</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="kt">double</span> <span class="n">calculate_gvalue</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueData</span> <span class="n">data</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidPopulation</span><span class="o">&amp;</span> <span class="n">pop</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="c1">// To be called from w/in a simulation</span>
+        <span class="kr">inline</span> <span class="kt">void</span>
+        <span class="k">operator</span><span class="p">()(</span><span class="n">DiploidGeneticValueData</span> <span class="n">data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">g</span> <span class="o">=</span> <span class="n">calculate_gvalue</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">e</span> <span class="o">=</span> <span class="n">noise</span><span class="p">(</span><span class="n">DiploidGeneticValueNoiseData</span><span class="p">(</span><span class="n">data</span><span class="p">));</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">w</span> <span class="o">=</span> <span class="n">genetic_value_to_fitness</span><span class="p">(</span>
+                <span class="n">DiploidGeneticValueToFitnessData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">gvalues</span><span class="p">));</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="kt">double</span>
+        <span class="n">genetic_value_to_fitness</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueToFitnessData</span> <span class="n">data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">gv2w</span><span class="o">-&gt;</span><span class="k">operator</span><span class="p">()(</span><span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="kt">double</span>
+        <span class="n">noise</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueNoiseData</span> <span class="n">data</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">noise_fxn</span><span class="o">-&gt;</span><span class="k">operator</span><span class="p">()(</span><span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">tuple</span>
+        <span class="n">shape</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">total_dim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">total_dim</span> <span class="o">!=</span> <span class="n">gvalues</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;dimensionality mismatch&quot;</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="k">return</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">total_dim</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span> <span class="c1">//namespace fwdpy11</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>Some notes:</p>
+<ul>
+<li><p>Only functions marked <code class="docutils literal notranslate"><span class="pre">virtual</span></code> may be overridden by a subclass.</p></li>
+<li><p>A function with the following form is a “pure virtual function”, which
+is the C++ analogue of <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.abstractmethod" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">abc.abstractmethod()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virtual</span> <span class="n">void</span> <span class="n">member_function</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Attempting to allocate an instance of a subclass that has not defined
+all pure virtual functions will fail to compile.</p>
+</li>
+<li><p>Classes like <a class="reference internal" href="../pages/genetic_values.html#fwdpy11.Additive" title="fwdpy11.Additive"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Additive</span></code></a> take instances of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a>
+instead of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsFitness" title="fwdpy11.GeneticValueIsFitness"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsFitness</span></code></a>.  The reason is that most use cases
+requiring a non-<code class="docutils literal notranslate"><span class="pre">None</span></code> argument here are models of traits.  For other cases,
+the default (<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsFitness" title="fwdpy11.GeneticValueIsFitness"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsFitness</span></code></a>) suffices.  However, the C++
+API allows you to subclass the base class however you wish.</p></li>
+</ul>
+<p>The interface class for genetic value to fitness maps is <code class="docutils literal notranslate"><span class="pre">&lt;fwdpy11/headers/fwdpy11/genetic_value_to_fitness/GeneticValueToFitnessMap.hpp&gt;</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__</span>
+<span class="cp">#define FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_values/default_update.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpp/util/named_type.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_data/genetic_value_data.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">fwdpy11</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">genetic_value_maps_to_fitness</span>
+    <span class="p">{</span>
+    <span class="p">};</span>
+
+    <span class="k">using</span> <span class="n">maps_to_fitness</span>
+        <span class="o">=</span> <span class="n">fwdpp</span><span class="o">::</span><span class="n">strong_types</span><span class="o">::</span><span class="n">named_type</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="n">genetic_value_maps_to_fitness</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">struct</span> <span class="nc">GeneticValueToFitnessMap</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">total_dim</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">bool</span> <span class="n">isfitness</span><span class="p">;</span>
+        <span class="k">explicit</span> <span class="nf">GeneticValueToFitnessMap</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">ndim</span><span class="p">,</span> <span class="k">const</span> <span class="n">maps_to_fitness</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">total_dim</span><span class="p">{</span><span class="n">ndim</span><span class="p">},</span> <span class="n">isfitness</span><span class="p">{</span><span class="n">m</span><span class="p">.</span><span class="n">get</span><span class="p">()}</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">GeneticValueToFitnessMap</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="kt">double</span>
+        <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">DiploidGeneticValueToFitnessData</span> <span class="cm">/*data*/</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidPopulation</span><span class="o">&amp;</span> <span class="cm">/*pop*/</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GeneticValueToFitnessMap</span><span class="o">&gt;</span> <span class="n">clone</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">virtual</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">tuple</span>
+        <span class="n">shape</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">total_dim</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span> <span class="c1">//namespace fwdpy11</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>The C++ definition of <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GeneticValueIsTrait" title="fwdpy11.GeneticValueIsTrait"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueIsTrait</span></code></a> inherits from the above, and is another interface class (because it does not define any of the pure virtual functions):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef FWDPY11_GENETIC_VALUE_IS_TRAIT</span>
+<span class="cp">#define FWDPY11_GENETIC_VALUE_IS_TRAIT</span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;GeneticValueToFitnessMap.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">fwdpy11</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">GeneticValueIsTrait</span> <span class="o">:</span> <span class="k">public</span> <span class="n">GeneticValueToFitnessMap</span>
+    <span class="c1">/// Another ABC.  Effectively a type trait</span>
+    <span class="p">{</span>
+        <span class="k">explicit</span> <span class="nf">GeneticValueIsTrait</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">ndim</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">GeneticValueToFitnessMap</span><span class="p">(</span><span class="n">ndim</span><span class="p">,</span> <span class="n">maps_to_fitness</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span> <span class="c1">// namespace fwdpy11</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>The three data types <code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueData</span></code>, <code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueNoiseData</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">MockDiploidGeneticValueToFitnessData</span></code> map to the following three classes,
+respectively, which hold references to objects from the simulation:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef FWDPY11_GENETIC_DATA_HPP__</span>
+<span class="cp">#define FWDPY11_GENETIC_DATA_HPP__</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/rng.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">fwdpy11</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="nc">DiploidGeneticValueData</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">GSLrng_t</span><span class="o">&gt;</span> <span class="n">rng</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidPopulation</span><span class="o">&gt;</span> <span class="n">pop</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&gt;</span> <span class="n">parent1_metadata</span><span class="p">,</span>
+            <span class="n">parent2_metadata</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">metadata_index</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&gt;</span> <span class="n">offspring_metadata</span><span class="p">;</span>
+
+        <span class="n">DiploidGeneticValueData</span><span class="p">(</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">GSLrng_t</span><span class="o">&amp;</span> <span class="n">rng_</span><span class="p">,</span>
+                                <span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidPopulation</span><span class="o">&amp;</span> <span class="n">pop_</span><span class="p">,</span>
+                                <span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&amp;</span> <span class="n">parent1_metadata_</span><span class="p">,</span>
+                                <span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&amp;</span> <span class="n">parent2_metadata_</span><span class="p">,</span>
+                                <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">metadata_index_</span><span class="p">,</span>
+                                <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&amp;</span> <span class="n">offspring_metadata_</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">rng</span><span class="p">(</span><span class="n">rng_</span><span class="p">),</span> <span class="n">pop</span><span class="p">(</span><span class="n">pop_</span><span class="p">),</span> <span class="n">parent1_metadata</span><span class="p">(</span><span class="n">parent1_metadata_</span><span class="p">),</span>
+              <span class="n">parent2_metadata</span><span class="p">(</span><span class="n">parent2_metadata_</span><span class="p">),</span> <span class="n">metadata_index</span><span class="p">(</span><span class="n">metadata_index_</span><span class="p">),</span>
+              <span class="n">offspring_metadata</span><span class="p">(</span><span class="n">offspring_metadata_</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="c1">// NOTE: the next two structs may be collapsible into one?</span>
+
+    <span class="k">struct</span> <span class="nc">DiploidGeneticValueNoiseData</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">GSLrng_t</span><span class="o">&gt;</span> <span class="n">rng</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&gt;</span> <span class="n">parent1_metadata</span><span class="p">,</span>
+            <span class="n">parent2_metadata</span><span class="p">,</span> <span class="n">offspring_metadata</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">metadata_index</span><span class="p">;</span>
+
+        <span class="k">explicit</span> <span class="nf">DiploidGeneticValueNoiseData</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueData</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">rng</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">rng</span><span class="p">),</span> <span class="n">parent1_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent1_metadata</span><span class="p">),</span>
+              <span class="n">parent2_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent2_metadata</span><span class="p">),</span>
+              <span class="n">offspring_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">),</span>
+              <span class="n">metadata_index</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">metadata_index</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">struct</span> <span class="nc">DiploidGeneticValueToFitnessData</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">GSLrng_t</span><span class="o">&gt;</span> <span class="n">rng</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidMetadata</span><span class="o">&gt;</span> <span class="n">parent1_metadata</span><span class="p">,</span>
+            <span class="n">parent2_metadata</span><span class="p">,</span> <span class="n">offspring_metadata</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">reference_wrapper</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&gt;</span> <span class="n">gvalues</span><span class="p">;</span>
+        <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">metadata_index</span><span class="p">;</span>
+
+        <span class="k">explicit</span> <span class="nf">DiploidGeneticValueToFitnessData</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueData</span><span class="o">&amp;</span> <span class="n">data</span><span class="p">,</span>
+                                                  <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">gvalues_</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">rng</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">rng</span><span class="p">),</span> <span class="n">parent1_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent1_metadata</span><span class="p">),</span>
+              <span class="n">parent2_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">parent2_metadata</span><span class="p">),</span>
+              <span class="n">offspring_metadata</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">),</span>
+              <span class="n">gvalues</span><span class="p">(</span><span class="n">gvalues_</span><span class="p">),</span>
+              <span class="n">metadata_index</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">metadata_index</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<div class="section" id="example-strict-additive-effects">
+<h3>Example: strict additive effects<a class="headerlink" href="#example-strict-additive-effects" title="Permalink to this headline">¶</a></h3>
+<p>This example comes from the test suite:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="c1"> //for std::max</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_values/DiploidGeneticValue.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_values/default_update.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">struct</span> <span class="nc">additive</span> <span class="o">:</span> <span class="k">public</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span>
+<span class="p">{</span>
+    <span class="n">additive</span><span class="p">()</span> <span class="o">:</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">}</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span>
+    <span class="n">calculate_gvalue</span><span class="p">(</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValueData</span> <span class="n">data</span><span class="p">)</span> <span class="k">override</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pop</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">pop</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="k">const</span> <span class="k">auto</span> <span class="n">diploid_index</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">label</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">m</span> <span class="p">:</span> <span class="n">pop</span><span class="p">.</span><span class="n">haploid_genomes</span><span class="p">[</span><span class="n">pop</span><span class="p">.</span><span class="n">diploids</span><span class="p">[</span><span class="n">diploid_index</span><span class="p">].</span><span class="n">first</span><span class="p">].</span><span class="n">smutations</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">pop</span><span class="p">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="p">].</span><span class="n">s</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">m</span> <span class="p">:</span> <span class="n">pop</span><span class="p">.</span><span class="n">haploid_genomes</span><span class="p">[</span><span class="n">pop</span><span class="p">.</span><span class="n">diploids</span><span class="p">[</span><span class="n">diploid_index</span><span class="p">].</span><span class="n">second</span><span class="p">].</span><span class="n">smutations</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">sum</span> <span class="o">+=</span> <span class="n">pop</span><span class="p">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="p">].</span><span class="n">s</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="n">gvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="n">sum</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">gvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="n">pybind11</span><span class="o">::</span><span class="n">object</span>
+    <span class="n">pickle</span><span class="p">()</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">bytes</span><span class="p">(</span><span class="s">&quot;custom_additive&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">DEFAULT_DIPLOID_POP_UPDATE</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="c1">//Standard pybind11 stuff goes here</span>
+<span class="n">PYBIND11_MODULE</span><span class="p">(</span><span class="n">custom_additive</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">pybind11</span><span class="o">::</span><span class="n">object</span> <span class="n">imported_custom_additive_base_class_type</span>
+        <span class="o">=</span> <span class="n">pybind11</span><span class="o">::</span><span class="k">module</span><span class="o">::</span><span class="k">import</span><span class="p">(</span><span class="s">&quot;fwdpy11&quot;</span><span class="p">).</span><span class="n">attr</span><span class="p">(</span><span class="s">&quot;DiploidGeneticValue&quot;</span><span class="p">);</span>
+    <span class="n">pybind11</span><span class="o">::</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">additive</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&quot;additive&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">pybind11</span><span class="o">::</span><span class="n">init</span><span class="o">&lt;&gt;</span><span class="p">())</span>
+        <span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">pybind11</span><span class="o">::</span><span class="n">pickle</span><span class="p">([](</span><span class="k">const</span> <span class="n">additive</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">pickle</span><span class="p">();</span> <span class="p">},</span>
+                              <span class="p">[](</span><span class="n">pybind11</span><span class="o">::</span><span class="n">object</span> <span class="n">o</span><span class="p">)</span> <span class="p">{</span>
+                                  <span class="n">pybind11</span><span class="o">::</span><span class="n">bytes</span> <span class="n">b</span><span class="p">(</span><span class="n">o</span><span class="p">);</span>
+                                  <span class="k">auto</span> <span class="n">s</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">();</span>
+                                  <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">!=</span> <span class="s">&quot;custom_additive&quot;</span><span class="p">)</span>
+                                      <span class="p">{</span>
+                                          <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span>
+                                              <span class="s">&quot;invalid object state&quot;</span><span class="p">);</span>
+                                      <span class="p">}</span>
+                                  <span class="k">return</span> <span class="n">additive</span><span class="p">();</span>
+                              <span class="p">}));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-a-snowdrift-model">
+<span id="snowdrift-cpp-example"></span><h3>Example: a snowdrift model<a class="headerlink" href="#example-a-snowdrift-model" title="Permalink to this headline">¶</a></h3>
+<p>This example is based on <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id17"><span>DHK04</span></a>]</span> and comes from the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> test suite.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Describe in words the implementation details.</p>
+</div>
+<p>The low-level details in C++ are:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Implement a stateful fitness model.</span>
+<span class="cm"> * We define a new C++ type that will be</span>
+<span class="cm"> * wrapped as a fwdpy11.DiploidGeneticValue</span>
+<span class="cm"> * object.</span>
+<span class="cm"> */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;pybind11/stl.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpp/fitness_models.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_values/DiploidGeneticValue.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">py</span> <span class="o">=</span> <span class="n">pybind11</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">snowdrift</span> <span class="o">:</span> <span class="k">public</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span>
+<span class="cm">/* This is the low-level implementation of our</span>
+<span class="cm"> * stateful fitness object.  It records the</span>
+<span class="cm"> * model parameters and holds a</span>
+<span class="cm"> * vector to track individual phenotypes.</span>
+<span class="cm"> *</span>
+<span class="cm"> * Here, we publicly inherit from fwdpy11::DiploidGeneticValue,</span>
+<span class="cm"> * which is defined in the header included above.  It is</span>
+<span class="cm"> * an abstract class in C++ terms, and is reflected</span>
+<span class="cm"> * as a Python Abstract Base Class (ABC) called</span>
+<span class="cm"> * fwdpy11.DiploidGeneticValue.</span>
+<span class="cm"> *</span>
+<span class="cm"> * The phenotypes get updated each generation during</span>
+<span class="cm"> * the simulation.</span>
+<span class="cm"> *</span>
+<span class="cm"> * The phenotypes will be the simple additive model,</span>
+<span class="cm"> * calculated using fwdpp&#39;s machinery.</span>
+<span class="cm"> */</span>
+<span class="p">{</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">sig0</span><span class="p">;</span>
+    <span class="c1">// This is our stateful data,</span>
+    <span class="c1">// which is a record of the</span>
+    <span class="c1">// additive genetic values of all</span>
+    <span class="c1">// diploids</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">phenotypes</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">fwdpp</span><span class="o">::</span><span class="n">additive_diploid</span> <span class="n">additive</span><span class="p">;</span>
+
+    <span class="c1">// This constructor is exposed to Python</span>
+    <span class="n">snowdrift</span><span class="p">(</span><span class="kt">double</span> <span class="n">b1_</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b2_</span><span class="p">,</span> <span class="kt">double</span> <span class="n">c1_</span><span class="p">,</span> <span class="kt">double</span> <span class="n">c2_</span><span class="p">,</span> <span class="kt">double</span> <span class="n">slope</span><span class="p">,</span> <span class="kt">double</span> <span class="n">p0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">,</span> <span class="k">nullptr</span><span class="p">},</span> <span class="n">b1</span><span class="p">(</span><span class="n">b1_</span><span class="p">),</span> <span class="n">b2</span><span class="p">(</span><span class="n">b2_</span><span class="p">),</span> <span class="n">c1</span><span class="p">(</span><span class="n">c1_</span><span class="p">),</span>
+          <span class="n">c2</span><span class="p">(</span><span class="n">c2_</span><span class="p">),</span> <span class="n">slope</span><span class="p">(</span><span class="n">slope</span><span class="p">),</span> <span class="n">sig0</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">log</span><span class="p">(</span><span class="n">p0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">p0</span><span class="p">))),</span>
+          <span class="n">phenotypes</span><span class="p">(),</span> <span class="n">additive</span><span class="p">{</span><span class="n">fwdpp</span><span class="o">::</span><span class="n">trait</span><span class="p">{</span><span class="mf">2.0</span><span class="p">}}</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p0</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">p0</span> <span class="o">==</span> <span class="mf">1.</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;p0 must be 0 &lt; p0 &lt; 1&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span>
+    <span class="n">calculate_gvalue</span><span class="p">(</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValueData</span> <span class="n">data</span><span class="p">)</span> <span class="k">override</span>
+    <span class="c1">// The call operator must return the genetic value of an individual</span>
+    <span class="p">{</span>
+        <span class="n">gvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">phenotypes</span><span class="p">[</span><span class="n">data</span><span class="p">.</span><span class="n">metadata_index</span><span class="p">];</span>
+        <span class="k">return</span> <span class="n">gvalues</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="kt">double</span>
+    <span class="n">genetic_value_to_fitness</span><span class="p">(</span>
+        <span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValueToFitnessData</span> <span class="n">data</span><span class="p">)</span> <span class="k">override</span>
+    <span class="c1">// This function converts genetic value to fitness.</span>
+    <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">zself</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">g</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">N</span> <span class="o">=</span> <span class="n">phenotypes</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+        <span class="k">auto</span> <span class="n">other</span> <span class="o">=</span> <span class="n">gsl_rng_uniform_int</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">rng</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">get</span><span class="p">(),</span> <span class="n">N</span><span class="p">);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">other</span> <span class="o">==</span> <span class="n">data</span><span class="p">.</span><span class="n">offspring_metadata</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">label</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">other</span> <span class="o">=</span> <span class="n">gsl_rng_uniform_int</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">rng</span><span class="p">.</span><span class="n">get</span><span class="p">().</span><span class="n">get</span><span class="p">(),</span> <span class="n">N</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="kt">double</span> <span class="n">zpair</span> <span class="o">=</span> <span class="n">zself</span> <span class="o">+</span> <span class="n">phenotypes</span><span class="p">[</span><span class="n">other</span><span class="p">];</span>
+        <span class="kt">double</span> <span class="n">a</span>
+            <span class="o">=</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">b1</span> <span class="o">*</span> <span class="n">zpair</span> <span class="o">+</span> <span class="n">b2</span> <span class="o">*</span> <span class="n">zpair</span> <span class="o">*</span> <span class="n">zpair</span> <span class="o">-</span> <span class="n">c1</span> <span class="o">*</span> <span class="n">zself</span> <span class="o">-</span> <span class="n">c2</span> <span class="o">*</span> <span class="n">zself</span> <span class="o">*</span> <span class="n">zself</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">void</span>
+    <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidPopulation</span> <span class="o">&amp;</span><span class="n">pop</span><span class="p">)</span> <span class="k">override</span>
+    <span class="c1">// A stateful fitness model needs updating.</span>
+    <span class="p">{</span>
+        <span class="n">phenotypes</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="nl">md</span> <span class="p">:</span> <span class="n">pop</span><span class="p">.</span><span class="n">diploid_metadata</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// A diploid tracks its index via</span>
+                <span class="c1">// fwdpy11::DiploidMetadata::label</span>
+                <span class="k">auto</span> <span class="n">g</span> <span class="o">=</span> <span class="n">additive</span><span class="p">(</span><span class="n">pop</span><span class="p">.</span><span class="n">diploids</span><span class="p">[</span><span class="n">md</span><span class="p">.</span><span class="n">label</span><span class="p">],</span> <span class="n">pop</span><span class="p">.</span><span class="n">haploid_genomes</span><span class="p">,</span>
+                                  <span class="n">pop</span><span class="p">.</span><span class="n">mutations</span><span class="p">);</span>
+                <span class="n">phenotypes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">slope</span> <span class="o">*</span> <span class="p">(</span><span class="n">g</span> <span class="o">+</span> <span class="n">sig0</span><span class="p">))));</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">PYBIND11_MODULE</span><span class="p">(</span><span class="n">ll_snowdrift</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">m</span><span class="p">.</span><span class="n">doc</span><span class="p">()</span> <span class="o">=</span> <span class="s">&quot;Example of custom stateful fitness model.&quot;</span><span class="p">;</span>
+
+    <span class="c1">// We need to import the Python version of our base class:</span>
+    <span class="n">pybind11</span><span class="o">::</span><span class="n">object</span> <span class="n">imported_snowdrift_base_class_type</span>
+        <span class="o">=</span> <span class="n">pybind11</span><span class="o">::</span><span class="k">module</span><span class="o">::</span><span class="k">import</span><span class="p">(</span><span class="s">&quot;fwdpy11&quot;</span><span class="p">).</span><span class="n">attr</span><span class="p">(</span><span class="s">&quot;DiploidGeneticValue&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Create a Python class based on our new type</span>
+    <span class="n">py</span><span class="o">::</span><span class="n">class_</span><span class="o">&lt;</span><span class="n">snowdrift</span><span class="p">,</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidGeneticValue</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&quot;_ll_DiploidSnowdrift&quot;</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">py</span><span class="o">::</span><span class="n">init</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;b1&quot;</span><span class="p">),</span>
+             <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;b2&quot;</span><span class="p">),</span> <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;c1&quot;</span><span class="p">),</span> <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;c2&quot;</span><span class="p">),</span> <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;slope&quot;</span><span class="p">),</span>
+             <span class="n">py</span><span class="o">::</span><span class="n">arg</span><span class="p">(</span><span class="s">&quot;p0&quot;</span><span class="p">))</span>
+        <span class="p">.</span><span class="n">def_readwrite</span><span class="p">(</span><span class="s">&quot;phenotypes&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">snowdrift</span><span class="o">::</span><span class="n">phenotypes</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The user-facing Python class is implemented using <code class="docutils literal notranslate"><span class="pre">attrs</span></code>, which
+is handy because we don’t have to write C++ code to pickle/unpickle:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">attr</span>
+
+<span class="kn">import</span> <span class="nn">fwdpy11.class_decorators</span>
+<span class="kn">import</span> <span class="nn">ll_snowdrift</span>
+
+
+<span class="nd">@fwdpy11</span><span class="o">.</span><span class="n">class_decorators</span><span class="o">.</span><span class="n">attr_class_to_from_dict</span>
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">DiploidSnowdrift</span><span class="p">(</span><span class="n">ll_snowdrift</span><span class="o">.</span><span class="n">_ll_DiploidSnowdrift</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the user-facing Python representation of</span>
+<span class="sd">    a simple snowdrift model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+    <span class="n">slope</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">attr</span><span class="o">.</span><span class="n">ib</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Need to initialize the C++ base class</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DiploidSnowdrift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">slope</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p0</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># asdict is provided by the 2nd class</span>
+        <span class="c1"># decorator (reading from bottom to top)</span>
+        <span class="c1"># We pickle this class as a tuple.</span>
+        <span class="c1"># Element 0 contains the kwargs + values</span>
+        <span class="c1"># needed for __init__ and we send along</span>
+        <span class="c1"># the current phenytpes from the base class</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">asdict</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">phenotypes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="c1"># update the representation of the Python/attrs</span>
+        <span class="c1"># class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Failure to properly init the C++ base class</span>
+        <span class="c1"># will lead to segmentation faults.</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DiploidSnowdrift</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># Reset the base class attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phenotypes</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./technical"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../pages/recorders.html" title="previous page">Time series analysis</a>
+    <a class='right-next' id="next-link" href="writingplugins.html" title="next page">Writing “plugins” with C++</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

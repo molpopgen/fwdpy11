@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finishing a simulation with a tree sequence from msprime &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example of time series analysis implemented in C++" href="recorder.html" />
+    <link rel="prev" title="Snowdrift model in python" href="pysnowdrift.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="bgs.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gss.html">
+   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="precapitation.html">
+   Starting a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/examples/recapitation.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fexamples/recapitation.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="finishing-a-simulation-with-a-tree-sequence-from-msprime">
+<span id="recapitation"></span><h1>Finishing a simulation with a tree sequence from msprime<a class="headerlink" href="#finishing-a-simulation-with-a-tree-sequence-from-msprime" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="../pages/advancedtopics.html#msprime-subtleties"><span class="std std-ref">here</span></a> for additional important information about interacting iwth <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.</p>
+</div>
+<p>This example is complementary to <a class="reference internal" href="precapitation.html#precapitation"><span class="std std-ref">Starting a simulation with a tree sequence from msprime</span></a>.  Rather than starting
+with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>, we instead finish a simulation by “coalescing
+back” the first generation of the simulation using <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.<br />
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id7"><span>HGKothers19</span></a>]</span> refer to this procedure as “recapitation” of a tree sequence. In order for recapitation
+to work correctly, we must pass <code class="docutils literal notranslate"><span class="pre">preserve_first_generation=True</span></code> to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
+If we keep this option at its default value of <code class="docutils literal notranslate"><span class="pre">False</span></code> then we risk getting biased results.</p>
+<p>The interface is the same as for the other example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">time</span> <span class="nv">PYTHONPATH</span><span class="o">=</span>../.. python3 recapitation.py -N <span class="m">1000</span> --rho <span class="m">1000</span> --theta <span class="m">1000</span> --nreps <span class="m">1000</span> --simlen <span class="m">1000</span> --seed <span class="m">42</span> --nsam <span class="m">10</span> --model dtwf
+</pre></div>
+</div>
+<p>The output format is also identical:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Means</span> <span class="kn">from</span> <span class="nn">fwdpy11</span><span class="p">:</span>
+<span class="n">S2N</span>            <span class="mf">8271.088000</span>
+<span class="n">Pi2N</span>            <span class="mf">998.004104</span>
+<span class="n">Sn</span>             <span class="mf">2823.524000</span>
+<span class="n">Pin</span>             <span class="mf">998.227800</span>
+<span class="n">watterson_n</span>     <span class="mf">998.075534</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">float64</span>
+<span class="n">Means</span> <span class="kn">from</span> <span class="nn">msprime</span><span class="p">:</span>
+<span class="n">S2N</span>            <span class="mf">8281.812000</span>
+<span class="n">Pi2N</span>            <span class="mf">999.956051</span>
+<span class="n">Sn</span>             <span class="mf">2827.652000</span>
+<span class="n">Pin</span>             <span class="mf">999.524778</span>
+<span class="n">watterson_n</span>     <span class="mf">999.534723</span>
+<span class="n">dtype</span><span class="p">:</span> <span class="n">float64</span>
+
+<span class="n">real</span>        <span class="mi">8</span><span class="n">m25</span><span class="o">.</span><span class="mi">782</span><span class="n">s</span>
+<span class="n">user</span>        <span class="mi">98</span><span class="n">m47</span><span class="o">.</span><span class="mi">845</span><span class="n">s</span>
+<span class="n">sys</span> <span class="mi">0</span><span class="n">m7</span><span class="o">.</span><span class="mi">061</span><span class="n">s</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The faster execution time of this example compared to <a class="reference internal" href="precapitation.html#precapitation"><span class="std std-ref">Starting a simulation with a tree sequence from msprime</span></a> is
+<em>not</em> due to a performance difference due to starting with <code class="docutils literal notranslate"><span class="pre">msprime</span></code> vs finishing
+with <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.  Those two options are a wash in terms of performance.
+The difference is that all of the statistics in this example are done using the
+tree sequence statistics of <code class="docutils literal notranslate"><span class="pre">tskit</span></code> described in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id5"><span>RTK20</span></a>]</span>. The <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>
+method <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection.fs" title="fwdpy11.TableCollection.fs"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.fs()</span></code></a> is not (yet) implemented as a tree statistic
+and calls to that function account for the bulk of the run time difference.</p>
+</div>
+<p>Let’s take a look at where the performance different is lurking.  If we execute the following
+<code class="docutils literal notranslate"><span class="pre">iPython</span></code> block, we can profile the amount of time spent to setup and run the simulation
+and calculate the summary statistics.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">precapitate</span>
+   <span class="o">...</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">recapitate</span>
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">load_ext</span> line_profiler
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">lprun</span> -f recapitate.run_sim recapitate.run_sim(1000, 1000, 1000, 1000, &quot;dtwf&quot;, 100, 101, 666)
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">lprun</span> -f precapitate.run_sim precapitate.run_sim(1000, 1000, 1000, 1000, &quot;dtwf&quot;, 100, 101, 666)
+   <span class="o">...</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>The results for recapitation are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Timer</span> <span class="n">unit</span><span class="p">:</span> <span class="mf">1e-06</span> <span class="n">s</span>
+
+<span class="n">Total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">1.9008</span> <span class="n">s</span>
+<span class="n">File</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">kevin</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">fwdpy11</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">tskit</span><span class="o">/</span><span class="n">recapitate</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">run_sim</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">86</span>
+
+<span class="n">Line</span> <span class="c1">#      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="o">==============================================================</span>
+    <span class="mi">86</span>                                           <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">fwdpy11_seed</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">):</span>
+    <span class="mi">87</span>         <span class="mi">1</span>         <span class="mf">17.0</span>     <span class="mf">17.0</span>      <span class="mf">0.0</span>      <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">88</span>         <span class="mi">1</span>         <span class="mf">68.0</span>     <span class="mf">68.0</span>      <span class="mf">0.0</span>      <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="mi">89</span>
+    <span class="mi">90</span>                                               <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">91</span>         <span class="mi">1</span>          <span class="mf">0.0</span>      <span class="mf">0.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="mi">92</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="mi">93</span>                                                   <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="mi">94</span>         <span class="mi">1</span>         <span class="mf">16.0</span>     <span class="mf">16.0</span>      <span class="mf">0.0</span>              <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="mi">95</span>                                                   <span class="p">],</span>
+    <span class="mi">96</span>         <span class="mi">1</span>          <span class="mf">0.0</span>      <span class="mf">0.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="mi">97</span>         <span class="mi">1</span>          <span class="mf">5.0</span>      <span class="mf">5.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="mi">98</span>         <span class="mi">1</span>          <span class="mf">5.0</span>      <span class="mf">5.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="mi">99</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+   <span class="mi">100</span>                                               <span class="p">}</span>
+   <span class="mi">101</span>         <span class="mi">1</span>         <span class="mf">66.0</span>     <span class="mf">66.0</span>      <span class="mf">0.0</span>      <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+   <span class="mi">102</span>         <span class="mi">1</span>         <span class="mf">13.0</span>     <span class="mf">13.0</span>      <span class="mf">0.0</span>      <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">fwdpy11_seed</span><span class="p">)</span>
+   <span class="mi">103</span>         <span class="mi">1</span>     <span class="mf">557747.0</span> <span class="mf">557747.0</span>     <span class="mf">29.3</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+   <span class="mi">104</span>         <span class="mi">1</span>      <span class="mf">33930.0</span>  <span class="mf">33930.0</span>      <span class="mf">1.8</span>      <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+   <span class="mi">105</span>         <span class="mi">1</span>    <span class="mf">1261655.0</span> <span class="mf">1261655.0</span>     <span class="mf">66.4</span>      <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+   <span class="mi">106</span>         <span class="mi">1</span>        <span class="mf">349.0</span>    <span class="mf">349.0</span>      <span class="mf">0.0</span>      <span class="n">samples</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+   <span class="mi">107</span>         <span class="mi">1</span>          <span class="mf">2.0</span>      <span class="mf">2.0</span>      <span class="mf">0.0</span>      <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
+   <span class="mi">108</span>         <span class="mi">1</span>      <span class="mf">28703.0</span>  <span class="mf">28703.0</span>      <span class="mf">1.5</span>          <span class="n">completed_ts</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">theta</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">msprime_seed</span>
+   <span class="mi">109</span>                                               <span class="p">)</span>
+   <span class="mi">110</span>         <span class="mi">1</span>       <span class="mf">4866.0</span>   <span class="mf">4866.0</span>      <span class="mf">0.3</span>      <span class="n">S2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">111</span>         <span class="mi">1</span>       <span class="mf">4440.0</span>   <span class="mf">4440.0</span>      <span class="mf">0.2</span>      <span class="n">pi2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">112</span>         <span class="mi">1</span>        <span class="mf">100.0</span>    <span class="mf">100.0</span>      <span class="mf">0.0</span>      <span class="n">rsample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">113</span>         <span class="mi">1</span>       <span class="mf">4415.0</span>   <span class="mf">4415.0</span>      <span class="mf">0.2</span>      <span class="n">Sn</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">114</span>         <span class="mi">1</span>       <span class="mf">4398.0</span>   <span class="mf">4398.0</span>      <span class="mf">0.2</span>      <span class="n">pin</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">115</span>
+   <span class="mi">116</span>         <span class="mi">1</span>          <span class="mf">6.0</span>      <span class="mf">6.0</span>      <span class="mf">0.0</span>      <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The results for precapitation are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Timer</span> <span class="n">unit</span><span class="p">:</span> <span class="mf">1e-06</span> <span class="n">s</span>
+
+<span class="n">Total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">2.30427</span> <span class="n">s</span>
+<span class="n">File</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">kevin</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">fwdpy11</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">tskit</span><span class="o">/</span><span class="n">precapitate</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">run_sim</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">96</span>
+
+<span class="n">Line</span> <span class="c1">#      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="o">==============================================================</span>
+    <span class="mi">96</span>                                           <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">fwdpy11_seed</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">):</span>
+    <span class="mi">97</span>         <span class="mi">1</span>         <span class="mf">12.0</span>     <span class="mf">12.0</span>      <span class="mf">0.0</span>      <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">98</span>         <span class="mi">1</span>    <span class="mf">1187728.0</span> <span class="mf">1187728.0</span>     <span class="mf">51.5</span>      <span class="n">ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">99</span>         <span class="mi">1</span>       <span class="mf">4168.0</span>   <span class="mf">4168.0</span>      <span class="mf">0.2</span>      <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+   <span class="mi">100</span>         <span class="mi">1</span>          <span class="mf">7.0</span>      <span class="mf">7.0</span>      <span class="mf">0.0</span>      <span class="k">del</span> <span class="n">ts</span>  <span class="c1"># No longer needed</span>
+   <span class="mi">101</span>
+   <span class="mi">102</span>                                               <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="mi">103</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+   <span class="mi">104</span>         <span class="mi">1</span>          <span class="mf">0.0</span>      <span class="mf">0.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+   <span class="mi">105</span>                                                   <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+   <span class="mi">106</span>         <span class="mi">1</span>         <span class="mf">20.0</span>     <span class="mf">20.0</span>      <span class="mf">0.0</span>              <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+   <span class="mi">107</span>                                                   <span class="p">],</span>
+   <span class="mi">108</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+   <span class="mi">109</span>         <span class="mi">1</span>          <span class="mf">6.0</span>      <span class="mf">6.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+   <span class="mi">110</span>         <span class="mi">1</span>          <span class="mf">7.0</span>      <span class="mf">7.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+   <span class="mi">111</span>         <span class="mi">1</span>          <span class="mf">2.0</span>      <span class="mf">2.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+   <span class="mi">112</span>                                               <span class="p">}</span>
+   <span class="mi">113</span>         <span class="mi">1</span>         <span class="mf">88.0</span>     <span class="mf">88.0</span>      <span class="mf">0.0</span>      <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+   <span class="mi">114</span>         <span class="mi">1</span>          <span class="mf">7.0</span>      <span class="mf">7.0</span>      <span class="mf">0.0</span>      <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">fwdpy11_seed</span><span class="p">)</span>
+   <span class="mi">115</span>         <span class="mi">1</span>     <span class="mf">604449.0</span> <span class="mf">604449.0</span>     <span class="mf">26.2</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+   <span class="mi">116</span>         <span class="mi">1</span>       <span class="mf">4912.0</span>   <span class="mf">4912.0</span>      <span class="mf">0.2</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">infinite_sites</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+   <span class="mi">117</span>         <span class="mi">1</span>        <span class="mf">351.0</span>    <span class="mf">351.0</span>      <span class="mf">0.0</span>      <span class="n">an</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+   <span class="mi">118</span>         <span class="mi">1</span>     <span class="mf">251575.0</span> <span class="mf">251575.0</span>     <span class="mf">10.9</span>      <span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span> <span class="o">=</span> <span class="n">process_sim</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">check_fixations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+   <span class="mi">119</span>         <span class="mi">1</span>         <span class="mf">74.0</span>     <span class="mf">74.0</span>      <span class="mf">0.0</span>      <span class="n">rn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">120</span>         <span class="mi">1</span>     <span class="mf">250859.0</span> <span class="mf">250859.0</span>     <span class="mf">10.9</span>      <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span> <span class="o">=</span> <span class="n">process_sim</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">rn</span><span class="p">,</span> <span class="n">check_fixations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">121</span>         <span class="mi">1</span>          <span class="mf">4.0</span>      <span class="mf">4.0</span>      <span class="mf">0.0</span>      <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It takes some squinting at first if you aren’t used to looking at these line profiles.  Overall, the timing differences
+between the two approaches are negligible for all of the steps except calculating the summary statistics. The
+recapitation example is about 6 times faster due to the use of tree sequence statistics.</p>
+<p>The main point is that precapitation and recapitation seem to be equally efficient.  The summary statistic calculation
+is a bit of a distraction here, but it is perhaps useful to see that larger simulations make our (currently)
+inefficient <code class="docutils literal notranslate"><span class="pre">fs</span></code> method less painful:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">precapitate</span>
+   <span class="o">...</span><span class="p">:</span> <span class="kn">import</span> <span class="nn">recapitate</span>
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">load_ext</span> line_profiler
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">lprun</span> -f recapitate.run_sim recapitate.run_sim(5000, 5000, 5000, 5000, &quot;dtwf&quot;, 100, 101, 666)
+   <span class="o">...</span><span class="p">:</span> <span class="o">%</span><span class="k">lprun</span> -f precapitate.run_sim precapitate.run_sim(5000, 5000, 5000, 5000, &quot;dtwf&quot;, 100, 101, 666)
+   <span class="o">...</span><span class="p">:</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Timer</span> <span class="n">unit</span><span class="p">:</span> <span class="mf">1e-06</span> <span class="n">s</span>
+
+<span class="n">Total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">55.0555</span> <span class="n">s</span>
+<span class="n">File</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">kevin</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">fwdpy11</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">tskit</span><span class="o">/</span><span class="n">recapitate</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">run_sim</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">86</span>
+
+<span class="n">Line</span> <span class="c1">#      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="o">==============================================================</span>
+    <span class="mi">86</span>                                           <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">fwdpy11_seed</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">):</span>
+    <span class="mi">87</span>         <span class="mi">1</span>         <span class="mf">16.0</span>     <span class="mf">16.0</span>      <span class="mf">0.0</span>      <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">88</span>         <span class="mi">1</span>        <span class="mf">328.0</span>    <span class="mf">328.0</span>      <span class="mf">0.0</span>      <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="mi">89</span>
+    <span class="mi">90</span>                                               <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">91</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="mi">92</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="mi">93</span>                                                   <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="mi">94</span>         <span class="mi">1</span>         <span class="mf">16.0</span>     <span class="mf">16.0</span>      <span class="mf">0.0</span>              <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="mi">95</span>                                                   <span class="p">],</span>
+    <span class="mi">96</span>         <span class="mi">1</span>          <span class="mf">0.0</span>      <span class="mf">0.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="mi">97</span>         <span class="mi">1</span>          <span class="mf">5.0</span>      <span class="mf">5.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="mi">98</span>         <span class="mi">1</span>          <span class="mf">6.0</span>      <span class="mf">6.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="mi">99</span>         <span class="mi">1</span>          <span class="mf">2.0</span>      <span class="mf">2.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+   <span class="mi">100</span>                                               <span class="p">}</span>
+   <span class="mi">101</span>         <span class="mi">1</span>         <span class="mf">69.0</span>     <span class="mf">69.0</span>      <span class="mf">0.0</span>      <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+   <span class="mi">102</span>         <span class="mi">1</span>         <span class="mf">11.0</span>     <span class="mf">11.0</span>      <span class="mf">0.0</span>      <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">fwdpy11_seed</span><span class="p">)</span>
+   <span class="mi">103</span>         <span class="mi">1</span>   <span class="mf">16544416.0</span> <span class="mf">16544416.0</span>     <span class="mf">30.1</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+   <span class="mi">104</span>         <span class="mi">1</span>     <span class="mf">183217.0</span> <span class="mf">183217.0</span>      <span class="mf">0.3</span>      <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+   <span class="mi">105</span>         <span class="mi">1</span>   <span class="mf">37901927.0</span> <span class="mf">37901927.0</span>     <span class="mf">68.8</span>      <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+   <span class="mi">106</span>         <span class="mi">1</span>        <span class="mf">395.0</span>    <span class="mf">395.0</span>      <span class="mf">0.0</span>      <span class="n">samples</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+   <span class="mi">107</span>         <span class="mi">1</span>          <span class="mf">2.0</span>      <span class="mf">2.0</span>      <span class="mf">0.0</span>      <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
+   <span class="mi">108</span>         <span class="mi">1</span>     <span class="mf">230681.0</span> <span class="mf">230681.0</span>      <span class="mf">0.4</span>          <span class="n">completed_ts</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">theta</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">msprime_seed</span>
+   <span class="mi">109</span>                                               <span class="p">)</span>
+   <span class="mi">110</span>         <span class="mi">1</span>      <span class="mf">46537.0</span>  <span class="mf">46537.0</span>      <span class="mf">0.1</span>      <span class="n">S2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">111</span>         <span class="mi">1</span>      <span class="mf">50670.0</span>  <span class="mf">50670.0</span>      <span class="mf">0.1</span>      <span class="n">pi2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">112</span>         <span class="mi">1</span>        <span class="mf">229.0</span>    <span class="mf">229.0</span>      <span class="mf">0.0</span>      <span class="n">rsample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">113</span>         <span class="mi">1</span>      <span class="mf">46352.0</span>  <span class="mf">46352.0</span>      <span class="mf">0.1</span>      <span class="n">Sn</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">114</span>         <span class="mi">1</span>      <span class="mf">50568.0</span>  <span class="mf">50568.0</span>      <span class="mf">0.1</span>      <span class="n">pin</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="mi">115</span>
+   <span class="mi">116</span>         <span class="mi">1</span>          <span class="mf">8.0</span>      <span class="mf">8.0</span>      <span class="mf">0.0</span>      <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span><span class="p">)</span>
+<span class="n">Timer</span> <span class="n">unit</span><span class="p">:</span> <span class="mf">1e-06</span> <span class="n">s</span>
+
+<span class="n">Total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">55.9958</span> <span class="n">s</span>
+<span class="n">File</span><span class="p">:</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">kevin</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">fwdpy11</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">tskit</span><span class="o">/</span><span class="n">precapitate</span><span class="o">.</span><span class="n">py</span>
+<span class="n">Function</span><span class="p">:</span> <span class="n">run_sim</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">96</span>
+
+<span class="n">Line</span> <span class="c1">#      Hits         Time  Per Hit   % Time  Line Contents</span>
+<span class="o">==============================================================</span>
+    <span class="mi">96</span>                                           <span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">fwdpy11_seed</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">):</span>
+    <span class="mi">97</span>         <span class="mi">1</span>         <span class="mf">12.0</span>     <span class="mf">12.0</span>      <span class="mf">0.0</span>      <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">98</span>         <span class="mi">1</span>   <span class="mf">35346846.0</span> <span class="mf">35346846.0</span>     <span class="mf">63.1</span>      <span class="n">ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="mi">99</span>         <span class="mi">1</span>      <span class="mf">28786.0</span>  <span class="mf">28786.0</span>      <span class="mf">0.1</span>      <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+   <span class="mi">100</span>         <span class="mi">1</span>         <span class="mf">13.0</span>     <span class="mf">13.0</span>      <span class="mf">0.0</span>      <span class="k">del</span> <span class="n">ts</span>  <span class="c1"># No longer needed</span>
+   <span class="mi">101</span>
+   <span class="mi">102</span>                                               <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="mi">103</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+   <span class="mi">104</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+   <span class="mi">105</span>                                                   <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+   <span class="mi">106</span>         <span class="mi">1</span>         <span class="mf">22.0</span>     <span class="mf">22.0</span>      <span class="mf">0.0</span>              <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+   <span class="mi">107</span>                                                   <span class="p">],</span>
+   <span class="mi">108</span>         <span class="mi">1</span>          <span class="mf">0.0</span>      <span class="mf">0.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+   <span class="mi">109</span>         <span class="mi">1</span>          <span class="mf">6.0</span>      <span class="mf">6.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+   <span class="mi">110</span>         <span class="mi">1</span>          <span class="mf">5.0</span>      <span class="mf">5.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+   <span class="mi">111</span>         <span class="mi">1</span>          <span class="mf">1.0</span>      <span class="mf">1.0</span>      <span class="mf">0.0</span>          <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+   <span class="mi">112</span>                                               <span class="p">}</span>
+   <span class="mi">113</span>         <span class="mi">1</span>         <span class="mf">92.0</span>     <span class="mf">92.0</span>      <span class="mf">0.0</span>      <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+   <span class="mi">114</span>         <span class="mi">1</span>          <span class="mf">7.0</span>      <span class="mf">7.0</span>      <span class="mf">0.0</span>      <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">fwdpy11_seed</span><span class="p">)</span>
+   <span class="mi">115</span>         <span class="mi">1</span>   <span class="mf">17592887.0</span> <span class="mf">17592887.0</span>     <span class="mf">31.4</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+   <span class="mi">116</span>         <span class="mi">1</span>      <span class="mf">38644.0</span>  <span class="mf">38644.0</span>      <span class="mf">0.1</span>      <span class="n">fwdpy11</span><span class="o">.</span><span class="n">infinite_sites</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">theta</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+   <span class="mi">117</span>         <span class="mi">1</span>        <span class="mf">402.0</span>    <span class="mf">402.0</span>      <span class="mf">0.0</span>      <span class="n">an</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+   <span class="mi">118</span>         <span class="mi">1</span>    <span class="mf">1490600.0</span> <span class="mf">1490600.0</span>      <span class="mf">2.7</span>      <span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span> <span class="o">=</span> <span class="n">process_sim</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">check_fixations</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+   <span class="mi">119</span>         <span class="mi">1</span>        <span class="mf">167.0</span>    <span class="mf">167.0</span>      <span class="mf">0.0</span>      <span class="n">rn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">120</span>         <span class="mi">1</span>    <span class="mf">1497318.0</span> <span class="mf">1497318.0</span>      <span class="mf">2.7</span>      <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span> <span class="o">=</span> <span class="n">process_sim</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">rn</span><span class="p">,</span> <span class="n">check_fixations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+   <span class="mi">121</span>         <span class="mi">1</span>          <span class="mf">5.0</span>      <span class="mf">5.0</span>      <span class="mf">0.0</span>      <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># Copyright (C) 2020 Kevin Thornton &lt;krthornt@uci.edu&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of fwdpy11.</span>
+<span class="c1">#</span>
+<span class="c1"># fwdpy11 is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># fwdpy11 is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with fwdpy11.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">SimOutput</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;SimOutput&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;S2N&quot;</span><span class="p">,</span> <span class="s2">&quot;Pi2N&quot;</span><span class="p">,</span> <span class="s2">&quot;Sn&quot;</span><span class="p">,</span> <span class="s2">&quot;Pin&quot;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">make_parser</span><span class="p">():</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-N&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Diploid population size&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--rho&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;4Nr&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--theta&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;4Nu&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--simlen&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Generations to run the forward simulation&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--seed&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Random number seed&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--nreps&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of simulation replicates&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--nsam&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sample size to analyze&quot;</span><span class="p">)</span>
+
+    <span class="n">optional</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s2">&quot;Optional arguments&quot;</span><span class="p">)</span>
+    <span class="n">optional</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;--model&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;msprime model&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;dtwf&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span>
+
+
+<span class="k">def</span> <span class="nf">run_msprime</span><span class="p">(</span><span class="n">Ne</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">input_ts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">input_ts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span>
+            <span class="mi">2</span> <span class="o">*</span> <span class="n">Ne</span><span class="p">,</span>
+            <span class="n">Ne</span><span class="o">=</span><span class="n">Ne</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">random_seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+            <span class="n">recombination_rate</span><span class="o">=</span><span class="n">rho</span> <span class="o">/</span> <span class="n">Ne</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="n">mutation_rate</span><span class="o">=</span><span class="n">theta</span> <span class="o">/</span> <span class="n">Ne</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span>
+            <span class="n">from_ts</span><span class="o">=</span><span class="n">input_ts</span><span class="p">,</span>
+            <span class="n">Ne</span><span class="o">=</span><span class="n">Ne</span><span class="p">,</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">random_seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+            <span class="n">recombination_rate</span><span class="o">=</span><span class="n">rho</span> <span class="o">/</span> <span class="n">Ne</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ts</span>
+
+
+<span class="k">def</span> <span class="nf">run_msprime_get_stats</span><span class="p">(</span><span class="n">Ne</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">Ne</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">samples</span><span class="p">()]</span>
+    <span class="n">S1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">sites</span><span class="p">)</span>
+    <span class="n">pi1</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rsample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">S2</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pi2</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S1</span><span class="p">,</span> <span class="n">pi1</span><span class="p">,</span> <span class="n">S2</span><span class="p">,</span> <span class="n">pi2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">run_sim</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">simlen</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">fwdpy11_seed</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">):</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">msprime_seed</span><span class="p">)</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="n">simlen</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="n">fwdpy11_seed</span><span class="p">)</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+    <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">run_msprime</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">msprime_seed</span><span class="p">,</span> <span class="n">ts</span><span class="p">)</span>
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">alive_nodes</span>
+    <span class="n">completed_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
+        <span class="n">completed_ts</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="n">theta</span> <span class="o">/</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">random_seed</span><span class="o">=</span><span class="n">msprime_seed</span>
+    <span class="p">)</span>
+    <span class="n">S2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pi2N</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">samples</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rsample</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">Sn</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">segregating_sites</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pin</span> <span class="o">=</span> <span class="n">completed_ts</span><span class="o">.</span><span class="n">diversity</span><span class="p">([</span><span class="n">rsample</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">SimOutput</span><span class="p">(</span><span class="n">S2N</span><span class="p">,</span> <span class="n">pi2N</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pin</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">make_parser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">msprime_seeds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fwdpy11_seeds</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nreps</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">msprime_seeds</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="n">msprime_seeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">fwdpy11_seeds</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="n">fwdpy11_seeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">run_sim</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">simlen</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span>
+                <span class="n">i</span><span class="p">,</span>
+                <span class="n">j</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">msprime_seeds</span><span class="p">,</span> <span class="n">fwdpy11_seeds</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">SimOutput</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>
+    <span class="n">results</span><span class="p">[</span><span class="s2">&quot;watterson_n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">Sn</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Means from fwdpy11:</span><span class="se">\n</span><span class="si">{</span><span class="n">results</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">msprime_seeds</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nreps</span><span class="p">):</span>
+        <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">msprime_seeds</span><span class="p">:</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+        <span class="n">msprime_seeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+    <span class="n">msprime_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+        <span class="n">futures</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                <span class="n">run_msprime_get_stats</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">N</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">i</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">msprime_seeds</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+            <span class="n">msprime_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="n">msprime_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">msprime_results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">SimOutput</span><span class="o">.</span><span class="n">_fields</span><span class="p">)</span>
+    <span class="n">msprime_results</span><span class="p">[</span><span class="s2">&quot;watterson_n&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">msprime_results</span><span class="o">.</span><span class="n">Sn</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nsam</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Means from msprime:</span><span class="se">\n</span><span class="si">{</span><span class="n">msprime_results</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="pysnowdrift.html" title="previous page">Snowdrift model in python</a>
+    <a class='right-next' id="next-link" href="recorder.html" title="next page">Example of time series analysis implemented in C++</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
