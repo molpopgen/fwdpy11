@@ -20,10 +20,12 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
-          access_token: ${{ secrets.FWDPY11_RECIPE_ACTIONS }}
+          access_token: ${{ secrets.ACTIONS }}
 
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          submodules: true
 
       # We install the R dependencies first
       # Later, Python dependencies will go into the same place.
@@ -64,40 +66,31 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --user  "pybind11[global]"
-          python -m pip install --user --upgrade -r book/requirements.txt
-
-      - name: Test that fwdpy11 is discoverable
-        run: |
-          python -c "import fwdpy11; print(fwdpy11.__version__)"
-          python -m fwdpy11 --help
+          python -m pip install --user "pybind11[global]" wheel
+          python -m pip install --user --upgrade -r requirements.txt
+          python -m pip install --user --upgrade -r doc/requirements.txt
 
       - name: Build module
         run: |
             python3 setup.py build_ext -i
 
-      - name: Test that C++ module is discoverable
-        run: |
-          python -c "import fp11recipes.freqtrackercpp"
-
-      - name: Build the book
+      - name: Build the docs
         working-directory: doc
         run: |
           make
 
-      - name: Move built HTML book
+      - name: Move built HTML docs
         if: github.ref == 'refs/heads/main'
         working-directory: doc
         run: |
-          mv _build/html book_output
+          mv _build/html ../docs_output
 
       - name: Upload artifacts
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v1
-        working-directory: doc
         with:
-          name: book_output
-          path: book_output/
+          name: docs_output
+          path: docs_output/
 
   deploy:
     name: deploy
@@ -114,12 +107,12 @@ jobs:
         uses: actions/download-artifact@v1.0.0
         with:
           # Artifact name
-          name: book_output # optional
+          name: docs_output # optional
           # Destination path
-          path: book_output # optional
+          path: docs_output # optional
       - name: Deploy to GitHub Pages
         uses: Cecilapp/GitHub-Pages-deploy@v3
         env:
-          GITHUB_TOKEN: ${{ secrets.FWDPY11_RECIPE_ACTIONS }} 
+          GITHUB_TOKEN: ${{ secrets.ACTIONS }} 
         with:
-          build_dir: book_output/
+          build_dir: docs_output/
