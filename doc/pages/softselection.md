@@ -17,13 +17,6 @@ This page describes implementing models of demographic events affecting
 multiple demes.  This functionality was first released in version 0.6.0
 and makes use of low-level types added in 0.5.3.
 
-:::{note}
-
-As of 0.6.0, these features only apply to simulations using tree sequence
-recording.
-
-:::
-
 ## Overview
 
 This chapter describes how to generate detailed demographic models of individuals

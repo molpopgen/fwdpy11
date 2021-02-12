@@ -19,7 +19,7 @@ the mean trait value and mean fitness for each deme are printed to the screen.
 :::{note}
 
 If you want to model mutations having the same effect size in all demes,
-then setting up the `sregions` and `gvalue` as done in {ref}`gss` will
+then setting up the `sregions` and `gvalue` as done in {ref}`gss_vignette` will
 do the trick.  You'll just need to modify the demography in that example
 to include multiple demes.
 
