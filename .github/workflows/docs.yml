@@ -26,6 +26,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+          fetch-depth: 0
 
       # We install the R dependencies first
       # Later, Python dependencies will go into the same place.
