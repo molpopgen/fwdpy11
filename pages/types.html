@@ -56,7 +56,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Background selection" href="../examples/bgs.html" />
+    <link rel="next" title="Adaptation to different optima with multivariate distribution of effect sizes" href="../examples/gss_divergent_optima.html" />
     <link rel="prev" title="Module fwdpy11.tskit_tools" href="tskit_tools.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -138,6 +138,109 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
   </a>
  </li>
 </ul>
@@ -318,18 +421,8 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../examples/bgs.html">
-   Background selection
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/gss.html">
-   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
   </a>
  </li>
  <li class="toctree-l1">
@@ -345,11 +438,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/migtest.html">
    Symmetric migration between two demes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/precapitation.html">
-   Starting a simulation with a tree sequence from msprime
   </a>
  </li>
  <li class="toctree-l1">
@@ -643,6 +731,24 @@ numpy.ndarray.</p>
 <dt id="fwdpy11.DiploidPopulation.generation">
 <code class="sig-name descname">generation</code><a class="headerlink" href="#fwdpy11.DiploidPopulation.generation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Curent generation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fwdpy11.DiploidPopulation.mutations">
+<code class="sig-name descname">mutations</code><a class="headerlink" href="#fwdpy11.DiploidPopulation.mutations" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of <a class="reference internal" href="#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This list contains <strong>both</strong> extinct <em>and</em> extant mutations.  
+To distinguish them, use the locations of nonzero values in “mcounts” 
+for an instance of this type.”</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="fwdpy11.DiploidPopulation.haploid_genomes">
+<code class="sig-name descname">haploid_genomes</code><a class="headerlink" href="#fwdpy11.DiploidPopulation.haploid_genomes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <a class="reference internal" href="#fwdpy11.HaploidGenomeVector" title="fwdpy11.HaploidGenomeVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.HaploidGenomeVector</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1923,7 +2029,7 @@ low-level C++ class</p>
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="tskit_tools.html" title="previous page">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a>
-    <a class='right-next' id="next-link" href="../examples/bgs.html" title="next page">Background selection</a>
+    <a class='right-next' id="next-link" href="../examples/gss_divergent_optima.html" title="next page">Adaptation to different optima with multivariate distribution of effect sizes</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

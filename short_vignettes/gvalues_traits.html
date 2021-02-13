@@ -1,0 +1,802 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genetic values - simulating phenotypes/traits. &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Working example - parameters for simulating direct effects on fitness" href="workingexample_fitness.html" />
+    <link rel="prev" title="Genetic values - mutations with direct effects on fitness" href="gvalues_fitness.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/gvalues_traits.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/gvalues_traits.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/gvalues_traits.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/gvalues_traits.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#changing-the-optimum-phenotype-during-a-simulation">
+   Changing the optimum phenotype during a simulation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-sudden-optimum-shift">
+     A sudden optimum shift
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#randomly-moving-optimum">
+     Randomly-moving optimum
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="genetic-values-simulating-phenotypes-traits">
+<span id="gvalues-traits-vignette"></span><h1>Genetic values - simulating phenotypes/traits.<a class="headerlink" href="#genetic-values-simulating-phenotypes-traits" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The objects described here are passed to the <code class="docutils literal notranslate"><span class="pre">gvalue</span></code> parameter when initializing instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
+</div>
+<p>The previous section discussed setting up a model where a mutation’s effect size (<a class="reference internal" href="../pages/types.html#fwdpy11.Mutation.s" title="fwdpy11.Mutation.s"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.s</span></code></a>) directly affects individual fitness.
+An alternative model is one where mutations affect some abstract “trait” or “phenotype” and a separate function maps trait values to fitness.</p>
+<p>Let’s consider the standard model of evolutionary quantitative genetics:</p>
+<ul class="simple">
+<li><p>Mutations have <strong>additive</strong> effects on trait values</p></li>
+<li><p>The fitness of a trait value is a quadratic function of its distance
+from an “optimum” trait value.</p></li>
+</ul>
+<p>In <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>, a non-mutant individual has a phenotype of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.
+Trait values are additive over the values contributed by individual genotypes
+according to the following table:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Genotype</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">AA</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Aa</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">aa</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Trait value</p></td>
+<td><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(hs\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(scaling\times s\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>(If we model multiplicative effects on a trait, a non-mutant individual still has a value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.
+The internal machinery handles this so that you don’t have to worry about it.)</p>
+<p>To specify an additive effects model of a trait under Gaussian stabilizing selection with an optimum trait value of <code class="docutils literal notranslate"><span class="pre">0.0</span></code> and (inverse) strength of stabilizing selection <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">=</span> <span class="pre">1.0</span></code>, we write:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
+    <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, we are using a second parameter to initialize a “genetic value to fitness” map stored in an instance of <a class="reference internal" href="../pages/genetic_values.html#fwdpy11.Additive" title="fwdpy11.Additive"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Additive</span></code></a>.
+(<a class="reference internal" href="../pages/genetic_values.html#fwdpy11.Multiplicative" title="fwdpy11.Multiplicative"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Multiplicative</span></code></a> also supports such maps.)
+See <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a> for details.</p>
+<p>We can also add Gaussian noise to an individual’s trait value:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span>
+    <span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+    <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSS</span><span class="p">(</span><span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">),</span>
+    <span class="n">noise</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianNoise</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The last example requires some explanation:</p>
+<ul class="simple">
+<li><p>We want <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">=</span> <span class="pre">1.0</span></code>.  We can decompose <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">=</span> <span class="pre">VW</span> <span class="pre">+</span> <span class="pre">VE</span></code>, where <code class="docutils literal notranslate"><span class="pre">VW</span></code> and <code class="docutils literal notranslate"><span class="pre">VE</span></code> are the additive contributions of genetic and environmental effects.</p></li>
+<li><p>Here, the environmental effect is a Gaussian with mean zero and variance <code class="docutils literal notranslate"><span class="pre">1/3</span></code>.
+The class is parameterized with the standard deviation, however, so we need to pass on the square root.</p></li>
+<li><p>We then set <code class="docutils literal notranslate"><span class="pre">VS</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">1/3</span> <span class="pre">=</span> <span class="pre">2/3</span></code> when initializing <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a>.</p></li>
+</ul>
+<p>Yes, this is a nomenclature issue!
+The <code class="docutils literal notranslate"><span class="pre">VS</span></code> argument to <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a> really should be called <code class="docutils literal notranslate"><span class="pre">VW</span></code> and we’ll fix that in a future version and hopefully not break people’s code.</p>
+<p>In general, there’s a good bit of subtlety to properly modeling quantitative traits.
+The machinery described here was used in <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id9"><span>Tho19</span></a>]</span>. <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id22"><span>Burger00</span></a>]</span> is an excellent technical reference on the topic.
+<span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id3"><span>WL18</span></a>]</span> also thoroughly covers a lot of relevant material.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Under the hood, the <code class="docutils literal notranslate"><span class="pre">GSS</span></code> and <code class="docutils literal notranslate"><span class="pre">GSSmo</span></code> classes aren’t that different.
+Their multivariate analogs are rather similar, too.
+Thus, we envision a future with one single <code class="docutils literal notranslate"><span class="pre">fwdpy11.GaussianStabilizingSelection</span></code> class to handle all cases.
+The types discussed here would remain as simple Python wrappers so that we don’t break existing simulations.</p>
+</div>
+<p>For an example of another approach to modeling phenotypes often attributed to <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>, see <a class="reference internal" href="../pages/advancedtopics.html#eyre-walker"><span class="std std-ref">here</span></a>.</p>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<p>Write (and refer to) an advanced section on pleiotropic models.</p>
+</div>
+<div class="section" id="changing-the-optimum-phenotype-during-a-simulation">
+<h2>Changing the optimum phenotype during a simulation<a class="headerlink" href="#changing-the-optimum-phenotype-during-a-simulation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-sudden-optimum-shift">
+<h3>A sudden optimum shift<a class="headerlink" href="#a-sudden-optimum-shift" title="Permalink to this headline">¶</a></h3>
+<p>The previous example set up a model where the optimum is stable for the entire simulation.
+We can parameterize a shifting optimum using <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>.
+For example, to shift the optimum from <code class="docutils literal notranslate"><span class="pre">0.0</span></code> to <code class="docutils literal notranslate"><span class="pre">1.0</span></code> at generation <code class="docutils literal notranslate"><span class="pre">100</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">moving_optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">gvalue</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="n">scaling</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">gvalue_to_fitness</span><span class="o">=</span><span class="n">moving_optimum</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="randomly-moving-optimum">
+<h3>Randomly-moving optimum<a class="headerlink" href="#randomly-moving-optimum" title="Permalink to this headline">¶</a></h3>
+<p>Since we are working in <code class="docutils literal notranslate"><span class="pre">Python</span></code>, we can take advantage of existing libraries to implement interesting models.
+Let’s consider the following model of a randomly moving optimum:</p>
+<ul class="simple">
+<li><p>There is a 1% chance each generation that the optimum shifts.</p></li>
+<li><p>When a shift happens, a normal deviate with mean <code class="docutils literal notranslate"><span class="pre">0.0</span></code> and variance <code class="docutils literal notranslate"><span class="pre">0.1</span></code> is added to the current optimum.</p></li>
+<li><p>The simulation will end at generation <code class="docutils literal notranslate"><span class="pre">1,000</span></code>.</p></li>
+</ul>
+<p>Let’s code it up:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optima</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)]</span>
+
+<span class="n">last_time</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">last_optimum</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">666</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="n">last_time</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
+    <span class="n">last_time</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">geometric</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">last_optimum</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">last_time</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">:</span>
+        <span class="n">optima</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="n">last_time</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="n">last_optimum</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">10.0</span><span class="p">))</span>
+
+<span class="n">random_moving_optimum</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span><span class="n">optima</span><span class="p">)</span>
+<span class="n">random_moving_optimum</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.GSSmo(optima=[fwdpy11.Optimum(optimum=0.0, VS=10.0, when=0), fwdpy11.Optimum(optimum=0.14621925773046504, VS=10.0, when=120), fwdpy11.Optimum(optimum=0.43133329773747653, VS=10.0, when=250), fwdpy11.Optimum(optimum=0.42015093754764493, VS=10.0, when=552), fwdpy11.Optimum(optimum=0.3570913002785381, VS=10.0, when=557), fwdpy11.Optimum(optimum=-0.0949791266685498, VS=10.0, when=568), fwdpy11.Optimum(optimum=-0.08281396117205914, VS=10.0, when=704), fwdpy11.Optimum(optimum=-0.4194925319000761, VS=10.0, when=726), fwdpy11.Optimum(optimum=-0.09246489411724829, VS=10.0, when=875), fwdpy11.Optimum(optimum=-0.37135303951111776, VS=10.0, when=876), fwdpy11.Optimum(optimum=0.024965855928271607, VS=10.0, when=898)])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note the cast to <code class="docutils literal notranslate"><span class="pre">int</span></code> when updating the time.
+<a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a> is very picky about its input.
+It requires <code class="docutils literal notranslate"><span class="pre">int</span></code> for <code class="docutils literal notranslate"><span class="pre">when</span></code> and will raise an exception if the <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> from <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.geometric.html#numpy.random.geometric" title="(in NumPy v1.20)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.geometric()</span></code></a> gets passed in.</p>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./short_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="gvalues_fitness.html" title="previous page">Genetic values - mutations with direct effects on fitness</a>
+    <a class='right-next' id="next-link" href="workingexample_fitness.html" title="next page">Working example - parameters for simulating direct effects on fitness</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

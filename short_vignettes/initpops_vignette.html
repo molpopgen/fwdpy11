@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Initializing a population &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Properties of populations" href="poptour_vignette.html" />
+    <link rel="prev" title="Setting up user environments for installation" href="../pages/userenv.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/initpops_vignette.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/initpops_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/initpops_vignette.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/initpops_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initializing-with-no-previous-ancestry">
+   Initializing with no previous ancestry
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#a-single-deme">
+     A single deme
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multiple-initial-demes">
+     Multiple initial demes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initializing-with-ancestry-from-msprime">
+   Initializing with ancestry from msprime
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     A single deme
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#multiple-demes">
+     Multiple demes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#limitations-and-caveats">
+     Limitations and caveats
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="initializing-a-population">
+<span id="initpops-vignette"></span><h1>Initializing a population<a class="headerlink" href="#initializing-a-population" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="initializing-with-no-previous-ancestry">
+<h2>Initializing with no previous ancestry<a class="headerlink" href="#initializing-with-no-previous-ancestry" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-single-deme">
+<h3>A single deme<a class="headerlink" href="#a-single-deme" title="Permalink to this headline">¶</a></h3>
+<p>To initialize a <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> with <span class="math notranslate nohighlight">\(N = 100\)</span> diploids and a genome length of <span class="math notranslate nohighlight">\(1000\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can access these fields:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">, L = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = 100, L = 1000.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>The genome length is a property of the <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> that records the population’s ancestry.</p>
+</div>
+<div class="section" id="multiple-initial-demes">
+<h3>Multiple initial demes<a class="headerlink" href="#multiple-initial-demes" title="Permalink to this headline">¶</a></h3>
+<p>To initialize <span class="math notranslate nohighlight">\(N = 100\)</span> with two demes of sizes 25 and 50, respectively, and the same genome length as above:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">75</span><span class="p">],</span> <span class="mf">1000.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The overall <span class="math notranslate nohighlight">\(N\)</span> is the same:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = 100
+</pre></div>
+</div>
+</div>
+</div>
+<p>The deme labels are reflected in the individual meta data.
+The meta data are a list of instance of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.
+That class is also a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>, allowing us to access the raw data efficiently as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0, 1], dtype=int32), array([25, 75]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>The individuals are intuitively ordered:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+      <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;deme&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 24 25 99
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="initializing-with-ancestry-from-msprime">
+<span id="precapitation"></span><h2>Initializing with ancestry from msprime<a class="headerlink" href="#initializing-with-ancestry-from-msprime" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The details of this section will change once <code class="docutils literal notranslate"><span class="pre">msprime</span></code> 1.0 is released.</p>
+</div>
+<div class="section" id="id1">
+<h3>A single deme<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mf">1000.0</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">Ne</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">recombination_rate</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">random_seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="si">}</span><span class="s2">, L = </span><span class="si">{</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">genome_length</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>N = 100, L = 1000.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, our tables have some data in them.
+Edges are stored as a list of <a class="reference internal" href="../pages/types.html#fwdpy11.Edge" title="fwdpy11.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Edge</span></code></a> and nodes as a list of <a class="reference internal" href="../pages/types.html#fwdpy11.Node" title="fwdpy11.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Node</span></code></a>.
+As with meta data, these are <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>s:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0., 1000., 200, 182), (0., 1000., 200, 191),
+       (0., 1000., 201,  59), (0., 1000., 201,  71),
+       (0., 1000., 202,   1), (0., 1000., 202, 166),
+       (0., 1000., 203,  96), (0., 1000., 203, 145),
+       (0., 1000., 204, 111), (0., 1000., 204, 199)],
+      dtype=[(&#39;left&#39;, &#39;&lt;f8&#39;), (&#39;right&#39;, &#39;&lt;f8&#39;), (&#39;parent&#39;, &#39;&lt;i4&#39;), (&#39;child&#39;, &#39;&lt;i4&#39;)])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0, 0.), (0, 0.), (0, 0.), (0, 0.), (0, 0.), (0, 0.), (0, 0.),
+       (0, 0.), (0, 0.), (0, 0.)],
+      dtype={&#39;names&#39;:[&#39;deme&#39;,&#39;time&#39;], &#39;formats&#39;:[&#39;&lt;i4&#39;,&#39;&lt;f8&#39;], &#39;offsets&#39;:[0,8], &#39;itemsize&#39;:16})
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="multiple-demes">
+<h3>Multiple demes<a class="headerlink" href="#multiple-demes" title="Permalink to this headline">¶</a></h3>
+<p>We can initialize from a multi-deme <code class="docutils literal notranslate"><span class="pre">msprime</span></code> simulation as well:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="n">sample_size</span> <span class="o">=</span> <span class="mi">50</span><span class="p">),</span>
+    <span class="n">msprime</span><span class="o">.</span><span class="n">PopulationConfiguration</span><span class="p">(</span><span class="n">sample_size</span> <span class="o">=</span> <span class="mi">150</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">migration_matrix</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">Ne</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span>
+    <span class="n">population_configurations</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+    <span class="n">migration_matrix</span><span class="o">=</span><span class="n">migration_matrix</span><span class="p">,</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span>
+    <span class="n">recombination_rate</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">&#39;deme&#39;</span><span class="p">],</span>
+          <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0, 1], dtype=int32), array([25, 75]))
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="limitations-and-caveats">
+<h3>Limitations and caveats<a class="headerlink" href="#limitations-and-caveats" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Mutations from <code class="docutils literal notranslate"><span class="pre">msprime</span></code> are ignored.</p></li>
+<li><p>See <a class="reference internal" href="../pages/advancedtopics.html#msprime-subtleties"><span class="std std-ref">Subtleties of starting/finishing tree sequences using msprime</span></a> for more information.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./short_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../pages/userenv.html" title="previous page">Setting up user environments for installation</a>
+    <a class='right-next' id="next-link" href="poptour_vignette.html" title="next page">Properties of populations</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

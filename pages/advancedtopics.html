@@ -143,6 +143,109 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Concepts
  </span>
 </p>
@@ -318,18 +421,8 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../examples/bgs.html">
-   Background selection
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/gss.html">
-   Gaussian stabilizing selection on a single trait (with a sudden optimum shift)
   </a>
  </li>
  <li class="toctree-l1">
@@ -345,11 +438,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/migtest.html">
    Symmetric migration between two demes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../examples/precapitation.html">
-   Starting a simulation with a tree sequence from msprime
   </a>
  </li>
  <li class="toctree-l1">
@@ -657,10 +745,10 @@ of compute nodes.</p>
 many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="../examples/bgs.html#bgs"><span class="std std-ref">Background selection</span></a></p></li>
+<li><p><a class="reference internal" href="../long_vignettes/bgs_vignette.html#bgs-vignette"><span class="std std-ref">Background selection</span></a></p></li>
 <li><p><a class="reference internal" href="../examples/IM.html#imexample"><span class="std std-ref">Isolation-with-migration (IM)</span></a></p></li>
 <li><p><a class="reference internal" href="../examples/migtest.html#migtest"><span class="std std-ref">Symmetric migration between two demes</span></a></p></li>
-<li><p><a class="reference internal" href="../examples/precapitation.html#precapitation"><span class="std std-ref">Starting a simulation with a tree sequence from msprime</span></a></p></li>
+<li><p><a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">Initializing with ancestry from msprime</span></a></p></li>
 <li><p><a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">Finishing a simulation with a tree sequence from msprime</span></a></p></li>
 </ul>
 <p>A common set of idioms used by these examples are:</p>
@@ -1710,11 +1798,11 @@ and this value.
 </div>
 <div class="section" id="subtleties-of-starting-finishing-tree-sequences-using-msprime">
 <span id="msprime-subtleties"></span><h2>Subtleties of starting/finishing tree sequences using <code class="docutils literal notranslate"><span class="pre">msprime</span></code><a class="headerlink" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime" title="Permalink to this headline">¶</a></h2>
-<p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../examples/precapitation.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
+<p>Some care is required starting a simulation from a tree sequence (see <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a>) or finishing a simulation with one (see <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a>).</p>
 <p>If simulating with discrete recombination positions (see <a class="reference internal" href="tutorial.html#geneticmapunit"><span class="std std-ref">here</span></a>), it may be important to realize that the current stable releases of <code class="docutils literal notranslate"><span class="pre">msprime</span></code> model continuous recombination breakpoints.
 A future <code class="docutils literal notranslate"><span class="pre">msprime</span></code> release will support discretized positions.</p>
 <p>When simulating with genome lengths longer than unity (1.0), determining the correct recombination rate for <code class="docutils literal notranslate"><span class="pre">msprime</span></code> needs additional work.
-The examples shown <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a> and <a class="reference internal" href="../examples/precapitation.html#precapitation"><span class="std std-ref">here</span></a> show the following method for determining the <code class="docutils literal notranslate"><span class="pre">msprime</span></code> recombination rate:</p>
+The examples shown <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a> and <a class="reference internal" href="../short_vignettes/initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a> show the following method for determining the <code class="docutils literal notranslate"><span class="pre">msprime</span></code> recombination rate:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">recombination_rate</span> <span class="o">=</span> <span class="n">rho</span> <span class="o">/</span> <span class="n">Ne</span> <span class="o">/</span> <span class="mi">4</span>
 </pre></div>
 </div>

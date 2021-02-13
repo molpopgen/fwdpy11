@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Distributions of effect sizes &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Neutral mutations during a simulation" href="neutralmuts_vignette.html" />
+    <link rel="prev" title="Genetic maps" href="geneticmaps_vignette.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/des_vignette.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/des_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/des_vignette.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/des_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#region-weighting">
+   Region weighting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-the-dominance-of-new-mutations">
+   Setting the dominance of new mutations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-distributions-of-effect-sizes">
+   Built-in distributions of effect sizes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#labelling-mutations-from-different-regions">
+   Labelling mutations from different regions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="distributions-of-effect-sizes">
+<span id="des-vignette"></span><h1>Distributions of effect sizes<a class="headerlink" href="#distributions-of-effect-sizes" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lists of objects described here are passed to the <code class="docutils literal notranslate"><span class="pre">sregions</span></code> parameter when initializing instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
+</div>
+<p>One of the main reasons to perform forward simulations is to be able to model mutations affecting individual fitness.
+To do so, we need to specify both mutation rates and the resulting effect sizes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> works by specifying an overall mutation rate to variants affecting fitness (see <a class="reference internal" href="../pages/tutorial.html#model-params"><span class="std std-ref">here</span></a>).
+Given that a mutation occurs, we need to specify its “effect size”.</p>
+<p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> chooses the effect size of a new mutation by first determining what <em>region</em> is mutated and then generating a mutation from the distribution of effect size associated with that region.</p>
+<p>Each region is represented by instances of classes derived from the ABC <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a>.
+Each instance is associated with a <em>weight</em>.
+These weights establish the relative probability that a mutation comes from a given region.
+Thus, given an overall mutation rate to non-neutral variants, instances of “<code class="docutils literal notranslate"><span class="pre">sregions</span></code>” are used to set up a multinomial distribution for generating new mutations.</p>
+<p>The following sets up a model where mutations have a constant effect size (<span class="math notranslate nohighlight">\(s=-0.01\)</span>), dominance <span class="math notranslate nohighlight">\(h=0.25\)</span>, and occur uniformly on the interval <span class="math notranslate nohighlight">\([0, 1)\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The previous example uses argument names for clarity, and the following is equivalent, with the <code class="docutils literal notranslate"><span class="pre">int</span></code> values getting converted to <code class="docutils literal notranslate"><span class="pre">float</span></code> automatically:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)]</span>
+<span class="n">sregions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ConstantS(beg=0, end=1, weight=1, s=-0.01, h=0.25, coupled=True, label=0, scaling=1.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the constructor parameters for these classes often have default values–see the specific class documentation for details.</p>
+<p>In some scenarios, it is useful to think about the distribution of effect sizes as scaled with respect to the population size.
+For example, selection coefficients may be exponentially-distributed with a mean of <span class="math notranslate nohighlight">\(2Ns\)</span>.
+To do this in <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ALPHA = 2Ns</span>
+<span class="n">MEAN_ALPHA</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MEAN_ALPHA</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">)]</span>
+<span class="n">sregions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ExpS(beg=0, end=1, weight=1, mean=-10, h=1.0, coupled=True, label=0, scaling=2000)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="region-weighting">
+<h2>Region weighting<a class="headerlink" href="#region-weighting" title="Permalink to this headline">¶</a></h2>
+<p>When multiple “sregion” objects are used, the default behavior is to multiply the input <code class="docutils literal notranslate"><span class="pre">weight</span></code> by <code class="docutils literal notranslate"><span class="pre">end-beg</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">),</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">sregions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=1.0, coupled=True, label=0, scaling=1.0),
+ fwdpy11.ConstantS(beg=1.0, end=3.0, weight=1.0, s=-0.1, h=1.0, coupled=True, label=0, scaling=1.0)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, the input <code class="docutils literal notranslate"><span class="pre">weight</span></code> is interpreted to mean the weight “per site” is constant.
+In this example, twice as many mutations will have positions in <span class="math notranslate nohighlight">\([1, 3)\)</span> as from <span class="math notranslate nohighlight">\([0, 1)\)</span>.
+To change the default behavior, one can prevent the coupling between input <code class="docutils literal notranslate"><span class="pre">weight</span></code> and region length:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">sregions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=1.0, coupled=False, label=0, scaling=1.0),
+ fwdpy11.ConstantS(beg=1.0, end=3.0, weight=1.0, s=-0.1, h=1.0, coupled=False, label=0, scaling=1.0)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The absolute values of the <code class="docutils literal notranslate"><span class="pre">weight</span></code> parameters themselves is irrelevant.
+The only thing that matters is the <em>relative</em> values from region to region.
+Simulations based on the above examples would give the same results if the <code class="docutils literal notranslate"><span class="pre">weight</span></code> were 42 or 73.06.
+Therefore, we can recreate our first example with code like the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sregions</span> <span class="o">=</span> <span class="p">[</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">56.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+   <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">112.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">coupled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+<span class="p">]</span>
+<span class="n">sregions</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[fwdpy11.ExpS(beg=0.0, end=1.0, weight=56.0, mean=-0.2, h=1.0, coupled=False, label=0, scaling=1.0),
+ fwdpy11.ConstantS(beg=1.0, end=3.0, weight=112.0, s=-0.1, h=1.0, coupled=False, label=0, scaling=1.0)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the above example, twice as many mutations occur in the second region because the weights have relative values of 2:1.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Different regions are allowed to overlap, allowing the simulation of concepts like “coding regions” where the DFE are a weighted mixture from multiple distributions, etc.</p>
+</div>
+</div>
+<div class="section" id="setting-the-dominance-of-new-mutations">
+<h2>Setting the dominance of new mutations<a class="headerlink" href="#setting-the-dominance-of-new-mutations" title="Permalink to this headline">¶</a></h2>
+<p>The dominance of a new mutation is set by the <code class="docutils literal notranslate"><span class="pre">h</span></code> parameter during initialization:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">mean</span><span class="o">=-</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ExpS(beg=0.0, end=1.0, weight=1.0, mean=-0.2, h=0.0, coupled=True, label=0, scaling=1.0)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="built-in-distributions-of-effect-sizes">
+<h2>Built-in distributions of effect sizes<a class="headerlink" href="#built-in-distributions-of-effect-sizes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.ConstantS" title="fwdpy11.ConstantS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ConstantS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.UniformS" title="fwdpy11.UniformS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.UniformS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.ExpS" title="fwdpy11.ExpS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ExpS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.GammaS" title="fwdpy11.GammaS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GammaS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.GaussianS" title="fwdpy11.GaussianS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GaussianS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.LogNormalS" title="fwdpy11.LogNormalS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.LogNormalS</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.DiscreteDESD" title="fwdpy11.DiscreteDESD"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDESD</span></code></a></p></li>
+</ul>
+</div>
+<div class="section" id="labelling-mutations-from-different-regions">
+<h2>Labelling mutations from different regions<a class="headerlink" href="#labelling-mutations-from-different-regions" title="Permalink to this headline">¶</a></h2>
+<p>It may be of use to know what region a mutation came from.
+To do so, give a nonzero value to the <code class="docutils literal notranslate"><span class="pre">label</span></code> argument:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ConstantS(beg=0.0, end=1.0, weight=1.0, s=0.001, h=1.0, coupled=True, label=1, scaling=1.0)
+</pre></div>
+</div>
+</div>
+</div>
+<p>At the end of the simulation, mutations from this region will have the <code class="docutils literal notranslate"><span class="pre">label</span></code> value stored in the attribute <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a>.</p>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer, <em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>.
+Larger values, or negative values, will result in exceptions.
+The following example tries to use a value one larger than the maximum allowed:</p>
+<div class="cell tag_raises-exception docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
+    <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">9</span><span class="o">-</span><span class="mi">99458</span><span class="n">d15ca6c</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> 
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
+
+<span class="nn">&lt;attrs generated init fwdpy11.regions.ConstantS&gt;</span> in <span class="ni">__init__</span><span class="nt">(self, beg, end, weight, s, h, coupled, label, scaling)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;scaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
+<span class="ne">---&gt; </span><span class="mi">12</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
+
+<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/regions.py</span> in <span class="ni">__attrs_post_init__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">184</span> 
+<span class="g g-Whitespace">    </span><span class="mi">185</span>     <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">186</span>         <span class="nb">super</span><span class="p">(</span><span class="n">ConstantS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>             <span class="bp">self</span><span class="o">.</span><span class="n">beg</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span>             <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+
+<span class="ne">TypeError</span>: __init__(): incompatible constructor arguments. The following argument types are supported:
+<span class="g g-Whitespace">    </span><span class="mi">1</span><span class="o">.</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">_fwdpy11</span><span class="o">.</span><span class="n">_ll_ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coupled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
+
+<span class="n">Invoked</span> <span class="k">with</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">65536</span><span class="p">,</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./short_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="geneticmaps_vignette.html" title="previous page">Genetic maps</a>
+    <a class='right-next' id="next-link" href="neutralmuts_vignette.html" title="next page">Neutral mutations during a simulation</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

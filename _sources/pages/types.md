@@ -77,6 +77,8 @@ the oddly-placed attributes are documented in
    :members:
 
    .. autoattribute:: fwdpy11.DiploidPopulation.generation
+   .. autoattribute:: fwdpy11.DiploidPopulation.mutations
+   .. autoattribute:: fwdpy11.DiploidPopulation.haploid_genomes
 ```
 
 ## Diploid Genotypes

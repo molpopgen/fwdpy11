@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Genetic maps &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Distributions of effect sizes" href="des_vignette.html" />
+    <link rel="prev" title="Introduction" href="genetics_vignettes_intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/geneticmaps_vignette.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/geneticmaps_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/geneticmaps_vignette.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/geneticmaps_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general-comments">
+   General comments
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="genetic-maps">
+<span id="geneticmaps-vignette"></span><h1>Genetic maps<a class="headerlink" href="#genetic-maps" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lists of objects described here are passed to the <code class="docutils literal notranslate"><span class="pre">recregions</span></code> parameter when initializing instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.3.0: </span>The methods described here replace a soon-to-be deprecated approach using <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added ability to restrict crossover positions to discrete values.</p>
+</div>
+<p>Genetic maps are lists of instances of classes derived from the <code class="docutils literal notranslate"><span class="pre">ABC</span></code>
+<a class="reference internal" href="../pages/regiontypes.html#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a>.
+Here <code class="docutils literal notranslate"><span class="pre">Unit</span></code> refers to an <em>element</em> of a genetic map rather than the actual units (<code class="docutils literal notranslate"><span class="pre">cM</span></code>, etc.).
+Instances of these classes contain their own rates and we can mix and match regions where recombination breakpoints are Poisson and binomially distributed.</p>
+<p>The following example uses <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.PoissonInterval" title="fwdpy11.PoissonInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonInterval</span></code></a> to model two genomic regions of equal length.
+The first region, spanning <span class="math notranslate nohighlight">\([0, 5)\)</span>, has a mean of <span class="math notranslate nohighlight">\(2 \times 10^{-3}\)</span> crossovers per generation.
+The second region, spanning [5, 10), has half as many crossovers per generation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The number of breakpoints in each <span class="math notranslate nohighlight">\([beg, end)\)</span> interval is Poisson distributed with the given mean.
+The position of each breakpoint is uniform (and continuous) on <span class="math notranslate nohighlight">\([beg, end)\)</span>.</p>
+<p>These classes also allow us to specify breakpoints at a specific position with a specific probability.
+The next example sets up 4 genomic regions, each 10 “units” long.  Within each region, the mean number of breakpoints (per diploid, per generation) is <span class="math notranslate nohighlight">\(1e-3\)</span>.
+Between each region, a single recombination occurs with probability of
+one-half, meaning that each region is assorting independently (50 <code class="docutils literal notranslate"><span class="pre">cM</span></code> between each region).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">NLOCI</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">LOCUS_LENGTH</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">RECRATE_PER_LOCUS</span> <span class="o">=</span> <span class="mf">1e-3</span>
+<span class="n">LOCUS_BOUNDARIES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NLOCI</span> <span class="o">*</span> <span class="n">LOCUS_LENGTH</span><span class="p">,</span> <span class="n">LOCUS_LENGTH</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">,</span> <span class="n">RECRATE_PER_LOCUS</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">LOCUS_BOUNDARIES</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+    <span class="n">recregions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">BinomialPoint</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">recregions</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.PoissonInterval(beg=0, end=10, mean=0.001, discrete=False)
+fwdpy11.PoissonInterval(beg=10, end=20, mean=0.001, discrete=False)
+fwdpy11.PoissonInterval(beg=20, end=30, mean=0.001, discrete=False)
+fwdpy11.PoissonInterval(beg=30, end=40, mean=0.001, discrete=False)
+fwdpy11.BinomialPoint(position=10, probability=0.5, discrete=False)
+fwdpy11.BinomialPoint(position=20, probability=0.5, discrete=False)
+fwdpy11.BinomialPoint(position=30, probability=0.5, discrete=False)
+</pre></div>
+</div>
+</div>
+</div>
+<p>As an aside, this example is not creating objects in order by their positions.  Such ordering is not required.</p>
+<p>Beginning in version <code class="docutils literal notranslate"><span class="pre">0.12.0</span></code>, it is possible to restrict crossover positions to integer values.
+For the examples given above, crossover positions are floating-point values sampled uniformly from <span class="math notranslate nohighlight">\([beg, end)\)</span>.
+To restrict positions to integer values, we pass <code class="docutils literal notranslate"><span class="pre">discrete=True</span></code> when creating object instances:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recregions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">2e-3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+    <span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, breakpoints from the first region will only take on values of <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>.</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">discrete=True</span></code> requires the following:</p>
+<ul class="simple">
+<li><p>Values for <code class="docutils literal notranslate"><span class="pre">beg</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> must be <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.  Thus, <code class="docutils literal notranslate"><span class="pre">1</span></code> is valid but <code class="docutils literal notranslate"><span class="pre">1.0</span></code> will raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">-</span> <span class="pre">beg</span></code> must be <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>.  This requirement prevents you from using <code class="docutils literal notranslate"><span class="pre">beg=0</span></code> and <code class="docutils literal notranslate"><span class="pre">end=1</span></code>, for example, which would result in the only possible crossover position being <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p>You must be more careful when using <code class="docutils literal notranslate"><span class="pre">msprime</span></code> to start/finish a simulation.
+See <a class="reference internal" href="initpops_vignette.html#precapitation"><span class="std std-ref">here</span></a> and <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a> for details.</p></li>
+</ul>
+<p>The following classes are available:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.PoissonInterval" title="fwdpy11.PoissonInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonInterval</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.PoissonPoint" title="fwdpy11.PoissonPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonPoint</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.BinomialInterval" title="fwdpy11.BinomialInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.BinomialInterval</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.BinomialPoint" title="fwdpy11.BinomialPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.BinomialPoint</span></code></a></p></li>
+<li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.FixedCrossovers" title="fwdpy11.FixedCrossovers"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.FixedCrossovers</span></code></a></p></li>
+</ul>
+<div class="section" id="general-comments">
+<h2>General comments<a class="headerlink" href="#general-comments" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Different <span class="math notranslate nohighlight">\([beg, end)\)</span> intervals may overlap.
+The interpretation of such a setup is up to you.</p></li>
+<li><p>When using classes like <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.PoissonInterval" title="fwdpy11.PoissonInterval"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PoissonInterval</span></code></a>, the recombination rate that you use to construct a <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> instance is ignored, as the rates are stored in the individual objects.</p></li>
+<li><p>You do not need to specify regions with zero recombination.
+Their existence is implied given the total length of the genome being simulated (<a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection.genome_length" title="fwdpy11.TableCollection.genome_length"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.genome_length</span></code></a>).</p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./short_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="genetics_vignettes_intro.html" title="previous page">Introduction</a>
+    <a class='right-next' id="next-link" href="des_vignette.html" title="next page">Distributions of effect sizes</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
