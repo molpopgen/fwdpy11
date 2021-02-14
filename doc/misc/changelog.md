@@ -554,7 +554,7 @@ Minor bugfix release:
 * A bug in handling fixations during simulations with tree sequence recording is fixed. This bug is
   GitHub {issue}`200` and the fix is
   PR {pr}`201`.
-* Updates to the fwdpp submodule fix a bug in {func}`fwdpy11.ts.infinite_sites`.  Previously, if the genome size
+* Updates to the fwdpp submodule fix a bug in `fwdpy11.ts.infinite_sites`.  Previously, if the genome size
   was not 1.0, then the number of mutations would be off by a factor of the genome size divided by 1.0.  The error was
   due to a bug upstream in fwdpp.
 * A bug in how diploid metadata were updated by genetic value types has been fixed.  It is unlikely that this bug
@@ -569,14 +569,14 @@ This pull request introduced several changes:
 The following new types are added:
 
 * {class}`fwdpy11.MultivariateGaussianEffects`, which is a new "region" type
-* {class}`fwdpy11.genetic_values.SlocusPopMultivariateGeneticValueWithMapping`, which is a new ABC for multivariate genetic values
-* {class}`fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`, which is a new ABC mapping multivariate trait values down to a (single) fitness value.
-* {class}`fwdpy11.genetic_values.MultivariateGSS`, which is GSS based on the Euclidean distance from multiple optima
-* {class}`fwdpy11.genetic_values.MultivariateGSSmo`, which is the multi-dimensional analog to the existing GSSmo
-* {class}`fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive`, which is a new genetic value class for pleiotropic traits.
+* `fwdpy11.genetic_values.SlocusPopMultivariateGeneticValueWithMapping`, which is a new ABC for multivariate genetic values
+* `fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap`, which is a new ABC mapping multivariate trait values down to a (single) fitness value.
+* `fwdpy11.genetic_values.MultivariateGSS`, which is GSS based on the Euclidean distance from multiple optima
+* `fwdpy11.genetic_values.MultivariateGSSmo`, which is the multi-dimensional analog to the existing GSSmo
+* `fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive`, which is a new genetic value class for pleiotropic traits.
 
 PR {pr}`175` adds tracking of genetic values during simulation as numpy
-arrays via {attr}`fwdpy11.Population.genetic_values` and {attr}`fwdpy11.Population.ancient_sample_genetic_values`.
+arrays via `fwdpy11.Population.genetic_values` and `fwdpy11.Population.ancient_sample_genetic_values`.
 Currently, filling these arrays is only supported for simulations with tree sequence recording.
 
 Changes to the C++ back end:
@@ -603,18 +603,18 @@ Detailed changes:
 * Generalized genetic maps for single-locus simulations.  You can now do much of the "multi-locus" stuff with
   `SlocusPop` now. PR {pr}`189`
 * Tree sequence recording now possible for mulit-locus simulations. PR {pr}`185`
-* {func}`fwdpy11.ts.count_mutations` added. PR {pr}`183`, PR {pr}`196`, PR {pr}`199`
-* Position and key properties added to {class}`fwdpy11.ts.VariantIterator`. PR {pr}`180`
+* `fwdpy11.ts.count_mutations` added. PR {pr}`183`, PR {pr}`196`, PR {pr}`199`
+* Position and key properties added to `fwdpy11.ts.VariantIterator`. PR {pr}`180`
   PR {pr}`181`
-* {class}`fwdpy11.ts.TreeIterator` is added, which provides much faster tree traversal. PR {pr}`176`,
+* `fwdpy11.ts.TreeIterator` is added, which provides much faster tree traversal. PR {pr}`176`,
   PR {pr}`177`
-* {func}`fwdpy11.ts.simplify` no longer retains ancient samples present in the input by default. To do so, explicitly
+* `fwdpy11.ts.simplify` no longer retains ancient samples present in the input by default. To do so, explicitly
   label any ancient samples to retain as part of the the samples list passed to the function.
   PR {pr}`169`
 * The types {class}`fwdpy11.Region` and {class}`fwdpy11.Sregion` have be re-implemented as C++-based classes, replacing
   the previous pure Python classes.  PR {pr}`163`,
   PR {pr}`174`
-* {attr}`fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations
+* `fwdpy11.model_params.ModelParams.nregions` now defaults to an empty list, which simplifies setup for simulations
   with tree sequences. {commit}`b557c4162cbfdfba6c9126ebec14c7f3f43884eb`.
 * When simulating with tree sequences, it is no longer an error to attempt to record ancient samples from the last
   generation of a simulation. PR {pr}`162`
@@ -646,31 +646,31 @@ This version breaks pickle format compatibility with files generated with versio
 
 ### Bug fixes:
 
-* Fixed bug in {func}`fwdpy11.util.sort_gamete_keys`.  The function was working on a copy, meaning data were not being
+* Fixed bug in `fwdpy11.util.sort_gamete_keys`.  The function was working on a copy, meaning data were not being
   modified. PR {pr}`93`
 * Fix a bug in updating a population's mutation lookup table. This bug was upstream in fwdpp ([fwdpp issue 130](<https://github.com/molpopgen/fwdpp/issues/130>)).  While definitely a bug, I could never find a case where simulation outputs were adversely affected.  In other words, simulation output remained the same after the fix, due to the rarity of the bug. PR {pr}`98`
 
 ### API changes/new features:
 
 * Added support for tree sequence recording.  PR {pr}`142`
-* Populations may now be dumped/loaded to/from files. See {func}`fwdpy11.SlocusPop.dump_to_file` and
-  {func}`fwdpy11.SlocusPop.load_from_file`.  Analagous functions exist for MlocusPop. PR {pr}`148`
-* {func}`fwdpy11.SlocusPop.sample` and {func}`fwdpy11.MlocusPop.sample` now return a {class}`fwdpy11.sampling.DataMatrix`.
+* Populations may now be dumped/loaded to/from files. See `fwdpy11.SlocusPop.dump_to_file` and
+  `fwdpy11.SlocusPop.load_from_file`.  Analagous functions exist for MlocusPop. PR {pr}`148`
+* `fwdpy11.SlocusPop.sample` and `fwdpy11.MlocusPop.sample` now return a `fwdpy11.sampling.DataMatrix`.
   PR {pr}`118`
-* {class}`fwdpy11.sampling.DataMatrix` is refactored to match updates to fwdpp.  PR {pr}`139`
-* {func}`fwdpy11.sampling.matrix_to_sample` now return a tuple with the neutral and selected data, respectively, as the
+* `fwdpy11.sampling.DataMatrix` is refactored to match updates to fwdpp.  PR {pr}`139`
+* `fwdpy11.sampling.matrix_to_sample` now return a tuple with the neutral and selected data, respectively, as the
   two elements.  PR {pr}`128`
 * Diploids have been refactored into two separate classes, {class}`fwdpy11.DiploidGenotype` and
   {class}`fwdpy11.DiploidMetadata`.  Both classes are valid NumPy dtypes.  PR {pr}`108`
-* {class}`fwdpy11.model_params.ModelParams` is massively simpilfied. There is now only one class! See {ref}`model-params`. PR {pr}`108`
+* `fwdpy11.model_params.ModelParams` is massively simpilfied. There is now only one class! See {ref}`model-params`. PR {pr}`108`
 * The design of objects related to calculating genetic values is vastly simplified. PR {pr}`108`
 * Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  PR {pr}`94`
-* {class}`fwdpy11.MlocusPop` now requires that {attr}`fwdpy11.MlocusPop.locus_boundaries` be initialized upon
+* `fwdpy11.MlocusPop` now requires that `fwdpy11.MlocusPop.locus_boundaries` be initialized upon
   construction. PR {pr}`96`
 * The mutation position lookup table of a population is now a read-only property. PR {pr}`103`
 * The mutation position lookup table is now represented as a dict of lists. PR {pr}`121`
-* A mutation or fixation can now be rapidy found by its "key".  See {func}`fwdpy11.Population.find_mutation_by_key`
-  and {func}`fwdpy11.Population.find_fixation_by_key`.  PR {pr}`106`
+* A mutation or fixation can now be rapidy found by its "key".  See `fwdpy11.Population.find_mutation_by_key`
+  and `fwdpy11.Population.find_fixation_by_key`.  PR {pr}`106`
 
 ### Back-end changes
 
@@ -700,21 +700,21 @@ This version breaks pickle format compatibility with files generated with versio
 ### Bug fixes:
 
 * A bug affecting retrieval of multi-locus diploid key data as a buffer for numpy arrays is now fixed. PR {pr}`72`
-* {attr}`fwdpy11.SingleLocusDiploid.label` is now pickled. PR {pr}`34`
+* `fwdpy11.SingleLocusDiploid.label` is now pickled. PR {pr}`34`
 
 ### API changes/new features:
 
 * Population objects have new member functions `sample` and `sample_ind`.  These replace
-  {func}`fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
-  {func}`~fwdpy11.SlocusPop.sample` for more info. (The
+  `fwdpy11.sampling.sample_separate`, which is now deprecated.  For example, see
+  `~fwdpy11.SlocusPop.sample` for more info. (The
   same member functions exist for *all* population objects.) PR {pr}`62`
 * Improved support for pickling lower-level types. See the unit test file `tests/test_pickling.py` for examples of directly pickling things like mutations and containers of mutations.  PR {pr}`55`
 * `__main__.py` added.  The main use is to help writing python modules based on fwdpy11. See {ref}`developersguide` for details. PR {pr}`54`
 * Attributes `popdata` and `popdata_user` added to all population objects. PR {pr}`52`
-* {attr}`fwdpy11.SingleLocusDiploid.parental_data` added as read-only field. PR {pr}`51`
-* {attr}`fwdpy11.MlocusPop.locus_boundaries` is now writeable.
-* {attr}`fwdpy11.sampling.DataMatrix.neutral` and {attr}`fwdpy11.sampling.DataMatrix.selected` are now writeable
-  buffers. {attr}`fwdpy11.sampling.DataMatrix.ndim_neutral` and {attr}`fwdpy11.sampling.DataMatrix.ndim_selected` have
+* `fwdpy11.SingleLocusDiploid.parental_data` added as read-only field. PR {pr}`51`
+* `fwdpy11.MlocusPop.locus_boundaries` is now writeable.
+* `fwdpy11.sampling.DataMatrix.neutral` and `fwdpy11.sampling.DataMatrix.selected` are now writeable
+  buffers. `fwdpy11.sampling.DataMatrix.ndim_neutral` and `fwdpy11.sampling.DataMatrix.ndim_selected` have
   been changed from functions to read-only properties. PR {pr}`45`
 * The 'label' field of {class}`fwdpy11.Region` (and {class}`fwdpy11.Sregion`) now populate the label
   field of a mutation. PR {pr}`32` See tests/test_mutation_labels.py for an example.
@@ -726,7 +726,7 @@ This version breaks pickle format compatibility with files generated with versio
 * The documentation building process is greatly streamlined.  PR {pr}`60`
 * Object namespaces have been refactored.  The big effect is to streamline the manual. PR {pr}`59`
 * Travis CI now tests several Python versions using GCC 6 on Linux. PR {pr}`44`
-* {func}`fwdpy11.wright_fisher_qtrait.evolve` has been updated to allow "standard popgen" models of multi-locus
+* `fwdpy11.wright_fisher_qtrait.evolve` has been updated to allow "standard popgen" models of multi-locus
   evolution. This change is a stepping stone to a future global simplification of the API. PR {pr}`42`
 * The {class}`fwdpy11.Sregion` now store their callback data differently.  The result is a type that can be
   pickled in Python 3.6. PR {pr}`39`
@@ -751,14 +751,14 @@ This version breaks pickle format compatibility with files generated with versio
 
 * {class}`fwdpy11.Sregion` may now model distrubitions of effect sizes on scales other than the effect size itself.  A scaling parameter allows the DFE to be functions of N, 2N, 4N, etc. [PR {pr}`16`]
   * Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.
-* {func}`fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of {class}`fwdpy11.Mutation` to be changed. {commit}`ba4841e9407b3d98031801d7eea92b2661871eb2`.
+* `fwdpy11.util.change_effect_size` added, allowing the "s" and "h" fields of {class}`fwdpy11.Mutation` to be changed. {commit}`ba4841e9407b3d98031801d7eea92b2661871eb2`.
 * The attributes of {class}`fwdpy11.Mutation` are now read-only, addressing {issue}`5` on GitHub. {commit}`f376d40788f3d59baa01d1d56b0aa99706560011`
 * Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. {commit}`fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9`
 
 ### Back-end changes
 
 * Code base updated to work with [pybind11][pybind11] 2.2.0. [PR {pr}`19`]
-* {mod}`fwdpy11.model_params` has been refactored, addressing {issue}`4`.  The new code base is more idiomatic w.r.to Python's OO methods. {commit}`1b811c33ab394ae4c64a3c8894984f320b870f22`
+* `fwdpy11.model_params` has been refactored, addressing {issue}`4`.  The new code base is more idiomatic w.r.to Python's OO methods. {commit}`1b811c33ab394ae4c64a3c8894984f320b870f22`
 * Many of the C++-based types can now be pickled, making model parameter objects easier to serialize.  Most of the
   changes are in {commit}`d0a3602e71a866f7ff9d355d62953ea00c663c5a`.  This mostly addresses {issue}`3`
 * Added magic numbers to keep track of compatibility changes to serialization formats.
@@ -774,13 +774,13 @@ This version breaks pickle format compatibility with files generated with versio
 ### API and back-end changes:
 
 * The C++ data structures are connected to NumPy via Python buffer protocol.  {commit}`48e3925a867c4ec55e1e5bb05457396fb456bc47`
-* {func}`fwdpy11.sampling.separate_samples_by_loci` changed to take a list of positions as first argument, and not a population object.
+* `fwdpy11.sampling.separate_samples_by_loci` changed to take a list of positions as first argument, and not a population object.
 
 ## Version 0.1.1
 
 ### Bug fixes:
 
-* Fixed bug in {func}`fwdpy11.sampling.DataMatrix.selected` that returned wrong data in best case scenario and could
+* Fixed bug in `fwdpy11.sampling.DataMatrix.selected` that returned wrong data in best case scenario and could
   have caused crash in worst case. {commit}`e715fb74472555aa64e1d894563ec218ebba1a97`.
 * Fix bug recording fixation times.  If a population was evolved multiple times, fixation times from the later rounds of
   evolution were incorrect. {commit}`9db14d8b3db1c744045e20bfc00ce37e7fb28dfb`
@@ -789,13 +789,13 @@ This version breaks pickle format compatibility with files generated with versio
 
 ### API and back-end changes:
 
-* Added {func}`fwdpy11.sampling.matrix_to_sample` and {func}`fwdpy11.sampling.separate_samples_by_loci`. {commit}`639c8de999679140fad6a976ff6c1996b25444aa`
+* Added `fwdpy11.sampling.matrix_to_sample` and `fwdpy11.sampling.separate_samples_by_loci`. {commit}`639c8de999679140fad6a976ff6c1996b25444aa`
 * Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code.  {commit}`a75166d9ff5471c2d18d66892f9fa01ebec5a667`
 * Custom fitness/genetic value calculations now allowed in pure Python, but they are quite slow (for now). {commit}`5549286046ead1181cba684464b3bcb19918321e`
 * Stateful trait value models enabled for qtrait sims. {commit}`161dfcef63f3abf28ad56df33b84a92d87d7750f`
 * Refactor evolution functions so that stateful fitness models behave as expected.  Enable compiling in a debug mode.
   Fix bug in operator== for diploid type. {commit}`a726c0535a5176aab1df5211fee7bf0aeba5054b`
-* fwdpy11.util added, providing {func}`fwdpy11.util.add_mutation`. {commit}`17b92dbe61ee85e2e60211e7dc0ed507a70dbd64`
+* fwdpy11.util added, providing `fwdpy11.util.add_mutation`. {commit}`17b92dbe61ee85e2e60211e7dc0ed507a70dbd64`
 * Simulations now parameterized using classes in fwdpy11.model_params. {commit}`18e261c8596bf63d2d4e1ef228effb87397b793e` and {commit}`eda7390adb9a98a5d96e6557ba1003488ebac511`
 * Added multi-locus simulation of quantitative traits. {commit}`fcad8de9d37bcef5a71ba6d26b4e40e1b67b1993`
 * Refactoring of type names. {commit}`632477c7b7592d956149a0cf44e4d26f2a67797e`
