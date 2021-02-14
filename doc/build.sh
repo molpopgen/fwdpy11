@@ -1,4 +1,4 @@
-jupyter-book build -n .
+jupyter-book build -W .
 RV=$?
 if [ $RV -ne 0 ];
 then

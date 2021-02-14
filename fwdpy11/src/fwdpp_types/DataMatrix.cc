@@ -8,21 +8,55 @@
 
 namespace py = pybind11;
 
+namespace
+{
+    static const auto STATE_MATRIX_DOCSTRING = R"delim(
+Simple matrix representation of variation data.
+
+These are not constructed directly.
+Rather, they are generated when a :class:`fwdpy11.DataMatrix` is generated .
+
+This object supports the buffer protocol .
+
+    ..versionadded:: 0.2.0
+)delim";
+
+    static const auto STATE_MATRIX_POSITIONS = R"delim(
+The mutation positions.
+
+.. versionchanged:: 0.6.1
+
+    Type changed to :class:`numpy.ndarray`
+)delim";
+
+    static const auto DATA_MATRIX1 = R"delim(
+Represent a sample from a population in a matrix format.
+
+There are two possible representations of the data:
+
+1. As a genotype matrix, where individuals are encoded a 0,1, or 2
+copies of the derived mutation. There is one column per diploid here,
+and one row per variable site.
+
+2. As a haplotype matrix, with two columns per diploid, and each
+column containing a 0 (ancestral) or 1 (derived) label. Each row
+represents a variable site.
+
+.. versionchanged:: 0.2.0
+
+    Changed layout to row = variable site. 
+    Changed to match fwdpp 0.7.0 layout where the neutral
+    and selected data are represented as a 
+    :class:`fwdpy11.StateMatrix`
+)delim";
+
+}
+
 void
 init_data_matrix(py::module &m)
 {
     py::class_<fwdpp::state_matrix>(m, "StateMatrix", py::buffer_protocol(),
-                                    R"delim(
-            Simple matrix representation of variation data.
-
-            These are not constructed directly.  Rather,
-            they are generated when a 
-            :class:`fwdpy11.DataMatrix` is generated.
-
-            This object supports the buffer protocol.
-
-            .. versionadded:: 0.2.0
-            )delim")
+                                    STATE_MATRIX_DOCSTRING)
         .def_property_readonly(
             "shape",
             [](const fwdpp::state_matrix &sm) {
@@ -43,44 +77,18 @@ init_data_matrix(py::module &m)
             [](const fwdpp::state_matrix &self) {
                 return fwdpy11::make_1d_ndarray_readonly(self.positions);
             },
-            R"delim(
-            The mutation positions.
-            
-            .. versionchanged:: 0.6.1
-            
-                Type changed to :class:`numpy.ndarray`
-            )delim")
+            STATE_MATRIX_POSITIONS)
         .def_buffer([](const fwdpp::state_matrix &sm) -> py::buffer_info {
             using value_type = std::int8_t;
             auto nrow = sm.positions.size();
             auto ncol = (nrow > 0) ? sm.data.size() / nrow : 0;
             return py::buffer_info(
                 const_cast<value_type *>(sm.data.data()), sizeof(value_type),
-                py::format_descriptor<value_type>::format(), 2, { nrow, ncol },
-                { sizeof(value_type) * ncol, sizeof(value_type) });
+                py::format_descriptor<value_type>::format(), 2, {nrow, ncol},
+                {sizeof(value_type) * ncol, sizeof(value_type)});
         });
 
-    py::class_<fwdpp::data_matrix>(m, "DataMatrix",
-                                   R"delim(
-		Represent a sample from a population in a matrix format.
-
-		There are two possible representations of the data:
-
-		1. As a genotype matrix, where individuals are encoded a 0,1, or 2
-		copies of the derived mutation. There is one column per diploid here,
-        and one row per variable site.
-
-		2. As a haplotype matrix, with two columns per diploid, and each
-		column containing a 0 (ancestral) or 1 (derived) label. Each row
-        represents a variable site.
-
-        .. versionchanged:: 0.2.0
-
-            Changed layout to row = variable site. 
-            Changed to match fwdpp 0.7.0 layout where the neutral
-            and selected data are represented as a 
-            :class:`fwdpy11.StateMatrix`
-		)delim")
+    py::class_<fwdpp::data_matrix>(m, "DataMatrix", DATA_MATRIX1)
         .def_readwrite("neutral", &fwdpp::data_matrix::neutral,
                        R"delim(
                 Return a buffer representing neutral variants.
@@ -111,8 +119,7 @@ init_data_matrix(py::module &m)
                 .. versionchanged:: 0.2.0
                     Type is :class:`fwdpy11.StateMatrix`
                 )delim")
-        .def_readonly("ncol", &fwdpp::data_matrix::ncol,
-                      "Sample size of the matrix")
+        .def_readonly("ncol", &fwdpp::data_matrix::ncol, "Sample size of the matrix")
         .def_property_readonly(
             "neutral_keys",
             [](const fwdpp::data_matrix &self) {

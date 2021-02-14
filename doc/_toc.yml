@@ -39,9 +39,9 @@
   - file: short_vignettes/neutralmutsafter_vignette
 
 # Restore once 656 is resolved
-# - part: Short vignettes - exporting data to tskit
-#   chapters:
-#  - file: short_vignettes/tskitconvert_vignette
+- part: Short vignettes - exporting data to tskit
+  chapters:
+  - file: short_vignettes/tskitconvert_vignette
 
 - part: Longer vignettes - complete examples
   chapters:
