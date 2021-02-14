@@ -36,13 +36,13 @@ init_data_matrix_from_tables(py::module& m)
      Create a :class:`fwdpy11.DataMatrix` from a table collection.
      
      :param pop: A population
-     :type pop: :class:`fwdpy11.Population`
+     :type pop: :class:`fwdpy11.PopulationBase`
      :param samples: A list of sample nodes
      :type samples: list
      :param record_neutral: If True, generate data for neutral variants
-     :type record_neutral: boolean
+     :type record_neutral: bool
      :param record_selected: If True, generate data for selected variants
-     :type record_selected: boolean
+     :type record_selected: bool
 
      .. deprecated:: 0.3.0
 
@@ -58,15 +58,15 @@ init_data_matrix_from_tables(py::module& m)
      Create a :class:`fwdpy11.DataMatrix` from a table collection.
      
      :param tables: A TableCollection
-     :type tables: :class:`fwdpy11.TableCollection`
+     :type tables: fwdpy11.TableCollection
      :param samples: A list of sample nodes
-     :type samples: list or array
+     :type samples: list or :func:`numpy.array`
      :param record_neutral: If True, generate data for neutral variants
-     :type record_neutral: boolean
+     :type record_neutral: bool
      :param record_selected: If True, generate data for selected variants
-     :type record_selected: boolean
+     :type record_selected: bool
      :param include_selected: (False) Whether to include variants fixed in the sample
-     :type include_selected: boolean
+     :type include_selected: bool
      :param begin: (0.0) Start of range, inclusive
      :param end: (max float) End of range, exclusive
 
