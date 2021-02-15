@@ -1,0 +1,7 @@
+jupyter-book
+matplotlib
+msprime
+--no-binary msprime
+numpy==1.19.5 # Last version compatible w/Py 3.6
+sphinx-issues
+tskit>=0.3.4

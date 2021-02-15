@@ -1,0 +1,22 @@
+pybind11[global]
+numpy==1.19.5 # Last version compatible w/Py 3.6
+sparse
+scipy==1.5.4 # Last version compatible w/Py 3.6
+attrs
+black
+
+#below are for building package
+#and running tests
+# requirements for docs are in docs/requirements.txt
+msprime
+--no-binary msprime
+tskit
+setuptools_scm==1.11.1
+pytest
+pytest-xdist
+
+#below are for formatting, linting,
+#etc.
+flake8
+flake8-bugbear
+blacken-docs
