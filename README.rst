@@ -29,9 +29,6 @@ Main:
 .. image:: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=main
     :target: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=main
 
-.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/main.svg?style=svg
-    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/main
-
 Development: 
 
 .. image:: https://github.com/molpopgen/fwdpy11/workflows/Tests/badge.svg?branch=dev
@@ -39,9 +36,6 @@ Development:
 
 .. image:: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
     :target: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
-
-.. image:: https://circleci.com/gh/molpopgen/fwdpy11/tree/dev.svg?style=svg
-    :target: https://circleci.com/gh/molpopgen/fwdpy11/tree/dev
 
 Manual
 -----------------------
