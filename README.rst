@@ -37,19 +37,6 @@ Development:
 .. image:: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
     :target: https://github.com/molpopgen/fwdpy11/workflows/UbuntuStressTest/badge.svg?branch=dev
 
-Manual
------------------------
-
-Latest/main:
-
-.. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=latest
-	:target: http://fwdpy11.readthedocs.io/en/latest/?badge=latest
-
-Development branch:
-
-.. image:: https://readthedocs.org/projects/fwdpy11/badge/?version=dev
-	:target: http://fwdpy11.readthedocs.io/en/dev/?badge=dev
-
 Miscellaneous
 -----------------------
 
@@ -65,6 +52,11 @@ Features
 * Parallel computation via multiprocessing_ or concurrent.futures_.
 * Custom temporal samplers to analyze populations *during* a simulation may be written in pure Python.
 * Flexible interface for simulating models with multiple populations.
+
+Documentation
+-----------------------
+
+The manual can be found `here <https://molpopgen.github.io/fwdpy11>`_.
 
 Dependencies
 -----------------------
