@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Random number distributions &#8212; fwdpy11 manual</title>
+    <title>Converting data to tskit format &#8212; fwdpy11 manual</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -56,8 +56,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Adding random noise to genetic values" href="gvaluenoise.html" />
-    <link rel="prev" title="Function documentation" href="functions.html" />
+    <link rel="next" title="Background selection" href="../long_vignettes/bgs_vignette.html" />
+    <link rel="prev" title="Adding neutral mutations to a population with existing ancestry" href="neutralmutsafter_vignette.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -136,7 +136,7 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="userenv.html">
+  <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
   </a>
  </li>
@@ -148,12 +148,12 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+  <a class="reference internal" href="initpops_vignette.html">
    Initializing a population
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+  <a class="reference internal" href="poptour_vignette.html">
    Properties of populations
   </a>
  </li>
@@ -165,42 +165,42 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+  <a class="reference internal" href="geneticmaps_vignette.html">
    Genetic maps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+  <a class="reference internal" href="des_vignette.html">
    Distributions of effect sizes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+  <a class="reference internal" href="neutralmuts_vignette.html">
    Neutral mutations during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+  <a class="reference internal" href="gvalues_fitness.html">
    Genetic values - mutations with direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+  <a class="reference internal" href="gvalues_traits.html">
    Genetic values - simulating phenotypes/traits.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+  <a class="reference internal" href="workingexample_fitness.html">
    Working example - parameters for simulating direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+  <a class="reference internal" href="workingexample_trait.html">
    Working example - parameters for the simulation of a trait
   </a>
  </li>
@@ -212,17 +212,17 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+  <a class="reference internal" href="evolvets_vignette.html">
    Evolving with tree sequence recording
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+  <a class="reference internal" href="recorders_vignette.html">
    Recording data during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
@@ -232,9 +232,9 @@
   Short vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Converting data to tskit format
   </a>
  </li>
@@ -263,7 +263,7 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="definitions.html">
+  <a class="reference internal" href="../pages/definitions.html">
    Definitions
   </a>
  </li>
@@ -275,12 +275,12 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
+  <a class="reference internal" href="../pages/tutorial.html">
    Tutorial
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="advancedtopics.html">
+  <a class="reference internal" href="../pages/advancedtopics.html">
    Advanced topics
   </a>
  </li>
@@ -292,32 +292,32 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="softselection.html">
+  <a class="reference internal" href="../pages/softselection.html">
    Soft selection with discrete demes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="mvdes.html">
+  <a class="reference internal" href="../pages/mvdes.html">
    Different effect sizes of mutations in different demes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="tsoverview.html">
+  <a class="reference internal" href="../pages/tsoverview.html">
    Conceptual overview of tree sequence recording
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="tstypes.html">
+  <a class="reference internal" href="../pages/tstypes.html">
    Data structures related to tree sequences
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="tablefs.html">
+  <a class="reference internal" href="../pages/tablefs.html">
    Calculating frequency spectra from tree sequences
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="recorders.html">
+  <a class="reference internal" href="../pages/recorders.html">
    Time series analysis
   </a>
  </li>
@@ -344,59 +344,59 @@
   Data types and fuctions
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="genetic_values.html">
+  <a class="reference internal" href="../pages/genetic_values.html">
    Genetic values
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="datamatrix.html">
+  <a class="reference internal" href="../pages/datamatrix.html">
    DataMatrix and StateMatrix
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html">
+  <a class="reference internal" href="../pages/demographic_models.html">
    The demography debugger
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html#module-fwdpy11.demographic_models">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
    Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="functions.html">
+  <a class="reference internal" href="../pages/functions.html">
    Function documentation
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
    Random number distributions
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="gvaluenoise.html">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
    Adding random noise to genetic values
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="gvalue_to_fitness.html">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
    Mapping genetic values to fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="model_params.html">
+  <a class="reference internal" href="../pages/model_params.html">
    Model parameters
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="regiontypes.html">
+  <a class="reference internal" href="../pages/regiontypes.html">
    Setting up genomic intervals
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="tskit_tools.html">
+  <a class="reference internal" href="../pages/tskit_tools.html">
    Module
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -406,22 +406,22 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="types.html">
+  <a class="reference internal" href="../pages/types.html">
    Data types related to simulated populations
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
    Types related to tree sequence recording
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
    Types related to discrete demographic events
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="types.html#miscellaneous-types">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
    Miscellaneous types
   </a>
  </li>
@@ -505,9 +505,12 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/tskitconvert_vignette.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/pages/gslrandom.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/tskitconvert_vignette.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -527,7 +530,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fpages/gslrandom.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/tskitconvert_vignette.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -543,6 +546,23 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/tskitconvert_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
@@ -555,67 +575,33 @@
         
               <div>
                 
-  <div class="section" id="random-number-distributions">
-<span id="gslrandom"></span><h1>Random number distributions<a class="headerlink" href="#random-number-distributions" title="Permalink to this headline">¶</a></h1>
-<p>The following functions map directly to C functions
-from the GNU Scientific Library.  All functions
-take positional arguments without names.</p>
-<dl class="py function">
-<dt id="fwdpy11.gsl_ran_gaussian_ziggurat">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">gsl_ran_gaussian_ziggurat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_gaussian_ziggurat" title="Permalink to this definition">¶</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param sd: The standard deviation
-:type sd: float
-:returns: A gaussian deviate with mean zero and standard
-deviation <code class="docutils literal notranslate"><span class="pre">sd</span></code>
-:rtype: float</p>
-</dd></dl>
+  <div class="section" id="converting-data-to-tskit-format">
+<span id="tskitconvert-vignette"></span><h1>Converting data to tskit format<a class="headerlink" href="#converting-data-to-tskit-format" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-<dl class="py function">
-<dt id="fwdpy11.gsl_rng_uniform">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">gsl_rng_uniform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_rng_uniform" title="Permalink to this definition">¶</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:returns: Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1)</span></code>
-:rtype: float</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fwdpy11.gsl_ran_flat">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">gsl_ran_flat</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_flat" title="Permalink to this definition">¶</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param a: Lower bound of range, inclusive.
-:type a: float
-:param b: Upper bound of range, exclusive.
-:type b: float
-:returns: Uniform deviate from the range <code class="docutils literal notranslate"><span class="pre">[a,</span> <span class="pre">b)</span></code>.
-:rtype: float</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fwdpy11.gsl_ran_poisson">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">gsl_ran_poisson</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_poisson" title="Permalink to this definition">¶</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param mean: The mean of the distribution
-:type mean: float
-:returns: The number of successes
-:rtype: int</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fwdpy11.gsl_ran_geometric">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">gsl_ran_geometric</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.gsl_ran_geometric" title="Permalink to this definition">¶</a></dt>
-<dd><p>:param rng: Random number generator
-:type rng: fwdpy11.GSLrng
-:param p: The probability of success
-:type p: float
-:returns: The waiting time until the next success
-:rtype: int</p>
-</dd></dl>
-
+<span class="c1"># Random number generators are initialized with seeds</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N</span><span class="p">,</span> <span class="n">Ne</span> <span class="o">=</span> <span class="n">N</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="n">L</span><span class="p">,</span> <span class="n">recombination_rate</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="n">random_seed</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">infinite_sites</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>17
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Finish once issue 656 is fixed</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -631,7 +617,7 @@ deviation <code class="docutils literal notranslate"><span class="pre">sd</span>
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./pages"
+            path: "./short_vignettes"
         },
         predefinedOutput: true
     }
@@ -646,8 +632,8 @@ deviation <code class="docutils literal notranslate"><span class="pre">sd</span>
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="functions.html" title="previous page">Function documentation</a>
-    <a class='right-next' id="next-link" href="gvaluenoise.html" title="next page">Adding random noise to genetic values</a>
+    <a class='left-prev' id="prev-link" href="neutralmutsafter_vignette.html" title="previous page">Adding neutral mutations to a population with existing ancestry</a>
+    <a class='right-next' id="next-link" href="../long_vignettes/bgs_vignette.html" title="next page">Background selection</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

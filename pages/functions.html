@@ -229,6 +229,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
@@ -722,6 +734,37 @@ demes will appear later on and have migration amongst them.</p>
 </dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.6.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fwdpy11.data_matrix_from_tables">
+<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">data_matrix_from_tables</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tables</span><span class="p">:</span> <span class="n">fwdpy11._fwdpy11.TableCollection</span></em>, <em class="sig-param"><span class="n">samples</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">record_neutral</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">record_selected</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">include_fixations</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">begin</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">end</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.7976931348623157e+308</span></em><span class="sig-paren">)</span> &#x2192; fwdpy11._fwdpy11.DataMatrix<a class="headerlink" href="#fwdpy11.data_matrix_from_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a <a class="reference internal" href="datamatrix.html#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> from a table collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tables</strong> (<a class="reference internal" href="types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – A TableCollection</p></li>
+<li><p><strong>samples</strong> (list or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.array.html#numpy.array" title="(in NumPy v1.20)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.array()</span></code></a>) – A list of sample nodes</p></li>
+<li><p><strong>record_neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If True, generate data for neutral variants</p></li>
+<li><p><strong>record_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If True, generate data for selected variants</p></li>
+<li><p><strong>include_selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (False) Whether to include variants fixed in the sample</p></li>
+<li><p><strong>begin</strong> – (0.0) Start of range, inclusive</p></li>
+<li><p><strong>end</strong> – (max float) End of range, exclusive</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="datamatrix.html#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a></p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.3.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.4.1: </span>Add begin, end options as floats</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.5.0: </span>No longer requires <a class="reference internal" href="types.html#fwdpy11.MutationVector" title="fwdpy11.MutationVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationVector</span></code></a> argument</p>
 </div>
 </dd></dl>
 

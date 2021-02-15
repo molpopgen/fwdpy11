@@ -34,4 +34,6 @@
 .. autofunction:: fwdpy11.migration_matrix_single_extant_deme
 ```
 
-
+```{eval-rst}
+.. autofunction:: fwdpy11.data_matrix_from_tables
+```

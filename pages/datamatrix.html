@@ -229,6 +229,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
@@ -548,18 +560,14 @@
 <dl class="py class">
 <dt id="fwdpy11.DataMatrix">
 <em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">DataMatrix</code><a class="headerlink" href="#fwdpy11.DataMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Represent a sample from a population in a matrix format.</p>
+<dd><p>Represent a sample from a population in a matrix format.</p>
 <p>There are two possible representations of the data:</p>
 <p>1. As a genotype matrix, where individuals are encoded a 0,1, or 2
-copies of the derived mutation. There is one column per diploid here,</p>
-</div></blockquote>
-<p>and one row per variable site.</p>
-<blockquote>
-<div><p>2. As a haplotype matrix, with two columns per diploid, and each
-column containing a 0 (ancestral) or 1 (derived) label. Each row</p>
-</div></blockquote>
-<p>represents a variable site.</p>
+copies of the derived mutation. There is one column per diploid here,
+and one row per variable site.</p>
+<p>2. As a haplotype matrix, with two columns per diploid, and each
+column containing a 0 (ancestral) or 1 (derived) label. Each row
+represents a variable site.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.2.0: </span>Changed layout to row = variable site. 
 Changed to match fwdpp 0.7.0 layout where the neutral
@@ -684,13 +692,12 @@ ndarray object.</p>
 <dt id="fwdpy11.StateMatrix">
 <em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">StateMatrix</code><a class="headerlink" href="#fwdpy11.StateMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple matrix representation of variation data.</p>
-<p>These are not constructed directly.  Rather,
-they are generated when a 
-<a class="reference internal" href="#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> is generated.</p>
-<p>This object supports the buffer protocol.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.2.0.</span></p>
-</div>
+<p>These are not constructed directly.
+Rather, they are generated when a <a class="reference internal" href="#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> is generated .</p>
+<p>This object supports the buffer protocol .</p>
+<blockquote>
+<div><p>..versionadded:: 0.2.0</p>
+</div></blockquote>
 <dl class="py method">
 <dt id="fwdpy11.StateMatrix.positions">
 <em class="property">property </em><code class="sig-name descname">positions</code><a class="headerlink" href="#fwdpy11.StateMatrix.positions" title="Permalink to this definition">¶</a></dt>

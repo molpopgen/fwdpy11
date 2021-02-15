@@ -229,6 +229,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
@@ -620,7 +632,7 @@ renamed <code class="docutils literal notranslate"><span class="pre">shape_param
 has been renamed <code class="docutils literal notranslate"><span class="pre">cov_matrix</span></code>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> <code class="docutils literal notranslate"><span class="pre">gw2w</span></code> for genetic value objects <code class="docutils literal notranslate"><span class="pre">init</span></code> methods has been replaced with <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code>.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">when</span></code> <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a> and <a class="reference internal" href="../pages/gvalue_to_fitness.html#fwdpy11.PleiotropicOptima" title="fwdpy11.PleiotropicOptima"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PleiotropicOptima</span></code></a> <code class="docutils literal notranslate"><span class="pre">init</span></code> methods is now the <strong>third</strong> positional argument rather than the first.  This change should be caught at run time (the new classes won’t auto-convert <code class="docutils literal notranslate"><span class="pre">float</span></code> to <code class="docutils literal notranslate"><span class="pre">int</span></code>, and is fixed by adding parameter names when initializing instances of these types.</p></li>
-<li><p>The type of <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.input_left</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.output_right</span></code> has changed
+<li><p>The type of <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection.input_left" title="fwdpy11.TableCollection.input_left"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.input_left</span></code></a> and <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection.output_right" title="fwdpy11.TableCollection.output_right"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.TableCollection.output_right</span></code></a> has changed
 to a simple index vector (<a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/529">#529</a>).  This change is a BIG memory savings when simulating large regions.</p></li>
 </ul>
 </div>
@@ -630,7 +642,7 @@ to a simple index vector (<a class="reference external" href="https://github.com
 <ul class="simple">
 <li><p><a class="reference internal" href="../pages/types.html#fwdpy11.VariantIterator" title="fwdpy11.VariantIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.VariantIterator</span></code></a></p></li>
 <li><p><a class="reference internal" href="../pages/types.html#fwdpy11.DataMatrixIterator" title="fwdpy11.DataMatrixIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrixIterator</span></code></a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.data_matrix_from_tables()</span></code></p></li>
+<li><p><a class="reference internal" href="../pages/functions.html#fwdpy11.data_matrix_from_tables" title="fwdpy11.data_matrix_from_tables"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.data_matrix_from_tables()</span></code></a></p></li>
 </ul>
 <p>The extra argument could be eliminated due to the new attributes added to <a class="reference internal" href="../pages/types.html#fwdpy11.MutationRecord" title="fwdpy11.MutationRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationRecord</span></code></a>.</p>
 </div>
@@ -642,8 +654,8 @@ These changes are major <em>simplifications</em> to the package.</p>
 <p>The changes to how diploid data are stored completely changes how custom genetic values calculations are implemented.</p>
 <p>Another major change is that genetic value and noise functions are no longer allowed to be written in Python.  We may
 bring that back in a later release.</p>
-<p>class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code> has been completely refactored.  See <a class="reference internal" href="../pages/datamatrix.html#datamatrix"><span class="std std-ref">DataMatrix and StateMatrix</span></a> for overview of current API.</p>
-<p>The function <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample()</span></code> now returns a tuple with two elements, which represent neutral
+<p><code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code> has been completely refactored.  See <a class="reference internal" href="../pages/datamatrix.html#datamatrix"><span class="std std-ref">DataMatrix and StateMatrix</span></a> for overview of current API.</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample</span></code> now returns a tuple with two elements, which represent neutral
 and selected gentoypes, respectively.  The previous  API made you choose neutral or selected for the return value, which
 was a list.</p>
 <p>Support for tree sequences will likely have a big impact on how you think about carrying out simulations.  See <a class="reference internal" href="../pages/tsoverview.html#tsoverview"><span class="std std-ref">Conceptual overview of tree sequence recording</span></a>
@@ -653,7 +665,7 @@ and <a class="reference internal" href="../pages/tstypes.html#ts-data-types"><sp
 <h2>0.1.4<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="changes-to-datamatrix">
 <h3>Changes to DataMatrix<a class="headerlink" href="#changes-to-datamatrix" title="Permalink to this headline">¶</a></h3>
-<p>The member types <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_neutral</span></code> and  <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_selected</span></code> are now read-only attributes.  In previous versions, they were functions.  To upgrade, simply remove any trailing <code class="docutils literal notranslate"><span class="pre">()</span></code>. In other words change this:</p>
+<p>The member types <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_neutral</span></code> and  <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_selected</span></code> are now read-only attributes.  In previous versions, they were functions.  To upgrade, simply remove any trailing <code class="docutils literal notranslate"><span class="pre">()</span></code>. In other words change this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">ndim_neutral</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -661,7 +673,7 @@ and <a class="reference internal" href="../pages/tstypes.html#ts-data-types"><sp
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">.</span><span class="n">ndim_neutral</span>
 </pre></div>
 </div>
-<p>The properties <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.neutral</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> are now
+<p>The properties <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.neutral</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> are now
 writeable.  This allows you to recode the data as needed.  For example, if you wish to swap the 0/1 values for a column,
 subtract 1 then multiply by -1.  The result will affect the data stored on the C++ side.</p>
 </div>

@@ -229,6 +229,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
@@ -1405,7 +1417,7 @@ by parameters passed to the class upon construction.</p></li>
 <ul class="simple">
 <li><p>Added position ranges to tree traversal.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/232">#232</a>.</p></li>
 <li><p>Changed default type for range arguments for VariantIterator and data matrix generation. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/233">#233</a>.</p></li>
-<li><p>Skipping fixations is now optional in <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.data_matrix_from_tables()</span></code>.</p></li>
+<li><p>Skipping fixations is now optional in <a class="reference internal" href="../pages/functions.html#fwdpy11.data_matrix_from_tables" title="fwdpy11.data_matrix_from_tables"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.data_matrix_from_tables()</span></code></a>.</p></li>
 <li><p>The C++ back-end for population classes was changed to avoid deleting move constructors. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/231">#231</a>.</p></li>
 <li><p>Documentation updates</p></li>
 </ul>
@@ -1446,7 +1458,7 @@ this class obsolete, but we will await a final verdict pending more testing.</p>
 <li><p>A bug in handling fixations during simulations with tree sequence recording is fixed. This bug is
 GitHub <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/200">#200</a> and the fix is
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/201">#201</a>.</p></li>
-<li><p>Updates to the fwdpp submodule fix a bug in <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ts.infinite_sites()</span></code>.  Previously, if the genome size
+<li><p>Updates to the fwdpp submodule fix a bug in <code class="docutils literal notranslate"><span class="pre">fwdpy11.ts.infinite_sites</span></code>.  Previously, if the genome size
 was not 1.0, then the number of mutations would be off by a factor of the genome size divided by 1.0.  The error was
 due to a bug upstream in fwdpp.</p></li>
 <li><p>A bug in how diploid metadata were updated by genetic value types has been fixed.  It is unlikely that this bug
@@ -1461,14 +1473,14 @@ This pull request introduced several changes:</p>
 <p>The following new types are added:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.MultivariateGaussianEffects" title="fwdpy11.MultivariateGaussianEffects"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGaussianEffects</span></code></a>, which is a new “region” type</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.SlocusPopMultivariateGeneticValueWithMapping</span></code>, which is a new ABC for multivariate genetic values</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap</span></code>, which is a new ABC mapping multivariate trait values down to a (single) fitness value.</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGSS</span></code>, which is GSS based on the Euclidean distance from multiple optima</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGSSmo</span></code>, which is the multi-dimensional analog to the existing GSSmo</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive</span></code>, which is a new genetic value class for pleiotropic traits.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.SlocusPopMultivariateGeneticValueWithMapping</span></code>, which is a new ABC for multivariate genetic values</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGeneticValueToFitnessMap</span></code>, which is a new ABC mapping multivariate trait values down to a (single) fitness value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGSS</span></code>, which is GSS based on the Euclidean distance from multiple optima</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.MultivariateGSSmo</span></code>, which is the multi-dimensional analog to the existing GSSmo</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.genetic_values.SlocusMultivariateEffectsStrictAdditive</span></code>, which is a new genetic value class for pleiotropic traits.</p></li>
 </ul>
 <p>PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/175">#175</a> adds tracking of genetic values during simulation as numpy
-arrays via <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Population.genetic_values</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Population.ancient_sample_genetic_values</span></code>.
+arrays via <code class="docutils literal notranslate"><span class="pre">fwdpy11.Population.genetic_values</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.Population.ancient_sample_genetic_values</span></code>.
 Currently, filling these arrays is only supported for simulations with tree sequence recording.</p>
 <p>Changes to the C++ back end:</p>
 <ul class="simple">
@@ -1497,18 +1509,18 @@ PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull
 <li><p>Generalized genetic maps for single-locus simulations.  You can now do much of the “multi-locus” stuff with
 <code class="docutils literal notranslate"><span class="pre">SlocusPop</span></code> now. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/189">#189</a></p></li>
 <li><p>Tree sequence recording now possible for mulit-locus simulations. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/185">#185</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ts.count_mutations()</span></code> added. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/183">#183</a>, PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/196">#196</a>, PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/199">#199</a></p></li>
-<li><p>Position and key properties added to <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ts.VariantIterator</span></code>. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/180">#180</a>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.ts.count_mutations</span></code> added. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/183">#183</a>, PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/196">#196</a>, PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/199">#199</a></p></li>
+<li><p>Position and key properties added to <code class="docutils literal notranslate"><span class="pre">fwdpy11.ts.VariantIterator</span></code>. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/180">#180</a>
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/181">#181</a></p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ts.TreeIterator</span></code> is added, which provides much faster tree traversal. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/176">#176</a>,
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.ts.TreeIterator</span></code> is added, which provides much faster tree traversal. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/176">#176</a>,
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/177">#177</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.ts.simplify()</span></code> no longer retains ancient samples present in the input by default. To do so, explicitly
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.ts.simplify</span></code> no longer retains ancient samples present in the input by default. To do so, explicitly
 label any ancient samples to retain as part of the the samples list passed to the function.
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/169">#169</a></p></li>
 <li><p>The types <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> and <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> have be re-implemented as C++-based classes, replacing
 the previous pure Python classes.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/163">#163</a>,
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/174">#174</a></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.model_params.ModelParams.nregions</span></code> now defaults to an empty list, which simplifies setup for simulations
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.model_params.ModelParams.nregions</span></code> now defaults to an empty list, which simplifies setup for simulations
 with tree sequences. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/b557c4162cbfdfba6c9126ebec14c7f3f43884eb">b557c41</a>.</p></li>
 <li><p>When simulating with tree sequences, it is no longer an error to attempt to record ancient samples from the last
 generation of a simulation. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/162">#162</a></p></li>
@@ -1543,7 +1555,7 @@ Please see <a class="reference internal" href="upgrade_path.html#upgrade-path"><
 <div class="section" id="id32">
 <h3>Bug fixes:<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Fixed bug in <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.util.sort_gamete_keys()</span></code>.  The function was working on a copy, meaning data were not being
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">fwdpy11.util.sort_gamete_keys</span></code>.  The function was working on a copy, meaning data were not being
 modified. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/93">#93</a></p></li>
 <li><p>Fix a bug in updating a population’s mutation lookup table. This bug was upstream in fwdpp (<a class="reference external" href="https://github.com/molpopgen/fwdpp/issues/130">fwdpp issue 130</a>).  While definitely a bug, I could never find a case where simulation outputs were adversely affected.  In other words, simulation output remained the same after the fix, due to the rarity of the bug. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/98">#98</a></p></li>
 </ul>
@@ -1552,24 +1564,24 @@ modified. PR <a class="reference external" href="https://github.com/molpopgen/fw
 <h3>API changes/new features:<a class="headerlink" href="#api-changes-new-features" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Added support for tree sequence recording.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/142">#142</a></p></li>
-<li><p>Populations may now be dumped/loaded to/from files. See <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.dump_to_file()</span></code> and
-<code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.load_from_file()</span></code>.  Analagous functions exist for MlocusPop. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/148">#148</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.sample()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.sample()</span></code> now return a <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code>.
+<li><p>Populations may now be dumped/loaded to/from files. See <code class="docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.dump_to_file</span></code> and
+<code class="docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.load_from_file</span></code>.  Analagous functions exist for MlocusPop. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/148">#148</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.SlocusPop.sample</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.sample</span></code> now return a <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code>.
 PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/118">#118</a></p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code> is refactored to match updates to fwdpp.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/139">#139</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample()</span></code> now return a tuple with the neutral and selected data, respectively, as the
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix</span></code> is refactored to match updates to fwdpp.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/139">#139</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample</span></code> now return a tuple with the neutral and selected data, respectively, as the
 two elements.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/128">#128</a></p></li>
 <li><p>Diploids have been refactored into two separate classes, <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidGenotype" title="fwdpy11.DiploidGenotype"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidGenotype</span></code></a> and
 <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a>.  Both classes are valid NumPy dtypes.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/108">#108</a></p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.model_params.ModelParams</span></code> is massively simpilfied. There is now only one class! See <a class="reference internal" href="../pages/tutorial.html#model-params"><span class="std std-ref">Setting up the parameters for a simulation</span></a>. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/108">#108</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.model_params.ModelParams</span></code> is massively simpilfied. There is now only one class! See <a class="reference internal" href="../pages/tutorial.html#model-params"><span class="std std-ref">Setting up the parameters for a simulation</span></a>. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/108">#108</a></p></li>
 <li><p>The design of objects related to calculating genetic values is vastly simplified. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/108">#108</a></p></li>
 <li><p>Populations now contain functions to add mutations, replacing previous functions in fwdpy11.util.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/94">#94</a></p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop</span></code> now requires that <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.locus_boundaries</span></code> be initialized upon
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop</span></code> now requires that <code class="docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.locus_boundaries</span></code> be initialized upon
 construction. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/96">#96</a></p></li>
 <li><p>The mutation position lookup table of a population is now a read-only property. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/103">#103</a></p></li>
 <li><p>The mutation position lookup table is now represented as a dict of lists. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/121">#121</a></p></li>
-<li><p>A mutation or fixation can now be rapidy found by its “key”.  See <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.Population.find_mutation_by_key()</span></code>
-and <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.Population.find_fixation_by_key()</span></code>.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/106">#106</a></p></li>
+<li><p>A mutation or fixation can now be rapidy found by its “key”.  See <code class="docutils literal notranslate"><span class="pre">fwdpy11.Population.find_mutation_by_key</span></code>
+and <code class="docutils literal notranslate"><span class="pre">fwdpy11.Population.find_fixation_by_key</span></code>.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/106">#106</a></p></li>
 </ul>
 </div>
 <div class="section" id="back-end-changes">
@@ -1604,23 +1616,23 @@ this <a class="reference external" href="https://github.com/molpopgen/fwdpy11/co
 <h3>Bug fixes:<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>A bug affecting retrieval of multi-locus diploid key data as a buffer for numpy arrays is now fixed. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/72">#72</a></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.SingleLocusDiploid.label</span></code> is now pickled. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/34">#34</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.SingleLocusDiploid.label</span></code> is now pickled. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/34">#34</a></p></li>
 </ul>
 </div>
 <div class="section" id="id34">
 <h3>API changes/new features:<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Population objects have new member functions <code class="docutils literal notranslate"><span class="pre">sample</span></code> and <code class="docutils literal notranslate"><span class="pre">sample_ind</span></code>.  These replace
-<code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.sample_separate()</span></code>, which is now deprecated.  For example, see
-<code class="xref py py-func docutils literal notranslate"><span class="pre">sample()</span></code> for more info. (The
+<code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.sample_separate</span></code>, which is now deprecated.  For example, see
+<code class="docutils literal notranslate"><span class="pre">~fwdpy11.SlocusPop.sample</span></code> for more info. (The
 same member functions exist for <em>all</em> population objects.) PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/62">#62</a></p></li>
 <li><p>Improved support for pickling lower-level types. See the unit test file <code class="docutils literal notranslate"><span class="pre">tests/test_pickling.py</span></code> for examples of directly pickling things like mutations and containers of mutations.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/55">#55</a></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">__main__.py</span></code> added.  The main use is to help writing python modules based on fwdpy11. See <a class="reference internal" href="developersguide.html#developersguide"><span class="std std-ref">Developer’s guide</span></a> for details. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/54">#54</a></p></li>
 <li><p>Attributes <code class="docutils literal notranslate"><span class="pre">popdata</span></code> and <code class="docutils literal notranslate"><span class="pre">popdata_user</span></code> added to all population objects. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/52">#52</a></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.SingleLocusDiploid.parental_data</span></code> added as read-only field. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/51">#51</a></p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.locus_boundaries</span></code> is now writeable.</p></li>
-<li><p><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.neutral</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> are now writeable
-buffers. <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_neutral</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_selected</span></code> have
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.SingleLocusDiploid.parental_data</span></code> added as read-only field. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/51">#51</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.MlocusPop.locus_boundaries</span></code> is now writeable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.neutral</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> are now writeable
+buffers. <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_neutral</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.ndim_selected</span></code> have
 been changed from functions to read-only properties. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/45">#45</a></p></li>
 <li><p>The ‘label’ field of <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> (and <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a>) now populate the label
 field of a mutation. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/32">#32</a> See tests/test_mutation_labels.py for an example.</p></li>
@@ -1634,7 +1646,7 @@ field of a mutation. PR <a class="reference external" href="https://github.com/m
 <li><p>The documentation building process is greatly streamlined.  PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/60">#60</a></p></li>
 <li><p>Object namespaces have been refactored.  The big effect is to streamline the manual. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/59">#59</a></p></li>
 <li><p>Travis CI now tests several Python versions using GCC 6 on Linux. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/44">#44</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.wright_fisher_qtrait.evolve()</span></code> has been updated to allow “standard popgen” models of multi-locus
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.wright_fisher_qtrait.evolve</span></code> has been updated to allow “standard popgen” models of multi-locus
 evolution. This change is a stepping stone to a future global simplification of the API. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/42">#42</a></p></li>
 <li><p>The <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Sregion" title="fwdpy11.Sregion"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Sregion</span></code></a> now store their callback data differently.  The result is a type that can be
 pickled in Python 3.6. PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/39">#39</a></p></li>
@@ -1669,7 +1681,7 @@ pickled in Python 3.6. PR <a class="reference external" href="https://github.com
 <li><p>Github issues 7, 8, and 9 resolved. All are relatively minor usability tweaks.</p></li>
 </ul>
 </li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.util.change_effect_size()</span></code> added, allowing the “s” and “h” fields of <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a> to be changed. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2">ba4841e</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.util.change_effect_size</span></code> added, allowing the “s” and “h” fields of <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a> to be changed. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/ba4841e9407b3d98031801d7eea92b2661871eb2">ba4841e</a>.</p></li>
 <li><p>The attributes of <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a> are now read-only, addressing <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/5">#5</a> on GitHub. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/f376d40788f3d59baa01d1d56b0aa99706560011">f376d40</a></p></li>
 <li><p>Trait-to-fitness mapping functions for quantitative trait simulations now take the entire population, rather than just the generation.  This allows us to model things like truncation selection, etc. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/fa37cb8f1763bc7f0e64c8620b6bc1ca350fddb9">fa37cb8</a></p></li>
 </ul>
@@ -1678,7 +1690,7 @@ pickled in Python 3.6. PR <a class="reference external" href="https://github.com
 <h3>Back-end changes<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>Code base updated to work with <a class="reference external" href="https://github.com/pybind/pybind11">pybind11</a> 2.2.0. [PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/19">#19</a>]</p></li>
-<li><p><code class="xref py py-mod docutils literal notranslate"><span class="pre">fwdpy11.model_params</span></code> has been refactored, addressing <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/4">#4</a>.  The new code base is more idiomatic <a class="reference external" href="http://w.r.to">w.r.to</a> Python’s OO methods. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22">1b811c3</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.model_params</span></code> has been refactored, addressing <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/4">#4</a>.  The new code base is more idiomatic <a class="reference external" href="http://w.r.to">w.r.to</a> Python’s OO methods. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/1b811c33ab394ae4c64a3c8894984f320b870f22">1b811c3</a></p></li>
 <li><p>Many of the C++-based types can now be pickled, making model parameter objects easier to serialize.  Most of the
 changes are in <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/d0a3602e71a866f7ff9d355d62953ea00c663c5a">d0a3602</a>.  This mostly addresses <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/3">#3</a></p></li>
 <li><p>Added magic numbers to keep track of compatibility changes to serialization formats.</p></li>
@@ -1699,7 +1711,7 @@ changes are in <a class="reference external" href="https://github.com/molpopgen/
 <h3>API and back-end changes:<a class="headerlink" href="#api-and-back-end-changes" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>The C++ data structures are connected to NumPy via Python buffer protocol.  <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/48e3925a867c4ec55e1e5bb05457396fb456bc47">48e3925</a></p></li>
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.separate_samples_by_loci()</span></code> changed to take a list of positions as first argument, and not a population object.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.separate_samples_by_loci</span></code> changed to take a list of positions as first argument, and not a population object.</p></li>
 </ul>
 </div>
 </div>
@@ -1708,7 +1720,7 @@ changes are in <a class="reference external" href="https://github.com/molpopgen/
 <div class="section" id="id40">
 <h3>Bug fixes:<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Fixed bug in <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected()</span></code> that returned wrong data in best case scenario and could
+<li><p>Fixed bug in <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.DataMatrix.selected</span></code> that returned wrong data in best case scenario and could
 have caused crash in worst case. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/e715fb74472555aa64e1d894563ec218ebba1a97">e715fb7</a>.</p></li>
 <li><p>Fix bug recording fixation times.  If a population was evolved multiple times, fixation times from the later rounds of
 evolution were incorrect. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/9db14d8b3db1c744045e20bfc00ce37e7fb28dfb">9db14d8</a></p></li>
@@ -1719,13 +1731,13 @@ evolution were incorrect. <a class="reference external" href="https://github.com
 <div class="section" id="id41">
 <h3>API and back-end changes:<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Added <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.sampling.separate_samples_by_loci()</span></code>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/639c8de999679140fad6a976ff6c1996b25444aa">639c8de</a></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.matrix_to_sample</span></code> and <code class="docutils literal notranslate"><span class="pre">fwdpy11.sampling.separate_samples_by_loci</span></code>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/639c8de999679140fad6a976ff6c1996b25444aa">639c8de</a></p></li>
 <li><p>Custom stateless fitness/genetic value calculations may now be implemented with a minimal amount of C++ code.  <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/a75166d9ff5471c2d18d66892f9fa01ebec5a667">a75166d</a></p></li>
 <li><p>Custom fitness/genetic value calculations now allowed in pure Python, but they are quite slow (for now). <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/5549286046ead1181cba684464b3bcb19918321e">5549286</a></p></li>
 <li><p>Stateful trait value models enabled for qtrait sims. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/161dfcef63f3abf28ad56df33b84a92d87d7750f">161dfce</a></p></li>
 <li><p>Refactor evolution functions so that stateful fitness models behave as expected.  Enable compiling in a debug mode.
 Fix bug in operator== for diploid type. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/a726c0535a5176aab1df5211fee7bf0aeba5054b">a726c05</a></p></li>
-<li><p>fwdpy11.util added, providing <code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.util.add_mutation()</span></code>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/17b92dbe61ee85e2e60211e7dc0ed507a70dbd64">17b92db</a></p></li>
+<li><p>fwdpy11.util added, providing <code class="docutils literal notranslate"><span class="pre">fwdpy11.util.add_mutation</span></code>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/17b92dbe61ee85e2e60211e7dc0ed507a70dbd64">17b92db</a></p></li>
 <li><p>Simulations now parameterized using classes in fwdpy11.model_params. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/18e261c8596bf63d2d4e1ef228effb87397b793e">18e261c</a> and <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/eda7390adb9a98a5d96e6557ba1003488ebac511">eda7390</a></p></li>
 <li><p>Added multi-locus simulation of quantitative traits. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/fcad8de9d37bcef5a71ba6d26b4e40e1b67b1993">fcad8de</a></p></li>
 <li><p>Refactoring of type names. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/commit/632477c7b7592d956149a0cf44e4d26f2a67797e">632477c</a></p></li>
