@@ -151,4 +151,22 @@ conda install cmake pybind11 clangxx_osx-64
 
 ```
 
+(sec_requirements_files)=
 
+## Comments on "requirements" files.
+
+Python uses files with names like `requirements.txt` to specify the package environment that is expected to go along with a certain tool such as this one.
+Unfortunately, the contents of such files vary quite a bit across projects.
+
+Here, we take the files `requirements.txt` and `doc/requirements.txt` to specify completely reproducible development and production environments.
+Within these files, all dependencies are pinned to specific versions, as are the dependencies of those dependencies.
+These files specify the exact versions used for testing the package on Ubuntu environments and for building Docker containers.
+
+The files `requirements.in` and `doc/requirements.in` are looser specifications of these environments.
+Here, the dependency pinnings are minimal, trying to keep the build environment compatible with the lowest Python version number that is still supported.
+Many users working in extant Python environments may want to use the `.in` versions for installing packages.
+Some may also want to remove the installation modifications to various packages in those files.
+
+These pinnings will be updated periodically.
+
+People using `conda` to install `fwdpy11` may consider using the fully-pinned files to install dependencies using `pip`.
