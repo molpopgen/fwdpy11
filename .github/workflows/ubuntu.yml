@@ -63,7 +63,7 @@ jobs:
         with:
           path: |
             ~/.local
-          key: ${{ runner.os }}-${{ matrix.python }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('doc/requirements.txt') }}
+          key: ${{ runner.os }}-${{ matrix.python }}-ubuntu-V1-${{ hashFiles('requirements.txt') }}-${{ hashFiles('doc/requirements.txt') }}
 
       - name: Install pip dependencies
         if: steps.cache.outputs.cache-hit != 'true'
