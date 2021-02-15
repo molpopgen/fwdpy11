@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -575,6 +573,11 @@
    </li>
   </ul>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#comments-on-requirements-files">
+   Comments on “requirements” files.
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -690,6 +693,20 @@ You will also need these tools if you intend to modify the <code class="docutils
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="comments-on-requirements-files">
+<span id="sec-requirements-files"></span><h2>Comments on “requirements” files.<a class="headerlink" href="#comments-on-requirements-files" title="Permalink to this headline">¶</a></h2>
+<p>Python uses files with names like <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> to specify the package environment that is expected to go along with a certain tool such as this one.
+Unfortunately, the contents of such files vary quite a bit across projects.</p>
+<p>Here, we take the files <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">doc/requirements.txt</span></code> to specify completely reproducible development and production environments.
+Within these files, all dependencies are pinned to specific versions, as are the dependencies of those dependencies.
+These files specify the exact versions used for testing the package on Ubuntu environments and for building Docker containers.</p>
+<p>The files <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code> and <code class="docutils literal notranslate"><span class="pre">doc/requirements.in</span></code> are looser specifications of these environments.
+Here, the dependency pinnings are minimal, trying to keep the build environment compatible with the lowest Python version number that is still supported.
+Many users working in extant Python environments may want to use the <code class="docutils literal notranslate"><span class="pre">.in</span></code> versions for installing packages.
+Some may also want to remove the installation modifications to various packages in those files.</p>
+<p>These pinnings will be updated periodically.</p>
+<p>People using <code class="docutils literal notranslate"><span class="pre">conda</span></code> to install <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> may consider using the fully-pinned files to install dependencies using <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
 </div>
 </div>
 

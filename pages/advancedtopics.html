@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -54,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Soft selection with discrete demes" href="softselection.html" />
@@ -828,7 +828,7 @@ etc..
 These functions are probably the most useful way to interact with the metadata.</p>
 <dl class="py function">
 <dt id="fwdpy11.tskit_tools.decode_individual_metadata">
-<code class="sig-prename descclassname">fwdpy11.tskit_tools.</code><code class="sig-name descname">decode_individual_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tc</span><span class="p">:</span> <span class="n">tskit.tables.TableCollection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_individual_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -848,7 +848,7 @@ These functions are probably the most useful way to interact with the metadata.<
 
 <dl class="py class">
 <dt id="fwdpy11.tskit_tools.DiploidMetadata">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.tskit_tools.</code><code class="sig-name descname">DiploidMetadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">g</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">e</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">w</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">sex</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">deme</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">label</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">alive</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">preserved</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">first_generation</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em>, <em class="sig-param"><span class="n">parents</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">geography</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">nodes</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.DiploidMetadata" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">DiploidMetadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sex</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alive</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_generation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geography</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.DiploidMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instances of this type are returned by
 <a class="reference internal" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a>.</p>
 <p>The following <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are used to construct instances of
@@ -879,7 +879,7 @@ this type. Member attributes have the same names as these
 
 <dl class="py function">
 <dt id="fwdpy11.tskit_tools.decode_mutation_metadata">
-<code class="sig-prename descclassname">fwdpy11.tskit_tools.</code><code class="sig-name descname">decode_mutation_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tc</span><span class="p">:</span> <span class="n">tskit.tables.TableCollection</span></em><span class="sig-paren">)</span> &#x2192; fwdpy11._fwdpy11.MutationVector<a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_mutation_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.MutationVector</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1220,7 +1220,7 @@ type.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> provides the following helper functions to improve efficiency:</p>
 <dl class="py function">
 <dt id="fwdpy11.strict_additive_effects">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">strict_additive_effects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">strict_additive_effects</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, ignoring dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1235,7 +1235,7 @@ fitness if needed.</p>
 
 <dl class="py function">
 <dt id="fwdpy11.additive_effects">
-<code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">additive_effects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">additive_effects</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, accounting for dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1348,7 +1348,7 @@ value types a bit easier.  You will see concrete examples using them
 later.</p>
 <dl class="py function">
 <dt id="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-prename descclassname">fwdpy11.custom_genetic_value_decorators.</code><code class="sig-name descname">genetic_value_is_trait_default_clone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ndim</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator is a <em>class</em> that adds the ability
 for custom types to be passed to classes derived from
 :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code>.</p>
@@ -1369,7 +1369,7 @@ The default is ``ndim=1``.
 
 <dl class="py function">
 <dt id="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-prename descclassname">fwdpy11.custom_genetic_value_decorators.</code><code class="sig-name descname">genetic_value_noise_default_clone</code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the analog to
 :attr:<code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone</span></code>
 for noise objects inheriting from :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code>.</p>
@@ -1378,7 +1378,7 @@ for noise objects inheriting from :class:<code class="docutils literal notransla
 
 <dl class="py function">
 <dt id="fwdpy11.custom_genetic_value_decorators.default_update">
-<code class="sig-prename descclassname">&#64;</code><code class="sig-prename descclassname">fwdpy11.custom_genetic_value_decorators.</code><code class="sig-name descname">default_update</code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">default_update</span></code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator adds the following function to <code class="docutils literal notranslate"><span class="pre">cls</span></code>,
 which is a no-op function:</p>
 <p>.. code-block:: python</p>
@@ -1490,7 +1490,7 @@ so that results are reproducible.)</p>
 <p>The type passed into the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is:</p>
 <dl class="py class">
 <dt id="fwdpy11.DiploidGeneticValueToFitnessData">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">DiploidGeneticValueToFitnessData</code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
@@ -1559,7 +1559,7 @@ and standard deviation <code class="docutils literal notranslate"><span class="p
 <h4>The data type<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
 <dl class="py class">
 <dt id="fwdpy11.DiploidGeneticValueNoiseData">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">DiploidGeneticValueNoiseData</code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>Instances of this class have the following attributes:</p>
 <p>.. py:attribute:: rng</p>
@@ -1600,7 +1600,7 @@ and this value.
 <p>The ABC type is <a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a>:</p>
 <dl class="py class">
 <dt id="fwdpy11.PyDiploidGeneticValue">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">PyDiploidGeneticValue</code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. py:method:: <strong>init</strong>()</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:param ndim:
 :type ndim: int
@@ -1768,7 +1768,7 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 <h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this headline">¶</a></h4>
 <dl class="py class">
 <dt id="fwdpy11.PyDiploidGeneticValueData">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">PyDiploidGeneticValueData</code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will

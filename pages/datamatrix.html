@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -559,7 +557,7 @@
 <span id="datamatrix"></span><h1>DataMatrix and StateMatrix<a class="headerlink" href="#datamatrix-and-statematrix" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fwdpy11.DataMatrix">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">DataMatrix</code><a class="headerlink" href="#fwdpy11.DataMatrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DataMatrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent a sample from a population in a matrix format.</p>
 <p>There are two possible representations of the data:</p>
 <p>1. As a genotype matrix, where individuals are encoded a 0,1, or 2
@@ -576,7 +574,7 @@ and selected data are represented as a
 </div>
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.merge">
-<code class="sig-name descname">merge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DataMatrix.merge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">merge</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DataMatrix.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge the neutral and selected data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -596,13 +594,13 @@ contains the mutation keys.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.ncol">
-<em class="property">property </em><code class="sig-name descname">ncol</code><a class="headerlink" href="#fwdpy11.DataMatrix.ncol" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">ncol</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.ncol" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sample size of the matrix</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral">
-<em class="property">property </em><code class="sig-name descname">neutral</code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a buffer representing neutral variants.
 This buffer may be used to create a NumPy
 ndarray object.</p>
@@ -619,7 +617,7 @@ ndarray object.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral_keys">
-<em class="property">property </em><code class="sig-name descname">neutral_keys</code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_keys" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral_keys</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keys for neutral mutations used to generate matrix</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.6.1: </span>Type changed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
@@ -628,7 +626,7 @@ ndarray object.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral_matrix">
-<em class="property">property </em><code class="sig-name descname">neutral_matrix</code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral_matrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Neutral mutations and keys</p>
@@ -645,7 +643,7 @@ ndarray object.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected">
-<em class="property">property </em><code class="sig-name descname">selected</code><a class="headerlink" href="#fwdpy11.DataMatrix.selected" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a buffer representing neutral variants.
 This buffer may be used to create a NumPy
 ndarray object.</p>
@@ -662,7 +660,7 @@ ndarray object.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected_keys">
-<em class="property">property </em><code class="sig-name descname">selected_keys</code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_keys" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected_keys</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keys for selected mutations used to generate matrix</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.6.1: </span>Type changed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
@@ -671,7 +669,7 @@ ndarray object.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected_matrix">
-<em class="property">property </em><code class="sig-name descname">selected_matrix</code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected_matrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Selected mutations and keys</p>
@@ -690,7 +688,7 @@ ndarray object.</p>
 
 <dl class="py class">
 <dt id="fwdpy11.StateMatrix">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">StateMatrix</code><a class="headerlink" href="#fwdpy11.StateMatrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">StateMatrix</span></code><a class="headerlink" href="#fwdpy11.StateMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simple matrix representation of variation data.</p>
 <p>These are not constructed directly.
 Rather, they are generated when a <a class="reference internal" href="#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> is generated .</p>
@@ -700,7 +698,7 @@ Rather, they are generated when a <a class="reference internal" href="#fwdpy11.D
 </div></blockquote>
 <dl class="py method">
 <dt id="fwdpy11.StateMatrix.positions">
-<em class="property">property </em><code class="sig-name descname">positions</code><a class="headerlink" href="#fwdpy11.StateMatrix.positions" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">positions</span></code><a class="headerlink" href="#fwdpy11.StateMatrix.positions" title="Permalink to this definition">¶</a></dt>
 <dd><p>The mutation positions.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.6.1: </span>Type changed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
@@ -709,7 +707,7 @@ Rather, they are generated when a <a class="reference internal" href="#fwdpy11.D
 
 <dl class="py method">
 <dt id="fwdpy11.StateMatrix.shape">
-<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fwdpy11.StateMatrix.shape" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">shape</span></code><a class="headerlink" href="#fwdpy11.StateMatrix.shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shape of the matrix.</p>
 </dd></dl>
 

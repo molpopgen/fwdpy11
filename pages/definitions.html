@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -54,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tutorial" href="tutorial.html" />
@@ -586,18 +586,18 @@
 <span id="simtypes"></span><h2>Simulation types<a class="headerlink" href="#simulation-types" title="Permalink to this headline">¶</a></h2>
 <p>When it comes to the effect of mutations on fitness, we have two types:</p>
 <dl class="glossary simple">
-<dt id="term-direct">direct</dt><dd><p>The mutation’s effect size(s) affects fitness directly.
+<dt id="term-direct">direct<a class="headerlink" href="#term-direct" title="Permalink to this term">¶</a></dt><dd><p>The mutation’s effect size(s) affects fitness directly.
 This is the <span class="math notranslate nohighlight">\(s\)</span> of standard population genetic models.</p>
 </dd>
-<dt id="term-indirect">indirect</dt><dd><p>The mutation’s effect size(s) affect one or more traits.
+<dt id="term-indirect">indirect<a class="headerlink" href="#term-indirect" title="Permalink to this term">¶</a></dt><dd><p>The mutation’s effect size(s) affect one or more traits.
 The trait vector/matrix of a diploid then determines fitness.</p>
 </dd>
 </dl>
 <p>Thus, we have two types of simulation:</p>
 <dl class="glossary simple">
-<dt id="term-Standard-population-genetic-simulation">“Standard population genetic simulation”</dt><dd><p>A simulation where mutations directly affect fitness</p>
+<dt id="term-Standard-population-genetic-simulation">“Standard population genetic simulation”<a class="headerlink" href="#term-Standard-population-genetic-simulation" title="Permalink to this term">¶</a></dt><dd><p>A simulation where mutations directly affect fitness</p>
 </dd>
-<dt id="term-Quantitative-genetic-simulation">“Quantitative genetic simulation”</dt><dd><p>A simulation where mutations affect trait (phenotype) values first,
+<dt id="term-Quantitative-genetic-simulation">“Quantitative genetic simulation”<a class="headerlink" href="#term-Quantitative-genetic-simulation" title="Permalink to this term">¶</a></dt><dd><p>A simulation where mutations affect trait (phenotype) values first,
 which in turn affects fitness.</p>
 </dd>
 </dl>
@@ -610,14 +610,14 @@ simulations as well as simulation of quantitative traits,
 we need to be precise about the terms we’re using.</p>
 <p>We apply the following definitions here:</p>
 <dl class="glossary simple">
-<dt id="term-genetic-value">genetic value</dt><dd><p>A <em>genetic value</em>, or <span class="math notranslate nohighlight">\(G\)</span>, is the result of applying a function
+<dt id="term-genetic-value">genetic value<a class="headerlink" href="#term-genetic-value" title="Permalink to this term">¶</a></dt><dd><p>A <em>genetic value</em>, or <span class="math notranslate nohighlight">\(G\)</span>, is the result of applying a function
 to the gamete data at a locus.</p>
 </dd>
-<dt id="term-trait-value">trait value</dt><dd><p>A <em>trait value</em>, or <em>phenotype</em>, <span class="math notranslate nohighlight">\(P\)</span>, reflects any adjustment
+<dt id="term-trait-value">trait value<a class="headerlink" href="#term-trait-value" title="Permalink to this term">¶</a></dt><dd><p>A <em>trait value</em>, or <em>phenotype</em>, <span class="math notranslate nohighlight">\(P\)</span>, reflects any adjustment
 made to <span class="math notranslate nohighlight">\(G\)</span>.  For example, the addition of random noise such
 that <span class="math notranslate nohighlight">\(P=G+E\)</span>, where <span class="math notranslate nohighlight">\(E\)</span> is the noise.</p>
 </dd>
-<dt id="term-fitness">fitness</dt><dd><p>A <em>fitness</em>, or <span class="math notranslate nohighlight">\(w\)</span> results from applying a function mapping
+<dt id="term-fitness">fitness<a class="headerlink" href="#term-fitness" title="Permalink to this term">¶</a></dt><dd><p>A <em>fitness</em>, or <span class="math notranslate nohighlight">\(w\)</span> results from applying a function mapping
 <span class="math notranslate nohighlight">\(P\)</span> to fitness. <span class="math notranslate nohighlight">\(w\)</span> is a non-negative float.</p>
 </dd>
 </dl>

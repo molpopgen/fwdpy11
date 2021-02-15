@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -583,7 +581,7 @@ was done in <a class="reference internal" href="tutorial.html#tutorial"><span cl
 <p>There are built-in types to handle common scenarios:</p>
 <dl class="py class">
 <dt id="fwdpy11.RandomAncientSamples">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">RandomAncientSamples</code><a class="headerlink" href="#fwdpy11.RandomAncientSamples" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">RandomAncientSamples</span></code><a class="headerlink" href="#fwdpy11.RandomAncientSamples" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preserve random samples of individuals at predetermined time points.</p>
 <p>This type randomly samples diploids at predetermined time points.
 For example, if we wanted to randomly sample 10 diploids
@@ -611,7 +609,7 @@ every N generations for the first 9N generations of a simulation:</p>
 <p>The first argument is the population itself.  The second is an instance of the following class:</p>
 <dl class="py class">
 <dt id="fwdpy11.SampleRecorder">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">SampleRecorder</code><a class="headerlink" href="#fwdpy11.SampleRecorder" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">SampleRecorder</span></code><a class="headerlink" href="#fwdpy11.SampleRecorder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allow recording of ancient samples during simulations with tree sequences.</p>
 <p>Instances of this type are <em>never</em> created by a user.  Rather,
 they are generated internally and passed to user-defined
@@ -622,7 +620,7 @@ for such recording.  The first function adds samples one
 at a time:</p>
 <dl class="py function">
 <dt id="fwdpy11.SampleRecorder.SampleRecorder.add_sample">
-<code class="sig-name descname">add_sample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">fwdpy11._fwdpy11.SampleRecorder</span></em>, <em class="sig-param"><span class="n">individual_index</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#fwdpy11.SampleRecorder.SampleRecorder.add_sample" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">add_sample</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.SampleRecorder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">individual_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.SampleRecorder.SampleRecorder.add_sample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add the index of an individual to the list of samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -635,7 +633,7 @@ at a time:</p>
 via a numpy array with dtype uint32:</p>
 <dl class="py function">
 <dt id="fwdpy11.SampleRecorder.SampleRecorder.assign">
-<code class="sig-name descname">assign</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n">fwdpy11._fwdpy11.SampleRecorder</span></em>, <em class="sig-param"><span class="n">samples</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a><span class="p">[</span>numpy.uint32<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="headerlink" href="#fwdpy11.SampleRecorder.SampleRecorder.assign" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">assign</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.SampleRecorder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint32</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.SampleRecorder.SampleRecorder.assign" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of individuals to the list of samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -54,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Model parameters" href="model_params.html" />
@@ -559,11 +559,11 @@
 <h1>Mapping genetic values to fitness<a class="headerlink" href="#mapping-genetic-values-to-fitness" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fwdpy11.GeneticValueToFitnessMap">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">GeneticValueToFitnessMap</code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GeneticValueToFitnessMap</span></code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>ABC for functions translating genetic values into fitness.</p>
 <dl class="py method">
 <dt id="fwdpy11.GeneticValueToFitnessMap.maps_to_fitness">
-<em class="property">property </em><code class="sig-name descname">maps_to_fitness</code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.maps_to_fitness" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">maps_to_fitness</span></code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.maps_to_fitness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if object represents a mapping directly to fitness, and
 False otherwise.</p>
 <div class="versionadded">
@@ -573,7 +573,7 @@ False otherwise.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.GeneticValueToFitnessMap.maps_to_trait_value">
-<em class="property">property </em><code class="sig-name descname">maps_to_trait_value</code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.maps_to_trait_value" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">maps_to_trait_value</span></code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.maps_to_trait_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if object represents a trait value, and
 False otherwise.</p>
 <div class="versionadded">
@@ -583,7 +583,7 @@ False otherwise.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.GeneticValueToFitnessMap.shape">
-<em class="property">property </em><code class="sig-name descname">shape</code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.shape" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">shape</span></code><a class="headerlink" href="#fwdpy11.GeneticValueToFitnessMap.shape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the shape (dimensonality) of the object</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.7.0.</span></p>
@@ -594,19 +594,19 @@ False otherwise.</p>
 
 <dl class="py class">
 <dt id="fwdpy11.GeneticValueIsTrait">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">GeneticValueIsTrait</code><a class="headerlink" href="#fwdpy11.GeneticValueIsTrait" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GeneticValueIsTrait</span></code><a class="headerlink" href="#fwdpy11.GeneticValueIsTrait" title="Permalink to this definition">¶</a></dt>
 <dd><p>ABC for functions mapping genetic values representing traits to fitness.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="fwdpy11.GeneticValueIsFitness">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">GeneticValueIsFitness</code><a class="headerlink" href="#fwdpy11.GeneticValueIsFitness" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GeneticValueIsFitness</span></code><a class="headerlink" href="#fwdpy11.GeneticValueIsFitness" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type implying the the genetic value is fitness.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="fwdpy11.GSS">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">GSS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimum</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>fwdpy11.genetic_values.Optimum<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">VS</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GSS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.Optimum</span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gaussian stabilizing selection on a single trait.</p>
 <p>This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
@@ -633,19 +633,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.GSS.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.GSS.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.GSS.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
@@ -653,7 +653,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt id="fwdpy11.GSSmo">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">GSSmo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optima</span><span class="p">:</span> <span class="n">List<span class="p">[</span>fwdpy11.genetic_values.Optimum<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GSSmo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.Optimum</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gaussian stabilizing selection on a single trait with moving
 optimum.</p>
 <p>This class has the following attributes, whose names
@@ -675,19 +675,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.GSSmo.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.GSSmo.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.GSSmo.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSSmo.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
@@ -695,7 +695,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt id="fwdpy11.Optimum">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">Optimum</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimum</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">VS</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">when</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">Optimum</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters for a trait optimum.</p>
 <p>This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
@@ -725,19 +725,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.Optimum.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.Optimum.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.Optimum.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
@@ -745,7 +745,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt id="fwdpy11.PleiotropicOptima">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">PleiotropicOptima</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optima</span><span class="p">:</span> <span class="n">List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">VS</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">when</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PleiotropicOptima</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters for multiple trait optima</p>
 <p>This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
@@ -775,19 +775,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.PleiotropicOptima.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.PleiotropicOptima.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.PleiotropicOptima.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
@@ -795,7 +795,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt id="fwdpy11.MultivariateGSS">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">MultivariateGSS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optima</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>fwdpy11.genetic_values.PleiotropicOptima<span class="p">, </span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span><span class="p">]</span></span></em>, <em class="sig-param"><span class="n">VS</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MultivariateGSS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.PleiotropicOptima</span><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multivariate gaussian stablizing selection.</p>
 <p>Maps a multidimensional trait to fitness using the Euclidian
 distance of a vector of trait values to a vector of optima.</p>
@@ -829,19 +829,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSS.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSS.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSS.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSS.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
@@ -849,7 +849,7 @@ low-level C++ class</p>
 
 <dl class="py class">
 <dt id="fwdpy11.MultivariateGSSmo">
-<em class="property">class </em><code class="sig-prename descclassname">fwdpy11.</code><code class="sig-name descname">MultivariateGSSmo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optima</span><span class="p">:</span> <span class="n">List<span class="p">[</span>fwdpy11.genetic_values.PleiotropicOptima<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MultivariateGSSmo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.PleiotropicOptima</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multivariate gaussian stablizing selection with moving optima
 This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
@@ -868,19 +868,19 @@ low-level C++ class</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSSmo.asblack">
-<code class="sig-name descname">asblack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asblack" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSSmo.asdict">
-<code class="sig-name descname">asdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asdict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.MultivariateGSSmo.fromdict">
-<em class="property">classmethod </em><code class="sig-name descname">fromdict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.fromdict" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
