@@ -18,6 +18,9 @@ jobs:
       run:
         shell: bash
     steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.6.0
         with:
@@ -50,6 +53,10 @@ jobs:
         run: |
             echo "LLVM_CONFIG=/usr/lib/llvm-9/bin/llvm-config" >> $GITHUB_ENV
 
+      - name: Python version
+        run: |
+          python --version
+
       - name: Cache pip dependancies
         id: cache
         uses: actions/cache@v2
@@ -62,11 +69,11 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
             # These are needed to install black:
-            python3 -m pip install --upgrade setuptools wheel
-            python3 -m pip install --upgrade -r requirements.txt
-            python3 -m pip install --upgrade -r doc/requirements.txt
+            python -m pip install --upgrade setuptools wheel
+            python -m pip install --upgrade -r requirements.txt
+            python -m pip install --upgrade -r doc/requirements.txt
             # For sdist validation
-            python3 -m pip install --upgrade twine
+            python -m pip install --upgrade twine
 
       - name: Set GCC as compiler
         if: matrix.compiler == 'gcc'
@@ -90,11 +97,11 @@ jobs:
 
       - name: Compile extension module
         run: |
-            CXX=$CXX CC=$CC python3 setup.py build_ext -i
+            CXX=$CXX CC=$CC python setup.py build_ext -i
 
       - name: Run Python tests
         run: |
-            python3 -m pytest -n 2 tests
+            python -m pytest -n 2 tests
 
       - name: Build manual and run doctests
         working-directory: doc
@@ -103,13 +110,13 @@ jobs:
 
       - name: Validate the sdist
         run: |
-            python3 setup.py sdist
-            python3 setup.py check
-            python3 -m twine check dist/*.tar.gz
+            python setup.py sdist
+            python setup.py check
+            python -m twine check dist/*.tar.gz
 
       - name: Test pip install from dist in fresh venv
         run: |
-            python3 -m venv venv
+            python -m venv venv
             source venv/bin/activate
             pip install --upgrade setuptools pip wheel
             python -m pip install dist/*.tar.gz
