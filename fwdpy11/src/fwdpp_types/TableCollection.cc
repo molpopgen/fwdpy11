@@ -18,7 +18,6 @@ init_ts_TableCollection(py::module& m)
     // A table_collection will not be user-constructible.  Rather,
     // they will be members of the Population classes.
     // TODO: work out conversion to msprime format
-    // TODO: allow preserved_nodes to be cleared
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::std_table_collection,
                std::shared_ptr<fwdpp::ts::std_table_collection>>(
@@ -39,9 +38,6 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("output_right", &fwdpp::ts::std_table_collection::output_right,
                       "Index vector describing when nodes leave trees.")
         .def("build_indexes", &fwdpp::ts::std_table_collection::build_indexes)
-        .def_readonly("preserved_nodes",
-                      &fwdpp::ts::std_table_collection::preserved_nodes,
-                      "List of nodes corresponding to ancient samples.")
         .def_property_readonly("genome_length",
                                &fwdpp::ts::std_table_collection::genome_length,
                                "Return the genome/sequence length.")
@@ -54,8 +50,7 @@ init_ts_TableCollection(py::module& m)
                                       fwdpy11::vector_to_list(tables.nodes),
                                       fwdpy11::vector_to_list(tables.edges),
                                       fwdpy11::vector_to_list(tables.mutations),
-                                      fwdpy11::vector_to_list(tables.sites),
-                                      fwdpy11::vector_to_list(tables.preserved_nodes));
+                                      fwdpy11::vector_to_list(tables.sites));
             },
             [](py::tuple t) {
                 auto length = t[0].cast<double>();
@@ -69,9 +64,6 @@ init_ts_TableCollection(py::module& m)
                     t[3].cast<py::list>());
                 tables.sites = fwdpy11::list_to_vector<
                     fwdpp::ts::std_table_collection::site_table>(t[4].cast<py::list>());
-                tables.preserved_nodes = fwdpy11::list_to_vector<decltype(
-                    fwdpp::ts::std_table_collection::preserved_nodes)>(
-                    t[5].cast<py::list>());
                 tables.build_indexes();
                 return tables;
             }));

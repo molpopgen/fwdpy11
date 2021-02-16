@@ -55,6 +55,7 @@ init_infinite_sites(py::module& m)
                           recycling_bin, pop, rng, left, right, generation);
                   };
             pop.fill_alive_nodes();
+            pop.fill_preserved_nodes();
             auto nmuts = fwdpp::ts::mutate_tables(
                 rng, apply_mutations, *pop.tables, pop.alive_nodes, mu);
             if (nmuts == 0)
@@ -62,8 +63,10 @@ init_infinite_sites(py::module& m)
                     return nmuts;
                 }
             fwdpp::ts::count_mutations(*pop.tables, pop.mutations,
-                                       pop.alive_nodes, pop.mcounts,
-                                       pop.mcounts_from_preserved_nodes);
+                                       pop.alive_nodes, pop.preserved_sample_nodes,
+                                       pop.mcounts, pop.mcounts_from_preserved_nodes);
+            pop.alive_nodes.clear();
+            pop.preserved_sample_nodes.clear();
             return nmuts;
         },
         py::arg("rng"), py::arg("pop"), py::arg("mu"));

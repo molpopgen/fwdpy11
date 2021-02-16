@@ -222,7 +222,7 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
         individual[k] = v
     flags = [1] * 2 * self.N + [0] * (len(node_view) - 2 * self.N)
     # Bug fixed in 0.3.1: add preserved nodes to samples list
-    for i in self.tables.preserved_nodes:
+    for i in np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten():
         flags[i] = 1
     tc.nodes.set_columns(
         flags=flags,
@@ -266,8 +266,32 @@ def _deme_sizes(self, as_dict=False):
     return {i: j for i, j in zip(deme_sizes[0], deme_sizes[1])}
 
 
+def _preserved_nodes(self):
+    """
+    Return an array of nodes associated with preserved/ancient samples.
+
+    :rtype: :class:`np.ndarray`
+
+    .. versionadded:: 0.13.0
+    """
+    return np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten()
+
+
+def _ancient_sample_nodes(self):
+    """
+    Return an array of nodes associated with preserved/ancient samples.
+
+    Alias for :attr:`fwdpy11.DiploidPopulation.preserved_nodes`.
+
+    .. versionadded:: 0.13.0
+    """
+    return self.preserved_nodes
+
+
 def _patch_diploid_population(d):
     d.alive_nodes = property(_alive_nodes)
     d.sample_timepoints = _traverse_sample_timepoints
     d.dump_tables_to_tskit = _dump_tables_to_tskit
     d.deme_sizes = _deme_sizes
+    d.preserved_nodes = property(_preserved_nodes)
+    d.ancient_sample_nodes = property(_ancient_sample_nodes)

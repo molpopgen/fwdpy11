@@ -1,7 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 #include <pybind11/stl.h>
-#include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include <fwdpp/ts/std_table_collection.hpp>
 #include <fwdpp/ts/site_visitor.hpp>
@@ -173,7 +173,7 @@ init_variant_iterator(py::module& m)
 
                  No longer requires a :class:`fwdpy11.MutationVector`.
             )delim")
-        .def(py::init([](const fwdpy11::Population& pop,
+        .def(py::init([](const fwdpy11::DiploidPopulation& pop,
                          const bool include_preserved, double begin,
                          double end, bool include_neutral_variants,
                          bool include_selected_variants) {
@@ -181,9 +181,11 @@ init_variant_iterator(py::module& m)
                  std::iota(samples.begin(), samples.end(), 0);
                  if (include_preserved)
                      {
-                         samples.insert(samples.end(),
-                                        pop.tables->preserved_nodes.begin(),
-                                        pop.tables->preserved_nodes.end());
+                         for(auto & md : pop.ancient_sample_metadata)
+                         {
+                            samples.push_back(md.nodes[0]);
+                            samples.push_back(md.nodes[1]);
+                         }
                      }
                  return VariantIterator(*pop.tables, samples, begin, end,
                                         include_neutral_variants,

@@ -206,7 +206,6 @@ init_DiploidPopulation(py::module& m)
                     {
                         dump(s, f);
                     }
-                dump(self.tables->preserved_nodes, f);
                 dump(self.genetic_value_matrix, f);
                 dump(self.ancient_sample_genetic_value_matrix, f);
             },
@@ -320,9 +319,6 @@ init_DiploidPopulation(py::module& m)
                         rv.tables->sites.push_back(
                             load(f).cast<fwdpp::ts::site>());
                     }
-
-                rv.tables->preserved_nodes
-                    = load(f).cast<decltype(rv.tables->preserved_nodes)>();
                 rv.tables->build_indexes();
                 rv.rebuild_mutation_lookup(false);
                 rv.genetic_value_matrix

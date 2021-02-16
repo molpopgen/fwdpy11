@@ -278,5 +278,12 @@ def _fs(
     return fs
 
 
+def _preserved_nodes(self):
+    raise AttributeError(
+        "TableCollection.preserved_nodes was removed in 0.13.0 and is now an attribute of DiploidPopulation"
+    )
+
+
 def _patch_table_collection(t):
     t.fs = _fs
+    t.preserved_nodes = property(_preserved_nodes)

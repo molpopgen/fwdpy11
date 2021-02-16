@@ -37,9 +37,6 @@ simplify(const fwdpy11::Population& pop,
             throw std::invalid_argument("invalid sample list");
         }
     auto t(*pop.tables);
-    // NOTE: If the user wants to keep ancient samples,
-    // they must pass them in to the samples list
-    t.preserved_nodes.clear();
     fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
     auto rv = simplifier.simplify(t, samples);
     t.build_indexes();
@@ -64,7 +61,7 @@ init_simplify_functions(py::module& m)
             Note that the samples argument is agnostic with respect to the time of
             the nodes in the input tables. Thus, you may do things like simplify
             to a set of "currently-alive" nodes plus some or all ancient samples by
-            including some node IDs from :attr:`fwdpy11.TableCollection.preserved_nodes`.
+            including some node IDs from :attr:`fwdpy11.DiploidPopulation.ancient_sample_metadata`.
             
             If the input contains ancient samples, and you wish to include them in the output,
             then you need to include their IDs in the samples argument.
@@ -95,7 +92,6 @@ init_simplify_functions(py::module& m)
         [](const fwdpp::ts::std_table_collection& tables,
            const std::vector<fwdpp::ts::table_index_t>& samples) -> py::tuple {
             auto t(tables);
-            t.preserved_nodes.clear();
             fwdpp::ts::table_simplifier<fwdpp::ts::std_table_collection> simplifier{};
             auto rv = simplifier.simplify(t, samples);
             t.build_indexes();

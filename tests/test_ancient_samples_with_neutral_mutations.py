@@ -132,7 +132,6 @@ def test_ancient_samples_and_neutral_mutations(
     )
 
     if resetter is not None:
-        assert len(mslike_pop.tables.preserved_nodes) == 0
         assert len(mslike_pop.ancient_sample_metadata) == 0
 
         # FIXME: check that the number of sampled time points is correct?
@@ -141,10 +140,6 @@ def test_ancient_samples_and_neutral_mutations(
 
         assert all([i == 10 for i in resetter.sample_sizes]) is True
     else:
-        assert (
-            len(mslike_pop.tables.preserved_nodes)
-            == len([i for i in range(1, params.simlen)]) * 10 * 2
-        )
         assert (
             len(mslike_pop.ancient_sample_metadata)
             == len([i for i in range(1, params.simlen)]) * 10

@@ -181,8 +181,10 @@ namespace fwdpy11
                         std::vector<fwdpp::ts::table_index_t> samples(2 * pop.N);
                         std::iota(samples.begin(), samples.end(), 0);
                         fwdpp::ts::count_mutations(*pop.tables, pop.mutations, samples,
-                                                   pop.mcounts,
-                                                   pop.mcounts_from_preserved_nodes);
+                                                   pop.mcounts);
+                        pop.mcounts_from_preserved_nodes.resize(pop.mutations.size());
+                        std::fill(begin(pop.mcounts_from_preserved_nodes),
+                                  end(pop.mcounts_from_preserved_nodes), 0);
                     }
                 if (version > 2)
                     {
