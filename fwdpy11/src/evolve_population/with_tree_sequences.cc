@@ -29,6 +29,7 @@
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
+#include <fwdpp/ts/make_simplifier_state.hpp>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
@@ -60,9 +61,8 @@ apply_treseq_resetting_of_ancient_samples(
     fwdpy11::DiploidPopulation &pop)
 {
     recorder(pop);
-    if (!pop.tables->preserved_nodes.empty())
+    if (!pop.ancient_sample_metadata.empty())
         {
-            pop.tables->preserved_nodes.clear();
             pop.ancient_sample_metadata.clear();
             pop.ancient_sample_genetic_value_matrix.clear();
         }
@@ -384,9 +384,6 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument("cannot preserve first generation when "
                                                 "the edge table is not empty");
                 }
-            pop.tables->preserved_nodes.insert(end(pop.tables->preserved_nodes),
-                                               begin(pop.alive_nodes),
-                                               end(pop.alive_nodes));
             pop.ancient_sample_metadata.insert(end(pop.ancient_sample_metadata),
                                                begin(pop.diploid_metadata),
                                                end(pop.diploid_metadata));
@@ -573,11 +570,6 @@ evolve_with_tree_sequences(
                                         "ancient sample index greater than "
                                         "current population size");
                                 }
-                            auto x = fwdpy11::parent_nodes_from_metadata(
-                                i, pop.diploid_metadata, 0);
-                            pop.tables->preserved_nodes.push_back(x.first);
-                            pop.tables->preserved_nodes.push_back(x.second);
-
                             // Record the metadata for this individual
                             pop.ancient_sample_metadata.push_back(
                                 pop.diploid_metadata[i]);
@@ -601,19 +593,21 @@ evolve_with_tree_sequences(
             stopping_criteron_met = stopping_criteron(pop, simplified);
         }
 
-    // NOTE: if tables.preserved_nodes overlaps with samples,
+    // NOTE: if pop.preserved_sample_nodes overlaps with samples,
     // then simplification throws an error. But, since it is annoying
     // for a user to have to remember not to do that, we filter the list
     // here
     pop.fill_alive_nodes();
     std::sort(begin(pop.alive_nodes), end(pop.alive_nodes));
+    pop.fill_preserved_nodes();
     auto itr = std::remove_if(
-        begin(pop.tables->preserved_nodes), end(pop.tables->preserved_nodes),
+        begin(pop.preserved_sample_nodes), end(pop.preserved_sample_nodes),
         [&pop](const fwdpp::ts::table_index_t l) {
             return std::binary_search(begin(pop.alive_nodes), end(pop.alive_nodes), l);
         });
-    pop.tables->preserved_nodes.erase(itr, end(pop.tables->preserved_nodes));
+    pop.preserved_sample_nodes.erase(itr, end(pop.preserved_sample_nodes));
     pop.alive_nodes.clear();
+    pop.preserved_sample_nodes.clear();
     pop.ancient_sample_metadata.erase(
         std::remove_if(begin(pop.ancient_sample_metadata),
                        end(pop.ancient_sample_metadata),

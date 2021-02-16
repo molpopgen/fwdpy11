@@ -16,12 +16,14 @@ index_and_count_mutations(bool suppress_edge_table_indexing,
         {
             return;
         }
-    if (pop.tables->preserved_nodes.empty() || simulating_neutral_variants)
+    if (pop.ancient_sample_metadata.empty() || simulating_neutral_variants)
         {
             pop.tables->build_indexes();
             pop.fill_alive_nodes();
+            pop.fill_preserved_nodes();
             fwdpp::ts::count_mutations(*pop.tables, pop.mutations, pop.alive_nodes,
-                                       pop.mcounts, pop.mcounts_from_preserved_nodes);
+                                       pop.preserved_sample_nodes, pop.mcounts,
+                                       pop.mcounts_from_preserved_nodes);
         }
     else
         {

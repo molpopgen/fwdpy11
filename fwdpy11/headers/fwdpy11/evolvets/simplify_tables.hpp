@@ -50,26 +50,23 @@ namespace fwdpy11
         // As of 0.8.0, we do not need to sort edges!
         fwdpp::ts::sort_mutation_table(tables);
         pop.fill_alive_nodes();
+        pop.fill_preserved_nodes();
         std::vector<fwdpp::ts::table_index_t> idmap;
-        std::vector<std::size_t> preserved_nodes;
-        fwdpp::ts::simplify_tables(pop.alive_nodes, alive_at_last_simplification,
+        std::vector<std::size_t> preserved_mutations;
+        auto samples(pop.alive_nodes);
+        samples.insert(end(samples), begin(pop.preserved_sample_nodes), end(pop.preserved_sample_nodes));
+        fwdpp::ts::simplify_tables(samples, alive_at_last_simplification,
                                    fwdpp::ts::simplification_flags{}, simplifier_state,
-                                   *pop.tables, new_edge_buffer, idmap, preserved_nodes);
-        auto rv = std::make_pair(std::move(idmap), std::move(preserved_nodes));
+                                   *pop.tables, new_edge_buffer, idmap, preserved_mutations);
+        auto rv = std::make_pair(std::move(idmap), std::move(preserved_mutations));
         for (auto &s : pop.alive_nodes)
             {
                 s = rv.first[s];
             }
-#ifndef NDEBUG
-        for (auto &s : tables.preserved_nodes)
+        for (auto &s: pop.preserved_sample_nodes)
             {
-                if (s == -1)
-                    {
-                        throw std::runtime_error("ancient sample node is NULL "
-                                                 "after simplification");
-                    }
+                s = rv.first[s];
             }
-#endif
         // Remove mutations that are simplified out
         // from the population hash table.
         std::vector<int> preserved(pop.mutations.size(), 0);
@@ -93,9 +90,10 @@ namespace fwdpy11
                 return rv;
             }
         pop.tables->build_indexes();
-        if (pop.tables->preserved_nodes.empty())
+        if (pop.ancient_sample_metadata.empty())
             {
                 fwdpp::ts::count_mutations(tables, pop.mutations, pop.alive_nodes,
+                                           pop.preserved_sample_nodes,
                                            pop.mcounts, mcounts_from_preserved_nodes);
             }
         else

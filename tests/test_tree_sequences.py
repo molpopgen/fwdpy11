@@ -136,8 +136,8 @@ def mcounts_comparison_details(pop, counts, ts):
 
 
 def mcounts_comparison(pop, ts):
-    if len(pop.tables.preserved_nodes) > 0:
-        ts2 = ts.simplify(pop.tables.preserved_nodes)
+    if len(pop.preserved_nodes) > 0:
+        ts2 = ts.simplify(pop.preserved_nodes)
         c = mcounts_comparison_details(pop, pop.mcounts_ancient_samples, ts2)
         if c is not True:
             return c
@@ -552,7 +552,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.assertTrue(self.pop.mut_lookup == up.mut_lookup)
 
     def test_count_mutations_preserved_samples(self):
-        mc = fwdpy11.count_mutations(self.pop, self.pop.tables.preserved_nodes)
+        mc = fwdpy11.count_mutations(self.pop, self.pop.preserved_nodes)
         pmc = np.array(self.pop.mcounts_ancient_samples)
         self.assertTrue(np.array_equal(mc, pmc))
 
@@ -564,7 +564,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_VariantIteratorFromPreservedSamples(self):
         n = np.array(self.pop.tables.nodes)
-        pn = np.array(self.pop.tables.preserved_nodes)
+        pn = np.array(self.pop.preserved_nodes)
         at = n["time"][pn]
         for u in np.unique(at):
             n = pn[np.where(at == u)[0]]
@@ -575,7 +575,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertNotEqual(k.key, np.iinfo(np.uint64).max)
 
     def test_mcounts_from_ancient_samples(self):
-        vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.tables.preserved_nodes)
+        vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.preserved_nodes)
         for v in vi:
             k = v.records[0]
             self.assertEqual(self.pop.mcounts_ancient_samples[k.key], v.genotypes.sum())
@@ -585,7 +585,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         amd = np.array(self.pop.ancient_sample_metadata, copy=False)
         n = np.array(self.pop.tables.nodes)
         at = n["time"][amd["nodes"][:, 0]]
-        pn = np.array(self.pop.tables.preserved_nodes)
+        pn = np.array(self.pop.preserved_nodes)
         self.assertEqual(2 * len(amd), len(pn))
         # j contains (time, nodes, metadata).  The metadata
         # also contain nodes
@@ -610,9 +610,9 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertEqual(amd["parents"][k][1], l.parents[1])
 
             # Extract out the nodes from preserved_nodes
-            idx = np.where(n["time"][self.pop.tables.preserved_nodes] == i)[0]
+            idx = np.where(n["time"][self.pop.preserved_nodes] == i)[0]
             self.assertTrue(
-                np.array_equal(np.array(self.pop.tables.preserved_nodes)[idx], j[1])
+                np.array_equal(np.array(self.pop.preserved_nodes)[idx], j[1])
             )
 
     def test_binary_round_trip(self):
@@ -1222,7 +1222,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                 self.timepoint_seen = {}
 
             def __call__(self, pop):
-                assert len(pop.tables.preserved_nodes) // 2 == len(
+                assert len(pop.preserved_nodes) // 2 == len(
                     pop.ancient_sample_metadata
                 )
                 # Get the most recent ancient samples
@@ -1277,7 +1277,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
         )
 
     def test_no_preserved_nodes(self):
-        self.assertEqual(len(self.pop.tables.preserved_nodes), 0)
+        self.assertEqual(len(self.pop.preserved_nodes), 0)
 
     def test_no_ancient_sample_metadata(self):
         self.assertEqual(len(self.pop.ancient_sample_metadata), 0)
@@ -1367,7 +1367,7 @@ class TestRecapitation(unittest.TestCase):
 
     def test_ancient_sample_records(self):
         self.assertEqual(len(self.pop.ancient_sample_metadata), self.pop.N)
-        self.assertEqual(len(self.pop.tables.preserved_nodes), 2 * self.pop.N)
+        self.assertEqual(len(self.pop.ancient_sample_nodes), 2 * self.pop.N)
 
     def test_ancient_sample_times(self):
         nodes = np.array(self.pop.tables.nodes, copy=False)
