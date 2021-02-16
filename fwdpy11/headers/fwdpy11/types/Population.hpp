@@ -163,6 +163,7 @@ namespace fwdpy11
 
         virtual std::size_t ancient_sample_metadata_size() const = 0;
         virtual void fill_alive_nodes() = 0;
+        virtual void fill_preserved_nodes() = 0;
     };
 }
 
