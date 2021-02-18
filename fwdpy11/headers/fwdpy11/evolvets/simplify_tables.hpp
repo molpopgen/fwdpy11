@@ -39,11 +39,12 @@ namespace fwdpy11
     // TODO allow for fixation recording
     // and simulation of neutral variants
     template <typename poptype, typename SimplificationState>
-    std::pair<std::vector<fwdpp::ts::table_index_t>, std::vector<std::size_t>>
+    void
     simplify_tables(
         poptype &pop, std::vector<fwdpp::uint_t> &mcounts_from_preserved_nodes,
         std::vector<fwdpp::ts::table_index_t> &alive_at_last_simplification,
         fwdpp::ts::std_table_collection &tables, SimplificationState &simplifier_state,
+        fwdpp::ts::simplify_tables_output & simplification_output,
         fwdpp::ts::edge_buffer &new_edge_buffer, const bool preserve_selected_fixations,
         const bool simulating_neutral_variants, const bool suppress_edge_table_indexing)
     {
@@ -51,26 +52,23 @@ namespace fwdpy11
         fwdpp::ts::sort_mutation_table(tables);
         pop.fill_alive_nodes();
         pop.fill_preserved_nodes();
-        std::vector<fwdpp::ts::table_index_t> idmap;
-        std::vector<std::size_t> preserved_mutations;
         auto samples(pop.alive_nodes);
         samples.insert(end(samples), begin(pop.preserved_sample_nodes), end(pop.preserved_sample_nodes));
         fwdpp::ts::simplify_tables(samples, alive_at_last_simplification,
                                    fwdpp::ts::simplification_flags{}, simplifier_state,
-                                   *pop.tables, new_edge_buffer, idmap, preserved_mutations);
-        auto rv = std::make_pair(std::move(idmap), std::move(preserved_mutations));
+                                   *pop.tables, new_edge_buffer, simplification_output);
         for (auto &s : pop.alive_nodes)
             {
-                s = rv.first[s];
+                s = simplification_output.idmap[s];
             }
         for (auto &s: pop.preserved_sample_nodes)
             {
-                s = rv.first[s];
+                s = simplification_output.idmap[s];
             }
         // Remove mutations that are simplified out
         // from the population hash table.
         std::vector<int> preserved(pop.mutations.size(), 0);
-        for (auto p : rv.second)
+        for (auto p : simplification_output.preserved_mutations)
             {
                 preserved[p] = 1;
             }
@@ -87,7 +85,7 @@ namespace fwdpy11
             {
                 pop.mcounts.resize(pop.mutations.size(), 0);
                 pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
-                return rv;
+                return;
             }
         pop.tables->build_indexes();
         if (pop.ancient_sample_metadata.empty())
@@ -136,7 +134,6 @@ namespace fwdpy11
             {
                 fwdpp::ts::rebuild_site_table(tables);
             }
-        return rv;
     } // namespace fwdpy11
 } // namespace fwdpy11
 #endif
