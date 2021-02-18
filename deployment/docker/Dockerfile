@@ -1,4 +1,4 @@
-FROM ubuntu:groovy
+FROM ubuntu:focal
 
 # Once this image is built:
 # If you have a script $HOME/tmp/foo.py,

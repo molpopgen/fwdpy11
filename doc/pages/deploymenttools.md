@@ -1,5 +1,30 @@
 # Deployment tools
 
+:::{note}
+`Docker` commands require `sudo` on most systems.
+On trusted machines, you may wish to add yourself to the `docker` group as described [here](https://docs.docker.com/engine/install/linux-postinstall/).
+:::
+
+## Docker images
+
+The directory `deployment/docker` contains a `Dockerfile` that will install a minimal environment for running `fwpdy11`.
+In the long run, this file will be the basis for auto-deployed Docker images.
+
+From the `root` of the `fwdpy11` repository:
+
+```sh
+docker build --rm IMAGE_NAME -f deployment/docker/Dockerfile .
+```
+
+The result with be a Docker image named `IMAGE_NAME`.
+
+Once this image is built, you may use it to run scripts on your local machine.
+If you have a script `$HOME/tmp/foo.py`, you can run it via:
+
+```sh
+docker run --rm -v $HOME/tmp:/app IMAGE_NAME python3 /app/foo.py
+```
+
 ## Linux wheel building
 
 The directory `deployment/linux_wheels` defines a `Docker` work flow to build binary wheels on Linux.
