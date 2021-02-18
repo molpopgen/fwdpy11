@@ -15,6 +15,7 @@
 - part: Installation and setup
   chapters:
   - file: pages/userenv
+  - file: pages/deploymenttools
 
 - part: Short vignettes - operations on populations
   chapters:
