@@ -138,6 +138,11 @@
    Setting up user environments for installation
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="deploymenttools.html">
+   Deployment tools
+  </a>
+ </li>
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
@@ -782,6 +787,16 @@ for an instance of this type.”</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="fwdpy11.DiploidPopulation.ancient_sample_nodes">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">ancient_sample_nodes</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.ancient_sample_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of nodes associated with preserved/ancient samples.</p>
+<p>Alias for <a class="reference internal" href="#fwdpy11.DiploidPopulation.preserved_nodes" title="fwdpy11.DiploidPopulation.preserved_nodes"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.preserved_nodes</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.clear">
 <code class="sig-name descname"><span class="pre">clear</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.DiploidPopulation.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clears all population data.</p>
@@ -918,6 +933,20 @@ memory.  It is, however, slower.</p>
 </dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.3.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fwdpy11.DiploidPopulation.preserved_nodes">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">preserved_nodes</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.preserved_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return an array of nodes associated with preserved/ancient samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">np.ndarray</span></code></p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
 </div>
 </dd></dl>
 
@@ -1285,12 +1314,6 @@ returned, indexed in the same order as the input windows.</p></li>
 <dt id="fwdpy11.TableCollection.output_right">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">output_right</span></code><a class="headerlink" href="#fwdpy11.TableCollection.output_right" title="Permalink to this definition">¶</a></dt>
 <dd><p>Index vector describing when nodes leave trees.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fwdpy11.TableCollection.preserved_nodes">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">preserved_nodes</span></code><a class="headerlink" href="#fwdpy11.TableCollection.preserved_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of nodes corresponding to ancient samples.</p>
 </dd></dl>
 
 <dl class="py method">
