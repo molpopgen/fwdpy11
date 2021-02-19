@@ -156,7 +156,7 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     :param s: the selection coefficient
     :type s: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -217,7 +217,7 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     :param mean: the mean selection coefficient
     :type s: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -282,7 +282,7 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     :param shape: the shape parameter of the distribution
     :type shape: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -345,7 +345,7 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     :param sd: standard deviation of effect sizes
     :type sd: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -408,7 +408,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     :param sigma: the sigma parameter
     :type sigma: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to(end-beg)*weight
     :type Constructor: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -473,7 +473,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
         :param weight: the weight to assign
         :type weight: float
         :param h: the dominance
-        :type h: float
+        :type h: typing.Union[float, fwdpy11.MutationDominance]
         :param coupled: if True, the weight is converted to(end-beg)*weight
         :type coupled: bool
         :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -519,7 +519,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     :param hi: upper bound on s
     :type hi: float
     :param h: the dominance
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
@@ -587,7 +587,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     :param fixed_effect: Fixed effect size. Defaults to 0.0.
     :type fixed_effect: float
     :param h: Dominance. Defaults to 1.0
-    :type h: float
+    :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: Specify if weight is function of end-beg or not. Defaults to True
     :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
