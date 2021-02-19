@@ -137,7 +137,7 @@ class Region(fwdpy11._fwdpy11._ll_Region):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     """
@@ -198,7 +198,7 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     """
@@ -261,7 +261,7 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     """
@@ -326,7 +326,7 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     """
@@ -387,7 +387,7 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     """
@@ -498,7 +498,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(**_common_attr_attribs)
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     """
@@ -563,7 +563,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr_class_to_from_dict
+@attr_class_to_from_dict_no_recurse
 @attr.s(eq=False, **_common_attr_attribs)
 class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffects):
     """
