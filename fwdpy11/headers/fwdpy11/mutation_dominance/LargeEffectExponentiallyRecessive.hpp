@@ -10,10 +10,13 @@ namespace fwdpy11
     struct LargeEffectExponentiallyRecessive : public MutationDominance
     {
         const double k;
+        const double scaling;
 
-        explicit LargeEffectExponentiallyRecessive(double k) : MutationDominance{}, k{k}
+        explicit LargeEffectExponentiallyRecessive(double k, double scaling)
+            : MutationDominance{}, k{k}, scaling{scaling}
         {
             fwdpp::validators::isfinite(k, "k must be finite");
+            fwdpp::validators::isfinite(scaling, "scaling must be finite");
             fwdpp::validators::is_positive(k, "k must be > 0.0");
         }
 
@@ -21,7 +24,7 @@ namespace fwdpy11
         generate_dominance(const GSLrng_t& rng,
                            const double effect_size) const override final
         {
-            return std::exp(-k * std::abs(effect_size));
+            return scaling * std::exp(-k * std::abs(effect_size));
         }
 
         std::shared_ptr<MutationDominance>
