@@ -27,6 +27,7 @@
   - file: short_vignettes/genetics_vignettes_intro
   - file: short_vignettes/geneticmaps_vignette
   - file: short_vignettes/des_vignette
+  - file: short_vignettes/mutationdominance_vignette
   - file: short_vignettes/neutralmuts_vignette
   - file: short_vignettes/gvalues_fitness
   - file: short_vignettes/gvalues_traits
