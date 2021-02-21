@@ -82,4 +82,25 @@
     This class inherits from :class:`fwdpy11.GeneticMapUnit`
 ```
 
+```{eval-rst}
+.. autoclass:: fwdpy11.MutationDominance
+    
+    See :ref:`here <mutationdominance_vignette>` for details.
+
+.. autoclass:: fwdpy11.FixedDominance
+    
+    See :ref:`here <mutationdominance_vignette>` for details.
+
+.. autoclass:: fwdpy11.UniformDominance
+    
+    See :ref:`here <mutationdominance_vignette>` for details.
+
+.. autoclass:: fwdpy11.ExponentialDominance
+    
+    See :ref:`here <mutationdominance_vignette>` for details.
+
+.. autoclass:: fwdpy11.LargeEffectExponentiallyRecessive
+    
+    See :ref:`here <mutationdominance_vignette>` for details.
+```
 

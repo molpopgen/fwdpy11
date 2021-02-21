@@ -52,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Module fwdpy11.tskit_tools" href="tskit_tools.html" />
@@ -180,6 +182,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/des_vignette.html">
    Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">
+   Mutations with variable dominance
   </a>
  </li>
  <li class="toctree-l1">
@@ -625,7 +632,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the end of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the selection coefficient</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -655,7 +662,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>lo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – lower bound on s</p></li>
 <li><p><strong>hi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – upper bound on s</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -684,7 +691,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the end of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>mean</strong> – the mean selection coefficient</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -714,7 +721,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the mean selection coefficient</p></li>
 <li><p><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the shape parameter of the distribution</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -743,7 +750,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the end of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>sd</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – standard deviation of effect sizes</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to (end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -775,7 +782,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Weight on the region</p></li>
 <li><p><strong>matrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Variance-covariance matrix</p></li>
 <li><p><strong>fixed_effect</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Fixed effect size. Defaults to 0.0.</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Dominance. Defaults to 1.0</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – Dominance. Defaults to 1.0</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Specify if weight is function of end-beg or not. Defaults to True</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 </ul>
@@ -813,7 +820,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
 <li><p><strong>zeta</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the zeta parameter</p></li>
 <li><p><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the sigma parameter</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> – if True, the weight is converted to(end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -841,7 +848,7 @@ details.</p>
 <li><p><strong>beg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the beginning of the region</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the end of the region</p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the weight to assign</p></li>
-<li><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – the dominance</p></li>
+<li><p><strong>h</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference internal" href="#fwdpy11.MutationDominance" title="fwdpy11.MutationDominance"><em>fwdpy11.MutationDominance</em></a><em>]</em>) – the dominance</p></li>
 <li><p><strong>coupled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – if True, the weight is converted to(end-beg)*weight</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.20)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>) – Fill <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a> with this value.</p></li>
 <li><p><strong>scaling</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The scaling of the DFE</p></li>
@@ -1093,6 +1100,81 @@ low-level C++ class</p>
 <p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.MutationDominance">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MutationDominance</span></code><a class="headerlink" href="#fwdpy11.MutationDominance" title="Permalink to this definition">¶</a></dt>
+<dd><p>ABC for classes determining the dominance of new mutations.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
+</div>
+<p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.FixedDominance">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">FixedDominance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedDominance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fixed heterozygous effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The heterozygous effect of a mutation, or “dominance”.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+</div>
+<p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.UniformDominance">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">UniformDominance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformDominance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uniform distribution of heterozygous effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lo</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The lower bound of the range</p></li>
+<li><p><strong>hi</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The upper bound of the range</p></li>
+</ul>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+</div>
+<p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.ExponentialDominance">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">ExponentialDominance</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExponentialDominance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponential distribution of heterozygous effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The mean of the distribution.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+</div>
+<p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fwdpy11.LargeEffectExponentiallyRecessive">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">LargeEffectExponentiallyRecessive</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LargeEffectExponentiallyRecessive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Large effect mutations are more recessive according to
+the function <span class="math notranslate nohighlight">\(y \times e^{-k|s|}\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is the
+effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “scaling” parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The “tuning” parameter.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+</div>
+<p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
 
 </div>
