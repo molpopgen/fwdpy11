@@ -50,6 +50,12 @@ from .genetic_map_unit import (
     BinomialPoint,
     FixedCrossovers,
 )
+from .mutation_dominance import ( # NOQA
+    FixedDominance,
+    UniformDominance,
+    ExponentialDominance,
+    LargeEffectExponentiallyRecessive,
+)
 from .genetic_values import (  # NOQA
     PleiotropicOptima,
     Optimum,
