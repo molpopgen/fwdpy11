@@ -279,8 +279,8 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     :type weight: float
     :param mean: the mean selection coefficient
     :type mean: float
-    :param shape: the shape parameter of the distribution
-    :type shape: float
+    :param shape_parameter: the shape parameter of the distribution
+    :type shape_parameter: float
     :param h: the dominance
     :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to (end-beg)*weight
@@ -410,7 +410,7 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     :param h: the dominance
     :type h: typing.Union[float, fwdpy11.MutationDominance]
     :param coupled: if True, the weight is converted to(end-beg)*weight
-    :type Constructor: bool
+    :type coupled: bool
     :param label: Fill :attr:`fwdpy11.Mutation.label` with this value.
     :type label: :attr:`numpy.uint16`
     :param scaling: The scaling of the DFE
@@ -582,8 +582,8 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     :type end: float
     :param weight: Weight on the region
     :type weight: float
-    :param matrix: Variance-covariance matrix
-    :type matrix: :class:`numpy.ndarray`
+    :param cov_matrix: Variance-covariance matrix
+    :type cov_matrix: :class:`numpy.ndarray`
     :param fixed_effect: Fixed effect size. Defaults to 0.0.
     :type fixed_effect: float
     :param h: Dominance. Defaults to 1.0
