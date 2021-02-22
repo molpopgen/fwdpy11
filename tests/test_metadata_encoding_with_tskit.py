@@ -21,12 +21,13 @@ import math
 import typing
 
 import attr
+import fwdpy11._monkeypatch._diploid_population
+import fwdpy11.tskit_tools
 import numpy as np
 import pytest
 import tskit
 
-import fwdpy11._monkeypatch._diploid_population
-import fwdpy11.tskit_tools
+np.random.seed(54321)
 
 MOCK_NODE_TABLE_DTYPE = [("time", np.float), ("deme", np.int32)]
 MOCK_EDGE_TABLE_DTYPE = [
@@ -264,7 +265,15 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
         assert np.array_equal(i.heffects, j.heffects)
 
 
-def test_encoding_neutral_mutations_with_msprime_tree_sequences():
+@pytest.mark.parametrize(
+    "msprime_seed", np.random.randint(0, np.iinfo(np.uint32).max, 10).tolist()
+)
+@pytest.mark.parametrize(
+    "fp11_seed", np.random.randint(0, np.iinfo(np.uint32).max, 10).tolist()
+)
+def test_encoding_neutral_mutations_with_msprime_tree_sequences(
+    msprime_seed, fp11_seed
+):
     """
     This is a test for GitHub issue 656.
     This test is part of release 0.13.0
@@ -276,12 +285,11 @@ def test_encoding_neutral_mutations_with_msprime_tree_sequences():
     import fwdpy11
     import msprime
 
-    ts = msprime.simulate(500, Ne=1000)
+    ts = msprime.simulate(500, Ne=1000, random_seed=msprime_seed)
     pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-    rng = fwdpy11.GSLrng(675843)
+    rng = fwdpy11.GSLrng(fp11_seed)
     nmuts = fwdpy11.infinite_sites(rng, pop, 1e-3)
     assert nmuts > 0
     for m in pop.tables.mutations:
         assert pop.mutations[m.key].g <= pop.tables.nodes[m.node].time
-    dumped_ts = pop.dump_tables_to_tskit()
-
+    _ = pop.dump_tables_to_tskit()
