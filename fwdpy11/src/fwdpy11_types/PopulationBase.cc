@@ -27,7 +27,7 @@ namespace py = pybind11;
 struct flattened_Mutation
 {
     double pos, s, h;
-    fwdpp::uint_t g;
+    std::int32_t g;
     decltype(fwdpy11::Mutation::xtra) label;
     std::int16_t neutral;
 };

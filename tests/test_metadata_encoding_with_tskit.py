@@ -166,12 +166,12 @@ def test_diploid_metadata(mock_population, tables):
 
     decoded = fwdpy11.tskit_tools.decode_individual_metadata(tables)
 
-    for i in decoded[:len(mock_population.diploid_metadata)]:
+    for i in decoded[: len(mock_population.diploid_metadata)]:
         assert i.alive
         assert not i.preserved
         assert not i.first_generation
 
-    for i in decoded[len(mock_population.diploid_metadata):]:
+    for i in decoded[len(mock_population.diploid_metadata) :]:
         assert not i.alive
         assert i.preserved
         assert i.first_generation
@@ -262,3 +262,26 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
         assert len(i.heffects) == 4
         assert np.array_equal(i.esizes, j.esizes)
         assert np.array_equal(i.heffects, j.heffects)
+
+
+def test_encoding_neutral_mutations_with_msprime_tree_sequences():
+    """
+    This is a test for GitHub issue 656.
+    This test is part of release 0.13.0
+    Previous versions of fwdpy11 used uint32_t for Mutation.g.
+    The unsigned integer caused overflow issues when adding mutations
+    to trees with negative node times.
+    Mutation.g was changes to int32_t in 0.13.0 as part of a fix.
+    """
+    import fwdpy11
+    import msprime
+
+    ts = msprime.simulate(500, Ne=1000)
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
+    rng = fwdpy11.GSLrng(675843)
+    nmuts = fwdpy11.infinite_sites(rng, pop, 1e-3)
+    assert nmuts > 0
+    for m in pop.tables.mutations:
+        assert pop.mutations[m.key].g <= pop.tables.nodes[m.node].time
+    dumped_ts = pop.dump_tables_to_tskit()
+

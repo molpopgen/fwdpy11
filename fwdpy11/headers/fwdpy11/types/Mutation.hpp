@@ -45,7 +45,7 @@ namespace fwdpy11
     ///! The fwdpy11 mutation type
     {
         //! The generation when the mutation arose
-        fwdpp::uint_t g;
+        std::int32_t g;
         //! Effect size.  We call it 's' so
         // that we can use fwdpp's genetic value toolkit
         double s;
@@ -64,7 +64,7 @@ namespace fwdpy11
           \param x_ Value to assign to mutation_base::xtra
         */
         Mutation(bool treat_as_neutral, const double pos_, const double s_,
-                 const double h_, const unsigned g_, const std::uint16_t x_ = 0) noexcept
+                 const double h_, const std::int32_t g_, const std::uint16_t x_ = 0) noexcept
             : mutation_base(pos_, treat_as_neutral, x_), g(g_), s(s_),
               h(h_), esizes{}, heffects{}
         {
@@ -84,7 +84,7 @@ namespace fwdpy11
         */
         template <typename vectype>
         Mutation(bool treat_as_neutral, const double pos_, const double s_,
-                 const double h_, const unsigned g_, vectype &&esizes_,
+                 const double h_, const std::int32_t g_, vectype &&esizes_,
                  vectype &&heffects_, const std::uint16_t x_ = 0) noexcept
             : fwdpp::mutation_base(pos_, treat_as_neutral, x_), g(g_), s(s_), h(h_),
               esizes(std::forward<vectype>(esizes_)),

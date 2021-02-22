@@ -78,7 +78,7 @@ MutationMetadata = tskit.metadata.MetadataSchema(
         "properties": {
             "s": {"type": "number", "binaryFormat": "d"},
             "h": {"type": "number", "binaryFormat": "d"},
-            "origin": {"type": "number", "binaryFormat": "I"},
+            "origin": {"type": "number", "binaryFormat": "i"},
             "neutral": {"type": "number", "binaryFormat": "?"},
             "label": {"type": "number", "binaryFormat": "H"},
             "key": {"type": "number", "binaryFormat": "Q"},
