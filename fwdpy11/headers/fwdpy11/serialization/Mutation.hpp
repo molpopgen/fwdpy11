@@ -69,7 +69,7 @@ namespace fwdpp
             inline fwdpy11::Mutation
             operator()(streamtype &buffer) const
             {
-                uint_t g;
+                std::int32_t g; // Changed from uint32_t in 0.13.0
                 bool neutral;
                 double pos, s, h;
                 decltype(fwdpy11::Mutation::xtra) xtra;
