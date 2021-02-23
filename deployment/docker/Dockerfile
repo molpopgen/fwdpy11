@@ -18,4 +18,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmak
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf build
 
-RUN python3 -m pip install --no-cache-dir .
+RUN python3 -m pip install --no-cache-dir . \
+  && cd / \
+  && rm -rf /app
