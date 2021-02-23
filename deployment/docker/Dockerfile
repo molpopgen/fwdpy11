@@ -15,6 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -qq -y install cmak
   libgsl-dev \
   python3 \
   python3-pip \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && rm -rf build
 
 RUN python3 -m pip install --no-cache-dir .
