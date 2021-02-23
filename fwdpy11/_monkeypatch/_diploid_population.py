@@ -20,11 +20,10 @@
 import json
 import typing
 
-import numpy as np
-import tskit
-
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
+import numpy as np
+import tskit
 
 
 def _alive_nodes(self):
@@ -145,11 +144,16 @@ def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None
         )
     )
     for m in self.tables.mutations:
+        if self.mutations[m.key].g != np.iinfo(np.int32).min:
+            origin_time = self.generation - self.mutations[m.key].g
+        else:
+            origin_time = tc.nodes.time[m.node]
+
         tc.mutations.add_row(
             site=m.site,
             node=m.node,
             derived_state="1",
-            time=self.generation - self.mutations[m.key].g,
+            time=origin_time,
             metadata=fwdpy11.tskit_tools.metadata_schema.generate_mutation_metadata(
                 m, self.mutations
             ),
@@ -180,7 +184,7 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
         Mutation time is now stored in the tskit.MutationTable column.
         Origin time of mutations is part of the metadata.
     """
-    from fwdpy11 import pybind11_version, gsl_version
+    from fwdpy11 import gsl_version, pybind11_version
 
     environment = tskit.provenance.get_environment(
         extra_libs={

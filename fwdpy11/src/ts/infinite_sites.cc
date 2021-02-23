@@ -48,9 +48,15 @@ init_infinite_sites(py::module& m)
             const auto apply_mutations
                 = [&recycling_bin, &rng, &pop](const double left, const double right,
                                                const double origin_time) {
+                      if (std::isfinite(origin_time))
+                          {
+                              return generate_neutral_variants(
+                                  recycling_bin, pop, rng, left, right,
+                                  static_cast<std::int32_t>(std::ceil(origin_time)));
+                          }
                       return generate_neutral_variants(
                           recycling_bin, pop, rng, left, right,
-                          static_cast<std::int32_t>(std::ceil(origin_time)));
+                          std::numeric_limits<std::int32_t>::min());
                   };
             pop.fill_alive_nodes();
             pop.fill_preserved_nodes();
