@@ -60,8 +60,29 @@ WORKDIR /app
 RUN python3 -m pip install matplotlib
 ```
     
-To sleuth out the `sha256` value that you need, navigate [here](https://hub.docker.com/r/molpopgen/fwdpy11/tags), click on the desired `tag`, then copy the `sha256` information from up at the top near the word `DIGEST`.
-This `sha256` will give you the unique identifier corresponding to the latest build of the `tag` you are looking at.
+To sleuth out the `sha256` value that you need, simply pull the image:
+
+```sh
+docker pull molpopgen/fwdpy11:latest
+```
+
+The output will look something like:
+
+```
+latest: Pulling from molpopgen/fwdpy11
+83ee3a23efb7: Already exists 
+db98fc6f11f0: Already exists 
+f611acd52c6c: Already exists 
+1902ff943d3d: Pull complete 
+2f1378e5b22a: Pull complete 
+bfbf9abf860e: Pull complete 
+55f3583009c4: Pull complete 
+Digest: sha256:106b32cb879f6f42bd5fc34a4a44ac40371dc66f51a89ee04dbf33b906dbcf69
+Status: Downloaded newer image for molpopgen/fwdpy11:latest
+docker.io/molpopgen/fwdpy11:latest
+```
+
+The `sha256` info that you need is on the line starting with `Digest:`.
 
 Some notes:
 
@@ -113,10 +134,3 @@ bash deployment/linux_wheels/extract_wheels.sh
 ```
 
 The output will be a file called `wheels.tar`.
-
-### Caveats and limitations
-
-The methods used to build wheels may not be totally ready for prime time.
-Ideally, we'd use [oldest-supported-numpy](https://pypi.org/project/oldest-supported-numpy/), but we haven't tested it yet.
-
-
