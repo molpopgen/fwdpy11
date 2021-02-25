@@ -2,6 +2,24 @@
 
 # Developer's guide
 
+## Enabling compiler command support for developing the C++ code
+
+Many language servers support processing a local file called `compile_commands.json`.
+See [here](https://clang.llvm.org/docs/JSONCompilationDatabase.html) for background.
+
+To generate this file, execute the following steps from the root of the source code repository:
+
+```sh
+mkdir ccomands
+cd ccomands
+cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+mv compile_commands.json ..
+cd ..
+rm -rf ccomands
+```
+
+Now, language servers supporting `clangd` will have nice error checking and code completion for the C++ code!
+
 ## C++ code standards
 
 ## Enabling code profiling
