@@ -3,18 +3,10 @@
 #
 - file: intro
 
-- part: Miscellany
-  chapters:
-  - file: misc/changelog
-  - file: misc/deprecated
-  - file: misc/developersguide
-  - file: misc/pubs
-  - file: misc/upgrade_path
-  - file: misc/bibliography
-
 - part: Installation and setup
   chapters:
   - file: pages/userenv
+  - file: pages/installation
   - file: pages/deploymenttools
 
 - part: Short vignettes - operations on populations
@@ -49,6 +41,7 @@
   chapters:
   - file: long_vignettes/bgs_vignette
   - file: long_vignettes/gss_vignette
+  - file: long_vignettes/pyfreqtracker
 
 - part: Concepts
   chapters:
@@ -97,4 +90,11 @@
   - file: examples/recapitation
   - file: examples/recorder
 
-
+- part: Miscellany
+  chapters:
+  - file: misc/changelog
+  - file: misc/deprecated
+  - file: misc/developersguide
+  - file: misc/pubs
+  - file: misc/upgrade_path
+  - file: misc/bibliography

@@ -86,3 +86,25 @@ ax.set_xlabel("Effect size of mutation on trait")
 ax.set_ylabel("Dominance")
 plt.show();
 ```
+
+## Using discrete distributions
+
+{class}`fwdpy11.DiscreteDESD` specifies a *D*iscrete *E*ffect *S*ize and *D*ominance joint distribution.
+A {class}`list` of {class}`tuple` of `(effect size, dominance, weight)` specify the joint distribution.
+For example:
+
+```{code-cell}
+import math
+import numpy as np
+
+joint_dist = []
+for s in np.arange(0.1, 1, 0.1):
+    joint_dist.append((-s, math.exp(-s), 1./s))
+```
+
+```{code-cell}
+des = fwdpy11.DiscreteDESD(beg=0, end=1, weight=1, joint_dist=joint_dist)
+print(des.asblack())
+```
+
+The result is that mutations with smaller effect sizes are more common (larger weights) and more dominant.

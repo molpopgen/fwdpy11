@@ -191,6 +191,7 @@ packaging==20.9
     # via
     #   bleach
     #   sphinx
+pandas==1.2.2
 pandocfilters==1.4.3
     # via nbconvert
 parso==0.8.1
