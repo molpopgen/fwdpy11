@@ -21,7 +21,7 @@ import math
 import typing
 
 import attr
-import fwdpy11._monkeypatch._diploid_population
+import fwdpy11.tskit_tools._dump_tables_to_tskit
 import fwdpy11.tskit_tools
 import numpy as np
 import pytest
@@ -161,7 +161,7 @@ def tables() -> tskit.TableCollection:
 def test_diploid_metadata(mock_population, tables):
     mock_population = add_diploid_metadata_and_nodes(mock_population)
 
-    fwdpy11._monkeypatch._diploid_population._initializeIndividualTable(
+    fwdpy11.tskit_tools._dump_tables_to_tskit._initializeIndividualTable(
         mock_population, tables
     )
 
@@ -204,7 +204,7 @@ def test_mutation_metadata_without_vectors(mock_population, tables):
         fwdpy11.Mutation(pos=0.1, s=-1e-3, h=1, g=mock_population.generation, label=7)
     )
 
-    fwdpy11._monkeypatch._diploid_population._dump_mutation_site_and_site_tables(
+    fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
         mock_population, tables
     )
     decoded = fwdpy11.tskit_tools.decode_mutation_metadata(tables)
@@ -245,7 +245,7 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
 
     assert len(mock_population.mutations[0].esizes) == 4
 
-    fwdpy11._monkeypatch._diploid_population._dump_mutation_site_and_site_tables(
+    fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
         mock_population, tables
     )
     decoded = fwdpy11.tskit_tools.decode_mutation_metadata(tables)

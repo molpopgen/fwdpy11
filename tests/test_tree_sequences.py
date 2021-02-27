@@ -190,18 +190,8 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         self.assertEqual(len(self.pop.mut_lookup), len(self.pop.tables.sites))
         self.assertTrue(validate_mut_lookup_content(self.pop))
 
-    def test_simplify(self):
-        tables, idmap = fwdpy11.simplify(self.pop, [i for i in range(10)])
-        for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
-
     def test_simplify_tables(self):
         tables, idmap = fwdpy11.simplify_tables(self.pop.tables, [i for i in range(10)])
-        for i in range(10):
-            self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
-
-    def test_simplify_numpy_array(self):
-        tables, idmap = fwdpy11.simplify(self.pop, np.array([i for i in range(10)]))
         for i in range(10):
             self.assertTrue(idmap[i] != fwdpy11.NULL_NODE)
 
@@ -355,7 +345,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
             tt += i.time
         samples = np.arange(0, 2 * self.pop.N, 50, dtype=np.int32)
         mspts = self.dumped_ts.simplify(samples=samples.tolist())
-        fp11ts, idmap = fwdpy11.simplify(self.pop, samples)
+        fp11ts, idmap = fwdpy11.simplify_tables(self.pop.tables, samples)
         for i in range(len(fp11ts.edges)):
             self.assertTrue(fp11ts.edges[i].parent < len(fp11ts.nodes))
             self.assertTrue(fp11ts.edges[i].child < len(fp11ts.nodes))
