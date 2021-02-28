@@ -60,7 +60,7 @@ for a more detailed discussion of relevant data structures.
 To initialize a population with individuals in multiple demes:
 
 ```{code-cell} python
-pop = fwdpy11.DiploidPopulation(demesizes=[500, 500], length=100.0)
+pop = fwdpy11.DiploidPopulation(N=[500, 500], length=100.0)
 pop.N
 pop.tables.genome_length
 ```

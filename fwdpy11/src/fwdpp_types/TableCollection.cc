@@ -21,26 +21,23 @@ init_ts_TableCollection(py::module& m)
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::std_table_collection,
                std::shared_ptr<fwdpp::ts::std_table_collection>>(
-        m, "TableCollection",
-        "A table collection representing a succinct tree sequence.")
-        .def_property_readonly("L", &fwdpp::ts::std_table_collection::genome_length,
-                               "Genome length")
-        .def_readonly("edges", &fwdpp::ts::std_table_collection::edges,
-                      "The :class:`fwdpy11.EdgeTable`.")
-        .def_readonly("nodes", &fwdpp::ts::std_table_collection::nodes,
-                      "The :class:`fwdpy11.NodeTable`.")
-        .def_readonly("mutations", &fwdpp::ts::std_table_collection::mutations,
-                      "The :class:`fwdpy11.MutationTable`.")
-        .def_readonly("sites", &fwdpp::ts::std_table_collection::sites,
-                      "The :class:`fwdpy11.SiteTable`.")
-        .def_readonly("input_left", &fwdpp::ts::std_table_collection::input_left,
-                      "Index vector describing when nodes enter trees.")
-        .def_readonly("output_right", &fwdpp::ts::std_table_collection::output_right,
-                      "Index vector describing when nodes leave trees.")
-        .def("build_indexes", &fwdpp::ts::std_table_collection::build_indexes)
-        .def_property_readonly("genome_length",
-                               &fwdpp::ts::std_table_collection::genome_length,
-                               "Return the genome/sequence length.")
+        m, "ll_TableCollection")
+        .def(py::init([](std::shared_ptr<fwdpp::ts::std_table_collection>& self) {
+            if (self == nullptr)
+                {
+                    throw std::invalid_argument("input tables cannot be nullptr");
+                }
+            return self;
+        }))
+        .def_readonly("_edges", &fwdpp::ts::std_table_collection::edges)
+        .def_readonly("_nodes", &fwdpp::ts::std_table_collection::nodes)
+        .def_readonly("_mutations", &fwdpp::ts::std_table_collection::mutations)
+        .def_readonly("_sites", &fwdpp::ts::std_table_collection::sites)
+        .def_readonly("_input_left", &fwdpp::ts::std_table_collection::input_left)
+        .def_readonly("_output_right", &fwdpp::ts::std_table_collection::output_right)
+        .def("_build_indexes", &fwdpp::ts::std_table_collection::build_indexes)
+        .def_property_readonly("_genome_length",
+                               &fwdpp::ts::std_table_collection::genome_length)
         .def("__eq__",
              [](const fwdpp::ts::std_table_collection& lhs,
                 const fwdpp::ts::std_table_collection& rhs) { return lhs == rhs; })

@@ -26,58 +26,6 @@ import numpy as np
 import tskit
 
 
-def _alive_nodes(self):
-    """
-    List of alive nodes corresponding to individuals.
-
-    :rtype: numpy.ndarray
-
-    .. versionadded:: 0.5.3
-    """
-    md = np.array(self.diploid_metadata, copy=False)
-    return md["nodes"].flatten()
-
-
-def _get_times(self):
-    amd = np.array(self.ancient_sample_metadata, copy=False)
-    nodes = np.array(self.tables.nodes, copy=False)
-    times = nodes["time"][amd["nodes"][:, 0]]
-    utimes = np.unique(times)
-    return times, utimes
-
-
-def _traverse_sample_timepoints(self, include_alive=True):
-    """
-    Return an iterator over all sample time points.
-    The iterator yields time, nodes, and metadata.
-
-    :param include_alive: If True, include currently-alive individuals.
-
-    .. versionadded :: 0.5.1
-
-    .. versionchanged:: 0.5.3
-
-       Monkey-patched into pybind11 class
-    """
-    amd = np.array(self.ancient_sample_metadata, copy=False)
-    amd.flags.writeable = False
-    times, utimes = _get_times(self)
-    for uti in utimes:
-        mdidx = np.where(times == uti)[0]
-        sample_nodes = amd["nodes"][mdidx].flatten()
-        sample_nodes.flags.writeable = False
-        mdslice = amd[mdidx][:]
-        mdslice.flags.writeable = False
-        yield uti, sample_nodes, mdslice
-
-    if include_alive is True:
-        md = np.array(self.diploid_metadata, copy=False)
-        nodes = md["nodes"].flatten()
-        md.flags.writeable = False
-        nodes.flags.writeable = False
-        yield self.generation, nodes, md
-
-
 def _initializePopulationTable(node_view, tc):
     tc.populations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
@@ -247,55 +195,5 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
     return tc.tree_sequence()
 
 
-def _deme_sizes(self, as_dict=False):
-    """
-    Return the number of individuals in each deme.
-
-    :param as_dict: If True, return results as a dict.
-                    If False, numpy arrays are returned
-
-    The default behavior of this function is equivalent to:
-
-    .. code-block:: python
-
-        md = numpy.array(self.diploid_metadata, copy=False)
-        return numpy.unique(md['deme'], return_counts=True)
-
-    .. versionadded:: 0.6.0
-    """
-    md = np.array(self.diploid_metadata, copy=False)
-    deme_sizes = np.unique(md["deme"], return_counts=True)
-    if as_dict is False:
-        return deme_sizes
-    return {i: j for i, j in zip(deme_sizes[0], deme_sizes[1])}
-
-
-def _preserved_nodes(self):
-    """
-    Return an array of nodes associated with preserved/ancient samples.
-
-    :rtype: :class:`np.ndarray`
-
-    .. versionadded:: 0.13.0
-    """
-    return np.array(self.ancient_sample_metadata, copy=False)["nodes"].flatten()
-
-
-def _ancient_sample_nodes(self):
-    """
-    Return an array of nodes associated with preserved/ancient samples.
-
-    Alias for :attr:`fwdpy11.DiploidPopulation.preserved_nodes`.
-
-    .. versionadded:: 0.13.0
-    """
-    return self.preserved_nodes
-
-
-def _patch_diploid_population(d):
-    d.alive_nodes = property(_alive_nodes)
-    d.sample_timepoints = _traverse_sample_timepoints
-    d.dump_tables_to_tskit = _dump_tables_to_tskit
-    d.deme_sizes = _deme_sizes
-    d.preserved_nodes = property(_preserved_nodes)
-    d.ancient_sample_nodes = property(_ancient_sample_nodes)
+def _add_dump_tables_to_tskit(cls):
+    cls.dump_tables_to_tskit = _dump_tables_to_tskit
