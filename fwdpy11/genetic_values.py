@@ -28,19 +28,17 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
 
-_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
-
 
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class Optimum(fwdpy11._fwdpy11._ll_Optimum):
     """
     Parameters for a trait optimum.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optimum: The trait value
@@ -53,8 +51,8 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
     .. note::
 
         When used to model a stable optimum (e.g.,
-        :class:`fwdpy11.GSS`), the ``when`` parameter is omitted.
-        The ``when`` parameter is used for moving optima
+        :class:`fwdpy11.GSS`), the `when` parameter is omitted.
+        The `when` parameter is used for moving optima
         (:class:`fwdpy11.GSSmo`).
 
     .. versionadded:: 0.7.1
@@ -81,13 +79,13 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs, eq=False)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11", eq=False)
 class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
     """
     Parameters for multiple trait optima
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optima: The trait values
@@ -100,8 +98,8 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
     .. note::
 
         When used to model stable optima (e.g.,
-        :class:`fwdpy11.MultivariateGSS`), the ``when`` parameter is omitted.
-        The ``when`` parameter is used for moving optima
+        :class:`fwdpy11.MultivariateGSS`), the `when` parameter is omitted.
+        The `when` parameter is used for moving optima
         (:class:`fwdpy11.MultivariateGSSmo`).
 
     .. versionadded:: 0.7.1
@@ -136,13 +134,13 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
 
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GSS(fwdpy11._fwdpy11._ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optimum: The optimal trait value
@@ -196,14 +194,14 @@ class GSS(fwdpy11._fwdpy11._ll_GSSmo):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait with moving
     optimum.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optima: The optimal trait values
@@ -212,7 +210,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
     .. note::
 
         Instances of fwdpy11.Optimum must have valid
-        values for ``when``.
+        values for `when`.
 
     .. versionchanged:: 0.8.0
 
@@ -237,7 +235,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
 
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection.
@@ -253,7 +251,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 
     For the case of moving optima, see :class:`fwdpy11.MultivariateGSSmo`.
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optima: The optimum value for each trait over time
@@ -263,9 +261,9 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 
     .. note::
 
-        ``VS`` should be ``None`` if ``optima`` is list[fwdpy11.PleiotropicOptima]
+        `VS` should be `None` if `optima` is list[fwdpy11.PleiotropicOptima]
 
-        ``VS`` is :math:`\omega^2` in the Simons et al. notation
+        `VS` is :math:`\omega^2` in the Simons et al. notation
 
     .. versionchanged:: 0.7.1
         Allow initialization with list of fwdpy11.PleiotropicOptima
@@ -304,12 +302,12 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection with moving optima
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param optima: list of optima over time
@@ -342,7 +340,7 @@ class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
     """
     No random effects on genetic values
@@ -360,12 +358,12 @@ class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
     """
     Gaussian noise added to genetic values.
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param sd: Standard deviation
@@ -389,13 +387,13 @@ class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class Additive(fwdpy11._fwdpy11._ll_Additive):
     """
     Additive effects on genetic values.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param scaling: How to treat mutant homozygotes.
@@ -405,15 +403,15 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
     :param noise: Random effects on trait values
     :type noise: fwdpy11.GeneticValueNoise
 
-    When ``gvalue_to_fitness`` is ``None``, then we are
+    When `gvalue_to_fitness` is `None`, then we are
     modeling additive effects on fitness.
 
     For a model of fitness, the genetic value is 1, 1+e*h,
-    1+``scaling``*e for genotypes AA, Aa, and aa, respectively,
-    where ``e`` and ``h`` are the effect size and dominance, respectively.
+    1+`scaling`*e for genotypes AA, Aa, and aa, respectively,
+    where `e` and `h` are the effect size and dominance, respectively.
 
-    For a model of a trait (phenotype), meaning ``gvalue_to_fitness``
-    is not ``None``, the values for the three genotypes are 0, e*h,
+    For a model of a trait (phenotype), meaning `gvalue_to_fitness`
+    is not `None`, the values for the three genotypes are 0, e*h,
     and e, respectively.
 
     .. versionchanged:: 0.8.0
@@ -436,13 +434,13 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
     """
     Multiplicative effects on genetic values.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param scaling: How to treat mutant homozygotes.
@@ -452,15 +450,15 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
     :param noise: Random effects on trait values
     :type noise: fwdpy11.GeneticValueNoise
 
-    When ``gvalue_to_fitness`` is ``None``, then we are
+    When `gvalue_to_fitness` is `None`, then we are
     modeling multiplicative effects on fitness.
 
     For a model of fitness, the genetic value is 1, 1+e*h,
-    1+``scaling``*e for genotypes AA, Aa, and aa, respectively,
-    where ``e`` and ``h`` are the effect size and dominance, respectively.
+    1+`scaling`*e for genotypes AA, Aa, and aa, respectively,
+    where `e` and `h` are the effect size and dominance, respectively.
 
-    For a model of a trait (phenotype), meaning ``gvalue_to_fitness``
-    is not ``None``, the values for the three genotypes are 0, e*h,
+    For a model of a trait (phenotype), meaning `gvalue_to_fitness`
+    is not `None`, the values for the three genotypes are 0, e*h,
     and e, respectively.
 
     .. versionchanged:: 0.8.0
@@ -483,7 +481,7 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GBR(fwdpy11._fwdpy11._ll_GBR):
     """
     The "gene-based recessive" trait model described in Thornton et al.
@@ -494,7 +492,7 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
     It is undefined for the case where these sums are negative.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param gvalue_to_fitness: How to map trait value to fitness
@@ -518,7 +516,7 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class StrictAdditiveMultivariateEffects(
     fwdpy11._fwdpy11._ll_StrictAdditiveMultivariateEffects
 ):
@@ -534,7 +532,7 @@ class StrictAdditiveMultivariateEffects(
     During a simulation, :attr:`fwdpy11.DiploidMetadata.g` is filled with the
     genetic value corresponding to a "focal" trait specified upon object construction.
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param ndimensions: Number of trait dimensions

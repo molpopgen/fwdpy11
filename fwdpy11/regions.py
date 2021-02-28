@@ -80,20 +80,17 @@ def _add_deprecated_properties(self):
     return self
 
 
-_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
-
-
 @_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class Region(fwdpy11._fwdpy11._ll_Region):
     """
     A genomic region, defined by half-open interval [beg, end)
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -138,13 +135,13 @@ class Region(fwdpy11._fwdpy11._ll_Region):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     """
     Mutations with fixed effect sizes
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -199,13 +196,13 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     """
     Exponential distribution of effect sizes
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -262,13 +259,13 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     """
     Gamma distribution of effect sizes
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -327,13 +324,13 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     """
     Gaussian distribution of effect sizes
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -388,13 +385,13 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     """
     Log-normal distribution of effect sizes.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -499,13 +496,13 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     """
     Uniform distrubution of effect sizes
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: the beginning of the region
@@ -564,7 +561,7 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, **_common_attr_attribs)
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffects):
     """
     Pleiotropic effects via a multivariate Gaussian distribution.
@@ -573,7 +570,7 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
     of effect sizes as well as a separate fixed effect.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: Beginning of the region
@@ -655,13 +652,13 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, **_common_attr_attribs)
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     """
     General multivariate distribution of effect sizes.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param des: Distributions of effect sizes
@@ -690,7 +687,7 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, **_common_attr_attribs)
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
     """
     Discretized distribution of effect sizes and dominance.
@@ -703,7 +700,7 @@ class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
     The weights must all be >= 0 and all values must fe finite.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: Beginning of the region

@@ -28,19 +28,17 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
 
-_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
-
 
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
     """
     Mass migration events.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param when: When the mass migration happens
@@ -51,12 +49,12 @@ class MassMigration(fwdpy11._fwdpy11._ll_MassMigration):
     :type destination: int
     :param fraction: The fraction of `source` to move to `destination`.
     :type fraction: float
-    :param move_individuals: If ``True``, the event moves individuals.
-                             If ``False``, individuals are copied.
+    :param move_individuals: If `True`, the event moves individuals.
+     If `False`, individuals are copied.
     :type move_individuals: bool
     :param resets_growth_rate: (True) Whether or not to reset the
-                               growth rates of `source` and `destination` to
-                               :data:`fwdpy11.NOGROWTH`
+     growth rates of `source` and `destination` to
+     :data:`fwdpy11.NOGROWTH`
     :type resets_growth_rate: bool
 
     .. note::
@@ -107,8 +105,8 @@ def move_individuals(
     :param fraction: The fraction of `source` to move to `destination`.
     :type fraction: float
     :param resets_growth_rate: (True) Whether or not to reset the
-                               growth rates of `source` and `destination` to
-                               :data:`fwdpy11.NOGROWTH`
+     growth rates of `source` and `destination` to
+     :data:`fwdpy11.NOGROWTH`
     :type resets_growth_rate: bool
 
     :rtype: :class:`fwdpy11.MassMigration`
@@ -133,8 +131,8 @@ def copy_individuals(
     :param fraction: The fraction of `source` to copy to `destination`.
     :type fraction: float
     :param resets_growth_rate: (True) Whether or not to reset the
-                               growth rates of `source` and `destination` to
-                               :data:`fwdpy11.NOGROWTH`
+     growth rates of `source` and `destination` to
+     :data:`fwdpy11.NOGROWTH`
     :type resets_growth_rate: bool
 
     :rtype: :class:`fwdpy11.MassMigration`
@@ -145,13 +143,13 @@ def copy_individuals(
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
     """
     Set the size of a deme at a given time.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param when: The generation when the event occurs
@@ -161,7 +159,7 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
     :param new_size: The new size
     :type new_size: int
     :param resets_growth_rate: (True) If deme size change resets
-                               growth rate to :data:`fwdpy11.NOGROWTH`
+     growth rate to :data:`fwdpy11.NOGROWTH`
     :type resets_growth_rate: bool
 
     .. versionadded:: 0.5.3
@@ -186,13 +184,13 @@ class SetDemeSize(fwdpy11._fwdpy11._ll_SetDemeSize):
 @attr_class_to_from_dict
 @attr_add_asblack
 @attr_class_pickle_with_super
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
     """
     Set the growth rate of a deme at a given time.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param when: The generation when the event occurs
@@ -221,13 +219,13 @@ class SetExponentialGrowth(fwdpy11._fwdpy11._ll_SetExponentialGrowth):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
     """
     Set the selfing probability within a deme at a given time.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param when: The generation when the event occurs
@@ -263,19 +261,19 @@ class SetSelfingRate(fwdpy11._fwdpy11._ll_SetSelfingRate):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(eq=False, **_common_attr_attribs)
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class MigrationMatrix(fwdpy11._fwdpy11._ll_MigrationMatrix):
     """
     The forward migration matrix for a simulation.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param migmatrix: A square matrix of non-negative floats.
     :type migmatrix: numpy.ndarray
     :param scaled: (True) If entries in `migmatrix` will be
-                   multiplied by deme sizes during simulation
+     multiplied by deme sizes during simulation
     :type scaled: bool
 
     .. versionadded:: 0.5.3
@@ -314,7 +312,7 @@ def _set_migration_rates_convert_deme(i: typing.Optional[int]) -> int:
 
 @attr_add_asblack
 @attr_class_to_from_dict
-@attr.s(eq=False, **_common_attr_attribs)
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     """
     Set the migration parameters of a simulation at a given time.
@@ -322,7 +320,7 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     deme or the entire migration matrix.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param when: The generation when the event occurs
@@ -333,11 +331,11 @@ class SetMigrationRates(fwdpy11._fwdpy11._ll_SetMigrationRates):
     :type migrates: list or numpy.ndarray
 
     The migration rates are equivalent to the single-generation ancestry proportions
-    with respect to ``deme``.
+    with respect to `deme`.
 
-    In order to change the entire migration matrix, pass ``None`` (or -1)
-    to ``deme`` and a 2d ``numpy.ndarray`` for ``migrates``.  A value of
-    ``None`` will be converted to ``-1`` in this case.
+    In order to change the entire migration matrix, pass `None` (or -1)
+    to `deme` and a 2d `numpy.ndarray` for `migrates`.  A value of
+    `None` will be converted to `-1` in this case.
 
     .. versionadded:: 0.5.3
 
@@ -430,14 +428,14 @@ def _convert_migmatrix(o):
 
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     """
     Representation of demographic events acting on
     discrete demes (sub-populations).
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param mass_migrations: Instances of :class:`fwdpy11.MassMigration`
@@ -449,8 +447,8 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     :param set_selfing_rates: Instances of :class:`fwdpy11.SetSelfingRate`
     :type set_selfing_rates: None or list[fwdpy11.SetSelfingRate]
     :param migmatrix: A migraton matrix. See :ref:`migration`. If not
-                      ``None``, then input are converted into an
-                      instance of :class:`fwdpy11.MigrationMatrix`.
+     `None`, then input are converted into an
+     instance of :class:`fwdpy11.MigrationMatrix`.
     :type migmatrix: None or numpy.ndarray or fwdpy11.MigrationMatrix
     :param set_migration_rates: Instances of :class:`fwdpy11.SetMigrationRates`
     :type set_migration_rates: None or list[fwdpy11.SetMigrationRates]
