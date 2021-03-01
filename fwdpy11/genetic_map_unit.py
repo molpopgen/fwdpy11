@@ -27,8 +27,6 @@ import fwdpy11._fwdpy11
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict)
 
-_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
-
 
 def _is_integer_if_discrete(self, attribute, value):
     if self.discrete is True:
@@ -38,13 +36,13 @@ def _is_integer_if_discrete(self, attribute, value):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     """
     Generate poisson number of crossover breakpoints.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
@@ -53,8 +51,8 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
     :type end: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
-    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
-                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
+     If `True`, positions take integer values uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -74,7 +72,7 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
 
     .. versionchanged:: 0.12.0
 
-        Added ``discrete`` option to initializer.
+        Added `discrete` option to initializer.
     """
 
     beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
@@ -91,22 +89,22 @@ class PoissonInterval(fwdpy11._fwdpy11._ll_PoissonInterval):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
     """
     Generate a recombination breakpoint at a fixed position if the
     number of crossover events is odd.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param position: The position of the crossover
     :type position: int or float
     :param mean: The mean number of breakpoints per meiosis
     :type mean: float
-    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
-                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
+     If `True`, positions take integer values uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -126,7 +124,7 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
 
     .. versionchanged:: 0.12.0
 
-        Added ``discrete`` option to initializer.
+        Added `discrete` option to initializer.
     """
 
     position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
@@ -148,13 +146,13 @@ class PoissonPoint(fwdpy11._fwdpy11._ll_PoissonPoint):
 
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     """
     Generate exactly one crossover with a given probability
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
@@ -163,8 +161,8 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
     :type end: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
-    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
-                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
+     If `True`, positions take integer values uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.5.2
@@ -180,7 +178,7 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
 
     .. versionchanged:: 0.12.0
 
-        Added ``discrete`` option to initializer.
+        Added `discrete` option to initializer.
     """
 
     beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
@@ -200,7 +198,7 @@ class BinomialInterval(fwdpy11._fwdpy11._ll_BinomialInterval):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     """
     Generate a crossover breakpoint at a fixed position with a
@@ -208,15 +206,15 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
     as centiMorgans/100.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param position: The beginning of the region
     :type position: int or float
     :param probability: The probability of a recombination (per meiosis).
     :type probability: float
-    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
-                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
+     If `True`, positions take integer values uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -236,7 +234,7 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
 
     .. versionchanged:: 0.12.0
 
-        Added ``discrete`` option to initializer.
+        Added `discrete` option to initializer.
     """
 
     position: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)
@@ -252,13 +250,13 @@ class BinomialPoint(fwdpy11._fwdpy11._ll_BinomialPoint):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     """
     Generate a fixed number of crossover breakpoints.
 
     This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
+    are also `kwargs` for intitialization.  The attribute names
     also determine the order of positional arguments:
 
     :param beg: The beginning of the region
@@ -267,8 +265,8 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
     :type end: int or float
     :param num_xovers: The number of breakpoints per meiosis
     :type num_xovers: float
-    :param discrete: If ``False``, positions are continuous and uniform from ``[beg, end)``.
-                     If ``True``, positions take integer values uniformly from ``[beg, end)``.
+    :param discrete: If `False`, positions are continuous and uniform from `[beg, end)`.
+     If `True`, positions take integer values uniformly from `[beg, end)`.
     :type discrete: bool
 
     .. versionadded:: 0.3.0
@@ -288,7 +286,7 @@ class FixedCrossovers(fwdpy11._fwdpy11._ll_FixedCrossovers):
 
     .. versionchanged:: 0.12.0
 
-        Added ``discrete`` option to initializer.
+        Added `discrete` option to initializer.
     """
 
     beg: typing.Union[int, float] = attr.ib(validator=_is_integer_if_discrete)

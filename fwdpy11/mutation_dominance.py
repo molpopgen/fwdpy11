@@ -24,13 +24,11 @@ import fwdpy11._fwdpy11
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict)
 
-_common_attr_attribs = {"frozen": True, "auto_attribs": True, "repr_ns": "fwdpy11"}
-
 
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class FixedDominance(fwdpy11._fwdpy11._ll_FixedDominance):
     """
     Fixed heterozygous effects.
@@ -50,7 +48,7 @@ class FixedDominance(fwdpy11._fwdpy11._ll_FixedDominance):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class ExponentialDominance(fwdpy11._fwdpy11._ll_ExponentialDominance):
     """
     Exponential distribution of heterozygous effects.
@@ -70,7 +68,7 @@ class ExponentialDominance(fwdpy11._fwdpy11._ll_ExponentialDominance):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class UniformDominance(fwdpy11._fwdpy11._ll_UniformDominance):
     """
     Uniform distribution of heterozygous effects.
@@ -93,7 +91,7 @@ class UniformDominance(fwdpy11._fwdpy11._ll_UniformDominance):
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class LargeEffectExponentiallyRecessive(
     fwdpy11._fwdpy11._ll_LargeEffectExponentiallyRecessive
 ):
