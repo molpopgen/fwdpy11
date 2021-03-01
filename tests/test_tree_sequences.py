@@ -24,13 +24,12 @@ import pickle
 import unittest
 from collections import namedtuple
 
-import pytest
-import msprime
-import numpy as np
-import tskit
-
 import fwdpy11
 import fwdpy11.tskit_tools
+import msprime
+import numpy as np
+import pytest
+import tskit
 
 
 class Recorder(object):
@@ -218,7 +217,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         tv = fwdpy11.TreeIterator(self.pop.tables, [i for i in range(2 * self.pop.N)])
         tt_fwd = 0
         for t in tv:
-            tt_fwd += t.total_time(self.pop.tables.nodes)
+            tt_fwd += t.total_time()
         tt_tskit = 0
         for t in self.dumped_ts.trees():
             tt_tskit += t.get_total_branch_length()
@@ -236,22 +235,38 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         # rather than a (deep) copy, which would have
         # a different address
         tv = fwdpy11.TreeIterator(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], True, 0, 1
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            update_samples=True,
+            begin=0,
+            end=1,
         )
         self.assertTrue(tv.tables is self.pop.tables)
 
         with self.assertRaises(ValueError):
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], True, 1, 0
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=True,
+                begin=1,
+                end=0,
             )
         with self.assertRaises(ValueError):
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], False, 1, 0
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=False,
+                begin=1,
+                end=0,
             )
 
         for i in np.arange(0.0, 1.0, 0.1):
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], True, i, i + 0.1
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=True,
+                begin=i,
+                end=i + 0.1,
             )
             for ti in tv:
                 a = ti.left < i + 0.1
@@ -259,7 +274,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
                 self.assertTrue(a and b)
 
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], False, i, i + 0.1
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=False,
+                begin=i,
+                end=i + 0.1,
             )
             for ti in tv:
                 a = ti.left < i + 0.1
@@ -282,7 +301,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         site_table = np.array(self.pop.tables.sites, copy=False)
         for i in np.arange(0.0, 1.0, 0.1):
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], False, i, i + 0.1
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=False,
+                begin=i,
+                end=i + 0.1,
             )
             nsites_visited = 0
             idx = np.where(
@@ -309,7 +332,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
         for i in np.arange(0.0, 1.0, 0.1):
             tv = fwdpy11.TreeIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], False, i, i + 0.1
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                update_samples=False,
+                begin=i,
+                end=i + 0.1,
             )
             nsites_visited = 0
             idx = np.where((sites["position"] >= i) & (sites["position"] < i + 0.1))[0]
@@ -354,7 +381,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         tt_fwd = 0.0
         tv = fwdpy11.TreeIterator(fp11ts, [i for i in range(len(samples))])
         for t in tv:
-            tt_fwd += t.total_time(fp11ts.nodes)
+            tt_fwd += t.total_time()
         tt_tskit = 0.0
         for t in mspts.trees():
             tt_tskit += t.get_total_branch_length()
@@ -1212,9 +1239,7 @@ class TestTreeSequenceResettingDuringTimeSeriesAnalysis(unittest.TestCase):
                 self.timepoint_seen = {}
 
             def __call__(self, pop):
-                assert len(pop.preserved_nodes) // 2 == len(
-                    pop.ancient_sample_metadata
-                )
+                assert len(pop.preserved_nodes) // 2 == len(pop.ancient_sample_metadata)
                 # Get the most recent ancient samples
                 # and record their number.  We do this
                 # by a "brute-force" approach

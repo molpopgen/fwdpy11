@@ -279,16 +279,7 @@ class tree_visitor_wrapper
 void
 init_tree_iterator(py::module& m)
 {
-    py::class_<tree_visitor_wrapper>(m, "TreeIterator",
-                                     R"delim(
-            Iterate over the marginal trees in a :class:`fwdpy11.TableCollection`
-            
-            .. versionadded 0.3.0
-
-            .. versionchanged:: 0.4.1
-        
-                Add begin, end options as floats for initializing
-            )delim")
+    py::class_<tree_visitor_wrapper>(m, "ll_TreeIterator")
         .def(py::init<std::shared_ptr<fwdpp::ts::std_table_collection>,
                       const std::vector<fwdpp::ts::table_index_t>&, bool, double,
                       double>(),
@@ -301,26 +292,19 @@ init_tree_iterator(py::module& m)
              py::arg("tables"), py::arg("samples"), py::arg("ancient_samples"),
              py::arg("update_samples") = false, py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max())
-        .def("parent", &tree_visitor_wrapper::parent, "Return parent of a node")
-        .def("leaf_counts", &tree_visitor_wrapper::leaf_counts, "Leaf counts for a node")
-        .def("preserved_leaf_counts", &tree_visitor_wrapper::preserved_leaf_counts,
-             "Ancient sample leaf counts for a node")
-        .def("left_sib", &tree_visitor_wrapper::left_sib,
-             "Return the left sibling of the current node")
-        .def("right_sib", &tree_visitor_wrapper::right_sib,
-             "Return the right sibling of the current node")
-        .def("left_child", &tree_visitor_wrapper::left_child,
-             "Mapping of current node id to its left child")
-        .def("right_child", &tree_visitor_wrapper::right_child,
-             "Mapping of current node id to its right child")
+        .def("_parent", &tree_visitor_wrapper::parent, "Return parent of a node")
+        .def("_leaf_counts", &tree_visitor_wrapper::leaf_counts)
+        .def("_preserved_leaf_counts", &tree_visitor_wrapper::preserved_leaf_counts)
+        .def("_left_sib", &tree_visitor_wrapper::left_sib)
+        .def("_right_sib", &tree_visitor_wrapper::right_sib)
+        .def("_left_child", &tree_visitor_wrapper::left_child)
+        .def("_right_child", &tree_visitor_wrapper::right_child)
         .def_property_readonly(
-            "left",
-            [](const tree_visitor_wrapper& self) { return self.visitor.tree().left; },
-            "Left edge of genomic interval (inclusive)")
+            "_left",
+            [](const tree_visitor_wrapper& self) { return self.visitor.tree().left; })
         .def_property_readonly(
-            "right",
-            [](const tree_visitor_wrapper& self) { return self.visitor.tree().right; },
-            "Right edge of genomic interval (exclusive)")
+            "_right",
+            [](const tree_visitor_wrapper& self) { return self.visitor.tree().right; })
         .def("__next__",
              [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& {
                  auto x = self();
@@ -332,94 +316,50 @@ init_tree_iterator(py::module& m)
              })
         .def("__iter__",
              [](tree_visitor_wrapper& self) -> tree_visitor_wrapper& { return self; })
-        .def(
-            "total_time",
-            [](const tree_visitor_wrapper& self,
-               const fwdpp::ts::std_table_collection::node_table& nodes) {
-                const auto& m = self.visitor.tree();
-                if (m.parents.size() != nodes.size())
-                    {
-                        throw std::invalid_argument(
-                            "node table length does not equal number of "
-                            "nodes in marginal tree");
-                    }
-                double tt = 0.0;
-                for (std::size_t i = 0; i < m.parents.size(); ++i)
-                    {
-                        if (m.parents[i] != fwdpp::ts::NULL_INDEX)
-                            {
-                                tt += nodes[i].time - nodes[m.parents[i]].time;
-                            }
-                    }
-                return tt;
-            },
-            "Return the sum of branch lengths")
+        .def("_total_time",
+             [](const tree_visitor_wrapper& self,
+                const fwdpp::ts::std_table_collection::node_table& nodes) {
+                 const auto& m = self.visitor.tree();
+                 if (m.parents.size() != nodes.size())
+                     {
+                         throw std::invalid_argument(
+                             "node table length does not equal number of "
+                             "nodes in marginal tree");
+                     }
+                 double tt = 0.0;
+                 for (std::size_t i = 0; i < m.parents.size(); ++i)
+                     {
+                         if (m.parents[i] != fwdpp::ts::NULL_INDEX)
+                             {
+                                 tt += nodes[i].time - nodes[m.parents[i]].time;
+                             }
+                     }
+                 return tt;
+             })
         .def_property_readonly("sample_size", &tree_visitor_wrapper::sample_size)
         .def_property_readonly(
-            "roots",
+            "_roots",
             [](const tree_visitor_wrapper& self) {
                 auto roots = fwdpp::ts::get_roots(self.visitor.tree());
                 return fwdpy11::make_1d_array_with_capsule(std::move(roots));
-            },
-            R"delim(
-            Return marginal tree roots as numpy.ndarray
-            
-            .. versionadded:: 0.4.0
-
-            .. versionchanged:: 0.5.1
-
-                Fixed to not return an empty array.
-            )delim")
-        .def("nodes", &tree_visitor_wrapper::nodes,
-             R"delim("Return the nodes in the current tree.
-             
-             The return order is preorder.
-             
-             .. versionadded:: 0.5.1
-             )delim")
-        .def("samples", &tree_visitor_wrapper::samples,
-             "Return the complete sample list")
-        .def_property_readonly("tables", &tree_visitor_wrapper::get_tables,
-                               "Return the TableCollection")
-        .def("samples_below", &tree_visitor_wrapper::samples_below,
-             R"delim(
-            Return the list of samples descending from a node.
-
-            :param node: A node id
-            :type node: int
-            :param sorted: (False) Whether or not to sort sample node IDs.
-            :type sorted: boolean
-
-            .. note::
-
-                Do not store these sample lists without making a "deep"
-                copy.  The internal buffer is re-used.
-            )delim",
-             py::arg("node"), py::arg("sorted") = false)
+            })
+        .def("_nodes", &tree_visitor_wrapper::nodes)
+        .def("_samples", &tree_visitor_wrapper::samples)
+        .def_property_readonly("_tables", &tree_visitor_wrapper::get_tables)
+        .def("_samples_below", &tree_visitor_wrapper::samples_below, py::arg("node"),
+             py::arg("sorted") = false)
         .def(
-            "sites",
+            "_sites",
             [](tree_visitor_wrapper& self) {
                 auto rv = self.get_sites_on_current_tree();
                 return py::make_iterator(rv.first, rv.second);
             },
-            py::keep_alive<0, 1>(),
-            R"delim(
-            Return iterator over all :class:`fwdpy11.Site` objects
-            on the current tree.
-
-            .. versionadded:: 0.5.1
-            )delim")
+            py::keep_alive<0, 1>())
         .def(
-            "mutations",
+            "_mutations",
             [](tree_visitor_wrapper& self) {
                 auto r = self.get_mutations_on_current_tree();
                 return py::make_iterator(r.first, r.second);
             },
-            py::keep_alive<0, 1>(),
-            R"delim(
-            Return iterator over all :class:`fwdpy11.MutationRecord` objects
-            on the current tree.
-
-            .. versionadded:: 0.5.1
-            )delim");
+            py::keep_alive<0, 1>());
 }
