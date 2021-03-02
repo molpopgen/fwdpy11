@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="current nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -562,6 +572,11 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#enabling-compiler-command-support-for-developing-the-c-code">
+   Enabling compiler command support for developing the C++ code
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#c-code-standards">
    C++ code standards
   </a>
@@ -645,6 +660,21 @@
                 
   <div class="section" id="developer-s-guide">
 <span id="developersguide"></span><h1>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="enabling-compiler-command-support-for-developing-the-c-code">
+<h2>Enabling compiler command support for developing the C++ code<a class="headerlink" href="#enabling-compiler-command-support-for-developing-the-c-code" title="Permalink to this headline">¶</a></h2>
+<p>Many language servers support processing a local file called <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code>.
+See <a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">here</a> for background.</p>
+<p>To generate this file, execute the following steps from the root of the source code repository:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir ccomands
+<span class="nb">cd</span> ccomands
+cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS<span class="o">=</span><span class="m">1</span>
+mv compile_commands.json ..
+<span class="nb">cd</span> ..
+rm -rf ccomands
+</pre></div>
+</div>
+<p>Now, language servers supporting <code class="docutils literal notranslate"><span class="pre">clangd</span></code> will have nice error checking and code completion for the C++ code!</p>
+</div>
 <div class="section" id="c-code-standards">
 <h2>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">¶</a></h2>
 </div>

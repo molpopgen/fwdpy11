@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -554,27 +564,24 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/evolvets_vignette.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#our-model">
+   Our model
+  </a>
+ </li>
+</ul>
+
+        </nav>
         
     </div>
 </div>
@@ -585,6 +592,101 @@
                 
   <div class="section" id="evolving-with-tree-sequence-recording">
 <span id="evolvets-vignette"></span><h1>Evolving with tree sequence recording<a class="headerlink" href="#evolving-with-tree-sequence-recording" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function described in this section has many <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> specifying various advanced features.
+Some of these will be the subject of later vignettes.</p>
+<p>Future releases are likely to change these arguments to be <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> only.
+It is also possible that we will move them into a class that can be pickled, added to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> tree files, etc..</p>
+</div>
+<p>The function <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a> evolves a population with tree sequence recording.</p>
+<div class="section" id="our-model">
+<h2>Our model<a class="headerlink" href="#our-model" title="Permalink to this headline">¶</a></h2>
+<p>By way of example, let’s use the following model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
+
+<span class="n">des</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">h</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">LargeEffectExponentiallyRecessive</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mf">5.0</span><span class="p">))</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">des</span><span class="p">],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The tables recording the genetic ancestry of the population are empty.
+For example, there are no edges:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can call our function to evolve our population.
+We will apply the table simplification algorithm of <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id10"><span>KTAR18</span></a>]</span> every 100 generations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, the edge table is populated:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([(0.        , 0.32363127, 1000, 874),
+       (0.        , 0.32363127, 1000, 955),
+       (0.        , 0.05966027, 1001, 443),
+       (0.35729991, 1.        , 1001, 443),
+       (0.        , 0.05966027, 1001, 470),
+       (0.35729991, 1.        , 1001, 470),
+       (0.39143993, 0.51894783, 1002, 593),
+       (0.        , 1.        , 1002, 732),
+       (0.        , 1.        , 1002, 762),
+       (0.        , 0.3523162 , 1002, 894)],
+      dtype=[(&#39;left&#39;, &#39;&lt;f8&#39;), (&#39;right&#39;, &#39;&lt;f8&#39;), (&#39;parent&#39;, &#39;&lt;i4&#39;), (&#39;child&#39;, &#39;&lt;i4&#39;)])
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -615,7 +625,7 @@ False otherwise.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">Additive</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.GeneticValueIsTrait</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.GeneticValueNoise</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Additive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Additive effects on genetic values.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -626,13 +636,13 @@ also determine the order of positional arguments:</p>
 </ul>
 </dd>
 </dl>
-<p>When <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then we are
+<p>When <cite>gvalue_to_fitness</cite> is <cite>None</cite>, then we are
 modeling additive effects on fitness.</p>
 <p>For a model of fitness, the genetic value is 1, 1+e*h,
-1+``scaling``*e for genotypes AA, Aa, and aa, respectively,
-where <code class="docutils literal notranslate"><span class="pre">e</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the effect size and dominance, respectively.</p>
-<p>For a model of a trait (phenotype), meaning <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code>
-is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the values for the three genotypes are 0, e*h,
+1+`scaling`*e for genotypes AA, Aa, and aa, respectively,
+where <cite>e</cite> and <cite>h</cite> are the effect size and dominance, respectively.</p>
+<p>For a model of a trait (phenotype), meaning <cite>gvalue_to_fitness</cite>
+is not <cite>None</cite>, the values for the three genotypes are 0, e*h,
 and e, respectively.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -701,7 +711,7 @@ False otherwise.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">Multiplicative</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue_to_fitness</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.GeneticValueIsTrait</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.GeneticValueNoise</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndemes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Multiplicative" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multiplicative effects on genetic values.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -712,13 +722,13 @@ also determine the order of positional arguments:</p>
 </ul>
 </dd>
 </dl>
-<p>When <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code>, then we are
+<p>When <cite>gvalue_to_fitness</cite> is <cite>None</cite>, then we are
 modeling multiplicative effects on fitness.</p>
 <p>For a model of fitness, the genetic value is 1, 1+e*h,
-1+``scaling``*e for genotypes AA, Aa, and aa, respectively,
-where <code class="docutils literal notranslate"><span class="pre">e</span></code> and <code class="docutils literal notranslate"><span class="pre">h</span></code> are the effect size and dominance, respectively.</p>
-<p>For a model of a trait (phenotype), meaning <code class="docutils literal notranslate"><span class="pre">gvalue_to_fitness</span></code>
-is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the values for the three genotypes are 0, e*h,
+1+`scaling`*e for genotypes AA, Aa, and aa, respectively,
+where <cite>e</cite> and <cite>h</cite> are the effect size and dominance, respectively.</p>
+<p>For a model of a trait (phenotype), meaning <cite>gvalue_to_fitness</cite>
+is not <cite>None</cite>, the values for the three genotypes are 0, e*h,
 and e, respectively.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -791,7 +801,7 @@ False otherwise.</p>
 <p>The trait value is the geometric mean of the sum of effect sizes on each haplotype.
 It is undefined for the case where these sums are negative.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -874,7 +884,7 @@ that any dominance terms associated with mutations are ignored.</p>
 <p>During a simulation, <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a> is filled with the
 genetic value corresponding to a “focal” trait specified upon object construction.
 This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

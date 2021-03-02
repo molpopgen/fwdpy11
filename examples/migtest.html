@@ -94,43 +94,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -138,6 +101,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -263,6 +231,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -478,6 +451,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -569,13 +579,13 @@
 <span id="migtest"></span><h1>Symmetric migration between two demes<a class="headerlink" href="#symmetric-migration-between-two-demes" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-default" id="id1">
 <img alt="../_images/migtest.png" src="../_images/migtest.png" />
-<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Example output from this script, which simulates two demes
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Example output from this script, which simulates two demes
 with <code class="docutils literal notranslate"><span class="pre">N=1,000</span></code> per deme.  For each replicate, <span class="math notranslate nohighlight">\(F_{st}\)</span>
 is calculated from a random sample of 10 diploids taken
 from each deme at the end of the simulation. For the scaling
 used here, the <span class="math notranslate nohighlight">\(E[F_{st}]=\frac{1}{1+8Nm}\)</span>.  It took
-about an hour to get these results on an 8-core laptop
-with a 10-th generation Intel i7 processor.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+about 17 minutes to get these results on a desktop machine
+with an AMD Ryzen 3600 CPU.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>The script executes the following work flow:</p>
 <ul class="simple">

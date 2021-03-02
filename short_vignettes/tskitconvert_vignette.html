@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -554,23 +564,6 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/tskitconvert_vignette.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
@@ -606,9 +599,28 @@
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MutationTableRow(site=0, node=1288, derived_state=&#39;1&#39;, parent=-1, metadata={&#39;h&#39;: 0.0, &#39;key&#39;: 13, &#39;label&#39;: 0, &#39;neutral&#39;: True, &#39;origin&#39;: -363, &#39;s&#39;: 0.0}, time=363.0)
+</pre></div>
+</div>
+</div>
+</div>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
-<p>Finish once issue 656 is fixed</p>
+<p>Fill in with more exposition.</p>
 </div>
 </div>
 

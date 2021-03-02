@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -587,12 +597,12 @@
 
 <dl class="py function">
 <dt id="fwdpy11.simplify">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">simplify</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.PopulationBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><span class="pre">tuple</span></a><a class="headerlink" href="#fwdpy11.simplify" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">simplify</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simplify a TableCollection stored in a Population.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pop</strong> – A <a class="reference internal" href="types.html#fwdpy11.PopulationBase" title="fwdpy11.PopulationBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase</span></code></a></p></li>
+<li><p><strong>pop</strong> – A <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase</span></code></p></li>
 <li><p><strong>samples</strong> – A list of samples (node indexes).</p></li>
 </ul>
 </dd>
@@ -606,13 +616,14 @@
 <p>Note that the samples argument is agnostic with respect to the time of
 the nodes in the input tables. Thus, you may do things like simplify
 to a set of “currently-alive” nodes plus some or all ancient samples by
-including some node IDs from <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="fwdpy11.DiploidPopulation.ancient_sample_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.ancient_sample_metadata</span></code></a>.</p>
+including some node IDs from
+<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="fwdpy11.DiploidPopulation.ancient_sample_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.ancient_sample_metadata</span></code></a>.</p>
 <p>If the input contains ancient samples, and you wish to include them in the output,
 then you need to include their IDs in the samples argument.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Due to node ID remapping, the metadata corresponding to nodes becomes a bit more
-difficult to look up.  You need to use the output ID map, the original IDs, and 
+difficult to look up.  You need to use the output ID map, the original IDs, and
 the population’s metadata containers.</p>
 </div>
 <div class="deprecated">
@@ -628,7 +639,7 @@ the population’s metadata containers.</p>
 
 <dl class="py function">
 <dt id="fwdpy11.simplify_tables">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">simplify_tables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><span class="pre">tuple</span></a><a class="headerlink" href="#fwdpy11.simplify_tables" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">simplify_tables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._types.table_collection.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._types.table_collection.TableCollection</span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.simplify_tables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simplify a TableCollection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -665,7 +676,7 @@ the population’s metadata containers.</p>
 <li><p><strong>suppress_table_indexing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (False) Prevents edge table indexing until
 end of simulation</p></li>
 <li><p><strong>record_gvalue_matrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (False) Whether to record genetic values into
-<a class="reference internal" href="types.html#fwdpy11.PopulationBase.genetic_values" title="fwdpy11.PopulationBase.genetic_values"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.genetic_values</span></code></a>.</p></li>
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.genetic_values</span></code>.</p></li>
 <li><p><strong>preserve_first_generation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (False) Whether to record generation 0 as
 ancient samples. Must be <cite>True</cite> for
 tree sequence “recapitation”. See
@@ -677,7 +688,7 @@ generation of the population.</p></li>
 </ul>
 </dd>
 </dl>
-<p>The recording of genetic values into <a class="reference internal" href="types.html#fwdpy11.PopulationBase.genetic_values" title="fwdpy11.PopulationBase.genetic_values"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.genetic_values</span></code></a>
+<p>The recording of genetic values into <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.genetic_values</span></code>
 is suppressed by default.  First, it is redundant with
 <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a> for the common case of mutational effects on a
 single trait. Second, we save some memory by not tracking these matrices.
@@ -747,7 +758,7 @@ demes will appear later on and have migration amongst them.</p>
 
 <dl class="py function">
 <dt id="fwdpy11.data_matrix_from_tables">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">data_matrix_from_tables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_neutral</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_selected</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_fixations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.7976931348623157e+308</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.DataMatrix</span><a class="headerlink" href="#fwdpy11.data_matrix_from_tables" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">data_matrix_from_tables</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.ll_TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_neutral</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_selected</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_fixations</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.7976931348623157e+308</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.DataMatrix</span><a class="headerlink" href="#fwdpy11.data_matrix_from_tables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a <a class="reference internal" href="datamatrix.html#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> from a table collection.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

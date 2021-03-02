@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -554,27 +564,31 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/recorders_vignette.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recording-ancient-samples">
+   Recording ancient samples
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#built-in-ancient-sample-recorders">
+     Built-in ancient sample recorders
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
         
     </div>
 </div>
@@ -585,7 +599,218 @@
                 
   <div class="section" id="recording-data-during-a-simulation">
 <span id="recorders-vignette"></span><h1>Recording data during a simulation<a class="headerlink" href="#recording-data-during-a-simulation" title="Permalink to this headline">¶</a></h1>
-<p>STUB</p>
+<p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
+The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
+<div class="tabbed-set docutils">
+<input checked="checked" id="2b655b8e-86a5-4e53-9dd3-33992c97e51a" name="e5d9a55c-5052-47b2-b566-724d202dbe23" type="radio">
+</input><label class="tabbed-label" for="2b655b8e-86a5-4e53-9dd3-33992c97e51a">
+python</label><div class="tabbed-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<input id="e907297e-e2b9-476a-bfae-440db2f42cf2" name="e5d9a55c-5052-47b2-b566-724d202dbe23" type="radio">
+</input><label class="tabbed-label" for="e907297e-e2b9-476a-bfae-440db2f42cf2">
+c++</label><div class="tabbed-content docutils">
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
+
+<span class="k">struct</span> <span class="nc">Recorder</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="nf">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidPopulation</span> <span class="o">&amp;</span> <span class="n">pop</span><span class="p">,</span>
+                    <span class="k">const</span> <span class="n">fwdpy11</span><span class="o">::</span><span class="n">SampleRecorder</span> <span class="o">&amp;</span> <span class="n">sampler</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The remainder of this vignette will only cover <code class="docutils literal notranslate"><span class="pre">Python</span></code>.
+The arguments to <code class="docutils literal notranslate"><span class="pre">__call__</span></code> are an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> and <a class="reference internal" href="../pages/recorders.html#fwdpy11.SampleRecorder" title="fwdpy11.SampleRecorder"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SampleRecorder</span></code></a>, respectively.
+The latter allows one to record “ancient samples” during a simulation, which we discuss more below.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Given that you can pass in any valid Python object, you can record anything you can imagine based on attributes of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
+Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
+<p>You can also process the genealogy of the population.
+Doing so is an advanced topic, which we deal with in a later vignette.</p>
+</div>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Write vignette showing how to access the tree sequences during a simulation.</p>
+</div>
+<p>Let’s return to the model from the previous vignette.
+We will implement a recorder to track the mean trait value and fitness of the entire population over time.</p>
+<p>That recorder object will look like this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_trait_value</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_fitness</span> <span class="o">=</span> <span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_trait_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_fitness</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The details of the simulation model follow, but are hidden by default as they repeat material from the previous vignette.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+
+<span class="n">GSSmo</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSSmo</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+        <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Optimum</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">optimum</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">VS</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
+
+<span class="n">des</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GaussianS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">h</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">LargeEffectExponentiallyRecessive</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mf">5.0</span><span class="p">))</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">),</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">des</span><span class="p">],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">))],</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">+</span> <span class="mi">200</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now pass in our callable to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">recorder</span> <span class="o">=</span> <span class="n">Recorder</span><span class="p">()</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting our results:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">mean_trait_value</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{g}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">mean_fitness</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{w}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/recorders_vignette_7_0.png" src="../_images/recorders_vignette_7_0.png" />
+</div>
+</div>
+<div class="section" id="recording-ancient-samples">
+<h2>Recording ancient samples<a class="headerlink" href="#recording-ancient-samples" title="Permalink to this headline">¶</a></h2>
+<p>Let’s write a new class that “preserves” a random number of individuals each generation.
+This recording preserves their nodes in the <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> and their meta data in <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="fwdpy11.DiploidPopulation.ancient_sample_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.ancient_sample_metadata</span></code></a>.</p>
+<p>Our class will also do all of the same operations that <code class="docutils literal notranslate"><span class="pre">Recorder</span></code> did.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RandomSamples</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsam</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsam</span> <span class="o">=</span> <span class="n">nsam</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_trait_value</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_fitness</span> <span class="o">=</span> <span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">generation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_trait_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_fitness</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="n">sampler</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsam</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To run this, we first create a new population, random number generator, and model parameters object.
+We need a new model parameters instance because the one used above has already applied the optimum shift.
+Thus, we need to rebuild the <code class="docutils literal notranslate"><span class="pre">gvalue</span></code> field.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+<span class="n">p</span><span class="p">[</span><span class="s1">&#39;gvalue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Additive</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">GSSmo</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">RandomSamples</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">recorder</span><span class="o">=</span><span class="n">recorder</span><span class="p">,</span> <span class="n">simplification_interval</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now want to recreate the plot from above, but with the values from our ancient samples shown as dots.
+Analyzing each time point separately is a common operation made easier by <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.sample_timepoints" title="fwdpy11.DiploidPopulation.sample_timepoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.sample_timepoints()</span></code></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ancient_generation</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ancient_mean_trait_value</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ancient_mean_fitness</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">md</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">sample_timepoints</span><span class="p">(</span><span class="n">include_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">ancient_generation</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="n">ancient_mean_trait_value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;g&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+    <span class="n">ancient_mean_fitness</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, the plot:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ancient_generation</span><span class="p">,</span> <span class="n">ancient_mean_trait_value</span><span class="p">,</span>
+           <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{g}</span><span class="s1">_</span><span class="si">{n}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">ancient_generation</span><span class="p">,</span> <span class="n">ancient_mean_fitness</span><span class="p">,</span>
+           <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{w}</span><span class="s1">_</span><span class="si">{n}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">mean_trait_value</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{g}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">recorder</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">recorder</span><span class="o">.</span><span class="n">mean_fitness</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;brown&#39;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\bar</span><span class="si">{w}</span><span class="s1">$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Generation&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/recorders_vignette_15_0.png" src="../_images/recorders_vignette_15_0.png" />
+</div>
+</div>
+<div class="section" id="built-in-ancient-sample-recorders">
+<h3>Built-in ancient sample recorders<a class="headerlink" href="#built-in-ancient-sample-recorders" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference internal" href="../pages/recorders.html#fwdpy11.RandomAncientSamples" title="fwdpy11.RandomAncientSamples"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.RandomAncientSamples</span></code></a></p></li>
+</ul>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

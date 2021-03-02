@@ -23,53 +23,6 @@ kernelspec:
 
 ```
 
-## Base class for populations
-
-```{eval-rst}
-.. autoclass:: fwdpy11.PopulationBase
-```
-
-:::{note}
-
-This base class is imperfect, and contains some attributes
-and functions that assume diploidy.  These issues will be
-fixed in future releases, largely by moving the diploid-specific
-stuff to the derived classes. To hopefully avoid confusion,
-the oddly-placed attributes are documented in
-{class}`fwdpy11.DiploidPopulation`.
-
-:::
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.haploid_genomes
-
-    .. note::
-
-        The haploid_genomes container contains extant and extinct
-        genomes. For the latter, :attr:`fwdpy11.HaploidGenome.n`
-        equals 0.
-```
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.mutations
-```
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.mcounts
-```
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.tables
-```
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.genetic_values
-```
-
-```{eval-rst}
-.. autoattribute:: fwdpy11.PopulationBase.ancient_sample_genetic_values
-```
-
 ## Populations of diploids
 
 ```{eval-rst}

@@ -52,6 +52,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Adaptation to different optima with multivariate distribution of effect sizes" href="../examples/gss_divergent_optima.html" />
@@ -92,43 +94,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +101,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +231,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +451,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -554,23 +566,6 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/pages/types.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
@@ -589,11 +584,6 @@
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#random-number-generator">
      Random number generator
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#base-class-for-populations">
-     Base class for populations
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -665,121 +655,36 @@
 </dd></dl>
 
 </div>
-<div class="section" id="base-class-for-populations">
-<h2>Base class for populations<a class="headerlink" href="#base-class-for-populations" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="fwdpy11.PopulationBase">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PopulationBase</span></code><a class="headerlink" href="#fwdpy11.PopulationBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Abstract base class for populations based on <a class="reference internal" href="#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a></p>
-</dd></dl>
-
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This base class is imperfect, and contains some attributes
-and functions that assume diploidy.  These issues will be
-fixed in future releases, largely by moving the diploid-specific
-stuff to the derived classes. To hopefully avoid confusion,
-the oddly-placed attributes are documented in
-<a class="reference internal" href="#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.</p>
-</div>
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.haploid_genomes">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">haploid_genomes</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.haploid_genomes" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="#fwdpy11.HaploidGenomeVector" title="fwdpy11.HaploidGenomeVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.HaploidGenomeVector</span></code></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The haploid_genomes container contains extant and extinct
-genomes. For the latter, <a class="reference internal" href="#fwdpy11.HaploidGenome.n" title="fwdpy11.HaploidGenome.n"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.HaploidGenome.n</span></code></a>
-equals 0.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.mutations">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">mutations</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.mutations" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of <a class="reference internal" href="#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This list contains <strong>both</strong> extinct <em>and</em> extant mutations.  
-To distinguish them, use the locations of nonzero values in “mcounts” 
-for an instance of this type.”</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.mcounts">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">mcounts</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.mcounts" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of number of occurrences of elements in 
-a population objecst “mutations” container.</p>
-<p>The values are unsigned 32-bit integers.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Some values may be 0.  These represent <em>extinct</em> variants.  You will typically want to avoid processing such mutations.</p>
-</div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.tables">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">tables</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Give access to the population’s 
-<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a></p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.genetic_values">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">genetic_values</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.genetic_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the genetic values as a readonly 2d numpy.ndarray.</p>
-<p>Rows are individuals.  Columns are genetic values.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="fwdpy11.PopulationBase.ancient_sample_genetic_values">
-<code class="sig-prename descclassname"><span class="pre">PopulationBase.</span></code><code class="sig-name descname"><span class="pre">ancient_sample_genetic_values</span></code><a class="headerlink" href="#fwdpy11.PopulationBase.ancient_sample_genetic_values" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the genetic values for ancient samples as a readonly 2d 
-numpy.ndarray.</p>
-<p>Rows are individuals.  Columns are genetic values.</p>
-</dd></dl>
-
-</div>
 <div class="section" id="populations-of-diploids">
 <h2>Populations of diploids<a class="headerlink" href="#populations-of-diploids" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="fwdpy11.DiploidPopulation">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidPopulation</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Representation of a diploid population</p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidPopulation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ll_pop</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.ll_DiploidPopulation</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A population of diploid individuals.</p>
+<p>To initialize a population of size N and genome length L:</p>
+<p>fwdpy11.DiploidPopulation(N, L)</p>
+<p>To initialize a population with two demes of initial
+sizes N1 and N2 and genome length L:</p>
+<p>fwdpy11.DiploidPopulation([N1, N2], L)</p>
 <dl class="py attribute">
 <dt id="fwdpy11.DiploidPopulation.generation">
 <code class="sig-name descname"><span class="pre">generation</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.generation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Curent generation.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="fwdpy11.DiploidPopulation.mutations">
 <code class="sig-name descname"><span class="pre">mutations</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.mutations" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of <a class="reference internal" href="#fwdpy11.Mutation" title="fwdpy11.Mutation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Mutation</span></code></a>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This list contains <strong>both</strong> extinct <em>and</em> extant mutations.  
-To distinguish them, use the locations of nonzero values in “mcounts” 
-for an instance of this type.”</p>
-</div>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="fwdpy11.DiploidPopulation.haploid_genomes">
 <code class="sig-name descname"><span class="pre">haploid_genomes</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.haploid_genomes" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="#fwdpy11.HaploidGenomeVector" title="fwdpy11.HaploidGenomeVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.HaploidGenomeVector</span></code></a>.</p>
-</dd></dl>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.alive_nodes">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">alive_nodes</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.alive_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of alive nodes corresponding to individuals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)">numpy.ndarray</a></p>
-</dd>
-</dl>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.5.3.</span></p>
 </div>
@@ -788,7 +693,7 @@ for an instance of this type.”</p>
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.ancient_sample_metadata">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">ancient_sample_metadata</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Container of metadata for ancient samples.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
@@ -802,14 +707,8 @@ for an instance of this type.”</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.DiploidPopulation.clear">
-<code class="sig-name descname"><span class="pre">clear</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.DiploidPopulation.clear" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clears all population data.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.create_from_tskit">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">create_from_tskit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.create_from_tskit" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">create_from_tskit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._types.diploid_population.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.create_from_tskit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new object from an tskit.TreeSequence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -840,7 +739,7 @@ for example.)</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.deme_sizes">
-<code class="sig-name descname"><span class="pre">deme_sizes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.deme_sizes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deme_sizes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DiploidPopulation.deme_sizes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of individuals in each deme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -861,13 +760,13 @@ If False, numpy arrays are returned</p>
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.diploid_metadata">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">diploid_metadata</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.diploid_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Container of diploid metadata.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.diploids">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">diploids</span></code><a class="headerlink" href="#fwdpy11.DiploidPopulation.diploids" title="Permalink to this definition">¶</a></dt>
-<dd><p>A <a class="reference internal" href="#fwdpy11.DiploidVector" title="fwdpy11.DiploidVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidVector</span></code></a>.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
@@ -899,19 +798,25 @@ Origin time of mutations is part of the metadata.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.dump_to_file">
-<code class="sig-name descname"><span class="pre">dump_to_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">dump_to_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a population to a file in binary format.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.load_from_file">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">load_from_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.load_from_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a population from a binary file.</p>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load_from_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._types.diploid_population.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.load_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load population from the output of
+<a class="reference internal" href="#fwdpy11.DiploidPopulation.dump_to_file" title="fwdpy11.DiploidPopulation.dump_to_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_to_file()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – A file name</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.load_from_pickle_file">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">load_from_pickle_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.load_from_pickle_file" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">load_from_pickle_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._types.diploid_population.DiploidPopulation</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.load_from_pickle_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read in a pickled population from a file.
 The file muse have been generated by
 a call to <a class="reference internal" href="#fwdpy11.DiploidPopulation.pickle_to_file" title="fwdpy11.DiploidPopulation.pickle_to_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.pickle_to_file()</span></code></a>.</p>
@@ -924,9 +829,9 @@ a call to <a class="reference internal" href="#fwdpy11.DiploidPopulation.pickle_
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.pickle_to_file">
-<code class="sig-name descname"><span class="pre">pickle_to_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.DiploidPopulation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.DiploidPopulation.pickle_to_file" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">pickle_to_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.pickle_to_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pickle the population to an open file.</p>
-<p>This function may be preferred over 
+<p>This function may be preferred over
 the direct pickling method because it uses less
 memory.  It is, however, slower.</p>
 <p>To read the population back in, you must call
@@ -957,7 +862,7 @@ memory.  It is, however, slower.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.sample_timepoints">
-<code class="sig-name descname"><span class="pre">sample_timepoints</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.sample_timepoints" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">sample_timepoints</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.20)"><span class="pre">numpy.recarray</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DiploidPopulation.sample_timepoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator over all sample time points.
 The iterator yields time, nodes, and metadata.</p>
 <dl class="field-list simple">
@@ -1223,23 +1128,11 @@ that is handled on the C++ side.</p>
 <h1>Types related to tree sequence recording<a class="headerlink" href="#types-related-to-tree-sequence-recording" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fwdpy11.TableCollection">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">TableCollection</span></code><a class="headerlink" href="#fwdpy11.TableCollection" title="Permalink to this definition">¶</a></dt>
-<dd><p>A table collection representing a succinct tree sequence.</p>
-<dl class="py method">
-<dt id="fwdpy11.TableCollection.L">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">L</span></code><a class="headerlink" href="#fwdpy11.TableCollection.L" title="Permalink to this definition">¶</a></dt>
-<dd><p>Genome length</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fwdpy11.TableCollection.build_indexes">
-<code class="sig-name descname"><span class="pre">build_indexes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TableCollection</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><span class="pre">None</span></a><a class="headerlink" href="#fwdpy11.TableCollection.build_indexes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">TableCollection</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.TableCollection" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
 <dt id="fwdpy11.TableCollection.edges">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">edges</span></code><a class="headerlink" href="#fwdpy11.TableCollection.edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="#fwdpy11.EdgeTable" title="fwdpy11.EdgeTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.EdgeTable</span></code></a>.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1292,39 +1185,21 @@ returned, indexed in the same order as the input windows.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.TableCollection.genome_length">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">genome_length</span></code><a class="headerlink" href="#fwdpy11.TableCollection.genome_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the genome/sequence length.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fwdpy11.TableCollection.input_left">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">input_left</span></code><a class="headerlink" href="#fwdpy11.TableCollection.input_left" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index vector describing when nodes enter trees.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="fwdpy11.TableCollection.mutations">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">mutations</span></code><a class="headerlink" href="#fwdpy11.TableCollection.mutations" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="#fwdpy11.MutationTable" title="fwdpy11.MutationTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationTable</span></code></a>.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TableCollection.nodes">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">nodes</span></code><a class="headerlink" href="#fwdpy11.TableCollection.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="#fwdpy11.NodeTable" title="fwdpy11.NodeTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.NodeTable</span></code></a>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="fwdpy11.TableCollection.output_right">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">output_right</span></code><a class="headerlink" href="#fwdpy11.TableCollection.output_right" title="Permalink to this definition">¶</a></dt>
-<dd><p>Index vector describing when nodes leave trees.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TableCollection.sites">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">sites</span></code><a class="headerlink" href="#fwdpy11.TableCollection.sites" title="Permalink to this definition">¶</a></dt>
-<dd><p>The <a class="reference internal" href="#fwdpy11.SiteTable" title="fwdpy11.SiteTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SiteTable</span></code></a>.</p>
+<dd><p>Supports buffer protocol</p>
 </dd></dl>
 
 </dd></dl>
@@ -1512,38 +1387,92 @@ when generating such views.</p>
 
 <dl class="py class">
 <dt id="fwdpy11.TreeIterator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">TreeIterator</span></code><a class="headerlink" href="#fwdpy11.TreeIterator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">TreeIterator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tables</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._types.table_collection.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ancient_samples</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.TreeIterator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Iterate over the marginal trees in a <a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a></p>
+<p>Positional arguments for initialization:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>TableCollection</em></a>) – A table collection</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
+</ul>
+</dd>
+</dl>
+<p>The following are keyword only:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ancient_samples</strong> (<em>List of sample nodes</em>) – List of ancient_samples nodes</p></li>
+<li><p><strong>begin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Start iteration at this position</p></li>
+<li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a>) – End iteration at this position</p></li>
+</ul>
+</dd>
+</dl>
+<p>If <cite>end</cite> is <cite>None</cite>, then iteration proceeds over all trees with
+after positions <span class="math notranslate nohighlight">\(\geq \mathrm{begin}\)</span>.</p>
+<p>If <cite>ancient_samples</cite> is not <cite>None</cite>, then
+<a class="reference internal" href="#fwdpy11.TreeIterator.preserved_leaf_counts" title="fwdpy11.TreeIterator.preserved_leaf_counts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TreeIterator.preserved_leaf_counts()</span></code></a> will return the number
+of ancient samples below a node.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.4.1: </span>Add begin, end options as floats for initializing</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.leaf_counts">
-<code class="sig-name descname"><span class="pre">leaf_counts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.leaf_counts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Leaf counts for a node</p>
+<code class="sig-name descname"><span class="pre">leaf_counts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.leaf_counts" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of samples (leaves) below node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.left">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">left</span></code><a class="headerlink" href="#fwdpy11.TreeIterator.left" title="Permalink to this definition">¶</a></dt>
-<dd><p>Left edge of genomic interval (inclusive)</p>
+<dd><p>Left coordinate of current tree (inclusive)</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.left_child">
-<code class="sig-name descname"><span class="pre">left_child</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.left_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping of current node id to its left child</p>
+<code class="sig-name descname"><span class="pre">left_child</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.left_child" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Left child id of node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.left_sib">
-<code class="sig-name descname"><span class="pre">left_sib</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.left_sib" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the left sibling of the current node</p>
+<code class="sig-name descname"><span class="pre">left_sib</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.left_sib" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Left sib id of node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.mutations">
-<code class="sig-name descname"><span class="pre">mutations</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><a class="headerlink" href="#fwdpy11.TreeIterator.mutations" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">mutations</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.MutationRecord</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.TreeIterator.mutations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator over all <a class="reference internal" href="#fwdpy11.MutationRecord" title="fwdpy11.MutationRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationRecord</span></code></a> objects
 on the current tree.</p>
 <div class="versionadded">
@@ -1553,73 +1482,112 @@ on the current tree.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.nodes">
-<code class="sig-name descname"><span class="pre">nodes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int32</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.TreeIterator.nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>“Return the nodes in the current tree.</p>
-<blockquote>
-<div><p>The return order is preorder.</p>
+<code class="sig-name descname"><span class="pre">nodes</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the nodes in the current tree.</p>
+<p>The return order is preorder.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.5.1.</span></p>
 </div>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.parent">
-<code class="sig-name descname"><span class="pre">parent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.parent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return parent of a node</p>
+<code class="sig-name descname"><span class="pre">parent</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.parent" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Parent id of node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.preserved_leaf_counts">
-<code class="sig-name descname"><span class="pre">preserved_leaf_counts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.preserved_leaf_counts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ancient sample leaf counts for a node</p>
+<code class="sig-name descname"><span class="pre">preserved_leaf_counts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.preserved_leaf_counts" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>number of ancient samples below node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.right">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">right</span></code><a class="headerlink" href="#fwdpy11.TreeIterator.right" title="Permalink to this definition">¶</a></dt>
-<dd><p>Right edge of genomic interval (exclusive)</p>
+<dd><p>Right coordinate of current tree (exclusive).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.right_child">
-<code class="sig-name descname"><span class="pre">right_child</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.right_child" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mapping of current node id to its right child</p>
+<code class="sig-name descname"><span class="pre">right_child</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.right_child" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Right child id of node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.right_sib">
-<code class="sig-name descname"><span class="pre">right_sib</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.right_sib" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the right sibling of the current node</p>
+<code class="sig-name descname"><span class="pre">right_sib</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.right_sib" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>u</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Right sib id of node <cite>u</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.roots">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">roots</span></code><a class="headerlink" href="#fwdpy11.TreeIterator.roots" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return marginal tree roots as numpy.ndarray</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.4.0.</span></p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.5.1: </span>Fixed to not return an empty array.</p>
-</div>
+<dd><p>Roots of the current tree</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.samples">
-<code class="sig-name descname"><span class="pre">samples</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">[</span></span><span class="pre">numpy.int32</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.TreeIterator.samples" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the complete sample list</p>
+<code class="sig-name descname"><span class="pre">samples</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.samples" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The samples list</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.samples_below">
-<code class="sig-name descname"><span class="pre">samples_below</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sorted</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.samples_below" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">samples_below</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.samples_below" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the list of samples descending from a node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>node</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – A node id</p></li>
-<li><p><strong>sorted</strong> (<em>boolean</em>) – (False) Whether or not to sort sample node IDs.</p></li>
+<li><p><strong>sort</strong> (<em>boolean</em>) – (False) Whether or not to sort sample node IDs.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1632,7 +1600,7 @@ copy.  The internal buffer is re-used.</p>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.sites">
-<code class="sig-name descname"><span class="pre">sites</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><a class="headerlink" href="#fwdpy11.TreeIterator.sites" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">sites</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.Site</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.TreeIterator.sites" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return iterator over all <a class="reference internal" href="#fwdpy11.Site" title="fwdpy11.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Site</span></code></a> objects
 on the current tree.</p>
 <div class="versionadded">
@@ -1643,13 +1611,20 @@ on the current tree.</p>
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.tables">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">tables</span></code><a class="headerlink" href="#fwdpy11.TreeIterator.tables" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the TableCollection</p>
+<dd><p>The underlying TableCollection</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.TreeIterator.total_time">
-<code class="sig-name descname"><span class="pre">total_time</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.TreeIterator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">fwdpy11._fwdpy11.NodeTable</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.total_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the sum of branch lengths</p>
+<code class="sig-name descname"><span class="pre">total_time</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><a class="headerlink" href="#fwdpy11.TreeIterator.total_time" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Sum of branch lengths</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1763,7 +1738,7 @@ instance of <a class="reference internal" href="datamatrix.html#fwdpy11.DataMatr
 <dd><p>Representation of demographic events acting on
 discrete demes (sub-populations).</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1773,7 +1748,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>set_deme_sizes</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><em>fwdpy11.SetDemeSize</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetDemeSize</span></code></a></p></li>
 <li><p><strong>set_selfing_rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><em>fwdpy11.SetSelfingRate</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetSelfingRate</span></code></a></p></li>
 <li><p><strong>migmatrix</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><em>numpy.ndarray</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><em>fwdpy11.MigrationMatrix</em></a>) – A migraton matrix. See <a class="reference internal" href="softselection.html#migration"><span class="std std-ref">Migration</span></a>. If not
-<code class="docutils literal notranslate"><span class="pre">None</span></code>, then input are converted into an
+<cite>None</cite>, then input are converted into an
 instance of <a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MigrationMatrix</span></code></a>.</p></li>
 <li><p><strong>set_migration_rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><em>fwdpy11.SetMigrationRates</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code></a></p></li>
 </ul>
@@ -1816,7 +1791,7 @@ other people with similar problems:</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">SetExponentialGrowth</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetExponentialGrowth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the growth rate of a deme at a given time.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1841,7 +1816,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">SetDemeSize</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetDemeSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the size of a deme at a given time.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1868,7 +1843,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">SetSelfingRate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">S</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.SetSelfingRate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the selfing probability within a deme at a given time.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1893,7 +1868,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MassMigration</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_individuals</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resets_growth_rate</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MassMigration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mass migration events.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1902,8 +1877,8 @@ also determine the order of positional arguments:</p>
 <li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The source deme for individuals to move</p></li>
 <li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The deme to where individuals we be moved</p></li>
 <li><p><strong>fraction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The fraction of <cite>source</cite> to move to <cite>destination</cite>.</p></li>
-<li><p><strong>move_individuals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the event moves individuals.
-If <code class="docutils literal notranslate"><span class="pre">False</span></code>, individuals are copied.</p></li>
+<li><p><strong>move_individuals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>True</cite>, the event moves individuals.
+If <cite>False</cite>, individuals are copied.</p></li>
 <li><p><strong>resets_growth_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – (True) Whether or not to reset the
 growth rates of <cite>source</cite> and <cite>destination</cite> to
 <a class="reference internal" href="#fwdpy11.NOGROWTH" title="fwdpy11.NOGROWTH"><code class="xref py py-data docutils literal notranslate"><span class="pre">fwdpy11.NOGROWTH</span></code></a></p></li>
@@ -1971,7 +1946,7 @@ growth rates of <cite>source</cite> and <cite>destination</cite> to
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MigrationMatrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">migmatrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MigrationMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>The forward migration matrix for a simulation.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2010,7 +1985,7 @@ low-level C++ class</p>
 May be used to set either the migration rates from a given
 deme or the entire migration matrix.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2022,10 +1997,10 @@ also determine the order of positional arguments:</p>
 </dd>
 </dl>
 <p>The migration rates are equivalent to the single-generation ancestry proportions
-with respect to <code class="docutils literal notranslate"><span class="pre">deme</span></code>.</p>
-<p>In order to change the entire migration matrix, pass <code class="docutils literal notranslate"><span class="pre">None</span></code> (or -1)
-to <code class="docutils literal notranslate"><span class="pre">deme</span></code> and a 2d <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> for <code class="docutils literal notranslate"><span class="pre">migrates</span></code>.  A value of
-<code class="docutils literal notranslate"><span class="pre">None</span></code> will be converted to <code class="docutils literal notranslate"><span class="pre">-1</span></code> in this case.</p>
+with respect to <cite>deme</cite>.</p>
+<p>In order to change the entire migration matrix, pass <cite>None</cite> (or -1)
+to <cite>deme</cite> and a 2d <cite>numpy.ndarray</cite> for <cite>migrates</cite>.  A value of
+<cite>None</cite> will be converted to <cite>-1</cite> in this case.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.5.3.</span></p>
 </div>

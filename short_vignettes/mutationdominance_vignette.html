@@ -92,43 +92,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -136,6 +99,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -261,6 +229,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -476,6 +449,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -554,23 +564,6 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/short_vignettes/mutationdominance_vignette.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
@@ -584,6 +577,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#example">
    Example
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-discrete-distributions">
+   Using discrete distributions
   </a>
  </li>
 </ul>
@@ -676,6 +674,56 @@ See <a class="reference internal" href="des_vignette.html#des-vignette"><span cl
 <img alt="../_images/mutationdominance_vignette_4_0.png" src="../_images/mutationdominance_vignette_4_0.png" />
 </div>
 </div>
+</div>
+<div class="section" id="using-discrete-distributions">
+<h2>Using discrete distributions<a class="headerlink" href="#using-discrete-distributions" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../pages/regiontypes.html#fwdpy11.DiscreteDESD" title="fwdpy11.DiscreteDESD"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDESD</span></code></a> specifies a <em>D</em>iscrete <em>E</em>ffect <em>S</em>ize and <em>D</em>ominance joint distribution.
+A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> of <code class="docutils literal notranslate"><span class="pre">(effect</span> <span class="pre">size,</span> <span class="pre">dominance,</span> <span class="pre">weight)</span></code> specify the joint distribution.
+For example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">joint_dist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">):</span>
+    <span class="n">joint_dist</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="n">s</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">s</span><span class="p">),</span> <span class="mf">1.</span><span class="o">/</span><span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">des</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDESD</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">joint_dist</span><span class="o">=</span><span class="n">joint_dist</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">des</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.DiscreteDESD(
+    beg=0,
+    end=1,
+    weight=1,
+    joint_dist=[
+        (-0.1, 0.9048374180359595, 10.0),
+        (-0.2, 0.8187307530779818, 5.0),
+        (-0.30000000000000004, 0.7408182206817179, 3.333333333333333),
+        (-0.4, 0.6703200460356393, 2.5),
+        (-0.5, 0.6065306597126334, 2.0),
+        (-0.6, 0.5488116360940264, 1.6666666666666667),
+        (-0.7000000000000001, 0.49658530379140947, 1.4285714285714284),
+        (-0.8, 0.44932896411722156, 1.25),
+        (-0.9, 0.4065696597405991, 1.1111111111111112),
+    ],
+    coupled=True,
+    label=0,
+    scaling=1.0,
+)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The result is that mutations with smaller effect sizes are more common (larger weights) and more dominant.</p>
 </div>
 </div>
 

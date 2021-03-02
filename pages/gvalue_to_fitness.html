@@ -94,43 +94,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -138,6 +101,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -263,6 +231,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -478,6 +451,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -619,7 +629,7 @@ False otherwise.</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GSS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.Optimum</span><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GSS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gaussian stabilizing selection on a single trait.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -667,7 +677,7 @@ low-level C++ class</p>
 <dd><p>Gaussian stabilizing selection on a single trait with moving
 optimum.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -677,7 +687,7 @@ also determine the order of positional arguments:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Instances of fwdpy11.Optimum must have valid
-values for <code class="docutils literal notranslate"><span class="pre">when</span></code>.</p>
+values for <cite>when</cite>.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored to use attrs and inherit from
@@ -708,7 +718,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">Optimum</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimum</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Optimum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters for a trait optimum.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -722,8 +732,8 @@ also determine the order of positional arguments:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When used to model a stable optimum (e.g.,
-<a class="reference internal" href="#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a>), the <code class="docutils literal notranslate"><span class="pre">when</span></code> parameter is omitted.
-The <code class="docutils literal notranslate"><span class="pre">when</span></code> parameter is used for moving optima
+<a class="reference internal" href="#fwdpy11.GSS" title="fwdpy11.GSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSS</span></code></a>), the <cite>when</cite> parameter is omitted.
+The <cite>when</cite> parameter is used for moving optima
 (<a class="reference internal" href="#fwdpy11.GSSmo" title="fwdpy11.GSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSSmo</span></code></a>).</p>
 </div>
 <div class="versionadded">
@@ -758,7 +768,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PleiotropicOptima</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">VS</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PleiotropicOptima" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters for multiple trait optima</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -772,8 +782,8 @@ also determine the order of positional arguments:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When used to model stable optima (e.g.,
-<a class="reference internal" href="#fwdpy11.MultivariateGSS" title="fwdpy11.MultivariateGSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSS</span></code></a>), the <code class="docutils literal notranslate"><span class="pre">when</span></code> parameter is omitted.
-The <code class="docutils literal notranslate"><span class="pre">when</span></code> parameter is used for moving optima
+<a class="reference internal" href="#fwdpy11.MultivariateGSS" title="fwdpy11.MultivariateGSS"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSS</span></code></a>), the <cite>when</cite> parameter is omitted.
+The <cite>when</cite> parameter is used for moving optima
 (<a class="reference internal" href="#fwdpy11.MultivariateGSSmo" title="fwdpy11.MultivariateGSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSSmo</span></code></a>).</p>
 </div>
 <div class="versionadded">
@@ -815,7 +825,7 @@ distance of a vector of trait values to a vector of optima.</p>
 PLoS Biology 16 (3): e2002985.</p>
 <p>For the case of moving optima, see <a class="reference internal" href="#fwdpy11.MultivariateGSSmo" title="fwdpy11.MultivariateGSSmo"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MultivariateGSSmo</span></code></a>.
 This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -827,8 +837,8 @@ also determine the order of positional arguments:</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="docutils literal notranslate"><span class="pre">VS</span></code> should be <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">optima</span></code> is list[fwdpy11.PleiotropicOptima]</p>
-<p><code class="docutils literal notranslate"><span class="pre">VS</span></code> is <span class="math notranslate nohighlight">\(\omega^2\)</span> in the Simons et al. notation</p>
+<p><cite>VS</cite> should be <cite>None</cite> if <cite>optima</cite> is list[fwdpy11.PleiotropicOptima]</p>
+<p><cite>VS</cite> is <span class="math notranslate nohighlight">\(\omega^2\)</span> in the Simons et al. notation</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.7.1: </span>Allow initialization with list of fwdpy11.PleiotropicOptima</p>
@@ -862,7 +872,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">MultivariateGSSmo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optima</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.genetic_values.PleiotropicOptima</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.MultivariateGSSmo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multivariate gaussian stablizing selection with moving optima
 This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

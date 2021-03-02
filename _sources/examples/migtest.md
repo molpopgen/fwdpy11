@@ -10,8 +10,8 @@ with `N=1,000` per deme.  For each replicate, {math}`F_{st}`
 is calculated from a random sample of 10 diploids taken
 from each deme at the end of the simulation. For the scaling
 used here, the {math}`E[F_{st}]=\frac{1}{1+8Nm}`.  It took
-about an hour to get these results on an 8-core laptop
-with a 10-th generation Intel i7 processor.
+about 17 minutes to get these results on a desktop machine
+with an AMD Ryzen 3600 CPU.
 
 :::
 

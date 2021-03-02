@@ -27,6 +27,14 @@ pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
 fwdpy11.infinite_sites(rng, pop, 1e-2)
 ```
 
+```{code-cell} python
+ts = pop.dump_tables_to_tskit()
+```
+
+```{code-cell}
+print(ts.tables.mutations[0])
+```
+
 :::{todo}
-Finish once issue 656 is fixed
+Fill in with more exposition.
 :::

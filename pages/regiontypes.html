@@ -94,43 +94,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -138,6 +101,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -263,6 +231,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -478,6 +451,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -572,7 +582,7 @@
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">Region</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.Region" title="Permalink to this definition">¶</a></dt>
 <dd><p>A genomic region, defined by half-open interval [beg, end)</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -623,7 +633,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">ConstantS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ConstantS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mutations with fixed effect sizes</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -652,7 +662,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">UniformS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lo</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hi</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.UniformS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uniform distrubution of effect sizes</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -682,7 +692,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">ExpS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ExpS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exponential distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -711,7 +721,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GammaS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shape_parameter</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GammaS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gamma distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -741,7 +751,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">GaussianS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sd</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.GaussianS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gaussian distribution of effect sizes</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -772,7 +782,7 @@ low-level C++ class</p>
 <p>This class can be used to generate mutations with both vectors
 of effect sizes as well as a separate fixed effect.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -810,7 +820,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">LogNormalS</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupled</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.LogNormalS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log-normal distribution of effect sizes.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -869,7 +879,7 @@ distrubtion of effect size and dominance.</p>
 Each tuple contains (effect size, dominance, weight).
 The weights must all be &gt;= 0 and all values must fe finite.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -894,7 +904,7 @@ also determine the order of positional arguments:</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">mvDES</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">des</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">means</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.mvDES" title="Permalink to this definition">¶</a></dt>
 <dd><p>General multivariate distribution of effect sizes.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -924,7 +934,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PoissonInterval</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.PoissonInterval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate poisson number of crossover breakpoints.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -932,8 +942,8 @@ also determine the order of positional arguments:</p>
 <li><p><strong>beg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The beginning of the region</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The end of the region</p></li>
 <li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The mean number of breakpoints per meiosis</p></li>
-<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, positions are continuous and uniform from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, positions take integer values uniformly from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.</p></li>
+<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>False</cite>, positions are continuous and uniform from <cite>[beg, end)</cite>.
+If <cite>True</cite>, positions take integer values uniformly from <cite>[beg, end)</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -951,7 +961,7 @@ If <code class="docutils literal notranslate"><span class="pre">True</span></cod
 low-level C++ class</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <cite>discrete</cite> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
 </dd></dl>
@@ -962,15 +972,15 @@ low-level C++ class</p>
 <dd><p>Generate a recombination breakpoint at a fixed position if the
 number of crossover events is odd.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>position</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The position of the crossover</p></li>
 <li><p><strong>mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The mean number of breakpoints per meiosis</p></li>
-<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, positions are continuous and uniform from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, positions take integer values uniformly from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.</p></li>
+<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>False</cite>, positions are continuous and uniform from <cite>[beg, end)</cite>.
+If <cite>True</cite>, positions take integer values uniformly from <cite>[beg, end)</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -988,7 +998,7 @@ If <code class="docutils literal notranslate"><span class="pre">True</span></cod
 low-level C++ class</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <cite>discrete</cite> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
 </dd></dl>
@@ -1000,15 +1010,15 @@ low-level C++ class</p>
 fixed probability.  This class represents genetic distance
 as centiMorgans/100.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>position</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The beginning of the region</p></li>
 <li><p><strong>probability</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The probability of a recombination (per meiosis).</p></li>
-<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, positions are continuous and uniform from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, positions take integer values uniformly from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.</p></li>
+<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>False</cite>, positions are continuous and uniform from <cite>[beg, end)</cite>.
+If <cite>True</cite>, positions take integer values uniformly from <cite>[beg, end)</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1026,7 +1036,7 @@ If <code class="docutils literal notranslate"><span class="pre">True</span></cod
 low-level C++ class</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <cite>discrete</cite> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
 </dd></dl>
@@ -1036,7 +1046,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">FixedCrossovers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_xovers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.FixedCrossovers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a fixed number of crossover breakpoints.</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1044,8 +1054,8 @@ also determine the order of positional arguments:</p>
 <li><p><strong>beg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The beginning of the region</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The end of the region</p></li>
 <li><p><strong>num_xovers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The number of breakpoints per meiosis</p></li>
-<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, positions are continuous and uniform from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, positions take integer values uniformly from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.</p></li>
+<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>False</cite>, positions are continuous and uniform from <cite>[beg, end)</cite>.
+If <cite>True</cite>, positions take integer values uniformly from <cite>[beg, end)</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1063,7 +1073,7 @@ If <code class="docutils literal notranslate"><span class="pre">True</span></cod
 low-level C++ class</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <cite>discrete</cite> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
 </dd></dl>
@@ -1073,7 +1083,7 @@ low-level C++ class</p>
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">BinomialInterval</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discrete</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.BinomialInterval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate exactly one crossover with a given probability</p>
 <p>This class has the following attributes, whose names
-are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
+are also <cite>kwargs</cite> for intitialization.  The attribute names
 also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1081,8 +1091,8 @@ also determine the order of positional arguments:</p>
 <li><p><strong>beg</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The beginning of the region</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The end of the region</p></li>
 <li><p><strong>probability</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – The probability of a recombination (per meiosis).</p></li>
-<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <code class="docutils literal notranslate"><span class="pre">False</span></code>, positions are continuous and uniform from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, positions take integer values uniformly from <code class="docutils literal notranslate"><span class="pre">[beg,</span> <span class="pre">end)</span></code>.</p></li>
+<li><p><strong>discrete</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>False</cite>, positions are continuous and uniform from <cite>[beg, end)</cite>.
+If <cite>True</cite>, positions take integer values uniformly from <cite>[beg, end)</cite>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1097,7 +1107,7 @@ If <code class="docutils literal notranslate"><span class="pre">True</span></cod
 low-level C++ class</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <code class="docutils literal notranslate"><span class="pre">discrete</span></code> option to initializer.</p>
+<p><span class="versionmodified changed">Changed in version 0.12.0: </span>Added <cite>discrete</cite> option to initializer.</p>
 </div>
 <p>This class inherits from <a class="reference internal" href="#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a></p>
 </dd></dl>

@@ -94,43 +94,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -138,6 +101,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -263,6 +231,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -478,6 +451,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -556,23 +566,6 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/pages/tstypes.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
@@ -635,7 +628,7 @@
 <li><p><a class="reference internal" href="types.html#fwdpy11.Edge" title="fwdpy11.Edge"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Edge</span></code></a> defines edges</p></li>
 <li><p><a class="reference internal" href="types.html#fwdpy11.Site" title="fwdpy11.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Site</span></code></a> defines a site (genomic location) where a mutation is present.</p></li>
 <li><p><a class="reference internal" href="types.html#fwdpy11.MutationRecord" title="fwdpy11.MutationRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationRecord</span></code></a> defines mutations associated with <a class="reference internal" href="types.html#fwdpy11.Site" title="fwdpy11.Site"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Site</span></code></a>
-objects on trees and in <a class="reference internal" href="types.html#fwdpy11.PopulationBase" title="fwdpy11.PopulationBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase</span></code></a> objects.</p></li>
+objects on trees and in <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase</span></code> objects.</p></li>
 <li><p><a class="reference internal" href="types.html#fwdpy11.NodeTable" title="fwdpy11.NodeTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.NodeTable</span></code></a> represents a node table</p></li>
 <li><p><a class="reference internal" href="types.html#fwdpy11.EdgeTable" title="fwdpy11.EdgeTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.EdgeTable</span></code></a> represents an edge table</p></li>
 <li><p><a class="reference internal" href="types.html#fwdpy11.MutationTable" title="fwdpy11.MutationTable"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationTable</span></code></a> represents a mutation table</p></li>
@@ -648,7 +641,7 @@ but with additional data fields that are useful for the forward-time simulations
 <div class="section" id="table-collections">
 <h2>Table collections<a class="headerlink" href="#table-collections" title="Permalink to this headline">¶</a></h2>
 <p>The above data types are encapsulated into the Python class <a class="reference internal" href="types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a>.  Instances of this
-class are data fields of populations, via <a class="reference internal" href="types.html#fwdpy11.PopulationBase.tables" title="fwdpy11.PopulationBase.tables"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.tables</span></code></a>.</p>
+class are data fields of populations, via <code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.PopulationBase.tables</span></code>.</p>
 </div>
 <div class="section" id="representing-trees">
 <span id="id1"></span><h2>Representing trees<a class="headerlink" href="#representing-trees" title="Permalink to this headline">¶</a></h2>

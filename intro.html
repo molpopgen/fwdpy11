@@ -54,7 +54,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="misc/changelog.html" />
+    <link rel="next" title="Setting up user environments for installation" href="pages/userenv.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -91,43 +91,6 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Miscellany
- </span>
-</p>
-<ul class="nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/changelog.html">
-   Changelog
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/deprecated.html">
-   Deprecated features
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/developersguide.html">
-   Developer’s guide
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/pubs.html">
-   Publications using fwdpy11
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/upgrade_path.html">
-   Upgrade path
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="misc/bibliography.html">
-   Literature cited
-  </a>
- </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
   Installation and setup
  </span>
 </p>
@@ -135,6 +98,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="pages/userenv.html">
    Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pages/installation.html">
+   Installation
   </a>
  </li>
  <li class="toctree-l1">
@@ -260,6 +228,11 @@
  <li class="toctree-l1">
   <a class="reference internal" href="long_vignettes/gss_vignette.html">
    Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
   </a>
  </li>
 </ul>
@@ -475,6 +448,43 @@
   </a>
  </li>
 </ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
 
 </nav> <!-- To handle the deprecated key -->
 
@@ -553,23 +563,6 @@
 
         <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/molpopgen/fwdpy11/main?urlpath=tree/doc/intro.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
     </div>
 
     <!-- Table of contents -->
@@ -583,6 +576,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version">
    Version
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-read-this-documentation">
+   How to read this documentation
   </a>
   <ul class="nav section-nav flex-column">
   </ul>
@@ -600,6 +598,7 @@
                 
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>This is the documentation for <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>, a Python package for individual-based, forward-time simulations of population genetic processes.</p>
 <div class="section" id="version">
 <h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
 <p>This manual is built with the following version of <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>:</p>
@@ -611,11 +610,21 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.12.1.dev94+ng35b6647e&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;0.12.1.dev109+nge46694ca&#39;
 </pre></div>
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="how-to-read-this-documentation">
+<h2>How to read this documentation<a class="headerlink" href="#how-to-read-this-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is organized around a number of short vignettes.
+We recommend that new users start there, and read them in order.</p>
+<p>Longer-form pages follow the vignettes.
+These contain more in the way of technical details that are probably best skipped upon a first reading of this manual.</p>
+<p>Many of the vignettes contain executable code.
+You may download any of these chapters as Jupyter notebooks and work with them locally.
+Doing so requires that <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> is installed on your system.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -673,7 +682,7 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='right-next' id="next-link" href="misc/changelog.html" title="next page">Changelog</a>
+    <a class='right-next' id="next-link" href="pages/userenv.html" title="next page">Setting up user environments for installation</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
