@@ -1,14 +1,8 @@
-name: Build and test wheels
+name: Build, test, and deploy, wheels
 
 on:
-  push:
-    branches:
-      - main
-      - wheeltest
-    tags:
-      - '*'
   release:
-    types: [published]
+    types: [created]
 
 jobs:
   macOS:
@@ -143,7 +137,7 @@ jobs:
           mkdir dist
           cp */*.{whl,gz} dist/.
       - name: Publish distribution to PRODUCTION PyPI
-        if: github.event_name == 'release' && startsWith(github.event.ref, 'refs/tags') 
+        if: github.event_name == 'release'
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_UPLOAD }}

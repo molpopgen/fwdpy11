@@ -4,6 +4,8 @@ on:
   pull_request:
   push:
     branches: [main]
+  release:
+    types: [created]
 
 jobs:
   builddocs:
@@ -81,13 +83,13 @@ jobs:
           make
 
       - name: Move built HTML docs
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'release'
         working-directory: doc
         run: |
           mv _build/html ../docs_output
 
       - name: Upload artifacts
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'release'
         uses: actions/upload-artifact@v1
         with:
           name: docs_output
@@ -96,7 +98,7 @@ jobs:
   deploy:
     name: deploy
     needs: builddocs
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'release'
     runs-on: ubuntu-20.04
     defaults:
       run:
