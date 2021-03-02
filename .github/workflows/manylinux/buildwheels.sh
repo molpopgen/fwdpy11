@@ -2,7 +2,7 @@
 
 set -e -x
 
-yum update
+yum update -y
 yum -y install cmake 
 
 GSL_VERSION=2.5
