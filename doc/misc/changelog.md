@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.13.1
+
+Point release
+
+* Attempt to fix deployment of various deliverables upon release.
+  {pr}`682`
+
 ## 0.13.0
 
 API changes
