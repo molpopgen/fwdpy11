@@ -118,6 +118,12 @@ class TableCollection(fwdpy11._fwdpy11.ll_TableCollection):
         return self._output_right
 
     def build_indexes(self):
+        """
+        Build edge input/output indexes.
+
+        .. versionadded:: 0.13.0
+
+        """
         self._build_indexes()
 
     def _1dfs(self, samples, windows, include_function, simplify):
