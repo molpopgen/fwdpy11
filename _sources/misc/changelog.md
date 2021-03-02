@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.13.2
+
+Point release
+
+* Small fix to wheel building action.
+  {commit}`c31420aede4180becfe2a28936469ed471c6ea41`
+
 ## 0.13.1
 
 Point release
