@@ -602,8 +602,8 @@
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="9cd20c93-dbb3-46da-85c0-059a3c228201" name="acce0911-5cea-43b8-ade3-e7f730d3ffa8" type="radio">
-</input><label class="tabbed-label" for="9cd20c93-dbb3-46da-85c0-059a3c228201">
+<input checked="checked" id="d360a62c-0f9f-4bb8-bcaa-4161c09b9d4c" name="fd0731e9-0444-411c-adcb-f3a7e315e70d" type="radio">
+</input><label class="tabbed-label" for="d360a62c-0f9f-4bb8-bcaa-4161c09b9d4c">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -611,8 +611,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="4a332288-d0a4-4ece-a8af-3fdb4104e1d7" name="acce0911-5cea-43b8-ade3-e7f730d3ffa8" type="radio">
-</input><label class="tabbed-label" for="4a332288-d0a4-4ece-a8af-3fdb4104e1d7">
+<input id="fdbbcb51-130e-400a-a375-1b727a9d56a8" name="fd0731e9-0444-411c-adcb-f3a7e315e70d" type="radio">
+</input><label class="tabbed-label" for="fdbbcb51-130e-400a-a375-1b727a9d56a8">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
