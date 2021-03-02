@@ -14,6 +14,9 @@ execute:
 bibtex_bibfiles:
   - references.bib
 
+launch_buttons:
+  binderhub_url: ""
+
 # Information about where the book exists on the web
 repository:
   url: https://github.com/molpopgen/fwdpy11  # Online location of your book
