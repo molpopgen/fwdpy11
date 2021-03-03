@@ -225,6 +225,7 @@ class DemographyDebugger(object):
             "asblack",
             "asdict",
             "fromdict",
+            "from_demes",
             "_timed_events",
             "_state_asdict",
             "_reset_state",

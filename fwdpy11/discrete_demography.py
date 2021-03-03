@@ -490,6 +490,15 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             set_migration_rates=self.set_migration_rates,
         )
 
+    # TODO: need docstring
+    # TODO: need type hints for dg
+    #       The type hints could be a forwarding ref if needed
+    @classmethod
+    def from_demes(cls, dg) -> 'DiscreteDemography':
+        from ._functions import demography_from_demes
+        d = demography_from_demes(dg)
+        return cls(**d)
+
     def __getstate__(self):
         return (self.asdict(), self._state_asdict())
 
