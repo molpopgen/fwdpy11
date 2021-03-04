@@ -4,6 +4,7 @@ sparse
 scipy==1.5.4 # Last version compatible w/Py 3.6
 attrs
 black
+demes
 
 #below are for building package
 #and running tests

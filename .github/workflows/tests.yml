@@ -76,6 +76,14 @@ jobs:
         run: |
           cp ~/.bash_profile ~/.bashrc
 
+      # NOTE: only necessary because demes
+      # is still an alpha release
+      - name: Install demes with pip
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          pip install demes==0.1.0a3
+
       - name: Build module
         # shell: bash -l {0}
         run: |
