@@ -1,6 +1,8 @@
 name: Build, test, and deploy, wheels
 
 on:
+  schedule:
+    - cron: "0 0 1 * *"
   release:
     types: [created]
 
