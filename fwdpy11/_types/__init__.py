@@ -19,4 +19,5 @@
 from .population_mixin import PopulationMixin  # NOQA
 from .table_collection import TableCollection  # NOQA
 from .tree_iterator import TreeIterator  # NOQA
+from .variant_iterator import VariantIterator  # NOQA
 from .diploid_population import DiploidPopulation  # NOQA

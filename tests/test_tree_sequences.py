@@ -471,7 +471,7 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
         i = 0
-        vi = fwdpy11.VariantIterator(self.pop)
+        vi = fwdpy11.VariantIterator(self.pop.tables, self.pop.alive_nodes)
         for v in vi:
             c = self.pop.mcounts[self.pop.tables.mutations[i].key]
             self.assertEqual(c, cs[i])
@@ -484,7 +484,10 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
     def test_VariantIteratorBeginEnd(self):
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
             vi = fwdpy11.VariantIterator(
-                self.pop.tables, [i for i in range(2 * self.pop.N)], i, i + 0.1
+                self.pop.tables,
+                [i for i in range(2 * self.pop.N)],
+                begin=i,
+                end=i + 0.1,
             )
             nm = len(
                 [

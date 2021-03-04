@@ -69,7 +69,12 @@ from .genetic_values import (  # NOQA
     StrictAdditiveMultivariateEffects,
 )
 
-from ._types import TableCollection, DiploidPopulation, TreeIterator  # NOQA
+from ._types import (
+    TableCollection,
+    DiploidPopulation,
+    TreeIterator,
+    VariantIterator,
+)  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
 from ._evolvets import *  # NOQA
