@@ -1,5 +1,8 @@
+rm -rf dist/
+
 for py in cp36-cp36m cp37-cp37m cp38-cp38
 do
+    rm -rf build
     PYPATH=/opt/python/${py}
     PYBIN=${PYPATH}/bin/python 
     ${PYBIN} -m pip install --no-cache -r requirements.txt

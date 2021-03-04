@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN yum update && yum install -y cmake \
+RUN yum update -y && yum install -y cmake \
   # The GSL version available from yum install is too old so we manually install.
   && bash deployment/linux_wheels/install_gsl.sh \
   && bash deployment/linux_wheels/build_and_audit.sh \
