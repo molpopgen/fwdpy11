@@ -22,9 +22,8 @@ import typing
 import warnings
 
 import attr
-import numpy as np
-
 import fwdpy11
+import numpy as np
 
 
 def _create_event_list(o):
@@ -212,26 +211,6 @@ class DemographyDebugger(object):
                     ):
                         raise ValueError("Migration rates mismatch")
 
-    def _get_event_names(self, events):
-        # NOTE: we rely on the fact that all public fields of
-        # DiscreteDemography are event lists or the migration
-        # matrix.  Thus, we filter out migmatrix, all
-        # magic fxns, and some others that aren't relevant.
-        # FIXME: a more Pythonic approach would be only to
-        # pull out attributes that are not None, are iterable,
-        # and whose elements contain a "when" attribute.
-        not_allowed = [
-            "migmatrix",
-            "asblack",
-            "asdict",
-            "fromdict",
-            "from_demes",
-            "_timed_events",
-            "_state_asdict",
-            "_reset_state",
-        ]
-        return [i for i in events.__dir__() if "__" not in i and i not in not_allowed]
-
     def _make_event_queues(self, events):
         """
         Take references from the input so that we can process them
@@ -240,7 +219,7 @@ class DemographyDebugger(object):
         from collections import deque
 
         rv = {}
-        for e in self._get_event_names(events):
+        for e in fwdpy11.DiscreteDemography._event_names_list():
             if events.__getattribute__(e) is not None:
                 rv[e] = deque([i for i in events.__getattribute__(e)])
             else:

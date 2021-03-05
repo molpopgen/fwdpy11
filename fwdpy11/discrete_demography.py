@@ -494,10 +494,25 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     # TODO: need type hints for dg
     #       The type hints could be a forwarding ref if needed
     @classmethod
-    def from_demes(cls, dg) -> 'DiscreteDemography':
+    def from_demes(cls, dg) -> "DiscreteDemography":
         from ._functions import demography_from_demes
+
         d = demography_from_demes(dg)
         return cls(**d)
+
+    @staticmethod
+    def _event_names_list() -> typing.List[str]:
+        """
+        Obtain the names of fields expected to contain
+        lists of demographic events.
+        """
+        return [
+            "mass_migrations",
+            "set_growth_rates",
+            "set_deme_sizes",
+            "set_selfing_rates",
+            "set_migration_rates",
+        ]
 
     def __getstate__(self):
         return (self.asdict(), self._state_asdict())
