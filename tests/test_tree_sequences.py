@@ -400,7 +400,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         as well as to an explicit calculation of mutation counts.
         """
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
+            include_fixations=True,
         )
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
@@ -424,7 +428,10 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_genotype_matrix_ranges(self):
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
         )
         spos = np.array(dm.selected.positions)
         for i in np.arange(0, self.pop.tables.genome_length, 0.1):
@@ -447,7 +454,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
         those in pop.mcounts
         """
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
+            include_fixations=True,
         )
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
@@ -466,7 +477,11 @@ class TestTreeSequencesNoAncientSamplesKeepFixations(unittest.TestCase):
 
     def test_VariantIteratorFromPopulation(self):
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
+            include_fixations=True,
         )
         sa = np.array(dm.selected)
         cs = np.sum(sa, axis=1)
@@ -813,7 +828,11 @@ class TestTreeSequencesNoAncientSamplesPruneFixations(unittest.TestCase):
 
     def test_genotype_matrix(self):
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
+            include_fixations=True,
         )
         rc = np.sum(dm.selected, axis=1)
         index = [i for i in range(len(self.pop.mcounts))]
@@ -900,7 +919,11 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
 
     def test_genotype_matrix(self):
         dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, [i for i in range(2 * self.pop.N)], False, True, True
+            self.pop.tables,
+            [i for i in range(2 * self.pop.N)],
+            record_neutral=False,
+            record_selected=True,
+            include_fixations=True,
         )
         rc = np.sum(dm.selected, axis=1)
         index = [i for i in range(len(self.pop.mcounts))]
@@ -1142,7 +1165,7 @@ class TestDataMatrixIterator(unittest.TestCase):
         self.all_samples = [i for i in range(2 * self.N)]
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100)
         self.dm = fwdpy11.data_matrix_from_tables(
-            self.pop.tables, self.all_samples, True, True
+            self.pop.tables, self.all_samples, record_neutral=True, record_selected=True
         )
         self.neutral = np.array(self.dm.neutral)
         self.npos = np.array(self.dm.neutral.positions)
