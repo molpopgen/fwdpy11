@@ -22,8 +22,10 @@ class DataMatrixIterator
 {
   private:
     using site_table_itr = fwdpp::ts::std_table_collection::site_table::const_iterator;
-    using mut_table_itr = fwdpp::ts::std_table_collection::mutation_table::const_iterator;
-    std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>> current_tree, next_tree;
+    using mut_table_itr
+        = fwdpp::ts::std_table_collection::mutation_table::const_iterator;
+    std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>>
+        current_tree, next_tree;
     const std::vector<std::pair<double, double>> position_ranges;
     std::vector<std::int8_t> genotypes;
     std::unordered_map<std::size_t, double> mutation_positions;
@@ -40,8 +42,9 @@ class DataMatrixIterator
     initialize_current_tree(const fwdpp::ts::std_table_collection& tables,
                             const std::vector<fwdpp::ts::table_index_t>& samples)
     {
-        std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>> rv(new fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>(
-            tables, samples, fwdpp::ts::update_samples_list(true)));
+        std::unique_ptr<fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>> rv(
+            new fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>(
+                tables, samples, fwdpp::ts::update_samples_list(true)));
         auto flag = rv->operator()();
         if (flag == false)
             {
@@ -403,13 +406,12 @@ class DataMatrixIterator
         : current_tree(initialize_current_tree(tables, samples)), next_tree(nullptr),
           position_ranges(init_intervals(intervals)), genotypes(samples.size(), 0),
           mutation_positions(set_positions(tables)),
-          dmatrix(new fwdpp::data_matrix(samples.size())),
-          sbeg(begin(tables.sites)), send(end(tables.sites)),
-          scurrent(init_trees_and_sites()), mbeg(begin(tables.mutations)),
-          mend(end(tables.mutations)), mcurrent(begin(tables.mutations)),
-          current_range(0), include_neutral_variants(neutral),
-          include_selected_variants(selected), include_fixations(fixations),
-          matrix_requires_clearing(false)
+          dmatrix(new fwdpp::data_matrix(samples.size())), sbeg(begin(tables.sites)),
+          send(end(tables.sites)), scurrent(init_trees_and_sites()),
+          mbeg(begin(tables.mutations)), mend(end(tables.mutations)),
+          mcurrent(begin(tables.mutations)), current_range(0),
+          include_neutral_variants(neutral), include_selected_variants(selected),
+          include_fixations(fixations), matrix_requires_clearing(false)
     {
     }
 
@@ -438,7 +440,8 @@ class DataMatrixIterator
                         if (right > position_ranges[current_range + 1].first)
                             {
                                 next_tree.reset(
-                                    new fwdpp::ts::tree_visitor<fwdpp::ts::std_table_collection>(*current_tree));
+                                    new fwdpp::ts::tree_visitor<
+                                        fwdpp::ts::std_table_collection>(*current_tree));
                             }
                     }
                 for (; scurrent < send && scurrent->position < tree.right
@@ -510,63 +513,23 @@ class DataMatrixIterator
     }
 };
 
-static const auto CLASS_DOCSTRING =
-    R"delim(
-Efficient iteration over genomic windows.
-
-This class allows efficient traversal across multiple
-genomic intervals.  The class is iterable,
-and encapsulates the data fields of 
-:class:`fwdpy11.DataMatrix`, which are accessible
-as properties.
-
-.. versionadded:: 0.4.4
-)delim";
-
-static const auto INIT_DOCSTRING_1 =
-    R"delim(
-:param tables: A table collection
-:type tables: :class:`fwdpy11.TableCollection`
-:param samples: A list of samples
-:type samples: List-like
-:param intervals: The :math:`[start, stop)` positions of each interval
-:type intervals: list of tuples
-:param neutral: If True, include neutral variants
-:type neutral: boolean
-:param selected: If True, include selected variants
-:type selected: boolean
-:param fixations: (False) If True, include fixations in the sample
-:type fixations: boolean
-
-.. versionchanged:: 0.5.0
-
-    No longer requires :class:`fwdpy11.MutationVector`
-)delim";
-
 void
 init_DataMatrixIterator(py::module& m)
 {
-    py::class_<DataMatrixIterator>(m, "DataMatrixIterator", CLASS_DOCSTRING)
+    py::class_<DataMatrixIterator>(m, "ll_DataMatrixIterator")
         .def(py::init<const fwdpp::ts::std_table_collection&,
                       const std::vector<fwdpp::ts::table_index_t>&,
                       const std::vector<std::pair<double, double>>&, bool, bool, bool>(),
              py::arg("tables"), py::arg("samples"), py::arg("intervals"),
-             py::arg("neutral"), py::arg("selected"), py::arg("fixations") = false,
-             INIT_DOCSTRING_1)
-        .def("__iter__", [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
-        .def("__next__", &DataMatrixIterator::next_data_matrix)
-        .def_property_readonly("neutral", &DataMatrixIterator::neutral,
-                               "Genotypes at neutral variants")
-        .def_property_readonly("neutral_keys", &DataMatrixIterator::neutral_keys,
-                               "Indexes of the neutral variants.")
-        .def_property_readonly("neutral_positions",
-                               &DataMatrixIterator::neutral_positions,
-                               "Positions of neutral variants.")
-        .def_property_readonly("selected", &DataMatrixIterator::selected,
-                               "Genotypes at selected variants.")
-        .def_property_readonly("selected_keys", &DataMatrixIterator::selected_keys,
-                               "Indexes of selected variants.")
-        .def_property_readonly("selected_positions",
-                               &DataMatrixIterator::selected_positions,
-                               "Positions of selected variants.");
+             py::arg("neutral"), py::arg("selected"), py::arg("fixations") = false)
+        .def("_ll_iter", [](DataMatrixIterator& v) -> DataMatrixIterator& { return v; })
+        .def("_ll_next", &DataMatrixIterator::next_data_matrix)
+        .def_property_readonly("_neutral", &DataMatrixIterator::neutral)
+        .def_property_readonly("_neutral_keys", &DataMatrixIterator::neutral_keys)
+        .def_property_readonly("_neutral_positions",
+                               &DataMatrixIterator::neutral_positions)
+        .def_property_readonly("_selected", &DataMatrixIterator::selected)
+        .def_property_readonly("_selected_keys", &DataMatrixIterator::selected_keys)
+        .def_property_readonly("_selected_positions",
+                               &DataMatrixIterator::selected_positions);
 }

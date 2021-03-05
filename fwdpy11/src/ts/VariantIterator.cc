@@ -29,9 +29,8 @@ class VariantIterator
                     const double beg, const double end,
                     const bool include_neutral_variant,
                     const bool include_selected_variants)
-        : sv(tc, samples), scurrent(begin(tc.sites)),
-          send(std::end(tc.sites)), genotype_data(samples.size(), 0),
-          include_neutral(include_neutral_variant),
+        : sv(tc, samples), scurrent(begin(tc.sites)), send(std::end(tc.sites)),
+          genotype_data(samples.size(), 0), include_neutral(include_neutral_variant),
           include_selected(include_selected_variants), from(beg), to(end),
           convert(false), mutation_records{},
           genotypes(fwdpy11::make_1d_ndarray(genotype_data)),
@@ -46,8 +45,7 @@ class VariantIterator
             {
                 if (!(to > from))
                     {
-                        throw std::invalid_argument(
-                            "invalid position interval");
+                        throw std::invalid_argument("invalid position interval");
                     }
             }
     }
@@ -93,8 +91,7 @@ class VariantIterator
                             }
                         if (neutral != -1 && selected != -1)
                             {
-                                throw fwdpp::ts::tables_error(
-                                    "invalid mutation data");
+                                throw fwdpp::ts::tables_error("invalid mutation data");
                             }
                         if (n)
                             {
@@ -133,13 +130,10 @@ class VariantIterator
 void
 init_variant_iterator(py::module& m)
 {
-    py::class_<VariantIterator>(
-        m, "VariantIterator",
-        "An iterable class for traversing genotypes in a tree sequence.")
+    py::class_<VariantIterator>(m, "ll_VariantIterator")
         .def(py::init([](const fwdpp::ts::std_table_collection& tables,
                          const std::vector<fwdpp::ts::table_index_t>& samples,
-                         double begin, double end,
-                         bool include_neutral_variants,
+                         double begin, double end, bool include_neutral_variants,
                          bool include_selected_variants) {
                  return VariantIterator(tables, samples, begin, end,
                                         include_neutral_variants,
@@ -148,87 +142,12 @@ init_variant_iterator(py::module& m)
              py::arg("tables"), py::arg("samples"), py::arg("begin") = 0.0,
              py::arg("end") = std::numeric_limits<double>::max(),
              py::arg("include_neutral_variants") = true,
-             py::arg("include_selected_variants") = true,
-             R"delim(
-             :param tables: The table collection
-             :type tables: :class:`fwdpy11.TableCollection`
-             :param samples: Samples list
-             :type samples: list
-             :param begin: (0.0) First position, inclusive.
-             :param end: (max float) Last position, exclusive.
-             :param include_neutral_variants: (True) Include neutral variants during traversal
-             :type include_neutral_variants: boolean
-             :param include_selected_variants: (True) Include selected variants during traversal
-             :type include_selected_variants: boolean
-
-             .. versionchanged:: 0.4.1
-        
-                 Add begin, end options as floats
-
-            .. versionchanged:: 0.4.2
-
-                 Add include_neutral_variants and include_selected_variants
-
-            .. versionchanged:: 0.5.0
-
-                 No longer requires a :class:`fwdpy11.MutationVector`.
-            )delim")
-        .def(py::init([](const fwdpy11::DiploidPopulation& pop,
-                         const bool include_preserved, double begin,
-                         double end, bool include_neutral_variants,
-                         bool include_selected_variants) {
-                 std::vector<fwdpp::ts::table_index_t> samples(2 * pop.N, 0);
-                 std::iota(samples.begin(), samples.end(), 0);
-                 if (include_preserved)
-                     {
-                         for(auto & md : pop.ancient_sample_metadata)
-                         {
-                            samples.push_back(md.nodes[0]);
-                            samples.push_back(md.nodes[1]);
-                         }
-                     }
-                 return VariantIterator(*pop.tables, samples, begin, end,
-                                        include_neutral_variants,
-                                        include_selected_variants);
-             }),
-             py::arg("pop"), py::arg("include_preserved_nodes") = false,
-             py::arg("begin") = 0.0,
-             py::arg("end") = std::numeric_limits<double>::max(),
-             py::arg("include_selected_variants") = true,
-             py::arg("include_selected_variants") = true,
-             R"delim(
-             :param pop: The population 
-             :type pop: :class:`fwdpy11.DiploidPopulation`
-             :param include_preserved_nodes: (False) Whether to include preserved samples during traversal
-             :type include_preserved_nodes: boolean
-             :param begin: (0.0) First position, inclusive.
-             :param end: (max float) Last position, exclusive.
-             :param include_neutral_variants: (True) Include neutral variants during traversal
-             :type include_neutral_variants: boolean
-             :param include_selected_variants: (True) Include selected variants during traversal
-             :type include_selected_variants: boolean
-
-             .. versionchanged:: 0.4.1
-        
-                 Add begin, end options as floats
-
-            .. versionchanged:: 0.4.2
-
-                 Add include_neutral_variants and include_selected_variants
-
-            )delim")
-        .def("__iter__",
-             [](VariantIterator& v) -> VariantIterator& { return v; })
+             py::arg("include_selected_variants") = true)
+        .def("__iter__", [](VariantIterator& v) -> VariantIterator& { return v; })
         .def("__next__", &VariantIterator::next_variant)
-        .def_readonly("genotypes", &VariantIterator::genotypes,
-                      "Genotype array.  Index order is same as sample input")
-        .def_property_readonly("site", &VariantIterator::current_site,
-                               "Current :class:`fwdpy11.Site`")
-        .def_property_readonly(
-            "records", &VariantIterator::records,
-            "Returns a copy of the :class:`fwdpy11.MutationRecord` objects "
-            "corresponding to the current site and sample")
-        .def_readonly("position", &VariantIterator::current_position,
-                      "Current mutation position");
+        .def_readonly("_genotypes", &VariantIterator::genotypes)
+        .def_property_readonly("site", &VariantIterator::current_site)
+        .def_property_readonly("_records", &VariantIterator::records)
+        .def_readonly("_position", &VariantIterator::current_position);
 }
 

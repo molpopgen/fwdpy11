@@ -137,7 +137,6 @@ PKGS = [
     "fwdpy11.demographic_models",
     "fwdpy11.tskit_tools",
     "fwdpy11._types",
-    "fwdpy11._monkeypatch",
 ]
 
 ext_modules = [

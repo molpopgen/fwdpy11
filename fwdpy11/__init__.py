@@ -28,7 +28,6 @@ from fwdpy11._version import version as __version__  # NOQA
 from ._demography import *  # NOQA
 from ._dev import *  # NOQA
 from ._fwdpy11 import *  # NOQA
-from ._monkeypatch import _data_matrix  # NOQA
 from .discrete_demography import (  # NOQA
     DiscreteDemography,
     MassMigration,
@@ -69,17 +68,24 @@ from .genetic_values import (  # NOQA
     StrictAdditiveMultivariateEffects,
 )
 
-from ._types import TableCollection, DiploidPopulation, TreeIterator  # NOQA
+from ._types import (
+    DataMatrix,
+    DataMatrixIterator,
+    TableCollection,
+    DiploidPopulation,
+    TreeIterator,
+    VariantIterator,
+)  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
 from ._evolvets import *  # NOQA
 
-from ._functions import simplify, simplify_tables  # NOQA
+from ._functions import (
+    data_matrix_from_tables,
+    make_data_matrix,
+    simplify,
+    simplify_tables,
+)  # NOQA
 
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")
-
-
-# NOTE: some operations that can be implemented efficiently
-# in Python are supplied as monkey-patches to the pybind11 classes
-_monkeypatch._data_matrix._patch_data_matrix(DataMatrix)  # NOQA
