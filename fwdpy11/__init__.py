@@ -70,6 +70,7 @@ from .genetic_values import (  # NOQA
 
 from ._types import (
     DataMatrix,
+    DataMatrixIterator,
     TableCollection,
     DiploidPopulation,
     TreeIterator,
