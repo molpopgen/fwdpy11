@@ -184,7 +184,16 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
 
+        :param destructive: If `True`, delete data held by the current instance.
+        :type destructive: bool
+
         :rtype: tskit.TreeSequence
+
+        .. warning::
+
+            If `destructive` is `True`, further opertations on the
+            current instance should be considered undefined behavior
+            that may lead to a crash.
 
         .. versionchanged:: 0.8.2
 
@@ -199,6 +208,11 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
             Use tskit metadata schema.
             Mutation time is now stored in the tskit.MutationTable column.
             Origin time of mutations is part of the metadata.
+
+        .. versionchanged:: 0.14.0
+
+            Added `destructive` option.
+
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
             self, parameters, destructive=destructive
