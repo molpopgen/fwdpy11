@@ -67,7 +67,7 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
         return cls(0, 0.0, ll_pop=ll)
 
     @classmethod
-    def load_from_file(cls, filename: IO) -> "fwdpy11.DiploidPopulation":
+    def load_from_file(cls, filename: str) -> "fwdpy11.DiploidPopulation":
         """
         Load population from the output of
         :func:`fwdpy11.DiploidPopulation.dump_to_file`.
@@ -208,7 +208,7 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
         """
         self._dump_to_file(filename)
 
-    def pickle_to_file(self, filename: str):
+    def pickle_to_file(self, filename: IO):
         """
         Pickle the population to an open file.
 
