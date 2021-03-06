@@ -41,11 +41,22 @@ PYBIND11_MAKE_OPAQUE(fwdpy11::DiploidPopulation::mutation_container);
 
 fwdpy11::DiploidPopulation create_DiploidPopulation_from_tree_sequence(py::object ts);
 
+namespace
+{
+    template <typename T>
+    void
+    swap_with_empty(T& t)
+    {
+        T temp;
+        t.swap(temp);
+    }
+}
+
 void
 init_DiploidPopulation(py::module& m)
 {
-    py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(
-        m, "ll_DiploidPopulation")
+    py::class_<fwdpy11::DiploidPopulation, fwdpy11::Population>(m,
+                                                                "ll_DiploidPopulation")
         .def(py::init<fwdpp::uint_t, double>(), py::arg("N"), py::arg("length"))
         .def(py::init<const std::vector<std::uint32_t>&, double>(), py::arg("demesizes"),
              py::arg("length"))
@@ -60,6 +71,22 @@ init_DiploidPopulation(py::module& m)
                        &fwdpy11::DiploidPopulation::diploid_metadata)
         .def_readwrite("_ancient_sample_metadata",
                        &fwdpy11::DiploidPopulation::ancient_sample_metadata)
+        .def("_clear_haploid_genomes",
+             [](fwdpy11::DiploidPopulation& self) {
+                 swap_with_empty(self.haploid_genomes);
+             })
+        .def("_clear_mutations",
+             [](fwdpy11::DiploidPopulation& self) {
+                 swap_with_empty(self.mutations);
+             })
+        .def("_clear_diploid_metadata",
+             [](fwdpy11::DiploidPopulation& self) {
+                 swap_with_empty(self.diploid_metadata);
+             })
+        .def("_clear_ancient_sample_metadata",
+             [](fwdpy11::DiploidPopulation& self) {
+                 swap_with_empty(self.ancient_sample_metadata);
+             })
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;

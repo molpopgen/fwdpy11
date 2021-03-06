@@ -12,6 +12,17 @@ PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::node_table);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::mutation_table);
 PYBIND11_MAKE_OPAQUE(fwdpp::ts::std_table_collection::site_table);
 
+namespace
+{
+    template <typename T>
+    void
+    swap_with_empty(T& t)
+    {
+        T temp;
+        t.swap(temp);
+    }
+}
+
 void
 init_ts_TableCollection(py::module& m)
 {
@@ -20,8 +31,7 @@ init_ts_TableCollection(py::module& m)
     // TODO: work out conversion to msprime format
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::std_table_collection,
-               std::shared_ptr<fwdpp::ts::std_table_collection>>(
-        m, "ll_TableCollection")
+               std::shared_ptr<fwdpp::ts::std_table_collection>>(m, "ll_TableCollection")
         .def(py::init([](std::shared_ptr<fwdpp::ts::std_table_collection>& self) {
             if (self == nullptr)
                 {
@@ -35,6 +45,21 @@ init_ts_TableCollection(py::module& m)
         .def_readonly("_sites", &fwdpp::ts::std_table_collection::sites)
         .def_readonly("_input_left", &fwdpp::ts::std_table_collection::input_left)
         .def_readonly("_output_right", &fwdpp::ts::std_table_collection::output_right)
+        .def("_clear_edges",
+             [](fwdpp::ts::std_table_collection& self) { swap_with_empty(self.edges); })
+        .def("_clear_nodes",
+             [](fwdpp::ts::std_table_collection& self) { swap_with_empty(self.nodes); })
+        .def("_clear_sites",
+             [](fwdpp::ts::std_table_collection& self) { swap_with_empty(self.sites); })
+        .def("_clear_mutations",
+             [](fwdpp::ts::std_table_collection& self) {
+                 swap_with_empty(self.mutations);
+             })
+        .def("_clear_indexes",
+             [](fwdpp::ts::std_table_collection& self) {
+                 swap_with_empty(self.input_left);
+                 swap_with_empty(self.output_right);
+             })
         .def("_build_indexes", &fwdpp::ts::std_table_collection::build_indexes)
         .def_property_readonly("_genome_length",
                                &fwdpp::ts::std_table_collection::genome_length)

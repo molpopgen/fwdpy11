@@ -108,7 +108,9 @@ def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None
         )
 
 
-def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None):
+def _dump_tables_to_tskit(
+    self, parameters: typing.Optional[typing.Dict] = None, *, destructive=False
+):
     """
     Dump the population's TableCollection into
     an tskit TreeSequence
@@ -160,6 +162,9 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
 
     tc = tskit.TableCollection(self.tables.genome_length)
 
+    if destructive is True:
+        self._clear_haploid_genomes()
+
     # We must initialize population and individual
     # tables before we can do anything else.
     # Attempting to set population to anything
@@ -168,7 +173,6 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
     # isn't set up.
     _initializePopulationTable(node_view, tc)
     node_to_individual = _initializeIndividualTable(self, tc)
-
     individual = [-1 for i in range(len(node_view))]
     for k, v in node_to_individual.items():
         individual[k] = v
@@ -182,14 +186,27 @@ def _dump_tables_to_tskit(self, parameters: typing.Optional[typing.Dict] = None)
         population=node_view["deme"],
         individual=individual,
     )
+    if destructive is True:
+        self._clear_diploid_metadata()
+        self._clear_ancient_sample_metadata()
+        node_view = None
+        self.tables._clear_nodes()
+
+    _dump_mutation_site_and_site_tables(self, tc)
+    if destructive is True:
+        self._clear_mutations()
+        self.tables._clear_sites()
+        self.tables._clear_mutations()
+
     tc.edges.set_columns(
         left=edge_view["left"],
         right=edge_view["right"],
         parent=edge_view["parent"],
         child=edge_view["child"],
     )
-
-    _dump_mutation_site_and_site_tables(self, tc)
+    if destructive is True:
+        edge_view = None
+        self.tables._clear_edges()
 
     tc.provenances.add_row(json.dumps(provenance))
     return tc.tree_sequence()
