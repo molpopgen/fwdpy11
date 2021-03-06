@@ -174,7 +174,9 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
             return deme_sizes
         return {i: j for i, j in zip(deme_sizes[0], deme_sizes[1])}
 
-    def dump_tables_to_tskit(self, parameters: Optional[Dict] = None):
+    def dump_tables_to_tskit(
+        self, parameters: Optional[Dict] = None, *, destructive=False
+    ):
         """
         Dump the population's TableCollection into
         an tskit TreeSequence
@@ -199,7 +201,7 @@ class DiploidPopulation(fwdpy11._fwdpy11.ll_DiploidPopulation, PopulationMixin):
             Origin time of mutations is part of the metadata.
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
-            self, parameters
+            self, parameters, destructive=destructive
         )
 
     def dump_to_file(self, filename: str):
