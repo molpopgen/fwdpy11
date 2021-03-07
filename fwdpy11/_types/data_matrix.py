@@ -21,7 +21,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from .._fwdpy11 import ll_DataMatrix
+from .._fwdpy11 import ll_DataMatrix, StateMatrix
 
 
 class DataMatrix(ll_DataMatrix):
@@ -55,7 +55,7 @@ class DataMatrix(ll_DataMatrix):
         return self._ncol
 
     @property
-    def neutral(self) -> "fwdpy11.StateMatrix":
+    def neutral(self) -> StateMatrix:
         """:class:`fwdpy11.StateMatrix` for neutral variants"""
         return self._neutral
 
@@ -65,7 +65,7 @@ class DataMatrix(ll_DataMatrix):
         return self._neutral_keys
 
     @property
-    def selected(self) -> "fwdpy11.StateMatrix":
+    def selected(self) -> StateMatrix:
         """:class:`fwdpy11.StateMatrix` for selected variants"""
         return self._selected
 

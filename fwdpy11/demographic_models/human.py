@@ -207,7 +207,7 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
         f"Nature 493 (7431): 216–20",
     )
 
-    full_citation = str().join([str(i) for i in full_citation])
+    full_citation_str = str().join([str(i) for i in full_citation])
 
     return DemographicModelDetails(
         model=ddemog,
@@ -216,7 +216,7 @@ def tennessen(burnin: int = 20, model_version: TennessenModel = TennessenModel.V
         parameters={"burnin": burnin},
         citation=DemographicModelCitation(
             DOI="10.1126/science.1219240 and 10.1038/nature11690",
-            full_citation=full_citation,
+            full_citation=full_citation_str,
             metadata=None,
         ),
         metadata={

@@ -1,8 +1,9 @@
 from typing import Iterable
 
-import fwdpy11._fwdpy11
 import numpy as np
 import sparse
+
+from .._fwdpy11 import Edge, MutationRecord, Node, Site, ll_TableCollection
 
 # Functions related to FS calculation
 
@@ -77,7 +78,7 @@ def _simplify(tables, samples, simplify):
     return t, i[samples]
 
 
-class TableCollection(fwdpy11._fwdpy11.ll_TableCollection):
+class TableCollection(ll_TableCollection):
     def __init__(self, *args):
         super(TableCollection, self).__init__(*args)
 
@@ -90,22 +91,22 @@ class TableCollection(fwdpy11._fwdpy11.ll_TableCollection):
         return self._genome_length
 
     @property
-    def edges(self) -> Iterable[fwdpy11.Edge]:
+    def edges(self) -> Iterable[Edge]:
         """Supports buffer protocol"""
         return self._edges
 
     @property
-    def nodes(self) -> Iterable[fwdpy11.Node]:
+    def nodes(self) -> Iterable[Node]:
         """Supports buffer protocol"""
         return self._nodes
 
     @property
-    def sites(self) -> Iterable[fwdpy11.Site]:
+    def sites(self) -> Iterable[Site]:
         """Supports buffer protocol"""
         return self._sites
 
     @property
-    def mutations(self) -> Iterable[fwdpy11.MutationRecord]:
+    def mutations(self) -> Iterable[MutationRecord]:
         """Supports buffer protocol"""
         return self._mutations
 
@@ -132,9 +133,10 @@ class TableCollection(fwdpy11._fwdpy11.ll_TableCollection):
         bins masked out.  The masking is for
         consistency w/ndfs output.
         """
+        from . import TreeIterator
         t, s = _simplify(self, samples, simplify)
         fs = [np.zeros(len(s) + 1, dtype=np.int32) for i in windows]
-        ti = fwdpy11.TreeIterator(t, s)
+        ti = TreeIterator(t, s)
         windex = 0
         sites = np.array(t.sites, copy=False)
         positions = sites["position"][:]
@@ -172,12 +174,13 @@ class TableCollection(fwdpy11._fwdpy11.ll_TableCollection):
         at first. When the marginals are wanted, we extract them
         later.
         """
+        from . import TreeIterator
         shapes = tuple(len(i) + 1 for i in samples)
         dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
 
         sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
         t, s = _simplify(self, sample_list, simplify)
-        ti = fwdpy11.TreeIterator(t, s, update_samples=True)
+        ti = TreeIterator(t, s, update_samples=True)
         counts = np.zeros(len(samples), dtype=np.int32)
         windex = 0
         sites = np.array(t.sites, copy=False)

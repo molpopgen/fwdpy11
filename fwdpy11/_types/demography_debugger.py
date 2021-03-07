@@ -18,12 +18,16 @@
 #
 import collections
 import copy
-import typing
 import warnings
+from typing import Dict, List, Optional, Union
 
 import attr
 import fwdpy11
 import numpy as np
+
+from ..demographic_models import DemographicModelDetails
+from ..discrete_demography import DiscreteDemography
+from .diploid_population import DiploidPopulation
 
 
 def _create_event_list(o):
@@ -86,10 +90,14 @@ class DemographyDebugger(object):
         A list of initial deme sizes is now accepted.
     """
 
-    initial_deme_sizes = attr.ib(converter=_create_initial_deme_sizes)
-    _events = attr.ib(converter=_create_event_list)
-    simlen = attr.ib(converter=_convert_simlen, default=None)
-    deme_labels = attr.ib(default=None)
+    initial_deme_sizes: Union[List[int], DiploidPopulation] = attr.ib(
+        converter=_create_initial_deme_sizes
+    )
+    _events: Union[DiscreteDemography, DemographicModelDetails] = attr.ib(
+        converter=_create_event_list
+    )
+    simlen: int = attr.ib(converter=_convert_simlen, default=None)
+    deme_labels: Optional[Dict] = attr.ib(default=None)
 
     def __attrs_post_init__(self):
         self._validate_migration_rate_change_lengths(self._events)

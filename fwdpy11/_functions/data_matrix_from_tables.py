@@ -22,15 +22,15 @@ from typing import List, Optional, Union
 import numpy as np
 
 from .._fwdpy11 import _data_matrix_from_tables, _make_data_matrix
-from .._types import DataMatrix
+from .._types import DataMatrix, DiploidPopulation, TableCollection
 
 
 def make_data_matrix(
-    pop: "fwdpy11.DiploidPopulation",
+    pop: DiploidPopulation,
     samples: Union[List, np.ndarray],
     record_neutral: bool,
     record_selected: bool,
-) -> "fwdpy11.DataMatrix":
+) -> DataMatrix:
     """
     Create a :class:`fwdpy11.DataMatrix` from a table collection.
 
@@ -58,7 +58,7 @@ def make_data_matrix(
 
 
 def data_matrix_from_tables(
-    tables: "fwdpy11.TableCollection",
+    tables: TableCollection,
     samples: Union[List, np.ndarray],
     *,
     record_neutral: bool = True,
@@ -66,7 +66,7 @@ def data_matrix_from_tables(
     include_fixations: bool = False,
     begin: float = 0.0,
     end: Optional[float] = None,
-) -> "fwdpy11.DataMatrix":
+) -> DataMatrix:
     """
     Create a :class:`fwdpy11.DataMatrix` from a table collection.
 

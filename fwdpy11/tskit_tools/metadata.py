@@ -21,7 +21,9 @@ import typing
 import attr
 import tskit
 
-import fwdpy11
+from .._fwdpy11 import Mutation, MutationVector
+from ._flags import (INDIVIDUAL_IS_ALIVE, INDIVIDUAL_IS_FIRST_GENERATION,
+                     INDIVIDUAL_IS_PRESERVED)
 
 
 @attr.s(auto_attribs=True, frozen=True, kw_only=True, eq=True)
@@ -91,9 +93,9 @@ def decode_individual_metadata(tc: tskit.TableCollection):
     """
     rv = []
     for i in tc.individuals:
-        alive = i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
-        preserved = i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
-        first_generation = i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+        alive = i.flags & INDIVIDUAL_IS_ALIVE
+        preserved = i.flags & INDIVIDUAL_IS_PRESERVED
+        first_generation = i.flags & INDIVIDUAL_IS_FIRST_GENERATION
         rv.append(
             DiploidMetadata(
                 **i.metadata,
@@ -106,7 +108,7 @@ def decode_individual_metadata(tc: tskit.TableCollection):
     return rv
 
 
-def decode_mutation_metadata(tc: tskit.TableCollection) -> fwdpy11.MutationVector:
+def decode_mutation_metadata(tc: tskit.TableCollection) -> MutationVector:
     """
     Decodes a :class:`tskit.MutationTable`.
 
@@ -118,12 +120,12 @@ def decode_mutation_metadata(tc: tskit.TableCollection) -> fwdpy11.MutationVecto
 
     .. versionadded:: 0.12.0
     """
-    mutations = fwdpy11.MutationVector()
+    mutations = MutationVector()
     for m in tc.mutations:
         md = m.metadata
         if "esizes" not in md:
             mutations.append(
-                fwdpy11.Mutation(
+                Mutation(
                     pos=tc.sites.position[m.site],
                     s=md["s"],
                     h=md["h"],
@@ -133,7 +135,7 @@ def decode_mutation_metadata(tc: tskit.TableCollection) -> fwdpy11.MutationVecto
             )
         else:
             mutations.append(
-                fwdpy11.Mutation(
+                Mutation(
                     pos=tc.sites.position[m.site],
                     s=md["s"],
                     h=md["h"],

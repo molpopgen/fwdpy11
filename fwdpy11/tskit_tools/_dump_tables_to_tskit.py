@@ -134,7 +134,7 @@ def _dump_tables_to_tskit(
         Mutation time is now stored in the tskit.MutationTable column.
         Origin time of mutations is part of the metadata.
     """
-    from fwdpy11 import gsl_version, pybind11_version
+    from .._fwdpy11 import gsl_version, pybind11_version
 
     environment = tskit.provenance.get_environment(
         extra_libs={
