@@ -22,8 +22,11 @@ import typing
 import attr
 import numpy as np
 
-import fwdpy11._fwdpy11
-
+from ._fwdpy11 import (GeneticValueIsTrait, GeneticValueNoise, _ll_Additive,
+                       _ll_GaussianNoise, _ll_GBR, _ll_GSSmo,
+                       _ll_Multiplicative, _ll_MultivariateGSSmo, _ll_NoNoise,
+                       _ll_Optimum, _ll_PleiotropicOptima,
+                       _ll_StrictAdditiveMultivariateEffects)
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
                                attr_class_to_from_dict_no_recurse)
@@ -33,7 +36,7 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class Optimum(fwdpy11._fwdpy11._ll_Optimum):
+class Optimum(_ll_Optimum):
     """
     Parameters for a trait optimum.
 
@@ -80,7 +83,7 @@ class Optimum(fwdpy11._fwdpy11._ll_Optimum):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11", eq=False)
-class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
+class PleiotropicOptima(_ll_PleiotropicOptima):
     """
     Parameters for multiple trait optima
 
@@ -135,7 +138,7 @@ class PleiotropicOptima(fwdpy11._fwdpy11._ll_PleiotropicOptima):
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class GSS(fwdpy11._fwdpy11._ll_GSSmo):
+class GSS(_ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait.
 
@@ -195,7 +198,7 @@ class GSS(fwdpy11._fwdpy11._ll_GSSmo):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
+class GSSmo(_ll_GSSmo):
     """
     Gaussian stabilizing selection on a single trait with moving
     optimum.
@@ -236,7 +239,7 @@ class GSSmo(fwdpy11._fwdpy11._ll_GSSmo):
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
+class MultivariateGSS(_ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection.
 
@@ -263,7 +266,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 
         `VS` should be `None` if `optima` is list[fwdpy11.PleiotropicOptima]
 
-        `VS` is :math:`\omega^2` in the Simons et al. notation
+        `VS` is :math:`\\omega^2` in the Simons et al. notation
 
     .. versionchanged:: 0.7.1
         Allow initialization with list of fwdpy11.PleiotropicOptima
@@ -303,7 +306,7 @@ class MultivariateGSS(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
+class MultivariateGSSmo(_ll_MultivariateGSSmo):
     """
     Multivariate gaussian stablizing selection with moving optima
     This class has the following attributes, whose names
@@ -341,7 +344,7 @@ class MultivariateGSSmo(fwdpy11._fwdpy11._ll_MultivariateGSSmo):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
+class NoNoise(_ll_NoNoise):
     """
     No random effects on genetic values
 
@@ -359,7 +362,7 @@ class NoNoise(fwdpy11._fwdpy11._ll_NoNoise):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
+class GaussianNoise(_ll_GaussianNoise):
     """
     Gaussian noise added to genetic values.
     This class has the following attributes, whose names
@@ -388,7 +391,7 @@ class GaussianNoise(fwdpy11._fwdpy11._ll_GaussianNoise):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class Additive(fwdpy11._fwdpy11._ll_Additive):
+class Additive(_ll_Additive):
     """
     Additive effects on genetic values.
 
@@ -421,8 +424,8 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
     """
 
     scaling: float
-    gvalue_to_fitness: fwdpy11.GeneticValueIsTrait = None
-    noise: fwdpy11.GeneticValueNoise = None
+    gvalue_to_fitness: GeneticValueIsTrait = None
+    noise: GeneticValueNoise = None
     ndemes: int = 1
 
     def __attrs_post_init__(self):
@@ -435,7 +438,7 @@ class Additive(fwdpy11._fwdpy11._ll_Additive):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
+class Multiplicative(_ll_Multiplicative):
     """
     Multiplicative effects on genetic values.
 
@@ -468,8 +471,8 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
     """
 
     scaling: float
-    gvalue_to_fitness: fwdpy11.GeneticValueIsTrait = None
-    noise: fwdpy11.GeneticValueNoise = None
+    gvalue_to_fitness: GeneticValueIsTrait = None
+    noise: GeneticValueNoise = None
     ndemes: int = 1
 
     def __attrs_post_init__(self):
@@ -482,7 +485,7 @@ class Multiplicative(fwdpy11._fwdpy11._ll_Multiplicative):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class GBR(fwdpy11._fwdpy11._ll_GBR):
+class GBR(_ll_GBR):
     """
     The "gene-based recessive" trait model described in Thornton et al.
     2013 http://dx.doi.org/10.1371/journal.pgen.1003258 and Sanjak et al. 2017
@@ -517,9 +520,7 @@ class GBR(fwdpy11._fwdpy11._ll_GBR):
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
-class StrictAdditiveMultivariateEffects(
-    fwdpy11._fwdpy11._ll_StrictAdditiveMultivariateEffects
-):
+class StrictAdditiveMultivariateEffects(_ll_StrictAdditiveMultivariateEffects):
     """
     Multivariate trait values under strictly additive effects.
 

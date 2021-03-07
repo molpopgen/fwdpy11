@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
-from typing import Dict, Optional, Iterable
+from typing import Dict, Iterable, Optional
 
-import fwdpy11
-import fwdpy11._fwdpy11
 import numpy as np
+
+from .._fwdpy11 import HaploidGenome, Mutation
 
 
 class PopulationMixin(object):
@@ -35,19 +35,19 @@ class PopulationMixin(object):
         ..  versionadded 0.3.0
 
         """
-        return self._ancient_sample_genetic_values
+        return self._ancient_sample_genetic_values  # type: ignore
 
     @property
-    def fixations(self) -> Iterable[fwdpy11.Mutation]:
-        return self._fixations
+    def fixations(self) -> Iterable[Mutation]:
+        return self._fixations  # type: ignore
 
     @property
     def fixation_times(self) -> Iterable[int]:
-        return self._fixation_times
+        return self._fixation_times  # type: ignore
 
     @property
     def generation(self) -> int:
-        return self._generation
+        return self._generation  # type: ignore
 
     @property
     def genetic_values(self) -> np.ndarray:
@@ -59,34 +59,34 @@ class PopulationMixin(object):
         ..  versionadded 0.3.0
 
         """
-        return self._genetic_values
+        return self._genetic_values  # type: ignore
 
     @property
-    def haploid_genomes(self) -> Iterable[fwdpy11.HaploidGenome]:
-        return self._haploid_genomes
+    def haploid_genomes(self) -> Iterable[HaploidGenome]:
+        return self._haploid_genomes  # type: ignore
 
     @property
     def mcounts(self) -> Iterable[int]:
-        return self._mcounts
+        return self._mcounts  # type: ignore
 
     @property
     def mcounts_ancient_samples(self) -> Iterable[int]:
-        return self._mcounts_ancient_samples
+        return self._mcounts_ancient_samples  # type: ignore
 
     def mutation_indexes(self, pos) -> Optional[np.ndarray]:
         """
         Return indexes in :attr:`fwdpy11.DiploidPopulation.mutations`
         that are mutations at postion `pos`.
         """
-        return self._mutation_indexes(pos)
+        return self._mutation_indexes(pos)  # type: ignore
 
     @property
     def mut_lookup(self) -> Dict:
-        return self._mut_lookup
+        return self._mut_lookup  # type: ignore
 
     @property
-    def mutations(self) -> Iterable[fwdpy11.Mutation]:
-        return self._mutations
+    def mutations(self) -> Iterable[Mutation]:
+        return self._mutations  # type: ignore
 
     @property
     def mutations_ndarray(self) -> np.ndarray:
@@ -100,11 +100,11 @@ class PopulationMixin(object):
 
         .. versionadded:: 0.4.0
         """
-        return self._mutations_ndarray
+        return self._mutations_ndarray  # type: ignore
 
     @property
     def N(self):
-        return self._N
+        return self._N  # type: ignore
 
     def find_fixation_by_key(self, key, offset=0):
         """
@@ -122,7 +122,7 @@ class PopulationMixin(object):
         .. versionadded:: 0.2.0
 
         """
-        return self._find_fixation_by_key(key, offset)
+        return self._find_fixation_by_key(key, offset)  # type: ignore
 
     def find_mutation_by_key(self, key, offset):
         """
@@ -140,4 +140,4 @@ class PopulationMixin(object):
         .. versionadded:: 0.2.0
 
         """
-        return self._find_mutation_by_key(key, offset)
+        return self._find_mutation_by_key(key, offset)  # type: ignore

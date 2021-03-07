@@ -22,6 +22,7 @@ from typing import List, Tuple, Union
 import numpy as np
 
 from .._fwdpy11 import ll_DataMatrixIterator
+from .._types import TableCollection
 
 
 class DataMatrixIterator(ll_DataMatrixIterator):
@@ -60,7 +61,7 @@ class DataMatrixIterator(ll_DataMatrixIterator):
 
     def __init__(
         self,
-        tables: "fwdpy11.TableCollection",
+        tables: TableCollection,
         samples: Union[List[int], np.ndarray],
         intervals: List[Tuple[float, float]],
         neutral: bool,

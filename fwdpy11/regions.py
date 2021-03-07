@@ -678,7 +678,7 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
 
     des: object
     means: object
-    matrix: typing.Optional = None
+    matrix: typing.Optional[np.ndarray] = None
 
     def __attrs_post_init__(self):
         super(mvDES, self).__init__(self.des, self.means, self.matrix)

@@ -4,21 +4,16 @@ This module provides functions to generate demographic events for
 """
 import attr
 import numpy as np
-
 from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
                                       attr_class_to_from_dict)
-
-_common_attr_attribs = {
-    "frozen": True,
-    "auto_attribs": True,
-    "repr_ns": "fwdpy11.demographic_models.IM",
-}
 
 
 @attr_add_asblack
 # @attr_class_pickle
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs, eq=False)
+@attr.s(
+    frozen=True, auto_attribs=True, repr_ns="fwdpy11.demographic_models.IM", eq=False
+)
 class TwoDemeIMParameters(object):
     """
     Holds the parameters to :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
@@ -56,7 +51,7 @@ class TwoDemeIMParameters(object):
 @attr_add_asblack
 @attr_class_pickle
 @attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
+@attr.s(frozen=True, auto_attribs=True, repr_ns="fwdpy11.demographic_models.IM")
 class TwoDemeIMMetaData(object):
     """
     Holds metadata returned by :func:`fwdpy11.demographic_models.IM.two_deme_IM`.
@@ -122,6 +117,7 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
     """
     import fwdpy11
     import numpy as np
+
     from .demographic_model_details import DemographicModelDetails
 
     N0, N1 = Ns
@@ -173,7 +169,12 @@ def two_deme_IM(Nanc, T, psplit, Ns, migrates, burnin=10.0):
         name="Two deme isolation-with-migration (IM) model",
         source={"function": "fwdpy11.demographic_models.IM.two_deme_IM"},
         parameters=TwoDemeIMParameters(
-            Nanc=Nanc, T=T, psplit=psplit, Ns=Ns, migrates=migrates, burnin=burnin,
+            Nanc=Nanc,
+            T=T,
+            psplit=psplit,
+            Ns=Ns,
+            migrates=migrates,
+            burnin=burnin,
         ),
         citation=None,
         metadata=TwoDemeIMMetaData(

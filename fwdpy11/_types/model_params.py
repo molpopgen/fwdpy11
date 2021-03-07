@@ -19,23 +19,15 @@
 import warnings
 
 import attr
-import numpy as np
-
 import fwdpy11
+import numpy as np
 from fwdpy11.class_decorators import (attr_add_asblack,
                                       attr_class_to_from_dict_no_recurse)
-
-_common_attr_attribs = {
-    "kw_only": True,
-    "frozen": True,
-    "slots": True,
-    "repr_ns": "fwdpy11",
-}
 
 
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
 class MutationAndRecombinationRates(object):
     """
     Stores and validates the mutation and recombination rate parameters
@@ -107,7 +99,7 @@ def _convert_demography(o):
 
 @attr_add_asblack
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(kw_only=True, frozen=True, slots=True, repr_ns="fwdpy11")
 class ModelParams(object):
     """
     This class stores and validates the parameters of a simulation.

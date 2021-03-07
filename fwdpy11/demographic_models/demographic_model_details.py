@@ -20,23 +20,44 @@
 import typing
 
 import attr
-
 from fwdpy11.class_decorators import (attr_add_asblack, attr_class_pickle,
                                       attr_class_to_from_dict,
                                       attr_class_to_from_dict_no_recurse)
 
-_common_attr_attribs = {
-    "kw_only": True,
-    "frozen": True,
-    "auto_attribs": True,
-    "repr_ns": "fwdpy11.demographic_models",
-}
+
+@attr_add_asblack
+@attr_class_pickle
+@attr_class_to_from_dict
+@attr.s(
+    kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11.demographic_models"
+)
+class DemographicModelCitation(object):
+    """
+    Citation information for a demographic model
+
+    This class has the following attributes, whose names
+    are also ``kwargs`` for intitialization.  The attribute names
+    also determine the order of positional arguments:
+
+    :param DOI: The Digital Object Identifier
+    :param full_citation: Something string-like giving the full citation.
+    :param metadata: Any additional information that may be needed.
+
+
+    .. versionadded:: 0.8.0
+    """
+
+    DOI: object
+    full_citation: object
+    metadata: object
 
 
 @attr_add_asblack
 @attr_class_pickle
 @attr_class_to_from_dict_no_recurse
-@attr.s(**_common_attr_attribs)
+@attr.s(
+    kw_only=True, frozen=True, auto_attribs=True, repr_ns="fwdpy11.demographic_models"
+)
 class DemographicModelDetails(object):
     """
     Stores rich information about a demographic model.
@@ -67,30 +88,5 @@ class DemographicModelDetails(object):
     name: str
     source: typing.Dict
     parameters: object
-    citation: typing.Optional[typing.Dict]
+    citation: typing.Optional[typing.Union[DemographicModelCitation, typing.Dict]]
     metadata: typing.Optional[object] = None
-
-
-@attr_add_asblack
-@attr_class_pickle
-@attr_class_to_from_dict
-@attr.s(**_common_attr_attribs)
-class DemographicModelCitation(object):
-    """
-    Citation information for a demographic model
-
-    This class has the following attributes, whose names
-    are also ``kwargs`` for intitialization.  The attribute names
-    also determine the order of positional arguments:
-
-    :param DOI: The Digital Object Identifier
-    :param full_citation: Something string-like giving the full citation.
-    :param metadata: Any additional information that may be needed.
-
-
-    .. versionadded:: 0.8.0
-    """
-
-    DOI: object
-    full_citation: object
-    metadata: object
