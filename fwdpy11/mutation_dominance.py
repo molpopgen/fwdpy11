@@ -36,7 +36,7 @@ class FixedDominance(fwdpy11._fwdpy11._ll_FixedDominance):
     :param h: The heterozygous effect of a mutation, or "dominance".
     :type h: float
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.13.0
     """
 
     h: float = attr.ib(validator=attr.validators.instance_of(float))
@@ -56,7 +56,7 @@ class ExponentialDominance(fwdpy11._fwdpy11._ll_ExponentialDominance):
     :param m: The mean of the distribution.
     :type m: float
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.13.0
     """
 
     m: float = attr.ib(validator=attr.validators.instance_of(float))
@@ -78,7 +78,7 @@ class UniformDominance(fwdpy11._fwdpy11._ll_UniformDominance):
     :param hi: The upper bound of the range
     :type hi: float
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.13.0
     """
 
     lo: float = attr.ib(validator=attr.validators.instance_of(float))
@@ -105,7 +105,7 @@ class LargeEffectExponentiallyRecessive(
     :type scaling: Scaling parameter
     :type scaling: float
 
-    .. versionadded:: 0.14.0
+    .. versionadded:: 0.13.0
     """
 
     k: float = attr.ib(validator=attr.validators.instance_of(float))
