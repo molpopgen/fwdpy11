@@ -260,6 +260,7 @@ that is handled on the C++ side.
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.DiscreteDemography
+    :members:
 ```
 
 ```{data} fwdpy11.NOGROWTH

@@ -495,6 +495,10 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     #       The type hints could be a forwarding ref if needed
     @classmethod
     def from_demes(cls, dg) -> "DiscreteDemography":
+        """
+        Build a :class:`fwdpy11.DiscreteDemography` object using
+        demes.
+        """
         from ._functions import demography_from_demes
 
         d = demography_from_demes(dg)
