@@ -32,6 +32,12 @@
   - file: short_vignettes/recorders_vignette
   - file: short_vignettes/neutralmutsafter_vignette
 
+- part: Short vignettes - demographic modeling
+  chapters:
+  - file: short_vignettes/demography_vignettes_intro
+  - file: short_vignettes/demes_vignette
+  - file: short_vignettes/demography_debugger_vignette
+
 # Restore once 656 is resolved
 - part: Short vignettes - exporting data to tskit
   chapters:
