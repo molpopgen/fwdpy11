@@ -143,6 +143,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
     @property
     def tables(self) -> TableCollection:
+        """Access the :class:`fwdpy11.TableCollection`"""
         return self._pytables
 
     def _get_times(self):
