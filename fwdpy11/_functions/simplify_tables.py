@@ -57,8 +57,8 @@ def simplify(pop, samples):
 
 
 def simplify_tables(
-    tables: fwdpy11.TableCollection, samples: Union[List, np.ndarray]
-) -> Tuple[fwdpy11.TableCollection, np.ndarray]:
+    tables: fwdpy11._types.TableCollection, samples: Union[List, np.ndarray]
+) -> Tuple[fwdpy11._types.TableCollection, np.ndarray]:
     """
     Simplify a TableCollection.
 
