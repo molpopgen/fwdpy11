@@ -108,9 +108,7 @@ It is sometimes useful to go through the code and to a "static" analysis to look
 tool is especially useful.  For example:
 
 ```{code-block} bash
-
-find fwdpy11/src/ -name '*.cc' | xargs -I  clang-tidy -checks='performance-*'   -- -I/usr/include/python3.7m -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers
-
+find fwdpy11/src/ -name '*.cc' -print | xargs -I % sh -c 'clang-tidy % -- -I/usr/include/python3.8d -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers -I$HOME/.local/include'
 ```
 
 ### Code formatting style
