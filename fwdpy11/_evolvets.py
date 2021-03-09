@@ -1,23 +1,28 @@
 #
-# Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
+# Copyright(C) 2017 Kevin Thornton < krthornt @uci.edu>
 #
 # This file is part of fwdpy11.
 #
-# fwdpy11 is free software: you can redistribute it and/or modify
+# fwdpy11 is free software : you can redistribute it and / or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # fwdpy11 is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
+# along with fwdpy11.If not, see < http: //www.gnu.org/licenses/>.
 #
 
+from typing import Callable, Optional
+
 import fwdpy11
+
+from ._fwdpy11 import GSLrng, SampleRecorder
+from ._types import DiploidPopulation, ModelParams
 
 
 def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: int):
@@ -36,20 +41,20 @@ def _validate_event_timings(demography: fwdpy11.DiscreteDemography, generation: 
 
 
 def evolvets(
-    rng,
-    pop,
-    params,
-    simplification_interval,
-    recorder=None,
+    rng: GSLrng,
+    pop: DiploidPopulation,
+    params: ModelParams,
+    simplification_interval: int,
+    recorder: Optional[Callable[[DiploidPopulation, SampleRecorder], None]] = None,
     *,
-    post_simplification_recorder=None,
-    suppress_table_indexing=False,
-    record_gvalue_matrix=False,
-    stopping_criterion=None,
-    track_mutation_counts=False,
-    remove_extinct_variants=True,
-    preserve_first_generation=False,
-    check_demographic_event_timings=True,
+    post_simplification_recorder: Optional[Callable[[DiploidPopulation], None]] = None,
+    suppress_table_indexing: bool = False,
+    record_gvalue_matrix: bool = False,
+    stopping_criterion: Optional[Callable[[DiploidPopulation, bool], bool]] = None,
+    track_mutation_counts: bool = False,
+    remove_extinct_variants: bool = True,
+    preserve_first_generation: bool = False,
+    check_demographic_event_timings: bool = True,
 ):
     """
     Evolve a population with tree sequence recording
@@ -129,9 +134,8 @@ def evolvets(
 
         stopping_criterion = _no_stopping
 
-    from ._fwdpy11 import MutationRegions
-    from ._fwdpy11 import dispatch_create_GeneticMap
-    from ._fwdpy11 import evolve_with_tree_sequences
+    from ._fwdpy11 import (MutationRegions, dispatch_create_GeneticMap,
+                           evolve_with_tree_sequences)
 
     try:
         # DemographicModelDetails ?
