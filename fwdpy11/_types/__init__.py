@@ -16,6 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+"""
+    isort:skip_file
+"""
 from .population_mixin import PopulationMixin  # NOQA
 from .table_collection import TableCollection  # NOQA
 from .tree_iterator import TreeIterator  # NOQA
@@ -23,3 +26,4 @@ from .variant_iterator import VariantIterator  # NOQA
 from .data_matrix import DataMatrix  # NOQA
 from .data_matrix_iterator import DataMatrixIterator  # NOQA
 from .diploid_population import DiploidPopulation  # NOQA
+from .model_params import ModelParams  # NOQA
