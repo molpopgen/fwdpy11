@@ -84,7 +84,7 @@ namespace fwdpy11
         std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::make_shared<MultivariateGSSmo>(*this);
+            return std::make_shared<MultivariateGSSmo>(optima);
         }
 
         template <typename poptype>

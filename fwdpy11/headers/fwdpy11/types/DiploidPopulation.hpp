@@ -157,7 +157,7 @@ namespace fwdpy11
         }
 
         void
-        fill_preserved_nodes()
+        fill_preserved_nodes() override
         {
             fill_sample_nodes_from_metadata(preserved_sample_nodes,
                                             ancient_sample_metadata);

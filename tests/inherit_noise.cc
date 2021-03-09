@@ -50,7 +50,7 @@ struct IneritedNoise : public fwdpy11::GeneticValueNoise
         return pybind11::bytes("IneritedNoise");
     }
 
-    static inline const IneritedNoise
+    static inline IneritedNoise
     unpickle(pybind11::object& o)
     {
         auto s = o.cast<std::string>();

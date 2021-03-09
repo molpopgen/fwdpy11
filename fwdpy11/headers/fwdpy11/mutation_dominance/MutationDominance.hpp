@@ -12,6 +12,11 @@ namespace fwdpy11
     struct MutationDominance
     {
         virtual ~MutationDominance() = default;
+        MutationDominance() = default;
+        MutationDominance(const MutationDominance&) = delete;
+        MutationDominance(MutationDominance&&) = default;
+        MutationDominance& operator=(const MutationDominance&) = delete;
+        MutationDominance& operator=(MutationDominance&&) = default;
         virtual double generate_dominance(const GSLrng_t& /*rng*/,
                                           const double /*effect_size*/) const = 0;
         virtual std::shared_ptr<MutationDominance> clone() const = 0;

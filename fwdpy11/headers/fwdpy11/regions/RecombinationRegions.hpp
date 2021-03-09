@@ -16,6 +16,11 @@ namespace fwdpy11
     struct GeneticMap
     {
         virtual ~GeneticMap() = default;
+        GeneticMap() = default;
+        GeneticMap(const GeneticMap&) = delete;
+        GeneticMap(GeneticMap&&) = default;
+        GeneticMap& operator=(const GeneticMap&)=delete;
+        GeneticMap& operator=(GeneticMap&&)=default;
         virtual std::vector<double> operator()(const GSLrng_t& rng) const = 0;
     };
 

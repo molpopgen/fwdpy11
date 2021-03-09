@@ -14,7 +14,7 @@ struct EsizeZero : public fwdpy11::Sregion
     std::unique_ptr<fwdpy11::Sregion>
     clone() const override
     {
-        return std::unique_ptr<EsizeZero>(new EsizeZero(*this));
+        return std::unique_ptr<EsizeZero>(new EsizeZero(this->region));
     }
 
     double

@@ -31,6 +31,11 @@ namespace fwdpy11
     ///ABC for random effects on trait values
     {
         virtual ~GeneticValueNoise() = default;
+        GeneticValueNoise() = default;
+        GeneticValueNoise(const GeneticValueNoise &) = delete;
+        GeneticValueNoise(GeneticValueNoise &&) = default;
+        GeneticValueNoise& operator=(GeneticValueNoise &&) = default;
+        GeneticValueNoise& operator=(const GeneticValueNoise &) = delete;
         virtual double
         operator()(const DiploidGeneticValueNoiseData /*data*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;

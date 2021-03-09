@@ -38,12 +38,18 @@ namespace fwdpy11
     struct GeneticValueToFitnessMap
     {
         std::size_t total_dim;
-        const bool isfitness;
+        bool isfitness;
         explicit GeneticValueToFitnessMap(std::size_t ndim, const maps_to_fitness& m)
             : total_dim{ndim}, isfitness{m.get()}
         {
         }
+
         virtual ~GeneticValueToFitnessMap() = default;
+        GeneticValueToFitnessMap(const GeneticValueToFitnessMap&)=delete;
+        GeneticValueToFitnessMap(GeneticValueToFitnessMap&&)=default;
+        GeneticValueToFitnessMap& operator=(const GeneticValueToFitnessMap&)=delete;
+        GeneticValueToFitnessMap& operator=(GeneticValueToFitnessMap&&)=default;
+
         virtual double
         operator()(const DiploidGeneticValueToFitnessData /*data*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;

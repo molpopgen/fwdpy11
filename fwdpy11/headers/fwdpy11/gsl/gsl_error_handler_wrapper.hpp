@@ -64,9 +64,14 @@ namespace fwdpy11
         gsl_scoped_convert_error_to_exception(
             const gsl_scoped_convert_error_to_exception&)
             = delete;
+        gsl_scoped_convert_error_to_exception(gsl_scoped_convert_error_to_exception&&)
+            = default;
         gsl_scoped_convert_error_to_exception&
         operator=(const gsl_scoped_convert_error_to_exception&)
             = delete;
+        gsl_scoped_convert_error_to_exception&
+        operator=(gsl_scoped_convert_error_to_exception&&)
+            = default;
     };
 
     struct gsl_scoped_disable_error_handler_wrapper
@@ -85,9 +90,16 @@ namespace fwdpy11
         gsl_scoped_disable_error_handler_wrapper(
             const gsl_scoped_disable_error_handler_wrapper&)
             = delete;
+        gsl_scoped_disable_error_handler_wrapper(
+            gsl_scoped_disable_error_handler_wrapper&&)
+            = default;
+
         gsl_scoped_disable_error_handler_wrapper&
         operator=(const gsl_scoped_disable_error_handler_wrapper&)
             = delete;
+        gsl_scoped_disable_error_handler_wrapper&
+        operator=(gsl_scoped_disable_error_handler_wrapper&&)
+            = default;
     };
 } // namespace fwdpy11
 
