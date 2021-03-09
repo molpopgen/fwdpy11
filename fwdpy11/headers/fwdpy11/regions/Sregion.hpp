@@ -20,7 +20,7 @@ namespace fwdpy11
     {
         Region region; // For returning positions
         double scaling;
-        const std::size_t total_dim;
+        std::size_t total_dim;
         std::shared_ptr<MutationDominance> dominance;
 
         virtual ~Sregion() = default;
@@ -39,6 +39,11 @@ namespace fwdpy11
                     throw std::invalid_argument("invalid dimension parameter");
                 }
         }
+
+        Sregion(const Sregion&) = delete;
+        Sregion(Sregion&&) = default;
+        Sregion& operator=(const Sregion&) = delete;
+        Sregion& operator=(Sregion&&) = default;
 
         inline double
         beg() const

@@ -46,7 +46,13 @@ namespace fwdpy11
         std::unique_ptr<Sregion>
         clone() const override
         {
-            return std::unique_ptr<LogNormalS>(new LogNormalS(*this));
+            if (std::isfinite(zeta))
+                {
+                    return std::unique_ptr<LogNormalS>(
+                        new LogNormalS(region, scaling, zeta, sigma, dominance));
+                }
+            return std::unique_ptr<LogNormalS>(
+                new LogNormalS(region, scaling, dominance));
         }
 
         std::uint32_t

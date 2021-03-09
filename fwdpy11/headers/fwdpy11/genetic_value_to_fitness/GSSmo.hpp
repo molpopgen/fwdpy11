@@ -74,7 +74,7 @@ namespace fwdpy11
         std::shared_ptr<GeneticValueToFitnessMap>
         clone() const override
         {
-            return std::make_shared<GSSmo>(*this);
+            return std::make_shared<GSSmo>(optima);
         }
     };
 } // namespace fwdpy11

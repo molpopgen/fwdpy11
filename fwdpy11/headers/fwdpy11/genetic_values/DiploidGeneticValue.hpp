@@ -73,6 +73,7 @@ namespace fwdpy11
         DiploidGeneticValue(const DiploidGeneticValue&) = delete;
         DiploidGeneticValue(DiploidGeneticValue&&) = default;
         DiploidGeneticValue& operator=(const DiploidGeneticValue&) = delete;
+        DiploidGeneticValue& operator=(DiploidGeneticValue&&) = default;
 
         virtual double calculate_gvalue(const DiploidGeneticValueData data) = 0;
 

@@ -31,6 +31,11 @@ namespace fwdpy11
             : GeneticValueToFitnessMap(ndim, maps_to_fitness(false))
         {
         }
+        virtual ~GeneticValueIsTrait() = default;
+        GeneticValueIsTrait(const GeneticValueIsTrait&) = delete;
+        GeneticValueIsTrait(GeneticValueIsTrait&&) = default;
+        GeneticValueIsTrait& operator=(const GeneticValueIsTrait&) = delete;
+        GeneticValueIsTrait& operator=(GeneticValueIsTrait&&) = default;
     };
 } // namespace fwdpy11
 

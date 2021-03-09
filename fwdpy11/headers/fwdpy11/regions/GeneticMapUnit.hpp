@@ -49,6 +49,12 @@ namespace fwdpy11
             : ll_map_unit(std::move(input)), discrete_(discrete)
         {
         }
+        GeneticMapUnit(GeneticMapUnit&&)=default;
+
+        GeneticMapUnit(const GeneticMapUnit &) = delete;
+        GeneticMapUnit& operator=(const GeneticMapUnit &) = delete;
+        GeneticMapUnit& operator=(GeneticMapUnit &&) = default;
+
 
         ll_ptr_t
         ll_clone() const

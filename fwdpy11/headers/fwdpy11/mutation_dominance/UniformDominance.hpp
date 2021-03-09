@@ -32,7 +32,7 @@ namespace fwdpy11
         std::shared_ptr<MutationDominance>
         clone() const override final
         {
-            return std::make_shared<UniformDominance>(*this);
+            return std::make_shared<UniformDominance>(lo, hi);
         }
     };
 }

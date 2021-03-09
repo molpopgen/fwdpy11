@@ -24,7 +24,7 @@ struct GaussianNoise : public fwdpy11::GeneticValueNoise
     std::shared_ptr<fwdpy11::GeneticValueNoise>
     clone() const override
     {
-        return std::make_shared<GaussianNoise>(*this);
+        return std::make_shared<GaussianNoise>(sd, mean);
     }
 };
 
