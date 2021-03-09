@@ -50,3 +50,4 @@ sphinx:
       attrs: ["https://www.attrs.org/en/stable", null]
       sparse: ["https://sparse.pydata.org/en/latest/", null]
       numpy: ['http://docs.scipy.org/doc/numpy', null]
+      pandas: ['http://pandas.pydata.org/pandas-docs/stable/', null]
