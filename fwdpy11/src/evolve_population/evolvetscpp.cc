@@ -1,47 +1,16 @@
-// Wright-Fisher simulation for a fwdpy11::DiploidPopulation with
-// tree sequences.
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-
-#include <pybind11/pybind11.h>
-#include <pybind11/functional.h>
-#include <pybind11/stl.h>
-#include <functional>
 #include <cmath>
 #include <stdexcept>
+
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/simplify_tables_output.hpp>
 #include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/make_simplifier_state.hpp>
-#include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
-#include <fwdpy11/evolvets/sample_recorder_types.hpp>
-#include <fwdpy11/regions/MutationRegions.hpp>
-#include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
-#include <fwdpy11/samplers.hpp>
+#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 #include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
@@ -53,7 +22,8 @@
 #include "remove_extinct_genomes.hpp"
 #include "runtime_checks.hpp"
 
-namespace py = pybind11;
+#include "evolvetscpp.hpp"
+
 namespace ddemog = fwdpy11::discrete_demography;
 
 void
@@ -85,16 +55,16 @@ simplification(
     bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
     SimplificationState &simplifier_state,
-    fwdpp::ts::simplify_tables_output & simplification_output,
+    fwdpp::ts::simplify_tables_output &simplification_output,
     fwdpp::ts::edge_buffer &new_edge_buffer,
     std::vector<fwdpp::ts::table_index_t> &alive_at_last_simplification,
     fwdpy11::DiploidPopulation &pop)
 {
-    fwdpy11::simplify_tables(
-        pop, pop.mcounts_from_preserved_nodes, alive_at_last_simplification, *pop.tables,
-        simplifier_state, simplification_output,
-        new_edge_buffer, preserve_selected_fixations,
-        simulating_neutral_variants, suppress_edge_table_indexing);
+    fwdpy11::simplify_tables(pop, pop.mcounts_from_preserved_nodes,
+                             alive_at_last_simplification, *pop.tables, simplifier_state,
+                             simplification_output, new_edge_buffer,
+                             preserve_selected_fixations, simulating_neutral_variants,
+                             suppress_edge_table_indexing);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
         {
             throw std::runtime_error("evolvets: count vector size mismatch after "
@@ -457,13 +427,13 @@ evolve_with_tree_sequences(
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
             if (current_demographic_state->will_go_globally_extinct() == true)
                 {
-                    simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, *simplifier_state,
-                        simplification_output, *new_edge_buffer,
-                        alive_at_last_simplification, pop);
+                    simplification(preserve_selected_fixations,
+                                   simulating_neutral_variants,
+                                   suppress_edge_table_indexing,
+                                   reset_treeseqs_to_alive_nodes_after_simplification,
+                                   post_simplification_recorder, *simplifier_state,
+                                   simplification_output, *new_edge_buffer,
+                                   alive_at_last_simplification, pop);
                     simplifier_state.reset(nullptr);
                     new_edge_buffer.reset(nullptr);
                     final_population_cleanup(
@@ -479,13 +449,13 @@ evolve_with_tree_sequences(
 
             if (gen % simplification_interval == 0.0)
                 {
-                    simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, *simplifier_state,
-                        simplification_output,
-                        *new_edge_buffer, alive_at_last_simplification, pop);
+                    simplification(preserve_selected_fixations,
+                                   simulating_neutral_variants,
+                                   suppress_edge_table_indexing,
+                                   reset_treeseqs_to_alive_nodes_after_simplification,
+                                   post_simplification_recorder, *simplifier_state,
+                                   simplification_output, *new_edge_buffer,
+                                   alive_at_last_simplification, pop);
                     simplified = true;
                 }
             else
@@ -539,14 +509,17 @@ evolve_with_tree_sequences(
                                         }
                                 }
                             simplification_output.preserved_mutations.erase(
-                                std::remove(begin(simplification_output.preserved_mutations),
-                                            end(simplification_output.preserved_mutations),
-                                            std::numeric_limits<std::size_t>::max()),
+                                std::remove(
+                                    begin(simplification_output.preserved_mutations),
+                                    end(simplification_output.preserved_mutations),
+                                    std::numeric_limits<std::size_t>::max()),
                                 end(simplification_output.preserved_mutations));
                             if (simulating_neutral_variants)
                                 {
                                     genetics.mutation_recycling_bin
-                                        = fwdpp::ts::make_mut_queue(simplification_output.preserved_mutations, pop.mutations.size());
+                                        = fwdpp::ts::make_mut_queue(
+                                            simplification_output.preserved_mutations,
+                                            pop.mutations.size());
                                 }
                             else
                                 {
@@ -559,7 +532,8 @@ evolve_with_tree_sequences(
                     else
                         {
                             genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                simplification_output.preserved_mutations, pop.mutations.size());
+                                simplification_output.preserved_mutations,
+                                pop.mutations.size());
                         }
                 }
 
@@ -622,14 +596,12 @@ evolve_with_tree_sequences(
 
     if (!simplified)
         {
-            simplification(
-                preserve_selected_fixations, simulating_neutral_variants,
-                suppress_edge_table_indexing,
-                reset_treeseqs_to_alive_nodes_after_simplification,
-                post_simplification_recorder, *simplifier_state,
-                simplification_output,
-                *new_edge_buffer,
-                alive_at_last_simplification, pop);
+            simplification(preserve_selected_fixations, simulating_neutral_variants,
+                           suppress_edge_table_indexing,
+                           reset_treeseqs_to_alive_nodes_after_simplification,
+                           post_simplification_recorder, *simplifier_state,
+                           simplification_output, *new_edge_buffer,
+                           alive_at_last_simplification, pop);
             if (!preserve_selected_fixations)
                 {
                     fwdpp::ts::remove_fixations_from_haploid_genomes(
@@ -648,8 +620,3 @@ evolve_with_tree_sequences(
     ddemog::save_model_state(std::move(current_demographic_state), demography);
 }
 
-void
-init_evolve_with_tree_sequences(py::module &m)
-{
-    m.def("evolve_with_tree_sequences", &evolve_with_tree_sequences);
-}
