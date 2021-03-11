@@ -134,6 +134,8 @@ ax.set_ylabel('Value')
 ax.legend(loc='best');
 ```
 
+(ancient_samples_vignette)=
+
 ## Recording ancient samples
 
 Let's write a new class that "preserves" a random number of individuals each generation.

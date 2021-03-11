@@ -26,27 +26,71 @@ The goal of `TSR` is to track a set of tables that contain the trees describing 
 
 To start out, let us consider the following tree:
 
-:::{figure-md}
-<img src="../images/tree.png">
+```{code-cell}
+---
+tags: ['hide-input']
+---
+import tskit
+from IPython.display import SVG
+from myst_nb import glue
+
+tc = tskit.TableCollection(1.)
+tc.nodes.set_columns(flags=[1]*4+[0]*3, time=[0]*4+[1,2,3])
+tc.edges.add_row(parent=4, child=0, left=0., right=1.)
+tc.edges.add_row(parent=4, child=1, left=0., right=1.)
+tc.edges.add_row(parent=5, child=2, left=0., right=1.)
+tc.edges.add_row(parent=5, child=3, left=0., right=1.)
+tc.edges.add_row(parent=6, child=4, left=0., right=1.)
+tc.edges.add_row(parent=6, child=5, left=0., right=1.)
+
+ts = tc.tree_sequence()
+glue("example_tree", SVG(ts.draw_svg(size=(500, 500))), display=False)
+```
+
+```{glue:figure} example_tree
+:name: 'example_tree'
 
 A tree with seven nodes.
+```
 
-:::
-
-This tree is the "marginal" history of a genomic segment covering the half-open interval {math}`[l, r)`. In other words,
-all genomic positions in this interval have the same ancestry, and recombination results in different intervals having
-different trees.
+This tree is the "marginal" history of a genomic segment covering the half-open interval {math}`[0, 1)`.
+In other words, all genomic positions in this interval have the same ancestry, and recombination results in different intervals having different trees.
 
 Following {cite}`Kelleher2016-cb`, we can represent the above tree using two tables:
 
-:::{figure-md}
-<img src="../images/tables.png">
+```{code-cell}
+---
+tags: ['hide-input']
+---
+import pandas as pd
 
-The node and edges tables corresponding to Fig 1.
+nodes = pd.DataFrame({'id': [i for i in range(len(ts.tables.nodes))],
+                      'time': ts.tables.nodes.time})
+edges = pd.DataFrame({'parent': ts.tables.edges.parent,
+                      'child': ts.tables.edges.child,
+                      'left': ts.tables.edges.left,
+                      'right': ts.tables.edges.right})
+```
 
-:::
+First we have the `nodes`:
 
-We learn two things from Fig 2:
+```{code-cell}
+---
+tags: ['hide-input']
+---
+nodes
+```
+
+Second, we have the `edges`:
+
+```{code-cell}
+---
+tags: ['hide-input']
+---
+edges
+```
+
+We learn two things from {numref}`example_tree` and its associated tables:
 
 1. Node tables track the birth times of nodes.  Here, we measure time as increasing from past to the present.
 2. Edge tables record the transmissions of genomic intervals from parents to children.  The parent/child fields
@@ -58,7 +102,7 @@ Edge tables have specific sorting requirements.  The sorting is nested:
 2. For edges with the same parent, child indexes are sorted in increasing order
 3. Finally, edges are sorted by increasing left position.
 
-### Relating an evolving populaton to node and edge tables
+## Relating an evolving population to node and edge tables
 
 Consider the case of a diploid Wright-Fisher population.  There are {math}`N` individuals, and
 thus {math}`2N` haploid genomes.  Define a genome as all of the genomic intervals inherited from a
@@ -79,8 +123,8 @@ The task of a forward simulation is to record new nodes and edges as they arise.
 transmission events that quickly go extinct.  The simplification algorithm described in the 2018 paper mentioned above
 takes this "messy" node and edge table and returns "simplified" node and edge tables.
 
-We can visualize this process using an example taken from the `tskit` [tutorials][tutorials], which implements the discrete-time
-Wright-Fisher model for a diploid population without recombination and without selection:
+We can visualize this process using an example implemented with `tskit`. 
+We implement a Wright-Fisher model for a diploid population without recombination and without selection:
 
 ```{code-cell} python
 import tskit
@@ -124,6 +168,8 @@ def wf1(N, ngens):
     return tc
 ```
 
+## Tree sequence simplification
+
 Let's run the simulation for a few generations and look at the resulting tree:
 
 ```{code-cell} python
@@ -143,13 +189,15 @@ tc.nodes.set_columns(time=t, flags=tc.nodes.flags)
 # Sort the tables:
 tc.sort()
 ts = tc.tree_sequence()
-print(ts.first().draw(format="unicode"))
+SVG(ts.draw_svg(size=(500,500)))
 ```
 
 The resulting tree contains information for extinct lineages as well as redundant node information.  Note
 that the three diploids in the last generation are defined by node pairs `(24,25)`, `(26,27)`, and `(28,29)`.
 
-Let's apply the simplification algorithm that:
+Let's apply the simplification algorithm now.
+Simplification returns the minimal history of a specific set of nodes that we may call the "sample nodes".
+Here, our sample nodes will be those nodes corresponding to the individuals alive at the end of the simulation.
 
 ```{code-cell} python
 ---
@@ -160,8 +208,8 @@ node_map = tc.simplify(samples=samples.tolist())
 ts = tc.tree_sequence()
 tree = ts.first()
 imap = {node_map[node]: node for node in range(len(node_map))}
-nl = {i: "->".format(imap[i], i) for i in tree.nodes()}
-print(tree.draw(format="unicode", node_labels=nl))
+nl = {i: f"{imap[i]}->{i}" for i in tree.nodes()}
+SVG(ts.draw_svg(size=(500,500), node_labels=nl))
 ```
 
 That's much nicer!  The simplified tree shows now the *input* node ids are remapped to *output* node ids
@@ -173,14 +221,10 @@ huge, and I refer you to the 2018 paper for the data on that.  But our simulatio
 much more information.  The tables of nodes, edges, etc., record the entire history of the simulation with respect to a
 set of sample nodes.
 
-Anyone interested in some of the more technical details of implementing `TSR` can take a look at the [tutorials][tutorials] accompanying the 2018 paper.
-
-## Sample recording
-
-:::{todo}
-discuss the current generation vs historical/ancient/preserved samples.
+:::{note}
+An important feature of the simplification algorithm is that we are *not* restricted to only using our "alive" nodes as our sample nodes.
+In fact, we can simplify with respect to any set of nodes in the tables.
+This feature allows us to keep nodes corresponding to "ancient samples" during a simulation.
+We simply mark them as nodes that we want to keep, and the algorithm does the rest.
+See {ref}`here <ancient_samples_vignette>` for how to do this in a simulation.
 :::
-
-[tutorials]: https://tskit-dev.github.io/tutorials/
-
-
