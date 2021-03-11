@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <stdexcept>
-#include <pybind11/pybind11.h>
 #include "DiploidGeneticValue.hpp"
 
 namespace fwdpy11
@@ -40,40 +39,12 @@ namespace fwdpy11
     {
         std::vector<fwdpy11::DiploidGeneticValue *> genetic_values;
 
-        std::vector<fwdpy11::DiploidGeneticValue *>
-        init_from_list(pybind11::list l)
-        {
-            if (l.empty())
-                {
-                    throw std::invalid_argument(
-                        "list of genetic values cannot be empty");
-                }
-            std::vector<fwdpy11::DiploidGeneticValue *> rv;
-            for (auto i : l)
-                {
-                    auto *ref = i.cast<fwdpy11::DiploidGeneticValue *>();
-                    rv.push_back(ref);
-                }
-            for (std::size_t i = 1; i < rv.size(); ++i)
-                {
-                    if (rv[i - 1]->total_dim != rv[i]->total_dim)
-                        {
-                            rv.clear();
-                            throw std::invalid_argument(
-                                "genetic value objects must all have same "
-                                "value for total_dim");
-                        }
-                }
-            return rv;
-        }
-
-        dgvalue_pointer_vector_(fwdpy11::DiploidGeneticValue &gv)
-            : genetic_values{ &gv }
+        dgvalue_pointer_vector_(fwdpy11::DiploidGeneticValue &gv) : genetic_values{&gv}
         {
         }
 
-        dgvalue_pointer_vector_(pybind11::list gv)
-            : genetic_values{ init_from_list(gv) }
+        dgvalue_pointer_vector_(std::vector<fwdpy11::DiploidGeneticValue *> gvpointers)
+            : genetic_values{std::move(gvpointers)}
         {
         }
     };

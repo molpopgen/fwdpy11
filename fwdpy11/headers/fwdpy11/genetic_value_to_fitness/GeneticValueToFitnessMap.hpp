@@ -20,7 +20,6 @@
 #define FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__
 
 #include <memory>
-#include <pybind11/pybind11.h>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/genetic_values/default_update.hpp>
 #include <fwdpp/util/named_type.hpp>
@@ -45,20 +44,15 @@ namespace fwdpy11
         }
 
         virtual ~GeneticValueToFitnessMap() = default;
-        GeneticValueToFitnessMap(const GeneticValueToFitnessMap&)=delete;
-        GeneticValueToFitnessMap(GeneticValueToFitnessMap&&)=default;
-        GeneticValueToFitnessMap& operator=(const GeneticValueToFitnessMap&)=delete;
-        GeneticValueToFitnessMap& operator=(GeneticValueToFitnessMap&&)=default;
+        GeneticValueToFitnessMap(const GeneticValueToFitnessMap&) = delete;
+        GeneticValueToFitnessMap(GeneticValueToFitnessMap&&) = default;
+        GeneticValueToFitnessMap& operator=(const GeneticValueToFitnessMap&) = delete;
+        GeneticValueToFitnessMap& operator=(GeneticValueToFitnessMap&&) = default;
 
         virtual double
         operator()(const DiploidGeneticValueToFitnessData /*data*/) const = 0;
         virtual void update(const DiploidPopulation& /*pop*/) = 0;
         virtual std::shared_ptr<GeneticValueToFitnessMap> clone() const = 0;
-        virtual pybind11::tuple
-        shape() const
-        {
-            return pybind11::make_tuple(total_dim);
-        }
     };
 } //namespace fwdpy11
 

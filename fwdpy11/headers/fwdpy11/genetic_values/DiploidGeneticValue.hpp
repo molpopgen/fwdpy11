@@ -27,7 +27,6 @@
 #include <fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp>
 #include <fwdpy11/genetic_value_noise/NoNoise.hpp>
 #include <fwdpy11/genetic_value_data/genetic_value_data.hpp>
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
@@ -99,16 +98,6 @@ namespace fwdpy11
         noise(const DiploidGeneticValueNoiseData data) const
         {
             return noise_fxn->operator()(data);
-        }
-
-        virtual pybind11::tuple
-        shape() const
-        {
-            if (total_dim > 1 && total_dim != gvalues.size())
-                {
-                    throw std::runtime_error("dimensionality mismatch");
-                }
-            return pybind11::make_tuple(total_dim);
         }
     };
 } //namespace fwdpy11

@@ -22,10 +22,42 @@
 
 namespace py = pybind11;
 
+namespace
+{
+    std::vector<fwdpy11::DiploidGeneticValue *>
+    init_from_list(pybind11::list l)
+    {
+        if (l.empty())
+            {
+                throw std::invalid_argument("list of genetic values cannot be empty");
+            }
+        std::vector<fwdpy11::DiploidGeneticValue *> rv;
+        for (auto i : l)
+            {
+                auto *ref = i.cast<fwdpy11::DiploidGeneticValue *>();
+                rv.push_back(ref);
+            }
+        for (std::size_t i = 1; i < rv.size(); ++i)
+            {
+                if (rv[i - 1]->total_dim != rv[i]->total_dim)
+                    {
+                        rv.clear();
+                        throw std::invalid_argument(
+                            "genetic value objects must all have same "
+                            "value for total_dim");
+                    }
+            }
+        return rv;
+    }
+}
+
 void
 init_dgvalue_pointer_vector(py::module &m)
 {
     py::class_<fwdpy11::dgvalue_pointer_vector_>(m, "_dgvalue_pointer_vector")
         .def(py::init<fwdpy11::DiploidGeneticValue &>())
-        .def(py::init<py::list>());
+        .def(py::init([](py::list l) {
+            auto pointers = init_from_list(l);
+            return fwdpy11::dgvalue_pointer_vector_(std::move(pointers));
+        }));
 }
