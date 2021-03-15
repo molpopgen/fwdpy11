@@ -128,15 +128,6 @@ class ModelParams(object):
                            as fixed.
     :type prune_selected: bool
 
-    The following ``kwargs``/attributes are pending deprecation along
-    with simulations without tree sequence recording:
-
-    :param pself: The probabilility that an individual selfs.
-                  For simulations with tree sequence recording,
-                  this parameter has no effect.  Instead, use
-                  the methods described :ref:`here <softselection>`.
-    :type self: float
-
     .. note::
 
         To initialize the ``rates`` field, we require an instance of
@@ -167,6 +158,10 @@ class ModelParams(object):
         Refactored class internals using ``attrs``.
         Mutation and recombination rates now
         stored in :class:`fwdpy11.MutationAndRecombinationRates`
+
+    .. versionchanged:: 0.14.0
+
+        Remove deprecated kwargs pself and popsizes.
     """
 
     nregions = attr.ib(factory=list)
@@ -179,20 +174,6 @@ class ModelParams(object):
     )
     simlen: int = attr.ib(converter=int, default=0)
     prune_selected: bool = attr.ib(default=True)
-
-    pself: float = attr.ib(default=0.0)  # Deprecated
-    popsizes = attr.ib()  # FIXME: this is a hack from 0.6.0
-
-    @popsizes.default
-    def popsizes_default(self):
-        return None
-
-    @popsizes.validator
-    def validate_popsizes(self, attribute, value):
-        if value is not None:
-            raise ValueError(
-                f"{attribute} has been removed. Please use demography keyword instead"
-            )
 
     @nregions.validator
     def validate_nregions(self, attribute, value):
@@ -287,18 +268,3 @@ class ModelParams(object):
     def validate_simlen(self, attribute, value):
         if value <= 0:
             raise ValueError(f"{attribute} must be >= 0, but we got {value} instead")
-
-        if self.popsizes is not None and value != len(self.popsizes):
-            raise ValueError(
-                f"simlen must equal len(self.popsizes), but we got {value} and "
-                f"{len(self.popsizes)} instead"
-            )
-
-    @pself.validator
-    def validate_pself(self, attribute, value):
-        if value != 0.0:
-            warnings.warn(
-                "attribute pself is deprecated"
-                " and will be removed in a future version",
-                DeprecationWarning,
-            )

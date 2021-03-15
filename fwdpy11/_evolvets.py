@@ -177,7 +177,6 @@ def evolvets(
         gvpointers,
         recorder,
         stopping_criterion,
-        params.pself,
         params.prune_selected is False,
         suppress_table_indexing,
         record_gvalue_matrix,
