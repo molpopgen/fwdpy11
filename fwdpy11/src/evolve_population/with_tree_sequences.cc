@@ -190,7 +190,6 @@ evolve_with_tree_sequences(
     fwdpy11::DiploidPopulation_sample_recorder recorder,
     std::function<bool(const fwdpy11::DiploidPopulation &, const bool)>
         &stopping_criteron,
-    const double selfing_rate,
     // NOTE: this is the complement of what a user will input, which is "prune_selected"
     const bool preserve_selected_fixations, const bool suppress_edge_table_indexing,
     bool record_genotype_matrix, const bool track_mutation_counts_during_sim,
