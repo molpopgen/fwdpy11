@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/evolvets/recorders.hpp>
 #include <fwdpy11/numpy/array.hpp>
@@ -28,8 +29,27 @@ init_tsrecorders(py::module& m)
              :type individual_index: int
              )delim",
              py::arg("individual_index"))
-        .def("assign", &fwdpy11::SampleRecorder::assign, py::arg("samples"),
-             R"delim(
+        .def(
+            "assign",
+            [](fwdpy11::SampleRecorder& self, py::array_t<std::uint32_t> a) {
+                py::buffer_info info = a.request();
+                if (info.ndim != 1)
+                    {
+                        throw std::invalid_argument(
+                            "preserved sample list must have ndim == 1");
+                    }
+                std::size_t size = info.shape[0];
+                if (size == 0)
+                    {
+                        throw std::invalid_argument("empty list of samples to preserve");
+                    }
+
+                fwdpp::uint_t* ptr = static_cast<fwdpp::uint_t*>(info.ptr);
+                self.samples.assign(ptr, ptr + size);
+            },
+            py::arg("samples"),
+
+            R"delim(
          Add a list of individuals to the list of samples.
 
          :param samples: Array of individual indexes
