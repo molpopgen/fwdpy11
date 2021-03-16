@@ -1,48 +1,13 @@
-// Wright-Fisher simulation for a fwdpy11::DiploidPopulation with
-// tree sequences.
-//
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
-//
-// This file is part of fwdpy11.
-//
-// fwdpy11 is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// fwdpy11 is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
-//
-
-#include <pybind11/pybind11.h>
-#include <pybind11/functional.h>
-#include <pybind11/stl.h>
-#include <functional>
-#include <cmath>
-#include <stdexcept>
 #include <fwdpp/simparams.hpp>
 #include <fwdpp/ts/simplify_tables.hpp>
 #include <fwdpp/ts/simplify_tables_output.hpp>
 #include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/recording/edge_buffer.hpp>
 #include <fwdpp/ts/make_simplifier_state.hpp>
-#include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/DiploidPopulation.hpp>
-#include <fwdpy11/genetic_values/dgvalue_pointer_vector.hpp>
+#include <fwdpp/ts/recycling.hpp>
+#include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <fwdpy11/evolvets/evolve_generation_ts.hpp>
 #include <fwdpy11/evolvets/simplify_tables.hpp>
-#include <fwdpy11/evolvets/sample_recorder_types.hpp>
-#include <fwdpy11/regions/MutationRegions.hpp>
-#include <fwdpy11/regions/RecombinationRegions.hpp>
-#include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
-#include <fwdpy11/samplers.hpp>
-#include <fwdpp/ts/recycling.hpp>
 #include "util.hpp"
 #include "diploid_pop_fitness.hpp"
 #include "index_and_count_mutations.hpp"
@@ -53,7 +18,8 @@
 #include "remove_extinct_genomes.hpp"
 #include "runtime_checks.hpp"
 
-namespace py = pybind11;
+#include "evolvets.hpp"
+
 namespace ddemog = fwdpy11::discrete_demography;
 
 void
@@ -647,8 +613,3 @@ evolve_with_tree_sequences(
     ddemog::save_model_state(std::move(current_demographic_state), demography);
 }
 
-void
-init_evolve_with_tree_sequences(py::module &m)
-{
-    m.def("evolve_with_tree_sequences", &evolve_with_tree_sequences);
-}

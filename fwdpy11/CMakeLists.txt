@@ -73,7 +73,8 @@ set(TS_SOURCES src/ts/init.cc src/ts/TreeIterator.cc src/ts/VariantIterator.cc
     src/ts/node_traversal.cc)
 
 set(EVOLVE_POPULATION_SOURCES src/evolve_population/init.cc
-    src/evolve_population/with_tree_sequences.cc
+    src/evolve_population/_evolvets.cc
+    src/evolve_population/evolvets.cc
     src/evolve_population/util.cc
     src/evolve_population/cleanup_metadata.cc
     src/evolve_population/diploid_pop_fitness.cc
