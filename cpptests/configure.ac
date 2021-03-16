@@ -1,5 +1,5 @@
 AC_INIT([fwdpy11_cpp_tests], 0.0)
-AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CXX
 AC_LANG(C++)
