@@ -5,7 +5,7 @@ do
     rm -rf build
     PYPATH=/opt/python/${py}
     PYBIN=${PYPATH}/bin/python 
-    ${PYBIN} -m pip install --no-cache -r requirements.txt
+    ${PYBIN} -m pip install --no-cache-dir -r requirements.txt
     PATH=${PYPATH}:$PATH ${PYBIN} setup.py build_ext -i
     PATH=${PYPATH}:$PATH ${PYBIN} setup.py bdist_wheel
 done

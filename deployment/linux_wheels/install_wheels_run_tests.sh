@@ -15,9 +15,9 @@ do
     ${PYBIN} -m venv test-${py}
     source test-${py}/bin/activate
     which pip
-    pip install --upgrade --no-cache pip wheel
-    pip install fwdpy11 --only-binary fwdpy11 -f ../dist/wheelhouse
-    pip install --no-cache msprime pytest pytest-xdist
+    pip install --upgrade --no-cache-dir pip wheel
+    pip install fwdpy11 --pre --only-binary fwdpy11 -f ../dist/wheelhouse
+    pip install --no-cache-dir msprime pytest pytest-xdist
     python -m pytest tests -n 4
     deactivate
     rm -rf test-${py}
