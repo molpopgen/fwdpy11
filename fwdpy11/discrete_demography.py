@@ -23,10 +23,14 @@ import attr
 import numpy as np
 
 import fwdpy11
+import demes
 
-from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
-                               attr_class_to_from_dict,
-                               attr_class_to_from_dict_no_recurse)
+from .class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle_with_super,
+    attr_class_to_from_dict,
+    attr_class_to_from_dict_no_recurse,
+)
 
 
 @attr_add_asblack
@@ -490,20 +494,6 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             set_migration_rates=self.set_migration_rates,
         )
 
-    # TODO: need docstring
-    # TODO: need type hints for dg
-    #       The type hints could be a forwarding ref if needed
-    @classmethod
-    def from_demes(cls, dg) -> "DiscreteDemography":
-        """
-        Build a :class:`fwdpy11.DiscreteDemography` object using
-        demes.
-        """
-        from ._functions import demography_from_demes
-
-        d = demography_from_demes(dg)
-        return cls(**d)
-
     @staticmethod
     def _event_names_list() -> typing.List[str]:
         """
@@ -535,3 +525,30 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             self.set_migration_rates,
         ]:
             yield i
+
+
+def from_demes(
+    dg: typing.Union[str, demes.Graph], burnin: int = 10
+) -> "DemographicModelDetails":
+    """
+    Build a :class:`fwdpy11.DiscreteDemography` object using demes. The deme
+    graph can either be a demes Graph object or a string as the filepath to a
+    demes-specifiend YAML demography.
+
+    :param dg: The demes Graph to convert.
+    :type dg: demes.Graph or str
+    :param burnin: A factor for how many generations to burn in the simulation.
+        For a typical demography with a single root, the number of generations
+        of burn in is `burnin` times the root deme's population size. For
+        models with multiple root demes joined by migration, that population
+        size is determined as the size of the metapopulation.
+    type burnin: int
+
+    :rtype: :class:`fwdpy11.demographic_models.DemographicModelDetails`
+
+    .. versionadded:: 0.14.0
+    """
+    from ._functions import demography_from_demes
+
+    demog = demography_from_demes(dg, burnin)
+    return demog
