@@ -82,7 +82,7 @@ jobs:
         run: |
           source ~/.bashrc
           conda activate anaconda-client-env
-          pip install demes==0.1.0a3
+          grep demes requirements.txt | xargs pip install
 
       - name: Build module
         # shell: bash -l {0}
