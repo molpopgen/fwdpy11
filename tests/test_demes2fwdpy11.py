@@ -42,6 +42,14 @@ class TestBadBurnin(unittest.TestCase):
 
 
 @check_valid_demography
+class TestLoadYAML(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.g = demes.load("tests/test_demog.yaml")
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+
+
+@check_valid_demography
 class TestTwoEpoch(unittest.TestCase):
     @classmethod
     def setUpClass(self):
@@ -187,7 +195,24 @@ class TestSplitMigration(unittest.TestCase):
             "Deme2", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
         self.b.add_migration(source="Deme1", dest="Deme2", rate=0.01)
-        self.b.add_migration(source="Deme2", dest="Deme1", rate=0.01)
+        self.b.add_migration(source="Deme2", dest="Deme1", rate=0.02)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+
+
+@check_valid_demography
+class TestSplitSymmetricMigration(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b.add_deme(
+            "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_deme(
+            "Deme2", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_migration(demes=["Deme1", "Deme2"], rate=0.01)
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
@@ -207,6 +232,26 @@ class TestSplitThreeWay(unittest.TestCase):
         self.b.add_deme(
             "Deme3", epochs=[dict(start_size=200, end_time=0)], ancestors=["Ancestor"]
         )
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+
+
+@check_valid_demography
+class TestSplitThreeWayMigration(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b.add_deme(
+            "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_deme(
+            "Deme2", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_deme(
+            "Deme3", epochs=[dict(start_size=200, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_migration(demes=["Deme1", "Deme2", "Deme3"], rate=0.1)
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
