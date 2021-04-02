@@ -42,6 +42,14 @@ class TestBadBurnin(unittest.TestCase):
 
 
 @check_valid_demography
+class TestLoadYAML(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.g = demes.load("tests/test_demog.yaml")
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+
+
+@check_valid_demography
 class TestTwoEpoch(unittest.TestCase):
     @classmethod
     def setUpClass(self):

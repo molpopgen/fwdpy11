@@ -1,24 +1,20 @@
 description: Two deme model with migration and size changes.
 time_units: generations
 demes:
-  ancestral:
-    description: ancestral deme, two epochs
-    epochs:
-      - end_time: 1000
-        initial_size: 1000
-      - end_time: 500
-        initial_size: 2000
-  deme1:
-    description: child 1
-    initial_size: 1500
-    final_size: 4000
-    ancestors: ancestral
-  deme2:
-    description: child 2
-    initial_size: 500
-    final_size: 20000
-    ancestors: ancestral
+- name: ancestral
+  description: ancestral deme, two epochs
+  epochs:
+  - {end_time: 1000, start_size: 1000}
+  - {end_time: 500, start_size: 2000}
+- name: deme1
+  description: child 1
+  epochs:
+  - {start_size: 1500, end_size: 4000, end_time: 0}
+  ancestors: [ancestral]
+- name: deme2
+  description: child 2
+  epochs:
+  - {start_size: 500, end_size: 20000, end_time: 0}
+  ancestors: [ancestral]
 migrations:
-  symmetric:
-  - demes: deme1, deme2
-    rate: 1e-3
+- {demes: [deme1, deme2], rate: 1e-3}

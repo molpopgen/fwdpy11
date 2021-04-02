@@ -9,6 +9,7 @@ import attr
 import math
 import sys
 import copy
+import itertools
 
 import demes
 
@@ -543,26 +544,50 @@ def _process_migrations(
     for m in dg.migrations:
         if m.start_time < math.inf:
             when = burnin_generation + int(model_times.model_start_time - m.start_time)
-            events.migration_rate_changes.append(
-                _MigrationRateChange(
-                    when=when,
-                    source=idmap[m.source],
-                    destination=idmap[m.dest],
-                    rate_change=m.rate,
-                    from_deme_graph=True,
+            try:
+                events.migration_rate_changes.append(
+                    _MigrationRateChange(
+                        when=when,
+                        source=idmap[m.source],
+                        destination=idmap[m.dest],
+                        rate_change=m.rate,
+                        from_deme_graph=True,
+                    )
                 )
-            )
+            except AttributeError:
+                for source, dest in itertools.permutations(m.demes, 2):
+                    events.migration_rate_changes.append(
+                        _MigrationRateChange(
+                            when=when,
+                            source=idmap[source],
+                            destination=idmap[dest],
+                            rate_change=m.rate,
+                            from_deme_graph=True,
+                        )
+                    )
         if m.end_time > 0:
             when = burnin_generation + int(model_times.model_start_time - m.end_time)
-            events.migration_rate_changes.append(
-                _MigrationRateChange(
-                    when=when,
-                    source=idmap[m.source],
-                    destination=idmap[m.dest],
-                    rate_change=-m.rate,
-                    from_deme_graph=True,
-                )
-            )
+            try:
+                events.migration_rate_changes.append(
+                    _MigrationRateChange(
+                        when=when,
+                        source=idmap[m.source],
+                        destination=idmap[m.dest],
+                        rate_change=-m.rate,
+                        from_deme_graph=True,
+                        )
+                    )
+            except AttributeError:
+                for source, dest in itertools.permutations(m.demes, 2):
+                    events.migration_rate_changes.append(
+                        _MigrationRateChange(
+                            when=when,
+                            source=idmap[source],
+                            destination=idmap[dest],
+                            rate_change=-m.rate,
+                            from_deme_graph=True,
+                        )
+                    )
 
 
 def _process_pulses(
