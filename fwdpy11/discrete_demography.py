@@ -542,7 +542,7 @@ def from_demes(
         of burn in is `burnin` times the root deme's population size. For
         models with multiple root demes joined by migration, that population
         size is determined as the size of the metapopulation.
-    type burnin: int
+    :type burnin: int
 
     :rtype: :class:`fwdpy11.demographic_models.DemographicModelDetails`
 
