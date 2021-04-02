@@ -57,7 +57,7 @@ def demography_from_demes(
     if burnin < 0:
         raise ValueError("Burn in factor must be non-negative")
 
-    demography = _build_from_deme_graph(dg, burnin, source)
+    demography = _build_from_deme_graph(g, burnin, source)
     return demography
 
 
