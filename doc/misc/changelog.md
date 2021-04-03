@@ -3,6 +3,43 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.14.0
+
+In addition to the changes listed below, several documentation, CI, and deployment changes also happened.
+These are collected under the `0.14.0` milestone on `GitHub`.
+
+New features:
+
+* Initial support for demographic models using the `demes` spec.
+  See {ref}`here <demes_vignette>`.
+  {pr}`710`
+  {pr}`712`
+  {pr}`713`
+  {user}`apragsdale`
+* {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` has a new option to "destructively" dump tables, which may save a lot of memory.
+  {pr}`695`
+
+Python changes:
+
+* Improved support for type hints
+  {pr}`690`
+  {pr}`692`
+  {pr}`694`
+  {pr}`696`
+* Deprecated `popsizes` and `pself` keyword arguments removed from {class}`fwdpy11.ModelParams`.
+  {pr}`703`
+* Fixed a design issue in how {class}`fwdpy11.DemographyDebugger` parsed input event lists.
+  {pr}`693`
+
+C++ back-end changes:
+
+* Several C++ source files were changed to no longer include `pybind11` headers.
+  {pr}`705`
+  {pr}`704`
+  {pr}`702`
+* Removed unused C++ header files
+  {pr}`689`
+
 ## 0.13.2
 
 Point release
