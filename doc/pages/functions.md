@@ -37,3 +37,7 @@
 ```{eval-rst}
 .. autofunction:: fwdpy11.data_matrix_from_tables
 ```
+
+```{eval-rst}
+.. autofunction:: fwdpy11.discrete_demography.from_demes
+```
