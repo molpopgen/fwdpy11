@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -901,7 +939,7 @@ also determine the order of positional arguments:</p>
 
 <dl class="py class">
 <dt id="fwdpy11.mvDES">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">mvDES</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">des</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">means</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.mvDES" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">mvDES</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">des</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">means</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.mvDES" title="Permalink to this definition">¶</a></dt>
 <dd><p>General multivariate distribution of effect sizes.</p>
 <p>This class has the following attributes, whose names
 are also <cite>kwargs</cite> for intitialization.  The attribute names
@@ -1132,7 +1170,7 @@ low-level C++ class</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
@@ -1150,7 +1188,7 @@ low-level C++ class</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
@@ -1165,7 +1203,7 @@ low-level C++ class</p>
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>
@@ -1182,7 +1220,7 @@ effect size and <span class="math notranslate nohighlight">\(y\)</span> is a “
 </dd>
 </dl>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 0.14.0.</span></p>
+<p><span class="versionmodified added">New in version 0.13.0.</span></p>
 </div>
 <p>See <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html#mutationdominance-vignette"><span class="std std-ref">here</span></a> for details.</p>
 </dd></dl>

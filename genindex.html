@@ -203,6 +203,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -232,6 +260,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -628,6 +666,8 @@
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asblack">asblack() (fwdpy11.Additive method)</a>
 
       <ul>
+        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.asblack">(fwdpy11.DiscreteDemography method)</a>
+</li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.asblack">(fwdpy11.GaussianNoise method)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.asblack">(fwdpy11.GBR method)</a>
@@ -658,6 +698,8 @@
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asdict">asdict() (fwdpy11.Additive method)</a>
 
       <ul>
+        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.asdict">(fwdpy11.DiscreteDemography method)</a>
+</li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.asdict">(fwdpy11.GaussianNoise method)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.asdict">(fwdpy11.GBR method)</a>
@@ -838,9 +880,13 @@
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.FixedDominance">FixedDominance (class in fwdpy11)</a>
 </li>
+      <li><a href="pages/functions.html#fwdpy11.discrete_demography.from_demes">from_demes() (in module fwdpy11.discrete_demography)</a>
+</li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.fromdict">fromdict() (fwdpy11.Additive class method)</a>
 
       <ul>
+        <li><a href="pages/types.html#fwdpy11.DiscreteDemography.fromdict">(fwdpy11.DiscreteDemography class method)</a>
+</li>
         <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise.fromdict">(fwdpy11.GaussianNoise class method)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.fromdict">(fwdpy11.GBR class method)</a>
@@ -896,6 +942,8 @@
         <li><a href="pages/advancedtopics.html#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">built-in function</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fwdpy11.demographic_models
 
@@ -903,8 +951,6 @@
         <li><a href="pages/demographic_models.html#module-fwdpy11.demographic_models">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     fwdpy11.demographic_models.human
 
@@ -1237,7 +1283,7 @@
 </li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_keys">neutral_keys() (fwdpy11.DataMatrix property)</a>
 </li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_matrix">neutral_matrix() (fwdpy11.DataMatrix property)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_matrix">neutral_matrix() (fwdpy11.DataMatrix method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1361,7 +1407,7 @@
 </li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_keys">selected_keys() (fwdpy11.DataMatrix property)</a>
 </li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_matrix">selected_matrix() (fwdpy11.DataMatrix property)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_matrix">selected_matrix() (fwdpy11.DataMatrix method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected_positions">selected_positions (fwdpy11.DataMatrixIterator attribute)</a>
 </li>
@@ -1429,8 +1475,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TableCollection">TableCollection (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.TreeIterator.tables">tables() (fwdpy11.TreeIterator property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.tables">tables() (fwdpy11.DiploidPopulation property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.TreeIterator.tables">(fwdpy11.TreeIterator property)</a>
 </li>
+      </ul></li>
       <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.tennessen">tennessen() (in module fwdpy11.demographic_models.human)</a>
 </li>
       <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.human.TennessenModel">TennessenModel (class in fwdpy11.demographic_models.human)</a>

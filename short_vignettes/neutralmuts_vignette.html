@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -578,7 +616,36 @@
                 
   <div class="section" id="neutral-mutations-during-a-simulation">
 <span id="neutralmuts-vignette"></span><h1>Neutral mutations during a simulation<a class="headerlink" href="#neutral-mutations-during-a-simulation" title="Permalink to this headline">¶</a></h1>
-<p>STUB</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lists of objects described here are passed to the <code class="docutils literal notranslate"><span class="pre">nregions</span></code> and <code class="docutils literal notranslate"><span class="pre">rates</span></code> parameters when initializing instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
+</div>
+<p>Normally, there is no need to simulate neutral mutations during a simulation.
+Because we record the ancestry using tree sequence recording, it is much more efficient in general to add neutral mutations when the simulation is complete.
+See <a class="reference internal" href="neutralmutsafter_vignette.html#neutralmutsafter-vignette"><span class="std std-ref">here</span></a>.</p>
+<p>The reasons to simulate neutral variants during a simulation include:</p>
+<ul class="simple">
+<li><p>Wanting to track their frequencies over time.</p></li>
+<li><p>Wanting neutral mutation rates to vary along the genome.
+(This is only necessary due to a current limitation of <a class="reference internal" href="../pages/functions.html#fwdpy11.infinite_sites" title="fwdpy11.infinite_sites"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.infinite_sites()</span></code></a>.)</p></li>
+</ul>
+<p>The procedure is relatively simple.
+Variation in the neutral mutation rate is specified by different weights in instances of <a class="reference internal" href="../pages/regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a>.</p>
+<p>For example, to have two regions of the same size, but the second having twice as many mutations as the first:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">nregions</span> <span class="o">=</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+           <span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>To specify the total mutation rate to neutral mutations, pass a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> as the first element of <code class="docutils literal notranslate"><span class="pre">rates</span></code>.
+(See <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.)</p>
+<p>To see neutral mutations during a simulation in action, check out <a class="reference internal" href="../long_vignettes/pyfreqtracker.html#freqtrackpy-neutral"><span class="std std-ref">this vignette</span></a>.</p>
 </div>
 
     <script type="text/x-thebe-config">

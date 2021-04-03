@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -579,7 +617,7 @@
 <span id="localadaptation"></span><h1>Local adaptation of a quantitative trait<a class="headerlink" href="#local-adaptation-of-a-quantitative-trait" title="Permalink to this headline">¶</a></h1>
 <div class="figure align-default" id="id1">
 <img alt="../_images/localadaptation.png" src="../_images/localadaptation.png" />
-<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Example output from this script. The command line shown below
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Example output from this script. The command line shown below
 generated this image.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 examples/discrete_demography/localadaptation.py -N <span class="m">5000</span> --rho <span class="m">10000</span> --mu <span class="m">0</span>.005 --sigma <span class="m">0</span>.10 --migrates 1e-4 1e-4 --plotfile localadaptation.png

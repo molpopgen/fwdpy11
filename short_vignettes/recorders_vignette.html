@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -602,8 +640,8 @@
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="761eceba-fc03-47f5-9749-485f19c7bc64" name="71bc4a46-3817-4082-bebb-92661afbf584" type="radio">
-</input><label class="tabbed-label" for="761eceba-fc03-47f5-9749-485f19c7bc64">
+<input checked="checked" id="d40ba1ec-6228-47cc-bda1-f20d1d08e9b5" name="d386cc1f-c7cf-4973-bd08-fc8cdf4a17ea" type="radio">
+</input><label class="tabbed-label" for="d40ba1ec-6228-47cc-bda1-f20d1d08e9b5">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -611,8 +649,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="3d8186ac-6cac-4ee2-94da-d062c4ff6d00" name="71bc4a46-3817-4082-bebb-92661afbf584" type="radio">
-</input><label class="tabbed-label" for="3d8186ac-6cac-4ee2-94da-d062c4ff6d00">
+<input id="84d8b775-e764-4981-9903-d7b23ccfecf2" name="d386cc1f-c7cf-4973-bd08-fc8cdf4a17ea" type="radio">
+</input><label class="tabbed-label" for="84d8b775-e764-4981-9903-d7b23ccfecf2">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
@@ -726,7 +764,7 @@ We will implement a recorder to track the mean trait value and fitness of the en
 </div>
 </div>
 <div class="section" id="recording-ancient-samples">
-<h2>Recording ancient samples<a class="headerlink" href="#recording-ancient-samples" title="Permalink to this headline">¶</a></h2>
+<span id="ancient-samples-vignette"></span><h2>Recording ancient samples<a class="headerlink" href="#recording-ancient-samples" title="Permalink to this headline">¶</a></h2>
 <p>Let’s write a new class that “preserves” a random number of individuals each generation.
 This recording preserves their nodes in the <a class="reference internal" href="../pages/types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a> and their meta data in <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata" title="fwdpy11.DiploidPopulation.ancient_sample_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.ancient_sample_metadata</span></code></a>.</p>
 <p>Our class will also do all of the same operations that <code class="docutils literal notranslate"><span class="pre">Recorder</span></code> did.</p>

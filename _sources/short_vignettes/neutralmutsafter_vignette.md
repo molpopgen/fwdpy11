@@ -10,7 +10,7 @@ kernelspec:
   name: python3
 ---
 
-(neutralmutationsafter_vignette)=
+(neutralmutsafter_vignette)=
 
 # Adding neutral mutations to a population with existing ancestry
 

@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -577,7 +615,7 @@
 <h1>Model parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fwdpy11.ModelParams">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">ModelParams</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">fwdpy11.DiscreteDemography(mass_migrations=None,</span> <span class="pre">set_growth_rates=None,</span> <span class="pre">set_deme_sizes=None,</span> <span class="pre">set_selfing_rates=None,</span> <span class="pre">migmatrix=None,</span> <span class="pre">set_migration_rates=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_selected</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pself</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popsizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ModelParams" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">ModelParams</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recregions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">NOTHING</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gvalue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">fwdpy11.DiscreteDemography(mass_migrations=None,</span> <span class="pre">set_growth_rates=None,</span> <span class="pre">set_deme_sizes=None,</span> <span class="pre">set_selfing_rates=None,</span> <span class="pre">migmatrix=None,</span> <span class="pre">set_migration_rates=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prune_selected</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.ModelParams" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class stores and validates the parameters of a simulation.
 Instances of this class are constructed using <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>
 and instance attributes are immutable once initialized.</p>
@@ -598,16 +636,6 @@ See below for more details.</p></li>
 the population when they are first detected
 as fixed.</p></li>
 </ul>
-</dd>
-</dl>
-<p>The following <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>/attributes are pending deprecation along
-with simulations without tree sequence recording:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>pself</strong> – The probabilility that an individual selfs.
-For simulations with tree sequence recording,
-this parameter has no effect.  Instead, use
-the methods described <a class="reference internal" href="softselection.html#softselection"><span class="std std-ref">here</span></a>.</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -638,6 +666,9 @@ into a much simpler, single class.</p>
 <p><span class="versionmodified changed">Changed in version 0.8.0: </span>Refactored class internals using <code class="docutils literal notranslate"><span class="pre">attrs</span></code>.
 Mutation and recombination rates now
 stored in <a class="reference internal" href="#fwdpy11.MutationAndRecombinationRates" title="fwdpy11.MutationAndRecombinationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationAndRecombinationRates</span></code></a></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.14.0: </span>Remove deprecated kwargs pself and popsizes.</p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.ModelParams.asblack">

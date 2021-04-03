@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -781,7 +819,7 @@ process, keep it simple!</p></li>
 </ul>
 </div>
 <div class="section" id="decoding-metadata-from-tskit-treesequence">
-<span id="processing-metadata"></span><h2>Decoding metadata from <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#decoding-metadata-from-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
+<span id="processing-metadata"></span><h2>Decoding metadata from <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#decoding-metadata-from-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
 <p>As of version 0.10.0, we make use of the metadata schema introduced in <code class="docutils literal notranslate"><span class="pre">tskit</span></code> 0.3.2.
 See <a class="reference external" href="https://tskit.readthedocs.io/en/latest/tutorial.html#working-with-metadata">here</a> for details.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
@@ -832,10 +870,10 @@ These functions are probably the most useful way to interact with the metadata.<
 <dl class="py function">
 <dt id="fwdpy11.tskit_tools.decode_individual_metadata">
 <code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_individual_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
+<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
+<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>individual metadata</p>
@@ -883,10 +921,10 @@ this type. Member attributes have the same names as these
 <dl class="py function">
 <dt id="fwdpy11.tskit_tools.decode_mutation_metadata">
 <code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_mutation_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.MutationVector</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
+<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
+<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Mutations</p>
@@ -1119,9 +1157,9 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id25"><span>KH88</span></a>]</span>, <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id26"><span>KH90</span></a>]</span>), which should be cited
+(<span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span>, <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>), which should be cited
 alongside <span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>.</p></li>
-<li><p><span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id25"><span>KH88</span></a>]</span> and <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id26"><span>KH90</span></a>]</span>) show that this model predicts heritability
+<li><p><span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span> and <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
 of that prediction is dubious.  <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id16"><span>JB05</span></a>]</span> discuss this point

@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -762,7 +800,7 @@ We have two basic ways to initialize a population:</p>
 <li><p>from a tree sequence in <code class="docutils literal notranslate"><span class="pre">tskit</span></code> format</p></li>
 </ul>
 <p>This section deals with the former.  See <a class="reference internal" href="#pop-from-tskit"><span class="std std-ref">here</span></a>
-for how to initialize from <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a> objects.</p>
+for how to initialize from <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a> objects.</p>
 <p>To initialize a population of <code class="docutils literal notranslate"><span class="pre">N</span></code> diploids from a single deme and a given
 genome length:</p>
 <div class="cell docutils container">
@@ -1804,32 +1842,32 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 <span class="ne">----&gt; </span><span class="mi">9</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">__attrs_post_init__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">119</span>         <span class="c1"># The real work</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_report</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">121</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span> 
-<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="nd">@initial_deme_sizes</span><span class="o">.</span><span class="n">validator</span>
+<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="c1"># The real work</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_report</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">128</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">129</span> 
+<span class="g g-Whitespace">    </span><span class="mi">130</span>     <span class="nd">@initial_deme_sizes</span><span class="o">.</span><span class="n">validator</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_process_demographic_model</span><span class="nt">(self, events, simlen)</span>
-<span class="g g-Whitespace">    </span><span class="mi">587</span>     <span class="k">def</span> <span class="nf">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">588</span>         <span class="n">event_queues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_event_queues</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">589</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_report</span><span class="p">(</span><span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">590</span> 
-<span class="g g-Whitespace">    </span><span class="mi">591</span>     <span class="nd">@property</span>
+<span class="g g-Whitespace">    </span><span class="mi">575</span>     <span class="k">def</span> <span class="nf">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">576</span>         <span class="n">event_queues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_event_queues</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">577</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_report</span><span class="p">(</span><span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">578</span> 
+<span class="g g-Whitespace">    </span><span class="mi">579</span>     <span class="nd">@property</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_generate_report</span><span class="nt">(self, event_queues, simlen)</span>
-<span class="g g-Whitespace">    </span><span class="mi">547</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_apply_SetMigrationRates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">548</span>             <span class="n">next_deme_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_growth_rates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">549</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_valid_parents</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">550</span>             <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_deme_sizes</span><span class="p">(</span><span class="n">next_deme_sizes</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">551</span>             <span class="n">sizes</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Deme sizes after growth: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">535</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_apply_SetMigrationRates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>             <span class="n">next_deme_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_apply_growth_rates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">537</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_check_for_valid_parents</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span>             <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_format_deme_sizes</span><span class="p">(</span><span class="n">next_deme_sizes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">539</span>             <span class="n">sizes</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Deme sizes after growth: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_check_for_valid_parents</span><span class="nt">(self, t)</span>
-<span class="g g-Whitespace">    </span><span class="mi">519</span>                         <span class="sa">f</span><span class="s2">&quot;but an empty row in the migration matrix&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">520</span>                     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">521</span>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">522</span> 
-<span class="g g-Whitespace">    </span><span class="mi">523</span>     <span class="k">def</span> <span class="nf">_generate_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">507</span>                         <span class="sa">f</span><span class="s2">&quot;but an empty row in the migration matrix&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">508</span>                     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">509</span>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">510</span> 
+<span class="g g-Whitespace">    </span><span class="mi">511</span>     <span class="k">def</span> <span class="nf">_generate_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
 
 <span class="ne">ValueError</span>: deme 1 at time 100 has size 50 but an empty row in the migration matrix
 </pre></div>
@@ -1856,32 +1894,32 @@ never gets created since we deleted the mass migration event:</p>
 <span class="ne">----&gt; </span><span class="mi">9</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">__attrs_post_init__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">119</span>         <span class="c1"># The real work</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_report</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">121</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span> 
-<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="nd">@initial_deme_sizes</span><span class="o">.</span><span class="n">validator</span>
+<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="c1"># The real work</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_report</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">128</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">129</span> 
+<span class="g g-Whitespace">    </span><span class="mi">130</span>     <span class="nd">@initial_deme_sizes</span><span class="o">.</span><span class="n">validator</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_process_demographic_model</span><span class="nt">(self, events, simlen)</span>
-<span class="g g-Whitespace">    </span><span class="mi">587</span>     <span class="k">def</span> <span class="nf">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">588</span>         <span class="n">event_queues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_event_queues</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">589</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_report</span><span class="p">(</span><span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">590</span> 
-<span class="g g-Whitespace">    </span><span class="mi">591</span>     <span class="nd">@property</span>
+<span class="g g-Whitespace">    </span><span class="mi">575</span>     <span class="k">def</span> <span class="nf">_process_demographic_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">simlen</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">576</span>         <span class="n">event_queues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_event_queues</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">577</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_generate_report</span><span class="p">(</span><span class="n">event_queues</span><span class="p">,</span> <span class="n">simlen</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">578</span> 
+<span class="g g-Whitespace">    </span><span class="mi">579</span>     <span class="nd">@property</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_generate_report</span><span class="nt">(self, event_queues, simlen)</span>
-<span class="g g-Whitespace">    </span><span class="mi">564</span>                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">565</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">_report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">566</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_validate_migration_rates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">next_deme_sizes</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">567</span>             <span class="bp">self</span><span class="o">.</span><span class="n">current_deme_sizes</span> <span class="o">=</span> <span class="n">next_deme_sizes</span>
-<span class="g g-Whitespace">    </span><span class="mi">568</span>             <span class="n">last_t</span> <span class="o">=</span> <span class="n">t</span>
+<span class="g g-Whitespace">    </span><span class="mi">552</span>                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">553</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">_report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">554</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_validate_migration_rates</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">next_deme_sizes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">555</span>             <span class="bp">self</span><span class="o">.</span><span class="n">current_deme_sizes</span> <span class="o">=</span> <span class="n">next_deme_sizes</span>
+<span class="g g-Whitespace">    </span><span class="mi">556</span>             <span class="n">last_t</span> <span class="o">=</span> <span class="n">t</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">_validate_migration_rates</span><span class="nt">(self, t, next_deme_sizes)</span>
-<span class="g g-Whitespace">    </span><span class="mi">476</span>                 <span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">477</span>                     <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_deme</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">migmatrix</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
-<span class="ne">--&gt; </span><span class="mi">478</span>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">479</span>                         <span class="s2">&quot;there is migration &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">480</span>                         <span class="s2">&quot;into empty deme </span><span class="si">{}</span><span class="s2"> &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">464</span>                 <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">465</span>                     <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_label_deme</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_events</span><span class="o">.</span><span class="n">migmatrix</span><span class="o">.</span><span class="n">M</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+<span class="ne">--&gt; </span><span class="mi">466</span>                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">467</span>                         <span class="s2">&quot;there is migration &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">468</span>                         <span class="s2">&quot;into empty deme </span><span class="si">{}</span><span class="s2"> &quot;</span>
 
 <span class="ne">ValueError</span>: there is migration into empty deme 1 at time 100, migrates=0.001
 </pre></div>
@@ -2026,8 +2064,6 @@ next subsection for details.</p></li>
     ),
     simlen=150,
     prune_selected=False,
-    pself=0.0,
-    popsizes=None,
 )
 </pre></div>
 </div>
@@ -2282,15 +2318,15 @@ between separate “chromosomes”.</p>
 </div>
 </div>
 <div class="section" id="converting-the-data-to-a-tskit-treesequence">
-<span id="tskittransfer"></span><h2>Converting the data to a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#converting-the-data-to-a-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
+<span id="tskittransfer"></span><h2>Converting the data to a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#converting-the-data-to-a-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
 <p>The tree sequence data structures may be converted to the analogous <code class="docutils literal notranslate"><span class="pre">tskit</span></code>
 objects using <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>,
-which returns a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.</p>
+which returns a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.</p>
 <p>The most basic usage is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>When you have the data stored as a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>,
+<p>When you have the data stored as a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>,
 information about individuals, mutations, etc., is stored as table metadata.
 See <a class="reference internal" href="advancedtopics.html#processing-metadata"><span class="std std-ref">here</span></a> to learn how to decode the metadata.</p>
 <div class="admonition note">
@@ -2299,7 +2335,7 @@ See <a class="reference internal" href="advancedtopics.html#processing-metadata"
 quite a bit and it will be simpler and more efficient to decode.</p>
 </div>
 <p>You may provide a <code class="docutils literal notranslate"><span class="pre">dict</span></code> that reflects the simulation parameters used.  This <code class="docutils literal notranslate"><span class="pre">dict</span></code>
-will be part of the provenance information encoded in the <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.
+will be part of the provenance information encoded in the <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>.
 For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assuming mp is a fwdpy11.ModelParams:</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;model&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">mp</span><span class="p">),</span> <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">12345</span><span class="p">})</span>
@@ -2324,7 +2360,7 @@ It turns out that Python files know who they are and can read themselves:</p>
 <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="n">script</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;script&quot;</span><span class="p">,</span> <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>In order to get the provenance information back out from a <a class="reference external" href="https://tskit.readthedocs.io/en/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>:</p>
+<p>In order to get the provenance information back out from a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
 
 <span class="n">provenance</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">provenance</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">record</span><span class="p">)</span>

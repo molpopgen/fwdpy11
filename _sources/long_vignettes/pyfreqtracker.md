@@ -11,6 +11,7 @@ kernelspec:
 ---
 
 (freqtrackpy)=
+
 # Tracking mutations over time
 
 ```{note}
@@ -171,6 +172,8 @@ glue("pyfreqtrackfig", f, display=False)
 Some sweeps from new mutations.
 ```
 
+(freqtrackpy_neutral)=
+
 ## Tracking the frequencies of neutral mutations
 
 One generally doesn't simulate neutral mutations.
@@ -234,7 +237,3 @@ This recipe needs adjustment for the following cases:
 * Tracking mutation frequencies in demes that change size.
 
 While this tracker is quite simple to write, performance may be an issue for very large simulations and one may prefer another approach.
-
-:::{todo}
-Provide example of other approach using ancient sample resetting and `sqlite3`.
-:::

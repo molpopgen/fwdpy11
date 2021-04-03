@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -580,17 +618,15 @@
   <a class="reference internal nav-link" href="#trees-and-tables">
    Trees and tables
   </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#relating-an-evolving-populaton-to-node-and-edge-tables">
-     Relating an evolving populaton to node and edge tables
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#sample-recording">
-   Sample recording
+  <a class="reference internal nav-link" href="#relating-an-evolving-population-to-node-and-edge-tables">
+   Relating an evolving population to node and edge tables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#tree-sequence-simplification">
+   Tree sequence simplification
   </a>
  </li>
 </ul>
@@ -615,19 +651,201 @@ heavily on concepts described in <span id="id2">[<a class="reference internal" h
 <div class="section" id="trees-and-tables">
 <h2>Trees and tables<a class="headerlink" href="#trees-and-tables" title="Permalink to this headline">¶</a></h2>
 <p>To start out, let us consider the following tree:</p>
-<div class="figure align-default" id="id5">
-<img alt="../_images/tree.png" src="../_images/tree.png" />
-<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">A tree with seven nodes.</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">SVG</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="n">tc</span> <span class="o">=</span> <span class="n">tskit</span><span class="o">.</span><span class="n">TableCollection</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">set_columns</span><span class="p">(</span><span class="n">flags</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="o">+</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">tc</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">child</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;example_tree&quot;</span><span class="p">,</span> <span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>This tree is the “marginal” history of a genomic segment covering the half-open interval <span class="math notranslate nohighlight">\([l, r)\)</span>. In other words,
-all genomic positions in this interval have the same ancestry, and recombination results in different intervals having
-different trees.</p>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="figure align-default" id="example-tree">
+<div class="cell_output docutils container">
+<img alt="../_images/tsoverview_1_0.svg" src="../_images/tsoverview_1_0.svg" /></div>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">A tree with seven nodes.</span><a class="headerlink" href="#example-tree" title="Permalink to this image">¶</a></p>
+</div>
+<p>This tree is the “marginal” history of a genomic segment covering the half-open interval <span class="math notranslate nohighlight">\([0, 1)\)</span>.
+In other words, all genomic positions in this interval have the same ancestry, and recombination results in different intervals having different trees.</p>
 <p>Following <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id19"><span>KEM16</span></a>]</span>, we can represent the above tree using two tables:</p>
-<div class="figure align-default" id="id6">
-<img alt="../_images/tables.png" src="../_images/tables.png" />
-<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">The node and edges tables corresponding to Fig 1.</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">nodes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="p">))],</span>
+                      <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;parent&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span>
+                      <span class="s1">&#39;child&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">child</span><span class="p">,</span>
+                      <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">left</span><span class="p">,</span>
+                      <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">right</span><span class="p">})</span>
+</pre></div>
 </div>
-<p>We learn two things from Fig 2:</p>
+</div>
+</div>
+<p>First we have the <code class="docutils literal notranslate"><span class="pre">nodes</span></code>:</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nodes</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>3.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Second, we have the <code class="docutils literal notranslate"><span class="pre">edges</span></code>:</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">edges</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>parent</th>
+      <th>child</th>
+      <th>left</th>
+      <th>right</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4</td>
+      <td>0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>5</td>
+      <td>2</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5</td>
+      <td>3</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6</td>
+      <td>4</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>5</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>We learn two things from <a class="reference internal" href="#example-tree"><span class="std std-numref">Fig. 3</span></a> and its associated tables:</p>
 <ol class="simple">
 <li><p>Node tables track the birth times of nodes.  Here, we measure time as increasing from past to the present.</p></li>
 <li><p>Edge tables record the transmissions of genomic intervals from parents to children.  The parent/child fields
@@ -639,8 +857,9 @@ are indexes of the node table.</p></li>
 <li><p>For edges with the same parent, child indexes are sorted in increasing order</p></li>
 <li><p>Finally, edges are sorted by increasing left position.</p></li>
 </ol>
-<div class="section" id="relating-an-evolving-populaton-to-node-and-edge-tables">
-<h3>Relating an evolving populaton to node and edge tables<a class="headerlink" href="#relating-an-evolving-populaton-to-node-and-edge-tables" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="relating-an-evolving-population-to-node-and-edge-tables">
+<h2>Relating an evolving population to node and edge tables<a class="headerlink" href="#relating-an-evolving-population-to-node-and-edge-tables" title="Permalink to this headline">¶</a></h2>
 <p>Consider the case of a diploid Wright-Fisher population.  There are <span class="math notranslate nohighlight">\(N\)</span> individuals, and
 thus <span class="math notranslate nohighlight">\(2N\)</span> haploid genomes.  Define a genome as all of the genomic intervals inherited from a
 single parent.  Positions along the genome have values from the interval <span class="math notranslate nohighlight">\([0,L)\)</span>, and we do not
@@ -655,8 +874,8 @@ recombination.  We record these transmission events as <em>edges</em>, which we 
 <p>The task of a forward simulation is to record new nodes and edges as they arise.  The simulation ends up recording many
 transmission events that quickly go extinct.  The simplification algorithm described in the 2018 paper mentioned above
 takes this “messy” node and edge table and returns “simplified” node and edge tables.</p>
-<p>We can visualize this process using an example taken from the <code class="docutils literal notranslate"><span class="pre">tskit</span></code> <a class="reference external" href="https://tskit-dev.github.io/tutorials/">tutorials</a>, which implements the discrete-time
-Wright-Fisher model for a diploid population without recombination and without selection:</p>
+<p>We can visualize this process using an example implemented with <code class="docutils literal notranslate"><span class="pre">tskit</span></code>.
+We implement a Wright-Fisher model for a diploid population without recombination and without selection:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
@@ -705,6 +924,9 @@ Wright-Fisher model for a diploid population without recombination and without s
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="tree-sequence-simplification">
+<h2>Tree sequence simplification<a class="headerlink" href="#tree-sequence-simplification" title="Permalink to this headline">¶</a></h2>
 <p>Let’s run the simulation for a few generations and look at the resulting tree:</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
@@ -721,27 +943,18 @@ Wright-Fisher model for a diploid population without recombination and without s
 <span class="c1"># Sort the tables:</span>
 <span class="n">tc</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 <span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">))</span>
+<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">)))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2 3   5     0           4            1
-    ┏━┻┓  ┏━┻┓          ┃            ┃
-    6  8 10 11          9            7
-       ┃        ┏━━━┳━━━┻━┳━━━━━┓    ┃
-      15       12  16    17    14   13
-       ┃           ┏┻━┓   ┃    ┏┻━┓   
-      22          18 21  19   23 20   
-                   ┃  ┃  ┏┻━┓  ┃  ┃   
-                  24 29 25 28 26 27   
-</pre></div>
-</div>
-</div>
+<img alt="../_images/tsoverview_12_0.svg" src="../_images/tsoverview_12_0.svg" /></div>
 </div>
 <p>The resulting tree contains information for extinct lineages as well as redundant node information.  Note
 that the three diploids in the last generation are defined by node pairs <code class="docutils literal notranslate"><span class="pre">(24,25)</span></code>, <code class="docutils literal notranslate"><span class="pre">(26,27)</span></code>, and <code class="docutils literal notranslate"><span class="pre">(28,29)</span></code>.</p>
-<p>Let’s apply the simplification algorithm that:</p>
+<p>Let’s apply the simplification algorithm now.
+Simplification returns the minimal history of a specific set of nodes that we may call the “sample nodes”.
+Here, our sample nodes will be those nodes corresponding to the individuals alive at the end of the simulation.</p>
 <div class="cell tag_raises-exception docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">tc</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -749,22 +962,13 @@ that the three diploids in the last generation are defined by node pairs <code c
 <span class="n">ts</span> <span class="o">=</span> <span class="n">tc</span><span class="o">.</span><span class="n">tree_sequence</span><span class="p">()</span>
 <span class="n">tree</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
 <span class="n">imap</span> <span class="o">=</span> <span class="p">{</span><span class="n">node_map</span><span class="p">[</span><span class="n">node</span><span class="p">]:</span> <span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_map</span><span class="p">))}</span>
-<span class="n">nl</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="s2">&quot;-&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">imap</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;unicode&quot;</span><span class="p">,</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">nl</span><span class="p">))</span>
+<span class="n">nl</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">imap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s2">-&gt;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">()}</span>
+<span class="n">SVG</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">draw_svg</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span><span class="mi">500</span><span class="p">),</span> <span class="n">node_labels</span><span class="o">=</span><span class="n">nl</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>       -&gt;        
-  ┏━━━━━╋━━━━━┓  
- -&gt;     ┃    -&gt;  
- ┏┻━┓   ┃    ┏┻━┓
- ┃  ┃  -&gt;    ┃  ┃
- ┃  ┃  ┏┻━┓  ┃  ┃
--&gt; -&gt; -&gt; -&gt; -&gt; -&gt;
-</pre></div>
-</div>
-</div>
+<img alt="../_images/tsoverview_14_0.svg" src="../_images/tsoverview_14_0.svg" /></div>
 </div>
 <p>That’s much nicer!  The simplified tree shows now the <em>input</em> node ids are remapped to <em>output</em> node ids
 in such a manner that relative ordering is preserved.</p>
@@ -773,14 +977,13 @@ We only have to simulate the selected variants and occasionally simplify our mes
 huge, and I refer you to the 2018 paper for the data on that.  But our simulations are not only faster.  They record
 much more information.  The tables of nodes, edges, etc., record the entire history of the simulation with respect to a
 set of sample nodes.</p>
-<p>Anyone interested in some of the more technical details of implementing <code class="docutils literal notranslate"><span class="pre">TSR</span></code> can take a look at the <a class="reference external" href="https://tskit-dev.github.io/tutorials/">tutorials</a> accompanying the 2018 paper.</p>
-</div>
-</div>
-<div class="section" id="sample-recording">
-<h2>Sample recording<a class="headerlink" href="#sample-recording" title="Permalink to this headline">¶</a></h2>
-<div class="admonition-todo admonition" id="id4">
-<p class="admonition-title">Todo</p>
-<p>discuss the current generation vs historical/ancient/preserved samples.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An important feature of the simplification algorithm is that we are <em>not</em> restricted to only using our “alive” nodes as our sample nodes.
+In fact, we can simplify with respect to any set of nodes in the tables.
+This feature allows us to keep nodes corresponding to “ancient samples” during a simulation.
+We simply mark them as nodes that we want to keep, and the algorithm does the rest.
+See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#ancient-samples-vignette"><span class="std std-ref">here</span></a> for how to do this in a simulation.</p>
 </div>
 </div>
 </div>

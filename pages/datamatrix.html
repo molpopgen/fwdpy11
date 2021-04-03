@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -577,7 +615,7 @@
 <span id="datamatrix"></span><h1>DataMatrix and StateMatrix<a class="headerlink" href="#datamatrix-and-statematrix" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="fwdpy11.DataMatrix">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DataMatrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DataMatrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DataMatrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent a sample from a population in a matrix format.</p>
 <p>There are two possible representations of the data:</p>
 <p>1. As a genotype matrix, where individuals are encoded a 0,1, or 2
@@ -587,14 +625,14 @@ and one row per variable site.</p>
 column containing a 0 (ancestral) or 1 (derived) label. Each row
 represents a variable site.</p>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.2.0: </span>Changed layout to row = variable site. 
+<p><span class="versionmodified changed">Changed in version 0.2.0: </span>Changed layout to row = variable site.
 Changed to match fwdpp 0.7.0 layout where the neutral
-and selected data are represented as a 
+and selected data are represented as a
 <a class="reference internal" href="#fwdpy11.StateMatrix" title="fwdpy11.StateMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.StateMatrix</span></code></a></p>
 </div>
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.merge">
-<code class="sig-name descname"><span class="pre">merge</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DataMatrix.merge" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">merge</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DataMatrix.merge" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge the neutral and selected data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -621,32 +659,18 @@ contains the mutation keys.</p>
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a buffer representing neutral variants.
-This buffer may be used to create a NumPy
-ndarray object.</p>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.1.2: </span>Return a buffer instead of 1d numpy.array</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.1.4: </span>Allow read/write access instead of readonly</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.2.0: </span>Type is <a class="reference internal" href="#fwdpy11.StateMatrix" title="fwdpy11.StateMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.StateMatrix</span></code></a></p>
-</div>
+<dd><p><a class="reference internal" href="#fwdpy11.StateMatrix" title="fwdpy11.StateMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.StateMatrix</span></code></a> for neutral variants</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral_keys">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral_keys</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Keys for neutral mutations used to generate matrix</p>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.6.1: </span>Type changed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
-</div>
+<dd><p>Keys for neutral mutations used to generate matrix.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.neutral_matrix">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">neutral_matrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">neutral_matrix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DataMatrix.neutral_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Neutral mutations and keys</p>
@@ -664,32 +688,18 @@ ndarray object.</p>
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a buffer representing neutral variants.
-This buffer may be used to create a NumPy
-ndarray object.</p>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.1.2: </span>Return a buffer instead of 1d numpy.array</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.1.4: </span>Allow read/write access instead of readonly</p>
-</div>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.2.0: </span>Type is <a class="reference internal" href="#fwdpy11.StateMatrix" title="fwdpy11.StateMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.StateMatrix</span></code></a></p>
-</div>
+<dd><p><a class="reference internal" href="#fwdpy11.StateMatrix" title="fwdpy11.StateMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.StateMatrix</span></code></a> for selected variants</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected_keys">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected_keys</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Keys for selected mutations used to generate matrix</p>
-<div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 0.6.1: </span>Type changed to <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
-</div>
+<dd><p>Keys for selected mutations used to generate matrix.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="fwdpy11.DataMatrix.selected_matrix">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">selected_matrix</span></code><a class="headerlink" href="#fwdpy11.DataMatrix.selected_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">selected_matrix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DataMatrix.selected_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Selected mutations and keys</p>
@@ -714,7 +724,9 @@ ndarray object.</p>
 Rather, they are generated when a <a class="reference internal" href="#fwdpy11.DataMatrix" title="fwdpy11.DataMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DataMatrix</span></code></a> is generated .</p>
 <p>This object supports the buffer protocol .</p>
 <blockquote>
-<div><p>..versionadded:: 0.2.0</p>
+<div><div class="versionadded">
+<p><span class="versionmodified added">New in version 0.2.0.</span></p>
+</div>
 </div></blockquote>
 <dl class="py method">
 <dt id="fwdpy11.StateMatrix.positions">

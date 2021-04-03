@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -572,61 +610,103 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#enabling-compiler-command-support-for-developing-the-c-code">
-   Enabling compiler command support for developing the C++ code
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#c-code-standards">
-   C++ code standards
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#enabling-code-profiling">
-   Enabling code profiling
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#disabling-link-time-optimization-lto">
-   Disabling link-time optimization (LTO)
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#enabling-debugging-symbols-in-the-c-code">
-   Enabling debugging symbols in the C++ code
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#enabling-assertions-in-the-c-code">
-   Enabling assertions in the C++ code
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
-   Enabling aggressive debugging of C++ STL templates using GCC
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#static-analysis-using-clang-tidy">
-   Static analysis using clang-tidy
+  <a class="reference internal nav-link" href="#working-with-the-source-code-repository">
+   Working with the source code repository
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dependencies">
+     Dependencies
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#non-python">
+       non-Python
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#python">
+       Python
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#updating-the-ci-deployment-dependencies">
+       Updating the CI/deployment dependencies
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-the-code">
+     Building the code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#running-the-python-test-suite">
+     Running the Python test suite
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-and-running-the-c-test-suite">
+     Building and running the C++ test suite.
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-compiler-command-support-for-developing-the-c-code">
+     Enabling compiler command support for developing the C++ code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#c-code-standards">
+     C++ code standards
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-code-profiling">
+     Enabling code profiling
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#disabling-link-time-optimization-lto">
+     Disabling link-time optimization (LTO)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-debugging-symbols-in-the-c-code">
+     Enabling debugging symbols in the C++ code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-assertions-in-the-c-code">
+     Enabling assertions in the C++ code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
+     Enabling aggressive debugging of C++ STL templates using GCC
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#static-analysis-using-clang-tidy">
+     Static analysis using clang-tidy
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#code-formatting-style">
      Code formatting style
     </a>
    </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#python-code-standards">
-   Python code standards
-  </a>
-  <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
-     Code formatting style
+    <a class="reference internal nav-link" href="#python-code-standards">
+     Python code standards
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id3">
+       Code formatting style
+      </a>
+     </li>
+    </ul>
    </li>
   </ul>
  </li>
@@ -636,8 +716,8 @@
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#formatting-the-python-code-in-rst-files">
-     Formatting the Python code in rst files
+    <a class="reference internal nav-link" href="#building-the-documentation">
+     Building the documentation
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -660,8 +740,74 @@
                 
   <div class="section" id="developer-s-guide">
 <span id="developersguide"></span><h1>Developer’s guide<a class="headerlink" href="#developer-s-guide" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="working-with-the-source-code-repository">
+<h2>Working with the source code repository<a class="headerlink" href="#working-with-the-source-code-repository" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="non-python">
+<h4>non-Python<a class="headerlink" href="#non-python" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>A C++ compiler that supports C++14 or later.
+On Linux, <code class="docutils literal notranslate"><span class="pre">gcc</span></code> is preferred, although <code class="docutils literal notranslate"><span class="pre">clang</span></code> is very useful to compare against.
+On macOS, use <code class="docutils literal notranslate"><span class="pre">clang</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span></code></p></li>
+<li><p>The GNU Scientific Library, version 2.3 or later.</p></li>
+</ul>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Describe dependencies for the C++ test suite</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">conda</span></code> users <strong>must</strong> install all of these dependencies using that system, including the compilers!
+See <a class="reference external" href="https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html">here</a> for info about <code class="docutils literal notranslate"><span class="pre">conda</span></code> compilers for Linux and for macOS.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">requirements/</span></code> folder of the source code repository contains a list of minimal <code class="docutils literal notranslate"><span class="pre">conda</span></code> dependencies that we use for CI.</p>
+</div>
+</div>
+<div class="section" id="python">
+<h4>Python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h4>
+<p>To reproduce the environments that we use for CI and deployment:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -m pip install -r requirements.txt
+<span class="c1"># If working on the manual:</span>
+python3 -m pip install -r doc/requirements.txt
+</pre></div>
+</div>
+<p>To use the latest version of the dependencies:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -m pip install -r requirements.in
+<span class="c1"># If working on the manual:</span>
+python3 -m pip install -r doc/requirements.in
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-ci-deployment-dependencies">
+<h4>Updating the CI/deployment dependencies<a class="headerlink" href="#updating-the-ci-deployment-dependencies" title="Permalink to this headline">¶</a></h4>
+<p>Use <code class="docutils literal notranslate"><span class="pre">pip-compile</span></code> from <a class="reference external" href="https://pypi.org/project/pip-tools/">pip-tools</a>.</p>
+</div>
+</div>
+<div class="section" id="building-the-code">
+<h3>Building the code<a class="headerlink" href="#building-the-code" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git submodule init
+git submodule update
+python3 setup.py build_ext -i
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-the-python-test-suite">
+<h3>Running the Python test suite<a class="headerlink" href="#running-the-python-test-suite" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3 -p ptest tests -n <span class="m">6</span>
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">6</span></code> with a number of threads appropriate for your machine.</p>
+</div>
+<div class="section" id="building-and-running-the-c-test-suite">
+<h3>Building and running the C++ test suite.<a class="headerlink" href="#building-and-running-the-c-test-suite" title="Permalink to this headline">¶</a></h3>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Describe building and executing the C++ test suite.</p>
+</div>
+</div>
 <div class="section" id="enabling-compiler-command-support-for-developing-the-c-code">
-<h2>Enabling compiler command support for developing the C++ code<a class="headerlink" href="#enabling-compiler-command-support-for-developing-the-c-code" title="Permalink to this headline">¶</a></h2>
+<h3>Enabling compiler command support for developing the C++ code<a class="headerlink" href="#enabling-compiler-command-support-for-developing-the-c-code" title="Permalink to this headline">¶</a></h3>
 <p>Many language servers support processing a local file called <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code>.
 See <a class="reference external" href="https://clang.llvm.org/docs/JSONCompilationDatabase.html">here</a> for background.</p>
 <p>To generate this file, execute the following steps from the root of the source code repository:</p>
@@ -676,26 +822,45 @@ rm -rf ccomands
 <p>Now, language servers supporting <code class="docutils literal notranslate"><span class="pre">clangd</span></code> will have nice error checking and code completion for the C++ code!</p>
 </div>
 <div class="section" id="c-code-standards">
-<h2>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">¶</a></h2>
+<h3>C++ code standards<a class="headerlink" href="#c-code-standards" title="Permalink to this headline">¶</a></h3>
+<p>This is a large topic.
+Briefly,</p>
+<ul class="simple">
+<li><p>Functions should not be concerned with ownership!
+If an input argument cannot cannot be <code class="docutils literal notranslate"><span class="pre">nullptr</span></code>, then pass it by reference.
+(Or by value if it will be consumed.)
+Likewise, smart pointers are not function arguments unless they will be consumed.
+If the calling environment manages an object with a smart pointer, and <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> is not a valid value to pass to a given function, then the function should be written to take a reference.</p></li>
+<li><p>If a pointer type is an argument, <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> must be checked for and handled.</p></li>
+<li><p>Always use smart pointers instead of raw allocations.</p></li>
+<li><p>Classes should respect the “rule of 5”.
+For abstract base classes, this usually means that the copy constructors and assignment operators must be marked <code class="docutils literal notranslate"><span class="pre">delete</span></code> to avoid slicing.
+(In practice, we don’t have any code that could lead to slicing, but we design the classes with this in mind.)</p></li>
+<li><p>Virtual functions in derived classes are marked <code class="docutils literal notranslate"><span class="pre">override</span></code>.
+Where appropriate, they are also marked <code class="docutils literal notranslate"><span class="pre">final</span></code>.</p></li>
+</ul>
 </div>
 <div class="section" id="enabling-code-profiling">
-<h2>Enabling code profiling<a class="headerlink" href="#enabling-code-profiling" title="Permalink to this headline">¶</a></h2>
-<p>By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size. One side effect
-is that it becomes impossible to accurately profile the code.  To override these defaults:</p>
+<h3>Enabling code profiling<a class="headerlink" href="#enabling-code-profiling" title="Permalink to this headline">¶</a></h3>
+<p>By default, fwdpy11 is compiled with aggressive optimizations to help reduce the library size.
+One side effect is that it becomes impossible to accurately profile the code.
+To override these defaults:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --enable-profiling
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The package should not be installed with profiling enabled. This method of building
-is for developers who need to accurately profile the C++ back-end.  Also note that
-only the main package is affected.  Building the unit test modules is not affected.</p>
+<p>The package should not be installed with profiling enabled.
+This method of building is for developers who need to accurately profile the C++ back-end.
+Also note that only the main package is affected.
+Building the unit test modules is not affected.</p>
 </div>
 </div>
 <div class="section" id="disabling-link-time-optimization-lto">
-<h2>Disabling link-time optimization (LTO)<a class="headerlink" href="#disabling-link-time-optimization-lto" title="Permalink to this headline">¶</a></h2>
-<p>LTO is enabled by default and reduced the final library size substantially. However, it takes a
-long time and is therefore a drag during development.  To disable it:</p>
+<h3>Disabling link-time optimization (LTO)<a class="headerlink" href="#disabling-link-time-optimization-lto" title="Permalink to this headline">¶</a></h3>
+<p>LTO is enabled by default and reduced the final library size substantially.
+However, it takes a long time and is therefore a drag during development.
+To disable it:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --disable_lto
 </pre></div>
 </div>
@@ -705,31 +870,35 @@ long time and is therefore a drag during development.  To disable it:</p>
 </div>
 </div>
 <div class="section" id="enabling-debugging-symbols-in-the-c-code">
-<h2>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">¶</a></h2>
+<h3>Enabling debugging symbols in the C++ code<a class="headerlink" href="#enabling-debugging-symbols-in-the-c-code" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build_ext -i --debug
 </pre></div>
 </div>
 <p>Debug mode disables all compiler optimizations, allows C-like assertions, and generated debug symbols.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Never install the package compiled in debug mode!  First, things will run much more slowly.
-Second, triggering an assertion will cause the Python interpreter to crash.  These assertions
-exist as a brute-force method to help developers quickly identify bugs.</p>
+<p>Never install the package compiled in debug mode!
+First, things will run much more slowly.
+Second, triggering an assertion will cause the Python interpreter to crash.
+These assertions exist as a brute-force method to help developers quickly identify bugs.</p>
 </div>
 </div>
 <div class="section" id="enabling-assertions-in-the-c-code">
-<h2>Enabling assertions in the C++ code<a class="headerlink" href="#enabling-assertions-in-the-c-code" title="Permalink to this headline">¶</a></h2>
-<p>The fwdpp library code uses C’s assert macros in several places.  These are disabled by default.  However, it can be useful to
-enable them when hacking the code.  To do so, you must manually set your compiler flags with cmake:</p>
+<h3>Enabling assertions in the C++ code<a class="headerlink" href="#enabling-assertions-in-the-c-code" title="Permalink to this headline">¶</a></h3>
+<p>The fwdpp library code uses C’s assert macros in several places.
+These are disabled by default.
+However, it can be useful to enable them when hacking the code.
+To do so, you must manually set your compiler flags with cmake:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake . -DCMAKE_CXX_FLAGS<span class="o">=</span><span class="s2">&quot;-UNDEBUG -O2 -g&quot;</span>
 </pre></div>
 </div>
-<p>When compiling this way, fwdpy11 makes some extra checks that will throw <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> if they fail.  The fwdpp back
-end also makes extra checks.  If those fail, <code class="docutils literal notranslate"><span class="pre">abort</span></code> will be called, which will crash the Python interpreter.  Thus,
-compiling with this option is a “serious debugging mode only” option.</p>
+<p>When compiling this way, fwdpy11 makes some extra checks that will throw <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> if they fail.
+The fwdpp back end also makes extra checks.
+If those fail, <code class="docutils literal notranslate"><span class="pre">abort</span></code> will be called, which will crash the Python interpreter.
+Thus, compiling with this option is a “serious debugging mode only” option.</p>
 </div>
 <div class="section" id="enabling-aggressive-debugging-of-c-stl-templates-using-gcc">
-<h2>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">¶</a></h2>
+<h3>Enabling aggressive debugging of C++ STL templates using GCC<a class="headerlink" href="#enabling-aggressive-debugging-of-c-stl-templates-using-gcc" title="Permalink to this headline">¶</a></h3>
 <p>Use the following flags to enable an “extreme” debugging mode of the C++ standard template library:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CXXFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> <span class="se">\</span>
    <span class="nv">CPPFLAGS</span><span class="o">=</span><span class="s2">&quot;-D_GLIBCXX_CONCEPT_CHECKS -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC&quot;</span> python3 setup.py build_ext -i
@@ -737,40 +906,42 @@ compiling with this option is a “serious debugging mode only” option.</p>
 </div>
 </div>
 <div class="section" id="static-analysis-using-clang-tidy">
-<h2>Static analysis using clang-tidy<a class="headerlink" href="#static-analysis-using-clang-tidy" title="Permalink to this headline">¶</a></h2>
-<p>It is sometimes useful to go through the code and to a “static” analysis to look for problems. The clang-tidy
-tool is especially useful.  For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span> <span class="p">|</span> xargs -I  clang-tidy -checks<span class="o">=</span><span class="s1">&#39;performance-*&#39;</span>   -- -I/usr/include/python3.7m -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers
+<h3>Static analysis using clang-tidy<a class="headerlink" href="#static-analysis-using-clang-tidy" title="Permalink to this headline">¶</a></h3>
+<p>It is sometimes useful to go through the code and to a “static” analysis to look for problems.
+The clang-tidy tool is especially useful.</p>
+<p>For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="k">for</span> i <span class="k">in</span> <span class="k">$(</span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span><span class="k">)</span>
+<span class="k">do</span>
+    <span class="nv">n</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$i</span> .cc<span class="sb">`</span>
+    <span class="nb">echo</span> <span class="nv">$i</span>
+    clang-tidy <span class="nv">$i</span> -checks<span class="o">=</span><span class="s2">&quot;cppcoreguidelines-special-member-functions&quot;</span> -header-filter<span class="o">=</span>fwdpy11 -export-fixes<span class="o">=</span>fixes/<span class="nv">$n</span>.yaml -- -I/usr/include/python3.8d -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers -I<span class="nv">$HOME</span>/.local/include
+<span class="k">done</span>
 </pre></div>
+</div>
 </div>
 <div class="section" id="code-formatting-style">
 <h3>Code formatting style<a class="headerlink" href="#code-formatting-style" title="Permalink to this headline">¶</a></h3>
 </div>
-</div>
 <div class="section" id="python-code-standards">
-<h2>Python code standards<a class="headerlink" href="#python-code-standards" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Code formatting style<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>The formatting style is <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> with a line length of 89, which is specified
-in the <code class="docutils literal notranslate"><span class="pre">.flake8</span></code> file that is part of the source repository.</p>
-<p>The beauty of formatting with <code class="docutils literal notranslate"><span class="pre">black</span></code> is that you can just write all your Python
-code and then format at the end. For example, with <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you may use the
-plugin from the <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> repository and the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command to
-auto-format your code:</p>
+<h3>Python code standards<a class="headerlink" href="#python-code-standards" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h4>Code formatting style<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>The formatting style is <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> with a line length of 89, which is specified in the <code class="docutils literal notranslate"><span class="pre">.flake8</span></code> file that is part of the source repository.</p>
+<p>The beauty of formatting with <code class="docutils literal notranslate"><span class="pre">black</span></code> is that you can just write all your Python code and then format at the end.
+For example, with <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you may use the plugin from the <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> repository and the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command to auto-format your code:</p>
 <div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:</span>Black
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>At the time of this writing (April 11, 2020), <code class="docutils literal notranslate"><span class="pre">vim/nvim</span></code> integration
-with <code class="docutils literal notranslate"><span class="pre">black</span></code> requires installing <code class="docutils literal notranslate"><span class="pre">black</span></code> from the GitHub repo
-and not from PyPi or conda.</p>
+<p>At the time of this writing (April 11, 2020), <code class="docutils literal notranslate"><span class="pre">vim/nvim</span></code> integration with <code class="docutils literal notranslate"><span class="pre">black</span></code> requires installing <code class="docutils literal notranslate"><span class="pre">black</span></code> from the GitHub repo and not from PyPi or conda.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install git+git://github.com/psf/black
 </pre></div>
 </div>
 </div>
-<p>Placing the following in your <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code> configuration file will
-map this command to the <code class="docutils literal notranslate"><span class="pre">F6</span></code> button:</p>
+<p>Placing the following in your <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code> configuration file will map this command to the <code class="docutils literal notranslate"><span class="pre">F6</span></code> button:</p>
 <div class="highlight-vim notranslate"><div class="highlight"><pre><span></span>autocmd <span class="nb">FileType</span> python <span class="nb">nnoremap</span> <span class="p">&lt;</span>buffer<span class="p">&gt;</span> <span class="p">&lt;</span>f6<span class="p">&gt;</span> :Black<span class="p">&lt;</span>CR<span class="p">&gt;</span>
 </pre></div>
 </div>
@@ -789,29 +960,38 @@ map this command to the <code class="docutils literal notranslate"><span class="
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>In the future, we may rely entirely on <code class="docutils literal notranslate"><span class="pre">black</span></code> to sort includes as
-<code class="docutils literal notranslate"><span class="pre">black/isort</span></code> compatibility evolves.</p>
+<p>In the future, we may rely entirely on <code class="docutils literal notranslate"><span class="pre">black</span></code> to sort includes as <code class="docutils literal notranslate"><span class="pre">black/isort</span></code> compatibility evolves.</p>
+</div>
 </div>
 </div>
 </div>
 <div class="section" id="writing-documentation">
 <h2>Writing documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="formatting-the-python-code-in-rst-files">
-<h3>Formatting the Python code in rst files<a class="headerlink" href="#formatting-the-python-code-in-rst-files" title="Permalink to this headline">¶</a></h3>
-<p>Code blocks in documentation should be formatted using <a class="reference external" href="https://github.com/asottile/blacken-docs">blacken-docs</a>.  In general,
-you can write your code blocks and format them after the fact using the following
-command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blacken-docs -E -l <span class="m">89</span> -t py36 file.rst
+<p>We use <a class="reference external" href="https://www.jupyterbook.org">jupyter book</a> to write the manual.
+This tool uses a flavor of markdown called <code class="docutils literal notranslate"><span class="pre">MYsT</span></code>.
+At the moment, there aren’t many tools available to do things like auto-format code, etc..</p>
+<p>The dependencies for the documentation are described above.</p>
+<div class="section" id="building-the-documentation">
+<h3>Building the documentation<a class="headerlink" href="#building-the-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> doc
+make 
 </pre></div>
 </div>
-<p>Using an editor like <code class="docutils literal notranslate"><span class="pre">vim</span></code> or <code class="docutils literal notranslate"><span class="pre">neovim</span></code>, you can format from within the editor using
-the following <code class="docutils literal notranslate"><span class="pre">normal</span></code> mode command:</p>
-<div class="highlight-vim notranslate"><div class="highlight"><pre><span></span><span class="p">:!</span>blacken<span class="p">-</span>docs <span class="p">-</span>E <span class="p">-</span><span class="k">l</span> <span class="m">89</span> <span class="p">-</span><span class="k">t</span> py36 %
+<p>Then, point your browser to <code class="docutils literal notranslate"><span class="pre">_build/html/index.html</span></code>.</p>
+<p>To remove the manual:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>make clean
 </pre></div>
 </div>
+<p>Remember to <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span></code> to get out of the <code class="docutils literal notranslate"><span class="pre">doc/</span></code> folder and get back to the repository root when you’re done.</p>
 </div>
 <div class="section" id="docstrings-in-c-code">
 <h3>Docstrings in C++ code<a class="headerlink" href="#docstrings-in-c-code" title="Permalink to this headline">¶</a></h3>
+<p>We are moving away from docstrings in C++ code.
+Where possible, we prefer to either have a Python class inherit from a <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> class.
+Alternately, encapsulation of the <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> class in a Python class is a possibility.
+Then, the Python classes contain the docstrings.</p>
+<p>For functions, we apply the same idea, defining a Python function that calls the low-level C++ function.</p>
+<p>Although this is a bit more work, it provides better support for tools like <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, <code class="docutils literal notranslate"><span class="pre">jedi</span></code>, etc..</p>
 </div>
 </div>
 </div>

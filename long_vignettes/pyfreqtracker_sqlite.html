@@ -1,0 +1,1126 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tracking mutations over time using sqlite3 &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Definitions" href="../pages/definitions.html" />
+    <link rel="prev" title="Tracking mutations over time" href="pyfreqtracker.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/deploymenttools.html">
+   Deployment tools
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">
+   Mutations with variable dominance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pyfreqtracker.html">
+   Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/long_vignettes/pyfreqtracker_sqlite.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/long_vignettes/pyfreqtracker_sqlite.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Flong_vignettes/pyfreqtracker_sqlite.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-types">
+   Helper types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-class-to-track-mutations-frequencies-via-a-database">
+   A class to track mutations frequencies via a database
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#details-of-the-implementation">
+   Details of the implementation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-considerations">
+   Further considerations
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="tracking-mutations-over-time-using-sqlite3">
+<span id="pyfreqtracker-sqlite"></span><h1>Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code><a class="headerlink" href="#tracking-mutations-over-time-using-sqlite3" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is an advanced vignette.
+It shows off how powerful it is to have access to the entire Python world of data packages during a simulation.
+This vignette uses low-level <a class="reference external" href="https://www.sqlite.org">sqlite</a> syntax as well as higher-level Python libraries.</p>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The previous vignette tracking mutation frequencies was straightforward to implement.
+However, using <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> to key <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>s of frequencies risks running out of memory.</p>
+<p>This vignette reimplements the previous method using much more powerful techniques:</p>
+<ul class="simple">
+<li><p>Instead of the <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, we record data into fixed-length <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> objects.</p></li>
+<li><p>During the simulation, we preserve all individuals of each generation as ancient samples.<br />
+See <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">here</span></a> for background.
+The trick is that we will only keep these ancient samples until the table collection is simplified!</p></li>
+<li><p>We populate those arrays immediately after simplification.
+We use the <code class="docutils literal notranslate"><span class="pre">post_simplification_recorder</span></code> argument to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>, passing in a class that gets frequencies from the tree sequences.
+Once our callback is finished, the ancient samples are purged.</p></li>
+<li><p>When the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays get full, we transfer their data to a relational database using the <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> module that is built in to the Python language.
+We will take advantage of the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.2.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
+</ul>
+<p>We will need the following imports:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">attr</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span> 
+
+<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We need to implement two Python classes.
+The first will handle the mechanics of recording the ancient samples themselves.
+This class is trivial (see <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">here</span></a> for background):</p>
+</div>
+<div class="section" id="helper-types">
+<h2>Helper types<a class="headerlink" href="#helper-types" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SampleEveryone</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">sampler</span><span class="p">):</span>
+        <span class="n">sampler</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The second class will be a callable that gets executed immediately after simplification.
+This type is responsible for processing trees, getting data into <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, and transferring the data to the database.</p>
+<p>This class has a lot of responsibilities.
+In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.2.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
+The definition of this class is shown below, and you may click to see it.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TableBuffer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">max_records</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">conn</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">generation</span><span class="p">,</span>
+        <span class="n">origin_time</span><span class="p">,</span>
+        <span class="n">position</span><span class="p">,</span>
+        <span class="n">frequency</span><span class="p">,</span>
+        <span class="n">effect_size</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">generation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_flush_buffer</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;generation&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;origin_time&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_time</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequency</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+                <span class="s2">&quot;effect_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">effect_size</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span>
+            <span class="s2">&quot;trajectories_temp&quot;</span><span class="p">,</span>
+            <span class="n">conn</span><span class="p">,</span>
+            <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;append&quot;</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;multi&quot;</span><span class="p">,</span>
+            <span class="n">chunksize</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We also have two simple helper classes.
+We will use them to not record the frequencies of fixed mutations over and over again, as well as to record when a mutation did reach fixation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">MutationKey</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">origin_time</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">effect_size</span><span class="p">:</span> <span class="nb">float</span>
+
+
+<span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">FixationRecord</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">fixation_time</span><span class="p">:</span> <span class="nb">int</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="a-class-to-track-mutations-frequencies-via-a-database">
+<h2>A class to track mutations frequencies via a database<a class="headerlink" href="#a-class-to-track-mutations-frequencies-via-a-database" title="Permalink to this headline">¶</a></h2>
+<p>Now, we define <code class="docutils literal notranslate"><span class="pre">CountMutations</span></code>, which is our real workhorse.
+The <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function takes an instance of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> as an argument.
+When this function is called, the <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.tables" title="fwdpy11.DiploidPopulation.tables"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.tables</span></code></a> will be indexed, allowing us to visit trees using <a class="reference internal" href="../pages/types.html#fwdpy11.TreeIterator" title="fwdpy11.TreeIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TreeIterator</span></code></a>.</p>
+<p>This class also contains several “boiler plate” functions to handle data transfer to the database.
+We follow the Python tradition of using function names beginning with an underscore to indicate that these functions are not intended to be part of the public interface to this class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example uses an in-memory <code class="docutils literal notranslate"><span class="pre">SQL</span></code> database named <code class="docutils literal notranslate"><span class="pre">:memory:</span></code>.
+(See <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#sqlite3.connect" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sqlite3.connect()</span></code></a> for details.)
+We use this approach because this example may be run on a cloud server.
+In practice, it is much more efficient to use an on-disk database!
+Doing so requires some simple modifications that are left as an “exercise for the reader”.</p>
+</div>
+<p>On a first read, you probably want to skip all of the underscore functions and focus on the details of <code class="docutils literal notranslate"><span class="pre">__call__</span></code>.
+This function uses <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.sample_timepoints" title="fwdpy11.DiploidPopulation.sample_timepoints"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.sample_timepoints()</span></code></a> to iterate over the ancient samples based on their birth times.
+For each cohort of ancient samples, we simplify the tables with respect to that sample using <a class="reference internal" href="../pages/functions.html#fwdpy11.simplify_tables" title="fwdpy11.simplify_tables"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.simplify_tables()</span></code></a>.
+We then iterate over all the trees, using <a class="reference internal" href="../pages/types.html#fwdpy11.TreeIterator" title="fwdpy11.TreeIterator"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TreeIterator</span></code></a>, to obtain the number of samples with each mutation via <a class="reference internal" href="../pages/types.html#fwdpy11.TreeIterator.leaf_counts" title="fwdpy11.TreeIterator.leaf_counts"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.TreeIterator.leaf_counts()</span></code></a>.</p>
+<p>The implementation details of <code class="docutils literal notranslate"><span class="pre">__call__</span></code> are offloaded to another function.
+The reason is that we need to avoid double-counting mutations!
+When the tables are simplified, they are simplified with respect to the ancestry of all samples nodes, both “alive” and “ancient”.
+Because we are preserving every generation, our current alive nodes will soon become ancient samples.
+Thus, to avoid double counting, we do <strong>not</strong> process the currently-alive generation.
+To make sure that we do, eventually, get all mutations counted, we need to call our <code class="docutils literal notranslate"><span class="pre">count_em_up</span></code> function at the end of the simulation for final tallying.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@attr</span><span class="o">.</span><span class="n">s</span><span class="p">(</span><span class="n">auto_attribs</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">CountMutations</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is run only in generations where simplification happens.</span>
+<span class="sd">    Tables are indexed and &quot;ready to roll&quot; for analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">max_records</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span> <span class="o">=</span> <span class="n">TableBuffer</span><span class="p">(</span><span class="n">max_records</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_records</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_records</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_dump_fixations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">origin_time</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">effect_size</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">fixation_times</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">origin_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">origin_time</span><span class="p">)</span>
+            <span class="n">effect_size</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">effect_size</span><span class="p">)</span>
+            <span class="n">position</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+            <span class="n">fixation_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">fixation_time</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;origin_time&quot;</span><span class="p">:</span> <span class="n">origin_time</span><span class="p">,</span>
+                <span class="s2">&quot;effect_size&quot;</span><span class="p">:</span> <span class="n">effect_size</span><span class="p">,</span>
+                <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="n">position</span><span class="p">,</span>
+                <span class="s2">&quot;fixation_time&quot;</span><span class="p">:</span> <span class="n">fixation_times</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="s2">&quot;fixations_temp&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="s2">&quot;replace&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_dump_remaining_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">_flush_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_fixations</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">finalize_database</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Be sure to call this at the end of a simulation!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dump_remaining_data</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">&quot;create table mutations (origin_time int, position real, effect_size real, id integer primary key autoincrement)&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            insert into mutations select origin_time, position, effect_size, NULL</span>
+<span class="sd">            from</span>
+<span class="sd">            trajectories_temp</span>
+<span class="sd">            group by origin_time, position, effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            create table trajectories</span>
+<span class="sd">            as</span>
+<span class="sd">            select mutations.id, trajectories_temp.generation,</span>
+<span class="sd">            trajectories_temp.frequency</span>
+<span class="sd">            from</span>
+<span class="sd">            trajectories_temp</span>
+<span class="sd">            left join mutations</span>
+<span class="sd">            on trajectories_temp.origin_time == mutations.origin_time</span>
+<span class="sd">            and trajectories_temp.position == mutations.position</span>
+<span class="sd">            and trajectories_temp.effect_size == mutations.effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;drop table trajectories_temp&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            create table fixations</span>
+<span class="sd">            as</span>
+<span class="sd">            select mutations.id, fixations_temp.fixation_time</span>
+<span class="sd">            from fixations_temp</span>
+<span class="sd">            left join mutations</span>
+<span class="sd">            on fixations_temp.origin_time == mutations.origin_time</span>
+<span class="sd">            and fixations_temp.position == mutations.position</span>
+<span class="sd">            and fixations_temp.effect_size == mutations.effect_size</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;drop table fixations_temp&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="c1"># indexes speed up cross-table analysis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index traj_id_index on trajectories(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index fixation_id_index on fixations(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;create index mutation_id_index on mutations(id)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;vacuum&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">count_em_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">include_alive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        We implement the mechanics of __call__ separately,</span>
+<span class="sd">        so that they may be re-used to process alive nodes</span>
+<span class="sd">        when evolvets returns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">generation</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">pop</span><span class="o">.</span><span class="n">sample_timepoints</span><span class="p">(</span>
+            <span class="n">include_alive</span><span class="o">=</span><span class="n">include_alive</span>
+        <span class="p">):</span>
+            <span class="c1"># non-owning view</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">][:]</span>
+            <span class="n">tables</span><span class="p">,</span> <span class="n">idmap</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">simplify_tables</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span>
+            <span class="n">tv</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">TreeIterator</span><span class="p">(</span><span class="n">tables</span><span class="p">,</span> <span class="n">idmap</span><span class="p">[</span><span class="n">nodes</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tv</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">MutationKey</span><span class="p">(</span>
+                        <span class="n">origin_time</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
+                        <span class="n">position</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span>
+                        <span class="n">effect_size</span><span class="o">=</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">:</span>
+                        <span class="n">s</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">leaf_counts</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+                        <span class="k">assert</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                        <span class="n">freq</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">freq</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">fixations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">FixationRecord</span><span class="p">(</span>
+                                <span class="n">fixation_time</span><span class="o">=</span><span class="n">generation</span>
+                            <span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">,</span>
+                            <span class="n">generation</span><span class="o">=</span><span class="n">generation</span><span class="p">,</span>
+                            <span class="n">origin_time</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">origin_time</span><span class="p">,</span>
+                            <span class="n">position</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">position</span><span class="p">,</span>
+                            <span class="n">frequency</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span>
+                            <span class="n">effect_size</span><span class="o">=</span><span class="n">key</span><span class="o">.</span><span class="n">effect_size</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count_em_up</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">include_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now run the same simulation as in in the previous vignette.
+The differences are:</p>
+<ul class="simple">
+<li><p>An instance of <code class="docutils literal notranslate"><span class="pre">SampleEveryone</span></code> is our recorder.</p></li>
+<li><p>An instance of <code class="docutils literal notranslate"><span class="pre">CountMutations</span></code> is passed to <code class="docutils literal notranslate"><span class="pre">post_simplification_recorder</span></code></p></li>
+<li><p>We simplify every 100 generations instead of every generation.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Add a region for neutral mutations:</span>
+    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Region</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="n">beg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)],</span>
+    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">)],</span>
+    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)],</span>
+    <span class="c1"># Add a mutation rate for neutral mutations:</span>
+    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5e-3</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
+<span class="n">recorder</span> <span class="o">=</span> <span class="n">SampleEveryone</span><span class="p">()</span>
+<span class="n">counter</span><span class="o">=</span><span class="n">CountMutations</span><span class="p">(</span><span class="n">max_records</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span>
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Simplify every 100 generations</span>
+    <span class="n">recorder</span><span class="p">,</span>
+    <span class="n">suppress_table_indexing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">post_simplification_recorder</span><span class="o">=</span><span class="n">counter</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As mentioned earlier, we have to run a couple of extra functions now to make sure we process all of our data:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get data from the final generation</span>
+<span class="n">counter</span><span class="o">.</span><span class="n">count_em_up</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span> <span class="n">include_alive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">counter</span><span class="o">.</span><span class="n">finalize_database</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are going to use <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v1.2.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
+Our approach here is not optimal and we discuss alternatives below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">traj</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;select * from trajectories&#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">mut</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="s1">&#39;select * from mutations&#39;</span><span class="p">,</span> <span class="n">counter</span><span class="o">.</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span> <span class="n">mut</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;neutral&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">==</span> <span class="mf">0.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">effect_size</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, let us plot our output:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;neutral&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">linestyle</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span>
+        <span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">frequency</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (generation)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/pyfreqtracker_sqlite_17_0.png" src="../_images/pyfreqtracker_sqlite_17_0.png" />
+</div>
+</div>
+<p>The figure should be identical to <a class="reference internal" href="pyfreqtracker.html#pyfreqtrackfigneutral"><span class="std std-numref">Fig. 2</span></a>.</p>
+</div>
+<div class="section" id="details-of-the-implementation">
+<h2>Details of the implementation<a class="headerlink" href="#details-of-the-implementation" title="Permalink to this headline">¶</a></h2>
+<p>What are all the underscore methods doing?
+They are all called by <code class="docutils literal notranslate"><span class="pre">finalize_database</span></code>, which is to be run at the end of a simulation.</p>
+<p>The operations are:</p>
+<ul class="simple">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">mutations</span></code> table in our database.
+We populate this table based on unique <code class="docutils literal notranslate"><span class="pre">(position,</span> <span class="pre">effect</span> <span class="pre">size,</span> <span class="pre">origin</span> <span class="pre">time)</span></code> combinations in our temporary trajectories.
+This table has an automatically incrementing column that assigns a unique integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> to each combination.
+This unique integer will be a “mutation <code class="docutils literal notranslate"><span class="pre">ID</span></code>”.</p></li>
+<li><p>We can now create our final trajectories table that is populated with the mutation <code class="docutils literal notranslate"><span class="pre">ID</span></code>, generation in the simulation and frequency.
+Thus, the redundant information is removed.</p></li>
+<li><p>We create a <code class="docutils literal notranslate"><span class="pre">fixations</span></code> table that also uses these <code class="docutils literal notranslate"><span class="pre">ID</span></code> values.</p></li>
+<li><p>Finally, we create index columns for the <code class="docutils literal notranslate"><span class="pre">ID</span></code> values for each table.
+These indexes will greatly speed up analysis.</p></li>
+</ul>
+<p>The use of all of this is to both save space on disk and to speed up analysis.</p>
+</div>
+<div class="section" id="further-considerations">
+<h2>Further considerations<a class="headerlink" href="#further-considerations" title="Permalink to this headline">¶</a></h2>
+<p>Like the previous vignette, this recipe needs adjustment for the following cases:</p>
+<ul class="simple">
+<li><p>Tracking mutation frequencies with respect to deme.</p></li>
+<li><p>Tracking mutation frequencies in demes that change size.</p></li>
+<li><p>When processing the databases, it is best to do as much as possible at the level of <code class="docutils literal notranslate"><span class="pre">SQL</span></code> itself and not pull everything into a data frame like we did above.
+For on-disk databases, <code class="docutils literal notranslate"><span class="pre">R</span></code>’s <a class="reference external" href="https://dbplyr.tidyverse.org/">dbplyr</a> package will generally be the best tool here.
+Yes, this means changing languages.
+But, you get to use the same syntax as “regular” <a class="reference external" href="https://dplyr.tidyverse.org/">dplyr</a> for most of your analyses.
+Most importantly, by having <code class="docutils literal notranslate"><span class="pre">dbplyr</span></code> execute your analysis on the <code class="docutils literal notranslate"><span class="pre">SQL</span></code> side, you can analyze massive data sets that you could not possible hold in memory.
+You can plot the output using <code class="docutils literal notranslate"><span class="pre">R</span></code> or use any of a variety of methods to get your processed data back into Python for plotting.</p></li>
+</ul>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./long_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="pyfreqtracker.html" title="previous page">Tracking mutations over time</a>
+    <a class='right-next' id="next-link" href="../pages/definitions.html" title="next page">Definitions</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

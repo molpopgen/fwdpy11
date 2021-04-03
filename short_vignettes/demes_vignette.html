@@ -1,0 +1,1022 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Using demes to specify demographic models. &#8212; fwdpy11 manual</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Debugging demographic models" href="demography_debugger_vignette.html" />
+    <link rel="prev" title="Introduction" href="demography_vignettes_intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  
+  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Installation and setup
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/userenv.html">
+   Setting up user environments for installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/deploymenttools.html">
+   Deployment tools
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - operations on populations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="initpops_vignette.html">
+   Initializing a population
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="poptour_vignette.html">
+   Properties of populations
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - setting up the genetics
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="geneticmaps_vignette.html">
+   Genetic maps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="des_vignette.html">
+   Distributions of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mutationdominance_vignette.html">
+   Mutations with variable dominance
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmuts_vignette.html">
+   Neutral mutations during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_fitness.html">
+   Genetic values - mutations with direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="gvalues_traits.html">
+   Genetic values - simulating phenotypes/traits.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
+   Working example - parameters for simulating direct effects on fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_trait.html">
+   Working example - parameters for the simulation of a trait
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - simulation with tree sequence recording
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="evolvets_vignette.html">
+   Evolving with tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="recorders_vignette.html">
+   Recording data during a simulation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
+   Adding neutral mutations to a population with existing ancestry
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Short vignettes - exporting data to tskit
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tskitconvert_vignette.html">
+   Converting data to tskit format
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Longer vignettes - complete examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
+   Background selection
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/gss_vignette.html">
+   Gaussian stabilizing selection with an optimum shift
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
+   Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/definitions.html">
+   Definitions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Tutorials
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tutorial.html">
+   Tutorial
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/advancedtopics.html">
+   Advanced topics
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Objects and concepts
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/softselection.html">
+   Soft selection with discrete demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/mvdes.html">
+   Different effect sizes of mutations in different demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tsoverview.html">
+   Conceptual overview of tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tstypes.html">
+   Data structures related to tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tablefs.html">
+   Calculating frequency spectra from tree sequences
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/recorders.html">
+   Time series analysis
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Technical details
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/genetic_values.html">
+   Technical overview of genetic value calculations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/writingplugins.html">
+   Writing “plugins” with C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Data types and fuctions
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/genetic_values.html">
+   Genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/datamatrix.html">
+   DataMatrix and StateMatrix
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html">
+   The demography debugger
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/demographic_models.html#module-fwdpy11.demographic_models">
+   Pre-computed demographic models
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/functions.html">
+   Function documentation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gslrandom.html">
+   Random number distributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvaluenoise.html">
+   Adding random noise to genetic values
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/gvalue_to_fitness.html">
+   Mapping genetic values to fitness
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/model_params.html">
+   Model parameters
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/regiontypes.html">
+   Setting up genomic intervals
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/tskit_tools.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html">
+   Data types related to simulated populations
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-tree-sequence-recording">
+   Types related to tree sequence recording
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#types-related-to-discrete-demographic-events">
+   Types related to discrete demographic events
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/types.html#miscellaneous-types">
+   Miscellaneous types
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Examples
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/gss_divergent_optima.html">
+   Adaptation to different optima with multivariate distribution of effect sizes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/IM.html">
+   Isolation-with-migration (IM)
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/localadaptation.html">
+   Local adaptation of a quantitative trait
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/migtest.html">
+   Symmetric migration between two demes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/pysnowdrift.html">
+   Snowdrift model in python
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recapitation.html">
+   Finishing a simulation with a tree sequence from msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../examples/recorder.html">
+   Example of time series analysis implemented in C++
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Miscellany
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/deprecated.html">
+   Deprecated features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/developersguide.html">
+   Developer’s guide
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/pubs.html">
+   Publications using fwdpy11
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/upgrade_path.html">
+   Upgrade path
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../misc/bibliography.html">
+   Literature cited
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/demes_vignette.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/demes_vignette.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/molpopgen/fwdpy11"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/demes_vignette.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#yaml-file-input">
+   YAML file input
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-graphs">
+   Working with graphs
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="using-demes-to-specify-demographic-models">
+<span id="demes-vignette"></span><h1>Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.<a class="headerlink" href="#using-demes-to-specify-demographic-models" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The lists of objects described here are passed to the <code class="docutils literal notranslate"><span class="pre">demography</span></code> and <code class="docutils literal notranslate"><span class="pre">simlen</span></code> parameters when initializing instances of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
+</div>
+<p>Starting with version <code class="docutils literal notranslate"><span class="pre">0.14.0</span></code>, it is possible to specify a demographic model using the <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/"><code class="docutils literal notranslate"><span class="pre">demes</span></code></a> specification.
+This method of specifying models uses a <code class="docutils literal notranslate"><span class="pre">YAML</span></code> syntax, which is described in detail in the <a class="reference external" href="https://popsim-consortium.github.io/demes-spec-docs/main/reference.html"><code class="docutils literal notranslate"><span class="pre">demes</span> <span class="pre">specification</span></code></a>.
+You may find several examples in the <a class="reference external" href="https://popsim-consortium.github.io/demes-spec-docs/main/gallery.html#sec-gallery">gallery</a>.</p>
+<p>There are several advantages to using <code class="docutils literal notranslate"><span class="pre">demes</span></code>:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files can be used by many pieces of related software, including <a class="reference external" href="https://tskit.dev/msprime/docs/stable/"><code class="docutils literal notranslate"><span class="pre">msprime</span></code></a> and <a class="reference external" href="https://moments.readthedocs.io"><code class="docutils literal notranslate"><span class="pre">moments</span></code></a>.</p></li>
+<li><p>The specification is simpler than the low-level <code class="docutils literal notranslate"><span class="pre">API</span></code> provided by any of these tools.</p></li>
+<li><p>You’ll get an extra layer of model validation when <code class="docutils literal notranslate"><span class="pre">demes</span></code> loads your model prior to it being converted into <code class="docutils literal notranslate"><span class="pre">fwpdy11</span></code> objects.</p></li>
+<li><p>Tools to visualize the models are under active development.</p></li>
+</ul>
+<div class="section" id="yaml-file-input">
+<h2>YAML file input<a class="headerlink" href="#yaml-file-input" title="Permalink to this headline">¶</a></h2>
+<p>The following <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specifies the human out-of-Africa model from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id24"><span>GHWB09</span></a>]</span>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">The Gutenkunst et al. (2009) OOA model.</span>
+<span class="nt">doi</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://doi.org/10.1371/journal.pgen.1000695</span>
+<span class="nt">time_units</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">years</span>
+<span class="nt">generation_time</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">25</span>
+
+<span class="nt">demes</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ancestral</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Equilibrium/root population</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span> <span class="nv">220e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span> <span class="nv">7300</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AMH</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Anatomically modern humans</span>
+  <span class="nt">ancestors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">ancestral</span><span class="p p-Indicator">]</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span> <span class="nv">140e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span> <span class="nv">12300</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">OOA</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Bottleneck out-of-Africa population</span>
+  <span class="nt">ancestors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">end_time</span><span class="p">:</span> <span class="nv">21.2e3</span><span class="p p-Indicator">,</span><span class="nt"> start_size</span><span class="p">:</span> <span class="nv">2100</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">YRI</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Yoruba in Ibadan, Nigeria</span>
+  <span class="nt">ancestors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">AMH</span><span class="p p-Indicator">]</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">start_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">12300</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CEU</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Utah Residents (CEPH) with Northern and Western European Ancestry</span>
+  <span class="nt">ancestors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span> <span class="nv">1000</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span> <span class="nv">29725</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">CHB</span>
+  <span class="nt">description</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Han Chinese in Beijing, China</span>
+  <span class="nt">ancestors</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">OOA</span><span class="p p-Indicator">]</span>
+  <span class="nt">epochs</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">start_size</span><span class="p">:</span> <span class="nv">510</span><span class="p p-Indicator">,</span><span class="nt"> end_size</span><span class="p">:</span> <span class="nv">54090</span><span class="p p-Indicator">}</span>
+
+<span class="nt">migrations</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span> <span class="nv">OOA</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span> <span class="nv">25e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span> <span class="nv">CEU</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span> <span class="nv">3e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">YRI</span><span class="p p-Indicator">,</span> <span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span> <span class="nv">1.9e-5</span><span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="p p-Indicator">{</span><span class="nt">demes</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">CEU</span><span class="p p-Indicator">,</span> <span class="nv">CHB</span><span class="p p-Indicator">],</span><span class="nt"> rate</span><span class="p">:</span> <span class="nv">9.6e-5</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>We can generate demographic models directly from these <code class="docutils literal notranslate"><span class="pre">YAML</span></code> files using <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, which handles the conversion to the low-level objects described <a class="reference internal" href="../pages/softselection.html#softselection"><span class="std std-ref">here</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be sure to read the documentation for <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>!
+There are important options concerning the run time of the simulation, etc.</p>
+</div>
+<p>The return value is an instance of <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a> and may be passed as the <code class="docutils literal notranslate"><span class="pre">demography</span></code> keyword argument to initialize an instance of <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
+To extract the simulation length to generate the <code class="docutils literal notranslate"><span class="pre">simlen</span></code> parameter of your <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> instance:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;total_simulation_length&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>81800
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we print the <code class="docutils literal notranslate"><span class="pre">model</span></code> object, we will see how much logic we’d have had to use in order to implement this model using the low-level object <code class="docutils literal notranslate"><span class="pre">API</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.demographic_models.DemographicModelDetails(
+    model=fwdpy11.DiscreteDemography(
+        mass_migrations=[],
+        set_growth_rates=[
+            fwdpy11.SetExponentialGrowth(when=80952, deme=4, G=1.00400799699368),
+            fwdpy11.SetExponentialGrowth(when=80952, deme=5, G=1.005515145509541),
+        ],
+        set_deme_sizes=[
+            fwdpy11.SetDemeSize(
+                when=72999, deme=1, new_size=12300, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=73000, deme=0, new_size=0, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=76199, deme=2, new_size=2100, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=76199, deme=3, new_size=12300, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=76200, deme=1, new_size=0, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=80951, deme=4, new_size=1000, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=80951, deme=5, new_size=510, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=80952, deme=2, new_size=0, resets_growth_rate=True
+            ),
+        ],
+        set_selfing_rates=[
+            fwdpy11.SetSelfingRate(when=0, deme=0, S=0),
+            fwdpy11.SetSelfingRate(when=73000, deme=1, S=0),
+            fwdpy11.SetSelfingRate(when=76200, deme=2, S=0),
+            fwdpy11.SetSelfingRate(when=76200, deme=3, S=0),
+            fwdpy11.SetSelfingRate(when=80952, deme=4, S=0),
+            fwdpy11.SetSelfingRate(when=80952, deme=5, S=0),
+        ],
+        migmatrix=fwdpy11.MigrationMatrix(
+            migmatrix=array(
+                [
+                    [1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                ]
+            ),
+            scaled=False,
+        ),
+        set_migration_rates=[
+            fwdpy11.SetMigrationRates(
+                when=72999, deme=1, migrates=array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=73000, deme=0, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=73000, deme=1, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76199, deme=2, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76199, deme=3, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76200, deme=1, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76200,
+                deme=2,
+                migrates=array(
+                    [0.0000e00, 0.0000e00, 9.9975e-01, 2.5000e-04, 0.0000e00, 0.0000e00]
+                ),
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76200,
+                deme=3,
+                migrates=array(
+                    [0.0000e00, 0.0000e00, 2.5000e-04, 9.9975e-01, 0.0000e00, 0.0000e00]
+                ),
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80951, deme=4, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80951, deme=5, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80952, deme=2, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80952,
+                deme=3,
+                migrates=array(
+                    [
+                        0.00000e00,
+                        0.00000e00,
+                        0.00000e00,
+                        9.99951e-01,
+                        3.00000e-05,
+                        1.90000e-05,
+                    ]
+                ),
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80952,
+                deme=4,
+                migrates=array(
+                    [
+                        0.00000e00,
+                        0.00000e00,
+                        0.00000e00,
+                        3.00000e-05,
+                        9.99874e-01,
+                        9.60000e-05,
+                    ]
+                ),
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80952,
+                deme=5,
+                migrates=array(
+                    [
+                        0.00000e00,
+                        0.00000e00,
+                        0.00000e00,
+                        1.90000e-05,
+                        9.60000e-05,
+                        9.99885e-01,
+                    ]
+                ),
+            ),
+        ],
+    ),
+    name=&quot;The Gutenkunst et al. (2009) OOA model.&quot;,
+    source={&quot;demes_yaml_file&quot;: &quot;gutenkunst_ooa.yml&quot;},
+    parameters=None,
+    citation=fwdpy11.demographic_models.DemographicModelCitation(
+        DOI=[&quot;https://doi.org/10.1371/journal.pgen.1000695&quot;],
+        full_citation=None,
+        metadata=None,
+    ),
+    metadata={
+        &quot;deme_labels&quot;: {
+            0: &quot;ancestral&quot;,
+            1: &quot;AMH&quot;,
+            2: &quot;OOA&quot;,
+            3: &quot;YRI&quot;,
+            4: &quot;CEU&quot;,
+            5: &quot;CHB&quot;,
+        },
+        &quot;initial_sizes&quot;: {0: 7300},
+        &quot;burnin_time&quot;: 73000,
+        &quot;total_simulation_length&quot;: 81800,
+    },
+)
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is hopefully clear how much simpler it is to use the <code class="docutils literal notranslate"><span class="pre">demes</span></code> <code class="docutils literal notranslate"><span class="pre">YAML</span></code> specification!</p>
+</div>
+<div class="section" id="working-with-graphs">
+<h2>Working with graphs<a class="headerlink" href="#working-with-graphs" title="Permalink to this headline">¶</a></h2>
+<p>You may also build models by creating <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Builder" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Builder</span></code></a> objects using the <code class="docutils literal notranslate"><span class="pre">demes</span></code> <code class="docutils literal notranslate"><span class="pre">API</span></code>.
+In general, we feel that the <code class="docutils literal notranslate"><span class="pre">YAML</span></code> method will be less error-prone and therefore the preferred approach.
+But, for example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
+
+<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
+<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
+        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.demographic_models.DemographicModelDetails(
+    model=fwdpy11.DiscreteDemography(
+        mass_migrations=[],
+        set_growth_rates=[],
+        set_deme_sizes=[
+            fwdpy11.SetDemeSize(
+                when=9999, deme=0, new_size=2000, resets_growth_rate=True
+            )
+        ],
+        set_selfing_rates=[
+            fwdpy11.SetSelfingRate(when=0, deme=0, S=0),
+            fwdpy11.SetSelfingRate(when=10000, deme=0, S=0),
+        ],
+        migmatrix=None,
+        set_migration_rates=[],
+    ),
+    name=&quot;test demography&quot;,
+    source=None,
+    parameters=None,
+    citation=fwdpy11.demographic_models.DemographicModelCitation(
+        DOI=[], full_citation=None, metadata=None
+    ),
+    metadata={
+        &quot;deme_labels&quot;: {0: &quot;deme&quot;},
+        &quot;initial_sizes&quot;: {0: 1000},
+        &quot;burnin_time&quot;: 10000,
+        &quot;total_simulation_length&quot;: 10100,
+    },
+)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Again, it is simpler to build up the demography using <code class="docutils literal notranslate"><span class="pre">demes</span></code> than it is using the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> objects directly.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./short_vignettes"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="demography_vignettes_intro.html" title="previous page">Introduction</a>
+    <a class='right-next' id="next-link" href="demography_debugger_vignette.html" title="next page">Debugging demographic models</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Kevin Thornton<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

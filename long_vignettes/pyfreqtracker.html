@@ -56,7 +56,7 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Definitions" href="../pages/definitions.html" />
+    <link rel="next" title="Tracking mutations over time using sqlite3" href="pyfreqtracker_sqlite.html" />
     <link rel="prev" title="Gaussian stabilizing selection with an optimum shift" href="gss_vignette.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -775,7 +813,7 @@ However, there are good reasons to convert things into common formats for analys
 </div>
 </div>
 <div class="section" id="tracking-the-frequencies-of-neutral-mutations">
-<h2>Tracking the frequencies of neutral mutations<a class="headerlink" href="#tracking-the-frequencies-of-neutral-mutations" title="Permalink to this headline">¶</a></h2>
+<span id="freqtrackpy-neutral"></span><h2>Tracking the frequencies of neutral mutations<a class="headerlink" href="#tracking-the-frequencies-of-neutral-mutations" title="Permalink to this headline">¶</a></h2>
 <p>One generally doesn’t simulate neutral mutations.
 However, certain questions regarding linked selection may force you to do so.
 Neutral mutations <em>do not</em> get added to diploid genomes (in order to save memory), and thus will their counts are not obtained via <code class="docutils literal notranslate"><span class="pre">track_mutation_counts=True</span></code>.
@@ -840,10 +878,6 @@ The selected variant trajectories have reduced opacity.</span><a class="headerli
 <li><p>Tracking mutation frequencies in demes that change size.</p></li>
 </ul>
 <p>While this tracker is quite simple to write, performance may be an issue for very large simulations and one may prefer another approach.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Provide example of other approach using ancient sample resetting and <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code>.</p>
-</div>
 </div>
 </div>
 
@@ -876,7 +910,7 @@ The selected variant trajectories have reduced opacity.</span><a class="headerli
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="gss_vignette.html" title="previous page">Gaussian stabilizing selection with an optimum shift</a>
-    <a class='right-next' id="next-link" href="../pages/definitions.html" title="next page">Definitions</a>
+    <a class='right-next' id="next-link" href="pyfreqtracker_sqlite.html" title="next page">Tracking mutations over time using <code class="docutils literal notranslate"><span class="pre">sqlite3</span></code></a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

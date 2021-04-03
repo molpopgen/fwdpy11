@@ -205,6 +205,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -234,6 +262,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -815,7 +853,6 @@ the Python-only side in order to promote thread safety.</p>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_to_fitness/GeneticValueIsFitness.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_noise/NoNoise.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_value_data/genetic_value_data.hpp&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
 
 <span class="k">namespace</span> <span class="n">fwdpy11</span>
 <span class="p">{</span>
@@ -861,6 +898,7 @@ the Python-only side in order to promote thread safety.</p>
         <span class="n">DiploidGeneticValue</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
         <span class="n">DiploidGeneticValue</span><span class="p">(</span><span class="n">DiploidGeneticValue</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
         <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">DiploidGeneticValue</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">DiploidGeneticValue</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
         <span class="k">virtual</span> <span class="kt">double</span> <span class="n">calculate_gvalue</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueData</span> <span class="n">data</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
@@ -886,16 +924,6 @@ the Python-only side in order to promote thread safety.</p>
         <span class="n">noise</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidGeneticValueNoiseData</span> <span class="n">data</span><span class="p">)</span> <span class="k">const</span>
         <span class="p">{</span>
             <span class="k">return</span> <span class="n">noise_fxn</span><span class="o">-&gt;</span><span class="k">operator</span><span class="p">()(</span><span class="n">data</span><span class="p">);</span>
-        <span class="p">}</span>
-
-        <span class="k">virtual</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">tuple</span>
-        <span class="n">shape</span><span class="p">()</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">total_dim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">total_dim</span> <span class="o">!=</span> <span class="n">gvalues</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
-                <span class="p">{</span>
-                    <span class="k">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;dimensionality mismatch&quot;</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="k">return</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">total_dim</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span> <span class="c1">//namespace fwdpy11</span>
@@ -925,7 +953,6 @@ API allows you to subclass the base class however you wish.</p></li>
 <span class="cp">#define FWDPY11_GENETIC_VALUE_TO_FITNESS_MAP_HPP__</span>
 
 <span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;pybind11/pybind11.h&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/genetic_values/default_update.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpp/util/named_type.hpp&gt;</span><span class="cp"></span>
@@ -943,21 +970,22 @@ API allows you to subclass the base class however you wish.</p></li>
     <span class="k">struct</span> <span class="nc">GeneticValueToFitnessMap</span>
     <span class="p">{</span>
         <span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">total_dim</span><span class="p">;</span>
-        <span class="k">const</span> <span class="kt">bool</span> <span class="n">isfitness</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">isfitness</span><span class="p">;</span>
         <span class="k">explicit</span> <span class="nf">GeneticValueToFitnessMap</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span> <span class="n">ndim</span><span class="p">,</span> <span class="k">const</span> <span class="n">maps_to_fitness</span><span class="o">&amp;</span> <span class="n">m</span><span class="p">)</span>
             <span class="o">:</span> <span class="n">total_dim</span><span class="p">{</span><span class="n">ndim</span><span class="p">},</span> <span class="n">isfitness</span><span class="p">{</span><span class="n">m</span><span class="p">.</span><span class="n">get</span><span class="p">()}</span>
         <span class="p">{</span>
         <span class="p">}</span>
+
         <span class="k">virtual</span> <span class="o">~</span><span class="n">GeneticValueToFitnessMap</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">GeneticValueToFitnessMap</span><span class="p">(</span><span class="k">const</span> <span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">GeneticValueToFitnessMap</span><span class="p">(</span><span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">GeneticValueToFitnessMap</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
         <span class="k">virtual</span> <span class="kt">double</span>
         <span class="k">operator</span><span class="p">()(</span><span class="k">const</span> <span class="n">DiploidGeneticValueToFitnessData</span> <span class="cm">/*data*/</span><span class="p">)</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">virtual</span> <span class="kt">void</span> <span class="n">update</span><span class="p">(</span><span class="k">const</span> <span class="n">DiploidPopulation</span><span class="o">&amp;</span> <span class="cm">/*pop*/</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
         <span class="k">virtual</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">GeneticValueToFitnessMap</span><span class="o">&gt;</span> <span class="n">clone</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">virtual</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">tuple</span>
-        <span class="n">shape</span><span class="p">()</span> <span class="k">const</span>
-        <span class="p">{</span>
-            <span class="k">return</span> <span class="n">pybind11</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span><span class="n">total_dim</span><span class="p">);</span>
-        <span class="p">}</span>
     <span class="p">};</span>
 <span class="p">}</span> <span class="c1">//namespace fwdpy11</span>
 
@@ -979,6 +1007,11 @@ API allows you to subclass the base class however you wish.</p></li>
             <span class="o">:</span> <span class="n">GeneticValueToFitnessMap</span><span class="p">(</span><span class="n">ndim</span><span class="p">,</span> <span class="n">maps_to_fitness</span><span class="p">(</span><span class="nb">false</span><span class="p">))</span>
         <span class="p">{</span>
         <span class="p">}</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">GeneticValueIsTrait</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">GeneticValueIsTrait</span><span class="p">(</span><span class="k">const</span> <span class="n">GeneticValueIsTrait</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">GeneticValueIsTrait</span><span class="p">(</span><span class="n">GeneticValueIsTrait</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">GeneticValueIsTrait</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">GeneticValueIsTrait</span><span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+        <span class="n">GeneticValueIsTrait</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">GeneticValueIsTrait</span><span class="o">&amp;&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
     <span class="p">};</span>
 <span class="p">}</span> <span class="c1">// namespace fwdpy11</span>
 

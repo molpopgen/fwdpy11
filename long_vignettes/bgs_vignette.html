@@ -207,6 +207,34 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
+  Short vignettes - demographic modeling
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+   Using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   to specify demographic models.
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+   Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
   Short vignettes - exporting data to tskit
  </span>
 </p>
@@ -236,6 +264,16 @@
  <li class="toctree-l1">
   <a class="reference internal" href="pyfreqtracker.html">
    Tracking mutations over time
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="pyfreqtracker_sqlite.html">
+   Tracking mutations over time using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     sqlite3
+    </span>
+   </code>
   </a>
  </li>
 </ul>
@@ -580,7 +618,7 @@
                 
   <div class="section" id="background-selection">
 <span id="bgs-vignette"></span><h1>Background selection<a class="headerlink" href="#background-selection" title="Permalink to this headline">¶</a></h1>
-<p>This vignette recreates results from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id24"><span>HK95</span></a>]</span>.</p>
+<p>This vignette recreates results from <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id25"><span>HK95</span></a>]</span>.</p>
 <p>The physical layout of the genome follows their Figure 1.
 The fact that the neutral region is non-recombining is a major simplification for the analysis.
 By definition, a single tree describes the history of that region.
@@ -644,7 +682,7 @@ If that were not the case, we would have to take the weighted mean of summaries 
 </div>
 </div>
 </div>
-<p>The following function runs the parameters in line 4 of Table 1 from <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id24"><span>HK95</span></a>]</span>.</p>
+<p>The following function runs the parameters in line 4 of Table 1 from <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id25"><span>HK95</span></a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hk95_table1_line4</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
