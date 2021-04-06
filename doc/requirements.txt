@@ -186,12 +186,14 @@ numpy==1.19.5
     #   h5py
     #   matplotlib
     #   msprime
+    #   pandas
     #   tskit
 packaging==20.9
     # via
     #   bleach
     #   sphinx
 pandas==1.2.2
+    # via -r requirements.in
 pandocfilters==1.4.3
     # via nbconvert
 parso==0.8.1
@@ -236,8 +238,11 @@ python-dateutil==2.8.1
     # via
     #   jupyter-client
     #   matplotlib
+    #   pandas
 pytz==2021.1
-    # via babel
+    # via
+    #   babel
+    #   pandas
 pyyaml==5.4.1
     # via
     #   jupyter-book
@@ -352,7 +357,7 @@ tskit==0.3.4
     #   msprime
 uc-micro-py==1.0.1
     # via linkify-it-py
-urllib3==1.26.3
+urllib3==1.26.4
     # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
