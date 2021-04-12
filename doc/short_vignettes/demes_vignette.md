@@ -91,3 +91,28 @@ print(model.asblack())
 ```
 
 Again, it is simpler to build up the demography using `demes` than it is using the `fwdpy11` objects directly.
+
+## Initializing populations
+
+A model specified using `demes` contains enough information to initialize instances of {class}`fwdpy11.DiploidPopulation`.
+We recommend that you use this information so that the initial deme size(s) in your simulation is correct!
+
+To see how this works, let's revisit the Gutenkunst model from above.
+The value returned contains the initial size of each deme in the model:
+
+```{code-cell}
+model = fwdpy11.discrete_demography.from_demes("gutenkunst_ooa.yml")
+
+print(model.metadata['initial_sizes'])
+```
+
+Given that, a sorted list comprehension does the job:
+
+```{code-cell}
+initial_sizes= [model.metadata['initial_sizes'][i] for i in sorted(model.metadata['initial_sizes'].keys())]
+pop = fwdpy11.DiploidPopulation(initial_sizes, 1000.)
+print(pop.deme_sizes())
+```
+
+The reason to go through the sorting step is to get the right initial sizes *in the right order* for "rootless" `demes` graphs.
+A rootless model is one with more than one ancestral deme in the ancient past.

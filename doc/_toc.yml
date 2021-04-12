@@ -70,6 +70,7 @@
 
 - part: Technical details
   chapters:
+  - file: technical/demes
   - file: technical/genetic_values
   - file: technical/writingplugins
 
