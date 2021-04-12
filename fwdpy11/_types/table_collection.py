@@ -134,6 +134,7 @@ class TableCollection(ll_TableCollection):
         consistency w/ndfs output.
         """
         from . import TreeIterator
+
         t, s = _simplify(self, samples, simplify)
         fs = [np.zeros(len(s) + 1, dtype=np.int32) for i in windows]
         ti = TreeIterator(t, s)
@@ -175,6 +176,7 @@ class TableCollection(ll_TableCollection):
         later.
         """
         from . import TreeIterator
+
         shapes = tuple(len(i) + 1 for i in samples)
         dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
 
@@ -256,7 +258,7 @@ class TableCollection(ll_TableCollection):
         :param include_neutral: Include neutral mutations?
         :param include_selected: Include selected mutations?
 
-        :returns: The mutation frequency spectrum
+        :returns: The mutation frequency spectrum.  The `dtype` is `int32`.
         :rtype: object
 
         The details of the return value depend heavily on the options.
@@ -276,6 +278,13 @@ class TableCollection(ll_TableCollection):
           then the return value is a single frequency spectrum summed over windows.
           If ``separate_windows == True``, then a list of frequency spectra is
           returned, indexed in the same order as the input windows.
+
+        .. warning::
+
+            :class:`sparse.COO` does *not* change `dtype` to `float` as a result of
+            division by a scalar!  Thus, operations like getting the average frequency spectrum
+            from a model require a call to :meth:`sparse.COO.astype` prior to any multiplication
+            and/or division.
 
         .. versionadded:: 0.6.0
 
