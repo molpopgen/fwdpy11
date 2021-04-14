@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.14.1
+
+This is a point release adding more documentation:
+
+* {ref}`Demes vignette <demes_vignette>` updated.
+* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of {class}`sparse.COO`.
+
 ## 0.14.0
 
 In addition to the changes listed below, several documentation, CI, and deployment changes also happened.
