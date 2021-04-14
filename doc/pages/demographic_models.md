@@ -16,6 +16,7 @@
 
 ```{eval-rst}
 .. autoclass:: fwdpy11.demographic_models.DemographicModelDetails
+   :members:
 ```
 
 ```{eval-rst}
