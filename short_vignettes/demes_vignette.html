@@ -348,6 +348,17 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
+  <a class="reference internal" href="../technical/demes.html">
+   Details of
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   integration
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../technical/genetic_values.html">
    Technical overview of genetic value calculations
   </a>
@@ -620,6 +631,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#working-with-graphs">
    Working with graphs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#initializing-populations">
+   Initializing populations
   </a>
  </li>
 </ul>
@@ -962,6 +978,44 @@ But, for example:</p>
 </div>
 </div>
 <p>Again, it is simpler to build up the demography using <code class="docutils literal notranslate"><span class="pre">demes</span></code> than it is using the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> objects directly.</p>
+</div>
+<div class="section" id="initializing-populations">
+<h2>Initializing populations<a class="headerlink" href="#initializing-populations" title="Permalink to this headline">¶</a></h2>
+<p>A model specified using <code class="docutils literal notranslate"><span class="pre">demes</span></code> contains enough information to initialize instances of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
+We recommend that you use this information so that the initial deme size(s) in your simulation is correct!</p>
+<p>To see how this works, let’s revisit the Gutenkunst model from above.
+The value returned contains the initial size of each deme in the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="s2">&quot;gutenkunst_ooa.yml&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{0: 7300}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Given that, a sorted list comprehension does the job:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">initial_sizes</span><span class="o">=</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;initial_sizes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="mf">1000.</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">deme_sizes</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([0], dtype=int32), array([7300]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>The reason to go through the sorting step is to get the right initial sizes <em>in the right order</em> for “rootless” <code class="docutils literal notranslate"><span class="pre">demes</span></code> graphs.
+A rootless model is one with more than one ancestral deme in the ancient past.</p>
 </div>
 </div>
 

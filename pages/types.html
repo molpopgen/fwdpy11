@@ -350,6 +350,17 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
+  <a class="reference internal" href="../technical/demes.html">
+   Details of
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     demes
+    </span>
+   </code>
+   integration
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../technical/genetic_values.html">
    Technical overview of genetic value calculations
   </a>
@@ -1220,7 +1231,7 @@ each interval in <code class="docutils literal notranslate"><span class="pre">wi
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The mutation frequency spectrum</p>
+<dd class="field-even"><p>The mutation frequency spectrum.  The <cite>dtype</cite> is <cite>int32</cite>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)">object</a></p>
@@ -1244,6 +1255,13 @@ then the return value is a single frequency spectrum summed over windows.
 If <code class="docutils literal notranslate"><span class="pre">separate_windows</span> <span class="pre">==</span> <span class="pre">True</span></code>, then a list of frequency spectra is
 returned, indexed in the same order as the input windows.</p></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> does <em>not</em> change <cite>dtype</cite> to <cite>float</cite> as a result of
+division by a scalar!  Thus, operations like getting the average frequency spectrum
+from a model require a call to <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.astype.html#sparse.COO.astype" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sparse.COO.astype()</span></code></a> prior to any multiplication
+and/or division.</p>
+</div>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.6.0: </span>Python implementation added</p>
 </div>
