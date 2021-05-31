@@ -21,7 +21,7 @@ import typing
 import attr
 import tskit
 
-from .._fwdpy11 import Mutation, MutationVector
+from .._fwdpy11 import Mutation
 from ._flags import (INDIVIDUAL_IS_ALIVE, INDIVIDUAL_IS_FIRST_GENERATION,
                      INDIVIDUAL_IS_PRESERVED)
 
@@ -108,41 +108,51 @@ def decode_individual_metadata(tc: tskit.TableCollection):
     return rv
 
 
-def decode_mutation_metadata(tc: tskit.TableCollection) -> MutationVector:
+def decode_mutation_metadata(
+    tc: tskit.TableCollection,
+) -> typing.List[typing.Optional[Mutation]]:
     """
-    Decodes a :class:`tskit.MutationTable`.
+    Decodes metadata from a :class:`tskit.MutationTable`.
 
     :param tc: A table collection
     :type tc: :class:`tskit.TableCollection`
 
     :returns: Mutations
-    :rtype: :class:`fwdpy11.MutationVector`
+    :rtype: list
 
     .. versionadded:: 0.12.0
+
+    .. versionchanged:: 0.14.2
+
+        Return type is now a list, allowing
+        some elements to be `None`.
     """
-    mutations = MutationVector()
+    mutations = []
     for m in tc.mutations:
         md = m.metadata
-        if "esizes" not in md:
-            mutations.append(
-                Mutation(
-                    pos=tc.sites.position[m.site],
-                    s=md["s"],
-                    h=md["h"],
-                    g=md["origin"],
-                    label=md["label"],
+        if md is not None:
+            if "esizes" not in md:
+                mutations.append(
+                    Mutation(
+                        pos=tc.sites.position[m.site],
+                        s=md["s"],
+                        h=md["h"],
+                        g=md["origin"],
+                        label=md["label"],
+                    )
                 )
-            )
+            else:
+                mutations.append(
+                    Mutation(
+                        pos=tc.sites.position[m.site],
+                        s=md["s"],
+                        h=md["h"],
+                        g=md["origin"],
+                        esizes=md["esizes"],
+                        heffects=md["heffects"],
+                        label=md["label"],
+                    )
+                )
         else:
-            mutations.append(
-                Mutation(
-                    pos=tc.sites.position[m.site],
-                    s=md["s"],
-                    h=md["h"],
-                    g=md["origin"],
-                    esizes=md["esizes"],
-                    heffects=md["heffects"],
-                    label=md["label"],
-                )
-            )
+            mutations.append(None)
     return mutations

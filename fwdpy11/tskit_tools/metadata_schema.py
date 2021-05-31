@@ -73,7 +73,7 @@ PopulationMetadata = tskit.metadata.MetadataSchema(
 MutationMetadata = tskit.metadata.MetadataSchema(
     {
         "codec": "struct",
-        "type": "object",
+        "type": ["object", "null"],
         "name": "Mutation metadata",
         "properties": {
             "s": {"type": "number", "binaryFormat": "d"},

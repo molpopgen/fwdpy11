@@ -19,10 +19,10 @@
 
 import json
 
+import fwdpy11
+import msprime
 import numpy as np
 import pytest
-
-import fwdpy11
 
 
 @pytest.fixture
@@ -55,6 +55,8 @@ def inception():
 @pytest.mark.parametrize("pdict", [{"simlen": 10}], indirect=["pdict"])
 @pytest.mark.parametrize("pop", [{"N": 100, "L": 1}], indirect=["pop"])
 def test_metadata_roundtrip_single_sim(rng, pdict, pop):
+    import sys
+
     params = fwdpy11.ModelParams(**pdict)
 
     r = fwdpy11.RandomAncientSamples(seed=42, samplesize=2, timepoints=[3])
@@ -62,6 +64,14 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     fwdpy11.evolvets(rng, pop, params, 100, r)
 
     ts = pop.dump_tables_to_tskit()
+
+    if sys.version_info.minor > 6:
+        # FIXME: this is a hack to avoid the test failing with msprime < 1.0
+        # add neutral mutations w/no metadata
+        ts = msprime.sim_mutations(ts, rate=1.0, random_seed=654321)
+        # bulk decode the mutation metadata, which is all None
+        mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables)
+        assert all([i is None for i in mutation_md])
 
     assert len(ts.tables.individuals) == pop.N + 2
     first = 0
