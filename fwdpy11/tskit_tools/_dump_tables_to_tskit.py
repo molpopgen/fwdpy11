@@ -58,8 +58,8 @@ def _initializeIndividualTable(self, tc):
     # Now, preserved nodes
     node_time = np.array(self.tables.nodes, copy=False)["time"]
     for i in self.ancient_sample_metadata:
-        assert i.nodes[0] not in individal_nodes, "indivudal record error"
-        assert i.nodes[1] not in individal_nodes, "indivudal record error"
+        assert i.nodes[0] not in individal_nodes, "individual record error"
+        assert i.nodes[1] not in individal_nodes, "individual record error"
         individal_nodes[i.nodes[0]] = num_ind_nodes
         individal_nodes[i.nodes[1]] = num_ind_nodes
         num_ind_nodes += 1
