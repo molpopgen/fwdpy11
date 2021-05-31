@@ -77,8 +77,27 @@ class DiploidMetadata(object):
     geography: typing.List[float]
     nodes: typing.List[int]
 
+    @classmethod
+    def from_table_row(cls, ind: tskit.IndividualTableRow):
+        """
+        Generate a metadata object from a :class:`tskit.IndividualTableRow`
 
-def decode_individual_metadata(tc: tskit.TableCollection):
+        .. versionadded:: 0.15.0
+        """
+        alive = ind.flags & INDIVIDUAL_IS_ALIVE
+        preserved = ind.flags & INDIVIDUAL_IS_PRESERVED
+        first_generation = ind.flags & INDIVIDUAL_IS_FIRST_GENERATION
+        return cls(
+            **ind.metadata,
+            alive=alive,
+            preserved=preserved,
+            first_generation=first_generation
+        )
+
+
+def decode_individual_metadata(
+    tc: tskit.TableCollection, rows: typing.Optional[typing.Union[int, slice]] = None
+) -> typing.List[DiploidMetadata]:
     """
     Decodes a :class:`tskit.IndividualTable`.
 
@@ -90,15 +109,32 @@ def decode_individual_metadata(tc: tskit.TableCollection):
 
 
     .. versionadded:: 0.12.0
+
+    .. versionchanged:: 0.15.0
+
+        Add index/slice access to the table.
     """
     rv = []
-    for i in tc.individuals:
-        alive = i.flags & INDIVIDUAL_IS_ALIVE
-        preserved = i.flags & INDIVIDUAL_IS_PRESERVED
-        first_generation = i.flags & INDIVIDUAL_IS_FIRST_GENERATION
+
+    if rows is None:
+        _rows = slice(0, tc.individuals.num_rows, 1)
+    else:
+        _rows = rows
+
+    try:
+        for ind in tc.individuals[_rows]:
+            alive = ind.flags & INDIVIDUAL_IS_ALIVE
+            preserved = ind.flags & INDIVIDUAL_IS_PRESERVED
+            first_generation = ind.flags & INDIVIDUAL_IS_FIRST_GENERATION
+            rv.append(DiploidMetadata.from_table_row(ind))
+    except:
+        ind = tc.individuals[_rows]
+        alive = ind.flags & INDIVIDUAL_IS_ALIVE
+        preserved = ind.flags & INDIVIDUAL_IS_PRESERVED
+        first_generation = ind.flags & INDIVIDUAL_IS_FIRST_GENERATION
         rv.append(
             DiploidMetadata(
-                **i.metadata,
+                **ind.metadata,
                 alive=alive,
                 preserved=preserved,
                 first_generation=first_generation
@@ -108,8 +144,36 @@ def decode_individual_metadata(tc: tskit.TableCollection):
     return rv
 
 
+def _append_mutation_metadata(tc, site, md, mutations):
+    if md is not None:
+        if "esizes" not in md:
+            mutations.append(
+                Mutation(
+                    pos=tc.sites.position[site],
+                    s=md["s"],
+                    h=md["h"],
+                    g=md["origin"],
+                    label=md["label"],
+                )
+            )
+        else:
+            mutations.append(
+                Mutation(
+                    pos=tc.sites.position[site],
+                    s=md["s"],
+                    h=md["h"],
+                    g=md["origin"],
+                    esizes=md["esizes"],
+                    heffects=md["heffects"],
+                    label=md["label"],
+                )
+            )
+    else:
+        mutations.append(None)
+
+
 def decode_mutation_metadata(
-    tc: tskit.TableCollection,
+    tc: tskit.TableCollection, rows: typing.Optional[typing.Union[int, slice]] = None
 ) -> typing.List[typing.Optional[Mutation]]:
     """
     Decodes metadata from a :class:`tskit.MutationTable`.
@@ -122,37 +186,23 @@ def decode_mutation_metadata(
 
     .. versionadded:: 0.12.0
 
-    .. versionchanged:: 0.14.2
+    .. versionchanged:: 0.15.0
 
         Return type is now a list, allowing
         some elements to be `None`.
+
+        Add index/slice access to the table.
     """
     mutations = []
-    for m in tc.mutations:
-        md = m.metadata
-        if md is not None:
-            if "esizes" not in md:
-                mutations.append(
-                    Mutation(
-                        pos=tc.sites.position[m.site],
-                        s=md["s"],
-                        h=md["h"],
-                        g=md["origin"],
-                        label=md["label"],
-                    )
-                )
-            else:
-                mutations.append(
-                    Mutation(
-                        pos=tc.sites.position[m.site],
-                        s=md["s"],
-                        h=md["h"],
-                        g=md["origin"],
-                        esizes=md["esizes"],
-                        heffects=md["heffects"],
-                        label=md["label"],
-                    )
-                )
-        else:
-            mutations.append(None)
+    if rows is None:
+        _rows = slice(0, tc.mutations.num_rows, 1)
+    else:
+        _rows = rows
+
+    try:
+        for m in tc.mutations[_rows]:
+            _append_mutation_metadata(tc, m.site, m.metadata, mutations)
+    except:
+        m = tc.mutations[_rows]
+        _append_mutation_metadata(tc, m.site, m.metadata, mutations)
     return mutations
