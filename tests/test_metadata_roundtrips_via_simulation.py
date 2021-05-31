@@ -71,6 +71,23 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables)
     assert all([i is None for i in mutation_md])
 
+    # test index access
+    num_muts = 0
+    for i in range(ts.tables.mutations.num_rows):
+        x = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables, i)
+        assert x[0] is None
+        num_muts += 1
+    assert num_muts == ts.tables.mutations.num_rows
+
+    num_muts = 0
+    for i in fwdpy11.tskit_tools.decode_mutation_metadata(
+        ts.tables, slice(0, ts.tables.mutations.num_rows, 2)
+    ):
+        assert i is None
+        num_muts += 1
+
+    assert num_muts == len([i for i in range(0, ts.num_mutations, 2)])
+
     assert len(ts.tables.individuals) == pop.N + 2
     first = 0
     preserved = 0
@@ -91,6 +108,33 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     assert alive == pop.N
     assert first == 0
     assert preserved == 2
+    # Test slice/index access to individual metadata
+    first = 0
+    preserved = 0
+    alive = 0
+    for row in range(ts.tables.individuals.num_rows):
+        i = fwdpy11.tskit_tools.decode_individual_metadata(ts.tables, row)[0]
+        if i.alive:
+            alive += 1
+            for n in i.nodes:
+                assert ts.tables.nodes.time[n] == 0
+        if i.preserved:
+            preserved += 1
+            for n in i.nodes:
+                assert (
+                    ts.tables.nodes.time[n] == 0 + params.simlen
+                    or ts.tables.nodes.time[n] == 0 + params.simlen - 3
+                )
+    assert alive == pop.N
+    assert first == 0
+    assert preserved == 2
+
+    num_md = 0
+    for _ in fwdpy11.tskit_tools.decode_individual_metadata(
+        ts.tables, slice(1, ts.tables.individuals.num_rows, 2)
+    ):
+        num_md += 1
+    assert num_md == len([i for i in range(0, ts.num_individuals, 2)])
 
 
 @pytest.mark.parametrize("rng", [{"seed": 1234}], indirect=["rng"])
