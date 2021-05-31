@@ -1,6 +1,6 @@
 rm -rf dist/
 
-for py in cp36-cp36m cp37-cp37m cp38-cp38
+for py in cp37-cp37m cp38-cp38 cp39-cp39
 do
     rm -rf build
     PYPATH=/opt/python/${py}

@@ -65,13 +65,11 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
 
     ts = pop.dump_tables_to_tskit()
 
-    if sys.version_info.minor > 6:
-        # FIXME: this is a hack to avoid the test failing with msprime < 1.0
-        # add neutral mutations w/no metadata
-        ts = msprime.sim_mutations(ts, rate=1.0, random_seed=654321)
-        # bulk decode the mutation metadata, which is all None
-        mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables)
-        assert all([i is None for i in mutation_md])
+    # add neutral mutations w/no metadata
+    ts = msprime.sim_mutations(ts, rate=1.0, random_seed=654321)
+    # bulk decode the mutation metadata, which is all None
+    mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables)
+    assert all([i is None for i in mutation_md])
 
     assert len(ts.tables.individuals) == pop.N + 2
     first = 0
