@@ -121,6 +121,7 @@ init_DiploidPopulation(py::module& m)
                     }
                 fwdpy11::DiploidPopulation pop(1, std::numeric_limits<double>::max());
                 fwdpy11::serialization::deserialize_details()(in, pop);
+                pop.tables->build_indexes();
                 return pop;
             })
         .def("_pickle_to_file",
