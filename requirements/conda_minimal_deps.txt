@@ -12,3 +12,4 @@ autoconf
 automake
 pytest
 pytest-xdist
+demes

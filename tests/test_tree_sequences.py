@@ -120,7 +120,7 @@ def set_up_standard_pop_gen_model(simlen=1.0):
 def mcounts_comparison_details(pop, counts, ts):
     for t in ts.trees():
         for m in t.mutations():
-            pos = m.position
+            pos = ts.tables.sites.position[m.site]
             # retrieve this mutation from the fwdpy11 table
             mr = None
             for i in pop.tables.mutations:
