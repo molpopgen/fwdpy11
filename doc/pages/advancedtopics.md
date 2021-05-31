@@ -935,7 +935,8 @@ in {ref}`this section <gvalue-simulation-behavior>` specifically.
 
 #### The data types
 
-```{py:class} fwdpy11.PyDiploidGeneticValueData
+```{eval-rst}
+.. class:: fwdpy11.PyDiploidGeneticValueData
 
 .. versionadded:: 0.9.0
 
@@ -973,7 +974,6 @@ Instances of this class have the following attributes:
     This index is useful in the event of mass migrations via copies,
     which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
     and this value.
-
 ```
 
 (msprime-subtleties)=
