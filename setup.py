@@ -9,9 +9,6 @@ from distutils.version import LooseVersion
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-if sys.version_info[0] < 3:
-    raise ValueError("Python 3 is required!")
-
 if "--weffcpp" in sys.argv:
     USE_WEFFCPP = True
     sys.argv.remove("--weffcpp")
