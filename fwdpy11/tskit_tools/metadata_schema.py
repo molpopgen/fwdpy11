@@ -19,9 +19,42 @@
 import copy
 import typing
 
+import fwdpy11
 import tskit
 
-import fwdpy11
+TopLevelMetadata = tskit.metadata.MetadataSchema(
+    {
+        "codec": "json",
+        "title": "Top-level metadata for table collection/tree sequence.",
+        "type": "object",
+        "properties": {
+            "generation": {
+                "type": "integer",
+                "description": "The value of pop.generation at the time data"
+                "were exported to tskit",
+            },
+            "model_params": {
+                "type": ["string", "object"],
+                "description": "One or more fwdpy11.ModelParams instances.",
+            },
+            "seed": {
+                "type": "integer",
+                "description": "Random number seed."
+                "This is optional because a random number generator"
+                "may be called prior to simulation, thus making the"
+                "initial seed not capable of reproducing the simulation",
+            },
+            "demes_graph": {
+                "type": "object",
+                "description": "A demographic model specified using demes."
+                "This information will be redundant with that stored in model_params,"
+                "but it may be useful as it allows reconstruction of the YAML file"
+                "from the tree sequence.",
+            },
+        },
+        "required": ["generation"],
+    }
+)
 
 IndividualDiploidMetadata = tskit.metadata.MetadataSchema(
     {

@@ -1,11 +1,13 @@
 from typing import IO, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
+import demes
 import fwdpy11._types
 import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
 import tskit
 
 from .._fwdpy11 import DiploidGenotype, DiploidMetadata, ll_DiploidPopulation
+from .model_params import ModelParams
 from .population_mixin import PopulationMixin
 from .table_collection import TableCollection
 
@@ -176,11 +178,26 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         return {i: j for i, j in zip(deme_sizes[0], deme_sizes[1])}
 
     def dump_tables_to_tskit(
-        self, parameters: Optional[Dict] = None, *, destructive=False
+        self,
+        *,
+        model_params: Optional[Union[ModelParams, Dict[str, ModelParams]]] = None,
+        demes_graph: Optional[demes.Graph] = None,
+        population_metadata: Optional[Dict[int, object]] = None,
+        parameters: Optional[Dict] = None,
+        destructive=False
     ):
         """
         Dump the population's TableCollection into
         an tskit TreeSequence
+
+        :param model_params: Model parameters to be stored as top-level metadata
+        :type model_params: :class:`fwdpy11.ModelParams` or :class:`dict`
+
+        :param demes_graph: A demographic model specified via `demes`.
+        :type demes_graph: :class:`demes.Graph`
+
+        :param population_metadata: A mapping from integer id of a deme/population to metadata
+        :type population_metadata: dict
 
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
@@ -189,6 +206,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         :type destructive: bool
 
         :rtype: tskit.TreeSequence
+
+        For examples, see :ref:`tskitconvert_vignette`.
 
         .. warning::
 
@@ -214,9 +233,18 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
             Added `destructive` option.
 
+        .. versionchanged:: 0.15.0
+
+            Added `model_params`, `demes_graph`, `population_metadata` keyword args.
+
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
-            self, parameters, destructive=destructive
+            self,
+            model_params=model_params,
+            demes_graph=demes_graph,
+            population_metadata=population_metadata,
+            parameters=parameters,
+            destructive=destructive,
         )
 
     def dump_to_file(self, filename: str):

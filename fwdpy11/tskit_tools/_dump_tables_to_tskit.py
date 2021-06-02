@@ -20,18 +20,25 @@
 import json
 import typing
 
+import demes
 import fwdpy11.tskit_tools
 import fwdpy11.tskit_tools.metadata_schema
 import numpy as np
 import tskit
+from fwdpy11._types.model_params import ModelParams
 
 
-def _initializePopulationTable(node_view, tc):
+def _initializePopulationTable(
+    node_view, population_metadata: typing.Optional[typing.Dict[int, object]], tc
+):
     tc.populations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
     )
     for i in sorted(np.unique(node_view["deme"])):
-        tc.populations.add_row(metadata={"name": "deme" + str(i)})
+        if population_metadata is not None and i in population_metadata:
+            tc.populations.add_row(metadata=population_metadata[i])
+        else:
+            tc.populations.add_row(metadata={"name": "deme" + str(i)})
 
 
 def _initializeIndividualTable(self, tc):
@@ -109,31 +116,16 @@ def _dump_mutation_site_and_site_tables(self, tc: tskit.TableCollection) -> None
 
 
 def _dump_tables_to_tskit(
-    self, parameters: typing.Optional[typing.Dict] = None, *, destructive=False
+    self,
+    *,
+    model_params: typing.Optional[
+        typing.Union[ModelParams, typing.Dict[str, ModelParams]]
+    ] = None,
+    demes_graph: typing.Optional[demes.Graph] = None,
+    population_metadata: typing.Optional[typing.Dict[int, object]] = None,
+    parameters: typing.Optional[typing.Dict] = None,
+    destructive=False,
 ):
-    """
-    Dump the population's TableCollection into
-    an tskit TreeSequence
-
-    :param parameters: The simulation parameters for the provenance table.
-    :type parameters: None or dict
-
-    :rtype: tskit.TreeSequence
-
-    .. versionchanged:: 0.8.2
-
-        Added `parameters`.
-        Generate provenance information for return value.
-        The provenance information is validated using
-        :func:`tskit.validate_provenance`, which may
-        raise an exception.
-
-    .. versionchanged:: 0.10.0
-
-        Use tskit metadata schema.
-        Mutation time is now stored in the tskit.MutationTable column.
-        Origin time of mutations is part of the metadata.
-    """
     from .._fwdpy11 import gsl_version, pybind11_version
 
     environment = tskit.provenance.get_environment(
@@ -162,6 +154,25 @@ def _dump_tables_to_tskit(
 
     tc = tskit.TableCollection(self.tables.genome_length)
 
+    tc.metadata_schema = fwdpy11.tskit_tools.metadata_schema.TopLevelMetadata
+
+    # Populate the required fields
+    top_level_metadata = {"generation": self.generation}
+
+    if model_params is not None:
+        try:
+            top_level_metadata["model_params"] = str(model_params.asdict())
+        except:
+            mp = {}
+            for key, value in model_params.items():
+                mp[key] = str(value.asdict())
+            top_level_metadata["model_params"] = mp
+
+    if demes_graph is not None:
+        top_level_metadata["demes_graph"] = demes_graph.asdict()
+
+    tc.metadata = top_level_metadata
+
     if destructive is True:
         self._clear_haploid_genomes()
 
@@ -171,7 +182,7 @@ def _dump_tables_to_tskit(
     # other than -1 in an tskit.NodeTable will
     # raise an exception if the PopulationTable
     # isn't set up.
-    _initializePopulationTable(node_view, tc)
+    _initializePopulationTable(node_view, population_metadata, tc)
     node_to_individual = _initializeIndividualTable(self, tc)
     individual = [-1 for i in range(len(node_view))]
     for k, v in node_to_individual.items():
