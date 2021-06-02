@@ -63,7 +63,7 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
 
     fwdpy11.evolvets(rng, pop, params, 100, r)
 
-    ts = pop.dump_tables_to_tskit()
+    ts = pop.dump_tables_to_tskit(model_params=params)
 
     # add neutral mutations w/no metadata
     ts = msprime.sim_mutations(ts, rate=1.0, random_seed=654321)
@@ -114,6 +114,9 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     alive = 0
     for row in range(ts.tables.individuals.num_rows):
         i = fwdpy11.tskit_tools.decode_individual_metadata(ts.tables, row)[0]
+        assert type(i.alive) == bool
+        assert type(i.preserved) == bool
+        assert type(i.first_generation) == bool
         if i.alive:
             alive += 1
             for n in i.nodes:
@@ -147,7 +150,7 @@ def test_metadata_roundtrip_single_sim_with_first_gen_preserved(rng, pdict, pop)
 
     fwdpy11.evolvets(rng, pop, params, 100, r, preserve_first_generation=True)
 
-    ts = pop.dump_tables_to_tskit()
+    ts = pop.dump_tables_to_tskit(model_params=params)
     assert len(ts.tables.individuals) == 2 * pop.N + 2
     first = 0
     preserved = 0
@@ -183,7 +186,7 @@ def test_metadata_roundtrip_single_deme_sim_with_parameters(rng, pdict, pop, inc
     fwdpy11.evolvets(rng, pop, params, 100)
 
     ts = pop.dump_tables_to_tskit(
-        {"params_dict": str(params.asdict()), "script": inception}
+        parameters={"params_dict": str(params.asdict()), "script": inception}
     )
 
     provenance = json.loads(ts.provenance(0).record)
