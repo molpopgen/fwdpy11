@@ -70,9 +70,9 @@ class DiploidMetadata(object):
     sex: int
     deme: int
     label: int
-    alive: bool
-    preserved: bool
-    first_generation: bool
+    alive: bool = attr.ib(converter=bool)
+    preserved: bool = attr.ib(converter=bool)
+    first_generation: bool = attr.ib(converter=bool)
     parents: typing.List[int]
     geography: typing.List[float]
     nodes: typing.List[int]
@@ -129,17 +129,7 @@ def decode_individual_metadata(
             rv.append(DiploidMetadata.from_table_row(ind))
     except:
         ind = tc.individuals[_rows]
-        alive = ind.flags & INDIVIDUAL_IS_ALIVE
-        preserved = ind.flags & INDIVIDUAL_IS_PRESERVED
-        first_generation = ind.flags & INDIVIDUAL_IS_FIRST_GENERATION
-        rv.append(
-            DiploidMetadata(
-                **ind.metadata,
-                alive=alive,
-                preserved=preserved,
-                first_generation=first_generation
-            )
-        )
+        rv.append(DiploidMetadata.from_table_row(ind))
 
     return rv
 
