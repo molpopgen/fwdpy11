@@ -15,6 +15,9 @@
     .. data:: fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE
     .. data:: fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED
     .. data:: fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION
+
+    .. autoclass:: fwdpy11.tskit_tools.WrappedTreeSequence
+       :members:
 ```
 
 
