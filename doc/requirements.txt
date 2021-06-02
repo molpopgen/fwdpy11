@@ -357,7 +357,7 @@ tskit==0.3.4
     #   msprime
 uc-micro-py==1.0.1
     # via linkify-it-py
-urllib3==1.26.4
+urllib3==1.26.5
     # via requests
 wcwidth==0.2.5
     # via prompt-toolkit
