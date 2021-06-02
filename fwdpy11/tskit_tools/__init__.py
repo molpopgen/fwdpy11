@@ -27,3 +27,20 @@ interact with ``tskit``.
 from ._flags import *  # NOQA
 from .metadata import (DiploidMetadata, decode_individual_metadata,
                        decode_mutation_metadata)
+from .trees import WrappedTreeSequence
+
+
+def load(filename: str):
+    """
+    Load a tree sequence from a file.
+
+    :param filename: Name of the trees file.
+    :type filename: str
+
+    :returns: A tree sequence
+    :rtype: :class:`fwdpy11.tskit_tools.WrappedTreeSequence`
+    """
+    import tskit
+
+    ts = tskit.load(filename)
+    return WrappedTreeSequence(ts=ts)

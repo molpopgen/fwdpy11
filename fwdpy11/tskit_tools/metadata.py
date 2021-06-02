@@ -104,9 +104,15 @@ def decode_individual_metadata(
     :param tc: A table collection
     :type tc: :class:`tskit.TableCollection`
 
+    :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
+    :type rows: int or slice or numpy array
+
     :returns: individual metadata
     :rtype: List of :class:`fwdpy11.tskit_tools.DiploidMetadata`
 
+    .. warning::
+
+        Decoding the entire table may consume a lot of system memory.
 
     .. versionadded:: 0.12.0
 
@@ -170,9 +176,15 @@ def decode_mutation_metadata(
 
     :param tc: A table collection
     :type tc: :class:`tskit.TableCollection`
+    :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
+    :type rows: int or slice or numpy array
 
     :returns: Mutations
     :rtype: list
+
+    .. warning::
+
+        Decoding the entire table may consume a lot of system memory.
 
     .. versionadded:: 0.12.0
 
