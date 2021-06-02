@@ -190,6 +190,15 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         Dump the population's TableCollection into
         an tskit TreeSequence
 
+        :param model_params: Model parameters to be stored as top-level metadata
+        :type model_params: :class:`fwdpy11.ModelParams` or :class:`dict`
+
+        :param demes_graph: A demographic model specified via `demes`.
+        :type demes_graph: :class:`demes.Graph`
+
+        :param population_metadata: A mapping from integer id of a deme/population to metadata
+        :type population_metadata: dict
+
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
 
@@ -223,6 +232,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         .. versionchanged:: 0.14.0
 
             Added `destructive` option.
+
+        .. versionchanged:: 0.15.0
+
+            Added `model_params`, `demes_graph`, `population_metadata` keyword args.
 
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
