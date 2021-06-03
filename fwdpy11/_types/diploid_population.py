@@ -5,6 +5,7 @@ import fwdpy11._types
 import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
 import tskit
+from fwdpy11.tskit_tools import WrappedTreeSequence
 
 from .._fwdpy11 import DiploidGenotype, DiploidMetadata, ll_DiploidPopulation
 from .model_params import ModelParams
@@ -31,7 +32,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         N: Union[int, List[int]],
         length: float,
         *,
-        ll_pop: Optional[ll_DiploidPopulation] = None
+        ll_pop: Optional[ll_DiploidPopulation] = None,
     ):
         if ll_pop is None:
             super(DiploidPopulation, self).__init__(N, length)
@@ -186,8 +187,9 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         data: Optional[object] = None,
         seed: Optional[int] = None,
         parameters: Optional[Dict] = None,
-        destructive=False
-    ):
+        destructive=False,
+        wrapped=False,
+    ) -> Union[tskit.TreeSequence, WrappedTreeSequence]:
         """
         Dump the population's TableCollection into
         an tskit TreeSequence
@@ -214,7 +216,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         :param destructive: If `True`, delete data held by the current instance.
         :type destructive: bool
 
-        :rtype: tskit.TreeSequence
+        :param wrapped: If `True`, return :class:`fwdpy11.tskit_tools.WrappedTreeSequence`
+        :type wrapped: bool
+
+        :rtype: tskit.TreeSequence or fwdpy11.tskit_tools.WrappedTreeSequence
 
         For examples, see :ref:`tskitconvert_vignette`.
 
@@ -257,6 +262,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             seed=seed,
             parameters=parameters,
             destructive=destructive,
+            wrapped=wrapped,
         )
 
     def dump_to_file(self, filename: str):
