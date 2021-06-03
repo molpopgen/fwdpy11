@@ -48,55 +48,6 @@ def pdict2():
     return pd
 
 
-@pytest.fixture
-def gutenkunst():
-    yaml = """
-description: The Gutenkunst et al. (2009) OOA model.
-doi:
-- https://doi.org/10.1371/journal.pgen.1000695
-time_units: years
-generation_time: 25
-
-demes:
-- name: ancestral
-  description: Equilibrium/root population
-  epochs:
-  - {end_time: 220e3, start_size: 7300}
-- name: AMH
-  description: Anatomically modern humans
-  ancestors: [ancestral]
-  epochs:
-  - {end_time: 140e3, start_size: 12300}
-- name: OOA
-  description: Bottleneck out-of-Africa population
-  ancestors: [AMH]
-  epochs:
-  - {end_time: 21.2e3, start_size: 2100}
-- name: YRI
-  description: Yoruba in Ibadan, Nigeria
-  ancestors: [AMH]
-  epochs:
-  - start_size: 12300
-- name: CEU
-  description: Utah Residents (CEPH) with Northern and Western European Ancestry
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 1000, end_size: 29725}
-- name: CHB
-  description: Han Chinese in Beijing, China
-  ancestors: [OOA]
-  epochs:
-  - {start_size: 510, end_size: 54090}
-
-migrations:
-- {demes: [YRI, OOA], rate: 25e-5}
-- {demes: [YRI, CEU], rate: 3e-5}
-- {demes: [YRI, CHB], rate: 1.9e-5}
-- {demes: [CEU, CHB], rate: 9.6e-5}
-"""
-    return demes.loads(yaml)
-
-
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_single_model_params(pop, pdict1):
     mp = fwdpy11.ModelParams(**pdict1)
@@ -165,6 +116,10 @@ def test_user_defined_data(pop):
     ts = pop.dump_tables_to_tskit(data={"mydata": 11})
     assert ts.metadata["data"]["mydata"] == 11
 
+    # Test WrappedTreeSequence propery
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert wts.data["mydata"] == 11
+
     class MyType(object):
         def __init__(self, x):
             self.x = x
@@ -175,11 +130,19 @@ def test_user_defined_data(pop):
     ts = pop.dump_tables_to_tskit(data=str(MyType(x=11)))
     assert eval(ts.metadata["data"]).x == 11
 
+    # Test WrappedTreeSequence property
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert eval(wts.data).x == 11
+
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_seed(pop):
     ts = pop.dump_tables_to_tskit(seed=333)
     assert ts.metadata["seed"] == 333
+
+    # Test WrappedTreeSequence property
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert wts.seed == 333
 
     with pytest.raises(ValueError):
         _ = pop.dump_tables_to_tskit(seed=-333)

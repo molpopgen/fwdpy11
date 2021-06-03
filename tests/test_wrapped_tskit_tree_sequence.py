@@ -40,7 +40,7 @@ def simulation():
 
     fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
 
-    return pop
+    return pop, params
 
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
@@ -53,9 +53,12 @@ def test_creation(pop):
 
 
 def test_on_simulated_example(simulation):
-    ts = simulation.dump_tables_to_tskit()
+    pop, params = simulation
+    ts = pop.dump_tables_to_tskit(model_params=params)
 
     wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
+
+    assert wts.model_params == params
 
     times = []
     for time, nodes, md in wts.timepoints_with_individuals(decode_metadata=True):
@@ -71,6 +74,30 @@ def test_on_simulated_example(simulation):
                 assert wts.ts.tables.nodes.time[n] == time
         times.append(time)
 
-    assert np.all(
-        np.array(times) == np.arange(simulation.generation, dtype=np.float64)[::-1]
-    )
+    assert np.all(np.array(times) == np.arange(pop.generation, dtype=np.float64)[::-1])
+
+    ## Test storing two model param object
+    ts = pop.dump_tables_to_tskit(model_params={"stage1": params, "stage2": params})
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    mp = wts.model_params
+    assert len(mp) == 2
+    for _, value in mp.items():
+        assert value == params
+
+
+def test_generation_property(simulation):
+    pop, _ = simulation
+    assert pop.generation > 0
+    ts = pop.dump_tables_to_tskit()
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
+    assert wts.generation == pop.generation
+
+
+def test_demes_graph_property(gutenkunst):
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    ts = pop.dump_tables_to_tskit(demes_graph=gutenkunst)
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert wts.demes_graph == gutenkunst
+    ts = pop.dump_tables_to_tskit()
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert wts.demes_graph is None
