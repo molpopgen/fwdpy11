@@ -124,6 +124,7 @@ def _dump_tables_to_tskit(
     demes_graph: typing.Optional[demes.Graph] = None,
     population_metadata: typing.Optional[typing.Dict[int, object]] = None,
     data: typing.Optional[object] = None,
+    seed: typing.Optional[int] = None,
     parameters: typing.Optional[typing.Dict] = None,
     destructive=False,
 ):
@@ -174,6 +175,11 @@ def _dump_tables_to_tskit(
 
     if data is not None:
         top_level_metadata["data"] = data
+
+    if seed is not None:
+        if seed < 0:
+            raise ValueError(f"seed must be >=0, got {seed}")
+        top_level_metadata["seed"] = seed
 
     tc.metadata = top_level_metadata
 
