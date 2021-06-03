@@ -174,3 +174,12 @@ def test_user_defined_data(pop):
 
     ts = pop.dump_tables_to_tskit(data=str(MyType(x=11)))
     assert eval(ts.metadata["data"]).x == 11
+
+
+@pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
+def test_seed(pop):
+    ts = pop.dump_tables_to_tskit(seed=333)
+    assert ts.metadata["seed"] == 333
+
+    with pytest.raises(ValueError):
+        _ = pop.dump_tables_to_tskit(seed=-333)

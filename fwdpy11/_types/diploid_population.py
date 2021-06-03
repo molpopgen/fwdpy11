@@ -184,6 +184,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         demes_graph: Optional[demes.Graph] = None,
         population_metadata: Optional[Dict[int, object]] = None,
         data: Optional[object] = None,
+        seed: Optional[int] = None,
         parameters: Optional[Dict] = None,
         destructive=False
     ):
@@ -202,6 +203,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         :param data: User-generated data to add to top-level metadata
         :type data: object
+
+        :param seed: Random number seed for top-level metadata.
+                     If not `None`, `seed` must be `>= 0`.
+        :type seed: int
 
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
@@ -249,6 +254,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             demes_graph=demes_graph,
             population_metadata=population_metadata,
             data=data,
+            seed=seed,
             parameters=parameters,
             destructive=destructive,
         )
