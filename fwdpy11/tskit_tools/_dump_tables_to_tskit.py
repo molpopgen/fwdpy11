@@ -123,6 +123,7 @@ def _dump_tables_to_tskit(
     ] = None,
     demes_graph: typing.Optional[demes.Graph] = None,
     population_metadata: typing.Optional[typing.Dict[int, object]] = None,
+    data: typing.Optional[object] = None,
     parameters: typing.Optional[typing.Dict] = None,
     destructive=False,
 ):
@@ -170,6 +171,9 @@ def _dump_tables_to_tskit(
 
     if demes_graph is not None:
         top_level_metadata["demes_graph"] = demes_graph.asdict()
+
+    if data is not None:
+        top_level_metadata["data"] = data
 
     tc.metadata = top_level_metadata
 

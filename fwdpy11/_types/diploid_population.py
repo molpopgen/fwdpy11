@@ -183,6 +183,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         model_params: Optional[Union[ModelParams, Dict[str, ModelParams]]] = None,
         demes_graph: Optional[demes.Graph] = None,
         population_metadata: Optional[Dict[int, object]] = None,
+        data: Optional[object] = None,
         parameters: Optional[Dict] = None,
         destructive=False
     ):
@@ -198,6 +199,9 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         :param population_metadata: A mapping from integer id of a deme/population to metadata
         :type population_metadata: dict
+
+        :param data: User-generated data to add to top-level metadata
+        :type data: object
 
         :param parameters: The simulation parameters for the provenance table.
         :type parameters: None or dict
@@ -235,7 +239,8 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         .. versionchanged:: 0.15.0
 
-            Added `model_params`, `demes_graph`, `population_metadata` keyword args.
+            Added `model_params`, `demes_graph`, `population_metadata`,
+            `data` keyword args.
 
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
@@ -243,6 +248,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             model_params=model_params,
             demes_graph=demes_graph,
             population_metadata=population_metadata,
+            data=data,
             parameters=parameters,
             destructive=destructive,
         )

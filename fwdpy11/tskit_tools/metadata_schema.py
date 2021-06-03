@@ -51,6 +51,10 @@ TopLevelMetadata = tskit.metadata.MetadataSchema(
                 "but it may be useful as it allows reconstruction of the YAML file"
                 "from the tree sequence.",
             },
+            "data": {
+                "type": ["object", "string"],
+                "description": "This field is reserved for the user to fill.",
+            },
         },
         "required": ["generation"],
     }
