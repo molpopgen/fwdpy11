@@ -67,6 +67,7 @@ class WrappedTreeSequence(object):
 
         If `decode_individual_metadata` is `True`, metadata will be stored in
         a :class:`list` of :class:`fwdpy11.tskit_tools.DiploidMetadata`.
+        If `False`, `None` will be yielded.
         """
         # Get rows of the node table where the nodes are in individuals
         nodes_in_individuals = np.where(self._ts.tables.nodes.individual != tskit.NULL)[

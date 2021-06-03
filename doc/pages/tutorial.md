@@ -95,7 +95,7 @@ We see that the deme labels are `0` and `1` and that each label
 was found 500 times.  (The first 500 individuals are in deme `0`,
 followed by 500 in deme `1`.)
 
-See {ref}`here <processing-metadata>` for more on individual metadata.
+See {ref}`here <tskit_metadata_vignette>` for more on individual metadata.
 
 (mutationregions)=
 
@@ -1134,7 +1134,7 @@ ts = pop.dump_tables_to_tskit()
 
 When you have the data stored as a {class}`tskit.TreeSequence`,
 information about individuals, mutations, etc., is stored as table metadata.
-See {ref}`here <processing-metadata>` to learn how to decode the metadata.
+See {ref}`here <tskit_metadata_vignette>` to learn how to decode the metadata.
 
 :::{note}
 

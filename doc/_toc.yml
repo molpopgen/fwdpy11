@@ -39,9 +39,10 @@
   - file: short_vignettes/demography_debugger_vignette
 
 # Restore once 656 is resolved
-- part: Short vignettes - exporting data to tskit
+- part: Longer vignettes - exporting data to tskit
   chapters:
-  - file: short_vignettes/tskitconvert_vignette
+  - file: long_vignettes/tskitconvert_vignette
+  - file: long_vignettes/tskit_metadata_vignette
 
 - part: Longer vignettes - complete examples
   chapters:

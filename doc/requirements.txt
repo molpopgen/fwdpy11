@@ -44,6 +44,7 @@ defusedxml==0.6.0
     # via nbconvert
 demes==0.1.1
     # via msprime
+git+git://github.com/grahamgower/demesdraw
 docutils==0.16
     # via
     #   jupyter-book

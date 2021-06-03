@@ -1,3 +1,5 @@
+(tskit_tools)=
+
 # Module `fwdpy11.tskit_tools`
 
 ```{eval-rst}
@@ -46,12 +48,23 @@
 
        This class has the following methods:
 
-       .. autofunction:: fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals
+       .. automethod:: fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals
 
-       .. autofunction:: fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata
+       .. automethod:: fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata
 
-       .. autofunction:: fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata
+       .. automethod:: fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata
 
 ```
 
+```{eval-rst}
+.. autofunction:: fwdpy11.tskit_tools.decode_individual_metadata
+```
+
+```{eval-rst}
+.. autoclass:: fwdpy11.tskit_tools.DiploidMetadata
+```
+
+```{eval-rst}
+.. autofunction:: fwdpy11.tskit_tools.decode_mutation_metadata
+```
 
