@@ -10,7 +10,6 @@ demes
 #and running tests
 # requirements for docs are in docs/requirements.txt
 msprime
---no-binary msprime
 tskit
 setuptools_scm==1.11.1
 pytest
