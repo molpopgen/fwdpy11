@@ -1,8 +1,5 @@
 jupyter-book
 matplotlib
-msprime
---no-binary msprime
-numpy==1.19.5 # Last version compatible w/Py 3.6
+msprime>=1.0.1
 pandas
 sphinx-issues
-tskit>=0.3.4
