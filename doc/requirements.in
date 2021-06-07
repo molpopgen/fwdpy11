@@ -3,3 +3,4 @@ matplotlib
 msprime>=1.0.1
 pandas
 sphinx-issues
+git+git://github.com/grahamgower/demesdraw
