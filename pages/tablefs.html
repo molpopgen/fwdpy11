@@ -233,13 +233,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Short vignettes - exporting data to tskit
+  Longer vignettes - exporting data to tskit
  </span>
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+  <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html">
+   Working with data in tskit format
   </a>
  </li>
 </ul>
@@ -656,7 +661,7 @@ The first and last values are for frequencies zero and <code class="docutils lit
 Singletons start in bin <code class="docutils literal notranslate"><span class="pre">1</span></code>, etc..</p></li>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from a single sample list is represented by a <a class="reference external" href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code></a>,
 object with the zero and fixed bins masked.</p></li>
-<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from more than one sample list is stored in a <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> sparse
+<li><p>An <code class="docutils literal notranslate"><span class="pre">fs</span></code> from more than one sample list is stored in a <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.12.0+25.g15f36a6.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> sparse
 matrix.</p></li>
 </ul>
 <p>For our examples, we will initialize a <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a> from
@@ -693,7 +698,7 @@ for neutral and non-neutral mutations.  See
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2923
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2909
 </pre></div>
 </div>
 </div>
@@ -718,7 +723,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(data=[--, 434, 208, 111, 94, 62, 61, 47, 46, 45, --],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(data=[--, 424, 199, 123, 91, 54, 77, 44, 57, 40, --],
              mask=[ True, False, False, False, False, False, False, False,
                    False, False,  True],
        fill_value=999999,
@@ -736,7 +741,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><table><tbody><tr><th style="text-align: left">Format</th><td style="text-align: left">coo</td></tr><tr><th style="text-align: left">Data Type</th><td style="text-align: left">int32</td></tr><tr><th style="text-align: left">Shape</th><td style="text-align: left">(11, 6)</td></tr><tr><th style="text-align: left">nnz</th><td style="text-align: left">54</td></tr><tr><th style="text-align: left">Density</th><td style="text-align: left">0.8181818181818182</td></tr><tr><th style="text-align: left">Read-only</th><td style="text-align: left">True</td></tr><tr><th style="text-align: left">Size</th><td style="text-align: left">1.1K</td></tr><tr><th style="text-align: left">Storage ratio</th><td style="text-align: left">4.1</td></tr></tbody></table></div></div>
+<div class="output text_html"><table><tbody><tr><th style="text-align: left">Format</th><td style="text-align: left">coo</td></tr><tr><th style="text-align: left">Data Type</th><td style="text-align: left">int32</td></tr><tr><th style="text-align: left">Shape</th><td style="text-align: left">(11, 6)</td></tr><tr><th style="text-align: left">nnz</th><td style="text-align: left">53</td></tr><tr><th style="text-align: left">Density</th><td style="text-align: left">0.803030303030303</td></tr><tr><th style="text-align: left">Read-only</th><td style="text-align: left">True</td></tr><tr><th style="text-align: left">Size</th><td style="text-align: left">1.0K</td></tr><tr><th style="text-align: left">Storage ratio</th><td style="text-align: left">4.0</td></tr></tbody></table></div></div>
 </div>
 <p>Obtain the full <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> for the joint <code class="docutils literal notranslate"><span class="pre">fs</span></code>:</p>
 <div class="cell docutils container">
@@ -746,17 +751,17 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[  0, 155,  26,   0,   0,   0],
-       [275, 117,  31,   8,   3,   0],
-       [104,  61,  30,  11,   2,   0],
-       [ 24,  33,  31,  16,   7,   0],
-       [ 20,  20,  36,  13,   3,   2],
-       [  1,  17,  22,  17,   4,   1],
-       [  1,   6,  22,  18,  10,   4],
-       [  0,   5,  12,  14,  13,   3],
-       [  0,   2,   7,  13,  10,  14],
-       [  0,   1,   3,   4,  26,  11],
-       [  0,   0,   1,   4,   6,  18]], dtype=int32)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[  0, 132,  19,   1,   0,   0],
+       [305,  85,  21,  12,   1,   0],
+       [ 71,  73,  25,  22,   8,   0],
+       [ 42,  35,  32,  13,   1,   0],
+       [ 18,  32,  15,  12,  10,   4],
+       [  5,  17,  11,  10,   8,   3],
+       [  2,  12,  19,  11,  26,   7],
+       [  0,   3,  11,  10,  11,   9],
+       [  0,   9,   9,  16,   7,  16],
+       [  0,   0,   7,  14,   7,  12],
+       [  0,   0,   0,   1,  11,  19]], dtype=int32)
 </pre></div>
 </div>
 </div>
@@ -774,7 +779,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([425, 417, 221, 118,  84,  53])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([443, 398, 169, 122,  90,  70])
 </pre></div>
 </div>
 </div>
@@ -783,7 +788,7 @@ First, let’s get the lists of nodes from the two demes in our population:</p>
 <p class="admonition-title">Note</p>
 <p>Be careful when processing sparse matrix objects!  Naive application of regular
 <a class="reference external" href="https://numpy.org/doc/stable/reference/index.html#module-numpy" title="(in NumPy v1.20)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">numpy</span></code></a> functions can lead to erroneous results.  Be sure to check the
-<a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.html#module-sparse" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sparse</span></code></a> documentation.</p>
+<a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.html#module-sparse" title="(in sparse v0.12.0+25.g15f36a6.dirty)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sparse</span></code></a> documentation.</p>
 </div>
 <p>The marginalization can be tedious for many samples, so you can have it happen automatically,
 in which case a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> is returned, keyed by sample list index:</p>
@@ -799,11 +804,11 @@ in which case a <a class="reference external" href="https://docs.python.org/3/li
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
-[-- 434 208 111 94 62 61 47 46 45 --]
-[181 434 208 111  94  62  61  47  46  45  29]
+[-- 424 199 123 91 54 77 44 57 40 --]
+[152 424 199 123  91  54  77  44  57  40  31]
 1
-[-- 417 221 118 84 --]
-[425 417 221 118  84  53]
+[-- 398 169 122 90 --]
+[443 398 169 122  90  70]
 </pre></div>
 </div>
 </div>
@@ -826,11 +831,11 @@ objects are instances of <a class="reference external" href="https://numpy.org/d
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
-[-- 417 221 118 84 --]
-[425 417 221 118  84  53]
+[-- 398 169 122 90 --]
+[443 398 169 122  90  70]
 1
-[-- 434 208 111 94 62 61 47 46 45 --]
-[181 434 208 111  94  62  61  47  46  45  29]
+[-- 424 199 123 91 54 77 44 57 40 --]
+[152 424 199 123  91  54  77  44  57  40  31]
 </pre></div>
 </div>
 </div>
@@ -844,7 +849,7 @@ the <code class="docutils literal notranslate"><span class="pre">fs</span></code
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(data=[--, 101, 32, 13, 12, 13, 9, 13, 9, 10, --],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(data=[--, 85, 38, 31, 20, 18, 14, 9, 8, 5, --],
              mask=[ True, False, False, False, False, False, False, False,
                    False, False,  True],
        fill_value=999999,
@@ -863,12 +868,12 @@ the <code class="docutils literal notranslate"><span class="pre">fs</span></code
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[masked_array(data=[--, 56, 23, 5, 9, 7, 8, 8, 4, 4, --],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[masked_array(data=[--, 43, 27, 20, 9, 5, 5, 5, 6, 4, --],
               mask=[ True, False, False, False, False, False, False, False,
                     False, False,  True],
         fill_value=999999,
              dtype=int32),
- masked_array(data=[--, 45, 9, 8, 3, 6, 1, 5, 5, 6, --],
+ masked_array(data=[--, 42, 11, 11, 11, 13, 9, 4, 2, 1, --],
               mask=[ True, False, False, False, False, False, False, False,
                     False, False,  True],
         fill_value=999999,
@@ -892,22 +897,22 @@ the <a class="reference external" href="https://docs.python.org/3/library/stdtyp
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{0: masked_array(data=[--, 56, 23, 5, 9, 7, 8, 8, 4, 4, --],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{0: masked_array(data=[--, 43, 27, 20, 9, 5, 5, 5, 6, 4, --],
                mask=[ True, False, False, False, False, False, False, False,
                      False, False,  True],
          fill_value=999999),
-  1: masked_array(data=[--, 27, 24, 19, 13, 12, 2, 4, 4, 5, 1, 7, 2, 4, 2, 4,
-                     1, 2, 2, 2, --],
+  1: masked_array(data=[--, 37, 28, 26, 9, 6, 6, 8, 9, 1, 6, 1, 5, 1, 1, 0, 3,
+                     6, 3, 2, --],
                mask=[ True, False, False, False, False, False, False, False,
                      False, False, False, False, False, False, False, False,
                      False, False, False, False,  True],
          fill_value=999999)},
- {0: masked_array(data=[--, 45, 9, 8, 3, 6, 1, 5, 5, 6, --],
+ {0: masked_array(data=[--, 42, 11, 11, 11, 13, 9, 4, 2, 1, --],
                mask=[ True, False, False, False, False, False, False, False,
                      False, False,  True],
          fill_value=999999),
-  1: masked_array(data=[--, 39, 29, 14, 3, 5, 11, 1, 5, 2, 2, 0, 1, 5, 1, 1, 1,
-                     1, 6, 2, --],
+  1: masked_array(data=[--, 24, 23, 9, 3, 7, 10, 5, 6, 3, 0, 3, 1, 1, 14, 1, 0,
+                     1, 2, 1, --],
                mask=[ True, False, False, False, False, False, False, False,
                      False, False, False, False, False, False, False, False,
                      False, False, False, False,  True],

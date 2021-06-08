@@ -3,6 +3,47 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.15.0
+
+This release is mostly about tskit.
+All changes and issues are collected under the `0.15.0` milestone on `GitHub`.
+
+Breaking changes:
+
+* Dropped support for Python 3.6.
+  Now, we support 3.7, 3.8, and 3.9.
+  {pr}`735`
+
+New documentation:
+
+* Rewrote {ref}`vignette <tskitconvert_vignette>` on exporting data to `tskit`.
+* Added {ref}`new vignette <tskit_metadata_vignette>` on working with data exported to `tskit`
+
+These docs were added in {pr}`745`.
+
+New features:
+
+* Added {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+  {pr}`743`
+  {pr}`747`
+* {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` may now return a `WrappedTreeSequence`.
+  {pr}`748`
+* Allow row/slice semantics for decoding `tskit` metadata.
+  {pr}`734`
+* Top-level metadata for `tskit` objects is now filled.
+  See {ref}`here <tskitconvert_vignette>` for details.
+* Custom deme names can now be added to `tskit` population tables.
+  {pr}`742`
+
+Fixes:
+
+* Tables are now indexed after calling {func}`fwdpy11.DiploidPopulation.load_from_file`.
+  {pr}`739`
+* Various fields of {class}`fwdpy11.tskit_tools.DiploidMetadata` are now populated as `bool` as documented.
+  {pr}`742`
+* Mutation metadata for `tskit` changed so that exported tree sequences are compatible with `msprime.sim_mutations`.
+  {pr}`731`.
+
 ## 0.14.1
 
 This is a point release adding more documentation:
@@ -201,7 +242,7 @@ Documentation changes:
 Interface changes:
 
 * When dumping tables to `tskit` via {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit`, we now use the latest metadata methods.
-  See {ref}`here <processing-metadata>`.
+  See {ref}`here <tskit_metadata_vignette>`.
   {pr}`588`
 * Most arguments to {func}`fwdpy11.evolvets` are now keyword-only.
   {pr}`584`

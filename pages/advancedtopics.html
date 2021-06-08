@@ -235,13 +235,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Short vignettes - exporting data to tskit
+  Longer vignettes - exporting data to tskit
  </span>
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+  <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html">
+   Working with data in tskit format
   </a>
  </li>
 </ul>
@@ -636,16 +641,6 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#decoding-metadata-from-tskit-treesequence">
-   Decoding metadata from
-   <code class="xref py py-class docutils literal notranslate">
-    <span class="pre">
-     tskit.TreeSequence
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#how-long-to-run-the-simulation">
    How long to run the simulation
   </a>
@@ -731,7 +726,7 @@
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id11">
+      <a class="reference internal nav-link" href="#id10">
        The data type
       </a>
      </li>
@@ -829,129 +824,8 @@ process, keep it simple!</p></li>
 <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="(in NumPy v1.20)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.seed()</span></code></a> using a user-provided seed.</p></li>
 </ul>
 </div>
-<div class="section" id="decoding-metadata-from-tskit-treesequence">
-<span id="processing-metadata"></span><h2>Decoding metadata from <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a><a class="headerlink" href="#decoding-metadata-from-tskit-treesequence" title="Permalink to this headline">¶</a></h2>
-<p>As of version 0.10.0, we make use of the metadata schema introduced in <code class="docutils literal notranslate"><span class="pre">tskit</span></code> 0.3.2.
-See <a class="reference external" href="https://tskit.readthedocs.io/en/latest/tutorial.html#working-with-metadata">here</a> for details.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tskit</span>
-
-<span class="n">first_individual</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">individuals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span>
-</pre></div>
-</div>
-<p>The data stored in <code class="docutils literal notranslate"><span class="pre">first_individual</span></code> will be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
-<p>In order to distinguish “alive” from “dead” individuals (<em>e.g.</em>, those
-preserved as ancient samples), we need to make use of flags found in
-<a class="reference internal" href="tskit_tools.html#module-fwdpy11.tskit_tools" title="fwdpy11.tskit_tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></a>. For example, to identify all currently alive
-individuals in the individual table:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11.tskit_tools</span>
-
-<span class="n">alive_individuals</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">individuals</span><span class="o">.</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">INDIVIDUAL_IS_ALIVE</span>
-</pre></div>
-</div>
-<p>To find the nodes corresponding to those individuals:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">alive_individual_nodes</span> <span class="o">=</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">individual</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span>
-    <span class="p">(</span>
-        <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">individuals</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">individual</span><span class="p">]</span>
-        <span class="o">&amp;</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">tskit_tools</span><span class="o">.</span><span class="n">INDIVIDUAL_IS_ALIVE</span>
-    <span class="p">)</span>
-    <span class="o">&gt;</span> <span class="mi">0</span>
-<span class="p">)</span>
-
-<span class="c1"># The time of these nodes should all be zero because we simulated</span>
-<span class="c1"># non-overlapping generations</span>
-<span class="n">alive_node_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-    <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">alive_individual_nodes</span><span class="p">)],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Provide nice functions to return nodes from various times,
-etc..
-</pre></div>
-</div>
-</div>
-<p>The mutation metadata follow the same general recipe:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">first_mutations</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span>
-</pre></div>
-</div>
-<p>The mutation’s data will be represented as a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
-<p id="howlongtorun"><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> provides the following functions and classes to decode and return all of the metadata.
-These functions are probably the most useful way to interact with the metadata.</p>
-<dl class="py function">
-<dt id="fwdpy11.tskit_tools.decode_individual_metadata">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_individual_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>individual metadata</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>List of <a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.DiploidMetadata</span></code></a></p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.12.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py class">
-<dt id="fwdpy11.tskit_tools.DiploidMetadata">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">DiploidMetadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sex</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alive</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_generation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geography</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.DiploidMetadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instances of this type are returned by
-<a class="reference internal" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a>.</p>
-<p>The following <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are used to construct instances of
-this type. Member attributes have the same names as these
-<code class="docutils literal notranslate"><span class="pre">kwargs`</span></code>:</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Genetic value</p></li>
-<li><p><strong>e</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – “Random/environmental” value</p></li>
-<li><p><strong>w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Fitness</p></li>
-<li><p><strong>sex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Sex</p></li>
-<li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Deme</p></li>
-<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Index in the population at time of living/sampling</p></li>
-<li><p><strong>alive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Individual is alive</p></li>
-<li><p><strong>preserved</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Individual is preserved</p></li>
-<li><p><strong>first_generation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Individual is first generation</p></li>
-<li><p><strong>parents</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – <code class="docutils literal notranslate"><span class="pre">label</span></code> of parents</p></li>
-<li><p><strong>geography</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – Location in 3d space</p></li>
-<li><p><strong>nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – Nodes on tree sequence</p></li>
-</ul>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.12.0.</span></p>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt id="fwdpy11.tskit_tools.decode_mutation_metadata">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_mutation_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">fwdpy11._fwdpy11.MutationVector</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Mutations</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="types.html#fwdpy11.MutationVector" title="fwdpy11.MutationVector"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MutationVector</span></code></a></p>
-</dd>
-</dl>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.12.0.</span></p>
-</div>
-</dd></dl>
-
-</div>
 <div class="section" id="how-long-to-run-the-simulation">
-<h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this headline">¶</a></h2>
+<span id="howlongtorun"></span><h2>How long to run the simulation<a class="headerlink" href="#how-long-to-run-the-simulation" title="Permalink to this headline">¶</a></h2>
 <p>Deciding how long to run a simulation depends on whether or not
 a “burn in” phase is required to get the model to statistical
 equilibrium.  For example, if you want to get the steady-state
@@ -974,8 +848,8 @@ For example, for a neutral model, the distribution of the
 number of mutations under an infinitely-many sites model
 for a small sample should match <code class="docutils literal notranslate"><span class="pre">msprime</span></code> very well.
 For a steady-state model of recurrent hitch-hiking
-<span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id21"><span>KHL89</span></a>]</span>, results from small samples
-should match coalescent simulations such as <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id18"><span>KS16</span></a>]</span>.
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21"><span>KHL89</span></a>]</span>, results from small samples
+should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18"><span>KS16</span></a>]</span>.
 Clearly, all of the different methods
 should match analytical results where possible.</p></li>
 <li><p>You probably want all of your trees to be fully coalesced
@@ -999,7 +873,7 @@ with a tree sequence from <code class="docutils literal notranslate"><span class
 </div>
 <div class="section" id="the-eyre-walker-model-of-complex-traits">
 <span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">¶</a></h2>
-<p><span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span> describes a model relating mutations with
+<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
 Here, <span class="math notranslate nohighlight">\(\epsilon\)</span> is a draw from a Gaussian distribution with mean zero,
@@ -1168,12 +1042,12 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span>, <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>), which should be cited
-alongside <span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>.</p></li>
-<li><p><span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span> and <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>) show that this model predicts heritability
+(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>), which should be cited
+alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>.</p></li>
+<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
-of that prediction is dubious.  <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id16"><span>JB05</span></a>]</span> discuss this point
+of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16"><span>JB05</span></a>]</span> discuss this point
 in some detail, and give other relevant references.</p></li>
 <li><p>Depending somewhat on the parameters of the <code class="docutils literal notranslate"><span class="pre">getz</span></code> function, one will eventually
 generate an intermediate-frequency variant with a massive <span class="math notranslate nohighlight">\(z\)</span>,
@@ -1607,8 +1481,8 @@ and standard deviation <code class="docutils literal notranslate"><span class="p
 </pre></div>
 </div>
 <p>See <a class="reference internal" href="gslrandom.html#fwdpy11.gsl_ran_gaussian_ziggurat" title="fwdpy11.gsl_ran_gaussian_ziggurat"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.gsl_ran_gaussian_ziggurat()</span></code></a> for details on that function.</p>
-<div class="section" id="id11">
-<h4>The data type<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id10">
+<h4>The data type<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
 <dl class="py class">
 <dt id="fwdpy11.DiploidGeneticValueNoiseData">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
@@ -1821,40 +1695,54 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 <dl class="py class">
 <dt id="fwdpy11.PyDiploidGeneticValueData">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
-<dd><p>.. versionadded:: 0.9.0</p>
+<dd></dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.9.0.</span></p>
+</div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a :class:<code class="docutils literal notranslate"><span class="pre">memoryview</span></code>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
-<p>.. py:attribute:: rng</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The simulation&#39;s random number generation, an
-instance of :class:`fwdpy11.GSLrng`
-</pre></div>
-</div>
-<p>.. py:attribute:: pop</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The population, an instance of :class:`fwdpy11.DiploidPopulation`
-</pre></div>
-</div>
-<p>.. py:attribute:: offspring_metadata</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The offspring&#39;s :class:`fwdpy11.DiploidMetadata`
-</pre></div>
-</div>
-<p>.. py:attribute:: parent1_metadata</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The first parent&#39;s :class:`fwdpy11.DiploidMetadata`
-</pre></div>
-</div>
-<p>.. py:attribute:: parent2_metadata</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The second parent&#39;s :class:`fwdpy11.DiploidMetadata`
-</pre></div>
-</div>
-<p>.. py:attribute:: offspring_metadata_index</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A 64 bit integer that gives the location (index) of
-``offspring_metadata`` in :attr:`fwdpy11.DiploidPopulation.diploid_metadata`.
+<dl class="py attribute">
+<dt id="rng">
+<code class="sig-name descname"><span class="pre">rng</span></code><a class="headerlink" href="#rng" title="Permalink to this definition">¶</a></dt>
+<dd><p>The simulation’s random number generation, an
+instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="pop">
+<code class="sig-name descname"><span class="pre">pop</span></code><a class="headerlink" href="#pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>The population, an instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="offspring_metadata">
+<code class="sig-name descname"><span class="pre">offspring_metadata</span></code><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The offspring’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="parent1_metadata">
+<code class="sig-name descname"><span class="pre">parent1_metadata</span></code><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The first parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="parent2_metadata">
+<code class="sig-name descname"><span class="pre">parent2_metadata</span></code><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>The second parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="offspring_metadata_index">
+<code class="sig-name descname"><span class="pre">offspring_metadata_index</span></code><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 64 bit integer that gives the location (index) of
+<code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
-which can cause a mismatch between :attr:`fwdpy11.DiploidMetadata.label`
-and this value.
-</pre></div>
-</div>
+which can cause a mismatch between <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.label" title="fwdpy11.DiploidMetadata.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.label</span></code></a>
+and this value.</p>
 </dd></dl>
 
 </div>

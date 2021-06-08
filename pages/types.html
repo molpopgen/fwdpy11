@@ -235,13 +235,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Short vignettes - exporting data to tskit
+  Longer vignettes - exporting data to tskit
  </span>
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/tskitconvert_vignette.html">
+  <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../long_vignettes/tskit_metadata_vignette.html">
+   Working with data in tskit format
   </a>
  </li>
 </ul>
@@ -820,20 +825,28 @@ If False, numpy arrays are returned</p>
 
 <dl class="py method">
 <dt id="fwdpy11.DiploidPopulation.dump_tables_to_tskit">
-<code class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._types.model_params.ModelParams</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">fwdpy11._types.model_params.ModelParams</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demes_graph</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">demes.demes.Graph</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">tskit.trees.TreeSequence</span><span class="p"><span class="pre">,</span> </span><span class="pre">fwdpy11.tskit_tools.trees.WrappedTreeSequence</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dump the population’s TableCollection into
 an tskit TreeSequence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>model_params</strong> (<a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – Model parameters to be stored as top-level metadata</p></li>
+<li><p><strong>demes_graph</strong> (<a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/api.html#demes.Graph" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">demes.Graph</span></code></a>) – A demographic model specified via <cite>demes</cite>.</p></li>
+<li><p><strong>population_metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – A mapping from integer id of a deme/population to metadata</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><em>object</em></a>) – User-generated data to add to top-level metadata</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Random number seed for top-level metadata.
+If not <cite>None</cite>, <cite>seed</cite> must be <cite>&gt;= 0</cite>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – The simulation parameters for the provenance table.</p></li>
 <li><p><strong>destructive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>True</cite>, delete data held by the current instance.</p></li>
+<li><p><strong>wrapped</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If <cite>True</cite>, return <a class="reference internal" href="tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.WrappedTreeSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.WrappedTreeSequence</span></code></a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)">tskit.TreeSequence</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)">tskit.TreeSequence</a> or <a class="reference internal" href="tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.WrappedTreeSequence">fwdpy11.tskit_tools.WrappedTreeSequence</a></p>
 </dd>
 </dl>
+<p>For examples, see <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html#tskitconvert-vignette"><span class="std std-ref">Converting data to tskit format</span></a>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If <cite>destructive</cite> is <cite>True</cite>, further opertations on the
@@ -854,6 +867,10 @@ Origin time of mutations is part of the metadata.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.14.0: </span>Added <cite>destructive</cite> option.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.15.0: </span>Added <cite>model_params</cite>, <cite>demes_graph</cite>, <cite>population_metadata</cite>,
+<cite>data</cite> keyword args.</p>
 </div>
 </dd></dl>
 
@@ -1257,9 +1274,9 @@ returned, indexed in the same order as the input windows.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> does <em>not</em> change <cite>dtype</cite> to <cite>float</cite> as a result of
+<p><a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.12.0+25.g15f36a6.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> does <em>not</em> change <cite>dtype</cite> to <cite>float</cite> as a result of
 division by a scalar!  Thus, operations like getting the average frequency spectrum
-from a model require a call to <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.astype.html#sparse.COO.astype" title="(in sparse v0.12.0+8.g75125cd.dirty)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sparse.COO.astype()</span></code></a> prior to any multiplication
+from a model require a call to <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.astype.html#sparse.COO.astype" title="(in sparse v0.12.0+25.g15f36a6.dirty)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sparse.COO.astype()</span></code></a> prior to any multiplication
 and/or division.</p>
 </div>
 <div class="versionadded">

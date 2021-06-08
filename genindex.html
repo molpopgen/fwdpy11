@@ -231,13 +231,18 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Short vignettes - exporting data to tskit
+  Longer vignettes - exporting data to tskit
  </span>
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="short_vignettes/tskitconvert_vignette.html">
+  <a class="reference internal" href="long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="long_vignettes/tskit_metadata_vignette.html">
+   Working with data in tskit format
   </a>
  </li>
 </ul>
@@ -799,21 +804,33 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.data">data (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
+</li>
       <li><a href="pages/functions.html#fwdpy11.data_matrix_from_tables">data_matrix_from_tables() (in module fwdpy11)</a>
 </li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix">DataMatrix (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DataMatrixIterator">DataMatrixIterator (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/advancedtopics.html#fwdpy11.tskit_tools.decode_individual_metadata">decode_individual_metadata() (in module fwdpy11.tskit_tools)</a>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata">decode_individual_metadata() (fwdpy11.tskit_tools.WrappedTreeSequence method)</a>
+
+      <ul>
+        <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.decode_individual_metadata">(in module fwdpy11.tskit_tools)</a>
 </li>
-      <li><a href="pages/advancedtopics.html#fwdpy11.tskit_tools.decode_mutation_metadata">decode_mutation_metadata() (in module fwdpy11.tskit_tools)</a>
+      </ul></li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata">decode_mutation_metadata() (fwdpy11.tskit_tools.WrappedTreeSequence method)</a>
+
+      <ul>
+        <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.decode_mutation_metadata">(in module fwdpy11.tskit_tools)</a>
 </li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.Node.deme">deme (fwdpy11.Node attribute)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata.deme">deme() (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.deme_sizes">deme_sizes() (fwdpy11.DiploidPopulation method)</a>
+</li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph">demes_graph (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
       <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.DemographicModelCitation">DemographicModelCitation (class in fwdpy11.demographic_models)</a>
 </li>
@@ -821,12 +838,12 @@
 </li>
       <li><a href="pages/demographic_models.html#fwdpy11.DemographyDebugger">DemographyDebugger (class in fwdpy11)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.MutationRecord.derived_state">derived_state (fwdpy11.MutationRecord attribute)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata">diploid_metadata() (fwdpy11.DiploidPopulation property)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue">DiploidGeneticValue (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidGenotype">DiploidGenotype (class in fwdpy11)</a>
@@ -834,7 +851,7 @@
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata">DiploidMetadata (class in fwdpy11)</a>
 
       <ul>
-        <li><a href="pages/advancedtopics.html#fwdpy11.tskit_tools.DiploidMetadata">(class in fwdpy11.tskit_tools)</a>
+        <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.DiploidMetadata">(class in fwdpy11.tskit_tools)</a>
 </li>
       </ul></li>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadataVector">DiploidMetadataVector (class in fwdpy11)</a>
@@ -1066,7 +1083,11 @@
       <li><a href="pages/genetic_values.html#fwdpy11.GBR">GBR (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.generation">generation (fwdpy11.DiploidPopulation attribute)</a>
+
+      <ul>
+        <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.generation">(fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
+      </ul></li>
       <li><a href="pages/definitions.html#term-genetic-value"><strong>genetic value</strong></a>
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.genetic_values">genetic_values() (fwdpy11.Additive property)</a>
@@ -1165,13 +1186,15 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.Edge.left">left (fwdpy11.Edge attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.left">left() (fwdpy11.TreeIterator property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.left_child">left_child() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.left_sib">left_sib() (fwdpy11.TreeIterator method)</a>
+</li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.load">load() (in module fwdpy11.tskit_tools)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.load_from_file">load_from_file() (fwdpy11.DiploidPopulation class method)</a>
 </li>
@@ -1222,6 +1245,8 @@
       <li><a href="pages/functions.html#fwdpy11.migration_matrix_single_extant_deme">migration_matrix_single_extant_deme() (in module fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.MigrationMatrix">MigrationMatrix (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.model_params">model_params (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
       <li><a href="pages/model_params.html#fwdpy11.ModelParams">ModelParams (class in fwdpy11)</a>
 </li>
@@ -1330,6 +1355,12 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/advancedtopics.html#offspring_metadata">offspring_metadata</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/advancedtopics.html#offspring_metadata_index">offspring_metadata_index</a>
+</li>
       <li><a href="pages/gvalue_to_fitness.html#fwdpy11.Optimum">Optimum (class in fwdpy11)</a>
 </li>
   </ul></td>
@@ -1342,6 +1373,10 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.parent">parent() (fwdpy11.TreeIterator method)</a>
 </li>
+      <li><a href="pages/advancedtopics.html#parent1_metadata">parent1_metadata</a>
+</li>
+      <li><a href="pages/advancedtopics.html#parent2_metadata">parent2_metadata</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata.parents">parents() (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.pickle_to_file">pickle_to_file() (fwdpy11.DiploidPopulation method)</a>
@@ -1353,6 +1388,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/regiontypes.html#fwdpy11.PoissonPoint">PoissonPoint (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/advancedtopics.html#pop">pop</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.Mutation.pos">pos (fwdpy11.Mutation attribute)</a>
 </li>
@@ -1392,6 +1429,8 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_sib">right_sib() (fwdpy11.TreeIterator method)</a>
 </li>
+      <li><a href="pages/advancedtopics.html#rng">rng</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.roots">roots() (fwdpy11.TreeIterator property)</a>
 </li>
   </ul></td>
@@ -1415,6 +1454,8 @@
       <li><a href="pages/types.html#fwdpy11.TreeIterator.samples_below">samples_below() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidGenotype.second">second (fwdpy11.DiploidGenotype attribute)</a>
+</li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.seed">seed (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected">selected (fwdpy11.DataMatrixIterator attribute)</a>
 </li>
@@ -1504,6 +1545,8 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.Node.time">time (fwdpy11.Node attribute)</a>
 </li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals">timepoints_with_individuals() (fwdpy11.tskit_tools.WrappedTreeSequence method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.total_time">total_time() (fwdpy11.TreeIterator method)</a>
@@ -1511,6 +1554,8 @@
       <li><a href="pages/definitions.html#term-trait-value"><strong>trait value</strong></a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator">TreeIterator (class in fwdpy11)</a>
+</li>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.ts">ts (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
       <li><a href="pages/demographic_models.html#fwdpy11.demographic_models.IM.two_deme_IM">two_deme_IM() (in module fwdpy11.demographic_models.IM)</a>
 </li>
@@ -1551,6 +1596,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.DiploidMetadata.w">w() (fwdpy11.DiploidMetadata property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence">WrappedTreeSequence (class in fwdpy11.tskit_tools)</a>
 </li>
   </ul></td>
 </tr></table>
