@@ -10,7 +10,7 @@ argon2-cffi==20.1.0
     # via notebook
 async-generator==1.10
     # via nbclient
-attrs>=20.3.0
+attrs==20.3.0
     # via
     #   demes
     #   jsonschema
@@ -42,9 +42,12 @@ decorator==4.4.2
     # via ipython
 defusedxml==0.6.0
     # via nbconvert
-demes==0.1.1
-    # via msprime
+demes==0.1.2
+    # via
+    #   demesdraw
+    #   msprime
 git+git://github.com/grahamgower/demesdraw
+    # via -r requirements.in
 docutils==0.16
     # via
     #   jupyter-book
@@ -136,7 +139,9 @@ markdown-it-py==0.6.2
 markupsafe==1.1.1
     # via jinja2
 matplotlib==3.3.4
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   demesdraw
 mdit-py-plugins==0.2.5
     # via
     #   markdown-it-py
@@ -183,9 +188,11 @@ notebook==6.2.0
     #   widgetsnbextension
 numpy==1.20.3
     # via
+    #   demesdraw
     #   matplotlib
     #   msprime
     #   pandas
+    #   scipy
     #   tskit
 packaging==20.9
     # via
@@ -262,6 +269,8 @@ ruamel.yaml.clib==0.2.2
     # via ruamel.yaml
 ruamel.yaml==0.17.7
     # via demes
+scipy==1.6.3
+    # via demesdraw
 send2trash==1.5.0
     # via notebook
 six==1.15.0

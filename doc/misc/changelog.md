@@ -3,6 +3,15 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+Dependencies:
+
+* `demes` bumped to `>=0.1.2` in requirements files.
+  This change is for `demesdraw` and the manual.
+  It is still `>= 0.1.1` in setup.cfg.
+  {pr}`761`
+
 ## 0.15.0
 
 This release is mostly about tskit.
