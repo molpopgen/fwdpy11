@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
+import json
 import typing
 
 import numpy as np
@@ -47,7 +48,7 @@ class WrappedTreeSequence(object):
     def __init__(self, ts: tskit.TreeSequence):
         found = False
         for row in ts.provenances():
-            record = eval(row.record)
+            record = json.loads(row.record)
             if "software" in record:
                 if record["software"]["name"] == "fwdpy11":
                     found = True
