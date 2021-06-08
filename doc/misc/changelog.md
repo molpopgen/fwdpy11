@@ -5,6 +5,11 @@ updates to latest `fwdpp` version, etc.
 
 ## Next release
 
+Bug fixes
+
+* Fix error in decoding provenance rows when initializing {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+  {pr}`760`
+
 Dependencies:
 
 * `demes` bumped to `>=0.1.2` in requirements files.

@@ -18,6 +18,7 @@
 #
 
 import fwdpy11
+import msprime
 import numpy as np
 import pytest
 
@@ -101,3 +102,13 @@ def test_demes_graph_property(gutenkunst):
     ts = pop.dump_tables_to_tskit()
     wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.demes_graph is None
+
+
+def test_with_msprime_provenance_added():
+    initial_ts = msprime.sim_ancestry(samples=200, population_size=100, random_seed=1)
+    pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+    ts = pop.dump_tables_to_tskit()
+    ts = msprime.sim_mutations(ts, rate=1e-5, random_seed=1)
+    assert ts.tables.provenances.num_rows == 2
+    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    assert wts.ts.tables.provenances.num_rows == 2
