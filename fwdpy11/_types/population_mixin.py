@@ -50,6 +50,10 @@ class PopulationMixin(object):
         return self._generation  # type: ignore
 
     @property
+    def _is_simulating(self) -> bool:
+        return self.is_simulating  # type: ignore
+
+    @property
     def genetic_values(self) -> np.ndarray:
         """
         Return the genetic values as a readonly 2d numpy.ndarray.

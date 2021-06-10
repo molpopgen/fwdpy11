@@ -58,6 +58,7 @@ namespace fwdpy11
 
         fwdpp::uint_t N;
         fwdpp::uint_t generation;
+        bool is_simulating;
 
         std::shared_ptr<fwdpp::ts::std_table_collection> tables;
         std::vector<fwdpp::ts::table_index_t> alive_nodes, preserved_sample_nodes;
@@ -69,7 +70,7 @@ namespace fwdpy11
         std::vector<double> genetic_value_matrix, ancient_sample_genetic_value_matrix;
 
         Population(fwdpp::uint_t N_, const double L)
-            : fwdpp_base{N_}, N{N_}, generation{0},
+            : fwdpp_base{N_}, N{N_}, generation{0}, is_simulating{false},
               tables(init_tables(N_, L)), alive_nodes{}, preserved_sample_nodes{},
               genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {
