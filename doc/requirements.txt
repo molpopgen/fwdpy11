@@ -208,7 +208,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.1.1
+pillow==8.2.0
     # via matplotlib
 prometheus-client==0.9.0
     # via notebook
