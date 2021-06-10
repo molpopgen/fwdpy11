@@ -10,6 +10,11 @@ C++ back-end
 * A population can now be checked that it is- or is not- being simulated.
   {pr}`762`
 
+Dependencies
+
+* Bump `pillow` version in doc/requirements.txt.
+  {pr}`763`
+
 ## 0.15.1
 
 Point release
