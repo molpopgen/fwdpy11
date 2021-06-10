@@ -40,6 +40,7 @@ class Recorder(object):
         self.data = []
 
     def __call__(self, pop, recorder):
+        assert pop._is_simulating is True
         if len(self.timepoints) > 0:
             if self.timepoints[0] == pop.generation:
                 s = np.random.choice(pop.N, self.samplesize, replace=False)
@@ -561,7 +562,9 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
         self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
         self.stimes = [i for i in range(1, 101)]
         self.recorder = Recorder(42, 10, self.stimes)
+        assert self.pop._is_simulating is False
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100, self.recorder)
+        assert self.pop._is_simulating is False
         assert (
             max(self.pop.mcounts) == 2 * self.pop.N
         ), "Nothing fixed, so test case is not helpful"

@@ -60,6 +60,7 @@ init_PopulationBase(py::module& m)
     py::class_<fwdpy11::Population>(m, "PopulationBase")
         .def_readonly("_N", &fwdpy11::Population::N)
         .def_readonly("_generation", &fwdpy11::Population::generation)
+        .def_readonly("_is_simulating", &fwdpy11::Population::is_simulating)
         .def_readonly("_mutations", &fwdpy11::Population::mutations)
         .def_property_readonly("_mutations_ndarray",
                                [](const fwdpy11::Population& self) {
