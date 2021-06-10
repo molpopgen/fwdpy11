@@ -75,6 +75,7 @@ from ._types import (
     DiploidPopulation,
     TreeIterator,
     VariantIterator,
+    NewMutationData,
 )  # NOQA
 from ._types.demography_debugger import DemographyDebugger  # NOQA
 from ._types.model_params import ModelParams, MutationAndRecombinationRates  # NOQA
