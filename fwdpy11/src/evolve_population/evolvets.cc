@@ -51,16 +51,16 @@ simplification(
     bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
     SimplificationState &simplifier_state,
-    fwdpp::ts::simplify_tables_output & simplification_output,
+    fwdpp::ts::simplify_tables_output &simplification_output,
     fwdpp::ts::edge_buffer &new_edge_buffer,
     std::vector<fwdpp::ts::table_index_t> &alive_at_last_simplification,
     fwdpy11::DiploidPopulation &pop)
 {
-    fwdpy11::simplify_tables(
-        pop, pop.mcounts_from_preserved_nodes, alive_at_last_simplification, *pop.tables,
-        simplifier_state, simplification_output,
-        new_edge_buffer, preserve_selected_fixations,
-        simulating_neutral_variants, suppress_edge_table_indexing);
+    fwdpy11::simplify_tables(pop, pop.mcounts_from_preserved_nodes,
+                             alive_at_last_simplification, *pop.tables, simplifier_state,
+                             simplification_output, new_edge_buffer,
+                             preserve_selected_fixations, simulating_neutral_variants,
+                             suppress_edge_table_indexing);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
         {
             throw std::runtime_error("evolvets: count vector size mismatch after "
@@ -140,6 +140,7 @@ final_population_cleanup(
             throw std::runtime_error("mutation container size does not equal mutation "
                                      "count container size(s)");
         }
+    pop.is_simulating = false;
 }
 
 void
@@ -375,6 +376,7 @@ evolve_with_tree_sequences(
 
     clear_edge_table_indexes(*pop.tables);
     fwdpp::ts::simplify_tables_output simplification_output;
+    pop.is_simulating = true;
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
@@ -422,13 +424,13 @@ evolve_with_tree_sequences(
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
             if (current_demographic_state->will_go_globally_extinct() == true)
                 {
-                    simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, *simplifier_state,
-                        simplification_output, *new_edge_buffer,
-                        alive_at_last_simplification, pop);
+                    simplification(preserve_selected_fixations,
+                                   simulating_neutral_variants,
+                                   suppress_edge_table_indexing,
+                                   reset_treeseqs_to_alive_nodes_after_simplification,
+                                   post_simplification_recorder, *simplifier_state,
+                                   simplification_output, *new_edge_buffer,
+                                   alive_at_last_simplification, pop);
                     simplifier_state.reset(nullptr);
                     new_edge_buffer.reset(nullptr);
                     final_population_cleanup(
@@ -444,13 +446,13 @@ evolve_with_tree_sequences(
 
             if (gen % simplification_interval == 0.0)
                 {
-                    simplification(
-                        preserve_selected_fixations, simulating_neutral_variants,
-                        suppress_edge_table_indexing,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        post_simplification_recorder, *simplifier_state,
-                        simplification_output,
-                        *new_edge_buffer, alive_at_last_simplification, pop);
+                    simplification(preserve_selected_fixations,
+                                   simulating_neutral_variants,
+                                   suppress_edge_table_indexing,
+                                   reset_treeseqs_to_alive_nodes_after_simplification,
+                                   post_simplification_recorder, *simplifier_state,
+                                   simplification_output, *new_edge_buffer,
+                                   alive_at_last_simplification, pop);
                     simplified = true;
                 }
             else
@@ -504,14 +506,17 @@ evolve_with_tree_sequences(
                                         }
                                 }
                             simplification_output.preserved_mutations.erase(
-                                std::remove(begin(simplification_output.preserved_mutations),
-                                            end(simplification_output.preserved_mutations),
-                                            std::numeric_limits<std::size_t>::max()),
+                                std::remove(
+                                    begin(simplification_output.preserved_mutations),
+                                    end(simplification_output.preserved_mutations),
+                                    std::numeric_limits<std::size_t>::max()),
                                 end(simplification_output.preserved_mutations));
                             if (simulating_neutral_variants)
                                 {
                                     genetics.mutation_recycling_bin
-                                        = fwdpp::ts::make_mut_queue(simplification_output.preserved_mutations, pop.mutations.size());
+                                        = fwdpp::ts::make_mut_queue(
+                                            simplification_output.preserved_mutations,
+                                            pop.mutations.size());
                                 }
                             else
                                 {
@@ -524,7 +529,8 @@ evolve_with_tree_sequences(
                     else
                         {
                             genetics.mutation_recycling_bin = fwdpp::ts::make_mut_queue(
-                                simplification_output.preserved_mutations, pop.mutations.size());
+                                simplification_output.preserved_mutations,
+                                pop.mutations.size());
                         }
                 }
 
@@ -587,14 +593,12 @@ evolve_with_tree_sequences(
 
     if (!simplified)
         {
-            simplification(
-                preserve_selected_fixations, simulating_neutral_variants,
-                suppress_edge_table_indexing,
-                reset_treeseqs_to_alive_nodes_after_simplification,
-                post_simplification_recorder, *simplifier_state,
-                simplification_output,
-                *new_edge_buffer,
-                alive_at_last_simplification, pop);
+            simplification(preserve_selected_fixations, simulating_neutral_variants,
+                           suppress_edge_table_indexing,
+                           reset_treeseqs_to_alive_nodes_after_simplification,
+                           post_simplification_recorder, *simplifier_state,
+                           simplification_output, *new_edge_buffer,
+                           alive_at_last_simplification, pop);
             if (!preserve_selected_fixations)
                 {
                     fwdpp::ts::remove_fixations_from_haploid_genomes(

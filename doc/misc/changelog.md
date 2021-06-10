@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+C++ back-end
+
+* A population can now be checked that it is- or is not- being simulated.
+  {pr}`762`
+
 ## 0.15.2
 
 Point release
