@@ -17,7 +17,7 @@ namespace
     generate_neutral_variants(fwdpp::flagged_mutation_queue& recycling_bin,
                               fwdpy11::Population& pop, const fwdpy11::GSLrng_t& rng,
                               const double left, const double right,
-                              const std::int32_t generation)
+                              const fwdpy11::mutation_origin_time generation)
     {
         const auto uniform
             = [left, right, &rng]() { return gsl_ran_flat(rng.get(), left, right); };
@@ -52,11 +52,12 @@ init_infinite_sites(py::module& m)
                           {
                               return generate_neutral_variants(
                                   recycling_bin, pop, rng, left, right,
-                                  static_cast<std::int32_t>(std::ceil(origin_time)));
+                                  static_cast<fwdpy11::mutation_origin_time>(
+                                      std::ceil(origin_time)));
                           }
                       return generate_neutral_variants(
                           recycling_bin, pop, rng, left, right,
-                          std::numeric_limits<std::int32_t>::min());
+                          std::numeric_limits<fwdpy11::mutation_origin_time>::min());
                   };
             pop.fill_alive_nodes();
             pop.fill_preserved_nodes();

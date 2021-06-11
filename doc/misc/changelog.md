@@ -5,6 +5,13 @@ updates to latest `fwdpp` version, etc.
 
 ## Next release
 
+Bug fixes
+
+* An integer type in the infinitely-many sites mutation model was changed from unsigned to signed.
+  This does not affect previous results because unsigned overflow doing the "right thing" ended up with final values being correct.
+  {pr}`766`
+  {issue}`765`
+
 C++ back-end
 
 * A population can now be checked that it is- or is not- being simulated.
@@ -140,7 +147,8 @@ API changes
   {pr}`678`
 * The type of {attr}`fwdpy11.Mutation.g` changed from an unsigned integer to a signed integer.
   This change has no practical consequence to user code written in Python.
-  {pr}`656`
+  {issue}`656`
+  {pr}`667`
   {pr}`670`
 
 New features
