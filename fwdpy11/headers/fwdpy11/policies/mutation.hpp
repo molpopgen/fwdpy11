@@ -33,7 +33,8 @@ namespace fwdpy11
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
                       Population::mutation_container &mutations,
                       Population::lookup_table_t &lookup, const bool treat_as_neutral,
-                      const fwdpp::uint_t &generation, const position_function &posmaker,
+                      const mutation_origin_time &generation,
+                      const position_function &posmaker,
                       const effect_size_function &esize_maker,
                       const dominance_function &hmaker,
                       const decltype(Mutation::xtra) x = 0)
@@ -75,9 +76,9 @@ namespace fwdpy11
             }
         auto esize = esize_maker();
         auto dominance = hmaker(esize);
-        auto idx = fwdpp::recycle_mutation_helper(recycling_bin, mutations,
-                                                  treat_as_neutral, pos, esize,
-                                                  dominance, generation, x);
+        auto idx
+            = fwdpp::recycle_mutation_helper(recycling_bin, mutations, treat_as_neutral,
+                                             pos, esize, dominance, generation, x);
         lookup.emplace(pos, idx);
         return idx;
     }
@@ -89,7 +90,8 @@ namespace fwdpy11
     infsites_Mutation(fwdpp::flagged_mutation_queue &recycling_bin,
                       Population::mutation_container &mutations,
                       Population::lookup_table_t &lookup, const bool treat_as_neutral,
-                      const fwdpp::uint_t &generation, const position_function &posmaker,
+                      const mutation_origin_time &generation,
+                      const position_function &posmaker,
                       const fixed_effect_size_function &fixed_esize_maker,
                       const fixed_dominance_function &fixed_hmaker,
                       const effect_sizes_function &esizes,
