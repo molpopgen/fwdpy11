@@ -15,7 +15,11 @@ Bug fixes
 New features
 
 * Add {func}`fwdpy11.DiploidPopulation.add_mutation`.
+  {pr}`764`
 * Add {class}`fwdpy11.NewMutationData`.
+  {pr}`764`
+* Add `__copy__` and `__deepcopy__` to {class}`fwdpy11.DiploidPopulation`.
+  {pr}`770`
 
 C++ back-end
 
