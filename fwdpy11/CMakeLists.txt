@@ -101,6 +101,10 @@ set (ARRAY_PROXY_SOURCES src/array_proxies/init.cc)
 set (MUTATION_DOMINANCE_SOURCES src/mutation_dominance/init.cc
      src/mutation_dominance/MutationDominance.cc)
 
+set (FUNCTION_SOURCES src/functions/init.cc
+     src/functions/add_mutation.cc
+     src/functions/_add_mutation.cc)
+
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
     ${REGION_SOURCES}
@@ -112,7 +116,8 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${EVOLVE_POPULATION_SOURCES}
     ${DISCRETE_DEMOGRAPHY_SOURCES}
     ${ARRAY_PROXY_SOURCES}
-    ${MUTATION_DOMINANCE_SOURCES})
+    ${MUTATION_DOMINANCE_SOURCES}
+    ${FUNCTION_SOURCES})
 
 set(LTO_OPTIONS)
 if(ENABLE_PROFILING OR DISABLE_LTO)

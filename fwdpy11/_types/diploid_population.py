@@ -9,6 +9,7 @@ from fwdpy11.tskit_tools import WrappedTreeSequence
 
 from .._fwdpy11 import DiploidGenotype, DiploidMetadata, ll_DiploidPopulation
 from .model_params import ModelParams
+from .new_mutation_data import NewMutationData
 from .population_mixin import PopulationMixin
 from .table_collection import TableCollection
 
@@ -321,3 +322,84 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             md.flags.writeable = False
             nodes.flags.writeable = False
             yield self.generation, nodes, md
+
+    def add_mutation(
+        self,
+        rng: fwdpy11.GSLrng,
+        *,
+        window: Tuple[float, float] = None,
+        ndescendants: int = 1,
+        deme: Optional[int] = None,
+        data: NewMutationData = None,
+    ) -> Optional[int]:
+        """
+        Add a new mutation to the population.
+
+        .. versionadded:: 0.16.0
+
+        :param rng: Random number generator
+        :type rng: fwdpy11.GSLrng
+
+        The following arguments are keyword-only:
+
+        :param window: A window [left, right) within which to place the mutation.
+                       The default is `None`, meaning the window is the entire
+                       genome.
+        :type window: tuple[float, float]
+        :param ndescendants: The number of alive nodes carrying the new mutation.
+                             Default is `1`, implying that a singleton mutation
+                             will be generated.
+        :type ndescendants: int
+        :param deme: The deme in which to place the new mutation
+                     The default is `None`, meaning that alive node demes are
+                     not considered.
+        :type deme: int
+        :type data: The details of the new mutation
+        :type data: fwdpy11.NewMutationData
+
+        :returns: The key of the new mutation.
+                  (The index of the variant in :attr:`DiploidPopulation.mutations`.)
+
+        Implementation details:
+
+        * A set of nodes are found within `window` that are ancestral to
+          exactly `ndescendants` alive nodes.
+        * From this list of candidate nodes, one is chosen randomly
+          to be the node where we place the new mutation.
+        * This node's time is the origin time of the new mutation.
+        * If `deme` is None, any set of `ndescendants` will be considered.
+        * If `deme` is :math:`\geq 0`, all `ndescendants` alive nodes must be
+          from that deme.
+        * If the `deme`/`ndescendants` requirements cannot be satisified,
+          the function returns `None`.
+        * The genetic values of individuals are not updated by this function.
+          Such updates will happen when the population begins evolution
+          forwards in time.
+
+        Exceptions:
+
+        :raises ValueError: for bad input.
+        :raises RuntimeError: if this function is applied during a simulation
+        :raises RuntimeError: if internal checks fail.
+        """
+        if window is None:
+            _window = (0.0, self.tables.genome_length)
+        else:
+            _window = window
+
+        if deme is None:
+            _deme = -1
+        else:
+            _deme = deme
+
+        if ndescendants is None:
+            raise ValueError(f"ndescendants must be > 0: got {ndescendants}")
+
+        from fwdpy11._fwdpy11 import _add_mutation
+
+        key = _add_mutation(
+            rng, _window[0], _window[1], ndescendants, _deme, data, self
+        )
+        if key == np.iinfo(np.uint64).max:
+            return None
+        return key
