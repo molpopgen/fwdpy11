@@ -42,6 +42,14 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
 
         self._pytables = TableCollection(self._tables)
 
+    def __copy__(self):
+        ll_pop = super(DiploidPopulation, self).__copy__()
+        return self.__class__(0, 0.0, ll_pop=ll_pop)
+
+    def __deepcopy__(self, memo):
+        ll_pop = super(DiploidPopulation, self).__deepcopy__(memo)
+        return self.__class__(0, 0.0, ll_pop=ll_pop)
+
     @classmethod
     def create_from_tskit(cls, ts: tskit.TreeSequence):
         """

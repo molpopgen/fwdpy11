@@ -66,6 +66,17 @@ init_DiploidPopulation(py::module& m)
         .def("clear", &fwdpy11::DiploidPopulation::clear, "Clears all population data.")
         .def("__eq__", [](const fwdpy11::DiploidPopulation& lhs,
                           const fwdpy11::DiploidPopulation& rhs) { return lhs == rhs; })
+        .def("__copy__",
+             [](const fwdpy11::DiploidPopulation& self) {
+                 return fwdpy11::DiploidPopulation(self);
+             })
+        .def("__deepcopy__",
+             [](const fwdpy11::DiploidPopulation& self, py::dict) {
+                 auto rv = fwdpy11::DiploidPopulation(self);
+                 rv.tables
+                     = std::make_shared<fwdpp::ts::std_table_collection>(*self.tables);
+                 return rv;
+             })
         .def_readonly("_diploids", &fwdpy11::DiploidPopulation::diploids)
         .def_readwrite("_diploid_metadata",
                        &fwdpy11::DiploidPopulation::diploid_metadata)
@@ -76,9 +87,7 @@ init_DiploidPopulation(py::module& m)
                  swap_with_empty(self.haploid_genomes);
              })
         .def("_clear_mutations",
-             [](fwdpy11::DiploidPopulation& self) {
-                 swap_with_empty(self.mutations);
-             })
+             [](fwdpy11::DiploidPopulation& self) { swap_with_empty(self.mutations); })
         .def("_clear_diploid_metadata",
              [](fwdpy11::DiploidPopulation& self) {
                  swap_with_empty(self.diploid_metadata);
