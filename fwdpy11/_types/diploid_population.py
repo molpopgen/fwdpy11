@@ -26,6 +26,16 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
     sizes N1 and N2 and genome length L:
 
     fwdpy11.DiploidPopulation([N1, N2], L)
+
+    .. versionchanged:: 0.16.0
+
+        Added __copy__ and __deepcopy__.
+        In general, the correct way to copy
+        instances if this class is via :func:`copy.deepcopy`.
+        Calling :func:`copy.copy` will copy some of the underlying
+        C++ objects, but the two objects will share the same
+        table collection.  This situation of sharing is almost certainly
+        not what one wants.
     """
 
     def __init__(
