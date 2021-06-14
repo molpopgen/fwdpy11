@@ -26,6 +26,16 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
     sizes N1 and N2 and genome length L:
 
     fwdpy11.DiploidPopulation([N1, N2], L)
+
+    .. versionchanged:: 0.16.0
+
+        Added __copy__ and __deepcopy__.
+        In general, the correct way to copy
+        instances if this class is via :func:`copy.deepcopy`.
+        Calling :func:`copy.copy` will copy some of the underlying
+        C++ objects, but the two objects will share the same
+        table collection.  This situation of sharing is almost certainly
+        not what one wants.
     """
 
     def __init__(
@@ -41,6 +51,14 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             super(DiploidPopulation, self).__init__(ll_pop)
 
         self._pytables = TableCollection(self._tables)
+
+    def __copy__(self):
+        ll_pop = super(DiploidPopulation, self).__copy__()
+        return self.__class__(0, 0.0, ll_pop=ll_pop)
+
+    def __deepcopy__(self, memo):
+        ll_pop = super(DiploidPopulation, self).__deepcopy__(memo)
+        return self.__class__(0, 0.0, ll_pop=ll_pop)
 
     @classmethod
     def create_from_tskit(cls, ts: tskit.TreeSequence):
