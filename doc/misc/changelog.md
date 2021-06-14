@@ -12,6 +12,11 @@ Bug fixes
   {pr}`766`
   {issue}`765`
 
+New features
+
+* Add {func}`fwdpy11.DiploidPopulation.add_mutation`.
+* Add {class}`fwdpy11.NewMutationData`.
+
 C++ back-end
 
 * A population can now be checked that it is- or is not- being simulated.

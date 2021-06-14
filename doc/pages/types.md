@@ -325,6 +325,9 @@ print(fwdpy11.NOGROWTH)
 
     .. autoattribute:: __init__
 
+.. autoclass:: fwdpy11.NewMutationData
+   :members:
+
 ```
 
 

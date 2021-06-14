@@ -93,3 +93,23 @@ migrations:
 - {demes: [CEU, CHB], rate: 9.6e-5}
 """
     return demes.loads(yaml)
+
+
+@pytest.fixture
+def small_split_model():
+    yaml = """
+description: Two deme model.
+time_units: generations
+demes:
+- name: ancestral
+  description: ancestral deme
+  epochs:
+  - {start_size: 100}
+- name: deme1
+  description: child deme
+  start_time: 100
+  epochs:
+  - {start_size: 100}
+  ancestors: [ancestral]
+"""
+    return demes.loads(yaml)

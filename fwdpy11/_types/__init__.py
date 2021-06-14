@@ -27,3 +27,4 @@ from .data_matrix import DataMatrix  # NOQA
 from .data_matrix_iterator import DataMatrixIterator  # NOQA
 from .diploid_population import DiploidPopulation  # NOQA
 from .model_params import ModelParams  # NOQA
+from .new_mutation_data import NewMutationData  # NOQA
