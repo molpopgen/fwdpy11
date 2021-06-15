@@ -43,24 +43,24 @@ namespace fwdpy11
     {
         using mass_migration_range = fwdpp::strong_types::named_type<
             std::pair<std::vector<MassMigration>::const_iterator,
-                      const std::vector<MassMigration>::const_iterator>,
+                      std::vector<MassMigration>::const_iterator>,
             detail::mass_migration_range_t>;
         using deme_size_change_range = fwdpp::strong_types::named_type<
             std::pair<std::vector<SetDemeSize>::const_iterator,
-                      const std::vector<SetDemeSize>::const_iterator>,
+                      std::vector<SetDemeSize>::const_iterator>,
             detail::deme_size_change_range_t>;
         using growth_rate_change_range = fwdpp::strong_types::named_type<
             std::pair<std::vector<SetExponentialGrowth>::const_iterator,
-                      const std::vector<SetExponentialGrowth>::const_iterator>,
+                      std::vector<SetExponentialGrowth>::const_iterator>,
             detail::growth_rate_change_range_t>;
         using selfing_rate_change_range = fwdpp::strong_types::named_type<
             std::pair<std::vector<SetSelfingRate>::const_iterator,
-                      const std::vector<SetSelfingRate>::const_iterator>,
+                      std::vector<SetSelfingRate>::const_iterator>,
             detail::selfing_rate_change_range_t>;
 
         using migration_rate_change_range = fwdpp::strong_types::named_type<
             std::pair<std::vector<SetMigrationRates>::const_iterator,
-                      const std::vector<SetMigrationRates>::const_iterator>,
+                      std::vector<SetMigrationRates>::const_iterator>,
             detail::migration_rate_change_range_t>;
 
         class demographic_model_state
@@ -110,7 +110,7 @@ namespace fwdpy11
             std::uint32_t next_global_N;
 
           public:
-            const std::int32_t maxdemes;
+            std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
             deme_properties sizes_rates;
             std::unique_ptr<MigrationMatrix> M;
@@ -142,6 +142,54 @@ namespace fwdpy11
                 next_global_N
                     = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
                                       end(sizes_rates.next_deme_sizes.get()), 0u);
+            }
+
+            demographic_model_state(const demographic_model_state& other)
+                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
+                  fitnesses{maxdemes}, sizes_rates{other.sizes_rates},
+                  M{other.M == nullptr ? nullptr : new MigrationMatrix(*other.M)},
+                  miglookup(maxdemes, M == nullptr)
+            {
+            }
+
+            demographic_model_state(demographic_model_state&& other)
+                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
+                  fitnesses{std::move(other.fitnesses)},
+                  sizes_rates{std::move(other.sizes_rates)}, M{std::exchange(other.M,
+                                                                             nullptr)},
+                  miglookup(maxdemes, M == nullptr)
+            {
+            }
+
+            demographic_model_state&
+            operator=(const demographic_model_state& other)
+            {
+                next_global_N = other.next_global_N;
+                maxdemes = other.maxdemes;
+                fitnesses = multideme_fitness_lookups<std::uint32_t>{maxdemes};
+                if (other.M == nullptr)
+                    {
+                        M = nullptr;
+                    }
+                else
+                    {
+                        M = std::make_unique<MigrationMatrix>(*other.M);
+                    }
+                auto lookup = migration_lookup(maxdemes, M == nullptr);
+                miglookup.lookups.swap(lookup.lookups);
+                miglookup.null_migmatrix = lookup.null_migmatrix;
+                return *this;
+            }
+
+            demographic_model_state&
+            operator=(demographic_model_state&& other)
+            {
+                next_global_N = other.next_global_N;
+                maxdemes = other.maxdemes;
+                fitnesses = std::move(other.fitnesses);
+                M.swap(other.M);
+                std::swap(miglookup, other.miglookup);
+                return *this;
             }
 
             void
@@ -341,7 +389,7 @@ namespace fwdpy11
 
             template <typename T>
             std::pair<typename std::vector<T>::const_iterator,
-                      const typename std::vector<T>::const_iterator>
+                      typename std::vector<T>::const_iterator>
             set_range(const std::vector<T>& v)
             {
                 return {v.cbegin(), v.cend()};
@@ -489,6 +537,96 @@ namespace fwdpy11
             {
                 check_if_no_migration();
                 validate_change_migration_events();
+            }
+
+            DiscreteDemography(const DiscreteDemography& other)
+                : model_state{other.model_state == nullptr
+                                  ? nullptr
+                                  : new demographic_model_state{*other.model_state}},
+                  mass_migrations(other.mass_migrations),
+                  set_growth_rates(other.set_growth_rates),
+                  set_deme_sizes(other.set_deme_sizes),
+                  set_selfing_rates(other.set_selfing_rates),
+                  migmatrix{other.migmatrix == nullptr
+                                ? nullptr
+                                : new MigrationMatrix(*other.migmatrix)},
+                  set_migration_rates(other.set_migration_rates),
+                  mass_migration_tracker(set_range(mass_migrations)),
+                  deme_size_change_tracker(set_range(set_deme_sizes)),
+                  growth_rate_change_tracker(set_range(set_growth_rates)),
+                  selfing_rate_change_tracker(set_range(set_selfing_rates)),
+                  migration_rate_change_tracker(set_range(set_migration_rates)),
+                  maxdemes_from_demographic_events{
+                      other.maxdemes_from_demographic_events}
+            {
+            }
+
+            DiscreteDemography(DiscreteDemography&& other)
+                : model_state{std::exchange(other.model_state, nullptr)},
+                  mass_migrations(std::exchange(other.mass_migrations, {})),
+                  set_growth_rates(std::exchange(other.set_growth_rates, {})),
+                  set_deme_sizes(std::exchange(other.set_deme_sizes, {})),
+                  set_selfing_rates(other.set_selfing_rates), migmatrix{std::exchange(
+                                                                  other.migmatrix,
+                                                                  nullptr)},
+                  set_migration_rates(std::exchange(other.set_migration_rates, {})),
+                  mass_migration_tracker(other.mass_migration_tracker),
+                  deme_size_change_tracker(other.deme_size_change_tracker),
+                  growth_rate_change_tracker(other.growth_rate_change_tracker),
+                  selfing_rate_change_tracker(other.selfing_rate_change_tracker),
+                  migration_rate_change_tracker(other.migration_rate_change_tracker),
+                  maxdemes_from_demographic_events{
+                      other.maxdemes_from_demographic_events}
+            {
+            }
+
+            DiscreteDemography&
+            operator=(const DiscreteDemography& other)
+            {
+                if (other.migmatrix == nullptr)
+                    {
+                        migmatrix = nullptr;
+                    }
+                else
+                    {
+                        migmatrix = std::make_unique<MigrationMatrix>(*other.migmatrix);
+                    }
+                mass_migrations = other.mass_migrations;
+                set_growth_rates = other.set_growth_rates;
+                set_deme_sizes = other.set_deme_sizes;
+                set_selfing_rates = other.set_selfing_rates;
+
+                mass_migration_tracker.get() = set_range(mass_migrations);
+                deme_size_change_tracker.get() = set_range(set_deme_sizes);
+                growth_rate_change_tracker.get() = set_range(set_growth_rates);
+                selfing_rate_change_tracker.get() = set_range(set_selfing_rates);
+                migration_rate_change_tracker.get() = set_range(set_migration_rates);
+
+                maxdemes_from_demographic_events
+                    = other.maxdemes_from_demographic_events;
+
+                return *this;
+            }
+
+            DiscreteDemography&
+            operator=(DiscreteDemography&& other)
+            {
+                migmatrix = std::exchange(other.migmatrix, nullptr);
+                mass_migrations.swap(other.mass_migrations);
+                set_growth_rates.swap(other.set_growth_rates);
+                set_deme_sizes.swap(other.set_deme_sizes);
+                set_selfing_rates.swap(other.set_selfing_rates);
+
+                mass_migration_tracker.get() = set_range(mass_migrations);
+                deme_size_change_tracker.get() = set_range(set_deme_sizes);
+                growth_rate_change_tracker.get() = set_range(set_growth_rates);
+                selfing_rate_change_tracker.get() = set_range(set_selfing_rates);
+                migration_rate_change_tracker.get() = set_range(set_migration_rates);
+
+                maxdemes_from_demographic_events
+                    = other.maxdemes_from_demographic_events;
+
+                return *this;
             }
 
             void
