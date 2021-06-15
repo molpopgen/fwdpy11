@@ -103,14 +103,18 @@ namespace fwdpy11
             }
         };
 
+        /// model_needs_update added in 0.16.0
+        /// in relation to GitHub issue 775
         template <typename METADATATYPE>
         inline demographic_model_state_pointer
         initialize_model_state(std::uint32_t generation,
                                const std::vector<METADATATYPE>& metadata,
-                               DiscreteDemography& demography)
+                               DiscreteDemography& demography, bool* model_needs_update)
         {
             // "steal" pointer from input
             auto rv = demography.get_model_state();
+
+            *model_needs_update = (rv == nullptr);
 
             if (rv == nullptr || generation == 0)
                 // If there is no state, then we need to make
@@ -121,6 +125,7 @@ namespace fwdpy11
                 {
                     demography.update_event_times(generation);
                     rv.reset(new demographic_model_state(metadata, demography));
+                    *model_needs_update = true;
                 }
             return rv;
         }

@@ -1,8 +1,10 @@
-import demes
-import numpy as np
 import unittest
-import pytest
+from dataclasses import dataclass
+
+import demes
 import fwdpy11
+import numpy as np
+import pytest
 
 
 def check_valid_demography(cls):
@@ -521,3 +523,135 @@ class TestPulseMigration(unittest.TestCase):
         self.assertTrue(
             np.all(self.demog.model.set_migration_rates[1].migrates == [0, 1])
         )
+
+
+def test_split_model_population_size_history(two_deme_split_with_ancestral_size_change):
+    """
+    This is a detailed test of the complete size history
+    of a model that we run all the way through.
+    """
+    model = fwdpy11.discrete_demography.from_demes(
+        two_deme_split_with_ancestral_size_change, burnin=1
+    )
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    # The ancestral deme exists until generation 110,
+    # and we only see offspring from birth time 1 on.
+    assert [i.when for i in recorder.sizes[0]] == [i for i in range(1, 111)]
+    # The daughter demes are seen from 110 till the end
+    for deme in [1, 2]:
+        assert [i.when for i in recorder.sizes[deme]] == [
+            i for i in range(110, model.metadata["total_simulation_length"] + 1)
+        ]
+    # initial daughter deme sizes
+    assert recorder.sizes[1][0].size == 250
+    assert recorder.sizes[2][0].size == 50
+    # final daughter deme sizes
+    assert recorder.sizes[1][-1].size == 500
+    assert recorder.sizes[2][-1].size == 200
+
+    # At generation 100, the ancestral pop size changed from 100
+    # to 200
+    for i in recorder.sizes[0]:
+        if i.when < 100:
+            assert i.size == 100, f"{i}"
+        else:
+            assert i.size == 200, f"{i}"
+
+
+@pytest.mark.parametrize("when", [i for i in range(75, 120)])
+def test_evolve_population_in_two_stages(
+    when, two_deme_split_with_ancestral_size_change
+):
+    model = fwdpy11.discrete_demography.from_demes(
+        two_deme_split_with_ancestral_size_change, burnin=1
+    )
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": when,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    fwdpy11.evolvets(rng, pop, params, 100)
+
+    pdict["simlen"] = model.metadata["total_simulation_length"] - when
+    params = fwdpy11.ModelParams(**pdict)
+
+    fwdpy11.evolvets(rng, pop, params, 100, check_demographic_event_timings=False)
+
+    counts = np.unique(np.array(pop.diploid_metadata)["deme"], return_counts=True)
+    assert counts[1][0] == 500
+    assert counts[1][1] == 200
+
+
+# NOTE: update this test to have burnin=0 once GittHub issue 776
+# is fixed
+# NOTE: models like this are important to applications where
+# the ancestor is simulated with msprime, and the split part
+# happens in fwdpy11
+@pytest.mark.parametrize("burnin", [1])
+def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
+    burnin,
+    start_demes_model_with_two_pops,
+):
+    model = fwdpy11.discrete_demography.from_demes(
+        start_demes_model_with_two_pops, burnin=burnin
+    )
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    print(model.metadata["initial_sizes"])
+    initial_sizes = [i for i in model.metadata["initial_sizes"].values()]
+    pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
+    for key, value in pop.deme_sizes(as_dict=True).items():
+        if key == 0:
+            assert value == 100
+        elif key == 1:
+            assert value == 75
+        else:
+            raise RuntimeError("unexpected key")
+    rng = fwdpy11.GSLrng(101)
+    fwdpy11.evolvets(rng, pop, params, 100)
+    for key, value in pop.deme_sizes(as_dict=True).items():
+        if key == 0:
+            assert value == 200
+        elif key == 1:
+            assert value == 300
+        else:
+            raise RuntimeError("unexpected key")

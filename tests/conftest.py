@@ -113,3 +113,53 @@ demes:
   ancestors: [ancestral]
 """
     return demes.loads(yaml)
+
+
+@pytest.fixture
+def two_deme_split_with_ancestral_size_change():
+    yaml = """
+description: Two deme model with migration and size changes.
+time_units: generations
+demes:
+- name: ancestral
+  description: ancestral deme, two epochs
+  epochs:
+  - {end_time: 20, start_size: 100}
+  - {end_time: 10, start_size: 200}
+- name: deme1
+  description: child 1
+  epochs:
+  - {start_size: 250, end_size: 500, end_time: 0}
+  ancestors: [ancestral]
+- name: deme2
+  description: child 2
+  epochs:
+  - {start_size: 50, end_size: 200, end_time: 0}
+  ancestors: [ancestral]
+migrations:
+- {demes: [deme1, deme2], rate: 1e-3}
+"""
+    return demes.loads(yaml)
+
+
+@pytest.fixture
+def start_demes_model_with_two_pops():
+    yaml = """
+description: after slicing original graph at time 50 (below slice)
+time_units: generations
+demes:
+- name: deme1
+  epochs:
+  - {start_size: 100, end_time: 50}
+  - {start_size: 100, end_size: 200, end_time: 0}
+- name: deme2
+  epochs:
+  - {start_size: 75, end_time: 50}
+  - {start_size: 75, end_time: 20}
+  - {start_size: 300, end_time: 0}
+migrations:
+- demes: [deme1, deme2]
+  rate: 1e-2
+  start_time: 50
+"""
+    return demes.loads(yaml)
