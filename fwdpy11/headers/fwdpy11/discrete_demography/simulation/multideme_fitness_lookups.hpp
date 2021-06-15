@@ -46,15 +46,46 @@ namespace fwdpy11
             {
             }
 
+            multideme_fitness_lookups(const multideme_fitness_lookups& other)
+                : starts(other.starts), stops(other.stops), offsets(other.offsets),
+                  fitnesses(other.fitnesses), individuals(other.individuals),
+                  lookups(copy_lookups(other))
+            {
+            }
+
+            std::vector<fwdpp::gsl_ran_discrete_t_ptr>
+            copy_lookups(const multideme_fitness_lookups& other)
+            {
+                std::vector<fwdpp::gsl_ran_discrete_t_ptr> rv;
+                rv.resize(other.lookups.size());
+                for (std::size_t i = 0; i < other.starts.size(); ++i)
+                    {
+                        if (other.stops[i] - other.starts[i] > 0)
+                            {
+                                // NOTE: the size of the i-th deme's
+                                // fitness array is starts[i]-stops[i]
+                                rv[i].reset(gsl_ran_discrete_preproc(
+                                    other.stops[i] - other.starts[i],
+                                    other.fitnesses.data() + starts[i]));
+                            }
+                        else
+                            {
+                                rv[i].reset(nullptr);
+                            }
+                    }
+
+                return rv;
+            }
+
             template <typename METADATATYPE>
             void
             update(const current_deme_sizes_vector& deme_sizes,
                    const std::vector<METADATATYPE>& metadata)
             {
                 auto& deme_sizes_ref = deme_sizes.get();
-                fitnesses.resize(std::accumulate(begin(deme_sizes_ref),
-                                                 end(deme_sizes_ref), 0),
-                                 -1.0);
+                fitnesses.resize(
+                    std::accumulate(begin(deme_sizes_ref), end(deme_sizes_ref), 0),
+                    -1.0);
                 individuals.resize(fitnesses.size(),
                                    std::numeric_limits<std::uint32_t>::max());
                 std::fill(begin(fitnesses), end(fitnesses),
@@ -77,8 +108,7 @@ namespace fwdpy11
                                 // NOTE: the size of the i-th deme's
                                 // fitness array is starts[i]-stops[i]
                                 lookups[i].reset(gsl_ran_discrete_preproc(
-                                    stops[i] - starts[i],
-                                    fitnesses.data() + starts[i]));
+                                    stops[i] - starts[i], fitnesses.data() + starts[i]));
                             }
                         else
                             {
@@ -88,8 +118,7 @@ namespace fwdpy11
             }
 
             T
-            get_parent(const GSLrng_t& rng,
-                       const current_deme_sizes_vector& deme_sizes,
+            get_parent(const GSLrng_t& rng, const current_deme_sizes_vector& deme_sizes,
                        const std::int32_t deme) const
             {
                 if (deme_sizes.get()[deme] == 0)

@@ -20,17 +20,14 @@
 import typing
 
 import attr
+import demes
 import numpy as np
 
 import fwdpy11
-import demes
 
-from .class_decorators import (
-    attr_add_asblack,
-    attr_class_pickle_with_super,
-    attr_class_to_from_dict,
-    attr_class_to_from_dict_no_recurse,
-)
+from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
+                               attr_class_to_from_dict,
+                               attr_class_to_from_dict_no_recurse)
 
 
 @attr_add_asblack
@@ -507,6 +504,12 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
             "set_selfing_rates",
             "set_migration_rates",
         ]
+
+    def __deepcopy__(self, memo):
+        rv = self.__class__(**self.asdict())
+        self._clone_state_to(rv)
+        self._liftover_range_states(rv)
+        return rv
 
     def __getstate__(self):
         return (self.asdict(), self._state_asdict())
