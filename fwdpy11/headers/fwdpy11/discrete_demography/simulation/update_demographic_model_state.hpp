@@ -22,7 +22,7 @@
 #include <memory>
 #include <sstream>
 #include <fwdpy11/rng.hpp>
-#include "demographic_model_state.hpp"
+#include "../DiscreteDemography.hpp"
 #include "functions.hpp"
 
 namespace fwdpy11

@@ -33,6 +33,9 @@
 #include "SetSelfingRate.hpp"
 #include "SetMigrationRates.hpp"
 #include "simulation/detail.hpp"
+#include "simulation/multideme_fitness_lookups.hpp"
+#include "simulation/deme_properties.hpp"
+#include "simulation/migration_lookup.hpp"
 
 namespace fwdpy11
 {
@@ -60,14 +63,172 @@ namespace fwdpy11
                       const std::vector<SetMigrationRates>::const_iterator>,
             detail::migration_rate_change_range_t>;
 
-        class demographic_model_state;
+        class demographic_model_state
+        /// Added in 0.6.0 to hold and manage
+        /// the relevant data structures.
+        {
+          private:
+            std::unique_ptr<MigrationMatrix>
+            init_migmatrix(const std::unique_ptr<const MigrationMatrix>& Minput)
+            {
+                if (Minput == nullptr)
+                    {
+                        return nullptr;
+                    }
+                return std::unique_ptr<MigrationMatrix>(new MigrationMatrix(*Minput));
+            }
 
-        using demographic_model_state_pointer
-            = std::unique_ptr<demographic_model_state>;
+            template <typename METADATATYPE>
+            std::int32_t
+            update_max_demes(const std::vector<METADATATYPE>& metadata,
+                             const std::unique_ptr<const MigrationMatrix>& migmatrix,
+                             std::int32_t maxdemes_from_demography)
+            {
+                std::int32_t max_from_metadata = -1;
+                for (auto& md : metadata)
+                    {
+                        max_from_metadata = std::max(md.deme, max_from_metadata);
+                    }
+                auto temp = std::max(max_from_metadata + 1, maxdemes_from_demography);
+                if (migmatrix == nullptr)
+                    {
+                        return temp;
+                    }
+                if (static_cast<std::size_t>(temp) > migmatrix->npops)
+                    {
+                        throw std::invalid_argument(
+                            "MigrationMatrix contains too few demes");
+                    }
+                if (static_cast<std::size_t>(temp) < migmatrix->npops)
+                    {
+                        throw std::invalid_argument(
+                            "MigrationMatrix contains too many demes");
+                    }
+                return std::max(temp, static_cast<std::int32_t>(migmatrix->npops));
+            }
+
+            std::uint32_t next_global_N;
+
+          public:
+            const std::int32_t maxdemes;
+            multideme_fitness_lookups<std::uint32_t> fitnesses;
+            deme_properties sizes_rates;
+            std::unique_ptr<MigrationMatrix> M;
+            migration_lookup miglookup;
+
+            // NOTE: demography.update_event_times() needs to have been
+            // called first!
+            template <typename METADATATYPE>
+            demographic_model_state(
+                const std::vector<METADATATYPE>& metadata,
+                const std::unique_ptr<const MigrationMatrix>& migmatrix,
+                std::int32_t maxdemes_from_demography)
+                : next_global_N(0), maxdemes(update_max_demes(metadata, migmatrix,
+                                                              maxdemes_from_demography)),
+                  fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
+                  M(init_migmatrix(migmatrix)), miglookup(maxdemes, M == nullptr)
+            {
+            }
+
+            // This constructor is only used when resetting
+            // the state from an event like pickling a DiscreteDemography
+            // instance.
+            demographic_model_state(std::int32_t maxdemes_, deme_properties sizes_rates_,
+                                    std::unique_ptr<MigrationMatrix> M_)
+                : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
+                  sizes_rates(std::move(sizes_rates_)), M(std::move(M_)),
+                  miglookup(maxdemes, M == nullptr)
+            {
+                next_global_N
+                    = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
+                                      end(sizes_rates.next_deme_sizes.get()), 0u);
+            }
+
+            void
+            set_next_global_N(std::uint32_t N)
+            {
+                next_global_N = N;
+            }
+
+            std::uint32_t
+            ttlN_next() const
+            {
+                return next_global_N;
+            }
+
+            bool
+            will_go_globally_extinct() const
+            {
+                return ttlN_next() == 0;
+            }
+        };
+
+        using demographic_model_state_pointer = std::unique_ptr<demographic_model_state>;
 
         class DiscreteDemography
         {
           private:
+            class get_max_number_of_demes
+            {
+              private:
+                template <typename T>
+                std::int32_t
+                update_maxdeme_from_demography(std::int32_t m, const T& t)
+                {
+                    for (auto&& i : t)
+                        {
+                            m = std::max(m, i.deme);
+                        }
+                    return m;
+                }
+
+              public:
+                template <
+                    typename mass_migration_vector, typename set_growth_rates_vector,
+                    typename set_deme_sizes_vector, typename set_selfing_rates_vector,
+                    typename set_migration_rates_vector>
+                std::int32_t
+                operator()(const std::unique_ptr<const MigrationMatrix>& migmatrix,
+                           const mass_migration_vector& mass_migrations,
+                           const set_growth_rates_vector& set_growth_rates,
+                           const set_deme_sizes_vector& set_deme_sizes,
+                           const set_selfing_rates_vector& set_selfing_rates,
+                           const set_migration_rates_vector& set_migration_rates)
+                // TODO: has to update to deal with size of migration matrix.
+                // TODO: check if deme IDs are contiguous for a simulation
+                {
+                    std::int32_t maxdeme_from_demography = -1;
+
+                    for (auto&& i : mass_migrations)
+                        {
+                            maxdeme_from_demography
+                                = std::max(maxdeme_from_demography, i.source);
+                            maxdeme_from_demography
+                                = std::max(maxdeme_from_demography, i.destination);
+                        }
+                    maxdeme_from_demography = update_maxdeme_from_demography(
+                        maxdeme_from_demography, set_growth_rates);
+                    maxdeme_from_demography = update_maxdeme_from_demography(
+                        maxdeme_from_demography, set_deme_sizes);
+                    maxdeme_from_demography = update_maxdeme_from_demography(
+                        maxdeme_from_demography, set_selfing_rates);
+                    maxdeme_from_demography = update_maxdeme_from_demography(
+                        maxdeme_from_demography, set_migration_rates);
+                    auto temp = maxdeme_from_demography + 1;
+                    if (migmatrix == nullptr)
+                        {
+                            // There is no migration, so we are done
+                            return temp;
+                        }
+                    if (static_cast<std::size_t>(temp) > migmatrix->npops)
+                        {
+                            throw std::invalid_argument(
+                                "MigrationMatrix contains too few demes");
+                        }
+                    return temp;
+                }
+            };
+
             template <typename T>
             void
             sort_events(std::vector<T>& v) noexcept
@@ -105,12 +266,10 @@ namespace fwdpy11
             {
                 for (std::size_t i = 1; i < v.size(); ++i)
                     {
-                        if (v[i].when == v[i - 1].when
-                            && v[i].deme == v[i - 1].deme)
+                        if (v[i].when == v[i - 1].when && v[i].deme == v[i - 1].deme)
                             {
                                 std::ostringstream o;
-                                o << "DiscreteDemography: multiple "
-                                  << event_name(v[i])
+                                o << "DiscreteDemography: multiple " << event_name(v[i])
                                   << " events the same deme in the same "
                                      "generation";
                                 throw std::invalid_argument(o.str());
@@ -125,11 +284,9 @@ namespace fwdpy11
             {
                 for (std::size_t i = 1; i < v.size(); ++i)
                     {
-                        if (v[i].when == v[i - 1].when
-                            && v[i].source == v[i - 1].source
+                        if (v[i].when == v[i - 1].when && v[i].source == v[i - 1].source
                             && v[i].destination == v[i - 1].destination
-                            && v[i].move_individuals
-                                   == v[i - 1].move_individuals)
+                            && v[i].move_individuals == v[i - 1].move_individuals)
                             {
                                 throw std::invalid_argument(
                                     "DiscreteDemography: multiple "
@@ -147,8 +304,7 @@ namespace fwdpy11
                                 auto j = i + 1;
                                 double sum = i->fraction;
                                 for (; j < end(v) && j->source == i->source
-                                       && i->when == j->when
-                                       && j->move_individuals;
+                                       && i->when == j->when && j->move_individuals;
                                      ++j)
                                     {
                                         if (i->source == j->source)
@@ -159,10 +315,9 @@ namespace fwdpy11
                                 if (sum > 1.0)
                                     {
                                         std::ostringstream o;
-                                        o << "DiscreteDemography: at time "
-                                          << i->when << ", attempting to move "
-                                          << sum * 100.0 << "% of deme "
-                                          << i->source << " is invalid";
+                                        o << "DiscreteDemography: at time " << i->when
+                                          << ", attempting to move " << sum * 100.0
+                                          << "% of deme " << i->source << " is invalid";
                                         throw std::invalid_argument(o.str());
                                     }
                                 i = j;
@@ -189,7 +344,7 @@ namespace fwdpy11
                       const typename std::vector<T>::const_iterator>
             set_range(const std::vector<T>& v)
             {
-                return { v.cbegin(), v.cend() };
+                return {v.cbegin(), v.cend()};
             }
 
             template <typename T>
@@ -226,14 +381,11 @@ namespace fwdpy11
                     }
                 gsl_matrix_const_view v = gsl_matrix_const_view_array(
                     migmatrix->M.data(), migmatrix->npops, migmatrix->npops);
-                gsl_vector_const_view diag
-                    = gsl_matrix_const_diagonal(&v.matrix);
+                gsl_vector_const_view diag = gsl_matrix_const_diagonal(&v.matrix);
                 bool allequal = true;
-                for (std::size_t i = 0;
-                     allequal == true && i < migmatrix->npops; ++i)
+                for (std::size_t i = 0; allequal == true && i < migmatrix->npops; ++i)
                     {
-                        gsl_vector_const_view rv
-                            = gsl_matrix_const_row(&v.matrix, i);
+                        gsl_vector_const_view rv = gsl_matrix_const_row(&v.matrix, i);
                         double rsum = 0.0;
                         for (std::size_t j = 0; j < migmatrix->npops; ++j)
                             {
@@ -269,9 +421,9 @@ namespace fwdpy11
                             {
                                 if (migmatrix->scaled == true)
                                     {
-                                        auto sum = std::accumulate(
-                                            begin(event.migrates),
-                                            end(event.migrates), 0.);
+                                        auto sum
+                                            = std::accumulate(begin(event.migrates),
+                                                              end(event.migrates), 0.);
                                         if (sum != 0.0 && sum != 1.)
                                             {
                                                 throw std::invalid_argument(
@@ -284,8 +436,7 @@ namespace fwdpy11
                         else if (event.migrates.size()
                                  != migmatrix->npops * migmatrix->npops)
                             {
-                                throw std::invalid_argument(
-                                    "invalid matrix size");
+                                throw std::invalid_argument("invalid matrix size");
                             }
                     }
             }
@@ -313,8 +464,9 @@ namespace fwdpy11
             selfing_rate_change_range selfing_rate_change_tracker;
             migration_rate_change_range migration_rate_change_tracker;
 
-            DiscreteDemography(mass_migration_vector mmig,
-                               set_growth_rates_vector sg,
+            std::int32_t maxdemes_from_demographic_events;
+
+            DiscreteDemography(mass_migration_vector mmig, set_growth_rates_vector sg,
                                set_deme_sizes_vector size_changes,
                                set_selfing_rates_vector ssr,
                                std::unique_ptr<MigrationMatrix> m,
@@ -330,7 +482,10 @@ namespace fwdpy11
                   deme_size_change_tracker(set_range(set_deme_sizes)),
                   growth_rate_change_tracker(set_range(set_growth_rates)),
                   selfing_rate_change_tracker(set_range(set_selfing_rates)),
-                  migration_rate_change_tracker(set_range(set_migration_rates))
+                  migration_rate_change_tracker(set_range(set_migration_rates)),
+                  maxdemes_from_demographic_events{get_max_number_of_demes()(
+                      migmatrix, mass_migrations, set_growth_rates, set_deme_sizes,
+                      set_selfing_rates, set_migration_rates)}
             {
                 check_if_no_migration();
                 validate_change_migration_events();
@@ -344,19 +499,14 @@ namespace fwdpy11
             // NOTE: needs test.
             {
                 reset_range(mass_migration_tracker, mass_migrations);
-                update_event_times(current_pop_generation,
-                                   mass_migration_tracker);
+                update_event_times(current_pop_generation, mass_migration_tracker);
                 reset_range(growth_rate_change_tracker, set_growth_rates);
-                update_event_times(current_pop_generation,
-                                   growth_rate_change_tracker);
+                update_event_times(current_pop_generation, growth_rate_change_tracker);
                 reset_range(deme_size_change_tracker, set_deme_sizes);
-                update_event_times(current_pop_generation,
-                                   deme_size_change_tracker);
+                update_event_times(current_pop_generation, deme_size_change_tracker);
                 reset_range(selfing_rate_change_tracker, set_selfing_rates);
-                update_event_times(current_pop_generation,
-                                   selfing_rate_change_tracker);
-                reset_range(migration_rate_change_tracker,
-                            set_migration_rates);
+                update_event_times(current_pop_generation, selfing_rate_change_tracker);
+                reset_range(migration_rate_change_tracker, set_migration_rates);
                 update_event_times(current_pop_generation,
                                    migration_rate_change_tracker);
             }
@@ -376,6 +526,37 @@ namespace fwdpy11
                 model_state = std::move(state);
             }
         };
+
+        template <typename METADATATYPE>
+        inline demographic_model_state_pointer
+        initialize_model_state(std::uint32_t generation,
+                               const std::vector<METADATATYPE>& metadata,
+                               DiscreteDemography& demography)
+        {
+            // "steal" pointer from input
+            auto rv = demography.get_model_state();
+
+            if (rv == nullptr || generation == 0)
+                // If there is no state, then we need to make
+                // one.  If there is a state, but the generation
+                // is zero, then we assume that the demography
+                // has been used for a different simulatin replicate
+                // and thus reset it.
+                {
+                    demography.update_event_times(generation);
+                    rv.reset(new demographic_model_state(
+                        metadata, demography.migmatrix,
+                        demography.maxdemes_from_demographic_events));
+                }
+            return rv;
+        }
+
+        inline void
+        save_model_state(demographic_model_state_pointer state,
+                         DiscreteDemography& demography)
+        {
+            demography.set_model_state(std::move(state));
+        }
     } // namespace discrete_demography
 } // namespace fwdpy11
 

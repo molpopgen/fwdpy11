@@ -21,7 +21,6 @@
 #define FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_HPP
 
 #include "constants.hpp"
-#include "simulation/get_max_number_of_demes.hpp"
 #include "simulation/apply_mass_migrations.hpp"
 #include "simulation/deme_properties.hpp"
 #include "simulation/multideme_fitness_lookups.hpp"
@@ -30,7 +29,6 @@
 #include "simulation/functions.hpp"
 #include "simulation/mating_event_type.hpp"
 #include "simulation/pick_parents.hpp"
-#include "simulation/demographic_model_state.hpp"
 #include "simulation/update_demographic_model_state.hpp"
 
 #endif
