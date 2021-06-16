@@ -1,3 +1,4 @@
+import copy
 import unittest
 from dataclasses import dataclass
 
@@ -865,6 +866,35 @@ def test_evolve_population_in_two_stages(
     counts = np.unique(np.array(pop.diploid_metadata)["deme"], return_counts=True)
     assert counts[1][0] == 500
     assert counts[1][1] == 200
+
+
+@pytest.mark.parametrize("when", [i for i in range(75, 120)])
+def test_evolve_population_in_two_stages_with_deepcopy(
+    when, two_deme_split_with_ancestral_size_change
+):
+    model = fwdpy11.discrete_demography.from_demes(
+        two_deme_split_with_ancestral_size_change, burnin=1
+    )
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": when,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    fwdpy11.evolvets(rng, pop, params, 100)
+
+    pdict2 = copy.deepcopy(pdict)
+    pdict2["simlen"] = model.metadata["total_simulation_length"] - when
+    params2 = fwdpy11.ModelParams(**pdict2)
+
+    fwdpy11.evolvets(rng, pop, params2, 100, check_demographic_event_timings=False)
+
+    counts = np.unique(np.array(pop.diploid_metadata)["deme"], return_counts=True)
+    assert counts[1][0] == 500, f"{counts}"
+    assert counts[1][1] == 200, f"{counts}"
 
 
 # NOTE: update this test to have burnin=0 once GittHub issue 776

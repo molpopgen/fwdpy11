@@ -32,6 +32,8 @@ New features
   {pr}`764`
 * Add `__copy__` and `__deepcopy__` to {class}`fwdpy11.DiploidPopulation`.
   {pr}`770`
+* Add `__deepcopy__` to {class}`fwdpy11.DiscreteDemography`.
+  {pr}`773`
 
 C++ back-end
 

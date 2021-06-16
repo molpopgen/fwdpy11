@@ -20,6 +20,7 @@
 #define FWDPY11_BUILD_MIGRATION_LOOKUP_HPP
 
 #include <algorithm>
+#include <sstream>
 #include <functional>
 #include "../../rng.hpp"
 #include <memory>
@@ -34,10 +35,9 @@ namespace fwdpy11
     namespace discrete_demography
     {
         inline void
-        build_migration_lookup(
-            const std::unique_ptr<MigrationMatrix>& M,
-            const current_deme_sizes_vector& current_deme_sizes,
-            migration_lookup& ml)
+        build_migration_lookup(const std::unique_ptr<MigrationMatrix>& M,
+                               const current_deme_sizes_vector& current_deme_sizes,
+                               migration_lookup& ml)
         {
             if (M != nullptr)
                 {
@@ -47,8 +47,7 @@ namespace fwdpy11
                     const auto& ref = current_deme_sizes.get();
                     for (std::size_t dest = 0; dest < npops; ++dest)
                         {
-                            for (std::size_t source = 0; source < npops;
-                                 ++source)
+                            for (std::size_t source = 0; source < npops; ++source)
                                 {
                                     // By default, input migration rates are
                                     // weighted by the current deme size...
@@ -62,34 +61,44 @@ namespace fwdpy11
                                         {
                                             scaling_factor = 1.0;
                                         }
-                                    double rate_in
-                                        = M->M[dest * npops + source];
+                                    double rate_in = M->M[dest * npops + source];
                                     if (rate_in > 0.
-                                        && (ref[source] == 0
-                                            || ref[dest] == 0))
+                                        && (ref[source] == 0 || ref[dest] == 0))
                                         {
                                             if (ref[dest] != 0)
                                                 {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "rate from "
-                                                        "empty parental deme");
+                                                    std::ostringstream o;
+                                                    o << "non-zero migration "
+                                                         "rate from "
+                                                         "empty parental deme "
+                                                      << source
+                                                      << " into destination deme "
+                                                      << dest;
+                                                    throw DemographyError(o.str());
                                                 }
                                             if (ref[source] != 0)
                                                 {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "rate into "
-                                                        "empty destination "
-                                                        "deme");
+                                                    std::ostringstream o;
+                                                    o << "non-zero migration "
+                                                         "rate into "
+                                                         "empty destination "
+                                                         "deme "
+                                                      << dest << " from source deme "
+                                                      << source;
+                                                    throw DemographyError(o.str());
                                                 }
                                             else // both are zero
                                                 {
-                                                    throw DemographyError(
-                                                        "non-zero migration "
-                                                        "from empty parental "
-                                                        "deme into empty "
-                                                        "destination deme");
+                                                    std::ostringstream o;
+                                                    o << "non-zero migration "
+                                                         "from empty parental "
+                                                         "deme "
+                                                      << source
+                                                      << " into empty "
+                                                         "destination deme "
+                                                      << dest;
+
+                                                    throw DemographyError(o.str());
                                                 }
                                         }
                                     temp.push_back(scaling_factor * rate_in);
@@ -98,9 +107,8 @@ namespace fwdpy11
                                              [](double d) { return d != 0.; })
                                 != end(temp))
                                 {
-                                    ml.lookups[dest].reset(
-                                        gsl_ran_discrete_preproc(temp.size(),
-                                                                 temp.data()));
+                                    ml.lookups[dest].reset(gsl_ran_discrete_preproc(
+                                        temp.size(), temp.data()));
                                 }
                             else // There is no possible migration into this deme
                                 {
