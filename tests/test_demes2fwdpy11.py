@@ -636,7 +636,6 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
         "simlen": model.metadata["total_simulation_length"],
     }
     params = fwdpy11.ModelParams(**pdict)
-    print(model.metadata["initial_sizes"])
     initial_sizes = [i for i in model.metadata["initial_sizes"].values()]
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
     for key, value in pop.deme_sizes(as_dict=True).items():
