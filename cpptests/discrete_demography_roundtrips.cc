@@ -54,15 +54,20 @@ DiscreteDemography_roundtrip(
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
 //
 {
+    bool demographic_model_needs_updating = true;
     auto current_demographic_state
         = fwdpy11::discrete_demography::initialize_model_state(
-            pop.generation, pop.diploid_metadata, demography);
+            pop.generation, pop.diploid_metadata, demography,
+            &demographic_model_needs_updating);
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
     std::vector<MatingEventRecord> rv;
-    fwdpy11::discrete_demography::update_demography_manager(
-        rng, pop.generation, pop.diploid_metadata, demography,
-        *current_demographic_state);
+    if (demographic_model_needs_updating)
+        {
+            fwdpy11::discrete_demography::update_demography_manager(
+                rng, pop.generation, pop.diploid_metadata, demography,
+                *current_demographic_state);
+        }
     if (current_demographic_state->will_go_globally_extinct() == true)
         {
             std::ostringstream o;

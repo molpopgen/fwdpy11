@@ -11,6 +11,18 @@ Bug fixes
   This does not affect previous results because unsigned overflow doing the "right thing" ended up with final values being correct.
   {pr}`766`
   {issue}`765`
+* Fix a bug where stopping/restarting the evolution of demographic models at time points
+  where a deme goes extinct.
+  It is not possible that this bug affected results from earlier versions, as attempting to stop/start at these time points raised exceptions.
+  {issue}`775`
+  {pr}`774`
+
+Behavior changes
+
+* If a demographic model is evolved, pickled, unpickled, and then used to evolve,
+  it is now possible that exceptions will raise.
+  This change is due to the fix for {issue}`775` introduced in {pr}`774`.
+  See issue {issue}`777` for more background.
 
 New features
 

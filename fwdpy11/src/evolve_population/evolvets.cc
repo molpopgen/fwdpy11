@@ -222,8 +222,12 @@ evolve_with_tree_sequences(
         }
 
     // Set up discrete demography types. New in 0.6.0
-    auto current_demographic_state = ddemog::initialize_model_state(
-        pop.generation, pop.diploid_metadata, demography);
+    /// model_needs_update added in 0.16.0
+    /// in relation to GitHub issue 775
+    bool demographic_model_needs_update = true;
+    auto current_demographic_state
+        = ddemog::initialize_model_state(pop.generation, pop.diploid_metadata,
+                                         demography, &demographic_model_needs_update);
     if (gvalue_pointers.genetic_values.size()
         > static_cast<std::size_t>(current_demographic_state->maxdemes))
         {
@@ -285,8 +289,11 @@ evolve_with_tree_sequences(
                               record_genotype_matrix);
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
-    ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                      demography, *current_demographic_state);
+    if (demographic_model_needs_update == true)
+        {
+            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
+                                              demography, *current_demographic_state);
+        }
     if (current_demographic_state->will_go_globally_extinct() == true)
         {
             std::ostringstream o;
