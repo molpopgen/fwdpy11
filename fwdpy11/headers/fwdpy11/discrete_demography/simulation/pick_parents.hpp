@@ -21,6 +21,7 @@
 #define FWDPY11_DISCRETE_DEMOGRAPY_PICK_PARENTS_HPP
 
 #include <cstdint>
+#include <sstream>
 #include "../../rng.hpp"
 #include "../MigrationMatrix.hpp"
 #include "migration_lookup.hpp"
@@ -70,7 +71,9 @@ namespace fwdpy11
                 }
             if (miglookup.lookups[offspring_deme] == nullptr)
                 {
-                    throw DemographyError("parental deme lookup is NULL");
+                    std::ostringstream o;
+                    o <<"parental deme lookup is NULL for deme " << offspring_deme; 
+                    throw DemographyError(o.str());
                 }
             std::int32_t pdeme = static_cast<std::int32_t>(gsl_ran_discrete(
                 rng.get(), miglookup.lookups[offspring_deme].get()));
