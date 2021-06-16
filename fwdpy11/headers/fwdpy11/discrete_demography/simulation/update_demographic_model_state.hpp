@@ -22,6 +22,7 @@
 #include <memory>
 #include <sstream>
 #include <fwdpy11/rng.hpp>
+#include "build_migration_lookup.hpp"
 #include "demographic_model_state.hpp"
 #include "functions.hpp"
 

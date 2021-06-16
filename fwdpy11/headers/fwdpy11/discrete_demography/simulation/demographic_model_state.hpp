@@ -27,6 +27,7 @@
 #include "multideme_fitness_lookups.hpp"
 #include "migration_lookup.hpp"
 #include "deme_properties.hpp"
+#include "build_migration_lookup.hpp"
 #include "../DiscreteDemography.hpp"
 
 namespace fwdpy11
@@ -84,6 +85,15 @@ namespace fwdpy11
                                       end(sizes_rates.next_deme_sizes.get()), 0u);
             }
 
+            demographic_model_state(const demographic_model_state& other)
+                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
+                  fitnesses{other.fitnesses}, sizes_rates{other.sizes_rates},
+                  M{other.M == nullptr ? nullptr : new MigrationMatrix(*other.M)},
+                  miglookup{maxdemes, M == nullptr}
+            {
+                build_migration_lookup(M, sizes_rates.current_deme_sizes, miglookup);
+            }
+
             void
             set_next_global_N(std::uint32_t N)
             {
@@ -100,6 +110,12 @@ namespace fwdpy11
             will_go_globally_extinct() const
             {
                 return ttlN_next() == 0;
+            }
+
+            std::unique_ptr<demographic_model_state>
+            clone() const
+            {
+                return std::make_unique<demographic_model_state>(*this);
             }
         };
 
