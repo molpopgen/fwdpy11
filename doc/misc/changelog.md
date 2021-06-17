@@ -40,6 +40,11 @@ C++ back-end
 * A population can now be checked that it is- or is not- being simulated.
   {pr}`762`
 
+Build system
+
+* All GCC builds and CI tests on Ubuntu + GCC now apply a much stricter set of compiler options.
+  {pr}`779` {issue}`778`
+
 Dependencies
 
 * Bump `pillow` version in doc/requirements.txt.

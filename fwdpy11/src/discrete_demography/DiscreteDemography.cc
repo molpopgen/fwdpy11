@@ -113,8 +113,7 @@ void
 init_DiscreteDemography(py::module& m)
 {
     // TODO: decide if we need to pass fitnesses via asdict?
-    py::class_<ddemog::demographic_model_state>(m, "_ll_DemographicModelState")
-        .def("asdict", [](const ddemog::demographic_model_state& self) {});
+    py::class_<ddemog::demographic_model_state>(m, "_ll_DemographicModelState");
     py::class_<ddemog::DiscreteDemography>(m, "_ll_DiscreteDemography")
         .def(py::init([](py::object mass_migration_events, py::object set_growth_rates,
                          py::object set_deme_sizes, py::object set_selfing_rates,

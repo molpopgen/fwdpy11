@@ -78,7 +78,7 @@ class tree_visitor_wrapper
           first_mutation(tables_->mutations.begin()),
           end_of_mutations(tables_->mutations.end()), current_mutation(first_mutation),
           update_samples(update_samples_below), from(start), until(stop),
-          visitor(*tables_, samples,
+          visitor(*tables_, samples, preserved_nodes,
                   fwdpp::ts::update_samples_list(update_samples_below)),
           samples_below_buffer()
     {

@@ -373,18 +373,6 @@ class DataMatrixIterator
                && pos < position_ranges[current_range].second;
     }
 
-    void
-    process_current_site(const fwdpp::ts::marginal_tree& tree, const site_table_itr itr)
-    {
-        // Make sure we skip mutants on the
-        // current tree but not in the current
-        // genomic interval.
-        if (!site_in_current_range(itr))
-            {
-                return;
-            }
-    }
-
     py::array_t<std::int8_t>
     genotype_matrix_wrapper(const fwdpp::state_matrix& sm,
                             const std::vector<std::size_t>& keys) const

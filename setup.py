@@ -9,12 +9,6 @@ from distutils.version import LooseVersion
 from setuptools import Extension, setup
 from setuptools.command.build_ext import build_ext
 
-if "--weffcpp" in sys.argv:
-    USE_WEFFCPP = True
-    sys.argv.remove("--weffcpp")
-else:
-    USE_WEFFCPP = False
-
 if "--debug" in sys.argv:
     DEBUG_MODE = True
     sys.argv.remove("--debug")
@@ -108,8 +102,6 @@ class CMakeBuild(build_ext):
             env.get("CXXFLAGS", ""), self.distribution.get_version()
         )
 
-        if USE_WEFFCPP is True:
-            cmake_args.append("-DUSE_WEFFCPP=ON")
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         if SKIP_BUILDING_TESTS is True:

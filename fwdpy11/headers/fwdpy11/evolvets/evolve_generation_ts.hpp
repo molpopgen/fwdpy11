@@ -166,7 +166,7 @@ namespace fwdpy11
                         next_index_local = offspring_node_2;
                     }
             }
-        assert(next_index_local == pop.tables->num_nodes() - 1);
+        assert(static_cast<std::size_t>(next_index_local) == pop.tables->num_nodes() - 1);
         if (next_index_local
             != static_cast<decltype(next_index_local)>(pop.tables->num_nodes()
                                                        - 1))
