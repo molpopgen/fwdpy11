@@ -390,7 +390,8 @@ namespace fwdpy11
         }
 
         double
-        generate_dominance(const GSLrng_t &rng, const double esize) const override final
+        generate_dominance(const GSLrng_t & /*rng*/,
+                           const double /*esize*/) const override final
         {
             throw std::runtime_error("mvDES::generate_dominance is not implemented");
             return std::numeric_limits<double>::quiet_NaN();
