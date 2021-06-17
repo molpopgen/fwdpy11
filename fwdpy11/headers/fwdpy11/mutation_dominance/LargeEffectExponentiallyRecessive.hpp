@@ -21,7 +21,7 @@ namespace fwdpy11
         }
 
         double
-        generate_dominance(const GSLrng_t& rng,
+        generate_dominance(const GSLrng_t& /*rng*/,
                            const double effect_size) const override final
         {
             return scaling * std::exp(-k * std::abs(effect_size));

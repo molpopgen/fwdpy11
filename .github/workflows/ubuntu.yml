@@ -79,6 +79,7 @@ jobs:
         run: |
           echo "CC=gcc" >> $GITHUB_ENV
           echo "CXX=g++" >> $GITHUB_ENV
+          echo "CPPFLAGS=-Wextra -Weffc++ -Woverloaded-virtual -Wold-style-cast -Werror=effc++ -Werror=old-style-cast -Werror=overloaded-virtual -Werror=unused-parameter" >> $GITHUB_ENV
 
       - name: Install clang-10
         if: matrix.compiler == 'clang10'
@@ -91,7 +92,7 @@ jobs:
         run: |
           cd cpptests
           autoreconf --install
-          CC=$CC CXX=$CXX ./configure
+          CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX ./configure
           make check
 
       - name: Compile extension module

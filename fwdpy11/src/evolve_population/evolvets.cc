@@ -46,8 +46,7 @@ clear_edge_table_indexes(fwdpp::ts::std_table_collection &tables)
 template <typename SimplificationState>
 void
 simplification(
-    bool preserve_selected_fixations, bool simulating_neutral_variants,
-    bool suppress_edge_table_indexing,
+    bool preserve_selected_fixations, bool suppress_edge_table_indexing,
     bool reset_treeseqs_to_alive_nodes_after_simplification,
     const fwdpy11::DiploidPopulation_temporal_sampler &post_simplification_recorder,
     SimplificationState &simplifier_state,
@@ -59,8 +58,7 @@ simplification(
     fwdpy11::simplify_tables(pop, pop.mcounts_from_preserved_nodes,
                              alive_at_last_simplification, *pop.tables, simplifier_state,
                              simplification_output, new_edge_buffer,
-                             preserve_selected_fixations, simulating_neutral_variants,
-                             suppress_edge_table_indexing);
+                             preserve_selected_fixations, suppress_edge_table_indexing);
     if (pop.mcounts.size() != pop.mcounts_from_preserved_nodes.size())
         {
             throw std::runtime_error("evolvets: count vector size mismatch after "
@@ -432,7 +430,6 @@ evolve_with_tree_sequences(
             if (current_demographic_state->will_go_globally_extinct() == true)
                 {
                     simplification(preserve_selected_fixations,
-                                   simulating_neutral_variants,
                                    suppress_edge_table_indexing,
                                    reset_treeseqs_to_alive_nodes_after_simplification,
                                    post_simplification_recorder, *simplifier_state,
@@ -454,7 +451,6 @@ evolve_with_tree_sequences(
             if (gen % simplification_interval == 0.0)
                 {
                     simplification(preserve_selected_fixations,
-                                   simulating_neutral_variants,
                                    suppress_edge_table_indexing,
                                    reset_treeseqs_to_alive_nodes_after_simplification,
                                    post_simplification_recorder, *simplifier_state,
@@ -600,8 +596,7 @@ evolve_with_tree_sequences(
 
     if (!simplified)
         {
-            simplification(preserve_selected_fixations, simulating_neutral_variants,
-                           suppress_edge_table_indexing,
+            simplification(preserve_selected_fixations, suppress_edge_table_indexing,
                            reset_treeseqs_to_alive_nodes_after_simplification,
                            post_simplification_recorder, *simplifier_state,
                            simplification_output, *new_edge_buffer,

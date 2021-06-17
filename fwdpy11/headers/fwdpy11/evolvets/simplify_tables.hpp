@@ -46,7 +46,7 @@ namespace fwdpy11
         fwdpp::ts::std_table_collection &tables, SimplificationState &simplifier_state,
         fwdpp::ts::simplify_tables_output & simplification_output,
         fwdpp::ts::edge_buffer &new_edge_buffer, const bool preserve_selected_fixations,
-        const bool simulating_neutral_variants, const bool suppress_edge_table_indexing)
+        const bool suppress_edge_table_indexing)
     {
         // As of 0.8.0, we do not need to sort edges!
         fwdpp::ts::sort_mutation_table(tables);
@@ -101,6 +101,9 @@ namespace fwdpy11
                 pop.mcounts_from_preserved_nodes.resize(pop.mcounts.size(), 0);
             }
 
+        // TODO: revisit this comment.
+        // in pr 779, we removed simulating_neutral_variants b/c it was unused.
+        //
         // If we are here, then the tables are indexed and mutations are counted.
         // If there are ancient samples and we are simulating neutral variants,
         // then we do not know their frequencies.  Thus, neutral

@@ -64,18 +64,19 @@ class DiscreteDESD : public fwdpy11::Sregion
             recycling_bin, mutations, lookup_table, false, generation,
             [this, &rng]() { return region(rng); },
             [this, idx]() { return esize[idx] / scaling; },
-            [this, idx](const double esize) { return h[idx]; }, this->label());
+            [this, idx](const double /*esize*/) { return h[idx]; }, this->label());
     }
 
     double
-    from_mvnorm(const double /*deviate*/, const double P) const override
+    from_mvnorm(const double /*deviate*/, const double /*P*/) const override
     {
         throw std::runtime_error("not implemented yet");
         return 1.;
     }
 
     double
-    generate_dominance(const fwdpy11::GSLrng_t& rng, const double esize) const override
+    generate_dominance(const fwdpy11::GSLrng_t& /*rng*/,
+                       const double /*esize*/) const override
     {
         return std::numeric_limits<double>::quiet_NaN();
     }
