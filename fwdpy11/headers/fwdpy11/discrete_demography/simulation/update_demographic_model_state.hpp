@@ -43,9 +43,9 @@ namespace fwdpy11
 
             inline void
             check_migration_in(std::size_t i, std::uint32_t generation,
-                               const std::unique_ptr<MigrationMatrix> &M)
+                               const MigrationMatrix &M)
             {
-                if (M->M[i * M->npops + i] > 0)
+                if (M.M[i * M.npops + i] > 0)
                     {
                         std::ostringstream o;
                         o << "deme " << i << " at time " << generation
@@ -70,7 +70,7 @@ namespace fwdpy11
                         if (next_N_deme[i] > 0
                             && current_demographic_state.fitnesses.lookups[i] == nullptr)
                             {
-                                if (current_demographic_state.M == nullptr)
+                                if (current_demographic_state.M.empty())
                                     {
                                         no_valid_parents(i, generation, next_N_deme[i]);
                                     }

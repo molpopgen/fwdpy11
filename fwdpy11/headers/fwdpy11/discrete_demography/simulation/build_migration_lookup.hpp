@@ -35,11 +35,11 @@ namespace fwdpy11
     namespace discrete_demography
     {
         inline void
-        build_migration_lookup(const std::unique_ptr<MigrationMatrix>& M,
+        build_migration_lookup(const MigrationMatrix& M,
                                const current_deme_sizes_vector& current_deme_sizes,
                                migration_lookup& ml)
         {
-            if (M != nullptr)
+            if (!M.empty())
                 {
                     std::vector<double> temp;
                     std::size_t npops = ml.lookups.size();
@@ -57,11 +57,11 @@ namespace fwdpy11
                                     // But if the deme size is zero, we make
                                     // sure it is removed as a possible source
                                     // of a parent.
-                                    if (M->scaled == false && ref[source] != 0)
+                                    if (M.scaled == false && ref[source] != 0)
                                         {
                                             scaling_factor = 1.0;
                                         }
-                                    double rate_in = M->M[dest * npops + source];
+                                    double rate_in = M.M[dest * npops + source];
                                     if (rate_in > 0.
                                         && (ref[source] == 0 || ref[dest] == 0))
                                         {

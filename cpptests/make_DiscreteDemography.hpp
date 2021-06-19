@@ -15,11 +15,11 @@ struct demographic_events
         set_migration_rates;
     fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
         set_selfing_rates;
-    std::unique_ptr<fwdpy11::discrete_demography::MigrationMatrix> migmatrix;
+    fwdpy11::discrete_demography::MigrationMatrix migmatrix;
 
     demographic_events()
         : mass_migrations{}, set_growth_rates{}, set_deme_sizes{}, set_migration_rates{},
-          set_selfing_rates{}, migmatrix{nullptr}
+          set_selfing_rates{}, migmatrix{}
     {
     }
 };
@@ -107,10 +107,10 @@ add_events(demographic_events& events,
 template <typename... Args>
 inline void
 add_events(demographic_events& events,
-           std::unique_ptr<fwdpy11::discrete_demography::MigrationMatrix> migmatrix,
+           fwdpy11::discrete_demography::MigrationMatrix migmatrix,
            Args&&... args)
 {
-    if (events.migmatrix != nullptr)
+    if (!events.migmatrix.empty())
         {
             throw std::invalid_argument("multiple migration matrices");
         }

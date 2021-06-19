@@ -79,14 +79,14 @@ namespace
         rv["selfing_rates"] = model_state->sizes_rates.selfing_rates.get();
 
         // The migration matrix
-        if (model_state->M == nullptr)
+        if (model_state->M.empty())
             {
                 rv["migmatrix"] = py::none();
             }
         else
             {
-                rv["migmatrix"] = py::make_tuple(
-                    model_state->M->M, model_state->M->npops, model_state->M->scaled);
+                rv["migmatrix"] = py::make_tuple(model_state->M.M, model_state->M.npops,
+                                                 model_state->M.scaled);
             }
         return rv;
     }
@@ -148,10 +148,10 @@ init_DiscreteDemography(py::module& m)
                      {
                          return ddemog::DiscreteDemography(
                              std::move(morc), std::move(growth), std::move(change_sizes),
-                             std::move(selfing), nullptr, std::move(migrates));
+                             std::move(selfing), ddemog::MigrationMatrix{},
+                             std::move(migrates));
                      }
-                 std::unique_ptr<ddemog::MigrationMatrix> M(new ddemog::MigrationMatrix(
-                     decode_migration_matrix_input(migmatrix)));
+                 ddemog::MigrationMatrix M(decode_migration_matrix_input(migmatrix));
                  return ddemog::DiscreteDemography(
                      std::move(morc), std::move(growth), std::move(change_sizes),
                      std::move(selfing), std::move(M), std::move(migrates));
@@ -249,15 +249,14 @@ init_DiscreteDemography(py::module& m)
                         std::move(growth_initial_sizes), std::move(growth_rates),
                         std::move(selfing_rates));
 
-                    std::unique_ptr<ddemog::MigrationMatrix> M(nullptr);
+                    ddemog::MigrationMatrix M{};
                     if (d["migmatrix"].is_none() == false)
                         {
                             auto t = d["migmatrix"].cast<py::tuple>();
                             auto rates = t[0].cast<std::vector<double>>();
                             auto npops = t[1].cast<std::size_t>();
                             auto scaled = t[2].cast<bool>();
-                            M.reset(new ddemog::MigrationMatrix(std::move(rates), npops,
-                                                                scaled));
+                            M = ddemog::MigrationMatrix(std::move(rates), npops, scaled);
                         }
                     state.reset(new ddemog::demographic_model_state(
                         maxdemes, std::move(sizes_rates), std::move(M)));

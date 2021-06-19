@@ -79,25 +79,25 @@ namespace fwdpy11
                 auto temp
                     = std::max(maxdeme_from_metadata, maxdeme_from_demography)
                       + 1;
-                if (demography.migmatrix == nullptr)
+                if (demography.migmatrix.empty())
                     {
                         // There is no migration, so we are done
                         return temp;
                     }
                 if (static_cast<std::size_t>(temp)
-                    > demography.migmatrix->npops)
+                    > demography.migmatrix.npops)
                     {
                         throw std::invalid_argument(
                             "MigrationMatrix contains too few demes");
                     }
                 if (static_cast<std::size_t>(temp)
-                    < demography.migmatrix->npops)
+                    < demography.migmatrix.npops)
                     {
                         throw std::invalid_argument(
                             "MigrationMatrix contains too many demes");
                     }
                 return std::max(temp, static_cast<std::int32_t>(
-                                          demography.migmatrix->npops));
+                                          demography.migmatrix.npops));
             }
         };
     } // namespace discrete_demography
