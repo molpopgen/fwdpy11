@@ -55,7 +55,7 @@ struct demographic_event_stable_sorting_fixture
         return fwdpy11::discrete_demography::DiscreteDemography(
             std::move(massmigs), std::move(growth), std::move(sizechanges),
             std::move(selfing),
-            std::make_unique<fwdpy11::discrete_demography::MigrationMatrix>(
+            fwdpy11::discrete_demography::MigrationMatrix(
                 std::move(migmatrix), 5, false),
             std::move(migration));
     }

@@ -19,7 +19,7 @@ struct mock_population_fixture
         set_migration_rates;
     fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
         set_selfing_rates;
-    std::unique_ptr<fwdpy11::discrete_demography::MigrationMatrix> migmatrix;
+    fwdpy11::discrete_demography::MigrationMatrix migmatrix;
 
     struct gsl_matrix_deleter
     {
@@ -34,7 +34,7 @@ struct mock_population_fixture
 
     mock_population_fixture()
         : rng{416134}, pop(100), mass_migrations{}, set_growth_rates{}, set_deme_sizes{},
-          set_migration_rates{}, set_selfing_rates{}, migmatrix{nullptr}
+          set_migration_rates{}, set_selfing_rates{}, migmatrix{}
     {
     }
 
@@ -51,7 +51,7 @@ struct mock_population_fixture
     inline void
     set_migmatrix(Args &&...args)
     {
-        migmatrix = std::make_unique<fwdpy11::discrete_demography::MigrationMatrix>(
+        migmatrix = fwdpy11::discrete_demography::MigrationMatrix(
             std::forward<Args>(args)...);
     }
 

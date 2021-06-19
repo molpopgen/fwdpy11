@@ -39,6 +39,9 @@ C++ back-end
 
 * A population can now be checked that it is- or is not- being simulated.
   {pr}`762`
+* {class}`fwdpy11.discrete_demography.DiscreteDemography` now stores the migration matrix as a stack-allocated object and not a `unique_ptr`.
+  {pr}`785`
+  {issue}`781`
 
 Build system
 

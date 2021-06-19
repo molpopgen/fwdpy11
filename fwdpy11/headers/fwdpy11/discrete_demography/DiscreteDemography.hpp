@@ -207,9 +207,9 @@ namespace fwdpy11
             // If there are no nonzero off-diagonal elements,
             // and no migration rate changes during a sim,
             // then there is no migration. Thus, reset
-            // migmatrix to nullptr.
+            // migmatrix to empty.
             {
-                if (migmatrix == nullptr)
+                if (migmatrix.empty())
                     {
                         return;
                     }
@@ -218,14 +218,14 @@ namespace fwdpy11
                         return;
                     }
                 gsl_matrix_const_view v = gsl_matrix_const_view_array(
-                    migmatrix->M.data(), migmatrix->npops, migmatrix->npops);
+                    migmatrix.M.data(), migmatrix.npops, migmatrix.npops);
                 gsl_vector_const_view diag = gsl_matrix_const_diagonal(&v.matrix);
                 bool allequal = true;
-                for (std::size_t i = 0; allequal == true && i < migmatrix->npops; ++i)
+                for (std::size_t i = 0; allequal == true && i < migmatrix.npops; ++i)
                     {
                         gsl_vector_const_view rv = gsl_matrix_const_row(&v.matrix, i);
                         double rsum = 0.0;
-                        for (std::size_t j = 0; j < migmatrix->npops; ++j)
+                        for (std::size_t j = 0; j < migmatrix.npops; ++j)
                             {
                                 rsum += gsl_vector_get(&rv.vector, j);
                             }
@@ -236,14 +236,14 @@ namespace fwdpy11
                     }
                 if (allequal)
                     {
-                        migmatrix.reset(nullptr);
+                        migmatrix.M.clear();
                     }
             }
 
             void
             validate_change_migration_events()
             {
-                if (migmatrix == nullptr)
+                if (migmatrix.empty())
                     {
                         if (!set_migration_rates.empty())
                             {
@@ -255,9 +255,9 @@ namespace fwdpy11
                     }
                 for (auto& event : set_migration_rates)
                     {
-                        if (event.migrates.size() == migmatrix->npops)
+                        if (event.migrates.size() == migmatrix.npops)
                             {
-                                if (migmatrix->scaled == true)
+                                if (migmatrix.scaled == true)
                                     {
                                         auto sum
                                             = std::accumulate(begin(event.migrates),
@@ -272,7 +272,7 @@ namespace fwdpy11
                                     }
                             }
                         else if (event.migrates.size()
-                                 != migmatrix->npops * migmatrix->npops)
+                                 != migmatrix.npops * migmatrix.npops)
                             {
                                 throw std::invalid_argument("invalid matrix size");
                             }
@@ -292,7 +292,7 @@ namespace fwdpy11
             set_growth_rates_vector set_growth_rates;
             set_deme_sizes_vector set_deme_sizes;
             set_selfing_rates_vector set_selfing_rates;
-            std::unique_ptr<const MigrationMatrix> migmatrix;
+            MigrationMatrix migmatrix;
             set_migration_rates_vector set_migration_rates;
 
             // pairs of iterators over the events
@@ -305,7 +305,7 @@ namespace fwdpy11
             DiscreteDemography(mass_migration_vector mmig, set_growth_rates_vector sg,
                                set_deme_sizes_vector size_changes,
                                set_selfing_rates_vector ssr,
-                               std::unique_ptr<MigrationMatrix> m,
+                               MigrationMatrix m,
                                set_migration_rates_vector smr)
                 : model_state(nullptr),
                   mass_migrations(init_events_vector(std::move(mmig))),
