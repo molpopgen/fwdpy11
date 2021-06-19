@@ -156,7 +156,7 @@ namespace fwdpy11
             update_migration_matrix(
                 const std::uint32_t t,
                 migration_rate_change_range& migration_rate_change_tracker,
-                std::unique_ptr<MigrationMatrix>& M)
+                MigrationMatrix& M)
 
             {
                 auto& range = migration_rate_change_tracker.get();
@@ -167,7 +167,7 @@ namespace fwdpy11
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
-                        M->set_migration_rates(range.first->deme,
+                        M.set_migration_rates(range.first->deme,
                                                range.first->migrates);
                     }
             }
@@ -217,7 +217,7 @@ namespace fwdpy11
         inline std::uint32_t
         apply_demographic_events(std::uint32_t t,
                                  DiscreteDemography& demography,
-                                 std::unique_ptr<MigrationMatrix>& M,
+                                 MigrationMatrix& M,
                                  deme_properties& sizes_rates)
         {
             std::copy(begin(sizes_rates.current_deme_sizes.get()),

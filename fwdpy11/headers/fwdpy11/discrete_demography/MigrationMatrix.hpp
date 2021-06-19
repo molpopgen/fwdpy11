@@ -78,8 +78,10 @@ namespace fwdpy11
 
           public:
             std::vector<double> M;
-            const std::size_t npops;
-            const bool scaled;
+            std::size_t npops;
+            bool scaled;
+
+            MigrationMatrix(): M{}, npops{0}, scaled{false} {}
 
             template <typename T>
             MigrationMatrix(T&& matrix, std::size_t nrows,
@@ -132,6 +134,13 @@ namespace fwdpy11
                         std::copy(begin(migrates), end(migrates), M.begin());
                     }
             }
+
+            bool
+            empty() const
+            {
+                return M.empty();
+            }
+        
         };
     } // namespace discrete_demography
 } // namespace fwdpy11

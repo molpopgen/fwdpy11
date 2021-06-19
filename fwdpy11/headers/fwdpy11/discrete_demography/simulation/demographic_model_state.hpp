@@ -39,23 +39,13 @@ namespace fwdpy11
         /// the relevant data structures.
         {
           private:
-            std::unique_ptr<MigrationMatrix>
-            init_migmatrix(const std::unique_ptr<const MigrationMatrix>& Minput)
-            {
-                if (Minput == nullptr)
-                    {
-                        return nullptr;
-                    }
-                return std::unique_ptr<MigrationMatrix>(new MigrationMatrix(*Minput));
-            }
-
             std::uint32_t next_global_N;
 
           public:
             const std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
             deme_properties sizes_rates;
-            std::unique_ptr<MigrationMatrix> M;
+            MigrationMatrix M;
             migration_lookup miglookup;
 
             // NOTE: demography.update_event_times() needs to have been
@@ -66,32 +56,31 @@ namespace fwdpy11
                 : next_global_N(0),
                   maxdemes(get_max_number_of_demes()(metadata, demography)),
                   fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
-                  M(init_migmatrix(demography.migmatrix)),
-                  miglookup(maxdemes, M == nullptr)
+                  M(demography.migmatrix), miglookup(maxdemes, M.empty())
             {
+            }
+
+            demographic_model_state(const demographic_model_state& other)
+                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
+                  fitnesses{other.fitnesses}, sizes_rates{other.sizes_rates},
+                  M{other.M},
+                  miglookup{maxdemes, M.empty()}
+            {
+                build_migration_lookup(M, sizes_rates.current_deme_sizes, miglookup);
             }
 
             // This constructor is only used when resetting
             // the state from an event like pickling a DiscreteDemography
             // instance.
             demographic_model_state(std::int32_t maxdemes_, deme_properties sizes_rates_,
-                                    std::unique_ptr<MigrationMatrix> M_)
+                                    MigrationMatrix M_)
                 : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
                   sizes_rates(std::move(sizes_rates_)), M(std::move(M_)),
-                  miglookup(maxdemes, M == nullptr)
+                  miglookup(maxdemes, M.empty())
             {
                 next_global_N
                     = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
                                       end(sizes_rates.next_deme_sizes.get()), 0u);
-            }
-
-            demographic_model_state(const demographic_model_state& other)
-                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
-                  fitnesses{other.fitnesses}, sizes_rates{other.sizes_rates},
-                  M{other.M == nullptr ? nullptr : new MigrationMatrix(*other.M)},
-                  miglookup{maxdemes, M == nullptr}
-            {
-                build_migration_lookup(M, sizes_rates.current_deme_sizes, miglookup);
             }
 
             void
