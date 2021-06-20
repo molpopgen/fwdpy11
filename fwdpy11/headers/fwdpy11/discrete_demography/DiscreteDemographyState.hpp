@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <utility>
+#include <fwdpy11/types/Diploid.hpp>
 #include "MassMigration.hpp"
 #include "SetExponentialGrowth.hpp"
 #include "SetDemeSize.hpp"
