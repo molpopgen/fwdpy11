@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <stdexcept>
 #include <fwdpy11/discrete_demography/DiscreteDemographyState.hpp>
 
 namespace fwdpy11
@@ -52,6 +53,39 @@ namespace fwdpy11
                                   const std::uint32_t simulation_time,
                                   std::vector<METADATATYPE>& individual_metadata)
             {
+                if (mass_migrations.event_range.first
+                        < mass_migrations.event_range.second
+                    && mass_migrations.events[mass_migrations.event_range.first].when
+                           != simulation_time)
+                    {
+                        return;
+                    }
+                const auto initial_N = individual_metadata.size();
+                if (initial_N == 0)
+                    {
+                        throw std::runtime_error("metadata are empty");
+                    }
+                bool initialized_moves{false};
+
+                for (std::size_t i = mass_migrations.event_range.first;
+                     i < mass_migrations.event_range.second
+                     && mass_migrations.events[i].when == simulation_time;
+                     ++i)
+                    {
+                        if (mass_migrations.events[i].move_individuals == false) // copy
+                            {
+                                if (initialized_moves == true)
+                                    {
+                                        // NOTE: this may no longer be necessary?
+                                        throw std::runtime_error(
+                                            "MassMigration error: copies after "
+                                            "moves");
+                                    }
+                            }
+                        else // move event
+                            {
+                            }
+                    }
             }
 
           public:
