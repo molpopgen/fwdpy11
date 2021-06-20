@@ -50,6 +50,12 @@ namespace fwdpy11
                 std::vector<SetSelfingRate> set_selfing_rates, MigrationMatrix M,
                 std::vector<SetMigrationRates> set_migration_rates);
 
+            // This function must be run early, when the simulation
+            // code is entered, but before we start iterating over generations.
+            void initialize(const std::vector<std::uint32_t>& deme_sizes,
+                            const std::uint32_t pop_generation);
+
+            // Assist the DiscreteDemographyState copy constructor
             std::unique_ptr<DiscreteDemographyState_impl> clone() const;
         };
     }

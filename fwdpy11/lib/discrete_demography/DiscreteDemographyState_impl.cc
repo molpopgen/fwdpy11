@@ -27,5 +27,12 @@ namespace fwdpy11
             return std::make_unique<
                 DiscreteDemographyState::DiscreteDemographyState_impl>(*this);
         }
+
+        void
+        DiscreteDemographyState::DiscreteDemographyState_impl::initialize(
+            const std::vector<std::uint32_t>& deme_sizes,
+            const std::uint32_t pop_generation)
+        {
+        }
     }
 }
