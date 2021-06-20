@@ -96,7 +96,8 @@ set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
     src/discrete_demography/DiscreteDemography.cc
     src/discrete_demography/exceptions.cc)
 
-set(DISCRETE_DEMOGRAPHY_LIB_SOURCES lib/discrete_demography/DiscreteDemographyState.cc)
+set(DISCRETE_DEMOGRAPHY_LIB_SOURCES lib/discrete_demography/DiscreteDemographyState.cc
+    lib/discrete_demography/DiscreteDemographyState_impl.cc)
 
 set (ARRAY_PROXY_SOURCES src/array_proxies/init.cc)
 
