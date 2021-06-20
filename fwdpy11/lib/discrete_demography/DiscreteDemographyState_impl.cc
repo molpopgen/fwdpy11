@@ -33,6 +33,8 @@ namespace fwdpy11
             const std::vector<std::uint32_t>& deme_sizes,
             const std::uint32_t pop_generation)
         {
+            deme_sizes;
+            pop_generation;
         }
     }
 }
