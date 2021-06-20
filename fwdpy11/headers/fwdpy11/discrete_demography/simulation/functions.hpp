@@ -60,7 +60,7 @@ namespace fwdpy11
             update_current_deme_sizes(const std::uint32_t t,
                                       deme_size_change_range& event_ranges,
                                       deme_properties& sizes_rates)
-            // NOTE: this function may resent growth rates to zero.
+            // NOTE: this function may reset growth rates to zero.
             // see SetDemeSize for details.
             {
                 deme_size_change_range::value_type& range = event_ranges.get();
