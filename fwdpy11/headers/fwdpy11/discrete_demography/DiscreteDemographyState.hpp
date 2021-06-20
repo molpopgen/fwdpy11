@@ -5,6 +5,7 @@
 #include <vector>
 #include <utility>
 #include <fwdpy11/types/Diploid.hpp>
+#include <fwdpy11/rng.hpp>
 #include "MassMigration.hpp"
 #include "SetExponentialGrowth.hpp"
 #include "SetDemeSize.hpp"
@@ -19,8 +20,9 @@ namespace fwdpy11
         class DiscreteDemographyState
         {
           private:
-              class DiscreteDemographyState_impl;
-              std::unique_ptr<DiscreteDemographyState_impl> pimpl;
+            class DiscreteDemographyState_impl;
+            std::unique_ptr<DiscreteDemographyState_impl> pimpl;
+
           public:
             DiscreteDemographyState(std::vector<MassMigration> mass_migrations,
                                     std::vector<SetExponentialGrowth> set_growth_rates,
@@ -29,8 +31,18 @@ namespace fwdpy11
                                     MigrationMatrix M,
                                     std::vector<SetMigrationRates> set_migration_rates);
 
-            DiscreteDemographyState(const DiscreteDemographyState &);
-            DiscreteDemographyState(DiscreteDemographyState &&);
+            DiscreteDemographyState(const DiscreteDemographyState&);
+            DiscreteDemographyState(DiscreteDemographyState&&);
+
+            // Applies mass migration events and deme size changes.
+            // Will affect growh rates, too.
+            void early(const GSLrng_t& rng, const std::uint32_t generation,
+                       std::vector<DiploidMetadata>& metadata);
+
+            // Updates fitness lookups, migration lookups,
+            // and performs runtime validations.
+            void late(const GSLrng_t& rng, const std::uint32_t generation,
+                      std::vector<DiploidMetadata>& metadata);
         };
 
     }

@@ -55,6 +55,18 @@ namespace fwdpy11
             void initialize(const std::vector<std::uint32_t>& deme_sizes,
                             const std::uint32_t pop_generation);
 
+            // Applies mass migration events and deme size changes.
+            // Will affect growh rates, too.
+            // NOTE: replaces mass_migrations_and_current_sizes.
+            void early(const GSLrng_t& rng, const std::uint32_t generation,
+                       std::vector<DiploidMetadata>& metadata);
+
+            // Updates fitness lookups, migration lookups,
+            // and performs runtime validations.
+            // NOTE: replaces finalize_demographic_state.
+            void late(const GSLrng_t& rng, const std::uint32_t generation,
+                       std::vector<DiploidMetadata>& metadata);
+
             // Assist the DiscreteDemographyState copy constructor
             std::unique_ptr<DiscreteDemographyState_impl> clone() const;
         };

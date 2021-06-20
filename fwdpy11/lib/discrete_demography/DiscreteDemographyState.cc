@@ -30,5 +30,21 @@ namespace fwdpy11
         {
         }
 
+        void
+        DiscreteDemographyState::early(const GSLrng_t& rng,
+                                       const std::uint32_t generation,
+                                       std::vector<DiploidMetadata>& metadata)
+        {
+            pimpl->early(rng, generation, metadata);
+        }
+
+        void
+        DiscreteDemographyState::late(const GSLrng_t& rng,
+                                      const std::uint32_t generation,
+                                      std::vector<DiploidMetadata>& metadata)
+        {
+            pimpl->late(rng, generation, metadata);
+        }
+
     }
 }
