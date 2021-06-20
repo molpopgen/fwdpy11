@@ -23,7 +23,9 @@ namespace fwdpy11
             };
 
             // These are the input parameters to the model +
-            // a set of integers to track what the next event is
+            // a set of integers to track what the next event is.
+            // The event lists and the migration matrix M are de-facto
+            // const.
             events_with_range<MassMigration> mass_migrations;
             events_with_range<SetExponentialGrowth> set_growth_rates;
             events_with_range<SetDemeSize> set_deme_sizes;
