@@ -42,6 +42,18 @@ namespace fwdpy11
             std::vector<double> selfing_rates;
             std::uint32_t current_time_in_simulation;
 
+            // Implementation details of demographic events
+            // Template implementations are in case of future
+            // support for non-diploid populations.
+
+            template <typename METADATATYPE>
+            void
+            apply_mass_migrations(const GSLrng_t& rng,
+                                  const std::uint32_t simulation_time,
+                                  std::vector<METADATATYPE>& individual_metadata)
+            {
+            }
+
           public:
             DiscreteDemographyState_impl(
                 std::vector<MassMigration> mass_migrations,
@@ -65,7 +77,7 @@ namespace fwdpy11
             // and performs runtime validations.
             // NOTE: replaces finalize_demographic_state.
             void late(const GSLrng_t& rng, const std::uint32_t generation,
-                       std::vector<DiploidMetadata>& metadata);
+                      std::vector<DiploidMetadata>& metadata);
 
             // Assist the DiscreteDemographyState copy constructor
             std::unique_ptr<DiscreteDemographyState_impl> clone() const;
