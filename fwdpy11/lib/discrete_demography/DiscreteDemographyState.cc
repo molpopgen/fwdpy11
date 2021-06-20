@@ -24,5 +24,11 @@ namespace fwdpy11
             : pimpl{other.pimpl->clone()}
         {
         }
+
+        DiscreteDemographyState::DiscreteDemographyState(DiscreteDemographyState&& other)
+            : pimpl{std::exchange(other.pimpl, nullptr)}
+        {
+        }
+
     }
 }

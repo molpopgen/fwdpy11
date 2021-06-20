@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <utility>
 #include "MassMigration.hpp"
 #include "SetExponentialGrowth.hpp"
 #include "SetDemeSize.hpp"
@@ -28,7 +29,7 @@ namespace fwdpy11
                                     std::vector<SetMigrationRates> set_migration_rates);
 
             DiscreteDemographyState(const DiscreteDemographyState &);
-            DiscreteDemographyState(DiscreteDemographyState &&) = default;
+            DiscreteDemographyState(DiscreteDemographyState &&);
         };
 
     }
