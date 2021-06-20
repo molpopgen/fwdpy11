@@ -1,8 +1,11 @@
 #pragma once
 
+#include <gsl/gsl_randist.h>
+#include <stack>
 #include <vector>
 #include <cstdint>
 #include <stdexcept>
+#include <unordered_map>
 #include <fwdpy11/discrete_demography/DiscreteDemographyState.hpp>
 
 namespace fwdpy11
@@ -46,6 +49,62 @@ namespace fwdpy11
             // Implementation details of demographic events
             // Template implementations are in case of future
             // support for non-diploid populations.
+            // Much of these details are copied and slightly modified
+            // from standalone functions prior to 0.16.0.
+
+            using deme_map = std::unordered_map<std::int32_t, std::vector<std::size_t>>;
+            using vector_backed_move_stack
+                = std::stack<std::size_t, std::vector<std::size_t>>;
+
+            struct move_stack
+            {
+                std::size_t initial_N;
+                vector_backed_move_stack ms;
+                template <typename T>
+                move_stack(std::size_t N, T&& t) : initial_N(N), ms(std::forward<T>(t))
+                {
+                }
+            };
+
+            using move_map = std::unordered_map<std::int32_t, move_stack>;
+
+            template <typename METADATATYPE>
+            deme_map
+            build_deme_map(const std::vector<METADATATYPE>& metadata)
+            {
+                deme_map rv;
+                for (std::size_t i = 0; i < metadata.size(); ++i)
+                    {
+                        if (i != metadata[i].label)
+                            {
+                                throw std::runtime_error(
+                                    "metadata label does not equal index");
+                            }
+                        rv[metadata[i].deme].push_back(i);
+                    }
+                return rv;
+            }
+
+            move_map
+            build_move_sources(const GSLrng_t& rng, const deme_map& deme_map)
+            {
+                move_map rv;
+
+                for (auto&& m : deme_map)
+                    {
+                        auto indexes(m.second);
+                        if (indexes.empty())
+                            {
+                                throw std::runtime_error("empty vector of individuals");
+                            }
+                        gsl_ran_shuffle(rng.get(), indexes.data(), indexes.size(),
+                                        sizeof(std::size_t));
+                        rv.emplace(m.first,
+                                   move_stack(indexes.size(), std::move(indexes)));
+                    }
+
+                return rv;
+            }
 
             template <typename METADATATYPE>
             void
@@ -66,6 +125,12 @@ namespace fwdpy11
                         throw std::runtime_error("metadata are empty");
                     }
                 bool initialized_moves{false};
+                std::vector<METADATATYPE> copies;
+                std::vector<std::int32_t> moves; // TODO: is this type okay?
+                std::vector<std::size_t> buffer;
+
+                auto input_deme_map = build_deme_map(individual_metadata);
+                move_map move_source;
 
                 for (std::size_t i = mass_migrations.event_range.first;
                      i < mass_migrations.event_range.second
