@@ -26,6 +26,9 @@ namespace fwdpy11
                                     std::vector<SetSelfingRate> set_selfing_rates,
                                     MigrationMatrix M,
                                     std::vector<SetMigrationRates> set_migration_rates);
+
+            DiscreteDemographyState(const DiscreteDemographyState &);
+            DiscreteDemographyState(DiscreteDemographyState &&) = default;
         };
 
     }

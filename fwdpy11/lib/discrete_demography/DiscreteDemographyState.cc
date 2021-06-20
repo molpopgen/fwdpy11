@@ -18,5 +18,11 @@ namespace fwdpy11
                 std::move(set_migration_rates)}}
         {
         }
+
+        DiscreteDemographyState::DiscreteDemographyState(
+            const DiscreteDemographyState& other)
+            : pimpl{other.pimpl->clone()}
+        {
+        }
     }
 }
