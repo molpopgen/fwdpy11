@@ -412,5 +412,15 @@ namespace fwdpy11
             // Assist the DiscreteDemographyState copy constructor
             std::unique_ptr<DiscreteDemographyState_impl> clone() const;
         };
+
+        extern template void
+        DiscreteDemographyState::DiscreteDemographyState_impl::early(
+            const GSLrng_t& rng, const std::uint32_t generation,
+            std::vector<DiploidMetadata>& metadata);
+
+        extern template void
+        DiscreteDemographyState::DiscreteDemographyState_impl::late(
+            const GSLrng_t& rng, const std::uint32_t generation,
+            std::vector<DiploidMetadata>& metadata);
     }
 }
