@@ -149,12 +149,58 @@ namespace fwdpy11
                     }
             }
 
+            void
+            move_from_stack(std::int32_t destination, std::size_t n,
+                            std::vector<std::int32_t>& moves, move_stack& ms)
+            {
+                for (std::size_t i = 0; i < n && !ms.ms.empty(); ++i)
+                    {
+                        auto val = ms.ms.top();
+                        if (moves[val] != -1)
+                            {
+                                throw std::runtime_error(
+                                    "MassMigration error: individual has "
+                                    "already "
+                                    "moved");
+                            }
+                        moves[val] = destination;
+                        ms.ms.pop();
+                    }
+            }
+
+            inline void
+            mass_migration_moves(const MassMigration& mm, std::uint32_t t,
+                                 std::vector<std::int32_t>& moves, move_map& move_source)
+            {
+                auto deme_itr = move_source.find(mm.source);
+                if (deme_itr == end(move_source))
+                    {
+                        std::ostringstream o;
+                        o << "moves from empty deme " << mm.source << " at time " << t
+                          << " attempted";
+                        throw DemographyError(o.str());
+                    }
+                if (mm.fraction < 1.0)
+                    {
+                        std::size_t destination_size
+                            = std::round(static_cast<double>(deme_itr->second.initial_N)
+                                         * mm.fraction);
+                        move_from_stack(mm.destination, destination_size, moves,
+                                        deme_itr->second);
+                    }
+                else // entire deme moves
+                    {
+                        move_from_stack(mm.destination, deme_itr->second.initial_N,
+                                        moves, deme_itr->second);
+                    }
+            }
+
             template <typename METADATATYPE>
             inline void
-            apply_mass_migration_copies(const GSLrng_t& rng, const MassMigration& mm,
-                                        const deme_map& deme_map, uint32_t t,
-                                        std::vector<std::size_t>& buffer,
-                                        std::vector<METADATATYPE>& metadata)
+            mass_migration_copies(const GSLrng_t& rng, const MassMigration& mm,
+                                  const deme_map& deme_map, uint32_t t,
+                                  std::vector<std::size_t>& buffer,
+                                  std::vector<METADATATYPE>& metadata)
             {
                 auto deme_itr = deme_map.find(mm.source);
                 if (deme_itr == end(deme_map))
@@ -190,6 +236,47 @@ namespace fwdpy11
                         mass_migration_copy_individuals(deme_itr->second, mm.destination,
                                                         metadata);
                     }
+            }
+
+            template <typename METADATATYPE>
+            inline std::unordered_map<std::int32_t, std::size_t>
+            update_metadata_due_to_mass_migrations(
+                const std::size_t initial_N, const deme_map& deme_map,
+                const std::vector<std::int32_t>& moves,
+                std::vector<METADATATYPE>& metadata)
+            {
+                auto deme_sizes = get_deme_sizes(deme_map);
+                // If there are moves, update the metadata and the deme sizes
+                for (std::size_t m = 0; m < moves.size(); ++m)
+                    {
+                        if (moves[m] != -1)
+                            {
+                                auto itr = deme_sizes.find(metadata[m].deme);
+                                if (itr == deme_sizes.end())
+                                    {
+                                        throw std::runtime_error(
+                                            "MassMigration error: deme not in "
+                                            "lookup "
+                                            "table");
+                                    }
+                                if (itr->second == 0)
+                                    {
+                                        throw std::runtime_error(
+                                            "MassMigration error: deme size "
+                                            "in "
+                                            "lookup "
+                                            "table is zero during moves");
+                                    }
+                                itr->second--;
+                                metadata[m].deme = moves[m];
+                                deme_sizes[moves[m]]++;
+                            }
+                    }
+                for (std::size_t i = initial_N; i < metadata.size(); ++i)
+                    {
+                        deme_sizes[metadata[i].deme]++;
+                    }
+                return deme_sizes;
             }
 
             template <typename METADATATYPE>
@@ -233,15 +320,18 @@ namespace fwdpy11
                                             "MassMigration error: copies after "
                                             "moves");
                                     }
-                                apply_mass_migration_copies(
-                                    rng, mass_migrations.events[i], simulation_time,
-                                    buffer, individual_metadata);
-                                update_changed_and_reset(mass_migrations.events[i],
-                                                         changed_and_reset);
+                                mass_migration_copies(rng, mass_migrations.events[i],
+                                                      simulation_time, buffer,
+                                                      individual_metadata);
                             }
                         else // move event
                             {
+                                mass_migration_moves(mass_migrations.events[i],
+                                                     simulation_time, moves,
+                                                     input_deme_map);
                             }
+                        update_changed_and_reset(mass_migrations.events[i],
+                                                 changed_and_reset);
                     }
             }
 
