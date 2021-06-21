@@ -250,7 +250,7 @@ namespace fwdpy11
             }
 
             template <typename METADATATYPE>
-            inline std::unordered_map<std::int32_t, std::size_t>
+            std::unordered_map<std::int32_t, std::size_t>
             update_metadata_due_to_mass_migrations(
                 const std::size_t initial_N, const deme_map& deme_map,
                 const std::vector<std::int32_t>& moves,
@@ -288,6 +288,38 @@ namespace fwdpy11
                         deme_sizes[metadata[i].deme]++;
                     }
                 return deme_sizes;
+            }
+
+            void
+            update_growth_parameters_after_mass_migrations(
+                std::uint32_t t,
+                const std::unordered_map<std::int32_t, std::size_t>& final_deme_sizes,
+                const std::unordered_map<std::int32_t, bool>& changed_and_reset)
+            {
+                for (auto&& cr : changed_and_reset)
+                    {
+                        auto fds = final_deme_sizes.find(cr.first);
+                        if (fds == final_deme_sizes.end())
+                            {
+                                throw std::runtime_error(
+                                    "MassMigration error: changed_and_reset "
+                                    "key "
+                                    "not found in final_deme_sizes");
+                            }
+                        // NOTE: fds->second is size_t, but deme sizes
+                        // are uint32_t so we have to check for overflow
+                        if (fds->second >= std::numeric_limits<std::uint32_t>::max())
+                            {
+                                throw std::runtime_error(
+                                    "MassMigration error: deme size overflow");
+                            }
+                        if (cr.second == true)
+                            {
+                                growth_rates[cr.first] = NOGROWTH;
+                            }
+                        growth_onset_times[fds->first] = t;
+                        growth_initial_sizes[fds->first] = fds->second;
+                    }
             }
 
             template <typename METADATATYPE>
@@ -344,6 +376,10 @@ namespace fwdpy11
                         update_changed_and_reset(mass_migrations.events[i],
                                                  changed_and_reset);
                     }
+                auto final_deme_sizes = update_metadata_due_to_mass_migrations(
+                    initial_N, individual_to_deme, moves, individual_metadata);
+                update_growth_parameters_after_mass_migrations(
+                    simulation_time, final_deme_sizes, changed_and_reset);
             }
 
           public:
