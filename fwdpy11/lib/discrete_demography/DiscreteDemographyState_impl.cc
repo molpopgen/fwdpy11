@@ -36,5 +36,9 @@ namespace fwdpy11
             deme_sizes;
             pop_generation;
         }
+
+        template void DiscreteDemographyState::DiscreteDemographyState_impl::early(
+            const GSLrng_t& rng, const std::uint32_t generation,
+            std::vector<DiploidMetadata>& metadata);
     }
 }

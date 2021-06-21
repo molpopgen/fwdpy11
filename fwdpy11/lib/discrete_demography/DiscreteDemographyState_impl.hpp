@@ -363,15 +363,22 @@ namespace fwdpy11
                                             "MassMigration error: copies after "
                                             "moves");
                                     }
-                                mass_migration_copies(rng, mass_migrations.events[i],
-                                                      simulation_time, buffer,
-                                                      individual_metadata);
+                                mass_migration_copies(
+                                    rng, mass_migrations.events[i], individual_to_deme,
+                                    simulation_time, buffer, individual_metadata);
                             }
                         else // move event
                             {
+                                if (initialized_moves == false)
+                                    {
+                                        moves.resize(initial_N, -1);
+                                        move_source = build_move_sources(
+                                            rng, individual_to_deme);
+                                        initialized_moves = true;
+                                    }
                                 mass_migration_moves(mass_migrations.events[i],
                                                      simulation_time, moves,
-                                                     individual_to_deme);
+                                                     move_source);
                             }
                         update_changed_and_reset(mass_migrations.events[i],
                                                  changed_and_reset);
