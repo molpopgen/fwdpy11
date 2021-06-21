@@ -70,6 +70,17 @@ namespace fwdpy11
 
             using move_map = std::unordered_map<std::int32_t, move_stack>;
 
+            std::unordered_map<std::int32_t, std::size_t>
+            get_deme_sizes(const deme_map& deme_map)
+            {
+                std::unordered_map<std::int32_t, std::size_t> rv;
+                for (auto&& i : deme_map)
+                    {
+                        rv.emplace(i.first, i.second.size());
+                    }
+                return rv;
+            }
+
             template <typename METADATATYPE>
             deme_map
             build_deme_map(const std::vector<METADATATYPE>& metadata)
@@ -302,7 +313,7 @@ namespace fwdpy11
                 std::vector<std::int32_t> moves; // TODO: is this type okay?
                 std::vector<std::size_t> buffer;
 
-                auto input_deme_map = build_deme_map(individual_metadata);
+                auto individual_to_deme = build_deme_map(individual_metadata);
                 move_map move_source;
                 std::unordered_map<std::int32_t, bool> changed_and_reset;
 
@@ -328,7 +339,7 @@ namespace fwdpy11
                             {
                                 mass_migration_moves(mass_migrations.events[i],
                                                      simulation_time, moves,
-                                                     input_deme_map);
+                                                     individual_to_deme);
                             }
                         update_changed_and_reset(mass_migrations.events[i],
                                                  changed_and_reset);
