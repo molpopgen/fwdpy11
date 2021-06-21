@@ -399,15 +399,19 @@ namespace fwdpy11
             // Will affect growh rates, too.
             // NOTE: replaces mass_migrations_and_current_sizes.
             template <typename METADATATYPE>
-            void early(const GSLrng_t& rng, const std::uint32_t generation,
-                       std::vector<METADATATYPE>& metadata);
+            void
+            early(const GSLrng_t& rng, const std::uint32_t generation,
+                  std::vector<METADATATYPE>& individual_metadata)
+            {
+                apply_mass_migrations(rng, generation, individual_metadata);
+            }
 
             // Updates fitness lookups, migration lookups,
             // and performs runtime validations.
             // NOTE: replaces finalize_demographic_state.
             template <typename METADATATYPE>
             void late(const GSLrng_t& rng, const std::uint32_t generation,
-                      std::vector<METADATATYPE>& metadata);
+                      std::vector<METADATATYPE>& individual_metadata);
 
             // Assist the DiscreteDemographyState copy constructor
             std::unique_ptr<DiscreteDemographyState_impl> clone() const;
@@ -418,8 +422,7 @@ namespace fwdpy11
             const GSLrng_t& rng, const std::uint32_t generation,
             std::vector<DiploidMetadata>& metadata);
 
-        extern template void
-        DiscreteDemographyState::DiscreteDemographyState_impl::late(
+        extern template void DiscreteDemographyState::DiscreteDemographyState_impl::late(
             const GSLrng_t& rng, const std::uint32_t generation,
             std::vector<DiploidMetadata>& metadata);
     }
