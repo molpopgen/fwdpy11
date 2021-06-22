@@ -47,6 +47,7 @@ namespace fwdpy11
             std::vector<double> growth_rates;
             std::vector<double> selfing_rates;
             std::uint32_t current_time_in_simulation;
+            std::uint32_t next_global_N;
 
             // Implementation details of demographic events
             // Template implementations are in case of future

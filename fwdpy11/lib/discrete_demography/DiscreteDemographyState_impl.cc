@@ -17,7 +17,8 @@ namespace fwdpy11
               set_selfing_rates{std::move(set_selfing_rates)}, M{std::move(M)},
               set_migration_rates{std::move(set_migration_rates)}, current_deme_sizes{},
               next_deme_sizes{}, growth_onset_times{}, growth_initial_sizes{},
-              growth_rates{}, selfing_rates{}, current_time_in_simulation{0}
+              growth_rates{}, selfing_rates{}, current_time_in_simulation{0},
+              next_global_N{0}
         {
         }
 
