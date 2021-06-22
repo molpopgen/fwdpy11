@@ -341,7 +341,6 @@ namespace fwdpy11
                         throw std::runtime_error("metadata are empty");
                     }
                 bool initialized_moves{false};
-                std::vector<METADATATYPE> copies;
                 std::vector<std::int32_t> moves; // TODO: is this type okay?
                 std::vector<std::size_t> buffer;
 
