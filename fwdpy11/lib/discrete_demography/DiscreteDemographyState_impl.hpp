@@ -399,6 +399,8 @@ namespace fwdpy11
 
             // This function must be run early, when the simulation
             // code is entered, but before we start iterating over generations.
+            // This function needs to take some/all responsibility for
+            // determining the max number of demes in the simulation.
             void initialize(const std::vector<std::uint32_t>& deme_sizes,
                             const std::uint32_t pop_generation);
 
