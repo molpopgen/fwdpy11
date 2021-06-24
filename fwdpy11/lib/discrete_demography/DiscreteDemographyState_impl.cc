@@ -31,10 +31,10 @@ namespace fwdpy11
 
         void
         DiscreteDemographyState::DiscreteDemographyState_impl::initialize(
-            const std::vector<std::uint32_t>& deme_sizes,
+            const DiploidPopulation & pop,
             const std::uint32_t pop_generation)
         {
-            deme_sizes;
+            pop;
             pop_generation;
         }
 

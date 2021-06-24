@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <fwdpy11/discrete_demography/DiscreteDemographyState.hpp>
 #include <fwdpy11/discrete_demography/exceptions.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 
 namespace fwdpy11
 {
@@ -401,7 +402,7 @@ namespace fwdpy11
             // code is entered, but before we start iterating over generations.
             // This function needs to take some/all responsibility for
             // determining the max number of demes in the simulation.
-            void initialize(const std::vector<std::uint32_t>& deme_sizes,
+            void initialize(const DiploidPopulation& pop,
                             const std::uint32_t pop_generation);
 
             // Applies mass migration events and deme size changes.
