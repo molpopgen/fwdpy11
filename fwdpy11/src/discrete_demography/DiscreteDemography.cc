@@ -21,7 +21,6 @@
 #include <pybind11/stl.h>
 
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 
 namespace py = pybind11;
 namespace ddemog = fwdpy11::discrete_demography;
@@ -63,49 +62,35 @@ namespace
     }
 
     py::dict
-    model_state_as_dict(
-        const std::unique_ptr<ddemog::demographic_model_state>& model_state)
+    model_state_as_dict(const ddemog::DiscreteDemographyState& model_state)
     {
         py::dict rv;
-        rv["maxdemes"] = model_state->maxdemes;
+        rv["maxdemes"] = model_state.maxdemes;
 
         // This is the deme_properties stuff
-        rv["current_deme_sizes"] = model_state->sizes_rates.current_deme_sizes.get();
-        rv["next_deme_sizes"] = model_state->sizes_rates.next_deme_sizes.get();
+        rv["current_deme_sizes"]
+            = model_state.current_deme_parameters.current_deme_sizes.get();
+        rv["next_deme_sizes"]
+            = model_state.current_deme_parameters.next_deme_sizes.get();
         rv["growth_rate_onset_times"]
-            = model_state->sizes_rates.growth_rate_onset_times.get();
-        rv["growth_initial_sizes"] = model_state->sizes_rates.growth_initial_sizes.get();
-        rv["growth_rates"] = model_state->sizes_rates.growth_rates.get();
-        rv["selfing_rates"] = model_state->sizes_rates.selfing_rates.get();
+            = model_state.current_deme_parameters.growth_rate_onset_times.get();
+        rv["growth_initial_sizes"]
+            = model_state.current_deme_parameters.growth_initial_sizes.get();
+        rv["growth_rates"] = model_state.current_deme_parameters.growth_rates.get();
+        rv["selfing_rates"] = model_state.current_deme_parameters.selfing_rates.get();
 
-        // The migration matrix
-        if (model_state->M.empty())
-            {
-                rv["migmatrix"] = py::none();
-            }
-        else
-            {
-                rv["migmatrix"] = py::make_tuple(model_state->M.M, model_state->M.npops,
-                                                 model_state->M.scaled);
-            }
+        rv["migmatrix"]
+            = py::make_tuple(model_state.M.M, model_state.M.npops, model_state.M.scaled);
+
+        rv["bookmark"] = py::dict{};
+        rv["bookmark"]["starts"] = model_state.fitness_bookmark.starts;
+        rv["bookmark"]["stops"] = model_state.fitness_bookmark.stops;
+        rv["bookmark"]["offsets"] = model_state.fitness_bookmark.offsets;
+        rv["bookmark"]["individuals"] = model_state.fitness_bookmark.individuals;
+        rv["bookmark"]["individual_fitness"]
+            = model_state.fitness_bookmark.individual_fitness;
+
         return rv;
-    }
-
-    template <typename range_t, typename event_list_t>
-    void
-    liftover_ranges(const event_list_t& input_events, const event_list_t& output_events,
-                    const range_t& input_range, range_t& output_range)
-    {
-        if (input_events.size() != output_events.size())
-            {
-                throw std::invalid_argument("event list sizes must be equal");
-            }
-        auto d = std::distance(begin(input_events), input_range.get().first);
-        if (output_range.get().first + d > output_range.get().second)
-            {
-                throw std::runtime_error("updating the range would create beg > end");
-            }
-        output_range.get().first += d;
     }
 } // namespace
 
@@ -113,16 +98,16 @@ void
 init_DiscreteDemography(py::module& m)
 {
     // TODO: decide if we need to pass fitnesses via asdict?
-    py::class_<ddemog::demographic_model_state>(m, "_ll_DemographicModelState");
+    // py::class_<ddemog::demographic_model_state>(m, "_ll_DemographicModelState");
     py::class_<ddemog::DiscreteDemography>(m, "_ll_DiscreteDemography")
         .def(py::init([](py::object mass_migration_events, py::object set_growth_rates,
                          py::object set_deme_sizes, py::object set_selfing_rates,
                          py::object migmatrix, py::object set_migration_rates) {
-                 ddemog::DiscreteDemography::mass_migration_vector morc;
-                 ddemog::DiscreteDemography::set_growth_rates_vector growth;
-                 ddemog::DiscreteDemography::set_deme_sizes_vector change_sizes;
-                 ddemog::DiscreteDemography::set_selfing_rates_vector selfing;
-                 ddemog::DiscreteDemography::set_migration_rates_vector migrates;
+                 std::vector<ddemog::MassMigration> morc;
+                 std::vector<ddemog::SetExponentialGrowth> growth;
+                 std::vector<ddemog::SetDemeSize> change_sizes;
+                 std::vector<ddemog::SetSelfingRate> selfing;
+                 std::vector<ddemog::SetMigrationRates> migrates;
 
                  if (mass_migration_events.is_none() == false)
                      {
@@ -162,105 +147,71 @@ init_DiscreteDemography(py::module& m)
              py::arg("set_selfing_rates") = py::none(),
              py::arg("migmatrix") = py::none(),
              py::arg("set_migration_rates") = py::none())
-        .def("_clone_state_to",
-             [](const ddemog::DiscreteDemography& self,
-                ddemog::DiscreteDemography& dest) {
-                 if (self.get_model_state_ref() == nullptr)
-                     {
-                         ddemog::save_model_state(nullptr, dest);
-                     }
-                 else
-                     {
-                         auto model = self.get_model_state_ref()->clone();
-                         ddemog::save_model_state(std::move(model), dest);
-                     }
-             })
-        .def("_liftover_range_states",
-             [](const ddemog::DiscreteDemography& self,
-                ddemog::DiscreteDemography& dest) {
-                 liftover_ranges(self.mass_migrations, dest.mass_migrations,
-                                 self.mass_migration_tracker,
-                                 dest.mass_migration_tracker);
-                 liftover_ranges(self.set_deme_sizes, dest.set_deme_sizes,
-                                 self.deme_size_change_tracker,
-                                 dest.deme_size_change_tracker);
-                 liftover_ranges(self.set_growth_rates, dest.set_growth_rates,
-                                 self.growth_rate_change_tracker,
-                                 dest.growth_rate_change_tracker);
-                 liftover_ranges(self.set_selfing_rates, dest.set_selfing_rates,
-                                 self.selfing_rate_change_tracker,
-                                 dest.selfing_rate_change_tracker);
-                 liftover_ranges(self.set_migration_rates, dest.set_migration_rates,
-                                 self.migration_rate_change_tracker,
-                                 dest.migration_rate_change_tracker);
-             })
+        .def("_clone_state_to", &ddemog::DiscreteDemography::copy_state_to)
         .def("_state_asdict",
              [](ddemog::DiscreteDemography& self) -> py::object {
-                 auto state = self.get_model_state();
-                 if (state == nullptr)
-                     {
-                         self.set_model_state(std::move(state));
-                         return py::none();
-                     }
-                 py::dict rv;
-                 try
-                     {
-                         rv = model_state_as_dict(state);
-                     }
-                 catch (...)
-                     {
-                         self.set_model_state(std::move(state));
-                         throw;
-                     }
-                 self.set_model_state(std::move(state));
-                 return rv;
+                 return model_state_as_dict(self.get_model_state());
              })
         .def("_reset_state", [](ddemog::DiscreteDemography& self, py::object o) {
-            std::unique_ptr<ddemog::demographic_model_state> state(nullptr);
-            if (o.is_none() == false)
-                {
-                    auto d = o.cast<py::dict>();
-                    auto maxdemes = d["maxdemes"].cast<std::int32_t>();
+            auto model_state = self.get_model_state();
+            auto d = o.cast<py::dict>();
+            auto maxdemes = d["maxdemes"].cast<std::int32_t>();
 
-                    // Deme properties uses strong types
-                    ddemog::current_deme_sizes_vector current_deme_sizes(
-                        d["current_deme_sizes"]
-                            .cast<ddemog::current_deme_sizes_vector::value_type>());
-                    ddemog::next_deme_sizes_vector next_deme_sizes(
-                        d["next_deme_sizes"]
-                            .cast<ddemog::next_deme_sizes_vector::value_type>());
-                    ddemog::growth_rates_onset_times_vector growth_rates_onset_times(
-                        d["growth_rate_onset_times"]
-                            .cast<
-                                ddemog::growth_rates_onset_times_vector::value_type>());
-                    ddemog::growth_initial_size_vector growth_initial_sizes(
-                        d["growth_initial_sizes"]
-                            .cast<ddemog::growth_initial_size_vector::value_type>());
-                    ddemog::growth_rates_vector growth_rates(
-                        d["growth_rates"]
-                            .cast<ddemog::growth_rates_vector::value_type>());
-                    ddemog::selfing_rates_vector selfing_rates(
-                        d["selfing_rates"]
-                            .cast<ddemog::selfing_rates_vector::value_type>());
+            // Deme properties uses strong types
+            ddemog::current_deme_sizes_vector current_deme_sizes(
+                d["current_deme_sizes"]
+                    .cast<ddemog::current_deme_sizes_vector::value_type>());
+            ddemog::next_deme_sizes_vector next_deme_sizes(
+                d["next_deme_sizes"].cast<ddemog::next_deme_sizes_vector::value_type>());
+            ddemog::growth_rates_onset_times_vector growth_rates_onset_times(
+                d["growth_rate_onset_times"]
+                    .cast<ddemog::growth_rates_onset_times_vector::value_type>());
+            ddemog::growth_initial_size_vector growth_initial_sizes(
+                d["growth_initial_sizes"]
+                    .cast<ddemog::growth_initial_size_vector::value_type>());
+            ddemog::growth_rates_vector growth_rates(
+                d["growth_rates"].cast<ddemog::growth_rates_vector::value_type>());
+            ddemog::selfing_rates_vector selfing_rates(
+                d["selfing_rates"].cast<ddemog::selfing_rates_vector::value_type>());
 
-                    ddemog::deme_properties sizes_rates(
-                        std::move(current_deme_sizes), std::move(next_deme_sizes),
-                        std::move(growth_rates_onset_times),
-                        std::move(growth_initial_sizes), std::move(growth_rates),
-                        std::move(selfing_rates));
+            ddemog::deme_properties sizes_rates(
+                std::move(current_deme_sizes), std::move(next_deme_sizes),
+                std::move(growth_rates_onset_times), std::move(growth_initial_sizes),
+                std::move(growth_rates), std::move(selfing_rates));
 
-                    ddemog::MigrationMatrix M{};
-                    if (d["migmatrix"].is_none() == false)
-                        {
-                            auto t = d["migmatrix"].cast<py::tuple>();
-                            auto rates = t[0].cast<std::vector<double>>();
-                            auto npops = t[1].cast<std::size_t>();
-                            auto scaled = t[2].cast<bool>();
-                            M = ddemog::MigrationMatrix(std::move(rates), npops, scaled);
-                        }
-                    state.reset(new ddemog::demographic_model_state(
-                        maxdemes, std::move(sizes_rates), std::move(M)));
-                }
-            self.set_model_state(std::move(state));
+            ddemog::MigrationMatrix M{};
+            auto t = d["migmatrix"].cast<py::tuple>();
+            auto rates = t[0].cast<std::vector<double>>();
+            auto npops = t[1].cast<std::size_t>();
+            auto scaled = t[2].cast<bool>();
+            M = ddemog::MigrationMatrix(std::move(rates), npops, scaled);
+
+            model_state.maxdemes = maxdemes;
+            model_state.current_deme_parameters.current_deme_sizes.get()
+                = std::move(current_deme_sizes.get());
+            model_state.current_deme_parameters.next_deme_sizes.get()
+                = std::move(next_deme_sizes.get());
+            model_state.current_deme_parameters.growth_rate_onset_times.get()
+                = std::move(growth_rates_onset_times.get());
+            model_state.current_deme_parameters.growth_initial_sizes.get()
+                = std::move(growth_initial_sizes.get());
+            model_state.current_deme_parameters.growth_rates.get()
+                = std::move(growth_rates.get());
+            model_state.current_deme_parameters.selfing_rates.get()
+                = std::move(selfing_rates.get());
+            model_state.M = std::move(M);
+
+            model_state.fitness_bookmark.starts
+                = d["bookmark"]["starts"].cast<std::vector<std::uint32_t>>();
+            model_state.fitness_bookmark.stops
+                = d["bookmark"]["stops"].cast<std::vector<std::uint32_t>>();
+            model_state.fitness_bookmark.offsets
+                = d["bookmark"]["offsets"].cast<std::vector<std::uint32_t>>();
+            model_state.fitness_bookmark.individuals
+                = d["bookmark"]["individuals"].cast<std::vector<std::uint32_t>>();
+            model_state.fitness_bookmark.individual_fitness
+                = d["bookmark"]["individual_fitness"].cast<std::vector<double>>();
+
+            self.set_model_state(std::move(model_state));
         });
 }

@@ -24,7 +24,6 @@
 #include <memory>
 #include <vector>
 #include <gsl/gsl_matrix.h>
-#include <fwdpp/util/named_type.hpp>
 
 #include "MassMigration.hpp"
 #include "MigrationMatrix.hpp"
@@ -33,37 +32,12 @@
 #include "SetSelfingRate.hpp"
 #include "SetMigrationRates.hpp"
 #include "simulation/detail.hpp"
+#include "DiscreteDemographyState.hpp"
 
 namespace fwdpy11
 {
     namespace discrete_demography
     {
-        using mass_migration_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<MassMigration>::const_iterator,
-                      const std::vector<MassMigration>::const_iterator>,
-            detail::mass_migration_range_t>;
-        using deme_size_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetDemeSize>::const_iterator,
-                      const std::vector<SetDemeSize>::const_iterator>,
-            detail::deme_size_change_range_t>;
-        using growth_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetExponentialGrowth>::const_iterator,
-                      const std::vector<SetExponentialGrowth>::const_iterator>,
-            detail::growth_rate_change_range_t>;
-        using selfing_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetSelfingRate>::const_iterator,
-                      const std::vector<SetSelfingRate>::const_iterator>,
-            detail::selfing_rate_change_range_t>;
-
-        using migration_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetMigrationRates>::const_iterator,
-                      const std::vector<SetMigrationRates>::const_iterator>,
-            detail::migration_rate_change_range_t>;
-
-        class demographic_model_state;
-
-        using demographic_model_state_pointer = std::unique_ptr<demographic_model_state>;
-
         class DiscreteDemography
         {
           private:
@@ -169,20 +143,12 @@ namespace fwdpy11
 
             template <typename T>
             std::vector<T>
-            init_events_vector(std::vector<T>&& v)
+            init_events_vector(std::vector<T> v)
             {
                 std::vector<T> rv(std::move(v));
                 sort_events(rv);
                 validate_events(rv);
                 return rv;
-            }
-
-            template <typename T>
-            std::pair<typename std::vector<T>::const_iterator,
-                      const typename std::vector<T>::const_iterator>
-            set_range(const std::vector<T>& v)
-            {
-                return {v.cbegin(), v.cend()};
             }
 
             template <typename T>
@@ -193,13 +159,6 @@ namespace fwdpy11
                     range.get().first, range.get().second, t,
                     [](const typename T::value_type::first_type::value_type v,
                        std::uint32_t t) { return v.when < t; });
-            }
-
-            template <typename T1, typename T2>
-            void
-            reset_range(T1& range, T2& events)
-            {
-                range.get().first = events.cbegin();
             }
 
             void
@@ -279,96 +238,105 @@ namespace fwdpy11
                     }
             }
 
-            demographic_model_state_pointer model_state;
+            DiscreteDemographyState model_state;
+            std::vector<MassMigration> mass_migrations;
+            std::vector<SetExponentialGrowth> set_growth_rates;
+            std::vector<SetDemeSize> set_deme_sizes;
+            std::vector<SetSelfingRate> set_selfing_rates;
+            MigrationMatrix migmatrix;
+            std::vector<SetMigrationRates> set_migration_rates;
 
           public:
-            using mass_migration_vector = std::vector<MassMigration>;
-            using set_growth_rates_vector = std::vector<SetExponentialGrowth>;
-            using set_deme_sizes_vector = std::vector<SetDemeSize>;
-            using set_selfing_rates_vector = std::vector<SetSelfingRate>;
-            using set_migration_rates_vector = std::vector<SetMigrationRates>;
-
-            mass_migration_vector mass_migrations;
-            set_growth_rates_vector set_growth_rates;
-            set_deme_sizes_vector set_deme_sizes;
-            set_selfing_rates_vector set_selfing_rates;
-            MigrationMatrix migmatrix;
-            set_migration_rates_vector set_migration_rates;
-
-            // pairs of iterators over the events
-            mass_migration_range mass_migration_tracker;
-            deme_size_change_range deme_size_change_tracker;
-            growth_rate_change_range growth_rate_change_tracker;
-            selfing_rate_change_range selfing_rate_change_tracker;
-            migration_rate_change_range migration_rate_change_tracker;
-
-            DiscreteDemography(mass_migration_vector mmig, set_growth_rates_vector sg,
-                               set_deme_sizes_vector size_changes,
-                               set_selfing_rates_vector ssr,
+            DiscreteDemography(std::vector<MassMigration> mass_migrations,
+                               std::vector<SetExponentialGrowth> set_growth_rates,
+                               std::vector<SetDemeSize> set_deme_sizes,
+                               std::vector<SetSelfingRate> set_selfing_rates,
                                MigrationMatrix m,
-                               set_migration_rates_vector smr)
-                : model_state(nullptr),
-                  mass_migrations(init_events_vector(std::move(mmig))),
-                  set_growth_rates(init_events_vector(std::move(sg))),
-                  set_deme_sizes(init_events_vector(std::move(size_changes))),
-                  set_selfing_rates(init_events_vector(std::move(ssr))),
+                               std::vector<SetMigrationRates> set_migration_rates)
+                : model_state(init_events_vector(mass_migrations),
+                              init_events_vector(set_growth_rates),
+                              init_events_vector(set_deme_sizes),
+                              init_events_vector(set_selfing_rates), m,
+                              init_events_vector(set_migration_rates)),
+                  mass_migrations(init_events_vector(std::move(mass_migrations))),
+                  set_growth_rates(init_events_vector(std::move(set_growth_rates))),
+                  set_deme_sizes(init_events_vector(std::move(set_deme_sizes))),
+                  set_selfing_rates(init_events_vector(std::move(set_selfing_rates))),
                   migmatrix(std::move(m)),
-                  set_migration_rates(init_events_vector(std::move(smr))),
-                  mass_migration_tracker(set_range(mass_migrations)),
-                  deme_size_change_tracker(set_range(set_deme_sizes)),
-                  growth_rate_change_tracker(set_range(set_growth_rates)),
-                  selfing_rate_change_tracker(set_range(set_selfing_rates)),
-                  migration_rate_change_tracker(set_range(set_migration_rates))
+                  set_migration_rates(init_events_vector(std::move(set_migration_rates)))
             {
                 check_if_no_migration();
                 validate_change_migration_events();
             }
 
             void
-            update_event_times(std::uint32_t current_pop_generation)
-            // When a simulation starts with the population's generation time
-            // not at zero, then we assume that the pop'n has been evolved
-            // and we may need to update the iterators accordingly.
-            // NOTE: needs test.
+            reset_model_state()
             {
-                reset_range(mass_migration_tracker, mass_migrations);
-                update_event_times(current_pop_generation, mass_migration_tracker);
-                reset_range(growth_rate_change_tracker, set_growth_rates);
-                update_event_times(current_pop_generation, growth_rate_change_tracker);
-                reset_range(deme_size_change_tracker, set_deme_sizes);
-                update_event_times(current_pop_generation, deme_size_change_tracker);
-                reset_range(selfing_rate_change_tracker, set_selfing_rates);
-                update_event_times(current_pop_generation, selfing_rate_change_tracker);
-                reset_range(migration_rate_change_tracker, set_migration_rates);
-                update_event_times(current_pop_generation,
-                                   migration_rate_change_tracker);
+                if (model_state.maxdemes > 0)
+                    {
+                        model_state = DiscreteDemographyState(
+                            mass_migrations, set_growth_rates, set_deme_sizes,
+                            set_selfing_rates, migmatrix, set_migration_rates);
+                    }
             }
 
-            demographic_model_state_pointer
+            const DiscreteDemographyState&
             get_model_state()
             // Not visible to Python
-            {
-                demographic_model_state_pointer rv(std::move(model_state));
-                return rv;
-            }
-
-            demographic_model_state_pointer&
-            get_model_state_ref() 
-            {
-                return model_state;
-            }
-
-            const demographic_model_state_pointer&
-            get_model_state_ref() const
             {
                 return model_state;
             }
 
             void
-            set_model_state(demographic_model_state_pointer state)
+            set_model_state(DiscreteDemographyState state)
             // Not visible to Python
             {
                 model_state = std::move(state);
+            }
+
+            void
+            copy_state_to(DiscreteDemography& other)
+            // Visible to Python as DiscreteDemography._clone_state_to
+            {
+                other.model_state = this->model_state;
+            }
+
+            // these getters are not exposed to Python
+
+            auto
+            get_mass_migrations() const
+            {
+                return mass_migrations;
+            }
+
+            auto
+            get_set_deme_sizes() const
+            {
+                return set_deme_sizes;
+            }
+
+            auto
+            get_set_selfing_rates() const
+            {
+                return set_selfing_rates;
+            }
+
+            auto
+            get_set_growth_rates() const
+            {
+                return set_growth_rates;
+            }
+
+            auto
+            get_set_migration_rates() const
+            {
+                return set_migration_rates;
+            }
+
+            auto
+            get_migration_matrix() const
+            {
+                return migmatrix;
             }
         };
     } // namespace discrete_demography

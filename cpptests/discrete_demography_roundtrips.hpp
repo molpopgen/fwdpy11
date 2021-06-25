@@ -22,8 +22,8 @@
 #include <unordered_map>
 #include <vector>
 #include <fwdpy11/rng.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 #include <fwdpy11/discrete_demography/simulation/mating_event_type.hpp>
 
 struct MatingEventRecord
@@ -36,31 +36,9 @@ struct MatingEventRecord
                       fwdpy11::discrete_demography::mating_event_type mt);
 };
 
-struct MockMetadata
-{
-    std::size_t parent1, parent2, label;
-    std::int32_t deme;
-    double w;
+std::unordered_map<int, int>
+get_deme_sizes(const std::vector<fwdpy11::DiploidMetadata>&);
 
-    MockMetadata(std::size_t parent1_, std::size_t parent2_, std::size_t label_,
-                 std::int32_t deme_, double w_);
-};
-
-class MockPopulation
-{
-  private:
-    std::vector<MockMetadata> init_metadata(std::uint32_t popsize);
-
-  public:
-    std::uint32_t N, generation;
-    std::vector<MockMetadata> diploid_metadata;
-
-    MockPopulation(std::uint32_t popsize);
-};
-
-std::unordered_map<int, int> get_deme_sizes(const std::vector<MockMetadata>&);
-
-std::vector<MatingEventRecord>
-DiscreteDemography_roundtrip(const fwdpy11::GSLrng_t& rng, MockPopulation& pop,
-                             fwdpy11::discrete_demography::DiscreteDemography& demography,
-                             std::uint32_t ngens);
+std::vector<MatingEventRecord> DiscreteDemography_roundtrip(
+    const fwdpy11::GSLrng_t& rng, fwdpy11::DiploidPopulation& pop,
+    fwdpy11::discrete_demography::DiscreteDemography& demography, std::uint32_t ngens);

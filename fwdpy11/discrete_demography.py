@@ -508,7 +508,6 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
     def __deepcopy__(self, memo):
         rv = self.__class__(**self.asdict())
         self._clone_state_to(rv)
-        self._liftover_range_states(rv)
         return rv
 
     def __getstate__(self):

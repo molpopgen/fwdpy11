@@ -21,9 +21,11 @@
 #define FWDPY11_MULTIDEME_FITNESS_LOOKUPS_HPP
 
 #include <algorithm>
+#include <sstream>
 #include <numeric>
 #include <limits>
 #include "deme_property_types.hpp"
+#include "multideme_fitness_bookmark.hpp"
 #include "../exceptions.hpp"
 #include "../../rng.hpp"
 #include <fwdpp/gsl_discrete.hpp>
@@ -34,81 +36,70 @@ namespace fwdpy11
     {
         template <typename T> struct multideme_fitness_lookups
         {
-            std::vector<T> starts, stops, offsets;
-            std::vector<double> fitnesses;
-            std::vector<std::uint32_t> individuals;
             std::vector<fwdpp::gsl_ran_discrete_t_ptr> lookups;
 
             multideme_fitness_lookups(std::int32_t max_number_demes)
-                : starts(max_number_demes, 0), stops(max_number_demes, 0),
-                  offsets(max_number_demes, 0), fitnesses(), individuals(),
-                  lookups(max_number_demes)
+                : lookups(max_number_demes)
             {
             }
 
-            multideme_fitness_lookups(const multideme_fitness_lookups& other)
-                : starts(other.starts), stops(other.stops), offsets(other.offsets),
-                  fitnesses(other.fitnesses), individuals(other.individuals),
-                  lookups(copy_lookups(other))
-            {
-            }
+            // NOTE: We require this to compile for some reason?
+            //multideme_fitness_lookups(const multideme_fitness_lookups& other)
+            //    : starts(other.starts), stops(other.stops), offsets(other.offsets),
+            //      fitnesses(other.fitnesses), individuals(other.individuals),
+            //      lookups(copy_lookups(other))
+            //{
+            //}
 
-            std::vector<fwdpp::gsl_ran_discrete_t_ptr>
-            copy_lookups(const multideme_fitness_lookups& other)
-            {
-                std::vector<fwdpp::gsl_ran_discrete_t_ptr> rv;
-                rv.resize(other.lookups.size());
-                for (std::size_t i = 0; i < other.starts.size(); ++i)
-                    {
-                        if (other.stops[i] - other.starts[i] > 0)
-                            {
-                                // NOTE: the size of the i-th deme's
-                                // fitness array is starts[i]-stops[i]
-                                rv[i].reset(gsl_ran_discrete_preproc(
-                                    other.stops[i] - other.starts[i],
-                                    other.fitnesses.data() + starts[i]));
-                            }
-                        else
-                            {
-                                rv[i].reset(nullptr);
-                            }
-                    }
+            //multideme_fitness_lookups&
+            //operator=(const multideme_fitness_lookups& other)
+            //{
+            //    starts = other.starts;
+            //    stops = other.stops;
+            //    fitnesses = other.fitnesses;
+            //    individuals = other.individuals;
+            //    lookups = copy_lookups(other);
+            //    return *this;
+            //}
 
-                return rv;
-            }
+            //std::vector<fwdpp::gsl_ran_discrete_t_ptr>
+            //copy_lookups(const multideme_fitness_lookups& other)
+            //{
+            //    std::vector<fwdpp::gsl_ran_discrete_t_ptr> rv;
+            //    rv.resize(other.lookups.size());
+            //    for (std::size_t i = 0; i < other.starts.size(); ++i)
+            //        {
+            //            if (other.stops[i] - other.starts[i] > 0)
+            //                {
+            //                    // NOTE: the size of the i-th deme's
+            //                    // fitness array is starts[i]-stops[i]
+            //                    rv[i].reset(gsl_ran_discrete_preproc(
+            //                        other.stops[i] - other.starts[i],
+            //                        other.fitnesses.data() + starts[i]));
+            //                }
+            //            else
+            //                {
+            //                    rv[i].reset(nullptr);
+            //                }
+            //        }
 
-            template <typename METADATATYPE>
+            //    return rv;
+            //}
+
             void
-            update(const current_deme_sizes_vector& deme_sizes,
-                   const std::vector<METADATATYPE>& metadata)
+            update(const multideme_fitness_bookmark& fitness_bookmark)
             {
-                auto& deme_sizes_ref = deme_sizes.get();
-                fitnesses.resize(
-                    std::accumulate(begin(deme_sizes_ref), end(deme_sizes_ref), 0),
-                    -1.0);
-                individuals.resize(fitnesses.size(),
-                                   std::numeric_limits<std::uint32_t>::max());
-                std::fill(begin(fitnesses), end(fitnesses),
-                          -1); // TODO: remove
-                std::partial_sum(begin(deme_sizes_ref), end(deme_sizes_ref),
-                                 begin(stops));
-                std::copy(begin(stops), end(stops) - 1, begin(starts) + 1);
-                std::fill(begin(offsets), end(offsets), 0);
-                for (auto&& md : metadata)
+                for (std::size_t i = 0; i < fitness_bookmark.starts.size(); ++i)
                     {
-                        auto i = starts[md.deme] + offsets[md.deme];
-                        fitnesses[i] = md.w;
-                        individuals[i] = md.label;
-                        offsets[md.deme]++;
-                    }
-                for (std::size_t i = 0; i < starts.size(); ++i)
-                    {
-                        if (deme_sizes_ref[i] > 0)
+                        if (fitness_bookmark.stops[i] - fitness_bookmark.starts[i] > 0)
                             {
                                 // NOTE: the size of the i-th deme's
                                 // fitness array is starts[i]-stops[i]
                                 lookups[i].reset(gsl_ran_discrete_preproc(
-                                    stops[i] - starts[i], fitnesses.data() + starts[i]));
+                                    fitness_bookmark.stops[i]
+                                        - fitness_bookmark.starts[i],
+                                    fitness_bookmark.individual_fitness.data()
+                                        + fitness_bookmark.starts[i]));
                             }
                         else
                             {
@@ -119,6 +110,7 @@ namespace fwdpy11
 
             T
             get_parent(const GSLrng_t& rng, const current_deme_sizes_vector& deme_sizes,
+                       const multideme_fitness_bookmark& fitness_bookmark,
                        const std::int32_t deme) const
             {
                 if (deme_sizes.get()[deme] == 0)
@@ -126,7 +118,7 @@ namespace fwdpy11
                         throw EmptyDeme("parental deme is empty");
                     }
                 auto o = gsl_ran_discrete(rng.get(), lookups[deme].get());
-                return individuals[starts[deme] + o];
+                return fitness_bookmark.individuals[fitness_bookmark.starts[deme] + o];
             }
         };
     } // namespace discrete_demography

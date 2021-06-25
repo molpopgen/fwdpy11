@@ -1,5 +1,4 @@
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 #include <boost/test/unit_test.hpp>
 
 struct demographic_event_stable_sorting_fixture
@@ -10,14 +9,11 @@ struct demographic_event_stable_sorting_fixture
     init()
     // This function does not create a valid model that can be simulated.
     {
-        fwdpy11::discrete_demography::DiscreteDemography::mass_migration_vector massmigs;
-        fwdpy11::discrete_demography::DiscreteDemography::set_growth_rates_vector growth;
-        fwdpy11::discrete_demography::DiscreteDemography::set_deme_sizes_vector
-            sizechanges;
-        fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
-            selfing;
-        fwdpy11::discrete_demography::DiscreteDemography::set_migration_rates_vector
-            migration;
+        std::vector<fwdpy11::discrete_demography::MassMigration> massmigs;
+        std::vector<fwdpy11::discrete_demography::SetExponentialGrowth> growth;
+        std::vector<fwdpy11::discrete_demography::SetDemeSize> sizechanges;
+        std::vector<fwdpy11::discrete_demography::SetSelfingRate> selfing;
+        std::vector<fwdpy11::discrete_demography::SetMigrationRates> migration;
 
         massmigs.emplace_back(5, 5, 3, 0, -1, 0.25, true, false, true);
         massmigs.emplace_back(5, 3, 2, 0, -1, 0.25, true, false, true);
@@ -55,8 +51,8 @@ struct demographic_event_stable_sorting_fixture
         return fwdpy11::discrete_demography::DiscreteDemography(
             std::move(massmigs), std::move(growth), std::move(sizechanges),
             std::move(selfing),
-            fwdpy11::discrete_demography::MigrationMatrix(
-                std::move(migmatrix), 5, false),
+            fwdpy11::discrete_demography::MigrationMatrix(std::move(migmatrix), 5,
+                                                          false),
             std::move(migration));
     }
 
@@ -73,11 +69,11 @@ BOOST_AUTO_TEST_CASE(test_mass_migrations)
     std::vector<std::uint32_t> when{4, 4, 5, 5};
     std::vector<int> source{4, 1, 5, 3};
     std::vector<int> dest{3, 2, 3, 2};
-    for (std::size_t i = 0; i < demog.mass_migrations.size(); ++i)
+    for (std::size_t i = 0; i < demog.get_mass_migrations().size(); ++i)
         {
-            BOOST_REQUIRE_EQUAL(demog.mass_migrations[i].when, when[i]);
-            BOOST_REQUIRE_EQUAL(demog.mass_migrations[i].source, source[i]);
-            BOOST_REQUIRE_EQUAL(demog.mass_migrations[i].destination, dest[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_mass_migrations()[i].when, when[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_mass_migrations()[i].source, source[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_mass_migrations()[i].destination, dest[i]);
         }
 }
 
@@ -85,10 +81,10 @@ BOOST_AUTO_TEST_CASE(test_set_migration_rates)
 {
     std::vector<std::uint32_t> when{4, 4, 5};
     std::vector<int> deme{4, fwdpy11::discrete_demography::NULLDEME, 3};
-    for (std::size_t i = 0; i < demog.set_migration_rates.size(); ++i)
+    for (std::size_t i = 0; i < demog.get_set_migration_rates().size(); ++i)
         {
-            BOOST_REQUIRE_EQUAL(demog.set_migration_rates[i].when, when[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_migration_rates[i].deme, deme[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_migration_rates()[i].when, when[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_migration_rates()[i].deme, deme[i]);
         }
 }
 
@@ -98,11 +94,11 @@ BOOST_AUTO_TEST_CASE(test_size_changes)
     std::vector<int> deme{0, 6, 3, 1, 0};
     std::vector<std::uint32_t> new_size{33, 1, 22, 11, 300};
 
-    for (std::size_t i = 0; i < demog.set_deme_sizes.size(); ++i)
+    for (std::size_t i = 0; i < demog.get_set_deme_sizes().size(); ++i)
         {
-            BOOST_REQUIRE_EQUAL(demog.set_deme_sizes[i].when, when[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_deme_sizes[i].deme, deme[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_deme_sizes[i].new_size, new_size[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_deme_sizes()[i].when, when[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_deme_sizes()[i].deme, deme[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_deme_sizes()[i].new_size, new_size[i]);
         }
 }
 
@@ -112,11 +108,11 @@ BOOST_AUTO_TEST_CASE(test_growth_rate_changes)
     std::vector<int> deme{0, 6, 3, 1, 0};
     std::vector<double> G{1., 0.1, 0.2, 0.5, 0.25};
 
-    for (std::size_t i = 0; i < demog.set_deme_sizes.size(); ++i)
+    for (std::size_t i = 0; i < demog.get_set_deme_sizes().size(); ++i)
         {
-            BOOST_REQUIRE_EQUAL(demog.set_growth_rates[i].when, when[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_growth_rates[i].deme, deme[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_growth_rates[i].G, G[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_growth_rates()[i].when, when[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_growth_rates()[i].deme, deme[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_growth_rates()[i].G, G[i]);
         }
 }
 
@@ -126,11 +122,11 @@ BOOST_AUTO_TEST_CASE(test_selfing_changes)
     std::vector<int> deme{0, 6, 3, 1, 0};
     std::vector<double> S{1., 0., 0.2, 0.5, 0.25};
 
-    for (std::size_t i = 0; i < demog.set_selfing_rates.size(); ++i)
+    for (std::size_t i = 0; i < demog.get_set_selfing_rates().size(); ++i)
         {
-            BOOST_REQUIRE_EQUAL(demog.set_selfing_rates[i].when, when[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_selfing_rates[i].deme, deme[i]);
-            BOOST_REQUIRE_EQUAL(demog.set_selfing_rates[i].S, S[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_selfing_rates()[i].when, when[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_selfing_rates()[i].deme, deme[i]);
+            BOOST_REQUIRE_EQUAL(demog.get_set_selfing_rates()[i].S, S[i]);
         }
 }
 

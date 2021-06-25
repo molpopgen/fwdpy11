@@ -52,6 +52,17 @@ namespace fwdpy11
             growth_rates_vector growth_rates;
             selfing_rates_vector selfing_rates;
 
+            deme_properties()
+                : current_deme_sizes{{}}, next_deme_sizes{{}},
+                  growth_rate_onset_times{{}}, growth_initial_sizes{{}},
+                  growth_rates{{}}, selfing_rates{{}}
+            {
+            }
+
+            deme_properties(const deme_properties&) = default;
+            deme_properties(deme_properties&&) = default;
+            deme_properties& operator=(const deme_properties&) = default;
+
             template <typename METADATATYPE>
             deme_properties(std::uint32_t max_number_demes,
                             const std::vector<METADATATYPE>& metadata)

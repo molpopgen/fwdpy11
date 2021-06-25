@@ -320,6 +320,9 @@ class TestSplit(unittest.TestCase):
         self.pop, self.num_parents, self.num_individuals = run_model(
             self.params, self.popsizes, 666
         )
+        assert (
+            max([i.deme for i in self.num_individuals]) == 2
+        ), "Invalid simulation"
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
