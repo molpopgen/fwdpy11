@@ -337,57 +337,66 @@ namespace fwdpy11
                     {
                         return;
                     }
-                const auto initial_N = individual_metadata.size();
-                if (initial_N == 0)
+                for (; mass_migrations.event_range.first
+                           < mass_migrations.event_range.second
+                       && mass_migrations.events[mass_migrations.event_range.first].when
+                              == simulation_time;
+                     ++mass_migrations.event_range.first)
                     {
-                        throw std::runtime_error("metadata are empty");
-                    }
-                bool initialized_moves{false};
-                std::vector<std::int32_t> moves; // TODO: is this type okay?
-                std::vector<std::size_t> buffer;
-
-                auto individual_to_deme = build_deme_map(individual_metadata);
-                move_map move_source;
-                std::unordered_map<std::int32_t, bool> changed_and_reset;
-
-                for (std::size_t i = mass_migrations.event_range.first;
-                     i < mass_migrations.event_range.second
-                     && mass_migrations.events[i].when == simulation_time;
-                     ++i)
-                    {
-                        if (mass_migrations.events[i].move_individuals == false) // copy
+                        const auto initial_N = individual_metadata.size();
+                        if (initial_N == 0)
                             {
-                                if (initialized_moves == true)
-                                    {
-                                        // NOTE: this may no longer be necessary?
-                                        throw std::runtime_error(
-                                            "MassMigration error: copies after "
-                                            "moves");
-                                    }
-                                mass_migration_copies(
-                                    rng, mass_migrations.events[i], individual_to_deme,
-                                    simulation_time, buffer, individual_metadata);
+                                throw std::runtime_error("metadata are empty");
                             }
-                        else // move event
+                        bool initialized_moves{false};
+                        std::vector<std::int32_t> moves; // TODO: is this type okay?
+                        std::vector<std::size_t> buffer;
+
+                        auto individual_to_deme = build_deme_map(individual_metadata);
+                        move_map move_source;
+                        std::unordered_map<std::int32_t, bool> changed_and_reset;
+
+                        for (std::size_t i = mass_migrations.event_range.first;
+                             i < mass_migrations.event_range.second
+                             && mass_migrations.events[i].when == simulation_time;
+                             ++i)
                             {
-                                if (initialized_moves == false)
+                                if (mass_migrations.events[i].move_individuals
+                                    == false) // copy
                                     {
-                                        moves.resize(initial_N, -1);
-                                        move_source = build_move_sources(
-                                            rng, individual_to_deme);
-                                        initialized_moves = true;
+                                        if (initialized_moves == true)
+                                            {
+                                                // NOTE: this may no longer be necessary?
+                                                throw std::runtime_error(
+                                                    "MassMigration error: copies after "
+                                                    "moves");
+                                            }
+                                        mass_migration_copies(
+                                            rng, mass_migrations.events[i],
+                                            individual_to_deme, simulation_time, buffer,
+                                            individual_metadata);
                                     }
-                                mass_migration_moves(mass_migrations.events[i],
-                                                     simulation_time, moves,
-                                                     move_source);
+                                else // move event
+                                    {
+                                        if (initialized_moves == false)
+                                            {
+                                                moves.resize(initial_N, -1);
+                                                move_source = build_move_sources(
+                                                    rng, individual_to_deme);
+                                                initialized_moves = true;
+                                            }
+                                        mass_migration_moves(mass_migrations.events[i],
+                                                             simulation_time, moves,
+                                                             move_source);
+                                    }
+                                update_changed_and_reset(mass_migrations.events[i],
+                                                         changed_and_reset);
                             }
-                        update_changed_and_reset(mass_migrations.events[i],
-                                                 changed_and_reset);
+                        auto final_deme_sizes = update_metadata_due_to_mass_migrations(
+                            initial_N, individual_to_deme, moves, individual_metadata);
+                        update_growth_parameters_after_mass_migrations(
+                            simulation_time, final_deme_sizes, changed_and_reset);
                     }
-                auto final_deme_sizes = update_metadata_due_to_mass_migrations(
-                    initial_N, individual_to_deme, moves, individual_metadata);
-                update_growth_parameters_after_mass_migrations(
-                    simulation_time, final_deme_sizes, changed_and_reset);
             }
 
           public:
