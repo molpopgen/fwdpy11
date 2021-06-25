@@ -56,8 +56,11 @@ namespace fwdpy11
             events_with_range<SetExponentialGrowth> set_growth_rates;
             events_with_range<SetDemeSize> set_deme_sizes;
             events_with_range<SetSelfingRate> set_selfing_rates;
-            MigrationMatrix M;
             events_with_range<SetMigrationRates> set_migration_rates;
+            // this is the input matrix.
+            // The current state of the matrix at time "t"
+            // is stored in "miglookup" below
+            MigrationMatrix M;
 
             std::uint32_t next_global_N;
 
@@ -77,9 +80,9 @@ namespace fwdpy11
                                     std::vector<SetMigrationRates> set_migration_rates)
                 : mass_migrations(std::move(mass_migrations)),
                   set_growth_rates{std::move(set_growth_rates)},
-                  set_deme_sizes{std::move(set_deme_sizes)},
-                  set_selfing_rates{std::move(set_selfing_rates)}, M{std::move(M)},
-                  set_migration_rates{std::move(set_migration_rates)},
+                  set_deme_sizes{std::move(set_deme_sizes)}, set_selfing_rates{std::move(
+                                                                 set_selfing_rates)},
+                  set_migration_rates{std::move(set_migration_rates)}, M{std::move(M)},
                   next_global_N(0), maxdemes{0}, fitnesses{0}, miglookup{M}
             // current_deme_parameters(maxdemes, metadata), miglookup{M}
             {
