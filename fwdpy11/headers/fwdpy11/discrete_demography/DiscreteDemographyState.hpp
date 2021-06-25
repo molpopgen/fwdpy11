@@ -70,8 +70,6 @@ namespace fwdpy11
             //deme_properties current_deme_parameters;
             migration_lookup_v2 miglookup;
 
-            // NOTE: demography.update_event_times() needs to have been
-            // called first!
             DiscreteDemographyState(std::vector<MassMigration> mass_migrations,
                                     std::vector<SetExponentialGrowth> set_growth_rates,
                                     std::vector<SetDemeSize> set_deme_sizes,
