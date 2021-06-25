@@ -33,6 +33,7 @@
 #include "SetSelfingRate.hpp"
 #include "SetMigrationRates.hpp"
 #include "simulation/detail.hpp"
+#include "DiscreteDemographyState.hpp"
 
 namespace fwdpy11
 {
