@@ -118,11 +118,11 @@ init_DiscreteDemography(py::module& m)
         .def(py::init([](py::object mass_migration_events, py::object set_growth_rates,
                          py::object set_deme_sizes, py::object set_selfing_rates,
                          py::object migmatrix, py::object set_migration_rates) {
-                 ddemog::DiscreteDemography::mass_migration_vector morc;
-                 ddemog::DiscreteDemography::set_growth_rates_vector growth;
-                 ddemog::DiscreteDemography::set_deme_sizes_vector change_sizes;
-                 ddemog::DiscreteDemography::set_selfing_rates_vector selfing;
-                 ddemog::DiscreteDemography::set_migration_rates_vector migrates;
+                 std::vector<ddemog::MassMigration> morc;
+                 std::vector<ddemog::SetExponentialGrowth> growth;
+                 std::vector<ddemog::SetDemeSize> change_sizes;
+                 std::vector<ddemog::SetSelfingRate> selfing;
+                 std::vector<ddemog::SetMigrationRates> migrates;
 
                  if (mass_migration_events.is_none() == false)
                      {

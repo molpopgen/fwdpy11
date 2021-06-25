@@ -283,18 +283,12 @@ namespace fwdpy11
             demographic_model_state_pointer model_state;
 
           public:
-            using mass_migration_vector = std::vector<MassMigration>;
-            using set_growth_rates_vector = std::vector<SetExponentialGrowth>;
-            using set_deme_sizes_vector = std::vector<SetDemeSize>;
-            using set_selfing_rates_vector = std::vector<SetSelfingRate>;
-            using set_migration_rates_vector = std::vector<SetMigrationRates>;
-
-            mass_migration_vector mass_migrations;
-            set_growth_rates_vector set_growth_rates;
-            set_deme_sizes_vector set_deme_sizes;
-            set_selfing_rates_vector set_selfing_rates;
+            std::vector<MassMigration> mass_migrations;
+            std::vector<SetExponentialGrowth> set_growth_rates;
+            std::vector<SetDemeSize> set_deme_sizes;
+            std::vector<SetSelfingRate> set_selfing_rates;
             MigrationMatrix migmatrix;
-            set_migration_rates_vector set_migration_rates;
+            std::vector<SetMigrationRates> set_migration_rates;
 
             // pairs of iterators over the events
             mass_migration_range mass_migration_tracker;
@@ -303,11 +297,11 @@ namespace fwdpy11
             selfing_rate_change_range selfing_rate_change_tracker;
             migration_rate_change_range migration_rate_change_tracker;
 
-            DiscreteDemography(mass_migration_vector mmig, set_growth_rates_vector sg,
-                               set_deme_sizes_vector size_changes,
-                               set_selfing_rates_vector ssr,
-                               MigrationMatrix m,
-                               set_migration_rates_vector smr)
+            DiscreteDemography(std::vector<MassMigration> mmig,
+                               std::vector<SetExponentialGrowth> sg,
+                               std::vector<SetDemeSize> size_changes,
+                               std::vector<SetSelfingRate> ssr, MigrationMatrix m,
+                               std::vector<SetMigrationRates> smr)
                 : model_state(nullptr),
                   mass_migrations(init_events_vector(std::move(mmig))),
                   set_growth_rates(init_events_vector(std::move(sg))),
@@ -354,7 +348,7 @@ namespace fwdpy11
             }
 
             demographic_model_state_pointer&
-            get_model_state_ref() 
+            get_model_state_ref()
             {
                 return model_state;
             }
