@@ -64,17 +64,14 @@ namespace fwdpy11
           public:
             const std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
-            deme_properties current_deme_parameters;
-            MigrationMatrix M;
-            migration_lookup miglookup;
+            //deme_properties current_deme_parameters;
+            migration_lookup_v2 miglookup;
 
             // NOTE: demography.update_event_times() needs to have been
             // called first!
-            template <typename METADATATYPE>
-            DiscreteDemographyState(std::vector<METADATATYPE>& metadata,
-                                    std::vector<MassMigration> mass_migrations,
+            DiscreteDemographyState(std::vector<MassMigration> mass_migrations,
                                     std::vector<SetExponentialGrowth> set_growth_rates,
-                                    std::vector<SetDemeSize> size_changes,
+                                    std::vector<SetDemeSize> set_deme_sizes,
                                     std::vector<SetSelfingRate> set_selfing_rates,
                                     MigrationMatrix M,
                                     std::vector<SetMigrationRates> set_migration_rates)
@@ -82,37 +79,28 @@ namespace fwdpy11
                   set_growth_rates{std::move(set_growth_rates)},
                   set_deme_sizes{std::move(set_deme_sizes)},
                   set_selfing_rates{std::move(set_selfing_rates)}, M{std::move(M)},
-                  set_migration_rates{std::move(set_migration_rates)}, next_global_N(0),
-                  maxdemes(get_max_number_of_demes()(metadata, demography)),
-                  fitnesses(maxdemes), current_deme_parameters(maxdemes, metadata),
-                  M(demography.migmatrix), miglookup(maxdemes, M.empty())
+                  set_migration_rates{std::move(set_migration_rates)},
+                  next_global_N(0), maxdemes{0}, fitnesses{0}, miglookup{M}
+            // current_deme_parameters(maxdemes, metadata), miglookup{M}
             {
             }
 
-            DiscreteDemographyState(const DiscreteDemographyState& other)
-                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
-                  fitnesses{other.fitnesses},
-                  current_deme_parameters{other.current_deme_parameters}, M{other.M},
-                  miglookup{maxdemes, M.empty()}
-            {
-                build_migration_lookup(M, current_deme_parameters.current_deme_sizes,
-                                       miglookup);
-            }
+            DiscreteDemographyState(const DiscreteDemographyState& other) = default;
 
             // This constructor is only used when resetting
             // the state from an event like pickling a DiscreteDemography
             // instance.
-            DiscreteDemographyState(std::int32_t maxdemes_,
-                                    deme_properties current_deme_parameters_,
-                                    MigrationMatrix M_)
-                : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
-                  current_deme_parameters(std::move(current_deme_parameters_)),
-                  M(std::move(M_)), miglookup(maxdemes, M.empty())
-            {
-                next_global_N = std::accumulate(
-                    begin(current_deme_parameters.next_deme_sizes.get()),
-                    end(current_deme_parameters.next_deme_sizes.get()), 0u);
-            }
+            // DiscreteDemographyState(std::int32_t maxdemes_,
+            //                         deme_properties current_deme_parameters_,
+            //                         MigrationMatrix M_)
+            //     : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
+            //       current_deme_parameters(std::move(current_deme_parameters_)),
+            //       M(std::move(M_)), miglookup(maxdemes, M.empty())
+            // {
+            //     next_global_N = std::accumulate(
+            //         begin(current_deme_parameters.next_deme_sizes.get()),
+            //         end(current_deme_parameters.next_deme_sizes.get()), 0u);
+            // }
 
             void
             set_next_global_N(std::uint32_t N)
@@ -130,12 +118,6 @@ namespace fwdpy11
             will_go_globally_extinct() const
             {
                 return ttlN_next() == 0;
-            }
-
-            std::unique_ptr<demographic_model_state>
-            clone() const
-            {
-                return std::make_unique<demographic_model_state>(*this);
             }
         };
     }
