@@ -50,7 +50,7 @@ namespace fwdpy11
                 return event().when;
             }
 
-            const std::size_t
+            std::size_t
             current() const
             {
                 return event_range.first;
@@ -62,7 +62,7 @@ namespace fwdpy11
                 return event_range.first;
             }
 
-            const std::size_t
+            std::size_t
             last() const
             {
                 return event_range.second;
