@@ -223,19 +223,19 @@ evolve_with_tree_sequences(
     /// model_needs_update added in 0.16.0
     /// in relation to GitHub issue 775
     bool demographic_model_needs_update = true;
-    auto current_demographic_state
-        = ddemog::initialize_model_state(pop.generation, pop.diploid_metadata,
-                                         demography, &demographic_model_needs_update);
+
+    auto current_demographic_state = demography.get_model_state();
+    current_demographic_state.initialize(pop);
     if (gvalue_pointers.genetic_values.size()
-        > static_cast<std::size_t>(current_demographic_state->maxdemes))
+        > static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument(
                 "list of genetic values is longer than maxdemes");
         }
-    if (static_cast<std::size_t>(current_demographic_state->maxdemes) > 1
+    if (static_cast<std::size_t>(current_demographic_state.maxdemes) > 1
         && gvalue_pointers.genetic_values.size() > 1
         && gvalue_pointers.genetic_values.size()
-               < static_cast<std::size_t>(current_demographic_state->maxdemes))
+               < static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument("too few genetic value objects");
         }
@@ -265,7 +265,7 @@ evolve_with_tree_sequences(
     auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
                                                    std::move(bound_mmodel),
                                                    std::move(bound_rmodel));
-    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state->maxdemes, 0);
+    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state.maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
             std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
@@ -287,12 +287,14 @@ evolve_with_tree_sequences(
                               record_genotype_matrix);
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
-    if (demographic_model_needs_update == true)
-        {
-            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                              demography, *current_demographic_state);
-        }
-    if (current_demographic_state->will_go_globally_extinct() == true)
+
+    current_demographic_state.initialize(pop);
+    //if (demographic_model_needs_update == true)
+    //    {
+    //        ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
+    //                                          demography, *current_demographic_state);
+    //    }
+    if (current_demographic_state.will_go_globally_extinct() == true)
         {
             std::ostringstream o;
             o << "extinction at time " << pop.generation;

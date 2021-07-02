@@ -22,6 +22,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include "MassMigration.hpp"
 #include "MigrationMatrix.hpp"
 #include "SetDemeSize.hpp"
@@ -110,6 +111,22 @@ namespace fwdpy11
             will_go_globally_extinct() const
             {
                 return ttlN_next() == 0;
+            }
+
+            void
+            initialize(const DiploidPopulation&)
+            {
+                throw std::runtime_error("not implemented");
+            }
+
+            void
+            early(const std::uint32_t /*current_simulation_time*/)
+            {
+            }
+
+            void
+            late(const std::uint32_t /*current_simulation_time*/)
+            {
             }
         };
     }
