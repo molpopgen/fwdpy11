@@ -84,7 +84,7 @@ namespace fwdpy11
     void
     evolve_generation_ts(
         const rng_t& rng, poptype& pop, genetic_param_holder& genetics,
-        const fwdpy11::discrete_demography::demographic_model_state&
+        const fwdpy11::discrete_demography::DiscreteDemographyState&
             current_demographic_state,
         const fwdpp::uint_t generation,
         fwdpp::ts::edge_buffer & new_edge_buffer,
