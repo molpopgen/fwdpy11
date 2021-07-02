@@ -109,15 +109,15 @@ namespace fwdpy11
         for (maxdeme_type deme = 0; deme < current_demographic_state.maxdemes; ++deme)
             {
                 auto next_N_deme
-                    = current_demographic_state.sizes_rates.next_deme_sizes.get()[deme];
+                    = current_demographic_state.current_deme_parameters.next_deme_sizes.get()[deme];
                 for (decltype(next_N_deme) ind = 0; ind < next_N_deme; ++ind)
                     {
                         // Get the parents
                         auto pdata
                             = fwdpy11::discrete_demography::pick_parents(
                                 rng, deme, current_demographic_state.miglookup,
-                                current_demographic_state.sizes_rates.current_deme_sizes,
-                                current_demographic_state.sizes_rates.selfing_rates,
+                                current_demographic_state.current_deme_parameters.current_deme_sizes,
+                                current_demographic_state.current_deme_parameters.selfing_rates,
                                 current_demographic_state.fitnesses);
                         fwdpy11::DiploidGenotype dip{
                             std::numeric_limits<std::size_t>::max(),

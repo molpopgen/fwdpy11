@@ -54,7 +54,7 @@ namespace fwdpy11
             MigrationMatrix M;
             std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
-            //deme_properties current_deme_parameters;
+            deme_properties current_deme_parameters;
 
             DiscreteDemographyState(std::vector<MassMigration> mass_migrations,
                                     std::vector<SetExponentialGrowth> set_growth_rates,
@@ -67,7 +67,7 @@ namespace fwdpy11
                   set_deme_sizes{std::move(set_deme_sizes)}, set_selfing_rates{std::move(
                                                                  set_selfing_rates)},
                   set_migration_rates{std::move(set_migration_rates)}, M{std::move(M)},
-                  maxdemes{0}, fitnesses{0}
+                  maxdemes{0}, fitnesses{0}, current_deme_parameters{}
             {
             }
 
