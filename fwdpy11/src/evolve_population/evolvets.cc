@@ -288,6 +288,12 @@ evolve_with_tree_sequences(
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
 
+    ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{-1};
+    ddemog::migration_lookup miglookup{-1, current_demographic_state.M.empty()};
+
+    fitness_lookup.update(
+        current_demographic_state.current_deme_parameters.current_deme_sizes,
+        pop.diploid_metadata);
     current_demographic_state.initialize(pop);
     //if (demographic_model_needs_update == true)
     //    {
@@ -388,7 +394,8 @@ evolve_with_tree_sequences(
         {
             ++pop.generation;
             fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
-                                          pop.generation, *new_edge_buffer, offspring,
+                                          fitness_lookup, miglookup, pop.generation,
+                                          *new_edge_buffer, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
