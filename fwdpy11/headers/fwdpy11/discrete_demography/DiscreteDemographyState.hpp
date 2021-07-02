@@ -28,6 +28,7 @@
 #include "SetExponentialGrowth.hpp"
 #include "SetSelfingRate.hpp"
 #include "SetMigrationRates.hpp"
+#include "current_event_state.hpp"
 #include "simulation/migration_lookup.hpp"
 #include "simulation/multideme_fitness_lookups.hpp"
 #include "simulation/deme_properties.hpp"
@@ -41,22 +42,11 @@ namespace fwdpy11
         /// the relevant data structures.
         {
           private:
-            template <typename T> struct events_with_range
-            {
-                std::vector<T> events;
-                std::pair<std::size_t, std::size_t> event_range;
-                template <typename Input>
-                events_with_range(Input&& input)
-                    : events(std::forward<Input>(input)), event_range{0, events.size()}
-                {
-                }
-            };
-
-            events_with_range<MassMigration> mass_migrations;
-            events_with_range<SetExponentialGrowth> set_growth_rates;
-            events_with_range<SetDemeSize> set_deme_sizes;
-            events_with_range<SetSelfingRate> set_selfing_rates;
-            events_with_range<SetMigrationRates> set_migration_rates;
+            current_event_state<MassMigration> mass_migrations;
+            current_event_state<SetExponentialGrowth> set_growth_rates;
+            current_event_state<SetDemeSize> set_deme_sizes;
+            current_event_state<SetSelfingRate> set_selfing_rates;
+            current_event_state<SetMigrationRates> set_migration_rates;
             // this is the input matrix.
             // The current state of the matrix at time "t"
             // is stored in "miglookup" below

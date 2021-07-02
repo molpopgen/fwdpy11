@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2017 Kevin Thornton <krthornt@uci.edu>
+// Copyright (C) 2021 Kevin Thornton <krthornt@uci.edu>
 //
 // This file is part of fwdpy11.
 //
@@ -17,20 +17,29 @@
 // along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_HPP
-#define FWDPY11_DISCRETE_DEMOGRAPY_SIMULATION_HPP
+#ifndef FWDPY11_DISCRETE_CURRENT_EVENT_STATE_HPP
+#define FWDPY11_DISCRETE_CURRENT_EVENT_STATE_HPP
 
-#include "constants.hpp"
-#include "DiscreteDemographyState.hpp"
-#include "simulation/get_max_number_of_demes.hpp"
-#include "simulation/apply_mass_migrations.hpp"
-#include "simulation/deme_properties.hpp"
-#include "simulation/multideme_fitness_lookups.hpp"
-#include "simulation/migration_lookup.hpp"
-#include "simulation/build_migration_lookup.hpp"
-#include "simulation/functions.hpp"
-#include "simulation/mating_event_type.hpp"
-#include "simulation/pick_parents.hpp"
-#include "simulation/update_demographic_model_state.hpp"
+#include <vector>
+#include <cstdint>
+#include <utility>
+
+namespace fwdpy11
+{
+    namespace discrete_demography
+    {
+        template <typename T> struct current_event_state
+        {
+            std::vector<T> events;
+            std::pair<std::size_t, std::size_t> event_range;
+            template <typename Input>
+            current_event_state(Input&& input)
+                : events(std::forward<Input>(input)), event_range{0, events.size()}
+            {
+            }
+        };
+
+    }
+}
 
 #endif
