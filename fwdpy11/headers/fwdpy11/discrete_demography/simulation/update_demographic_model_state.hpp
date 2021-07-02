@@ -58,30 +58,30 @@ namespace fwdpy11
                     }
             }
 
-            inline void
-            validate_parental_state(
-                std::uint32_t generation,
-                const demographic_model_state &current_demographic_state)
-            {
-                const auto &next_N_deme
-                    = current_demographic_state.sizes_rates.next_deme_sizes.get();
-                for (std::size_t i = 0; i < next_N_deme.size(); ++i)
-                    {
-                        if (next_N_deme[i] > 0
-                            && current_demographic_state.fitnesses.lookups[i] == nullptr)
-                            {
-                                if (current_demographic_state.M.empty())
-                                    {
-                                        no_valid_parents(i, generation, next_N_deme[i]);
-                                    }
-                                else
-                                    {
-                                        check_migration_in(i, generation,
-                                                           current_demographic_state.M);
-                                    }
-                            }
-                    }
-            }
+            //inline void
+            //validate_parental_state(
+            //    std::uint32_t generation,
+            //    const demographic_model_state &current_demographic_state)
+            //{
+            //    const auto &next_N_deme
+            //        = current_demographic_state.sizes_rates.next_deme_sizes.get();
+            //    for (std::size_t i = 0; i < next_N_deme.size(); ++i)
+            //        {
+            //            if (next_N_deme[i] > 0
+            //                && current_demographic_state.fitnesses.lookups[i] == nullptr)
+            //                {
+            //                    if (current_demographic_state.M.empty())
+            //                        {
+            //                            no_valid_parents(i, generation, next_N_deme[i]);
+            //                        }
+            //                    else
+            //                        {
+            //                            check_migration_in(i, generation,
+            //                                               current_demographic_state.M);
+            //                        }
+            //                }
+            //        }
+            //}
 
         } // namespace detail
 

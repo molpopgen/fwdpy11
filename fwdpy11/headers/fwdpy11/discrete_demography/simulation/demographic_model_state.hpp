@@ -34,79 +34,79 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        class demographic_model_state
-        /// Added in 0.6.0 to hold and manage
-        /// the relevant data structures.
-        {
-          private:
-            std::uint32_t next_global_N;
+        //class demographic_model_state
+        ///// Added in 0.6.0 to hold and manage
+        ///// the relevant data structures.
+        //{
+        //  private:
+        //    std::uint32_t next_global_N;
 
-          public:
-            const std::int32_t maxdemes;
-            multideme_fitness_lookups<std::uint32_t> fitnesses;
-            deme_properties sizes_rates;
-            MigrationMatrix M;
-            migration_lookup miglookup;
+        //  public:
+        //    const std::int32_t maxdemes;
+        //    multideme_fitness_lookups<std::uint32_t> fitnesses;
+        //    deme_properties sizes_rates;
+        //    MigrationMatrix M;
+        //    migration_lookup miglookup;
 
-            // NOTE: demography.update_event_times() needs to have been
-            // called first!
-            template <typename METADATATYPE>
-            demographic_model_state(const std::vector<METADATATYPE>& metadata,
-                                    DiscreteDemography& demography)
-                : next_global_N(0),
-                  maxdemes(get_max_number_of_demes()(metadata, demography)),
-                  fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
-                  M(demography.migmatrix), miglookup(maxdemes, M.empty())
-            {
-            }
+        //    // NOTE: demography.update_event_times() needs to have been
+        //    // called first!
+        //    template <typename METADATATYPE>
+        //    demographic_model_state(const std::vector<METADATATYPE>& metadata,
+        //                            DiscreteDemography& demography)
+        //        : next_global_N(0),
+        //          maxdemes(get_max_number_of_demes()(metadata, demography)),
+        //          fitnesses(maxdemes), sizes_rates(maxdemes, metadata),
+        //          M(demography.migmatrix), miglookup(maxdemes, M.empty())
+        //    {
+        //    }
 
-            demographic_model_state(const demographic_model_state& other)
-                : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
-                  fitnesses{other.fitnesses}, sizes_rates{other.sizes_rates},
-                  M{other.M},
-                  miglookup{maxdemes, M.empty()}
-            {
-                build_migration_lookup(M, sizes_rates.current_deme_sizes, miglookup);
-            }
+        //    demographic_model_state(const demographic_model_state& other)
+        //        : next_global_N{other.next_global_N}, maxdemes{other.maxdemes},
+        //          fitnesses{other.fitnesses}, sizes_rates{other.sizes_rates},
+        //          M{other.M},
+        //          miglookup{maxdemes, M.empty()}
+        //    {
+        //        build_migration_lookup(M, sizes_rates.current_deme_sizes, miglookup);
+        //    }
 
-            // This constructor is only used when resetting
-            // the state from an event like pickling a DiscreteDemography
-            // instance.
-            demographic_model_state(std::int32_t maxdemes_, deme_properties sizes_rates_,
-                                    MigrationMatrix M_)
-                : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
-                  sizes_rates(std::move(sizes_rates_)), M(std::move(M_)),
-                  miglookup(maxdemes, M.empty())
-            {
-                next_global_N
-                    = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
-                                      end(sizes_rates.next_deme_sizes.get()), 0u);
-            }
+        //    // This constructor is only used when resetting
+        //    // the state from an event like pickling a DiscreteDemography
+        //    // instance.
+        //    demographic_model_state(std::int32_t maxdemes_, deme_properties sizes_rates_,
+        //                            MigrationMatrix M_)
+        //        : next_global_N(0), maxdemes(maxdemes_), fitnesses(maxdemes),
+        //          sizes_rates(std::move(sizes_rates_)), M(std::move(M_)),
+        //          miglookup(maxdemes, M.empty())
+        //    {
+        //        next_global_N
+        //            = std::accumulate(begin(sizes_rates.next_deme_sizes.get()),
+        //                              end(sizes_rates.next_deme_sizes.get()), 0u);
+        //    }
 
-            void
-            set_next_global_N(std::uint32_t N)
-            {
-                next_global_N = N;
-            }
+        //    void
+        //    set_next_global_N(std::uint32_t N)
+        //    {
+        //        next_global_N = N;
+        //    }
 
-            std::uint32_t
-            ttlN_next() const
-            {
-                return next_global_N;
-            }
+        //    std::uint32_t
+        //    ttlN_next() const
+        //    {
+        //        return next_global_N;
+        //    }
 
-            bool
-            will_go_globally_extinct() const
-            {
-                return ttlN_next() == 0;
-            }
+        //    bool
+        //    will_go_globally_extinct() const
+        //    {
+        //        return ttlN_next() == 0;
+        //    }
 
-            std::unique_ptr<demographic_model_state>
-            clone() const
-            {
-                return std::make_unique<demographic_model_state>(*this);
-            }
-        };
+        //    std::unique_ptr<demographic_model_state>
+        //    clone() const
+        //    {
+        //        return std::make_unique<demographic_model_state>(*this);
+        //    }
+        //};
 
         // /// model_needs_update added in 0.16.0
         // /// in relation to GitHub issue 775
