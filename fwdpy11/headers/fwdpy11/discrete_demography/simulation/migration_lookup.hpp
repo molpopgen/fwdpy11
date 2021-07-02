@@ -32,10 +32,23 @@ namespace fwdpy11
         // TODO: replace the older class w/this new version
         struct migration_lookup_v2
         {
+            void
+            build_lookups()
+            {
+            }
+
             std::vector<fwdpp::gsl_ran_discrete_t_ptr> lookups;
             MigrationMatrix M;
             migration_lookup_v2(MigrationMatrix M) : lookups{M.npops}, M{std::move(M)}
             {
+            }
+
+            migration_lookup_v2&
+            operator=(const migration_lookup_v2& other)
+            {
+                M = other.M;
+                lookups.clear();
+                return *this;
             }
         };
 
