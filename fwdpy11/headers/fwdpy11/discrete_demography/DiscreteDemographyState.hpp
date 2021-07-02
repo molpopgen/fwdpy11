@@ -42,6 +42,9 @@ namespace fwdpy11
         /// the relevant data structures.
         {
           private:
+            std::uint32_t next_global_N;
+
+          public:
             current_event_state<MassMigration> mass_migrations;
             current_event_state<SetExponentialGrowth> set_growth_rates;
             current_event_state<SetDemeSize> set_deme_sizes;
@@ -51,10 +54,6 @@ namespace fwdpy11
             // The current state of the matrix at time "t"
             // is stored in "miglookup" below
             MigrationMatrix M;
-
-            std::uint32_t next_global_N;
-
-          public:
             std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
             //deme_properties current_deme_parameters;
@@ -66,12 +65,12 @@ namespace fwdpy11
                                     std::vector<SetSelfingRate> set_selfing_rates,
                                     MigrationMatrix M,
                                     std::vector<SetMigrationRates> set_migration_rates)
-                : mass_migrations(std::move(mass_migrations)),
+                : next_global_N{0}, mass_migrations(std::move(mass_migrations)),
                   set_growth_rates{std::move(set_growth_rates)},
                   set_deme_sizes{std::move(set_deme_sizes)}, set_selfing_rates{std::move(
                                                                  set_selfing_rates)},
                   set_migration_rates{std::move(set_migration_rates)}, M{std::move(M)},
-                  next_global_N(0), maxdemes{0}, fitnesses{0}, miglookup{M}
+                  maxdemes{0}, fitnesses{0}, miglookup{M}
             // current_deme_parameters(maxdemes, metadata), miglookup{M}
             {
             }

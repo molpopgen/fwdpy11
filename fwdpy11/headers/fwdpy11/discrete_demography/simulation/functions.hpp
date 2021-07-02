@@ -57,14 +57,15 @@ namespace fwdpy11
         namespace detail
         {
             inline void
-            update_current_deme_sizes(const std::uint32_t t,
-                                      deme_size_change_range& event_ranges,
-                                      deme_properties& sizes_rates)
+            update_current_deme_sizes(
+                const std::uint32_t t,
+                current_event_state<SetDemeSize>& size_change_events,
+                deme_properties& sizes_rates)
             // NOTE: this function may resent growth rates to zero.
             // see SetDemeSize for details.
             {
-                deme_size_change_range::value_type& range = event_ranges.get();
-                if (range.first < range.second && t < range.first->when)
+                if (size_change_events.current() < size_change_events.last()
+                    && t < size_change_events.when())
                     {
                         return;
                     }
@@ -76,12 +77,13 @@ namespace fwdpy11
                     = sizes_rates.growth_rate_onset_times.get();
                 growth_initial_size_vector::value_type& growth_initial_sizes
                     = sizes_rates.growth_initial_sizes.get();
-                for (; range.first < range.second && range.first->when == t;
-                     ++range.first)
+                for (; size_change_events.current() < size_change_events.last()
+                       && size_change_events.when() == t;
+                     ++size_change_events.current())
                     {
-                        auto deme = range.first->deme;
-                        current_deme_sizes[deme] = range.first->new_size;
-                        if (range.first->resets_growth_rate == true)
+                        auto deme = size_change_events.event().deme;
+                        current_deme_sizes[deme] = size_change_events.event().new_size;
+                        if (size_change_events.event().resets_growth_rate == true)
                             {
                                 growth_rates[deme] = NOGROWTH;
                             }
@@ -94,12 +96,13 @@ namespace fwdpy11
             }
 
             inline void
-            update_growth_rates(const std::uint32_t t,
-                                growth_rate_change_range& growth_rate_change_tracker,
-                                deme_properties& sizes_rates)
+            update_growth_rates(
+                const std::uint32_t t,
+                current_event_state<SetExponentialGrowth>& growth_rate_changes,
+                deme_properties& sizes_rates)
             {
-                auto& range = growth_rate_change_tracker.get();
-                if (range.first < range.second && t < range.first->when)
+                if (growth_rate_changes.current() < growth_rate_changes.last()
+                    && t < growth_rate_changes.when())
                     {
                         return;
                     }
@@ -108,62 +111,69 @@ namespace fwdpy11
                 auto& current_deme_sizes = sizes_rates.current_deme_sizes.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
                 auto& Ncurr = sizes_rates.current_deme_sizes.get();
-                for (; range.first < range.second && range.first->when == t;
-                     ++range.first)
+                for (; growth_rate_changes.current() < growth_rate_changes.last()
+                       && growth_rate_changes.when() == t;
+                     ++growth_rate_changes.current())
                     {
-                        auto deme = range.first->deme;
-                        if (range.first->G != NOGROWTH && Ncurr[deme] == 0)
+                        auto deme = growth_rate_changes.event().deme;
+                        if (growth_rate_changes.event().G != NOGROWTH
+                            && Ncurr[deme] == 0)
                             {
                                 throw DemographyError(
                                     "attempt to change growth rate in extinct "
                                     "deme");
                             }
-                        rates[deme] = range.first->G;
+                        rates[deme] = growth_rate_changes.event().G;
                         onsets[deme] = t;
                         N0[deme] = current_deme_sizes[deme];
                     }
             }
 
             inline void
-            update_selfing_rates(const std::uint32_t t,
-                                 selfing_rate_change_range& selfing_rate_change_tracker,
-                                 deme_properties& sizes_rates)
+            update_selfing_rates(
+                const std::uint32_t t,
+                current_event_state<SetSelfingRate>& selfing_rate_changes,
+                deme_properties& sizes_rates)
             {
-                auto& range = selfing_rate_change_tracker.get();
-                if (range.first < range.second && t < range.first->when)
+                if (selfing_rate_changes.current() < selfing_rate_changes.last()
+                    && t < selfing_rate_changes.when())
                     {
                         return;
                     }
                 auto& rates = sizes_rates.selfing_rates.get();
                 auto& Ncurr = sizes_rates.current_deme_sizes.get();
-                for (; range.first < range.second && range.first->when == t;
-                     ++range.first)
+                for (; selfing_rate_changes.current() < selfing_rate_changes.last()
+                       && selfing_rate_changes.when() == t;
+                     ++selfing_rate_changes.current())
                     {
-                        if (Ncurr[range.first->deme] == 0)
+                        auto& event = selfing_rate_changes.event();
+                        if (Ncurr[event.deme] == 0)
                             {
                                 throw DemographyError("attempt to set selfing "
                                                       "rate in extinct deme");
                             }
-                        rates[range.first->deme] = range.first->S;
+                        rates[event.deme] = event.S;
                     }
             }
 
             inline void
             update_migration_matrix(
                 const std::uint32_t t,
-                migration_rate_change_range& migration_rate_change_tracker,
+                current_event_state<SetMigrationRates>& migration_rate_changes,
                 MigrationMatrix& M)
 
             {
-                auto& range = migration_rate_change_tracker.get();
-                if (range.first < range.second && t < range.first->when)
+                if (migration_rate_changes.current() < migration_rate_changes.last()
+                    && t < migration_rate_changes.when())
                     {
                         return;
                     }
-                for (; range.first < range.second && range.first->when == t;
-                     ++range.first)
+                for (; migration_rate_changes.current() < migration_rate_changes.last()
+                       && migration_rate_changes.when() == t;
+                     ++migration_rate_changes.current())
                     {
-                        M.set_migration_rates(range.first->deme, range.first->migrates);
+                        auto& event = migration_rate_changes.event();
+                        M.set_migration_rates(event.deme, event.migrates);
                     }
             }
 
@@ -209,7 +219,7 @@ namespace fwdpy11
         } // namespace detail
 
         inline std::uint32_t
-        apply_demographic_events(std::uint32_t t, DiscreteDemography& demography,
+        apply_demographic_events(std::uint32_t t, DiscreteDemographyState& demography,
                                  MigrationMatrix& M, deme_properties& sizes_rates)
         {
             std::copy(begin(sizes_rates.current_deme_sizes.get()),
@@ -217,17 +227,13 @@ namespace fwdpy11
                       begin(sizes_rates.next_deme_sizes.get()));
             // Step 1, do the discrete changes of deme sizes
             // NOTE: this may reset growth rates to zero
-            detail::update_current_deme_sizes(t, demography.deme_size_change_tracker,
-                                              sizes_rates);
+            detail::update_current_deme_sizes(t, demography.set_deme_sizes, sizes_rates);
 
             // Step 2: set new growth rates
-            detail::update_growth_rates(t, demography.growth_rate_change_tracker,
-                                        sizes_rates);
+            detail::update_growth_rates(t, demography.set_growth_rates, sizes_rates);
             // Step 3: update selfing rates
-            detail::update_selfing_rates(t, demography.selfing_rate_change_tracker,
-                                         sizes_rates);
-            detail::update_migration_matrix(t, demography.migration_rate_change_tracker,
-                                            M);
+            detail::update_selfing_rates(t, demography.set_selfing_rates, sizes_rates);
+            detail::update_migration_matrix(t, demography.set_migration_rates, M);
             // Step 4: set next deme sizes and apply growth rates
             std::copy(begin(sizes_rates.current_deme_sizes.get()),
                       end(sizes_rates.current_deme_sizes.get()),
