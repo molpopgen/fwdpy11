@@ -37,8 +37,37 @@ namespace fwdpy11
                 : events(std::forward<Input>(input)), event_range{0, events.size()}
             {
             }
-        };
 
+            const T&
+            event() const
+            {
+                return events[current()];
+            }
+
+            auto
+            when() const
+            {
+                return event().when;
+            }
+
+            const std::size_t
+            current() const
+            {
+                return event_range.first;
+            }
+
+            std::size_t&
+            current()
+            {
+                return event_range.first;
+            }
+
+            const std::size_t
+            last() const
+            {
+                return event_range.second;
+            }
+        };
     }
 }
 

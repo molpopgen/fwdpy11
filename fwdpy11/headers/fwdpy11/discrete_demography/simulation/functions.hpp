@@ -22,6 +22,7 @@
 
 #include <vector>
 #include "../../rng.hpp"
+#include "../current_event_state.hpp"
 #include "../MassMigration.hpp"
 #include "../DiscreteDemography.hpp"
 #include "deme_properties.hpp"
@@ -32,25 +33,24 @@ namespace fwdpy11
     {
         template <typename METADATATYPE>
         inline void
-        mass_migration(
-            const GSLrng_t& rng, std::uint32_t t,
-            mass_migration_range& mass_migration_ranges,
-            growth_rates_vector& growth_rates,
-            growth_rates_onset_times_vector& growth_rate_onset_times,
-            growth_initial_size_vector& growth_initial_sizes,
-            std::vector<METADATATYPE>& metadata)
+        mass_migration(const GSLrng_t& rng, std::uint32_t t,
+                       current_event_state<MassMigration>& mass_migration_events,
+                       growth_rates_vector& growth_rates,
+                       growth_rates_onset_times_vector& growth_rate_onset_times,
+                       growth_initial_size_vector& growth_initial_sizes,
+                       std::vector<METADATATYPE>& metadata)
         {
-            auto& ref = mass_migration_ranges.get();
-            if (ref.first < ref.second && t < ref.first->when)
+            if (mass_migration_events.current() < mass_migration_events.last()
+                && t < mass_migration_events.when())
                 {
                     return;
                 }
-            while (ref.first < ref.second && ref.first->when == t)
+            while (mass_migration_events.current() < mass_migration_events.last()
+                   && mass_migration_events.when() == t)
                 {
-                    ref.first = apply_mass_migrations(
-                        rng, t, ref.first, ref.second, growth_rates,
-                        growth_rate_onset_times, growth_initial_sizes,
-                        metadata);
+                    mass_migration_events.current() = apply_mass_migrations(
+                        rng, t, mass_migration_events, growth_rates,
+                        growth_rate_onset_times, growth_initial_sizes, metadata);
                 }
         }
 
@@ -72,8 +72,7 @@ namespace fwdpy11
                     = sizes_rates.current_deme_sizes.get();
                 growth_rates_vector::value_type& growth_rates
                     = sizes_rates.growth_rates.get();
-                growth_rates_onset_times_vector::value_type&
-                    growth_rate_onset_times
+                growth_rates_onset_times_vector::value_type& growth_rate_onset_times
                     = sizes_rates.growth_rate_onset_times.get();
                 growth_initial_size_vector::value_type& growth_initial_sizes
                     = sizes_rates.growth_initial_sizes.get();
@@ -95,10 +94,9 @@ namespace fwdpy11
             }
 
             inline void
-            update_growth_rates(
-                const std::uint32_t t,
-                growth_rate_change_range& growth_rate_change_tracker,
-                deme_properties& sizes_rates)
+            update_growth_rates(const std::uint32_t t,
+                                growth_rate_change_range& growth_rate_change_tracker,
+                                deme_properties& sizes_rates)
             {
                 auto& range = growth_rate_change_tracker.get();
                 if (range.first < range.second && t < range.first->when)
@@ -107,8 +105,7 @@ namespace fwdpy11
                     }
                 auto& rates = sizes_rates.growth_rates.get();
                 auto& onsets = sizes_rates.growth_rate_onset_times.get();
-                auto& current_deme_sizes
-                    = sizes_rates.current_deme_sizes.get();
+                auto& current_deme_sizes = sizes_rates.current_deme_sizes.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
                 auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; range.first < range.second && range.first->when == t;
@@ -128,10 +125,9 @@ namespace fwdpy11
             }
 
             inline void
-            update_selfing_rates(
-                const std::uint32_t t,
-                selfing_rate_change_range& selfing_rate_change_tracker,
-                deme_properties& sizes_rates)
+            update_selfing_rates(const std::uint32_t t,
+                                 selfing_rate_change_range& selfing_rate_change_tracker,
+                                 deme_properties& sizes_rates)
             {
                 auto& range = selfing_rate_change_tracker.get();
                 if (range.first < range.second && t < range.first->when)
@@ -167,8 +163,7 @@ namespace fwdpy11
                 for (; range.first < range.second && range.first->when == t;
                      ++range.first)
                     {
-                        M.set_migration_rates(range.first->deme,
-                                               range.first->migrates);
+                        M.set_migration_rates(range.first->deme, range.first->migrates);
                     }
             }
 
@@ -194,9 +189,8 @@ namespace fwdpy11
                                     }
                                 double next_size = std::round(
                                     static_cast<double>(N0[deme])
-                                    * std::pow(G[deme],
-                                               static_cast<double>(
-                                                   t - onset[deme] + 1)));
+                                    * std::pow(G[deme], static_cast<double>(
+                                                            t - onset[deme] + 1)));
                                 if (next_size <= 0.0)
                                     {
                                         next_size = 0.0;
@@ -215,27 +209,25 @@ namespace fwdpy11
         } // namespace detail
 
         inline std::uint32_t
-        apply_demographic_events(std::uint32_t t,
-                                 DiscreteDemography& demography,
-                                 MigrationMatrix& M,
-                                 deme_properties& sizes_rates)
+        apply_demographic_events(std::uint32_t t, DiscreteDemography& demography,
+                                 MigrationMatrix& M, deme_properties& sizes_rates)
         {
             std::copy(begin(sizes_rates.current_deme_sizes.get()),
                       end(sizes_rates.current_deme_sizes.get()),
                       begin(sizes_rates.next_deme_sizes.get()));
             // Step 1, do the discrete changes of deme sizes
             // NOTE: this may reset growth rates to zero
-            detail::update_current_deme_sizes(
-                t, demography.deme_size_change_tracker, sizes_rates);
+            detail::update_current_deme_sizes(t, demography.deme_size_change_tracker,
+                                              sizes_rates);
 
             // Step 2: set new growth rates
-            detail::update_growth_rates(
-                t, demography.growth_rate_change_tracker, sizes_rates);
+            detail::update_growth_rates(t, demography.growth_rate_change_tracker,
+                                        sizes_rates);
             // Step 3: update selfing rates
-            detail::update_selfing_rates(
-                t, demography.selfing_rate_change_tracker, sizes_rates);
-            detail::update_migration_matrix(
-                t, demography.migration_rate_change_tracker, M);
+            detail::update_selfing_rates(t, demography.selfing_rate_change_tracker,
+                                         sizes_rates);
+            detail::update_migration_matrix(t, demography.migration_rate_change_tracker,
+                                            M);
             // Step 4: set next deme sizes and apply growth rates
             std::copy(begin(sizes_rates.current_deme_sizes.get()),
                       end(sizes_rates.current_deme_sizes.get()),
