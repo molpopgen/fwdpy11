@@ -53,6 +53,17 @@ namespace fwdpy11
             {
             }
 
+            multideme_fitness_lookups&
+            operator=(const multideme_fitness_lookups& other)
+            {
+                starts = other.starts;
+                stops = other.stops;
+                fitnesses = other.fitnesses;
+                individuals = other.individuals;
+                lookups = copy_lookups(other);
+                return *this;
+            }
+
             std::vector<fwdpp::gsl_ran_discrete_t_ptr>
             copy_lookups(const multideme_fitness_lookups& other)
             {

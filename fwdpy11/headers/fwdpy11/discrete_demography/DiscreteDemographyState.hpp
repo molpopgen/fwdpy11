@@ -65,7 +65,7 @@ namespace fwdpy11
             std::uint32_t next_global_N;
 
           public:
-            const std::int32_t maxdemes;
+            std::int32_t maxdemes;
             multideme_fitness_lookups<std::uint32_t> fitnesses;
             //deme_properties current_deme_parameters;
             migration_lookup_v2 miglookup;
@@ -86,7 +86,9 @@ namespace fwdpy11
             {
             }
 
-            DiscreteDemographyState(const DiscreteDemographyState& other) = default;
+            DiscreteDemographyState(const DiscreteDemographyState&) = default;
+            DiscreteDemographyState& operator=(const DiscreteDemographyState&) = default;
+            DiscreteDemographyState(DiscreteDemographyState&&) = default;
 
             // This constructor is only used when resetting
             // the state from an event like pickling a DiscreteDemography

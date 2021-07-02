@@ -61,10 +61,6 @@ namespace fwdpy11
                       const std::vector<SetMigrationRates>::const_iterator>,
             detail::migration_rate_change_range_t>;
 
-        class demographic_model_state;
-
-        using demographic_model_state_pointer = std::unique_ptr<demographic_model_state>;
-
         class DiscreteDemography
         {
           private:
@@ -280,7 +276,7 @@ namespace fwdpy11
                     }
             }
 
-            demographic_model_state_pointer model_state;
+            DiscreteDemographyState model_state;
 
           public:
             std::vector<MassMigration> mass_migrations;
@@ -297,18 +293,20 @@ namespace fwdpy11
             selfing_rate_change_range selfing_rate_change_tracker;
             migration_rate_change_range migration_rate_change_tracker;
 
-            DiscreteDemography(std::vector<MassMigration> mmig,
-                               std::vector<SetExponentialGrowth> sg,
-                               std::vector<SetDemeSize> size_changes,
-                               std::vector<SetSelfingRate> ssr, MigrationMatrix m,
-                               std::vector<SetMigrationRates> smr)
-                : model_state(nullptr),
-                  mass_migrations(init_events_vector(std::move(mmig))),
-                  set_growth_rates(init_events_vector(std::move(sg))),
-                  set_deme_sizes(init_events_vector(std::move(size_changes))),
-                  set_selfing_rates(init_events_vector(std::move(ssr))),
-                  migmatrix(std::move(m)),
-                  set_migration_rates(init_events_vector(std::move(smr))),
+            DiscreteDemography(std::vector<MassMigration> mass_migrations,
+                               std::vector<SetExponentialGrowth> set_growth_rates,
+                               std::vector<SetDemeSize> set_deme_sizes,
+                               std::vector<SetSelfingRate> set_selfing_rates,
+                               MigrationMatrix m,
+                               std::vector<SetMigrationRates> set_migration_rates)
+                : model_state(mass_migrations, set_growth_rates, set_deme_sizes,
+                              set_selfing_rates, m, set_migration_rates),
+                  mass_migrations(init_events_vector(std::move(mass_migrations))),
+                  set_growth_rates(init_events_vector(std::move(set_growth_rates))),
+                  set_deme_sizes(init_events_vector(std::move(set_deme_sizes))),
+                  set_selfing_rates(init_events_vector(std::move(set_selfing_rates))),
+                  migmatrix(std::move(m)), set_migration_rates(init_events_vector(
+                                               std::move(set_migration_rates))),
                   mass_migration_tracker(set_range(mass_migrations)),
                   deme_size_change_tracker(set_range(set_deme_sizes)),
                   growth_rate_change_tracker(set_range(set_growth_rates)),
@@ -339,28 +337,15 @@ namespace fwdpy11
                                    migration_rate_change_tracker);
             }
 
-            demographic_model_state_pointer
+            const DiscreteDemographyState&
             get_model_state()
             // Not visible to Python
-            {
-                demographic_model_state_pointer rv(std::move(model_state));
-                return rv;
-            }
-
-            demographic_model_state_pointer&
-            get_model_state_ref()
-            {
-                return model_state;
-            }
-
-            const demographic_model_state_pointer&
-            get_model_state_ref() const
             {
                 return model_state;
             }
 
             void
-            set_model_state(demographic_model_state_pointer state)
+            set_model_state(DiscreteDemographyState state)
             // Not visible to Python
             {
                 model_state = std::move(state);
