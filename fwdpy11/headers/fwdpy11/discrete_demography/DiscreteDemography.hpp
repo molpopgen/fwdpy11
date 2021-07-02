@@ -24,7 +24,6 @@
 #include <memory>
 #include <vector>
 #include <gsl/gsl_matrix.h>
-#include <fwdpp/util/named_type.hpp>
 
 #include "MassMigration.hpp"
 #include "MigrationMatrix.hpp"
@@ -39,28 +38,6 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        using mass_migration_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<MassMigration>::const_iterator,
-                      const std::vector<MassMigration>::const_iterator>,
-            detail::mass_migration_range_t>;
-        using deme_size_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetDemeSize>::const_iterator,
-                      const std::vector<SetDemeSize>::const_iterator>,
-            detail::deme_size_change_range_t>;
-        using growth_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetExponentialGrowth>::const_iterator,
-                      const std::vector<SetExponentialGrowth>::const_iterator>,
-            detail::growth_rate_change_range_t>;
-        using selfing_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetSelfingRate>::const_iterator,
-                      const std::vector<SetSelfingRate>::const_iterator>,
-            detail::selfing_rate_change_range_t>;
-
-        using migration_rate_change_range = fwdpp::strong_types::named_type<
-            std::pair<std::vector<SetMigrationRates>::const_iterator,
-                      const std::vector<SetMigrationRates>::const_iterator>,
-            detail::migration_rate_change_range_t>;
-
         class DiscreteDemography
         {
           private:
@@ -175,14 +152,6 @@ namespace fwdpy11
             }
 
             template <typename T>
-            std::pair<typename std::vector<T>::const_iterator,
-                      const typename std::vector<T>::const_iterator>
-            set_range(const std::vector<T>& v)
-            {
-                return {v.cbegin(), v.cend()};
-            }
-
-            template <typename T>
             void
             update_event_times(std::uint32_t t, T& range)
             {
@@ -190,13 +159,6 @@ namespace fwdpy11
                     range.get().first, range.get().second, t,
                     [](const typename T::value_type::first_type::value_type v,
                        std::uint32_t t) { return v.when < t; });
-            }
-
-            template <typename T1, typename T2>
-            void
-            reset_range(T1& range, T2& events)
-            {
-                range.get().first = events.cbegin();
             }
 
             void
@@ -286,13 +248,6 @@ namespace fwdpy11
             MigrationMatrix migmatrix;
             std::vector<SetMigrationRates> set_migration_rates;
 
-            // pairs of iterators over the events
-            mass_migration_range mass_migration_tracker;
-            deme_size_change_range deme_size_change_tracker;
-            growth_rate_change_range growth_rate_change_tracker;
-            selfing_rate_change_range selfing_rate_change_tracker;
-            migration_rate_change_range migration_rate_change_tracker;
-
             DiscreteDemography(std::vector<MassMigration> mass_migrations,
                                std::vector<SetExponentialGrowth> set_growth_rates,
                                std::vector<SetDemeSize> set_deme_sizes,
@@ -305,13 +260,8 @@ namespace fwdpy11
                   set_growth_rates(init_events_vector(std::move(set_growth_rates))),
                   set_deme_sizes(init_events_vector(std::move(set_deme_sizes))),
                   set_selfing_rates(init_events_vector(std::move(set_selfing_rates))),
-                  migmatrix(std::move(m)), set_migration_rates(init_events_vector(
-                                               std::move(set_migration_rates))),
-                  mass_migration_tracker(set_range(mass_migrations)),
-                  deme_size_change_tracker(set_range(set_deme_sizes)),
-                  growth_rate_change_tracker(set_range(set_growth_rates)),
-                  selfing_rate_change_tracker(set_range(set_selfing_rates)),
-                  migration_rate_change_tracker(set_range(set_migration_rates))
+                  migmatrix(std::move(m)),
+                  set_migration_rates(init_events_vector(std::move(set_migration_rates)))
             {
                 check_if_no_migration();
                 validate_change_migration_events();
@@ -324,17 +274,8 @@ namespace fwdpy11
             // and we may need to update the iterators accordingly.
             // NOTE: needs test.
             {
-                reset_range(mass_migration_tracker, mass_migrations);
-                update_event_times(current_pop_generation, mass_migration_tracker);
-                reset_range(growth_rate_change_tracker, set_growth_rates);
-                update_event_times(current_pop_generation, growth_rate_change_tracker);
-                reset_range(deme_size_change_tracker, set_deme_sizes);
-                update_event_times(current_pop_generation, deme_size_change_tracker);
-                reset_range(selfing_rate_change_tracker, set_selfing_rates);
-                update_event_times(current_pop_generation, selfing_rate_change_tracker);
-                reset_range(migration_rate_change_tracker, set_migration_rates);
-                update_event_times(current_pop_generation,
-                                   migration_rate_change_tracker);
+                auto x{current_pop_generation};
+                throw std::runtime_error("this function will go away!");
             }
 
             const DiscreteDemographyState&
