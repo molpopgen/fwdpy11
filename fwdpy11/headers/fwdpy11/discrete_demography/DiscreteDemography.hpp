@@ -239,14 +239,20 @@ namespace fwdpy11
             }
 
             DiscreteDemographyState model_state;
-
-          public:
             std::vector<MassMigration> mass_migrations;
             std::vector<SetExponentialGrowth> set_growth_rates;
             std::vector<SetDemeSize> set_deme_sizes;
             std::vector<SetSelfingRate> set_selfing_rates;
             MigrationMatrix migmatrix;
             std::vector<SetMigrationRates> set_migration_rates;
+
+          public:
+            //std::vector<MassMigration> mass_migrations;
+            //std::vector<SetExponentialGrowth> set_growth_rates;
+            //std::vector<SetDemeSize> set_deme_sizes;
+            //std::vector<SetSelfingRate> set_selfing_rates;
+            //MigrationMatrix migmatrix;
+            //std::vector<SetMigrationRates> set_migration_rates;
 
             DiscreteDemography(std::vector<MassMigration> mass_migrations,
                                std::vector<SetExponentialGrowth> set_growth_rates,
