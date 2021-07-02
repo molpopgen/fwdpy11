@@ -19,9 +19,9 @@
 import pickle
 import unittest
 
-import numpy as np
-
 import fwdpy11
+import numpy as np
+import pytest
 
 
 class TestMoveOrCopyIndividuals(unittest.TestCase):
@@ -403,6 +403,34 @@ class TestPickling(unittest.TestCase):
         p = pickle.dumps(m)
         up = pickle.loads(p)
         self.assertEqual(m, up)
+
+
+@pytest.fixture(params=[10234, 91246412, 8513251, 51285123, 252101511])
+def random_migrates_seed(request):
+    return request.param
+
+
+@pytest.fixture(params=[i for i in range(2, 30, 2)])
+def random_migrates_npops(request):
+    return request.param
+
+
+def test_set_migration_rates_numerical_tolerance(
+    random_migrates_seed, random_migrates_npops
+):
+    """
+    Test related to GitHub issue 787
+    """
+    nreps = 100
+    rng = np.random.Generator(np.random.MT19937(seed=random_migrates_seed))
+    for index in range(random_migrates_npops):
+        alpha = [rng.integers(1, high=10)] * random_migrates_npops
+        samples = rng.dirichlet(alpha, size=nreps)
+        for row in range(nreps):
+            r = samples[row, :][:]
+            r[index] = 0.0
+            r[index] = 1.0 - r.sum()
+            _ = fwdpy11.SetMigrationRates(when=1, deme=index, migrates=r)
 
 
 if __name__ == "__main__":

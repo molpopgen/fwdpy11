@@ -38,6 +38,22 @@ namespace fwdpy11
             std::uint32_t when;
             std::int32_t deme; // source deme
             std::vector<double> migrates;
+
+            void
+            validate_sum(double sum)
+            {
+                bool close_to_zero = std::fabs(sum - 0.0)
+                                     <= 10. * std::numeric_limits<double>::epsilon();
+                bool close_to_one = std::fabs(sum - 1.0)
+                                    <= 10. * std::numeric_limits<double>::epsilon();
+                if (!close_to_one && !close_to_zero)
+                    {
+                        throw std::invalid_argument(
+                            "migration rates must sum to ~0. or ~1. in "
+                            "a row.");
+                    }
+            }
+
             SetMigrationRates(std::uint32_t w, std::int32_t d, std::vector<double> r)
                 : when(w), deme(d), migrates(std::move(r))
             {
@@ -69,12 +85,7 @@ namespace fwdpy11
                     }
 
                 auto sum = std::accumulate(begin(migrates), end(migrates), 0.0);
-                if (sum != 0. && sum != 1.0)
-                    {
-                        throw std::invalid_argument(
-                            "migration rates must sum to 0. or 1. in "
-                            "a row.");
-                    }
+                validate_sum(sum);
             }
 
             SetMigrationRates(std::uint32_t w, std::vector<double> migmatrix)
@@ -113,11 +124,7 @@ namespace fwdpy11
                                     }
                                 sum += v;
                             }
-                        if (sum != 0.0 && sum != 1.0)
-                            {
-                                throw std::invalid_argument(
-                                    "migration matrix rows must sum to 0.0 or 1.0");
-                            }
+                        validate_sum(sum);
                     }
             }
         };
