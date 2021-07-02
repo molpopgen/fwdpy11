@@ -225,6 +225,7 @@ evolve_with_tree_sequences(
     bool demographic_model_needs_update = true;
 
     auto current_demographic_state = demography.get_model_state();
+    // FIXME: warning repeat!
     current_demographic_state.initialize(pop);
     if (gvalue_pointers.genetic_values.size()
         > static_cast<std::size_t>(current_demographic_state.maxdemes))
@@ -294,6 +295,7 @@ evolve_with_tree_sequences(
     fitness_lookup.update(
         current_demographic_state.current_deme_parameters.current_deme_sizes,
         pop.diploid_metadata);
+    // FIXME: warning -- repeat
     current_demographic_state.initialize(pop);
     //if (demographic_model_needs_update == true)
     //    {
