@@ -30,8 +30,6 @@
 #include "SetSelfingRate.hpp"
 #include "SetMigrationRates.hpp"
 #include "current_event_state.hpp"
-#include "simulation/migration_lookup.hpp"
-#include "simulation/multideme_fitness_lookups.hpp"
 #include "simulation/deme_properties.hpp"
 
 namespace fwdpy11
@@ -53,7 +51,6 @@ namespace fwdpy11
             current_event_state<SetMigrationRates> set_migration_rates;
             MigrationMatrix M;
             std::int32_t maxdemes;
-            multideme_fitness_lookups<std::uint32_t> fitnesses;
             deme_properties current_deme_parameters;
 
             DiscreteDemographyState(std::vector<MassMigration> mass_migrations,
@@ -67,7 +64,7 @@ namespace fwdpy11
                   set_deme_sizes{std::move(set_deme_sizes)}, set_selfing_rates{std::move(
                                                                  set_selfing_rates)},
                   set_migration_rates{std::move(set_migration_rates)}, M{std::move(M)},
-                  maxdemes{0}, fitnesses{0}, current_deme_parameters{}
+                  maxdemes{0}, current_deme_parameters{}
             {
             }
 
