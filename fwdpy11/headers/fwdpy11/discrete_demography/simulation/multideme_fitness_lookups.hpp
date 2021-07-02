@@ -47,12 +47,12 @@ namespace fwdpy11
             }
 
             // NOTE: We require this to compile for some reason?
-            multideme_fitness_lookups(const multideme_fitness_lookups& other)
-                : starts(other.starts), stops(other.stops), offsets(other.offsets),
-                  fitnesses(other.fitnesses), individuals(other.individuals),
-                  lookups(copy_lookups(other))
-            {
-            }
+            //multideme_fitness_lookups(const multideme_fitness_lookups& other)
+            //    : starts(other.starts), stops(other.stops), offsets(other.offsets),
+            //      fitnesses(other.fitnesses), individuals(other.individuals),
+            //      lookups(copy_lookups(other))
+            //{
+            //}
 
             //multideme_fitness_lookups&
             //operator=(const multideme_fitness_lookups& other)
@@ -65,29 +65,29 @@ namespace fwdpy11
             //    return *this;
             //}
 
-            std::vector<fwdpp::gsl_ran_discrete_t_ptr>
-            copy_lookups(const multideme_fitness_lookups& other)
-            {
-                std::vector<fwdpp::gsl_ran_discrete_t_ptr> rv;
-                rv.resize(other.lookups.size());
-                for (std::size_t i = 0; i < other.starts.size(); ++i)
-                    {
-                        if (other.stops[i] - other.starts[i] > 0)
-                            {
-                                // NOTE: the size of the i-th deme's
-                                // fitness array is starts[i]-stops[i]
-                                rv[i].reset(gsl_ran_discrete_preproc(
-                                    other.stops[i] - other.starts[i],
-                                    other.fitnesses.data() + starts[i]));
-                            }
-                        else
-                            {
-                                rv[i].reset(nullptr);
-                            }
-                    }
+            //std::vector<fwdpp::gsl_ran_discrete_t_ptr>
+            //copy_lookups(const multideme_fitness_lookups& other)
+            //{
+            //    std::vector<fwdpp::gsl_ran_discrete_t_ptr> rv;
+            //    rv.resize(other.lookups.size());
+            //    for (std::size_t i = 0; i < other.starts.size(); ++i)
+            //        {
+            //            if (other.stops[i] - other.starts[i] > 0)
+            //                {
+            //                    // NOTE: the size of the i-th deme's
+            //                    // fitness array is starts[i]-stops[i]
+            //                    rv[i].reset(gsl_ran_discrete_preproc(
+            //                        other.stops[i] - other.starts[i],
+            //                        other.fitnesses.data() + starts[i]));
+            //                }
+            //            else
+            //                {
+            //                    rv[i].reset(nullptr);
+            //                }
+            //        }
 
-                return rv;
-            }
+            //    return rv;
+            //}
 
             template <typename METADATATYPE>
             void
