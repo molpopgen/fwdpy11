@@ -23,6 +23,12 @@ Minor changes
   Issue {issue}`789`.
   Fixed in PR {pr}`794`
 
+Dependencies
+
+* Pinned `demesdraw` in `doc/requirements.txt`
+  Issue {issue}`790`.
+  Fixed in PR {pr}`795`.
+
 ## 0.15.1
 
 Point release
