@@ -29,10 +29,10 @@ import tskit
 
 np.random.seed(54321)
 
-MOCK_NODE_TABLE_DTYPE = [("time", np.float), ("deme", np.int32)]
+MOCK_NODE_TABLE_DTYPE = [("time", np.float64), ("deme", np.int32)]
 MOCK_EDGE_TABLE_DTYPE = [
-    ("left", np.float),
-    ("right", np.float),
+    ("left", np.float64),
+    ("right", np.float64),
     ("parent", np.int32),
     ("child", np.int32),
 ]
