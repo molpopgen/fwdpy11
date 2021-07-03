@@ -36,7 +36,12 @@ def _initializePopulationTable(
     tc.populations.metadata_schema = (
         fwdpy11.tskit_tools.metadata_schema.PopulationMetadata
     )
-    for i in sorted(np.unique(node_view["deme"])):
+    # Prior to 0.15.2, we just iterated over unique values.
+    # However, that was incorrect (see GitHub issue 792)
+    # because the possibility of demes going extinct could leave
+    # nodes in the tree in a way that resulted in population IDs
+    # being shifted, giving a LibraryError from tskit.
+    for i in range(node_view["deme"].max() + 1):
         if population_metadata is not None and i in population_metadata:
             tc.populations.add_row(metadata=population_metadata[i])
         else:

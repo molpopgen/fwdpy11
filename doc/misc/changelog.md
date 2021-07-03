@@ -13,6 +13,9 @@ Bug fixes
   {issue}`787`
   {user}`apragsdale`
   {user}`molpopgen`
+* Fix bug where the number of rows in a {class}`tskit.PopulationTable` were incorrect upon export via {meth}`fwdpy11.DiploidPopulation.dump_tables_to_tskit`.
+  Issue {issue}`792`.
+  Fixed in PR {pr}`793`.
 
 ## 0.15.1
 
