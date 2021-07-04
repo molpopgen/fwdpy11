@@ -17,6 +17,12 @@ Bug fixes
   Issue {issue}`792`.
   Fixed in PR {pr}`793`.
 
+Minor changes
+
+* Remove use of deprecated `numpy` `dtype` in tests.
+  Issue {issue}`789`.
+  Fixed in PR {pr}`794`
+
 ## 0.15.1
 
 Point release
