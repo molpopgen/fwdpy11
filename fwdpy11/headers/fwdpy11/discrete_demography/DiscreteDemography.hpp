@@ -297,6 +297,44 @@ namespace fwdpy11
             {
                 model_state = std::move(state);
             }
+
+            // these getters are not exposed to Python
+
+            auto
+            get_mass_migrations() const
+            {
+                return mass_migrations;
+            }
+
+            auto
+            get_set_deme_sizes() const
+            {
+                return set_deme_sizes;
+            }
+
+            auto
+            get_set_selfing_rates() const
+            {
+                return set_selfing_rates;
+            }
+
+            auto
+            get_set_growth_rates() const
+            {
+                return set_growth_rates;
+            }
+            
+            auto
+            get_set_migration_rates() const
+            {
+                return set_migration_rates;
+            }
+            
+            auto
+            get_migration_matrix() const
+            {
+                return migmatrix;
+            }
         };
     } // namespace discrete_demography
 } // namespace fwdpy11
