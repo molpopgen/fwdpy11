@@ -533,6 +533,20 @@ def check_debugger_passes(demog):
         raise "unexpected exception"
 
 
+def evolve_demes_model(demog, initial_sizes) -> fwdpy11.DiploidPopulation:
+    pdict = {
+        "rates": (0.0, 0.0, 0.0),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "demography": demog,
+        "simlen": demog.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(100)
+    pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
+    fwdpy11.evolvets(rng, pop, params, 100)
+    return pop
+
+
 def three_way_continuous_migration(
     goes_extinct: typing.Optional[typing.List[str]] = None,
 ):
@@ -588,6 +602,30 @@ def test_three_way_continuous_migration_pairwise(demog):
         demog.model.migmatrix.M
         == np.array([[0.8, 0.1, 0.1], [0.1, 0.8, 0.1], [0.1, 0.1, 0.8]])
     )
+
+
+@pytest.mark.parametrize(
+    "demog",
+    [
+        three_way_continuous_migration(),
+        three_way_continuous_migration(["A"]),
+        three_way_continuous_migration(["B"]),
+        three_way_continuous_migration(["C"]),
+        three_way_continuous_migration(["A", "B"]),
+        three_way_continuous_migration(["A", "C"]),
+        three_way_continuous_migration(["B", "C"]),
+        three_way_continuous_migration_pairwise(),
+        three_way_continuous_migration_pairwise(["A"]),
+        three_way_continuous_migration_pairwise(["B"]),
+        three_way_continuous_migration_pairwise(["C"]),
+        three_way_continuous_migration_pairwise(["A", "B"]),
+        three_way_continuous_migration_pairwise(["A", "C"]),
+        three_way_continuous_migration_pairwise(["B", "C"]),
+    ],
+)
+def test_evolve_three_way_continuous_migration_pairwise(demog):
+    pop = evolve_demes_model(demog, [100] * 3)
+    assert pop.generation == demog.metadata["total_simulation_length"]
 
 
 def multiple_migrations_delayed():
