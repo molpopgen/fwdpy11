@@ -22,6 +22,9 @@ Minor changes
 * Remove use of deprecated `numpy` `dtype` in tests.
   Issue {issue}`789`.
   Fixed in PR {pr}`794`
+* Added more tests of `demes`-generated models with symmetric migration and individual demes going extinct.
+  Issue {issue}`758`
+  Closed by {pr}`797`
 
 ## 0.15.1
 
