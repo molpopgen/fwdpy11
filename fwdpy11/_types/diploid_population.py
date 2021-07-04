@@ -252,6 +252,11 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             Added `model_params`, `demes_graph`, `population_metadata`,
             `data` keyword args.
 
+        .. versionchanged:: 0.15.2
+
+            Fixed bug that could generate a :class:`tskit.PopulationTable`
+            with an incorrect number of rows.
+
         """
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
             self,
