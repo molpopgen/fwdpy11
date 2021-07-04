@@ -3,6 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.15.2
+
+Point release
+
+Bug fixes
+
+* {class}`fwdpy11.SetMigrationRates` now uses a tolerance when checking that rates sum to 0 or 1.
+  {issue}`787`
+  {user}`apragsdale`
+  {user}`molpopgen`
+
 ## 0.15.1
 
 Point release
