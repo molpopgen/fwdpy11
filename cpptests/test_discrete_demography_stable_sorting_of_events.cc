@@ -10,10 +10,9 @@ struct demographic_event_stable_sorting_fixture
     init()
     // This function does not create a valid model that can be simulated.
     {
-        fwdpy11::discrete_demography::DiscreteDemography::mass_migration_vector massmigs;
-        fwdpy11::discrete_demography::DiscreteDemography::set_growth_rates_vector growth;
-        fwdpy11::discrete_demography::DiscreteDemography::set_deme_sizes_vector
-            sizechanges;
+        std::vector<fwdpy11::discrete_demography::MassMigration> massmigs;
+        std::vector<fwdpy11::discrete_demography::SetExponentialGrowth> growth;
+        std::vector<fwdpy11::discrete_demography::SetDemeSize> sizechanges;
         fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
             selfing;
         fwdpy11::discrete_demography::DiscreteDemography::set_migration_rates_vector
@@ -55,8 +54,8 @@ struct demographic_event_stable_sorting_fixture
         return fwdpy11::discrete_demography::DiscreteDemography(
             std::move(massmigs), std::move(growth), std::move(sizechanges),
             std::move(selfing),
-            fwdpy11::discrete_demography::MigrationMatrix(
-                std::move(migmatrix), 5, false),
+            fwdpy11::discrete_demography::MigrationMatrix(std::move(migmatrix), 5,
+                                                          false),
             std::move(migration));
     }
 
