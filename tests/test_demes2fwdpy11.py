@@ -542,6 +542,16 @@ def three_way_continuous_migration():
     return fwdpy11.discrete_demography.from_demes(g, 1)
 
 
+def three_way_continuous_migration_one_deme_goes_extinct():
+    b = demes.Builder(description="many migrations", time_units="generations")
+    b.add_deme(name="A", epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="B", epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="C", epochs=[dict(start_size=100, end_time=10)])
+    b.add_migration(demes=["A", "B", "C"], rate=0.1)
+    g = b.resolve()
+    return fwdpy11.discrete_demography.from_demes(g, 1)
+
+
 def three_way_continuous_migration_pairwise():
     b = demes.Builder(description="many migrations", time_units="generations")
     b.add_deme(name="A", epochs=[dict(start_size=100, end_time=0)])
@@ -554,9 +564,26 @@ def three_way_continuous_migration_pairwise():
     return fwdpy11.discrete_demography.from_demes(g, 1)
 
 
+def three_way_continuous_migration_pairwise_one_deme_goes_extinct():
+    b = demes.Builder(description="many migrations", time_units="generations")
+    b.add_deme(name="A", epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="B", epochs=[dict(start_size=100, end_time=7)])
+    b.add_deme(name="C", epochs=[dict(start_size=100, end_time=0)])
+    b.add_migration(demes=["A", "B"], rate=0.1)
+    b.add_migration(demes=["A", "C"], rate=0.1)
+    b.add_migration(demes=["B", "C"], rate=0.1)
+    g = b.resolve()
+    return fwdpy11.discrete_demography.from_demes(g, 1)
+
+
 @pytest.mark.parametrize(
     "demog",
-    [three_way_continuous_migration(), three_way_continuous_migration_pairwise()],
+    [
+        three_way_continuous_migration(),
+        three_way_continuous_migration_one_deme_goes_extinct(),
+        three_way_continuous_migration_pairwise(),
+        three_way_continuous_migration_pairwise_one_deme_goes_extinct(),
+    ],
 )
 def test_three_way_continuous_migration_pairwise(demog):
     check_debugger_passes(demog)
