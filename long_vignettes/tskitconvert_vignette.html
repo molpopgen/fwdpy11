@@ -948,18 +948,18 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">,</span> <span class="n">wrapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py</span> in <span class="ni">dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive, wrapped)</span>
-<span class="g g-Whitespace">    </span><span class="mi">254</span> 
-<span class="g g-Whitespace">    </span><span class="mi">255</span>         <span class="s2">&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">256</span><span class="s2">         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span><span class="s2">             self,</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span><span class="s2">             model_params=model_params,</span>
+<span class="g g-Whitespace">    </span><span class="mi">259</span> 
+<span class="g g-Whitespace">    </span><span class="mi">260</span>         <span class="s2">&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">261</span><span class="s2">         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(</span>
+<span class="g g-Whitespace">    </span><span class="mi">262</span><span class="s2">             self,</span>
+<span class="g g-Whitespace">    </span><span class="mi">263</span><span class="s2">             model_params=model_params,</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive, wrapped)</span>
-<span class="g g-Whitespace">    </span><span class="mi">182</span><span class="s2">     if seed is not None:</span>
-<span class="g g-Whitespace">    </span><span class="mi">183</span><span class="s2">         if seed &lt; 0:</span>
-<span class="ne">--&gt; </span><span class="mi">184</span><span class="s2">             raise ValueError(f&quot;seed must be &gt;=0, got </span><span class="si">{seed}</span><span class="s2">&quot;)</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span><span class="s2">         top_level_metadata[&quot;seed&quot;] = seed</span>
-<span class="g g-Whitespace">    </span><span class="mi">186</span><span class="s2"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span><span class="s2">     if seed is not None:</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span><span class="s2">         if seed &lt; 0:</span>
+<span class="ne">--&gt; </span><span class="mi">189</span><span class="s2">             raise ValueError(f&quot;seed must be &gt;=0, got </span><span class="si">{seed}</span><span class="s2">&quot;)</span>
+<span class="g g-Whitespace">    </span><span class="mi">190</span><span class="s2">         top_level_metadata[&quot;seed&quot;] = seed</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span><span class="s2"> </span>
 
 <span class="ne">ValueError</span>: seed must be &gt;=0, got -4616
 </pre></div>

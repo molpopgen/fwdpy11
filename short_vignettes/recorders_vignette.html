@@ -656,8 +656,8 @@
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="b2ba0e84-0b6c-4402-83f8-1a85d0f4b07c" name="0f3e2c38-6fc4-414a-ab15-6f300a51bfa4" type="radio">
-</input><label class="tabbed-label" for="b2ba0e84-0b6c-4402-83f8-1a85d0f4b07c">
+<input checked="checked" id="112c8893-26e0-44f0-a076-3f310444a162" name="d9347229-a6e1-444f-83ea-dbd715078b27" type="radio">
+</input><label class="tabbed-label" for="112c8893-26e0-44f0-a076-3f310444a162">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -665,8 +665,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="9b5d518e-36c6-414c-99ad-3bdc5dc36bae" name="0f3e2c38-6fc4-414a-ab15-6f300a51bfa4" type="radio">
-</input><label class="tabbed-label" for="9b5d518e-36c6-414c-99ad-3bdc5dc36bae">
+<input id="8d6ea294-fda0-431c-8e85-6c512fb6c4e9" name="d9347229-a6e1-444f-83ea-dbd715078b27" type="radio">
+</input><label class="tabbed-label" for="8d6ea294-fda0-431c-8e85-6c512fb6c4e9">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
@@ -687,7 +687,7 @@ The latter allows one to record “ancient samples” during a simulation, which
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Given that you can pass in any valid Python object, you can record anything you can imagine based on attributes of <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>.
-Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.20)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
+Further, as many of those attributes can be viewed as <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>, you may use any Python library compatible with those types.</p>
 <p>You can also process the genealogy of the population.
 Doing so is an advanced topic, which we deal with in a later vignette.</p>
 </div>

@@ -3,6 +3,38 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.15.2
+
+Point release
+
+Bug fixes
+
+* {class}`fwdpy11.SetMigrationRates` now uses a tolerance when checking that rates sum to 0 or 1.
+  {issue}`787`
+  {user}`apragsdale`
+  {user}`molpopgen`
+* Fix bug where the number of rows in a {class}`tskit.PopulationTable` were incorrect upon export via {meth}`fwdpy11.DiploidPopulation.dump_tables_to_tskit`.
+  Issue {issue}`792`.
+  Fixed in PR {pr}`793`.
+
+Minor changes
+
+* Remove use of deprecated `numpy` `dtype` in tests.
+  Issue {issue}`789`.
+  Fixed in PR {pr}`794`
+* Added more tests of `demes`-generated models with symmetric migration and individual demes going extinct.
+  Issue {issue}`758`
+  Closed by {pr}`797`
+
+Dependencies
+
+* Pinned `demesdraw` in `doc/requirements.txt`
+  Issue {issue}`790`.
+  Fixed in PR {pr}`795`.
+* Pin `demes` to `== 0.1.2` in `setup.cfg`.
+  Issue {issue}`796`.
+  Fixed in PR {pr}`795`.
+
 ## 0.15.1
 
 Point release
