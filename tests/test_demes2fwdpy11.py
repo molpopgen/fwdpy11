@@ -1,6 +1,7 @@
 import demes
 import numpy as np
 import unittest
+import typing
 import pytest
 import fwdpy11
 
@@ -532,21 +533,43 @@ def check_debugger_passes(demog):
         raise "unexpected exception"
 
 
-def three_way_continuous_migration():
+def evolve_demes_model(demog, initial_sizes) -> fwdpy11.DiploidPopulation:
+    pdict = {
+        "rates": (0.0, 0.0, 0.0),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "demography": demog,
+        "simlen": demog.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(100)
+    pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
+    fwdpy11.evolvets(rng, pop, params, 100)
+    return pop
+
+
+def three_way_continuous_migration(
+    goes_extinct: typing.Optional[typing.List[str]] = None,
+):
     b = demes.Builder(description="many migrations", time_units="generations")
-    b.add_deme(name="A", epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="B", epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="C", epochs=[dict(start_size=100, end_time=0)])
+    for deme in ["A", "B", "C"]:
+        if goes_extinct is not None and deme in goes_extinct:
+            b.add_deme(name=deme, epochs=[dict(start_size=100, end_time=10)])
+        else:
+            b.add_deme(name=deme, epochs=[dict(start_size=100, end_time=0)])
     b.add_migration(demes=["A", "B", "C"], rate=0.1)
     g = b.resolve()
     return fwdpy11.discrete_demography.from_demes(g, 1)
 
 
-def three_way_continuous_migration_pairwise():
+def three_way_continuous_migration_pairwise(
+    goes_extinct: typing.Optional[typing.List[str]] = None,
+):
     b = demes.Builder(description="many migrations", time_units="generations")
-    b.add_deme(name="A", epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="B", epochs=[dict(start_size=100, end_time=0)])
-    b.add_deme(name="C", epochs=[dict(start_size=100, end_time=0)])
+    for deme in ["A", "B", "C"]:
+        if goes_extinct is not None and deme in goes_extinct:
+            b.add_deme(name=deme, epochs=[dict(start_size=100, end_time=10)])
+        else:
+            b.add_deme(name=deme, epochs=[dict(start_size=100, end_time=0)])
     b.add_migration(demes=["A", "B"], rate=0.1)
     b.add_migration(demes=["A", "C"], rate=0.1)
     b.add_migration(demes=["B", "C"], rate=0.1)
@@ -556,7 +579,22 @@ def three_way_continuous_migration_pairwise():
 
 @pytest.mark.parametrize(
     "demog",
-    [three_way_continuous_migration(), three_way_continuous_migration_pairwise()],
+    [
+        three_way_continuous_migration(),
+        three_way_continuous_migration(["A"]),
+        three_way_continuous_migration(["B"]),
+        three_way_continuous_migration(["C"]),
+        three_way_continuous_migration(["A", "B"]),
+        three_way_continuous_migration(["A", "C"]),
+        three_way_continuous_migration(["B", "C"]),
+        three_way_continuous_migration_pairwise(),
+        three_way_continuous_migration_pairwise(["A"]),
+        three_way_continuous_migration_pairwise(["B"]),
+        three_way_continuous_migration_pairwise(["C"]),
+        three_way_continuous_migration_pairwise(["A", "B"]),
+        three_way_continuous_migration_pairwise(["A", "C"]),
+        three_way_continuous_migration_pairwise(["B", "C"]),
+    ],
 )
 def test_three_way_continuous_migration_pairwise(demog):
     check_debugger_passes(demog)
@@ -564,6 +602,30 @@ def test_three_way_continuous_migration_pairwise(demog):
         demog.model.migmatrix.M
         == np.array([[0.8, 0.1, 0.1], [0.1, 0.8, 0.1], [0.1, 0.1, 0.8]])
     )
+
+
+@pytest.mark.parametrize(
+    "demog",
+    [
+        three_way_continuous_migration(),
+        three_way_continuous_migration(["A"]),
+        three_way_continuous_migration(["B"]),
+        three_way_continuous_migration(["C"]),
+        three_way_continuous_migration(["A", "B"]),
+        three_way_continuous_migration(["A", "C"]),
+        three_way_continuous_migration(["B", "C"]),
+        three_way_continuous_migration_pairwise(),
+        three_way_continuous_migration_pairwise(["A"]),
+        three_way_continuous_migration_pairwise(["B"]),
+        three_way_continuous_migration_pairwise(["C"]),
+        three_way_continuous_migration_pairwise(["A", "B"]),
+        three_way_continuous_migration_pairwise(["A", "C"]),
+        three_way_continuous_migration_pairwise(["B", "C"]),
+    ],
+)
+def test_evolve_three_way_continuous_migration_pairwise(demog):
+    pop = evolve_demes_model(demog, [100] * 3)
+    assert pop.generation == demog.metadata["total_simulation_length"]
 
 
 def multiple_migrations_delayed():
