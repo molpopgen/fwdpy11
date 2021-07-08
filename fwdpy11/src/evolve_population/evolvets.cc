@@ -411,7 +411,7 @@ evolve_with_tree_sequences(
             // for a bit more context.
             pop.diploids.swap(offspring);
 
-            current_demographic_state.early(pop.generation);
+            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
             //ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
             //                                          offspring_metadata, demography,
             //                                          current_demographic_state);
@@ -437,7 +437,7 @@ evolve_with_tree_sequences(
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
 
-            current_demographic_state.late(pop.generation);
+            current_demographic_state.late(pop.diploid_metadata);
             //ddemog::finalize_demographic_state(pop.generation, pop.diploid_metadata,
             //                                   demography, *current_demographic_state);
 

@@ -23,6 +23,8 @@
 #include <cstdint>
 #include <vector>
 #include <fwdpy11/types/DiploidPopulation.hpp>
+#include <fwdpy11/types/Diploid.hpp>
+#include <fwdpy11/rng.hpp>
 #include "MassMigration.hpp"
 #include "MigrationMatrix.hpp"
 #include "SetDemeSize.hpp"
@@ -31,6 +33,8 @@
 #include "SetMigrationRates.hpp"
 #include "current_event_state.hpp"
 #include "simulation/deme_properties.hpp"
+#include "simulation/functions.hpp"
+#include "simulation/functions.hpp"
 
 namespace fwdpy11
 {
@@ -112,12 +116,20 @@ namespace fwdpy11
             }
 
             void
-            early(const std::uint32_t /*current_simulation_time*/)
+            early(const GSLrng_t& rng, std::uint32_t current_simulation_time,
+                  std::vector<DiploidMetadata> individual_metadata)
             {
+                mass_migration(rng, current_simulation_time, mass_migrations,
+                               current_deme_parameters.growth_rates,
+                               current_deme_parameters.growth_rate_onset_times,
+                               current_deme_parameters.growth_initial_sizes,
+                               individual_metadata);
+                get_current_deme_sizes(individual_metadata,
+                                       current_deme_parameters.current_deme_sizes);
             }
 
             void
-            late(const std::uint32_t /*current_simulation_time*/)
+            late(std::vector<DiploidMetadata>& /*pop*/)
             {
             }
         };
