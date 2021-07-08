@@ -25,8 +25,9 @@
 #include "../current_event_state.hpp"
 #include "apply_mass_migrations.hpp"
 #include "../MassMigration.hpp"
-// #include "../DiscreteDemography.hpp"
 #include "../exceptions.hpp"
+#include "multideme_fitness_lookups.hpp"
+#include "migration_lookup.hpp"
 #include "deme_properties.hpp"
 
 namespace fwdpy11
@@ -218,6 +219,33 @@ namespace fwdpy11
                     }
                 return next_global_N;
             }
+
+            inline void
+            no_valid_parents(std::size_t i, std::uint32_t generation, std::uint32_t N)
+            {
+                std::ostringstream o;
+                o << "deme " << i << " at time " << generation << " has size " << N
+                  << " and no valid parents";
+                throw DemographyError(o.str());
+            }
+
+            inline void
+            check_migration_in(std::size_t i, std::uint32_t generation,
+                               const MigrationMatrix& M)
+            {
+                if (M.M[i * M.npops + i] > 0)
+                    {
+                        std::ostringstream o;
+                        o << "deme " << i << " at time " << generation
+                          << " has no valid parents "
+                             "from "
+                             "the same deme but "
+                             "M[i,i] != "
+                             "0";
+                        throw DemographyError(o.str());
+                    }
+            }
+
         } // namespace detail
 
         //inline std::uint32_t
@@ -257,6 +285,31 @@ namespace fwdpy11
                     ref[i.deme]++;
                 }
         }
+
+        inline void
+        validate_parental_state(
+            std::uint32_t generation,
+            const multideme_fitness_lookups<std::uint32_t>& fitnesses,
+            const deme_properties& current_deme_parameters, const MigrationMatrix& M)
+        {
+            const auto& next_N_deme = current_deme_parameters.next_deme_sizes.get();
+            for (std::size_t i = 0; i < next_N_deme.size(); ++i)
+                {
+                    if (next_N_deme[i] > 0 && fitnesses.lookups[i] == nullptr)
+                        {
+                            if (M.empty())
+                                {
+                                    detail::no_valid_parents(i, generation,
+                                                             next_N_deme[i]);
+                                }
+                            else
+                                {
+                                    detail::check_migration_in(i, generation, M);
+                                }
+                        }
+                }
+        }
+
     } // namespace discrete_demography
 } // namespace fwdpy11
 

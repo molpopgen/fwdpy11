@@ -163,8 +163,8 @@ namespace fwdpy11
                 set_next_global_N(next_global_N_);
                 build_migration_lookup(M, current_deme_parameters.current_deme_sizes,
                                        miglookup);
-                //detail::validate_parental_state(current_deme_parameters,
-                //                                current_demographic_state);
+                validate_parental_state(current_simulation_time, fitnesses,
+                                        current_deme_parameters, M);
             }
         };
     }

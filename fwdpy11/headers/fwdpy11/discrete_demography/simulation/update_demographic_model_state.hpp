@@ -32,57 +32,6 @@ namespace fwdpy11
     {
         namespace detail
         {
-            inline void
-            no_valid_parents(std::size_t i, std::uint32_t generation, std::uint32_t N)
-            {
-                std::ostringstream o;
-                o << "deme " << i << " at time " << generation << " has size " << N
-                  << " and no valid parents";
-                throw DemographyError(o.str());
-            }
-
-            inline void
-            check_migration_in(std::size_t i, std::uint32_t generation,
-                               const MigrationMatrix &M)
-            {
-                if (M.M[i * M.npops + i] > 0)
-                    {
-                        std::ostringstream o;
-                        o << "deme " << i << " at time " << generation
-                          << " has no valid parents "
-                             "from "
-                             "the same deme but "
-                             "M[i,i] != "
-                             "0";
-                        throw DemographyError(o.str());
-                    }
-            }
-
-            //inline void
-            //validate_parental_state(
-            //    std::uint32_t generation,
-            //    const demographic_model_state &current_demographic_state)
-            //{
-            //    const auto &next_N_deme
-            //        = current_demographic_state.sizes_rates.next_deme_sizes.get();
-            //    for (std::size_t i = 0; i < next_N_deme.size(); ++i)
-            //        {
-            //            if (next_N_deme[i] > 0
-            //                && current_demographic_state.fitnesses.lookups[i] == nullptr)
-            //                {
-            //                    if (current_demographic_state.M.empty())
-            //                        {
-            //                            no_valid_parents(i, generation, next_N_deme[i]);
-            //                        }
-            //                    else
-            //                        {
-            //                            check_migration_in(i, generation,
-            //                                               current_demographic_state.M);
-            //                        }
-            //                }
-            //        }
-            //}
-
         } // namespace detail
 
         //template <typename METADATATYPE>
