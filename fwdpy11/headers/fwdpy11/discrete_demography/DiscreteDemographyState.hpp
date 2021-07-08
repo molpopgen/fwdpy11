@@ -34,7 +34,9 @@
 #include "current_event_state.hpp"
 #include "simulation/deme_properties.hpp"
 #include "simulation/functions.hpp"
-#include "simulation/functions.hpp"
+#include "simulation/multideme_fitness_lookups.hpp"
+#include "simulation/migration_lookup.hpp"
+#include "simulation/build_migration_lookup.hpp"
 
 namespace fwdpy11
 {
@@ -129,8 +131,40 @@ namespace fwdpy11
             }
 
             void
-            late(std::vector<DiploidMetadata>& /*pop*/)
+            late(std::uint32_t current_simulation_time,
+                 multideme_fitness_lookups<std::uint32_t>& fitnesses,
+                 migration_lookup& miglookup,
+                 std::vector<DiploidMetadata>& individual_metadata)
             {
+                fitnesses.update(current_deme_parameters.current_deme_sizes,
+                                 individual_metadata);
+                std::copy(begin(current_deme_parameters.current_deme_sizes.get()),
+                          end(current_deme_parameters.current_deme_sizes.get()),
+                          begin(current_deme_parameters.next_deme_sizes.get()));
+                // Step 1, do the discrete changes of deme sizes
+                // NOTE: this may reset growth rates to zero
+                detail::update_current_deme_sizes(
+                    current_simulation_time, set_deme_sizes, current_deme_parameters);
+
+                // Step 2: set new growth rates
+                detail::update_growth_rates(current_simulation_time, set_growth_rates,
+                                            current_deme_parameters);
+                // Step 3: update selfing rates
+                detail::update_selfing_rates(current_simulation_time, set_selfing_rates,
+                                             current_deme_parameters);
+                detail::update_migration_matrix(current_simulation_time,
+                                                set_migration_rates, M);
+                // Step 4: set next deme sizes and apply growth rates
+                std::copy(begin(current_deme_parameters.current_deme_sizes.get()),
+                          end(current_deme_parameters.current_deme_sizes.get()),
+                          begin(current_deme_parameters.next_deme_sizes.get()));
+                auto next_global_N_ = detail::apply_growth_rates_get_next_global_N(
+                    current_simulation_time, current_deme_parameters);
+                set_next_global_N(next_global_N_);
+                build_migration_lookup(M, current_deme_parameters.current_deme_sizes,
+                                       miglookup);
+                //detail::validate_parental_state(current_deme_parameters,
+                //                                current_demographic_state);
             }
         };
     }

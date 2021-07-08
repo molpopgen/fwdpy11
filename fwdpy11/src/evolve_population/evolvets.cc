@@ -437,7 +437,8 @@ evolve_with_tree_sequences(
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
 
-            current_demographic_state.late(pop.diploid_metadata);
+            current_demographic_state.late(pop.generation, fitness_lookup, miglookup,
+                                           pop.diploid_metadata);
             //ddemog::finalize_demographic_state(pop.generation, pop.diploid_metadata,
             //                                   demography, *current_demographic_state);
 
