@@ -21,6 +21,7 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
+#include <sstream>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/policies/mutation.hpp>
@@ -81,6 +82,48 @@ namespace
         }
     };
 
+    bool
+    node_has_valid_time(const std::vector<fwdpp::ts::node>& node_table,
+                        const std::int32_t mutation_node,
+                        const std::int32_t mutation_node_parent)
+    {
+        if (mutation_node_parent == fwdpp::ts::NULL_INDEX)
+            {
+                return true;
+            }
+        auto mutation_node_time = node_table[mutation_node].time;
+        // Check for easy case where we can assign mutation time == node time
+        if (mutation_node_time < 0.0)
+            {
+                if (mutation_node_time - std::floor(mutation_node_time) == 0.0)
+                    {
+                        return true;
+                    }
+            }
+        else if (mutation_node_time - std::ceil(mutation_node_time) == 0.0)
+            {
+                return true;
+            }
+
+        auto mutation_node_parent_time = node_table[mutation_node_parent].time;
+        bool valid = false;
+        if (mutation_node_parent_time < 0.0)
+            {
+                if (std::ceil(mutation_node_parent_time) <= mutation_node_time)
+                    {
+                        valid = true;
+                    }
+            }
+        else
+            {
+                if (std::floor(mutation_node_parent_time) <= mutation_node_time)
+                    {
+                        valid = true;
+                    }
+            }
+        return valid;
+    }
+
     std::vector<candidate_node_map>
     generate_canidate_list(const double left, const double right,
                            const unsigned ndescendants,
@@ -139,11 +182,16 @@ namespace
                                                                == deme;
                                                     })))
                                             {
-                                                candidates.emplace_back(
-                                                    std::max(tree.left, left),
-                                                    std::min(tree.right, right), n,
-                                                    tree.parents[n],
-                                                    std::move(descendants));
+                                                if (node_has_valid_time(
+                                                        pop.tables->nodes, n,
+                                                        tree.parents[n]))
+                                                    {
+                                                        candidates.emplace_back(
+                                                            std::max(tree.left, left),
+                                                            std::min(tree.right, right),
+                                                            n, tree.parents[n],
+                                                            std::move(descendants));
+                                                    }
                                             }
                                     }
                                 n = ni();
@@ -156,8 +204,48 @@ namespace
             }
         return candidates;
     }
+
+    std::int64_t
+    generate_mutation_time(const fwdpy11::GSLrng_t& rng,
+                           const std::vector<fwdpp::ts::node>& node_table,
+                           const std::int32_t mutation_node,
+                           const std::int32_t mutation_node_parent)
+    {
+        auto mutation_node_time = node_table[mutation_node].time;
+        // Check for easy case where we can assign mutation time == node time
+        if (mutation_node_time < 0.0)
+            {
+                if (mutation_node_time - std::floor(mutation_node_time) == 0.0)
+                    {
+                        return static_cast<std::int64_t>(std::floor(mutation_node_time));
+                    }
+            }
+        else if (mutation_node_time - std::ceil(mutation_node_time) == 0.0)
+            {
+                return static_cast<std::int64_t>(std::ceil(mutation_node_time));
+            }
+
+        if (mutation_node_parent == fwdpp::ts::NULL_INDEX)
+            {
+                // Time is the closest int64_t to the node time
+                if (mutation_node_time < 0.0)
+                    {
+                        return static_cast<std::int64_t>(std::floor(mutation_node_time));
+                    }
+                return static_cast<std::int64_t>(std::ceil(mutation_node_time));
+            }
+        // choose a random time
+        auto candidate_time = gsl_ran_flat(rng.get(), mutation_node_time,
+                                           node_table[mutation_node_parent].time);
+        if (candidate_time < 0.0)
+            {
+                return static_cast<std::int64_t>(std::floor(mutation_node_time));
+            }
+        return static_cast<std::int64_t>(std::ceil(mutation_node_time));
+    }
 }
 
+// Returns size_t max value if no candidates are found.
 std::size_t
 add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right,
              const fwdpp::ts::table_index_t ndescendants,
@@ -226,7 +314,27 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
         = static_cast<std::size_t>(gsl_ran_flat(rng.get(), 0, candidates.size()));
 
     auto candidate_data = std::move(candidates[candidate]);
-    // TODO: what to do if candidates.empty() == true?
+    auto mutation_node_time = generate_mutation_time(
+        rng, pop.tables->nodes, candidate_data.node, candidate_data.parent);
+    if (mutation_node_time > pop.tables->nodes[candidate_data.node].time)
+        {
+            std::ostringstream o;
+            o << "origin time of " << mutation_node_time
+              << " for mutation is invalid: it must be <= mutation node time of "
+              << pop.tables->nodes[candidate_data.node].time;
+            throw std::runtime_error(o.str());
+        }
+    if (candidate_data.parent != fwdpp::ts::NULL_INDEX)
+        {
+            if (mutation_node_time <= pop.tables->nodes[candidate_data.parent].time)
+                {
+                    std::ostringstream o;
+                    o << "origin time of " << mutation_node_time
+                      << " for mutation is invalid: it must be < parent node time of "
+                      << pop.tables->nodes[candidate_data.parent].time;
+                    throw std::runtime_error(o.str());
+                }
+        }
 
     // NOTE: can we do all of what we need using existing
     // mutate/recombine functions?  Gotta check the back-end.
@@ -234,10 +342,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
     // The new variant gets a derived state of 1
     auto empty = fwdpp::empty_mutation_queue();
     new_mutation_key = fwdpy11::infsites_Mutation(
-        empty, pop.mutations, pop.mut_lookup, false,
-        // The new mutation's origin time == the node time
-        static_cast<fwdpy11::mutation_origin_time>(
-            pop.tables->nodes[candidate_data.node].time),
+        empty, pop.mutations, pop.mut_lookup, false, mutation_node_time,
         // The lambdas will simply transfer input parameters to the new object.
         [&rng, &candidate_data]() {
             return gsl_ran_flat(rng.get(), candidate_data.left, candidate_data.right);

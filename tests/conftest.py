@@ -18,8 +18,17 @@
 #
 import demes
 import fwdpy11
+import numpy as np
 import pytest
 
+
+@pytest.fixture(scope="function")
+def numpy_generator(request):
+    try:
+        seed = request.param.get("seed", None)
+        return np.random.Generator(np.random.MT19937(seed=seed))
+    except AttributeError as a:  # NOQA
+        raise a
 
 @pytest.fixture(scope="function")
 def rng(request):
