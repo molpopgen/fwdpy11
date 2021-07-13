@@ -389,7 +389,11 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
           exactly `ndescendants` alive nodes.
         * From this list of candidate nodes, one is chosen randomly
           to be the node where we place the new mutation.
-        * This node's time is the origin time of the new mutation.
+        * If the node's parent's time is NULL, then the mutations' origin
+          time is the first 64 bit integer ancestral to the node time,
+          which could be the node time itself.
+          Otherwise, a 64 bit integer is chosen uniformly between the
+          node time and the node's parent's time.
         * If `deme` is None, any set of `ndescendants` will be considered.
         * If `deme` is :math:`\geq 0`, all `ndescendants` alive nodes must be
           from that deme.

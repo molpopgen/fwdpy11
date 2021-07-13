@@ -27,13 +27,14 @@ Behavior changes
 New features
 
 * Add {func}`fwdpy11.DiploidPopulation.add_mutation`.
-  {pr}`764`
+  PR {pr}`764`
+  PR {pr}`799`
 * Add {class}`fwdpy11.NewMutationData`.
-  {pr}`764`
+  PR {pr}`764`
 * Add `__copy__` and `__deepcopy__` to {class}`fwdpy11.DiploidPopulation`.
-  {pr}`770`
+  PR {pr}`770`
 * Add `__deepcopy__` to {class}`fwdpy11.DiscreteDemography`.
-  {pr}`773`
+  PR {pr}`773`
 
 C++ back-end
 
