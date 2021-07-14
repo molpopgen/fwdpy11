@@ -227,6 +227,10 @@ evolve_with_tree_sequences(
     auto current_demographic_state = demography.get_model_state();
     // FIXME: warning repeat!
     current_demographic_state.initialize(pop);
+    if (current_demographic_state.maxdemes <= 0)
+        {
+            throw std::runtime_error("maxdemes must be > 0");
+        }
     if (gvalue_pointers.genetic_values.size()
         > static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
@@ -289,14 +293,14 @@ evolve_with_tree_sequences(
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
 
-    ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{-1};
-    ddemog::migration_lookup miglookup{-1, current_demographic_state.M.empty()};
+    ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
+        current_demographic_state.maxdemes};
+    ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
+                                       current_demographic_state.M.empty()};
 
     fitness_lookup.update(
         current_demographic_state.current_deme_parameters.current_deme_sizes,
         pop.diploid_metadata);
-    // FIXME: warning -- repeat
-    current_demographic_state.initialize(pop);
     //if (demographic_model_needs_update == true)
     //    {
     //        ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,

@@ -42,6 +42,17 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
+        template <typename T>
+        std::int32_t
+        update_maxdeme_from_demography(std::int32_t m, const T& t)
+        {
+            for (auto&& i : t)
+                {
+                    m = std::max(m, i.deme);
+                }
+            return m;
+        }
+
         class DiscreteDemographyState
         /// Added in 0.16.0 to hold and manage
         /// the relevant data structures.
@@ -70,7 +81,7 @@ namespace fwdpy11
                   set_deme_sizes{std::move(set_deme_sizes)}, set_selfing_rates{std::move(
                                                                  set_selfing_rates)},
                   set_migration_rates{std::move(set_migration_rates)}, M{std::move(M)},
-                  maxdemes{0}, current_deme_parameters{}
+                  maxdemes{-1}, current_deme_parameters{}
             {
             }
 
@@ -111,10 +122,68 @@ namespace fwdpy11
                 return ttlN_next() == 0;
             }
 
+            // NOTE: this sets maxdemes
+            // NOTE: sets current_deme_sizes IF it is empty
             void
-            initialize(const DiploidPopulation&)
+            initialize(const fwdpy11::DiploidPopulation& pop)
             {
-                throw std::runtime_error("not implemented");
+                std::int32_t maxdeme_from_metadata = -1;
+                std::int32_t maxdeme_from_demography = -1;
+                for (auto& md : pop.diploid_metadata)
+                    {
+                        if (md.deme < 0)
+                            {
+                                throw std::invalid_argument(
+                                    "input deme labels must be non-negative");
+                            }
+                        maxdeme_from_metadata = std::max(maxdeme_from_metadata, md.deme);
+                    }
+                for (auto& m : mass_migrations.events)
+                    {
+                        maxdeme_from_demography
+                            = std::max(maxdeme_from_demography, m.source);
+                        maxdeme_from_demography
+                            = std::max(maxdeme_from_demography, m.destination);
+                    }
+                maxdeme_from_demography = update_maxdeme_from_demography(
+                    maxdeme_from_demography, set_growth_rates.events);
+                maxdeme_from_demography = update_maxdeme_from_demography(
+                    maxdeme_from_demography, set_deme_sizes.events);
+                maxdeme_from_demography = update_maxdeme_from_demography(
+                    maxdeme_from_demography, set_selfing_rates.events);
+                maxdeme_from_demography = update_maxdeme_from_demography(
+                    maxdeme_from_demography, set_migration_rates.events);
+                auto temp = std::max(maxdeme_from_metadata, maxdeme_from_demography) + 1;
+                if (M.empty())
+                    {
+                        // no migration, so done
+                        maxdemes = temp;
+                    }
+                else
+                    {
+                        if (static_cast<std::size_t>(temp) > M.npops)
+                            {
+                                throw std::invalid_argument(
+                                    "MigrationMatrix contains too few demes");
+                            }
+                        if (static_cast<std::size_t>(temp) < M.npops)
+                            {
+                                throw std::invalid_argument(
+                                    "MigrationMatrix contains too many demes");
+                            }
+                        maxdemes = std::max(temp, static_cast<std::int32_t>(M.npops));
+                    }
+
+                if (current_deme_parameters.current_deme_sizes.get().empty())
+                    {
+                        current_deme_parameters.current_deme_sizes.get().resize(maxdemes,
+                                                                                0);
+                        for (auto& md : pop.diploid_metadata)
+                            {
+                                current_deme_parameters.current_deme_sizes
+                                    .get()[md.deme]++;
+                            }
+                    }
             }
 
             void
