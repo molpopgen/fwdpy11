@@ -293,14 +293,22 @@ evolve_with_tree_sequences(
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
 
+
     ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
         current_demographic_state.maxdemes};
     ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
                                        current_demographic_state.M.empty()};
 
-    fitness_lookup.update(
-        current_demographic_state.current_deme_parameters.current_deme_sizes,
-        pop.diploid_metadata);
+    //fitness_lookup.update(
+    //    current_demographic_state.current_deme_parameters.current_deme_sizes,
+    //    pop.diploid_metadata);
+
+    if (pop.generation == 0)
+        {
+            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+            current_demographic_state.late(pop.generation, fitness_lookup, miglookup,
+                                           pop.diploid_metadata);
+        }
     //if (demographic_model_needs_update == true)
     //    {
     //        ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,

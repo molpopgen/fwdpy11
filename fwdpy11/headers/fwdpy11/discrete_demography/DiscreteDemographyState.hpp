@@ -123,7 +123,6 @@ namespace fwdpy11
             }
 
             // NOTE: this sets maxdemes
-            // NOTE: sets current_deme_sizes IF it is empty
             void
             initialize(const fwdpy11::DiploidPopulation& pop)
             {
@@ -176,19 +175,14 @@ namespace fwdpy11
 
                 if (current_deme_parameters.current_deme_sizes.get().empty())
                     {
-                        current_deme_parameters.current_deme_sizes.get().resize(maxdemes,
-                                                                                0);
-                        for (auto& md : pop.diploid_metadata)
-                            {
-                                current_deme_parameters.current_deme_sizes
-                                    .get()[md.deme]++;
-                            }
+                        current_deme_parameters
+                            = deme_properties{maxdemes, pop.diploid_metadata};
                     }
             }
 
             void
             early(const GSLrng_t& rng, std::uint32_t current_simulation_time,
-                  std::vector<DiploidMetadata> individual_metadata)
+                  std::vector<DiploidMetadata>& individual_metadata)
             {
                 mass_migration(rng, current_simulation_time, mass_migrations,
                                current_deme_parameters.growth_rates,
