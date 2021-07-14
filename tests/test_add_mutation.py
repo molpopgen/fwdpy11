@@ -22,7 +22,7 @@ import msprime
 import numpy as np
 import pytest
 
-import tests.test_utilities as test_utilities
+from fwdpy11_test_utilities import seed_list
 
 # NOTE: this is copied from test/test_tree_sequences.py
 # FIXME: this should be a more general fixture?
@@ -259,8 +259,8 @@ def test_attempt_to_add_to_pop_without_ancestry():
         pop.add_mutation(rng, ndescendants=1, data=data)
 
 
-@pytest.mark.parametrize("msprime_seed", test_utilities.seed_list(135123, 10))
-@pytest.mark.parametrize("fp11_seed", test_utilities.seed_list(5130125, 10))
+@pytest.mark.parametrize("msprime_seed", seed_list(135123, 10))
+@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 10))
 @pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 100, 257])
 def test_add_mutation_to_random_msprime_output(msprime_seed, fp11_seed, ndescendants):
     initial_ts = msprime.sim_ancestry(
