@@ -423,7 +423,7 @@ evolve_with_tree_sequences(
             // for a bit more context.
             pop.diploids.swap(offspring);
 
-            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+            current_demographic_state.early(rng, pop.generation, offspring_metadata);
             //ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
             //                                          offspring_metadata, demography,
             //                                          current_demographic_state);
