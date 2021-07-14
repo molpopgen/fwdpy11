@@ -177,6 +177,7 @@ init_DiscreteDemography(py::module& m)
         .def("_liftover_range_states",
              [](const ddemog::DiscreteDemography& /*self*/,
                 ddemog::DiscreteDemography& /*dest*/) {
+                 throw std::runtime_error("_liftover_range_states not implemented");
                  //liftover_ranges(self.mass_migrations, dest.mass_migrations,
                  //                self.mass_migration_tracker,
                  //                dest.mass_migration_tracker);
@@ -194,7 +195,8 @@ init_DiscreteDemography(py::module& m)
                  //                dest.migration_rate_change_tracker);
              })
         .def("_state_asdict",
-             [](ddemog::DiscreteDemography & /*self*/) -> py::object {
+             [](ddemog::DiscreteDemography& /*self*/) -> py::object {
+                 throw std::runtime_error("_state_asdict not implemented");
                  py::dict rv;
                  //auto state = self.get_model_state();
                  //if (state == nullptr)
@@ -216,6 +218,7 @@ init_DiscreteDemography(py::module& m)
                  return rv;
              })
         .def("_reset_state", [](ddemog::DiscreteDemography& /*self*/, py::object /*o*/) {
+            throw std::runtime_error("_reset_state not implemented");
             //std::unique_ptr<ddemog::demographic_model_state> state(nullptr);
             //if (o.is_none() == false)
             //    {
