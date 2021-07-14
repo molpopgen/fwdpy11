@@ -23,7 +23,7 @@ import msprime
 import numpy as np
 
 import pytest
-import tests.test_utilities as test_utilities
+from fwdpy11_test_utilities import seed_list
 
 
 class MutMonitor(object):
@@ -106,8 +106,8 @@ def run_selective_sweep(
     return None, None
 
 
-@pytest.mark.parametrize("msprime_seed", test_utilities.seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", test_utilities.seed_list(5130125, 5))
+@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
+@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
 def test_sweep_from_new_mutation(msprime_seed, fp11_seed):
     pop_with_fixation, idx = run_selective_sweep(msprime_seed, fp11_seed, 1)
     if pop_with_fixation is not None:
@@ -115,8 +115,8 @@ def test_sweep_from_new_mutation(msprime_seed, fp11_seed):
         _ = pop_with_fixation.dump_tables_to_tskit()
 
 
-@pytest.mark.parametrize("msprime_seed", test_utilities.seed_list(135123, 5))
-@pytest.mark.parametrize("fp11_seed", test_utilities.seed_list(5130125, 5))
+@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
+@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
 @pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 100, 257])
 def test_sweep_from_standing_variation(msprime_seed, fp11_seed, ndescendants):
     pop_with_fixation, idx = run_selective_sweep(msprime_seed, fp11_seed, ndescendants)
