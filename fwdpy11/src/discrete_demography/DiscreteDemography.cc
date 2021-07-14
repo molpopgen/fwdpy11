@@ -62,31 +62,26 @@ namespace
     }
 
     py::dict
-    model_state_as_dict(const ddemog::DiscreteDemographyState& /*model_state*/)
-    //const std::unique_ptr<ddemog::demographic_model_state>& model_state)
+    model_state_as_dict(const ddemog::DiscreteDemographyState& model_state)
     {
         py::dict rv;
-        //rv["maxdemes"] = model_state->maxdemes;
+        rv["maxdemes"] = model_state.maxdemes;
 
-        //// This is the deme_properties stuff
-        //rv["current_deme_sizes"] = model_state->sizes_rates.current_deme_sizes.get();
-        //rv["next_deme_sizes"] = model_state->sizes_rates.next_deme_sizes.get();
-        //rv["growth_rate_onset_times"]
-        //    = model_state->sizes_rates.growth_rate_onset_times.get();
-        //rv["growth_initial_sizes"] = model_state->sizes_rates.growth_initial_sizes.get();
-        //rv["growth_rates"] = model_state->sizes_rates.growth_rates.get();
-        //rv["selfing_rates"] = model_state->sizes_rates.selfing_rates.get();
+        // This is the deme_properties stuff
+        rv["current_deme_sizes"]
+            = model_state.current_deme_parameters.current_deme_sizes.get();
+        rv["next_deme_sizes"]
+            = model_state.current_deme_parameters.next_deme_sizes.get();
+        rv["growth_rate_onset_times"]
+            = model_state.current_deme_parameters.growth_rate_onset_times.get();
+        rv["growth_initial_sizes"]
+            = model_state.current_deme_parameters.growth_initial_sizes.get();
+        rv["growth_rates"] = model_state.current_deme_parameters.growth_rates.get();
+        rv["selfing_rates"] = model_state.current_deme_parameters.selfing_rates.get();
 
-        //// The migration matrix
-        //if (model_state->M.empty())
-        //    {
-        //        rv["migmatrix"] = py::none();
-        //    }
-        //else
-        //    {
-        //        rv["migmatrix"] = py::make_tuple(model_state->M.M, model_state->M.npops,
-        //                                         model_state->M.scaled);
-        //    }
+        rv["migmatrix"]
+            = py::make_tuple(model_state.M.M, model_state.M.npops, model_state.M.scaled);
+
         return rv;
     }
 
@@ -195,27 +190,8 @@ init_DiscreteDemography(py::module& m)
                  //                dest.migration_rate_change_tracker);
              })
         .def("_state_asdict",
-             [](ddemog::DiscreteDemography& /*self*/) -> py::object {
-                 throw std::runtime_error("_state_asdict not implemented");
-                 py::dict rv;
-                 //auto state = self.get_model_state();
-                 //if (state == nullptr)
-                 //    {
-                 //        self.set_model_state(std::move(state));
-                 //        return py::none();
-                 //    }
-                 //py::dict rv;
-                 //try
-                 //    {
-                 //        rv = model_state_as_dict(state);
-                 //    }
-                 //catch (...)
-                 //    {
-                 //        self.set_model_state(std::move(state));
-                 //        throw;
-                 //    }
-                 //self.set_model_state(std::move(state));
-                 return rv;
+             [](ddemog::DiscreteDemography& self) -> py::object {
+                 return model_state_as_dict(self.get_model_state());
              })
         .def("_reset_state", [](ddemog::DiscreteDemography& /*self*/, py::object /*o*/) {
             throw std::runtime_error("_reset_state not implemented");
