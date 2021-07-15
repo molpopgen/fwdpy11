@@ -143,7 +143,7 @@ namespace fwdpy11
 
             template <typename T>
             std::vector<T>
-            init_events_vector(std::vector<T>&& v)
+            init_events_vector(std::vector<T> v)
             {
                 std::vector<T> rv(std::move(v));
                 sort_events(rv);
@@ -260,8 +260,11 @@ namespace fwdpy11
                                std::vector<SetSelfingRate> set_selfing_rates,
                                MigrationMatrix m,
                                std::vector<SetMigrationRates> set_migration_rates)
-                : model_state(mass_migrations, set_growth_rates, set_deme_sizes,
-                              set_selfing_rates, m, set_migration_rates),
+                : model_state(init_events_vector(mass_migrations),
+                              init_events_vector(set_growth_rates),
+                              init_events_vector(set_deme_sizes),
+                              init_events_vector(set_selfing_rates), m,
+                              init_events_vector(set_migration_rates)),
                   mass_migrations(init_events_vector(std::move(mass_migrations))),
                   set_growth_rates(init_events_vector(std::move(set_growth_rates))),
                   set_deme_sizes(init_events_vector(std::move(set_deme_sizes))),
@@ -323,13 +326,13 @@ namespace fwdpy11
             {
                 return set_growth_rates;
             }
-            
+
             auto
             get_set_migration_rates() const
             {
                 return set_migration_rates;
             }
-            
+
             auto
             get_migration_matrix() const
             {

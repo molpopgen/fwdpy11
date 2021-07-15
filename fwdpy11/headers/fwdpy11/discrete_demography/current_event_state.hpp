@@ -21,6 +21,8 @@
 #define FWDPY11_DISCRETE_CURRENT_EVENT_STATE_HPP
 
 #include <vector>
+#include <stdexcept>
+#include <algorithm>
 #include <cstdint>
 #include <utility>
 
@@ -36,6 +38,10 @@ namespace fwdpy11
             current_event_state(Input&& input)
                 : events(std::forward<Input>(input)), event_range{0, events.size()}
             {
+                if (!std::is_sorted(begin(events), end(events)))
+                    {
+                        throw std::invalid_argument("events list is not sorted");
+                    }
             }
 
             const T&
