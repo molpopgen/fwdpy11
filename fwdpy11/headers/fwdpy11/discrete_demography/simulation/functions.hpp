@@ -51,9 +51,9 @@ namespace fwdpy11
             while (mass_migration_events.current() < mass_migration_events.last()
                    && mass_migration_events.when() == t)
                 {
-                    mass_migration_events.current() = apply_mass_migrations(
-                        rng, t, mass_migration_events, growth_rates,
-                        growth_rate_onset_times, growth_initial_sizes, metadata);
+                    apply_mass_migrations(rng, t, mass_migration_events, growth_rates,
+                                          growth_rate_onset_times, growth_initial_sizes,
+                                          metadata);
                 }
         }
 

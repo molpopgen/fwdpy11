@@ -32,6 +32,7 @@
 #include "../exceptions.hpp"
 #include "../current_event_state.hpp"
 #include "deme_property_types.hpp"
+#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
@@ -311,14 +312,13 @@ namespace fwdpy11
         } // namespace detail
 
         template <typename METADATATYPE>
-        inline auto
-        apply_mass_migrations(
-            const GSLrng_t& rng, std::uint32_t t,
-            const current_event_state<MassMigration>& mass_migration_events,
-            growth_rates_vector& growth_rates,
-            growth_rates_onset_times_vector& growth_rate_onset_times,
-            growth_initial_size_vector& growth_initial_sizes,
-            std::vector<METADATATYPE>& metadata)
+        inline void
+        apply_mass_migrations(const GSLrng_t& rng, std::uint32_t t,
+                              current_event_state<MassMigration>& mass_migration_events,
+                              growth_rates_vector& growth_rates,
+                              growth_rates_onset_times_vector& growth_rate_onset_times,
+                              growth_initial_size_vector& growth_initial_sizes,
+                              std::vector<METADATATYPE>& metadata)
         // Simultaneous application of all mass migration events
         // occurring at time t
         {
@@ -327,7 +327,7 @@ namespace fwdpy11
                 {
                     // TODO: maybe this should be an exception,
                     // or is not necessary at all?
-                    return mass_migration_events.current();
+                    return;
                 }
             std::vector<METADATATYPE> copies;
             const std::size_t initial_N = metadata.size();
@@ -336,11 +336,11 @@ namespace fwdpy11
             std::vector<std::size_t> buffer;
             detail::move_map_t move_source;
             bool initialized_moves = false;
-            auto i{mass_migration_events.current()};
 
             std::unordered_map<std::int32_t, bool> changed_and_reset;
-            for (; i < mass_migration_events.last() && mass_migration_events.when() == t;
-                 ++i)
+            for (; mass_migration_events.current() < mass_migration_events.last()
+                   && mass_migration_events.when() == t;
+                 ++mass_migration_events.current())
                 {
                     if (mass_migration_events.event().move_individuals == false) //copy
                         {
@@ -376,7 +376,6 @@ namespace fwdpy11
             detail::update_growth_parameters(t, final_deme_sizes, changed_and_reset,
                                              growth_rates, growth_rate_onset_times,
                                              growth_initial_sizes);
-            return i;
         }
     } // namespace discrete_demography
 } // namespace fwdpy11

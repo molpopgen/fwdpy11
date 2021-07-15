@@ -45,9 +45,15 @@ namespace fwdpy11
             }
 
             const T&
+            event(std::size_t index) const
+            {
+                return events[index];
+            }
+
+            const T&
             event() const
             {
-                return events[current()];
+                return event(current());
             }
 
             auto
