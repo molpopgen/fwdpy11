@@ -32,7 +32,6 @@
 #include "../exceptions.hpp"
 #include "../current_event_state.hpp"
 #include "deme_property_types.hpp"
-#include <pybind11/pybind11.h>
 
 namespace fwdpy11
 {
