@@ -301,6 +301,13 @@ namespace fwdpy11
                 model_state = std::move(state);
             }
 
+            void
+            copy_state_to(DiscreteDemography& other)
+            // Visible to Python as DiscreteDemography._clone_state_to
+            {
+                other.model_state = this->model_state;
+            }
+
             // these getters are not exposed to Python
 
             auto

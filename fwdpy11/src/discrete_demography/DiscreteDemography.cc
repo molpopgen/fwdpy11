@@ -84,23 +84,6 @@ namespace
 
         return rv;
     }
-
-    //template <typename range_t, typename event_list_t>
-    //void
-    //liftover_ranges(const event_list_t& input_events, const event_list_t& output_events,
-    //                const range_t& input_range, range_t& output_range)
-    //{
-    //    if (input_events.size() != output_events.size())
-    //        {
-    //            throw std::invalid_argument("event list sizes must be equal");
-    //        }
-    //    auto d = std::distance(begin(input_events), input_range.get().first);
-    //    if (output_range.get().first + d > output_range.get().second)
-    //        {
-    //            throw std::runtime_error("updating the range would create beg > end");
-    //        }
-    //    output_range.get().first += d;
-    //}
 } // namespace
 
 void
@@ -156,39 +139,7 @@ init_DiscreteDemography(py::module& m)
              py::arg("set_selfing_rates") = py::none(),
              py::arg("migmatrix") = py::none(),
              py::arg("set_migration_rates") = py::none())
-        .def("_clone_state_to",
-             [](const ddemog::DiscreteDemography& /*self*/,
-                ddemog::DiscreteDemography& /*dest*/) {
-                 //if (self.get_model_state_ref() == nullptr)
-                 //    {
-                 //        ddemog::save_model_state(nullptr, dest);
-                 //    }
-                 //else
-                 //    {
-                 //        auto model = self.get_model_state_ref()->clone();
-                 //        ddemog::save_model_state(std::move(model), dest);
-                 //    }
-             })
-        .def("_liftover_range_states",
-             [](const ddemog::DiscreteDemography& /*self*/,
-                ddemog::DiscreteDemography& /*dest*/) {
-                 throw std::runtime_error("_liftover_range_states not implemented");
-                 //liftover_ranges(self.mass_migrations, dest.mass_migrations,
-                 //                self.mass_migration_tracker,
-                 //                dest.mass_migration_tracker);
-                 //liftover_ranges(self.set_deme_sizes, dest.set_deme_sizes,
-                 //                self.deme_size_change_tracker,
-                 //                dest.deme_size_change_tracker);
-                 //liftover_ranges(self.set_growth_rates, dest.set_growth_rates,
-                 //                self.growth_rate_change_tracker,
-                 //                dest.growth_rate_change_tracker);
-                 //liftover_ranges(self.set_selfing_rates, dest.set_selfing_rates,
-                 //                self.selfing_rate_change_tracker,
-                 //                dest.selfing_rate_change_tracker);
-                 //liftover_ranges(self.set_migration_rates, dest.set_migration_rates,
-                 //                self.migration_rate_change_tracker,
-                 //                dest.migration_rate_change_tracker);
-             })
+        .def("_clone_state_to", &ddemog::DiscreteDemography::copy_state_to)
         .def("_state_asdict",
              [](ddemog::DiscreteDemography& self) -> py::object {
                  return model_state_as_dict(self.get_model_state());
