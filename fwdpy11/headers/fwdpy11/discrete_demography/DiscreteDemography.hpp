@@ -277,6 +277,17 @@ namespace fwdpy11
             }
 
             void
+            reset_model_state()
+            {
+                if (model_state.maxdemes > 0)
+                    {
+                        model_state = DiscreteDemographyState(
+                            mass_migrations, set_growth_rates, set_deme_sizes,
+                            set_selfing_rates, migmatrix, set_migration_rates);
+                    }
+            }
+
+            void
             update_event_times(std::uint32_t current_pop_generation)
             // When a simulation starts with the population's generation time
             // not at zero, then we assume that the pop'n has been evolved

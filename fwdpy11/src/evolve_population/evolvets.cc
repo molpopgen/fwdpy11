@@ -224,6 +224,13 @@ evolve_with_tree_sequences(
     /// in relation to GitHub issue 775
     bool demographic_model_needs_update = true;
 
+    if(pop.generation == 0)
+    {
+        // If we have an already-initialized model state,
+        // then we reset it back to an unevolved one.
+        demography.reset_model_state();
+    }
+
     auto current_demographic_state = demography.get_model_state();
     // FIXME: warning repeat!
     current_demographic_state.initialize(pop);
