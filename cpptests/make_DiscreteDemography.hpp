@@ -1,20 +1,17 @@
 #pragma once
 
+#include "fwdpy11/discrete_demography/SetDemeSize.hpp"
+#include "fwdpy11/discrete_demography/SetExponentialGrowth.hpp"
+#include "fwdpy11/discrete_demography/SetSelfingRate.hpp"
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 
 struct demographic_events
 {
-    fwdpy11::discrete_demography::DiscreteDemography::mass_migration_vector
-        mass_migrations;
-    fwdpy11::discrete_demography::DiscreteDemography::set_growth_rates_vector
-        set_growth_rates;
-    fwdpy11::discrete_demography::DiscreteDemography::set_deme_sizes_vector
-        set_deme_sizes;
-    fwdpy11::discrete_demography::DiscreteDemography::set_migration_rates_vector
-        set_migration_rates;
-    fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
-        set_selfing_rates;
+    std::vector<fwdpy11::discrete_demography::MassMigration> mass_migrations;
+    std::vector<fwdpy11::discrete_demography::SetExponentialGrowth> set_growth_rates;
+    std::vector<fwdpy11::discrete_demography::SetDemeSize> set_deme_sizes;
+    std::vector<fwdpy11::discrete_demography::SetMigrationRates> set_migration_rates;
+    std::vector<fwdpy11::discrete_demography::SetSelfingRate> set_selfing_rates;
     fwdpy11::discrete_demography::MigrationMatrix migmatrix;
 
     demographic_events()
@@ -32,8 +29,7 @@ add_events(demographic_events&)
 template <typename... Args>
 inline void
 add_events(demographic_events& events,
-           fwdpy11::discrete_demography::DiscreteDemography::mass_migration_vector
-               mass_migrations,
+           std::vector<fwdpy11::discrete_demography::MassMigration> mass_migrations,
            Args&&... args)
 {
     if (!events.mass_migrations.empty())
@@ -47,8 +43,7 @@ add_events(demographic_events& events,
 template <typename... Args>
 inline void
 add_events(demographic_events& events,
-           fwdpy11::discrete_demography::DiscreteDemography::set_deme_sizes_vector
-               set_deme_sizes,
+           std::vector<fwdpy11::discrete_demography::SetDemeSize> set_deme_sizes,
            Args&&... args)
 {
     if (!events.set_deme_sizes.empty())
@@ -61,10 +56,10 @@ add_events(demographic_events& events,
 
 template <typename... Args>
 inline void
-add_events(demographic_events& events,
-           fwdpy11::discrete_demography::DiscreteDemography::set_growth_rates_vector
-               set_growth_rates,
-           Args&&... args)
+add_events(
+    demographic_events& events,
+    std::vector<fwdpy11::discrete_demography::SetExponentialGrowth> set_growth_rates,
+    Args&&... args)
 {
     if (!events.set_growth_rates.empty())
         {
@@ -76,10 +71,10 @@ add_events(demographic_events& events,
 
 template <typename... Args>
 inline void
-add_events(demographic_events& events,
-           fwdpy11::discrete_demography::DiscreteDemography::set_migration_rates_vector
-               set_migration_rates,
-           Args&&... args)
+add_events(
+    demographic_events& events,
+    std::vector<fwdpy11::discrete_demography::SetMigrationRates> set_migration_rates,
+    Args&&... args)
 {
     if (!events.set_migration_rates.empty())
         {
@@ -92,8 +87,7 @@ add_events(demographic_events& events,
 template <typename... Args>
 inline void
 add_events(demographic_events& events,
-           fwdpy11::discrete_demography::DiscreteDemography::set_selfing_rates_vector
-               set_selfing_rates,
+           std::vector<fwdpy11::discrete_demography::SetSelfingRate> set_selfing_rates,
            Args&&... args)
 {
     if (!events.set_selfing_rates.empty())
@@ -107,8 +101,7 @@ add_events(demographic_events& events,
 template <typename... Args>
 inline void
 add_events(demographic_events& events,
-           fwdpy11::discrete_demography::MigrationMatrix migmatrix,
-           Args&&... args)
+           fwdpy11::discrete_demography::MigrationMatrix migmatrix, Args&&... args)
 {
     if (!events.migmatrix.empty())
         {

@@ -30,6 +30,7 @@
 #include "../MassMigration.hpp"
 #include "../constants.hpp"
 #include "../exceptions.hpp"
+#include "../current_event_state.hpp"
 #include "deme_property_types.hpp"
 
 namespace fwdpy11
@@ -66,8 +67,7 @@ namespace fwdpy11
                 std::size_t initial_N;
                 vector_backed_move_stack ms;
                 template <typename T>
-                move_stack(std::size_t N, T&& t)
-                    : initial_N(N), ms(std::forward<T>(t))
+                move_stack(std::size_t N, T&& t) : initial_N(N), ms(std::forward<T>(t))
                 {
                 }
             };
@@ -84,13 +84,12 @@ namespace fwdpy11
                         auto indexes(m.second);
                         if (indexes.empty())
                             {
-                                throw std::runtime_error(
-                                    "empty vector of individuals");
+                                throw std::runtime_error("empty vector of individuals");
                             }
-                        gsl_ran_shuffle(rng.get(), indexes.data(),
-                                        indexes.size(), sizeof(std::size_t));
-                        rv.emplace(m.first, move_stack(indexes.size(),
-                                                       std::move(indexes)));
+                        gsl_ran_shuffle(rng.get(), indexes.data(), indexes.size(),
+                                        sizeof(std::size_t));
+                        rv.emplace(m.first,
+                                   move_stack(indexes.size(), std::move(indexes)));
                     }
 
                 return rv;
@@ -114,8 +113,7 @@ namespace fwdpy11
             template <typename METADATATYPE>
             inline void
             apply_copies(const GSLrng_t& rng, const MassMigration& mm,
-                         const deme_map_t& deme_map,
-                         uint32_t t,
+                         const deme_map_t& deme_map, uint32_t t,
                          std::vector<std::size_t>& buffer,
                          std::vector<METADATATYPE>& metadata)
             {
@@ -123,15 +121,14 @@ namespace fwdpy11
                 if (deme_itr == end(deme_map))
                     {
                         std::ostringstream o;
-                        o << "copies from empty deme " << mm.source
-                          << " at time " << t << " attempted";
+                        o << "copies from empty deme " << mm.source << " at time " << t
+                          << " attempted";
                         throw DemographyError(o.str());
                     }
                 if (mm.fraction < 1.)
                     {
                         std::size_t destination_size = std::round(
-                            static_cast<double>(deme_itr->second.size())
-                            * mm.fraction);
+                            static_cast<double>(deme_itr->second.size()) * mm.fraction);
                         buffer.resize(destination_size);
                         // Cannot choose an individual 2x to copy to
                         // the same destination.
@@ -150,8 +147,7 @@ namespace fwdpy11
                     }
                 else // entire deme is copied.
                     {
-                        copy_individuals(deme_itr->second, mm.destination,
-                                         metadata);
+                        copy_individuals(deme_itr->second, mm.destination, metadata);
                     }
             }
 
@@ -175,31 +171,29 @@ namespace fwdpy11
             }
 
             inline void
-            apply_moves(const MassMigration& mm,
-                        std::uint32_t t, std::vector<std::int32_t>& moves,
-                        move_map_t& move_source)
+            apply_moves(const MassMigration& mm, std::uint32_t t,
+                        std::vector<std::int32_t>& moves, move_map_t& move_source)
             {
                 auto deme_itr = move_source.find(mm.source);
                 if (deme_itr == end(move_source))
                     {
                         std::ostringstream o;
-                        o << "moves from empty deme " << mm.source
-                          << " at time " << t << " attempted";
+                        o << "moves from empty deme " << mm.source << " at time " << t
+                          << " attempted";
                         throw DemographyError(o.str());
                     }
                 if (mm.fraction < 1.0)
                     {
-                        std::size_t destination_size = std::round(
-                            static_cast<double>(deme_itr->second.initial_N)
-                            * mm.fraction);
-                        move_from_stack(mm.destination, destination_size,
-                                        moves, deme_itr->second);
+                        std::size_t destination_size
+                            = std::round(static_cast<double>(deme_itr->second.initial_N)
+                                         * mm.fraction);
+                        move_from_stack(mm.destination, destination_size, moves,
+                                        deme_itr->second);
                     }
                 else // entire deme moves
                     {
-                        move_from_stack(mm.destination,
-                                        deme_itr->second.initial_N, moves,
-                                        deme_itr->second);
+                        move_from_stack(mm.destination, deme_itr->second.initial_N,
+                                        moves, deme_itr->second);
                     }
             }
 
@@ -283,10 +277,8 @@ namespace fwdpy11
             inline void
             update_growth_parameters(
                 std::uint32_t t,
-                const std::unordered_map<std::int32_t, std::size_t>&
-                    final_deme_sizes,
-                const std::unordered_map<std::int32_t, bool>&
-                    changed_and_reset,
+                const std::unordered_map<std::int32_t, std::size_t>& final_deme_sizes,
+                const std::unordered_map<std::int32_t, bool>& changed_and_reset,
                 growth_rates_vector& growth_rates,
                 growth_rates_onset_times_vector& growth_rate_onset_times,
                 growth_initial_size_vector& growth_initial_sizes)
@@ -303,8 +295,7 @@ namespace fwdpy11
                             }
                         // NOTE: fds->second is size_t, but deme sizes
                         // are uint32_t so we have to check for overflow
-                        if (fds->second
-                            >= std::numeric_limits<std::uint32_t>::max())
+                        if (fds->second >= std::numeric_limits<std::uint32_t>::max())
                             {
                                 throw std::runtime_error(
                                     "MassMigration error: deme size overflow");
@@ -319,22 +310,23 @@ namespace fwdpy11
             }
         } // namespace detail
 
-        template <typename METADATATYPE, typename ITERATOR>
-        inline ITERATOR
-        apply_mass_migrations(
-            const GSLrng_t& rng, std::uint32_t t, const ITERATOR beg,
-            const ITERATOR end, growth_rates_vector& growth_rates,
-            growth_rates_onset_times_vector& growth_rate_onset_times,
-            growth_initial_size_vector& growth_initial_sizes,
-            std::vector<METADATATYPE>& metadata)
+        template <typename METADATATYPE>
+        inline void
+        apply_mass_migrations(const GSLrng_t& rng, std::uint32_t t,
+                              current_event_state<MassMigration>& mass_migration_events,
+                              growth_rates_vector& growth_rates,
+                              growth_rates_onset_times_vector& growth_rate_onset_times,
+                              growth_initial_size_vector& growth_initial_sizes,
+                              std::vector<METADATATYPE>& metadata)
         // Simultaneous application of all mass migration events
         // occurring at time t
         {
-            if (beg < end && beg->when != t)
+            if (mass_migration_events.current() < mass_migration_events.last()
+                && mass_migration_events.when() != t)
                 {
                     // TODO: maybe this should be an exception,
                     // or is not necessary at all?
-                    return beg;
+                    return;
                 }
             std::vector<METADATATYPE> copies;
             const std::size_t initial_N = metadata.size();
@@ -343,12 +335,13 @@ namespace fwdpy11
             std::vector<std::size_t> buffer;
             detail::move_map_t move_source;
             bool initialized_moves = false;
-            ITERATOR i = beg;
 
             std::unordered_map<std::int32_t, bool> changed_and_reset;
-            for (; i < end && i->when == t; ++i)
+            for (; mass_migration_events.current() < mass_migration_events.last()
+                   && mass_migration_events.when() == t;
+                 ++mass_migration_events.current())
                 {
-                    if (i->move_individuals == false) //copy
+                    if (mass_migration_events.event().move_individuals == false) //copy
                         {
                             if (initialized_moves == true)
                                 {
@@ -357,33 +350,31 @@ namespace fwdpy11
                                         "MassMigration error: copies after "
                                         "moves");
                                 }
-                            detail::apply_copies(rng, *i, deme_map, t, buffer,
-                                                 metadata);
+                            detail::apply_copies(rng, mass_migration_events.event(),
+                                                 deme_map, t, buffer, metadata);
                             detail::update_changed_and_reset(
-                                *i, changed_and_reset);
+                                mass_migration_events.event(), changed_and_reset);
                         }
                     else //move
                         {
                             if (initialized_moves == false)
                                 {
                                     moves.resize(initial_N, -1);
-                                    move_source = detail::build_move_sources(
-                                        rng, deme_map);
+                                    move_source
+                                        = detail::build_move_sources(rng, deme_map);
                                     initialized_moves = true;
                                 }
-                            detail::apply_moves(*i, t, moves,
+                            detail::apply_moves(mass_migration_events.event(), t, moves,
                                                 move_source);
                             detail::update_changed_and_reset(
-                                *i, changed_and_reset);
+                                mass_migration_events.event(), changed_and_reset);
                         }
                 }
-            auto final_deme_sizes
-                = detail::update_metadata_due_to_moves_and_copies(
-                    initial_N, deme_map, moves, metadata);
-            detail::update_growth_parameters(
-                t, final_deme_sizes, changed_and_reset, growth_rates,
-                growth_rate_onset_times, growth_initial_sizes);
-            return i;
+            auto final_deme_sizes = detail::update_metadata_due_to_moves_and_copies(
+                initial_N, deme_map, moves, metadata);
+            detail::update_growth_parameters(t, final_deme_sizes, changed_and_reset,
+                                             growth_rates, growth_rate_onset_times,
+                                             growth_initial_sizes);
         }
     } // namespace discrete_demography
 } // namespace fwdpy11

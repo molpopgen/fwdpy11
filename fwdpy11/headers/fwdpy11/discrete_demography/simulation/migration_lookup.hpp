@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <vector>
 #include <fwdpp/gsl_discrete.hpp>
+#include "../MigrationMatrix.hpp"
 
 namespace fwdpy11
 {
@@ -37,7 +38,7 @@ namespace fwdpy11
             {
             }
         };
-        } // namespace discrete_demography
+    } // namespace discrete_demography
 } // namespace fwdpy11
 
 #endif
