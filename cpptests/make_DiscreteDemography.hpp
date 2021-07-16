@@ -4,7 +4,6 @@
 #include "fwdpy11/discrete_demography/SetExponentialGrowth.hpp"
 #include "fwdpy11/discrete_demography/SetSelfingRate.hpp"
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 
 struct demographic_events
 {

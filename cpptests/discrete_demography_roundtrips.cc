@@ -55,10 +55,8 @@ DiscreteDemography_roundtrip(
 //
 {
     bool demographic_model_needs_updating = true;
-    auto current_demographic_state
-        = fwdpy11::discrete_demography::initialize_model_state(
-            pop.generation, pop.diploid_metadata, demography,
-            &demographic_model_needs_updating);
+    auto current_demographic_state = demography.get_model_state();
+    current_demographic_state.initialize(pop);
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
     std::vector<MatingEventRecord> rv;

@@ -5,7 +5,6 @@
 #include "fwdpy11/discrete_demography/SetSelfingRate.hpp"
 #include <boost/test/unit_test.hpp>
 #include <fwdpy11/discrete_demography/DiscreteDemography.hpp>
-#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 #include <stdexcept>
 #include <vector>
 
