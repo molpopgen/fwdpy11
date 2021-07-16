@@ -175,8 +175,8 @@ namespace fwdpy11
 
                 if (current_deme_parameters.current_deme_sizes.get().empty())
                     {
-                        current_deme_parameters
-                            = deme_properties{maxdemes, pop.diploid_metadata};
+                        current_deme_parameters = deme_properties{
+                            static_cast<std::uint32_t>(maxdemes), pop.diploid_metadata};
                     }
             }
 
