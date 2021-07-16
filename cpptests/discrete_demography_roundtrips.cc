@@ -29,19 +29,20 @@ DiscreteDemography_roundtrip(
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
 //
 {
-    bool demographic_model_needs_updating = true;
     auto current_demographic_state = demography.get_model_state();
-    current_demographic_state.initialize(pop);
+
     decltype(pop.diploid_metadata) offspring_metadata;
     offspring_metadata.reserve(pop.N);
     std::vector<MatingEventRecord> rv;
-    if (demographic_model_needs_updating)
-        {
-            fwdpy11::discrete_demography::update_demography_manager(
-                rng, pop.generation, pop.diploid_metadata, demography,
-                *current_demographic_state);
-        }
-    if (current_demographic_state->will_go_globally_extinct() == true)
+    current_demographic_state.initialize(pop);
+    fwdpy11::discrete_demography::multideme_fitness_lookups<std::uint32_t>
+        fitness_lookup{current_demographic_state.maxdemes};
+    fwdpy11::discrete_demography::migration_lookup miglookup{
+        current_demographic_state.maxdemes, current_demographic_state.M.empty()};
+    current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+    current_demographic_state.late(pop.generation, fitness_lookup, miglookup,
+                                   pop.diploid_metadata);
+    if (current_demographic_state.will_go_globally_extinct() == true)
         {
             std::ostringstream o;
             o << "extinction at time " << pop.generation;
@@ -51,19 +52,21 @@ DiscreteDemography_roundtrip(
         {
             ++pop.generation;
             // Generate the offspring
-            for (std::int32_t deme = 0; deme < current_demographic_state->maxdemes;
+            for (std::int32_t deme = 0; deme < current_demographic_state.maxdemes;
                  ++deme)
                 {
-                    for (unsigned ind = 0; ind < current_demographic_state->sizes_rates
-                                                     .next_deme_sizes.get()[deme];
+                    for (unsigned ind = 0;
+                         ind < current_demographic_state.current_deme_parameters
+                                   .next_deme_sizes.get()[deme];
                          ++ind)
                         {
                             auto pdata = fwdpy11::discrete_demography::pick_parents(
-                                rng, deme, current_demographic_state->miglookup,
-                                current_demographic_state->sizes_rates
+                                rng, deme, miglookup,
+                                current_demographic_state.current_deme_parameters
                                     .current_deme_sizes,
-                                current_demographic_state->sizes_rates.selfing_rates,
-                                current_demographic_state->fitnesses);
+                                current_demographic_state.current_deme_parameters
+                                    .selfing_rates,
+                                fitness_lookup);
                             if (pdata.deme1 != deme)
                                 {
                                     rv.emplace_back(pop.generation + 1, pdata.deme1,
@@ -74,18 +77,26 @@ DiscreteDemography_roundtrip(
                                     rv.emplace_back(pop.generation + 1, pdata.deme2,
                                                     deme, pdata.mating);
                                 }
-                            offspring_metadata.emplace_back(pdata.parent1, pdata.parent2,
-                                                            offspring_metadata.size(),
-                                                            deme, 1.);
+                            offspring_metadata.emplace_back(
+                                fwdpy11::DiploidMetadata{0.,
+                                                         0.,
+                                                         1.,
+                                                         {0., 0., 0.},
+                                                         offspring_metadata.size(),
+                                                         {pdata.parent1, pdata.parent2},
+                                                         deme,
+                                                         0,
+                                                         {-1, -1}});
                         }
                 }
             pop.diploid_metadata.swap(offspring_metadata);
             offspring_metadata.clear();
 
-            fwdpy11::discrete_demography::update_demography_manager(
-                rng, pop.generation, pop.diploid_metadata, demography,
-                *current_demographic_state);
-            if (current_demographic_state->will_go_globally_extinct() == true)
+            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+            current_demographic_state.late(pop.generation, fitness_lookup, miglookup,
+                                           pop.diploid_metadata);
+
+            if (current_demographic_state.will_go_globally_extinct() == true)
                 {
                     std::ostringstream o;
                     o << "extinction at time " << pop.generation;
@@ -96,8 +107,7 @@ DiscreteDemography_roundtrip(
             // from what we do in a "real" simulation.
             pop.N = static_cast<std::uint32_t>(pop.diploid_metadata.size());
         }
-    fwdpy11::discrete_demography::save_model_state(std::move(current_demographic_state),
-                                                   demography);
+    demography.set_model_state(std::move(current_demographic_state));
     return rv;
 }
 
