@@ -22,7 +22,6 @@
 
 #include "constants.hpp"
 #include "DiscreteDemographyState.hpp"
-#include "simulation/get_max_number_of_demes.hpp"
 #include "simulation/apply_mass_migrations.hpp"
 #include "simulation/deme_properties.hpp"
 #include "simulation/multideme_fitness_lookups.hpp"
