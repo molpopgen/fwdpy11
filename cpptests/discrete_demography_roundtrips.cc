@@ -10,33 +10,8 @@ MatingEventRecord::MatingEventRecord(std::uint32_t g, std::int32_t pd, std::int3
 {
 }
 
-MockMetadata::MockMetadata(std::size_t parent1_, std::size_t parent2_,
-                           std::size_t label_, std::int32_t deme_, double w_)
-    : parent1{parent1_}, parent2{parent2_}, label{label_}, deme{deme_}, w{w_}
-{
-}
-
-MockPopulation::MockPopulation(std::uint32_t popsize)
-
-    : N{popsize}, generation{0}, diploid_metadata{init_metadata(popsize)}
-{
-}
-
-std::vector<MockMetadata>
-MockPopulation::init_metadata(std::uint32_t popsize)
-{
-    std::vector<MockMetadata> rv;
-    for (decltype(popsize) i = 0; i < popsize; ++i)
-        {
-            rv.emplace_back(std::numeric_limits<std::size_t>::max(),
-                            std::numeric_limits<std::size_t>::max(), static_cast<int>(i),
-                            0, 1.0);
-        }
-    return rv;
-}
-
 std::unordered_map<int, int>
-get_deme_sizes(const std::vector<MockMetadata>& metadata)
+get_deme_sizes(const std::vector<fwdpy11::DiploidMetadata>& metadata)
 {
     std::unordered_map<int, int> rv;
     for (auto&& md : metadata)
@@ -48,7 +23,7 @@ get_deme_sizes(const std::vector<MockMetadata>& metadata)
 
 std::vector<MatingEventRecord>
 DiscreteDemography_roundtrip(
-    const fwdpy11::GSLrng_t& rng, MockPopulation& pop,
+    const fwdpy11::GSLrng_t& rng, fwdpy11::DiploidPopulation& pop,
     fwdpy11::discrete_demography::DiscreteDemography& demography, std::uint32_t ngens)
 // Assumptions:
 // 1. Initial deme labels are set by the user. NOTE: validated by manager object
