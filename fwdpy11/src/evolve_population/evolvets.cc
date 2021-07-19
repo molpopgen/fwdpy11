@@ -219,23 +219,30 @@ evolve_with_tree_sequences(
                 }
         }
 
-    // Set up discrete demography types. New in 0.6.0
-    /// model_needs_update added in 0.16.0
-    /// in relation to GitHub issue 775
-    bool demographic_model_needs_update = true;
-    auto current_demographic_state
-        = ddemog::initialize_model_state(pop.generation, pop.diploid_metadata,
-                                         demography, &demographic_model_needs_update);
+    if (pop.generation == 0)
+        {
+            // If we have an already-initialized model state,
+            // then we reset it back to an unevolved one.
+            demography.reset_model_state();
+        }
+
+    auto current_demographic_state = demography.get_model_state();
+
+    current_demographic_state.initialize(pop);
+    if (current_demographic_state.maxdemes <= 0)
+        {
+            throw std::runtime_error("maxdemes must be > 0");
+        }
     if (gvalue_pointers.genetic_values.size()
-        > static_cast<std::size_t>(current_demographic_state->maxdemes))
+        > static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument(
                 "list of genetic values is longer than maxdemes");
         }
-    if (static_cast<std::size_t>(current_demographic_state->maxdemes) > 1
+    if (static_cast<std::size_t>(current_demographic_state.maxdemes) > 1
         && gvalue_pointers.genetic_values.size() > 1
         && gvalue_pointers.genetic_values.size()
-               < static_cast<std::size_t>(current_demographic_state->maxdemes))
+               < static_cast<std::size_t>(current_demographic_state.maxdemes))
         {
             throw std::invalid_argument("too few genetic value objects");
         }
@@ -265,7 +272,7 @@ evolve_with_tree_sequences(
     auto genetics = fwdpp::make_genetic_parameters(gvalue_pointers.genetic_values,
                                                    std::move(bound_mmodel),
                                                    std::move(bound_rmodel));
-    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state->maxdemes, 0);
+    std::vector<std::size_t> deme_to_gvalue_map(current_demographic_state.maxdemes, 0);
     if (genetics.gvalue.size() > 1)
         {
             std::iota(begin(deme_to_gvalue_map), end(deme_to_gvalue_map), 0);
@@ -287,12 +294,37 @@ evolve_with_tree_sequences(
                               record_genotype_matrix);
     pop.genetic_value_matrix.swap(new_diploid_gvalues);
     pop.diploid_metadata.swap(offspring_metadata);
-    if (demographic_model_needs_update == true)
+
+    ddemog::multideme_fitness_lookups<std::uint32_t> fitness_lookup{
+        current_demographic_state.maxdemes};
+    ddemog::migration_lookup miglookup{current_demographic_state.maxdemes,
+                                       current_demographic_state.M.empty()};
+
+    if (pop.generation == 0)
         {
-            ddemog::update_demography_manager(rng, pop.generation, pop.diploid_metadata,
-                                              demography, *current_demographic_state);
+            current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
+            current_demographic_state.late(pop.generation, miglookup,
+                                           pop.diploid_metadata);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
         }
-    if (current_demographic_state->will_go_globally_extinct() == true)
+    else
+        {
+            build_migration_lookup(
+                current_demographic_state.M,
+                current_demographic_state.current_deme_parameters.current_deme_sizes,
+                miglookup);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
+        }
+
+    if (current_demographic_state.will_go_globally_extinct() == true)
         {
             std::ostringstream o;
             o << "extinction at time " << pop.generation;
@@ -385,8 +417,9 @@ evolve_with_tree_sequences(
     for (std::uint32_t gen = 0; gen < simlen && !stopping_criteron_met; ++gen)
         {
             ++pop.generation;
-            fwdpy11::evolve_generation_ts(rng, pop, genetics, *current_demographic_state,
-                                          pop.generation, *new_edge_buffer, offspring,
+            fwdpy11::evolve_generation_ts(rng, pop, genetics, current_demographic_state,
+                                          fitness_lookup, miglookup, pop.generation,
+                                          *new_edge_buffer, offspring,
                                           offspring_metadata, next_index);
             // TODO: abstract out these steps into a "cleanup_pop" function
             // NOTE: by swapping the diploids here, it is not possible
@@ -399,9 +432,9 @@ evolve_with_tree_sequences(
             // to make these models "nice".  See GitHub issue 372
             // for a bit more context.
             pop.diploids.swap(offspring);
-            ddemog::mass_migrations_and_current_sizes(rng, pop.generation,
-                                                      offspring_metadata, demography,
-                                                      *current_demographic_state);
+
+            current_demographic_state.early(rng, pop.generation, offspring_metadata);
+
             // NOTE: the two swaps of the metadata ensure
             // that the update loop below passes the correct
             // metadata on, and that we then have the
@@ -423,11 +456,16 @@ evolve_with_tree_sequences(
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
 
-            ddemog::finalize_demographic_state(pop.generation, pop.diploid_metadata,
-                                               demography, *current_demographic_state);
+            current_demographic_state.late(pop.generation, miglookup,
+                                           pop.diploid_metadata);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
 
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
-            if (current_demographic_state->will_go_globally_extinct() == true)
+            if (current_demographic_state.will_go_globally_extinct() == true)
                 {
                     simplification(preserve_selected_fixations,
                                    suppress_edge_table_indexing,
@@ -616,6 +654,6 @@ evolve_with_tree_sequences(
         remove_extinct_mutations_at_finish, simulating_neutral_variants,
         reset_treeseqs_to_alive_nodes_after_simplification, last_preserved_generation,
         last_preserved_generation_counts, pop);
-    ddemog::save_model_state(std::move(current_demographic_state), demography);
+    demography.set_model_state(std::move(current_demographic_state));
 }
 

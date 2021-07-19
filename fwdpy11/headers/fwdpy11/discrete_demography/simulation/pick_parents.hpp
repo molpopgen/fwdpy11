@@ -39,8 +39,8 @@ namespace fwdpy11
             std::int32_t deme1, deme2;
             mating_event_type mating;
 
-            parent_data(std::size_t p1, std::size_t p2, std::int32_t d1,
-                        std::int32_t d2, mating_event_type m)
+            parent_data(std::size_t p1, std::size_t p2, std::int32_t d1, std::int32_t d2,
+                        mating_event_type m)
                 : parent1(p1), parent2(p2), deme1(d1), deme2(d2), mating(m)
             {
             }
@@ -51,42 +51,44 @@ namespace fwdpy11
                      const migration_lookup& miglookup,
                      const current_deme_sizes_vector& current_deme_sizes,
                      const selfing_rates_vector& selfing_rates,
+                     const multideme_fitness_bookmark& fitness_bookmark,
                      const multideme_fitness_lookups<std::uint32_t>& wlookups)
         {
             if (miglookup.null_migmatrix) // Model has no migration
                 {
                     auto p1 = wlookups.get_parent(rng, current_deme_sizes,
-                                                  offspring_deme);
+                                                  fitness_bookmark, offspring_deme);
                     if (selfing_rates.get()[offspring_deme] > 0.
                         && gsl_rng_uniform(rng.get())
                                <= selfing_rates.get()[offspring_deme])
                         {
-                            return { p1, p1, offspring_deme, offspring_deme,
-                                     mating_event_type::selfing };
+                            return {p1, p1, offspring_deme, offspring_deme,
+                                    mating_event_type::selfing};
                         }
                     auto p2 = wlookups.get_parent(rng, current_deme_sizes,
-                                                  offspring_deme);
-                    return { p1, p2, offspring_deme, offspring_deme,
-                             mating_event_type::outcrossing };
+                                                  fitness_bookmark, offspring_deme);
+                    return {p1, p2, offspring_deme, offspring_deme,
+                            mating_event_type::outcrossing};
                 }
             if (miglookup.lookups[offspring_deme] == nullptr)
                 {
                     std::ostringstream o;
-                    o <<"parental deme lookup is NULL for deme " << offspring_deme; 
+                    o << "parental deme lookup is NULL for deme " << offspring_deme;
                     throw DemographyError(o.str());
                 }
-            std::int32_t pdeme = static_cast<std::int32_t>(gsl_ran_discrete(
-                rng.get(), miglookup.lookups[offspring_deme].get()));
+            std::int32_t pdeme = static_cast<std::int32_t>(
+                gsl_ran_discrete(rng.get(), miglookup.lookups[offspring_deme].get()));
 
-            auto p1 = wlookups.get_parent(rng, current_deme_sizes, pdeme);
+            auto p1
+                = wlookups.get_parent(rng, current_deme_sizes, fitness_bookmark, pdeme);
             if (selfing_rates.get()[pdeme] > 0.
                 && gsl_rng_uniform(rng.get()) <= selfing_rates.get()[pdeme])
                 {
-                    return { p1, p1, pdeme, pdeme,
-                             mating_event_type::selfing };
+                    return {p1, p1, pdeme, pdeme, mating_event_type::selfing};
                 }
-            auto p2 = wlookups.get_parent(rng, current_deme_sizes, pdeme);
-            return { p1, p2, pdeme, pdeme, mating_event_type::outcrossing };
+            auto p2
+                = wlookups.get_parent(rng, current_deme_sizes, fitness_bookmark, pdeme);
+            return {p1, p2, pdeme, pdeme, mating_event_type::outcrossing};
         }
     } // namespace discrete_demography
 } // namespace fwdpy11
