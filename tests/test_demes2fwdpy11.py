@@ -975,5 +975,6 @@ demes:
     "model", [set_deme_sizes_after_burnin(), set_selfing_rate_after_burnin()]
 )
 def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
-    demog = fwdpy11.discrete_demography.from_demes(model, 0)
+    g = demes.loads(model)
+    demog = fwdpy11.discrete_demography.from_demes(g, 0)
     check_debugger_passes(demog)
