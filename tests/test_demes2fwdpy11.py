@@ -777,6 +777,7 @@ def test_yamls_with_migration(data):
     demog = fwdpy11.discrete_demography.from_demes(g, 1)
     check_debugger_passes(demog)
 
+
 def test_split_model_population_size_history(two_deme_split_with_ancestral_size_change):
     """
     This is a detailed test of the complete size history
@@ -936,3 +937,43 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
         else:
             raise RuntimeError("unexpected key")
 
+
+def set_deme_sizes_after_burnin():
+    return """description: test model
+time_units: generations
+demes:
+  - name: Ancestor
+    epochs:
+      - end_time: 20
+        start_size: 100
+  - name: B
+    ancestors: [Ancestor]
+    epochs:
+      - end_time: 0
+        start_size: 50
+"""
+
+
+def set_selfing_rate_after_burnin():
+    return """description: test model
+time_units: generations
+demes:
+  - name: Ancestor
+    epochs:
+      - end_time: 20
+        start_size: 100
+  - name: B
+    ancestors: [Ancestor]
+    epochs:
+      - end_time: 0
+        selfing_rate: 1.0
+        start_size: 20
+"""
+
+
+@pytest.mark.parametrize(
+    "model", [set_deme_sizes_after_burnin(), set_selfing_rate_after_burnin()]
+)
+def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
+    demog = fwdpy11.discrete_demography.from_demes(model, 0)
+    check_debugger_passes(demog)
