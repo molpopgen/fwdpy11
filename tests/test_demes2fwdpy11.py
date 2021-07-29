@@ -1,12 +1,11 @@
 import copy
+import typing
 import unittest
 from dataclasses import dataclass
 
 import demes
 import fwdpy11
 import numpy as np
-import unittest
-import typing
 import pytest
 
 
@@ -939,6 +938,12 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
 
 
 def set_deme_sizes_after_burnin():
+    """
+    This model is semi-pathological:
+
+    Deme 0 is burned-in.
+    Deme 0 ends at the end of burn-in and all inidividuals move to deme 1.
+    """
     return """description: test model
 time_units: generations
 demes:
@@ -954,25 +959,25 @@ demes:
 """
 
 
-def set_selfing_rate_after_burnin():
-    return """description: test model
-time_units: generations
-demes:
-  - name: Ancestor
-    epochs:
-      - end_time: 20
-        start_size: 100
-  - name: B
-    ancestors: [Ancestor]
-    epochs:
-      - end_time: 0
-        selfing_rate: 1.0
-        start_size: 20
-"""
+# def set_selfing_rate_after_burnin():
+#     return """description: test model
+# time_units: generations
+# demes:
+#   - name: Ancestor
+#     epochs:
+#       - end_time: 20
+#         start_size: 100
+#   - name: B
+#     ancestors: [Ancestor]
+#     epochs:
+#       - end_time: 0
+#         selfing_rate: 1.0
+#         start_size: 20
+# """
 
 
 @pytest.mark.parametrize(
-    "model", [set_deme_sizes_after_burnin(), set_selfing_rate_after_burnin()]
+    "model", [set_deme_sizes_after_burnin()]  # , set_selfing_rate_after_burnin()]
 )
 def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
     g = demes.loads(model)
