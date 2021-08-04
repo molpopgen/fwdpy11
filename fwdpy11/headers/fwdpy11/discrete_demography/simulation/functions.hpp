@@ -110,16 +110,15 @@ namespace fwdpy11
                     }
                 auto& rates = sizes_rates.growth_rates.get();
                 auto& onsets = sizes_rates.growth_rate_onset_times.get();
-                auto& current_deme_sizes = sizes_rates.current_deme_sizes.get();
+                auto& next_deme_sizes = sizes_rates.next_deme_sizes.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
-                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 for (; growth_rate_changes.current() < growth_rate_changes.last()
                        && growth_rate_changes.when() == t;
                      ++growth_rate_changes.current())
                     {
                         auto deme = growth_rate_changes.event().deme;
                         if (growth_rate_changes.event().G != NOGROWTH
-                            && Ncurr[deme] == 0)
+                            && next_deme_sizes[deme] == 0)
                             {
                                 throw DemographyError(
                                     "attempt to change growth rate in extinct "
@@ -127,7 +126,7 @@ namespace fwdpy11
                             }
                         rates[deme] = growth_rate_changes.event().G;
                         onsets[deme] = t;
-                        N0[deme] = current_deme_sizes[deme];
+                        N0[deme] = next_deme_sizes[deme];
                     }
             }
 
