@@ -60,10 +60,9 @@ namespace fwdpy11
         namespace detail
         {
             inline void
-            update_current_deme_sizes(
-                const std::uint32_t t,
-                current_event_state<SetDemeSize>& size_change_events,
-                deme_properties& sizes_rates)
+            set_next_deme_sizes(const std::uint32_t t,
+                                current_event_state<SetDemeSize>& size_change_events,
+                                deme_properties& sizes_rates)
             // NOTE: this function may resent growth rates to zero.
             // see SetDemeSize for details.
             {
@@ -72,8 +71,8 @@ namespace fwdpy11
                     {
                         return;
                     }
-                current_deme_sizes_vector::value_type& current_deme_sizes
-                    = sizes_rates.current_deme_sizes.get();
+                next_deme_sizes_vector::value_type& current_deme_sizes
+                    = sizes_rates.next_deme_sizes.get();
                 growth_rates_vector::value_type& growth_rates
                     = sizes_rates.growth_rates.get();
                 growth_rates_onset_times_vector::value_type& growth_rate_onset_times
