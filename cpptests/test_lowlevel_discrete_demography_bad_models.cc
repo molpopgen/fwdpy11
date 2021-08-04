@@ -6,7 +6,7 @@
 #include "fwdpy11/discrete_demography/exceptions.hpp"
 
 BOOST_FIXTURE_TEST_SUITE(test_lowlevel_discrete_demography_bad_models,
-                         mock_population_fixture)
+                         population_fixture)
 
 BOOST_AUTO_TEST_CASE(test_migration_matrix_too_small)
 /*

@@ -15,7 +15,7 @@ using namespace fwdpy11::discrete_demography;
 
 using deme_sizes_t = std::unordered_map<int, int>;
 
-BOOST_FIXTURE_TEST_SUITE(test_lowlevel_demographic_events, mock_population_fixture)
+BOOST_FIXTURE_TEST_SUITE(test_lowlevel_demographic_events, population_fixture)
 
 BOOST_AUTO_TEST_CASE(test_simple_moves_from_single_deme)
 {
