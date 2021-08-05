@@ -142,13 +142,13 @@ namespace fwdpy11
                         return;
                     }
                 auto& rates = sizes_rates.selfing_rates.get();
-                auto& Ncurr = sizes_rates.current_deme_sizes.get();
+                auto& Nnext = sizes_rates.next_deme_sizes.get();
                 for (; selfing_rate_changes.current() < selfing_rate_changes.last()
                        && selfing_rate_changes.when() == t;
                      ++selfing_rate_changes.current())
                     {
                         auto& event = selfing_rate_changes.event();
-                        if (Ncurr[event.deme] == 0)
+                        if (Nnext[event.deme] == 0)
                             {
                                 throw DemographyError("attempt to set selfing "
                                                       "rate in extinct deme");
