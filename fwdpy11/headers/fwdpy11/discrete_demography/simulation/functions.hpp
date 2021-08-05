@@ -245,31 +245,6 @@ namespace fwdpy11
 
         } // namespace detail
 
-        //inline std::uint32_t
-        //apply_demographic_events(std::uint32_t t, DiscreteDemographyState& demography,
-        //                         MigrationMatrix& M, deme_properties& sizes_rates)
-        //{
-        //    std::copy(begin(sizes_rates.current_deme_sizes.get()),
-        //              end(sizes_rates.current_deme_sizes.get()),
-        //              begin(sizes_rates.next_deme_sizes.get()));
-        //    // Step 1, do the discrete changes of deme sizes
-        //    // NOTE: this may reset growth rates to zero
-        //    detail::update_current_deme_sizes(t, demography.set_deme_sizes, sizes_rates);
-
-        //    // Step 2: set new growth rates
-        //    detail::update_growth_rates(t, demography.set_growth_rates, sizes_rates);
-        //    // Step 3: update selfing rates
-        //    detail::update_selfing_rates(t, demography.set_selfing_rates, sizes_rates);
-        //    detail::update_migration_matrix(t, demography.set_migration_rates, M);
-        //    // Step 4: set next deme sizes and apply growth rates
-        //    std::copy(begin(sizes_rates.current_deme_sizes.get()),
-        //              end(sizes_rates.current_deme_sizes.get()),
-        //              begin(sizes_rates.next_deme_sizes.get()));
-        //    auto next_global_N
-        //        = detail::apply_growth_rates_get_next_global_N(t, sizes_rates);
-        //    return next_global_N;
-        //}
-
         template <typename METADATATYPE>
         inline void
         get_current_deme_sizes(const std::vector<METADATATYPE>& metadata,
