@@ -22,6 +22,7 @@ from collections import namedtuple
 
 import fwdpy11
 import numpy as np
+import pytest
 
 
 def validate_alive_node_metadata(pop):
@@ -861,6 +862,40 @@ class TestIMModel(unittest.TestCase):
         deme_sizes = self.pop.deme_sizes()
         self.assertEqual(deme_sizes[1][0], self.N0t)
         self.assertEqual(deme_sizes[1][1], self.N1t)
+
+
+@pytest.mark.parametrize("rng", [{"seed": 51253}], indirect=["rng"])
+@pytest.mark.parametrize(
+    "pop",
+    [
+        {"N": 100, "genome_length": 10.0},
+        {"N": 73, "genome_length": 10.0},
+        {"N": 303, "genome_length": 10.0},
+    ],
+    indirect=["pop"],
+)
+@pytest.mark.parametrize("new_size", [50, 250, 333])
+@pytest.mark.parametrize("G", [1.001, 1.01, 1.375122])
+def test_set_deme_size_and_growth_rates_at_same_time(pop, rng, new_size, G):
+    """
+    This test models what causes the skipped "expensive" tests to fail
+    when working on PR 802
+    """
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=0, deme=0, new_size=new_size)]
+    set_growth_rates = [fwdpy11.SetExponentialGrowth(when=0, deme=0, G=G)]
+    demog = fwdpy11.DiscreteDemography(
+        set_deme_sizes=set_deme_sizes, set_growth_rates=set_growth_rates
+    )
+    pdict = {
+        "demography": demog,
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0.0, 0.0, 0.0),
+        "simlen": 5,
+    }
+    expected_final_N = np.round(float(new_size) * np.power(G, pdict["simlen"]))
+    params = fwdpy11.ModelParams(**pdict)
+    fwdpy11.evolvets(rng, pop, params, 100)
+    assert pop.N == expected_final_N
 
 
 if __name__ == "__main__":
