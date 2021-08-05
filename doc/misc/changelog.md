@@ -20,6 +20,7 @@ Bug fixes
   In some cases, we were using the wrong vector of deme sizes to update the model,
   leading to runtime exceptions.
   {pr}`802`
+  {pr}`803`
 
 Behavior changes
 

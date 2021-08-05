@@ -142,13 +142,13 @@ namespace fwdpy11
                         return;
                     }
                 auto& rates = sizes_rates.selfing_rates.get();
-                auto& Ncurr = sizes_rates.current_deme_sizes.get();
+                auto& Nnext = sizes_rates.next_deme_sizes.get();
                 for (; selfing_rate_changes.current() < selfing_rate_changes.last()
                        && selfing_rate_changes.when() == t;
                      ++selfing_rate_changes.current())
                     {
                         auto& event = selfing_rate_changes.event();
-                        if (Ncurr[event.deme] == 0)
+                        if (Nnext[event.deme] == 0)
                             {
                                 throw DemographyError("attempt to set selfing "
                                                       "rate in extinct deme");
@@ -182,7 +182,6 @@ namespace fwdpy11
             apply_growth_rates_get_next_global_N(const std::uint32_t t,
                                                  deme_properties& sizes_rates)
             {
-                auto& Ncurr = sizes_rates.current_deme_sizes.get();
                 auto& Nnext = sizes_rates.next_deme_sizes.get();
                 auto& G = sizes_rates.growth_rates.get();
                 auto& N0 = sizes_rates.growth_initial_sizes.get();
@@ -192,7 +191,7 @@ namespace fwdpy11
                     {
                         if (G[deme] != NOGROWTH)
                             {
-                                if (Ncurr[deme] == 0)
+                                if (Nnext[deme] == 0)
                                     {
                                         throw DemographyError(
                                             "growth is happening in an "

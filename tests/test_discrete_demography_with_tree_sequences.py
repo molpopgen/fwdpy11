@@ -898,5 +898,141 @@ def test_set_deme_size_and_growth_rates_at_same_time(pop, rng, new_size, G):
     assert pop.N == expected_final_N
 
 
+@pytest.mark.parametrize("rng", [{"seed": 51253}], indirect=["rng"])
+@pytest.mark.parametrize(
+    "pop",
+    [
+        {"N": 100, "genome_length": 10.0},
+    ],
+    indirect=["pop"],
+)
+@pytest.mark.parametrize("new_size", [100])
+@pytest.mark.parametrize("migration_when", [0, 1, 7, 11])
+@pytest.mark.parametrize("selfing_deme", [0, 1])
+def test_mass_migration_via_migration_rate_changes_and_set_selfing_rate_at_same_time(
+    pop, rng, migration_when, new_size, selfing_deme
+):
+    """
+    Mock up of how we treat demes models:
+
+    * mass migration by setting migration rates in 2 subsequent generations
+    * set some other property at the same time
+
+    Setting the selfing rate in deme 0 should raise an exception
+    """
+    set_deme_sizes = [
+        fwdpy11.SetDemeSize(when=migration_when, deme=0, new_size=0),
+        fwdpy11.SetDemeSize(when=migration_when, deme=1, new_size=new_size),
+    ]
+    migmatrix = fwdpy11.MigrationMatrix(
+        np.array([1.0, 0.0, 0.0, 0.0]).reshape(2, 2), scaled=False
+    )
+    set_migration_rates = [
+        fwdpy11.SetMigrationRates(
+            when=migration_when,
+            deme=-1,
+            migrates=np.array([0.0, 0.0, 1.0, 0.0]).reshape(2, 2),
+        ),
+        fwdpy11.SetMigrationRates(
+            when=migration_when + 1,
+            deme=-1,
+            migrates=np.array([0.0, 0.0, 0.0, 1.0]).reshape(2, 2),
+        ),
+    ]
+    set_selfing_rates = [
+        fwdpy11.SetSelfingRate(when=migration_when, deme=selfing_deme, S=0.5)
+    ]
+    demog = fwdpy11.DiscreteDemography(
+        set_deme_sizes=set_deme_sizes,
+        migmatrix=migmatrix,
+        set_migration_rates=set_migration_rates,
+        set_selfing_rates=set_selfing_rates,
+    )
+    pdict = {
+        "demography": demog,
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0.0, 0.0, 0.0),
+        "simlen": migration_when + 2,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    if selfing_deme == 0:
+        with pytest.raises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(rng, pop, params, 100)
+    else:
+        fwdpy11.evolvets(rng, pop, params, 100)
+
+
+@pytest.mark.parametrize("rng", [{"seed": 51253}], indirect=["rng"])
+@pytest.mark.parametrize(
+    "pop",
+    [
+        {"N": 100, "genome_length": 10.0},
+    ],
+    indirect=["pop"],
+)
+@pytest.mark.parametrize("new_size", [100])
+@pytest.mark.parametrize("migration_when", [0, 1, 7, 11])
+@pytest.mark.parametrize("growth_deme", [0, 1])
+@pytest.mark.parametrize("growth_rate", [1.01])
+def test_mass_migration_via_migration_rate_changes_and_set_growth_rate_at_same_time(
+    pop,
+    rng,
+    migration_when,
+    new_size,
+    growth_deme,
+    growth_rate,
+):
+    """
+    Mock up of how we treat demes models:
+
+    * mass migration by setting migration rates in 2 subsequent generations
+    * set some other property at the same time
+
+    Setting the growth rate in deme 0 should raise an exception
+    """
+    set_deme_sizes = [
+        fwdpy11.SetDemeSize(when=migration_when, deme=0, new_size=0),
+        fwdpy11.SetDemeSize(when=migration_when, deme=1, new_size=new_size),
+    ]
+    migmatrix = fwdpy11.MigrationMatrix(
+        np.array([1.0, 0.0, 0.0, 0.0]).reshape(2, 2), scaled=False
+    )
+    set_migration_rates = [
+        fwdpy11.SetMigrationRates(
+            when=migration_when,
+            deme=-1,
+            migrates=np.array([0.0, 0.0, 1.0, 0.0]).reshape(2, 2),
+        ),
+        fwdpy11.SetMigrationRates(
+            when=migration_when + 1,
+            deme=-1,
+            migrates=np.array([0.0, 0.0, 0.0, 1.0]).reshape(2, 2),
+        ),
+    ]
+    set_growth_rates = [
+        fwdpy11.SetExponentialGrowth(
+            when=migration_when, deme=growth_deme, G=growth_rate
+        )
+    ]
+    demog = fwdpy11.DiscreteDemography(
+        set_deme_sizes=set_deme_sizes,
+        migmatrix=migmatrix,
+        set_migration_rates=set_migration_rates,
+        set_growth_rates=set_growth_rates,
+    )
+    pdict = {
+        "demography": demog,
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0.0, 0.0, 0.0),
+        "simlen": migration_when + 2,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    if growth_deme == 0:
+        with pytest.raises(fwdpy11.DemographyError):
+            fwdpy11.evolvets(rng, pop, params, 100)
+    else:
+        fwdpy11.evolvets(rng, pop, params, 100)
+
+
 if __name__ == "__main__":
     unittest.main()
