@@ -37,6 +37,7 @@ namespace fwdpy11
         inline void
         build_migration_lookup(const MigrationMatrix& M,
                                const current_deme_sizes_vector& current_deme_sizes,
+                               const next_deme_sizes_vector& next_deme_sizes,
                                migration_lookup& ml)
         {
             if (!M.empty())
@@ -44,28 +45,31 @@ namespace fwdpy11
                     std::vector<double> temp;
                     std::size_t npops = ml.lookups.size();
                     temp.reserve(npops);
-                    const auto& ref = current_deme_sizes.get();
+                    const auto& current_deme_sizes_ref = current_deme_sizes.get();
+                    const auto& next_deme_sizes_ref = next_deme_sizes.get();
                     for (std::size_t dest = 0; dest < npops; ++dest)
                         {
                             for (std::size_t source = 0; source < npops; ++source)
                                 {
                                     // By default, input migration rates are
                                     // weighted by the current deme size...
-                                    double scaling_factor
-                                        = static_cast<double>(ref[source]);
+                                    double scaling_factor = static_cast<double>(
+                                        current_deme_sizes_ref[source]);
                                     // ...unless we are told not to do that.
                                     // But if the deme size is zero, we make
                                     // sure it is removed as a possible source
                                     // of a parent.
-                                    if (M.scaled == false && ref[source] != 0)
+                                    if (M.scaled == false
+                                        && current_deme_sizes_ref[source] != 0)
                                         {
                                             scaling_factor = 1.0;
                                         }
                                     double rate_in = M.M[dest * npops + source];
                                     if (rate_in > 0.
-                                        && (ref[source] == 0 || ref[dest] == 0))
+                                        && (current_deme_sizes_ref[source] == 0
+                                            || next_deme_sizes_ref[dest] == 0))
                                         {
-                                            if (ref[dest] != 0)
+                                            if (current_deme_sizes_ref[dest] != 0)
                                                 {
                                                     std::ostringstream o;
                                                     o << "non-zero migration "
@@ -76,7 +80,7 @@ namespace fwdpy11
                                                       << dest;
                                                     throw DemographyError(o.str());
                                                 }
-                                            if (ref[source] != 0)
+                                            if (next_deme_sizes_ref[source] != 0)
                                                 {
                                                     std::ostringstream o;
                                                     o << "non-zero migration "

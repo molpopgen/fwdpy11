@@ -73,13 +73,13 @@ DiscreteDemography_roundtrip(
                                 fitness_lookup);
                             if (pdata.deme1 != deme)
                                 {
-                                    rv.emplace_back(pop.generation + 1, pdata.deme1,
-                                                    deme, pdata.mating);
+                                    rv.emplace_back(pop.generation, pdata.deme1, deme,
+                                                    pdata.mating);
                                 }
                             if (pdata.deme2 != deme)
                                 {
-                                    rv.emplace_back(pop.generation + 1, pdata.deme2,
-                                                    deme, pdata.mating);
+                                    rv.emplace_back(pop.generation, pdata.deme2, deme,
+                                                    pdata.mating);
                                 }
                             offspring_metadata.emplace_back(
                                 fwdpy11::DiploidMetadata{0.,

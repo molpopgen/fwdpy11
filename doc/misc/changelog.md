@@ -16,6 +16,10 @@ Bug fixes
   It is not possible that this bug affected results from earlier versions, as attempting to stop/start at these time points raised exceptions.
   {issue}`775`
   {pr}`774`
+* Fix bugs in C++ back-end for discrete demographic models.
+  In some cases, we were using the wrong vector of deme sizes to update the model,
+  leading to runtime exceptions.
+  {pr}`802`
 
 Behavior changes
 

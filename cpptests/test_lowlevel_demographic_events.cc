@@ -15,7 +15,7 @@ using namespace fwdpy11::discrete_demography;
 
 using deme_sizes_t = std::unordered_map<int, int>;
 
-BOOST_FIXTURE_TEST_SUITE(test_lowlevel_demographic_events, mock_population_fixture)
+BOOST_FIXTURE_TEST_SUITE(test_lowlevel_demographic_events, population_fixture)
 
 BOOST_AUTO_TEST_CASE(test_simple_moves_from_single_deme)
 {
@@ -375,6 +375,40 @@ BOOST_AUTO_TEST_CASE(bad_metadata_label_when_mass_migration_happens)
     auto ddemog = make_model();
     BOOST_CHECK_THROW({ DiscreteDemography_roundtrip(rng, pop, ddemog, 20); },
                       std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(mass_migration_via_change_in_migration_rates)
+{
+    // Set deme size 0 to 0 immediately.
+    set_deme_sizes.emplace_back(0, 0, 0, true);
+    // Create a new deme, that will get 100% of ancestry from
+    // individuals in deme 0
+    set_deme_sizes.emplace_back(0, 1, pop.N, true);
+
+    // Set an initial migration matrix representing just 100%
+    // ancestry of ancestral pop to itself.
+    set_migmatrix(std::vector<double>{1., 0., 0., 0.}, 2, false);
+
+    // Change the migration matrix to reflect the "mass migration"
+    // event founding deme 1
+    set_migration_rates.emplace_back(0, std::vector<double>{0., 0., 1., 0.});
+
+    // The mass migration event is done, so all the ancestry
+    // must now come from the new deme.
+    set_migration_rates.emplace_back(1, std::vector<double>{0., 0., 0., 1.});
+
+    auto demog = make_model();
+    auto migevents = DiscreteDemography_roundtrip(rng, pop, demog, 5);
+
+    // We only record migrations if parent deme != offspring deme,
+    // so all migrations should have generation 1 (the first offspring
+    // generation) and be from 0 -> 1, representing the pulse migration.
+    for (auto& m : migevents)
+        {
+            BOOST_REQUIRE_EQUAL(m.generation, 1);
+            BOOST_REQUIRE_EQUAL(m.parental_deme, 0);
+            BOOST_REQUIRE_EQUAL(m.offspring_deme, 1);
+        }
 }
 
 BOOST_AUTO_TEST_SUITE_END()

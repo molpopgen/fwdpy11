@@ -6,7 +6,7 @@
 #include "make_DiscreteDemography.hpp"
 #include "discrete_demography_roundtrips.hpp"
 
-struct mock_population_fixture
+struct population_fixture
 {
     fwdpy11::GSLrng_t rng;
     fwdpy11::DiploidPopulation pop;
@@ -28,7 +28,7 @@ struct mock_population_fixture
 
     using gsl_matrix_ptr = std::unique_ptr<gsl_matrix, gsl_matrix_deleter>;
 
-    mock_population_fixture()
+    population_fixture()
         : rng{416134}, pop(100, 1.0), mass_migrations{}, set_growth_rates{},
           set_deme_sizes{}, set_migration_rates{}, set_selfing_rates{}, migmatrix{}
     {

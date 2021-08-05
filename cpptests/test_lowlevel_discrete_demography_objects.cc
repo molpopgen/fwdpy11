@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(wrong_number_of_rates)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-BOOST_FIXTURE_TEST_SUITE(test_DiscreteDemography, mock_population_fixture)
+BOOST_FIXTURE_TEST_SUITE(test_DiscreteDemography, population_fixture)
 
 BOOST_AUTO_TEST_CASE(set_deme_size_twice)
 {

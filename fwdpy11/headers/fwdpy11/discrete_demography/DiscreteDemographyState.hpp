@@ -189,27 +189,19 @@ namespace fwdpy11
                 std::copy(begin(current_deme_parameters.current_deme_sizes.get()),
                           end(current_deme_parameters.current_deme_sizes.get()),
                           begin(current_deme_parameters.next_deme_sizes.get()));
-                // Step 1, do the discrete changes of deme sizes
-                // NOTE: this may reset growth rates to zero
-                detail::update_current_deme_sizes(
+                detail::set_next_deme_sizes(
                     current_simulation_time, set_deme_sizes, current_deme_parameters);
-
-                // Step 2: set new growth rates
                 detail::update_growth_rates(current_simulation_time, set_growth_rates,
                                             current_deme_parameters);
-                // Step 3: update selfing rates
                 detail::update_selfing_rates(current_simulation_time, set_selfing_rates,
                                              current_deme_parameters);
                 detail::update_migration_matrix(current_simulation_time,
                                                 set_migration_rates, M);
-                // Step 4: set next deme sizes and apply growth rates
-                std::copy(begin(current_deme_parameters.current_deme_sizes.get()),
-                          end(current_deme_parameters.current_deme_sizes.get()),
-                          begin(current_deme_parameters.next_deme_sizes.get()));
                 auto next_global_N_ = detail::apply_growth_rates_get_next_global_N(
                     current_simulation_time, current_deme_parameters);
                 set_next_global_N(next_global_N_);
                 build_migration_lookup(M, current_deme_parameters.current_deme_sizes,
+                                       current_deme_parameters.next_deme_sizes,
                                        miglookup);
             }
         };
