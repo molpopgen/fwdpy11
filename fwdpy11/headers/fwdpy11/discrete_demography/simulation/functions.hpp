@@ -71,7 +71,7 @@ namespace fwdpy11
                     {
                         return;
                     }
-                next_deme_sizes_vector::value_type& current_deme_sizes
+                next_deme_sizes_vector::value_type& next_deme_sizes
                     = sizes_rates.next_deme_sizes.get();
                 growth_rates_vector::value_type& growth_rates
                     = sizes_rates.growth_rates.get();
@@ -84,7 +84,7 @@ namespace fwdpy11
                      ++size_change_events.current())
                     {
                         auto deme = size_change_events.event().deme;
-                        current_deme_sizes[deme] = size_change_events.event().new_size;
+                        next_deme_sizes[deme] = size_change_events.event().new_size;
                         if (size_change_events.event().resets_growth_rate == true)
                             {
                                 growth_rates[deme] = NOGROWTH;
@@ -93,7 +93,7 @@ namespace fwdpy11
                         // the onset of growth and the initial N for this deme
                         // NOTE: this needs careful documentation!
                         growth_rate_onset_times[deme] = t;
-                        growth_initial_sizes[deme] = current_deme_sizes[deme];
+                        growth_initial_sizes[deme] = next_deme_sizes[deme];
                     }
             }
 
