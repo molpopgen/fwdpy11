@@ -9,24 +9,24 @@ Bug fixes
 
 * An integer type in the infinitely-many sites mutation model was changed from unsigned to signed.
   This does not affect previous results because unsigned overflow doing the "right thing" ended up with final values being correct.
-  {pr}`766`
-  {issue}`765`
+  PR {pr}`766`
+  Issue {issue}`765`
 * Fix a bug where stopping/restarting the evolution of demographic models at time points
   where a deme goes extinct.
   It is not possible that this bug affected results from earlier versions, as attempting to stop/start at these time points raised exceptions.
-  {issue}`775`
-  {pr}`774`
+  Issue {issue}`775`
+  PR {pr}`774`
 * Fix bugs in C++ back-end for discrete demographic models.
   In some cases, we were using the wrong vector of deme sizes to update the model,
   leading to runtime exceptions.
-  {pr}`802`
-  {pr}`803`
+  PR {pr}`802`
+  PR {pr}`803`
 
 Behavior changes
 
 * If a demographic model is evolved, pickled, unpickled, and then used to evolve,
   it is now possible that exceptions will raise.
-  This change is due to the fix for {issue}`775` introduced in {pr}`774`.
+  This change is due to the fix for Issue {issue}`775` introduced in PR {pr}`774`.
   See issue {issue}`777` for more background.
 
 New features
@@ -44,9 +44,9 @@ New features
 C++ back-end
 
 * A population can now be checked that it is- or is not- being simulated.
-  {pr}`762`
+  PR {pr}`762`
 * {class}`fwdpy11.discrete_demography.DiscreteDemography` now stores the migration matrix as a stack-allocated object and not a `unique_ptr`.
-  {pr}`785`
+  PR {pr}`785`
   {issue}`781`
 
 Build system
