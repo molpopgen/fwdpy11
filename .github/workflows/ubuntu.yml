@@ -33,7 +33,7 @@ jobs:
 
       - name: Install apt dependencies
         run: |
-            sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev
+            sudo apt install --fix-missing -y libgsl-dev cmake autoconf libboost-test-dev libboost-program-options-dev
 
       - name: Edit PATH
         run: |
@@ -93,7 +93,17 @@ jobs:
           cd cpptests
           autoreconf --install
           CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX ./configure
-          make check
+          make check -j 3
+          # Clean up so that the next step can work...
+          make clean
+
+      - name: Build and run standalone C++ program
+        run: |
+          cd cpp_neutral_benchmark
+          autoreconf --install
+          CXXFLAGS="-O3 -g" CC=$CC CXX=$CXX ./configure
+          make -j 3
+          ./cpp_neutral_benchmark
 
       - name: Compile extension module
         run: |
