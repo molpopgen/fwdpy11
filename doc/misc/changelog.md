@@ -58,6 +58,8 @@ Dependencies
 
 * Bump `pillow` version in doc/requirements.txt.
   {pr}`763`
+* Bump all lib dependencies and some doc dependencies.
+  {pr}`807`
 
 ## 0.15.2
 

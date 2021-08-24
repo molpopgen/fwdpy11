@@ -46,7 +46,7 @@ demes==0.1.2
     # via
     #   demesdraw
     #   msprime
-demesdraw==0.1.3
+git+git://github.com/grahamgower/demesdraw
     # via -r requirements.in
 docutils==0.16
     # via
@@ -182,7 +182,7 @@ nested-lookup==0.2.22
     # via jupyter-book
 newick==1.3.0
     # via msprime
-notebook==6.2.0
+notebook==6.4.3
     # via
     #   nbdime
     #   widgetsnbextension
