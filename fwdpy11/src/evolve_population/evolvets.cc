@@ -303,7 +303,7 @@ evolve_with_tree_sequences(
     if (pop.generation == 0)
         {
             current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
-            current_demographic_state.late(pop.generation, miglookup,
+            current_demographic_state.late(rng, pop.generation, miglookup,
                                            pop.diploid_metadata);
             fitness_lookup.update(current_demographic_state.fitness_bookmark);
             ddemog::validate_parental_state(
@@ -456,36 +456,7 @@ evolve_with_tree_sequences(
             pop.genetic_value_matrix.swap(new_diploid_gvalues);
             // TODO: abstract out these steps into a "cleanup_pop" function
             pop.diploid_metadata.swap(offspring_metadata);
-
-            current_demographic_state.late(pop.generation, miglookup,
-                                           pop.diploid_metadata);
-            fitness_lookup.update(current_demographic_state.fitness_bookmark);
-            ddemog::validate_parental_state(
-                pop.generation, fitness_lookup,
-                current_demographic_state.current_deme_parameters,
-                current_demographic_state.M);
-
             pop.N = static_cast<std::uint32_t>(pop.diploids.size());
-            if (current_demographic_state.will_go_globally_extinct() == true)
-                {
-                    simplification(preserve_selected_fixations,
-                                   suppress_edge_table_indexing,
-                                   reset_treeseqs_to_alive_nodes_after_simplification,
-                                   post_simplification_recorder, *simplifier_state,
-                                   simplification_output, *new_edge_buffer,
-                                   alive_at_last_simplification, pop);
-                    simplifier_state.reset(nullptr);
-                    new_edge_buffer.reset(nullptr);
-                    final_population_cleanup(
-                        suppress_edge_table_indexing, preserve_selected_fixations,
-                        remove_extinct_mutations_at_finish, simulating_neutral_variants,
-                        reset_treeseqs_to_alive_nodes_after_simplification,
-                        last_preserved_generation, last_preserved_generation_counts,
-                        pop);
-                    std::ostringstream o;
-                    o << "extinction at time " << pop.generation;
-                    throw ddemog::GlobalExtinction(o.str());
-                }
 
             if (gen % simplification_interval == 0.0)
                 {
@@ -512,8 +483,10 @@ evolve_with_tree_sequences(
                 {
                     track_mutation_counts(pop, simplified, suppress_edge_table_indexing);
                 }
+
             // The user may now analyze the pop'n and record ancient samples
             recorder(pop, sr);
+
             if (simplified)
                 {
                     if (suppress_edge_table_indexing == false)
@@ -574,6 +547,35 @@ evolve_with_tree_sequences(
                                 simplification_output.preserved_mutations,
                                 pop.mutations.size());
                         }
+                }
+
+            current_demographic_state.late(rng, pop.generation, miglookup,
+                                           pop.diploid_metadata);
+            fitness_lookup.update(current_demographic_state.fitness_bookmark);
+            ddemog::validate_parental_state(
+                pop.generation, fitness_lookup,
+                current_demographic_state.current_deme_parameters,
+                current_demographic_state.M);
+
+            if (current_demographic_state.will_go_globally_extinct() == true)
+                {
+                    simplification(preserve_selected_fixations,
+                                   suppress_edge_table_indexing,
+                                   reset_treeseqs_to_alive_nodes_after_simplification,
+                                   post_simplification_recorder, *simplifier_state,
+                                   simplification_output, *new_edge_buffer,
+                                   alive_at_last_simplification, pop);
+                    simplifier_state.reset(nullptr);
+                    new_edge_buffer.reset(nullptr);
+                    final_population_cleanup(
+                        suppress_edge_table_indexing, preserve_selected_fixations,
+                        remove_extinct_mutations_at_finish, simulating_neutral_variants,
+                        reset_treeseqs_to_alive_nodes_after_simplification,
+                        last_preserved_generation, last_preserved_generation_counts,
+                        pop);
+                    std::ostringstream o;
+                    o << "extinction at time " << pop.generation;
+                    throw ddemog::GlobalExtinction(o.str());
                 }
 
             // TODO: deal with the result of the recorder populating sr

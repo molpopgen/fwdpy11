@@ -23,9 +23,8 @@
 
 import unittest
 
-import numpy as np
-
 import fwdpy11
+import numpy as np
 
 
 def gvalue_multiplicative(pop, ind, scaling):
@@ -92,19 +91,21 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
                 self.data = []
 
             def __call__(self, pop, sampler):
-                for i in range(len(pop.diploids), len(pop.diploid_metadata)):
-                    md = pop.diploid_metadata[i]
-                    dip = pop.diploids[md.label]
-                    a = len(pop.haploid_genomes[dip.first].smutations)
-                    b = len(pop.haploid_genomes[dip.second].smutations)
-                    self.data.append(
-                        (
-                            pop.generation,
-                            pop.diploid_metadata[i].w,
-                            pop.diploid_metadata[i].deme,
-                            a + b,
-                        )
-                    )
+                if pop.generation == 2:
+                    for i in range(0, len(pop.diploid_metadata)):
+                        md = pop.diploid_metadata[i]
+                        if md.deme == 1:
+                            dip = pop.diploids[md.label]
+                            a = len(pop.haploid_genomes[dip.first].smutations)
+                            b = len(pop.haploid_genomes[dip.second].smutations)
+                            self.data.append(
+                                (
+                                    pop.generation,
+                                    pop.diploid_metadata[i].w,
+                                    pop.diploid_metadata[i].deme,
+                                    a + b,
+                                )
+                            )
 
         self.f = CheckFitnesses()
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100, self.f)
@@ -117,7 +118,7 @@ class TestMassMigrationsWithCopies(unittest.TestCase):
         for i in self.f.data:
             self.assertEqual(i[2], 1)  # deme == 1
             self.assertTrue(i[1] <= 1.0)  # Mutations are harmful in this deme
-            self.assertEqual(i[0], 1)  # Generation == 1, when mass mig happened
+            self.assertEqual(i[0], 2)  # Generation == 2, when mass mig happened
 
 
 class TestMassMigrationsWithMoves(unittest.TestCase):
@@ -167,7 +168,7 @@ class TestMassMigrationsWithMoves(unittest.TestCase):
                 # Moves don't affect the amount of metadata
                 # vs diploid genotypes
                 assert len(pop.diploids) == len(pop.diploid_metadata)
-                if pop.generation == 1:
+                if pop.generation == 2:
                     for i in range(len(pop.diploids)):
                         md = pop.diploid_metadata[i]
                         dip = pop.diploids[md.label]
@@ -199,10 +200,12 @@ class TestMassMigrationsWithMoves(unittest.TestCase):
         for i in self.f.data:
             if i[2] == 0:  # deme 0
                 self.assertTrue(i[1] >= 1.0)  # Mutations are beneficial in this deme
-                self.assertEqual(i[0], 1)  # Generation == 1, when mass mig happened
+                self.assertEqual(
+                    i[0], 2
+                )  # Generation == 2, when new deme first appeared
             else:
                 self.assertEqual(i[2], 1)
-                self.assertTrue(i[1] <= 1.0)  # Mutations are harmful in this deme
+                self.assertTrue(i[1] <= 2.0)  # Mutations are harmful in this deme
 
 
 class TestMultiplicativeWithExpSNoMigration(unittest.TestCase):

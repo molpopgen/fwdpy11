@@ -27,9 +27,8 @@ import typing
 import unittest
 
 import attr
-import numpy as np
-
 import fwdpy11
+import numpy as np
 
 
 @attr.s(auto_attribs=True)
@@ -54,6 +53,7 @@ class DemeSizeTracker(object):
     def __call__(
         self, pop: fwdpy11.DiploidPopulation, sampler: fwdpy11.SampleRecorder
     ) -> None:
+        assert pop.N == len(pop.diploid_metadata)
         for i in pop.diploid_metadata:
             for n in i.nodes:
                 assert (
@@ -63,9 +63,7 @@ class DemeSizeTracker(object):
         for i, j in zip(deme_sizes[0], deme_sizes[1]):
             self.parent_numbers.append(NumberOfParentsAtTime(pop.generation, i, j))
 
-        number_of_individuals = np.unique(
-            [i.deme for i in pop.diploid_metadata[: pop.N]], return_counts=True
-        )
+        number_of_individuals = pop.deme_sizes()
         for i, j in zip(number_of_individuals[0], number_of_individuals[1]):
             self.individual_numbers.append(DemeSizeAtTime(pop.generation, i, j))
 
@@ -85,6 +83,7 @@ class TrackParents(object):
     def __call__(
         self, pop: fwdpy11.DiploidPopulation, sampler: fwdpy11.SampleRecorder
     ) -> None:
+        assert pop.N == len(pop.diploid_metadata)
         for i in pop.diploid_metadata:
             self.parents.append(
                 ParentData(pop.generation, i.deme, i.parents[0], i.parents[1])
@@ -282,6 +281,7 @@ class TestBranch(unittest.TestCase):
         self.pop, self.num_parents, self.num_individuals = run_model(
             self.params, self.popsizes, 666
         )
+        assert self.pop.generation == 50
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -292,11 +292,12 @@ class TestBranch(unittest.TestCase):
         self.assertEqual(
             len([i for i in self.num_parents if i.deme == 0]), self.params.simlen
         )
-        # Deme 1 first appeared in generation 10, so there were 9 generations
+        # Deme 1 first appeared in generation 11, so there were 10 generations
         # w/o that deme around.
+        assert self.params.simlen - self.when == 40
         self.assertEqual(
             len([i for i in self.num_parents if i.deme == 1]),
-            self.params.simlen - self.when + 1,
+            self.params.simlen - self.when,
         )
 
     def test_deme_sizes_over_time(self):
@@ -320,9 +321,8 @@ class TestSplit(unittest.TestCase):
         self.pop, self.num_parents, self.num_individuals = run_model(
             self.params, self.popsizes, 666
         )
-        assert (
-            max([i.deme for i in self.num_individuals]) == 2
-        ), "Invalid simulation"
+        assert max([i.deme for i in self.num_individuals]) == 2, "Invalid simulation"
+        assert self.pop.generation == 50
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -335,10 +335,10 @@ class TestSplit(unittest.TestCase):
             max([i.generation for i in self.num_parents if i.deme == 0]), self.when
         )
         self.assertEqual(
-            min([i.generation for i in self.num_parents if i.deme == 1]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 1]), self.when + 1
         )
         self.assertEqual(
-            min([i.generation for i in self.num_parents if i.deme == 2]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 2]), self.when + 1
         )
 
     def test_deme_sizes_over_time(self):
@@ -378,25 +378,27 @@ class TestSplitViaMoves(unittest.TestCase):
 
     def test_parent_sizes_over_time(self):
         self.assertEqual(
-            max([i.generation for i in self.num_parents if i.deme == 0]), self.when - 1
+            max([i.generation for i in self.num_parents if i.deme == 0]), self.when
         )
         self.assertEqual(
-            min([i.generation for i in self.num_parents if i.deme == 1]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 1]), self.when + 1
         )
         self.assertEqual(
-            min([i.generation for i in self.num_parents if i.deme == 2]), self.when
+            min([i.generation for i in self.num_parents if i.deme == 2]), self.when + 1
         )
 
     def test_deme_sizes_over_time(self):
         self.assertEqual(
             max([i.generation for i in self.num_individuals if i.deme == 0]),
-            self.when - 1,
+            self.when,
         )
         self.assertEqual(
-            min([i.generation for i in self.num_individuals if i.deme == 1]), self.when
+            min([i.generation for i in self.num_individuals if i.deme == 1]),
+            self.when + 1,
         )
         self.assertEqual(
-            min([i.generation for i in self.num_individuals if i.deme == 2]), self.when
+            min([i.generation for i in self.num_individuals if i.deme == 2]),
+            self.when + 1,
         )
 
 
@@ -412,6 +414,8 @@ class TestMergeKeepAncestralDemes(unittest.TestCase):
         self.pop, self.num_parents, self.num_individuals = run_model(
             self.params, self.popsizes, 666
         )
+        for i in self.num_individuals:
+            print(i)
 
     def test_final_sizes(self):
         deme_sizes = self.pop.deme_sizes(as_dict=True)
@@ -432,13 +436,13 @@ class TestMergeKeepAncestralDemes(unittest.TestCase):
 
         min_deme_2 = min([i.generation for i in self.num_parents if i.deme == 2])
 
-        self.assertEqual(min_deme_2, self.when)
+        self.assertEqual(min_deme_2, self.when + 1)
 
-        # Deme 2 parents first appeared in generation 10, so there were 9 generations
+        # Deme 2 parents first appeared in generation 11, so there were 10 generations
         # w/o any
         self.assertEqual(
             len([i for i in self.num_parents if i.deme == 2]),
-            self.params.simlen - self.when + 1,
+            self.params.simlen - self.when,
         )
 
     def test_deme_sizes_over_time(self):
@@ -449,6 +453,10 @@ class TestMergeKeepAncestralDemes(unittest.TestCase):
             len([i for i in self.num_individuals if i.deme == 1]), self.params.simlen
         )
         min_deme_2 = min([i.generation for i in self.num_individuals if i.deme == 2])
+
+        for i in self.num_individuals:
+            if i.deme == 2:
+                print(i)
 
         self.assertEqual(min_deme_2, self.when + 1)
 
@@ -486,13 +494,13 @@ class TestMergeKillAncestralDemes(unittest.TestCase):
 
         min_deme_2 = min([i.generation for i in self.num_parents if i.deme == 2])
 
-        self.assertEqual(min_deme_2, self.when)
+        self.assertEqual(min_deme_2, self.when + 1)
 
-        # Deme 2 parents first appeared in generation 10, so there were 9 generations
+        # Deme 2 parents first appeared in generation 11, so there were 10 generations
         # w/o any
         self.assertEqual(
             len([i for i in self.num_parents if i.deme == 2]),
-            self.params.simlen - self.when + 1,
+            self.params.simlen - self.when,
         )
 
     def test_deme_sizes_over_time(self):

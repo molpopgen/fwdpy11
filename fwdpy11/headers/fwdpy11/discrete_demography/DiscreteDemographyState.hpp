@@ -168,8 +168,15 @@ namespace fwdpy11
             }
 
             void
-            early(const GSLrng_t& rng, std::uint32_t current_simulation_time,
-                  std::vector<DiploidMetadata>& individual_metadata)
+            early(const GSLrng_t& /*rng*/, std::uint32_t /*current_simulation_time*/,
+                  std::vector<DiploidMetadata>& /*individual_metadata*/)
+            {
+            }
+
+            void
+            late(const GSLrng_t& rng, std::uint32_t current_simulation_time,
+                 migration_lookup& miglookup,
+                 std::vector<DiploidMetadata>& individual_metadata)
             {
                 mass_migration(rng, current_simulation_time, mass_migrations,
                                current_deme_parameters.growth_rates,
@@ -178,19 +185,13 @@ namespace fwdpy11
                                individual_metadata);
                 get_current_deme_sizes(individual_metadata,
                                        current_deme_parameters.current_deme_sizes);
-            }
-
-            void
-            late(std::uint32_t current_simulation_time, migration_lookup& miglookup,
-                 std::vector<DiploidMetadata>& individual_metadata)
-            {
                 fitness_bookmark.update(current_deme_parameters.current_deme_sizes,
                                         individual_metadata);
                 std::copy(begin(current_deme_parameters.current_deme_sizes.get()),
                           end(current_deme_parameters.current_deme_sizes.get()),
                           begin(current_deme_parameters.next_deme_sizes.get()));
-                detail::set_next_deme_sizes(
-                    current_simulation_time, set_deme_sizes, current_deme_parameters);
+                detail::set_next_deme_sizes(current_simulation_time, set_deme_sizes,
+                                            current_deme_parameters);
                 detail::update_growth_rates(current_simulation_time, set_growth_rates,
                                             current_deme_parameters);
                 detail::update_selfing_rates(current_simulation_time, set_selfing_rates,
