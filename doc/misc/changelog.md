@@ -28,6 +28,11 @@ Behavior changes
   it is now possible that exceptions will raise.
   This change is due to the fix for Issue {issue}`775` introduced in PR {pr}`774`.
   See issue {issue}`777` for more background.
+* Mass migration events implemented via {func}`fwdpy11.copy_individuals`
+  and {func}`fwdpy11.move_individuals` now occur *after* sampling within a generation.  
+  This change makes the timings consistent with all other events and also makes
+  certain operations easier/feasible.
+  {pr}`809`
 
 New features
 

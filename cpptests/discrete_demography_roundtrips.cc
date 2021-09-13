@@ -40,7 +40,7 @@ DiscreteDemography_roundtrip(
     fwdpy11::discrete_demography::migration_lookup miglookup{
         current_demographic_state.maxdemes, current_demographic_state.M.empty()};
     current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
-    current_demographic_state.late(pop.generation, miglookup, pop.diploid_metadata);
+    current_demographic_state.late(rng, pop.generation, miglookup, pop.diploid_metadata);
     fitness_lookup.update(current_demographic_state.fitness_bookmark);
     fwdpy11::discrete_demography::validate_parental_state(
         pop.generation, fitness_lookup,
@@ -97,7 +97,7 @@ DiscreteDemography_roundtrip(
             offspring_metadata.clear();
 
             current_demographic_state.early(rng, pop.generation, pop.diploid_metadata);
-            current_demographic_state.late(pop.generation, miglookup,
+            current_demographic_state.late(rng, pop.generation, miglookup,
                                            pop.diploid_metadata);
             fitness_lookup.update(current_demographic_state.fitness_bookmark);
             fwdpy11::discrete_demography::validate_parental_state(
