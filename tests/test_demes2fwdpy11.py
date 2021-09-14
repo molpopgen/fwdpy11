@@ -1050,11 +1050,7 @@ def test_size_change_then_move_to_new_deme(burnin):
             dict(start_size=20, end_time=40),
         ],
     )
-    b.add_deme(
-        name="B",
-        ancestors=["A"],
-        epochs=[dict(start_size=30, end_time=0)]
-    )
+    b.add_deme(name="B", ancestors=["A"], epochs=[dict(start_size=30, end_time=0)])
     g = b.resolve()
 
     model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
@@ -1092,3 +1088,313 @@ def test_size_change_then_move_to_new_deme(burnin):
 
     sizes0 = [s.size for s in recorder.sizes[0]]
     sizes2 = [s.size for s in recorder.sizes[1]]
+
+
+# NOTE: the following tests are for apragsdale/molpopgen
+# to keep track of specific things in PR801
+# Keeping them long-term is up for discussion
+
+
+class Popsizes(object):
+    def __init__(self):
+        self.popsizes = []
+
+    def __call__(self, pop, _):
+        d = pop.deme_sizes()
+        for (i, j) in zip(d[0], d[1]):
+            self.popsizes.append((pop.generation, i, j))
+
+
+class Migrants(object):
+    def __init__(self):
+        self.migrants = []
+        self.popsizes = Popsizes()
+
+    def __call__(self, pop, sampler):
+        migrants = [0] * 2
+        for i, d in enumerate(pop.diploid_metadata):
+            if d.deme == 0:
+                if d.parents[0] >= 100:
+                    migrants[d.deme] += 1
+            else:
+                if d.parents[0] < 100:
+                    migrants[d.deme] += 1
+        self.migrants.append((pop.generation, migrants))
+
+        self.popsizes(pop, sampler)
+
+
+def test_mass_migration_via_copy_and_setting_sizes():
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
+    mass_migrations = [
+        fwdpy11.copy_individuals(when=11, source=0, destination=1, fraction=1.0)
+    ]
+
+    demog = fwdpy11.DiscreteDemography(
+        mass_migrations=mass_migrations,
+        set_deme_sizes=set_deme_sizes,
+    )
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": 20,
+        "demography": demog,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+
+def test_mass_migration_via_demes_import_approach():
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
+    set_migration_rates = [
+        fwdpy11.SetMigrationRates(when=11, deme=1, migrates=[1.0, 0.0])
+    ]
+    set_migration_rates.append(
+        fwdpy11.SetMigrationRates(when=12, deme=1, migrates=[0.0, 1.0])
+    )
+    migmatrix = np.array([1.0, 0.0, 0.0, 0.0]).reshape(2, 2)
+
+    demog = fwdpy11.DiscreteDemography(
+        set_migration_rates=set_migration_rates,
+        set_deme_sizes=set_deme_sizes,
+        migmatrix=migmatrix,
+    )
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": 20,
+        "demography": demog,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+
+def test_mass_migration_via_demes_import():
+    yaml = """
+description: single_deme_set_size_demes
+time_units: generations
+demes:
+- name: ancestral
+  description: ancestral
+  epochs:
+  - {end_time: 20, start_size: 100}
+  - {end_time: 0, start_size: 100}
+- name: derived
+  description: derived deme
+  start_time: 9
+  epochs:
+  - {start_size: 150, end_time: 0}
+  ancestors: [ancestral]
+"""
+    graph = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": model.metadata["total_simulation_length"],
+        "demography": model,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+
+def test_mass_migration_via_copy_and_setting_sizes_with_growth():
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
+    mass_migrations = [
+        fwdpy11.copy_individuals(when=11, source=0, destination=1, fraction=1.0)
+    ]
+
+    # We want the first generation of the new deme to have size 150,
+    # THEN we want it to start growing, so we got when=12 here
+    set_growth_rates = [fwdpy11.SetExponentialGrowth(when=12, deme=1, G=1.025)]
+
+    demog = fwdpy11.DiscreteDemography(
+        mass_migrations=mass_migrations,
+        set_deme_sizes=set_deme_sizes,
+        set_growth_rates=set_growth_rates,
+    )
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": 20,
+        "demography": demog,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+    deme_sizes = pop.deme_sizes()
+    # Generations (13, end] have grown in deme 1, so we have the
+    # non-inclusive duration 20 - 12 during which growth happened
+    expected_deme_1_size = np.round(150 * 1.025 ** (20 - 12))
+    assert deme_sizes[1][0] == 100
+    assert (
+        deme_sizes[1][1] == expected_deme_1_size
+    ), f"{deme_sizes[1]} {expected_deme_1_size}"
+
+
+def test_mass_migration_via_demes_import_approach_with_growth():
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
+    set_migration_rates = [
+        fwdpy11.SetMigrationRates(when=11, deme=1, migrates=[1.0, 0.0])
+    ]
+    set_migration_rates.append(
+        fwdpy11.SetMigrationRates(when=12, deme=1, migrates=[0.0, 1.0])
+    )
+    migmatrix = np.array([1.0, 0.0, 0.0, 0.0]).reshape(2, 2)
+    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
+
+    # We want the first generation of the new deme to have size 150,
+    # THEN we want it to start growing, so we got when=12 here
+    set_growth_rates = [fwdpy11.SetExponentialGrowth(when=12, deme=1, G=1.025)]
+
+    demog = fwdpy11.DiscreteDemography(
+        migmatrix=migmatrix,
+        set_migration_rates=set_migration_rates,
+        set_deme_sizes=set_deme_sizes,
+        set_growth_rates=set_growth_rates,
+    )
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": 20,
+        "demography": demog,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+    deme_sizes = pop.deme_sizes()
+    # Generations (13, end] have grown in deme 1, so we have the
+    # non-inclusive duration 20 - 12 during which growth happened
+    expected_deme_1_size = np.round(150 * 1.025 ** (20 - 12))
+    assert deme_sizes[1][0] == 100
+    assert (
+        deme_sizes[1][1] == expected_deme_1_size
+    ), f"{deme_sizes[1]} {expected_deme_1_size}"
+
+
+def test_mass_migration_via_demes_import_with_growth():
+    yaml = """
+description: single_deme_set_size_demes
+time_units: generations
+demes:
+- name: ancestral
+  description: ancestral
+  epochs:
+  - {end_time: 20, start_size: 100}
+  - {end_time: 0, start_size: 100}
+- name: derived
+  description: derived deme
+  start_time: 9
+  epochs:
+  - {start_size: 150, end_size: 183, end_time: 0}
+  ancestors: [ancestral]
+"""
+    graph = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": model.metadata["total_simulation_length"],
+        "demography": model,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Migrants()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.migrants:
+        if i[0] == 12:
+            assert i[1][0] == 0, f"{i}"
+            assert i[1][1] == 150, f"{i}"
+        else:
+            assert all([j == 0 for j in i[1]]), f"{i}"
+
+    deme_sizes = pop.deme_sizes()
+    # Generations (13, end] have grown in deme 1, so we have the
+    # non-inclusive duration 20 - 12 during which growth happened
+    expected_deme_1_size = np.round(150 * 1.025 ** (20 - 12))
+    assert deme_sizes[1][0] == 100
+    assert (
+        deme_sizes[1][1] == expected_deme_1_size
+    ), f"{deme_sizes[1]} {expected_deme_1_size}"
