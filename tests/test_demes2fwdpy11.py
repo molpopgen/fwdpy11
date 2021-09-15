@@ -1366,6 +1366,7 @@ demes:
 """
     graph = demes.loads(yaml)
     model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+    print(model.asblack())
 
     pdict = {
         "gvalue": [fwdpy11.Multiplicative(2.0)],

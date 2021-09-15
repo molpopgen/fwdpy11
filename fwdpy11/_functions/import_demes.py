@@ -461,6 +461,28 @@ def _process_epoch(
             )
         )
         if e.end_size != e.start_size:
+            """
+            Aaron -- there's a tricky bug here.
+
+            This setting of growth rates assumes that there's not a
+            simultaneuous "pulse" event that results in the setting
+            of a destination deme's size to X.
+
+            In general, I think, a pulse event + growth would have the 
+            following interpretation:
+
+            1. Set destination deme size to X
+            2. Grow it from X to X'.
+
+            But here, it is being set at the same time as the "when - 1"
+            to set the migration rates to initially found a new deme.
+
+            I have added print statements to let you visualize this.
+
+            The fastest way to do so is:
+
+            python -m pytest tests/test_demes2fwdpy11.py::test_mass_migration_via_demes_import_with_growth 
+            """
             if e.size_function != "exponential":
                 raise ValueError(
                     f"Size change function must be exponential.  We got {e.size_function}"
@@ -468,6 +490,7 @@ def _process_epoch(
             G = exponential_growth_rate(
                 e.start_size, e.end_size, int(np.rint(e.time_span))
             )
+            print(f"Setting growth rate for deme {idmap[deme_id]} at {when}")
             events.set_growth_rates.append(
                 SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
             )
