@@ -139,7 +139,15 @@ class _SetExponentialGrowth(object):
     deme: int = attr.ib(
         validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
     )
-    G: float = attr.ib()
+    start_size: int = attr.ib(
+        validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
+    )
+    end_size: int = attr.ib(
+        validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
+    )
+    time_span: int = attr.ib(
+        validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
+    )
 
 
 @class_decorators.attr_class_to_from_dict_no_recurse
@@ -271,7 +279,12 @@ class _Fwdpy11Events(object):
             mass_migrations=self.mass_migrations,
             set_deme_sizes=self.set_deme_sizes,
             set_growth_rates=[
-                SetExponentialGrowth(**attr.asdict(i)) for i in self.set_growth_rates
+                SetExponentialGrowth(
+                    when=i.when,
+                    deme=i.deme,
+                    G=exponential_growth_rate(i.start_size, i.end_size, i.time_span),
+                )
+                for i in self.set_growth_rates
             ],
             set_selfing_rates=self.set_selfing_rates,
             migmatrix=self.initial_migmatrix,
@@ -493,7 +506,13 @@ def _process_epoch(
             )
             print(f"Setting growth rate for deme {idmap[deme_id]} at {when}")
             events.set_growth_rates.append(
-                _SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
+                _SetExponentialGrowth(
+                    when=when,
+                    deme=idmap[deme_id],
+                    start_size=e.start_size,
+                    end_size=e.end_size,
+                    time_span=int(np.rint(e.time_span)),
+                )
             )
 
 
@@ -725,6 +744,8 @@ def _process_splits(
     (danger!) that each offspring deme gets 100% of its ancestry
     from the parent.
     """
+    print(model_times)
+    print(events)
     for s in dg_events["splits"]:
         when = burnin_generation + int(model_times.model_start_time - s.time)
         for c in s.children:
