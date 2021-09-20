@@ -808,3 +808,8 @@ def _process_branches(
                 from_deme_graph=False,
             )
         )
+
+        for i in events.set_growth_rates:
+            if i.when == when and i.deme == idmap[b.child]:
+                i.when += 1
+                i.time_span -= 1
