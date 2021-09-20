@@ -770,6 +770,12 @@ def _process_splits(
                 )
             )
 
+            # HACK
+            for i in events.set_growth_rates:
+                if i.when == when and i.deme == idmap[c]:
+                    i.when += 1
+                    i.time_span -= 1
+
 
 def _process_branches(
     dg: demes.Graph,
@@ -809,6 +815,7 @@ def _process_branches(
             )
         )
 
+        # HACK
         for i in events.set_growth_rates:
             if i.when == when and i.deme == idmap[b.child]:
                 i.when += 1
