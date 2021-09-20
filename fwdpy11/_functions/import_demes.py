@@ -1,35 +1,23 @@
-from typing import (
-    Dict,
-    List,
-    Optional,
-    Union,
-)
-import numpy as np
-import attr
-import math
-import sys
 import copy
 import itertools
+import math
+import sys
+from typing import Dict, List, Optional, Union
 
+import attr
 import demes
-
-from ..discrete_demography import (
-    MassMigration,
-    MigrationMatrix,
-    SetDemeSize,
-    SetExponentialGrowth,
-    SetMigrationRates,
-    SetSelfingRate,
-    copy_individuals,
-    move_individuals,
-    DiscreteDemography,
-)
+import numpy as np
 
 from .. import class_decorators
-
-from ..demographic_models import DemographicModelDetails, DemographicModelCitation
-
 from .._demography import exponential_growth_rate
+from ..demographic_models import (DemographicModelCitation,
+                                  DemographicModelDetails)
+from ..discrete_demography import (DiscreteDemography, MassMigration,
+                                   MigrationMatrix, SetDemeSize,
+                                   SetExponentialGrowth, SetMigrationRates,
+                                   SetSelfingRate, copy_individuals,
+                                   move_individuals)
+
 
 # TODO: need type hints for dg
 def demography_from_demes(
@@ -143,6 +131,17 @@ class _MigrationRateChange(object):
     from_deme_graph: bool = attr.ib(validator=attr.validators.instance_of(bool))
 
 
+@attr.s(auto_attribs=True)
+class _SetExponentialGrowth(object):
+    when: int = attr.ib(
+        validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
+    )
+    deme: int = attr.ib(
+        validator=[demes.demes.non_negative, attr.validators.instance_of(int)]
+    )
+    G: float = attr.ib()
+
+
 @class_decorators.attr_class_to_from_dict_no_recurse
 @attr.s(auto_attribs=True)
 class _Fwdpy11Events(object):
@@ -155,7 +154,7 @@ class _Fwdpy11Events(object):
 
     mass_migrations: List[MassMigration] = attr.Factory(list)
     set_deme_sizes: List[SetDemeSize] = attr.Factory(list)
-    set_growth_rates: List[SetExponentialGrowth] = attr.Factory(list)
+    set_growth_rates: List[_SetExponentialGrowth] = attr.Factory(list)
     set_selfing_rates: List[SetSelfingRate] = attr.Factory(list)
     idmap: Dict = None
 
@@ -271,7 +270,9 @@ class _Fwdpy11Events(object):
         return DiscreteDemography(
             mass_migrations=self.mass_migrations,
             set_deme_sizes=self.set_deme_sizes,
-            set_growth_rates=self.set_growth_rates,
+            set_growth_rates=[
+                SetExponentialGrowth(**attr.asdict(i)) for i in self.set_growth_rates
+            ],
             set_selfing_rates=self.set_selfing_rates,
             migmatrix=self.initial_migmatrix,
             set_migration_rates=set_migration_rates,
@@ -468,7 +469,7 @@ def _process_epoch(
             simultaneuous "pulse" event that results in the setting
             of a destination deme's size to X.
 
-            In general, I think, a pulse event + growth would have the 
+            In general, I think, a pulse event + growth would have the
             following interpretation:
 
             1. Set destination deme size to X
@@ -481,7 +482,7 @@ def _process_epoch(
 
             The fastest way to do so is:
 
-            python -m pytest tests/test_demes2fwdpy11.py::test_mass_migration_via_demes_import_with_growth 
+            python -m pytest tests/test_demes2fwdpy11.py::test_mass_migration_via_demes_import_with_growth
             """
             if e.size_function != "exponential":
                 raise ValueError(
@@ -602,8 +603,8 @@ def _process_migrations(
                         destination=idmap[m.dest],
                         rate_change=-m.rate,
                         from_deme_graph=True,
-                        )
                     )
+                )
             except AttributeError:
                 for source, dest in itertools.permutations(m.demes, 2):
                     events.migration_rate_changes.append(
