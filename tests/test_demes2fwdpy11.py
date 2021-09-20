@@ -1398,3 +1398,42 @@ demes:
     assert (
         deme_sizes[1][1] == expected_deme_1_size
     ), f"{deme_sizes[1]} {expected_deme_1_size}"
+
+
+def test_simple_size_change():
+    yaml = """
+description: single_deme_set_size_demes
+time_units: generations
+demes:
+- name: ancestral
+  description: ancestral
+  epochs:
+  - {end_time: 20, start_size: 100}
+  - {end_time: 19, start_size: 100}
+  - {end_time: 0, start_size: 100, end_size: 200}
+"""
+    graph = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+    print(model.asblack())
+
+    pdict = {
+        "gvalue": [fwdpy11.Multiplicative(2.0)],
+        "rates": (0, 0, 0),
+        "simlen": model.metadata["total_simulation_length"],
+        "demography": model,
+    }
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+
+    rng = fwdpy11.GSLrng(100)
+
+    recorder = Popsizes()
+    fwdpy11.evolvets(rng, pop, params, 50, recorder=recorder)
+
+    for i in recorder.popsizes:
+        if i[0] < 2:
+            assert i[2] == 100
+        else:
+            assert i[2] > 100
