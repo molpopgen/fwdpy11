@@ -744,8 +744,6 @@ def _process_splits(
     (danger!) that each offspring deme gets 100% of its ancestry
     from the parent.
     """
-    print(model_times)
-    print(events)
     for s in dg_events["splits"]:
         when = burnin_generation + int(model_times.model_start_time - s.time)
         for c in s.children:
