@@ -493,7 +493,7 @@ def _process_epoch(
             )
             print(f"Setting growth rate for deme {idmap[deme_id]} at {when}")
             events.set_growth_rates.append(
-                SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
+                _SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
             )
 
 
