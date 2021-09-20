@@ -1301,7 +1301,6 @@ def test_mass_migration_via_demes_import_approach_with_growth():
         fwdpy11.SetMigrationRates(when=12, deme=1, migrates=[0.0, 1.0])
     )
     migmatrix = np.array([1.0, 0.0, 0.0, 0.0]).reshape(2, 2)
-    set_deme_sizes = [fwdpy11.SetDemeSize(when=11, deme=1, new_size=150)]
 
     # We want the first generation of the new deme to have size 150,
     # THEN we want it to start growing, so we got when=12 here
