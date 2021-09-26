@@ -77,9 +77,9 @@ class TestTwoEpoch(unittest.TestCase):
 
     def test_size_change_params(self):
         self.assertTrue(len(self.demog.model.set_deme_sizes) == 1)
-        self.assertEqual(
-            self.demog.model.set_deme_sizes[0].when,
-            self.demog.metadata["burnin_time"],
+        self.assertTrue(
+            self.demog.model.set_deme_sizes[0].when
+            == self.demog.metadata["burnin_time"]
         )
         self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 2000)
 
@@ -107,7 +107,7 @@ class TestNonGenerationUnits(unittest.TestCase):
             == self.demog.metadata["burnin_time"]
         )
         self.assertTrue(
-            self.demog.metadata["total_simulation_length"]
+            self.demog.metadata["total_simulation_length"] - 1
             == self.demog.metadata["burnin_time"] + 25000 // 25
         )
         self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 1000)
@@ -132,7 +132,7 @@ class TestSelfingShift(unittest.TestCase):
         self.assertTrue(self.demog.model.set_selfing_rates[0].when == 0)
         self.assertTrue(self.demog.model.set_selfing_rates[0].S == 0.0)
         self.assertTrue(
-            self.demog.model.set_selfing_rates[1].when
+            self.demog.model.set_selfing_rates[1].when - 1
             == self.demog.metadata["burnin_time"]
         )
         self.assertTrue(self.demog.model.set_selfing_rates[1].S == 0.2)
@@ -403,7 +403,7 @@ class TestIslandModelRateChange(unittest.TestCase):
     def test_total_sim_length(self):
         self.assertTrue(
             self.demog.metadata["total_simulation_length"]
-            == self.demog.metadata["burnin_time"] + 500
+            == self.demog.metadata["burnin_time"] + 500 + 1
         )
 
 
@@ -438,7 +438,7 @@ class TestTwoPopMerger(unittest.TestCase):
     def test_total_sim_length(self):
         self.assertTrue(
             self.demog.metadata["total_simulation_length"]
-            == self.demog.metadata["burnin_time"] + 1000
+            == self.demog.metadata["burnin_time"] + 1000 + 1
         )
 
     def test_num_size_changes(self):
@@ -488,7 +488,7 @@ class TestFourWayMerger(unittest.TestCase):
     def test_total_sim_length(self):
         self.assertTrue(
             self.demog.metadata["total_simulation_length"]
-            == self.demog.metadata["burnin_time"] + 1000
+            == self.demog.metadata["burnin_time"] + 1000 + 1
         )
 
     def test_num_size_changes(self):
@@ -509,7 +509,7 @@ class TestPulseMigration(unittest.TestCase):
     def test_total_sim_length(self):
         self.assertTrue(
             self.demog.metadata["total_simulation_length"]
-            == self.demog.metadata["burnin_time"] + 100
+            == self.demog.metadata["burnin_time"] + 100 + 1
         )
 
     def test_pulse_migration_matrix(self):
@@ -821,9 +821,9 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
     recorder = DemeSizes()
     fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
 
-    # The ancestral deme exists until generation 110,
+    # The ancestral deme exists until generation 111,
     # and we only see offspring from birth time 1 on.
-    assert [i.when for i in recorder.sizes[0]] == [i for i in range(1, 111)]
+    assert [i.when for i in recorder.sizes[0]] == [i for i in range(1, 112)]
     # The daughter demes are seen from 110 till the end
     for deme in [1, 2]:
         assert [i.when for i in recorder.sizes[deme]] == [
@@ -837,7 +837,7 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
     assert recorder.sizes[1][-1].size == 500
     assert recorder.sizes[2][-1].size == 200
 
-    # At generation 100, the ancestral pop size changed from 100
+    # At generation 101, the ancestral pop size changed from 100
     # to 200
     for i in recorder.sizes[0]:
         if i.when < 101:

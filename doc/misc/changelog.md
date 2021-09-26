@@ -33,6 +33,8 @@ Behavior changes
   This change makes the timings consistent with all other events and also makes
   certain operations easier/feasible.
   {pr}`809`
+* Demographic models imported from [demes](https://pypi.org/project/demes/) now begin 1 generation before the earliest ancestral deme's end time.
+  {pr}`810`
 
 New features
 
