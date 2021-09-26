@@ -1,35 +1,23 @@
-from typing import (
-    Dict,
-    List,
-    Optional,
-    Union,
-)
-import numpy as np
-import attr
-import math
-import sys
 import copy
 import itertools
+import math
+import sys
+from typing import Dict, List, Optional, Union
 
+import attr
 import demes
-
-from ..discrete_demography import (
-    MassMigration,
-    MigrationMatrix,
-    SetDemeSize,
-    SetExponentialGrowth,
-    SetMigrationRates,
-    SetSelfingRate,
-    copy_individuals,
-    move_individuals,
-    DiscreteDemography,
-)
+import numpy as np
 
 from .. import class_decorators
-
-from ..demographic_models import DemographicModelDetails, DemographicModelCitation
-
 from .._demography import exponential_growth_rate
+from ..demographic_models import (DemographicModelCitation,
+                                  DemographicModelDetails)
+from ..discrete_demography import (DiscreteDemography, MassMigration,
+                                   MigrationMatrix, SetDemeSize,
+                                   SetExponentialGrowth, SetMigrationRates,
+                                   SetSelfingRate, copy_individuals,
+                                   move_individuals)
+
 
 # TODO: need type hints for dg
 def demography_from_demes(
@@ -354,7 +342,14 @@ def _get_model_times(dg: demes.Graph) -> _ModelTimes:
         mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
         mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
         pulse_times = [p.time for p in dg.pulses]
-        model_start_time = max(ends_inf + starts + mig_starts + mig_ends + pulse_times)
+
+        # The forward-time model with start with a generation 0,
+        # which is the earliest end point of a deme with start time
+        # of inf, minus 1.  That definition is forwards in time, so we
+        # ADD one to the backwards-in-time demes info.
+        model_start_time = (
+            max(ends_inf + starts + mig_starts + mig_ends + pulse_times) + 1
+        )
 
     if most_recent_deme_end != 0:
         model_duration = model_start_time - most_recent_deme_end
@@ -575,8 +570,8 @@ def _process_migrations(
                         destination=idmap[m.dest],
                         rate_change=-m.rate,
                         from_deme_graph=True,
-                        )
                     )
+                )
             except AttributeError:
                 for source, dest in itertools.permutations(m.demes, 2):
                     events.migration_rate_changes.append(
