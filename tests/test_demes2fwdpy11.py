@@ -1,12 +1,11 @@
 import copy
+import typing
 import unittest
 from dataclasses import dataclass
 
 import demes
 import fwdpy11
 import numpy as np
-import unittest
-import typing
 import pytest
 
 
@@ -777,6 +776,7 @@ def test_yamls_with_migration(data):
     demog = fwdpy11.discrete_demography.from_demes(g, 1)
     check_debugger_passes(demog)
 
+
 def test_split_model_population_size_history(two_deme_split_with_ancestral_size_change):
     """
     This is a detailed test of the complete size history
@@ -936,3 +936,65 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
         else:
             raise RuntimeError("unexpected key")
 
+
+def test_four_deme_split_model():
+    yaml = """time_units: generations
+demes:
+- name: A
+  epochs:
+    - {end_time: 45, start_size: 10}
+- name: B
+  ancestors: [A] 
+  epochs:
+    - {end_time: 30, start_size: 20}
+- name: C
+  ancestors: [B] 
+  epochs:
+    - {end_time: 15, start_size: 30}
+- name: D
+  ancestors: [C] 
+  epochs:
+    - {end_time: 0, start_size: 40}
+"""
+    burnin = 1
+    g = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
+    print(model.asblack())
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            print(pop.generation, pop.deme_sizes())
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_size = g["A"].epochs[0].start_size
+    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    for deme in recorder.sizes:
+        if deme > 0:
+            assert len(recorder.sizes[deme]) == 15
+        else:
+            assert len(recorder.sizes[deme]) == burnin * initial_size
