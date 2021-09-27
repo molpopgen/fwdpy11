@@ -176,7 +176,7 @@ class TestSplit(unittest.TestCase):
 
         check_debugger_passes(self.demog)
 
-        # NOTE: commented these out as they test internal sort order and not 
+        # NOTE: commented these out as they test internal sort order and not
         # the model validity
         # self.assertTrue(self.demog.model.set_deme_sizes[0].deme == 1)
         # self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 100)
@@ -977,7 +977,8 @@ demes:
             self.sizes = dict()
 
         def __call__(self, pop, _):
-            print(pop.generation, pop.deme_sizes())
+            deme_sizes = pop.deme_sizes()
+            assert len(deme_sizes[0]) == 1
             for key, value in pop.deme_sizes(as_dict=True).items():
                 if key not in self.sizes:
                     self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
