@@ -589,7 +589,7 @@ def _process_pulses(
         when = burnin_generation + int(model_times.model_start_time - p.time)
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when - 1,
+                when=when,
                 source=idmap[p.source],
                 destination=idmap[p.dest],
                 rate_change=p.proportion,
@@ -598,7 +598,7 @@ def _process_pulses(
         )
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when,
+                when=when + 1,
                 source=idmap[p.source],
                 destination=idmap[p.dest],
                 rate_change=-p.proportion,
@@ -620,7 +620,7 @@ def _process_admixtures(
         for parent, proportion in zip(a.parents, a.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when - 1,
+                    when=when,
                     source=idmap[parent],
                     destination=idmap[a.child],
                     rate_change=proportion,
@@ -629,7 +629,7 @@ def _process_admixtures(
             )
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when,
+                    when=when + 1,
                     source=idmap[parent],
                     destination=idmap[a.child],
                     rate_change=-proportion,
@@ -651,7 +651,7 @@ def _process_mergers(
         for parent, proportion in zip(m.parents, m.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when - 1,
+                    when=when,
                     source=idmap[parent],
                     destination=idmap[m.child],
                     rate_change=proportion,
@@ -660,7 +660,7 @@ def _process_mergers(
             )
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when,
+                    when=when + 1,
                     source=idmap[parent],
                     destination=idmap[m.child],
                     rate_change=-proportion,
@@ -730,7 +730,7 @@ def _process_branches(
         # turn on migration for one generation at "when"
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when - 1,
+                when=when,
                 source=idmap[b.parent],
                 destination=idmap[b.child],
                 rate_change=1.0,
@@ -740,7 +740,7 @@ def _process_branches(
         # end that migration after one generation
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when,
+                when=when + 1,
                 source=idmap[b.parent],
                 destination=idmap[b.child],
                 rate_change=-1.0,
