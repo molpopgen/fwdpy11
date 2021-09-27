@@ -21,6 +21,9 @@ Bug fixes
   leading to runtime exceptions.
   PR {pr}`802`
   PR {pr}`803`
+* Fix error in `demes` models where "replacement" models had 1 generation of overlap between ancestral/derived demes.
+  Issue {issue}`814`
+  PR {pr}`815`
 
 Behavior changes
 
