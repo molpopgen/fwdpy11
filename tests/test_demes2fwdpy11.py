@@ -1072,16 +1072,24 @@ def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
     check_debugger_passes(demog)
 
 
-@pytest.mark.parametrize("burnin", [0, 1, 2])
-def test_three_epoch_model_sizes(burnin):
+@pytest.mark.parametrize(
+    "nepochs, burnin",
+    [(3, 0), (3, 1), (3, 2), (4, 0), (4, 1), (4, 2), (5, 0), (5, 1), (5, 2)],
+)
+def test_many_epoch_model_sizes(nepochs, burnin):
     b = demes.Builder()
+    end_time = 15 * nepochs
+    start_size = 10
+
+    epochs = []
+    for _ in range(nepochs + 1):
+        epochs.append(dict(start_size=start_size, end_time=end_time))
+        end_time -= 15
+        start_size += 10
+
     b.add_deme(
         name="A",
-        epochs=[
-            dict(start_size=10, end_time=30),
-            dict(start_size=20, end_time=15),
-            dict(start_size=40, end_time=0),
-        ],
+        epochs=epochs,
     )
     g = b.resolve()
 
@@ -1120,9 +1128,13 @@ def test_three_epoch_model_sizes(burnin):
 
     sizes = [s.size for s in recorder.sizes[0]]
     assert sizes.count(initial_size) == burnin * initial_size
-    assert sizes.count(20) == 15
-    # Aaron: how do you feel about this?
-    assert sizes.count(40) == 16
+    size_history = np.unique(sizes, return_counts=True)
+    if burnin == 0:
+        assert size_history[1][0] == 15
+    else:
+        assert size_history[1][0] == burnin * 10
+    for i in size_history[1][1:]:
+        assert i == 15
 
 
 @pytest.mark.parametrize("burnin", [0, 1, 2])
