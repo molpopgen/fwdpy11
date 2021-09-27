@@ -1072,6 +1072,7 @@ def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
     check_debugger_passes(demog)
 
 
+# FIXME: rename
 def test_four():
     yaml = """time_units: generations
 demes:
@@ -1132,64 +1133,6 @@ demes:
         print(f"deme {i}")
         for x in recorder.sizes[i]:
             print(x)
-
-
-def test_simple():
-    yaml = """time_units: generations
-demes:
-- name: A
-  epochs:
-  - {end_time: 45, start_size: 10}
-  - {end_time: 30, start_size: 20}
-  - {end_time: 15, start_size: 30}
-  - {end_time: 0, start_size: 40}
-"""
-    burnin = 0
-    g = demes.loads(yaml)
-    model = fwdpy11.discrete_demography.from_demes(g, burnin=0)
-
-    @dataclass
-    class DemeSizeAtTime:
-        when: int
-        size: int
-
-    class DemeSizes(object):
-        def __init__(self):
-            self.sizes = dict()
-
-        def __call__(self, pop, _):
-            for key, value in pop.deme_sizes(as_dict=True).items():
-                if key not in self.sizes:
-                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
-                else:
-                    self.sizes[key].append(
-                        DemeSizeAtTime(when=pop.generation, size=value)
-                    )
-
-    pdict = {
-        "gvalue": fwdpy11.Multiplicative(2.0),
-        "rates": (0, 0, 0),
-        "demography": model,
-        "simlen": model.metadata["total_simulation_length"],
-    }
-    params = fwdpy11.ModelParams(**pdict)
-    initial_size = g["A"].epochs[0].start_size
-    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
-    rng = fwdpy11.GSLrng(90210)
-    recorder = DemeSizes()
-    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
-
-    sizes = [s.size for s in recorder.sizes[0]]
-    for i in recorder.sizes[0]:
-        print(i, "generations ago = ", pop.generation - i.when)
-    assert sizes.count(initial_size) == burnin * initial_size
-    size_history = np.unique(sizes, return_counts=True)
-    if burnin == 0:
-        assert size_history[1][0] == 15
-    else:
-        assert size_history[1][0] == burnin * 10
-    for i in size_history[1][1:]:
-        assert i == 15
 
 
 @pytest.mark.parametrize(
