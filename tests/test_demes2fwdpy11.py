@@ -944,6 +944,11 @@ def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
 
 
 def test_four_deme_split_model():
+    """
+    Tests primarily for lack of temporal
+    overlap b/w ancestral/derived demes.
+    See GitHub issue #814
+    """
     yaml = """time_units: generations
 demes:
 - name: A
