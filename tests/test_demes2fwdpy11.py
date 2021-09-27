@@ -965,7 +965,6 @@ demes:
     burnin = 1
     g = demes.loads(yaml)
     model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
-    print(model.asblack())
 
     @dataclass
     class DemeSizeAtTime:
