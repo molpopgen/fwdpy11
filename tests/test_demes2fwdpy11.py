@@ -1137,7 +1137,7 @@ demes:
 
 @pytest.mark.parametrize(
     "nepochs, burnin",
-    [(3, 0)],  # , (3, 1), (3, 2), (4, 0), (4, 1), (4, 2), (5, 0), (5, 1), (5, 2)],
+    [(3, 0), (3, 1), (3, 2), (4, 0), (4, 1), (4, 2), (5, 0), (5, 1), (5, 2)],
 )
 def test_many_epoch_model_sizes(nepochs, burnin):
     b = demes.Builder()
@@ -1155,7 +1155,6 @@ def test_many_epoch_model_sizes(nepochs, burnin):
         epochs=epochs,
     )
     g = b.resolve()
-    print(g)
 
     model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
 
@@ -1193,12 +1192,10 @@ def test_many_epoch_model_sizes(nepochs, burnin):
     sizes = [s.size for s in recorder.sizes[0]]
     assert sizes.count(initial_size) == burnin * initial_size + 1
     size_history = np.unique(sizes, return_counts=True)
-    for i in recorder.sizes[0]:
-        print(i)
     if burnin == 0:
         assert size_history[1][0] == 1
     else:
-        assert size_history[1][0] == burnin * 10
+        assert size_history[1][0] == burnin * 10 + 1
     for i in size_history[1][1:]:
         assert i == 15
 
