@@ -1191,12 +1191,12 @@ def test_many_epoch_model_sizes(nepochs, burnin):
     fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
 
     sizes = [s.size for s in recorder.sizes[0]]
-    assert sizes.count(initial_size) == burnin * initial_size
+    assert sizes.count(initial_size) == burnin * initial_size + 1
     size_history = np.unique(sizes, return_counts=True)
     for i in recorder.sizes[0]:
         print(i)
     if burnin == 0:
-        assert size_history[1][0] == 15
+        assert size_history[1][0] == 1
     else:
         assert size_history[1][0] == burnin * 10
     for i in size_history[1][1:]:
