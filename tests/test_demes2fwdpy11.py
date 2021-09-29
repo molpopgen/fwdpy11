@@ -76,12 +76,12 @@ class TestTwoEpoch(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
     def test_size_change_params(self):
-        self.assertTrue(len(self.demog.model.set_deme_sizes) == 1)
-        self.assertTrue(
-            self.demog.model.set_deme_sizes[0].when
-            == self.demog.metadata["burnin_time"]
+        self.assertEqual(len(self.demog.model.set_deme_sizes), 1)
+        self.assertEqual(
+            self.demog.model.set_deme_sizes[0].when,
+            self.demog.metadata["burnin_time"] + 1,
         )
-        self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 2000)
+        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 2000)
 
 
 @check_valid_demography
@@ -102,15 +102,15 @@ class TestNonGenerationUnits(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
     def test_conversion_to_generations(self):
-        self.assertTrue(
-            self.demog.model.set_deme_sizes[0].when
-            == self.demog.metadata["burnin_time"]
+        self.assertEqual(
+            self.demog.model.set_deme_sizes[0].when,
+            self.demog.metadata["burnin_time"] + 1,
         )
-        self.assertTrue(
-            self.demog.metadata["total_simulation_length"] - 1
-            == self.demog.metadata["burnin_time"] + 25000 // 25
+        self.assertEqual(
+            self.demog.metadata["total_simulation_length"] - 1,
+            self.demog.metadata["burnin_time"] + 25000 // 25,
         )
-        self.assertTrue(self.demog.model.set_deme_sizes[0].new_size == 1000)
+        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 1000)
 
 
 @check_valid_demography
@@ -513,17 +513,17 @@ class TestPulseMigration(unittest.TestCase):
         )
 
     def test_pulse_migration_matrix(self):
-        self.assertTrue(len(self.demog.model.set_migration_rates) == 2)
-        self.assertTrue(
-            self.demog.model.set_migration_rates[0].when
-            == self.demog.metadata["burnin_time"]
+        self.assertEqual(len(self.demog.model.set_migration_rates), 2)
+        self.assertEqual(
+            self.demog.model.set_migration_rates[0].when,
+            self.demog.metadata["burnin_time"] + 1,
         )
-        self.assertTrue(
-            self.demog.model.set_migration_rates[1].when
-            == self.demog.metadata["burnin_time"] + 1
+        self.assertEqual(
+            self.demog.model.set_migration_rates[1].when,
+            self.demog.metadata["burnin_time"] + 2,
         )
-        self.assertTrue(self.demog.model.set_migration_rates[0].deme == 1)
-        self.assertTrue(self.demog.model.set_migration_rates[1].deme == 1)
+        self.assertEqual(self.demog.model.set_migration_rates[0].deme, 1)
+        self.assertEqual(self.demog.model.set_migration_rates[1].deme, 1)
         self.assertTrue(
             np.all(self.demog.model.set_migration_rates[0].migrates == [0.2, 0.8])
         )
@@ -827,7 +827,7 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
     # The daughter demes are seen from 110 till the end
     for deme in [1, 2]:
         assert [i.when for i in recorder.sizes[deme]] == [
-            i for i in range(111, model.metadata["total_simulation_length"] + 1)
+            i for i in range(112, model.metadata["total_simulation_length"] + 1)
         ]
     # initial daughter deme sizes
     # NOTE/FIXME: discuss this w/Aaron re: growth rates.
@@ -837,10 +837,10 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
     assert recorder.sizes[1][-1].size == 500
     assert recorder.sizes[2][-1].size == 200
 
-    # At generation 101, the ancestral pop size changed from 100
+    # At generation 102, the ancestral pop size changed from 100
     # to 200
     for i in recorder.sizes[0]:
-        if i.when < 101:
+        if i.when < 102:
             assert i.size == 100, f"{i}"
         else:
             assert i.size == 200, f"{i}"
@@ -1008,4 +1008,4 @@ demes:
         if deme > 0:
             assert len(recorder.sizes[deme]) == 15
         else:
-            assert len(recorder.sizes[deme]) == burnin * initial_size
+            assert len(recorder.sizes[deme]) == burnin * initial_size + 1
