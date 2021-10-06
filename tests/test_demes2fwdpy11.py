@@ -1009,3 +1009,238 @@ demes:
             assert len(recorder.sizes[deme]) == 15
         else:
             assert len(recorder.sizes[deme]) == burnin * initial_size + 1
+
+
+def set_deme_sizes_after_burnin():
+    """
+    This model is semi-pathological:
+
+    Deme 0 is burned-in.
+    Deme 0 ends at the end of burn-in and all inidividuals move to deme 1.
+    """
+    return """description: test model
+time_units: generations
+demes:
+  - name: Ancestor
+    epochs:
+      - end_time: 20
+        start_size: 100
+  - name: B
+    ancestors: [Ancestor]
+    epochs:
+      - end_time: 0
+        start_size: 50
+"""
+
+
+def set_selfing_rate_after_burnin():
+    return """description: test model
+time_units: generations
+demes:
+  - name: Ancestor
+    epochs:
+      - end_time: 20
+        start_size: 100
+  - name: B
+    ancestors: [Ancestor]
+    epochs:
+      - end_time: 0
+        selfing_rate: 1.0
+        start_size: 20
+"""
+
+
+@pytest.mark.parametrize(
+    "model", [set_deme_sizes_after_burnin(), set_selfing_rate_after_burnin()]
+)
+def test_building_models_with_events_at_time_zero_with_burnin_of_zero(model):
+    g = demes.loads(model)
+    demog = fwdpy11.discrete_demography.from_demes(g, 0)
+    check_debugger_passes(demog)
+
+
+# FIXME: rename
+def test_four():
+    yaml = """time_units: generations
+demes:
+- name: A
+  epochs:
+    - {end_time: 45, start_size: 10}
+- name: B
+  ancestors: [A] 
+  epochs:
+    - {end_time: 30, start_size: 20}
+- name: C
+  ancestors: [B] 
+  epochs:
+    - {end_time: 15, start_size: 30}
+- name: D
+  ancestors: [C] 
+  epochs:
+    - {end_time: 0, start_size: 40}
+"""
+    burnin = 0
+    g = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            print(pop.deme_sizes())
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_size = g["A"].epochs[0].start_size
+    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    # FIXME: test something
+    sizes = [s.size for s in recorder.sizes[0]]
+    for i in recorder.sizes:
+        print(f"deme {i}")
+        for x in recorder.sizes[i]:
+            print(x)
+
+
+@pytest.mark.parametrize(
+    "nepochs, burnin",
+    [(3, 0), (3, 1), (3, 2), (4, 0), (4, 1), (4, 2), (5, 0), (5, 1), (5, 2)],
+)
+def test_many_epoch_model_sizes(nepochs, burnin):
+    b = demes.Builder()
+    end_time = 15 * nepochs
+    start_size = 10
+
+    epochs = []
+    for _ in range(nepochs + 1):
+        epochs.append(dict(start_size=start_size, end_time=end_time))
+        end_time -= 15
+        start_size += 10
+
+    b.add_deme(
+        name="A",
+        epochs=epochs,
+    )
+    g = b.resolve()
+
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_size = g["A"].epochs[0].start_size
+    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    sizes = [s.size for s in recorder.sizes[0]]
+    assert sizes.count(initial_size) == burnin * initial_size + 1
+    size_history = np.unique(sizes, return_counts=True)
+    if burnin == 0:
+        assert size_history[1][0] == 1
+    else:
+        assert size_history[1][0] == burnin * 10 + 1
+    for i in size_history[1][1:]:
+        assert i == 15
+
+
+@pytest.mark.parametrize("burnin", [0, 1, 2])
+def test_size_change_then_move_to_new_deme(burnin):
+    b = demes.Builder()
+    b.add_deme(
+        name="A",
+        epochs=[
+            dict(start_size=10, end_time=50),
+            dict(start_size=20, end_time=40),
+        ],
+    )
+    b.add_deme(name="B", ancestors=["A"], epochs=[dict(start_size=30, end_time=0)])
+    g = b.resolve()
+
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            deme_sizes = pop.deme_sizes()
+            assert len(deme_sizes[0]) == 1
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_size = g["A"].epochs[0].start_size
+    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    for deme in recorder.sizes:
+        if deme > 0:
+            assert len(recorder.sizes[deme]) == 40
+        else:
+            assert len(recorder.sizes[deme]) == (burnin + 1) * initial_size + 1
+    # FIXME: do something with these
+    sizes0 = [s.size for s in recorder.sizes[0]]
+    sizes2 = [s.size for s in recorder.sizes[1]]
