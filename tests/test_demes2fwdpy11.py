@@ -830,9 +830,10 @@ def test_split_model_population_size_history(two_deme_split_with_ancestral_size_
             i for i in range(111, model.metadata["total_simulation_length"] + 1)
         ]
     # initial daughter deme sizes
-    # NOTE/FIXME: discuss this w/Aaron re: growth rates.
-    # assert recorder.sizes[1][0].size == 250
-    # assert recorder.sizes[2][0].size == 50
+    g1 = 2 ** (1 / 10) - 1
+    g2 = 4 ** (1 / 10) - 1
+    assert recorder.sizes[1][0].size == int(np.rint(250 * (1 + g1)))
+    assert recorder.sizes[2][0].size == int(np.rint(50 * (1 + g2)))
     # final daughter deme sizes
     assert recorder.sizes[1][-1].size == 500
     assert recorder.sizes[2][-1].size == 200
