@@ -24,6 +24,8 @@ Bug fixes
 * Fix error in `demes` models where "replacement" models had 1 generation of overlap between ancestral/derived demes.
   Issue {issue}`814`
   PR {pr}`815`
+  {user}`apragsdale`
+  {user}`molpopgen`
 
 Behavior changes
 
