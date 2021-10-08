@@ -1010,3 +1010,52 @@ demes:
             assert len(recorder.sizes[deme]) == 15
         else:
             assert len(recorder.sizes[deme]) == burnin * initial_size + 1
+
+
+def no_demography_no_burnin():
+    yaml = """time_units: generations
+demes:
+- name: A
+  epochs:
+  - {end_time: 0, start_size: 10}
+"""
+    burnin = 0
+    g = demes.loads(yaml)
+    model = fwdpy11.discrete_demography.from_demes(g, burnin=burnin)
+
+    @dataclass
+    class DemeSizeAtTime:
+        when: int
+        size: int
+
+    class DemeSizes(object):
+        def __init__(self):
+            self.sizes = dict()
+
+        def __call__(self, pop, _):
+            deme_sizes = pop.deme_sizes()
+            assert len(deme_sizes[0]) == 1
+            for key, value in pop.deme_sizes(as_dict=True).items():
+                if key not in self.sizes:
+                    self.sizes[key] = [DemeSizeAtTime(when=pop.generation, size=value)]
+                else:
+                    self.sizes[key].append(
+                        DemeSizeAtTime(when=pop.generation, size=value)
+                    )
+
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": model,
+        "simlen": model.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_size = g["A"].epochs[0].start_size
+    pop = fwdpy11.DiploidPopulation(initial_size, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = DemeSizes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+
+    assert len(recorder.sizes[0]) == 1
+    assert recorder.sizes[0][0].when == 1
+    assert recorder.sizes[0][0].size == 10
