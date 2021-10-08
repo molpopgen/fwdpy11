@@ -38,6 +38,10 @@ Behavior changes
   This change makes the timings consistent with all other events and also makes
   certain operations easier/feasible.
   {pr}`809`
+* Models imported from `demes` now start the forward-time portion of the model 1 (one) generation before the most ancient end time of an ancestral deme.
+  {pr}`818`
+  {user}`apragsdale`
+  {user}`molpopgen`
 
 New features
 
