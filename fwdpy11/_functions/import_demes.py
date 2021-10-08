@@ -342,7 +342,13 @@ def _get_model_times(dg: demes.Graph) -> _ModelTimes:
         mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
         mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
         pulse_times = [p.time for p in dg.pulses]
-        model_start_time = max(ends_inf + starts + mig_starts + mig_ends + pulse_times)
+        # The forward-time model with start with a generation 0,
+        # which is the earliest end point of a deme with start time
+        # of inf, minus 1.  That definition is forwards in time, so we
+        # ADD one to the backwards-in-time demes info.
+        model_start_time = (
+            max(ends_inf + starts + mig_starts + mig_ends + pulse_times) + 1
+        )
 
     if most_recent_deme_end != 0:
         model_duration = model_start_time - most_recent_deme_end
