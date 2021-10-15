@@ -33,6 +33,9 @@ Behavior changes
   This change makes the timings consistent with all other events and also makes
   certain operations easier/feasible.
   {pr}`809`
+* Calling {func}`fwdpy11.infinite_sites` during a simulation now raises `RuntimeError`.
+  {pr}`820`
+  {issue}`769`
 
 New features
 
