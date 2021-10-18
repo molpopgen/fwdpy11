@@ -3,6 +3,82 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.16.0
+
+Bug fixes
+
+* An integer type in the infinitely-many sites mutation model was changed from unsigned to signed.
+  This does not affect previous results because unsigned overflow doing the "right thing" ended up with final values being correct.
+  PR {pr}`766`
+  Issue {issue}`765`
+* Fix a bug where stopping/restarting the evolution of demographic models at time points
+  where a deme goes extinct.
+  It is not possible that this bug affected results from earlier versions, as attempting to stop/start at these time points raised exceptions.
+  Issue {issue}`775`
+  PR {pr}`774`
+* Fix bugs in C++ back-end for discrete demographic models.
+  In some cases, we were using the wrong vector of deme sizes to update the model,
+  leading to runtime exceptions.
+  PR {pr}`802`
+  PR {pr}`803`
+* Fix error in `demes` models where "replacement" models had 1 generation of overlap between ancestral/derived demes.
+  Issue {issue}`814`
+  PR {pr}`815`
+  {user}`apragsdale`
+  {user}`molpopgen`
+
+Behavior changes
+
+* If a demographic model is evolved, pickled, unpickled, and then used to evolve,
+  it is now possible that exceptions will raise.
+  This change is due to the fix for Issue {issue}`775` introduced in PR {pr}`774`.
+  See issue {issue}`777` for more background.
+* Mass migration events implemented via {func}`fwdpy11.copy_individuals`
+  and {func}`fwdpy11.move_individuals` now occur *after* sampling within a generation.  
+  This change makes the timings consistent with all other events and also makes
+  certain operations easier/feasible.
+  {pr}`809`
+* Calling {func}`fwdpy11.infinite_sites` during a simulation now raises `RuntimeError`.
+  {pr}`820`
+  {issue}`769`
+* Models imported from `demes` now start the forward-time portion of the model 1 (one) generation before the most ancient end time of an ancestral deme.
+  {pr}`818`
+  {user}`apragsdale`
+  {user}`molpopgen`
+
+New features
+
+* Add {func}`fwdpy11.DiploidPopulation.add_mutation`.
+  PR {pr}`764`
+  PR {pr}`799`
+* Add {class}`fwdpy11.NewMutationData`.
+  PR {pr}`764`
+* Add `__copy__` and `__deepcopy__` to {class}`fwdpy11.DiploidPopulation`.
+  PR {pr}`770`
+* Add `__deepcopy__` to {class}`fwdpy11.DiscreteDemography`.
+  PR {pr}`773`
+
+C++ back-end
+
+* A population can now be checked that it is- or is not- being simulated.
+  PR {pr}`762`
+* {class}`fwdpy11.discrete_demography.DiscreteDemography` now stores the migration matrix as a stack-allocated object and not a `unique_ptr`.
+  PR {pr}`785`
+  {issue}`781`
+
+Build system
+
+* All GCC builds and CI tests on Ubuntu + GCC now apply a much stricter set of compiler options.
+  {pr}`779` {issue}`778`
+
+Dependencies
+
+* Bump `pillow` version in doc/requirements.txt.
+  {pr}`763`
+  {pr}`811`
+* Bump all lib dependencies and some doc dependencies.
+  {pr}`807`
+
 ## 0.15.2
 
 Point release
@@ -160,7 +236,8 @@ API changes
   {pr}`678`
 * The type of {attr}`fwdpy11.Mutation.g` changed from an unsigned integer to a signed integer.
   This change has no practical consequence to user code written in Python.
-  {pr}`656`
+  {issue}`656`
+  {pr}`667`
   {pr}`670`
 
 New features

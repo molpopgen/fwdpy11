@@ -635,7 +635,7 @@
 <p>You may use <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> to check the validity of demographic models.
 The following code block applies this class to the model we built using <code class="docutils literal notranslate"><span class="pre">demes</span></code> in <a class="reference internal" href="demes_vignette.html#demes-vignette"><span class="std std-ref">an earlier vignette</span></a>.</p>
 <p>For the debugger to do its job, it needs to know the initial sizes of each deme.
-For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
+For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
 We use that <code class="docutils literal notranslate"><span class="pre">dict</span></code> below to get the required list of initial_sizes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -674,12 +674,10 @@ We use that <code class="docutils literal notranslate"><span class="pre">dict</s
 Events at time 0:
 	Selfing probability set to 0 in deme 0
 	Deme sizes after growth: [(0, 1000)]
-Events at time 9999:
+Events at time 10000:
 	Deme size set to 2000 in deme 0
 		Growth rate set to 1.0
 		Growth initial size set to 2000
-	Deme sizes after growth: [(0, 2000)]
-Events at time 10000:
 	Selfing probability set to 0 in deme 0
 	Deme sizes after growth: [(0, 2000)]
 </pre></div>

@@ -763,28 +763,28 @@ To extract the simulation length to generate the <code class="docutils literal n
         ],
         set_deme_sizes=[
             fwdpy11.SetDemeSize(
-                when=72999, deme=1, new_size=12300, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
                 when=73000, deme=0, new_size=0, resets_growth_rate=True
             ),
             fwdpy11.SetDemeSize(
-                when=76199, deme=2, new_size=2100, resets_growth_rate=True
-            ),
-            fwdpy11.SetDemeSize(
-                when=76199, deme=3, new_size=12300, resets_growth_rate=True
+                when=73000, deme=1, new_size=12300, resets_growth_rate=True
             ),
             fwdpy11.SetDemeSize(
                 when=76200, deme=1, new_size=0, resets_growth_rate=True
             ),
             fwdpy11.SetDemeSize(
-                when=80951, deme=4, new_size=1000, resets_growth_rate=True
+                when=76200, deme=2, new_size=2100, resets_growth_rate=True
             ),
             fwdpy11.SetDemeSize(
-                when=80951, deme=5, new_size=510, resets_growth_rate=True
+                when=76200, deme=3, new_size=12300, resets_growth_rate=True
             ),
             fwdpy11.SetDemeSize(
                 when=80952, deme=2, new_size=0, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=80952, deme=4, new_size=1000, resets_growth_rate=True
+            ),
+            fwdpy11.SetDemeSize(
+                when=80952, deme=5, new_size=510, resets_growth_rate=True
             ),
         ],
         set_selfing_rates=[
@@ -810,42 +810,36 @@ To extract the simulation length to generate the <code class="docutils literal n
         ),
         set_migration_rates=[
             fwdpy11.SetMigrationRates(
-                when=72999, deme=1, migrates=array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
                 when=73000, deme=0, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
             ),
             fwdpy11.SetMigrationRates(
-                when=73000, deme=1, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+                when=73000, deme=1, migrates=array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0])
             ),
             fwdpy11.SetMigrationRates(
-                when=76199, deme=2, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=76199, deme=3, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+                when=73001, deme=1, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
             ),
             fwdpy11.SetMigrationRates(
                 when=76200, deme=1, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
             ),
             fwdpy11.SetMigrationRates(
-                when=76200,
+                when=76200, deme=2, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76200, deme=3, migrates=array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=76201,
                 deme=2,
                 migrates=array(
                     [0.0000e00, 0.0000e00, 9.9975e-01, 2.5000e-04, 0.0000e00, 0.0000e00]
                 ),
             ),
             fwdpy11.SetMigrationRates(
-                when=76200,
+                when=76201,
                 deme=3,
                 migrates=array(
                     [0.0000e00, 0.0000e00, 2.5000e-04, 9.9975e-01, 0.0000e00, 0.0000e00]
                 ),
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80951, deme=4, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
-            ),
-            fwdpy11.SetMigrationRates(
-                when=80951, deme=5, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
             ),
             fwdpy11.SetMigrationRates(
                 when=80952, deme=2, migrates=array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
@@ -865,7 +859,13 @@ To extract the simulation length to generate the <code class="docutils literal n
                 ),
             ),
             fwdpy11.SetMigrationRates(
-                when=80952,
+                when=80952, deme=4, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80952, deme=5, migrates=array([0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+            ),
+            fwdpy11.SetMigrationRates(
+                when=80953,
                 deme=4,
                 migrates=array(
                     [
@@ -879,7 +879,7 @@ To extract the simulation length to generate the <code class="docutils literal n
                 ),
             ),
             fwdpy11.SetMigrationRates(
-                when=80952,
+                when=80953,
                 deme=5,
                 migrates=array(
                     [
@@ -955,7 +955,7 @@ But, for example:</p>
         set_growth_rates=[],
         set_deme_sizes=[
             fwdpy11.SetDemeSize(
-                when=9999, deme=0, new_size=2000, resets_growth_rate=True
+                when=10000, deme=0, new_size=2000, resets_growth_rate=True
             )
         ],
         set_selfing_rates=[

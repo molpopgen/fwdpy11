@@ -1309,7 +1309,7 @@ To restrict positions to integer values, we pass <code class="docutils literal n
 <p>Now, breakpoints from the first region will only take on values of <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">3</span></code>, or <code class="docutils literal notranslate"><span class="pre">4</span></code>.</p>
 <p>Setting <code class="docutils literal notranslate"><span class="pre">discrete=True</span></code> requires the following:</p>
 <ul class="simple">
-<li><p>Values for <code class="docutils literal notranslate"><span class="pre">beg</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> must be <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.  Thus, <code class="docutils literal notranslate"><span class="pre">1</span></code> is valid but <code class="docutils literal notranslate"><span class="pre">1.0</span></code> will raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
+<li><p>Values for <code class="docutils literal notranslate"><span class="pre">beg</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> must be <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>.  Thus, <code class="docutils literal notranslate"><span class="pre">1</span></code> is valid but <code class="docutils literal notranslate"><span class="pre">1.0</span></code> will raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">end</span> <span class="pre">-</span> <span class="pre">beg</span></code> must be <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>.  This requirement prevents you from using <code class="docutils literal notranslate"><span class="pre">beg=0</span></code> and <code class="docutils literal notranslate"><span class="pre">end=1</span></code>, for example,
 which would result in the only possible crossover position being <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
 <li><p>You must be more careful when using <code class="docutils literal notranslate"><span class="pre">msprime</span></code> to start/finish a simulation.
@@ -1699,7 +1699,7 @@ the attributes are read-only and attempts to modify will raise exceptions:</p>
 </div>
 </div>
 </div>
-<p>However, you can get a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> representation of the data, which you
+<p>However, you can get a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> representation of the data, which you
 can modify:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1732,7 +1732,7 @@ can modify:</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>It is best practice to use <a class="reference external" href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">copy.deepcopy()</span></code></a> here. The
+<p>It is best practice to use <a class="reference external" href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">copy.deepcopy()</span></code></a> here. The
 <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> instances may contain
 objects like <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> that only get copied by
 reference when the <code class="docutils literal notranslate"><span class="pre">dict</span></code> is generated.  For safety/general
@@ -1951,7 +1951,7 @@ All of the examples shown above generated objects that we need to store in
 such instances.</p>
 <p>Like <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a>, <a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a> is
 immutable after initialization.  Thus, I find it most convenient to
-first put the objects into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> and then “explode” it to
+first put the objects into a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> and then “explode” it to
 initialize a <a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.</p>
 <p>The following example uses what we discussed above:</p>
 <div class="cell docutils container">
@@ -2088,10 +2088,10 @@ next subsection for details.</p></li>
 <div class="section" id="mutation-and-recombination-rates">
 <span id="model-params-rate-details"></span><h3>Mutation and recombination rates<a class="headerlink" href="#mutation-and-recombination-rates" title="Permalink to this headline">¶</a></h3>
 <p>In general, the neutral mutation rate should be set to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p>
-<p>The selected mutation rate is a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> representing the total mutation
+<p>The selected mutation rate is a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> representing the total mutation
 rate per haploid genome per generation.</p>
 <p>If you use instances of <a class="reference internal" href="regiontypes.html#fwdpy11.Region" title="fwdpy11.Region"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Region</span></code></a> to set up the genetic map
-(see <a class="reference internal" href="#recregions"><span class="std std-ref">here</span></a>), then you need to provide a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
+(see <a class="reference internal" href="#recregions"><span class="std std-ref">here</span></a>), then you need to provide a non-negative <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
 representing the total recombination rate per meiosis.  If you use instances
 of <a class="reference internal" href="regiontypes.html#fwdpy11.GeneticMapUnit" title="fwdpy11.GeneticMapUnit"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GeneticMapUnit</span></code></a> (see <a class="reference internal" href="#geneticmapunit"><span class="std std-ref">here</span></a>), then use
 <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
@@ -2206,11 +2206,11 @@ where we pass an instance on to <a class="reference internal" href="functions.ht
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0., 0., 0.60653066, [0., 0., 0.], 45, [17, 42], 0, 0, [2490, 2491])
- (0., 0., 0.60653066, [0., 0., 0.], 46, [16, 30], 0, 0, [2492, 2493])
- (0., 0., 0.60653066, [0., 0., 0.], 47, [23, 22], 0, 0, [2494, 2495])
- (0., 0., 0.60653066, [0., 0., 0.], 48, [22, 15], 0, 0, [2496, 2497])
- (0., 0., 0.60653066, [0., 0., 0.], 49, [40, 34], 0, 0, [2498, 2499])]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(0., 0., 0.60653066, [0., 0., 0.], 45, [17, 42], 0, 0, [2590, 2591])
+ (0., 0., 0.60653066, [0., 0., 0.], 46, [16, 30], 0, 0, [2592, 2593])
+ (0., 0., 0.60653066, [0., 0., 0.], 47, [23, 22], 0, 0, [2594, 2595])
+ (0., 0., 0.60653066, [0., 0., 0.], 48, [22, 15], 0, 0, [2596, 2597])
+ (0., 0., 0.60653066, [0., 0., 0.], 49, [40, 34], 0, 0, [2598, 2599])]
 </pre></div>
 </div>
 </div>
@@ -2412,7 +2412,7 @@ than <code class="docutils literal notranslate"><span class="pre">numpy.array</s
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">load_from_file</span><span class="p">(</span><span class="s2">&quot;pop.bin&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>There are two means of storing a population in <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> format.
+<p>There are two means of storing a population in <a class="reference external" href="https://docs.python.org/3/library/pickle.html#module-pickle" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pickle</span></code></a> format.
 The first is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
@@ -2430,7 +2430,7 @@ memory, which is probably important for really big simulations:</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>These two pickling methods create very different files!
-The first can be read back in with <a class="reference external" href="https://docs.python.org/3/library/pickle.html#pickle.load" title="(in Python v3.9)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pickle.load()</span></code></a>
+The first can be read back in with <a class="reference external" href="https://docs.python.org/3/library/pickle.html#pickle.load" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pickle.load()</span></code></a>
 but the second <strong>must</strong> be read back in with the
 static function <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.load_from_pickle_file" title="fwdpy11.DiploidPopulation.load_from_pickle_file"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.load_from_pickle_file()</span></code></a>.</p>
 </div>

@@ -948,11 +948,11 @@ You do not know the state of the <code class="docutils literal notranslate"><spa
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">seed</span><span class="o">=-</span><span class="mi">4616</span><span class="p">,</span> <span class="n">wrapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/diploid_population.py</span> in <span class="ni">dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive, wrapped)</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span> 
-<span class="g g-Whitespace">    </span><span class="mi">260</span>         <span class="s2">&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">261</span><span class="s2">         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span><span class="s2">             self,</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span><span class="s2">             model_params=model_params,</span>
+<span class="g g-Whitespace">    </span><span class="mi">278</span> 
+<span class="g g-Whitespace">    </span><span class="mi">279</span>         <span class="s2">&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">280</span><span class="s2">         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span><span class="s2">             self,</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span><span class="s2">             model_params=model_params,</span>
 
 <span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/tskit_tools/_dump_tables_to_tskit.py</span> in <span class="ni">_dump_tables_to_tskit</span><span class="nt">(self, model_params, demes_graph, population_metadata, data, seed, parameters, destructive, wrapped)</span>
 <span class="g g-Whitespace">    </span><span class="mi">187</span><span class="s2">     if seed is not None:</span>
@@ -1032,7 +1032,7 @@ and two parameters objects.</p></li>
 </div>
 </div>
 </div>
-<p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
+<p>We can pass both objects to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">(</span><span class="n">model_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;burnin&#39;</span><span class="p">:</span> <span class="n">params</span><span class="p">,</span> <span class="s1">&#39;adaptation&#39;</span><span class="p">:</span> <span class="n">params2</span><span class="p">},</span> <span class="n">wrapped</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1143,7 +1143,7 @@ With the graph as metadata, you can extract it and reconstruct the original <cod
 <div class="section" id="user-defined-metadata">
 <h3>User-defined metadata<a class="headerlink" href="#user-defined-metadata" title="Permalink to this headline">¶</a></h3>
 <p>It may be useful to store arbitrary data in the output.
-For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
+For example, this could be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> containing information obtained from a <a class="reference internal" href="../short_vignettes/recorders_vignette.html#recorders-vignette"><span class="std std-ref">time series</span></a> analysis of a simulation.</p>
 <p>The simplest situation is to use a <code class="docutils literal notranslate"><span class="pre">dict</span></code> containing simple objects:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1193,7 +1193,7 @@ Further, if the data are very large, then other output formats are likely more a
 <div class="section" id="setting-population-table-metadata">
 <h2>Setting population table metadata<a class="headerlink" href="#setting-population-table-metadata" title="Permalink to this headline">¶</a></h2>
 <p>You can also set the population table metadata when exporting data.
-Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+Doing so requires a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer label for each population to another <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
 <p>For example, let’s create an demographic model from the <code class="docutils literal notranslate"><span class="pre">demes</span></code> graph that used above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">

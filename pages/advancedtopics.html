@@ -800,7 +800,7 @@
 For example, you could write a single Python script plus a shell script
 that your local cluster understands, sending your simulation to hundreds
 of compute nodes.</p>
-<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.9)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
+<p>This section introduces <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#module-concurrent.futures" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">concurrent.futures</span></code></a> as a method to execute
 many replicates in separate Python <em>processes</em> using a single script.</p>
 <p>Fully worked-out examples of varying complexity can be found here:</p>
 <ul class="simple">
@@ -1614,7 +1614,7 @@ responsibilities:</p>
 <ol class="simple">
 <li><p>It must return a value that will populate the genetic value
 field of the offspring’s metadata (<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata.g" title="fwdpy11.DiploidMetadata.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata.g</span></code></a>).</p></li>
-<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
+<li><p>It also needs to populate an array of <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> that represents
 the genetic values for all trait dimensions. See <a class="reference internal" href="#python-genetic-value-dimensions"><span class="std std-ref">here</span></a>.
 For the common case of a one-dimensional genetic value,
 you populate element <code class="docutils literal notranslate"><span class="pre">0</span></code> of this array with value that you
@@ -1635,7 +1635,7 @@ resistance in the short term was to implement the current approach.</p>
 <h4>Example: strictly additive effects on a trait<a class="headerlink" href="#example-strictly-additive-effects-on-a-trait" title="Permalink to this headline">¶</a></h4>
 <p>Here is an example of a strict additive model of a trait,
 taken from the test suite. You’ll notice that we are accessing
-arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
+arrays on the <code class="docutils literal notranslate"><span class="pre">C++</span></code> using Python <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a> objects.
 This is a <em>very</em> efficient method, and much faster
 than creating a temporary, non-owning <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1656,7 +1656,7 @@ than creating a temporary, non-owning <a class="reference external" href="https:
 </pre></div>
 </div>
 <p>If you want to account for the heterozygous effect of mutations, then the
-most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
+most explicit approach is probably to use <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.Counter" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.Counter</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">calculate_gvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="n">s</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
@@ -1702,7 +1702,7 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 </div>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
-be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
+be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
 <dt id="rng">
