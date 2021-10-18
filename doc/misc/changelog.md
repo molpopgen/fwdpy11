@@ -3,7 +3,7 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## Next release
+## 0.16.0
 
 Bug fixes
 
