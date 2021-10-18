@@ -94,7 +94,9 @@ def _build_from_deme_graph(
             "deme_labels": {j: i for i, j in idmap.items()},
             "initial_sizes": initial_sizes,
             "burnin_time": burnin_generation,
-            "total_simulation_length": burnin_generation + model_times.model_duration,
+            "total_simulation_length": burnin_generation
+            + model_times.model_duration
+            - 1,
         },
     )
 
@@ -428,7 +430,7 @@ def _process_epoch(
     to raise an error if the rate is not None or nonzero.
     """
     if e.start_time != math.inf:
-        when = burnin_generation + int(model_times.model_start_time - e.start_time)
+        when = burnin_generation + int(model_times.model_start_time - e.start_time - 1)
     else:
         when = 0
 
@@ -489,7 +491,7 @@ def _process_all_epochs(
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.start_time),
+                    + int(model_times.model_start_time - deme.start_time - 1),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=1.0,
@@ -502,7 +504,7 @@ def _process_all_epochs(
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time),
+                    + int(model_times.model_start_time - deme.end_time - 1),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=-1.0,
@@ -511,16 +513,31 @@ def _process_all_epochs(
             )
 
         # if deme ends before time zero, we set set its size to zero
-        # we proces deme extintions here instead of in the events
+        # we proces deme extinctions here instead of in the events
         if deme.end_time > 0:
             events.set_deme_sizes.append(
                 SetDemeSize(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time),
+                    + int(model_times.model_start_time - deme.end_time - 1),
                     deme=idmap[deme.name],
                     new_size=0,
                 )
             )
+
+        # collect all (deme, time) tuples that represent extinctions
+        extinctions = [
+            (i.deme, i.when) for i in events.set_deme_sizes if i.new_size == 0
+        ]
+
+        # purge invalid events:
+        # * setting selfing rates in extinct demes
+        # * setting growth rates in extinct demes
+        events.set_selfing_rates = [
+            i for i in events.set_selfing_rates if (i.deme, i.when) not in extinctions
+        ]
+        events.set_growth_rates = [
+            i for i in events.set_growth_rates if (i.deme, i.when) not in extinctions
+        ]
 
 
 def _process_migrations(
@@ -537,7 +554,9 @@ def _process_migrations(
     """
     for m in dg.migrations:
         if m.start_time < math.inf:
-            when = burnin_generation + int(model_times.model_start_time - m.start_time)
+            when = burnin_generation + int(
+                model_times.model_start_time - m.start_time - 1
+            )
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -560,7 +579,9 @@ def _process_migrations(
                         )
                     )
         if m.end_time > 0:
-            when = burnin_generation + int(model_times.model_start_time - m.end_time)
+            when = burnin_generation + int(
+                model_times.model_start_time - m.end_time - 1
+            )
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -592,7 +613,7 @@ def _process_pulses(
     events: _Fwdpy11Events,
 ) -> None:
     for p in dg.pulses:
-        when = burnin_generation + int(model_times.model_start_time - p.time)
+        when = burnin_generation + int(model_times.model_start_time - p.time - 1)
         events.migration_rate_changes.append(
             _MigrationRateChange(
                 when=when,
@@ -622,7 +643,7 @@ def _process_admixtures(
     events: _Fwdpy11Events,
 ) -> None:
     for a in dg_events["admixtures"]:
-        when = burnin_generation + int(model_times.model_start_time - a.time)
+        when = burnin_generation + int(model_times.model_start_time - a.time - 1)
         for parent, proportion in zip(a.parents, a.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -653,7 +674,7 @@ def _process_mergers(
     events: _Fwdpy11Events,
 ) -> None:
     for m in dg_events["mergers"]:
-        when = burnin_generation + int(model_times.model_start_time - m.time)
+        when = burnin_generation + int(model_times.model_start_time - m.time - 1)
         for parent, proportion in zip(m.parents, m.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -692,7 +713,7 @@ def _process_splits(
     from the parent.
     """
     for s in dg_events["splits"]:
-        when = burnin_generation + int(model_times.model_start_time - s.time)
+        when = burnin_generation + int(model_times.model_start_time - s.time - 1)
         for c in s.children:
             # one generation of migration to move lineages from parent to children
             events.migration_rate_changes.append(
@@ -732,7 +753,7 @@ def _process_branches(
     child's ancestry is from parent.
     """
     for b in dg_events["branches"]:
-        when = burnin_generation + int(model_times.model_start_time - b.time)
+        when = burnin_generation + int(model_times.model_start_time - b.time - 1)
         # turn on migration for one generation at "when"
         events.migration_rate_changes.append(
             _MigrationRateChange(
