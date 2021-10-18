@@ -1,35 +1,23 @@
-from typing import (
-    Dict,
-    List,
-    Optional,
-    Union,
-)
-import numpy as np
-import attr
-import math
-import sys
 import copy
 import itertools
+import math
+import sys
+from typing import Dict, List, Optional, Union
 
+import attr
 import demes
-
-from ..discrete_demography import (
-    MassMigration,
-    MigrationMatrix,
-    SetDemeSize,
-    SetExponentialGrowth,
-    SetMigrationRates,
-    SetSelfingRate,
-    copy_individuals,
-    move_individuals,
-    DiscreteDemography,
-)
+import numpy as np
 
 from .. import class_decorators
-
-from ..demographic_models import DemographicModelDetails, DemographicModelCitation
-
 from .._demography import exponential_growth_rate
+from ..demographic_models import (DemographicModelCitation,
+                                  DemographicModelDetails)
+from ..discrete_demography import (DiscreteDemography, MassMigration,
+                                   MigrationMatrix, SetDemeSize,
+                                   SetExponentialGrowth, SetMigrationRates,
+                                   SetSelfingRate, copy_individuals,
+                                   move_individuals)
+
 
 # TODO: need type hints for dg
 def demography_from_demes(
@@ -106,7 +94,9 @@ def _build_from_deme_graph(
             "deme_labels": {j: i for i, j in idmap.items()},
             "initial_sizes": initial_sizes,
             "burnin_time": burnin_generation,
-            "total_simulation_length": burnin_generation + model_times.model_duration,
+            "total_simulation_length": burnin_generation
+            + model_times.model_duration
+            - 1,
         },
     )
 
@@ -354,7 +344,13 @@ def _get_model_times(dg: demes.Graph) -> _ModelTimes:
         mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
         mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
         pulse_times = [p.time for p in dg.pulses]
-        model_start_time = max(ends_inf + starts + mig_starts + mig_ends + pulse_times)
+        # The forward-time model with start with a generation 0,
+        # which is the earliest end point of a deme with start time
+        # of inf, minus 1.  That definition is forwards in time, so we
+        # ADD one to the backwards-in-time demes info.
+        model_start_time = (
+            max(ends_inf + starts + mig_starts + mig_ends + pulse_times) + 1
+        )
 
     if most_recent_deme_end != 0:
         model_duration = model_start_time - most_recent_deme_end
@@ -434,7 +430,7 @@ def _process_epoch(
     to raise an error if the rate is not None or nonzero.
     """
     if e.start_time != math.inf:
-        when = burnin_generation + int(model_times.model_start_time - e.start_time)
+        when = burnin_generation + int(model_times.model_start_time - e.start_time - 1)
     else:
         when = 0
 
@@ -451,7 +447,7 @@ def _process_epoch(
         # Handle size change functions
         events.set_deme_sizes.append(
             SetDemeSize(
-                when=when - 1,
+                when=when,
                 deme=idmap[deme_id],
                 new_size=e.start_size,
             )
@@ -495,7 +491,7 @@ def _process_all_epochs(
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.start_time),
+                    + int(model_times.model_start_time - deme.start_time - 1),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=1.0,
@@ -508,7 +504,7 @@ def _process_all_epochs(
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time),
+                    + int(model_times.model_start_time - deme.end_time - 1),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=-1.0,
@@ -517,16 +513,31 @@ def _process_all_epochs(
             )
 
         # if deme ends before time zero, we set set its size to zero
-        # we proces deme extintions here instead of in the events
+        # we proces deme extinctions here instead of in the events
         if deme.end_time > 0:
             events.set_deme_sizes.append(
                 SetDemeSize(
                     when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time),
+                    + int(model_times.model_start_time - deme.end_time - 1),
                     deme=idmap[deme.name],
                     new_size=0,
                 )
             )
+
+        # collect all (deme, time) tuples that represent extinctions
+        extinctions = [
+            (i.deme, i.when) for i in events.set_deme_sizes if i.new_size == 0
+        ]
+
+        # purge invalid events:
+        # * setting selfing rates in extinct demes
+        # * setting growth rates in extinct demes
+        events.set_selfing_rates = [
+            i for i in events.set_selfing_rates if (i.deme, i.when) not in extinctions
+        ]
+        events.set_growth_rates = [
+            i for i in events.set_growth_rates if (i.deme, i.when) not in extinctions
+        ]
 
 
 def _process_migrations(
@@ -543,7 +554,9 @@ def _process_migrations(
     """
     for m in dg.migrations:
         if m.start_time < math.inf:
-            when = burnin_generation + int(model_times.model_start_time - m.start_time)
+            when = burnin_generation + int(
+                model_times.model_start_time - m.start_time - 1
+            )
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -566,7 +579,9 @@ def _process_migrations(
                         )
                     )
         if m.end_time > 0:
-            when = burnin_generation + int(model_times.model_start_time - m.end_time)
+            when = burnin_generation + int(
+                model_times.model_start_time - m.end_time - 1
+            )
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -575,8 +590,8 @@ def _process_migrations(
                         destination=idmap[m.dest],
                         rate_change=-m.rate,
                         from_deme_graph=True,
-                        )
                     )
+                )
             except AttributeError:
                 for source, dest in itertools.permutations(m.demes, 2):
                     events.migration_rate_changes.append(
@@ -598,10 +613,10 @@ def _process_pulses(
     events: _Fwdpy11Events,
 ) -> None:
     for p in dg.pulses:
-        when = burnin_generation + int(model_times.model_start_time - p.time)
+        when = burnin_generation + int(model_times.model_start_time - p.time - 1)
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when - 1,
+                when=when,
                 source=idmap[p.source],
                 destination=idmap[p.dest],
                 rate_change=p.proportion,
@@ -610,7 +625,7 @@ def _process_pulses(
         )
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when,
+                when=when + 1,
                 source=idmap[p.source],
                 destination=idmap[p.dest],
                 rate_change=-p.proportion,
@@ -628,11 +643,11 @@ def _process_admixtures(
     events: _Fwdpy11Events,
 ) -> None:
     for a in dg_events["admixtures"]:
-        when = burnin_generation + int(model_times.model_start_time - a.time)
+        when = burnin_generation + int(model_times.model_start_time - a.time - 1)
         for parent, proportion in zip(a.parents, a.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when - 1,
+                    when=when,
                     source=idmap[parent],
                     destination=idmap[a.child],
                     rate_change=proportion,
@@ -641,7 +656,7 @@ def _process_admixtures(
             )
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when,
+                    when=when + 1,
                     source=idmap[parent],
                     destination=idmap[a.child],
                     rate_change=-proportion,
@@ -659,11 +674,11 @@ def _process_mergers(
     events: _Fwdpy11Events,
 ) -> None:
     for m in dg_events["mergers"]:
-        when = burnin_generation + int(model_times.model_start_time - m.time)
+        when = burnin_generation + int(model_times.model_start_time - m.time - 1)
         for parent, proportion in zip(m.parents, m.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when - 1,
+                    when=when,
                     source=idmap[parent],
                     destination=idmap[m.child],
                     rate_change=proportion,
@@ -672,7 +687,7 @@ def _process_mergers(
             )
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when,
+                    when=when + 1,
                     source=idmap[parent],
                     destination=idmap[m.child],
                     rate_change=-proportion,
@@ -698,12 +713,12 @@ def _process_splits(
     from the parent.
     """
     for s in dg_events["splits"]:
-        when = burnin_generation + int(model_times.model_start_time - s.time)
+        when = burnin_generation + int(model_times.model_start_time - s.time - 1)
         for c in s.children:
             # one generation of migration to move lineages from parent to children
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when - 1,
+                    when=when,
                     source=idmap[s.parent],
                     destination=idmap[c],
                     rate_change=1.0,
@@ -713,7 +728,7 @@ def _process_splits(
             # turn off that migration after one generation
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=when,
+                    when=when + 1,
                     source=idmap[s.parent],
                     destination=idmap[c],
                     rate_change=-1.0,
@@ -738,11 +753,11 @@ def _process_branches(
     child's ancestry is from parent.
     """
     for b in dg_events["branches"]:
-        when = burnin_generation + int(model_times.model_start_time - b.time)
+        when = burnin_generation + int(model_times.model_start_time - b.time - 1)
         # turn on migration for one generation at "when"
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when - 1,
+                when=when,
                 source=idmap[b.parent],
                 destination=idmap[b.child],
                 rate_change=1.0,
@@ -752,7 +767,7 @@ def _process_branches(
         # end that migration after one generation
         events.migration_rate_changes.append(
             _MigrationRateChange(
-                when=when,
+                when=when + 1,
                 source=idmap[b.parent],
                 destination=idmap[b.child],
                 rate_change=-1.0,

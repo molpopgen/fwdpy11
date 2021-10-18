@@ -21,6 +21,11 @@ Bug fixes
   leading to runtime exceptions.
   PR {pr}`802`
   PR {pr}`803`
+* Fix error in `demes` models where "replacement" models had 1 generation of overlap between ancestral/derived demes.
+  Issue {issue}`814`
+  PR {pr}`815`
+  {user}`apragsdale`
+  {user}`molpopgen`
 
 Behavior changes
 
@@ -36,6 +41,10 @@ Behavior changes
 * Calling {func}`fwdpy11.infinite_sites` during a simulation now raises `RuntimeError`.
   {pr}`820`
   {issue}`769`
+* Models imported from `demes` now start the forward-time portion of the model 1 (one) generation before the most ancient end time of an ancestral deme.
+  {pr}`818`
+  {user}`apragsdale`
+  {user}`molpopgen`
 
 New features
 
