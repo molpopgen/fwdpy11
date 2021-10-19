@@ -1,39 +1,18 @@
 # Setting up user environments for installation
 
-## Standard Unix-like environments
+## Linux and macOS
 
-This section assumes an Ubuntu-like Linux.
-Users of other distros and Apple's macOS should adjust accordingly.
-
-First, install the GNU Scientific Library, cmake, and a C++ compiler:
+For those using 64-bit Linux systems and macOS on Intel chips, `fwdpy11` can be installed directly from [PyPi](https://pypy.org) with no need to compile anything.
+The recommended procedure is to install into a virtual environment:
 
 ```{code-block} bash
-
-sudo apt install g++ cmake libgsl-dev
-
+mkdir ~/venvs
+python3 -m venv ~/venvs/fwdpy11
+source activate ~/venvs/fwdpy11/bin/activate
+pip install fwpdy11
 ```
 
-Then, install from PyPi via `pip`:
-
-```{code-block} bash
-
-pip3 install fwdpy11
-
-```
-
-Or, if working from the root of a clone of the repository:
-
-```{code-block} bash
-
-pip3 install -f requirements.txt
-pip3 install .
-
-```
-
-The above commands will also work within `virtualenv` for users familiar with that tool.
-
-We refrain from giving detailed instructions for macOS at this time.
-This platform has always been a moving target, and major recent changes to Xcode and the switch to ARM chips lead us to anticipate strangeness in the coming months.
+If you must install from source, see the {ref}`developer's guide <developersguide>`.
 
 ## Conda
 
@@ -129,44 +108,3 @@ When working in environments, never `conda update`!
 Updating is likely to do *bad things* to dependencies that you won't notice until you run something.
 
 :::
-
-### Conda compilers
-
-If you will develop or use plugins to `fwdpy11` (see {ref}`here <writingplugins>`), then you will need C++ compilers installed as well as `pybind11` and probably `cmake`.
-You will also need these tools if you intend to modify the `fwdpy11` code itself.
-
-On Linux:
-
-```{code-block} bash
-
-conda install cmake pybind11 gxx_linux-64
-
-```
-
-On macOS:
-
-```{code-block} bash
-
-conda install cmake pybind11 clangxx_osx-64
-
-```
-
-(sec_requirements_files)=
-
-## Comments on "requirements" files.
-
-Python uses files with names like `requirements.txt` to specify the package environment that is expected to go along with a certain tool such as this one.
-Unfortunately, the contents of such files vary quite a bit across projects.
-
-Here, we take the files `requirements.txt` and `doc/requirements.txt` to specify completely reproducible development and production environments.
-Within these files, all dependencies are pinned to specific versions, as are the dependencies of those dependencies.
-These files specify the exact versions used for testing the package on Ubuntu environments and for building Docker containers.
-
-The files `requirements.in` and `doc/requirements.in` are looser specifications of these environments.
-Here, the dependency pinnings are minimal, trying to keep the build environment compatible with the lowest Python version number that is still supported.
-Many users working in extant Python environments may want to use the `.in` versions for installing packages.
-Some may also want to remove the installation modifications to various packages in those files.
-
-These pinnings will be updated periodically.
-
-People using `conda` to install `fwdpy11` may consider using the fully-pinned files to install dependencies using `pip`.
