@@ -31,6 +31,10 @@ parts:
   - file: short_vignettes/demography_vignettes_intro
   - file: short_vignettes/demes_vignette
   - file: short_vignettes/demography_debugger_vignette
+- caption: Short vignettes - special case models
+  chapters:
+  - file: short_vignettes/trackmutationfates
+  - file: short_vignettes/selective_sweep
 - caption: Longer vignettes - exporting data to tskit
   chapters:
   - file: long_vignettes/tskitconvert_vignette
@@ -73,6 +77,7 @@ parts:
   - file: pages/model_params
   - file: pages/regiontypes
   - file: pages/tskit_tools
+  - file: pages/conditional_models
   - file: pages/types
 - caption: Examples
   chapters:
