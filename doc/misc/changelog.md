@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.16.1
+
+New features:
+
+* `Mutation.__str__` is now more informative.
+  `pr`{825}
+
 ## 0.16.0
 
 Bug fixes

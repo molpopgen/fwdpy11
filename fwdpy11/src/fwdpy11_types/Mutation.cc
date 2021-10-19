@@ -142,10 +142,32 @@ init_Mutation(py::module &m)
                     p[7].cast<std::uint16_t>()));
             }))
         .def("__str__",
-             [](const fwdpy11::Mutation &m) {
-                 return "Mutation[" + std::to_string(m.pos) + "," + std::to_string(m.s)
-                        + "," + std::to_string(m.h) + "," + std::to_string(m.g) + ","
-                        + std::to_string(m.xtra) + "]";
+             [](const fwdpy11::Mutation &self) {
+                 auto rv = "Mutation[position:" + std::to_string(self.pos)
+                           + ", effect size:" + std::to_string(self.s)
+                           + ", dominance:" + std::to_string(self.h)
+                           + ", origin time:" + std::to_string(self.g)
+                           + ", label:" + std::to_string(self.xtra);
+                 if (!self.esizes.empty())
+                     {
+                         rv += ", multivariate effect sizes: [";
+                         for (auto i : self.esizes)
+                             {
+                                 rv += std::to_string(i);
+                                 rv += ", ";
+                             }
+                         rv += "], multivariate dominance: [";
+                         for (auto i : self.heffects)
+                             {
+                                 rv += std::to_string(i);
+                                 rv += ", ";
+                             }
+                         rv += "]";
+                     }
+
+                 rv += "]";
+
+                 return rv;
              })
         .def("__eq__", [](const fwdpy11::Mutation &a, const fwdpy11::Mutation &b) {
             return a == b;
