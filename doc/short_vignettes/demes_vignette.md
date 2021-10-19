@@ -20,7 +20,8 @@ The lists of objects described here are passed to the `demography` and `simlen` 
 
 Starting with version `0.14.0`, it is possible to specify a demographic model using the [`demes`](https://popsim-consortium.github.io/demes-docs/main/) specification.
 This method of specifying models uses a `YAML` syntax, which is described in detail in the [`demes specification`](https://popsim-consortium.github.io/demes-spec-docs/main/reference.html).
-You may find several examples in the [gallery](https://popsim-consortium.github.io/demes-spec-docs/main/gallery.html#sec-gallery).
+
+It is a good idea to browse both the [tutorial](https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html) and the [gallery](https://popsim-consortium.github.io/demes-spec-docs/main/gallery.html#sec-gallery) before continuing.
 
 There are several advantages to using `demes`:
 
