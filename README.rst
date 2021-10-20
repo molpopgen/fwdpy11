@@ -75,8 +75,8 @@ Dependencies and installation
 
 These topics are covered in the user manual:
 
-* People wishing to run `fwpdy11` should see [here](https://molpopgen.github.io/fwdpy11/pages/userenv.html).
-* Those who need to build the package from source should look [here](https://molpopgen.github.io/fwdpy11/misc/developersguide.html).
+* People wishing to run `fwpdy11` should see `this section <https://molpopgen.github.io/fwdpy11/pages/userenv.html>`_.
+* Those who need to build the package from source should look `the developer's guide <https://molpopgen.github.io/fwdpy11/misc/developersguide.html>`_.
 
 
 .. _fwdpy11: https://github.com/molpopgen/fwdpy11
