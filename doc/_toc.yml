@@ -1,20 +1,16 @@
-# Table of content
-# Learn more at https://jupyterbook.org/customize/toc.html
-#
-- file: intro
-
-- part: Installation and setup
+format: jb-book
+root: intro
+parts:
+- caption: Installation and setup
   chapters:
   - file: pages/userenv
   - file: pages/installation
   - file: pages/deploymenttools
-
-- part: Short vignettes - operations on populations
+- caption: Short vignettes - operations on populations
   chapters:
   - file: short_vignettes/initpops_vignette
   - file: short_vignettes/poptour_vignette
-
-- part: Short vignettes - setting up the genetics
+- caption: Short vignettes - setting up the genetics
   chapters:
   - file: short_vignettes/genetics_vignettes_intro
   - file: short_vignettes/geneticmaps_vignette
@@ -25,42 +21,34 @@
   - file: short_vignettes/gvalues_traits
   - file: short_vignettes/workingexample_fitness
   - file: short_vignettes/workingexample_trait
-
-- part: Short vignettes - simulation with tree sequence recording
+- caption: Short vignettes - simulation with tree sequence recording
   chapters:
   - file: short_vignettes/evolvets_vignette
   - file: short_vignettes/recorders_vignette
   - file: short_vignettes/neutralmutsafter_vignette
-
-- part: Short vignettes - demographic modeling
+- caption: Short vignettes - demographic modeling
   chapters:
   - file: short_vignettes/demography_vignettes_intro
   - file: short_vignettes/demes_vignette
   - file: short_vignettes/demography_debugger_vignette
-
-# Restore once 656 is resolved
-- part: Longer vignettes - exporting data to tskit
+- caption: Longer vignettes - exporting data to tskit
   chapters:
   - file: long_vignettes/tskitconvert_vignette
   - file: long_vignettes/tskit_metadata_vignette
-
-- part: Longer vignettes - complete examples
+- caption: Longer vignettes - complete examples
   chapters:
   - file: long_vignettes/bgs_vignette
   - file: long_vignettes/gss_vignette
   - file: long_vignettes/pyfreqtracker
   - file: long_vignettes/pyfreqtracker_sqlite
-
-- part: Concepts
+- caption: Concepts
   chapters:
   - file: pages/definitions
-
-- part: Tutorials
+- caption: Tutorials
   chapters:
   - file: pages/tutorial
   - file: pages/advancedtopics
-
-- part: Objects and concepts
+- caption: Objects and concepts
   chapters:
   - file: pages/softselection
   - file: pages/mvdes
@@ -68,14 +56,12 @@
   - file: pages/tstypes
   - file: pages/tablefs
   - file: pages/recorders
-
-- part: Technical details
+- caption: Technical details
   chapters:
   - file: technical/demes
   - file: technical/genetic_values
   - file: technical/writingplugins
-
-- part: Data types and fuctions
+- caption: Data types and fuctions
   chapters:
   - file: pages/genetic_values
   - file: pages/datamatrix
@@ -88,8 +74,7 @@
   - file: pages/regiontypes
   - file: pages/tskit_tools
   - file: pages/types
-
-- part: Examples
+- caption: Examples
   chapters:
   - file: examples/gss_divergent_optima
   - file: examples/IM
@@ -98,8 +83,7 @@
   - file: examples/pysnowdrift
   - file: examples/recapitation
   - file: examples/recorder
-
-- part: Miscellany
+- caption: Miscellany
   chapters:
   - file: misc/changelog
   - file: misc/deprecated
