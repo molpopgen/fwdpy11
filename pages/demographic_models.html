@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The demography debugger &#8212; fwdpy11 manual</title>
     
-  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,19 +31,19 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
         const thebe_selector_output = ".output"
@@ -56,14 +53,14 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Function documentation" href="functions.html" />
     <link rel="prev" title="DataMatrix and StateMatrix" href="datamatrix.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -72,30 +69,31 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
    Introduction
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
@@ -112,12 +110,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
    Initializing a population
@@ -129,12 +127,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
    Introduction
@@ -181,12 +179,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -203,12 +201,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
    Introduction
@@ -231,12 +229,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
@@ -248,12 +246,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
    Background selection
@@ -280,24 +278,24 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="definitions.html">
    Definitions
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="tutorial.html">
    Tutorial
@@ -309,12 +307,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="softselection.html">
    Soft selection with discrete demes
@@ -346,12 +344,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../technical/demes.html">
    Details of
@@ -374,12 +372,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="genetic_values.html">
    Genetic values
@@ -393,11 +391,6 @@
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="#module-fwdpy11.demographic_models">
-   Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
@@ -445,28 +438,13 @@
    Data types related to simulated populations
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
-   Types related to tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
-   Types related to discrete demographic events
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#miscellaneous-types">
-   Miscellaneous types
-  </a>
- </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
@@ -503,12 +481,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../misc/changelog.html">
    Changelog
@@ -541,6 +519,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -556,21 +535,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -588,7 +567,7 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -606,25 +585,25 @@
     </div>
 </div>
 
+            <!-- Full screen (wrap in <a> to have style consistency -->
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
-
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
         </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#">
    The demography debugger
@@ -634,7 +613,7 @@
   <a class="reference internal nav-link" href="#module-fwdpy11.demographic_models">
    Pre-computed demographic models
   </a>
-  <ul class="nav section-nav flex-column">
+  <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#module-fwdpy11.demographic_models.IM">
      <code class="docutils literal notranslate">
@@ -653,8 +632,8 @@
  </li>
 </ul>
 
-        </nav>
-        
+            </nav>
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -662,11 +641,11 @@
         
               <div>
                 
-  <div class="section" id="the-demography-debugger">
+  <div class="tex2jax_ignore mathjax_ignore section" id="the-demography-debugger">
 <span id="demographic-models"></span><h1>The demography debugger<a class="headerlink" href="#the-demography-debugger" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fwdpy11.DemographyDebugger">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DemographyDebugger</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_deme_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographyDebugger" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DemographyDebugger">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DemographyDebugger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_deme_sizes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme_labels</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.DemographyDebugger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Efficiently debug demographic events.</p>
 <p>The class executes a mock simulation
 of demographic events in order to quickly
@@ -695,9 +674,9 @@ which may be either positional or keyword:</p>
 <p><span class="versionmodified changed">Changed in version 0.8.1: </span>Initialization now done with attr.
 A list of initial deme sizes is now accepted.</p>
 </div>
-<dl class="py method">
-<dt id="fwdpy11.DemographyDebugger.report">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">report</span></code><a class="headerlink" href="#fwdpy11.DemographyDebugger.report" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="fwdpy11.DemographyDebugger.report">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">report</span></span><a class="headerlink" href="#fwdpy11.DemographyDebugger.report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Obtain the details of the demographic
 model as a nicely-formatting string.</p>
 </dd></dl>
@@ -705,11 +684,11 @@ model as a nicely-formatting string.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-fwdpy11.demographic_models">
+<div class="tex2jax_ignore mathjax_ignore section" id="module-fwdpy11.demographic_models">
 <span id="pre-computed-demographic-models"></span><h1>Pre-computed demographic models<a class="headerlink" href="#module-fwdpy11.demographic_models" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fwdpy11.demographic_models.DemographicModelDetails">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.</span></code><code class="sig-name descname"><span class="pre">DemographicModelDetails</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.demographic_models.demographic_model_details.DemographicModelCitation</span><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.DemographicModelDetails">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.</span></span><span class="sig-name descname"><span class="pre">DemographicModelDetails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">citation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelCitation" title="fwdpy11.demographic_models.demographic_model_details.DemographicModelCitation"><span class="pre">fwdpy11.demographic_models.demographic_model_details.DemographicModelCitation</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stores rich information about a demographic model.
 Instances of this class get returned by functions
 generating pre-calculated models.</p>
@@ -732,28 +711,28 @@ also determine the order of positional arguments:</p>
 <p><span class="versionmodified added">New in version 0.8.0.</span></p>
 </div>
 <dl class="py method">
-<dt id="fwdpy11.demographic_models.DemographicModelDetails.asblack">
-<code class="sig-name descname"><span class="pre">asblack</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.asblack" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.DemographicModelDetails.asblack">
+<span class="sig-name descname"><span class="pre">asblack</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.asblack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a string representation formatted with black</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.demographic_models.DemographicModelDetails.asdict">
-<code class="sig-name descname"><span class="pre">asdict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.asdict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.DemographicModelDetails.asdict">
+<span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.demographic_models.DemographicModelDetails.fromdict">
-<em class="property"><span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">fromdict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.fromdict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.DemographicModelDetails.fromdict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">fromdict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelDetails.fromdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build an instance from a dictionary</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="fwdpy11.demographic_models.DemographicModelCitation">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.</span></code><code class="sig-name descname"><span class="pre">DemographicModelCitation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_citation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelCitation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.DemographicModelCitation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.</span></span><span class="sig-name descname"><span class="pre">DemographicModelCitation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DOI</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_citation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.DemographicModelCitation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Citation information for a demographic model</p>
 <p>This class has the following attributes, whose names
 are also <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for intitialization.  The attribute names
@@ -777,8 +756,8 @@ also determine the order of positional arguments:</p>
 <p>This module provides functions to generate demographic events for
 “isolation-with-migration”, or IM, models.</p>
 <dl class="py function">
-<dt id="fwdpy11.demographic_models.IM.two_deme_IM">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></code><code class="sig-name descname"><span class="pre">two_deme_IM</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nanc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">migrates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.IM.two_deme_IM">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></span><span class="sig-name descname"><span class="pre">two_deme_IM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nanc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psplit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">migrates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="Permalink to this definition">¶</a></dt>
 <dd><p>Isolation-with-migration (IM) model for two demes.</p>
 <p>An ancestral population splits into two daughter demes.
 At the time of the split, <code class="docutils literal notranslate"><span class="pre">psplit</span></code> of the ancestral
@@ -824,8 +803,8 @@ construct a population with intitial size <code class="docutils literal notransl
 </dd></dl>
 
 <dl class="py class">
-<dt id="fwdpy11.demographic_models.IM.TwoDemeIMParameters">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></code><code class="sig-name descname"><span class="pre">TwoDemeIMParameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nanc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">psplit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">migrates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMParameters" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.IM.TwoDemeIMParameters">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></span><span class="sig-name descname"><span class="pre">TwoDemeIMParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Nanc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">psplit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><span class="pre">tuple</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">migrates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMParameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Holds the parameters to <a class="reference internal" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>.</p>
 <p>Instances of this class are held as the <code class="docutils literal notranslate"><span class="pre">parameters</span></code> attribute of
 <a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a>.</p>
@@ -849,8 +828,8 @@ construct a population with intitial size <code class="docutils literal notransl
 </dd></dl>
 
 <dl class="py class">
-<dt id="fwdpy11.demographic_models.IM.TwoDemeIMMetaData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></code><code class="sig-name descname"><span class="pre">TwoDemeIMMetaData</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gens_post_split</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMMetaData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.IM.TwoDemeIMMetaData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.IM.</span></span><span class="sig-name descname"><span class="pre">TwoDemeIMMetaData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_time</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gens_post_split</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">simlen</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.IM.TwoDemeIMMetaData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Holds metadata returned by <a class="reference internal" href="#fwdpy11.demographic_models.IM.two_deme_IM" title="fwdpy11.demographic_models.IM.two_deme_IM"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.IM.two_deme_IM()</span></code></a>.</p>
 <p>Instances of this class are held as the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> attribute of
 <a class="reference internal" href="#fwdpy11.demographic_models.DemographicModelDetails" title="fwdpy11.demographic_models.DemographicModelDetails"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.DemographicModelDetails</span></code></a>.</p>
@@ -873,35 +852,35 @@ construct a population with intitial size <code class="docutils literal notransl
 <h2>Human demographic models<a class="headerlink" href="#human-demographic-models" title="Permalink to this headline">¶</a></h2>
 <p>This module provides the following models:</p>
 <ul class="simple">
-<li><p><span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20"><span>TBOConnor+12</span></a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.tennessen" title="fwdpy11.demographic_models.human.tennessen"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.tennessen()</span></code></a>.</p></li>
-<li><p>The three deme model from Table 2 of <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id8"><span>JLRG17</span></a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="fwdpy11.demographic_models.human.jouganous_three_deme"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.jouganous_three_deme()</span></code></a>.</p></li>
+<li><p><span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id20">TBOConnor+12</a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.tennessen" title="fwdpy11.demographic_models.human.tennessen"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.tennessen()</span></code></a>.</p></li>
+<li><p>The three deme model from Table 2 of <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id8">JLRG17</a>]</span> via <a class="reference internal" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="fwdpy11.demographic_models.human.jouganous_three_deme"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.jouganous_three_deme()</span></code></a>.</p></li>
 </ul>
 <span class="target" id="module-fwdpy11.demographic_models.human"></span><p>This module provided pre-calculated demographic models
 for human populations.</p>
 <dl class="py class">
-<dt id="fwdpy11.demographic_models.human.TennessenModel">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></code><code class="sig-name descname"><span class="pre">TennessenModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.human.TennessenModel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></span><span class="sig-name descname"><span class="pre">TennessenModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Enumeration type declaring alternative implementations
 of the Tennessen et al. (2012) model. See
 <a class="reference internal" href="#fwdpy11.demographic_models.human.tennessen" title="fwdpy11.demographic_models.human.tennessen"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.demographic_models.human.tennessen()</span></code></a> for
 details.</p>
 <dl class="py attribute">
-<dt id="fwdpy11.demographic_models.human.TennessenModel.V0">
-<code class="sig-name descname"><span class="pre">V0</span></code><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V0" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.human.TennessenModel.V0">
+<span class="sig-name descname"><span class="pre">V0</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V0" title="Permalink to this definition">¶</a></dt>
 <dd><p>Default version of the model</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.demographic_models.human.TennessenModel.V1">
-<code class="sig-name descname"><span class="pre">V1</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V1" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.human.TennessenModel.V1">
+<span class="sig-name descname"><span class="pre">V1</span></span><em class="property"> <span class="pre">=</span> <span class="pre">1</span></em><a class="headerlink" href="#fwdpy11.demographic_models.human.TennessenModel.V1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alternate version of the model</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.demographic_models.human.jouganous_three_deme">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></code><code class="sig-name descname"><span class="pre">jouganous_three_deme</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.human.jouganous_three_deme">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></span><span class="sig-name descname"><span class="pre">jouganous_three_deme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.jouganous_three_deme" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate parameters for the demographic model described in Table 2 of:</p>
 <p>Jouganous, Julien, Will Long, Aaron P. Ragsdale, and Simon Gravel. 2017.
 “Inferring the Joint Demographic History of Multiple Populations:
@@ -927,8 +906,8 @@ and the mapping of integer values to deme names.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.demographic_models.human.tennessen">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></code><code class="sig-name descname"><span class="pre">tennessen</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">burnin:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">20</span></em>, <em class="sig-param"><span class="pre">model_version:</span> <span class="pre">fwdpy11.demographic_models.human.TennessenModel</span> <span class="pre">=</span> <span class="pre">&lt;TennessenModel.V0:</span> <span class="pre">0&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.tennessen" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.demographic_models.human.tennessen">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.demographic_models.human.</span></span><span class="sig-name descname"><span class="pre">tennessen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">burnin</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_version</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#fwdpy11.demographic_models.human.TennessenModel" title="fwdpy11.demographic_models.human.TennessenModel"><span class="pre">fwdpy11.demographic_models.human.TennessenModel</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">TennessenModel.V0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.demographic_models.human.tennessen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate parameters for the demographic model described in:</p>
 <p>Tennessen, Jacob A., Abigail W. Bigham, Timothy D. O’Connor, Wenqing Fu,
 Eimear E. Kenny, Simon Gravel, Sean McGee, et al. 2012.
@@ -1001,23 +980,43 @@ are obtained using <a class="reference external" href="https://numpy.org/doc/sta
 
               </div>
               
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="datamatrix.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">DataMatrix and StateMatrix</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="functions.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Function documentation</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-    <a class='left-prev' id="prev-link" href="datamatrix.html" title="previous page">DataMatrix and StateMatrix</a>
-    <a class='right-next' id="next-link" href="functions.html" title="next page">Function documentation</a>
-
-    </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
           By Kevin Thornton<br/>
         
-            &copy; Copyright 2020.<br/>
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>
@@ -1026,11 +1025,9 @@ are obtained using <a class="reference external" href="https://numpy.org/doc/sta
 
       </div>
     </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>

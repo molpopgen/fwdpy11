@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index &#8212; fwdpy11 manual</title>
     
-  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
@@ -34,34 +31,27 @@
     <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/togglebutton.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -70,30 +60,31 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="intro.html">
    Introduction
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pages/userenv.html">
    Setting up user environments for installation
@@ -110,12 +101,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="short_vignettes/initpops_vignette.html">
    Initializing a population
@@ -127,12 +118,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="short_vignettes/genetics_vignettes_intro.html">
    Introduction
@@ -179,12 +170,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="short_vignettes/evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -201,12 +192,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="short_vignettes/demography_vignettes_intro.html">
    Introduction
@@ -229,12 +220,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
@@ -246,12 +237,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="long_vignettes/bgs_vignette.html">
    Background selection
@@ -278,24 +269,24 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pages/definitions.html">
    Definitions
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pages/tutorial.html">
    Tutorial
@@ -307,12 +298,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pages/softselection.html">
    Soft selection with discrete demes
@@ -344,12 +335,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="technical/demes.html">
    Details of
@@ -372,12 +363,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="pages/genetic_values.html">
    Genetic values
@@ -391,11 +382,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="pages/demographic_models.html">
    The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pages/demographic_models.html#module-fwdpy11.demographic_models">
-   Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
@@ -443,28 +429,13 @@
    Data types related to simulated populations
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pages/types.html#types-related-to-tree-sequence-recording">
-   Types related to tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pages/types.html#types-related-to-discrete-demographic-events">
-   Types related to discrete demographic events
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="pages/types.html#miscellaneous-types">
-   Miscellaneous types
-  </a>
- </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
@@ -501,12 +472,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="misc/changelog.html">
    Changelog
@@ -539,6 +510,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -554,22 +526,22 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
-        <!-- Source interaction buttons -->
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -587,20 +559,21 @@
     </div>
 </div>
 
+            <!-- Full screen (wrap in <a> to have style consistency -->
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
+        </div>
 
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -673,13 +646,13 @@
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive">Additive (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.alive_nodes">alive_nodes() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.alive_nodes">alive_nodes (fwdpy11.DiploidPopulation property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.Site.ancestral_state">ancestral_state (fwdpy11.Site attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata">ancient_sample_metadata() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_metadata">ancient_sample_metadata (fwdpy11.DiploidPopulation property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_nodes">ancient_sample_nodes() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.ancient_sample_nodes">ancient_sample_nodes (fwdpy11.DiploidPopulation property)</a>
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.Additive.asblack">asblack() (fwdpy11.Additive method)</a>
 
@@ -826,10 +799,12 @@
         <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.decode_mutation_metadata">(in module fwdpy11.tskit_tools)</a>
 </li>
       </ul></li>
-      <li><a href="pages/types.html#fwdpy11.Node.deme">deme (fwdpy11.Node attribute)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.deme">deme (fwdpy11.DiploidMetadata property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.Node.deme">(fwdpy11.Node attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.deme">deme() (fwdpy11.DiploidMetadata property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.deme_sizes">deme_sizes() (fwdpy11.DiploidPopulation method)</a>
 </li>
       <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph">demes_graph (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
@@ -844,7 +819,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.MutationRecord.derived_state">derived_state (fwdpy11.MutationRecord attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata">diploid_metadata() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploid_metadata">diploid_metadata (fwdpy11.DiploidPopulation property)</a>
 </li>
       <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue">DiploidGeneticValue (class in fwdpy11)</a>
 </li>
@@ -860,7 +835,7 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation">DiploidPopulation (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploids">diploids() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.diploids">diploids (fwdpy11.DiploidPopulation property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidVector">DiploidVector (class in fwdpy11)</a>
 </li>
@@ -880,11 +855,11 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.e">e() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.e">e (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.Edge">Edge (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.TableCollection.edges">edges() (fwdpy11.TableCollection property)</a>
+      <li><a href="pages/types.html#fwdpy11.TableCollection.edges">edges (fwdpy11.TableCollection property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.EdgeTable">EdgeTable (class in fwdpy11)</a>
 </li>
@@ -1072,10 +1047,12 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.Mutation.g">g (fwdpy11.Mutation attribute)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.g">g (fwdpy11.DiploidMetadata property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.Mutation.g">(fwdpy11.Mutation attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.g">g() (fwdpy11.DiploidMetadata property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/regiontypes.html#fwdpy11.GammaS">GammaS (class in fwdpy11)</a>
 </li>
       <li><a href="pages/gvaluenoise.html#fwdpy11.GaussianNoise">GaussianNoise (class in fwdpy11)</a>
@@ -1092,7 +1069,7 @@
       </ul></li>
       <li><a href="pages/definitions.html#term-genetic-value"><strong>genetic value</strong></a>
 </li>
-      <li><a href="pages/genetic_values.html#fwdpy11.Additive.genetic_values">genetic_values() (fwdpy11.Additive property)</a>
+      <li><a href="pages/genetic_values.html#fwdpy11.Additive.genetic_values">genetic_values (fwdpy11.Additive property)</a>
 
       <ul>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.genetic_values">(fwdpy11.DiploidGeneticValue property)</a>
@@ -1116,9 +1093,9 @@
 </li>
       <li><a href="pages/gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap">GeneticValueToFitnessMap (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.VariantIterator.genotypes">genotypes() (fwdpy11.VariantIterator property)</a>
+      <li><a href="pages/types.html#fwdpy11.VariantIterator.genotypes">genotypes (fwdpy11.VariantIterator property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.geography">geography() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.geography">geography (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.GSLrng">GSLrng (class in fwdpy11)</a>
 </li>
@@ -1178,18 +1155,22 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.Mutation.label">label (fwdpy11.Mutation attribute)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.label">label (fwdpy11.DiploidMetadata property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.Mutation.label">(fwdpy11.Mutation attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.label">label() (fwdpy11.DiploidMetadata property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/regiontypes.html#fwdpy11.LargeEffectExponentiallyRecessive">LargeEffectExponentiallyRecessive (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.leaf_counts">leaf_counts() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.Edge.left">left (fwdpy11.Edge attribute)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.TreeIterator.left">(fwdpy11.TreeIterator property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.TreeIterator.left">left() (fwdpy11.TreeIterator property)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.left_child">left_child() (fwdpy11.TreeIterator method)</a>
@@ -1212,7 +1193,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.MigrationMatrix.M">M (fwdpy11.MigrationMatrix attribute)</a>
 </li>
-      <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_fitness">maps_to_fitness() (fwdpy11.Additive property)</a>
+      <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_fitness">maps_to_fitness (fwdpy11.Additive property)</a>
 
       <ul>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.maps_to_fitness">(fwdpy11.DiploidGeneticValue property)</a>
@@ -1226,7 +1207,7 @@
         <li><a href="pages/genetic_values.html#fwdpy11.StrictAdditiveMultivariateEffects.maps_to_fitness">(fwdpy11.StrictAdditiveMultivariateEffects property)</a>
 </li>
       </ul></li>
-      <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_trait_value">maps_to_trait_value() (fwdpy11.Additive property)</a>
+      <li><a href="pages/genetic_values.html#fwdpy11.Additive.maps_to_trait_value">maps_to_trait_value (fwdpy11.Additive property)</a>
 
       <ul>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.maps_to_trait_value">(fwdpy11.DiploidGeneticValue property)</a>
@@ -1290,13 +1271,11 @@
       <ul>
         <li><a href="pages/types.html#fwdpy11.HaploidGenome.mutations">(fwdpy11.HaploidGenome attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="pages/types.html#fwdpy11.TableCollection.mutations">mutations() (fwdpy11.TableCollection property)</a>
-
-      <ul>
-        <li><a href="pages/types.html#fwdpy11.TreeIterator.mutations">(fwdpy11.TreeIterator method)</a>
+        <li><a href="pages/types.html#fwdpy11.TableCollection.mutations">(fwdpy11.TableCollection property)</a>
 </li>
       </ul></li>
+      <li><a href="pages/types.html#fwdpy11.TreeIterator.mutations">mutations() (fwdpy11.TreeIterator method)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.MutationTable">MutationTable (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.MutationVector">MutationVector (class in fwdpy11)</a>
@@ -1313,20 +1292,22 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.HaploidGenome.n">n (fwdpy11.HaploidGenome attribute)</a>
 </li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.ncol">ncol() (fwdpy11.DataMatrix property)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.ncol">ncol (fwdpy11.DataMatrix property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.neutral">neutral (fwdpy11.DataMatrixIterator attribute)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral">neutral (fwdpy11.DataMatrix property)</a>
 
       <ul>
+        <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.neutral">(fwdpy11.DataMatrixIterator attribute)</a>
+</li>
         <li><a href="pages/types.html#fwdpy11.MutationRecord.neutral">(fwdpy11.MutationRecord attribute)</a>
 </li>
       </ul></li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral">neutral() (fwdpy11.DataMatrix property)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_keys">neutral_keys (fwdpy11.DataMatrix property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.neutral_keys">(fwdpy11.DataMatrixIterator attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.neutral_keys">neutral_keys (fwdpy11.DataMatrixIterator attribute)</a>
-</li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_keys">neutral_keys() (fwdpy11.DataMatrix property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.neutral_matrix">neutral_matrix() (fwdpy11.DataMatrix method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.neutral_positions">neutral_positions (fwdpy11.DataMatrixIterator attribute)</a>
@@ -1341,14 +1322,14 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.MutationRecord.node">node (fwdpy11.MutationRecord attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.nodes">nodes() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.nodes">nodes (fwdpy11.DiploidMetadata property)</a>
 
       <ul>
         <li><a href="pages/types.html#fwdpy11.TableCollection.nodes">(fwdpy11.TableCollection property)</a>
 </li>
-        <li><a href="pages/types.html#fwdpy11.TreeIterator.nodes">(fwdpy11.TreeIterator method)</a>
-</li>
       </ul></li>
+      <li><a href="pages/types.html#fwdpy11.TreeIterator.nodes">nodes() (fwdpy11.TreeIterator method)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.NodeTable">NodeTable (class in fwdpy11)</a>
 </li>
       <li><a href="pages/gvaluenoise.html#fwdpy11.NoNoise">NoNoise (class in fwdpy11)</a>
@@ -1381,7 +1362,7 @@
 </li>
       <li><a href="pages/advancedtopics.html#parent2_metadata">parent2_metadata</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.parents">parents() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.parents">parents (fwdpy11.DiploidMetadata property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DiploidPopulation.pickle_to_file">pickle_to_file() (fwdpy11.DiploidPopulation method)</a>
 </li>
@@ -1398,14 +1379,16 @@
       <li><a href="pages/types.html#fwdpy11.Mutation.pos">pos (fwdpy11.Mutation attribute)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.Site.position">position (fwdpy11.Site attribute)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.VariantIterator.position">(fwdpy11.VariantIterator property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.VariantIterator.position">position() (fwdpy11.VariantIterator property)</a>
-</li>
-      <li><a href="pages/datamatrix.html#fwdpy11.StateMatrix.positions">positions() (fwdpy11.StateMatrix property)</a>
+      </ul></li>
+      <li><a href="pages/datamatrix.html#fwdpy11.StateMatrix.positions">positions (fwdpy11.StateMatrix property)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.preserved_leaf_counts">preserved_leaf_counts() (fwdpy11.TreeIterator method)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.preserved_nodes">preserved_nodes() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.preserved_nodes">preserved_nodes (fwdpy11.DiploidPopulation property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1417,25 +1400,27 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.RecordNothing">RecordNothing (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.VariantIterator.records">records() (fwdpy11.VariantIterator property)</a>
+      <li><a href="pages/types.html#fwdpy11.VariantIterator.records">records (fwdpy11.VariantIterator property)</a>
 </li>
       <li><a href="pages/regiontypes.html#fwdpy11.Region">Region (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/demographic_models.html#fwdpy11.DemographyDebugger.report">report() (fwdpy11.DemographyDebugger property)</a>
+      <li><a href="pages/demographic_models.html#fwdpy11.DemographyDebugger.report">report (fwdpy11.DemographyDebugger property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.Edge.right">right (fwdpy11.Edge attribute)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.TreeIterator.right">(fwdpy11.TreeIterator property)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.TreeIterator.right">right() (fwdpy11.TreeIterator property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_child">right_child() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.TreeIterator.right_sib">right_sib() (fwdpy11.TreeIterator method)</a>
 </li>
       <li><a href="pages/advancedtopics.html#rng">rng</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.TreeIterator.roots">roots() (fwdpy11.TreeIterator property)</a>
+      <li><a href="pages/types.html#fwdpy11.TreeIterator.roots">roots (fwdpy11.TreeIterator property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1461,14 +1446,18 @@
 </li>
       <li><a href="pages/tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence.seed">seed (fwdpy11.tskit_tools.WrappedTreeSequence attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected">selected (fwdpy11.DataMatrixIterator attribute)</a>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected">selected (fwdpy11.DataMatrix property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected">(fwdpy11.DataMatrixIterator attribute)</a>
 </li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected">selected() (fwdpy11.DataMatrix property)</a>
+      </ul></li>
+      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_keys">selected_keys (fwdpy11.DataMatrix property)</a>
+
+      <ul>
+        <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected_keys">(fwdpy11.DataMatrixIterator attribute)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected_keys">selected_keys (fwdpy11.DataMatrixIterator attribute)</a>
-</li>
-      <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_keys">selected_keys() (fwdpy11.DataMatrix property)</a>
-</li>
+      </ul></li>
       <li><a href="pages/datamatrix.html#fwdpy11.DataMatrix.selected_matrix">selected_matrix() (fwdpy11.DataMatrix method)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.DataMatrixIterator.selected_positions">selected_positions (fwdpy11.DataMatrixIterator attribute)</a>
@@ -1481,13 +1470,11 @@
 </li>
       <li><a href="pages/types.html#fwdpy11.SetSelfingRate">SetSelfingRate (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.sex">sex() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.sex">sex (fwdpy11.DiploidMetadata property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.MigrationMatrix.shape">shape (fwdpy11.MigrationMatrix attribute)</a>
-</li>
-      <li><a href="pages/genetic_values.html#fwdpy11.Additive.shape">shape() (fwdpy11.Additive property)</a>
+      <li><a href="pages/genetic_values.html#fwdpy11.Additive.shape">shape (fwdpy11.Additive property)</a>
 
       <ul>
         <li><a href="pages/genetic_values.html#fwdpy11.DiploidGeneticValue.shape">(fwdpy11.DiploidGeneticValue property)</a>
@@ -1495,6 +1482,8 @@
         <li><a href="pages/genetic_values.html#fwdpy11.GBR.shape">(fwdpy11.GBR property)</a>
 </li>
         <li><a href="pages/gvalue_to_fitness.html#fwdpy11.GeneticValueToFitnessMap.shape">(fwdpy11.GeneticValueToFitnessMap property)</a>
+</li>
+        <li><a href="pages/types.html#fwdpy11.MigrationMatrix.shape">(fwdpy11.MigrationMatrix attribute)</a>
 </li>
         <li><a href="pages/genetic_values.html#fwdpy11.Multiplicative.shape">(fwdpy11.Multiplicative property)</a>
 </li>
@@ -1510,15 +1499,15 @@
       <li><a href="pages/types.html#fwdpy11.Site">Site (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.MutationRecord.site">site (fwdpy11.MutationRecord attribute)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.VariantIterator.site">site() (fwdpy11.VariantIterator property)</a>
-</li>
-      <li><a href="pages/types.html#fwdpy11.TableCollection.sites">sites() (fwdpy11.TableCollection property)</a>
 
       <ul>
-        <li><a href="pages/types.html#fwdpy11.TreeIterator.sites">(fwdpy11.TreeIterator method)</a>
+        <li><a href="pages/types.html#fwdpy11.VariantIterator.site">(fwdpy11.VariantIterator property)</a>
 </li>
       </ul></li>
+      <li><a href="pages/types.html#fwdpy11.TableCollection.sites">sites (fwdpy11.TableCollection property)</a>
+</li>
+      <li><a href="pages/types.html#fwdpy11.TreeIterator.sites">sites() (fwdpy11.TreeIterator method)</a>
+</li>
       <li><a href="pages/types.html#fwdpy11.SiteTable">SiteTable (class in fwdpy11)</a>
 </li>
       <li><a href="pages/types.html#fwdpy11.HaploidGenome.smutations">smutations (fwdpy11.HaploidGenome attribute)</a>
@@ -1537,7 +1526,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pages/types.html#fwdpy11.TableCollection">TableCollection (class in fwdpy11)</a>
 </li>
-      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.tables">tables() (fwdpy11.DiploidPopulation property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidPopulation.tables">tables (fwdpy11.DiploidPopulation property)</a>
 
       <ul>
         <li><a href="pages/types.html#fwdpy11.TreeIterator.tables">(fwdpy11.TreeIterator property)</a>
@@ -1599,7 +1588,7 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.w">w() (fwdpy11.DiploidMetadata property)</a>
+      <li><a href="pages/types.html#fwdpy11.DiploidMetadata.w">w (fwdpy11.DiploidMetadata property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1612,21 +1601,25 @@
 
               </div>
               
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+
+</div>
+        
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-
-    </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
           By Kevin Thornton<br/>
         
-            &copy; Copyright 2020.<br/>
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>
@@ -1635,11 +1628,9 @@
 
       </div>
     </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>

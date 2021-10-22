@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module fwdpy11.tskit_tools &#8212; fwdpy11 manual</title>
     
-  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,19 +31,19 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
         const thebe_selector_output = ".output"
@@ -56,14 +53,14 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data types related to simulated populations" href="types.html" />
     <link rel="prev" title="Setting up genomic intervals" href="regiontypes.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -72,30 +69,31 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
    Introduction
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
@@ -112,12 +110,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
    Initializing a population
@@ -129,12 +127,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
    Introduction
@@ -181,12 +179,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -203,12 +201,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
    Introduction
@@ -231,12 +229,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
@@ -248,12 +246,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
    Background selection
@@ -280,24 +278,24 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="definitions.html">
    Definitions
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="tutorial.html">
    Tutorial
@@ -309,12 +307,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="softselection.html">
    Soft selection with discrete demes
@@ -346,12 +344,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../technical/demes.html">
    Details of
@@ -374,12 +372,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="genetic_values.html">
    Genetic values
@@ -393,11 +391,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="demographic_models.html">
    The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html#module-fwdpy11.demographic_models">
-   Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
@@ -445,28 +438,13 @@
    Data types related to simulated populations
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
-   Types related to tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
-   Types related to discrete demographic events
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#miscellaneous-types">
-   Miscellaneous types
-  </a>
- </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
@@ -503,12 +481,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../misc/changelog.html">
    Changelog
@@ -541,6 +519,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -556,21 +535,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -588,7 +567,7 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -606,20 +585,21 @@
     </div>
 </div>
 
+            <!-- Full screen (wrap in <a> to have style consistency -->
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
+        </div>
 
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -627,7 +607,7 @@
         
               <div>
                 
-  <div class="section" id="module-fwdpy11.tskit_tools">
+  <div class="tex2jax_ignore mathjax_ignore section" id="module-fwdpy11.tskit_tools">
 <span id="module-fwdpy11-tskit-tools"></span><span id="tskit-tools"></span><h1>Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code><a class="headerlink" href="#module-fwdpy11.tskit_tools" title="Permalink to this headline">¶</a></h1>
 <p>This module contains various things to help
 interact with <code class="docutils literal notranslate"><span class="pre">tskit</span></code>.</p>
@@ -642,23 +622,23 @@ very first generation of the simulation, respectively.
 See <a class="reference internal" href="../examples/recapitation.html#recapitation"><span class="std std-ref">here</span></a> for why the last class
 of preserved samples are special.</p>
 <dl class="py data">
-<dt id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">INDIVIDUAL_IS_ALIVE</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">INDIVIDUAL_IS_ALIVE</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">INDIVIDUAL_IS_PRESERVED</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">INDIVIDUAL_IS_PRESERVED</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
-<dt id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">INDIVIDUAL_IS_FIRST_GENERATION</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">INDIVIDUAL_IS_FIRST_GENERATION</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">WrappedTreeSequence</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">WrappedTreeSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulates a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a> as <cite>self.ts</cite>.</p>
 <p>Instance methods give additional functionality that usually
 requires interacting with the metadata.</p>
@@ -669,45 +649,45 @@ or a call to <a class="reference internal" href="#fwdpy11.tskit_tools.load" titl
 </div>
 <p>This class has the following attributes:</p>
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.data">
-<code class="sig-name descname"><span class="pre">data</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <cite>data</cite> field from top-level metadata</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph">
-<code class="sig-name descname"><span class="pre">demes_graph</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph">
+<span class="sig-name descname"><span class="pre">demes_graph</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <cite>demes_graph</cite> field from top-level metadata</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.generation">
-<code class="sig-name descname"><span class="pre">generation</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.generation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.generation">
+<span class="sig-name descname"><span class="pre">generation</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.generation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <cite>generation</cite> field from top-level metadata</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.model_params">
-<code class="sig-name descname"><span class="pre">model_params</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.model_params" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.model_params">
+<span class="sig-name descname"><span class="pre">model_params</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.model_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <cite>model_params</cite> field from top-level metadata</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.seed">
-<code class="sig-name descname"><span class="pre">seed</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.seed" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <cite>seed</cite> field from top-level metadata</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.ts">
-<code class="sig-name descname"><span class="pre">ts</span></code><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.ts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.ts">
+<span class="sig-name descname"><span class="pre">ts</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.ts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access the underlying <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a></p>
 </dd></dl>
 
 <p>This class has the following methods:</p>
 <dl class="py method">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals">
-<code class="sig-name descname"><span class="pre">timepoints_with_individuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals">
+<span class="sig-name descname"><span class="pre">timepoints_with_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator over all unique time points with individuals.</p>
 <p>For each time point a tuple of (time, nodes, metadata) is yielded.</p>
 <dl class="field-list simple">
@@ -721,15 +701,15 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata">
-<code class="sig-name descname"><span class="pre">decode_individual_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata">
+<span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.metadata.DiploidMetadata"><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decode individual metadata.</p>
 <p>See <a class="reference internal" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a> for details.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata">
-<code class="sig-name descname"><span class="pre">decode_mutation_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.Mutation</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata">
+<span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#fwdpy11.Mutation" title="fwdpy11._fwdpy11.Mutation"><span class="pre">fwdpy11._fwdpy11.Mutation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decode mutation metadata.</p>
 <p>See <a class="reference internal" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="fwdpy11.tskit_tools.decode_mutation_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_mutation_metadata()</span></code></a> for details.</p>
 </dd></dl>
@@ -737,8 +717,8 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.tskit_tools.load">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">load</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.load" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.load">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a tree sequence from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -754,8 +734,8 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.tskit_tools.decode_individual_metadata">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_individual_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_individual_metadata">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.metadata.DiploidMetadata"><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -784,8 +764,8 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="fwdpy11.tskit_tools.DiploidMetadata">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">DiploidMetadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sex</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geography</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.DiploidMetadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.DiploidMetadata">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">DiploidMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sex</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">alive</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_generation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parents</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geography</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.DiploidMetadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instances of this type are returned by
 <a class="reference internal" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a>.</p>
 <p>The following <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are used to construct instances of
@@ -815,8 +795,8 @@ this type. Member attributes have the same names as these
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.tskit_tools.decode_mutation_metadata">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></code><code class="sig-name descname"><span class="pre">decode_mutation_metadata</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">fwdpy11._fwdpy11.Mutation</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_mutation_metadata">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#fwdpy11.Mutation" title="fwdpy11._fwdpy11.Mutation"><span class="pre">fwdpy11._fwdpy11.Mutation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes metadata from a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -870,23 +850,43 @@ some elements to be <cite>None</cite>.</p>
 
               </div>
               
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="regiontypes.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Setting up genomic intervals</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="types.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Data types related to simulated populations</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-    <a class='left-prev' id="prev-link" href="regiontypes.html" title="previous page">Setting up genomic intervals</a>
-    <a class='right-next' id="next-link" href="types.html" title="next page">Data types related to simulated populations</a>
-
-    </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
           By Kevin Thornton<br/>
         
-            &copy; Copyright 2020.<br/>
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>
@@ -895,11 +895,9 @@ some elements to be <cite>None</cite>.</p>
 
       </div>
     </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>

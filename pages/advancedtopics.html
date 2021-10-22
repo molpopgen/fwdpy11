@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Advanced topics &#8212; fwdpy11 manual</title>
     
-  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,38 +31,38 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Soft selection with discrete demes" href="softselection.html" />
     <link rel="prev" title="Tutorial" href="tutorial.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -74,30 +71,31 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
    Introduction
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
@@ -114,12 +112,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
    Initializing a population
@@ -131,12 +129,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
    Introduction
@@ -183,12 +181,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -205,12 +203,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
    Introduction
@@ -233,12 +231,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
@@ -250,12 +248,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
    Background selection
@@ -282,24 +280,24 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="definitions.html">
    Definitions
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="tutorial.html">
    Tutorial
@@ -311,12 +309,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="softselection.html">
    Soft selection with discrete demes
@@ -348,12 +346,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../technical/demes.html">
    Details of
@@ -376,12 +374,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="genetic_values.html">
    Genetic values
@@ -395,11 +393,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="demographic_models.html">
    The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html#module-fwdpy11.demographic_models">
-   Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
@@ -447,28 +440,13 @@
    Data types related to simulated populations
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
-   Types related to tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
-   Types related to discrete demographic events
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#miscellaneous-types">
-   Miscellaneous types
-  </a>
- </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
@@ -505,12 +483,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../misc/changelog.html">
    Changelog
@@ -543,6 +521,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -558,21 +537,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -593,7 +572,7 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -611,25 +590,25 @@
     </div>
 </div>
 
+            <!-- Full screen (wrap in <a> to have style consistency -->
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
-
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
         </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">
    Executing multiple replicates in parallel using
@@ -783,8 +762,8 @@
  </li>
 </ul>
 
-        </nav>
-        
+            </nav>
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -792,7 +771,7 @@
         
               <div>
                 
-  <div class="section" id="advanced-topics">
+  <div class="tex2jax_ignore mathjax_ignore section" id="advanced-topics">
 <span id="advancedtopics"></span><h1>Advanced topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="executing-multiple-replicates-in-parallel-using-concurrent-futures">
 <h2>Executing multiple replicates in parallel using <code class="docutils literal notranslate"><span class="pre">concurrent.futures</span></code><a class="headerlink" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures" title="Permalink to this headline">¶</a></h2>
@@ -848,8 +827,8 @@ For example, for a neutral model, the distribution of the
 number of mutations under an infinitely-many sites model
 for a small sample should match <code class="docutils literal notranslate"><span class="pre">msprime</span></code> very well.
 For a steady-state model of recurrent hitch-hiking
-<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21"><span>KHL89</span></a>]</span>, results from small samples
-should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18"><span>KS16</span></a>]</span>.
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21">KHL89</a>]</span>, results from small samples
+should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18">KS16</a>]</span>.
 Clearly, all of the different methods
 should match analytical results where possible.</p></li>
 <li><p>You probably want all of your trees to be fully coalesced
@@ -873,7 +852,7 @@ with a tree sequence from <code class="docutils literal notranslate"><span class
 </div>
 <div class="section" id="the-eyre-walker-model-of-complex-traits">
 <span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">¶</a></h2>
-<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span> describes a model relating mutations with
+<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
 Here, <span class="math notranslate nohighlight">\(\epsilon\)</span> is a draw from a Gaussian distribution with mean zero,
@@ -1042,12 +1021,12 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>), which should be cited
-alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>.</p></li>
-<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28"><span>KH88</span></a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29"><span>KH90</span></a>]</span>) show that this model predicts heritability
+(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29">KH90</a>]</span>), which should be cited
+alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23">EW10</a>]</span>.</p></li>
+<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29">KH90</a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
-of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16"><span>JB05</span></a>]</span> discuss this point
+of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16">JB05</a>]</span> discuss this point
 in some detail, and give other relevant references.</p></li>
 <li><p>Depending somewhat on the parameters of the <code class="docutils literal notranslate"><span class="pre">getz</span></code> function, one will eventually
 generate an intermediate-frequency variant with a massive <span class="math notranslate nohighlight">\(z\)</span>,
@@ -1145,8 +1124,8 @@ model, then use <a class="reference internal" href="genetic_values.html#fwdpy11.
 type.</p>
 <p><code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> provides the following helper functions to improve efficiency:</p>
 <dl class="py function">
-<dt id="fwdpy11.strict_additive_effects">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">strict_additive_effects</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.strict_additive_effects">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">strict_additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.strict_additive_effects" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, ignoring dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1160,8 +1139,8 @@ fitness if needed.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.additive_effects">
-<code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">additive_effects</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.additive_effects">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">additive_effects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.additive_effects" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function computes the sum of effect sizes in a
 diploid genome, accounting for dominance.  The return value
 is an offset from zero, so add 1.0 to convert to a
@@ -1273,8 +1252,8 @@ initialize the base.</p>
 value types a bit easier.  You will see concrete examples using them
 later.</p>
 <dl class="py function">
-<dt id="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone">
-<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone">
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_is_trait_default_clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator is a <em>class</em> that adds the ability
 for custom types to be passed to classes derived from
 :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.DiploidGeneticValue</span></code>.</p>
@@ -1294,8 +1273,8 @@ The default is ``ndim=1``.
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">
-<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone">
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">genetic_value_noise_default_clone</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.genetic_value_noise_default_clone" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the analog to
 :attr:<code class="docutils literal notranslate"><span class="pre">fwdpy11.custom_genetic_value_decorators.genetic_value_is_trait_default_clone</span></code>
 for noise objects inheriting from :class:<code class="docutils literal notranslate"><span class="pre">fwdpy11.GeneticValueNoise</span></code>.</p>
@@ -1303,8 +1282,8 @@ for noise objects inheriting from :class:<code class="docutils literal notransla
 </dd></dl>
 
 <dl class="py function">
-<dt id="fwdpy11.custom_genetic_value_decorators.default_update">
-<code class="sig-prename descclassname"><span class="pre">&#64;</span></code><code class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></code><code class="sig-name descname"><span class="pre">default_update</span></code><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.custom_genetic_value_decorators.default_update">
+<span class="sig-prename descclassname"><span class="pre">&#64;</span></span><span class="sig-prename descclassname"><span class="pre">fwdpy11.custom_genetic_value_decorators.</span></span><span class="sig-name descname"><span class="pre">default_update</span></span><a class="headerlink" href="#fwdpy11.custom_genetic_value_decorators.default_update" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator adds the following function to <code class="docutils literal notranslate"><span class="pre">cls</span></code>,
 which is a no-op function:</p>
 <p>.. code-block:: python</p>
@@ -1415,8 +1394,8 @@ so that results are reproducible.)</p>
 <h4>The data type<a class="headerlink" href="#the-data-type" title="Permalink to this headline">¶</a></h4>
 <p>The type passed into the <code class="docutils literal notranslate"><span class="pre">__call__</span></code> function is:</p>
 <dl class="py class">
-<dt id="fwdpy11.DiploidGeneticValueToFitnessData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueToFitnessData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueToFitnessData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueToFitnessData" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>This class supports the buffer protocol, which exposes the
 genetic values array.  The most efficient access will
@@ -1484,8 +1463,8 @@ and standard deviation <code class="docutils literal notranslate"><span class="p
 <div class="section" id="id10">
 <h4>The data type<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
 <dl class="py class">
-<dt id="fwdpy11.DiploidGeneticValueNoiseData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></code><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.DiploidGeneticValueNoiseData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">DiploidGeneticValueNoiseData</span></span><a class="headerlink" href="#fwdpy11.DiploidGeneticValueNoiseData" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. versionadded:: 0.9.0</p>
 <p>Instances of this class have the following attributes:</p>
 <p>.. py:attribute:: rng</p>
@@ -1525,8 +1504,8 @@ and this value.
 <h4>The abstract base class<a class="headerlink" href="#the-abstract-base-class" title="Permalink to this headline">¶</a></h4>
 <p>The ABC type is <a class="reference internal" href="#fwdpy11.PyDiploidGeneticValue" title="fwdpy11.PyDiploidGeneticValue"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.PyDiploidGeneticValue</span></code></a>:</p>
 <dl class="py class">
-<dt id="fwdpy11.PyDiploidGeneticValue">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValue">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValue</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValue" title="Permalink to this definition">¶</a></dt>
 <dd><p>.. py:method:: <strong>init</strong>()</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>:param ndim:
 :type ndim: int
@@ -1693,8 +1672,8 @@ in <a class="reference internal" href="../technical/genetic_values.html#gvalue-s
 <div class="section" id="the-data-types">
 <h4>The data types<a class="headerlink" href="#the-data-types" title="Permalink to this headline">¶</a></h4>
 <dl class="py class">
-<dt id="fwdpy11.PyDiploidGeneticValueData">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">fwdpy11.</span></code><code class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></code><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fwdpy11.PyDiploidGeneticValueData">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.</span></span><span class="sig-name descname"><span class="pre">PyDiploidGeneticValueData</span></span><a class="headerlink" href="#fwdpy11.PyDiploidGeneticValueData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <div class="versionadded">
@@ -1705,39 +1684,39 @@ genetic values array.  The most efficient access will
 be via a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#memoryview" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">memoryview</span></code></a>.</p>
 <p>Instances of this class have the following attributes:</p>
 <dl class="py attribute">
-<dt id="rng">
-<code class="sig-name descname"><span class="pre">rng</span></code><a class="headerlink" href="#rng" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="rng">
+<span class="sig-name descname"><span class="pre">rng</span></span><a class="headerlink" href="#rng" title="Permalink to this definition">¶</a></dt>
 <dd><p>The simulation’s random number generation, an
 instance of <a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="pop">
-<code class="sig-name descname"><span class="pre">pop</span></code><a class="headerlink" href="#pop" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>The population, an instance of <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="offspring_metadata">
-<code class="sig-name descname"><span class="pre">offspring_metadata</span></code><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="offspring_metadata">
+<span class="sig-name descname"><span class="pre">offspring_metadata</span></span><a class="headerlink" href="#offspring_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>The offspring’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="parent1_metadata">
-<code class="sig-name descname"><span class="pre">parent1_metadata</span></code><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parent1_metadata">
+<span class="sig-name descname"><span class="pre">parent1_metadata</span></span><a class="headerlink" href="#parent1_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>The first parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="parent2_metadata">
-<code class="sig-name descname"><span class="pre">parent2_metadata</span></code><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parent2_metadata">
+<span class="sig-name descname"><span class="pre">parent2_metadata</span></span><a class="headerlink" href="#parent2_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>The second parent’s <a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt id="offspring_metadata_index">
-<code class="sig-name descname"><span class="pre">offspring_metadata_index</span></code><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="offspring_metadata_index">
+<span class="sig-name descname"><span class="pre">offspring_metadata_index</span></span><a class="headerlink" href="#offspring_metadata_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>A 64 bit integer that gives the location (index) of
 <code class="docutils literal notranslate"><span class="pre">offspring_metadata</span></code> in <a class="reference internal" href="types.html#fwdpy11.DiploidPopulation.diploid_metadata" title="fwdpy11.DiploidPopulation.diploid_metadata"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.diploid_metadata</span></code></a>.
 This index is useful in the event of mass migrations via copies,
@@ -1788,23 +1767,43 @@ A more general example, for a genome of length <code class="docutils literal not
 
               </div>
               
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="tutorial.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Tutorial</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="softselection.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Soft selection with discrete demes</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-    <a class='left-prev' id="prev-link" href="tutorial.html" title="previous page">Tutorial</a>
-    <a class='right-next' id="next-link" href="softselection.html" title="next page">Soft selection with discrete demes</a>
-
-    </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
           By Kevin Thornton<br/>
         
-            &copy; Copyright 2020.<br/>
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>
@@ -1813,11 +1812,9 @@ A more general example, for a genome of length <code class="docutils literal not
 
       </div>
     </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>

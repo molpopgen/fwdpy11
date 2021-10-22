@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tutorial &#8212; fwdpy11 manual</title>
     
-  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
 
     
   <link rel="stylesheet"
@@ -19,14 +20,10 @@
 
     
       
-  <link rel="stylesheet"
-    href="../_static/vendor/open-sans_all/1.44.1/index.css">
-  <link rel="stylesheet"
-    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,38 +31,38 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
 
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
-    <script >
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
         const thebe_selector = ".thebe"
         const thebe_selector_input = "pre"
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Advanced topics" href="advancedtopics.html" />
     <link rel="prev" title="Definitions" href="definitions.html" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
-
-
-
+    
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
     
 
     <div class="container-xl">
@@ -74,30 +71,31 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="../index.html">
-  
-  
-  <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
-  
-</a>
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">fwdpy11 manual</h1>
+      
+    </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
-</form>
-<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <ul class="nav sidenav_l1">
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../intro.html">
    Introduction
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="userenv.html">
    Setting up user environments for installation
@@ -114,12 +112,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
    Initializing a population
@@ -131,12 +129,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
    Introduction
@@ -183,12 +181,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -205,12 +203,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
    Introduction
@@ -233,12 +231,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html">
    Converting data to tskit format
@@ -250,12 +248,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../long_vignettes/bgs_vignette.html">
    Background selection
@@ -282,24 +280,24 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="definitions.html">
    Definitions
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
 </p>
-<ul class="current nav sidenav_l1">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Tutorial
@@ -311,12 +309,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="softselection.html">
    Soft selection with discrete demes
@@ -348,12 +346,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../technical/demes.html">
    Details of
@@ -376,12 +374,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="genetic_values.html">
    Genetic values
@@ -395,11 +393,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="demographic_models.html">
    The demography debugger
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="demographic_models.html#module-fwdpy11.demographic_models">
-   Pre-computed demographic models
   </a>
  </li>
  <li class="toctree-l1">
@@ -447,28 +440,13 @@
    Data types related to simulated populations
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-tree-sequence-recording">
-   Types related to tree sequence recording
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#types-related-to-discrete-demographic-events">
-   Types related to discrete demographic events
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="types.html#miscellaneous-types">
-   Miscellaneous types
-  </a>
- </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../examples/gss_divergent_optima.html">
    Adaptation to different optima with multivariate distribution of effect sizes
@@ -505,12 +483,12 @@
   </a>
  </li>
 </ul>
-<p class="caption collapsible-parent">
+<p class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../misc/changelog.html">
    Changelog
@@ -543,6 +521,7 @@
  </li>
 </ul>
 
+    </div>
 </nav> <!-- To handle the deprecated key -->
 
 <div class="navbar_extra_footer">
@@ -558,21 +537,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -593,7 +572,7 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -611,25 +590,25 @@
     </div>
 </div>
 
+            <!-- Full screen (wrap in <a> to have style consistency -->
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
-
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
         </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#initializing-a-population">
    Initializing a population
@@ -787,8 +766,8 @@
  </li>
 </ul>
 
-        </nav>
-        
+            </nav>
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -796,7 +775,7 @@
         
               <div>
                 
-  <div class="section" id="tutorial">
+  <div class="tex2jax_ignore mathjax_ignore section" id="tutorial">
 <span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
 <p>The tutorial is organized around a series of tasks that one
 needs to complete in order to run a simulation.</p>
@@ -840,7 +819,7 @@ genome length:</p>
 that is used to record the ancestry of the simulated population.
 The tables themselves are instances of <a class="reference internal" href="types.html#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a>.
 See <a class="reference internal" href="tsoverview.html#tsoverview"><span class="std std-ref">here</span></a> for a brief introduction to tables as well
-as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19"><span>KEM16</span></a>]</span> and <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id10"><span>KTAR18</span></a>]</span>.  See <a class="reference internal" href="tstypes.html#ts-data-types"><span class="std std-ref">here</span></a>
+as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id19">KEM16</a>]</span> and <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id10">KTAR18</a>]</span>.  See <a class="reference internal" href="tstypes.html#ts-data-types"><span class="std std-ref">here</span></a>
 for a more detailed discussion of relevant data structures.</p>
 <p>To initialize a population with individuals in multiple demes:</p>
 <div class="cell docutils container">
@@ -1104,12 +1083,12 @@ the maximum allowed:</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">14</span><span class="o">-</span><span class="mi">5586</span><span class="n">ed4c8878</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_4417</span><span class="o">/</span><span class="mf">904959176.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
 
-<span class="nn">&lt;attrs generated init fwdpy11.regions.ConstantS&gt;</span> in <span class="ni">__init__</span><span class="nt">(self, beg, end, weight, s, h, coupled, label, scaling)</span>
+<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/regions.py</span> in <span class="ni">__init__</span><span class="nt">(self, beg, end, weight, s, h, coupled, label, scaling)</span>
 <span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
 <span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;scaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
 <span class="ne">---&gt; </span><span class="mi">12</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
@@ -1477,8 +1456,8 @@ so we need to pass on the square root.</p></li>
 really should be called <code class="docutils literal notranslate"><span class="pre">VW</span></code> and we’ll fix that in a future version and hopefully
 not break people’s code.</p>
 <p>In general, there’s a good bit of subtlety to properly modeling quantitative traits.
-The machinery described here was used in <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id9"><span>Tho19</span></a>]</span>. <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id22"><span>Burger00</span></a>]</span> is an excellent
-technical reference on the topic. <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id3"><span>WL18</span></a>]</span> also thoroughly covers a lot of
+The machinery described here was used in <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id9">Tho19</a>]</span>. <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id22">Burger00</a>]</span> is an excellent
+technical reference on the topic. <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id3">WL18</a>]</span> also thoroughly covers a lot of
 relevant material.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1489,7 +1468,7 @@ to handle all cases.  The types discussed here would remain as simple
 Python wrappers so that we don’t break existing simulations.</p>
 </div>
 <p>For an example of another approach to modeling phenotypes often
-attributed to <span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id23"><span>EW10</span></a>]</span>, see <a class="reference internal" href="advancedtopics.html#eyre-walker"><span class="std std-ref">here</span></a>.</p>
+attributed to <span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id23">EW10</a>]</span>, see <a class="reference internal" href="advancedtopics.html#eyre-walker"><span class="std std-ref">here</span></a>.</p>
 <div class="admonition-todo admonition" id="id8">
 <p class="admonition-title">Todo</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Write (and refer to) an advanced section on pleiotropic models.
@@ -1684,15 +1663,15 @@ the attributes are read-only and attempts to modify will raise exceptions:</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">FrozenInstanceError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">31</span><span class="o">-</span><span class="mi">9</span><span class="n">bee89e8c493</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_4417</span><span class="o">/</span><span class="mf">4006667398.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dmodel</span><span class="o">.</span><span class="n">mass_migrations</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="nn">~/.local/lib/python3.8/site-packages/attr/_make.py</span> in <span class="ni">_frozen_setattrs</span><span class="nt">(self, name, value)</span>
-<span class="g g-Whitespace">    </span><span class="mi">551</span>         <span class="n">Attached</span> <span class="n">to</span> <span class="n">frozen</span> <span class="n">classes</span> <span class="k">as</span> <span class="fm">__setattr__</span><span class="o">.</span>
-<span class="g g-Whitespace">    </span><span class="mi">552</span>         <span class="s2">&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">553</span><span class="s2">         raise FrozenInstanceError()</span>
-<span class="g g-Whitespace">    </span><span class="mi">554</span><span class="s2"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">555</span><span class="s2"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">624</span>         <span class="n">Attached</span> <span class="n">to</span> <span class="n">frozen</span> <span class="n">classes</span> <span class="k">as</span> <span class="fm">__setattr__</span><span class="o">.</span>
+<span class="g g-Whitespace">    </span><span class="mi">625</span>         <span class="s2">&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">626</span><span class="s2">         raise FrozenInstanceError()</span>
+<span class="g g-Whitespace">    </span><span class="mi">627</span><span class="s2"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">628</span><span class="s2"> </span>
 
 <span class="ne">FrozenInstanceError</span>: 
 </pre></div>
@@ -1748,12 +1727,12 @@ See <a class="reference internal" href="demographic_models.html#demographic-mode
 <p class="admonition-title">Warning</p>
 <p>Programatically building up demographic models is tedious
 and error-prone.  Errors end up in the literature, too (see
-<span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id2"><span>RNGK20</span></a>]</span>).  Where possible, I <strong>strongly</strong> urge you
+<span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id2">RNGK20</a>]</span>).  Where possible, I <strong>strongly</strong> urge you
 to test the correctness of a model against another implementation.
 For example, one could compare results with no selection
 and no recombination with the output of <code class="docutils literal notranslate"><span class="pre">msprime</span></code>. Another
 approach is to compare to the predictions of
-<a class="reference external" href="https://bitbucket.org/simongravel/moments">moments</a> <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id8"><span>JLRG17</span></a>]</span>,
+<a class="reference external" href="https://bitbucket.org/simongravel/moments">moments</a> <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id8">JLRG17</a>]</span>,
 which is the approach taken by the <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code>
 <a class="reference external" href="https://github.com/molpopgen/fwdpy11_statistical_tests">statistical tests</a>.</p>
 </div>
@@ -1847,12 +1826,12 @@ deme <code class="docutils literal notranslate"><span class="pre">1</span></code
 </div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">34</span><span class="o">-</span><span class="n">b0add2dffb95</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_4417</span><span class="o">/</span><span class="mf">1043365372.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="nb">print</span><span class="p">(</span><span class="n">bad_dmodel</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
 <span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">d</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">bad_dmodel</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;ANCESTRAL&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;DERIVED&quot;</span><span class="p">})</span>
 
-<span class="nn">&lt;attrs generated init fwdpy11._types.demography_debugger.DemographyDebugger&gt;</span> in <span class="ni">__init__</span><span class="nt">(self, initial_deme_sizes, events, simlen, deme_labels)</span>
+<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">__init__</span><span class="nt">(self, initial_deme_sizes, events, simlen, deme_labels)</span>
 <span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="n">__attr_validator_initial_deme_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__attr_initial_deme_sizes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_deme_sizes</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="n">__attr_validator_simlen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__attr_simlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
 <span class="ne">----&gt; </span><span class="mi">9</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
@@ -1901,10 +1880,10 @@ never gets created since we deleted the mass migration event:</p>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">35</span><span class="o">-</span><span class="n">f3b6385b3886</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_4417</span><span class="o">/</span><span class="mf">3433610417.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">([</span><span class="mi">100</span><span class="p">],</span> <span class="n">dmodel2</span><span class="p">)</span>
 
-<span class="nn">&lt;attrs generated init fwdpy11._types.demography_debugger.DemographyDebugger&gt;</span> in <span class="ni">__init__</span><span class="nt">(self, initial_deme_sizes, events, simlen, deme_labels)</span>
+<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/_types/demography_debugger.py</span> in <span class="ni">__init__</span><span class="nt">(self, initial_deme_sizes, events, simlen, deme_labels)</span>
 <span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="n">__attr_validator_initial_deme_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__attr_initial_deme_sizes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_deme_sizes</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="n">__attr_validator_simlen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__attr_simlen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">simlen</span><span class="p">)</span>
 <span class="ne">----&gt; </span><span class="mi">9</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
@@ -2118,7 +2097,7 @@ which is a random number generator.</p>
 </div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">simplification_interval</span></code> parameter directs <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> to run the tree
-sequence simplification algorithm <span id="id11">[<a class="reference internal" href="../misc/bibliography.html#id10"><span>KTAR18</span></a>]</span> every 25 generations.  Simplifying
+sequence simplification algorithm <span id="id11">[<a class="reference internal" href="../misc/bibliography.html#id10">KTAR18</a>]</span> every 25 generations.  Simplifying
 often uses less total memory but requires a longer total run time.  Simplifying too
 infrequently may consume too much memory.  In general, I use a value of <code class="docutils literal notranslate"><span class="pre">100</span></code> and
 try not to think about it too much.</p>
@@ -2316,7 +2295,7 @@ with mutations.  The variants will simply be ignored.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When simulating very large genomic regions, it is not a good
-idea to use the standard model in <code class="docutils literal notranslate"><span class="pre">msprime</span></code>. See <span id="id13">[<a class="reference internal" href="../misc/bibliography.html#id6"><span>NKR+20</span></a>]</span>
+idea to use the standard model in <code class="docutils literal notranslate"><span class="pre">msprime</span></code>. See <span id="id13">[<a class="reference internal" href="../misc/bibliography.html#id6">NKR+20</a>]</span>
 for details and also <a class="reference external" href="https://tskit.dev/msprime/docs/latest/api.html#msprime.DiscreteTimeWrightFisher" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">msprime.DiscreteTimeWrightFisher</span></code></a>.
 Also note that starting with <code class="docutils literal notranslate"><span class="pre">msprime</span></code> output doesn’t
 guarantee that you don’t need to “burn in” the simulation
@@ -2466,23 +2445,43 @@ static function <a class="reference internal" href="types.html#fwdpy11.DiploidPo
 
               </div>
               
+        
+            
+
+
+
+<div class='prev-next-bottom'>
+    
+    <div id="prev">
+        <a class="left-prev" href="definitions.html" title="previous page">
+            <i class="prevnext-label fas fa-angle-left"></i>
+            <div class="prevnext-info">
+                <p class="prevnext-label">previous</p>
+                <p class="prevnext-title">Definitions</p>
+            </div>
+        </a>
+    </div>
+     <div id="next">
+        <a class="right-next" href="advancedtopics.html" title="next page">
+            <div class="prevnext-info">
+                <p class="prevnext-label">next</p>
+                <p class="prevnext-title">Advanced topics</p>
+            </div>
+            <i class="prevnext-label fas fa-angle-right"></i>
+        </a>
+     </div>
+
+</div>
+        
         </div>
     </div>
-    
-    
-    <div class='prev-next-bottom'>
-        
-    <a class='left-prev' id="prev-link" href="definitions.html" title="previous page">Definitions</a>
-    <a class='right-next' id="next-link" href="advancedtopics.html" title="next page">Advanced topics</a>
-
-    </div>
-    <footer class="footer mt-5 mt-md-0">
+    <footer class="footer">
     <div class="container">
       <p>
         
           By Kevin Thornton<br/>
         
-            &copy; Copyright 2020.<br/>
+            &copy; Copyright 2021.<br/>
       </p>
     </div>
   </footer>
@@ -2491,11 +2490,9 @@ static function <a class="reference internal" href="types.html#fwdpy11.DiploidPo
 
       </div>
     </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
 
-    
-  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
-
-
-    
+  
   </body>
 </html>
