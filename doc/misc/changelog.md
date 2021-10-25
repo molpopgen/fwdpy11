@@ -3,6 +3,14 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.16.2
+
+Documentation
+
+* Document that virtual envs should upgrade `pip`.
+  `pr`{834}
+  `issue`{833}
+
 ## 0.16.1
 
 New features:
