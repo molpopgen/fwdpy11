@@ -9,8 +9,16 @@ The recommended procedure is to install into a virtual environment:
 mkdir ~/venvs
 python3 -m venv ~/venvs/fwdpy11
 source activate ~/venvs/fwdpy11/bin/activate
+python -m pip install --upgrade pip
 pip install fwpdy11
 ```
+
+:::{note}
+
+The reason to upgrade `pip` is so that dependencies are properly-handled.
+This step will not be required for all users, but we recommend it just in case
+
+:::
 
 If you must install from source, see the {ref}`developer's guide <developersguide>`.
 
