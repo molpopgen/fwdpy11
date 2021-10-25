@@ -20,9 +20,9 @@
 import os
 import unittest
 
-import numpy as np
-
 import fwdpy11
+import numpy as np
+import pytest
 
 
 def setup_pdict(demog, simlen):
@@ -136,6 +136,11 @@ class TestTwoDemeIMModelVariousInitMethods(unittest.TestCase):
             1000, 0.1, 0.7, (1.1, 2.7), np.array([1e-2, 0.25]), burnin=1.0
         )
         self.assertEqual(model, model)
+
+
+@pytest.mark.parametrize("modelname", ["tennessen", "jouganous_three_deme"])
+def test_import_human_demographic_models(modelname):
+    _ = eval("fwdpy11.demographic_models.human." + modelname + "()")
 
 
 @unittest.skipIf(
