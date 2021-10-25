@@ -1330,9 +1330,9 @@ returned, indexed in the same order as the input windows.</p></li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.13.0+4.g2e3d84d.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> does <em>not</em> change <cite>dtype</cite> to <cite>float</cite> as a result of
+<p><a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.html#sparse.COO" title="(in sparse v0.13.0+6.gd9c848e.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sparse.COO</span></code></a> does <em>not</em> change <cite>dtype</cite> to <cite>float</cite> as a result of
 division by a scalar!  Thus, operations like getting the average frequency spectrum
-from a model require a call to <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.astype.html#sparse.COO.astype" title="(in sparse v0.13.0+4.g2e3d84d.dirty)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sparse.COO.astype()</span></code></a> prior to any multiplication
+from a model require a call to <a class="reference external" href="https://sparse.pydata.org/en/latest/generated/sparse.COO.astype.html#sparse.COO.astype" title="(in sparse v0.13.0+6.gd9c848e.dirty)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sparse.COO.astype()</span></code></a> prior to any multiplication
 and/or division.</p>
 </div>
 <div class="versionadded">
