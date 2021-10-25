@@ -11,6 +11,12 @@ Documentation
   `pr`{834}
   `issue`{833}
 
+Packaging
+
+* Fix import of functions in `fwdpy11.demographic_models.human`.
+  `pr`{835}
+  `issue`{832}
+
 ## 0.16.1
 
 New features:
