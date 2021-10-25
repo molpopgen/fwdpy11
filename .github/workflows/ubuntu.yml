@@ -118,13 +118,16 @@ jobs:
             python setup.py sdist
             python setup.py check
             python -m twine check dist/*.tar.gz
+            rm -rf dist/*.tar.gz
 
       - name: Test pip install from dist in fresh venv
         run: |
             python -m venv venv
             source venv/bin/activate
             pip install --upgrade setuptools pip wheel
-            python -m pip install dist/*.tar.gz
+            python setup.py bdist_wheel
+            python -m pip install --no-cache-dir dist/fwdpy11*-linux*.whl
             python -m fwdpy11 --includes
             python -c "import fwdpy11;print(fwdpy11.__version__)"
+            python -c "import fwdpy11;print(fwdpy11.__file__)"
 
