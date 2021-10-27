@@ -8,29 +8,34 @@ updates to latest `fwdpp` version, etc.
 Bug fixes
 
 * Fix error initializing the founder genome of {class}`fwdpy11.DiploidPopulation`
-  `issue`{836}
-  `pr`{838}
+  Issue {issue}`836`
+  PR {pr}`838`
+
+Back end changes:
+
+* Add more runtime checks to {func}`fwdpy11.DiploidPopulation.add_mutation`
+  PR {pr}`837`
 
 ## 0.16.2
 
 Documentation
 
 * Document that virtual envs should upgrade `pip`.
-  `pr`{834}
-  `issue`{833}
+  PR {pr}`834`
+  Issue {issue}`833`
 
 Packaging
 
 * Fix import of functions in `fwdpy11.demographic_models.human`.
-  `pr`{835}
-  `issue`{832}
+  PR {pr}`835`
+  Issue {issue}`832`
 
 ## 0.16.1
 
 New features:
 
 * `Mutation.__str__` is now more informative.
-  `pr`{825}
+  PR {pr}`825`
 
 ## 0.16.0
 
