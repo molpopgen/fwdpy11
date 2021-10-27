@@ -29,6 +29,10 @@ class TestDiploidPopulation(unittest.TestCase):
     def test_N(self):
         self.assertEqual(self.pop.N, 1000)
 
+    def test_founder_genome_counts(self):
+        self.assertEqual(1, len(self.pop.haploid_genomes))
+        self.assertEqual(2 * self.pop.N, self.pop.haploid_genomes[0].n)
+
     def test_generation(self):
         self.assertEqual(self.pop.generation, 0)
 

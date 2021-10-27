@@ -109,7 +109,7 @@ namespace fwdpy11
 
         // Constructors for Python
         DiploidPopulation(const fwdpp::uint_t N, const double length)
-            : Population{ N, length }, diploids(N, { 0, 0 }),
+            : Population{2, N, length }, diploids(N, { 0, 0 }),
               diploid_metadata(N), ancient_sample_metadata{}
         {
             finish_construction({ N });
@@ -117,7 +117,7 @@ namespace fwdpy11
 
         DiploidPopulation(const std::vector<std::uint32_t> &deme_sizes,
                           const double length)
-            : Population{ std::accumulate(begin(deme_sizes), end(deme_sizes),
+            : Population{2, std::accumulate(begin(deme_sizes), end(deme_sizes),
                                           0u),
                           length },
               diploids(std::accumulate(begin(deme_sizes), end(deme_sizes), 0u),
