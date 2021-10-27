@@ -69,8 +69,8 @@ namespace fwdpy11
         // represent a matrix of N rows by "dimensions" columns.
         std::vector<double> genetic_value_matrix, ancient_sample_genetic_value_matrix;
 
-        Population(fwdpp::uint_t N_, const double L)
-            : fwdpp_base{N_}, N{N_}, generation{0}, is_simulating{false},
+        Population(fwdpp::uint_t ploidy, fwdpp::uint_t N_, const double L)
+            : fwdpp_base{ploidy*N_}, N{N_}, generation{0}, is_simulating{false},
               tables(init_tables(N_, L)), alive_nodes{}, preserved_sample_nodes{},
               genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {
