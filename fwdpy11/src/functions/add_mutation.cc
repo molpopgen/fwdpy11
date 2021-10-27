@@ -21,6 +21,7 @@
 #include <vector>
 #include <stdexcept>
 #include <algorithm>
+#include <unordered_map>
 #include <sstream>
 #include <fwdpy11/rng.hpp>
 #include <fwdpy11/types/DiploidPopulation.hpp>
@@ -283,21 +284,38 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
         {
             throw std::invalid_argument("number of descendants must be >= 1");
         }
+    if (static_cast<decltype(pop.N)>(ndescendants) >= 2 * pop.N)
+        {
+            throw std::invalid_argument("ndescendants must be < 2*pop.N");
+        }
     if (deme >= 0)
         {
+            std::unordered_map<fwdpp::ts::table_index_t, unsigned> deme_sizes;
             bool found = false;
             for (auto& dip : pop.diploid_metadata)
                 {
+                    auto itr = deme_sizes.find(dip.deme);
+                    if (itr == end(deme_sizes))
+                        {
+                            deme_sizes[dip.deme] = 0;
+                        }
+                    else
+                        {
+                            itr->second++;
+                        }
                     if (dip.deme == deme)
                         {
                             found = true;
-                            break;
                         }
                 }
             if (!found)
                 {
                     throw std::invalid_argument(
                         "no alive individuals have the desired deme id");
+                }
+            if (static_cast<unsigned>(ndescendants) >= 2 * deme_sizes[deme])
+                {
+                    throw std::invalid_argument("ndescendants must be < 2*(deme size)");
                 }
         }
 
@@ -373,7 +391,7 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
         pop.tables->nodes.size(),
         std::make_pair(std::numeric_limits<std::size_t>::max(), -1));
 
-    for (std::size_t i = 0; i < pop.diploid_metadata.size(); ++i)
+    for (std::size_t i = 0; i < static_cast<std::size_t>(pop.N); ++i)
         {
             auto node0 = pop.diploid_metadata[i].nodes[0];
             auto node1 = pop.diploid_metadata[i].nodes[1];
@@ -444,5 +462,16 @@ add_mutation(const fwdpy11::GSLrng_t& rng, const double left, const double right
                 }
         }
 
+    for (auto& dip : pop.diploids)
+        {
+            if (pop.haploid_genomes[dip.first].n == 0)
+                {
+                    throw std::runtime_error("diploid refers to extinct genome");
+                }
+            if (pop.haploid_genomes[dip.second].n == 0)
+                {
+                    throw std::runtime_error("diploid refers to extinct genome");
+                }
+        }
     return new_mutation_key;
 }

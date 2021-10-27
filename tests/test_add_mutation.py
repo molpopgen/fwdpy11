@@ -24,6 +24,57 @@ import pytest
 
 from fwdpy11_test_utilities import seed_list
 
+
+def generate_msprime_ancestry(
+    msprime_seed,
+    fp11_seed,
+    ndescendants,
+    N=100,
+    alpha=1000,  # 2Ns
+    rho=100,
+    L=1.0,
+    max_attempts=100000,
+):
+    for initial_ts in msprime.sim_ancestry(
+        samples=N,
+        population_size=2 * N,
+        recombination_rate=rho / 4 / N,
+        random_seed=msprime_seed,
+        sequence_length=1.0,
+        num_replicates=max_attempts,
+    ):
+        pop = fwdpy11.DiploidPopulation.create_from_tskit(initial_ts)
+        pdict = {
+            "recregions": [fwdpy11.PoissonInterval(0, 1, 5e-2)],
+            "gvalue": fwdpy11.Multiplicative(2.0),
+            "rates": (0, 0, None),
+            "prune_selected": False,
+            "simlen": 10 * pop.N,
+        }
+        params = fwdpy11.ModelParams(**pdict)
+
+        rng = fwdpy11.GSLrng(fp11_seed)
+        data = fwdpy11.NewMutationData(effect_size=alpha / 2 / N, dominance=1.0)
+        idx = pop.add_mutation(
+            rng, ndescendants=ndescendants, data=data, window=(0.49, 0.51)
+        )
+        if idx is None:
+            continue
+
+        return pop, idx
+    return None, None
+
+
+# This test triggers GitHub issue 836
+@pytest.mark.parametrize("msprime_seed", seed_list(135123, 5))
+@pytest.mark.parametrize("fp11_seed", seed_list(5130125, 5))
+@pytest.mark.parametrize("ndescendants", [2, 7, 10, 23, 12, 100])
+def test_ndescendants(msprime_seed, fp11_seed, ndescendants):
+    pop, idx = generate_msprime_ancestry(msprime_seed, fp11_seed, ndescendants)
+    if pop is not None:
+        _ = pop.dump_tables_to_tskit()
+
+
 # NOTE: this is copied from test/test_tree_sequences.py
 # FIXME: this should be a more general fixture?
 @pytest.fixture
