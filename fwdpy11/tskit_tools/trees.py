@@ -71,29 +71,31 @@ class WrappedTreeSequence(object):
         If `False`, `None` will be yielded.
         """
         # Get rows of the node table where the nodes are in individuals
-        nodes_in_individuals = np.where(self._ts.tables.nodes.individual != tskit.NULL)[
-            0
-        ]
+        nodes_in_individuals = np.array(
+            [i for i, j in enumerate(self._ts.nodes()) if j.individual != tskit.NULL]
+        )
 
         # Get the times
-        node_times = self._ts.tables.nodes.time[nodes_in_individuals]
+        node_times = np.array([self._ts.node(n).time for n in nodes_in_individuals])
 
         unique_node_times = np.unique(node_times)
 
         for utime in unique_node_times[::-1]:
             # Get the node tables rows in individuals at this time
-            x = np.where(node_times == utime)
+            x = np.where(node_times == utime)[0]
             node_table_rows = nodes_in_individuals[x]
-            assert np.all(self._ts.tables.nodes.time[node_table_rows] == utime)
+            assert np.all([self._ts.node(n).time == utime for n in node_table_rows])
 
             # Get the individuals
-            individuals = np.unique(self._ts.tables.nodes.individual[node_table_rows])
+            individuals = np.unique(
+                [self._ts.node(n).individual for n in node_table_rows]
+            )
             assert not np.any(individuals == tskit.NULL)
 
             if decode_metadata is True:
                 # now, let's decode the individual metadata for this time slice
                 decoded_individual_metadata = decode_individual_metadata(
-                    self._ts.tables,
+                    self._ts,
                     individuals,
                 )
             else:
@@ -108,7 +110,7 @@ class WrappedTreeSequence(object):
 
         See :func:`fwdpy11.tskit_tools.decode_individual_metadata` for details.
         """
-        return decode_individual_metadata(self._ts.tables, rows)
+        return decode_individual_metadata(self._ts, rows)
 
     def decode_mutation_metadata(
         self, rows: typing.Optional[typing.Union[int, slice]] = None
@@ -118,7 +120,7 @@ class WrappedTreeSequence(object):
 
         See :func:`fwdpy11.tskit_tools.decode_mutation_metadata` for details.
         """
-        return decode_mutation_metadata(self._ts.tables, rows)
+        return decode_mutation_metadata(self._ts, rows)
 
     @property
     def generation(self):
