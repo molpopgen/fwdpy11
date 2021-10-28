@@ -21,8 +21,8 @@ import math
 import typing
 
 import attr
-import fwdpy11.tskit_tools._dump_tables_to_tskit
 import fwdpy11.tskit_tools
+import fwdpy11.tskit_tools._dump_tables_to_tskit
 import numpy as np
 import pytest
 import tskit
@@ -165,7 +165,9 @@ def test_diploid_metadata(mock_population, tables):
         mock_population, tables
     )
 
-    decoded = fwdpy11.tskit_tools.decode_individual_metadata(tables)
+    ts = tables.tree_sequence()
+
+    decoded = fwdpy11.tskit_tools.decode_individual_metadata(ts)
 
     for i in decoded[: len(mock_population.diploid_metadata)]:
         assert i.alive
@@ -207,7 +209,10 @@ def test_mutation_metadata_without_vectors(mock_population, tables):
     fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
         mock_population, tables
     )
-    decoded = fwdpy11.tskit_tools.decode_mutation_metadata(tables)
+
+    tables.nodes.add_row(time=0.0)
+    ts = tables.tree_sequence()
+    decoded = fwdpy11.tskit_tools.decode_mutation_metadata(ts)
 
     assert len(decoded) == len(mock_population.tables.mutations)
 
@@ -248,7 +253,10 @@ def test_mutation_metadata_with_vectors(mock_population, tables):
     fwdpy11.tskit_tools._dump_tables_to_tskit._dump_mutation_site_and_site_tables(
         mock_population, tables
     )
-    decoded = fwdpy11.tskit_tools.decode_mutation_metadata(tables)
+
+    tables.nodes.add_row(time=0.0)
+    ts = tables.tree_sequence()
+    decoded = fwdpy11.tskit_tools.decode_mutation_metadata(ts)
 
     assert len(decoded) == len(mock_population.tables.mutations)
 

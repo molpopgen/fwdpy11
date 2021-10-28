@@ -68,41 +68,41 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     # add neutral mutations w/no metadata
     ts = msprime.sim_mutations(ts, rate=1.0, random_seed=654321)
     # bulk decode the mutation metadata, which is all None
-    mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables)
+    mutation_md = fwdpy11.tskit_tools.decode_mutation_metadata(ts)
     assert all([i is None for i in mutation_md])
 
     # test index access
     num_muts = 0
-    for i in range(ts.tables.mutations.num_rows):
-        x = fwdpy11.tskit_tools.decode_mutation_metadata(ts.tables, i)
+    for i in range(ts.num_mutations):
+        x = fwdpy11.tskit_tools.decode_mutation_metadata(ts, i)
         assert x[0] is None
         num_muts += 1
-    assert num_muts == ts.tables.mutations.num_rows
+    assert num_muts == ts.num_mutations
 
     num_muts = 0
     for i in fwdpy11.tskit_tools.decode_mutation_metadata(
-        ts.tables, slice(0, ts.tables.mutations.num_rows, 2)
+        ts, slice(0, ts.num_mutations, 2)
     ):
         assert i is None
         num_muts += 1
 
     assert num_muts == len([i for i in range(0, ts.num_mutations, 2)])
 
-    assert len(ts.tables.individuals) == pop.N + 2
+    assert ts.num_individuals == pop.N + 2
     first = 0
     preserved = 0
     alive = 0
-    for i in ts.tables.individuals:
+    for i in ts.individuals():
         if i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE:
             alive += 1
             for n in i.metadata["nodes"]:
-                assert ts.tables.nodes.time[n] == 0
+                assert ts.node(n).time == 0
         if i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED:
             preserved += 1
             for n in i.metadata["nodes"]:
                 assert (
-                    ts.tables.nodes.time[n] == 0 + params.simlen
-                    or ts.tables.nodes.time[n] == 0 + params.simlen - 3
+                    ts.node(n).time == 0 + params.simlen
+                    or ts.node(n).time == 0 + params.simlen - 3
                 )
 
     assert alive == pop.N
@@ -112,21 +112,21 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
     first = 0
     preserved = 0
     alive = 0
-    for row in range(ts.tables.individuals.num_rows):
-        i = fwdpy11.tskit_tools.decode_individual_metadata(ts.tables, row)[0]
+    for row in range(ts.num_individuals):
+        i = fwdpy11.tskit_tools.decode_individual_metadata(ts, row)[0]
         assert type(i.alive) == bool
         assert type(i.preserved) == bool
         assert type(i.first_generation) == bool
         if i.alive:
             alive += 1
             for n in i.nodes:
-                assert ts.tables.nodes.time[n] == 0
+                assert ts.node(n).time == 0
         if i.preserved:
             preserved += 1
             for n in i.nodes:
                 assert (
-                    ts.tables.nodes.time[n] == 0 + params.simlen
-                    or ts.tables.nodes.time[n] == 0 + params.simlen - 3
+                    ts.node(n).time == 0 + params.simlen
+                    or ts.node(n).time == 0 + params.simlen - 3
                 )
     assert alive == pop.N
     assert first == 0
@@ -134,7 +134,7 @@ def test_metadata_roundtrip_single_sim(rng, pdict, pop):
 
     num_md = 0
     for _ in fwdpy11.tskit_tools.decode_individual_metadata(
-        ts.tables, slice(1, ts.tables.individuals.num_rows, 2)
+        ts, slice(1, ts.num_individuals, 2)
     ):
         num_md += 1
     assert num_md == len([i for i in range(0, ts.num_individuals, 2)])
@@ -151,26 +151,26 @@ def test_metadata_roundtrip_single_sim_with_first_gen_preserved(rng, pdict, pop)
     fwdpy11.evolvets(rng, pop, params, 100, r, preserve_first_generation=True)
 
     ts = pop.dump_tables_to_tskit(model_params=params)
-    assert len(ts.tables.individuals) == 2 * pop.N + 2
+    assert ts.num_individuals == 2 * pop.N + 2
     first = 0
     preserved = 0
     alive = 0
-    for i in ts.tables.individuals:
+    for i in ts.individuals():
         if i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_ALIVE:
             alive += 1
             for n in i.metadata["nodes"]:
-                assert ts.tables.nodes.time[n] == 0
+                assert ts.node(n).time == 0
         if i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_PRESERVED:
             preserved += 1
             for n in i.metadata["nodes"]:
                 assert (
-                    ts.tables.nodes.time[n] == 0 + params.simlen
-                    or ts.tables.nodes.time[n] == 0 + params.simlen - 3
+                    ts.node(n).time == 0 + params.simlen
+                    or ts.node(n).time == 0 + params.simlen - 3
                 )
         if i.flags & fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION:
             first += 1
             for n in i.metadata["nodes"]:
-                assert ts.tables.nodes.time[n] == 0 + params.simlen
+                assert ts.node(n).time == 0 + params.simlen
 
     assert alive == pop.N
     assert first == pop.N

@@ -96,13 +96,13 @@ class DiploidMetadata(object):
 
 
 def decode_individual_metadata(
-    tc: tskit.TableCollection, rows: typing.Optional[typing.Union[int, slice]] = None
+    ts: tskit.TreeSequence, rows: typing.Optional[typing.Union[int, slice]] = None
 ) -> typing.List[DiploidMetadata]:
     """
     Decodes a :class:`tskit.IndividualTable`.
 
-    :param tc: A table collection
-    :type tc: :class:`tskit.TableCollection`
+    :param ts: A tree sequence
+    :type ts: :class:`tskit.TreeSequence`
 
     :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
     :type rows: int or slice or numpy array
@@ -123,29 +123,32 @@ def decode_individual_metadata(
     rv = []
 
     if rows is None:
-        _rows = slice(0, tc.individuals.num_rows, 1)
+        _rows = slice(0, ts.num_individuals, 1)
     else:
         _rows = rows
 
     try:
-        for ind in tc.individuals[_rows]:
-            alive = ind.flags & INDIVIDUAL_IS_ALIVE
-            preserved = ind.flags & INDIVIDUAL_IS_PRESERVED
-            first_generation = ind.flags & INDIVIDUAL_IS_FIRST_GENERATION
-            rv.append(DiploidMetadata.from_table_row(ind))
-    except:
-        ind = tc.individuals[_rows]
+        ind = ts.individual(_rows)
         rv.append(DiploidMetadata.from_table_row(ind))
+    except Exception as _:
+        try:
+            for i in _rows:
+                ind = ts.individual(i)
+                rv.append(DiploidMetadata.from_table_row(ind))
+        except Exception as _:
+            for i in range(_rows.start, _rows.stop, _rows.step):
+                ind = ts.individual(i)
+                rv.append(DiploidMetadata.from_table_row(ind))
 
     return rv
 
 
-def _append_mutation_metadata(tc, site, md, mutations):
+def _append_mutation_metadata(ts, site, md, mutations):
     if md is not None:
         if "esizes" not in md:
             mutations.append(
                 Mutation(
-                    pos=tc.sites.position[site],
+                    pos=ts.site(site).position,
                     s=md["s"],
                     h=md["h"],
                     g=md["origin"],
@@ -155,7 +158,7 @@ def _append_mutation_metadata(tc, site, md, mutations):
         else:
             mutations.append(
                 Mutation(
-                    pos=tc.sites.position[site],
+                    pos=ts.site(site).position,
                     s=md["s"],
                     h=md["h"],
                     g=md["origin"],
@@ -169,13 +172,13 @@ def _append_mutation_metadata(tc, site, md, mutations):
 
 
 def decode_mutation_metadata(
-    tc: tskit.TableCollection, rows: typing.Optional[typing.Union[int, slice]] = None
+    ts: tskit.TreeSequence, rows: typing.Optional[typing.Union[int, slice]] = None
 ) -> typing.List[typing.Optional[Mutation]]:
     """
     Decodes metadata from a :class:`tskit.MutationTable`.
 
-    :param tc: A table collection
-    :type tc: :class:`tskit.TableCollection`
+    :param ts: A tree sequence
+    :type ts: :class:`tskit.TreeSequence`
     :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
     :type rows: int or slice or numpy array
 
@@ -197,14 +200,20 @@ def decode_mutation_metadata(
     """
     mutations = []
     if rows is None:
-        _rows = slice(0, tc.mutations.num_rows, 1)
+        _rows = slice(0, ts.num_mutations, 1)
     else:
         _rows = rows
 
     try:
-        for m in tc.mutations[_rows]:
-            _append_mutation_metadata(tc, m.site, m.metadata, mutations)
-    except:
-        m = tc.mutations[_rows]
-        _append_mutation_metadata(tc, m.site, m.metadata, mutations)
+        m = ts.mutation(_rows)
+        _append_mutation_metadata(ts, m.site, m.metadata, mutations)
+    except Exception as _:
+        try:
+            for i in _rows:
+                m = ts.mutation(i)
+                _append_mutation_metadata(ts, m.site, m.metadata, mutations)
+        except Exception as _:
+            for i in range(_rows.start, _rows.stop, _rows.step):
+                m = ts.mutation(i)
+                _append_mutation_metadata(ts, m.site, m.metadata, mutations)
     return mutations

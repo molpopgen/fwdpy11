@@ -15,6 +15,8 @@ Back end changes:
 
 * Add more runtime checks to {func}`fwdpy11.DiploidPopulation.add_mutation`
   PR {pr}`837`
+* Remove unnecessary copying of table collections in {mod}`fwdpy11.tskit_tools`.
+  PR {pr}`842`
 
 ## 0.16.2
 
