@@ -18,6 +18,7 @@
 #
 import json
 import typing
+import warnings
 
 import numpy as np
 import tskit
@@ -38,14 +39,23 @@ class WrappedTreeSequence(object):
     or a call to :func:`fwdpy11.tskit_tools.load`.
 
     .. versionadded:: 0.15.0
+
+    .. deprecated:: 0.17.0
     """
 
     def _toplevel_metadata_value(self, name):
-        if name in self._ts.metadata:
-            return self._ts.metadata[name]
-        return None
+        from fwdpy11.tskit_tools import get_toplevel_metadata
+
+        return get_toplevel_metadata(self._ts, name)
 
     def __init__(self, ts: tskit.TreeSequence):
+        warnings.warn(
+            FutureWarning(
+                "fwdpy11.tskit_tools.WrappedTreeSequence is deprecated. "
+                "Please use tskit.load and standalone functions "
+                "from fwdpy11.tskit_tools instead"
+            )
+        )
         found = False
         for row in ts.provenances():
             record = json.loads(row.record)
@@ -58,49 +68,17 @@ class WrappedTreeSequence(object):
         self._ts = ts
 
     def timepoints_with_individuals(self, *, decode_metadata=False):
-        """
-        Return an iterator over all unique time points with individuals.
+        from fwdpy11.tskit_tools import iterate_timepoints_with_individuals
 
-        For each time point a tuple of (time, nodes, metadata) is yielded.
-
-        :param decode_individual_metadata: Whether to return decoded metadata.
-        :type decode_individual_metadata: bool
-
-        If `decode_individual_metadata` is `True`, metadata will be stored in
-        a :class:`list` of :class:`fwdpy11.tskit_tools.DiploidMetadata`.
-        If `False`, `None` will be yielded.
-        """
-        # Get rows of the node table where the nodes are in individuals
-        nodes_in_individuals = np.array(
-            [i for i, j in enumerate(self._ts.nodes()) if j.individual != tskit.NULL]
+        warnings.warn(
+            FutureWarning(
+                "use fwdpy11.tskit_tools.iterate_timepoints_with_individuals instead"
+            )
         )
 
-        # Get the times
-        node_times = np.array([self._ts.node(n).time for n in nodes_in_individuals])
-
-        unique_node_times = np.unique(node_times)
-
-        for utime in unique_node_times[::-1]:
-            # Get the node tables rows in individuals at this time
-            x = np.where(node_times == utime)[0]
-            node_table_rows = nodes_in_individuals[x]
-            assert np.all([self._ts.node(n).time == utime for n in node_table_rows])
-
-            # Get the individuals
-            individuals = np.unique(
-                [self._ts.node(n).individual for n in node_table_rows]
-            )
-            assert not np.any(individuals == tskit.NULL)
-
-            if decode_metadata is True:
-                # now, let's decode the individual metadata for this time slice
-                decoded_individual_metadata = decode_individual_metadata(
-                    self._ts,
-                    individuals,
-                )
-            else:
-                decoded_individual_metadata = None
-            yield utime, node_table_rows, decoded_individual_metadata
+        return iterate_timepoints_with_individuals(
+            self._ts, decode_metadata=decode_metadata
+        )
 
     def decode_individual_metadata(
         self, rows: typing.Optional[typing.Union[int, slice]] = None

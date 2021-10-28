@@ -164,7 +164,7 @@ fwdpy11.evolvets(rng, pop, params,
                  simplification_interval=100,
                  suppress_table_indexing=True)
 
-ts = pop.dump_tables_to_tskit(demes_graph=graph, wrapped=True)
+ts = pop.dump_tables_to_tskit(demes_graph=graph)
 ```
 
 Now that we have some data, let's look at how the `fwdpy11` mutation and individual information got encoded as `tskit` metadata!
@@ -174,21 +174,21 @@ Now that we have some data, let's look at how the `fwdpy11` mutation and individ
 By default, the metadata decode as a {class}`dict`:
 
 ```{code-cell} python
-for m in ts.ts.mutations():
+for m in ts.mutations():
     print(m.metadata)
 ```
 
-We can call {func}`fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata` to convert the `dict` to a {class}`fwdpy11.Mutation`.  Thus function returns a {class}`list` because it can be accessed using a {class}`slice`:
+We can call {func}`fwdpy11.tskit_tools.decode_mutation_metadata` to convert the `dict` to a {class}`fwdpy11.Mutation`.  Thus function returns a {class}`list` because it can be accessed using a {class}`slice`:
 
 ```{code-cell}
-m = ts.decode_mutation_metadata(0)
+m = fwdpy11.tskit_tools.decode_mutation_metadata(ts, 0)
 type(m[0])
 ```
 
 With no arguments, all metadata are converted to the `Mutation` type:
 
 ```{code-cell} python
-for m in ts.decode_mutation_metadata():
+for m in fwdpy11.tskit_tools.decode_mutation_metadata(ts):
     print(m.esizes)
 ```
 
@@ -206,8 +206,8 @@ Let's mutate a copy of our tree sequence.
 We will apply a binary, infinite-site model to add neutral mutations:
 
 ```{code-cell} python
-tscopy = msprime.sim_mutations(ts.ts.tables.tree_sequence(), rate=RECRATE / L, model=msprime.BinaryMutationModel(), discrete_genome=False, random_seed=615243)
-print("Our original number of mutations =", ts.ts.num_mutations)
+tscopy = msprime.sim_mutations(ts.tables.tree_sequence(), rate=RECRATE / L, model=msprime.BinaryMutationModel(), discrete_genome=False, random_seed=615243)
+print("Our original number of mutations =", ts.num_mutations)
 print("Our new number of mutations =", tscopy.num_mutations)
 ```
 
@@ -217,9 +217,9 @@ for i in tscopy.mutations():
     if i.metadata is None:
         metadata_is_none += 1
 
-assert metadata_is_none == tscopy.num_mutations - ts.ts.num_mutations
+assert metadata_is_none == tscopy.num_mutations - ts.num_mutations
 # mut be true because we asked for an "infinite-sites" mutation scheme
-assert metadata_is_none == tscopy.num_sites - ts.ts.num_mutations
+assert metadata_is_none == tscopy.num_sites - ts.num_mutations
 ```
 
 
@@ -228,19 +228,19 @@ assert metadata_is_none == tscopy.num_sites - ts.ts.num_mutations
 As with mutations, individual metadata automatically decode to {class}`dict`:
 
 ```{code-cell} python
-print(ts.ts.individual(0).metadata)
-print(type(ts.ts.individual(0).metadata))
+print(ts.individual(0).metadata)
+print(type(ts.individual(0).metadata))
 ```
 
 It is often more efficient to decode the data into {class}`fwdpy11.tskit_tools.DiploidMetadata` (which is an {mod}`attrs`-based analog to {class}`fwdpy11.DiploidMetadata`).
-As with mutation metadata, {func}`fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata` returns a list:
+As with mutation metadata, {func}`fwdpy11.tskit_tools.decode_individual_metadata` returns a list:
 
 ```{code-cell} python
-ts.decode_individual_metadata(0)
+fwdpy11.tskit_tools.decode_individual_metadata(ts, 0)
 ```
 
 ```{code-cell} python
-print(type(ts.decode_individual_metadata(0)[0]))
+print(type(fwdpy11.tskit_tools.decode_individual_metadata(ts, 0)[0]))
 ```
 
 The main difference between this Python class and its C++ analog is that the former contains several fields that decode the `flags` column of the individual table.
@@ -250,7 +250,7 @@ See {ref}`here <tskit_tools>` for details.
 ## Traversing all time points for which individuals exist
 
 The example simulation preserves individuals at many different time points.
-Use {func}`fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals` to automate iterating over each time point:
+Use {func}`fwdpy11.tskit_tools.iterate_timepoints_with_individuals` to automate iterating over each time point:
 
 ```{code-cell} python
 import pandas as pd
@@ -259,7 +259,7 @@ pd.set_option("display.max_rows", 11)
 times = []
 num_nodes = []
 len_metadata = []
-for time, nodes, metadata in ts.timepoints_with_individuals(decode_metadata=True):
+for time, nodes, metadata in fwdpy11.tskit_tools.iterate_timepoints_with_individuals(ts, decode_metadata=True):
     times.append(time)
     num_nodes.append(len(nodes))
     len_metadata.append(len(metadata))

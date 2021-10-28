@@ -1,3 +1,4 @@
+import warnings
 from typing import IO, Dict, Iterable, Iterator, List, Optional, Tuple, Union
 
 import demes
@@ -276,7 +277,17 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
             Fixed bug that could generate a :class:`tskit.PopulationTable`
             with an incorrect number of rows.
 
+        .. versionchanged:: 0.17.0
+
+            The `wrapped` keyword argument is deprecated.
+
         """
+        if wrapped is True:
+            warnings.warn(
+                FutureWarning(
+                    "the wrapped kwarg is deprecated and will be removed in a future release"
+                )
+            )
         return fwdpy11.tskit_tools._dump_tables_to_tskit._dump_tables_to_tskit(
             self,
             model_params=model_params,

@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import warnings
+
 import fwdpy11
 import msprime
 import numpy as np
@@ -50,36 +52,44 @@ def test_creation(pop):
 
     ts.dump("foo.trees")
 
-    fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        fwdpy11.tskit_tools.WrappedTreeSequence(ts)
 
 
 def test_on_simulated_example(simulation):
     pop, params = simulation
     ts = pop.dump_tables_to_tskit(model_params=params)
 
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
 
     assert wts.model_params == params
 
     times = []
-    for time, nodes, md in wts.timepoints_with_individuals(decode_metadata=True):
-        assert np.all(wts.ts.tables.nodes.time[nodes] == time)
-        for i in md:
-            if time == 0.0:
-                assert i.alive is True
-                assert i.preserved is False
-            else:
-                assert i.alive is False
-                assert i.preserved is True
-            for n in i.nodes:
-                assert wts.ts.tables.nodes.time[n] == time
-        times.append(time)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        for time, nodes, md in wts.timepoints_with_individuals(decode_metadata=True):
+            assert np.all(wts.ts.tables.nodes.time[nodes] == time)
+            for i in md:
+                if time == 0.0:
+                    assert i.alive is True
+                    assert i.preserved is False
+                else:
+                    assert i.alive is False
+                    assert i.preserved is True
+                for n in i.nodes:
+                    assert wts.ts.tables.nodes.time[n] == time
+            times.append(time)
 
     assert np.all(np.array(times) == np.arange(pop.generation, dtype=np.float64)[::-1])
 
     ## Test storing two model param object
     ts = pop.dump_tables_to_tskit(model_params={"stage1": params, "stage2": params})
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     mp = wts.model_params
     assert len(mp) == 2
     for _, value in mp.items():
@@ -90,17 +100,23 @@ def test_generation_property(simulation):
     pop, _ = simulation
     assert pop.generation > 0
     ts = pop.dump_tables_to_tskit()
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts=ts)
     assert wts.generation == pop.generation
 
 
 def test_demes_graph_property(gutenkunst):
     pop = fwdpy11.DiploidPopulation(100, 1.0)
     ts = pop.dump_tables_to_tskit(demes_graph=gutenkunst)
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.demes_graph == gutenkunst
     ts = pop.dump_tables_to_tskit()
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.demes_graph is None
 
 
@@ -110,5 +126,7 @@ def test_with_msprime_provenance_added():
     ts = pop.dump_tables_to_tskit()
     ts = msprime.sim_mutations(ts, rate=1e-5, random_seed=1)
     assert ts.tables.provenances.num_rows == 2
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.ts.tables.provenances.num_rows == 2
