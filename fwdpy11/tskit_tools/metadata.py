@@ -119,6 +119,10 @@ def decode_individual_metadata(
     .. versionchanged:: 0.15.0
 
         Add index/slice access to the table.
+
+    .. versionchanged:: 0.17.0
+
+        Change input from TableCollection to TreeSequence
     """
     rv = []
 
@@ -197,6 +201,10 @@ def decode_mutation_metadata(
         some elements to be `None`.
 
         Add index/slice access to the table.
+
+    .. versionchanged:: 0.17.0
+
+        Change input from TableCollection to TreeSequence
     """
     mutations = []
     if rows is None:

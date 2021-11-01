@@ -24,10 +24,72 @@ interact with ``tskit``.
 .. versionadded:: 0.8.0
 """
 
+import typing
+import warnings
+
+import numpy as np
+import tskit
+
 from ._flags import *  # NOQA
 from .metadata import (DiploidMetadata, decode_individual_metadata,
                        decode_mutation_metadata)
 from .trees import WrappedTreeSequence
+
+
+def get_toplevel_metadata(ts: tskit.TreeSequence, name) -> typing.Optional[object]:
+    if name in ts.metadata:
+        return ts.metadata[name]
+    return None
+
+
+def iterate_timepoints_with_individuals(
+    ts: tskit.TreeSequence, *, decode_metadata=False
+):
+    """
+    Return an iterator over all unique time points with individuals.
+
+    :param ts: A tree sequence
+    :type ts: tskit.TreeSequence
+    :param decode_metadata: Flag to decode individual metadata or not
+    :type decode_metadata: bool
+
+    For each time point a tuple of (time, nodes, metadata) is yielded.
+
+    :param decode_individual_metadata: Whether to return decoded metadata.
+    :type decode_individual_metadata: bool
+
+    If `decode_individual_metadata` is `True`, metadata will be stored in
+    a :class:`list` of :class:`fwdpy11.tskit_tools.DiploidMetadata`.
+    If `False`, `None` will be yielded.
+    """
+
+    # Get rows of the node table where the nodes are in individuals
+    nodes_in_individuals = np.where(ts.tables.nodes.individual != tskit.NULL)[0]
+
+    # Get the times
+    node_times = ts.tables.nodes.time[nodes_in_individuals]
+
+    unique_node_times = np.unique(node_times)
+
+    for utime in unique_node_times[::-1]:
+        # Get the node tables rows in individuals at this time
+        x = np.where(node_times == utime)
+        node_table_rows = nodes_in_individuals[x]
+        assert np.all(ts.tables.nodes.time[node_table_rows] == utime)
+
+        # Get the individuals
+        individuals = np.unique(ts.tables.nodes.individual[node_table_rows])
+        assert not np.any(individuals == tskit.NULL)
+
+        if decode_metadata is True:
+            # now, let's decode the individual metadata for this time slice
+            decoded_individual_metadata = decode_individual_metadata(
+                ts,
+                individuals,
+            )
+        else:
+            decoded_individual_metadata = None
+        yield utime, node_table_rows, decoded_individual_metadata
 
 
 def load(filename: str):
@@ -41,6 +103,12 @@ def load(filename: str):
     :rtype: :class:`fwdpy11.tskit_tools.WrappedTreeSequence`
     """
     import tskit
+
+    warnings.warn(
+        FutureWarning(
+            "fwdpy11.tskit_tools.load is deprecated. Please use tskit.load instead."
+        )
+    )
 
     ts = tskit.load(filename)
     return WrappedTreeSequence(ts=ts)

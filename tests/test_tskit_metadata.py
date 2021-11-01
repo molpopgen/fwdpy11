@@ -17,6 +17,8 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import warnings
+
 import demes
 import fwdpy11
 import pytest
@@ -117,7 +119,9 @@ def test_user_defined_data(pop):
     assert ts.metadata["data"]["mydata"] == 11
 
     # Test WrappedTreeSequence propery
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.data["mydata"] == 11
 
     class MyType(object):
@@ -131,7 +135,9 @@ def test_user_defined_data(pop):
     assert eval(ts.metadata["data"]).x == 11
 
     # Test WrappedTreeSequence property
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert eval(wts.data).x == 11
 
 
@@ -141,7 +147,9 @@ def test_seed(pop):
     assert ts.metadata["seed"] == 333
 
     # Test WrappedTreeSequence property
-    wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=FutureWarning)
+        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
     assert wts.seed == 333
 
     with pytest.raises(ValueError):

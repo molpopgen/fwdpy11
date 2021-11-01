@@ -11,6 +11,11 @@ Bug fixes
   Issue {issue}`836`
   PR {pr}`838`
 
+Dependencies
+
+* Deprecate `fwdpy11.tskit_tools.WrappedTreeSequence`
+  PR {pr}`841`
+
 Back end changes:
 
 * Add more runtime checks to {func}`fwdpy11.DiploidPopulation.add_mutation`
