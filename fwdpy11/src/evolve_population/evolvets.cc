@@ -80,12 +80,13 @@ final_population_cleanup(
     bool suppress_edge_table_indexing, bool preserve_selected_fixations,
     bool remove_extinct_mutations_at_finish, bool simulating_neutral_variants,
     bool reset_treeseqs_to_alive_nodes_after_simplification,
-    std::uint32_t /*last_preserved_generation*/,
+    std::uint32_t last_preserved_generation,
     const std::vector<std::uint32_t> & /*last_preserved_generation_counts*/,
     fwdpy11::DiploidPopulation &pop)
 {
     index_and_count_mutations(suppress_edge_table_indexing, simulating_neutral_variants,
-                              reset_treeseqs_to_alive_nodes_after_simplification, pop);
+                              reset_treeseqs_to_alive_nodes_after_simplification,
+                              last_preserved_generation == pop.generation, pop);
     check_mutation_table_consistency_with_count_vectors(pop, __FILE__, __LINE__);
     // The following block was commented out in GitHub PR 845
     // in order to fix GitHub issue 844
@@ -659,6 +660,14 @@ evolve_with_tree_sequences(
         remove_extinct_mutations_at_finish, simulating_neutral_variants,
         reset_treeseqs_to_alive_nodes_after_simplification, last_preserved_generation,
         last_preserved_generation_counts, pop);
+    if (pop.tables->edges.size() != pop.tables->input_left.size()
+        || pop.tables->edges.size() != pop.tables->output_right.size())
+        {
+            std::ostringstream o;
+            o << "edge table is not indexed " << strip_unix_path(__FILE__) << ", line "
+              << __LINE__;
+            throw std::runtime_error(o.str());
+        }
     demography.set_model_state(std::move(current_demographic_state));
 }
 

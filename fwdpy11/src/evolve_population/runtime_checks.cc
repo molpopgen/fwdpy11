@@ -1,7 +1,7 @@
 #include <sstream>
 #include <fwdpy11/types/DiploidPopulation.hpp>
 
-static std::string
+std::string
 strip_unix_path(const std::string file)
 {
     auto pos = file.find_last_of('/');

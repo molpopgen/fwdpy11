@@ -15,6 +15,7 @@ Bug fixes
   Thus, previous exception-free results were not affected.
   Issue {issue}`844`
   PR {pr}`845`
+  PR {pr}`847`
 
 Dependencies
 
