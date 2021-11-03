@@ -10,6 +10,11 @@ Bug fixes
 * Fix error initializing the founder genome of {class}`fwdpy11.DiploidPopulation`
   Issue {issue}`836`
   PR {pr}`838`
+* Fix bug in handling mutation counts when final generation was recorded as "ancient samples".
+  This bug resulted in an exception being raised.
+  Thus, previous exception-free results were not affected.
+  Issue {issue}`844`
+  PR {pr}`845`
 
 Dependencies
 
