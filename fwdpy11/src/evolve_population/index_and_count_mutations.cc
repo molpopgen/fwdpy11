@@ -8,17 +8,20 @@ void
 index_and_count_mutations(bool suppress_edge_table_indexing,
                           bool simulating_neutral_variants,
                           bool reset_treeseqs_to_alive_nodes_after_simplification,
+                          bool last_generation_was_recorded,
                           fwdpy11::DiploidPopulation& pop)
 {
     pop.mcounts_from_preserved_nodes.resize(pop.mutations.size(), 0);
-    if (!suppress_edge_table_indexing && !simulating_neutral_variants
+    if (!last_generation_was_recorded && !suppress_edge_table_indexing
+        && !simulating_neutral_variants
         && !reset_treeseqs_to_alive_nodes_after_simplification)
         {
             return;
         }
-    if (pop.ancient_sample_metadata.empty() || simulating_neutral_variants)
+    pop.tables->build_indexes();
+    if (last_generation_was_recorded || pop.ancient_sample_metadata.empty()
+        || simulating_neutral_variants)
         {
-            pop.tables->build_indexes();
             pop.fill_alive_nodes();
             pop.fill_preserved_nodes();
             fwdpp::ts::count_mutations(*pop.tables, pop.mutations, pop.alive_nodes,

@@ -560,7 +560,7 @@ class TestTreeSequencesWithAncientSamplesKeepFixations(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.params, self.rng, self.pop = set_up_quant_trait_model(3.0)
-        self.stimes = [i for i in range(1, 101)]
+        self.stimes = [i for i in range(1, 101)] + [self.params.simlen]
         self.recorder = Recorder(42, 10, self.stimes)
         assert self.pop._is_simulating is False
         fwdpy11.evolvets(self.rng, self.pop, self.params, 100, self.recorder)
