@@ -1,6 +1,7 @@
 import unittest
 
 import fwdpy11
+import numpy as np
 
 
 class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
@@ -30,6 +31,35 @@ class test_stopping_criterion_DiploidPopulation(unittest.TestCase):
 
         fwdpy11.evolvets(rng, self.pop, self.params, 100, stopping_criterion=generation)
         self.assertEqual(self.pop.generation, 50)
+
+
+def test_stopping_criterion_with_ancient_samples():
+    """
+    This triggers github issue 844
+    """
+
+    def preserve(pop, sampler):
+        if pop.generation == 10:
+            sampler.assign(np.arange(pop.N, dtype=np.uint32))
+
+    def stopper(pop, _):
+        if pop.generation == 10:
+            return True
+        return False
+
+    pdict = {
+        "sregions": [fwdpy11.ExpS(0, 1, 1, -0.05, 1)],
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0.1, 0),
+        "simlen": 20,
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    pop = fwdpy11.DiploidPopulation(100, 1.0)
+    rng = fwdpy11.GSLrng(90210)
+
+    fwdpy11.evolvets(
+        rng, pop, params, 100, recorder=preserve, stopping_criterion=stopper
+    )
 
 
 if __name__ == "__main__":

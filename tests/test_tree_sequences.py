@@ -1084,7 +1084,7 @@ class TestMetaData(unittest.TestCase):
         MD = namedtuple("MD", ["g", "e", "w", "label"])
 
         class Recorder(object):
-            """ Records entire pop every 100 generations """
+            """Records entire pop every 100 generations"""
 
             def __init__(self):
                 self.data = []
@@ -1524,6 +1524,20 @@ def test_table_indexing_during_sim(test_table_indexing_during_sim_recorder):
         suppress_table_indexing=True,
     )
     assert test_table_indexing_during_sim_recorder.called > 0
+
+
+def test_only_preserve_final_generation():
+    """
+    This test also triggers GitHub issue 844
+    """
+    params, rng, pop = set_up_quant_trait_model(0.1)
+
+    def preserver(pop, sampler):
+        if pop.generation == preserver.when:
+            sampler.assign(np.arange(pop.N, dtype=np.uint32))
+
+    preserver.when = params.simlen
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=preserver)
 
 
 if __name__ == "__main__":
