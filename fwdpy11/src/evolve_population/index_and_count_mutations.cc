@@ -3,6 +3,7 @@
 #include <fwdpp/ts/table_collection_functions.hpp>
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/internal/sample_diploid_helpers.hpp>
+#include <pybind11/pybind11.h>
 
 void
 index_and_count_mutations(bool suppress_edge_table_indexing,
@@ -16,9 +17,9 @@ index_and_count_mutations(bool suppress_edge_table_indexing,
         {
             return;
         }
+    pop.tables->build_indexes();
     if (pop.ancient_sample_metadata.empty() || simulating_neutral_variants)
         {
-            pop.tables->build_indexes();
             pop.fill_alive_nodes();
             pop.fill_preserved_nodes();
             fwdpp::ts::count_mutations(*pop.tables, pop.mutations, pop.alive_nodes,

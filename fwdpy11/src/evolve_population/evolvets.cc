@@ -659,6 +659,11 @@ evolve_with_tree_sequences(
         remove_extinct_mutations_at_finish, simulating_neutral_variants,
         reset_treeseqs_to_alive_nodes_after_simplification, last_preserved_generation,
         last_preserved_generation_counts, pop);
+    if (pop.tables->edges.size() != pop.tables->input_left.size()
+        || pop.tables->edges.size() != pop.tables->output_right.size())
+        {
+            throw std::runtime_error("edge table is not indexed");
+        }
     demography.set_model_state(std::move(current_demographic_state));
 }
 
