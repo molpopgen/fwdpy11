@@ -21,6 +21,7 @@ Dependencies
 
 * Deprecate `fwdpy11.tskit_tools.WrappedTreeSequence`
   PR {pr}`841`
+  PR {pr}`848`
 
 Back end changes:
 
