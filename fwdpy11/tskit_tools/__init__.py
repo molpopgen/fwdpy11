@@ -36,7 +36,17 @@ from .metadata import (DiploidMetadata, decode_individual_metadata,
 from .trees import WrappedTreeSequence
 
 
-def get_toplevel_metadata(ts: tskit.TreeSequence, name) -> typing.Optional[object]:
+def get_toplevel_metadata(ts: tskit.TreeSequence, name: str) -> typing.Optional[object]:
+    """
+    Extract top-level metadata from a tree sequence.
+
+    :param ts: A tree sequence
+    :type ts: tskit.TreeSequence
+    :param name: Metadata field name
+    :type name: str
+    :returns: The metadata field, if `name` is a valid field, or
+              `None` otherwise.
+    """
     if name in ts.metadata:
         return ts.metadata[name]
     return None
