@@ -96,6 +96,16 @@ init_DiploidPopulation(py::module& m)
              [](fwdpy11::DiploidPopulation& self) {
                  swap_with_empty(self.ancient_sample_metadata);
              })
+        .def("_record_ancient_samples",
+             [](fwdpy11::DiploidPopulation& self,
+                const std::vector<std::uint32_t>& individuals) {
+                 if (self.is_simulating)
+                     {
+                         throw std::runtime_error(
+                             "cannot call _record_ancient_samples when simulating");
+                     }
+                 self.record_ancient_samples(individuals);
+             })
         .def(py::pickle(
             [](const fwdpy11::DiploidPopulation& pop) -> py::object {
                 std::ostringstream o;
