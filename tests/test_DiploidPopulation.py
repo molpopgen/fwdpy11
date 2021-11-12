@@ -19,6 +19,7 @@
 import unittest
 
 import fwdpy11
+import numpy as np
 
 
 class TestDiploidPopulation(unittest.TestCase):
@@ -59,6 +60,23 @@ class TestDiploidPopulationExceptions(unittest.TestCase):
     def testNzero(self):
         with self.assertRaises(ValueError):
             fwdpy11.DiploidPopulation(0, 1.0)
+
+
+# NOTE: this tests an internal function (pop._record_ancient_samples),
+# which is NOT the canonical user-facing API for doing this!
+def test_ancient_sample_recording():
+    pop = fwdpy11.DiploidPopulation(1000, 1.0)
+    pop._record_ancient_samples([i for i in range(pop.N)])
+    md = np.array(pop.diploid_metadata, copy=False)
+    amd = np.array(pop.ancient_sample_metadata, copy=False)
+    assert np.array_equal(md, amd)
+
+    pop = fwdpy11.DiploidPopulation(1000, 1.0)
+    pop._record_ancient_samples([i for i in range(0, pop.N, 2)])
+    md = np.array(pop.diploid_metadata, copy=False)
+    amd = np.array(pop.ancient_sample_metadata, copy=False)
+    assert len(amd) == pop.N // 2
+    assert np.array_equal(md[::2], amd)
 
 
 if __name__ == "__main__":

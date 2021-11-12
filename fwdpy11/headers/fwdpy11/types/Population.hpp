@@ -70,7 +70,7 @@ namespace fwdpy11
         std::vector<double> genetic_value_matrix, ancient_sample_genetic_value_matrix;
 
         Population(fwdpp::uint_t ploidy, fwdpp::uint_t N_, const double L)
-            : fwdpp_base{ploidy*N_}, N{N_}, generation{0}, is_simulating{false},
+            : fwdpp_base{ploidy * N_}, N{N_}, generation{0}, is_simulating{false},
               tables(init_tables(N_, L)), alive_nodes{}, preserved_sample_nodes{},
               genetic_value_matrix{}, ancient_sample_genetic_value_matrix{}
         {
@@ -165,6 +165,13 @@ namespace fwdpy11
         virtual std::size_t ancient_sample_metadata_size() const = 0;
         virtual void fill_alive_nodes() = 0;
         virtual void fill_preserved_nodes() = 0;
+        virtual void
+        record_ancient_samples(const std::vector<std::uint32_t> & /*alive_individuals*/)
+            = 0;
+        virtual void update_ancient_sample_genetic_value_matrix(
+            const std::vector<std::uint32_t> & /*alive_individuals*/,
+            std::size_t /*total_dim*/)
+            = 0;
     };
 }
 
