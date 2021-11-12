@@ -29,6 +29,9 @@ Back end changes:
   PR {pr}`837`
 * Remove unnecessary copying of table collections in {mod}`fwdpy11.tskit_tools`.
   PR {pr}`842`
+* Move back-end for ancient sample recording to the population classes.
+  Add `fwdpy11.DiploidPopulation._record_ancient_samples`.
+  {pr}`853`
 
 ## 0.16.2
 
