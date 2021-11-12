@@ -394,20 +394,14 @@ evolve_with_tree_sequences(
                     throw std::invalid_argument("cannot preserve first generation when "
                                                 "the edge table is not empty");
                 }
-            pop.ancient_sample_metadata.insert(end(pop.ancient_sample_metadata),
-                                               begin(pop.diploid_metadata),
-                                               end(pop.diploid_metadata));
-            if (record_genotype_matrix == true)
-                {
-                    pop.ancient_sample_genetic_value_matrix.insert(
-                        end(pop.ancient_sample_genetic_value_matrix),
-                        begin(pop.genetic_value_matrix), end(pop.genetic_value_matrix));
-                }
             std::vector<std::uint32_t> individuals;
             for (const auto &md : pop.diploid_metadata)
                 {
                     individuals.push_back(md.label);
                 }
+            pop.record_ancient_samples(individuals);
+            pop.update_ancient_sample_genetic_value_matrix(
+                individuals, genetics.gvalue[0]->total_dim);
             track_ancestral_counts(individuals, &last_preserved_generation,
                                    last_preserved_generation_counts, pop);
         }
@@ -584,29 +578,9 @@ evolve_with_tree_sequences(
             // TODO: deal with the result of the recorder populating sr
             if (!sr.samples.empty())
                 {
-                    for (auto i : sr.samples)
-                        {
-                            if (i >= pop.N)
-                                {
-                                    throw std::invalid_argument(
-                                        "ancient sample index greater than "
-                                        "current population size");
-                                }
-                            // Record the metadata for this individual
-                            pop.ancient_sample_metadata.push_back(
-                                pop.diploid_metadata[i]);
-                            // Update the genotype matrix w.r.to
-                            // the new ancient samples
-                            if (!pop.genetic_value_matrix.empty())
-                                {
-                                    auto offset = i * genetics.gvalue[0]->total_dim;
-                                    pop.ancient_sample_genetic_value_matrix.insert(
-                                        end(pop.ancient_sample_genetic_value_matrix),
-                                        begin(pop.genetic_value_matrix) + offset,
-                                        begin(pop.genetic_value_matrix) + offset
-                                            + genetics.gvalue[0]->total_dim);
-                                }
-                        }
+                    pop.record_ancient_samples(sr.samples);
+                    pop.update_ancient_sample_genetic_value_matrix(
+                        sr.samples, genetics.gvalue[0]->total_dim);
                     track_ancestral_counts(sr.samples, &last_preserved_generation,
                                            last_preserved_generation_counts, pop);
                     // Finally, clear the input
