@@ -17,7 +17,12 @@ Bug fixes
   PR {pr}`845`
   PR {pr}`847`
 
-Dependencies
+New features
+
+* Add module {mod}`fwdpy11.conditional_models`.
+  PR {pr}`828`
+
+Deprecations
 
 * Deprecate `fwdpy11.tskit_tools.WrappedTreeSequence`
   PR {pr}`841`
