@@ -54,7 +54,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Adaptation to different optima with multivariate distribution of effect sizes" href="../examples/gss_divergent_optima.html" />
-    <link rel="prev" title="Module fwdpy11.tskit_tools" href="tskit_tools.html" />
+    <link rel="prev" title="Module fwdpy11.conditional_models" href="conditional_models.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -228,6 +228,23 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
    Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Short vignettes - special case models
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
+   Need title
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/selective_sweep.html">
+   Selective sweeps
   </a>
  </li>
 </ul>
@@ -431,6 +448,16 @@
    <code class="docutils literal notranslate">
     <span class="pre">
      fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="conditional_models.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.conditional_models
     </span>
    </code>
   </a>
@@ -877,7 +904,7 @@ If False, numpy arrays are returned</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.DiploidPopulation.dump_tables_to_tskit">
-<span class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11._types.model_params.ModelParams"><span class="pre">fwdpy11._types.model_params.ModelParams</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11._types.model_params.ModelParams"><span class="pre">fwdpy11._types.model_params.ModelParams</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demes_graph</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">demes.demes.Graph</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">tskit.trees.TreeSequence</span><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.trees.WrappedTreeSequence"><span class="pre">fwdpy11.tskit_tools.trees.WrappedTreeSequence</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">dump_tables_to_tskit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11._types.model_params.ModelParams"><span class="pre">fwdpy11._types.model_params.ModelParams</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11._types.model_params.ModelParams"><span class="pre">fwdpy11._types.model_params.ModelParams</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">demes_graph</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">demes.demes.Graph</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_metadata</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destructive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapped</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">tskit.trees.TreeSequence</span><span class="p"><span class="pre">,</span> </span><span class="pre">fwdpy11.tskit_tools.trees.WrappedTreeSequence</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dump the population’s TableCollection into
 an tskit TreeSequence</p>
 <dl class="field-list simple">
@@ -891,11 +918,11 @@ an tskit TreeSequence</p>
 If not <cite>None</cite>, <cite>seed</cite> must be <cite>&gt;= 0</cite>.</p></li>
 <li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – The simulation parameters for the provenance table.</p></li>
 <li><p><strong>destructive</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If <cite>True</cite>, delete data held by the current instance.</p></li>
-<li><p><strong>wrapped</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If <cite>True</cite>, return <a class="reference internal" href="tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.WrappedTreeSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.WrappedTreeSequence</span></code></a></p></li>
+<li><p><strong>wrapped</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If <cite>True</cite>, return <code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.WrappedTreeSequence</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)">tskit.TreeSequence</a> or <a class="reference internal" href="tskit_tools.html#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.WrappedTreeSequence">fwdpy11.tskit_tools.WrappedTreeSequence</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)">tskit.TreeSequence</a> or fwdpy11.tskit_tools.WrappedTreeSequence</p>
 </dd>
 </dl>
 <p>For examples, see <a class="reference internal" href="../long_vignettes/tskitconvert_vignette.html#tskitconvert-vignette"><span class="std std-ref">Converting data to tskit format</span></a>.</p>
@@ -927,6 +954,9 @@ Origin time of mutations is part of the metadata.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.15.2: </span>Fixed bug that could generate a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.PopulationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.PopulationTable</span></code></a>
 with an incorrect number of rows.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.17.0: </span>The <cite>wrapped</cite> keyword argument is deprecated.</p>
 </div>
 </dd></dl>
 
@@ -2306,11 +2336,11 @@ Default is 0.</p></li>
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="tskit_tools.html" title="previous page">
+        <a class="left-prev" href="conditional_models.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools</span></code></p>
+                <p class="prevnext-title">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></p>
             </div>
         </a>
     </div>

@@ -231,6 +231,23 @@
 </ul>
 <p class="caption" role="heading">
  <span class="caption-text">
+  Short vignettes - special case models
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="trackmutationfates.html">
+   Need title
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="selective_sweep.html">
+   Selective sweeps
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
 </p>
@@ -429,6 +446,16 @@
    <code class="docutils literal notranslate">
     <span class="pre">
      fwdpy11.tskit_tools
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../pages/conditional_models.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.conditional_models
     </span>
    </code>
   </a>
@@ -635,8 +662,8 @@
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="e2d9df4c-777b-457f-892a-b3ce42a60810" name="43702c0d-69fd-43ab-8e78-123947aa3144" type="radio">
-</input><label class="tabbed-label" for="e2d9df4c-777b-457f-892a-b3ce42a60810">
+<input checked="checked" id="b1f3c114-5d6d-4d97-b88e-c5c9c6d4ac68" name="b58e8dd3-14f1-48f7-bedb-6f196b52b111" type="radio">
+</input><label class="tabbed-label" for="b1f3c114-5d6d-4d97-b88e-c5c9c6d4ac68">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -644,8 +671,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="43b5247b-0a70-4fd8-8bbd-255dadbf80bf" name="43702c0d-69fd-43ab-8e78-123947aa3144" type="radio">
-</input><label class="tabbed-label" for="43b5247b-0a70-4fd8-8bbd-255dadbf80bf">
+<input id="bc6fad62-8d01-44fb-a287-df7fb6695c92" name="b58e8dd3-14f1-48f7-bedb-6f196b52b111" type="radio">
+</input><label class="tabbed-label" for="bc6fad62-8d01-44fb-a287-df7fb6695c92">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>

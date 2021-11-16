@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Working example - parameters for simulating direct effects on fitness &#8212; fwdpy11 manual</title>
+    <title>Need title &#8212; fwdpy11 manual</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet" />
   <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Working example - parameters for the simulation of a trait" href="workingexample_trait.html" />
-    <link rel="prev" title="Genetic values - simulating phenotypes/traits." href="gvalues_traits.html" />
+    <link rel="next" title="Selective sweeps" href="selective_sweep.html" />
+    <link rel="prev" title="Debugging demographic models" href="demography_debugger_vignette.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -132,7 +132,7 @@
   Short vignettes - setting up the genetics
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="genetics_vignettes_intro.html">
    Introduction
@@ -168,8 +168,8 @@
    Genetic values - simulating phenotypes/traits.
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="workingexample_fitness.html">
    Working example - parameters for simulating direct effects on fitness
   </a>
  </li>
@@ -234,9 +234,9 @@
   Short vignettes - special case models
  </span>
 </p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="trackmutationfates.html">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Need title
   </a>
  </li>
@@ -584,11 +584,11 @@
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
         <a class="dropdown-buttons"
-            href="../_sources/short_vignettes/workingexample_fitness.ipynb"><button type="button"
+            href="../_sources/short_vignettes/trackmutationfates.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/short_vignettes/workingexample_fitness.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/trackmutationfates.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -608,7 +608,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/workingexample_fitness.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/trackmutationfates.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -629,6 +629,26 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id1">
+   Need title
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#recording-all-generations-of-the-mutation-s-sojourn">
+     Recording all generations of the mutation’s sojourn
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -637,99 +657,193 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="working-example-parameters-for-simulating-direct-effects-on-fitness">
-<span id="workingexample-fitness-vignette"></span><h1>Working example - parameters for simulating direct effects on fitness<a class="headerlink" href="#working-example-parameters-for-simulating-direct-effects-on-fitness" title="Permalink to this headline">¶</a></h1>
-<div class="cell docutils container">
+  <div class="tex2jax_ignore mathjax_ignore section" id="need-title">
+<span id="tracking-mutation-fates"></span><h1>Need title<a class="headerlink" href="#need-title" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
-
-<span class="n">N</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="n">mu_neutral</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">mu_selected</span> <span class="o">=</span> <span class="mf">1e-3</span>
-<span class="n">rho</span> <span class="o">=</span> <span class="mf">1000.</span>
-<span class="n">alpha</span> <span class="o">=</span> <span class="o">-</span><span class="mi">50</span>
-
-<span class="n">p</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;nregions&quot;</span><span class="p">:</span> <span class="p">[],</span>
-    <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
-    <span class="s2">&quot;sregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">ExpS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="n">alpha</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">))],</span>
-    <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">rho</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">N</span><span class="p">))],</span>
-    <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">mu_neutral</span><span class="p">,</span> <span class="n">mu_selected</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-    <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;demography&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiscreteDemography</span><span class="p">(),</span>
-    <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">N</span><span class="p">,</span>
-<span class="p">}</span>
-<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">p</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>Let’s take a look at what he have:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">asblack</span><span class="p">())</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11.conditional_models</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">prune_selected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Dropping mutations requires existing</span>
+    <span class="c1"># ancestry, which we can get either</span>
+    <span class="c1"># from a burn-in or from msprime.</span>
+    <span class="n">initial_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">recombination_rate</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="o">=</span><span class="mi">43215</span><span class="p">,</span>
+        <span class="n">sequence_length</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Build the pop from msprime output</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">initial_ts</span><span class="p">)</span>
+
+    <span class="c1"># Set up basic model parameters</span>
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">)],</span>
+        <span class="c1"># Here, 2 means that fitness is multiplicative</span>
+        <span class="c1"># over 1, 1+hs, 1+2s.</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Need title<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ALPHA</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">pop</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mutation_data</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">NewMutationParameters</span><span class="p">(</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AlleleCount</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">NewMutationData</span><span class="p">(</span><span class="n">effect_size</span><span class="o">=</span><span class="n">ALPHA</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dominance</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">PositionRange</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.49</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.51</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">track_mutation</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">when</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">until</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>When tracking deleterious variants, it is unlikely that they will be around at the end of the simulation:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>fwdpy11.ModelParams(
-    nregions=[],
-    sregions=[
-        fwdpy11.ExpS(
-            beg=0,
-            end=1.0,
-            weight=1,
-            mean=-0.025,
-            h=1.0,
-            coupled=True,
-            label=0,
-            scaling=1.0,
-        )
-    ],
-    recregions=[fwdpy11.PoissonInterval(beg=0, end=1.0, mean=0.25, discrete=False)],
-    rates=fwdpy11.MutationAndRecombinationRates(
-        neutral_mutation_rate=0.0, selected_mutation_rate=0.001, recombination_rate=None
-    ),
-    gvalue=fwdpy11.Multiplicative(
-        scaling=2.0, gvalue_to_fitness=None, noise=None, ndemes=1
-    ),
-    demography=fwdpy11.DiscreteDemography(
-        mass_migrations=None,
-        set_growth_rates=None,
-        set_deme_sizes=None,
-        set_selfing_rates=None,
-        migmatrix=None,
-        set_migration_rates=None,
-    ),
-    simlen=10000,
-    prune_selected=True,
-)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>mutation 0 is no longer in the population!
 </pre></div>
 </div>
 </div>
 </div>
-<p>Let’s explain a few new things:</p>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">rate</span></code> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> contains the neutral mutation rate, selected mutation rate, and recombination rate, respectively.
-The recombination rate is <code class="docutils literal notranslate"><span class="pre">None</span></code> because the rates are all contained in <code class="docutils literal notranslate"><span class="pre">recregions</span></code>.
-(See <a class="reference internal" href="geneticmaps_vignette.html#geneticmaps-vignette"><span class="std std-ref">Genetic maps</span></a>.)
-This parameterization of <code class="docutils literal notranslate"><span class="pre">rates</span></code> will soon be deprecated and the need to specify a recombination rate of <code class="docutils literal notranslate"><span class="pre">None</span></code> will go away.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">demography</span></code> field is something we’ve not encountered yet.
-If nothing is provided, an empty instance of <a class="reference internal" href="../pages/types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> gets initialized.
-This means “no demographic events”.
-Demographic events are the subject of later vignettes and <a class="reference internal" href="../pages/softselection.html#softselection"><span class="std std-ref">this page</span></a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">simlen</span></code> is how many generations to evolve the population.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">prune_selected</span></code> is a boolean.
-If <code class="docutils literal notranslate"><span class="pre">True</span></code>, then mutations that are fixed in the alive individuals, and not present at all in ancient samples, will be removed from the simulation.
-This removal is an efficiency thing–we don’t need them for multiplicative models.
-In the future, we hope for a better method for handling fixations that allows for removal, even when present in ancient samples, during the simulation, then add them back in to the tables before returning from the simulation.</p></li>
-</ul>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Do not set <code class="docutils literal notranslate"><span class="pre">prune_selected</span> <span class="pre">=</span> <span class="pre">True</span></code> for models of additive effects.
-Doing so breaks our requirement that the rank order of relative fitness is preserved up to a multiplicative constant.</p>
+<div class="section" id="recording-all-generations-of-the-mutation-s-sojourn">
+<h3>Recording all generations of the mutation’s sojourn<a class="headerlink" href="#recording-all-generations-of-the-mutation-s-sojourn" title="Permalink to this headline">¶</a></h3>
+<p>So, we’ve lost all the information about this variant.
+That’s not so useful.
+Let’s record all generations of its existence as ancient samples:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>Our next vignette shows us some tricks that can be useful for modifying our <code class="docutils literal notranslate"><span class="pre">params</span></code> objects.</p>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">track_mutation</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">when</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">until</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">sampling_policy</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AncientSamplePolicy</span><span class="o">.</span><span class="n">DURATION</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, our mutation is present in nodes in our tree sequence.
+Let’s try to print it again:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+<span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mutation[position:0.493168, effect size:-0.010000, dominance:1.000000, origin time:3, label:0]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s track this variant’s frequency at each time point:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">time</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">sample_timepoints</span><span class="p">(</span><span class="n">include_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">))</span>
+    <span class="n">tree_itr</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">TreeIterator</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">tables</span><span class="p">,</span> <span class="n">nodes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">tree_itr</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">mutation</span> <span class="ow">in</span> <span class="n">tree</span><span class="o">.</span><span class="n">mutations</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">tree</span><span class="o">.</span><span class="n">leaf_counts</span><span class="p">(</span><span class="n">mutation</span><span class="o">.</span><span class="n">node</span><span class="p">),</span> <span class="n">mutation</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.0 1000
+3.0 1 0
+4.0 1000
+4.0 1 0
+5.0 1000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.0 1 0
+6.0 1000
+6.0 2 0
+7.0 1000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.0 2 0
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -762,19 +876,19 @@ Doing so breaks our requirement that the rank order of relative fitness is prese
 <div class='prev-next-bottom'>
     
     <div id="prev">
-        <a class="left-prev" href="gvalues_traits.html" title="previous page">
+        <a class="left-prev" href="demography_debugger_vignette.html" title="previous page">
             <i class="prevnext-label fas fa-angle-left"></i>
             <div class="prevnext-info">
                 <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Genetic values - simulating phenotypes/traits.</p>
+                <p class="prevnext-title">Debugging demographic models</p>
             </div>
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="workingexample_trait.html" title="next page">
+        <a class="right-next" href="selective_sweep.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Working example - parameters for the simulation of a trait</p>
+                <p class="prevnext-title">Selective sweeps</p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>

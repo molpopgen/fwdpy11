@@ -51,7 +51,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data types related to simulated populations" href="types.html" />
+    <link rel="next" title="Module fwdpy11.conditional_models" href="conditional_models.html" />
     <link rel="prev" title="Setting up genomic intervals" href="regiontypes.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -226,6 +226,23 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
    Debugging demographic models
+  </a>
+ </li>
+</ul>
+<p class="caption" role="heading">
+ <span class="caption-text">
+  Short vignettes - special case models
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
+   Need title
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../short_vignettes/selective_sweep.html">
+   Selective sweeps
   </a>
  </li>
 </ul>
@@ -434,6 +451,16 @@
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="conditional_models.html">
+   Module
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fwdpy11.conditional_models
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="types.html">
    Data types related to simulated populations
   </a>
@@ -636,59 +663,36 @@ of preserved samples are special.</p>
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">INDIVIDUAL_IS_FIRST_GENERATION</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.fwdpy11.tskit_tools.INDIVIDUAL_IS_FIRST_GENERATION" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">WrappedTreeSequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encapsulates a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a> as <cite>self.ts</cite>.</p>
-<p>Instance methods give additional functionality that usually
-requires interacting with the metadata.</p>
-<p>Instances of this class may be created using a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>
-or a call to <a class="reference internal" href="#fwdpy11.tskit_tools.load" title="fwdpy11.tskit_tools.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.load()</span></code></a>.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.15.0.</span></p>
-</div>
-<p>This class has the following attributes:</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <cite>data</cite> field from top-level metadata</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.get_toplevel_metadata">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">get_toplevel_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><span class="pre">object</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.get_toplevel_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract top-level metadata from a tree sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Metadata field name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The metadata field, if <cite>name</cite> is a valid field, or
+<cite>None</cite> otherwise.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph">
-<span class="sig-name descname"><span class="pre">demes_graph</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.demes_graph" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <cite>demes_graph</cite> field from top-level metadata</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.generation">
-<span class="sig-name descname"><span class="pre">generation</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.generation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <cite>generation</cite> field from top-level metadata</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.model_params">
-<span class="sig-name descname"><span class="pre">model_params</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.model_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <cite>model_params</cite> field from top-level metadata</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.seed">
-<span class="sig-name descname"><span class="pre">seed</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.seed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <cite>seed</cite> field from top-level metadata</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.ts">
-<span class="sig-name descname"><span class="pre">ts</span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.ts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Access the underlying <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a></p>
-</dd></dl>
-
-<p>This class has the following methods:</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals">
-<span class="sig-name descname"><span class="pre">timepoints_with_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.timepoints_with_individuals" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="fwdpy11.tskit_tools.iterate_timepoints_with_individuals">
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">iterate_timepoints_with_individuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decode_metadata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.iterate_timepoints_with_individuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an iterator over all unique time points with individuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
+<li><p><strong>decode_metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Flag to decode individual metadata or not</p></li>
+</ul>
+</dd>
+</dl>
 <p>For each time point a tuple of (time, nodes, metadata) is yielded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -698,22 +702,6 @@ or a call to <a class="reference internal" href="#fwdpy11.tskit_tools.load" titl
 <p>If <cite>decode_individual_metadata</cite> is <cite>True</cite>, metadata will be stored in
 a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.DiploidMetadata</span></code></a>.
 If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata">
-<span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.metadata.DiploidMetadata"><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decode individual metadata.</p>
-<p>See <a class="reference internal" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="fwdpy11.tskit_tools.decode_individual_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_individual_metadata()</span></code></a> for details.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata">
-<span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#fwdpy11.Mutation" title="fwdpy11._fwdpy11.Mutation"><span class="pre">fwdpy11._fwdpy11.Mutation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.WrappedTreeSequence.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decode mutation metadata.</p>
-<p>See <a class="reference internal" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="fwdpy11.tskit_tools.decode_mutation_metadata"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.decode_mutation_metadata()</span></code></a> for details.</p>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py function">
@@ -728,19 +716,19 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 <dd class="field-even"><p>A tree sequence</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#fwdpy11.tskit_tools.WrappedTreeSequence" title="fwdpy11.tskit_tools.WrappedTreeSequence"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.WrappedTreeSequence</span></code></a></p>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.WrappedTreeSequence</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_individual_metadata">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.metadata.DiploidMetadata"><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#fwdpy11.tskit_tools.DiploidMetadata" title="fwdpy11.tskit_tools.metadata.DiploidMetadata"><span class="pre">fwdpy11.tskit_tools.metadata.DiploidMetadata</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
 <li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><em>slice</em></a><em> or </em><em>numpy array</em>) – The rows to decode. If <cite>None</cite>, the entire table is decoded and returned.</p></li>
 </ul>
 </dd>
@@ -760,6 +748,9 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 0.15.0: </span>Add index/slice access to the table.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.17.0: </span>Change input from TableCollection to TreeSequence</p>
 </div>
 </dd></dl>
 
@@ -796,12 +787,12 @@ this type. Member attributes have the same names as these
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_mutation_metadata">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tc</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.tables.TableCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#fwdpy11.Mutation" title="fwdpy11._fwdpy11.Mutation"><span class="pre">fwdpy11._fwdpy11.Mutation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">tskit.trees.TreeSequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="types.html#fwdpy11.Mutation" title="fwdpy11._fwdpy11.Mutation"><span class="pre">fwdpy11._fwdpy11.Mutation</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decodes metadata from a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tc</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>) – A table collection</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
 <li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><em>slice</em></a><em> or </em><em>numpy array</em>) – The rows to decode. If <cite>None</cite>, the entire table is decoded and returned.</p></li>
 </ul>
 </dd>
@@ -823,6 +814,9 @@ this type. Member attributes have the same names as these
 <p><span class="versionmodified changed">Changed in version 0.15.0: </span>Return type is now a list, allowing
 some elements to be <cite>None</cite>.</p>
 <p>Add index/slice access to the table.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 0.17.0: </span>Change input from TableCollection to TreeSequence</p>
 </div>
 </dd></dl>
 
@@ -867,10 +861,10 @@ some elements to be <cite>None</cite>.</p>
         </a>
     </div>
      <div id="next">
-        <a class="right-next" href="types.html" title="next page">
+        <a class="right-next" href="conditional_models.html" title="next page">
             <div class="prevnext-info">
                 <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Data types related to simulated populations</p>
+                <p class="prevnext-title">Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code></p>
             </div>
             <i class="prevnext-label fas fa-angle-right"></i>
         </a>

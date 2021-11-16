@@ -3,26 +3,61 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a0
+
+Bug fixes
+
+* Fix error initializing the founder genome of {class}`fwdpy11.DiploidPopulation`
+  Issue {issue}`836`
+  PR {pr}`838`
+* Fix bug in handling mutation counts when final generation was recorded as "ancient samples".
+  This bug resulted in an exception being raised.
+  Thus, previous exception-free results were not affected.
+  Issue {issue}`844`
+  PR {pr}`845`
+  PR {pr}`847`
+
+New features
+
+* Add module {mod}`fwdpy11.conditional_models`.
+  PR {pr}`828`
+
+Deprecations
+
+* Deprecate `fwdpy11.tskit_tools.WrappedTreeSequence`
+  PR {pr}`841`
+  PR {pr}`848`
+
+Back end changes:
+
+* Add more runtime checks to {func}`fwdpy11.DiploidPopulation.add_mutation`
+  PR {pr}`837`
+* Remove unnecessary copying of table collections in {mod}`fwdpy11.tskit_tools`.
+  PR {pr}`842`
+* Move back-end for ancient sample recording to the population classes.
+  Add `fwdpy11.DiploidPopulation._record_ancient_samples`.
+  {pr}`853`
+
 ## 0.16.2
 
 Documentation
 
 * Document that virtual envs should upgrade `pip`.
-  `pr`{834}
-  `issue`{833}
+  PR {pr}`834`
+  Issue {issue}`833`
 
 Packaging
 
 * Fix import of functions in `fwdpy11.demographic_models.human`.
-  `pr`{835}
-  `issue`{832}
+  PR {pr}`835`
+  Issue {issue}`832`
 
 ## 0.16.1
 
 New features:
 
 * `Mutation.__str__` is now more informative.
-  `pr`{825}
+  PR {pr}`825`
 
 ## 0.16.0
 
