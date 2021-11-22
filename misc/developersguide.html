@@ -729,6 +729,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#static-analysis-using-cppcheck">
+     Static analysis using cppcheck
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#code-formatting-style">
      Code formatting style
     </a>
@@ -976,14 +981,18 @@ Thus, compiling with this option is a “serious debugging mode only” option.<
 <p>It is sometimes useful to go through the code and to a “static” analysis to look for problems.
 The clang-tidy tool is especially useful.</p>
 <p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-
-<span class="k">for</span> i <span class="k">in</span> <span class="k">$(</span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span><span class="k">)</span>
-<span class="k">do</span>
-    <span class="nv">n</span><span class="o">=</span><span class="sb">`</span>basename <span class="nv">$i</span> .cc<span class="sb">`</span>
-    <span class="nb">echo</span> <span class="nv">$i</span>
-    clang-tidy <span class="nv">$i</span> -checks<span class="o">=</span><span class="s2">&quot;cppcoreguidelines-special-member-functions&quot;</span> -header-filter<span class="o">=</span>fwdpy11 -export-fixes<span class="o">=</span>fixes/<span class="nv">$n</span>.yaml -- -I/usr/include/python3.8d -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers -I<span class="nv">$HOME</span>/.local/include
-<span class="k">done</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find fwdpy11/src/ -name <span class="s1">&#39;*.cc&#39;</span> <span class="p">|</span> xargs clang-tidy -p ./compile_commands.json -checks<span class="o">=</span><span class="s2">&quot;all&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="static-analysis-using-cppcheck">
+<h3>Static analysis using cppcheck<a class="headerlink" href="#static-analysis-using-cppcheck" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The JSON file may containt too many backslashes, causing cppcheck to fail.
+Use <code class="docutils literal notranslate"><span class="pre">sed</span></code>/editor of choice to fix.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cppcheck --project<span class="o">=</span>compile_commands.json --enable<span class="o">=</span><span class="s2">&quot;all&quot;</span>
 </pre></div>
 </div>
 </div>

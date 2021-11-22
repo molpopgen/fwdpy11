@@ -236,14 +236,18 @@ The clang-tidy tool is especially useful.
 For example:
 
 ```{code-block} bash
-#!/bin/bash
+find fwdpy11/src/ -name '*.cc' | xargs clang-tidy -p ./compile_commands.json -checks="all"
+```
 
-for i in $(find fwdpy11/src/ -name '*.cc')
-do
-    n=`basename $i .cc`
-    echo $i
-    clang-tidy $i -checks="cppcoreguidelines-special-member-functions" -header-filter=fwdpy11 -export-fixes=fixes/$n.yaml -- -I/usr/include/python3.8d -I./fwdpy11/headers/fwdpp -I./fwdpy11/headers -I$HOME/.local/include
-done
+### Static analysis using cppcheck
+
+```{note}
+The JSON file may containt too many backslashes, causing cppcheck to fail.
+Use `sed`/editor of choice to fix.
+```
+
+```{code-block} bash
+cppcheck --project=compile_commands.json --enable="all"
 ```
 
 ### Code formatting style
