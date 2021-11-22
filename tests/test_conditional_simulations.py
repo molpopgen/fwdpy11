@@ -96,7 +96,7 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     try:
-        output = fwdpy11.conditional_models.track_mutation(
+        output = fwdpy11.conditional_models.track_added_mutation(
             rng,
             pop,
             params,
@@ -136,7 +136,7 @@ def test_deleterious_mutation_remains_present_with_final_recording(
     )
     rng = fwdpy11.GSLrng(fp11_seed)
     try:
-        output = fwdpy11.conditional_models.track_mutation(
+        output = fwdpy11.conditional_models.track_added_mutation(
             rng,
             pop,
             params,

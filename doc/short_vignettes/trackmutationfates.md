@@ -86,7 +86,7 @@ mutation_data = fwdpy11.conditional_models.NewMutationParameters(
 
 
 ```{code-cell} python
-output = fwdpy11.conditional_models.track_mutation(
+output = fwdpy11.conditional_models.track_added_mutation(
     rng, 
     pop,
     params,
@@ -116,7 +116,7 @@ rng = fwdpy11.GSLrng(12345)
 ```
 
 ```{code-cell} python
-output = fwdpy11.conditional_models.track_mutation(
+output = fwdpy11.conditional_models.track_added_mutation(
     rng, 
     pop,
     params,

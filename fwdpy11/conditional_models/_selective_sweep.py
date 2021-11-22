@@ -25,7 +25,7 @@ from fwdpy11.conditional_models import (
     ConditionalModelOutput,
 )
 
-from ._track_mutation import _track_mutation
+from ._track_added_mutation import _track_added_mutation
 
 __disallowed_kwargs = ["until"]
 
@@ -53,7 +53,7 @@ def _selective_sweep(
         if d in kwargs:
             raise ValueError(f"{d} is not a valid kwarg")
 
-    return _track_mutation(
+    return _track_added_mutation(
         rng,
         pop,
         params,

@@ -7,7 +7,7 @@
    :members:
    :undoc-members:
 
-.. autofunction:: fwdpy11.conditional_models.track_mutation
+.. autofunction:: fwdpy11.conditional_models.track_added_mutation
 
 .. autofunction:: fwdpy11.conditional_models.selective_sweep
 ```
