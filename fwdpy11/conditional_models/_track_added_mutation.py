@@ -284,7 +284,7 @@ def _copy_pop_and_add_mutation(
     return pcopy, idx, final_count, out_params
 
 
-def _track_mutation(
+def _track_added_mutation(
     rng: fwdpy11.GSLrng,
     pop: fwdpy11._types.DiploidPopulation,
     params: fwdpy11.ModelParams,

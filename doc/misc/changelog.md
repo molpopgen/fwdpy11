@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a1
+
+Changes to `fwdpy11.conditional_models`:
+
+* Rename `track_mutation` to `track_added_mutation`.
+  PR {pr}`856`
+
 ## 0.17.0a0
 
 Bug fixes
