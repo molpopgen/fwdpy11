@@ -3,6 +3,14 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a2
+
+Bug fixes:
+
+* Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.
+  It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
+  PR {pr}`857`
+
 ## 0.17.0a1
 
 Changes to `fwdpy11.conditional_models`:
