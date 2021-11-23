@@ -174,14 +174,13 @@ namespace
                                                 s = si();
                                             }
                                         if (deme < 0
-                                            || (deme >= 0
-                                                && std::all_of(
-                                                    begin(descendants), end(descendants),
-                                                    [&pop,
-                                                     deme](fwdpp::ts::table_index_t i) {
-                                                        return pop.tables->nodes[i].deme
-                                                               == deme;
-                                                    })))
+                                            || std::all_of(
+                                                begin(descendants), end(descendants),
+                                                [&pop,
+                                                 deme](fwdpp::ts::table_index_t i) {
+                                                    return pop.tables->nodes[i].deme
+                                                           == deme;
+                                                }))
                                             {
                                                 if (node_has_valid_time(
                                                         pop.tables->nodes, n,

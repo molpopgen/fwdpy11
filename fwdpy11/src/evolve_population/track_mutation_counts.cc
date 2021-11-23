@@ -13,7 +13,7 @@ track_mutation_counts(fwdpy11::Population &pop, const bool simplified,
             throw std::runtime_error(
                 "track_mutation_counts: count vector size mismatch");
         }
-    if (!simplified || (simplified && suppress_edge_table_indexing))
+    if (!simplified || suppress_edge_table_indexing)
         {
             fwdpp::fwdpp_internal::process_haploid_genomes(
                 pop.haploid_genomes, pop.mutations, pop.mcounts);
