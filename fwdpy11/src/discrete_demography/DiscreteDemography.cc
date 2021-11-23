@@ -175,9 +175,8 @@ init_DiscreteDemography(py::module& m)
                 d["selfing_rates"].cast<ddemog::selfing_rates_vector::value_type>());
 
             ddemog::deme_properties sizes_rates(
-                std::move(current_deme_sizes), std::move(next_deme_sizes),
-                std::move(growth_rates_onset_times), std::move(growth_initial_sizes),
-                std::move(growth_rates), std::move(selfing_rates));
+                current_deme_sizes, next_deme_sizes, growth_rates_onset_times,
+                growth_initial_sizes, growth_rates, selfing_rates);
 
             ddemog::MigrationMatrix M{};
             auto t = d["migmatrix"].cast<py::tuple>();

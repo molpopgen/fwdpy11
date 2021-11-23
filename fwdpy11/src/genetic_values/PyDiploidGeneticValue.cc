@@ -95,7 +95,7 @@ strict_additive_effects(const fwdpy11::DiploidPopulation& pop,
                         const fwdpy11::DiploidMetadata& individual)
 {
     double g = 0.0;
-    auto& diploid = pop.diploids[individual.label];
+    const auto& diploid = pop.diploids[individual.label];
     for (auto k : pop.haploid_genomes[diploid.first].smutations)
         {
             g += pop.mutations[k].s;

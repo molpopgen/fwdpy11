@@ -810,7 +810,7 @@ class TestIMModel(unittest.TestCase):
         self.assertEqual(deme_sizes[1][1], self.N1t)
 
     @unittest.skip(
-        reason="Fixing issue 775 means that this no longer works because pickling DiscreteDemography does not fully round-trip the internal model state"
+        reason="Fixing issue 775 means that this no longer works because pickling DiscreteDemography does not fully round-trip the internal model state. See issue 777"
     )
     def test_evolve_in_two_steps_restart_with_two_demes_and_pickle(self):
         """

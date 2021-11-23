@@ -67,7 +67,7 @@ remove_extinct_mutations(fwdpy11::Population& pop)
                 }
         }
     pop.mutations.erase(std::remove_if(begin(pop.mutations), end(pop.mutations),
-                                       [](fwdpy11::Mutation& m) {
+                                       [](const fwdpy11::Mutation& m) {
                                            return m.pos
                                                   == std::numeric_limits<double>::max();
                                        }),

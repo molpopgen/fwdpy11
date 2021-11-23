@@ -32,7 +32,7 @@ init_ts_TableCollection(py::module& m)
     // TODO: allow access to the "right" member functions
     py::class_<fwdpp::ts::std_table_collection,
                std::shared_ptr<fwdpp::ts::std_table_collection>>(m, "ll_TableCollection")
-        .def(py::init([](std::shared_ptr<fwdpp::ts::std_table_collection>& self) {
+        .def(py::init([](const std::shared_ptr<fwdpp::ts::std_table_collection>& self) {
             if (self == nullptr)
                 {
                     throw std::invalid_argument("input tables cannot be nullptr");
