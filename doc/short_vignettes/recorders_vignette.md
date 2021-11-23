@@ -92,7 +92,7 @@ rng = fwdpy11.GSLrng(54321)
 GSSmo = fwdpy11.GSSmo(
     [
         fwdpy11.Optimum(when=0, optimum=0.0, VS=1.0),
-        fwdpy11.Optimum(when=10 * pop.N, optimum=1.0, VS=1.0),
+        fwdpy11.Optimum(when=pop.N, optimum=1.0, VS=1.0),
     ]
 )
 
@@ -109,7 +109,7 @@ p = {
     "rates": (0.0, 1e-3, None),
     "prune_selected": False,
     "demography": fwdpy11.DiscreteDemography(),
-    "simlen": 10 * pop.N + 200,
+    "simlen": pop.N + 200,
 }
 params = fwdpy11.ModelParams(**p)
 ```
