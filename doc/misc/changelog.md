@@ -5,6 +5,11 @@ updates to latest `fwdpp` version, etc.
 
 ## 0.17.0a2
 
+Changes to `fwdpy11.conditional_models`:
+
+* Change name of `kwarg` to `track_added_mutation`.
+  PR {pr}`858`
+
 Bug fixes:
 
 * Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.

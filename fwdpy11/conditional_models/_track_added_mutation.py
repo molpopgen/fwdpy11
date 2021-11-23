@@ -54,11 +54,11 @@ class _ProgressMonitor:
         ]
     )
     key: typing.Tuple[float, float, int]
-    exit_when_condition_met: bool
+    return_when_stopping_condition_met: bool
     status: SimulationStatus
 
     def __call__(self, pop: fwdpy11.DiploidPopulation, _) -> bool:
-        if self.status.condition_met is True and self.exit_when_condition_met is True:
+        if self.status.condition_met is True and self.return_when_stopping_condition_met is True:
             return True
         return self.status.should_terminate
 
@@ -301,7 +301,7 @@ def _track_added_mutation(
         ]
     ] = None,
     evolvets_options: typing.Optional[EvolveOptions] = None,
-    exit_when_condition_met: bool = False,
+    return_when_stopping_condition_met: bool = False,
 ) -> ConditionalModelOutput:
 
     if pop.generation > 0:
@@ -345,7 +345,7 @@ def _track_added_mutation(
         _ProgressMonitor(
             idx,
             pcopy.mutations[idx].key,
-            exit_when_condition_met,
+            return_when_stopping_condition_met,
             SimulationStatus(False, False),
         ),
         _sampling_policy,

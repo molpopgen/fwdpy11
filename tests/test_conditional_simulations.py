@@ -250,7 +250,7 @@ def test_sweep_from_new_mutation_using_API_exit_when_finished(
         mutation_data,
         fwdpy11.conditional_models.GlobalFixation(),
         sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION,
-        exit_when_condition_met=True,
+        return_when_stopping_condition_met=True,
     )
     assert len(output.pop.fixation_times) == 1
     assert output.pop.generation == output.pop.fixation_times[0]
