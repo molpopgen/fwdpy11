@@ -10,6 +10,12 @@ Changes to `fwdpy11.conditional_models`:
 * Change name of `kwarg` to `track_added_mutation`.
   PR {pr}`858`
 
+Back end changes:
+
+* Remove extra copies of tskit table collections from the implementation of {func}`fwdpy11.tskit_tools.iterate_timepoints_with_individuals`.
+  PR {pr}`859`
+  Issue {issue}`851`
+
 Bug fixes:
 
 * Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.
