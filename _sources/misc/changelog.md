@@ -3,6 +3,25 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a2
+
+Changes to `fwdpy11.conditional_models`:
+
+* Change name of `kwarg` to `track_added_mutation`.
+  PR {pr}`858`
+
+Back end changes:
+
+* Remove extra copies of tskit table collections from the implementation of {func}`fwdpy11.tskit_tools.iterate_timepoints_with_individuals`.
+  PR {pr}`859`
+  Issue {issue}`851`
+
+Bug fixes:
+
+* Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.
+  It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
+  PR {pr}`857`
+
 ## 0.17.0a1
 
 Changes to `fwdpy11.conditional_models`:

@@ -632,6 +632,11 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a2">
+   0.17.0a2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#a1">
    0.17.0a1
   </a>
@@ -1033,6 +1038,26 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <p>Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest <code class="docutils literal notranslate"><span class="pre">fwdpp</span></code> version, etc.</p>
+<div class="section" id="a2">
+<h2>0.17.0a2<a class="headerlink" href="#a2" title="Permalink to this headline">¶</a></h2>
+<p>Changes to <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code>:</p>
+<ul class="simple">
+<li><p>Change name of <code class="docutils literal notranslate"><span class="pre">kwarg</span></code> to <code class="docutils literal notranslate"><span class="pre">track_added_mutation</span></code>.
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/858">#858</a></p></li>
+</ul>
+<p>Back end changes:</p>
+<ul class="simple">
+<li><p>Remove extra copies of tskit table collections from the implementation of <a class="reference internal" href="../pages/tskit_tools.html#fwdpy11.tskit_tools.iterate_timepoints_with_individuals" title="fwdpy11.tskit_tools.iterate_timepoints_with_individuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.tskit_tools.iterate_timepoints_with_individuals()</span></code></a>.
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/859">#859</a>
+Issue <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/851">#851</a></p></li>
+</ul>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>Fixed a “use after move” error in C++ code used to pickle <a class="reference internal" href="../pages/types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a>.
+It looks like this bug was introduced back in <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/791">#791</a>, which was part of the 0.16.0 release.
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/857">#857</a></p></li>
+</ul>
+</div>
 <div class="section" id="a1">
 <h2>0.17.0a1<a class="headerlink" href="#a1" title="Permalink to this headline">¶</a></h2>
 <p>Changes to <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code>:</p>
