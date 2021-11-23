@@ -121,7 +121,7 @@ init_DiploidPopulation(py::module& m)
                 return pop;
             }))
         .def("_dump_to_file",
-             [](const fwdpy11::DiploidPopulation& pop, const std::string filename) {
+             [](const fwdpy11::DiploidPopulation& pop, const std::string & filename) {
                  std::ofstream out(filename.c_str(), std::ios_base::binary);
                  if (!out)
                      {
@@ -132,7 +132,7 @@ init_DiploidPopulation(py::module& m)
              })
         .def_static(
             "_load_from_file",
-            [](const std::string filename) {
+            [](const std::string & filename) {
                 std::ifstream in(filename.c_str(), std::ios_base::binary);
                 if (!in)
                     {
