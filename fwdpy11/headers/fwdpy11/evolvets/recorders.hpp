@@ -36,7 +36,7 @@ namespace fwdpy11
      */
     {
         inline void
-        operator()(const DiploidPopulation&, SampleRecorder&) const
+        operator()(const DiploidPopulation&, SampleRecorder&)
         {
         }
     };

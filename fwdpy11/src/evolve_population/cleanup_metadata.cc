@@ -10,7 +10,7 @@ cleanup_metadata(const fwdpp::ts::std_table_collection& tables,
 {
     metadata.erase(
         std::remove_if(begin(metadata), end(metadata),
-                       [generation, &tables](fwdpy11::DiploidMetadata& md) {
+                       [generation, &tables](const fwdpy11::DiploidMetadata& md) {
                            return tables.nodes[md.nodes[0]].time
                                       == generation
                                   || tables.nodes[md.nodes[1]].time

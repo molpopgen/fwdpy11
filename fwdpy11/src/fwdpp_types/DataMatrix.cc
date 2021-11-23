@@ -69,7 +69,7 @@ init_data_matrix(py::module &m)
 
     py::class_<fwdpp::data_matrix, std::shared_ptr<fwdpp::data_matrix>>(
         m, "ll_DataMatrix")
-        .def(py::init([](std::shared_ptr<fwdpp::data_matrix> &p) {
+        .def(py::init([](const std::shared_ptr<fwdpp::data_matrix> &p) {
             if (p == nullptr)
                 {
                     throw std::invalid_argument("input pointer is nullptr");
