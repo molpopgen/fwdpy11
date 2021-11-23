@@ -73,11 +73,15 @@ def iterate_timepoints_with_individuals(
     If `False`, `None` will be yielded.
     """
 
-    # Get rows of the node table where the nodes are in individuals
-    nodes_in_individuals = np.where(ts.tables.nodes.individual != tskit.NULL)[0]
+    nodes_in_individuals = []
+    node_times = []
+    for individual in ts.individuals():
+        for node in individual.nodes:
+            nodes_in_individuals.append(node)
+            node_times.append(ts.node(node).time)
 
-    # Get the times
-    node_times = ts.tables.nodes.time[nodes_in_individuals]
+    node_times = np.array(node_times)
+    nodes_in_individuals = np.array(nodes_in_individuals)
 
     unique_node_times = np.unique(node_times)
 
@@ -85,10 +89,12 @@ def iterate_timepoints_with_individuals(
         # Get the node tables rows in individuals at this time
         x = np.where(node_times == utime)
         node_table_rows = nodes_in_individuals[x]
-        assert np.all(ts.tables.nodes.time[node_table_rows] == utime)
+        assert np.all(np.array([ts.node(i).time for i in node_table_rows]) == utime)
 
         # Get the individuals
-        individuals = np.unique(ts.tables.nodes.individual[node_table_rows])
+        individuals = np.unique(
+            np.array([ts.node(i).individual for i in node_table_rows])
+        )
         assert not np.any(individuals == tskit.NULL)
 
         if decode_metadata is True:
