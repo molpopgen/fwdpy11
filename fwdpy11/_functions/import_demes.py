@@ -22,7 +22,7 @@ from ..discrete_demography import (DiscreteDemography, MassMigration,
 # TODO: need type hints for dg
 def demography_from_demes(
     dg: Union[str, demes.Graph], burnin: int
-) -> DemographicModelDetails:
+) -> "DemographicModelDetails":
     """
     The deme graph, dg, can be either a string or a resolved deme-graph.
 

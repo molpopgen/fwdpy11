@@ -21,9 +21,11 @@ import typing
 
 import attr
 import demes
+import demes.demes
 import numpy as np
 
 import fwdpy11
+import fwdpy11.demographic_models
 
 from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict,
@@ -531,7 +533,7 @@ class DiscreteDemography(fwdpy11._fwdpy11._ll_DiscreteDemography):
 
 def from_demes(
     dg: typing.Union[str, demes.Graph], burnin: int = 10
-) -> "DemographicModelDetails":
+) -> fwdpy11.demographic_models.DemographicModelDetails:
     """
     Build a :class:`fwdpy11.DiscreteDemography` object using demes. The deme
     graph can either be a demes Graph object or a string as the filepath to a

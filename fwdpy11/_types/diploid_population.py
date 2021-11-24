@@ -44,7 +44,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         N: Union[int, List[int]],
         length: float,
         *,
-        ll_pop: Optional[ll_DiploidPopulation] = None,
+        ll_pop: Optional["ll_DiploidPopulation"] = None,
     ):
         if ll_pop is None:
             super(DiploidPopulation, self).__init__(N, length)
