@@ -199,7 +199,7 @@ Point release
 
 Bug fixes
 
-* Fix error in decoding provenance rows when initializing {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Fix error in decoding provenance rows when initializing `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`760`
 
 Dependencies:
@@ -229,7 +229,7 @@ These docs were added in {pr}`745`.
 
 New features:
 
-* Added {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Added `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`743`
   {pr}`747`
 * {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` may now return a `WrappedTreeSequence`.

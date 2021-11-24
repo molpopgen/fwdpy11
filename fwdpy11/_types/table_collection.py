@@ -112,10 +112,12 @@ class TableCollection(ll_TableCollection):
 
     @property
     def input_left(self):
+        """Left edge index"""
         return self._input_left
 
     @property
     def output_right(self):
+        """Right edge index"""
         return self._output_right
 
     def build_indexes(self):

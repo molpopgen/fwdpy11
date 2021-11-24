@@ -28,7 +28,7 @@ import fwdpy11
 ```
 
 At the end of a simulation, {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` will generate a {class}`tskit.TreeSequence` object.
-This object can be saved to a file using {func}`tskit.TreeSequence.dump`, resulting in a "trees file".
+This object can be saved to a file using `tskit.TreeSequence.dump`, resulting in a "trees file".
 
 Saving data in `tskit`'s format gives you access to a huge array of methods for downstream analysis of your simulated data.
 See the [tskit docs](https://tskit.dev/tskit/docs/stable/index.html) for much more on what you can do.
