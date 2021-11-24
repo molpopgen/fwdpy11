@@ -6,9 +6,9 @@
     :param rng: Random number generator
     :type rng: :class:`fwdpy11.GSLrng`
     :param pop: A population
-    :type pop: :class:`fwdpy11.Population`
-    :param mu: The mutation rate, per haploid genome per generation
-    :type mu: float
+    :type pop: :class:`fwdpy11.DiploidPopulation`
+    :param mutation_rate: The mutation rate, per haploid genome per generation
+    :type mutation_rate: float
 
     :return: Number of mutations added
     :rtype: int

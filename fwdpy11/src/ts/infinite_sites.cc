@@ -36,7 +36,7 @@ void
 init_infinite_sites(py::module& m)
 {
     m.def(
-        "infinite_sites",
+        "_infinite_sites",
         [](const fwdpy11::GSLrng_t& rng, fwdpy11::Population& pop,
            const double mu) -> unsigned {
             if (pop.is_simulating)
