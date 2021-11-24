@@ -34,7 +34,7 @@ class Recorder(object):
 
 struct Recorder {
     void operator()(const fwdpy11::DiploidPopulation & pop,
-                    const fwdpy11::SampleRecorder & sampler)
+                    fwdpy11::SampleRecorder & sampler)
     {
     }
 };
