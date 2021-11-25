@@ -105,7 +105,7 @@ def decode_individual_metadata(
     :type ts: :class:`tskit.TreeSequence`
 
     :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
-    :type rows: int or slice or numpy array
+    :type rows: int or slice or numpy.ndarray
 
     :returns: individual metadata
     :rtype: List of :class:`fwdpy11.tskit_tools.DiploidMetadata`
@@ -184,7 +184,7 @@ def decode_mutation_metadata(
     :param ts: A tree sequence
     :type ts: :class:`tskit.TreeSequence`
     :param rows: The rows to decode. If `None`, the entire table is decoded and returned.
-    :type rows: int or slice or numpy array
+    :type rows: int or slice or numpy.ndarray
 
     :returns: Mutations
     :rtype: list

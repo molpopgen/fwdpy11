@@ -83,6 +83,7 @@ from ._evolvets import *  # NOQA
 
 from ._functions import (
     data_matrix_from_tables,
+    infinite_sites,
     make_data_matrix,
     simplify,
     simplify_tables,

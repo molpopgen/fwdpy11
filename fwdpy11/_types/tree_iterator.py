@@ -41,7 +41,7 @@ class TreeIterator(ll_TreeIterator):
     :type update_samples: If `True`, track list of sample nodes for each tree
     :type update_samples: TableCollection
     :param ancient_samples: List of ancient_samples nodes
-    :type ancient_samples: List of sample nodes
+    :type ancient_samples: list or numpy.ndarray
     :param begin: Start iteration at this position
     :type begin: float
     :param end: End iteration at this position
@@ -176,7 +176,7 @@ class TreeIterator(ll_TreeIterator):
     def samples(self) -> np.ndarray:
         """
         :return: The samples list
-        :rtype: np.ndarray
+        :rtype: numpy.ndarray
         """
         return self._samples()
 
@@ -187,7 +187,7 @@ class TreeIterator(ll_TreeIterator):
         :param node: A node id
         :type node: int
         :param sort: (False) Whether or not to sort sample node IDs.
-        :type sort: boolean
+        :type sort: bool
 
         .. note::
 

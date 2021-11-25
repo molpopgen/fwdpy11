@@ -21,6 +21,7 @@ import typing
 
 import attr
 import demes
+import demes.demes
 import numpy as np
 
 import fwdpy11

@@ -40,15 +40,15 @@ class DataMatrixIterator(ll_DataMatrixIterator):
     :param tables: A table collection
     :type tables: :class:`fwdpy11.TableCollection`
     :param samples: A list of samples
-    :type samples: List-like
+    :type samples: list or numpy.ndarray
     :param intervals: The :math:`[start, stop)` positions of each interval
-    :type intervals: list of tuples
+    :type intervals: list[tuple]
     :param neutral: If True, include neutral variants
-    :type neutral: boolean
+    :type neutral: bool
     :param selected: If True, include selected variants
-    :type selected: boolean
+    :type selected: bool
     :param fixations: (False) If True, include fixations in the sample
-    :type fixations: boolean
+    :type fixations: bool
 
 
     .. versionadded:: 0.4.4

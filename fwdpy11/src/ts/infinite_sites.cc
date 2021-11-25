@@ -5,7 +5,7 @@
 #include <fwdpp/ts/count_mutations.hpp>
 #include <fwdpp/ts/mutation_tools.hpp>
 #include <fwdpy11/rng.hpp>
-#include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/policies/mutation.hpp>
 #include <pybind11/pybind11.h>
 
@@ -36,8 +36,8 @@ void
 init_infinite_sites(py::module& m)
 {
     m.def(
-        "infinite_sites",
-        [](const fwdpy11::GSLrng_t& rng, fwdpy11::Population& pop,
+        "_infinite_sites",
+        [](const fwdpy11::GSLrng_t& rng, fwdpy11::DiploidPopulation& pop,
            const double mu) -> unsigned {
             if (pop.is_simulating)
                 {

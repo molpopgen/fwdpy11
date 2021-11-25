@@ -258,7 +258,7 @@ class MultivariateGSS(_ll_MultivariateGSSmo):
     also determine the order of positional arguments:
 
     :param optima: The optimum value for each trait over time
-    :type optima: numpy.array or list[fwdpy11.PleiotropicOptima]
+    :type optima: numpy.ndarray or list[fwdpy11.PleiotropicOptima]
     :param VS: Inverse strength of stablizing selection
     :type VS: float or None
 

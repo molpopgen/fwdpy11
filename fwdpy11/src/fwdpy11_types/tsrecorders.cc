@@ -10,6 +10,8 @@ namespace py = pybind11;
 void
 init_tsrecorders(py::module& m)
 {
+    py::options options;
+    options.disable_function_signatures();
     py::class_<fwdpy11::SampleRecorder>(
         m, "SampleRecorder",
         "Allow recording of ancient samples during simulations with tree "
@@ -53,10 +55,10 @@ init_tsrecorders(py::module& m)
          Add a list of individuals to the list of samples.
 
          :param samples: Array of individual indexes
-         :type samples: numpy.array
+         :type samples: numpy.ndarray
 
          The :class:`numpy.dtype` of ``samples`` must be
-         ``np.uint32``.
+         :attr:`numpy.uint32`.
          )delim");
 
     py::class_<fwdpy11::no_ancient_samples>(
