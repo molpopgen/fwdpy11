@@ -22,6 +22,11 @@ Bug fixes:
   It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
   PR {pr}`857`
 
+Build system:
+
+* Update requirements.txt and doc/requirements.txt.
+  PR {pr}`864`.
+
 ## 0.17.0a1
 
 Changes to `fwdpy11.conditional_models`:
