@@ -11,7 +11,7 @@ demes
 # requirements for docs are in docs/requirements.txt
 msprime
 tskit
-setuptools_scm==1.11.1
+setuptools_scm
 pytest
 pytest-xdist
 
