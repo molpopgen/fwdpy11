@@ -1,3 +1,4 @@
+-c ../requirements.in
 jupyter-book
 matplotlib
 msprime>=1.0.1

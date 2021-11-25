@@ -14,6 +14,7 @@ argon2-cffi==21.1.0
     #   notebook
 attrs==21.2.0
     # via
+    #   -c ../requirements.in
     #   demes
     #   jsonschema
     #   jupyter-cache
@@ -52,6 +53,7 @@ defusedxml==0.7.1
     # via nbconvert
 demes==0.1.2
     # via
+    #   -c ../requirements.in
     #   demesdraw
     #   msprime
 demesdraw @ git+https://github.com/grahamgower/demesdraw
@@ -182,7 +184,9 @@ mdit-py-plugins==0.2.8
 mistune==0.8.4
     # via nbconvert
 msprime==1.0.3
-    # via -r requirements.in
+    # via
+    #   -c ../requirements.in
+    #   -r requirements.in
 myst-nb==0.13.1
     # via jupyter-book
 myst-parser==0.15.2
@@ -222,6 +226,7 @@ notebook==6.4.6
     # via widgetsnbextension
 numpy==1.20.3
     # via
+    #   -c ../requirements.in
     #   demesdraw
     #   matplotlib
     #   msprime
@@ -311,13 +316,17 @@ ruamel.yaml==0.17.17
 ruamel.yaml.clib==0.2.6
     # via ruamel.yaml
 scipy==1.7.3
-    # via demesdraw
+    # via
+    #   -c ../requirements.in
+    #   demesdraw
 send2trash==1.8.0
     # via
     #   jupyter-server
     #   notebook
 setuptools-scm==6.3.2
-    # via matplotlib
+    # via
+    #   -c ../requirements.in
+    #   matplotlib
 six==1.16.0
     # via
     #   bleach
@@ -423,7 +432,9 @@ traitlets==5.1.1
     #   nbformat
     #   notebook
 tskit==0.3.7
-    # via msprime
+    # via
+    #   -c ../requirements.in
+    #   msprime
 typing-extensions==4.0.0
     # via gitpython
 uc-micro-py==1.0.1
