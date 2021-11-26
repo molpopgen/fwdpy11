@@ -3,6 +3,18 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a3
+
+Build system:
+
+* Update requirements.txt and doc/requirements.txt.
+  PR {pr}`864`.
+
+Documentation:
+
+* Manual is now built with "nitpick" enabled.
+  PR {pr}`865`.
+
 ## 0.17.0a2
 
 Changes to `fwdpy11.conditional_models`:
@@ -22,10 +34,6 @@ Bug fixes:
   It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
   PR {pr}`857`
 
-Build system:
-
-* Update requirements.txt and doc/requirements.txt.
-  PR {pr}`864`.
 
 ## 0.17.0a1
 
@@ -204,7 +212,7 @@ Point release
 
 Bug fixes
 
-* Fix error in decoding provenance rows when initializing {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Fix error in decoding provenance rows when initializing `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`760`
 
 Dependencies:
@@ -234,7 +242,7 @@ These docs were added in {pr}`745`.
 
 New features:
 
-* Added {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Added `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`743`
   {pr}`747`
 * {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` may now return a `WrappedTreeSequence`.

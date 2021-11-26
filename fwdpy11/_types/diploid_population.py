@@ -157,7 +157,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         """
         Return an array of nodes associated with preserved/ancient samples.
 
-        :rtype: :class:`np.ndarray`
+        :rtype: numpy.ndarray
 
         .. versionadded:: 0.13.0
 
@@ -209,7 +209,7 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         parameters: Optional[Dict] = None,
         destructive=False,
         wrapped=False,
-    ) -> Union[tskit.TreeSequence, WrappedTreeSequence]:
+    ) -> tskit.TreeSequence:
         """
         Dump the population's TableCollection into
         an tskit TreeSequence
@@ -236,10 +236,10 @@ class DiploidPopulation(ll_DiploidPopulation, PopulationMixin):
         :param destructive: If `True`, delete data held by the current instance.
         :type destructive: bool
 
-        :param wrapped: If `True`, return :class:`fwdpy11.tskit_tools.WrappedTreeSequence`
+        :param wrapped: If `True`, return `fwdpy11.tskit_tools.WrappedTreeSequence`
         :type wrapped: bool
 
-        :rtype: tskit.TreeSequence or fwdpy11.tskit_tools.WrappedTreeSequence
+        :rtype: tskit.TreeSequence
 
         For examples, see :ref:`tskitconvert_vignette`.
 

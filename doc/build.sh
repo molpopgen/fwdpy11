@@ -1,5 +1,5 @@
 REPORTDIR=_build/html/reports
-jupyter-book build -W .
+jupyter-book build -n -W .
 RV=$?
 if [ $RV -ne 0 ];
 then

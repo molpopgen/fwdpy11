@@ -88,6 +88,7 @@ class TableCollection(ll_TableCollection):
 
     @property
     def genome_length(self) -> float:
+        """Genome length"""
         return self._genome_length
 
     @property
@@ -112,10 +113,12 @@ class TableCollection(ll_TableCollection):
 
     @property
     def input_left(self):
+        """Edge input order"""
         return self._input_left
 
     @property
     def output_right(self):
+        """Edge output order"""
         return self._output_right
 
     def build_indexes(self):

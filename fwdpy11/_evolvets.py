@@ -75,7 +75,7 @@ def evolvets(
                                     end of simulation
     :type suppress_table_indexing: bool
     :param record_gvalue_matrix: (False) Whether to record genetic values into
-                                 :attr:`fwdpy11.PopulationBase.genetic_values`.
+                                 :attr:`fwdpy11.DiploidPopulation.genetic_values`.
     :type record_gvalue_matrix: bool
     :param preserve_first_generation: (False) Whether to record generation 0 as
                                       ancient samples. Must be `True` for
@@ -88,7 +88,7 @@ def evolvets(
                                             generation of the population.
     :type check_demographic_event_timings: bool
 
-    The recording of genetic values into :attr:`fwdpy11.PopulationBase.genetic_values`
+    The recording of genetic values into :attr:`fwdpy11.DiploidPopulation.genetic_values`
     is suppressed by default.  First, it is redundant with
     :attr:`fwdpy11.DiploidMetadata.g` for the common case of mutational effects on a
     single trait. Second, we save some memory by not tracking these matrices.

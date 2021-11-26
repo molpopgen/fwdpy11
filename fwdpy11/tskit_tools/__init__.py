@@ -115,8 +115,11 @@ def load(filename: str):
     :param filename: Name of the trees file.
     :type filename: str
 
-    :returns: A tree sequence
-    :rtype: :class:`fwdpy11.tskit_tools.WrappedTreeSequence`
+    :returns: A wrapped tree sequence
+
+    .. deprecated:: 0.17.0
+
+        Prefer {meth}`tskit.TreeSequence.load`
     """
     import tskit
 

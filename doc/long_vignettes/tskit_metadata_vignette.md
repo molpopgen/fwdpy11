@@ -232,7 +232,7 @@ print(ts.individual(0).metadata)
 print(type(ts.individual(0).metadata))
 ```
 
-It is often more efficient to decode the data into {class}`fwdpy11.tskit_tools.DiploidMetadata` (which is an {mod}`attrs`-based analog to {class}`fwdpy11.DiploidMetadata`).
+It is often more efficient to decode the data into {class}`fwdpy11.tskit_tools.DiploidMetadata` (which is an `attrs`-based analog to {class}`fwdpy11.DiploidMetadata`).
 As with mutation metadata, {func}`fwdpy11.tskit_tools.decode_individual_metadata` returns a list:
 
 ```{code-cell} python

@@ -1,4 +1,4 @@
-#include <fwdpy11/types/Population.hpp>
+#include <fwdpy11/types/DiploidPopulation.hpp>
 #include <fwdpy11/numpy/array.hpp>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
@@ -10,7 +10,7 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<fwdpy11::Mutation>);
 
 py::tuple
-simplify(const fwdpy11::Population& pop,
+simplify(const fwdpy11::DiploidPopulation& pop,
          const std::vector<fwdpp::ts::table_index_t>& samples)
 {
     if (pop.tables->genome_length() == std::numeric_limits<double>::max())

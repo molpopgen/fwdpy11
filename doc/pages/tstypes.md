@@ -20,7 +20,7 @@ kernelspec:
 * {class}`fwdpy11.Edge` defines edges
 * {class}`fwdpy11.Site` defines a site (genomic location) where a mutation is present.
 * {class}`fwdpy11.MutationRecord` defines mutations associated with {class}`fwdpy11.Site`
-  objects on trees and in {class}`fwdpy11.PopulationBase` objects.
+  objects on trees and in {class}`fwdpy11.DiploidPopulation` objects.
 * {class}`fwdpy11.NodeTable` represents a node table
 * {class}`fwdpy11.EdgeTable` represents an edge table
 * {class}`fwdpy11.MutationTable` represents a mutation table
@@ -33,7 +33,7 @@ but with additional data fields that are useful for the forward-time simulations
 ## Table collections
 
 The above data types are encapsulated into the Python class {class}`fwdpy11.TableCollection`.  Instances of this
-class are data fields of populations, via {attr}`fwdpy11.PopulationBase.tables`.
+class are data fields of populations, via {attr}`fwdpy11.DiploidPopulation.tables`.
 
 (representing-trees)=
 

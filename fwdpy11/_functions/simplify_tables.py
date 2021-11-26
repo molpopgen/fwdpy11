@@ -9,7 +9,7 @@ def simplify(pop, samples):
     """
     Simplify a TableCollection stored in a Population.
 
-    :param pop: A :class:`fwdpy11.PopulationBase`
+    :param pop: A :class:`fwdpy11.DiploidPopulation`
     :param samples: A list of samples (node indexes).
 
     :return: The simplified tables and array mapping input sample IDs to output IDS
@@ -33,8 +33,7 @@ def simplify(pop, samples):
 
     .. deprecated:: 0.3.0
 
-        Prefer :func:`fwdpp.simplify_tables`
-
+        Prefer :func:`fwdpy11.simplify_tables`
 
     .. versionchanged:: 0.3.0
 

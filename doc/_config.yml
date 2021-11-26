@@ -52,3 +52,7 @@ sphinx:
       numpy: ['http://docs.scipy.org/doc/numpy', null]
       pandas: ['http://pandas.pydata.org/pandas-docs/stable/', null]
       demes: ['https://popsim-consortium.github.io/demes-docs/main/', null]
+    # Idea taken from msprime.
+    # Sphinx's approach to autodoc'ing type
+    # hints is a total mess.
+    autodoc_typehints: none
