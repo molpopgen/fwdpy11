@@ -5,6 +5,11 @@ updates to latest `fwdpp` version, etc.
 
 ## 0.17.0a3
 
+Changes to `fwdpy11.conditional_models`:
+
+* Return evolved instance of {class}`fwdpy11.ModelParams`.
+  PR {pr}`866`
+
 Build system:
 
 * Update requirements.txt and doc/requirements.txt.

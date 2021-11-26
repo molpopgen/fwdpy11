@@ -23,19 +23,12 @@ import attr
 import fwdpy11
 import numpy as np
 from fwdpy11.class_decorators import attr_class_to_from_dict
-from fwdpy11.conditional_models import (
-    AddMutationFailure,
-    AlleleCount,
-    AlleleCountRange,
-    AncientSamplePolicy,
-    ConditionalModelOutput,
-    EvolveOptions,
-    FrequencyRange,
-    NewMutationParameters,
-    OutOfAttempts,
-    SimulationStatus,
-    non_negative_value,
-)
+from fwdpy11.conditional_models import (AddMutationFailure, AlleleCount,
+                                        AlleleCountRange, AncientSamplePolicy,
+                                        ConditionalModelOutput, EvolveOptions,
+                                        FrequencyRange, NewMutationParameters,
+                                        OutOfAttempts, SimulationStatus,
+                                        non_negative_value)
 
 
 @attr_class_to_from_dict
@@ -58,7 +51,10 @@ class _ProgressMonitor:
     status: SimulationStatus
 
     def __call__(self, pop: fwdpy11.DiploidPopulation, _) -> bool:
-        if self.status.condition_met is True and self.return_when_stopping_condition_met is True:
+        if (
+            self.status.condition_met is True
+            and self.return_when_stopping_condition_met is True
+        ):
             return True
         return self.status.should_terminate
 
@@ -395,4 +391,6 @@ def _track_added_mutation(
     if attempt == max_attempts:
         raise OutOfAttempts()
 
-    return ConditionalModelOutput(pop=pop_to_return, index=idx, num_nodes=ndescendants)
+    return ConditionalModelOutput(
+        pop=pop_to_return, params=local_params, index=idx, num_nodes=ndescendants
+    )
