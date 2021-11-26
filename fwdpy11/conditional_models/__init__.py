@@ -142,6 +142,7 @@ class SimulationStatus:
 @attr.s(auto_attribs=True, kw_only=True)
 class ConditionalModelOutput:
     pop: fwdpy11.DiploidPopulation
+    params: fwdpy11.ModelParams
     index: int
     num_nodes: int
 
