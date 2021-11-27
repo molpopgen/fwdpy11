@@ -13,11 +13,7 @@ update(fwdpy11::DiploidPopulation& pop, fwdpy11::MultivariateGSSmo& gssmo)
 std::vector<double>
 get_optima(const fwdpy11::MultivariateGSSmo& gssmo)
 {
-    if (gssmo.current_timepoint >= gssmo.optima.size())
-        {
-            throw std::runtime_error("current_timepoint out of range");
-        }
-    return gssmo.optima[gssmo.current_timepoint].optima;
+    return gssmo.current_timepoint_optima;
 }
 
 PYBIND11_MODULE(testMultivariateGSSmo, m)

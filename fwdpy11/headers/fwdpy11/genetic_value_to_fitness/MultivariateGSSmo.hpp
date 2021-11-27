@@ -34,10 +34,13 @@ namespace fwdpy11
     {
         std::vector<PleiotropicOptima> optima;
         std::size_t current_timepoint;
+        std::vector<double> current_timepoint_optima;
+        double VW;
 
         MultivariateGSSmo(const std::vector<PleiotropicOptima> &po)
             : GeneticValueIsTrait{po.empty() ? 0 : po[0].optima.size()}, optima(po),
-              current_timepoint(0)
+              current_timepoint(0),
+              current_timepoint_optima{}, VW{std::numeric_limits<double>::quiet_NaN()}
         {
             if (po.empty())
                 {
@@ -76,9 +79,9 @@ namespace fwdpy11
             for (std::size_t i = 0; i < data.gvalues.get().size(); ++i)
                 {
                     sqdiff += gsl_pow_2(data.gvalues.get()[i]
-                                        - optima[current_timepoint].optima[i]);
+                                        - current_timepoint_optima[i]);
                 }
-            return std::exp(-sqdiff / (2.0 * optima[current_timepoint].VW));
+            return std::exp(-sqdiff / (2.0 * VW));
         }
 
         std::shared_ptr<GeneticValueToFitnessMap>
@@ -91,9 +94,18 @@ namespace fwdpy11
         inline void
         update_details(const poptype &pop)
         {
-            if (current_timepoint < optima.size() - 1
+            while (current_timepoint < optima.size()
+                   && optima[current_timepoint].when < pop.generation)
+                {
+                    current_timepoint_optima = optima[current_timepoint].optima;
+                    VW = optima[current_timepoint].VW;
+                    ++current_timepoint;
+                }
+            if (current_timepoint < optima.size()
                 && pop.generation >= optima[current_timepoint].when)
                 {
+                    current_timepoint_optima = optima[current_timepoint].optima;
+                    VW = optima[current_timepoint].VW;
                     ++current_timepoint;
                 }
         }
