@@ -17,7 +17,7 @@ namespace fwdpy11
 
         GSSmo(std::vector<Optimum> optima_)
             : GeneticValueIsTrait{1}, VS{std::numeric_limits<double>::quiet_NaN()},
-              opt{std::numeric_limits<double>::quiet_NaN()}, current_optimum(1),
+              opt{std::numeric_limits<double>::quiet_NaN()}, current_optimum(0),
               optima(std::move(optima_))
         {
             if (optima.empty())
@@ -38,8 +38,6 @@ namespace fwdpy11
                 {
                     throw std::invalid_argument("optima not sorted by time");
                 }
-            opt = optima[0].opt;
-            VS = optima[0].VW;
         }
 
         double
@@ -55,13 +53,19 @@ namespace fwdpy11
         inline void
         update_details(const poptype &pop)
         {
-            if (current_optimum < optima.size())
+            while (current_optimum < optima.size()
+                   && optima[current_optimum].when < pop.generation)
                 {
-                    if (pop.generation >= optima[current_optimum].when)
-                        {
-                            opt = optima[current_optimum].opt;
-                            VS = optima[current_optimum++].VW;
-                        }
+                    opt = optima[current_optimum].opt;
+                    VS = optima[current_optimum].VW;
+                    current_optimum++;
+                }
+            if (current_optimum < optima.size()
+                && pop.generation >= optima[current_optimum].when)
+                {
+                    opt = optima[current_optimum].opt;
+                    VS = optima[current_optimum].VW;
+                    current_optimum++;
                 }
         }
 
