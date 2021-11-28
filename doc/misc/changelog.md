@@ -10,6 +10,16 @@ Changes to `fwdpy11.conditional_models`:
 * Return evolved instance of {class}`fwdpy11.ModelParams`.
   PR {pr}`866`
 
+Bug fixes
+
+* Fixed bug in updating {class}`fwdpy11.MultivariateGSSmo`.
+  PR {pr}`867`.
+
+Back end changes:
+
+* {class}`fwdpy11.GSSmo` and {class}`fwdpy11.MultivariateGSSmo` now handle cases where population start time is greater than zero.
+  PR {pr}`867`.
+
 Build system:
 
 * Update requirements.txt and doc/requirements.txt.
