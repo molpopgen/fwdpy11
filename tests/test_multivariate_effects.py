@@ -1,10 +1,7 @@
 import unittest
 
-import numpy as np
-
 import fwdpy11
-import poptools
-import testMultivariateGSSmo
+import numpy as np
 
 
 def set_up_quant_trait_model():
@@ -59,41 +56,6 @@ class TestMultivariateGSSmo(unittest.TestCase):
 
             if nonmutants == 0:
                 self.fail("Test invalid: zero individuals were mutation-free")
-
-
-class TestMultivariateGSSmoCPP(unittest.TestCase):
-    """
-    Tests of C++ API
-    """
-
-    def setUp(self):
-        self.pop = fwdpy11.DiploidPopulation(100, 1.0)
-        self.ntraits = 4
-
-    def test_multiple_optima(self):
-        timepoints = np.array([0, 5 * self.pop.N])
-        optima = np.array(np.zeros(len(timepoints) * self.ntraits))
-        optima = optima.reshape((len(timepoints), self.ntraits))
-        optima[1, 0] = 1
-        PO = fwdpy11.PleiotropicOptima
-        po = []
-        for i, t in enumerate(timepoints):
-            po.append(PO(when=int(t), optima=optima[i, :], VS=1.0))
-        GSSmo = fwdpy11.MultivariateGSSmo(po)
-
-        co = testMultivariateGSSmo.get_optima(GSSmo)
-        self.assertTrue(all([i == 0 for i in co]))
-        poptools.change_generation(self.pop, timepoints[1])
-        testMultivariateGSSmo.update(self.pop, GSSmo)
-        co = testMultivariateGSSmo.get_optima(GSSmo)
-        self.assertEqual(co[0], 1)
-        self.assertTrue(all([i == 0 for i in co[1:]]))
-
-        poptools.change_generation(self.pop, timepoints[1] + 10)
-        testMultivariateGSSmo.update(self.pop, GSSmo)
-        co2 = testMultivariateGSSmo.get_optima(GSSmo)
-
-        self.assertTrue(co == co2)
 
 
 if __name__ == "__main__":
