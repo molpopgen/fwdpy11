@@ -29,6 +29,9 @@ Documentation:
 
 * Manual is now built with "nitpick" enabled.
   PR {pr}`865`.
+* Updated {ref}`precapitation` to latest `msprime` API.
+  Moved "recapitation" concept into a {ref}`shorter vignette <recapitation>`.
+  PR {pr}`868`.
 
 ## 0.17.0a2
 
