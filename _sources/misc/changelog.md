@@ -3,6 +3,36 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a3
+
+Changes to `fwdpy11.conditional_models`:
+
+* Return evolved instance of {class}`fwdpy11.ModelParams`.
+  PR {pr}`866`
+
+Bug fixes
+
+* Fixed bug in updating {class}`fwdpy11.MultivariateGSSmo`.
+  PR {pr}`867`.
+
+Back end changes:
+
+* {class}`fwdpy11.GSSmo` and {class}`fwdpy11.MultivariateGSSmo` now handle cases where population start time is greater than zero.
+  PR {pr}`867`.
+
+Build system:
+
+* Update requirements.txt and doc/requirements.txt.
+  PR {pr}`864`.
+
+Documentation:
+
+* Manual is now built with "nitpick" enabled.
+  PR {pr}`865`.
+* Updated {ref}`precapitation` to latest `msprime` API.
+  Moved "recapitation" concept into a {ref}`shorter vignette <recapitation>`.
+  PR {pr}`868`.
+
 ## 0.17.0a2
 
 Changes to `fwdpy11.conditional_models`:
@@ -21,6 +51,7 @@ Bug fixes:
 * Fixed a "use after move" error in C++ code used to pickle {class}`fwdpy11.DiscreteDemography`.
   It looks like this bug was introduced back in {pr}`791`, which was part of the 0.16.0 release.
   PR {pr}`857`
+
 
 ## 0.17.0a1
 
@@ -199,7 +230,7 @@ Point release
 
 Bug fixes
 
-* Fix error in decoding provenance rows when initializing {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Fix error in decoding provenance rows when initializing `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`760`
 
 Dependencies:
@@ -229,7 +260,7 @@ These docs were added in {pr}`745`.
 
 New features:
 
-* Added {class}`fwdpy11.tskit_tools.WrappedTreeSequence`.
+* Added `fwdpy11.tskit_tools.WrappedTreeSequence`.
   {pr}`743`
   {pr}`747`
 * {func}`fwdpy11.DiploidPopulation.dump_tables_to_tskit` may now return a `WrappedTreeSequence`.

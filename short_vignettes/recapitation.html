@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Debugging demographic models &#8212; fwdpy11 manual</title>
+    <title>Finishing a simulation with msprime &#8212; fwdpy11 manual</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -51,8 +51,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Need title" href="trackmutationfates.html" />
-    <link rel="prev" title="Using demes to specify demographic models." href="demes_vignette.html" />
+    <link rel="next" title="Adding neutral mutations to a population with existing ancestry" href="neutralmutsafter_vignette.html" />
+    <link rel="prev" title="Recording data during a simulation" href="recorders_vignette.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -187,7 +187,7 @@
   Short vignettes - simulation with tree sequence recording
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="evolvets_vignette.html">
    Evolving with tree sequence recording
@@ -198,8 +198,8 @@
    Recording data during a simulation
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="recapitation.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Finishing a simulation with msprime
   </a>
  </li>
@@ -214,7 +214,7 @@
   Short vignettes - demographic modeling
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="demography_vignettes_intro.html">
    Introduction
@@ -231,8 +231,8 @@
    to specify demographic models.
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="demography_debugger_vignette.html">
    Debugging demographic models
   </a>
  </li>
@@ -587,11 +587,11 @@
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
         <a class="dropdown-buttons"
-            href="../_sources/short_vignettes/demography_debugger_vignette.ipynb"><button type="button"
+            href="../_sources/short_vignettes/recapitation.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/short_vignettes/demography_debugger_vignette.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/recapitation.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -611,7 +611,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/demography_debugger_vignette.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/recapitation.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -640,56 +640,52 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="debugging-demographic-models">
-<span id="demography-debugger-vignette"></span><h1>Debugging demographic models<a class="headerlink" href="#debugging-demographic-models" title="Permalink to this headline">¶</a></h1>
-<p>You may use <a class="reference internal" href="../pages/demographic_models.html#fwdpy11.DemographyDebugger" title="fwdpy11.DemographyDebugger"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DemographyDebugger</span></code></a> to check the validity of demographic models.
-The following code block applies this class to the model we built using <code class="docutils literal notranslate"><span class="pre">demes</span></code> in <a class="reference internal" href="demes_vignette.html#demes-vignette"><span class="std std-ref">an earlier vignette</span></a>.</p>
-<p>For the debugger to do its job, it needs to know the initial sizes of each deme.
-For models generated via <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>, the meta data contains a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> mapping the integer <code class="docutils literal notranslate"><span class="pre">ID</span></code> for each deme to its initial size.
-We use that <code class="docutils literal notranslate"><span class="pre">dict</span></code> below to get the required list of initial_sizes.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="finishing-a-simulation-with-msprime">
+<span id="recapitation"></span><h1>Finishing a simulation with msprime<a class="headerlink" href="#finishing-a-simulation-with-msprime" title="Permalink to this headline">¶</a></h1>
+<p>This example is complementary to <a class="reference internal" href="initpops_vignette.html#precapitation"><span class="std std-ref">Initializing with ancestry from msprime</span></a>.
+Rather than starting with a tree sequence from <code class="docutils literal notranslate"><span class="pre">msprime</span></code>, we instead finish a simulation by “coalescing back” the first generation of the simulation using <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id7">HGKothers19</a>]</span> refer to this procedure as “recapitation” of a tree sequence.
+In order for recapitation to work correctly, we must pass <code class="docutils literal notranslate"><span class="pre">preserve_first_generation=True</span></code> to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.</p>
+<p>First, we’ll simulate a population for 10 generations:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">demes</span>
-<span class="kn">import</span> <span class="nn">fwdpy11</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
 
-<span class="n">builder</span> <span class="o">=</span> <span class="n">demes</span><span class="o">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;test demography&quot;</span><span class="p">,</span> <span class="n">time_units</span><span class="o">=</span><span class="s2">&quot;generations&quot;</span><span class="p">)</span>
-<span class="n">builder</span><span class="o">.</span><span class="n">add_deme</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;deme&quot;</span><span class="p">,</span>
-    <span class="n">epochs</span><span class="o">=</span><span class="p">[</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-        <span class="nb">dict</span><span class="p">(</span><span class="n">start_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">end_time</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
-    <span class="p">],</span>
-<span class="p">)</span>
+<span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mf">1000.0</span><span class="p">)</span>
 
-<span class="n">graph</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+         <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.</span><span class="p">),</span>
+         <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">}</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">54321</span><span class="p">)</span>
 
-<span class="n">demog</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">discrete_demography</span><span class="o">.</span><span class="n">from_demes</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+<span class="c1"># We must preserve the founder generation:</span>
+<span class="n">fwdpy11</span><span class="o">.</span><span class="n">evolvets</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">preserve_first_generation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">initial_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">demog</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;initial_sizes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())]</span>
-
-<span class="n">dbg</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DemographyDebugger</span><span class="p">(</span><span class="n">initial_sizes</span><span class="p">,</span> <span class="n">demog</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">pop</span><span class="o">.</span><span class="n">generation</span> <span class="o">==</span> <span class="mi">10</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">dbg</span></code> variable also contains a “report” describing the model:</p>
+<p>Now we use <code class="docutils literal notranslate"><span class="pre">msprime</span></code> to coalesce the founder generation roots back to a common ancestor:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dbg</span><span class="o">.</span><span class="n">report</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">msprime</span>
+
+<span class="c1"># Convert to tskit format</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+
+<span class="n">num_roots_pre_recapitation</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">num_roots</span>
+
+<span class="n">recapitated_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">from_ts</span><span class="o">=</span><span class="n">ts</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">num_roots_pre_recapitation</span><span class="p">,</span> <span class="n">recapitated_ts</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">num_roots</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Deme sizes at time 0: [(0, 1000)]
-Events at time 0:
-	Selfing probability set to 0 in deme 0
-	Deme sizes after growth: [(0, 1000)]
-Events at time 10000:
-	Deme size set to 2000 in deme 0
-		Growth rate set to 1.0
-		Growth initial size set to 2000
-	Selfing probability set to 0 in deme 0
-	Deme sizes after growth: [(0, 2000)]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>200 1
 </pre></div>
 </div>
 </div>
@@ -721,17 +717,17 @@ Events at time 10000:
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="demes_vignette.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="recorders_vignette.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Using <code class="docutils literal notranslate"><span class="pre">demes</span></code> to specify demographic models.</p>
+            <p class="prev-next-title">Recording data during a simulation</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="trackmutationfates.html" title="next page">
+    <a class='right-next' id="next-link" href="neutralmutsafter_vignette.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Need title</p>
+        <p class="prev-next-title">Adding neutral mutations to a population with existing ancestry</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

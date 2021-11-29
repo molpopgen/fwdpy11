@@ -32,6 +32,8 @@ kernelspec:
    .. autoattribute:: fwdpy11.DiploidPopulation.generation
    .. autoattribute:: fwdpy11.DiploidPopulation.mutations
    .. autoattribute:: fwdpy11.DiploidPopulation.haploid_genomes
+   .. autoattribute:: fwdpy11.DiploidPopulation.genetic_values
+   .. autoattribute:: fwdpy11.DiploidPopulation.ancient_sample_genetic_values
 ```
 
 ## Diploid Genotypes

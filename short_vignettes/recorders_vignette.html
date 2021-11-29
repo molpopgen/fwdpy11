@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recording data during a simulation &#8212; fwdpy11 manual</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet" />
-  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -51,10 +51,13 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Adding neutral mutations to a population with existing ancestry" href="neutralmutsafter_vignette.html" />
+    <link rel="next" title="Finishing a simulation with msprime" href="recapitation.html" />
     <link rel="prev" title="Evolving with tree sequence recording" href="evolvets_vignette.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
     
   </head>
   <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
@@ -88,7 +91,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Installation and setup
  </span>
@@ -110,7 +113,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - operations on populations
  </span>
@@ -127,7 +130,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - setting up the genetics
  </span>
@@ -179,7 +182,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - simulation with tree sequence recording
  </span>
@@ -196,12 +199,17 @@
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="recapitation.html">
+   Finishing a simulation with msprime
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="neutralmutsafter_vignette.html">
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - demographic modeling
  </span>
@@ -229,7 +237,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Short vignettes - special case models
  </span>
@@ -246,7 +254,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - exporting data to tskit
  </span>
@@ -263,7 +271,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Longer vignettes - complete examples
  </span>
@@ -295,7 +303,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Concepts
  </span>
@@ -307,7 +315,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Tutorials
  </span>
@@ -324,7 +332,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Objects and concepts
  </span>
@@ -361,7 +369,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Technical details
  </span>
@@ -389,7 +397,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Data types and fuctions
  </span>
@@ -466,7 +474,7 @@
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Examples
  </span>
@@ -498,17 +506,12 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../examples/recapitation.html">
-   Finishing a simulation with a tree sequence from msprime
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../examples/recorder.html">
    Example of time series analysis implemented in C++
   </a>
  </li>
 </ul>
-<p class="caption" role="heading">
+<p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Miscellany
  </span>
@@ -662,8 +665,8 @@
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="c2dd0727-0fc1-42a8-8d59-f22a904dcaad" name="d1c13142-64d1-44d5-9bac-2250e89333f9" type="radio">
-</input><label class="tabbed-label" for="c2dd0727-0fc1-42a8-8d59-f22a904dcaad">
+<input checked="checked" id="397bd75b-4b76-4bdd-a20e-c503eea21d84" name="dac89d75-c4f3-4f2a-bb24-9faf2b9440f7" type="radio">
+</input><label class="tabbed-label" for="397bd75b-4b76-4bdd-a20e-c503eea21d84">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -671,15 +674,15 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="eb81479c-943c-4ad5-a58f-137f9ca0c04f" name="d1c13142-64d1-44d5-9bac-2250e89333f9" type="radio">
-</input><label class="tabbed-label" for="eb81479c-943c-4ad5-a58f-137f9ca0c04f">
+<input id="cd9b7456-5e27-4f1a-b16d-480a8d1d8b06" name="dac89d75-c4f3-4f2a-bb24-9faf2b9440f7" type="radio">
+</input><label class="tabbed-label" for="cd9b7456-5e27-4f1a-b16d-480a8d1d8b06">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>
 
 <span class="k">struct</span> <span class="nc">Recorder</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">operator</span><span class="p">()(</span><span class="k">const</span><span class="w"> </span><span class="n">fwdpy11</span><span class="o">::</span><span class="n">DiploidPopulation</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">pop</span><span class="p">,</span><span class="w"></span>
-<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">fwdpy11</span><span class="o">::</span><span class="n">SampleRecorder</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">sampler</span><span class="p">)</span><span class="w"></span>
+<span class="w">                    </span><span class="n">fwdpy11</span><span class="o">::</span><span class="n">SampleRecorder</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">sampler</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">};</span><span class="w"></span>
@@ -896,31 +899,22 @@ Analyzing each time point separately is a common operation made easier by <a cla
               </div>
               
         
-            
-
-
-
-<div class='prev-next-bottom'>
-    
-    <div id="prev">
-        <a class="left-prev" href="evolvets_vignette.html" title="previous page">
-            <i class="prevnext-label fas fa-angle-left"></i>
-            <div class="prevnext-info">
-                <p class="prevnext-label">previous</p>
-                <p class="prevnext-title">Evolving with tree sequence recording</p>
-            </div>
-        </a>
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="evolvets_vignette.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Evolving with tree sequence recording</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="recapitation.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Finishing a simulation with msprime</p>
     </div>
-     <div id="next">
-        <a class="right-next" href="neutralmutsafter_vignette.html" title="next page">
-            <div class="prevnext-info">
-                <p class="prevnext-label">next</p>
-                <p class="prevnext-title">Adding neutral mutations to a population with existing ancestry</p>
-            </div>
-            <i class="prevnext-label fas fa-angle-right"></i>
-        </a>
-     </div>
-
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
         
         </div>
@@ -941,8 +935,7 @@ Analyzing each time point separately is a common operation made easier by <a cla
       </div>
     </div>
   
-  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
 
-  
   </body>
 </html>

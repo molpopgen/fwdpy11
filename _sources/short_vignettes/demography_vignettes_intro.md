@@ -8,7 +8,7 @@
 The first method uses Python code and a low-level, object-oriented `API`.
 You will find detailed documentation for this approach {ref}`here <softselection>`.
 
-A simpler method is to specify the demographic model via a `YAML` file and build a model using {func}`fwdpy11.DiscreteDemography.from_demes`.
+A simpler method is to specify the demographic model via a `YAML` file and build a model using {func}`fwdpy11.discrete_demography.from_demes`.
 This approach is described in a later vignette and is the recommended method because it will be the least error-prone.
 
 ## A note of caution
