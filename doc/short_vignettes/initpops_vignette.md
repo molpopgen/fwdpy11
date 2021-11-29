@@ -85,12 +85,10 @@ import msprime
 N = 100
 L = 1000.0
 
-ts = msprime.simulate(2*N, Ne = N, length=L, recombination_rate = 1e-3, random_seed = 42)
+ts = msprime.sim_ancestry(N, population_size = N, sequence_length=L, recombination_rate = 1e-3, random_seed = 42)
 pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-```
-
-```{code-cell}
-print(f"N = {pop.N}, L = {pop.tables.genome_length}")
+assert pop.N == 100
+assert pop.tables.genome_length == L
 ```
 
 Now, our tables have some data in them.
@@ -108,25 +106,43 @@ np.array(pop.tables.nodes, copy=False)[:10]
 
 ### Multiple demes
 
-We can initialize from a multi-deme `msprime` simulation as well:
+We can initialize from a multi-deme `msprime` simulation as well.
+The simplest way to do this is to use [demes](https://popsim-consortium.github.io/demes-spec-docs/main/tutorial.html) to specify the model:
 
 ```{code-cell} python
-config = [
-    msprime.PopulationConfiguration(sample_size = 50),
-    msprime.PopulationConfiguration(sample_size = 150),
-]
-migration_matrix = [[0.0, 0.1], [0.1, 0.0]]
-ts = msprime.simulate(Ne = N,
-    population_configurations=config,
-    migration_matrix=migration_matrix,
-    length = L,
-    recombination_rate = 1e-3)
+import demes
+
+model_yaml = """
+description:
+  Example from the fwdpy11 manual
+time_units: generations
+demes:
+  - name: deme0
+    epochs:
+      - start_size: 50
+        end_time: 0
+  - name: deme1
+    epochs:
+      - start_size: 150
+        end_time: 0
+migrations:
+  - demes: [deme0, deme1]
+    rate: 0.1    
+"""
+
+graph = demes.loads(model_yaml)
+
+demography = msprime.Demography.from_demes(graph)
+ts = msprime.sim_ancestry(
+    samples={0: 50, 1: 150},
+    demography=demography,
+    sequence_length=100,
+    recombination_rate=1e-3)
 pop = fwdpy11.DiploidPopulation.create_from_tskit(ts)
-```
-
-```{code-cell} python
-np.unique(np.array(pop.diploid_metadata, copy=False)['deme'],
-          return_counts=True)
+assert pop.N == 200
+ds = pop.deme_sizes(as_dict=True)
+assert ds[0] == 50
+assert ds[1] == 150
 ```
 
 ### Limitations and caveats
