@@ -25,6 +25,7 @@ parts:
   chapters:
   - file: short_vignettes/evolvets_vignette
   - file: short_vignettes/recorders_vignette
+  - file: short_vignettes/recapitation
   - file: short_vignettes/neutralmutsafter_vignette
 - caption: Short vignettes - demographic modeling
   chapters:
@@ -86,7 +87,6 @@ parts:
   - file: examples/localadaptation
   - file: examples/migtest
   - file: examples/pysnowdrift
-  - file: examples/recapitation
   - file: examples/recorder
 - caption: Miscellany
   chapters:
