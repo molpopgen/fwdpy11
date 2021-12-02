@@ -4,4 +4,4 @@ matplotlib
 msprime>=1.0.1
 pandas
 sphinx-issues
-git+https://github.com/grahamgower/demesdraw
+demesdraw==0.1.4

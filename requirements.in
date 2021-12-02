@@ -1,16 +1,19 @@
+# NOTE: any pinning should also be coordinated
+# with requirements.in and doc/requirements.in
+# and may require regenerating the .txt files.
 pybind11[global]
 numpy
 sparse
 scipy
 attrs
 black
-demes
+demes==0.1.2
 
 #below are for building package
 #and running tests
 # requirements for docs are in docs/requirements.txt
 msprime
-tskit
+tskit>=0.3.6
 setuptools_scm
 pytest
 pytest-xdist
