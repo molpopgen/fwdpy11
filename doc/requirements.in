@@ -1,6 +1,7 @@
 jupyter-book
 matplotlib
 msprime>=1.0.1
+numpy<1.21.0
 pandas
 sphinx-issues
-demesdraw==0.1.4
+demesdraw>=0.2.0,<0.3.0

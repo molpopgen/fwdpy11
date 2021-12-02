@@ -9,6 +9,8 @@ Dependencies:
 
 * Clean up pinning of `demes` and `demesdraw`.
   PR {pr}`869` 
+* Update to `demes` ~=0.2.0.
+  PR {pr}`871`
 
 ## 0.17.0a3
 
