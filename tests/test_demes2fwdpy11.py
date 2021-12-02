@@ -505,7 +505,7 @@ class TestPulseMigration(unittest.TestCase):
         self.b = demes.Builder(description="pulse", time_units="generations")
         self.b.add_deme(name="deme1", epochs=[dict(start_size=100, end_time=0)])
         self.b.add_deme(name="deme2", epochs=[dict(start_size=100, end_time=0)])
-        self.b.add_pulse(source="deme1", dest="deme2", time=100, proportion=0.2)
+        self.b.add_pulse(sources=["deme1"], dest="deme2", time=100, proportions=[0.2])
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
@@ -1551,3 +1551,38 @@ def test_events_in_generation_one_following_demes_import_start_stop(testdata, bu
     )
 
     validate(recorder)
+
+
+@pytest.fixture
+def multiple_pulse_source_setup():
+    b = demes.Builder(description="pulse", time_units="generations")
+    b.add_deme(name="deme0", epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="deme1", epochs=[dict(start_size=100, end_time=0)])
+    b.add_deme(name="deme2", epochs=[dict(start_size=100, end_time=0)])
+    b.add_pulse(
+        sources=["deme0", "deme1"], dest="deme2", time=100, proportions=[0.2, 0.25]
+    )
+    g = b.resolve()
+    demog = fwdpy11.discrete_demography.from_demes(g, 10)
+
+    check_debugger_passes(demog)
+
+    return demog
+
+
+def test_multiple_pulse_source(multiple_pulse_source_setup):
+    demog = multiple_pulse_source_setup
+    assert (
+        demog.metadata["total_simulation_length"] == demog.metadata["burnin_time"] + 100
+    )
+
+    assert len(demog.model.set_migration_rates) == 2
+
+    expected_ancestry_proportions = [
+        np.array([0.2, 0.25, 0.55]),
+        np.array([0.0, 0.0, 1.0]),
+    ]
+
+    for i, m in enumerate(demog.model.set_migration_rates):
+        assert m.deme == 2
+        assert np.all(m.migrates == expected_ancestry_proportions[i])

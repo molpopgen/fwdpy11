@@ -10,13 +10,18 @@ import numpy as np
 
 from .. import class_decorators
 from .._demography import exponential_growth_rate
-from ..demographic_models import (DemographicModelCitation,
-                                  DemographicModelDetails)
-from ..discrete_demography import (DiscreteDemography, MassMigration,
-                                   MigrationMatrix, SetDemeSize,
-                                   SetExponentialGrowth, SetMigrationRates,
-                                   SetSelfingRate, copy_individuals,
-                                   move_individuals)
+from ..demographic_models import DemographicModelCitation, DemographicModelDetails
+from ..discrete_demography import (
+    DiscreteDemography,
+    MassMigration,
+    MigrationMatrix,
+    SetDemeSize,
+    SetExponentialGrowth,
+    SetMigrationRates,
+    SetSelfingRate,
+    copy_individuals,
+    move_individuals,
+)
 
 
 # TODO: need type hints for dg
@@ -614,24 +619,25 @@ def _process_pulses(
 ) -> None:
     for p in dg.pulses:
         when = burnin_generation + int(model_times.model_start_time - p.time - 1)
-        events.migration_rate_changes.append(
-            _MigrationRateChange(
-                when=when,
-                source=idmap[p.source],
-                destination=idmap[p.dest],
-                rate_change=p.proportion,
-                from_deme_graph=False,
+        for source, proportion in zip(p.sources, p.proportions):
+            events.migration_rate_changes.append(
+                _MigrationRateChange(
+                    when=when,
+                    source=idmap[source],
+                    destination=idmap[p.dest],
+                    rate_change=proportion,
+                    from_deme_graph=False,
+                )
             )
-        )
-        events.migration_rate_changes.append(
-            _MigrationRateChange(
-                when=when + 1,
-                source=idmap[p.source],
-                destination=idmap[p.dest],
-                rate_change=-p.proportion,
-                from_deme_graph=False,
+            events.migration_rate_changes.append(
+                _MigrationRateChange(
+                    when=when + 1,
+                    source=idmap[source],
+                    destination=idmap[p.dest],
+                    rate_change=-proportion,
+                    from_deme_graph=False,
+                )
             )
-        )
 
 
 def _process_admixtures(
