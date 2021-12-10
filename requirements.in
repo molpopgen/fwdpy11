@@ -2,12 +2,12 @@
 # with requirements.in and doc/requirements.in
 # and may require regenerating the .txt files.
 pybind11[global]
-numpy
+numpy<1.21.0
 sparse
 scipy
 attrs
 black
-demes==0.1.2
+demes~=0.2.0
 
 #below are for building package
 #and running tests
