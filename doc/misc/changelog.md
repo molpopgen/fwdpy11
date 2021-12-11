@@ -11,6 +11,8 @@ Dependencies:
   PR {pr}`869` 
 * Update to `demes` ~=0.2.0.
   PR {pr}`873`
+* Update to `tskit` ~=0.4.0
+  PR {pr}`874`
 
 ## 0.17.0a3
 
