@@ -13,7 +13,7 @@ demes~=0.2.0
 #and running tests
 # requirements for docs are in docs/requirements.txt
 msprime
-tskit>=0.3.6
+tskit~=0.4.0
 setuptools_scm
 pytest
 pytest-xdist
