@@ -635,6 +635,11 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a4">
+   0.17.0a4
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#a3">
    0.17.0a3
   </a>
@@ -1046,6 +1051,18 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
 <p>Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest <code class="docutils literal notranslate"><span class="pre">fwdpp</span></code> version, etc.</p>
+<div class="section" id="a4">
+<h2>0.17.0a4<a class="headerlink" href="#a4" title="Permalink to this headline">¶</a></h2>
+<p>Dependencies:</p>
+<ul class="simple">
+<li><p>Clean up pinning of <code class="docutils literal notranslate"><span class="pre">demes</span></code> and <code class="docutils literal notranslate"><span class="pre">demesdraw</span></code>.
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/869">#869</a></p></li>
+<li><p>Update to <code class="docutils literal notranslate"><span class="pre">demes</span></code> ~=0.2.0.
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/873">#873</a></p></li>
+<li><p>Update to <code class="docutils literal notranslate"><span class="pre">tskit</span></code> ~=0.4.0
+PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/874">#874</a></p></li>
+</ul>
+</div>
 <div class="section" id="a3">
 <h2>0.17.0a3<a class="headerlink" href="#a3" title="Permalink to this headline">¶</a></h2>
 <p>Changes to <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code>:</p>
@@ -1250,7 +1267,7 @@ PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull
 <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/787">#787</a>
 <a class="reference external" href="https://github.com/apragsdale">&#64;apragsdale</a>
 <a class="reference external" href="https://github.com/molpopgen">&#64;molpopgen</a></p></li>
-<li><p>Fix bug where the number of rows in a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.PopulationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.PopulationTable</span></code></a> were incorrect upon export via <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>.
+<li><p>Fix bug where the number of rows in a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.PopulationTable" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.PopulationTable</span></code></a> were incorrect upon export via <a class="reference internal" href="../pages/types.html#fwdpy11.DiploidPopulation.dump_tables_to_tskit" title="fwdpy11.DiploidPopulation.dump_tables_to_tskit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation.dump_tables_to_tskit()</span></code></a>.
 Issue <a class="reference external" href="https://github.com/molpopgen/fwdpy11/issues/792">#792</a>.
 Fixed in PR <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/793">#793</a>.</p></li>
 </ul>
@@ -1652,7 +1669,7 @@ Such instances can be passed as the <code class="docutils literal notranslate"><
 to initialize <a class="reference internal" href="../pages/model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>.
 <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/509">#509</a>.</p></li>
 <li><p>The “individual” column of a node table is now populated
-when exporting to a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/488">#488</a></p></li>
+when exporting to a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TableCollection" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TableCollection</span></code></a>. <a class="reference external" href="https://github.com/molpopgen/fwdpy11/pull/488">#488</a></p></li>
 </ul>
 <p>Changes to implementation of Python classes</p>
 <ul class="simple">

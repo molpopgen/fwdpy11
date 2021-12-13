@@ -645,7 +645,7 @@ interact with <code class="docutils literal notranslate"><span class="pre">tskit
 <p><span class="versionmodified added">New in version 0.8.0.</span></p>
 </div>
 <p>The following are boolean flags that are used to populate
-the <code class="docutils literal notranslate"><span class="pre">flags</span></code> colummn of a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.
+the <code class="docutils literal notranslate"><span class="pre">flags</span></code> colummn of a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.
 The flags represent individuals alive at the end of the simulation,
 those preserved as ancient samples, and those from the
 very first generation of the simulation, respectively.
@@ -673,7 +673,7 @@ of preserved samples are special.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Metadata field name</p></li>
 </ul>
 </dd>
@@ -691,7 +691,7 @@ of preserved samples are special.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><em>tskit.TreeSequence</em></a>) – A tree sequence</p></li>
 <li><p><strong>decode_metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Flag to decode individual metadata or not</p></li>
 </ul>
 </dd>
@@ -727,11 +727,11 @@ If <cite>False</cite>, <cite>None</cite> will be yielded.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_individual_metadata">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_individual_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_individual_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
+<dd><p>Decodes a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.IndividualTable" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.IndividualTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
 <li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><em>slice</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a>) – The rows to decode. If <cite>None</cite>, the entire table is decoded and returned.</p></li>
 </ul>
 </dd>
@@ -791,11 +791,11 @@ this type. Member attributes have the same names as these
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.tskit_tools.decode_mutation_metadata">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.tskit_tools.</span></span><span class="sig-name descname"><span class="pre">decode_mutation_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.tskit_tools.decode_mutation_metadata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Decodes metadata from a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
+<dd><p>Decodes metadata from a <a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.MutationTable" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.MutationTable</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in tskit v0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
+<li><p><strong>ts</strong> (<a class="reference external" href="https://tskit.dev/tskit/docs/stable/python-api.html#tskit.TreeSequence" title="(in Python)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tskit.TreeSequence</span></code></a>) – A tree sequence</p></li>
 <li><p><strong>rows</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><em>slice</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.21)"><em>numpy.ndarray</em></a>) – The rows to decode. If <cite>None</cite>, the entire table is decoded and returned.</p></li>
 </ul>
 </dd>

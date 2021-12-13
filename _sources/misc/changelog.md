@@ -3,6 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.17.0a4
+
+Dependencies:
+
+* Clean up pinning of `demes` and `demesdraw`.
+  PR {pr}`869` 
+* Update to `demes` ~=0.2.0.
+  PR {pr}`873`
+* Update to `tskit` ~=0.4.0
+  PR {pr}`874`
+
 ## 0.17.0a3
 
 Changes to `fwdpy11.conditional_models`:
