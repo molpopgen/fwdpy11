@@ -12,7 +12,7 @@ kernelspec:
 
 (tracking_mutation_fates)=
 
-# Need title
+# Tracking user-specified new mutations
 
 ```{code-cell} python
 ---
@@ -64,7 +64,7 @@ def setup(prune_selected=False):
     return pop, params
 ```
 
-## Need title
+## Tracking a mutation for a specified number of generations
 
 ```{code-cell} python
 ALPHA = -10.0
@@ -100,9 +100,9 @@ When tracking deleterious variants, it is unlikely that they will be around at t
 
 ```{code-cell} python
 try:
-    print(output.pop.mutations[output.index])
+    print(output.pop.mutations[output.mutation_index])
 except IndexError as _:
-    print(f"mutation {output.index} is no longer in the population!") 
+    print(f"mutation {output.mutation_index} is no longer in the population!") 
 ```
 
 ### Recording all generations of the mutation's sojourn
@@ -132,9 +132,9 @@ Let's try to print it again:
 
 ```{code-cell} python
 try:
-    print(output.pop.mutations[output.index])
+    print(output.pop.mutations[output.mutation_index])
 except IndexError as _:
-    output.index(f"mutation {output.index} is no longer in the population!") 
+    output.mutation_index(f"mutation {output.mutation_index} is no longer in the population!") 
 ```
 
 Let's track this variant's frequency at each time point:

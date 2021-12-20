@@ -19,11 +19,9 @@
 import typing
 
 import fwdpy11
-from fwdpy11.conditional_models import (
-    NewMutationParameters,
-    SimulationStatus,
-    ConditionalModelOutput,
-)
+from fwdpy11.conditional_models import (ConditionalModelOutput,
+                                        NewMutationParameters,
+                                        SimulationStatus)
 
 from ._track_added_mutation import _track_added_mutation
 
@@ -46,6 +44,13 @@ def _selective_sweep(
     ],
     **kwargs,
 ) -> ConditionalModelOutput:
+    """
+    This function is a wrapper around :func:`fwdpy11.conditional_models.track_added_mutation`.
+
+    This function requires a `stopping_condition`.
+    If `when` is not given as a keyword argument, it is assumed to be 0.
+    The keyword argument `until` is not allowed.
+    """
     if "when" not in kwargs or kwargs["when"] is None:
         kwargs["when"] = 0
 
