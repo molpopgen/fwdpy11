@@ -1586,3 +1586,46 @@ def test_multiple_pulse_source(multiple_pulse_source_setup):
     for i, m in enumerate(demog.model.set_migration_rates):
         assert m.deme == 2
         assert np.all(m.migrates == expected_ancestry_proportions[i])
+
+
+def test_issue_881():
+    """
+    Copied from the statistical test suite.
+    This is the model that triggered GitHub issue 881
+    """
+    yaml = """
+description: Recent admixture with migration in the ancestor
+time_units: generations
+demes:
+- name: deme0
+  description: The ancestral deme
+  epochs:
+    - {start_size: 1000, end_time: 100}
+
+- name: deme1
+  description: The derived deme.
+  ancestors: [deme0]
+  start_time: 1100
+  epochs:
+    - {start_size: 760, end_time: 100}
+
+- name: admixed
+  description: The admixed deme.
+  ancestors: [deme0, deme1]
+  proportions: [0.8, 0.2]
+  start_time: 100
+  epochs:
+    - {start_size: 500, end_time: 0}
+
+migrations:
+    - {source: deme0, dest: deme1, rate: 1e-4}
+    - {source: deme1, dest: deme0, rate: 0.5e-5}
+    """
+    g = demes.loads(yaml)
+    demog = fwdpy11.discrete_demography.from_demes(g, 1)
+    initial_sizes = [
+        demog.metadata["initial_sizes"][i]
+        for i in demog.metadata["initial_sizes"].keys()
+    ]
+    fwdpy11.DemographyDebugger(initial_sizes, demog)
+    _ = evolve_demes_model(demog, initial_sizes)
