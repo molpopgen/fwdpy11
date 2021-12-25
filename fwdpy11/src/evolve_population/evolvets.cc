@@ -317,7 +317,7 @@ evolve_with_tree_sequences(
     else
         {
             build_migration_lookup(
-                current_demographic_state.M,
+                pop.generation, current_demographic_state.M,
                 current_demographic_state.current_deme_parameters.current_deme_sizes,
                 current_demographic_state.current_deme_parameters.next_deme_sizes,
                 miglookup);
