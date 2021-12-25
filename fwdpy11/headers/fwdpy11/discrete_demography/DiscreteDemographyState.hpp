@@ -201,7 +201,8 @@ namespace fwdpy11
                 auto next_global_N_ = detail::apply_growth_rates_get_next_global_N(
                     current_simulation_time, current_deme_parameters);
                 set_next_global_N(next_global_N_);
-                build_migration_lookup(M, current_deme_parameters.current_deme_sizes,
+                build_migration_lookup(current_simulation_time, M,
+                                       current_deme_parameters.current_deme_sizes,
                                        current_deme_parameters.next_deme_sizes,
                                        miglookup);
             }

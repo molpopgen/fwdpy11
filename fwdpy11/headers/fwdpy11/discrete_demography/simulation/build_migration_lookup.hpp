@@ -35,7 +35,8 @@ namespace fwdpy11
     namespace discrete_demography
     {
         inline void
-        build_migration_lookup(const MigrationMatrix& M,
+        build_migration_lookup(std::uint32_t current_simulation_time,
+                               const MigrationMatrix& M,
                                const current_deme_sizes_vector& current_deme_sizes,
                                const next_deme_sizes_vector& next_deme_sizes,
                                migration_lookup& ml)
@@ -77,7 +78,8 @@ namespace fwdpy11
                                                          "empty parental deme "
                                                       << source
                                                       << " into destination deme "
-                                                      << dest;
+                                                      << dest << " at time "
+                                                      << current_simulation_time;
                                                     throw DemographyError(o.str());
                                                 }
                                             if (next_deme_sizes_ref[source] != 0)
@@ -88,7 +90,8 @@ namespace fwdpy11
                                                          "empty destination "
                                                          "deme "
                                                       << dest << " from source deme "
-                                                      << source;
+                                                      << source << " at time "
+                                                      << current_simulation_time;
                                                     throw DemographyError(o.str());
                                                 }
                                             else // both are zero
@@ -100,7 +103,8 @@ namespace fwdpy11
                                                       << source
                                                       << " into empty "
                                                          "destination deme "
-                                                      << dest;
+                                                      << dest << " at time "
+                                                      << current_simulation_time;
 
                                                     throw DemographyError(o.str());
                                                 }
