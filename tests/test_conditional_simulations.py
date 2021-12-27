@@ -104,11 +104,11 @@ def test_deleterious_mutation_remains_present(msprime_seed, fp11_seed):
             when=0,
             until=10,
         )
-        assert output.num_nodes == 1
+        assert output.num_descendant_nodes == 1
         assert output.pop is not None
-        assert output.index is not None
-        assert output.index < len(output.pop.mutations)
-        assert output.pop.mutations[output.index].s == -1e-2
+        assert output.mutation_index is not None
+        assert output.mutation_index < len(output.pop.mutations)
+        assert output.pop.mutations[output.mutation_index].s == -1e-2
     except fwdpy11.conditional_models.AddMutationFailure as _:
         pass
     except Exception as e:
@@ -145,12 +145,12 @@ def test_deleterious_mutation_remains_present_with_final_recording(
             until=10,
             sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION,
         )
-        assert output.num_nodes == 1
+        assert output.num_descendant_nodes == 1
         assert output.pop.generation == params.simlen
         assert output.pop is not None
-        assert output.index is not None
-        assert output.index < len(output.pop.mutations)
-        assert output.pop.mutations[output.index].s == -1e-2
+        assert output.mutation_index is not None
+        assert output.mutation_index < len(output.pop.mutations)
+        assert output.pop.mutations[output.mutation_index].s == -1e-2
         assert len(output.pop.ancient_sample_metadata) == pop.N
         for md in output.pop.ancient_sample_metadata:
             for n in md.nodes:
@@ -188,17 +188,17 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
         fwdpy11.conditional_models.GlobalFixation(),
         sampling_policy=fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
-        assert output.pop.mcounts[output.index] == 2 * output.pop.N
+        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         _ = output.pop.dump_tables_to_tskit()
-        if output.pop.fixation_times[output.index] < output.pop.generation:
+        if output.pop.fixation_times[output.mutation_index] < output.pop.generation:
             for md in output.pop.ancient_sample_metadata:
                 for n in md.nodes:
                     assert (
                         output.pop.tables.nodes[n].time
-                        == output.pop.fixation_times[output.index]
+                        == output.pop.fixation_times[output.mutation_index]
                     )
             ti = fwdpy11.TreeIterator(
                 output.pop.tables,
@@ -207,18 +207,18 @@ def test_sweep_from_new_mutation_using_API(msprime_seed, fp11_seed, alpha):
             )
             for t in ti:
                 for mutation in t.mutations():
-                    assert mutation.key == output.index
+                    assert mutation.key == output.mutation_index
                     assert t.leaf_counts(mutation.node) == 2 * pop.N
                     for s in t.samples_below(mutation.node):
                         assert (
                             output.pop.tables.nodes[s].time
-                            == output.pop.fixation_times[output.index]
+                            == output.pop.fixation_times[output.mutation_index]
                         )
 
         ti = fwdpy11.TreeIterator(output.pop.tables, output.pop.alive_nodes)
         for t in ti:
             for mutation in t.mutations():
-                assert mutation.key == output.index
+                assert mutation.key == output.mutation_index
                 assert t.leaf_counts(mutation.node) == 2 * pop.N
 
 
@@ -287,10 +287,10 @@ def test_sweep_from_standing_variation_using_API(
             mutation_data,
             fwdpy11.conditional_models.GlobalFixation(),
         )
-        assert output.num_nodes == ndescendants
+        assert output.num_descendant_nodes == ndescendants
         assert output.pop.generation > pop.generation
         if output.pop is not None:
-            assert output.pop.mcounts[output.index] == 2 * output.pop.N
+            assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
             _ = output.pop.dump_tables_to_tskit()
             finished = True
     except fwdpy11.conditional_models.AddMutationFailure as a:
@@ -418,13 +418,13 @@ def test_sweep_from_new_mutation_in_single_deme_using_API(fp11_seed, demes_yaml,
         fwdpy11.conditional_models.GlobalFixation(),
         when=model.metadata["burnin_time"] + 50,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
-        assert output.pop.mcounts[output.index] == 2 * output.pop.N
+        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         _ = output.pop.dump_tables_to_tskit()
     else:
         pytest.fail("test failed")
@@ -466,14 +466,14 @@ def test_sweep_from_new_mutation_with_demography_using_API(
         fwdpy11.conditional_models.GlobalFixation(),
         when=model.metadata["burnin_time"] + 50,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     assert output.pop.generation == params.simlen
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
-        assert output.pop.mcounts[output.index] == 2 * output.pop.N
+        assert output.pop.mcounts[output.mutation_index] == 2 * output.pop.N
         _ = output.pop.dump_tables_to_tskit()
     else:
         pytest.fail("test failed")
@@ -514,14 +514,14 @@ def test_origination_deme1_fixation_in_deme_2(fp11_seed, demes_yaml, alpha):
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
         when=model.metadata["burnin_time"] + 50,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
         assert (
-            count_mutation(output.pop, output.index, 2)
+            count_mutation(output.pop, output.mutation_index, 2)
             == 2 * output.pop.deme_sizes(as_dict=True)[2]
         )
         _ = output.pop.dump_tables_to_tskit()
@@ -562,12 +562,12 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
         when=model.metadata["burnin_time"] + 50,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     del pop
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
 
         deme_sizes = output.pop.deme_sizes(as_dict=True)
@@ -576,7 +576,7 @@ def test_origination_deme1_fixation_in_deme_2_with_growth(fp11_seed, demes_yaml,
             assert deme_sizes[deme] == n
 
         assert (
-            count_mutation(output.pop, output.index, 2)
+            count_mutation(output.pop, output.mutation_index, 2)
             == 2 * output.pop.deme_sizes(as_dict=True)[2]
         )
         _ = output.pop.dump_tables_to_tskit()
@@ -621,13 +621,13 @@ def test_origination_deme2_fixation_in_deme_2_no_migration(
         fwdpy11.conditional_models.FocalDemeFixation(deme=2),
         when=model.metadata["burnin_time"] + 50,
     )
-    assert output.num_nodes == 1
+    assert output.num_descendant_nodes == 1
     assert output.pop.generation > pop.generation
     if output.pop is not None:
         assert (
-            output.pop.mutations[output.index].g == model.metadata["burnin_time"] + 50
+            output.pop.mutations[output.mutation_index].g == model.metadata["burnin_time"] + 50
         )
         deme_sizes = output.pop.deme_sizes(as_dict=True)
-        assert count_mutation(output.pop, output.index, 2) == 2 * deme_sizes[2]
-        assert count_mutation(output.pop, output.index, 1) == 0
+        assert count_mutation(output.pop, output.mutation_index, 2) == 2 * deme_sizes[2]
+        assert count_mutation(output.pop, output.mutation_index, 1) == 0
         _ = output.pop.dump_tables_to_tskit()

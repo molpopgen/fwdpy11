@@ -28,7 +28,7 @@ from fwdpy11.conditional_models import (AddMutationFailure, AlleleCount,
                                         ConditionalModelOutput, EvolveOptions,
                                         FrequencyRange, NewMutationParameters,
                                         OutOfAttempts, SimulationStatus,
-                                        non_negative_value)
+                                        _non_negative_value)
 
 
 @attr_class_to_from_dict
@@ -43,7 +43,7 @@ class _ProgressMonitor:
     index: int = attr.ib(
         validator=[
             attr.validators.instance_of(int),
-            non_negative_value,
+            _non_negative_value,
         ]
     )
     key: typing.Tuple[float, float, int]
@@ -62,7 +62,7 @@ class _ProgressMonitor:
 @attr.s(auto_attribs=True)
 class _MutationPresent:
     when: int = attr.ib(
-        validator=[attr.validators.instance_of(int), non_negative_value]
+        validator=[attr.validators.instance_of(int), _non_negative_value]
     )
     until: typing.Optional[int] = attr.ib(attr.validators.optional(int))
 
@@ -299,6 +299,32 @@ def _track_added_mutation(
     evolvets_options: typing.Optional[EvolveOptions] = None,
     return_when_stopping_condition_met: bool = False,
 ) -> ConditionalModelOutput:
+    """
+    Track the fate of a specific mutation added to the population.
+
+    :param rng: A random number generator
+    :type rng: :class:`fwdpy11.GSLrng`
+    :param pop: The input population
+    :type pop: :class:`fwdpy11.DiploidPopulation`
+    :param params: Input simulation parameters
+    :type params: :class:`fwdpy11.ModelParams`
+    :param mutation_parameters: Details of the new mutation
+    :type mutation_parameters: :class:`NewMutationParameters`
+    :param when: Time to add the new mutation
+    :type when: int
+    :param until: Time stop monitoring the new mutation
+    :type until: int
+    :param max_attempts: Maximum number of attempts to satisfy `stopping_condition`
+    :type max_attempts: int
+    :param sampling_policy: Enumeration specifying the recording of ancient samples.
+    :type sampling_policy: :class:`AncientSamplePolicy`
+    :param stopping_condition: An optional callable that specifies a TODO
+    :type stopping_condition:  typing.Optional[ typing.Callable[ [fwdpy11.DiploidPopulation, int, typing.Tuple[float, float, int]], SimulationStatus, ]
+    :param evolvets_options: Options to :func:`fwdpy11.evolvets`
+    :type evolvets_options: :class:`EvolveOptions`
+    :param return_when_stopping_condition_met: If `True`, return to calling environment once `stopping_condition` is satisfied.
+                                               If `False`, simulate to the end of the model.
+    """
 
     if pop.generation > 0:
         raise ValueError(
@@ -392,5 +418,8 @@ def _track_added_mutation(
         raise OutOfAttempts()
 
     return ConditionalModelOutput(
-        pop=pop_to_return, params=local_params, index=idx, num_nodes=ndescendants
+        pop=pop_to_return,
+        params=local_params,
+        mutation_index=idx,
+        num_descendant_nodes=ndescendants,
     )

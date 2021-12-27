@@ -102,7 +102,7 @@ assert pop.generation == 0
 ```
 
 ```{code-cell} python
-print(output.pop.mutations[output.index])
+print(output.pop.mutations[output.mutation_index])
 ```
 
 ```{code-cell}
@@ -135,7 +135,7 @@ output = fwdpy11.conditional_models.selective_sweep(
 
 ```{code-cell} python
 assert len(output.pop.ancient_sample_nodes) == 2 * output.pop.N
-assert output.pop.fixation_times[output.index] == FIXATION_TIME
+assert output.pop.fixation_times[output.mutation_index] == FIXATION_TIME
 ```
 
 
@@ -144,7 +144,7 @@ node_array = np.array(output.pop.tables.nodes, copy=False)
 ancient_sample_node_times = \
     node_array["time"][output.pop.ancient_sample_nodes]
 assert np.all([ancient_sample_node_times == \
-    output.pop.fixation_times[output.index]])
+    output.pop.fixation_times[output.mutation_index]])
 ```
 
 ## From a standing variant

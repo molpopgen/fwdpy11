@@ -32,7 +32,7 @@ parts:
   - file: short_vignettes/demography_vignettes_intro
   - file: short_vignettes/demes_vignette
   - file: short_vignettes/demography_debugger_vignette
-- caption: Short vignettes - special case models
+- caption: Short vignettes - conditional models
   chapters:
   - file: short_vignettes/trackmutationfates
   - file: short_vignettes/selective_sweep
