@@ -239,13 +239,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Short vignettes - special case models
+  Short vignettes - conditional models
  </span>
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
-   Need title
+   Tracking user-specified new mutations
   </a>
  </li>
  <li class="toctree-l1">
@@ -640,6 +640,8 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="module-fwdpy11.conditional_models">
 <span id="module-fwdpy11-conditional-models"></span><span id="conditional-models"></span><h1>Module <code class="docutils literal notranslate"><span class="pre">fwdpy11.conditional_models</span></code><a class="headerlink" href="#module-fwdpy11.conditional_models" title="Permalink to this headline">¶</a></h1>
 <p>Defining models with specific outcomes.</p>
+<p>The API of this module may be subjet to change.
+Hence, the documentation is minimal.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AddMutationFailure">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">AddMutationFailure</span></span><a class="headerlink" href="#fwdpy11.conditional_models.AddMutationFailure" title="Permalink to this definition">¶</a></dt>
@@ -648,7 +650,14 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AlleleCount">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">AlleleCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.AlleleCount" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>Specify a <em>number</em> of copies of a mutation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>count</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Initial number of copies of a mutation.
+This value must be <cite>&gt; 0</cite>.</p>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AlleleCount.count">
 <span class="sig-name descname"><span class="pre">count</span></span><a class="headerlink" href="#fwdpy11.conditional_models.AlleleCount.count" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -658,7 +667,18 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AlleleCountRange">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">AlleleCountRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.AlleleCountRange" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>Specify a range for a <em>number</em> of copies of a mutation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Minimum number of copies of a mutation.
+This value must be <cite>&gt; 0</cite>.</p></li>
+<li><p><strong>maximum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Maximum number of copies of a mutation.
+This value must be <cite>&gt; minimum</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AlleleCountRange.maximum">
 <span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#fwdpy11.conditional_models.AlleleCountRange.maximum" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -673,53 +693,62 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AncientSamplePolicy">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">AncientSamplePolicy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.AncientSamplePolicy" title="Permalink to this definition">¶</a></dt>
-<dd><p>An enumeration.</p>
+<dd><p>When to record “preserved” or “ancient” samples:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION">
 <span class="sig-name descname"><span class="pre">COMPLETION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#fwdpy11.conditional_models.AncientSamplePolicy.COMPLETION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Only record the generation when the terminiation condition is first met.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AncientSamplePolicy.DURATION">
 <span class="sig-name descname"><span class="pre">DURATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#fwdpy11.conditional_models.AncientSamplePolicy.DURATION" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>During the entire sojourn of the mutation from when it is first
+added to when the terminiation condition is first met.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.AncientSamplePolicy.NEVER">
 <span class="sig-name descname"><span class="pre">NEVER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#fwdpy11.conditional_models.AncientSamplePolicy.NEVER" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Never.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">ConditionalModelOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">ConditionalModelOutput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_descendant_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.index">
-<span class="sig-name descname"><span class="pre">index</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.index" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.mutation_index">
+<span class="sig-name descname"><span class="pre">mutation_index</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.mutation_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the new mutation in pop.mutations</p>
+</dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.num_nodes">
-<span class="sig-name descname"><span class="pre">num_nodes</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.num_nodes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.num_descendant_nodes">
+<span class="sig-name descname"><span class="pre">num_descendant_nodes</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.num_descendant_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of alive nodes initially containing the new mutation</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.params">
 <span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.params" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The evolved model parameters</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.ConditionalModelOutput.pop">
 <span class="sig-name descname"><span class="pre">pop</span></span><a class="headerlink" href="#fwdpy11.conditional_models.ConditionalModelOutput.pop" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>The population with the added mutation</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.EvolveOptions">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">EvolveOptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simplification_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suppress_table_indexing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_gvalue_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_first_generation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.EvolveOptions" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Options to pass on too <a class="reference internal" href="functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.EvolveOptions.asdict">
 <span class="sig-name descname"><span class="pre">asdict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.EvolveOptions.asdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return dict representation</p>
@@ -756,7 +785,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.FocalDemeFixation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">FocalDemeFixation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deme</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.FocalDemeFixation" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>A terminiation condition checking for fixation in a specific deme.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.FocalDemeFixation.deme">
 <span class="sig-name descname"><span class="pre">deme</span></span><a class="headerlink" href="#fwdpy11.conditional_models.FocalDemeFixation.deme" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -766,7 +796,18 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.FrequencyRange">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">FrequencyRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minimum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.FrequencyRange" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>Specify a range for the initial <em>frequency</em> of a mutation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minimum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – Minimum frequency of a mutation.
+This value must be <cite>&gt; 0.0</cite> and <cite>&lt; 1.0</cite>.</p></li>
+<li><p><strong>maximum</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – Maximum frequency of a mutation.
+This value must be <cite>&gt; minimum</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.FrequencyRange.maximum">
 <span class="sig-name descname"><span class="pre">maximum</span></span><a class="headerlink" href="#fwdpy11.conditional_models.FrequencyRange.maximum" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -781,12 +822,27 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.GlobalFixation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">GlobalFixation</span></span><a class="headerlink" href="#fwdpy11.conditional_models.GlobalFixation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A terminiation condition monitoring for global fixation of
+the mutation.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.NewMutationParameters">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">NewMutationParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.NewMutationParameters" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>Details of a new mutation to add to a population.</p>
+<p>Class instances are created via keyword arguments that
+become attribute names:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>deme</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em>) – The id of the deme in which to add the mutation</p></li>
+<li><p><strong>frequency</strong> (<em>Union</em><em>[</em><a class="reference internal" href="#fwdpy11.conditional_models.AlleleCount" title="fwdpy11.conditional_models.AlleleCount"><em>AlleleCount</em></a><em>, </em><a class="reference internal" href="#fwdpy11.conditional_models.AlleleCountRange" title="fwdpy11.conditional_models.AlleleCountRange"><em>AlleleCountRange</em></a><em>, </em><a class="reference internal" href="#fwdpy11.conditional_models.FrequencyRange" title="fwdpy11.conditional_models.FrequencyRange"><em>FrequencyRange</em></a><em>]</em>) – The frequency of the new mutation.</p></li>
+<li><p><strong>position</strong> (<a class="reference internal" href="#fwdpy11.conditional_models.PositionRange" title="fwdpy11.conditional_models.PositionRange"><em>PositionRange</em></a>) – Where to put the new mutation</p></li>
+<li><p><strong>data</strong> (<a class="reference internal" href="types.html#fwdpy11.NewMutationData" title="fwdpy11.NewMutationData"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.NewMutationData</span></code></a>) – The specifics of the new mutation</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.NewMutationParameters.data">
 <span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#fwdpy11.conditional_models.NewMutationParameters.data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -816,7 +872,16 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.PositionRange">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">PositionRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">right</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.PositionRange" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>Specify a half-open interval within which to place a mutation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>left</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The left edge, inclusive, of the interval</p></li>
+<li><p><strong>right</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The right edge, exclusive, of the interval</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.PositionRange.left">
 <span class="sig-name descname"><span class="pre">left</span></span><a class="headerlink" href="#fwdpy11.conditional_models.PositionRange.left" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -831,7 +896,17 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">SimulationStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">should_terminate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition_met</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="py attribute">
+<dd><p>The return value of a stopping condition callable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>should_terminate</strong> – Set to <cite>True</cite> if the simulation should be terminated.</p></li>
+<li><p><strong>condition_met</strong> – Set to <cite>True</cite> if the stopping condition has been met.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For examples, see implementations of <a class="reference internal" href="#fwdpy11.conditional_models.GlobalFixation" title="fwdpy11.conditional_models.GlobalFixation"><code class="xref py py-class docutils literal notranslate"><span class="pre">GlobalFixation</span></code></a> and <a class="reference internal" href="#fwdpy11.conditional_models.FocalDemeFixation" title="fwdpy11.conditional_models.FocalDemeFixation"><code class="xref py py-class docutils literal notranslate"><span class="pre">FocalDemeFixation</span></code></a>.</p>
+<dl class="py attribute">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.SimulationStatus.condition_met">
 <span class="sig-name descname"><span class="pre">condition_met</span></span><a class="headerlink" href="#fwdpy11.conditional_models.SimulationStatus.condition_met" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -844,39 +919,37 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.greater_than_zero">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">greater_than_zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.greater_than_zero" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.is_polymorphic_frequency">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">is_polymorphic_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.is_polymorphic_frequency" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.maximum_greater_minimum">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">maximum_greater_minimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.maximum_greater_minimum" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.non_negative_value">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">non_negative_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.non_negative_value" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="fwdpy11.conditional_models.right_greater_left">
-<span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">right_greater_left</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.right_greater_left" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.track_added_mutation">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">track_added_mutation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_parameters</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">until</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_attempts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolvets_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_when_stopping_condition_met</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.track_added_mutation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Track the fate of a specific mutation added to the population.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rng</strong> (<a class="reference internal" href="types.html#fwdpy11.GSLrng" title="fwdpy11.GSLrng"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.GSLrng</span></code></a>) – A random number generator</p></li>
+<li><p><strong>pop</strong> (<a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidPopulation</span></code></a>) – The input population</p></li>
+<li><p><strong>params</strong> (<a class="reference internal" href="model_params.html#fwdpy11.ModelParams" title="fwdpy11.ModelParams"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.ModelParams</span></code></a>) – Input simulation parameters</p></li>
+<li><p><strong>mutation_parameters</strong> (<a class="reference internal" href="#fwdpy11.conditional_models.NewMutationParameters" title="fwdpy11.conditional_models.NewMutationParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewMutationParameters</span></code></a>) – Details of the new mutation</p></li>
+<li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Time to add the new mutation</p></li>
+<li><p><strong>until</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Time stop monitoring the new mutation</p></li>
+<li><p><strong>max_attempts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Maximum number of attempts to satisfy <cite>stopping_condition</cite></p></li>
+<li><p><strong>sampling_policy</strong> (<a class="reference internal" href="#fwdpy11.conditional_models.AncientSamplePolicy" title="fwdpy11.conditional_models.AncientSamplePolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">AncientSamplePolicy</span></code></a>) – Enumeration specifying the recording of ancient samples.</p></li>
+<li><p><strong>stopping_condition</strong> (<em>typing.Optional</em><em>[ </em><em>typing.Callable</em><em>[ </em><em>[</em><a class="reference internal" href="types.html#fwdpy11.DiploidPopulation" title="fwdpy11.DiploidPopulation"><em>fwdpy11.DiploidPopulation</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>typing.Tuple</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>]</em><em>, </em><a class="reference internal" href="#fwdpy11.conditional_models.SimulationStatus" title="fwdpy11.conditional_models.SimulationStatus"><em>SimulationStatus</em></a><em>, </em><em>]</em>) – An optional callable that specifies a TODO</p></li>
+<li><p><strong>evolvets_options</strong> (<a class="reference internal" href="#fwdpy11.conditional_models.EvolveOptions" title="fwdpy11.conditional_models.EvolveOptions"><code class="xref py py-class docutils literal notranslate"><span class="pre">EvolveOptions</span></code></a>) – Options to <a class="reference internal" href="functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a></p></li>
+<li><p><strong>return_when_stopping_condition_met</strong> – If <cite>True</cite>, return to calling environment once <cite>stopping_condition</cite> is satisfied.
+If <cite>False</cite>, simulate to the end of the model.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="fwdpy11.conditional_models.selective_sweep">
 <span class="sig-prename descclassname"><span class="pre">fwdpy11.conditional_models.</span></span><span class="sig-name descname"><span class="pre">selective_sweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutation_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_condition</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fwdpy11.conditional_models.selective_sweep" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>This function is a wrapper around <a class="reference internal" href="#fwdpy11.conditional_models.track_added_mutation" title="fwdpy11.conditional_models.track_added_mutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.conditional_models.track_added_mutation()</span></code></a>.</p>
+<p>This function requires a <cite>stopping_condition</cite>.
+If <cite>when</cite> is not given as a keyword argument, it is assumed to be 0.
+The keyword argument <cite>until</cite> is not allowed.</p>
+</dd></dl>
 
 </div>
 

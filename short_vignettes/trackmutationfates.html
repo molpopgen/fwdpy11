@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Need title &#8212; fwdpy11 manual</title>
+    <title>Tracking user-specified new mutations &#8212; fwdpy11 manual</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -239,13 +239,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Short vignettes - special case models
+  Short vignettes - conditional models
  </span>
 </p>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Need title
+   Tracking user-specified new mutations
   </a>
  </li>
  <li class="toctree-l1">
@@ -638,8 +638,8 @@
             <nav id="bd-toc-nav" aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#id1">
-   Need title
+  <a class="reference internal nav-link" href="#tracking-a-mutation-for-a-specified-number-of-generations">
+   Tracking a mutation for a specified number of generations
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -660,8 +660,8 @@
         
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="need-title">
-<span id="tracking-mutation-fates"></span><h1>Need title<a class="headerlink" href="#need-title" title="Permalink to this headline">¶</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="tracking-user-specified-new-mutations">
+<span id="tracking-mutation-fates"></span><h1>Tracking user-specified new mutations<a class="headerlink" href="#tracking-user-specified-new-mutations" title="Permalink to this headline">¶</a></h1>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
@@ -712,8 +712,8 @@
 </div>
 </div>
 </div>
-<div class="section" id="id1">
-<h2>Need title<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tracking-a-mutation-for-a-specified-number-of-generations">
+<h2>Tracking a mutation for a specified number of generations<a class="headerlink" href="#tracking-a-mutation-for-a-specified-number-of-generations" title="Permalink to this headline">¶</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ALPHA</span> <span class="o">=</span> <span class="o">-</span><span class="mf">10.0</span>
@@ -758,9 +758,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
@@ -802,9 +802,9 @@ Let’s try to print it again:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-    <span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
+    <span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mutation </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="si">}</span><span class="s2"> is no longer in the population!&quot;</span><span class="p">)</span> 
 </pre></div>
 </div>
 </div>
@@ -831,16 +831,16 @@ Let’s try to print it again:</p>
 3.0 1 0
 4.0 1000
 4.0 1 0
-5.0 1000
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5.0 1000
 5.0 1 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.0 1000
+6.0 1000
 6.0 2 0
-7.0 1000
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.0 2 0
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7.0 1000
+7.0 2 0
 </pre></div>
 </div>
 </div>

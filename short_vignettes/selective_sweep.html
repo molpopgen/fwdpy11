@@ -52,7 +52,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Converting data to tskit format" href="../long_vignettes/tskitconvert_vignette.html" />
-    <link rel="prev" title="Need title" href="trackmutationfates.html" />
+    <link rel="prev" title="Tracking user-specified new mutations" href="trackmutationfates.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -239,13 +239,13 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Short vignettes - special case models
+  Short vignettes - conditional models
  </span>
 </p>
 <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="trackmutationfates.html">
-   Need title
+   Tracking user-specified new mutations
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -769,7 +769,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -825,7 +825,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">ancient_sample_nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">N</span>
-<span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="n">FIXATION_TIME</span>
+<span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">]</span> <span class="o">==</span> <span class="n">FIXATION_TIME</span>
 </pre></div>
 </div>
 </div>
@@ -836,7 +836,7 @@
 <span class="n">ancient_sample_node_times</span> <span class="o">=</span> \
     <span class="n">node_array</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">ancient_sample_nodes</span><span class="p">]</span>
 <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">ancient_sample_node_times</span> <span class="o">==</span> \
-    <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">index</span><span class="p">]])</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">fixation_times</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">]])</span>
 </pre></div>
 </div>
 </div>
@@ -878,7 +878,7 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Need title</p>
+            <p class="prev-next-title">Tracking user-specified new mutations</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="../long_vignettes/tskitconvert_vignette.html" title="next page">
