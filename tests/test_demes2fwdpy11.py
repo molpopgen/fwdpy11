@@ -1593,7 +1593,7 @@ def test_issue_881():
     Copied from the statistical test suite.
     This is the model that triggered GitHub issue 881
 
-    In demes-ese, this event is a "branch" with assymmetric
+    In demes-ese, this event is a "branch" with asymmetric
     migration.
     """
     yaml = """
