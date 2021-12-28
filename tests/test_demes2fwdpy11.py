@@ -39,7 +39,7 @@ class TestNoEvents(unittest.TestCase):
         self.b.add_deme(name="deme", epochs=[dict(start_size=1000, end_time=0)])
 
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 class TestBadBurnin(unittest.TestCase):
@@ -60,7 +60,7 @@ class TestLoadGraph(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.g = demes.load("tests/test_demog.yaml")
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -68,7 +68,7 @@ class TestLoadGraph(unittest.TestCase):
 class TestLoadYAML(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.demog = fwdpy11.discrete_demography.from_demes("tests/test_demog.yaml", 10)
+        self.demog = fwdpy11.discrete_demography.from_demes("tests/test_demog.yaml", 1)
 
 
 @run_model_round_trip
@@ -85,7 +85,7 @@ class TestTwoEpoch(unittest.TestCase):
             ],
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_size_change_params(self):
         self.assertEqual(len(self.demog.model.set_deme_sizes), 1)
@@ -107,12 +107,12 @@ class TestNonGenerationUnits(unittest.TestCase):
         self.b.add_deme(
             name="Pop",
             epochs=[
-                dict(start_size=10000, end_time=25000),
-                dict(start_size=1000, end_size=20000, end_time=0),
+                dict(start_size=1000, end_time=250),
+                dict(start_size=100, end_size=200, end_time=0),
             ],
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_conversion_to_generations(self):
         self.assertEqual(
@@ -121,9 +121,9 @@ class TestNonGenerationUnits(unittest.TestCase):
         )
         self.assertEqual(
             self.demog.metadata["total_simulation_length"],
-            self.demog.metadata["burnin_time"] + 25000 // 25,
+            self.demog.metadata["burnin_time"] + 250 // 25,
         )
-        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 1000)
+        self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 100)
 
 
 @run_model_round_trip
@@ -140,7 +140,7 @@ class TestSelfingShift(unittest.TestCase):
             ],
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_selfing_parameters(self):
         pass
@@ -167,7 +167,7 @@ class TestSelfing(unittest.TestCase):
             defaults=dict(epoch=dict(selfing_rate=0.5)),
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_single_pop_selfing(self):
         self.assertTrue(self.demog.model.set_selfing_rates[0].when == 0)
@@ -188,7 +188,7 @@ class TestSplit(unittest.TestCase):
             "Deme2", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_size_changes(self):
         self.assertEqual(len(self.demog.model.set_deme_sizes), 3)
@@ -233,7 +233,7 @@ class TestSplitMigration(unittest.TestCase):
         self.b.add_migration(source="Deme1", dest="Deme2", rate=0.01)
         self.b.add_migration(source="Deme2", dest="Deme1", rate=0.02)
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -251,7 +251,7 @@ class TestSplitSymmetricMigration(unittest.TestCase):
         )
         self.b.add_migration(demes=["Deme1", "Deme2"], rate=0.01)
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -271,7 +271,7 @@ class TestSplitThreeWay(unittest.TestCase):
             "Deme3", epochs=[dict(start_size=200, end_time=0)], ancestors=["Ancestor"]
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -292,7 +292,7 @@ class TestSplitThreeWayMigration(unittest.TestCase):
         )
         self.b.add_migration(demes=["Deme1", "Deme2", "Deme3"], rate=0.1)
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -309,7 +309,7 @@ class TestBranch(unittest.TestCase):
             start_time=100,
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -328,7 +328,7 @@ class TestBranchMigration(unittest.TestCase):
         self.b.add_migration(source="Ancestor", dest="Deme1", rate=0.01)
         self.b.add_migration(source="Deme1", dest="Ancestor", rate=0.01)
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -357,7 +357,7 @@ class TestMultipleBranches(unittest.TestCase):
             start_time=20,
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -380,7 +380,7 @@ class TestSplitsBranches(unittest.TestCase):
             name="D", epochs=[dict(start_size=1000, end_time=0)], ancestors=["A"]
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
 
 @run_model_round_trip
@@ -394,12 +394,12 @@ class TestIslandModel(unittest.TestCase):
         self.b.add_migration(source="Island1", dest="Island2", rate=0.01)
         self.b.add_migration(source="Island2", dest="Island1", rate=0.02)
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 2)
 
     def test_demog_attributes(self):
         self.assertTrue(
             self.demog.metadata["burnin_time"]
-            == sum(self.demog.metadata["initial_sizes"].values()) * 10
+            == sum(self.demog.metadata["initial_sizes"].values()) * 2
         )
         self.assertTrue(len(self.demog.model.set_migration_rates) == 0)
 
@@ -418,12 +418,12 @@ class TestIslandModelRateChange(unittest.TestCase):
             source="Island1", dest="Island2", rate=0.05, start_time=500
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 2)
 
     def test_burnin_time(self):
         self.assertTrue(
             self.demog.metadata["burnin_time"]
-            == sum(self.demog.metadata["initial_sizes"].values()) * 10
+            == sum(self.demog.metadata["initial_sizes"].values()) * 2
         )
 
     def test_num_mig_rate_changes(self):
@@ -463,7 +463,7 @@ class TestTwoPopMerger(unittest.TestCase):
             start_time=500,
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_total_sim_length(self):
         self.assertEqual(
@@ -514,7 +514,7 @@ class TestFourWayMerger(unittest.TestCase):
             start_time=100,
         )
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_total_sim_length(self):
         self.assertEqual(
@@ -536,7 +536,7 @@ class TestPulseMigration(unittest.TestCase):
         self.b.add_deme(name="deme2", epochs=[dict(start_size=100, end_time=0)])
         self.b.add_pulse(sources=["deme1"], dest="deme2", time=100, proportions=[0.2])
         self.g = self.b.resolve()
-        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
 
     def test_total_sim_length(self):
         self.assertEqual(
