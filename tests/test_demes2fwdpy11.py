@@ -22,6 +22,15 @@ def check_valid_demography(cls):
     return cls
 
 
+def run_model_round_trip(cls):
+    def _test_evolvets_roundtrip(self):
+        _ = evolve_demes_model(self.demog)
+
+    cls.test_evolvets_roundtrip = _test_evolvets_roundtrip
+    return cls
+
+
+@run_model_round_trip
 @check_valid_demography
 class TestNoEvents(unittest.TestCase):
     @classmethod
@@ -45,6 +54,7 @@ class TestBadBurnin(unittest.TestCase):
             self.demog = fwdpy11.discrete_demography.from_demes(self.g, -1)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestLoadGraph(unittest.TestCase):
     @classmethod
@@ -53,6 +63,7 @@ class TestLoadGraph(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestLoadYAML(unittest.TestCase):
     @classmethod
@@ -60,6 +71,7 @@ class TestLoadYAML(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes("tests/test_demog.yaml", 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestTwoEpoch(unittest.TestCase):
     @classmethod
@@ -84,6 +96,7 @@ class TestTwoEpoch(unittest.TestCase):
         self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 2000)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestNonGenerationUnits(unittest.TestCase):
     @classmethod
@@ -113,6 +126,7 @@ class TestNonGenerationUnits(unittest.TestCase):
         self.assertEqual(self.demog.model.set_deme_sizes[0].new_size, 1000)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSelfingShift(unittest.TestCase):
     @classmethod
@@ -141,6 +155,7 @@ class TestSelfingShift(unittest.TestCase):
         # self.assertTrue(self.demog.model.set_selfing_rates[1].S == 0.2)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSelfing(unittest.TestCase):
     @classmethod
@@ -159,6 +174,7 @@ class TestSelfing(unittest.TestCase):
         self.assertTrue(self.demog.model.set_selfing_rates[0].S == 0.5)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplit(unittest.TestCase):
     @classmethod
@@ -201,6 +217,7 @@ class TestSplit(unittest.TestCase):
         # )
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplitMigration(unittest.TestCase):
     @classmethod
@@ -219,6 +236,7 @@ class TestSplitMigration(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplitSymmetricMigration(unittest.TestCase):
     @classmethod
@@ -236,6 +254,7 @@ class TestSplitSymmetricMigration(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplitThreeWay(unittest.TestCase):
     @classmethod
@@ -255,6 +274,7 @@ class TestSplitThreeWay(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplitThreeWayMigration(unittest.TestCase):
     @classmethod
@@ -275,6 +295,7 @@ class TestSplitThreeWayMigration(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestBranch(unittest.TestCase):
     @classmethod
@@ -291,6 +312,7 @@ class TestBranch(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestBranchMigration(unittest.TestCase):
     @classmethod
@@ -309,6 +331,7 @@ class TestBranchMigration(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestMultipleBranches(unittest.TestCase):
     @classmethod
@@ -337,6 +360,7 @@ class TestMultipleBranches(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestSplitsBranches(unittest.TestCase):
     @classmethod
@@ -359,6 +383,7 @@ class TestSplitsBranches(unittest.TestCase):
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 10)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestIslandModel(unittest.TestCase):
     @classmethod
@@ -379,6 +404,7 @@ class TestIslandModel(unittest.TestCase):
         self.assertTrue(len(self.demog.model.set_migration_rates) == 0)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestIslandModelRateChange(unittest.TestCase):
     @classmethod
@@ -410,6 +436,7 @@ class TestIslandModelRateChange(unittest.TestCase):
         )
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestTwoPopMerger(unittest.TestCase):
     @classmethod
@@ -448,6 +475,7 @@ class TestTwoPopMerger(unittest.TestCase):
         self.assertEqual(len(self.demog.model.set_deme_sizes), 6)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestFourWayMerger(unittest.TestCase):
     @classmethod
@@ -498,6 +526,7 @@ class TestFourWayMerger(unittest.TestCase):
         self.assertTrue(len(self.demog.model.set_deme_sizes), 14)
 
 
+@run_model_round_trip
 @check_valid_demography
 class TestPulseMigration(unittest.TestCase):
     @classmethod
@@ -544,13 +573,17 @@ def check_debugger_passes(demog):
         raise "unexpected exception"
 
 
-def evolve_demes_model(demog, initial_sizes) -> fwdpy11.DiploidPopulation:
+def evolve_demes_model(demog) -> fwdpy11.DiploidPopulation:
     pdict = {
         "rates": (0.0, 0.0, 0.0),
         "gvalue": fwdpy11.Multiplicative(2.0),
         "demography": demog,
         "simlen": demog.metadata["total_simulation_length"],
     }
+    initial_sizes = [
+        demog.metadata["initial_sizes"][i]
+        for i in demog.metadata["initial_sizes"].keys()
+    ]
     params = fwdpy11.ModelParams(**pdict)
     rng = fwdpy11.GSLrng(100)
     pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
@@ -635,7 +668,7 @@ def test_three_way_continuous_migration_pairwise(demog):
     ],
 )
 def test_evolve_three_way_continuous_migration_pairwise(demog):
-    pop = evolve_demes_model(demog, [100] * 3)
+    pop = evolve_demes_model(demog)
     assert pop.generation == demog.metadata["total_simulation_length"]
 
 
