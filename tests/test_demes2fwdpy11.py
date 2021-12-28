@@ -256,6 +256,25 @@ class TestSplitSymmetricMigration(unittest.TestCase):
 
 @run_model_round_trip
 @check_valid_demography
+class TestSplitAsymmetricMigration(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test demography", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=200)])
+        self.b.add_deme(
+            "Deme1", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_deme(
+            "Deme2", epochs=[dict(start_size=100, end_time=0)], ancestors=["Ancestor"]
+        )
+        self.b.add_migration(source="Deme1", dest="Deme2", rate=0.01)
+        self.b.add_migration(source="Deme2", dest="Deme1", rate=1e-3)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
 class TestSplitThreeWay(unittest.TestCase):
     @classmethod
     def setUpClass(self):
