@@ -345,9 +345,54 @@ class TestBranchMigration(unittest.TestCase):
             start_time=100,
         )
         self.b.add_migration(source="Ancestor", dest="Deme1", rate=0.01)
-        self.b.add_migration(source="Deme1", dest="Ancestor", rate=0.01)
+        self.b.add_migration(source="Deme1", dest="Ancestor", rate=0.005)
         self.g = self.b.resolve()
         self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@pytest.mark.parametrize("second_ancestor", ["Ancestor", "Deme1"])
+@pytest.mark.parametrize("first_start_time", [100])
+@pytest.mark.parametrize("second_start_time", [99])
+@pytest.mark.parametrize(
+    "migrations",
+    [
+        [],
+        [
+            {"source": "Ancestor", "dest": "Deme1", "rate": 0.01},
+            {"source": "Deme1", "dest": "Ancestor", "rate": 0.005},
+        ],
+        [
+            {"source": "Deme2", "dest": "Deme1", "rate": 0.01},
+            {"source": "Deme1", "dest": "Deme2", "rate": 0.005},
+        ],
+        [
+            {"source": "Ancestor", "dest": "Deme2", "rate": 0.01},
+            {"source": "Deme2", "dest": "Ancestor", "rate": 0.005},
+        ],
+    ],
+)
+def test_three_deme_sequential_branches(
+    second_ancestor, first_start_time, second_start_time, migrations
+):
+    b = demes.Builder(description="test branch", time_units="generations")
+    b.add_deme(name="Ancestor", epochs=[dict(start_size=500, end_time=0)])
+    b.add_deme(
+        "Deme1",
+        epochs=[dict(start_size=100, end_time=0)],
+        ancestors=["Ancestor"],
+        start_time=first_start_time,
+    )
+    b.add_deme(
+        "Deme2",
+        epochs=[dict(start_size=100, end_time=0)],
+        ancestors=[second_ancestor],
+        start_time=second_start_time,
+    )
+    for m in migrations:
+        b.add_migration(**m)
+    g = b.resolve()
+    demog = fwdpy11.discrete_demography.from_demes(g, 1)
+    evolve_demes_model(demog)
 
 
 @run_model_round_trip
