@@ -30,6 +30,17 @@ def run_model_round_trip(cls):
     return cls
 
 
+def resolve_and_run(b: demes.Builder, burnin: int = 1):
+    g = b.resolve()
+    demog = fwdpy11.discrete_demography.from_demes(g, burnin)
+    initial_sizes = [
+        demog.metadata["initial_sizes"][i]
+        for i in demog.metadata["initial_sizes"].keys()
+    ]
+    fwdpy11.DemographyDebugger(initial_sizes, demog)
+    evolve_demes_model(demog)
+
+
 @run_model_round_trip
 @check_valid_demography
 class TestNoEvents(unittest.TestCase):
@@ -359,7 +370,8 @@ class TestBranchMigration(unittest.TestCase):
         [],
         [
             {"source": "Ancestor", "dest": "Deme1", "rate": 0.01},
-        ],[
+        ],
+        [
             {"source": "Ancestor", "dest": "Deme2", "rate": 0.01},
         ],
         [
@@ -396,9 +408,7 @@ def test_three_deme_sequential_branches(
     )
     for m in migrations:
         b.add_migration(**m)
-    g = b.resolve()
-    demog = fwdpy11.discrete_demography.from_demes(g, 1)
-    evolve_demes_model(demog)
+    resolve_and_run(b)
 
 
 @run_model_round_trip
