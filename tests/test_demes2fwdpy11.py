@@ -369,6 +369,7 @@ class TestBranchMigration(unittest.TestCase):
             {"source": "Ancestor", "dest": "Deme2", "rate": 0.01},
             {"source": "Deme2", "dest": "Ancestor", "rate": 0.005},
         ],
+        [{"demes": ["Ancestor", "Deme1", "Deme2"], "rate": 1e-5}],
     ],
 )
 def test_three_deme_sequential_branches(
