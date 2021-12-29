@@ -352,6 +352,126 @@ class TestBranchMigration(unittest.TestCase):
 
 @run_model_round_trip
 @check_valid_demography
+class TestSequentialBranch(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Deme1"],
+            start_time=99,
+        )
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
+class TestSequentialBranchMigrationAncestorDeme1(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Deme1"],
+            start_time=99,
+        )
+        self.b.add_migration(demes=["Ancestor", "Deme1"], rate=0.025)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
+class TestSequentialBranchMigrationAncestorDeme2(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Deme1"],
+            start_time=99,
+        )
+        self.b.add_migration(demes=["Ancestor", "Deme2"], rate=0.025)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
+class TestSequentialBranchMigrationDeme1Deme2(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Deme1"],
+            start_time=99,
+        )
+        self.b.add_migration(demes=["Deme2", "Deme1"], rate=0.025)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+# TODO: repeat the above migration tests,
+# but we need a better pattern here than copy/paste
+@run_model_round_trip
+@check_valid_demography
+class TestSequentialBranchAlternateOrder(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=99,
+        )
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
 class TestMultipleBranches(unittest.TestCase):
     @classmethod
     def setUpClass(self):
