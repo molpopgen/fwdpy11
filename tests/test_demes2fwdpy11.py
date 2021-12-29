@@ -381,6 +381,40 @@ class TestMultipleBranches(unittest.TestCase):
 
 @run_model_round_trip
 @check_valid_demography
+class TestMultipleBranchesWithMigration(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.b = demes.Builder(description="test branch", time_units="generations")
+        self.b.add_deme(name="Ancestor", epochs=[dict(start_size=1000, end_time=0)])
+        self.b.add_deme(
+            "Deme1",
+            epochs=[dict(start_size=100, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=100,
+        )
+        self.b.add_deme(
+            "Deme2",
+            epochs=[dict(start_size=200, end_time=0)],
+            ancestors=["Ancestor"],
+            start_time=50,
+        )
+        self.b.add_deme(
+            "Deme3",
+            epochs=[dict(start_size=300, end_time=0)],
+            ancestors=["Deme1"],
+            start_time=20,
+        )
+        self.b.add_migration(source="Deme1", dest="Deme2", rate=1e-6)
+        self.b.add_migration(source="Deme2", dest="Deme1", rate=2e-6)
+        self.b.add_migration(demes=["Deme1", "Deme3"], rate=0.01)
+        self.b.add_migration(source="Deme3", dest="Deme2", rate=1e-6)
+        self.b.add_migration(source="Deme2", dest="Deme3", rate=2e-6)
+        self.g = self.b.resolve()
+        self.demog = fwdpy11.discrete_demography.from_demes(self.g, 1)
+
+
+@run_model_round_trip
+@check_valid_demography
 class TestSplitsBranches(unittest.TestCase):
     @classmethod
     def setUpClass(self):
