@@ -359,6 +359,11 @@ class TestBranchMigration(unittest.TestCase):
         [],
         [
             {"source": "Ancestor", "dest": "Deme1", "rate": 0.01},
+        ],[
+            {"source": "Ancestor", "dest": "Deme2", "rate": 0.01},
+        ],
+        [
+            {"source": "Ancestor", "dest": "Deme1", "rate": 0.01},
             {"source": "Deme1", "dest": "Ancestor", "rate": 0.005},
         ],
         [
