@@ -3,7 +3,17 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
-## Next release
+## 0.17.1
+
+Bug fixes
+
+* Fix bug in fixation checking in `fwdpy11.conditional_models`.
+  Previous results were not incorrect.
+  Rather, they took too long to be obtained because some simulations did not terminate early enough.
+  Issue {issue}`893`
+  PR {pr}`894`
+
+  Miscellaneous
 
 - Improved exception message for invalid migrations during a simulation.
   PR {pr}`892`

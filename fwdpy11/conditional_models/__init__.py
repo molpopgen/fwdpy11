@@ -215,6 +215,7 @@ class SimulationStatus:
 
     For examples, see implementations of :class:`GlobalFixation` and :class:`FocalDemeFixation`.
     """
+
     should_terminate: bool = attr.ib(validator=attr.validators.instance_of(bool))
     condition_met: bool = attr.ib(validator=attr.validators.instance_of(bool))
 
@@ -241,7 +242,15 @@ class GlobalFixation(object):
         self, pop: fwdpy11.DiploidPopulation, index: int, key: tuple
     ) -> SimulationStatus:
         if pop.mutations[index].key != key:
-            return SimulationStatus(False, False)
+            # The key has changed, meaning the mutation is
+            # flagged for recycling.
+            # First, check if it is in the fixations list
+            for m in pop.fixations:
+                if m.key == key:
+                    # It is fixed, so we are done
+                    return SimulationStatus(True, False)
+            # The mutation is gone from the simulation
+            return SimulationStatus(True, False)
         if pop.mcounts[index] == 0:
             return SimulationStatus(True, False)
         if pop.mcounts[index] == 2 * pop.N:
@@ -262,7 +271,12 @@ class FocalDemeFixation:
     def __call__(self, pop: fwdpy11.DiploidPopulation, index, key) -> SimulationStatus:
         deme_sizes = pop.deme_sizes(as_dict=True)
         if pop.mutations[index].key != key:
-            return SimulationStatus(False, False)
+            # check for a global fixation
+            for m in pop.fixations:
+                if m.key == key:
+                    return SimulationStatus(True, False)
+            # The mutation is gone from the simulation
+            return SimulationStatus(True, False)
         if self.deme not in deme_sizes:
             return SimulationStatus(False, False)
         count = 0
