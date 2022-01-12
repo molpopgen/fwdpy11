@@ -843,7 +843,7 @@ To do so, give a nonzero value to the <code class="docutils literal notranslate"
 </div>
 </div>
 <p>At the end of the simulation, mutations from this region will have the <code class="docutils literal notranslate"><span class="pre">label</span></code> value stored in the attribute <a class="reference internal" href="../pages/types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a>.</p>
-<p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer, <em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.21)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>.
+<p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer, <em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.22)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>.
 Larger values, or negative values, will result in exceptions.
 The following example tries to use a value one larger than the maximum allowed:</p>
 <div class="cell tag_raises-exception docutils container">
@@ -859,7 +859,7 @@ The following example tries to use a value one larger than the maximum allowed:<
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_4090</span><span class="o">/</span><span class="mf">1747280255.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_3799</span><span class="o">/</span><span class="mf">1747280255.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> 
 <span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
