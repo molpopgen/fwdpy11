@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next version
+
+Dependencies
+
+* Removed use of `pip-tools` in favor of a single `requirements/development.txt` file with loose pinning.
+  Issue {issue}`877`, PR {pr}`896`
+
 ## 0.17.1
 
 Bug fixes
