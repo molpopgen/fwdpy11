@@ -70,7 +70,7 @@ jobs:
         run: |
             # These are needed to install black:
             python -m pip install --user --upgrade setuptools wheel
-            python -m pip install --user -r requirements.txt
+            python -m pip install --user -r requirements/development.txt
             # For sdist validation
             python -m pip install --user --upgrade twine
 
