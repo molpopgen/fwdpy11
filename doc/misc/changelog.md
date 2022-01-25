@@ -5,6 +5,12 @@ updates to latest `fwdpp` version, etc.
 
 ## Next version
 
+Back end changes
+
+* Add new Python class intended to help validate demographic models and
+  aid in importing models from `demes`.
+  PR {pr}`900`.
+
 Dependencies
 
 * Removed use of `pip-tools` in favor of a single `requirements/development.txt` file with loose pinning.

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2020 Kevin Thornton <krthornt@uci.edu>
+# Copyright (C) 2019 Kevin Thornton <krthornt@uci.edu>
 #
 # This file is part of fwdpy11.
 #
@@ -17,11 +17,15 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import itertools
 import typing
+from collections import defaultdict
+from dataclasses import dataclass
 
 import attr
 import demes
 import demes.demes
+import intervaltree
 import numpy as np
 
 import fwdpy11
@@ -555,3 +559,609 @@ def from_demes(
 
     demog = demography_from_demes(dg, burnin)
     return demog
+
+
+@dataclass
+class _DemeSize:
+    deme: int
+    ancestors: typing.Optional[typing.List[int]]
+    when: int
+    size: int
+    growth_parameter: float
+
+    def __post_init__(self):
+        if self.ancestors is not None:
+            self.ancestors = sorted(self.ancestors)
+
+    def add_ancestor(self, ancestor: int):
+        if self.ancestors is None:
+            self.ancestors = [ancestor]
+        else:
+            self.ancestors.append(ancestor)
+            self.ancestors = sorted(self.ancestors)
+
+
+@dataclass
+class _EpochData:
+    deme: int
+    ancestors: typing.Optional[typing.List[int]]
+    initial_size: int
+    growth_parameter: float
+
+    def __post_init__(self):
+        if self.ancestors is not None:
+            self.ancestors = sorted(self.ancestors)
+
+    def add_ancestor(self, ancestor: int):
+        if self.ancestors is None:
+            self.ancestors = [ancestor]
+        else:
+            self.ancestors.append(ancestor)
+            self.ancestors = sorted(self.ancestors)
+
+
+@dataclass
+class _EventsAtTimeT:
+    mass_migrations: typing.List[MassMigration]
+    set_deme_sizes: typing.List[SetDemeSize]
+    set_growth_rates: typing.List[SetExponentialGrowth]
+
+
+@dataclass
+class _SortedEvents:
+    """
+    Not part of the public API.
+
+    This class defines an iterator over demographic events
+    that change population sizes.
+    """
+
+    mass_migrations: typing.List[MassMigration]
+    set_deme_sizes: typing.List[SetDemeSize]
+    set_growth_rates: typing.List[SetExponentialGrowth]
+
+    def __post_init__(self):
+        self.mass_migrations = sorted(
+            self.mass_migrations,
+            # TODO: compare this to the C++ side sort function.
+            key=lambda x: (x.when, x.source, x.destination, not x.move_individuals),
+        )
+
+        self.set_deme_sizes = sorted(
+            self.set_deme_sizes, key=lambda x: (x.when, x.deme)
+        )
+        self.set_growth_rates = sorted(
+            self.set_growth_rates, key=lambda x: (x.when, x.deme)
+        )
+
+        for i in [self.mass_migrations, self.set_deme_sizes, self.set_growth_rates]:
+            i.reverse()
+
+        # NOTE: several properties of
+        # the instance objects in these lists
+        # were already checked upon initialization.
+
+        # We do not allow things like setting the growth
+        # rate > 1 time for the same deme at the same generation.
+        for a, b in _pairwise(self.set_deme_sizes):
+            if a.when == b.when and a.deme == b.deme:
+                raise ValueError(
+                    f"Multple SetDemeSize events at the same time for the same deme: {a}, {b}"
+                )
+        for a, b in _pairwise(self.set_growth_rates):
+            if a.when == b.when and a.deme == b.deme:
+                raise ValueError(
+                    f"Multple SetExponentialGrowth events at the same time for the same deme: {a}, {b}"
+                )
+        for a, b in _pairwise(self.mass_migrations):
+            # TODO: what if one is a move and the other a copy?
+            if (
+                a.when == b.when
+                and a.source == b.source
+                and a.destination == b.destination
+            ):
+                raise ValueError(
+                    f"Multple MassMigration events at the same time for the same pair of demes: {a}, {b}"
+                )
+
+    def _get_next_event_time(self) -> typing.Optional[int]:
+        times = []
+        if len(self.mass_migrations) > 0:
+            times.append(self.mass_migrations[-1].when)
+        if len(self.set_deme_sizes) > 0:
+            times.append(self.set_deme_sizes[-1].when)
+        if len(self.set_growth_rates) > 0:
+            times.append(self.set_growth_rates[-1].when)
+
+        if len(times) == 0:
+            return None
+
+        return min(times)
+
+    def _get_next_simultaneous_events(self) -> typing.Optional[_EventsAtTimeT]:
+        next_event_time = self._get_next_event_time()
+        if next_event_time is None:
+            return None
+
+        rv = _EventsAtTimeT([], [], [])
+
+        for i, j in [
+            (self.mass_migrations, rv.mass_migrations),
+            (self.set_deme_sizes, rv.set_deme_sizes),
+            (self.set_growth_rates, rv.set_growth_rates),
+        ]:
+            while len(i) > 0 and i[-1].when == next_event_time:
+                j.append(i.pop())
+
+        return rv
+
+    def __iter__(self):
+        return self
+
+    def __next__(
+        self,
+    ):
+        ne = self._get_next_simultaneous_events()
+        if ne is not None:
+            return ne
+
+        raise StopIteration
+
+
+def _get_N_exp_growth(N0: int, t: int, G: float) -> int:
+    return int(np.rint(N0 * G ** t))
+
+
+def _get_epoch_end_size(
+    deme: int, when: int, deme_sizes: typing.Dict[int, typing.List[_DemeSize]]
+) -> int:
+    if deme not in deme_sizes:
+        raise ValueError(f"deme {deme} does not exist")
+
+    assert len(deme_sizes[deme]) > 0
+
+    return _get_N_exp_growth(
+        deme_sizes[deme][-1].size,
+        when - deme_sizes[deme][-1].when,
+        deme_sizes[deme][-1].growth_parameter,
+    )
+
+
+def _pairwise(iterable: typing.Iterable) -> typing.Iterator:
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return zip(a, b)
+
+
+def _global_extinction(deme_sizes: typing.Dict[int, typing.List[_DemeSize]]):
+    for _, v in deme_sizes.items():
+        assert len(v) > 0
+        assert v[-1].size >= 0
+        if v[-1].size > 0:
+            return False
+    return True
+
+
+# TODO / FIXME: there is so much logic duplication here.
+# Need to identify patterns and abstract ops out to functions, etc..
+def _process_lowlevel_mass_migrations(mass_migrations, deme_sizes):
+    destination_sizes_temp = defaultdict(list)
+    for mass_mig_event in mass_migrations:
+        if mass_mig_event.source not in deme_sizes:
+            raise ValueError(
+                f"Mass migration {mass_mig_event} involves a non-existant source deme"
+            )
+        if deme_sizes[mass_mig_event.source][-1].size == 0:
+            raise ValueError(
+                f"MassMigration from an extinct source deme: {mass_mig_event}"
+            )
+        # This is how many individuals will mass migrate
+        end_size = _get_epoch_end_size(
+            mass_mig_event.source, mass_mig_event.when + 1, deme_sizes
+        )
+        num_source_ind = int(np.rint(end_size * mass_mig_event.fraction))
+        # TODO: there's a lot of logic duplication here.
+        # We may also need to check:
+        # What happens if the fraction moved rounds down to 0
+        # and the old growth rate was 1.0.
+        # In that case, no new epoch is needed.
+        if mass_mig_event.move_individuals:
+            # Adjust source deme size
+            if mass_mig_event.when + 1 == deme_sizes[mass_mig_event.source][-1].when:
+                deme_sizes[mass_mig_event.source][-1].size -= num_source_ind
+                if mass_mig_event.resets_growth_rate is True:
+                    deme_sizes[mass_mig_event.source][-1].growth_parameter = 1.0
+            else:
+                new_size = end_size - num_source_ind
+                if new_size < 0:
+                    raise ValueError(
+                        f"MassMigration results in a source deme size < 0, {mass_mig_event}"
+                    )
+                if mass_mig_event.resets_growth_rate is True:
+                    G = 1.0
+                else:
+                    G = deme_sizes[mass_mig_event.source][-1].growth_parameter
+
+                if deme_sizes[mass_mig_event.source][-1].ancestors is not None:
+                    new_ancestors = deme_sizes[mass_mig_event.source][
+                        -1
+                    ].ancestors.copy()
+                    if mass_mig_event.source not in new_ancestors:
+                        new_ancestors.append(mass_mig_event.source)
+                        new_ancestors = sorted(new_ancestors)
+                else:
+                    new_ancestors = [mass_mig_event.source]
+                deme_sizes[mass_mig_event.source].append(
+                    _DemeSize(
+                        mass_mig_event.source,
+                        new_ancestors,
+                        mass_mig_event.when + 1,
+                        new_size,
+                        G,
+                    )
+                )
+        else:  # A copy
+            if mass_mig_event.when + 1 == deme_sizes[mass_mig_event.source][-1].when:
+                if mass_mig_event.resets_growth_rate is True:
+                    deme_sizes[mass_mig_event.source][-1].growth_parameter = 1.0
+            elif deme_sizes[mass_mig_event.source][-1].growth_parameter != 1.0:
+                # Only add a new epoch if the growth rate actually
+                # would be reset
+                new_size = end_size
+                if mass_mig_event.resets_growth_rate is True:
+                    G = 1.0
+                else:
+                    G = deme_sizes[mass_mig_event.source][-1].growth_parameter
+
+                if deme_sizes[mass_mig_event.source][-1].ancestors is not None:
+                    new_ancestors = deme_sizes[mass_mig_event.source][
+                        -1
+                    ].ancestors.copy()
+                    if mass_mig_event.source not in new_ancestors:
+                        new_ancestors.append(mass_mig_event.source)
+                        new_ancestors = sorted(new_ancestors)
+                else:
+                    new_ancestors = [mass_mig_event.source]
+                deme_sizes[mass_mig_event.source].append(
+                    _DemeSize(
+                        mass_mig_event.source,
+                        new_ancestors,
+                        mass_mig_event.when + 1,
+                        new_size,
+                        G,
+                    )
+                )
+
+        if mass_mig_event.destination not in deme_sizes:
+            # This is a new deme, so we initialize
+            # it with growth parameter of 1.0
+            destination_sizes_temp[mass_mig_event.destination].append(
+                _DemeSize(
+                    mass_mig_event.destination,
+                    [mass_mig_event.source],  # A new deme
+                    mass_mig_event.when + 1,
+                    num_source_ind,
+                    1.0,
+                )
+            )
+        else:
+            assert len(deme_sizes[mass_mig_event.destination]) > 0
+
+            if mass_mig_event.destination in destination_sizes_temp:
+                # There are other mass migrations into this deme at this time.
+                assert (
+                    mass_mig_event.when + 1
+                    == destination_sizes_temp[mass_mig_event.destination][-1].when
+                )
+                assert (
+                    destination_sizes_temp[mass_mig_event.destination][-1].ancestors
+                    is not None
+                )
+                end_size = _get_epoch_end_size(
+                    mass_mig_event.destination,
+                    mass_mig_event.when + 1,
+                    destination_sizes_temp,
+                )
+                new_size = (
+                    destination_sizes_temp[mass_mig_event.destination][-1].size
+                    + num_source_ind
+                )
+                if new_size < 0:
+                    raise ValueError(
+                        f"MassMigration results in a source deme size < 0, {mass_mig_event}, {new_size}"
+                    )
+                if mass_mig_event.resets_growth_rate is True:
+                    G = 1.0
+                else:
+                    G = destination_sizes_temp[mass_mig_event.destination][
+                        -1
+                    ].growth_parameter
+                if (
+                    destination_sizes_temp[mass_mig_event.destination][-1].ancestors
+                    is not None
+                ):
+                    new_ancestors = destination_sizes_temp[mass_mig_event.destination][
+                        -1
+                    ].ancestors.copy()
+                    if mass_mig_event.source not in new_ancestors:
+                        new_ancestors.append(mass_mig_event.source)
+                        new_ancestors = sorted(new_ancestors)
+                else:
+                    new_ancestors = [mass_mig_event.source]
+
+                last = destination_sizes_temp[mass_mig_event.destination][-1]
+                last.size = new_size
+                last.growth_parameter = G
+                last.ancestors = new_ancestors
+            else:
+                # This is the first mass migration at this time
+                # into this deme
+                end_size = _get_epoch_end_size(
+                    mass_mig_event.destination,
+                    mass_mig_event.when + 1,
+                    deme_sizes,
+                )
+                new_size = end_size + num_source_ind
+                if new_size < 0:
+                    raise ValueError(
+                        f"MassMigration results in a source deme size < 0, {mass_mig_event}, {new_size}"
+                    )
+                if mass_mig_event.resets_growth_rate is True:
+                    G = 1.0
+                else:
+                    G = deme_sizes[mass_mig_event.destination][-1].growth_parameter
+                if deme_sizes[mass_mig_event.destination][-1].ancestors is not None:
+                    new_ancestors = sorted(
+                        [mass_mig_event.destination, mass_mig_event.source]
+                    )
+                else:
+                    new_ancestors = [mass_mig_event.source]
+                destination_sizes_temp[mass_mig_event.destination].append(
+                    _DemeSize(
+                        mass_mig_event.destination,
+                        new_ancestors,
+                        mass_mig_event.when + 1,
+                        new_size,
+                        G,
+                    )
+                )
+
+    for k, v in destination_sizes_temp.items():
+        deme_sizes[k].extend(v)
+
+    return len(mass_migrations)
+
+
+def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
+    for event in set_deme_sizes:
+        if event.resets_growth_rate is True and event.deme in deme_sizes:
+            assert len(deme_sizes[event.deme]) > 0
+            if event.when + 1 != deme_sizes[event.deme][-1].when:
+                if deme_sizes[event.deme][-1].ancestors is None:
+                    new_ancestors = None
+                else:
+                    new_ancestors = [event.deme]
+
+                deme_sizes[event.deme].append(
+                    _DemeSize(
+                        event.deme,
+                        new_ancestors,
+                        event.when + 1,
+                        event.new_size,
+                        1.0,
+                    )
+                )
+            else:
+                deme_sizes[event.deme][-1].size = event.new_size
+                deme_sizes[event.deme][-1].growth_parameter = 1.0
+        else:
+            # Inherit the growth rate from the previous epoch
+            if event.deme in deme_sizes:
+                assert len(deme_sizes[event.deme]) > 0
+                lastG = deme_sizes[event.deme][-1].growth_parameter
+                if event.when + 1 != deme_sizes[event.deme][-1].when:
+                    if deme_sizes[event.deme][-1].ancestors is None:
+                        new_ancestors = None
+                    else:
+                        new_ancestors = [event.deme]
+
+                    deme_sizes[event.deme].append(
+                        _DemeSize(
+                            event.deme,
+                            new_ancestors,
+                            event.when + 1,
+                            event.new_size,
+                            lastG,
+                        )
+                    )
+                else:
+                    deme_sizes[event.deme][-1].size = event.new_size
+                    deme_sizes[event.deme][-1].growth_parameter = lastG
+            else:
+                # There is no previous epoch for this deme,
+                # so we initialize with G = 1.0
+                deme_sizes[event.deme].append(
+                    _DemeSize(event.deme, None, event.when + 1, event.new_size, 1.0)
+                )
+
+    return len(set_deme_sizes)
+
+
+def _process_lowlevel_set_growth_rates(set_growth_rates, deme_sizes):
+    for event in set_growth_rates:
+        if (
+            event.deme not in deme_sizes
+            or len(deme_sizes[event.deme]) == 0
+            or deme_sizes[event.deme][-1].size == 0
+        ):
+            raise ValueError(f"Event {event} being applied to a non-existant deme")
+        if event.when + 1 == deme_sizes[event.deme][-1].when:
+            # the rate is concurrent w/another event, so
+            # just change the value
+            deme_sizes[event.deme][-1].growth_parameter = event.G
+        else:
+            assert event.when + 1 > deme_sizes[event.deme][-1].when
+            N0 = _get_N_exp_growth(
+                deme_sizes[event.deme][-1].size,
+                event.when + 1 - deme_sizes[event.deme][-1].when,
+                deme_sizes[event.deme][-1].growth_parameter,
+            )
+            deme_sizes[event.deme].append(
+                _DemeSize(event.deme, [event.deme], event.when + 1, N0, event.G)
+            )
+
+    return len(set_growth_rates)
+
+
+@dataclass
+class _DemeSizeHistory:
+    """
+    This class is not part of the public API.
+
+    It is used by various parts of the Python back end
+    for validating demographic models.
+    """
+
+    epochs: intervaltree.IntervalTree
+    model_times: typing.Any  # should be ModelTimes...
+
+    def __post_init__(self):
+        self._validate_epoch_ancestry()
+
+    @staticmethod
+    def from_demes_graph(g: demes.Graph, burnin: int):
+        raise NotImplementedError(
+            "_DemeSizeHistory.from_demes_graph is not implemented"
+        )
+
+    # TODO:
+    # * We need to track the ancestor deme of each epoch.
+    #   Without this, we cannot distinguish a mass migration
+    #   from a deme size change w/no accompanying migration
+    #   to provide ancestry.
+    # * We've done some of the above, but probably incorrectly:
+    #   We need tests of 3- and 4- way mass-migration.
+    #   More generally, we need to account for multi-way ancestry
+    @staticmethod
+    def from_lowlevel(
+        initial_sizes: typing.Dict[int, int],
+        *,
+        mass_migrations: typing.Optional[typing.List[MassMigration]] = None,
+        set_deme_sizes: typing.Optional[typing.List[SetDemeSize]] = None,
+        set_growth_rates: typing.Optional[typing.List[SetExponentialGrowth]] = None,
+        total_simulation_length: typing.Optional[int] = None,
+    ):
+        # TODO: we repeat ourselves a lot
+        # in how we access deme_sizes.
+        # This should probably be abstracted out
+        # to a class containing a dict.
+        deme_sizes = defaultdict(list)
+        for deme, size in initial_sizes.items():
+            if deme < 0:
+                raise ValueError(f"all deme indexes must be non-negative, got {deme}")
+            if size <= 0:
+                raise ValueError(f"deme {deme} size must be > 0, got {size}")
+            deme_sizes[deme].append(_DemeSize(deme, [deme], 0, size, 1.0))
+
+        events = _SortedEvents(
+            mass_migrations if mass_migrations is not None else [],
+            set_deme_sizes if set_deme_sizes is not None else [],
+            set_growth_rates if set_growth_rates is not None else [],
+        )
+
+        num_events_processed = 0
+        global_extinction = False
+        num_events_expected = (
+            len(events.mass_migrations)
+            + len(events.set_growth_rates)
+            + len(events.set_deme_sizes)
+        )
+        for next_events in events:
+            global_extinction = _global_extinction(deme_sizes)
+            if global_extinction is True:
+                break
+
+            num_events_processed += _process_lowlevel_mass_migrations(
+                next_events.mass_migrations, deme_sizes
+            )
+            num_events_processed += _process_lowlevel_set_deme_sizes(
+                next_events.set_deme_sizes, deme_sizes
+            )
+            num_events_processed += _process_lowlevel_set_growth_rates(
+                next_events.set_growth_rates, deme_sizes
+            )
+
+        if not global_extinction:
+            assert (
+                num_events_processed == num_events_expected
+            ), f"{num_events_processed} {num_events_expected} {events}"
+
+        itree = intervaltree.IntervalTree()
+
+        for k, v in deme_sizes.items():
+            assert len(v) > 0
+            for a, b in _pairwise(v):
+                itree[a.when : b.when] = _EpochData(
+                    k, a.ancestors, a.size, a.growth_parameter
+                )
+            if total_simulation_length is not None:
+                if v[-1].when < total_simulation_length and v[-1].size > 0:
+                    itree[v[-1].when : total_simulation_length + 1] = _EpochData(
+                        k, v[-1].ancestors, v[-1].size, v[-1].growth_parameter
+                    )
+            else:
+                if v[-1].size > 0:
+                    itree[v[-1].when : int(np.iinfo(np.uint32).max)] = _EpochData(
+                        k, v[-1].ancestors, v[-1].size, v[-1].growth_parameter
+                    )
+        rv = _DemeSizeHistory(itree, None)
+        return rv
+
+    def _validate_epoch_ancestry(self):
+        """
+        If this function fails, the most likely
+        cause is a logic error in setting up the
+        ancestors.
+        """
+        for interval in self.epochs:
+            if interval.data.ancestors is not None:
+                for ancestor in interval.data.ancestors:
+                    if interval.begin == 0:
+                        if interval.data.deme != ancestor:
+                            raise RuntimeError("epoch ancestry error")
+                        w = interval.begin
+                    else:
+                        w = interval.begin - 1
+                    if not self.deme_exists_at(ancestor, w):
+                        raise RuntimeError("epoch ancestry error")
+
+    def demes_at(self, generation: int):
+        if generation < 0:
+            raise ValueError("generation must be non-negative")
+        for interval in self.epochs[generation]:
+            yield interval.data.deme
+
+    def deme_exists_at(self, deme: int, generation: int) -> bool:
+        if deme < 0:
+            raise ValueError("deme must be non-negative")
+        for deme in self.demes_at(generation):
+            if deme == deme:
+                return True
+        return False
+
+    def deme_size_at(self, deme: int, generation: int) -> typing.Optional[int]:
+        if not self.deme_exists_at(deme, generation):
+            return None
+
+        for interval in self.epochs[generation]:
+            if interval.data.deme == deme:
+                data = interval.data
+                t = generation - interval.begin + 1
+                return int(np.rint(data.initial_size * data.growth_parameter ** t))
+
+    def demes_coexist_at(self, demes: typing.Tuple[int, int], generation: int) -> bool:
+        for deme in demes:
+            if deme < 0:
+                raise ValueError("deme must be non-negative")
+        temp = [i for i in self.demes_at(generation)]
+        return all([i in temp for i in demes])

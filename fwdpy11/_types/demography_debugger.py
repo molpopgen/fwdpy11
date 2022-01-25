@@ -26,7 +26,7 @@ import fwdpy11
 import numpy as np
 
 from ..demographic_models import DemographicModelDetails
-from ..discrete_demography import DiscreteDemography
+from ..discrete_demography import DiscreteDemography, _DemeSizeHistory
 from .diploid_population import DiploidPopulation
 
 
@@ -126,6 +126,23 @@ class DemographyDebugger(object):
         # The real work
         self._report = None
         self._process_demographic_model(self._events, self.simlen)
+
+        # NOTE: this is a placeholder for refactoring this entire
+        # class
+        if isinstance(self._events, fwdpy11.DiscreteDemography):
+            self.size_history = _DemeSizeHistory.from_lowlevel(
+                {i: j for i, j in enumerate(self.initial_deme_sizes)},
+                mass_migrations=self._events.mass_migrations,
+                set_deme_sizes=self._events.set_deme_sizes,
+                set_growth_rates=self._events.set_growth_rates,
+            )
+        else:
+            self.size_history = _DemeSizeHistory.from_lowlevel(
+                {i: j for i, j in enumerate(self.initial_deme_sizes)},
+                mass_migrations=self._events.model.mass_migrations,
+                set_deme_sizes=self._events.model.set_deme_sizes,
+                set_growth_rates=self._events.model.set_growth_rates,
+            )
 
     @initial_deme_sizes.validator
     def validate_initial_deme_sizes(self, attribute, value):

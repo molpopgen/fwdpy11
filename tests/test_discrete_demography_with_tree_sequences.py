@@ -374,6 +374,40 @@ class TestSimpleMovesAndCopies(unittest.TestCase):
             self.assertEqual(expected[i], j)
         self.assertTrue(validate_alive_node_metadata(self.pop))
 
+    def test_copies_happen_before_set_deme_size(self):
+        m = [
+            fwdpy11.copy_individuals(0, 0, 1, 0.5),
+        ]
+        s = [fwdpy11.SetDemeSize(when=0, deme=1, new_size=self.pop.N)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
+        N0 = self.pop.N
+        self.pdict["demography"] = d
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        expected = {0: N0, 1: N0}
+        deme_sizes = self.pop.deme_sizes()
+        print(deme_sizes)
+        for i, j in zip(deme_sizes[0], deme_sizes[1]):
+            self.assertEqual(expected[i], j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
+    def test_moves_happen_before_set_deme_size(self):
+        m = [
+            fwdpy11.move_individuals(0, 0, 1, 1),
+        ]
+        s = [fwdpy11.SetDemeSize(when=0, deme=1, new_size=self.pop.N // 2)]
+        d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
+        N0 = self.pop.N
+        self.pdict["demography"] = d
+        params = fwdpy11.ModelParams(**self.pdict)
+        fwdpy11.evolvets(self.rng, self.pop, params, 100)
+        expected = {0: 0, 1: N0 // 2}
+        deme_sizes = self.pop.deme_sizes()
+        print(deme_sizes)
+        for i, j in zip(deme_sizes[0], deme_sizes[1]):
+            self.assertEqual(expected[i], j)
+        self.assertTrue(validate_alive_node_metadata(self.pop))
+
     def test_mass_move_with_growth(self):
         """
         In generation 5, the mass movement from 0 to 1

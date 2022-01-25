@@ -15,8 +15,8 @@ def check_valid_demography(cls):
             _ = fwdpy11.DemographyDebugger(
                 [100] * len(self.demog.metadata["initial_sizes"]), self.demog
             )
-        except:
-            self.fail("unexpected exception")
+        except Exception as e:
+            self.fail(f"unexpected exception, {e}")
 
     cls.test_validity = _valid_fwdpy11_demography
     return cls
