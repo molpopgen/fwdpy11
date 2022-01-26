@@ -1817,3 +1817,15 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
         assert recorder.parents[1][-ii - 10].parents[1] == 200
         assert recorder.parents[0][-ii - 30].parents[0] == 200
         assert recorder.parents[1][-ii - 30].parents[1] == 200
+
+
+def test_split_with_existence_n_way_migration():
+    b = demes.Builder(time_units="generations")
+    b.add_deme(name="anc", epochs=[dict(start_size=100, end_time=200)])
+    b.add_deme(name="A", ancestors=["anc"], epochs=[dict(start_size=100)])
+    b.add_deme(name="B", ancestors=["anc"], epochs=[dict(start_size=100, end_time=100)])
+    b.add_deme(name="C", ancestors=["B"], epochs=[dict(start_size=100)])
+    b.add_deme(name="D", ancestors=["B"], epochs=[dict(start_size=100)])
+    b.add_deme(name="E", ancestors=["B"], epochs=[dict(start_size=100)])
+    b.add_migration(demes=["A", "C", "D", "E"], rate=0.1)
+    resolve_and_run(b, burnin=1)
