@@ -1733,3 +1733,87 @@ def test_multiple_pulse_source(multiple_pulse_source_setup):
     for i, m in enumerate(demog.model.set_migration_rates):
         assert m.deme == 2
         assert np.all(m.migrates == expected_ancestry_proportions[i])
+
+
+@pytest.fixture
+def two_demes_migration_rate_changes_setup():
+    b = demes.Builder(time_units="generations")
+    b.add_deme(name="A", epochs=[dict(start_size=100)])
+    b.add_deme(name="B", epochs=[dict(start_size=100)])
+    b.add_migration(demes=["A", "B"], rate=0.0, end_time=30)
+    b.add_migration(demes=["A", "B"], rate=0.5, start_time=30, end_time=20)
+    b.add_migration(demes=["A", "B"], rate=0.0, start_time=20, end_time=10)
+    b.add_migration(demes=["A", "B"], rate=0.5, start_time=10)
+    g = b.resolve()
+    demog = fwdpy11.discrete_demography.from_demes(g, 1)
+
+    check_debugger_passes(demog)
+
+    return demog
+
+
+def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup):
+    # test to check that the last 10 generation have the high migration rates
+    # not 9 generations, and not 11 generations
+
+    @dataclass
+    class ParentDemesAtTime:
+        when: int
+        parents: list
+
+    class ParentDemes(object):
+        def __init__(self):
+            self.parents = dict()
+
+        def __call__(self, pop, _):
+            deme_indexes, deme_sizes = pop.deme_sizes()
+            for deme_idx in deme_indexes:
+                if deme_idx not in self.parents:
+                    self.parents[deme_idx] = [
+                        ParentDemesAtTime(when=pop.generation, parents=[0, 0])
+                    ]
+                else:
+                    self.parents[deme_idx].append(
+                        ParentDemesAtTime(when=pop.generation, parents=[0, 0])
+                    )
+            for ii, metadata in enumerate(pop.diploid_metadata):
+                parents = metadata.parents
+                for parent in parents:
+                    self.parents[metadata.deme][-1].parents[
+                        pop.diploid_metadata[parent].deme
+                    ] += 1
+
+    demog = two_demes_migration_rate_changes_setup
+    pdict = {
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "rates": (0, 0, 0),
+        "demography": demog,
+        "simlen": demog.metadata["total_simulation_length"],
+    }
+    params = fwdpy11.ModelParams(**pdict)
+    initial_sizes = demog.metadata["initial_sizes"]
+    pop = fwdpy11.DiploidPopulation([initial_sizes[0], initial_sizes[1]], 1.0)
+    rng = fwdpy11.GSLrng(90210)
+    recorder = ParentDemes()
+    fwdpy11.evolvets(rng, pop, params, 100, recorder=recorder)
+    for ii in range(1, 11):
+        assert (
+            recorder.parents[0][-ii].parents[0] > 0
+            and recorder.parents[0][-ii].parents[1] > 0
+        )
+        assert (
+            recorder.parents[0][-ii].parents[0] > 0
+            and recorder.parents[0][-ii].parents[1] > 0
+        )
+        assert (
+            recorder.parents[0][-ii - 20].parents[0] > 0
+            and recorder.parents[0][-ii - 20].parents[1] > 0
+        )
+        assert (
+            recorder.parents[0][-ii - 20].parents[0] > 0
+            and recorder.parents[0][-ii - 20].parents[1] > 0
+        )
+        assert recorder.parents[0][-ii - 10].parents[0] == 200
+        assert recorder.parents[1][-ii - 10].parents[1] == 200
+        assert recorder.parents[0][-ii - 30].parents[0] == 200
+        assert recorder.parents[1][-ii - 30].parents[1] == 200
