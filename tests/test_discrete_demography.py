@@ -17,9 +17,13 @@
 # along with fwdpy11.  If not, see <http://www.gnu.org/licenses/>.
 #
 import pickle
+import typing
 import unittest
+from dataclasses import dataclass
 
+import attr
 import fwdpy11
+import intervaltree
 import numpy as np
 import pytest
 
@@ -431,6 +435,973 @@ def test_set_migration_rates_numerical_tolerance(
             r[index] = 0.0
             r[index] = 1.0 - r.sum()
             _ = fwdpy11.SetMigrationRates(when=1, deme=index, migrates=r)
+
+
+# NOTE: from here down we have tests of non-public stuff
+
+
+# NOTE: use attr b/c we want kw_only, which isn't in dataclass until 3.10
+@attr.s(kw_only=True, auto_attribs=True)
+class Payload:
+    initial_sizes: typing.Dict[int, int]
+    mass_migrations: typing.Optional[typing.List[fwdpy11.MassMigration]]
+    set_deme_sizes: typing.Optional[typing.List[fwdpy11.SetDemeSize]]
+    set_growth_rates: typing.Optional[typing.List[fwdpy11.SetExponentialGrowth]]
+    total_simulation_length: typing.Optional[int]
+    expected_itree: intervaltree.IntervalTree
+
+
+def __detailed_size_history_test_runner(payload: Payload):
+    import fwdpy11.discrete_demography
+
+    deme_properties = fwdpy11.discrete_demography._DemeSizeHistory.from_lowlevel(
+        initial_sizes=payload.initial_sizes,
+        mass_migrations=payload.mass_migrations,
+        set_deme_sizes=payload.set_deme_sizes,
+        set_growth_rates=payload.set_growth_rates,
+        total_simulation_length=payload.total_simulation_length,
+    )
+
+    assert deme_properties.epochs == payload.expected_itree
+
+    @dataclass
+    class TrackSizes:
+        sizes: typing.List[typing.Tuple[int, typing.Dict[int, int]]]
+
+        def __call__(self, pop, _):
+            self.sizes.append((pop.generation, pop.deme_sizes(as_dict=True)))
+
+    t = TrackSizes([])
+
+    demog = fwdpy11.DiscreteDemography(
+        set_deme_sizes=payload.set_deme_sizes,
+        mass_migrations=payload.mass_migrations,
+        set_growth_rates=payload.set_growth_rates,
+    )
+
+    pdict = {
+        "rates": (0, 0, 0),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "simlen": payload.total_simulation_length,
+        "demography": demog,
+    }
+
+    if pdict["simlen"] is None:
+        pdict["simlen"] = 50
+
+    params = fwdpy11.ModelParams(**pdict)
+
+    pop = fwdpy11.DiploidPopulation([v for _, v in payload.initial_sizes.items()], 1.0)
+
+    rng = fwdpy11.GSLrng(42)
+
+    final_time = params.simlen
+
+    try:
+        fwdpy11.evolvets(rng, pop, params, 100, t)
+    except fwdpy11.GlobalExtinction as _:
+        final_time = pop.generation
+    except Exception as e:
+        pytest.fail(f"unexpected exception, {e}")
+
+    # The data from the forward sim must overlap an interval
+    # in the interval tree
+    for i in t.sizes:
+        generation, sizes = i
+        for deme, size in sizes.items():
+            assert deme_properties.deme_exists_at(
+                deme, generation
+            ), f"failure at {generation} for deme {deme}, which has size {size}"
+            # Get the interval for this deme
+            for i in deme_properties.epochs[generation]:
+                if i.data.deme == deme and i.begin == generation:
+                    assert size == int(
+                        np.rint(i.data.initial_size * i.data.growth_parameter)
+                    )
+            predicted_size = deme_properties.deme_size_at(deme, generation)
+            assert size is not None
+            assert (
+                size == predicted_size
+            ), f"{size} != {predicted_size} at time {generation}"
+
+    # Check the other direction--does the interval tree predict the sim outputs?
+    generations = [0] * (final_time + 1)
+    for i in deme_properties.epochs:
+        if i.begin == 0:
+            start = 1
+        else:
+            start = i.begin
+        for g in range(start, min(i.end, params.simlen + 1)):
+            generations[g] += 1
+            record = [j[1] for j in t.sizes if j[0] == g]
+            assert len(record) == 1
+            assert i.data.deme in [key for key in record[0].keys()], f"{record[0]}"
+    assert all([i > 0 for i in generations[1:]])
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        # Relatively simple models
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=None,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        int(np.iinfo(np.uint32).max),
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    )
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 100},
+            mass_migrations=None,
+            set_deme_sizes=[fwdpy11.SetDemeSize(when=11, deme=0, new_size=777)],
+            set_growth_rates=None,
+            total_simulation_length=500,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0, 12, fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        12,
+                        501,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 777, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 501, fwdpy11.discrete_demography._EpochData(1, [1], 100, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 100},
+            mass_migrations=None,
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(when=11, deme=0, new_size=777),
+                fwdpy11.SetDemeSize(when=14, deme=1, new_size=0),
+            ],
+            set_growth_rates=None,
+            total_simulation_length=500,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0, 12, fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        12,
+                        501,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 777, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 15, fwdpy11.discrete_demography._EpochData(1, [1], 100, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 100},
+            mass_migrations=None,
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(when=11, deme=0, new_size=0),
+                fwdpy11.SetDemeSize(when=14, deme=1, new_size=0),
+            ],
+            set_growth_rates=None,
+            total_simulation_length=500,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0, 12, fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        0, 15, fwdpy11.discrete_demography._EpochData(1, [1], 100, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 100},
+            mass_migrations=None,
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(when=11, deme=0, new_size=0),
+                fwdpy11.SetDemeSize(when=14, deme=1, new_size=0),
+            ],
+            set_growth_rates=None,
+            total_simulation_length=None,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0, 12, fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        0, 15, fwdpy11.discrete_demography._EpochData(1, [1], 100, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        # Simple growth in a single deme
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            set_growth_rates=[fwdpy11.SetExponentialGrowth(deme=0, when=11, G=1.01)],
+            total_simulation_length=None,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        12,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        12,
+                        int(np.iinfo(np.uint32).max),
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.01),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(deme=0, when=1, G=1.0),
+            ],
+            total_simulation_length=15,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.00),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(deme=0, when=0, G=1.1),
+                fwdpy11.SetExponentialGrowth(deme=0, when=1, G=1.0),
+            ],
+            total_simulation_length=15,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        1,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        1,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.1),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 11, 1.00),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(deme=0, when=5, G=1.1),
+                fwdpy11.SetExponentialGrowth(deme=0, when=10, G=1.02),
+            ],
+            total_simulation_length=15,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        6,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.1),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 16, 1.02),
+                    ),
+                ]
+            ),
+        ),
+        # Same as above, but we do a hard size reset
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=[fwdpy11.SetDemeSize(when=10, deme=0, new_size=20)],
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(deme=0, when=5, G=1.1),
+                fwdpy11.SetExponentialGrowth(deme=0, when=10, G=1.02),
+            ],
+            total_simulation_length=15,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        6,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.1),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 20, 1.02),
+                    ),
+                ]
+            ),
+        ),
+        # Same as above, but we do a hard size reset that DOES NOT affect growth rates
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(
+                    when=10, deme=0, new_size=20, resets_growth_rate=False
+                )
+            ],
+            set_growth_rates=[
+                fwdpy11.SetExponentialGrowth(deme=0, when=5, G=1.1),
+            ],
+            total_simulation_length=15,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        6,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.1),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 20, 1.1),
+                    ),
+                ]
+            ),
+        ),
+        # Quirky edge cases go here (with comments)
+        # One deme, goes extinct at the end of generation 0
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=[fwdpy11.SetDemeSize(deme=0, when=1, new_size=0)],
+            set_growth_rates=None,
+            total_simulation_length=None,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    )
+                ]
+            ),
+        ),
+    ],
+)
+def test_deme_size_history(payload: Payload):
+    __detailed_size_history_test_runner(payload)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=10, source=0, destination=1, fraction=1.0)
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 10, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 100},
+            mass_migrations=[
+                fwdpy11.copy_individuals(
+                    when=10, source=0, destination=1, fraction=0.5
+                ),
+                fwdpy11.copy_individuals(
+                    when=20, source=1, destination=0, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=30,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 100, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        21,
+                        31,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 150, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        31,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 50, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        # Same as above, but with move in lieu of copies
+        Payload(
+            initial_sizes={0: 100},
+            mass_migrations=[
+                fwdpy11.move_individuals(
+                    when=10, source=0, destination=1, fraction=0.5
+                ),
+                fwdpy11.move_individuals(
+                    when=20, source=1, destination=0, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=30,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 100, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 50, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        21,
+                        31,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 100, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 50, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        # Mass migrations and growth.
+        # This is where U+1F4A9 hits the fan
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(
+                    when=10, source=0, destination=1, fraction=0.5
+                ),
+                fwdpy11.copy_individuals(
+                    when=15, source=1, destination=0, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=[fwdpy11.SetExponentialGrowth(when=10, deme=1, G=2)],
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        16,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 170, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 5, 2.0),
+                    ),
+                    intervaltree.Interval(
+                        16,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(1, [0, 1], 160, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        # Rare use case: mass migrations
+        # not affecting growth rates
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(
+                    when=10,
+                    source=0,
+                    destination=1,
+                    fraction=0.5,
+                    resets_growth_rate=False,
+                ),
+                fwdpy11.copy_individuals(
+                    when=15,
+                    source=1,
+                    destination=0,
+                    fraction=1.0,
+                    resets_growth_rate=False,
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=[fwdpy11.SetExponentialGrowth(when=10, deme=1, G=2)],
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        16,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 170, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        16,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 5, 2.0),
+                    ),
+                    intervaltree.Interval(
+                        16,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(1, [0, 1], 160, 2.0),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(
+                    when=10, source=0, destination=1, fraction=0.5
+                ),
+                fwdpy11.copy_individuals(
+                    when=11, source=1, destination=0, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        12,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        12,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 15, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 5, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.move_individuals(
+                    when=10, source=0, destination=1, fraction=0.5
+                ),
+                fwdpy11.move_individuals(
+                    when=11, source=1, destination=0, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        12,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 5, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        12,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11,
+                        12,
+                        fwdpy11.discrete_demography._EpochData(1, [0], 5, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=1, source=1, destination=0, fraction=1.0),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 20, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(1, [1], 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=1, source=1, destination=0, fraction=1.0),
+            ],
+            set_deme_sizes=[fwdpy11.SetDemeSize(when=5, deme=0, new_size=10)],
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        6,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1], 20, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(1, [1], 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+    ],
+)
+def test_deme_size_history_two_deme_mass_migrations(payload: Payload):
+    __detailed_size_history_test_runner(payload)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        Payload(
+            initial_sizes={0: 10, 1: 10, 2: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=1, source=1, destination=0, fraction=1.0),
+                fwdpy11.copy_individuals(when=1, source=2, destination=0, fraction=1.0),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1, 2], 30, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(1, [1], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(2, [2], 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 10, 2: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=1, source=1, destination=0, fraction=1.0),
+                fwdpy11.copy_individuals(when=1, source=2, destination=0, fraction=1.0),
+                fwdpy11.copy_individuals(when=5, source=2, destination=0, fraction=1.0),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        6,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1, 2], 30, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 2], 40, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(1, [1], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(2, [2], 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+        Payload(
+            initial_sizes={0: 10, 1: 10, 2: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(when=1, source=1, destination=0, fraction=1.0),
+                fwdpy11.copy_individuals(when=1, source=2, destination=0, fraction=1.0),
+                fwdpy11.copy_individuals(when=5, source=0, destination=2, fraction=1.0),
+            ],
+            set_deme_sizes=[fwdpy11.SetDemeSize(when=10, deme=2, new_size=10)],
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        21,
+                        fwdpy11.discrete_demography._EpochData(0, [0, 1, 2], 30, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(1, [1], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        0, 6, fwdpy11.discrete_demography._EpochData(2, [2], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        6,
+                        11,
+                        fwdpy11.discrete_demography._EpochData(2, [0, 2], 40, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        11, 21, fwdpy11.discrete_demography._EpochData(2, [2], 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+    ],
+)
+def test_deme_size_history_three_deme_mass_migrations(payload: Payload):
+    __detailed_size_history_test_runner(payload)
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        # One deme is replaced by another at when=1
+        # NOTE: this test helped find a bug in our
+        # class, but it cannot be run through the back-end
+        # b/c there's no ancesty for deme 1
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=[
+                fwdpy11.SetDemeSize(deme=0, when=1, new_size=0),
+                fwdpy11.SetDemeSize(deme=1, when=1, new_size=10),
+            ],
+            set_growth_rates=None,
+            total_simulation_length=None,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0,
+                        2,
+                        fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0),
+                    ),
+                    intervaltree.Interval(
+                        2,
+                        np.iinfo(np.uint32).max,
+                        fwdpy11.discrete_demography._EpochData(1, None, 10, 1.0),
+                    ),
+                ]
+            ),
+        ),
+        # NOTE: this is a valid interval tree,
+        # but the model cannot be run below b/c there are no migrations
+        # to give deme 1 ancestors. Will need to make sure we cover this
+        # case when we refactor the DemographyDebugger.
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=[fwdpy11.SetDemeSize(when=0, deme=1, new_size=10)],
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(
+                [
+                    intervaltree.Interval(
+                        0, 21, fwdpy11.discrete_demography._EpochData(0, [0], 10, 1.0)
+                    ),
+                    intervaltree.Interval(
+                        1, 21, fwdpy11.discrete_demography._EpochData(1, None, 10, 1.0)
+                    ),
+                ]
+            ),
+        ),
+    ],
+)
+def test_deme_size_history_models_with_no_valid_ancestry(payload: Payload):
+    """
+    Tests of models that give valid size histories but cannot be run
+    though the C++ back-end because some demes do not have valid ancestry.
+
+    These are examples of models that the DemographyDebugger should
+    flag as invalid.
+    """
+    import fwdpy11.discrete_demography
+
+    deme_properties = fwdpy11.discrete_demography._DemeSizeHistory.from_lowlevel(
+        initial_sizes=payload.initial_sizes,
+        mass_migrations=payload.mass_migrations,
+        set_deme_sizes=payload.set_deme_sizes,
+        set_growth_rates=payload.set_growth_rates,
+        total_simulation_length=payload.total_simulation_length,
+    )
+
+    assert deme_properties.epochs == payload.expected_itree
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=None,
+            set_deme_sizes=None,
+            # The deme does not have a previous history.
+            set_growth_rates=[fwdpy11.SetExponentialGrowth(when=0, deme=1, G=1.1)],
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(),
+        ),
+        # NOTE: we don't have a test of this
+        # case in the existing test suite.
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.move_individuals(
+                    when=10, source=0, destination=1, fraction=1.0
+                ),
+                fwdpy11.move_individuals(
+                    when=10, source=1, destination=2, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(),
+        ),
+        Payload(
+            initial_sizes={0: 10},
+            mass_migrations=[
+                fwdpy11.copy_individuals(
+                    when=10, source=0, destination=1, fraction=1.0
+                ),
+                fwdpy11.copy_individuals(
+                    when=10, source=1, destination=2, fraction=1.0
+                ),
+            ],
+            set_deme_sizes=None,
+            set_growth_rates=None,
+            total_simulation_length=20,
+            expected_itree=intervaltree.IntervalTree(),
+        ),
+    ],
+)
+def test_deme_size_history_bad_models(payload: Payload):
+    import fwdpy11.discrete_demography
+
+    with pytest.raises(ValueError):
+        _ = fwdpy11.discrete_demography._DemeSizeHistory.from_lowlevel(
+            initial_sizes=payload.initial_sizes,
+            mass_migrations=payload.mass_migrations,
+            set_deme_sizes=payload.set_deme_sizes,
+            set_growth_rates=payload.set_growth_rates,
+            total_simulation_length=payload.total_simulation_length,
+        )
 
 
 if __name__ == "__main__":

@@ -186,8 +186,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         )
         try:
             fwdpy11.DemographyDebugger(self.pop, d)
-        except Exception:
-            self.fail("unexpected exception")
+        except Exception as e:
+            self.fail(f"unexpected exception, {e}")
         setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_with_migration_V2_migration_rescue(self):
@@ -211,8 +211,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         )
         try:
             fwdpy11.DemographyDebugger(self.pop, d)
-        except Exception:
-            self.fail("unexpected exception")
+        except Exception as e:
+            self.fail(f"unexpected exception, {e}")
         setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_with_migration_V3(self):
