@@ -1039,6 +1039,11 @@ class _DemeSizeHistory:
         model_times: typing.ForwardRef("_ModelTimes"),
     ):
         g_events = g.discrete_demographic_events()
+        deme_sizes = defaultdict(list)
+
+        for d in g.demes:
+            for e in d.epochs:
+                pass
         # raise NotImplementedError(
         #     "_DemeSizeHistory.from_demes_graph is not implemented"
         # )
