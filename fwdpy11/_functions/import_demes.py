@@ -12,6 +12,7 @@ from .. import class_decorators
 from .._demography import exponential_growth_rate
 from ..demographic_models import DemographicModelCitation, DemographicModelDetails
 from ..discrete_demography import (
+    _DemeSizeHistory,
     DiscreteDemography,
     MassMigration,
     MigrationMatrix,
@@ -74,6 +75,8 @@ def _build_from_deme_graph(
     model_times = _ModelTimes.from_demes_graph(dg)
 
     events = _Fwdpy11Events(idmap=idmap)
+
+    size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, model_times)
 
     _set_initial_migration_matrix(dg, idmap, events)
     _process_all_epochs(dg, idmap, model_times, burnin_generation, events)

@@ -1032,10 +1032,13 @@ class _DemeSizeHistory:
         self._validate_epoch_ancestry()
 
     @staticmethod
-    def from_demes_graph(g: demes.Graph, burnin: int):
-        raise NotImplementedError(
-            "_DemeSizeHistory.from_demes_graph is not implemented"
-        )
+    def from_demes_graph(
+        g: demes.Graph, burnin: int, model_times: typing.ForwardRef("_ModelTimes")
+    ):
+        pass
+        # raise NotImplementedError(
+        #     "_DemeSizeHistory.from_demes_graph is not implemented"
+        # )
 
     # TODO:
     # * We need to track the ancestor deme of each epoch.
