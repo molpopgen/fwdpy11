@@ -312,7 +312,7 @@ class _Fwdpy11Events(object):
 
         return set_migration_rates
 
-    ### now unused ??
+    # now unused ??
     def build_model(self) -> DiscreteDemography:
         set_migration_rates = self._build_migration_rate_changes()
         return DiscreteDemography(
