@@ -1033,9 +1033,12 @@ class _DemeSizeHistory:
 
     @staticmethod
     def from_demes_graph(
-        g: demes.Graph, burnin: int, model_times: typing.ForwardRef("_ModelTimes")
+        g: demes.Graph,
+        burnin: int,
+        idmap: typing.Dict,
+        model_times: typing.ForwardRef("_ModelTimes"),
     ):
-        pass
+        g_events = g.discrete_demographic_events()
         # raise NotImplementedError(
         #     "_DemeSizeHistory.from_demes_graph is not implemented"
         # )

@@ -76,7 +76,7 @@ def _build_from_deme_graph(
 
     events = _Fwdpy11Events(idmap=idmap)
 
-    size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, model_times)
+    size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, idmap, model_times)
 
     _set_initial_migration_matrix(dg, idmap, events)
     _process_all_epochs(dg, idmap, model_times, burnin_generation, events)
