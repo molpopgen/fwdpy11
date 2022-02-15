@@ -118,7 +118,7 @@ class _ModelTimes(object):
     model_duration: int = attr.ib(validator=attr.validators.instance_of(int))
 
     @staticmethod
-    def from_demes_graph(dg: demes.Graph) -> '_ModelTimes':
+    def from_demes_graph(dg: demes.Graph) -> "_ModelTimes":
         """
         In units of dg.time_units, obtain the following:
 
@@ -141,9 +141,13 @@ class _ModelTimes(object):
             # first size change for all demes with inf
             # start time, and the start time for all other
             # demes, and take max of those.
-            ends_inf = [d.epochs[0].end_time for d in dg.demes if d.start_time == math.inf]
+            ends_inf = [
+                d.epochs[0].end_time for d in dg.demes if d.start_time == math.inf
+            ]
             starts = [d.start_time for d in dg.demes if d.start_time != math.inf]
-            mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
+            mig_starts = [
+                m.start_time for m in dg.migrations if m.start_time != math.inf
+            ]
             mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
             pulse_times = [p.time for p in dg.pulses]
             # The forward-time model with start with a generation 0,
