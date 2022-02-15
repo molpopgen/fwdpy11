@@ -369,7 +369,6 @@ def _get_most_recent_deme_end_time(dg: demes.Graph) -> demes.demes.Time:
     return min([d.end_time for d in dg.demes])
 
 
-
 def _get_ancestral_population_size(dg: demes.Graph) -> int:
     """
     Need this for the burnin time.
@@ -416,9 +415,7 @@ def _set_initial_migration_matrix(
         events.initial_migmatrix = migmatrix
 
 
-##
-## Process deme epochs, migrations, and discrete demographic events
-##
+# Process deme epochs, migrations, and discrete demographic events
 
 
 def _process_epoch(
