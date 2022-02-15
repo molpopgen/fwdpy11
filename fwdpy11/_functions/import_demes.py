@@ -71,7 +71,7 @@ def _build_from_deme_graph(
     Nref = _get_ancestral_population_size(dg)
 
     burnin_generation = int(np.rint(burnin * Nref))
-    model_times = _get_model_times(dg)
+    model_times = _ModelTimes.from_demes_graph(dg)
 
     events = _Fwdpy11Events(idmap=idmap)
 
@@ -116,6 +116,54 @@ class _ModelTimes(object):
     model_start_time: demes.demes.Time
     model_end_time: demes.demes.Time
     model_duration: int = attr.ib(validator=attr.validators.instance_of(int))
+
+    @staticmethod
+    def from_demes_graph(dg: demes.Graph) -> '_ModelTimes':
+        """
+        In units of dg.time_units, obtain the following:
+
+        1. The time when the demographic model starts.
+        2. The time when it ends.
+        3. The total simulation length.
+
+        """
+        # FIXME: this function isn't working well.
+        # For example, twodemes.yml and twodemes_one_goes_away.yml
+        # both break it.
+        oldest_deme_time = _get_most_ancient_deme_start_time(dg)
+        most_recent_deme_end = _get_most_recent_deme_end_time(dg)
+
+        model_start_time = oldest_deme_time
+        if oldest_deme_time == math.inf:
+            # We want to find the time of first event or
+            # the first demographic change, which is when
+            # burnin will end. To do this, get a list of
+            # first size change for all demes with inf
+            # start time, and the start time for all other
+            # demes, and take max of those.
+            ends_inf = [d.epochs[0].end_time for d in dg.demes if d.start_time == math.inf]
+            starts = [d.start_time for d in dg.demes if d.start_time != math.inf]
+            mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
+            mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
+            pulse_times = [p.time for p in dg.pulses]
+            # The forward-time model with start with a generation 0,
+            # which is the earliest end point of a deme with start time
+            # of inf, minus 1.  That definition is forwards in time, so we
+            # ADD one to the backwards-in-time demes info.
+            model_start_time = (
+                max(ends_inf + starts + mig_starts + mig_ends + pulse_times) + 1
+            )
+
+        if most_recent_deme_end != 0:
+            model_duration = model_start_time - most_recent_deme_end
+        else:
+            model_duration = model_start_time
+
+        return _ModelTimes(
+            model_start_time=model_start_time,
+            model_end_time=most_recent_deme_end,
+            model_duration=int(np.rint(model_duration)),
+        )
 
 
 @attr.s(auto_attribs=True)
@@ -320,53 +368,6 @@ def _get_most_ancient_deme_start_time(dg: demes.Graph) -> demes.demes.Time:
 def _get_most_recent_deme_end_time(dg: demes.Graph) -> demes.demes.Time:
     return min([d.end_time for d in dg.demes])
 
-
-def _get_model_times(dg: demes.Graph) -> _ModelTimes:
-    """
-    In units of dg.time_units, obtain the following:
-
-    1. The time when the demographic model starts.
-    2. The time when it ends.
-    3. The total simulation length.
-
-    """
-    # FIXME: this function isn't working well.
-    # For example, twodemes.yml and twodemes_one_goes_away.yml
-    # both break it.
-    oldest_deme_time = _get_most_ancient_deme_start_time(dg)
-    most_recent_deme_end = _get_most_recent_deme_end_time(dg)
-
-    model_start_time = oldest_deme_time
-    if oldest_deme_time == math.inf:
-        # We want to find the time of first event or
-        # the first demographic change, which is when
-        # burnin will end. To do this, get a list of
-        # first size change for all demes with inf
-        # start time, and the start time for all other
-        # demes, and take max of those.
-        ends_inf = [d.epochs[0].end_time for d in dg.demes if d.start_time == math.inf]
-        starts = [d.start_time for d in dg.demes if d.start_time != math.inf]
-        mig_starts = [m.start_time for m in dg.migrations if m.start_time != math.inf]
-        mig_ends = [m.end_time for m in dg.migrations if m.start_time == math.inf]
-        pulse_times = [p.time for p in dg.pulses]
-        # The forward-time model with start with a generation 0,
-        # which is the earliest end point of a deme with start time
-        # of inf, minus 1.  That definition is forwards in time, so we
-        # ADD one to the backwards-in-time demes info.
-        model_start_time = (
-            max(ends_inf + starts + mig_starts + mig_ends + pulse_times) + 1
-        )
-
-    if most_recent_deme_end != 0:
-        model_duration = model_start_time - most_recent_deme_end
-    else:
-        model_duration = model_start_time
-
-    return _ModelTimes(
-        model_start_time=model_start_time,
-        model_end_time=most_recent_deme_end,
-        model_duration=int(np.rint(model_duration)),
-    )
 
 
 def _get_ancestral_population_size(dg: demes.Graph) -> int:
