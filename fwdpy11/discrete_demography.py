@@ -1055,7 +1055,7 @@ class _DemeSizeHistory:
                 end = model_times.convert_time(e.end_time) + 1
                 assert end > start, f"{e}, {start}, {end}"
                 # NOTE: 1.0 is a HACK for growth rate and is WRONG
-                itree[start:end] = _EpochData(d, None, int(e.start_size), 1.0)
+                itree[start:end] = _EpochData(d.name, None, int(e.start_size), 1.0)
 
         rv = _DemeSizeHistory(itree, model_times)
         return rv
