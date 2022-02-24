@@ -72,7 +72,7 @@ def _build_from_deme_graph(
     Nref = _get_ancestral_population_size(dg)
 
     burnin_generation = int(np.rint(burnin * Nref))
-    model_times = _ModelTimes.from_demes_graph(dg)
+    model_times = _ModelTimes.from_demes_graph(dg, burnin_generation)
 
     events = _Fwdpy11Events(idmap=idmap)
 
@@ -119,9 +119,10 @@ class _ModelTimes(object):
     model_start_time: demes.demes.Time
     model_end_time: demes.demes.Time
     model_duration: int = attr.ib(validator=attr.validators.instance_of(int))
+    burnin_generation: int = attr.ib(validator=attr.validators.instance_of(int))
 
     @staticmethod
-    def from_demes_graph(dg: demes.Graph) -> "_ModelTimes":
+    def from_demes_graph(dg: demes.Graph, burnin_generation: int) -> "_ModelTimes":
         """
         In units of dg.time_units, obtain the following:
 
@@ -170,7 +171,19 @@ class _ModelTimes(object):
             model_start_time=model_start_time,
             model_end_time=most_recent_deme_end,
             model_duration=int(np.rint(model_duration)),
+            burnin_generation=burnin_generation,
         )
+
+    def convert_time(self, demes_event_time: float) -> int:
+        """
+        Backwards time -> forwards time
+        """
+        if demes_event_time != math.inf:
+            return self.burnin_generation + int(
+                self.model_start_time - demes_event_time - 1
+            )
+
+        return 0
 
 
 @attr.s(auto_attribs=True)
@@ -440,7 +453,7 @@ def _process_epoch(
     to raise an error if the rate is not None or nonzero.
     """
     if e.start_time != math.inf:
-        when = burnin_generation + int(model_times.model_start_time - e.start_time - 1)
+        when = model_times.convert_time(e.start_time)
     else:
         when = 0
 
@@ -564,9 +577,7 @@ def _process_migrations(
     """
     for m in dg.migrations:
         if m.start_time < math.inf:
-            when = burnin_generation + int(
-                model_times.model_start_time - m.start_time - 1
-            )
+            when = model_times.convert_time(m.start_time)
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -589,9 +600,7 @@ def _process_migrations(
                         )
                     )
         if m.end_time > 0:
-            when = burnin_generation + int(
-                model_times.model_start_time - m.end_time - 1
-            )
+            when = model_times.convert_time(m.end_time)
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -623,7 +632,7 @@ def _process_pulses(
     events: _Fwdpy11Events,
 ) -> None:
     for p in dg.pulses:
-        when = burnin_generation + int(model_times.model_start_time - p.time - 1)
+        when = model_times.convert_time(p.time)
         for source, proportion in zip(p.sources, p.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -654,7 +663,7 @@ def _process_admixtures(
     events: _Fwdpy11Events,
 ) -> None:
     for a in dg_events["admixtures"]:
-        when = burnin_generation + int(model_times.model_start_time - a.time - 1)
+        when = model_times.convert_time(a.time)
         for parent, proportion in zip(a.parents, a.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -685,7 +694,7 @@ def _process_mergers(
     events: _Fwdpy11Events,
 ) -> None:
     for m in dg_events["mergers"]:
-        when = burnin_generation + int(model_times.model_start_time - m.time - 1)
+        when = model_times.convert_time(m.time)
         for parent, proportion in zip(m.parents, m.proportions):
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -724,7 +733,7 @@ def _process_splits(
     from the parent.
     """
     for s in dg_events["splits"]:
-        when = burnin_generation + int(model_times.model_start_time - s.time - 1)
+        when = model_times.convert_time(s.time)
         for c in s.children:
             # one generation of migration to move lineages from parent to children
             events.migration_rate_changes.append(
@@ -764,7 +773,7 @@ def _process_branches(
     child's ancestry is from parent.
     """
     for b in dg_events["branches"]:
-        when = burnin_generation + int(model_times.model_start_time - b.time - 1)
+        when = model_times.convert_time(b.time)
         # turn on migration for one generation at "when"
         events.migration_rate_changes.append(
             _MigrationRateChange(
