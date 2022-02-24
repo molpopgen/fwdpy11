@@ -235,9 +235,18 @@ class _Fwdpy11Events(object):
     migration_rate_changes: List[_MigrationRateChange] = attr.Factory(list)
     # deme_extinctions: List[_DemeExtinctionEvent] = attr.Factory(list)
 
-    def _update_changes_at_m(self, changes_at_m, migration_rate_change):
+    def _update_changes_at_m(
+        self, when, changes_at_m, migration_rate_change, size_history
+    ):
         # tally changes
+        # NOTE: Aaron -- getting a load of asserts triggered in here.
         if migration_rate_change.from_deme_graph:
+            assert size_history.deme_exists_at(
+                migration_rate_change.source, when
+            ), f"source error: {migration_rate_change.source}"
+            assert size_history.deme_exists_at(
+                migration_rate_change.destination, when
+            ), f"destination error: {migration_rate_change.destination}"
             changes_at_m[0][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
@@ -246,6 +255,12 @@ class _Fwdpy11Events(object):
                     migration_rate_change.destination
                 ] -= migration_rate_change.rate_change
         else:
+            assert size_history.deme_exists_at(
+                migration_rate_change.source, when
+            ), f"source error: {migration_rate_change.source}, {when}, {size_history.epochs}"
+            assert size_history.deme_exists_at(
+                migration_rate_change.destination, when
+            ), f"destination error: {migration_rate_change.destination}"
             changes_at_m[1][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
@@ -297,7 +312,9 @@ class _Fwdpy11Events(object):
         while m < len(self.migration_rate_changes):
             # gather all migration rate changes and extinction events
             # that occur at a given time
-            self._update_changes_at_m(changes_at_m, self.migration_rate_changes[m])
+            self._update_changes_at_m(
+                m, changes_at_m, self.migration_rate_changes[m], size_history
+            )
             mm = m + 1
 
             while (
@@ -305,7 +322,9 @@ class _Fwdpy11Events(object):
                 and self.migration_rate_changes[mm].when
                 == self.migration_rate_changes[m].when
             ):
-                self._update_changes_at_m(changes_at_m, self.migration_rate_changes[mm])
+                self._update_changes_at_m(
+                    m, changes_at_m, self.migration_rate_changes[mm], size_history
+                )
                 mm += 1
 
             # update M_cont and M_mass
