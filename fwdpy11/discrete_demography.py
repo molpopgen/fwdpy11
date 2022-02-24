@@ -30,9 +30,12 @@ import numpy as np
 
 import fwdpy11
 
-from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
-                               attr_class_to_from_dict,
-                               attr_class_to_from_dict_no_recurse)
+from .class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle_with_super,
+    attr_class_to_from_dict,
+    attr_class_to_from_dict_no_recurse,
+)
 
 
 @attr_add_asblack
@@ -1144,8 +1147,8 @@ class _DemeSizeHistory:
     def deme_exists_at(self, deme: int, generation: int) -> bool:
         if deme < 0:
             raise ValueError("deme must be non-negative")
-        for deme in self.demes_at(generation):
-            if deme == deme:
+        for d in self.demes_at(generation):
+            if d == deme:
                 return True
         return False
 

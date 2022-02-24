@@ -10,6 +10,7 @@ Back end changes
 * Add new Python class intended to help validate demographic models and
   aid in importing models from `demes`.
   PR {pr}`900`.
+  PR {pr}`904`.
 
 Dependencies
 
