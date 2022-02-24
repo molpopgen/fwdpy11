@@ -235,18 +235,16 @@ class _Fwdpy11Events(object):
     migration_rate_changes: List[_MigrationRateChange] = attr.Factory(list)
     # deme_extinctions: List[_DemeExtinctionEvent] = attr.Factory(list)
 
-    def _update_changes_at_m(
-        self, when, changes_at_m, migration_rate_change, size_history
-    ):
+    def _update_changes_at_m(self, changes_at_m, migration_rate_change, size_history):
         # tally changes
-        # NOTE: Aaron -- getting a load of asserts triggered in here.
+        # TODO: check that we mean "when" below...
         if migration_rate_change.from_deme_graph:
             assert size_history.deme_exists_at(
-                migration_rate_change.source, when
-            ), f"source error: {migration_rate_change.source}"
+                migration_rate_change.source, migration_rate_change.when
+            ), f"source error: {migration_rate_change.source}, {migration_rate_change.when}, {size_history.epochs}"
             assert size_history.deme_exists_at(
-                migration_rate_change.destination, when
-            ), f"destination error: {migration_rate_change.destination}"
+                migration_rate_change.destination, migration_rate_change.when
+            ), f"destination error: {migration_rate_change.destination}, {migration_rate_change.when}, {size_history.epochs}"
             changes_at_m[0][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
@@ -256,11 +254,11 @@ class _Fwdpy11Events(object):
                 ] -= migration_rate_change.rate_change
         else:
             assert size_history.deme_exists_at(
-                migration_rate_change.source, when
-            ), f"source error: {migration_rate_change.source}, {when}, {size_history.epochs}"
+                migration_rate_change.source, migration_rate_change.when
+            ), f"source error: {migration_rate_change.source}, {migration_rate_change.when}, {size_history.epochs}"
             assert size_history.deme_exists_at(
-                migration_rate_change.destination, when
-            ), f"destination error: {migration_rate_change.destination}"
+                migration_rate_change.destination, migration_rate_change.when
+            ), f"destination error: {migration_rate_change.destination}, {migration_rate_change.when}, {size_history.epochs}"
             changes_at_m[1][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
@@ -313,7 +311,7 @@ class _Fwdpy11Events(object):
             # gather all migration rate changes and extinction events
             # that occur at a given time
             self._update_changes_at_m(
-                m, changes_at_m, self.migration_rate_changes[m], size_history
+                changes_at_m, self.migration_rate_changes[m], size_history
             )
             mm = m + 1
 
@@ -323,7 +321,7 @@ class _Fwdpy11Events(object):
                 == self.migration_rate_changes[m].when
             ):
                 self._update_changes_at_m(
-                    m, changes_at_m, self.migration_rate_changes[mm], size_history
+                    changes_at_m, self.migration_rate_changes[mm], size_history
                 )
                 mm += 1
 
@@ -336,6 +334,9 @@ class _Fwdpy11Events(object):
             # for any rows that don't match, add a fwdpy11.SetMigrationRate
             for i in range(len(self.idmap)):
                 if np.any(self.migmatrix[i] != new_migmatrix[i]):
+                    assert size_history.deme_exists_at(
+                        i, self.migration_rate_changes[m].when
+                    )
                     set_migration_rates.append(
                         SetMigrationRates(
                             self.migration_rate_changes[m].when, i, new_migmatrix[i]
