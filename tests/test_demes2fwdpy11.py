@@ -827,11 +827,12 @@ def splits_with_migrations():
     b.add_migration(demes=["B", "E"], rate=0.1)
     b.add_migration(demes=["D", "E"], rate=0.1)
     g = b.resolve()
-    return fwdpy11.discrete_demography.from_demes(g, 1)
+    return g
 
 
-@pytest.mark.parametrize("demog", [splits_with_migrations()])
-def test_splits_with_migrations(demog):
+@pytest.mark.parametrize("graph", [splits_with_migrations()])
+def test_splits_with_migrations(graph):
+    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
     check_debugger_passes(demog)
     M = np.zeros(25).reshape(5, 5)
     M[0, 0] = 1
