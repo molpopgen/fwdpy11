@@ -79,13 +79,13 @@ def _build_from_deme_graph(
     size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, idmap, model_times)
 
     _set_initial_migration_matrix(dg, idmap, events)
-    _process_all_epochs(dg, idmap, model_times, burnin_generation, events)
-    _process_migrations(dg, idmap, model_times, burnin_generation, events)
-    _process_pulses(dg, idmap, model_times, burnin_generation, events)
-    _process_admixtures(dg, dg_events, idmap, model_times, burnin_generation, events)
-    _process_mergers(dg, dg_events, idmap, model_times, burnin_generation, events)
-    _process_splits(dg, dg_events, idmap, model_times, burnin_generation, events)
-    _process_branches(dg, dg_events, idmap, model_times, burnin_generation, events)
+    _process_all_epochs(dg, idmap, model_times, events)
+    _process_migrations(dg, idmap, model_times, events)
+    _process_pulses(dg, idmap, model_times, events)
+    _process_admixtures(dg, dg_events, idmap, model_times, events)
+    _process_mergers(dg, dg_events, idmap, model_times, events)
+    _process_splits(dg, dg_events, idmap, model_times, events)
+    _process_branches(dg, dg_events, idmap, model_times, events)
 
     if dg.doi != "None":
         doi = dg.doi
@@ -443,7 +443,6 @@ def _process_epoch(
     e: demes.Epoch,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     """
@@ -492,7 +491,6 @@ def _process_all_epochs(
     dg: demes.Graph,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ):
     """
@@ -505,7 +503,6 @@ def _process_all_epochs(
                 e,
                 idmap,
                 model_times,
-                burnin_generation,
                 events,
             )
         # if a deme starts more recently than math.inf, we have to
@@ -513,8 +510,7 @@ def _process_all_epochs(
         if deme.start_time < math.inf:
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=burnin_generation
-                    + int(model_times.model_start_time - deme.start_time - 1),
+                    when=model_times.convert_time(deme.start_time),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=1.0,
@@ -526,8 +522,7 @@ def _process_all_epochs(
         if deme.end_time > 0:
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time - 1),
+                    when=model_times.convert_time(deme.end_time),
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=-1.0,
@@ -540,8 +535,7 @@ def _process_all_epochs(
         if deme.end_time > 0:
             events.set_deme_sizes.append(
                 SetDemeSize(
-                    when=burnin_generation
-                    + int(model_times.model_start_time - deme.end_time - 1),
+                    when=model_times.convert_time(deme.end_time),
                     deme=idmap[deme.name],
                     new_size=0,
                 )
@@ -567,7 +561,6 @@ def _process_migrations(
     dg: demes.Graph,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     """
@@ -628,7 +621,6 @@ def _process_pulses(
     dg: demes.Graph,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     for p in dg.pulses:
@@ -659,7 +651,6 @@ def _process_admixtures(
     dg_events: Dict,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     for a in dg_events["admixtures"]:
@@ -690,7 +681,6 @@ def _process_mergers(
     dg_events: Dict,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     for m in dg_events["mergers"]:
@@ -721,7 +711,6 @@ def _process_splits(
     dg_events: Dict,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     """
@@ -762,7 +751,6 @@ def _process_branches(
     dg_events: Dict,
     idmap: Dict,
     model_times: _ModelTimes,
-    burnin_generation: int,
     events: _Fwdpy11Events,
 ) -> None:
     """
