@@ -76,6 +76,9 @@ def _build_from_deme_graph(
 
     events = _Fwdpy11Events(idmap=idmap)
 
+    # TODO: size_history now contains model_times, so passing
+    # the latter into functions is redundant.
+    # We should clean this up later.
     size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, idmap, model_times)
     assert size_history.model_times is not None
 
