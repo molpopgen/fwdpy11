@@ -1049,6 +1049,9 @@ class _DemeSizeHistory:
         for d in g.demes:
             for e in d.epochs:
                 start = model_times.convert_time(e.start_time)
+                # NOTE: this is to ensure that the interval tree
+                # correctly contains the 1/2 open interval
+                # during which individuals exist in this deme
                 end = model_times.convert_time(e.end_time) + 1
                 assert end > start, f"{e}, {start}, {end}"
                 # NOTE: 1.0 is a HACK for growth rate and is WRONG
