@@ -82,14 +82,14 @@ def _build_from_deme_graph(
     size_history = _DemeSizeHistory.from_demes_graph(dg, burnin, idmap, model_times)
     assert size_history.model_times is not None
 
-    _set_initial_migration_matrix(dg, idmap, events)
-    _process_all_epochs(dg, idmap, model_times, events)
-    _process_migrations(dg, idmap, model_times, events)
-    _process_pulses(dg, idmap, model_times, events)
-    _process_admixtures(dg, dg_events, idmap, model_times, events)
-    _process_mergers(dg, dg_events, idmap, model_times, events)
-    _process_splits(dg, dg_events, idmap, model_times, events)
-    _process_branches(dg, dg_events, idmap, model_times, events)
+    _set_initial_migration_matrix(dg, idmap, events, size_history)
+    _process_all_epochs(dg, idmap, model_times, events, size_history)
+    _process_migrations(dg, idmap, model_times, events, size_history)
+    _process_pulses(dg, idmap, model_times, events, size_history)
+    _process_admixtures(dg, dg_events, idmap, model_times, events, size_history)
+    _process_mergers(dg, dg_events, idmap, model_times, events, size_history)
+    _process_splits(dg, dg_events, idmap, model_times, events, size_history)
+    _process_branches(dg, dg_events, idmap, model_times, events, size_history)
 
     if dg.doi != "None":
         doi = dg.doi
@@ -97,7 +97,7 @@ def _build_from_deme_graph(
         doi = None
 
     return DemographicModelDetails(
-        model=events.build_model(),
+        model=events.build_model(size_history),
         name=dg.description,
         source=source,
         parameters=None,
@@ -264,7 +264,9 @@ class _Fwdpy11Events(object):
         )
         return new_migmatrix
 
-    def _build_migration_rate_changes(self) -> List[SetMigrationRates]:
+    def _build_migration_rate_changes(
+        self, size_history: _DemeSizeHistory
+    ) -> List[SetMigrationRates]:
         # We track the coninuous migration rates, and then augment with a matrix that
         # specifies changes to migration due to "instantaneous" events. The
         # instantaneous migration matrix is typically just the identity matrix,
@@ -333,8 +335,8 @@ class _Fwdpy11Events(object):
         return set_migration_rates
 
     # now unused ??
-    def build_model(self) -> DiscreteDemography:
-        set_migration_rates = self._build_migration_rate_changes()
+    def build_model(self, size_history: _DemeSizeHistory) -> DiscreteDemography:
+        set_migration_rates = self._build_migration_rate_changes(size_history)
         return DiscreteDemography(
             mass_migrations=self.mass_migrations,
             set_deme_sizes=self.set_deme_sizes,
@@ -417,7 +419,10 @@ def _get_ancestral_population_size(dg: demes.Graph) -> int:
 
 
 def _set_initial_migration_matrix(
-    dg: demes.Graph, idmap: Dict, events: _Fwdpy11Events
+    dg: demes.Graph,
+    idmap: Dict,
+    events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     """
     Set any migration rates that have start time of inf. More
@@ -428,10 +433,13 @@ def _set_initial_migration_matrix(
         migmatrix = np.zeros((len(idmap), len(idmap)))
         for deme_id, ii in idmap.items():
             if dg[deme_id].start_time == math.inf:
+                assert size_history.deme_exists_at(idmap[deme_id], 0)
                 migmatrix[ii, ii] = 1.0
         if len(dg.migrations) > 0:
             for m in dg.migrations:
                 if m.start_time == math.inf:
+                    assert size_history.deme_exists_at(idmap[m.dest], 0)
+                    assert size_history.deme_exists_at(idmap[m.source], 0)
                     migmatrix[idmap[m.dest]][idmap[m.source]] += m.rate
                     migmatrix[idmap[m.dest]][idmap[m.dest]] -= m.rate
 
@@ -448,6 +456,7 @@ def _process_epoch(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     """
     Can change sizes, cloning rates, and selfing rates.
@@ -459,6 +468,8 @@ def _process_epoch(
         when = model_times.convert_time(e.start_time)
     else:
         when = 0
+
+    assert size_history.deme_exists_at(idmap[deme_id], when)
 
     if e.selfing_rate is not None:
         events.set_selfing_rates.append(
@@ -496,6 +507,7 @@ def _process_all_epochs(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ):
     """
     Processes all epochs of all demes to set sizes and selfing rates.
@@ -508,13 +520,16 @@ def _process_all_epochs(
                 idmap,
                 model_times,
                 events,
+                size_history,
             )
         # if a deme starts more recently than math.inf, we have to
         # turn on migration in that deme with a diagonal element to 1
         if deme.start_time < math.inf:
+            when = size_history.model_times.convert_time(deme.start_time)
+            assert size_history.deme_exists_at(idmap[deme.name], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=model_times.convert_time(deme.start_time),
+                    when=when,
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=1.0,
@@ -524,9 +539,11 @@ def _process_all_epochs(
 
         # if a deme ends before time zero, we set diag entry in migmatrix to 0
         if deme.end_time > 0:
+            when = size_history.model_times.convert_time(deme.end_time)
+            assert size_history.deme_exists_at(idmap[deme.name], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
-                    when=model_times.convert_time(deme.end_time),
+                    when=when,
                     source=idmap[deme.name],
                     destination=idmap[deme.name],
                     rate_change=-1.0,
@@ -537,6 +554,8 @@ def _process_all_epochs(
         # if deme ends before time zero, we set set its size to zero
         # we proces deme extinctions here instead of in the events
         if deme.end_time > 0:
+            when = size_history.model_times.convert_time(deme.end_time)
+            assert size_history.deme_exists_at(idmap[deme.name], when)
             events.set_deme_sizes.append(
                 SetDemeSize(
                     when=model_times.convert_time(deme.end_time),
@@ -566,6 +585,7 @@ def _process_migrations(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     """
     Make a record of everything in dg.migrations
@@ -575,6 +595,8 @@ def _process_migrations(
     for m in dg.migrations:
         if m.start_time < math.inf:
             when = model_times.convert_time(m.start_time)
+            assert size_history.deme_exists_at(idmap[m.source], when)
+            assert size_history.deme_exists_at(idmap[m.dest], when)
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -587,6 +609,8 @@ def _process_migrations(
                 )
             except AttributeError:
                 for source, dest in itertools.permutations(m.demes, 2):
+                    assert size_history.deme_exists_at(idmap[source], when)
+                    assert size_history.deme_exists_at(idmap[dest], when)
                     events.migration_rate_changes.append(
                         _MigrationRateChange(
                             when=when,
@@ -598,6 +622,8 @@ def _process_migrations(
                     )
         if m.end_time > 0:
             when = model_times.convert_time(m.end_time)
+            assert size_history.deme_exists_at(idmap[m.source], when)
+            assert size_history.deme_exists_at(idmap[m.dest], when)
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(
@@ -610,6 +636,8 @@ def _process_migrations(
                 )
             except AttributeError:
                 for source, dest in itertools.permutations(m.demes, 2):
+                    assert size_history.deme_exists_at(idmap[source], when)
+                    assert size_history.deme_exists_at(idmap[dest], when)
                     events.migration_rate_changes.append(
                         _MigrationRateChange(
                             when=when,
@@ -626,10 +654,13 @@ def _process_pulses(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     for p in dg.pulses:
         when = model_times.convert_time(p.time)
         for source, proportion in zip(p.sources, p.proportions):
+            assert size_history.deme_exists_at(idmap[source], when)
+            assert size_history.deme_exists_at(idmap[p.dest], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -639,6 +670,8 @@ def _process_pulses(
                     from_deme_graph=False,
                 )
             )
+            assert size_history.deme_exists_at(idmap[source], when + 1)
+            assert size_history.deme_exists_at(idmap[p.dest], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -656,10 +689,13 @@ def _process_admixtures(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     for a in dg_events["admixtures"]:
         when = model_times.convert_time(a.time)
         for parent, proportion in zip(a.parents, a.proportions):
+            assert size_history.deme_exists_at(idmap[parent], when)
+            assert size_history.deme_exists_at(idmap[a.child], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -669,6 +705,8 @@ def _process_admixtures(
                     from_deme_graph=False,
                 )
             )
+            assert size_history.deme_exists_at(idmap[parent], when + 1)
+            assert size_history.deme_exists_at(idmap[a.child], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -686,10 +724,13 @@ def _process_mergers(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     for m in dg_events["mergers"]:
         when = model_times.convert_time(m.time)
         for parent, proportion in zip(m.parents, m.proportions):
+            assert size_history.deme_exists_at(idmap[parent], when)
+            assert size_history.deme_exists_at(idmap[m.child], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -699,6 +740,8 @@ def _process_mergers(
                     from_deme_graph=False,
                 )
             )
+            assert size_history.deme_exists_at(idmap[parent], when + 1)
+            assert size_history.deme_exists_at(idmap[m.child], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -716,6 +759,7 @@ def _process_splits(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     """
     A split is a "sudden" creation of > 1 offspring deme
@@ -729,6 +773,8 @@ def _process_splits(
         when = model_times.convert_time(s.time)
         for c in s.children:
             # one generation of migration to move lineages from parent to children
+            assert size_history.deme_exists_at(idmap[s.parent], when)
+            assert size_history.deme_exists_at(idmap[c], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -739,6 +785,8 @@ def _process_splits(
                 )
             )
             # turn off that migration after one generation
+            assert size_history.deme_exists_at(idmap[s.parent], when + 1)
+            assert size_history.deme_exists_at(idmap[c], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -756,6 +804,7 @@ def _process_branches(
     idmap: Dict,
     model_times: _ModelTimes,
     events: _Fwdpy11Events,
+    size_history: _DemeSizeHistory,
 ) -> None:
     """
     A branch creates a child deme with 100% ancestry from the parent.
@@ -767,6 +816,8 @@ def _process_branches(
     for b in dg_events["branches"]:
         when = model_times.convert_time(b.time)
         # turn on migration for one generation at "when"
+        assert size_history.deme_exists_at(idmap[b.parent], when)
+        assert size_history.deme_exists_at(idmap[b.child], when)
         events.migration_rate_changes.append(
             _MigrationRateChange(
                 when=when,
@@ -777,6 +828,8 @@ def _process_branches(
             )
         )
         # end that migration after one generation
+        assert size_history.deme_exists_at(idmap[b.parent], when + 1)
+        assert size_history.deme_exists_at(idmap[b.child], when + 1)
         events.migration_rate_changes.append(
             _MigrationRateChange(
                 when=when + 1,

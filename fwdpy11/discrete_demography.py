@@ -1042,8 +1042,6 @@ class _DemeSizeHistory:
         NOTE: this function provides a limited data structure
               that only allows existence querying at given times.
 
-        NOTE: the data will contain the name from the demes.Graph
-              rather than the integer ID of the deme.
         """
         itree = intervaltree.IntervalTree()
         for d in g.demes:
@@ -1055,7 +1053,9 @@ class _DemeSizeHistory:
                 end = model_times.convert_time(e.end_time) + 1
                 assert end > start, f"{e}, {start}, {end}"
                 # NOTE: 1.0 is a HACK for growth rate and is WRONG
-                itree[start:end] = _EpochData(d.name, None, int(e.start_size), 1.0)
+                itree[start:end] = _EpochData(
+                    idmap[d.name], None, int(e.start_size), 1.0
+                )
 
         rv = _DemeSizeHistory(itree, model_times)
         return rv
