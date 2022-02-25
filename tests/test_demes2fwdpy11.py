@@ -796,11 +796,12 @@ def multiple_migrations_delayed():
     b.add_migration(demes=["B", "C"], rate=0.1)
     b.add_migration(demes=["A", "C"], rate=0.1, start_time=100)
     g = b.resolve()
-    return fwdpy11.discrete_demography.from_demes(g, 1)
+    return g
 
 
-@pytest.mark.parametrize("demog", [multiple_migrations_delayed()])
-def test_multiple_migrations_delayed(demog):
+@pytest.mark.parametrize("graph", [multiple_migrations_delayed()])
+def test_multiple_migrations_delayed(graph):
+    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
     check_debugger_passes(demog)
     assert np.all(
         demog.model.migmatrix.M
@@ -1747,11 +1748,7 @@ def two_demes_migration_rate_changes_setup():
     b.add_migration(demes=["A", "B"], rate=0.0, start_time=20, end_time=10)
     b.add_migration(demes=["A", "B"], rate=0.5, start_time=10)
     g = b.resolve()
-    demog = fwdpy11.discrete_demography.from_demes(g, 1)
-
-    check_debugger_passes(demog)
-
-    return demog
+    return g
 
 
 def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup):
@@ -1785,7 +1782,13 @@ def test_two_demes_migration_rate_changes(two_demes_migration_rate_changes_setup
                         pop.diploid_metadata[parent].deme
                     ] += 1
 
-    demog = two_demes_migration_rate_changes_setup
+    demog = fwdpy11.discrete_demography.from_demes(
+        two_demes_migration_rate_changes_setup, 1
+    )
+
+    check_debugger_passes(demog)
+
+    return demog
     pdict = {
         "gvalue": fwdpy11.Multiplicative(2.0),
         "rates": (0, 0, 0),
