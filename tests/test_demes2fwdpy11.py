@@ -716,7 +716,7 @@ def three_way_continuous_migration(
             b.add_deme(name=deme, epochs=[dict(start_size=100, end_time=0)])
     b.add_migration(demes=["A", "B", "C"], rate=0.1)
     g = b.resolve()
-    return fwdpy11.discrete_demography.from_demes(g, 1)
+    return g
 
 
 def three_way_continuous_migration_pairwise(
@@ -732,11 +732,11 @@ def three_way_continuous_migration_pairwise(
     b.add_migration(demes=["A", "C"], rate=0.1)
     b.add_migration(demes=["B", "C"], rate=0.1)
     g = b.resolve()
-    return fwdpy11.discrete_demography.from_demes(g, 1)
+    return g
 
 
 @pytest.mark.parametrize(
-    "demog",
+    "graph",
     [
         three_way_continuous_migration(),
         three_way_continuous_migration(["A"]),
@@ -754,7 +754,8 @@ def three_way_continuous_migration_pairwise(
         three_way_continuous_migration_pairwise(["B", "C"]),
     ],
 )
-def test_three_way_continuous_migration_pairwise(demog):
+def test_three_way_continuous_migration_pairwise(graph):
+    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
     check_debugger_passes(demog)
     assert np.all(
         demog.model.migmatrix.M
