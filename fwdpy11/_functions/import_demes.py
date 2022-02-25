@@ -532,6 +532,10 @@ def _process_all_epochs(
         # turn on migration in that deme with a diagonal element to 1
         if deme.start_time < math.inf:
             when = size_history.model_times.convert_time(deme.start_time)
+            if when > 0:
+                assert size_history.deme_exists_at(idmap[deme.name], when + 1)
+            else:
+                assert size_history.deme_exists_at(idmap[deme.name], when)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -545,6 +549,9 @@ def _process_all_epochs(
         # if a deme ends before time zero, we set diag entry in migmatrix to 0
         if deme.end_time > 0:
             when = size_history.model_times.convert_time(deme.end_time)
+            assert size_history.deme_exists_at(
+                idmap[deme.name], when
+            ), f"{idmap[deme.name]} {when} {size_history.epochs}"
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -559,6 +566,7 @@ def _process_all_epochs(
         # we proces deme extinctions here instead of in the events
         if deme.end_time > 0:
             when = size_history.model_times.convert_time(deme.end_time)
+            assert size_history.deme_exists_at(idmap[deme.name], when)
             events.set_deme_sizes.append(
                 SetDemeSize(
                     when=model_times.convert_time(deme.end_time),
