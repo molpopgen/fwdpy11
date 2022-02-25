@@ -764,7 +764,7 @@ def test_three_way_continuous_migration_pairwise(graph):
 
 
 @pytest.mark.parametrize(
-    "demog",
+    "graph",
     [
         three_way_continuous_migration(),
         three_way_continuous_migration(["A"]),
@@ -782,7 +782,9 @@ def test_three_way_continuous_migration_pairwise(graph):
         three_way_continuous_migration_pairwise(["B", "C"]),
     ],
 )
-def test_evolve_three_way_continuous_migration_pairwise(demog):
+def test_evolve_three_way_continuous_migration_pairwise(graph):
+    demog = fwdpy11.discrete_demography.from_demes(graph, 1)
+    check_debugger_passes(demog)
     pop = evolve_demes_model(demog)
     assert pop.generation == demog.metadata["total_simulation_length"]
 
