@@ -471,6 +471,11 @@ def _process_epoch(
     else:
         when = 0
 
+    # So...this is terrible...
+    if when > 0:
+        assert size_history.deme_exists_at(idmap[deme_id], when + 1)
+    else:
+        assert size_history.deme_exists_at(idmap[deme_id], when)
 
     if e.selfing_rate is not None:
         events.set_selfing_rates.append(
