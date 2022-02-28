@@ -487,6 +487,8 @@ def _process_epoch(
             raise ValueError("fwdpy11 does not currently support cloning rates > 0.")
 
     if e.start_time != math.inf:
+        assert size_history.deme_exists_at(idmap[deme_id], when + 1)
+
         # Handle size change functions
         events.set_deme_sizes.append(
             SetDemeSize(
