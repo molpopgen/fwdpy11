@@ -664,6 +664,8 @@ def _process_pulses(
     for p in dg.pulses:
         when = model_times.convert_time(p.time)
         for source, proportion in zip(p.sources, p.proportions):
+            assert size_history.deme_exists_at(idmap[source], when + 1)
+            assert size_history.deme_exists_at(idmap[p.dest], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -673,6 +675,8 @@ def _process_pulses(
                     from_deme_graph=False,
                 )
             )
+            assert size_history.deme_exists_at(idmap[source], when + 2)
+            assert size_history.deme_exists_at(idmap[p.dest], when + 2)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -695,6 +699,8 @@ def _process_admixtures(
     for a in dg_events["admixtures"]:
         when = model_times.convert_time(a.time)
         for parent, proportion in zip(a.parents, a.proportions):
+            assert size_history.deme_exists_at(idmap[parent], when + 1)
+            assert size_history.deme_exists_at(idmap[a.child], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -704,6 +710,8 @@ def _process_admixtures(
                     from_deme_graph=False,
                 )
             )
+            assert size_history.deme_exists_at(idmap[parent], when + 2)
+            assert size_history.deme_exists_at(idmap[a.child], when + 2)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -726,6 +734,8 @@ def _process_mergers(
     for m in dg_events["mergers"]:
         when = model_times.convert_time(m.time)
         for parent, proportion in zip(m.parents, m.proportions):
+            # assert size_history.deme_exists_at(idmap[parent], when + 1)
+            # assert size_history.deme_exists_at(idmap[m.child], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -735,6 +745,8 @@ def _process_mergers(
                     from_deme_graph=False,
                 )
             )
+            # assert size_history.deme_exists_at(idmap[parent], when + 2)
+            # assert size_history.deme_exists_at(idmap[m.child], when + 2)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
@@ -765,6 +777,8 @@ def _process_splits(
     for s in dg_events["splits"]:
         when = model_times.convert_time(s.time)
         for c in s.children:
+            # assert size_history.deme_exists_at(idmap[s.parent], when + 1)
+            # assert size_history.deme_exists_at(idmap[c], when + 1)
             # one generation of migration to move lineages from parent to children
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -775,6 +789,8 @@ def _process_splits(
                     from_deme_graph=False,
                 )
             )
+            # assert size_history.deme_exists_at(idmap[s.parent], when + 2)
+            # assert size_history.deme_exists_at(idmap[c], when + 2)
             # turn off that migration after one generation
             events.migration_rate_changes.append(
                 _MigrationRateChange(
@@ -805,6 +821,8 @@ def _process_branches(
     for b in dg_events["branches"]:
         when = model_times.convert_time(b.time)
         # turn on migration for one generation at "when"
+        # assert size_history.deme_exists_at(idmap[b.parent], when + 1)
+        # assert size_history.deme_exists_at(idmap[b.child], when + 1)
         events.migration_rate_changes.append(
             _MigrationRateChange(
                 when=when,
@@ -815,6 +833,8 @@ def _process_branches(
             )
         )
         # end that migration after one generation
+        # assert size_history.deme_exists_at(idmap[b.parent], when + 2)
+        # assert size_history.deme_exists_at(idmap[b.child], when + 2)
         events.migration_rate_changes.append(
             _MigrationRateChange(
                 when=when + 1,
