@@ -735,7 +735,7 @@ def _process_mergers(
         when = model_times.convert_time(m.time)
         for parent, proportion in zip(m.parents, m.proportions):
             # assert size_history.deme_exists_at(idmap[parent], when + 1)
-            # assert size_history.deme_exists_at(idmap[m.child], when + 1)
+            assert size_history.deme_exists_at(idmap[m.child], when + 1)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when,
@@ -746,7 +746,7 @@ def _process_mergers(
                 )
             )
             # assert size_history.deme_exists_at(idmap[parent], when + 2)
-            # assert size_history.deme_exists_at(idmap[m.child], when + 2)
+            assert size_history.deme_exists_at(idmap[m.child], when + 2)
             events.migration_rate_changes.append(
                 _MigrationRateChange(
                     when=when + 1,
