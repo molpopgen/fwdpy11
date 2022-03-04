@@ -95,8 +95,11 @@ class TestSingleDemeWithVariousMigrationMatrices(unittest.TestCase):
         Will warn about the 1-by-1 matrix
         """
         demog = fwdpy11.DiscreteDemography(migmatrix=np.array([[1.0]]))
+        warned = False
         with warnings.catch_warnings(record=True) as w:
             _ = fwdpy11.DemographyDebugger([100], demog)
+            warned = True
+        assert warned is True
 
     def test_two_by_two_migration_matrix(self):
         demog = fwdpy11.DiscreteDemography(migmatrix=np.array([[1.0, 0.0], [0.0, 1.0]]))
@@ -136,8 +139,13 @@ class TestBadMassMigrations(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(migmatrix=M, mass_migrations=mm)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 20)
 
 
+# FIXME: many of the tests below this class
+# have nothing to do with GlobalExtinction, yet
+# the class name would suggest otherwise.
 class TestDetectingExtinctions(unittest.TestCase):
     @classmethod
     def setUp(self):
@@ -149,6 +157,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_V2(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
@@ -156,6 +166,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_V3(self):
         m = [fwdpy11.copy_individuals(0, 0, 1, 1)]
@@ -163,6 +175,8 @@ class TestDetectingExtinctions(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 12)
 
     def test_no_valid_parents_with_migration(self):
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
@@ -171,11 +185,22 @@ class TestDetectingExtinctions(unittest.TestCase):
         d = fwdpy11.DiscreteDemography(mass_migrations=m, set_deme_sizes=s, migmatrix=M)
         with self.assertRaises(ValueError):
             fwdpy11.DemographyDebugger(self.pop, d)
+        with self.assertRaises(fwdpy11.DemographyError):
+            setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_with_migration_V2(self):
+        # Move all founders from deme 0 to deme 1
+        # In gen 1, all ancestry in deme 1 is from
+        # deme 0
         m = [fwdpy11.move_individuals(0, 0, 1, 1)]
+        # At the same time, set deme 0 size to 100
         s = [fwdpy11.SetDemeSize(0, 0, 100)]
+        # The initial migration matrix will have 50%
+        # ancestry for all pops each generation...
         M = np.array([0.5] * 4).reshape(2, 2)
+        # But we will immediately change this
+        # so that all ancestry for both demes
+        # is from deme 1, making the model valid
         cM = [
             fwdpy11.SetMigrationRates(
                 when=0, deme=None, migrates=np.array([0, 1, 0, 1]).reshape(2, 2)

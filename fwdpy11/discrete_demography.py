@@ -712,7 +712,7 @@ class _SortedEvents:
 
 
 def _get_N_exp_growth(N0: int, t: int, G: float) -> int:
-    return int(np.rint(N0 * G ** t))
+    return int(np.rint(N0 * G**t))
 
 
 def _get_epoch_end_size(
@@ -794,6 +794,10 @@ def _process_lowlevel_mass_migrations(mass_migrations, deme_sizes):
                         new_ancestors = sorted(new_ancestors)
                 else:
                     new_ancestors = [mass_mig_event.source]
+
+                if mass_mig_event.fraction == 1.0:
+                    new_ancestors = None
+
                 deme_sizes[mass_mig_event.source].append(
                     _DemeSize(
                         mass_mig_event.source,
@@ -942,6 +946,8 @@ def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
             if event.when + 1 != deme_sizes[event.deme][-1].when:
                 if deme_sizes[event.deme][-1].ancestors is None:
                     new_ancestors = None
+                elif deme_sizes[event.deme][-1].size == 0:
+                    new_ancestors = None
                 else:
                     new_ancestors = [event.deme]
 
@@ -957,6 +963,8 @@ def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
             else:
                 deme_sizes[event.deme][-1].size = event.new_size
                 deme_sizes[event.deme][-1].growth_parameter = 1.0
+                if deme_sizes[event.deme][-1].size == 0:
+                    deme_sizes[event.deme][-1].ancestors = None
         else:
             # Inherit the growth rate from the previous epoch
             if event.deme in deme_sizes:
@@ -964,6 +972,8 @@ def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
                 lastG = deme_sizes[event.deme][-1].growth_parameter
                 if event.when + 1 != deme_sizes[event.deme][-1].when:
                     if deme_sizes[event.deme][-1].ancestors is None:
+                        new_ancestors = None
+                    elif deme_sizes[event.deme][-1].size == 0:
                         new_ancestors = None
                     else:
                         new_ancestors = [event.deme]
@@ -980,6 +990,8 @@ def _process_lowlevel_set_deme_sizes(set_deme_sizes, deme_sizes):
                 else:
                     deme_sizes[event.deme][-1].size = event.new_size
                     deme_sizes[event.deme][-1].growth_parameter = lastG
+                    if event.new_size == 0:
+                        deme_sizes[event.deme][-1].ancestors = None
             else:
                 # There is no previous epoch for this deme,
                 # so we initialize with G = 1.0
@@ -1189,7 +1201,7 @@ class _DemeSizeHistory:
             if interval.data.deme == deme:
                 data = interval.data
                 t = generation - interval.begin + 1
-                return int(np.rint(data.initial_size * data.growth_parameter ** t))
+                return int(np.rint(data.initial_size * data.growth_parameter**t))
 
     def demes_coexist_at(self, demes: typing.Tuple[int, int], generation: int) -> bool:
         for deme in demes:
