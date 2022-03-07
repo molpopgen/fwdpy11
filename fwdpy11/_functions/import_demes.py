@@ -194,7 +194,6 @@ class _ModelTimes(object):
 class _MigrationRateChange(object):
     """
     Use to make registry of migration rate changes.
-
     """
 
     when: int = attr.ib(
@@ -233,12 +232,18 @@ class _Fwdpy11Events(object):
 
     # The following do not correspond to fwdpy11 event types.
     migration_rate_changes: List[_MigrationRateChange] = attr.Factory(list)
-    # deme_extinctions: List[_DemeExtinctionEvent] = attr.Factory(list)
 
-    def _update_changes_at_m(self, changes_at_m, migration_rate_change, size_history):
-        # tally changes
-        # TODO: check that we mean "when" below...
+    def _update_changes_at_m(self, changes_at_m, migration_rate_change):
+        """
+        "Changes at m" are all the migration rate changes that occur at generation
+        m, since there can be multiple changes to migration rates that occur within
+        the same generation. `changes_at_m` keeps track of those changes, either
+        coming from the Demes Graph (ancestors of new demes, pulse events), or from
+        specified continuous migrations (in demes.migrations).
+        """
         if migration_rate_change.from_deme_graph:
+            # "from_deme_graph" refers to if the migration rate change comes from
+            # a mass migration event based on the deme graph
             changes_at_m[0][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
@@ -247,34 +252,57 @@ class _Fwdpy11Events(object):
                     migration_rate_change.destination
                 ] -= migration_rate_change.rate_change
         else:
+            # Otherwise, the migration rate change comes from the continuous migrations.
+            # First, add the rate change to appropriate row (dest) and column (source)
             changes_at_m[1][migration_rate_change.destination][
                 migration_rate_change.source
             ] += migration_rate_change.rate_change
+            # Then, subtract from row (dest) and column (dest) so that migration rates
+            # still sum to 1
             changes_at_m[1][migration_rate_change.destination][
                 migration_rate_change.destination
             ] -= migration_rate_change.rate_change
 
-    def _update_continuous_mass_migrations(self, changes_at_m, M_cont, M_mass):
+    def _update_continuous_and_mass_migrations(self, changes_at_m, M_cont, M_mass):
         M_cont += changes_at_m[0]
         M_mass += changes_at_m[1]
         return M_cont, M_mass
 
     def _migration_matrix_from_partition(self, M_cont, M_mass):
+        """
+        The new migration matrix is built from the combination of mass migration events
+        and continuous migration rates. Mass migrations "overrull" the continuous
+        migration, and that amount of non-mass-migration is set by the first term (dot
+        product).
+        """
         new_migmatrix = np.diag(np.diag(M_mass)).dot(M_cont) + (
             M_mass - np.diag(np.diag(M_mass))
         )
         return new_migmatrix
 
-    def _build_migration_rate_changes(
-        self, size_history: _DemeSizeHistory
-    ) -> List[SetMigrationRates]:
-        # We track the coninuous migration rates, and then augment with a matrix that
+    def _build_migration_rate_changes(self) -> List[SetMigrationRates]:
+        """
+        We track two types of migration rate changes specified by the demes format.
+        The first is due to continuous migration between demes, specified within
+        `demes.migrations`. The second is due to instantaneous events, from
+        `demes.pulses`, and population splits, branches, admixtures, and mergers
+        We track these separately, even though they both are translated into
+        fwdpy11's SetMigrationRates.
+
+        Key to this is whether the migration rate change comes "from_deme_graph",
+        meaning from a mass migration event vs demes.migrations rates.
+        """
+
+        # continuous migration rates, and then augment with a matrix that
         # specifies changes to migration due to "instantaneous" events. The
         # instantaneous migration matrix is typically just the identity matrix,
         # (i.e. uses continuous rates, but off diag elements scale continuous rates
         # and add to ancestry source from the off diagonal source column)
         # but for some generations has ancestry pointing to different demes due
         # to pulse, split, etc events
+
+        # We set up the initial migration matrices (M_cont: from demes.migration,
+        # M_mass: from demes.pulses and new demes' ancestors)
         if self.migmatrix is not None:
             M_cont = copy.deepcopy(self.migmatrix)
         else:
@@ -283,24 +311,23 @@ class _Fwdpy11Events(object):
 
         set_migration_rates: List[SetMigrationRates] = []
 
+        # A sorted list of all migration events
         self.migration_rate_changes = sorted(
             self.migration_rate_changes,
             key=lambda x: (x.when, x.destination, x.source, x.from_deme_graph),
         )
-        # self.deme_extinctions = sorted(
-        #    self.deme_extinctions, key=lambda x: (x.when, x.deme)
-        # )
+
+        # Multiple migration rate changes (indexed by m) can occur in the same
+        # generation, so we gather all rate changes that occur at the same time
+        # as "changes_at_m"
         m = 0
         changes_at_m = [
             np.zeros((len(self.idmap), len(self.idmap))),  # from Graph
             np.zeros((len(self.idmap), len(self.idmap))),  # not from Graph
         ]
         while m < len(self.migration_rate_changes):
-            # gather all migration rate changes and extinction events
-            # that occur at a given time
-            self._update_changes_at_m(
-                changes_at_m, self.migration_rate_changes[m], size_history
-            )
+            # Gather all migration rate changes that occur at a given time
+            self._update_changes_at_m(changes_at_m, self.migration_rate_changes[m])
             mm = m + 1
 
             while (
@@ -308,18 +335,19 @@ class _Fwdpy11Events(object):
                 and self.migration_rate_changes[mm].when
                 == self.migration_rate_changes[m].when
             ):
-                self._update_changes_at_m(
-                    changes_at_m, self.migration_rate_changes[mm], size_history
-                )
+                self._update_changes_at_m(changes_at_m, self.migration_rate_changes[mm])
                 mm += 1
 
-            # update M_cont and M_mass
-            M_cont, M_mass = self._update_continuous_mass_migrations(
+            # Update M_cont and M_mass from these migration rate changes that occur
+            # at the same time
+            M_cont, M_mass = self._update_continuous_and_mass_migrations(
                 changes_at_m, M_cont, M_mass
             )
-            # get the new migration matrix
+
+            # Set up the new migration matrix due to this collection of rate changes
             new_migmatrix = self._migration_matrix_from_partition(M_cont, M_mass)
-            # for any rows that don't match, add a fwdpy11.SetMigrationRate
+            # For any rows that don't match, we add a fwdpy11.SetMigrationRate for
+            # that deme (rows that don't change don't need migration rates updated)
             for i in range(len(self.idmap)):
                 if np.any(self.migmatrix[i] != new_migmatrix[i]):
                     set_migration_rates.append(
@@ -328,10 +356,11 @@ class _Fwdpy11Events(object):
                         )
                     )
 
+            # At the end of the updates in this generation, update the "current"
+            # migration matrix and reset changes to zero, then move on to the next
+            # time with migration rate changes
             self.migmatrix = new_migmatrix
-
             m = mm
-            # reset changes
             changes_at_m = [
                 np.zeros((len(self.idmap), len(self.idmap))),  # from Graph
                 np.zeros((len(self.idmap), len(self.idmap))),  # not from Graph
@@ -339,9 +368,8 @@ class _Fwdpy11Events(object):
 
         return set_migration_rates
 
-    # now unused ??
     def build_model(self, size_history: _DemeSizeHistory) -> DiscreteDemography:
-        set_migration_rates = self._build_migration_rate_changes(size_history)
+        set_migration_rates = self._build_migration_rate_changes()
         return DiscreteDemography(
             mass_migrations=self.mass_migrations,
             set_deme_sizes=self.set_deme_sizes,
