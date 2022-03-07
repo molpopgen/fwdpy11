@@ -631,11 +631,22 @@ def _process_migrations(
     """
     Make a record of everything in dg.migrations
 
-    When a migration rate has an end time > 0, it gets entered twice.
+    When a migration rate has an end time > 0, it gets entered twice so that we can
+    remove that migration rate once it stops.
+
+    When a new migration rate comes from a source that is a new deme, we need to make
+    sure that it exists when we pull migrants. This can be set by making sure that
+    `when` is strictly less than the source deme's start_time.
     """
     for m in dg.migrations:
         if m.start_time < math.inf:
             when = model_times.convert_time(m.start_time)
+            if when == model_times.convert_time(dg[m.source].start_time):
+                # If we try to set a migration rate at the time that the source deme
+                # also comes into existence, we would be trying to draw migrants from
+                # a non-existent deme. We bump the migration rate change time one
+                # generation later to make sure we don't try to draw from empty demes.
+                when += 1
             try:
                 events.migration_rate_changes.append(
                     _MigrationRateChange(

@@ -841,9 +841,6 @@ def test_splits_with_migrations(graph):
     M = np.zeros(25).reshape(5, 5)
     M[0, 0] = 1
     assert np.all(demog.model.migmatrix.M == M)
-    num_splits = 2
-    len_set_migs = 3 * num_splits + 2 + 3
-    assert len(demog.model.set_migration_rates) == len_set_migs
 
 
 def yaml_migration_1():
