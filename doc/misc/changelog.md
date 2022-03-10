@@ -15,6 +15,12 @@ Bug fixes
   {user}`apragsdale`,
   {user}`molpopgen`.
 
+* User interface improvements
+
+* Region coordinates are now validated before starting the simulation.
+  PR {pr}`909`.
+  Issue {issue}`908`.
+
 Testing
 
 * Added many more tests related to models defined using `demes`

@@ -116,6 +116,48 @@ def evolvets(
         Added ``check_demographic_event_timings``.
 
     """
+
+    for r in params.sregions:
+        if isinstance(r, fwdpy11.mvDES):
+            if isinstance(r.des, list):
+                for rr in r.des:
+                    if rr.beg < 0:
+                        raise ValueError(f"{r} has begin value < 0.0")
+                    if rr.end > pop.tables.genome_length:
+                        raise ValueError(
+                            f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                        )
+            else:
+                if r.des.beg < 0:
+                    raise ValueError(f"{r} has begin value < 0.0")
+                if r.des.end > pop.tables.genome_length:
+                    raise ValueError(
+                        f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                    )
+        else:
+            if r.beg < 0:
+                raise ValueError(f"{r} has begin value < 0.0")
+            if r.end > pop.tables.genome_length:
+                raise ValueError(
+                    f"{r} has end value >= genome length of {pop.tables.genome_length}"
+                )
+
+    for r in params.nregions:
+        if r.beg < 0:
+            raise ValueError(f"{r} has begin value < 0.0")
+        if r.end > pop.tables.genome_length:
+            raise ValueError(
+                f"{r} has end value > genome length of {pop.tables.genome_length}"
+            )
+
+    for r in params.recregions:
+        if r.beg < 0:
+            raise ValueError(f"{r} has begin value < 0.0")
+        if r.end > pop.tables.genome_length:
+            raise ValueError(
+                f"{r} has end value >= genome length of {pop.tables.genome_length}"
+            )
+
     if recorder is None:
         from ._fwdpy11 import NoAncientSamples
 
@@ -134,8 +176,11 @@ def evolvets(
 
         stopping_criterion = _no_stopping
 
-    from ._fwdpy11 import (MutationRegions, dispatch_create_GeneticMap,
-                           evolve_with_tree_sequences)
+    from ._fwdpy11 import (
+        MutationRegions,
+        dispatch_create_GeneticMap,
+        evolve_with_tree_sequences,
+    )
 
     try:
         # DemographicModelDetails ?

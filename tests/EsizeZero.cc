@@ -50,6 +50,9 @@ PYBIND11_MODULE(EsizeZero, m)
         .def(pybind11::init([](double beg, double end, double weight, bool coupled,
                                std::uint16_t label) {
             return EsizeZero(fwdpy11::Region(beg, end, weight, coupled, label));
-        }));
+        }))
+    .def_property_readonly("beg",
+            [](const EsizeZero & self){ return self.region.beg;})
+    .def_property_readonly("end",
+            [](const EsizeZero & self){ return self.region.end;});
 }
-
