@@ -1026,16 +1026,45 @@ class _DemeSizeHistory:
     """
 
     epochs: intervaltree.IntervalTree
-    model_times: typing.Any  # should be ModelTimes...
+    model_times: typing.Optional[typing.ForwardRef("_ModelTimes")]
 
     def __post_init__(self):
         self._validate_epoch_ancestry()
 
     @staticmethod
-    def from_demes_graph(g: demes.Graph, burnin: int):
-        raise NotImplementedError(
-            "_DemeSizeHistory.from_demes_graph is not implemented"
-        )
+    def from_demes_graph(
+        g: demes.Graph,
+        burnin_generation: int,
+        idmap: typing.Dict,
+        model_times: typing.ForwardRef("_ModelTimes"),
+    ):
+        """
+        NOTE: this function provides a limited data structure
+              that only allows existence querying at given times.
+
+        """
+        itree = intervaltree.IntervalTree()
+        for d in g.demes:
+            for e in d.epochs:
+                start = model_times.convert_time(e.start_time)
+                # NOTE: this is to ensure that the interval tree
+                # correctly contains the 1/2 open interval
+                # during which individuals exist in this deme
+                if start > 0:
+                    start = start + 1
+                end = model_times.convert_time(e.end_time) + 1
+                assert end > start, f"{e}, {start}, {end}"
+                # NOTE: 1.0 is a HACK for growth rate and is WRONG
+                itree[start:end] = _EpochData(
+                    idmap[d.name], None, int(e.start_size), 1.0
+                )
+
+        rv = _DemeSizeHistory(itree, model_times)
+        return rv
+
+        # raise NotImplementedError(
+        #     "_DemeSizeHistory.from_demes_graph is not implemented"
+        # )
 
     # TODO:
     # * We need to track the ancestor deme of each epoch.

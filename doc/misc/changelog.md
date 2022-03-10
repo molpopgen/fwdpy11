@@ -5,6 +5,24 @@ updates to latest `fwdpp` version, etc.
 
 ## Next version
 
+Bug fixes
+
+* Fixed a bug in event time handling from `demes` models.
+  This bug did not lead to incorrect results as the C++ back end caught the
+  invalid models at run time.
+  PR {pr}`891`.
+  Issue {issue}`881`.
+  {user}`apragsdale`,
+  {user}`molpopgen`.
+
+Testing
+
+* Added many more tests related to models defined using `demes`
+  PR {pr}`891`.
+  Issue {issue}`890`.
+  {user}`apragsdale`,
+  {user}`molpopgen`.
+
 Back end changes
 
 * Add new Python class intended to help validate demographic models and
