@@ -3,7 +3,7 @@
 # and may require regenerating the .txt files.
 pybind11[global]
 intervaltree
-numpy<1.21.0
+numpy
 sparse
 scipy
 attrs
