@@ -18,6 +18,7 @@
 #
 
 from typing import Iterable, List, Optional, Union
+import warnings
 
 import numpy as np
 
@@ -73,6 +74,10 @@ class TreeIterator(ll_TreeIterator):
         begin: float = 0.0,
         end: Optional[float] = None
     ):
+        warnings.warn(
+            FutureWarning,
+            "fwdpy11.TreeIterator is deprecated.  Existing work flows should be updated to work with the data after exporting to tskit.",
+        )
         _end = end
         if _end is None:
             _end = np.finfo(np.float64).max
