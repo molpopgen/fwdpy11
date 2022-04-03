@@ -14,6 +14,9 @@ Bug fixes
   Issue {issue}`881`.
   {user}`apragsdale`,
   {user}`molpopgen`.
+* Fix lambda capture in `examples/plugin/gvalue_recorder.cc`.
+  The previous code was not compatible with current versions of `pybind11`.
+  PR {pr}`921`. Issue {issue}`920`.
 
 * User interface improvements
 

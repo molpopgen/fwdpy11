@@ -113,6 +113,12 @@ jobs:
         run: |
             python -m pytest -n 2 tests
 
+      - name: Build and run examples/plugin
+        run: |
+          CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX PYTHONPATH=. cmake examples/plugin
+          make
+          PYTHONPATH=. python examples/plugin/test_plugin.py
+
       - name: Validate the sdist
         run: |
             python setup.py sdist

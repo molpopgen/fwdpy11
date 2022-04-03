@@ -21,7 +21,13 @@ pop = fwdpy11.DiploidPopulation(N, 1.0)
 rng = fwdpy11.GSLrng(42)
 
 gvalues = []
-r = gvalue_recorder.record_gvalue(gvalues)
+rg = gvalue_recorder.record_gvalue()
+
+
+def r(pop, _):
+    rg(pop, gvalues)
+
+
 fwdpy11.evolvets(rng, pop, params, 100, r)
 
 assert len(gvalues) == pop.generation, "Callback failure"
