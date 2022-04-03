@@ -107,7 +107,7 @@ jobs:
 
       - name: Compile extension module
         run: |
-            CXX=$CXX CC=$CC python setup.py build_ext -i
+            CXX=$CXX CC=$CC python -m pip install -e .
 
       - name: Run Python tests
         run: |
