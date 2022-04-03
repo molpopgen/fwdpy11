@@ -82,7 +82,9 @@ jobs:
           # conda init bash
           source ~/.bashrc
           conda activate anaconda-client-env
-          python setup.py build_ext --inplace
+          # NOTE: python -m pip install -e . 
+          # fails in GitHub actions on conda/macOS
+          python setup.py build_ext -i
 
       - name: Build and run C++ tests
         run: |

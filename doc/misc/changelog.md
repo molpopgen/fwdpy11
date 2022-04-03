@@ -46,6 +46,11 @@ Dependencies
 * Bump minimum `pybind11` to 2.9.0.
   PR {pr}`922`.
 
+Build System
+
+* `setup.cfg` now pins minimum and maximum Python versions.
+  PR {pr}`923`.  Issue {issue}`914`.
+
 ## 0.17.1
 
 Bug fixes
