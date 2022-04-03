@@ -43,6 +43,8 @@ Dependencies
 
 * Removed use of `pip-tools` in favor of a single `requirements/development.txt` file with loose pinning.
   Issue {issue}`877`, PR {pr}`896`
+* Bump minimum `pybind11` to 2.9.0.
+  PR {pr}`922`.
 
 ## 0.17.1
 
