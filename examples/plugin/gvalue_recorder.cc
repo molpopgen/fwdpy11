@@ -5,10 +5,10 @@
 
 PYBIND11_MODULE(gvalue_recorder, m)
 {
-    m.def("record_gvalue", [](pybind11::list l) {
+    m.def("record_gvalue", []() {
         return pybind11::cpp_function(
-            [l](const fwdpy11::DiploidPopulation &pop,
-                fwdpy11::SampleRecorder &) {
+            [](const fwdpy11::DiploidPopulation &pop,
+                pybind11::list l) {
                 double mean_trait_value = 0.0;
                 for (auto &md : pop.diploid_metadata)
                     {
