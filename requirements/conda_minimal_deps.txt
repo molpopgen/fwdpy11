@@ -1,7 +1,6 @@
 intervaltree
 pybind11>=2.9.0
 numpy
-sparse
 scipy
 attrs>=0.19.2
 black

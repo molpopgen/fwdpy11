@@ -48,7 +48,7 @@ sphinx:
       tskit: ["https://tskit.readthedocs.io/en/stable", null]
       msprime: ["https://tskit.dev/msprime/docs/latest", null]
       attrs: ["https://www.attrs.org/en/stable", null]
-      sparse: ["https://sparse.pydata.org/en/latest/", null]
+      scipy: ['http://docs.scipy.org/doc/scipy', null]
       numpy: ['http://docs.scipy.org/doc/numpy', null]
       pandas: ['http://pandas.pydata.org/pandas-docs/stable/', null]
       demes: ['https://popsim-consortium.github.io/demes-docs/main/', null]

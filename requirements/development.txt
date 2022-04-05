@@ -4,7 +4,6 @@
 pybind11[global]
 intervaltree
 numpy
-sparse
 scipy
 attrs
 black
