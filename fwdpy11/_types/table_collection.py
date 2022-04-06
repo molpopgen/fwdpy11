@@ -1,7 +1,7 @@
 from typing import Iterable
 
 import numpy as np
-import sparse
+import scipy.sparse
 
 from .._fwdpy11 import Edge, MutationRecord, Node, Site, ll_TableCollection
 
@@ -42,8 +42,8 @@ def _handle_fs_marginalizing(fs, marginalize, nwindows, num_sample_groups):
     if nwindows == 1:
         temp = {}
         for i in range(num_sample_groups):
-            axes = tuple(j for j in range(num_sample_groups) if j != i)
-            temp[i] = np.ma.array(fs.sum(axis=axes).todense())
+            axes = num_sample_groups - i - 1
+            temp[i] = np.ma.array(np.asarray(fs.sum(axis=axes).flatten())[0])
             temp[i][0] = np.ma.masked
             temp[i][-1] = np.ma.masked
         return temp
@@ -52,8 +52,8 @@ def _handle_fs_marginalizing(fs, marginalize, nwindows, num_sample_groups):
     for f in fs:
         temp = {}
         for i in range(num_sample_groups):
-            axes = tuple(j for j in range(num_sample_groups) if j != i)
-            temp[i] = np.ma.array(f.sum(axis=axes).todense())
+            axes = num_sample_groups - i - 1
+            temp[i] = np.ma.array(np.asarray(f.sum(axis=axes).flatten())[0])
             temp[i][0] = np.ma.masked
             temp[i][-1] = np.ma.masked
         rv.append(temp)
@@ -181,7 +181,7 @@ class TableCollection(ll_TableCollection):
         from . import TreeIterator
 
         shapes = tuple(len(i) + 1 for i in samples)
-        dok_JFS = [sparse.DOK(shapes, dtype=np.int32) for i in windows]
+        dok_JFS = [scipy.sparse.dok_matrix(shapes, dtype=np.int32) for i in windows]
 
         sample_list = np.where(sample_groups != NOT_A_SAMPLE)[0]
         t, s = _simplify(self, sample_list, simplify)
@@ -205,7 +205,7 @@ class TableCollection(ll_TableCollection):
                             c = np.unique(sample_groups[d], return_counts=True)
                             counts[c[0]] += c[1]
                             dok_JFS[windex][tuple((i) for i in counts)] += 1
-        return [sparse.COO(i) for i in dok_JFS]
+        return [scipy.sparse.coo_matrix(i) for i in dok_JFS]
 
     def _fs_implementation(self, samples, windows, include_function, simplify):
         """
@@ -271,10 +271,10 @@ class TableCollection(ll_TableCollection):
           bins correspond to frequencies 1 to n-1, where n is the number
           of sample nodes.
         * If multiple sample lists are provided, the return value is a
-          ``sparse.COO`` matrix.  For each dimension, the 0 and n bins
+          :class:`scipy.sparse.coo_matrix`.  For each dimension, the 0 and n bins
           are included.
         * If ``marginalize == True`` and more than one sample bin is provided,
-          the ``sparse.COO`` matrix is converted into a dict where the key
+          the :class:`scipy.sparse.coo_matrix` matrix is converted into a dict where the key
           is the index of the sample list and the value is a dense 1-d array,
           masked as described above.
         * If multiple windows are provided and ``separate_windows == False``,
@@ -282,16 +282,15 @@ class TableCollection(ll_TableCollection):
           If ``separate_windows == True``, then a list of frequency spectra is
           returned, indexed in the same order as the input windows.
 
-        .. warning::
-
-            :class:`sparse.COO` does *not* change `dtype` to `float` as a result of
-            division by a scalar!  Thus, operations like getting the average frequency spectrum
-            from a model require a call to :meth:`sparse.COO.astype` prior to any multiplication
-            and/or division.
-
         .. versionadded:: 0.6.0
 
             Python implementation added
+
+        .. versionchanged:: 0.18.0
+
+            Dropped `sparse` as a dependency, using types from `scipy.sparse` instead.
+            This change drops support for more than 2 sample lists.
+
         """
         for s in samples:
             if len(s) == 0:

@@ -177,8 +177,8 @@ class TestTwoDemeCase(unittest.TestCase):
         d1 = a[np.where(nodes["deme"][a] == 1)[0]]
 
         tc_fs = self.pop.tables.fs([d0, d1])
-        tc_fs0 = tc_fs.sum(axis=1).todense()
-        tc_fs1 = tc_fs.sum(axis=0).todense()
+        tc_fs0 = np.asarray(tc_fs.sum(axis=1).flatten())[0]
+        tc_fs1 = np.asarray(tc_fs.sum(axis=0).flatten())[0]
         for i, j in zip((tc_fs0, tc_fs1), (d0, d1)):
             dm = fwdpy11.data_matrix_from_tables(
                 self.pop.tables, j, record_neutral=True, record_selected=True
@@ -193,47 +193,12 @@ class TestTwoDemeCase(unittest.TestCase):
         d0 = a[np.where(nodes["deme"][a] == 0)[0]]
         d1 = a[np.where(nodes["deme"][a] == 1)[0]]
         tc_fs = self.pop.tables.fs([d0, d1])
-        tc_fs_deme0 = tc_fs.sum(axis=1).todense()
-        tc_fs_deme1 = tc_fs.sum(axis=0).todense()
+        tc_fs_deme0 = np.asarray(tc_fs.sum(axis=1).flatten())[0]
+        tc_fs_deme1 = np.asarray(tc_fs.sum(axis=0).flatten())[0]
 
         tc_fs2 = self.pop.tables.fs([d0, d1], marginalize=True)
         self.assertTrue(np.array_equal(tc_fs_deme0, tc_fs2[0]))
         self.assertTrue(np.array_equal(tc_fs_deme1, tc_fs2[1]))
-
-    def test_marginalizing_to_three_samples(self):
-        a = self.pop.alive_nodes
-        sample_lists = [a[:10], a[20:30], a[200:210]]
-        fs1 = self.pop.tables.fs([sample_lists[0]])
-        fs2 = self.pop.tables.fs([sample_lists[1]])
-        fs3 = self.pop.tables.fs([sample_lists[2]])
-
-        mfs = self.pop.tables.fs(sample_lists, marginalize=True)
-
-        for i, j in zip(range(3), [fs1, fs2, fs3]):
-            self.assertTrue(np.ma.allequal(mfs[i], j))
-
-    def test_marginalizing_to_three_samples_in_separate_windows(self):
-        a = self.pop.alive_nodes
-        sample_lists = [a[:10], a[20:30], a[200:210]]
-        windows = [(0.1, 0.23), (0.723, 0.85)]
-        fs1 = self.pop.tables.fs(
-            [sample_lists[0]], windows=windows, separate_windows=True
-        )
-        fs2 = self.pop.tables.fs(
-            [sample_lists[1]], windows=windows, separate_windows=True
-        )
-        fs3 = self.pop.tables.fs(
-            [sample_lists[2]], windows=windows, separate_windows=True
-        )
-
-        mfs = self.pop.tables.fs(
-            sample_lists, marginalize=True, windows=windows, separate_windows=True
-        )
-
-        for i, j in zip(mfs, range(len(windows))):
-            self.assertTrue(np.ma.allequal(i[0], fs1[j]))
-            self.assertTrue(np.ma.allequal(i[1], fs2[j]))
-            self.assertTrue(np.ma.allequal(i[2], fs3[j]))
 
 
 if __name__ == "__main__":

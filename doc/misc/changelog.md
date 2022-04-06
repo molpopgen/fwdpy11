@@ -5,6 +5,13 @@ updates to latest `fwdpp` version, etc.
 
 ## Next version
 
+Breaking changes
+
+* {func}`fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
+  This change allowed us to drop `sparse` as a dependency that was causing
+  headaches when new Python point releases come out.
+  PR {pr}`924`. Issue {issue}`876`.
+
 Bug fixes
 
 * Fixed a bug in event time handling from `demes` models.
@@ -18,7 +25,7 @@ Bug fixes
   The previous code was not compatible with current versions of `pybind11`.
   PR {pr}`921`. Issue {issue}`920`.
 
-* User interface improvements
+User interface improvements
 
 * Region coordinates are now validated before starting the simulation.
   PR {pr}`909`.
@@ -381,7 +388,7 @@ Fixes:
 This is a point release adding more documentation:
 
 * {ref}`Demes vignette <demes_vignette>` updated.
-* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of {class}`sparse.COO`.
+* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
 
 ## 0.14.0
 
@@ -780,7 +787,7 @@ details of book-keeping various data structures:
 
 Other changes:
 
-* {mod}`sparse` is added to `install_requires` in `setup.py`.  {issue}`421`
+* `sparse` is added to `install_requires` in `setup.py`.  {issue}`421`
 * {class}`fwdpy11.TableCollection`'s validation of genome lengths is improved. PR {pr}`428`
 * The C++ base class for a population is now a concrete class rather than a template alias.  This change enables forward declarations in header files. PR {pr}`427`
 
