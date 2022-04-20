@@ -58,6 +58,12 @@ Build System
 * `setup.cfg` now pins minimum and maximum Python versions.
   PR {pr}`923`.  Issue {issue}`914`.
 
+Miscellaneous
+
+* Update Docker work flow for building wheels to correctly locate requirements file 
+  and build for Python 3.10
+  PR {pr}`927`
+
 ## 0.17.1
 
 Bug fixes
