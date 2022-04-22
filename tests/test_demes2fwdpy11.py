@@ -1833,3 +1833,27 @@ def test_split_with_existence_n_way_migration():
     b.add_deme(name="E", ancestors=["B"], epochs=[dict(start_size=100)])
     b.add_migration(demes=["A", "C", "D", "E"], rate=0.1)
     resolve_and_run(b, burnin=1)
+
+
+def test_non_integer_size_change():
+    b = demes.Builder()
+    b.add_deme("A", epochs=[{"start_size": 100}])
+    b.add_deme("B", ancestors=["A"], start_time=10, epochs=[{"start_size": 100.5}])
+    g = b.resolve()
+
+    _ = fwdpy11.discrete_demography.from_demes(g)
+
+
+def test_non_integer_initial_epoch_size():
+    b = demes.Builder()
+    b.add_deme("A", epochs=[{"start_size": 100.5}])
+    g = b.resolve()
+
+    demog = fwdpy11.discrete_demography.from_demes(g)
+
+    # initialize the ancestral population
+    initial_sizes = [
+        demog.metadata["initial_sizes"][i]
+        for i in sorted(demog.metadata["initial_sizes"].keys())
+    ]
+    _ = fwdpy11.DiploidPopulation(initial_sizes, 1)

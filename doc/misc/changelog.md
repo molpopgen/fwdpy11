@@ -24,6 +24,8 @@ Bug fixes
 * Fix lambda capture in `examples/plugin/gvalue_recorder.cc`.
   The previous code was not compatible with current versions of `pybind11`.
   PR {pr}`921`. Issue {issue}`920`.
+* Fixed handling of non-integer times in `demes` models.
+  PR {pr}`930`. Issue {issue}`929`.
 
 User interface improvements
 
