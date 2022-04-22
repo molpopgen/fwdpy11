@@ -43,6 +43,7 @@ Testing
 
 * Added many more tests related to models defined using `demes`
   PR {pr}`891`.
+  PR {pr}`931`.
   Issue {issue}`890`.
   {user}`apragsdale`,
   {user}`molpopgen`.
@@ -55,6 +56,10 @@ Back end changes
   PR {pr}`904`.
 * Completely rebuild {class}`fwdpy11.DemographyDebugger`.
   PR {pr}`906`.
+* Added infrastructure to separate out back end from Python-specific C++ code.
+  PR {pr}`936`.
+* Assert that epochs from `demes` models are at least 1 generation long.
+  PR {pr}`931`
 * Added infrastructure to separate out back end from Python-specific C++ code.
   PR {pr}`936`.
 
