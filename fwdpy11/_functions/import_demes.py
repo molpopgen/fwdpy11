@@ -412,7 +412,7 @@ def _get_initial_deme_sizes(dg: demes.Graph, idmap: Dict) -> Dict:
     rv = dict()
     for deme in dg.demes:
         if deme.epochs[0].start_time == otime:
-            rv[idmap[deme.name]] = deme.epochs[0].start_size
+            rv[idmap[deme.name]] = int(np.rint(deme.epochs[0].start_size))
 
     if len(rv) == 0:
         raise RuntimeError("could not determine initial deme sizes")
@@ -440,7 +440,7 @@ def _get_ancestral_population_size(dg: demes.Graph) -> int:
 
     rv = sum(
         [
-            e.start_size
+            int(np.rint(e.start_size))
             for d in dg.demes
             for e in d.epochs
             if e.start_time == oldest_deme_time
@@ -517,22 +517,19 @@ def _process_epoch(
     if e.start_time != math.inf:
         assert size_history.deme_exists_at(idmap[deme_id], when + 1)
 
+        start_size = int(np.rint(e.start_size))
+        end_size = int(np.rint(e.end_size))
+
         # Handle size change functions
         events.set_deme_sizes.append(
-            SetDemeSize(
-                when=when,
-                deme=idmap[deme_id],
-                new_size=e.start_size,
-            )
+            SetDemeSize(when=when, deme=idmap[deme_id], new_size=start_size)
         )
-        if e.end_size != e.start_size:
+        if end_size != start_size:
             if e.size_function != "exponential":
                 raise ValueError(
                     f"Size change function must be exponential.  We got {e.size_function}"
                 )
-            G = exponential_growth_rate(
-                e.start_size, e.end_size, int(np.rint(e.time_span))
-            )
+            G = exponential_growth_rate(start_size, end_size, int(np.rint(e.time_span)))
             events.set_growth_rates.append(
                 SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
             )
