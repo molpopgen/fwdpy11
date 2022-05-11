@@ -12,6 +12,12 @@ Breaking changes
   headaches when new Python point releases come out.
   PR {pr}`924`. Issue {issue}`876`.
 
+Behavior changes
+
+* {func}`fwdpy11.DemographyDebugger.report` raises a warning
+  to state that it has not been implemented.
+  It returns a string with a message to that effect.
+
 Bug fixes
 
 * Fixed a bug in event time handling from `demes` models.
@@ -47,6 +53,8 @@ Back end changes
   aid in importing models from `demes`.
   PR {pr}`900`.
   PR {pr}`904`.
+* Completely rebuild {class}`fwdpy11.DemographyDebugger`.
+  PR {pr}`906`.
 
 Dependencies
 
