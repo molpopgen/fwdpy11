@@ -1,4 +1,4 @@
-AC_INIT([fwdpy11_cpp_tests], 0.0)
+AC_INIT([fwdpy11_cpp_tests],[0.0])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CXX
@@ -17,7 +17,7 @@ AC_CHECK_LIB([gsl],[gsl_blas_dgemm],,[AC_MSG_ERROR([gsl run-time library not fou
 
 dnl check for C++ runtime libraries
 AC_LANG_SAVE
-      AC_LANG_CPLUSPLUS
+      AC_LANG([C++])
       AC_REQUIRE_CPP
       AC_CHECK_LIB(boost_unit_test_framework,main,HAVEBOOSTTESTRUNTIME=1,[AC_MSG_ERROR([boost_unit_test_framework runtime library does not
                                                             seem to be here.  Unit tests will not be compiled])])

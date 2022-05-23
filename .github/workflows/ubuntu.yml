@@ -89,26 +89,32 @@ jobs:
           echo "CC=clang-10" >> $GITHUB_ENV
           echo "CXX=clang++-10" >> $GITHUB_ENV
 
-      - name: Build and run C++ tests
-        run: |
-          cd cpptests
-          autoreconf --install
-          CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX ./configure
-          make check -j 3
-          # Clean up so that the next step can work...
-          make clean
-
-      - name: Build and run standalone C++ program
-        run: |
-          cd cpp_neutral_benchmark
-          autoreconf --install
-          CXXFLAGS="-O3 -g" CC=$CC CXX=$CXX ./configure
-          make -j 3
-          ./cpp_neutral_benchmark
 
       - name: Compile extension module
         run: |
             CXX=$CXX CC=$CC python -m pip install -e .
+
+      - name: Build C++ tests
+        working-directory: cpptests
+        run: |
+          autoreconf --install
+          CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX ./configure
+          make -j 3
+
+      - name: Run C++ tests
+        working-directory: cpptests
+        run: |
+          make check
+          # Clean up so that the next step can work...
+          make clean
+
+      - name: Build and run standalone C++ program
+        working-directory: cpp_neutral_benchmark
+        run: |
+          autoreconf --install
+          CXXFLAGS="-O3 -g" CC=$CC CXX=$CXX ./configure
+          make -j 3
+          ./cpp_neutral_benchmark
 
       - name: Run Python tests
         run: |

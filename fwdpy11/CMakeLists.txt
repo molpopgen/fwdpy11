@@ -125,8 +125,10 @@ if(ENABLE_PROFILING OR DISABLE_LTO)
 endif()
 # These are the main modules
 pybind11_add_module(_fwdpy11 MODULE ${LTO_OPTIONS} src/_fwdpy11.cc ${ALL_SOURCES})
+add_dependencies(_fwdpy11 fwdpy11core)
+set_target_properties(_fwdpy11 fwdpy11core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
 endif()
-target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas)
+target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas ${CMAKE_SOURCE_DIR}/lib/libfwdpy11core.a)
