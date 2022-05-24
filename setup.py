@@ -74,9 +74,10 @@ class CMakeBuild(build_ext):
 
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        parent = os.path.abspath(os.path.dirname("."))
         cmake_args = [
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
-            "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=" + extdir + "/../lib/",
+            "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=" + parent + "/lib/",
             "-DPYTHON_EXECUTABLE=" + sys.executable,
         ]
 
