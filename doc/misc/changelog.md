@@ -55,6 +55,8 @@ Back end changes
   PR {pr}`904`.
 * Completely rebuild {class}`fwdpy11.DemographyDebugger`.
   PR {pr}`906`.
+* Added infrastructure to separate out back end from Python-specific C++ code.
+  PR {pr}`936`.
 
 Dependencies
 

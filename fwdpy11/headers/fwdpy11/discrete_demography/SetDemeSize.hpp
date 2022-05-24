@@ -20,7 +20,6 @@
 #define SET_DEME_SIZE_HPP
 
 #include <cstdint>
-#include <stdexcept>
 
 namespace fwdpy11
 {
@@ -35,16 +34,7 @@ namespace fwdpy11
             bool resets_growth_rate;
 
             SetDemeSize(std::uint32_t w, std::int32_t d, std::uint32_t n,
-                        bool reset)
-                : when(w), deme(d), new_size(n), resets_growth_rate(reset)
-            {
-                if (deme < 0)
-                    {
-                        throw std::invalid_argument(
-                            "SetDemeSize:"
-                            " deme must be non-negative");
-                    }
-            }
+                        bool reset);
         };
 
         inline bool

@@ -39,6 +39,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wextra -Weffc++ -Woverloaded-virtual -Wold-style-cast -Werror=effc++ -Werror=old-style-cast -Werror=overloaded-virtual -Werror=unused-parameter")
 endif()
 
+add_subdirectory(lib)
 add_subdirectory(fwdpy11)
 
 if(BUILD_UNIT_TESTS)
