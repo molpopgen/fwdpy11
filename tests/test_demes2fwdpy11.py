@@ -1857,3 +1857,51 @@ def test_non_integer_initial_epoch_size():
         for i in sorted(demog.metadata["initial_sizes"].keys())
     ]
     _ = fwdpy11.DiploidPopulation(initial_sizes, 1)
+
+
+def test_very_short_epoch():
+    b = demes.Builder()
+    b.add_deme("A", epochs=[{"start_size": 100}])
+    b.add_deme(
+        "B",
+        ancestors=["A"],
+        start_time=10,
+        epochs=[
+            {"start_size": 100, "end_time": 1e-3},
+            {"start_size": 200, "end_time": 0.0},
+        ],
+    )
+    g = b.resolve()
+
+    with pytest.raises(ValueError):
+        _ = fwdpy11.discrete_demography.from_demes(g)
+
+
+def test_epoch_rounding_01():
+    yaml = """
+time_units: generations
+demes:
+- name: bad
+  epochs:
+  - {end_time: 1.75, start_size: 1}
+  - {end_time: 1.25, start_size: 2}
+  - {end_time: 0.5, start_size: 3}
+  - {end_time: 0, start_size: 4}
+"""
+    graph = demes.loads(yaml)
+    with pytest.raises(ValueError):
+        _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+def test_epoch_rounding_02():
+    yaml = """
+time_units: generations
+demes:
+- name: bad
+  epochs:
+  - {end_time: 1.5, start_size: 1}
+  - {end_time: 0.5, start_size: 2}
+  - {end_time: 0, start_size: 3}
+"""
+    graph = demes.loads(yaml)
+    with pytest.raises(ValueError):
+        _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)

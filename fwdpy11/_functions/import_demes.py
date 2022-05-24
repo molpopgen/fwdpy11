@@ -519,6 +519,10 @@ def _process_epoch(
 
         start_size = int(np.rint(e.start_size))
         end_size = int(np.rint(e.end_size))
+        time_span = int(np.rint(e.time_span))
+
+        if time_span < 1:
+            raise ValueError("epoch durations must be >= 1 time step")
 
         # Handle size change functions
         events.set_deme_sizes.append(
@@ -529,7 +533,7 @@ def _process_epoch(
                 raise ValueError(
                     f"Size change function must be exponential.  We got {e.size_function}"
                 )
-            G = exponential_growth_rate(start_size, end_size, int(np.rint(e.time_span)))
+            G = exponential_growth_rate(start_size, end_size, time_span)
             events.set_growth_rates.append(
                 SetExponentialGrowth(when=when, deme=idmap[deme_id], G=G)
             )

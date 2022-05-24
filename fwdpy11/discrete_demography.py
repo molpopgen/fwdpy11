@@ -1065,7 +1065,10 @@ class _DemeSizeHistory:
                 if start > 0:
                     start = start + 1
                 end = model_times.convert_time(e.end_time) + 1
-                assert end > start, f"{e}, {start}, {end}"
+                if not end > start:
+                    raise ValueError(
+                        f"epoch end time must be > start, got end: {end}, start: {start}"
+                    )
                 # NOTE: 1.0 is a HACK for growth rate and is WRONG
                 itree[start:end] = _EpochData(
                     idmap[d.name], None, int(e.start_size), 1.0
