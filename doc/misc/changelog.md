@@ -10,7 +10,7 @@ Breaking changes
 * {func}`fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
   This change allowed us to drop `sparse` as a dependency that was causing
   headaches when new Python point releases come out.
-  PR {pr}`924`. Issue {issue}`876`.
+  PR {pr}`924`. Issues {issue}`876`, {issue}`919`.
 
 Behavior changes
 
