@@ -5,13 +5,15 @@ on:
     - cron: "0 0 1 * *"
   release:
     types: [created]
+  push:
+    branches: [main, dev]
 
 jobs:
   macOS:
     runs-on: macos-latest
     strategy:
       matrix:
-        python: [3.7, 3.8, 3.9, "3.10"]
+        python: [3.7, 3.8, 3.9] #, "3.10"]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,10 +33,6 @@ jobs:
           # Instead of letting setup.py install a newer numpy we install it here
           # using the oldest supported version for ABI compatibility
           pip install oldest-supported-numpy
-      - name: Build module
-        run: |
-          python -VV
-          python setup.py build_ext --inplace
       - name: Build Wheel
         run: |
           python setup.py bdist_wheel
@@ -111,7 +109,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python: [3.7, 3.8, 3.9, "3.10"]
+        python: [3.7, 3.8, 3.9] #, "3.10"]
     steps:
       - name: Download wheels
         uses: actions/download-artifact@v2
@@ -121,11 +119,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
+      - name: ls
+        run: |
+          ls -lhrt
       - name: Install wheel and test
         run: |
           python -VV
+          pip install --upgrade pip
           # Install the local wheel
-          pip install fwdpy11 --only-binary fwdpy11 -f .
+          python -m pip install fwdpy11 --only-binary fwdpy11 -f .
           python -c "import fwdpy11;print(fwdpy11.__version__)"
 
   upload_to_PyPI:

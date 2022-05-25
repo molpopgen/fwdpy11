@@ -13,8 +13,15 @@ cd gsl-${GSL_VERSION}
 make -j 2 
 make install 
 cd .. 
+
+# Taken from msprime/#2043
+# We're running as root in the docker container so git commands issued by
+# setuptools_scm will fail without this:
+git config --global --add safe.directory /project
+# Fetch the full history as we'll be missing tags otherwise.
+# git fetch --unshallow
   
-for py in cp37-cp37m cp38-cp38 cp39-cp39
+for py in cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310
 do
     PYPATH=/opt/python/${py}
     PYBIN=${PYPATH}/bin/python 
