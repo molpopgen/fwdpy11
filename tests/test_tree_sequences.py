@@ -856,6 +856,7 @@ class TestTreeSequencesWithAncientSamplesPruneFixations(unittest.TestCase):
             self.params,
             100,
             self.recorder,
+            suppress_table_indexing=False,
             track_mutation_counts=True,
         )
         assert len(self.pop.fixations) > 0, "Nothing fixed, so test case is not helpful"
