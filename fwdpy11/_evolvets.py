@@ -48,7 +48,7 @@ def evolvets(
     recorder: Optional[Callable[[DiploidPopulation, SampleRecorder], None]] = None,
     *,
     post_simplification_recorder: Optional[Callable[[DiploidPopulation], None]] = None,
-    suppress_table_indexing: bool = False,
+    suppress_table_indexing: Optional[bool] = None,
     record_gvalue_matrix: bool = False,
     stopping_criterion: Optional[Callable[[DiploidPopulation, bool], bool]] = None,
     track_mutation_counts: bool = False,
@@ -71,9 +71,10 @@ def evolvets(
     :type recorder: typing.Callable
     :param post_simplification_recorder: (None) A temporal sampler
     :type post_simplification_recorder: typing.Callable
-    :param suppress_table_indexing: (False) Prevents edge table indexing until
-                                    end of simulation
-    :type suppress_table_indexing: bool
+    :param suppress_table_indexing: (`None`) Prevents edge table indexing until
+                                    end of simulation.  The default value (`None`)
+                                    will be interpreted as `True`
+    :type suppress_table_indexing: Optional[bool]
     :param record_gvalue_matrix: (False) Whether to record genetic values into
                                  :attr:`fwdpy11.DiploidPopulation.genetic_values`.
     :type record_gvalue_matrix: bool
@@ -114,6 +115,11 @@ def evolvets(
 
         Update to refactored ModelParams.
         Added ``check_demographic_event_timings``.
+
+    .. versionchanged: 0.18.0
+
+        `suppress_table_indexing` default changed to `None`,
+        which is interpreted as `True`.
 
     """
 
@@ -207,6 +213,10 @@ def evolvets(
     sr = SampleRecorder()
     from ._fwdpy11 import _dgvalue_pointer_vector
 
+    _suppress_table_indexing = suppress_table_indexing
+    if _suppress_table_indexing is None:
+        _suppress_table_indexing is True
+
     gvpointers = _dgvalue_pointer_vector(params.gvalue)
     evolve_with_tree_sequences(
         rng,
@@ -223,7 +233,7 @@ def evolvets(
         recorder,
         stopping_criterion,
         params.prune_selected is False,
-        suppress_table_indexing,
+        _suppress_table_indexing,
         record_gvalue_matrix,
         track_mutation_counts,
         remove_extinct_variants,

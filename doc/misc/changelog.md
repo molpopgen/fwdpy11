@@ -11,6 +11,10 @@ Breaking changes
   This change allowed us to drop `sparse` as a dependency that was causing
   headaches when new Python point releases come out.
   PR {pr}`924`. Issues {issue}`876`, {issue}`919`.
+* {func}`fwdpy11.evolvets`: the default for `suppress_table_indexing`
+  has changed from `False` to `True`.
+  This change will generally result in faster simulations, but will
+  break work flows that relied on accessing the trees during simulation.
 
 Behavior changes
 
