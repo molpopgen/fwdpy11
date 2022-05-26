@@ -15,6 +15,10 @@ Breaking changes
   has changed from `False` to `True`.
   This change will generally result in faster simulations, but will
   break work flows that relied on accessing the trees during simulation.
+* Removed deprecated attributes from distribution of effect size types.
+  These attributes have been undocumented for so long that no one's code
+  should break.
+  PR {pr}`938`. Issue {issue}`886`.
 
 Behavior changes
 

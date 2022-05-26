@@ -30,57 +30,6 @@ from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
                                attr_class_to_from_dict_no_recurse)
 
 
-def _add_deprecated_properties(self):
-    """
-    We've been using some non-Pythonic property names for a while.
-    This decorator adds them back
-    """
-
-    def b(self):
-        warnings.warn(
-            "b is deprecated in favor of beg and is scheduled for removal in 0.11.",
-            FutureWarning,
-        )
-        return self.beg
-
-    def e(self):
-        warnings.warn(
-            "e is deprecated in favor of end and is scheduled for removal in 0.11.",
-            FutureWarning,
-        )
-        return self.end
-
-    def w(self):
-        warnings.warn(
-            "w is deprecated in favor of weight and is scheduled for removal in 0.11.",
-            FutureWarning,
-        )
-        return self.weight
-
-    def c(self):
-        warnings.warn(
-            "c is deprecated in favor of coupled and is scheduled for removal in 0.11.",
-            FutureWarning,
-        )
-        return self.coupled
-
-    def l(self):
-        warnings.warn(
-            "l is deprecated in favor of label and is scheduled for removal in 0.11.",
-            FutureWarning,
-        )
-        return self.label
-
-    self.b = property(b)
-    self.e = property(e)
-    self.w = property(w)
-    self.c = property(c)
-    self.l = property(l)
-
-    return self
-
-
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
@@ -131,7 +80,6 @@ class Region(fwdpy11._fwdpy11._ll_Region):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -192,7 +140,6 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -255,7 +202,6 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -320,7 +266,6 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -381,7 +326,6 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -492,7 +436,6 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
@@ -557,7 +500,6 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
         )
 
 
-@_add_deprecated_properties
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
