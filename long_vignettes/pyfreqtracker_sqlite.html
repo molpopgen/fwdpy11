@@ -37,17 +37,19 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -596,7 +598,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -630,7 +632,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -670,7 +672,50 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Tracking mutations over time using sqlite3</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#helper-types">
+   Helper types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#a-class-to-track-mutations-frequencies-via-a-database">
+   A class to track mutations frequencies via a database
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#details-of-the-implementation">
+   Details of the implementation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#further-considerations">
+   Further considerations
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="tracking-mutations-over-time-using-sqlite3">
@@ -695,7 +740,7 @@ The trick is that we will only keep these ancient samples until the table collec
 We use the <code class="docutils literal notranslate"><span class="pre">post_simplification_recorder</span></code> argument to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>, passing in a class that gets frequencies from the tree sequences.
 Once our callback is finished, the ancient samples are purged.</p></li>
 <li><p>When the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays get full, we transfer their data to a relational database using the <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.10)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> module that is built in to the Python language.
-We will take advantage of the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.3.5)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
+We will take advantage of the <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> function <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.4.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>, which can transfer in-memory data to <code class="docutils literal notranslate"><span class="pre">SQL</span></code> databases via a convenient <code class="docutils literal notranslate"><span class="pre">API</span></code>.</p></li>
 </ul>
 <p>We will need the following imports:</p>
 <div class="cell docutils container">
@@ -728,7 +773,7 @@ This class is trivial (see <a class="reference internal" href="../short_vignette
 <p>The second class will be a callable that gets executed immediately after simplification.
 This type is responsible for processing trees, getting data into <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays, and transferring the data to the database.</p>
 <p>This class has a lot of responsibilities.
-In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.3.5)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
+In order to shorten the code, we define a <code class="docutils literal notranslate"><span class="pre">TableBuffer</span></code> class that holds the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> arrays and handles the mechanics of calling <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.to_sql.html#pandas.DataFrame.to_sql" title="(in pandas v1.4.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.to_sql()</span></code></a>.
 The definition of this class is shown below, and you may click to see it.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
@@ -1022,7 +1067,7 @@ The differences are:</p>
 </div>
 </div>
 </div>
-<p>We are going to use <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v1.3.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.3.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
+<p>We are going to use <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_sql.html#pandas.read_sql" title="(in pandas v1.4.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.read_sql()</span></code></a> to pull data from our database into <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> objects.
 Our approach here is not optimal and we discuss alternatives below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1116,8 +1161,8 @@ You can plot the output using <code class="docutils literal notranslate"><span c
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="pyfreqtracker.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -1134,19 +1179,17 @@ You can plot the output using <code class="docutils literal notranslate"><span c
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Kevin Thornton<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Kevin Thornton<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

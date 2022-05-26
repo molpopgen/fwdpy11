@@ -37,20 +37,22 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Mutations with variable dominance" href="mutationdominance_vignette.html" />
@@ -598,7 +600,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -632,7 +634,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -667,7 +669,45 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Distributions of effect sizes</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#region-weighting">
+   Region weighting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-the-dominance-of-new-mutations">
+   Setting the dominance of new mutations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-distributions-of-effect-sizes">
+   Built-in distributions of effect sizes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#labelling-mutations-from-different-regions">
+   Labelling mutations from different regions
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="distributions-of-effect-sizes">
@@ -859,24 +899,29 @@ The following example tries to use a value one larger than the maximum allowed:<
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_3799</span><span class="o">/</span><span class="mf">1747280255.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="nn">Input In [9],</span> in <span class="ni">&lt;cell line: 3&gt;</span><span class="nt">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> 
 <span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ConstantS</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">beg</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
 
-<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/regions.py</span> in <span class="ni">__init__</span><span class="nt">(self, beg, end, weight, s, h, coupled, label, scaling)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;scaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
-<span class="ne">---&gt; </span><span class="mi">12</span>     <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
+<span class="nn">File &lt;attrs generated init fwdpy11.regions.ConstantS&gt;:12,</span> in <span class="ni">__init__</span><span class="nt">(self, beg, end, weight, s, h, coupled, label, scaling)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">_inst_dict</span><span class="p">[</span><span class="s1">&#39;scaling&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scaling</span>
+<span class="ne">---&gt; </span><span class="mi">12</span> <span class="bp">self</span><span class="o">.</span><span class="n">__attrs_post_init__</span><span class="p">()</span>
 
-<span class="nn">~/work/fwdpy11/fwdpy11/fwdpy11/regions.py</span> in <span class="ni">__attrs_post_init__</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">181</span> 
-<span class="g g-Whitespace">    </span><span class="mi">182</span>     <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">183</span>         <span class="nb">super</span><span class="p">(</span><span class="n">ConstantS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">184</span>             <span class="bp">self</span><span class="o">.</span><span class="n">beg</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">185</span>             <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+<span class="nn">File ~/work/fwdpy11/fwdpy11/fwdpy11/regions.py:131,</span> in <span class="ni">ConstantS.__attrs_post_init__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">130</span> <span class="k">def</span> <span class="nf">__attrs_post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">131</span>     <span class="nb">super</span><span class="p">(</span><span class="n">ConstantS</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">132</span>         <span class="bp">self</span><span class="o">.</span><span class="n">beg</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span>         <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>         <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span>         <span class="bp">self</span><span class="o">.</span><span class="n">s</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span>         <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">137</span>         <span class="bp">self</span><span class="o">.</span><span class="n">coupled</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">138</span>         <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">139</span>         <span class="bp">self</span><span class="o">.</span><span class="n">scaling</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">140</span>     <span class="p">)</span>
 
 <span class="ne">TypeError</span>: __init__(): incompatible constructor arguments. The following argument types are supported:
 <span class="g g-Whitespace">    </span><span class="mi">1</span><span class="o">.</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">_fwdpy11</span><span class="o">.</span><span class="n">_ll_ConstantS</span><span class="p">(</span><span class="n">beg</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">coupled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
@@ -912,8 +957,8 @@ The following example tries to use a value one larger than the maximum allowed:<
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="geneticmaps_vignette.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -930,19 +975,17 @@ The following example tries to use a value one larger than the maximum allowed:<
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Kevin Thornton<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Kevin Thornton<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

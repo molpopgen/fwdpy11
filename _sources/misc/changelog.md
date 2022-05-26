@@ -3,6 +3,94 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.18.0
+
+Breaking changes
+
+* {func}`fwdpy11.TableCollection.fs` no longer accepts more than two sample sets.
+  This change allowed us to drop `sparse` as a dependency that was causing
+  headaches when new Python point releases come out.
+  PR {pr}`924`. Issues {issue}`876`, {issue}`919`.
+* {func}`fwdpy11.evolvets`: the default for `suppress_table_indexing`
+  has changed from `False` to `True`.
+  This change will generally result in faster simulations, but will
+  break work flows that relied on accessing the trees during simulation.
+* Removed deprecated attributes from distribution of effect size types.
+  These attributes have been undocumented for so long that no one's code
+  should break.
+  PR {pr}`938`. Issue {issue}`886`.
+
+Behavior changes
+
+* {func}`fwdpy11.DemographyDebugger.report` raises a warning
+  to state that it has not been implemented.
+  It returns a string with a message to that effect.
+
+Bug fixes
+
+* Fixed a bug in event time handling from `demes` models.
+  This bug did not lead to incorrect results as the C++ back end caught the
+  invalid models at run time.
+  PR {pr}`891`.
+  Issue {issue}`881`.
+  {user}`apragsdale`,
+  {user}`molpopgen`.
+* Fix lambda capture in `examples/plugin/gvalue_recorder.cc`.
+  The previous code was not compatible with current versions of `pybind11`.
+  PR {pr}`921`. Issue {issue}`920`.
+* Fixed handling of non-integer times in `demes` models.
+  PR {pr}`930`. Issue {issue}`929`.
+
+User interface improvements
+
+* Region coordinates are now validated before starting the simulation.
+  PR {pr}`909`.
+  Issue {issue}`908`.
+
+Testing
+
+* Added many more tests related to models defined using `demes`
+  PR {pr}`891`.
+  PR {pr}`931`.
+  Issue {issue}`890`.
+  {user}`apragsdale`,
+  {user}`molpopgen`.
+
+Back end changes
+
+* Add new Python class intended to help validate demographic models and
+  aid in importing models from `demes`.
+  PR {pr}`900`.
+  PR {pr}`904`.
+* Completely rebuild {class}`fwdpy11.DemographyDebugger`.
+  PR {pr}`906`.
+* Added infrastructure to separate out back end from Python-specific C++ code.
+  PR {pr}`936`.
+* Assert that epochs from `demes` models are at least 1 generation long.
+  PR {pr}`931`
+* Added infrastructure to separate out back end from Python-specific C++ code.
+  PR {pr}`936`.
+
+Dependencies
+
+* Removed use of `pip-tools` in favor of a single `requirements/development.txt` file with loose pinning.
+  Issue {issue}`877`, PR {pr}`896`
+* Bump minimum `pybind11` to 2.9.0.
+  PR {pr}`922`.
+
+Build System
+
+* `setup.cfg` now pins minimum and maximum Python versions.
+  PR {pr}`923`.  Issue {issue}`914`.
+
+Deployment
+
+* Update Docker work flow for building wheels to correctly locate requirements file 
+  and build for Python 3.10
+  PR {pr}`927`
+* Update GitHub actions to build wheels for Python 3.10.
+  PR {pr}`928`
+
 ## 0.17.1
 
 Bug fixes
@@ -333,7 +421,7 @@ Fixes:
 This is a point release adding more documentation:
 
 * {ref}`Demes vignette <demes_vignette>` updated.
-* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of {class}`sparse.COO`.
+* {func}`fwdpy11.TableCollection.fs` docstring updated regarding some perhaps unexpected behavior of `sparse.COO`.
 
 ## 0.14.0
 
@@ -732,7 +820,7 @@ details of book-keeping various data structures:
 
 Other changes:
 
-* {mod}`sparse` is added to `install_requires` in `setup.py`.  {issue}`421`
+* `sparse` is added to `install_requires` in `setup.py`.  {issue}`421`
 * {class}`fwdpy11.TableCollection`'s validation of genome lengths is improved. PR {pr}`428`
 * The C++ base class for a population is now a concrete class rather than a template alias.  This change enables forward declarations in header files. PR {pr}`427`
 

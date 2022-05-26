@@ -14,6 +14,15 @@ kernelspec:
 
 # Calculating frequency spectra from tree sequences
 
+:::{note}
+
+   In version 0.18.0, the sparse matrix type is now given by the `scipy.sparse` module
+   rather than the `sparse` module.
+   This change removes supports for frequency spectra with more than
+   two sample groups.
+
+:::
+
 The mutation frequency spectrum is an array-like object representing the
 number of mutation events occurring at different frequencies.  Generating
 frequency spectra, or `fs`, from simulations is handled by {func}`fwdpy11.TableCollection.fs`.
@@ -30,7 +39,7 @@ We have to define some conventions:
   Singletons start in bin `1`, etc..
 * An `fs` from a single sample list is represented by a {class}`numpy.ma.MaskedArray`,
   object with the zero and fixed bins masked.
-* An `fs` from more than one sample list is stored in a {class}`sparse.COO` sparse
+* An `fs` from more than one sample list is stored in a `scipy.sparse.coo_matrix` sparse
   matrix.
 
 For our examples, we will initialize a {class}`fwdpy11.DiploidPopulation` from
@@ -93,7 +102,7 @@ fs
 Obtain the full {class}`numpy.ndarray` for the joint `fs`:
 
 ```{code-cell} python
-fs.todense()
+np.asarray(fs.todense())
 ```
 
 :::{warning}
@@ -102,20 +111,18 @@ The joint `fs` can take a lot of memory!
 
 :::
 
-We can use standard array operations to get the marginal `fs` from our joint `fs`:
-
-```{code-cell} python
-fs.sum(axis=1).todense()
-fs.sum(axis=0).todense()
-```
-
 :::{note}
 
-Be careful when processing sparse matrix objects!  Naive application of regular
-{mod}`numpy` functions can lead to erroneous results.  Be sure to check the
-{mod}`sparse` documentation.
+Without the call to `np.asarray`, you would get a `np.matrix` object back, which is a different thing!
 
 :::
+
+We can use standard array operations to get the marginal `fs` from our joint `fs` as a `numpy.ndarray`:
+
+```{code-cell} python
+np.asarray(fs.sum(axis=1).flatten())[0]
+np.asarray(fs.sum(axis=0).flatten())[0]
+```
 
 The marginalization can be tedious for many samples, so you can have it happen automatically,
 in which case a {class}`dict` is returned, keyed by sample list index:

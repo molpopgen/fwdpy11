@@ -37,17 +37,19 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -596,7 +598,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -630,7 +632,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -747,7 +749,127 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Soft selection with discrete demes</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#overview">
+   Overview
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-model">
+     The model
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-timings-of-events">
+     The timings of events
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-the-initial-demes-in-a-simulation">
+   Setting the initial demes in a simulation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-discretedemography-class">
+   The DiscreteDemography class
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#compatibility-with-previous-versions-of-fwdpy11">
+     Compatibility with previous versions of fwdpy11
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#event-types">
+   Event types
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mass-migrations">
+     Mass migrations
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setting-the-initial-state-of-a-simulation">
+       Setting the initial state of a simulation
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#multiple-mass-migrations">
+       Multiple mass migrations
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-rate-of-drift">
+       The rate of drift
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#instantaneous-deme-size-changes">
+     Instantaneous deme size changes
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changing-growth-rates">
+     Changing growth rates
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#changing-the-selfing-rate">
+     Changing the selfing rate
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#migration">
+     Migration
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#an-alternative-model-of-migration">
+       An alternative model of migration
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examples-of-models">
+   Examples of models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#isolation-with-migration-or-im">
+     Isolation with migration, or “IM”
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="soft-selection-with-discrete-demes">
@@ -764,10 +886,10 @@ see <a class="reference internal" href="demographic_models.html#demographic-mode
 <p>Once you’ve digested this section, you may want to read <a class="reference internal" href="mvdes.html#mvdes"><span class="std std-ref">Different effect sizes of mutations in different demes</span></a>.</p>
 <div class="section" id="the-model">
 <h3>The model<a class="headerlink" href="#the-model" title="Permalink to this headline">¶</a></h3>
-<p>The model here is soft selection <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id14">Lev53</a>]</span>, meaning that the number of
+<p>The model here is soft selection <span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id14" title="Howard Levene. Genetic equilibrium when more than one ecological niche is available. Am. Nat., 87(836):331–333, September 1953. doi:10.1086/281792.">Lev53</a>]</span>, meaning that the number of
 breeding individuals (“adults”) in each deme is fixed at a certain value.
-A nice overview of this model and how it compares to others in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id15">Fel76</a>]</span>.
-You may also find <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id11">Chr74</a>]</span> and <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id12">Chr75</a>]</span> useful.</p>
+A nice overview of this model and how it compares to others in <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id15" title="J Felsenstein. The theoretical population genetics of variable selection and migration. Annu. Rev. Genet., 10:253–280, 1976. doi:10.1146/annurev.ge.10.120176.001345.">Fel76</a>]</span>.
+You may also find <span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id11" title="Freddy Bugge Christiansen. Sufficient conditions for protected polymorphism in a subdivided population. Am. Nat., 108(960):157–166, 1974. doi:10.1086/282896.">Chr74</a>]</span> and <span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id12" title="Freddy Bugge Christiansen. Hard and soft selection in a subdivided population. Am. Nat., 109(965):11–16, January 1975. doi:10.1086/282970.">Chr75</a>]</span> useful.</p>
 <p>Each generation, we generate offspring (“juveniles”) in each deme.  In the absence of
 migration, all parents of all offspring come from the offspring deme.  With a migration
 matrix, we first choose the “source” deme, pick parents from that deme, and then
@@ -1272,9 +1394,9 @@ fraction of deme <code class="docutils literal notranslate"><span class="pre">i<
 entry <code class="docutils literal notranslate"><span class="pre">M[i,</span> <span class="pre">i]</span></code> represents the non-migrant fraction of deme <code class="docutils literal notranslate"><span class="pre">i</span></code>’s ancestry.
 The matrix is “row-major” meaning that rows refer to migration into source demes.
 This definition of the migration matrix corresponds to that found in several
-different sources (<span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id11">Chr74</a>]</span>, <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id12">Chr75</a>]</span>).
-This definition of migration is also what diffusion models assume (<em>e.g.</em> <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id8">JLRG17</a>]</span>)
-as well as coalescent simulations like <em>msprime</em> <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id19">KEM16</a>]</span>.</p>
+different sources (<span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id11" title="Freddy Bugge Christiansen. Sufficient conditions for protected polymorphism in a subdivided population. Am. Nat., 108(960):157–166, 1974. doi:10.1086/282896.">Chr74</a>]</span>, <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id12" title="Freddy Bugge Christiansen. Hard and soft selection in a subdivided population. Am. Nat., 109(965):11–16, January 1975. doi:10.1086/282970.">Chr75</a>]</span>).
+This definition of migration is also what diffusion models assume (<em>e.g.</em> <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id8" title="Julien Jouganous, Will Long, Aaron P Ragsdale, and Simon Gravel. Inferring the joint demographic history of multiple populations: beyond the diffusion approximation. Genetics, 206(3):1549–1567, July 2017. doi:10.1534/genetics.117.200493.">JLRG17</a>]</span>)
+as well as coalescent simulations like <em>msprime</em> <span id="id10">[<a class="reference internal" href="../misc/bibliography.html#id19" title="Jerome Kelleher, Alison M Etheridge, and Gilean McVean. Efficient coalescent simulation and genealogical analysis for large sample sizes. PLoS Comput. Biol., 12(5):e1004842, May 2016. doi:10.1371/journal.pcbi.1004842.">KEM16</a>]</span>.</p>
 <p>For example, consider the following matrix:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1657,8 +1779,8 @@ from diffusion models.</p>
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="advancedtopics.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -1675,19 +1797,17 @@ from diffusion models.</p>
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Kevin Thornton<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Kevin Thornton<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 

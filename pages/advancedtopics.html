@@ -37,20 +37,22 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Soft selection with discrete demes" href="softselection.html" />
@@ -598,7 +600,7 @@
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
     </div>
 </div>
 
@@ -632,7 +634,7 @@
         </div>
 
         <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
             <div class="tocsection onthispage pt-5 pb-3">
                 <i class="fas fa-list"></i> Contents
@@ -798,7 +800,176 @@
 </div>
     <div id="main-content" class="row">
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Advanced topics</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#executing-multiple-replicates-in-parallel-using-concurrent-futures">
+   Executing multiple replicates in parallel using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     concurrent.futures
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-long-to-run-the-simulation">
+   How long to run the simulation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-eyre-walker-model-of-complex-traits">
+   The “Eyre-Walker” model of complex traits
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#writing-genetic-value-classes-in-python">
+   Writing genetic value classes in Python
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#concepts">
+     Concepts
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-dimensionality-of-a-model">
+       The “dimensionality” of a model
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#supporting-time-dependent-models">
+       Supporting time-dependent models
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#performance">
+     Performance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#technical-issues">
+     Technical issues
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#abstract-base-classes">
+       Abstract base classes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#initializing-the-super-class">
+       Initializing the super class
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#attrs">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         attrs
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#custom-decorators">
+       Custom decorators
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#genetic-value-to-fitness-maps">
+     Genetic value to fitness maps
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-data-type">
+       The data type
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#genetic-value-noise">
+     Genetic value “noise”
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id10">
+       The data type
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#new-genetic-value-models">
+     New genetic value models
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-abstract-base-class">
+       The abstract base class
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#outline-of-user-defined-classes">
+       Outline of user-defined classes
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#method-requirements">
+       Method requirements
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#example-strictly-additive-effects-on-a-trait">
+       Example: strictly additive effects on a trait
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#more-complex-scenarios-such-as-social-interactions">
+       More complex scenarios (such as social interactions)
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-data-types">
+       The data types
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#subtleties-of-starting-finishing-tree-sequences-using-msprime">
+   Subtleties of starting/finishing tree sequences using
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     msprime
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
               <div>
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="advanced-topics">
@@ -857,8 +1028,8 @@ For example, for a neutral model, the distribution of the
 number of mutations under an infinitely-many sites model
 for a small sample should match <code class="docutils literal notranslate"><span class="pre">msprime</span></code> very well.
 For a steady-state model of recurrent hitch-hiking
-<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21">KHL89</a>]</span>, results from small samples
-should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18">KS16</a>]</span>.
+<span id="id1">[<a class="reference internal" href="../misc/bibliography.html#id21" title="N L Kaplan, R R Hudson, and C H Langley. The “hitchhiking effect” revisited. Genetics, 123(4):887–899, December 1989.">KHL89</a>]</span>, results from small samples
+should match coalescent simulations such as <span id="id2">[<a class="reference internal" href="../misc/bibliography.html#id18" title="Andrew D Kern and Daniel R Schrider. Discoal: flexible coalescent simulations with selection. Bioinformatics, 32(24):3839–3841, December 2016. doi:10.1093/bioinformatics/btw556.">KS16</a>]</span>.
 Clearly, all of the different methods
 should match analytical results where possible.</p></li>
 <li><p>You probably want all of your trees to be fully coalesced
@@ -882,7 +1053,7 @@ with a tree sequence from <code class="docutils literal notranslate"><span class
 </div>
 <div class="section" id="the-eyre-walker-model-of-complex-traits">
 <span id="eyre-walker"></span><h2>The “Eyre-Walker” model of complex traits<a class="headerlink" href="#the-eyre-walker-model-of-complex-traits" title="Permalink to this headline">¶</a></h2>
-<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23">EW10</a>]</span> describes a model relating mutations with
+<p><span id="id3">[<a class="reference internal" href="../misc/bibliography.html#id23" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010. doi:10.1073/pnas.0906182107.">EW10</a>]</span> describes a model relating mutations with
 fitness effect <span class="math notranslate nohighlight">\(S = |2Ns|\)</span> to <span class="math notranslate nohighlight">\(z\)</span>, their effect on
 a phenotype/trait according to <span class="math notranslate nohighlight">\(z = \delta S^\tau(1+\epsilon)\)</span>.
 Here, <span class="math notranslate nohighlight">\(\epsilon\)</span> is a draw from a Gaussian distribution with mean zero,
@@ -1051,12 +1222,12 @@ to abuse this.  More often than not, you’ll just break stuff.)</p>
 <p>I feel that some comments about this model are warranted:</p>
 <ul class="simple">
 <li><p>The model is a simplification of earlier work by Keightley and Hill
-(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29">KH90</a>]</span>), which should be cited
-alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23">EW10</a>]</span>.</p></li>
-<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29">KH90</a>]</span>) show that this model predicts heritability
+(<span id="id4">[<a class="reference internal" href="../misc/bibliography.html#id28" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span>, <span id="id5">[<a class="reference internal" href="../misc/bibliography.html#id29" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990. doi:10.1098/rspb.1990.0110.">KH90</a>]</span>), which should be cited
+alongside <span id="id6">[<a class="reference internal" href="../misc/bibliography.html#id23" title="Adam Eyre-Walker. Evolution in health and medicine sackler colloquium: genetic architecture of a complex trait and its implications for fitness and genome-wide association studies. Proc. Natl. Acad. Sci. U. S. A., 107 Suppl 1:1752–1756, January 2010. doi:10.1073/pnas.0906182107.">EW10</a>]</span>.</p></li>
+<li><p><span id="id7">[<a class="reference internal" href="../misc/bibliography.html#id28" title="P D Keightley and W G Hill. Quantitative genetic variability maintained by mutation-stabilizing selection balance in finite populations. Genet. Res., 52(1):33–43, August 1988.">KH88</a>]</span> and <span id="id8">[<a class="reference internal" href="../misc/bibliography.html#id29" title="Peter D Keightley and William G Hill. Variation maintained in quantitative traits with Mutation-Selection balance: pleiotropic Side-Effects on fitness traits. Proceedings of the Royal Society of London B: Biological Sciences, 242(1304):95–100, November 1990. doi:10.1098/rspb.1990.0110.">KH90</a>]</span>) show that this model predicts heritability
 (the genetic variance) is linear-ish with <code class="docutils literal notranslate"><span class="pre">N</span></code>, with the details depending
 somewhat on the model parameters.  The biological reasonableness
-of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16">JB05</a>]</span> discuss this point
+of that prediction is dubious.  <span id="id9">[<a class="reference internal" href="../misc/bibliography.html#id16" title="Toby Johnson and Nick Barton. Theoretical models of selection and mutation on quantitative traits. Philos. Trans. R. Soc. Lond. B Biol. Sci., 360(1459):1411–1425, July 2005. doi:10.1098/rstb.2005.1667.">JB05</a>]</span> discuss this point
 in some detail, and give other relevant references.</p></li>
 <li><p>Depending somewhat on the parameters of the <code class="docutils literal notranslate"><span class="pre">getz</span></code> function, one will eventually
 generate an intermediate-frequency variant with a massive <span class="math notranslate nohighlight">\(z\)</span>,
@@ -1797,8 +1968,8 @@ A more general example, for a genome of length <code class="docutils literal not
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
+            
+                <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
     <a class='left-prev' id="prev-link" href="tutorial.html" title="previous page">
         <i class="fas fa-angle-left"></i>
@@ -1815,19 +1986,17 @@ A more general example, for a genome of length <code class="docutils literal not
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            
         </div>
     </div>
     <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Kevin Thornton<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
-    </div>
-  </footer>
+  <p>
+    
+      By Kevin Thornton<br/>
+    
+        &copy; Copyright 2021.<br/>
+  </p>
+</footer>
 </main>
 
 
