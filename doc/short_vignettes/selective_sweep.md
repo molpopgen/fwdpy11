@@ -42,9 +42,9 @@ def setup(prune_selected=False):
     initial_ts = msprime.sim_ancestry(
         samples=500,
         population_size=500,
-        recombination_rate=1e-1,
+        recombination_rate=1e-4,
         random_seed=43215,
-        sequence_length=1.0,
+        sequence_length=10000.0,
     )
 
     # Build the pop from msprime output
@@ -52,7 +52,7 @@ def setup(prune_selected=False):
 
     # Set up basic model parameters
     pdict = {
-        "recregions": [fwdpy11.PoissonInterval(0, 1, 1e-1)],
+        "recregions": [fwdpy11.PoissonInterval(0, 10000, 1e-4, discrete=True)],
         # Here, 2 means that fitness is multiplicative
         # over 1, 1+hs, 1+2s.
         "gvalue": fwdpy11.Multiplicative(2.0),
