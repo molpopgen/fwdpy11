@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+Bug fixes
+
+* Fix display of `weight` for distribution-of-effect-size classes.
+  Issue {issue}`885`. PR {pr}`943`.
+
 ## 0.18.0
 
 Breaking changes

@@ -25,15 +25,20 @@ import numpy as np
 
 import fwdpy11._fwdpy11
 
-from .class_decorators import (attr_add_asblack, attr_class_pickle_with_super,
-                               attr_class_to_from_dict,
-                               attr_class_to_from_dict_no_recurse)
+from .class_decorators import (
+    attr_add_asblack,
+    attr_class_pickle_with_super,
+    attr_class_to_from_dict,
+    attr_class_to_from_dict_no_recurse,
+    region_custom_repr,
+)
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class Region(fwdpy11._fwdpy11._ll_Region):
     """
     A genomic region, defined by half-open interval [beg, end)
@@ -80,10 +85,11 @@ class Region(fwdpy11._fwdpy11._ll_Region):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
     """
     Mutations with fixed effect sizes
@@ -140,10 +146,11 @@ class ConstantS(fwdpy11._fwdpy11._ll_ConstantS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class ExpS(fwdpy11._fwdpy11._ll_ExpS):
     """
     Exponential distribution of effect sizes
@@ -202,10 +209,11 @@ class ExpS(fwdpy11._fwdpy11._ll_ExpS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class GammaS(fwdpy11._fwdpy11._ll_GammaS):
     """
     Gamma distribution of effect sizes
@@ -266,10 +274,11 @@ class GammaS(fwdpy11._fwdpy11._ll_GammaS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
     """
     Gaussian distribution of effect sizes
@@ -326,10 +335,11 @@ class GaussianS(fwdpy11._fwdpy11._ll_GaussianS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
     """
     Log-normal distribution of effect sizes.
@@ -436,10 +446,11 @@ class LogNormalS(fwdpy11._fwdpy11._ll_LogNormalS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class UniformS(fwdpy11._fwdpy11._ll_UniformS):
     """
     Uniform distrubution of effect sizes
@@ -500,10 +511,11 @@ class UniformS(fwdpy11._fwdpy11._ll_UniformS):
         )
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffects):
     """
     Pleiotropic effects via a multivariate Gaussian distribution.
@@ -591,10 +603,11 @@ class MultivariateGaussianEffects(fwdpy11._fwdpy11._ll_MultivariateGaussianEffec
         return np.array_equal(self.cov_matrix, other.cov_matrix)
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class mvDES(fwdpy11._fwdpy11._ll_mvDES):
     """
     General multivariate distribution of effect sizes.
@@ -626,10 +639,11 @@ class mvDES(fwdpy11._fwdpy11._ll_mvDES):
         super(mvDES, self).__init__(self.des, self.means, self.matrix)
 
 
+@region_custom_repr
 @attr_add_asblack
 @attr_class_pickle_with_super
 @attr_class_to_from_dict_no_recurse
-@attr.s(eq=False, auto_attribs=True, frozen=True, repr_ns="fwdpy11")
+@attr.s(eq=False, auto_attribs=True, frozen=True, repr=False, repr_ns="fwdpy11")
 class DiscreteDESD(fwdpy11._fwdpy11._ll_DiscreteDESD):
     """
     Discretized distribution of effect sizes and dominance.
