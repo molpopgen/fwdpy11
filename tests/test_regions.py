@@ -452,5 +452,15 @@ class TestDiscreteDESD(unittest.TestCase):
             fwdpy11.DiscreteDESD(0, 1, 2, jdist)
 
 
+def test_ConstantS_weight_display():
+    c = fwdpy11.ConstantS(0, 10, 1.0, s=0.5, coupled=True)
+    sc = str(c)
+    print(sc)
+    assert "weight=10" in sc
+    pc = pickle.dumps(c)
+    up = pickle.loads(pc)
+    assert "weight=10" in str(up)
+
+
 if __name__ == "__main__":
     unittest.main()

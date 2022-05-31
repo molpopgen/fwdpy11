@@ -140,3 +140,26 @@ def attr_add_asblack(cls):
     cls.asblack = _asblack
 
     return cls
+
+
+def region_custom_repr(cls):
+    """
+    Custom repr to correctly display weight for region instances
+    """
+
+    def custom_repr(self):
+        name = self.__class__.__name__
+        d = {k: v for k, v in self.__dict__.items()}
+        if d["coupled"] is True:
+            d["weight"] = (d["end"] - d["beg"]) * d["weight"]
+        d = str(d)
+        d = d.replace("{", "")
+        d = d.replace("}", "")
+        d = d.replace("'", "")
+        d = d.replace(": ", "=")
+        repr = f"fwdpy11.{name}({d})"
+        return repr
+
+    cls.__repr__ = custom_repr
+
+    return cls
