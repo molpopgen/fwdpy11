@@ -13,6 +13,8 @@
   On macOS, use `clang`.
 * `cmake`
 * The GNU Scientific Library, version 2.3 or later.
+* The development files (headers) required for your Python installation.
+  For example, on Ubuntu-based Linux distributions, you need the `libpython3-dev` package.
 
 :::{todo}
 Describe dependencies for the C++ test suite

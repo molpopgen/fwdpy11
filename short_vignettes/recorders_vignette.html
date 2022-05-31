@@ -255,6 +255,11 @@ const thebe_selector_output = ".output, .cell_output"
    Selective sweeps
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="incomplete_sweep.html">
+   Incomplete selective sweeps
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
@@ -697,8 +702,8 @@ const thebe_selector_output = ".output, .cell_output"
 <p>In order to facilitate time-series analyses, you may pass a callable object to <a class="reference internal" href="../pages/functions.html#fwdpy11.evolvets" title="fwdpy11.evolvets"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fwdpy11.evolvets()</span></code></a>.
 The following boiler plate illustrates the requirements for the callable objects in both <code class="docutils literal notranslate"><span class="pre">Python</span></code> and in <code class="docutils literal notranslate"><span class="pre">C++</span></code>:</p>
 <div class="tabbed-set docutils">
-<input checked="checked" id="487f7f64-c38f-49de-b857-6f5efbfe4f9c" name="798b1e90-52bd-4cb3-8421-1a0aff2e32f8" type="radio">
-</input><label class="tabbed-label" for="487f7f64-c38f-49de-b857-6f5efbfe4f9c">
+<input checked="checked" id="de6c2038-ec4e-4336-a4f6-2877d1b0ad0a" name="cb763078-a813-4eba-87ee-f19fb60882f9" type="radio">
+</input><label class="tabbed-label" for="de6c2038-ec4e-4336-a4f6-2877d1b0ad0a">
 python</label><div class="tabbed-content docutils">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Recorder</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">sampler</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">SampleRecorder</span><span class="p">):</span>
@@ -706,8 +711,8 @@ python</label><div class="tabbed-content docutils">
 </pre></div>
 </div>
 </div>
-<input id="425441dd-b525-475f-9d16-8bd3ae74df89" name="798b1e90-52bd-4cb3-8421-1a0aff2e32f8" type="radio">
-</input><label class="tabbed-label" for="425441dd-b525-475f-9d16-8bd3ae74df89">
+<input id="35040cad-da52-41c3-8b41-6e8b51552687" name="cb763078-a813-4eba-87ee-f19fb60882f9" type="radio">
+</input><label class="tabbed-label" for="35040cad-da52-41c3-8b41-6e8b51552687">
 c++</label><div class="tabbed-content docutils">
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/evolvets/SampleRecorder.hpp&gt;</span><span class="cp"></span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fwdpy11/types/DiploidPopulation.hpp&gt;</span><span class="cp"></span>

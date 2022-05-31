@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Details of demes integration &#8212; fwdpy11 manual</title>
+    <title>Incomplete selective sweeps &#8212; fwdpy11 manual</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -53,8 +53,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Technical overview of genetic value calculations" href="genetic_values.html" />
-    <link rel="prev" title="Time series analysis" href="../pages/recorders.html" />
+    <link rel="next" title="Converting data to tskit format" href="../long_vignettes/tskitconvert_vignette.html" />
+    <link rel="prev" title="Selective sweeps" href="selective_sweep.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -122,12 +122,12 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/initpops_vignette.html">
+  <a class="reference internal" href="initpops_vignette.html">
    Initializing a population
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/poptour_vignette.html">
+  <a class="reference internal" href="poptour_vignette.html">
    Properties of populations
   </a>
  </li>
@@ -139,47 +139,47 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/genetics_vignettes_intro.html">
+  <a class="reference internal" href="genetics_vignettes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/geneticmaps_vignette.html">
+  <a class="reference internal" href="geneticmaps_vignette.html">
    Genetic maps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/des_vignette.html">
+  <a class="reference internal" href="des_vignette.html">
    Distributions of effect sizes
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/mutationdominance_vignette.html">
+  <a class="reference internal" href="mutationdominance_vignette.html">
    Mutations with variable dominance
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmuts_vignette.html">
+  <a class="reference internal" href="neutralmuts_vignette.html">
    Neutral mutations during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_fitness.html">
+  <a class="reference internal" href="gvalues_fitness.html">
    Genetic values - mutations with direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/gvalues_traits.html">
+  <a class="reference internal" href="gvalues_traits.html">
    Genetic values - simulating phenotypes/traits.
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_fitness.html">
+  <a class="reference internal" href="workingexample_fitness.html">
    Working example - parameters for simulating direct effects on fitness
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/workingexample_trait.html">
+  <a class="reference internal" href="workingexample_trait.html">
    Working example - parameters for the simulation of a trait
   </a>
  </li>
@@ -191,22 +191,22 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/evolvets_vignette.html">
+  <a class="reference internal" href="evolvets_vignette.html">
    Evolving with tree sequence recording
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recorders_vignette.html">
+  <a class="reference internal" href="recorders_vignette.html">
    Recording data during a simulation
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/recapitation.html">
+  <a class="reference internal" href="recapitation.html">
    Finishing a simulation with msprime
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/neutralmutsafter_vignette.html">
+  <a class="reference internal" href="neutralmutsafter_vignette.html">
    Adding neutral mutations to a population with existing ancestry
   </a>
  </li>
@@ -218,12 +218,12 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_vignettes_intro.html">
+  <a class="reference internal" href="demography_vignettes_intro.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demes_vignette.html">
+  <a class="reference internal" href="demes_vignette.html">
    Using
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -234,7 +234,7 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/demography_debugger_vignette.html">
+  <a class="reference internal" href="demography_debugger_vignette.html">
    Debugging demographic models
   </a>
  </li>
@@ -244,19 +244,19 @@ const thebe_selector_output = ".output, .cell_output"
   Short vignettes - conditional models
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/trackmutationfates.html">
+  <a class="reference internal" href="trackmutationfates.html">
    Tracking user-specified new mutations
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/selective_sweep.html">
+  <a class="reference internal" href="selective_sweep.html">
    Selective sweeps
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../short_vignettes/incomplete_sweep.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Incomplete selective sweeps
   </a>
  </li>
@@ -381,9 +381,9 @@ const thebe_selector_output = ".output, .cell_output"
   Technical details
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../technical/demes.html">
    Details of
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -394,12 +394,12 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="genetic_values.html">
+  <a class="reference internal" href="../technical/genetic_values.html">
    Technical overview of genetic value calculations
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="writingplugins.html">
+  <a class="reference internal" href="../technical/writingplugins.html">
    Writing “plugins” with C++
   </a>
  </li>
@@ -593,9 +593,12 @@ const thebe_selector_output = ".output, .cell_output"
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="../_sources/short_vignettes/incomplete_sweep.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/technical/demes.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/short_vignettes/incomplete_sweep.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -615,7 +618,7 @@ const thebe_selector_output = ".output, .cell_output"
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Ftechnical/demes.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/molpopgen/fwdpy11/issues/new?title=Issue%20on%20page%20%2Fshort_vignettes/incomplete_sweep.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -636,19 +639,6 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#implementation-of-mass-migration-events-a-k-a-pulse-migrations">
-   Implementation of mass migration events (a.k.a. pulse migrations)
-  </a>
- </li>
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -656,41 +646,150 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Details of demes integration</h1>
+                <h1>Incomplete selective sweeps</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#implementation-of-mass-migration-events-a-k-a-pulse-migrations">
-   Implementation of mass migration events (a.k.a. pulse migrations)
-  </a>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="details-of-demes-integration">
-<span id="demes-details"></span><h1>Details of <code class="docutils literal notranslate"><span class="pre">demes</span></code> integration<a class="headerlink" href="#details-of-demes-integration" title="Permalink to this headline">¶</a></h1>
-<p>This page gives various technical details regarding <code class="docutils literal notranslate"><span class="pre">fwdpy11</span></code> treats <a class="reference external" href="https://popsim-consortium.github.io/demes-docs/main/"><code class="docutils literal notranslate"><span class="pre">demes</span></code></a> models.
-See <a class="reference internal" href="../short_vignettes/demes_vignette.html#demes-vignette"><span class="std std-ref">the vignette</span></a> for an overview.</p>
-<div class="section" id="implementation-of-mass-migration-events-a-k-a-pulse-migrations">
-<h2>Implementation of mass migration events (a.k.a. pulse migrations)<a class="headerlink" href="#implementation-of-mass-migration-events-a-k-a-pulse-migrations" title="Permalink to this headline">¶</a></h2>
-<p>The low-level discrete demography <code class="docutils literal notranslate"><span class="pre">API</span></code> provides <a class="reference internal" href="../pages/types.html#fwdpy11.MassMigration" title="fwdpy11.MassMigration"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MassMigration</span></code></a> to implement single-generation bulk movements of lineages.
-See <a class="reference internal" href="../pages/softselection.html#massmigrations"><span class="std std-ref">here</span></a> for details.</p>
-<p>For models generated with <code class="docutils literal notranslate"><span class="pre">demes</span></code>, we instead use a single-generation change to the migration matrix.
-It turns out that this method greatly simplifies the implementation of <a class="reference internal" href="../pages/functions.html#fwdpy11.discrete_demography.from_demes" title="fwdpy11.discrete_demography.from_demes"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.discrete_demography.from_demes()</span></code></a>.</p>
-<p>While biologically and mathematically equivalent, these two approaches would give different results for the same random number seed.</p>
+  <div class="tex2jax_ignore mathjax_ignore section" id="incomplete-selective-sweeps">
+<span id="id1"></span><h1>Incomplete selective sweeps<a class="headerlink" href="#incomplete-selective-sweeps" title="Permalink to this headline">¶</a></h1>
+<p>A sweep from a new mutation simulated until it first
+hits a frequency :math:<code class="docutils literal notranslate"><span class="pre">\geq</span> <span class="pre">0.25</span></code>.</p>
+<p>Key points:</p>
+<ul class="simple">
+<li><p>Note the flags passed to <a class="reference internal" href="../pages/conditional_models.html#fwdpy11.conditional_models.selective_sweep" title="fwdpy11.conditional_models.selective_sweep"><code class="xref py py-func docutils literal notranslate"><span class="pre">fwdpy11.conditional_models.selective_sweep()</span></code></a>.</p></li>
+<li><p>Note the differences in parameter scaling between this software and <code class="docutils literal notranslate"><span class="pre">msprime</span></code>.</p></li>
+<li><p>This example uses a custom monitor object, <code class="docutils literal notranslate"><span class="pre">IncompleteSweep</span></code>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fwdpy11</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">msprime</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.conditional_models</span>
+<span class="kn">import</span> <span class="nn">fwdpy11.tskit_tools</span>
+
+
+<span class="k">class</span> <span class="nc">IncompleteSweep</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pop</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">tuple</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="n">key</span><span class="p">:</span>
+            <span class="c1"># it is fixed or lost, neither of </span>
+            <span class="c1"># which we want</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        
+        <span class="c1"># Terminate the first time we see the </span>
+        <span class="c1"># variant get about a freq of 0.25</span>
+        <span class="k">if</span> <span class="n">pop</span><span class="o">.</span><span class="n">mcounts</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span> <span class="o">&gt;=</span> <span class="mf">0.25</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># make sure there&#39;s a valid return value</span>
+        <span class="k">return</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">SimulationStatus</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="mf">10000.0</span>
+<span class="n">ttl_rec_rate</span> <span class="o">=</span> <span class="mf">1e-5</span><span class="o">*</span><span class="n">L</span>
+
+<span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="n">prune_selected</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="c1"># Dropping mutations requires existing</span>
+    <span class="c1"># ancestry, which we can get either</span>
+    <span class="c1"># from a burn-in or from msprime.</span>
+    <span class="n">initial_ts</span> <span class="o">=</span> <span class="n">msprime</span><span class="o">.</span><span class="n">sim_ancestry</span><span class="p">(</span>
+        <span class="n">samples</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+        <span class="c1"># In msprime, recombination rates are per &quot;unit&quot; (&quot;base pair&quot;)</span>
+        <span class="n">recombination_rate</span><span class="o">=</span><span class="n">ttl_rec_rate</span><span class="o">/</span><span class="n">L</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="o">=</span><span class="mi">43215</span><span class="p">,</span>
+        <span class="n">sequence_length</span><span class="o">=</span><span class="n">L</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Build the pop from msprime output</span>
+    <span class="n">pop</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">DiploidPopulation</span><span class="o">.</span><span class="n">create_from_tskit</span><span class="p">(</span><span class="n">initial_ts</span><span class="p">)</span>
+
+    <span class="c1"># Set up basic model parameters</span>
+    <span class="n">pdict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># Here, the rec rate is number of events per region, not per &quot;base pair&quot;!</span>
+        <span class="s2">&quot;recregions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">PoissonInterval</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">L</span><span class="p">),</span> <span class="n">ttl_rec_rate</span><span class="p">,</span> <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span><span class="p">)],</span>
+        <span class="s2">&quot;gvalue&quot;</span><span class="p">:</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">Multiplicative</span><span class="p">(</span><span class="mf">2.0</span><span class="p">),</span>
+        <span class="s2">&quot;rates&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s2">&quot;prune_selected&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;simlen&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">ModelParams</span><span class="p">(</span><span class="o">**</span><span class="n">pdict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pop</span><span class="p">,</span> <span class="n">params</span>
+
+<span class="n">ALPHA</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">GSLrng</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">pop</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">setup</span><span class="p">()</span>
+<span class="n">mutation_data</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">NewMutationParameters</span><span class="p">(</span>
+    <span class="n">frequency</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">AlleleCount</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">NewMutationData</span><span class="p">(</span><span class="n">effect_size</span><span class="o">=</span><span class="n">ALPHA</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">pop</span><span class="o">.</span><span class="n">N</span><span class="p">,</span> <span class="n">dominance</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">position</span><span class="o">=</span><span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">PositionRange</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">L</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">fwdpy11</span><span class="o">.</span><span class="n">conditional_models</span><span class="o">.</span><span class="n">selective_sweep</span><span class="p">(</span>
+    <span class="n">rng</span><span class="p">,</span> 
+    <span class="n">pop</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">mutation_data</span><span class="p">,</span>
+    <span class="n">IncompleteSweep</span><span class="p">(),</span>
+    <span class="c1"># NOTE: this is key flag!</span>
+    <span class="c1"># The default is False, which will </span>
+    <span class="c1"># keep simulating until params.simlen,</span>
+    <span class="c1"># at which point the mutation may be fixed.</span>
+    <span class="n">return_when_stopping_condition_met</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">mutations</span><span class="p">[</span><span class="n">output</span><span class="o">.</span><span class="n">mutation_index</span><span class="p">])</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">pop</span><span class="o">.</span><span class="n">dump_tables_to_tskit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;genotype table of resultant sweep&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">genotype_matrix</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mutation[position:5000.780309, effect size:1.000000, dominance:1.000000, origin time:0, label:0]
+genotype table of resultant sweep
+[[0 0 1 0 0 1 0 1 0 0 0 1 1 0 0 1 1 1 0 0 0 0 0 1 1 0 1 1 0 0 1 1 0 1 1 0
+  0 0 1 0 0 1 0 1 0 0 1 0 1 1 0 0 1 1 1 0 0 0 0 1 1 0 0 0 0 0 0 1 1 0 0 0
+  1 1 0 1 1 1 1 1 0 0 0 1 0 1 0 0 0 1 0 1 1 0 0 1 0 0 0 1 0 0 0 1 0 0 0 0
+  0 1 0 0 1 0 1 1 0 0 0 0 0 0 0 1 0 1 1 0 1 0 0 1 0 0 0 1 0 1 0 0 0 0 1 1
+  0 0 0 0 1 1 1 0 0 1 0 1 0 0 0 1 0 0 1 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0 0 0
+  0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0
+  0 0 1 0 1 0 0 0 1 1 1 0 0 1 0 0 0 0 1 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+  0 1 0 1 1 0 1 1 1 1 0 1 0 0 0 0 0 0 0 1 1 0 0 0 0 1 0 1 1 0 0 0 1 0 0 0
+  1 0 0 0 0 0 0 1 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 1 1 1 0 0 0
+  1 0 1 1 0 1 0 0 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 1 1 0 0 1 1 0 0 0 1 0 0
+  1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 1 0 1 1 0 0 0 0 0 1 0 0 0 1 1
+  0 0 1 1 0 0 0 1 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 1 1 1 0 1 0 0 0 0 0 1 1 0
+  1 0 0 0 1 1 1 0 1 1 1 0 0 0 0 1 0 0 0 1 0 0 1 0 1 0 0 0 0 0 0 0 1 0 0 1
+  0 1 0 0 0 0 0 1 1 1 0 0 1 0 0 0 1 0 0 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 1 0
+  0 1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 1 0 0 1 0 0 0
+  0 1 0 0 1 0 1 0 0 0 0 0 0 0 1 1 1 1 0 1 0 0 0 0 1 1 1 0 0 0 1 0 0 0 1 1
+  1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 0 1 0 0 0 0 0 0 1 1 0 1 0 0 0 0 1 0 0 0 1
+  0 1 1 0 0 1 1 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0
+  0 0 1 1 0 0 0 0 0 1 0 1 1 0 1 1 0 0 0 1 0 0 0 0 1 1 1 1 0 1 0 0 0 0 0 0
+  0 0 1 1 0 0 1 0 0 0 0 0 0 0 1 1 1 0 1 1 1 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0
+  0 1 1 0 0 0 0 0 0 0 1 0 1 1 0 0 1 0 1 0 0 0 0 0 0 0 1 0 1 0 0 1 1 1 0 0
+  0 0 0 1 1 0 1 1 0 1 1 0 1 0 0 0 0 0 0 1 1 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0
+  1 0 1 0 0 0 1 1 0 0 0 0 1 1 1 0 1 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 0 0 1 0
+  1 0 1 0 0 1 0 1 0 0 1 1 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0 1 1 0 0 1 0 0 0
+  0 0 0 0 0 1 0 0 0 0 1 0 1 0 1 0 1 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0
+  0 1 0 0 1 0 1 0 0 0 0 0 1 0 0 0 0 1 1 0 0 1 1 1 0 1 0 0 0 0 0 0 1 0 0 1
+  1 0 0 0 0 1 0 1 0 0 0 1 0 0 1 1 0 1 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+  0 1 0 1 1 0 0 1 1 1 0 0 0 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1]]
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -707,7 +806,7 @@ It turns out that this method greatly simplifies the implementation of <a class=
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./technical"
+            path: "./short_vignettes"
         },
         predefinedOutput: true
     }
@@ -719,17 +818,17 @@ It turns out that this method greatly simplifies the implementation of <a class=
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../pages/recorders.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="selective_sweep.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Time series analysis</p>
+            <p class="prev-next-title">Selective sweeps</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="genetic_values.html" title="next page">
+    <a class='right-next' id="next-link" href="../long_vignettes/tskitconvert_vignette.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Technical overview of genetic value calculations</p>
+        <p class="prev-next-title">Converting data to tskit format</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
