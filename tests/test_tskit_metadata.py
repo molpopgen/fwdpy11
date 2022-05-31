@@ -118,12 +118,6 @@ def test_user_defined_data(pop):
     ts = pop.dump_tables_to_tskit(data={"mydata": 11})
     assert ts.metadata["data"]["mydata"] == 11
 
-    # Test WrappedTreeSequence propery
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=FutureWarning)
-        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
-    assert wts.data["mydata"] == 11
-
     class MyType(object):
         def __init__(self, x):
             self.x = x
@@ -134,23 +128,11 @@ def test_user_defined_data(pop):
     ts = pop.dump_tables_to_tskit(data=str(MyType(x=11)))
     assert eval(ts.metadata["data"]).x == 11
 
-    # Test WrappedTreeSequence property
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=FutureWarning)
-        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
-    assert eval(wts.data).x == 11
-
 
 @pytest.mark.parametrize("pop", [{"N": 100, "genome_length": 1}], indirect=["pop"])
 def test_seed(pop):
     ts = pop.dump_tables_to_tskit(seed=333)
     assert ts.metadata["seed"] == 333
-
-    # Test WrappedTreeSequence property
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=FutureWarning)
-        wts = fwdpy11.tskit_tools.WrappedTreeSequence(ts)
-    assert wts.seed == 333
 
     with pytest.raises(ValueError):
         _ = pop.dump_tables_to_tskit(seed=-333)
