@@ -1,68 +1,38 @@
 #ifndef FWDPY11_MUTATION_DOMINANCE_HPP
 #define FWDPY11_MUTATION_DOMINANCE_HPP
 
-#include <cmath>
-#include <memory>
-#include <stdexcept>
-#include <fwdpp/util/validators.hpp>
+#include <functional>
 #include <fwdpy11/rng.hpp>
 
 namespace fwdpy11
 {
     struct MutationDominance
     {
-        virtual ~MutationDominance() = default;
-        MutationDominance() = default;
-        MutationDominance(const MutationDominance&) = delete;
-        MutationDominance(MutationDominance&&) = default;
-        MutationDominance& operator=(const MutationDominance&) = delete;
-        MutationDominance& operator=(MutationDominance&&) = default;
-        virtual double generate_dominance(const GSLrng_t& /*rng*/,
-                                          const double /*effect_size*/) const = 0;
-        virtual std::shared_ptr<MutationDominance> clone() const = 0;
-    };
+        using function = std::function<double(const GSLrng_t&, const double)>;
+        function generate_dominance;
 
-    struct FixedDominance : public MutationDominance
-    {
-        double dominance;
-        explicit FixedDominance(double d) : dominance{d}
+        MutationDominance(function f) : generate_dominance(std::move(f))
         {
-            fwdpp::validators::isfinite(d, "dominance values must be finite");
         }
 
-        double
-        generate_dominance(const GSLrng_t& /*rng*/,
-                           const double /*effect_size*/) const override final
+        inline double
+        operator()(const GSLrng_t& rng, const double effect_size) const
         {
-            return dominance;
-        }
-
-        std::shared_ptr<MutationDominance>
-        clone() const override final
-        {
-            return std::make_shared<FixedDominance>(dominance);
+            return generate_dominance(rng, effect_size);
         }
     };
 
-    inline std::shared_ptr<MutationDominance>
-    process_input_dominance(double dominance)
-    {
-        return std::make_shared<FixedDominance>(dominance);
-    }
+    MutationDominance fixed_dominance(double d);
 
-    // NOTE/FIXME we may not need both of these overloads:
+    MutationDominance large_effect_exponentially_recessive(double k, double scaling);
 
-    inline std::shared_ptr<MutationDominance>
-    process_input_dominance(const MutationDominance& dominance)
-    {
-        return dominance.clone();
-    }
+    MutationDominance exponential_dominance(double mean);
 
-    inline std::shared_ptr<MutationDominance>
-    process_input_dominance(const std::shared_ptr<MutationDominance>& dominance)
-    {
-        return dominance->clone();
-    }
+    MutationDominance uniform_dominance(double lo, double hi);
+
+    MutationDominance process_input_dominance(double dominance);
+
+    MutationDominance process_input_dominance(const MutationDominance& dominance);
 }
 
 #endif

@@ -21,7 +21,7 @@ namespace fwdpy11
         Region region; // For returning positions
         double scaling;
         std::size_t total_dim;
-        std::shared_ptr<MutationDominance> dominance;
+        MutationDominance dominance;
 
         virtual ~Sregion() = default;
 
@@ -84,7 +84,7 @@ namespace fwdpy11
         virtual double
         generate_dominance(const GSLrng_t& rng, const double esize) const
         {
-            return dominance->generate_dominance(rng, esize);
+            return dominance(rng, esize);
         }
 
         virtual std::vector<std::size_t>

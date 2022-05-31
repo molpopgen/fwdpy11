@@ -67,9 +67,7 @@ namespace fwdpy11
                 [this, &rng]() {
                     return gsl_ran_lognormal(rng.get(), zeta, sigma) / scaling;
                 },
-                [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
-                },
+                [this, &rng](const double esize) { return dominance(rng, esize); },
                 this->label());
         }
 
@@ -82,4 +80,3 @@ namespace fwdpy11
 }
 
 #endif
-

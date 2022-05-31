@@ -26,7 +26,7 @@ namespace fwdpy11
         clone() const override
         {
             return std::unique_ptr<ExpS>(
-                new ExpS(this->region, this->scaling, this->mean, *this->dominance));
+                new ExpS(this->region, this->scaling, this->mean, dominance));
         }
 
         std::uint32_t
@@ -42,7 +42,7 @@ namespace fwdpy11
                     return gsl_ran_exponential(rng.get(), mean) / scaling;
                 },
                 [this, &rng](const auto esize) {
-                    return dominance->generate_dominance(rng, esize);
+                    return dominance(rng, esize);
                 },
                 this->label());
         }

@@ -35,7 +35,7 @@ namespace fwdpy11
         clone() const override
         {
             return std::make_unique<UniformS>(this->region, this->scaling, this->lo,
-                                              this->hi, *this->dominance);
+                                              this->hi, dominance);
         }
 
         std::uint32_t
@@ -49,7 +49,7 @@ namespace fwdpy11
                 [this, &rng]() { return region(rng); },
                 [this, &rng]() { return gsl_ran_flat(rng.get(), lo, hi) / scaling; },
                 [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
+                    return dominance(rng, esize);
                 },
                 this->label());
         }
@@ -63,4 +63,3 @@ namespace fwdpy11
 } // namespace fwdpy11
 
 #endif
-

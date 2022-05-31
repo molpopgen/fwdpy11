@@ -31,7 +31,7 @@ namespace fwdpy11
         clone() const override
         {
             return std::make_unique<GammaS>(this->region, this->scaling, this->mean,
-                                            this->shape_parameter, *this->dominance);
+                                            this->shape_parameter, dominance);
         }
 
         std::uint32_t
@@ -49,7 +49,7 @@ namespace fwdpy11
                            / scaling;
                 },
                 [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
+                    return dominance(rng, esize);
                 },
                 this->label());
         }
