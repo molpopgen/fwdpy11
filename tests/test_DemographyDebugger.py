@@ -191,6 +191,13 @@ class TestDetectingAbsenceOfAncestry(unittest.TestCase):
             setup_and_run_model(self.pop, d, 5)
 
     def test_no_valid_parents_with_migration_V2(self):
+        """
+        This is a complex test: we mess around with
+        things at time 0, which is relevent to scenarios
+        where we stop/start models.
+
+        A complementary tests exists in the C++ suite.
+        """
         # Move all founders from deme 0 to deme 1
         # In gen 1, all ancestry in deme 1 is from
         # deme 0
