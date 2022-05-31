@@ -143,10 +143,12 @@ class TestBadMassMigrations(unittest.TestCase):
             setup_and_run_model(self.pop, d, 20)
 
 
-# FIXME: many of the tests below this class
-# have nothing to do with GlobalExtinction, yet
-# the class name would suggest otherwise.
-class TestDetectingExtinctions(unittest.TestCase):
+class TestDetectingAbsenceOfAncestry(unittest.TestCase):
+    """
+    These tests check for errors arising due to
+    there being no valid parental generation at some
+    point.
+    """
     @classmethod
     def setUp(self):
         self.pop = fwdpy11.DiploidPopulation(100, 1.0)
