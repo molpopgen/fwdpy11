@@ -1892,6 +1892,7 @@ demes:
     with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
+
 def test_epoch_rounding_02():
     yaml = """
 time_units: generations
@@ -1905,3 +1906,76 @@ demes:
     graph = demes.loads(yaml)
     with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+
+def test_tutorial_example_11():
+    """
+    Downscaled by 10x, add Deme Y
+    """
+    yaml = """
+time_units: generations
+demes:
+  - name: X
+    epochs:
+      - end_time: 200
+        start_size: 200
+  - name: Y
+    ancestors: [X]
+    epochs:
+      - end_time: 100
+        start_size: 200
+  - name: A
+    ancestors: [Y]
+    epochs:
+      - start_size: 200
+  - name: B
+    ancestors: [Y]
+    epochs:
+      - start_size: 200
+migrations:
+  - source: A
+    dest: B
+    rate: 1e-4
+"""
+    graph = demes.loads(yaml)
+    demog = fwdpy11.discrete_demography.from_demes(graph, burnin=1)
+    pdict = {
+        "rates": (0.0, 0.0, 0.0),
+        "gvalue": fwdpy11.Multiplicative(2.0),
+        "demography": demog,
+        "simlen": demog.metadata["total_simulation_length"],
+    }
+    initial_sizes = [
+        demog.metadata["initial_sizes"][i]
+        for i in demog.metadata["initial_sizes"].keys()
+    ]
+    params = fwdpy11.ModelParams(**pdict)
+    rng = fwdpy11.GSLrng(100)
+    pop = fwdpy11.DiploidPopulation(initial_sizes, 1.0)
+    deme_sizes = []
+    fwdpy11.evolvets(
+        rng,
+        pop,
+        params,
+        100,
+        recorder=lambda simpop, _: deme_sizes.append(
+            (simpop.generation, simpop.deme_sizes())
+        ),
+    )
+
+    # For the first 200 generations, only deme 0 should exist
+    for i in deme_sizes[:200]:
+        assert 0 in i[1][0]
+        for j in [1, 2, 3]:
+            assert j not in i[1][0]
+
+    for i in deme_sizes[200:300]:
+        assert 1 in i[1][0], i
+        for j in [0, 2, 3]:
+            assert j not in i[1][0], j
+
+    for i in deme_sizes[300:]:
+        for j in [2, 3]:
+            assert j in i[1][0], j
+        for j in [0, 1]:
+            assert j not in i[1][0], j
