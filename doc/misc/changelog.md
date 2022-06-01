@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+Back end changes
+
+* Simplify the back-end behind {class}`fwdpy11.MutationDominance`.
+  PR {pr}`947`.
+
 ## 0.18.1
 
 Bug fixes

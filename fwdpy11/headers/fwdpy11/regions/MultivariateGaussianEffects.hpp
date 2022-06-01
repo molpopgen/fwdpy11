@@ -47,7 +47,8 @@ namespace fwdpy11
               mu(gsl_vector_calloc(input_matrix.size1),
                  [](gsl_vector *v) { gsl_vector_free(v); }),
               fixed_effect(s), effect_sizes(input_matrix.size1),
-              dominance_values(input_matrix.size1, std::numeric_limits<double>::quiet_NaN()),
+              dominance_values(input_matrix.size1,
+                               std::numeric_limits<double>::quiet_NaN()),
               // Holds the results of calls to mvn, and maps the
               // output to effect_sizes
               res(gsl_vector_view_array(effect_sizes.data(), effect_sizes.size()))
@@ -110,8 +111,7 @@ namespace fwdpy11
                                                    &res.vector);
             for (std::size_t i = 0; i < effect_sizes.size(); ++i)
                 {
-                    dominance_values[i]
-                        = dominance->generate_dominance(rng, effect_sizes[i]);
+                    dominance_values[i] = dominance(rng, effect_sizes[i]);
                 }
             if (rv != GSL_SUCCESS)
                 {
@@ -123,7 +123,7 @@ namespace fwdpy11
                 [this, &rng]() { return region(rng); },
                 [this]() { return fixed_effect; },
                 [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
+                    return dominance(rng, esize);
                 },
                 [this]() { return effect_sizes; }, [this]() { return dominance_values; },
                 this->label());

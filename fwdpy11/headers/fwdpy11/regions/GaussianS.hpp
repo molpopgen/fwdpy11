@@ -31,7 +31,7 @@ namespace fwdpy11
         clone() const override
         {
             return std::make_unique<GaussianS>(this->region, this->scaling, this->sd,
-                                               *this->dominance);
+                                               dominance);
         }
 
         std::uint32_t
@@ -47,7 +47,7 @@ namespace fwdpy11
                     return gsl_ran_gaussian_ziggurat(rng.get(), sd) / scaling;
                 },
                 [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
+                    return dominance(rng, esize);
                 },
                 this->label());
         }

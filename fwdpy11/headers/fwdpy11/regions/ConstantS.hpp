@@ -40,7 +40,7 @@ namespace fwdpy11
         clone() const override
         {
             return std::make_unique<ConstantS>(this->region, this->scaling, this->esize,
-                                               *this->dominance);
+                                               dominance);
         }
 
         std::uint32_t
@@ -53,9 +53,7 @@ namespace fwdpy11
                 recycling_bin, mutations, lookup_table, is_neutral, generation,
                 [this, &rng]() { return region(rng); },
                 [this]() { return esize / scaling; },
-                [this, &rng](const double esize) {
-                    return dominance->generate_dominance(rng, esize);
-                },
+                [this, &rng](const double esize) { return dominance(rng, esize); },
                 this->label());
         }
 
@@ -69,4 +67,3 @@ namespace fwdpy11
 } // namespace fwdpy11
 
 #endif
-

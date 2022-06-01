@@ -32,32 +32,32 @@ generate_mutation(const fwdpy11::Sregion &s, std::vector<fwdpy11::Mutation> &mut
     return s(q, mutations, lookup_table, 0, rng);
 }
 
-BOOST_AUTO_TEST_CASE(test_FixedDominance_init_and_clone)
+BOOST_AUTO_TEST_CASE(test_fixed_dominance_init_and_clone)
 {
     fwdpy11::GSLrng_t rng(42);
-    fwdpy11::FixedDominance f(1.0);
-    BOOST_CHECK_EQUAL(f.generate_dominance(rng, 0.2135123), 1.);
+    auto f = fwdpy11::fixed_dominance(1.0);
+    BOOST_CHECK_EQUAL(f(rng, 0.2135123), 1.);
 
-    auto fc = f.clone();
-    BOOST_CHECK_EQUAL(fc->generate_dominance(rng, 0.2135123), 1.);
+    auto fc(f);
+    BOOST_CHECK_EQUAL(fc(rng, 0.2135123), 1.);
 }
 
-BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip)
+BOOST_AUTO_TEST_CASE(test_fixed_dominance_round_trip)
 {
-    fwdpy11::ExpS e(make_dummy_region(), 2, 1., fwdpy11::FixedDominance(0.25));
+    fwdpy11::ExpS e(make_dummy_region(), 2, 1., fwdpy11::fixed_dominance(0.25));
     std::vector<fwdpy11::Mutation> mutations;
     auto x = generate_mutation(e, mutations);
     BOOST_CHECK_EQUAL(x, 0);
     BOOST_CHECK_EQUAL(mutations[x].h, 0.25);
 }
 
-BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip_mvDES_vector_of_Sregion)
+BOOST_AUTO_TEST_CASE(test_fixed_dominance_round_trip_mvDES_vector_of_Sregion)
 {
     std::vector<std::unique_ptr<fwdpy11::Sregion>> odist;
     for (int i = 0; i < 3; ++i)
         {
             odist.emplace_back(std::unique_ptr<fwdpy11::Sregion>(new fwdpy11::ExpS(
-                make_dummy_region(), 2, 1., fwdpy11::FixedDominance(i))));
+                make_dummy_region(), 2, 1., fwdpy11::fixed_dominance(i))));
         }
     std::vector<double> vcov(9, 0.);
     gsl_matrix_view vcov_view = gsl_matrix_view_array(vcov.data(), 3, 3);
@@ -72,9 +72,9 @@ BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip_mvDES_vector_of_Sregion)
         }
 }
 
-BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip_mvDES_LogNormalS)
+BOOST_AUTO_TEST_CASE(test_fixed_dominance_round_trip_mvDES_LogNormalS)
 {
-    fwdpy11::LogNormalS l(make_dummy_region(), 1, fwdpy11::FixedDominance(1. / 8.));
+    fwdpy11::LogNormalS l(make_dummy_region(), 1, fwdpy11::fixed_dominance(1. / 8.));
     std::vector<double> vcov(9, 0.);
     gsl_matrix_view vcov_view = gsl_matrix_view_array(vcov.data(), 3, 3);
     gsl_matrix_set_identity(&vcov_view.matrix);
@@ -88,13 +88,13 @@ BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip_mvDES_LogNormalS)
         }
 }
 
-BOOST_AUTO_TEST_CASE(test_FixedDominance_round_trip_mvDES_MultivariateGaussian)
+BOOST_AUTO_TEST_CASE(test_fixed_dominance_round_trip_mvDES_MultivariateGaussian)
 {
     std::vector<double> vcov(9, 0.);
     gsl_matrix_view vcov_view = gsl_matrix_view_array(vcov.data(), 3, 3);
     gsl_matrix_set_identity(&vcov_view.matrix);
     fwdpy11::MultivariateGaussianEffects mvg(make_dummy_region(), 2., vcov_view.matrix,
-                                             1, fwdpy11::FixedDominance(1. / 6.));
+                                             1, fwdpy11::fixed_dominance(1. / 6.));
     fwdpy11::mvDES mv(mvg, std::vector<double>(3, 0.));
     std::vector<fwdpy11::Mutation> mutations;
     auto x = generate_mutation(mv, mutations);
