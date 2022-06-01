@@ -9,6 +9,8 @@ Back end changes
 
 * Simplify the back-end behind {class}`fwdpy11.MutationDominance`.
   PR {pr}`947`.
+* Refactor a class decorator used to pickle/unpickle `attrs`-based classes.
+  PR {pr}`948`.
 
 ## 0.18.1
 

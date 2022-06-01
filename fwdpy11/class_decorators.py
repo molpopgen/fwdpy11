@@ -111,7 +111,7 @@ def attr_class_pickle_with_super(cls):
 
     def setstate(self, d):
         self.__dict__.update(d)
-        super(cls, self).__init__(**d)
+        self.__attrs_post_init__()
 
     cls.__setstate__ = setstate
     return _add_getstate(cls)
