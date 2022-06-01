@@ -24,26 +24,12 @@ import fwdpy11._fwdpy11
 from .class_decorators import (
     attr_add_asblack,
     attr_class_to_from_dict,
+    attr_class_pickle_with_super,
 )
 
 
-def _add_pickling(cls):
-    def getstate(self):
-        return self.asdict()
-
-    def setstate(self, d):
-        self.__dict__.update(d)
-        self.__attrs_post_init__()
-
-    cls.__setstate__ = setstate
-
-    cls.__getstate__ = getstate
-
-    return cls
-
-
 @attr_add_asblack
-@_add_pickling
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class FixedDominance(fwdpy11._fwdpy11.MutationDominance):
@@ -63,7 +49,7 @@ class FixedDominance(fwdpy11._fwdpy11.MutationDominance):
 
 
 @attr_add_asblack
-@_add_pickling
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class ExponentialDominance(fwdpy11._fwdpy11.MutationDominance):
@@ -85,7 +71,7 @@ class ExponentialDominance(fwdpy11._fwdpy11.MutationDominance):
 
 
 @attr_add_asblack
-@_add_pickling
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class UniformDominance(fwdpy11._fwdpy11.MutationDominance):
@@ -110,7 +96,7 @@ class UniformDominance(fwdpy11._fwdpy11.MutationDominance):
 
 
 @attr_add_asblack
-@_add_pickling
+@attr_class_pickle_with_super
 @attr_class_to_from_dict
 @attr.s(auto_attribs=True, frozen=True, repr_ns="fwdpy11")
 class LargeEffectExponentiallyRecessive(fwdpy11._fwdpy11.MutationDominance):
