@@ -506,9 +506,19 @@ def _process_epoch(
         assert size_history.deme_exists_at(idmap[deme_id], when)
 
     if e.selfing_rate is not None:
-        events.set_selfing_rates.append(
-            SetSelfingRate(when=when, deme=idmap[deme_id], S=e.selfing_rate)
-        )
+        # Guard against double-setting selfing rates
+        # This guard is necessary because we skip size changes
+        # for founder demes that happen before a natural time 0.
+        # See test_evolve_demes_model_starting_with_two_pops_and_no_ancestry.
+        if not any(
+            [
+                i.when == when and i.deme == idmap[deme_id]
+                for i in events.set_selfing_rates
+            ]
+        ):
+            events.set_selfing_rates.append(
+                SetSelfingRate(when=when, deme=idmap[deme_id], S=e.selfing_rate)
+            )
 
     if e.cloning_rate is not None:
         if e.cloning_rate > 0.0:

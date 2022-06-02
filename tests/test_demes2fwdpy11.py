@@ -1056,12 +1056,7 @@ def test_evolve_population_in_two_stages_with_deepcopy(
     assert counts[1][1] == 200, f"{counts}"
 
 
-# NOTE: update this test to have burnin=0 once GittHub issue 776
-# is fixed
-# NOTE: models like this are important to applications where
-# the ancestor is simulated with msprime, and the split part
-# happens in fwdpy11
-@pytest.mark.parametrize("burnin", [1])
+@pytest.mark.parametrize("burnin", [1, 0])
 def test_evolve_demes_model_starting_with_two_pops_and_no_ancestry(
     burnin,
     start_demes_model_with_two_pops,

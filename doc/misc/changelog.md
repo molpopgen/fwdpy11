@@ -12,6 +12,11 @@ Back end changes
 * Refactor a class decorator used to pickle/unpickle `attrs`-based classes.
   PR {pr}`948`.
 
+Bug fixes
+
+* Fixed edge case when importing demes models with burn-in time of 0.
+  PR {pr}`949`.
+
 ## 0.18.1
 
 Bug fixes
