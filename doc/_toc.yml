@@ -32,6 +32,13 @@ parts:
   - file: short_vignettes/demography_vignettes_intro
   - file: short_vignettes/demes_vignette
   - file: short_vignettes/demography_debugger_vignette
+- caption: Short vignettes - varying fitness conditions across demes
+  chapters:
+  - file: short_vignettes/varying_fitness_conditions_across_demes_intro
+  - file: short_vignettes/multivariate_gaussian_effect_sizes_across_demes
+  - file: short_vignettes/multivariate_lognormal_effect_sizes
+  - file: short_vignettes/custom_multivarate_distributions
+  - file: short_vignettes/special_considerations_demes_models
 - caption: Short vignettes - conditional models
   chapters:
   - file: short_vignettes/trackmutationfates
