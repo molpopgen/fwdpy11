@@ -1,67 +1,16 @@
 #pragma once
 
-#include <cstdint>
-#include <memory>
-#include <string>
-#include <vector>
+#include "forward_demes_graph/demes_model_time.hpp"
+#include "forward_demes_graph/asymmetric_migration.hpp"
+#include "forward_demes_graph/size_function.hpp"
+#include "forward_demes_graph/epoch.hpp"
+#include "forward_demes_graph/deme.hpp"
+#include "forward_demes_graph/pulse.hpp"
 
 namespace fwdpy11
 {
     namespace discrete_demography
     {
-        /* General comments:
-         * * These types should go into separate headers.
-         * * And/or...we can probably pimpl them with 
-         *   no (noticeable) loss of performance.
-         */
-
-        // fwdpy11 time is uint32_t, but that is
-        // BAD if you have to do stuff like subtract!
-        // So, we use int64_t here and will return casted
-        // values as needed (after checks).
-        using demes_model_time = std::int64_t;
-
-        struct Pulse
-        {
-            std::vector<std::int32_t> sources;
-            std::vector<double> proportions;
-            std::int32_t dest;
-            demes_model_time time;
-        };
-
-        struct AsymmetricMigration
-        {
-            std::int32_t source, dest;
-            demes_model_time start_time, end_time;
-        };
-
-        // Should this be a virtual base class
-        // or simply store a std::function?
-        struct SizeFunction
-        {
-            virtual double operator()(demes_model_time epoch_start_time,
-                                      demes_model_time epoch_end_time,
-                                      demes_model_time current_time) const;
-        };
-
-        struct Epoch
-        {
-            demes_model_time end_time, start_size, end_size;
-            double cloning_rate, selfing_rate;
-
-            // Never accept nullptr: "constant" should
-            // also be a callback.
-            std::unique_ptr<SizeFunction> size_function;
-        };
-
-        struct Deme
-        {
-            std::int32_t id, start_time;
-            std::vector<std::int32_t> ancestors;
-            std::vector<double> proportions;
-            std::vector<Epoch> epochs;
-        };
-
         struct ForwardDemesGraph
         /// Limited to:
         /// * construction from a fully-resolved demes.Graph
