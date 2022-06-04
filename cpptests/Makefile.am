@@ -10,7 +10,8 @@ fwdpy11_cpp_tests_SOURCES=fwdpy11_cpp_tests.cc \
 						  discrete_demography_roundtrips.cc \
 						  discrete_demography_util.cc \
 						  test_MutationDominance.cc \
-						  test_gss_classes.cc
+						  test_gss_classes.cc \
+						  test_forward_demes_graph.cc
 
 AM_CPPFLAGS=-I../fwdpy11/headers -I../fwdpy11/headers/fwdpp -I../fwdpy11/src/evolve_population
 AM_CXXFLAGS=-W -Wall --coverage -DBOOST_TEST_DYN_LINK
