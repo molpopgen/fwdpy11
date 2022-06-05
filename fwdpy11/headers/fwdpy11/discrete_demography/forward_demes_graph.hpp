@@ -68,6 +68,10 @@ namespace fwdpy11
                         message << "deme name " << name << " already exists";
                         throw std::invalid_argument(message.str());
                     }
+                if (demes.empty())
+                    {
+                        throw std::runtime_error("fatal error: demes is empty");
+                    }
                 return demes.back();
             }
         };
