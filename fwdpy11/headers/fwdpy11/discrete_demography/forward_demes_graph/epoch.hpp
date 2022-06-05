@@ -13,9 +13,7 @@ namespace fwdpy11
             demes_model_time end_time, start_size, end_size;
             double cloning_rate, selfing_rate;
 
-            // Never accept nullptr: "constant" should
-            // also be a callback.
-            std::unique_ptr<SizeFunction> size_function;
+            SizeFunction size_function;
         };
     }
 }
