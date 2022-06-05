@@ -15,11 +15,20 @@ namespace fwdpy11
             demes_model_time start_time;
             std::vector<std::int32_t> ancestors;
             std::vector<double> proportions;
-            //std::vector<Epoch> epochs;
+            std::vector<Epoch> epochs;
 
             Deme(std::int32_t id, demes_model_time start_time)
-                : id{id}, start_time{start_time}, ancestors{}, proportions{}//, epochs{}
+                : id{id}, start_time{start_time}, ancestors{}, proportions{}, epochs{}
             {
+            }
+
+            void
+            add_epoch(demes_model_time end_time, std::uint32_t start_size,
+                      std::uint32_t end_size, double cloning_rate, double selfing_rate,
+                      SizeFunction size_function)
+            {
+                epochs.push_back(Epoch{end_time, start_size, end_size, cloning_rate,
+                                       selfing_rate, std::move(size_function)});
             }
         };
     }
