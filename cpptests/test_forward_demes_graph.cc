@@ -22,4 +22,13 @@ BOOST_AUTO_TEST_CASE(add_deme_that_already_exists)
     BOOST_CHECK_THROW({ g.add_deme("CEU", 0, 0); }, std::invalid_argument);
 }
 
+BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
+{
+    fwdpy11::discrete_demography::ForwardDemesGraph g;
+
+    auto deme = g.add_deme("CEU", 0, 0);
+
+    deme.add_epoch(/*TBD*/);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
