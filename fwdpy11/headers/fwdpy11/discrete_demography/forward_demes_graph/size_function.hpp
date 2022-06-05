@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <stdexcept>
 #include "demes_model_time.hpp"
 
 namespace fwdpy11
@@ -22,7 +23,22 @@ namespace fwdpy11
             }
         };
 
-        struct ConstantSizeFunction {
+        struct ConstantSizeFunction
+        {
+            inline std::uint32_t
+            operator()(std::uint32_t epoch_start_size, std::uint32_t epoch_end_size,
+                       demes_model_time /*epoch_start_time*/,
+                       demes_model_time /*epoch_end_time*/,
+                       demes_model_time /*current_time*/)
+            {
+                if (epoch_start_size != epoch_end_size)
+                    {
+                        throw std::invalid_argument(
+                            "start_size != end_size incompatible with "
+                            "ConstantSizeFunction");
+                    }
+                return epoch_start_size;
+            }
         };
     }
 }
