@@ -12,6 +12,7 @@ namespace fwdpy11
         struct SizeFunction
         {
             using size_function = std::function<std::uint32_t(
+                std::uint32_t /*epoch_start_size*/, std::uint32_t /*epoch_end_size*/,
                 demes_model_time /*epoch_start_time*/,
                 demes_model_time /*epoch_end_time*/, demes_model_time /*current_time*/)>;
             size_function f;
