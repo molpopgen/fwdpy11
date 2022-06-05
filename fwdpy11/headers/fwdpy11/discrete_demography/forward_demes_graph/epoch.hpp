@@ -9,8 +9,20 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        struct WrightFisherSelfing {};
-
+        // Selfing rate ideas:
+        // NaN will be interpreted as W-F selfing.
+        // Any other value 0. <= s <= 1. will be
+        // taken as the probabilty that an individual selfs
+        // or out-crosses.
+        //
+        // OR:
+        //
+        // We use some type of struct/enum to distinguish
+        // W-F selfing from a "strict" selfing rate.
+        //
+        // Ideally, Epoch only stores the minimal info
+        // and doesn't have to know about/interact with
+        // the rng type, etc., used in fwdpy11.
         struct Epoch
         {
             demes_model_time end_time;
