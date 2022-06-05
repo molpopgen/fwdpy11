@@ -20,6 +20,5 @@ namespace fwdpy11
             {
             }
         };
-
     }
 }
