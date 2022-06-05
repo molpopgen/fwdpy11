@@ -15,8 +15,12 @@ namespace fwdpy11
             demes_model_time start_time;
             std::vector<std::int32_t> ancestors;
             std::vector<double> proportions;
-            std::vector<Epoch> epochs;
-        };
+            //std::vector<Epoch> epochs;
 
+            Deme(std::int32_t id, demes_model_time start_time)
+                : id{id}, start_time{start_time}, ancestors{}, proportions{}//, epochs{}
+            {
+            }
+        };
     }
 }
