@@ -12,15 +12,17 @@ namespace fwdpy11
         // or simply store a std::function?
         struct SizeFunction
         {
-            using size_function = std::function<std::uint32_t(
-                std::uint32_t /*epoch_start_size*/, std::uint32_t /*epoch_end_size*/,
-                demes_model_time /*epoch_start_time*/,
-                demes_model_time /*epoch_end_time*/, demes_model_time /*current_time*/)>;
-            size_function f;
+            virtual std::uint32_t
+            operator()(std::uint32_t /*epoch_start_size*/,
+                       std::uint32_t /*epoch_end_size*/,
+                       demes_model_time /*epoch_start_time*/,
+                       demes_model_time /*epoch_end_time*/,
+                       demes_model_time /*current_time*/) const = 0;
 
-            SizeFunction(size_function f) : f{f}
-            {
-            }
+            // Throw std::invalid_argument if start/end sizes
+            // are not compatible
+            virtual void validate(std::uint32_t /*epoch_start_size*/,
+                                  std::uint32_t /*epoch_end_size*/) const = 0;
         };
 
         struct ConstantSizeFunction
