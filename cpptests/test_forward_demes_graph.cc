@@ -29,7 +29,9 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
     auto deme = g.add_deme("CEU", 0, 0);
 
     // end tie, start size, end size, cloning, selfing, size_function
-    deme.add_epoch(100, 150, 100, 0., WrightFisherSelfing(), ConstantSizeFunction());
+    deme.add_epoch(100, 150, 100, 0.,
+                   fwdpy11::discrete_demography::WrightFisherSelfing(),
+                   fwdpy11::discrete_demography::ConstantSizeFunction());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

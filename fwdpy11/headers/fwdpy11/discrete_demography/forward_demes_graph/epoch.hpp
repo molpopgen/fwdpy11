@@ -9,6 +9,8 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
+        struct WrightFisherSelfing {};
+
         struct Epoch
         {
             demes_model_time end_time;

@@ -21,5 +21,8 @@ namespace fwdpy11
             {
             }
         };
+
+        struct ConstantSizeFunction {
+        };
     }
 }
