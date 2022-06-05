@@ -50,15 +50,11 @@ namespace fwdpy11
             }
 
             Deme&
-            add_deme(const std::string& name, demes_model_time start_time)
+            add_deme(const std::string& name, std::int32_t id,
+                     demes_model_time start_time)
             {
                 if (deme_name_to_id.find(name) == end(deme_name_to_id))
                     {
-                        if (demes.size() > std::numeric_limits<std::int32_t>::max() - 1)
-                            {
-                                throw std::invalid_argument("out of deme ids");
-                            }
-                        auto id = static_cast<std::int32_t>(demes.size());
                         deme_name_to_id.insert({name, id});
                         demes.push_back(Deme{id, start_time});
                     }

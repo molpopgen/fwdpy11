@@ -10,15 +10,16 @@ BOOST_AUTO_TEST_CASE(add_deme)
     fwdpy11::discrete_demography::ForwardDemesGraph g;
 
     // return pointer/reference to deme with a given start time.
-    auto deme = g.add_deme("CEU", 0);
+    // arguments are name, id, start_time
+    auto deme = g.add_deme("CEU", 0, 0);
 }
 
 BOOST_AUTO_TEST_CASE(add_deme_that_already_exists)
 {
     fwdpy11::discrete_demography::ForwardDemesGraph g;
 
-    g.add_deme("CEU", 0);
-    BOOST_CHECK_THROW({ g.add_deme("CEU", 0); }, std::invalid_argument);
+    g.add_deme("CEU", 0, 0);
+    BOOST_CHECK_THROW({ g.add_deme("CEU", 0, 0); }, std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
