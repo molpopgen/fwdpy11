@@ -49,7 +49,7 @@ namespace fwdpy11
             {
             }
 
-            Deme&
+            Deme *
             add_deme(const std::string& name, std::int32_t id,
                      demes_model_time start_time)
             {
@@ -68,7 +68,7 @@ namespace fwdpy11
                     {
                         throw std::runtime_error("fatal error: demes is empty");
                     }
-                return demes.back();
+                return &demes[demes.size()-1];
             }
         };
     }
