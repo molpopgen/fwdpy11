@@ -34,18 +34,6 @@ namespace fwdpy11
         inline SizeFunction
         constant_size_function()
         {
-            SizeFunction::validate_function validate(
-                [](std::uint32_t epoch_start_size,
-                   std::uint32_t epoch_end_size) -> void {
-                    if (epoch_start_size != epoch_end_size)
-                        {
-                            throw std::invalid_argument(
-                                "start_size != end_size incompatible with constant "
-                                "size function");
-                        }
-                    return;
-                });
-
             return SizeFunction{
                 [](std::uint32_t epoch_start_size, std::uint32_t /*epoch_end_size*/,
                    demes_model_time /*epoch_start_time*/,
