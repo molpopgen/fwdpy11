@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
 
     // end tie, start size, end size, cloning, selfing, size_function
     deme.add_epoch(100, 150, 100, 0.,
-                   fwdpy11::discrete_demography::WrightFisherSelfing(),
+                   fwdpy11::discrete_demography::Selfing::wright_fisher(),
                    fwdpy11::discrete_demography::ConstantSizeFunction());
 }
 

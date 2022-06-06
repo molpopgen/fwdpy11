@@ -39,9 +39,9 @@ namespace fwdpy11
             }
 
             static Selfing
-            wright_fisher(double rate)
+            wright_fisher()
             {
-                return Selfing(rate, SelfingPolicy::WrightFisher);
+                return Selfing(0.0, SelfingPolicy::WrightFisher);
             }
 
             static Selfing
