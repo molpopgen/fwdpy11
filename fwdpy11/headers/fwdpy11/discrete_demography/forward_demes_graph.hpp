@@ -18,6 +18,10 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
+        struct DemeRef {
+            std::reference_wrapper<Deme> deme;
+        };
+
         struct ForwardDemesGraph
         /// Limited to:
         /// * construction from a fully-resolved demes.Graph
@@ -49,7 +53,7 @@ namespace fwdpy11
             {
             }
 
-            Deme *
+            DemeRef
             add_deme(const std::string& name, std::int32_t id,
                      demes_model_time start_time)
             {
@@ -68,7 +72,7 @@ namespace fwdpy11
                     {
                         throw std::runtime_error("fatal error: demes is empty");
                     }
-                return &demes[demes.size()-1];
+                return DemeRef{std::ref(demes[demes.size()-1])};
             }
         };
     }

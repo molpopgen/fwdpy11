@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE(add_deme)
     // return pointer/reference to deme with a given start time.
     // arguments are name, id, start_time
     auto deme = g.add_deme("CEU", 0, 0);
-    BOOST_REQUIRE(deme->epochs.empty());
+    BOOST_REQUIRE(deme.deme.get().epochs.empty());
 }
 
 BOOST_AUTO_TEST_CASE(add_deme_that_already_exists)
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
     auto deme = g.add_deme("CEU", 0, 0);
 
     // end tie, start size, end size, cloning, selfing, size_function
-    deme->add_epoch(100, 100, 100, 0.,
+    deme.deme.get().add_epoch(100, 100, 100, 0.,
                     fwdpy11::discrete_demography::Selfing::wright_fisher(),
                     fwdpy11::discrete_demography::constant_size_function());
     assert(!g.demes[0].epochs.empty());
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme_with_bad_size_function)
     // end tie, start size, end size, cloning, selfing, size_function
     BOOST_CHECK_THROW(
         {
-            deme->add_epoch(100, 100, 150, 0.,
+            deme.deme.get().add_epoch(100, 100, 150, 0.,
                             fwdpy11::discrete_demography::Selfing::wright_fisher(),
                             fwdpy11::discrete_demography::constant_size_function());
         },

@@ -31,6 +31,7 @@ void init_SetExponentialGrowth(py::module&);
 void init_SetSelfingRate(py::module&);
 void init_SetMigrationRate(py::module&);
 void init_DiscreteDemography(py::module&);
+void init_ForwardDemesGraph(py::module&);
 
 void
 init_discrete_demography(py::module& m)
@@ -47,4 +48,5 @@ init_discrete_demography(py::module& m)
     init_SetSelfingRate(m);
     init_SetMigrationRate(m);
     init_DiscreteDemography(m);
+    init_ForwardDemesGraph(m);
 }

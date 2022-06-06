@@ -94,7 +94,8 @@ set(DISCRETE_DEMOGRAPHY_SOURCES src/discrete_demography/init.cc
     src/discrete_demography/SetSelfingRate.cc
     src/discrete_demography/SetMigrationRates.cc
     src/discrete_demography/DiscreteDemography.cc
-    src/discrete_demography/exceptions.cc)
+    src/discrete_demography/exceptions.cc
+    src/discrete_demography/ForwardDemesGraph.cc)
 
 set (ARRAY_PROXY_SOURCES src/array_proxies/init.cc)
 
