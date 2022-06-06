@@ -86,6 +86,11 @@ namespace fwdpy11
                   cloning_rate{cloning_rate}, selfing{std::move(selfing)},
                   size_function{std::move(size_function)}
             {
+                if (end_time <= 0)
+                    {
+                        throw std::invalid_argument("epoch end_time must be > 0");
+                    }
+
                 size_function.validate(start_size, end_size);
             }
         };

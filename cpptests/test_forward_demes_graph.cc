@@ -36,11 +36,20 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
 
     auto deme = g.add_deme("CEU", 0, 0);
 
-    // end tie, start size, end size, cloning, selfing, size_function
+    // end time, start size, end size, cloning, selfing, size_function
     deme.deme.get().add_epoch(100, 100, 100, 0.,
-                    fwdpy11::discrete_demography::Selfing::wright_fisher(),
-                    fwdpy11::discrete_demography::constant_size_function());
+                              fwdpy11::discrete_demography::Selfing::wright_fisher(),
+                              fwdpy11::discrete_demography::constant_size_function());
     assert(!g.demes[0].epochs.empty());
+
+    BOOST_CHECK_THROW(
+        {
+            // Bad end_time, must be > 0!
+            deme.deme.get().add_epoch(
+                0, 100, 100, 0., fwdpy11::discrete_demography::Selfing::wright_fisher(),
+                fwdpy11::discrete_demography::constant_size_function());
+        },
+        std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(add_epoch_to_deme_with_bad_size_function)
@@ -52,9 +61,10 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme_with_bad_size_function)
     // end tie, start size, end size, cloning, selfing, size_function
     BOOST_CHECK_THROW(
         {
-            deme.deme.get().add_epoch(100, 100, 150, 0.,
-                            fwdpy11::discrete_demography::Selfing::wright_fisher(),
-                            fwdpy11::discrete_demography::constant_size_function());
+            deme.deme.get().add_epoch(
+                100, 100, 150, 0.,
+                fwdpy11::discrete_demography::Selfing::wright_fisher(),
+                fwdpy11::discrete_demography::constant_size_function());
         },
         std::invalid_argument);
 }
