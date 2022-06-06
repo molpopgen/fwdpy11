@@ -77,17 +77,17 @@ namespace fwdpy11
             std::uint32_t start_size, end_size;
             double cloning_rate;
             Selfing selfing;
-            SizeFunction size_function;
+            std::unique_ptr<SizeFunction> size_function;
 
             Epoch(demes_model_time end_time, std::uint32_t start_size,
                   std::uint32_t end_size, double cloning_rate, Selfing selfing,
-                  SizeFunction size_function)
+                  std::unique_ptr<SizeFunction> size_function)
                 : end_time{end_time}, start_size{start_size}, end_size{end_size},
                   cloning_rate{cloning_rate}, selfing{std::move(selfing)},
                   size_function{std::move(size_function)}
             {
                 // NOTE: fail early!
-                size_function.validate(start_size, end_size);
+                size_function->validate(start_size, end_size);
             }
         };
     }

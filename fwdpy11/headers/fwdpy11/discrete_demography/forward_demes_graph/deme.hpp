@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <vector>
 #include "demes_model_time.hpp"
 #include "epoch.hpp"
@@ -24,11 +25,11 @@ namespace fwdpy11
 
             void
             add_epoch(demes_model_time end_time, std::uint32_t start_size,
-                      std::uint32_t end_size, double cloning_rate, double selfing_rate,
-                      SizeFunction size_function)
+                      std::uint32_t end_size, double cloning_rate, Selfing selfing,
+                      std::unique_ptr<SizeFunction> size_function)
             {
                 epochs.push_back(Epoch{end_time, start_size, end_size, cloning_rate,
-                                       selfing_rate, std::move(size_function)});
+                                       std::move(selfing), std::move(size_function)});
             }
         };
     }
