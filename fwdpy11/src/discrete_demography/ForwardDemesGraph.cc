@@ -10,12 +10,12 @@ init_ForwardDemesGraph(py::module& m)
 {
     py::class_<::ForwardDemesGraph>(m, "_ll_ForwardDemesGraph")
         .def(py::init<>())
-        .def("add_deme", &::ForwardDemesGraph::add_deme);
+        .def("_add_deme", &::ForwardDemesGraph::add_deme);
 
     py::class_<::Selfing>(m, "_ll_Selfing");
 
     py::class_<::DemeRef>(m, "_ll_DemeRef")
-        .def("add_epoch",
+        .def("_add_epoch",
              [](::DemeRef& self, demes_model_time end_time, std::uint32_t start_size,
                 std::uint32_t end_size, double cloning_rate, Selfing selfing,
                 SizeFunction size_function) {
