@@ -12,12 +12,11 @@ namespace fwdpy11
         // or simply store a std::function?
         struct SizeFunction
         {
-            virtual std::uint32_t
-            operator()(std::uint32_t /*epoch_start_size*/,
-                       std::uint32_t /*epoch_end_size*/,
-                       demes_model_time /*epoch_start_time*/,
-                       demes_model_time /*epoch_end_time*/,
-                       demes_model_time /*current_time*/) const = 0;
+            virtual std::uint32_t size_at(std::uint32_t /*epoch_start_size*/,
+                                          std::uint32_t /*epoch_end_size*/,
+                                          demes_model_time /*epoch_start_time*/,
+                                          demes_model_time /*epoch_end_time*/,
+                                          demes_model_time /*current_time*/) const = 0;
 
             // Throw std::invalid_argument if start/end sizes
             // are not compatible
