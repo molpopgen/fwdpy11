@@ -8,8 +8,6 @@ namespace fwdpy11
 {
     namespace discrete_demography
     {
-        // Should this be a virtual base class
-        // or simply store a std::function?
         struct SizeFunction
         {
             using size_function = std::function<std::uint32_t(

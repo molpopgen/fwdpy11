@@ -87,7 +87,7 @@ namespace fwdpy11
                   size_function{std::move(size_function)}
             {
                 // NOTE: fail early!
-                size_function.validate(start_size, end_size);
+                // size_function.validate(start_size, end_size);
             }
         };
     }
