@@ -27,7 +27,7 @@ namespace fwdpy11
             {
             }
 
-            static SizeFunction
+            inline static SizeFunction
             constant()
             {
                 return SizeFunction{
