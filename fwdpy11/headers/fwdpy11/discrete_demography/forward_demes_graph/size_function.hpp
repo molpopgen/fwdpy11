@@ -19,31 +19,48 @@ namespace fwdpy11
             // are not compatible
             using validate_function = std::function<void(
                 std::uint32_t /*epoch_start_size*/, std::uint32_t /*epoch_end_size*/)>;
-            size_function size_at;
-            validate_function validate;
+            const size_function size_at;
+            const validate_function validate;
 
             SizeFunction(size_function size_at, validate_function validate)
                 : size_at{std::move(size_at)}, validate{std::move(validate)}
             {
-            }
-
-            inline static SizeFunction
-            constant()
-            {
-                return SizeFunction{
-                    [](std::uint32_t epoch_start_size, std::uint32_t /*epoch_end_size*/,
-                       demes_model_time /*epoch_start_time*/,
-                       demes_model_time /*epoch_end_time*/,
-                       demes_model_time /*current_time*/) { return epoch_start_size; },
-                    [](std::uint32_t epoch_start_size, std::uint32_t epoch_end_size) {
-                        if (epoch_start_size != epoch_end_size)
-                            {
-                                throw std::invalid_argument(
-                                    "start_size != end_size incompatible with constant "
-                                    "size function");
-                            }
-                    }};
+                this->validate(0, 0);
             }
         };
+
+        // NOTE: we can make only this stuff public?
+
+        inline SizeFunction
+        constant_size_function()
+        {
+            SizeFunction::validate_function validate(
+                [](std::uint32_t epoch_start_size,
+                   std::uint32_t epoch_end_size) -> void {
+                    if (epoch_start_size != epoch_end_size)
+                        {
+                            throw std::invalid_argument(
+                                "start_size != end_size incompatible with constant "
+                                "size function");
+                        }
+                    return;
+                });
+
+            return SizeFunction{
+                [](std::uint32_t epoch_start_size, std::uint32_t /*epoch_end_size*/,
+                   demes_model_time /*epoch_start_time*/,
+                   demes_model_time /*epoch_end_time*/,
+                   demes_model_time /*current_time*/) { return epoch_start_size; },
+                [](std::uint32_t epoch_start_size,
+                   std::uint32_t epoch_end_size) -> void {
+                    if (epoch_start_size != epoch_end_size)
+                        {
+                            throw std::invalid_argument(
+                                "start_size != end_size incompatible with constant "
+                                "size function");
+                        }
+                    return;
+                }};
+        }
     }
 }

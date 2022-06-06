@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(add_deme_that_already_exists)
 
 BOOST_AUTO_TEST_CASE(constant_size_function)
 {
-    auto e = fwdpy11::discrete_demography::SizeFunction::constant();
+    auto e = fwdpy11::discrete_demography::constant_size_function();
     e.validate(10, 10);
     BOOST_CHECK_THROW({ e.validate(100, 200); }, std::invalid_argument);
 }
@@ -37,9 +37,9 @@ BOOST_AUTO_TEST_CASE(add_epoch_to_deme)
     auto deme = g.add_deme("CEU", 0, 0);
 
     // end tie, start size, end size, cloning, selfing, size_function
-    deme->add_epoch(100, 150, 100, 0.,
+    deme->add_epoch(100, 100, 100, 0.,
                     fwdpy11::discrete_demography::Selfing::wright_fisher(),
-                    fwdpy11::discrete_demography::SizeFunction::constant());
+                    fwdpy11::discrete_demography::constant_size_function());
     assert(!g.demes[0].epochs.empty());
 }
 

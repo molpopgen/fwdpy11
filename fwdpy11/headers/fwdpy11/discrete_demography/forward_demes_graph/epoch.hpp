@@ -86,8 +86,7 @@ namespace fwdpy11
                   cloning_rate{cloning_rate}, selfing{std::move(selfing)},
                   size_function{std::move(size_function)}
             {
-                // NOTE: fail early!
-                // size_function.validate(start_size, end_size);
+                size_function.validate(start_size, end_size);
             }
         };
     }
