@@ -10,7 +10,8 @@ init_ForwardDemesGraph(py::module& m)
 {
     py::class_<ForwardDemesGraph>(m, "_ll_ForwardDemesGraph")
         .def(py::init<>())
-        .def("_add_deme", &::ForwardDemesGraph::add_deme);
+        .def("_add_deme", &::ForwardDemesGraph::add_deme, py::kw_only(),
+             py::arg("name"), py::arg("id"), py::arg("start_time"));
 
     py::class_<Selfing>(m, "_ll_Selfing");
     py::class_<SizeFunction>(m, "_ll_SizeFunction");
