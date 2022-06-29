@@ -11,6 +11,10 @@ Back end changes
   PR {pr}`947`.
 * Refactor a class decorator used to pickle/unpickle `attrs`-based classes.
   PR {pr}`948`.
+* Reject any `demes` models that involve multiple pulse events into the
+  same source deme at the same time.  Such models are better written
+  in a different way.
+  PR {pr}`953`
 
 Bug fixes
 
