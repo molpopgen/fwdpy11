@@ -89,5 +89,10 @@ from ._functions import (
     simplify_tables,
 )  # NOQA
 
+
+class AmbiguousPulses(Exception):
+    pass
+
+
 if sys.version_info[0] < 3:
     raise ValueError("Python3 required!")

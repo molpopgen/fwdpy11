@@ -1887,6 +1887,7 @@ demes:
     with pytest.raises(ValueError):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
 
+
 def test_epoch_rounding_02():
     yaml = """
 time_units: generations
@@ -1899,4 +1900,29 @@ demes:
 """
     graph = demes.loads(yaml)
     with pytest.raises(ValueError):
+        _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)
+
+
+def test_ambiguous_pulses():
+    yaml = """
+time_units: generations
+demes:
+ - name: A
+   epochs:
+    - start_size: 50
+ - name: B
+   epochs:
+    - start_size: 50
+pulses:
+ - sources: [A]
+   dest: B
+   proportions: [0.9]
+   time: 25
+ - sources: [A]
+   dest: B
+   proportions: [0.9]
+   time: 25
+"""
+    graph = demes.loads(yaml)
+    with pytest.raises(fwdpy11.AmbiguousPulses):
         _ = fwdpy11.discrete_demography.from_demes(graph, burnin=0)

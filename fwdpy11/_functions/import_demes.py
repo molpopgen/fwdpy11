@@ -51,8 +51,25 @@ def demography_from_demes(
     if burnin < 0:
         raise ValueError("Burn in factor must be non-negative")
 
+    _validate_pulses(g)
+
     demography = _build_from_deme_graph(g, burnin, source)
     return demography
+
+
+def _validate_pulses(graph: demes.Graph):
+    from fwdpy11 import AmbiguousPulses
+
+    unique_pulse_times = set([np.rint(p.time) for p in graph.pulses])
+    for time in unique_pulse_times:
+        pulses = [p for p in graph.pulses if np.rint(p.time) == time]
+        dests = set()
+        for p in pulses:
+            if p.dest in dests:
+                raise AmbiguousPulses(
+                    f"multiple pulse events into deme {p.dest} at time {time}"
+                )
+            dests.add(p.dest)
 
 
 def _build_from_deme_graph(
