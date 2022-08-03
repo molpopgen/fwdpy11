@@ -26,6 +26,11 @@ Dependencies
 * Pinned pybind11 to 2.9.1.
   PR {pr}`955`.
 
+Build system and CI
+
+* Fix dependency caching for Ubuntu tests.
+  PR {pr}`957`.
+
 ## 0.18.1
 
 Bug fixes
