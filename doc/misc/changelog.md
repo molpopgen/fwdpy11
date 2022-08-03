@@ -21,6 +21,11 @@ Bug fixes
 * Fixed edge case when importing demes models with burn-in time of 0.
   PR {pr}`949`.
 
+Dependencies
+
+* Pinned pybind11 to 2.9.1.
+  PR {pr}`955`.
+
 ## 0.18.1
 
 Bug fixes
