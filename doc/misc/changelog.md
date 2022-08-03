@@ -25,6 +25,8 @@ Dependencies
 
 * Pinned pybind11 to 2.9.1.
   PR {pr}`955`.
+* Use [build](https://pypi.org/project/build/) for wheels.
+  PR {pr}`958`.
 
 Build system and CI
 
