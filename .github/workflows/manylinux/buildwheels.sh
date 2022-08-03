@@ -28,7 +28,7 @@ do
     rm -rf build/ 
     # Instead of letting setup.py install a newer numpy we install it here
     # using the oldest supported version for ABI compatibility
-    ${PYBIN} -m pip install --no-cache oldest-supported-numpy pybind11-global
+    ${PYBIN} -m pip install --no-cache oldest-supported-numpy
     PATH=${PYPATH}:$PATH ${PYBIN} setup.py build_ext -i
     PATH=${PYPATH}:$PATH ${PYBIN} setup.py bdist_wheel
 done
