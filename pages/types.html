@@ -1111,7 +1111,7 @@ memory.  It is, however, slower.</p>
 <dd><p>Return an array of nodes associated with preserved/ancient samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <div class="versionadded">
@@ -1442,10 +1442,10 @@ each interval in <code class="docutils literal notranslate"><span class="pre">wi
 bins correspond to frequencies 1 to n-1, where n is the number
 of sample nodes.</p></li>
 <li><p>If multiple sample lists are provided, the return value is a
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a>.  For each dimension, the 0 and n bins
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a>.  For each dimension, the 0 and n bins
 are included.</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">marginalize</span> <span class="pre">==</span> <span class="pre">True</span></code> and more than one sample bin is provided,
-the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a> matrix is converted into a dict where the key
+the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html#scipy.sparse.coo_matrix" title="(in SciPy v1.9.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse.coo_matrix</span></code></a> matrix is converted into a dict where the key
 is the index of the sample list and the value is a dense 1-d array,
 masked as described above.</p></li>
 <li><p>If multiple windows are provided and <code class="docutils literal notranslate"><span class="pre">separate_windows</span> <span class="pre">==</span> <span class="pre">False</span></code>,
@@ -1690,7 +1690,7 @@ when generating such views.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>TableCollection</em></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – List of sample nodes</p></li>
 </ul>
 </dd>
 </dl>
@@ -1698,7 +1698,7 @@ when generating such views.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
+<li><p><strong>ancient_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – List of ancient_samples nodes</p></li>
 <li><p><strong>begin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – Start iteration at this position</p></li>
 <li><p><strong>end</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a><em> or </em><em>None</em>) – End iteration at this position</p></li>
 </ul>
@@ -1870,7 +1870,7 @@ on the current tree.</p>
 <dd class="field-odd"><p>The samples list</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1934,7 +1934,7 @@ on the current tree.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><em>fwdpy11.TableCollection</em></a>) – The table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – Samples list</p></li>
 </ul>
 </dd>
 </dl>
@@ -2002,7 +2002,7 @@ as properties.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tables</strong> (<a class="reference internal" href="#fwdpy11.TableCollection" title="fwdpy11.TableCollection"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.TableCollection</span></code></a>) – A table collection</p></li>
-<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
+<li><p><strong>samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – A list of samples</p></li>
 <li><p><strong>intervals</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>]</em>) – The <span class="math notranslate nohighlight">\([start, stop)\)</span> positions of each interval</p></li>
 <li><p><strong>neutral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, include neutral variants</p></li>
 <li><p><strong>selected</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – If True, include selected variants</p></li>
@@ -2092,7 +2092,7 @@ also determine the order of positional arguments:</p>
 <li><p><strong>set_growth_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetExponentialGrowth" title="fwdpy11.SetExponentialGrowth"><em>fwdpy11.SetExponentialGrowth</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetExponentialGrowth" title="fwdpy11.SetExponentialGrowth"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetExponentialGrowth</span></code></a></p></li>
 <li><p><strong>set_deme_sizes</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><em>fwdpy11.SetDemeSize</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetDemeSize" title="fwdpy11.SetDemeSize"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetDemeSize</span></code></a></p></li>
 <li><p><strong>set_selfing_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><em>fwdpy11.SetSelfingRate</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetSelfingRate" title="fwdpy11.SetSelfingRate"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetSelfingRate</span></code></a></p></li>
-<li><p><strong>migmatrix</strong> (<em>None</em><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><em>fwdpy11.MigrationMatrix</em></a>) – A migraton matrix. See <a class="reference internal" href="softselection.html#migration"><span class="std std-ref">Migration</span></a>. If not
+<li><p><strong>migmatrix</strong> (<em>None</em><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a><em> or </em><a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><em>fwdpy11.MigrationMatrix</em></a>) – A migraton matrix. See <a class="reference internal" href="softselection.html#migration"><span class="std std-ref">Migration</span></a>. If not
 <cite>None</cite>, then input are converted into an
 instance of <a class="reference internal" href="#fwdpy11.MigrationMatrix" title="fwdpy11.MigrationMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.MigrationMatrix</span></code></a>.</p></li>
 <li><p><strong>set_migration_rates</strong> (<em>None</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>[</em><a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><em>fwdpy11.SetMigrationRates</em></a><em>]</em>) – Instances of <a class="reference internal" href="#fwdpy11.SetMigrationRates" title="fwdpy11.SetMigrationRates"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.SetMigrationRates</span></code></a></p></li>
@@ -2314,7 +2314,7 @@ also determine the order of positional arguments:</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>migmatrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – A square matrix of non-negative floats.</p></li>
+<li><p><strong>migmatrix</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – A square matrix of non-negative floats.</p></li>
 <li><p><strong>scaled</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – (True) If entries in <cite>migmatrix</cite> will be
 multiplied by deme sizes during simulation</p></li>
 </ul>
@@ -2355,7 +2355,7 @@ also determine the order of positional arguments:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>when</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The generation when the event occurs</p></li>
 <li><p><strong>deme</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><em>None</em>) – The row index of the migration matrix</p></li>
-<li><p><strong>migrates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><em>numpy.ndarray</em></a>) – The migration rates into <cite>deme</cite> from all other populations.</p></li>
+<li><p><strong>migrates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em> or </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – The migration rates into <cite>deme</cite> from all other populations.</p></li>
 </ul>
 </dd>
 </dl>

@@ -3,6 +3,40 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## 0.18.2
+
+Back end changes
+
+* Simplify the back-end behind {class}`fwdpy11.MutationDominance`.
+  PR {pr}`947`.
+* Refactor a class decorator used to pickle/unpickle `attrs`-based classes.
+  PR {pr}`948`.
+* Reject any `demes` models that involve multiple pulse events into the
+  same source deme at the same time.  Such models are better written
+  in a different way.
+  PR {pr}`953`
+
+Bug fixes
+
+* Fixed edge case when importing demes models with burn-in time of 0.
+  PR {pr}`949`.
+
+Dependencies
+
+* Pinned pybind11 to 2.9.1.
+  PR {pr}`955`.
+* Use [build](https://pypi.org/project/build/) for wheels.
+  PR {pr}`958`.
+* Bump `tskit` to `=~ 0.5.0`.
+  PR {pr}`959`.
+
+Build system and CI
+
+* Fix dependency caching for Ubuntu tests.
+  PR {pr}`957`.
+* Fix wheel builds for macosx.
+  PR {pr}`941`.
+
 ## 0.18.1
 
 Bug fixes

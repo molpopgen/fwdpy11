@@ -1051,8 +1051,8 @@ for a more detailed discussion of relevant data structures.</p>
 <p>Our population size is unchanged, but our population now has 500 individuals
 in each of two demes.  We can verify this by looking at the <code class="docutils literal notranslate"><span class="pre">metadata</span></code> associated
 with each individual.  Individual metadata are instances of
-<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a> but they are also registered as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.22)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>,
-meaning that we can look at the metadata as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.22)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
+<a class="reference internal" href="types.html#fwdpy11.DiploidMetadata" title="fwdpy11.DiploidMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiploidMetadata</span></code></a> but they are also registered as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.dtype.html#numpy.dtype" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.dtype</span></code></a>,
+meaning that we can look at the metadata as a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.recarray.html#numpy.recarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.recarray</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">md</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pop</span><span class="o">.</span><span class="n">diploid_metadata</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -1075,7 +1075,7 @@ meaning that we can look at the metadata as a <a class="reference external" href
 </div>
 </div>
 <p>We can easily confirm the number of individuals in each deme using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="(in NumPy v1.22)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.unique()</span></code></a>:</p>
+<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.unique()</span></code></a>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="s2">&quot;deme&quot;</span><span class="p">],</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1279,7 +1279,7 @@ so, give a nonzero value to the <code class="docutils literal notranslate"><span
 <p>At the end of the simulation, mutations from this region will have
 the <code class="docutils literal notranslate"><span class="pre">label</span></code> value stored in the attribute <a class="reference internal" href="types.html#fwdpy11.Mutation.label" title="fwdpy11.Mutation.label"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fwdpy11.Mutation.label</span></code></a>.</p>
 <p>The value of <code class="docutils literal notranslate"><span class="pre">label</span></code> must fit into a 16-bit unsigned integer,
-<em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.22)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>. Larger values, or negative values, will result
+<em>e.g.</em>, <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.uint16" title="(in NumPy v1.23)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.uint16</span></code></a>. Larger values, or negative values, will result
 in exceptions.  The following example tries to use a value one larger than
 the maximum allowed:</p>
 <div class="cell tag_raises-exception docutils container">
@@ -1751,7 +1751,7 @@ moving optimum:</p>
 <p class="admonition-title">Note</p>
 <p>Note the cast to <code class="docutils literal notranslate"><span class="pre">int</span></code> when updating the time.  <a class="reference internal" href="gvalue_to_fitness.html#fwdpy11.Optimum" title="fwdpy11.Optimum"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.Optimum</span></code></a>
 is very picky about its input. It requires <code class="docutils literal notranslate"><span class="pre">int</span></code> for <code class="docutils literal notranslate"><span class="pre">when</span></code> and will
-raise an exception if the <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v1.22)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> from <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.geometric.html#numpy.random.geometric" title="(in NumPy v1.22)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.geometric()</span></code></a>
+raise an exception if the <a class="reference external" href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="(in NumPy v1.23)"><code class="xref py py-attr docutils literal notranslate"><span class="pre">numpy.int64</span></code></a> from <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.geometric.html#numpy.random.geometric" title="(in NumPy v1.23)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random.geometric()</span></code></a>
 gets passed in.</p>
 </div>
 </div>
@@ -1929,7 +1929,7 @@ can modify:</p>
 <p class="admonition-title">Warning</p>
 <p>It is best practice to use <a class="reference external" href="https://docs.python.org/3/library/copy.html#copy.deepcopy" title="(in Python v3.10)"><code class="xref py py-func docutils literal notranslate"><span class="pre">copy.deepcopy()</span></code></a> here. The
 <a class="reference internal" href="types.html#fwdpy11.DiscreteDemography" title="fwdpy11.DiscreteDemography"><code class="xref py py-class docutils literal notranslate"><span class="pre">fwdpy11.DiscreteDemography</span></code></a> instances may contain
-objects like <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.22)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> that only get copied by
+objects like <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> that only get copied by
 reference when the <code class="docutils literal notranslate"><span class="pre">dict</span></code> is generated.  For safety/general
 happiness, making a deep copy helps here.</p>
 </div>
