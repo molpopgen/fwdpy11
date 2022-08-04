@@ -34,6 +34,8 @@ Build system and CI
 
 * Fix dependency caching for Ubuntu tests.
   PR {pr}`957`.
+* Fix wheel builds for macosx.
+  PR {pr}`941`.
 
 ## 0.18.1
 
