@@ -27,6 +27,8 @@ Dependencies
   PR {pr}`955`.
 * Use [build](https://pypi.org/project/build/) for wheels.
   PR {pr}`958`.
+* Bump `tskit` to `=~ 0.5.0`.
+  PR {pr}`959`.
 
 Build system and CI
 
