@@ -16,7 +16,7 @@ jobs:
         compiler: [gcc]
         python-version: [3.8]
         rust:
-          1.62.1
+          "1.62.1"
     defaults:
       run:
         shell: bash
