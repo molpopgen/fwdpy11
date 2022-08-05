@@ -130,9 +130,9 @@ add_dependencies(_fwdpy11 cargo-build_demes-forward-capi)
 set_target_properties(_fwdpy11 fwdpy11core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 if(UNIX AND NOT APPLE)
-    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "$ORIGIN")
+    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "$ORIGIN/fwdpy11")
 elseif(APPLE)
-    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "@loader_path")
+    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "@loader_path/fwdpy11")
 endif()
 
 if (ENABLE_PROFILING)
