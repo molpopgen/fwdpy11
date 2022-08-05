@@ -43,6 +43,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
 endif()
 
 add_subdirectory(lib)
+add_subdirectory(rust)
 add_subdirectory(fwdpy11)
 
 if(BUILD_UNIT_TESTS)

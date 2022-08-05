@@ -132,6 +132,6 @@ set_target_properties(_fwdpy11 fwdpy11core PROPERTIES POSITION_INDEPENDENT_CODE 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
 endif()
-target_link_directories(_fwdpy11 PRIVATE ${CMAKE_BINARY_DIR}/lib)
+target_link_directories(_fwdpy11 PRIVATE ${CMAKE_BINARY_DIR}/rust)
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas ${CMAKE_SOURCE_DIR}/lib/libfwdpy11core.a
     demes_forward_capi.a)
