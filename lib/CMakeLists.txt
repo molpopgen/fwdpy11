@@ -20,4 +20,4 @@ target_link_libraries(fwdpy11core PUBLIC demes_forward_capi STATIC)
 
 # Run cbindgen manually to generate the demes header
 add_custom_command(OUTPUT ${DEMES_FORWARD_HEADER_LOCATION}/lib/demes_forward.h COMMAND cbindgen -l C --cpp-compat -o
-    ${DEMES_FORWARD_HEADER_LOCATION}/demes_forward.h ${CMAKE_SOURCE_DIR}/lib/rust/demes-forward-capi)
+    ${DEMES_FORWARD_HEADER_LOCATION}/lib/demes_forward.h ${CMAKE_SOURCE_DIR}/lib/rust/demes-forward-capi)

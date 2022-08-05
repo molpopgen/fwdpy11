@@ -5,10 +5,17 @@
 #include <fwdpy11/gsl/gsl_error_handler_wrapper.hpp>
 #include <pybind11/pybind11.h>
 
+#include <demes_forward.h>
+
 static_assert(GSL_MAJOR_VERSION >= 2, "GSL major version >= 2 required");
 static_assert(GSL_MINOR_VERSION >= 3, "GSL minor version >= 3 required");
 
 namespace py = pybind11;
+
+void foo() {
+    auto x = forward_graph_allocate();
+    forward_graph_deallocate(x);
+}
 
 void initialize_fwdpp_types(py::module &);
 void initialize_fwdpy11_types(py::module &m);
@@ -26,6 +33,7 @@ void initialize_functions(py::module & m);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
+    foo();
     initialize_fwdpp_types(m);
     initialize_fwdpy11_types(m);
     initialize_mutation_dominance(m);
