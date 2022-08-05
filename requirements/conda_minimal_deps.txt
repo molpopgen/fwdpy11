@@ -13,3 +13,4 @@ automake
 pytest
 pytest-xdist
 demes==0.2.0
+rust==1.62.1
