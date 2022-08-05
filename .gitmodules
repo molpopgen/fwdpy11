@@ -5,5 +5,5 @@
 	path = rust/demes-forward-capi
 	url = https://github.com/molpopgen/demes-forward-capi.git
 [submodule "lib/corrosion"]
-	path = corrosion
+	path = rust/corrosion
 	url = https://github.com/corrosion-rs/corrosion.git
