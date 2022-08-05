@@ -1,3 +1,4 @@
+add_subdirectory(corrosion)
 set(DISCRETE_DEMOGRAPHY_SOURCES discrete_demography/SetDemeSize.cc)
 
 set(MUTATION_DOMINANCE_SOURCES mutation_dominance/dependency_injection.cc)
