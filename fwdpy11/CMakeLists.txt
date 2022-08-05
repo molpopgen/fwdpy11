@@ -135,7 +135,7 @@ if(UNIX AND NOT APPLE)
 elseif(APPLE)
     set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "@loader_path/fwdpy11")
 endif()
-set_target_properties(pymodule PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
+set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
