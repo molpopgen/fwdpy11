@@ -15,5 +15,7 @@ add_custom_target(header DEPENDS ${DEMES_FORWARD_HEADER_LOCATION}/demes_forward.
 
 add_library(fwdpy11core STATIC ${ALL_SOURCES})
 add_dependencies(fwdpy11core cargo-build_demes-forward-capi header)
+
+# Run cbindgen manually to generate the demes header
 add_custom_command(OUTPUT ${DEMES_FORWARD_HEADER_LOCATION}/demes_forward.h COMMAND cbindgen -l C --cpp-compat -o
     ${DEMES_FORWARD_HEADER_LOCATION}/lib/demes_forward.h ${CMAKE_SOURCE_DIR}/lib/rust/demes-forward-capi)
