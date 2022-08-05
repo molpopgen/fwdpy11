@@ -175,8 +175,6 @@ for root, dirnames, filenames in os.walk("fwdpy11/headers"):
                 generated_package_data[replace] = ["*.tcc"]
 generated_package_data['fwdpy11'] = ['lib*.so']
 
-print(generated_package_data)
-
 setup(
     ext_modules=ext_modules,
     use_scm_version={"write_to": "fwdpy11/_version.py"},
