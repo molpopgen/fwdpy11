@@ -76,6 +76,14 @@ jobs:
         run: |
           cp ~/.bash_profile ~/.bashrc
 
+      - name: Install cbindgen
+        run: |
+          cargo install cbindgen@0.24.3
+
+      - name: Test cbindgen
+        run:
+          cbindgen --version
+
       - name: Build module
         # shell: bash -l {0}
         run: |
