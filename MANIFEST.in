@@ -1,6 +1,7 @@
 recursive-include fwdpy11 *.cc *.hpp
 recursive-include tests *.cc *.pyx *.py
 recursive-include examples COPYING *.rst *.py Makefile *.cc *.R *.txt
+recursive-include rust
 include COPYING
 include CMakeLists.txt
 include fwdpy11/CMakeLists.txt

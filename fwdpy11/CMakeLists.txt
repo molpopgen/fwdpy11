@@ -134,4 +134,4 @@ if (ENABLE_PROFILING)
 endif()
 target_link_directories(_fwdpy11 PRIVATE ${CMAKE_BINARY_DIR}/rust)
 target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas ${CMAKE_SOURCE_DIR}/lib/libfwdpy11core.a
-    demes_forward_capi.a)
+    demes_forward_capi)
