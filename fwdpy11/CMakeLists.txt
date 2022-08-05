@@ -129,11 +129,13 @@ add_dependencies(_fwdpy11 fwdpy11core)
 add_dependencies(_fwdpy11 cargo-build_demes-forward-capi)
 set_target_properties(_fwdpy11 fwdpy11core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
+// https://github.com/pybind/cmake_example/issues/11
 if(UNIX AND NOT APPLE)
     set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "$ORIGIN/fwdpy11")
 elseif(APPLE)
     set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "@loader_path/fwdpy11")
 endif()
+set_target_properties(pymodule PROPERTIES INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
