@@ -2,8 +2,8 @@
 	path = fwdpy11/headers/fwdpp
 	url = https://github.com/molpopgen/fwdpp
 [submodule "lib/rust/demes-forward-capi"]
-	path = lib/rust/demes-forward-capi
+	path = rust/demes-forward-capi
 	url = https://github.com/molpopgen/demes-forward-capi.git
 [submodule "lib/corrosion"]
-	path = lib/corrosion
+	path = corrosion
 	url = https://github.com/corrosion-rs/corrosion.git
