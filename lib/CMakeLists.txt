@@ -11,5 +11,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 # Set up the rust build deps
 get_filename_component(DEMES_FORWARD_HEADER_LOCATION ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY CACHE)
 corrosion_import_crate(MANIFEST_PATH rust/demes-forward-capi/Cargo.toml)
+add_custom_target(header DEPENDS ${DEMES_FORWARD_HEADER_LOCATION}/demes_forward.h)
 
 add_library(fwdpy11core STATIC ${ALL_SOURCES})
+add_dependencies(fwdpy11core cargo-build_demes-forward-capi header)
+add_custom_command(OUTPUT ${DEMES_FORWARD_HEADER_LOCATION}/demes_forward.h COMMAND cbindgen -l C --cpp-compat -o
+    ${DEMES_FORWARD_HEADER_LOCATION}/lib/demes_forward.h ${CMAKE_SOURCE_DIR}/lib/rust/demes-forward-capi)
