@@ -15,6 +15,8 @@ jobs:
       matrix:
         compiler: [gcc]
         python-version: [3.8]
+        rust:
+          1.62.1
     defaults:
       run:
         shell: bash
@@ -29,6 +31,11 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: false
 
       # We install the R dependencies first
       # Later, Python dependencies will go into the same place.
@@ -50,6 +57,14 @@ jobs:
       - name: Install apt dependencies
         run: |
           sudo apt install --fix-missing -y libgsl-dev cmake 
+
+      - name: Install cbindgen
+        run: |
+          cargo install cbindgen@0.24.3
+
+      - name: Test cbindgen
+        run:
+          cbindgen --version
 
       - name: Set GCC as compiler
         if: matrix.compiler == 'gcc'
