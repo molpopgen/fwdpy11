@@ -1,0 +1,20 @@
+[package]
+name = "fp11rust"
+version = "0.1.0"
+edition = "2021"
+license = "GPL-3.0-or-later"
+publish = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["staticlib"]
+
+[profile.release]
+lto = "fat"
+codegen-units=1
+panic = "abort"
+strip = true
+
+[dependencies]
+demes-forward-capi = "0.2.0"
+libc = "~0.2"
