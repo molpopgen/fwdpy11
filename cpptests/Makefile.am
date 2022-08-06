@@ -15,7 +15,7 @@ fwdpy11_cpp_tests_SOURCES=fwdpy11_cpp_tests.cc \
 AM_CPPFLAGS=-I../fwdpy11/headers -I../fwdpy11/headers/fwdpp -I../fwdpy11/src/evolve_population
 AM_CXXFLAGS=-W -Wall --coverage -DBOOST_TEST_DYN_LINK
 
-AM_LDFLAGS=-L../lib
+AM_LDFLAGS=-L../fwdpy11 -Wl,-rpath ../fwdpy11
 AM_LIBS=-lboost_unit_test_framework -lfwdpy11core
 
 LIBS+=$(AM_LIBS)
