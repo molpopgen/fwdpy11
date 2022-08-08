@@ -7,6 +7,7 @@ on:
     types: [created]
   push:
     branches: [main, dev]
+  pull_request:
 
 jobs:
   macOS_wheel:

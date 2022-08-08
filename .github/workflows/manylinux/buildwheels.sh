@@ -34,7 +34,9 @@ done
 
 cd dist
 for whl in *.whl; do
-    auditwheel repair "$whl"
+    # Need to set this so that the core library
+    # can be found
+    LD_LIBRARY_PATH=fwdpy11 auditwheel repair "$whl"
     rm "$whl"
 done
 cd ..

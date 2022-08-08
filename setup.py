@@ -174,6 +174,9 @@ for root, dirnames, filenames in os.walk("fwdpy11/headers"):
             except:  # NOQA
                 generated_package_data[replace] = ["*.tcc"]
 
+# FIXME: this is only for Linux
+generated_package_data["fwdpy11"] = ["lib*.so"]
+
 setup(
     ext_modules=ext_modules,
     use_scm_version={"write_to": "fwdpy11/_version.py"},
