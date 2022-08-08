@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.15)
 project(fwdpy11)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -8,6 +8,10 @@ else()
     set(CMAKE_CXX_STANDARD 14) 
 endif()
 message(STATUS "Compiling with C++${CMAKE_CXX_STANDARD} standard.")
+
+if (APPLE) 
+    set(CMAKE_MACOSX_RPATH 1)
+endif()
 
 find_package(pybind11)
 message(STATUS "Found pybind11: ${pybind11_VERSION}")

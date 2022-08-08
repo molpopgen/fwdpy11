@@ -119,6 +119,9 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${MUTATION_DOMINANCE_SOURCES}
     ${FUNCTION_SOURCES})
 
+# NOTE: unclear if I can assign this to a
+# named target?
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(LTO_OPTIONS)
 if(ENABLE_PROFILING OR DISABLE_LTO)
     set(LTO_OPTIONS NO_EXTRAS)
@@ -127,8 +130,16 @@ endif()
 pybind11_add_module(_fwdpy11 MODULE ${LTO_OPTIONS} src/_fwdpy11.cc ${ALL_SOURCES})
 add_dependencies(_fwdpy11 fwdpy11core)
 set_target_properties(_fwdpy11 fwdpy11core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+target_link_directories(_fwdpy11 PRIVATE ${CMAKE_SOURCE_DIR}/fwdpy11)
+set_target_properties(_fwdpy11 PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE)
+# From https://github.com/pybind/cmake_example/issues/11
+if (UNIX AND NOT APPLE)
+    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "$\{ORIGIN\}")
+elseif(APPLE)
+    set_target_properties(_fwdpy11 PROPERTIES INSTALL_RPATH "@loader_path")
+endif()
 
 if (ENABLE_PROFILING)
     set_target_properties(_fwdpy11 PROPERTIES CXX_VISIBILITY_PRESET "default")
 endif()
-target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas ${CMAKE_SOURCE_DIR}/lib/libfwdpy11core.a)
+target_link_libraries(_fwdpy11 PRIVATE GSL::gsl GSL::gslcblas fwdpy11core)

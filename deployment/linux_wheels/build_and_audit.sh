@@ -12,7 +12,7 @@ done
 
 cd dist
 for whl in *.whl; do
-    auditwheel -v repair "$whl"
+    LD_LIBRARY_PATH=fwdpy11 auditwheel -v repair "$whl"
     rm "$whl"
 done
 cd ..
