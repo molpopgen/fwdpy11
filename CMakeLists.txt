@@ -23,8 +23,9 @@ add_definitions(-DPYBIND11_VERSION="${pybind11_VERSION}")
 find_package(GSL REQUIRED)
 option(USE_WEFFCPP "Use -Weffc++ during compilation" OFF)
 option(ENABLE_PROFILING "Compile to enable code profiling" OFF)
-option(BUILD_UNIT_TESTS "Build C++ modules for unit tests" ON)
+option(BUILD_PYTHON_UNIT_TESTS "Build C++ modules for unit tests" ON)
 option(DISABLE_LTO "Disable link-time optimization (LTO)" OFF)
+option(CMAKE_BUILD "Set to ON when building with cmake. Set to off from, e.g., setup.py." ON)
 include_directories(BEFORE
     ${fwdpy11_SOURCE_DIR}/fwdpy11/headers
     ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp
@@ -46,10 +47,13 @@ if (CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wextra -Weffc++ -Woverloaded-virtual -Wold-style-cast -Werror=effc++ -Werror=old-style-cast -Werror=overloaded-virtual -Werror=unused-parameter")
 endif()
 
+if (CMAKE_BUILD)
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/fwdpy11)
+endif()
 add_subdirectory(lib)
 add_subdirectory(rust)
 add_subdirectory(fwdpy11)
 
-if(BUILD_UNIT_TESTS)
+if(BUILD_PYTHON_UNIT_TESTS)
     add_subdirectory(tests)
-endif(BUILD_UNIT_TESTS)
+endif(BUILD_PYTHON_UNIT_TESTS)
