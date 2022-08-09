@@ -1,0 +1,10 @@
+[parse]
+# Whether to parse dependent crates and include their types in the output
+# default: false
+parse_deps = true
+
+# A white list of crate names that are allowed to be parsed. If this is defined,
+# only crates found in this list will ever be parsed.
+#
+# default: there is no whitelist (NOTE: this is the opposite of [])
+include = ["demes-forward-capi"]
