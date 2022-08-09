@@ -1,3 +1,6 @@
 [submodule "fwdpy11/headers/fwdpp"]
 	path = fwdpy11/headers/fwdpp
 	url = https://github.com/molpopgen/fwdpp
+[submodule "rust/corrosion"]
+	path = rust/corrosion
+	url = https://github.com/corrosion-rs/corrosion.git

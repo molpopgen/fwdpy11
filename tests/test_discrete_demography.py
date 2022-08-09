@@ -1404,5 +1404,21 @@ def test_deme_size_history_bad_models(payload: Payload):
         )
 
 
+# NOTE: this tests internal implementation details.
+# This test should be deleted one a public API
+# is in place
+def test_forward_graph_with_bad_model():
+    yaml = """
+time_units: generations
+description: missing start size
+demes:
+ - name: A
+   epochs:
+    - end_time: 0
+"""
+    with pytest.raises(ValueError):
+        _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
+
+
 if __name__ == "__main__":
     unittest.main()

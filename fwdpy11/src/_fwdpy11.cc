@@ -22,7 +22,8 @@ void init_ts(py::module &);
 void init_evolution_functions(py::module &);
 void init_discrete_demography(py::module &m);
 void init_array_proxies(py::module &m);
-void initialize_functions(py::module & m);
+void initialize_functions(py::module &m);
+void init_demes(py::module &m);
 
 PYBIND11_MODULE(_fwdpy11, m)
 {
@@ -39,6 +40,7 @@ PYBIND11_MODULE(_fwdpy11, m)
     init_discrete_demography(m);
     init_array_proxies(m);
     initialize_functions(m);
+    init_demes(m);
 
     py::register_exception<fwdpy11::GSLError>(m, "GSLError");
 
