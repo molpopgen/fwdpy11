@@ -105,6 +105,10 @@ set (FUNCTION_SOURCES src/functions/init.cc
      src/functions/add_mutation.cc
      src/functions/_add_mutation.cc)
 
+set (DEMES_SOURCES
+    src/demes/init.cc
+    src/demes/forward_graph.cc)
+
 set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${FWDPY11_TYPES_SOURCES}
     ${REGION_SOURCES}
@@ -117,7 +121,8 @@ set(ALL_SOURCES ${FWDPP_TYPES_SOURCES}
     ${DISCRETE_DEMOGRAPHY_SOURCES}
     ${ARRAY_PROXY_SOURCES}
     ${MUTATION_DOMINANCE_SOURCES}
-    ${FUNCTION_SOURCES})
+    ${FUNCTION_SOURCES}
+    ${DEMES_SOURCES})
 
 # NOTE: unclear if I can assign this to a
 # named target?

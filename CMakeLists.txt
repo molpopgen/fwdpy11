@@ -25,7 +25,10 @@ option(USE_WEFFCPP "Use -Weffc++ during compilation" OFF)
 option(ENABLE_PROFILING "Compile to enable code profiling" OFF)
 option(BUILD_UNIT_TESTS "Build C++ modules for unit tests" ON)
 option(DISABLE_LTO "Disable link-time optimization (LTO)" OFF)
-include_directories(BEFORE ${fwdpy11_SOURCE_DIR}/fwdpy11/headers ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp)
+include_directories(BEFORE
+    ${fwdpy11_SOURCE_DIR}/fwdpy11/headers
+    ${fwdpy11_SOURCE_DIR}/fwdpy11/headers/fwdpp
+    ${fwdpy11_SOURCE_DIR}/lib)
 message(STATUS "GSL headers in ${GSL_INCLUDE_DIRS}")
 include_directories(BEFORE ${GSL_INCLUDE_DIRS})
 
@@ -44,6 +47,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
 endif()
 
 add_subdirectory(lib)
+add_subdirectory(rust)
 add_subdirectory(fwdpy11)
 
 if(BUILD_UNIT_TESTS)

@@ -86,6 +86,10 @@ jobs:
           # fails in GitHub actions on conda/macOS
           python setup.py build_ext -i
 
+      - name: View built products
+        run: |
+          ls -lhrt fwdpy11/
+
       - name: Build and run C++ tests
         run: |
           source ~/.bashrc

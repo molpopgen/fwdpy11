@@ -3,7 +3,17 @@
 set -e -x
 
 yum update -y
-yum -y install cmake 
+yum -y install cmake curl
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y 
+source "$HOME/.cargo/env" 
+# Pin the rustc toolchain to a specific version.
+# Rust 1.64.0 will change the minimum glibc ABI
+# to a version incompatibly with manylinux_2014,
+# so we need to be careful in general.
+rustup override set 1.62.1 
+# Pin cbindgen 
+cargo install cbindgen@0.24.3 
 
 GSL_VERSION=2.5
 curl -o gsl-${GSL_VERSION}.tar.gz "ftp://ftp.gnu.org/gnu/gsl/gsl-${GSL_VERSION}.tar.gz" 
