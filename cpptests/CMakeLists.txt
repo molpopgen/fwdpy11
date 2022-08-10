@@ -1,0 +1,18 @@
+SET(CPPTEST_SOURCES fwdpy11_cpp_tests.cc
+    test_discrete_demography_stable_sorting_of_events.cc
+    test_lowlevel_demographic_events.cc
+    test_lowlevel_discrete_demography_bad_models.cc
+    test_lowlevel_discrete_demography_objects.cc
+    discrete_demography_roundtrips.cc
+    discrete_demography_util.cc
+    test_MutationDominance.cc
+    test_gss_classes.cc)
+
+add_executable(fwdpy11_cpp_tests ${CPPTEST_SOURCES})
+add_dependencies(fwdpy11_cpp_tests fwdpy11core header)
+target_link_directories(fwdpy11_cpp_tests PRIVATE ${CMAKE_SOURCE_DIR}/fwdpy11)
+target_link_libraries(fwdpy11_cpp_tests PRIVATE boost_unit_test_framework fwdpy11core GSL::gsl GSL::gslcblas) 
+set_target_properties(fwdpy11_cpp_tests PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_TEST_DYN_LINK")
+
+add_test(NAME fwdpy11_cpp_tests
+         COMMAND fwdpy11_cpp_tests)
