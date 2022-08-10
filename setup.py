@@ -79,6 +79,7 @@ class CMakeBuild(build_ext):
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=" + parent + "/lib/",
             "-DPYTHON_EXECUTABLE=" + sys.executable,
+            "-DCMAKE_BUILD=OFF",
         ]
 
         cfg = "Debug" if DEBUG_MODE is True else "Release"
@@ -107,7 +108,7 @@ class CMakeBuild(build_ext):
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
         if SKIP_BUILDING_TESTS is True:
-            cmake_args.append("-DBUILD_UNIT_TESTS=OFF")
+            cmake_args.append("-DBUILD_PYTHON_UNIT_TESTS=OFF")
 
         if SKIP_LTO is True:
             cmake_args.append("-DDISABLE_LTO=ON")
