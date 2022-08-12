@@ -145,11 +145,13 @@ jobs:
 
       - name: Test pip install from dist in fresh venv
         run: |
+            python -m pip install --upgrade setuptools pip wheel build
+            python -m build .
+            cd dist
             python -m venv venv
             source venv/bin/activate
-            pip install --upgrade setuptools pip wheel
-            python setup.py bdist_wheel
-            python -m pip install --no-cache-dir dist/fwdpy11*-linux*.whl
+            which python
+            python -m pip install --no-cache-dir ./fwdpy11*-linux*.whl
             python -m fwdpy11 --includes
             python -c "import fwdpy11;print(fwdpy11.__version__)"
             python -c "import fwdpy11;print(fwdpy11.__file__)"
