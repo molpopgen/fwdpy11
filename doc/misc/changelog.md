@@ -3,6 +3,13 @@
 Major changes are listed below.  Each release likely contains fiddling with back-end code,
 updates to latest `fwdpp` version, etc.
 
+## Next release
+
+Build system and CI
+
+* Remove all use of automake/autoconf.
+  PR {pr}`971`.
+
 ## 0.18.2
 
 Back end changes

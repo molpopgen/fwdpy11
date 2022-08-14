@@ -105,26 +105,21 @@ jobs:
             CXX=$CXX CC=$CC python -m pip install -e .
 
       - name: Build C++ tests
-        working-directory: cpptests
         run: |
-          autoreconf --install
-          CPPFLAGS=$CPPFLAGS CC=$CC CXX=$CXX ./configure
-          make -j 3
+          cmake -E env CPPFLAGS="$CPPFLAGS" \
+            cmake -E env CC="$CC" \
+            cmake -E env CXX="$CXX" cmake -S. -Bbuild_cpp_tests -DBUILD_CPP_UNIT_TESTS=ON
+          cmake --build build_cpp_tests -t fwdpy11_cpp_tests -j 4
 
       - name: Run C++ tests
-        working-directory: cpptests
         run: |
-          make check
-          # Clean up so that the next step can work...
-          make clean
+          cmake --build build_cpp_tests -t test
 
       - name: Build and run standalone C++ program
-        working-directory: cpp_neutral_benchmark
         run: |
-          autoreconf --install
-          CXXFLAGS="-O3 -g" CC=$CC CXX=$CXX ./configure
-          make -j 3
-          ./cpp_neutral_benchmark
+          cmake -E env CC=$CC cmake -E env CXX=$CXX cmake -S. -Bbuild_cpp -DBUILD_CPP_BENCHMARK=ON
+          cmake --build build_cpp -t cpp_neutral_benchmark -j 4
+          ./build_cpp/cpp_neutral_benchmark/cpp_neutral_benchmark
 
       - name: Run Python tests
         run: |
