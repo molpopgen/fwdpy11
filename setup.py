@@ -182,7 +182,6 @@ else:
 
 setup(
     ext_modules=ext_modules,
-    use_scm_version={"write_to": "fwdpy11/_version.py"},
     cmdclass={"build_ext": CMakeBuild},
     packages=PKGS,
     package_data=generated_package_data,

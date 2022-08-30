@@ -21,3 +21,5 @@ endif()
 
 target_include_directories(cpp_neutral_benchmark BEFORE PUBLIC ${CMAKE_SOURCE_DIR}/fwdpy11/headers ${CMAKE_SOURCE_DIR}/fwdpy11/headers/fwdpp ${CMAKE_SOURCE_DIR}/fwdpy11/src/evolve_population)
 
+add_test(NAME cpp_neutral_benchmark
+         COMMAND cpp_neutral_benchmark)
