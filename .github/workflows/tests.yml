@@ -76,27 +76,24 @@ jobs:
         run: |
           cp ~/.bash_profile ~/.bashrc
 
-      - name: Build module
-        # shell: bash -l {0}
-        run: |
-          # conda init bash
-          source ~/.bashrc
-          conda activate anaconda-client-env
-          # NOTE: python -m pip install -e . 
-          # fails in GitHub actions on conda/macOS
-          python setup.py build_ext -i
-
-      - name: View built products
-        run: |
-          ls -lhrt fwdpy11/
-
-      - name: Build and run C++ tests
+      - name: Build
         run: |
           source ~/.bashrc
           conda activate anaconda-client-env
-          cmake -S. -Bbuild_cpp_tests -DBUILD_CPP_UNIT_TESTS=ON
-          cmake --build build_cpp_tests -t fwdpy11_cpp_tests -j 4
-          cmake --build build_cpp_tests -t test
+          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_CPP_UNIT_TESTS=ON -DBUILD_PYTHON_UNIT_TESTS=ON
+          cmake --build build -j 4
+
+      - name: Run C++ tests
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          cmake --build build -t test
+
+      - name: Manualy run setuptools_scm
+        run: |
+          source ~/.bashrc
+          conda activate anaconda-client-env
+          python -m setuptools_scm
 
       - name: Run Python tests
         # shell: bash -l {0}
