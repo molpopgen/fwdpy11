@@ -12,6 +12,9 @@ add_executable(fwdpy11_cpp_tests ${CPPTEST_SOURCES})
 add_dependencies(fwdpy11_cpp_tests fwdpy11core header)
 target_link_directories(fwdpy11_cpp_tests PRIVATE ${CMAKE_SOURCE_DIR}/fwdpy11)
 target_link_libraries(fwdpy11_cpp_tests PRIVATE boost_unit_test_framework fwdpy11core GSL::gsl GSL::gslcblas) 
+if (NOT APPLE)
+    target_link_options(fwdpy11_cpp_tests BEFORE PUBLIC LINKER:--no-as-needed -ldl)
+endif()
 set_target_properties(fwdpy11_cpp_tests PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_TEST_DYN_LINK")
 
 add_test(NAME fwdpy11_cpp_tests
