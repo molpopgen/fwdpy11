@@ -99,27 +99,20 @@ jobs:
           echo "CC=clang-10" >> $GITHUB_ENV
           echo "CXX=clang++-10" >> $GITHUB_ENV
 
-
-      - name: Compile extension module
-        run: |
-            CXX=$CXX CC=$CC python -m pip install -e .
-
-      - name: Build C++ tests
+      - name: Build
         run: |
           cmake -E env CPPFLAGS="$CPPFLAGS" \
             cmake -E env CC="$CC" \
-            cmake -E env CXX="$CXX" cmake -S. -Bbuild_cpp_tests -DBUILD_CPP_UNIT_TESTS=ON
-          cmake --build build_cpp_tests -t fwdpy11_cpp_tests -j 4
+            cmake -E env CXX="$CXX" cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_CPP_UNIT_TESTS=ON -DBUILD_CPP_BENCHMARK=ON -DBUILD_PYTHON_UNIT_TESTS=ON
+          cmake --build build -j 4
 
       - name: Run C++ tests
         run: |
-          cmake --build build_cpp_tests -t test
+          cmake --build build -t test
 
-      - name: Build and run standalone C++ program
+      - name: Manualy run setuptools_scm
         run: |
-          cmake -E env CC=$CC cmake -E env CXX=$CXX cmake -S. -Bbuild_cpp -DBUILD_CPP_BENCHMARK=ON
-          cmake --build build_cpp -t cpp_neutral_benchmark -j 4
-          ./build_cpp/cpp_neutral_benchmark/cpp_neutral_benchmark
+          python -m setuptools_scm
 
       - name: Run Python tests
         run: |
