@@ -21,7 +21,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/functional.h>
-#include "evolvets.hpp"
+#include <core/evolve_discrete_demes/evolvets.hpp>
 //#include <fwdpy11/discrete_demography/simulation/demographic_model_state.hpp>
 
 namespace py = pybind11;
