@@ -94,8 +94,9 @@ jobs:
         run: |
           source ~/.bashrc
           conda activate anaconda-client-env
-          cd cpptests && autoreconf --install && ./configure && cd ..
-          make check -C cpptests
+          cmake -S. -Bbuild_cpp_tests -DBUILD_CPP_UNIT_TESTS=ON
+          cmake --build build_cpp_tests -t fwdpy11_cpp_tests -j 4
+          cmake --build build_cpp_tests -t test
 
       - name: Run Python tests
         # shell: bash -l {0}
