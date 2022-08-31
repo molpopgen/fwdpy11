@@ -18,6 +18,7 @@
 #
 import pickle
 import typing
+import glob
 import unittest
 from dataclasses import dataclass
 
@@ -1405,19 +1406,24 @@ def test_deme_size_history_bad_models(payload: Payload):
 
 
 # NOTE: this tests internal implementation details.
-# This test should be deleted one a public API
+# This test should be deleted once a public API
 # is in place
-def test_forward_graph_with_bad_model():
-    yaml = """
-time_units: generations
-description: missing start size
-demes:
- - name: A
-   epochs:
-    - end_time: 0
-"""
-    with pytest.raises(ValueError):
-        _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
+def test_invalid_demes_spec_modules():
+    for bad in glob.glob("tests/demes-spec/test-cases/invalid/*.yaml"):
+        with open(bad, "r") as f:
+            yaml = "".join(f.readlines())
+            with pytest.raises(ValueError):
+                _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
+
+
+# NOTE: this tests internal implementation details.
+# This test should be deleted once a public API
+# is in place
+def test_valid_demes_spec_modules():
+    for good in glob.glob("tests/demes-spec/test-cases/valid/*.yaml"):
+        with open(good, "r") as f:
+            yaml = "".join(f.readlines())
+            _ = fwdpy11._fwdpy11._ForwardDemesGraph(yaml=yaml, burnin=0)
 
 
 if __name__ == "__main__":
