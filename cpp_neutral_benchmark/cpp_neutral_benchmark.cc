@@ -12,7 +12,7 @@
 #include <fwdpy11/evolvets/SampleRecorder.hpp>
 #include <fwdpy11/evolvets/recorders.hpp>
 #include <fwdpy11/rng.hpp>
-#include "../fwdpy11/src/evolve_population/evolvets.hpp"
+#include <core/evolve_discrete_demes/evolvets.hpp>
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
